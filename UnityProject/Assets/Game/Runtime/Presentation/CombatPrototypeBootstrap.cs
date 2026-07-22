@@ -139,10 +139,10 @@ namespace OCC.Combat.Presentation
         public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; }
         private void Update() { if (!Application.isPlaying || developerFlow == null || developerFlow.Phase != CombatFlowPhase.Active || state == null || state.IsVictory || state.IsDefeat || state.ActiveUnitId == "hero") return; RunEnemyTurn(); developerFlow.RefreshOutcome(); }
         private void RunEnemyTurn() { UnitState enemy = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); if (enemy == null || !enemy.IsAlive) { if (enemy != null) CombatResolver.EndTurn(state, enemy); return; } try { if (Distance(enemy.Position, hero.Position) <= 4 && enemy.ActionPoints > 0) CombatResolver.Resolve(state, enemy.Id == "caster" ? CombatCommand.Cast(enemy.Id, hero.Id) : CombatCommand.Attack(enemy.Id, hero.Id)); else if (enemy.ActionPoints > 0) CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, StepToward(enemy.Position, hero.Position), FacingToward(enemy.Position, hero.Position))); if (state.ActiveUnitId == enemy.Id) CombatResolver.EndTurn(state, enemy); } catch (InvalidOperationException error) { state.AddLog(error.Message); CombatResolver.EndTurn(state, enemy); } }
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawPanelStageTwo(new Rect(1470, 112, 420, 790)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
+        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawPanelStageTwo(new Rect(1390, 112, 500, 790)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
-            GUI.skin.label.fontSize = 16; GUI.skin.button.fontSize = 16; GUI.skin.box.fontSize = 18;
+            GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
             GUI.skin.button.padding = new RectOffset(12, 12, 8, 8);
             GUI.skin.box.normal.textColor = new Color(.88f, .94f, 1f);
         }
@@ -234,47 +234,94 @@ namespace OCC.Combat.Presentation
         private void DrawPanel(Rect rect) { GUI.Box(rect, "\u6218\u6597\u63a7\u5236\u53f0"); UnitState active = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); GUI.Label(new Rect(rect.x + 14, rect.y + 34, 280, 22), $"\u884c\u52a8\u5355\u4f4d：{active.DisplayName} | AP {active.ActionPoints}"); GUI.Label(new Rect(rect.x + 14, rect.y + 60, 280, 20), $"\u4e3b\u89d2\u8d44\u6e90：{hero.Health}/{hero.MaxHealth} HP  {hero.Shield} \u62a4\u76fe  {hero.Mana}/{hero.MaxMana} \u4ee5\u592a"); GUI.Label(new Rect(rect.x + 14, rect.y + 82, 280, 20), GetRangeDescription()); string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u65bd\u672f", "\u9053\u5177", "\u4e92\u52a8" }; for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 108 + (i / 2) * 34, 128, 28), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i]; if (GUI.Button(new Rect(rect.x + 14, rect.y + 216, 128, 30), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero")); if (GUI.Button(new Rect(rect.x + 150, rect.y + 216, 128, 30), "\u6218\u672f\u91cd\u5f00")) { state = snapshot.Clone(); CombatResolver.BeginTurn(state, "hero"); } GUI.Label(new Rect(rect.x + 14, rect.y + 256, 280, 20), "\u884c\u52a8\u6761\uff1a\u6570\u503c\u8d8a\u4f4e\u8d8a\u5148\u884c\u52a8"); int row = 0; foreach (UnitState unit in state.Units.Values) { GUI.Label(new Rect(rect.x + 14, rect.y + 280 + row * 27, 125, 20), $"{unit.DisplayName} HP{unit.Health} \u62a4{unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 142, rect.y + 284 + row * 27, 130, 16), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; } GUI.Label(new Rect(rect.x + 14, rect.y + 410, 280, 20), "\u654c\u4eba\u610f\u56fe\u548c\u6218\u6597\u8bb0\u5f55"); for (int i = 0; i < Math.Min(6, state.EventLog.Count); i++) GUI.Label(new Rect(rect.x + 14, rect.y + 434 + i * 18, 280, 18), state.EventLog[i]); }
         private void DrawPanelStageTwo(Rect rect)
         {
+            GUI.color = new Color(.025f, .055f, .095f, .98f);
             GUI.Box(rect, "");
+            GUI.color = Color.white;
             UnitState active = state.GetUnit(state.ActiveUnitId);
             UnitState hero = state.GetUnit("hero");
-            DrawHudSectionTitle(rect, 12, "战斗控制台");
-            DrawHudLabel(rect, 40, $"行动单位：{active.DisplayName}  AP {active.ActionPoints}");
-            DrawHudLabel(rect, 62, $"生命 {hero.Health}/{hero.MaxHealth}  护盾 {hero.Shield}/{hero.MaxShield}");
-            DrawHudLabel(rect, 84, $"以太 {hero.Mana}/{hero.MaxMana}  背包 {state.Backpack.Items.Count}/{state.Backpack.Width * state.Backpack.Height}");
-            DrawHudLabel(rect, 106, $"主手：{hero.MainHand.DisplayName}");
-            DrawHudLabel(rect, 128, $"技能：{hero.SkillOne.DisplayName} {hero.Cooldown(hero.SkillOne)}  /  {hero.SkillTwo.DisplayName} {hero.Cooldown(hero.SkillTwo)}");
-            DrawHudLabel(rect, 150, GetRangeDescriptionStageTwo());
-            DrawHudLabel(rect, 172, "状态：" + GetStatusText(hero));
-            string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u6280\u80fd1", "\u6280\u80fd2", "\u641c\u522e", "\u4e92\u52a8" };
-            for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 204 + (i / 2) * 32, 128, 27), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i];
-            DrawHudSectionTitle(rect, 310, "快捷栏（使用消耗 1 AP）");
+
+            DrawHudHeader(rect, active, hero);
+            DrawHudSection(rect, 164, 150, "战术指令", "选择后点击战场格");
+            string[] actions = { "移动", "攻击", "技能1", "技能2", "搜刮", "互动" };
+            for (int i = 0; i < actions.Length; i++)
+            {
+                Rect button = new Rect(rect.x + 18 + (i % 2) * 236, rect.y + 216 + (i / 2) * 32, 228, 28);
+                if (GUI.Toggle(button, selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i];
+            }
+
+            DrawHudSection(rect, 324, 134, "快捷栏", "使用消耗 1 AP");
             for (int i = 0; i < state.Quickbar.Length; i++)
             {
                 ConsumableDefinition item = state.Quickbar[i];
-                string label = item == null ? $"{i + 1} \u7a7a" : $"{i + 1} {item.DisplayName}";
-                if (GUI.Button(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 338 + (i / 2) * 28, 128, 25), label) && item != null) TryCommand(CombatCommand.UseQuickbar("hero", i));
+                string label = item == null ? (i + 1) + " 空" : (i + 1) + " " + item.DisplayName;
+                Rect button = new Rect(rect.x + 18 + (i % 2) * 236, rect.y + 374 + (i / 2) * 25, 228, 23);
+                if (GUI.Button(button, label) && item != null) TryCommand(CombatCommand.UseQuickbar("hero", i));
             }
-            DrawHudSectionTitle(rect, 462, "免费工坊（不消耗 AP）");
-            if (GUI.Button(new Rect(rect.x + 14, rect.y + 490, 84, 26), "\u6b65\u67aa\u6784\u7b51")) ApplyBuild(0);
-            if (GUI.Button(new Rect(rect.x + 104, rect.y + 490, 84, 26), "\u6218\u9524\u6784\u7b51")) ApplyBuild(1);
-            if (GUI.Button(new Rect(rect.x + 194, rect.y + 490, 84, 26), "\u6cd5\u6756\u6784\u7b51")) ApplyBuild(2);
-            if (GUI.Button(new Rect(rect.x + 14, rect.y + 526, 128, 28), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero"));
-            if (GUI.Button(new Rect(rect.x + 150, rect.y + 526, 128, 28), "\u6218\u672f\u91cd\u5f00")) TacticalRestartDeveloperCombat();
-            DrawHudSectionTitle(rect, 570, "行动条（数值低者先行动）");
+
+            DrawHudSection(rect, 468, 98, "构筑与回合", "切换构筑不消耗 AP");
+            if (GUI.Button(new Rect(rect.x + 18, rect.y + 516, 148, 26), "步枪")) ApplyBuild(0);
+            if (GUI.Button(new Rect(rect.x + 176, rect.y + 516, 148, 26), "战锤")) ApplyBuild(1);
+            if (GUI.Button(new Rect(rect.x + 334, rect.y + 516, 148, 26), "法杖")) ApplyBuild(2);
+            if (GUI.Button(new Rect(rect.x + 18, rect.y + 548, 230, 26), "结束行动")) TryCommand(CombatCommand.EndTurn("hero"));
+            if (GUI.Button(new Rect(rect.x + 258, rect.y + 548, 224, 26), "战术重开")) TacticalRestartDeveloperCombat();
+
+            DrawHudSection(rect, 578, 124, "行动条", "数值低者先行动");
             int row = 0;
-            foreach (UnitState unit in state.Units.Values.Take(5)) { DrawHudLabel(rect, 598 + row * 24, $"{unit.DisplayName}  HP {unit.Health}  盾 {unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 238, rect.y + 604 + row * 24, 154, 14), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; }
-            DrawHudSectionTitle(rect, 726, "战斗记录");
-            for (int i = 0; i < Math.Min(3, state.EventLog.Count); i++) DrawHudLabel(rect, 752 + i * 18, state.EventLog[i]);
+            foreach (UnitState unit in state.Units.Values.OrderBy(unit => unit.InitiativeTime).Take(4))
+            {
+                float y = 628 + row * 18;
+                DrawHudLabel(rect, y, unit.DisplayName + "  " + unit.Health + " HP", 14);
+                DrawHudMeter(new Rect(rect.x + 278, rect.y + y + 4, 204, 11), Math.Min(100, unit.InitiativeTime) / 100f, unit.IsHero ? new Color(.18f, .75f, .9f) : new Color(.82f, .25f, .2f));
+                row++;
+            }
+
+            DrawHudSection(rect, 712, 66, "战斗记录", "最新信息");
+            for (int i = 0; i < Math.Min(2, state.EventLog.Count); i++) DrawHudLabel(rect, 752 + i * 16, state.EventLog[i], 12);
         }
 
-        private static void DrawHudSectionTitle(Rect panel, float y, string text)
+        private static void DrawHudHeader(Rect panel, UnitState active, UnitState hero)
         {
+            GUI.color = new Color(.08f, .19f, .28f, 1f);
+            GUI.Box(new Rect(panel.x + 10, panel.y + 10, panel.width - 20, 142), "");
+            GUI.color = Color.white;
             GUI.color = new Color(.35f, .9f, 1f);
-            GUI.Label(new Rect(panel.x + 14, panel.y + y, panel.width - 28, 20), text);
+            GUI.Label(new Rect(panel.x + 18, panel.y + 18, 290, 24), "战斗控制台");
+            GUI.color = new Color(.78f, .85f, .92f);
+            GUI.Label(new Rect(panel.x + 18, panel.y + 42, panel.width - 36, 20), "行动：" + active.DisplayName + "  ·  AP " + active.ActionPoints);
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 68, panel.width - 36, 12), hero.Health / (float)hero.MaxHealth, new Color(.2f, .82f, .43f));
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 88, panel.width - 36, 12), hero.Shield / (float)Math.Max(1, hero.MaxShield), new Color(.45f, .72f, .95f));
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 108, panel.width - 36, 12), hero.Mana / (float)hero.MaxMana, new Color(.36f, .85f, .82f));
+            GUI.color = Color.white;
+            GUI.Label(new Rect(panel.x + 18, panel.y + 124, panel.width - 36, 20), "主手：" + hero.MainHand.DisplayName + "  状态：" + GetStatusText(hero));
+        }
+
+        private static void DrawHudSection(Rect panel, float y, float height, string title, string subtitle)
+        {
+            GUI.color = new Color(.055f, .12f, .18f, .96f);
+            GUI.Box(new Rect(panel.x + 10, panel.y + y, panel.width - 20, height), "");
+            GUI.color = new Color(.35f, .9f, 1f);
+            GUI.Label(new Rect(panel.x + 18, panel.y + y + 8, 180, 20), title);
+            GUI.color = new Color(.52f, .62f, .7f);
+            GUI.Label(new Rect(panel.x + 198, panel.y + y + 8, panel.width - 226, 20), subtitle);
             GUI.color = Color.white;
         }
 
-        private static void DrawHudLabel(Rect panel, float y, string text) => GUI.Label(new Rect(panel.x + 14, panel.y + y, panel.width - 28, 20), text);
+        private static void DrawHudMeter(Rect rect, float value, Color fill)
+        {
+            GUI.color = new Color(.01f, .025f, .04f, 1f);
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            GUI.color = fill;
+            GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, (rect.width - 2) * Mathf.Clamp01(value), rect.height - 2), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+        }
+
+        private static void DrawHudLabel(Rect panel, float y, string text, int size)
+        {
+            int previousSize = GUI.skin.label.fontSize;
+            GUI.skin.label.fontSize = size;
+            GUI.Label(new Rect(panel.x + 18, panel.y + y, panel.width - 36, 18), text);
+            GUI.skin.label.fontSize = previousSize;
+        }
 
         private void ApplyBuild(int build)
         {
