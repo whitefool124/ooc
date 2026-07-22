@@ -21,6 +21,7 @@ namespace OCC.Combat.Presentation
         private bool initialized;
         private MissionPreparation developerPreparation;
         private CombatFlowController developerFlow;
+        private readonly Dictionary<string, Texture2D> hudIcons = new Dictionary<string, Texture2D>();
 
         private void OnEnable()
         {
@@ -39,6 +40,12 @@ namespace OCC.Combat.Presentation
         {
             if (!Application.isPlaying) return;
             Application.targetFrameRate = 60;
+        }
+
+        private void OnDisable()
+        {
+            foreach (Texture2D icon in hudIcons.Values) Destroy(icon);
+            hudIcons.Clear();
         }
 
         public void EnsureEditorVisuals()
@@ -234,85 +241,175 @@ namespace OCC.Combat.Presentation
         private void DrawPanel(Rect rect) { GUI.Box(rect, "\u6218\u6597\u63a7\u5236\u53f0"); UnitState active = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); GUI.Label(new Rect(rect.x + 14, rect.y + 34, 280, 22), $"\u884c\u52a8\u5355\u4f4d：{active.DisplayName} | AP {active.ActionPoints}"); GUI.Label(new Rect(rect.x + 14, rect.y + 60, 280, 20), $"\u4e3b\u89d2\u8d44\u6e90：{hero.Health}/{hero.MaxHealth} HP  {hero.Shield} \u62a4\u76fe  {hero.Mana}/{hero.MaxMana} \u4ee5\u592a"); GUI.Label(new Rect(rect.x + 14, rect.y + 82, 280, 20), GetRangeDescription()); string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u65bd\u672f", "\u9053\u5177", "\u4e92\u52a8" }; for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 108 + (i / 2) * 34, 128, 28), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i]; if (GUI.Button(new Rect(rect.x + 14, rect.y + 216, 128, 30), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero")); if (GUI.Button(new Rect(rect.x + 150, rect.y + 216, 128, 30), "\u6218\u672f\u91cd\u5f00")) { state = snapshot.Clone(); CombatResolver.BeginTurn(state, "hero"); } GUI.Label(new Rect(rect.x + 14, rect.y + 256, 280, 20), "\u884c\u52a8\u6761\uff1a\u6570\u503c\u8d8a\u4f4e\u8d8a\u5148\u884c\u52a8"); int row = 0; foreach (UnitState unit in state.Units.Values) { GUI.Label(new Rect(rect.x + 14, rect.y + 280 + row * 27, 125, 20), $"{unit.DisplayName} HP{unit.Health} \u62a4{unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 142, rect.y + 284 + row * 27, 130, 16), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; } GUI.Label(new Rect(rect.x + 14, rect.y + 410, 280, 20), "\u654c\u4eba\u610f\u56fe\u548c\u6218\u6597\u8bb0\u5f55"); for (int i = 0; i < Math.Min(6, state.EventLog.Count); i++) GUI.Label(new Rect(rect.x + 14, rect.y + 434 + i * 18, 280, 18), state.EventLog[i]); }
         private void DrawPanelStageTwo(Rect rect)
         {
-            GUI.color = new Color(.025f, .055f, .095f, .98f);
-            GUI.Box(rect, "");
-            GUI.color = Color.white;
             UnitState active = state.GetUnit(state.ActiveUnitId);
             UnitState hero = state.GetUnit("hero");
-
+            DrawHudFrame(rect);
             DrawHudHeader(rect, active, hero);
-            DrawHudSection(rect, 164, 150, "战术指令", "选择后点击战场格");
+            DrawHudSection(rect, 160, "战术指令", "点击图标后选择战场格");
             string[] actions = { "移动", "攻击", "技能1", "技能2", "搜刮", "互动" };
+            string[] iconIds = { "move", "attack", "skillOne", "skillTwo", "loot", "interact" };
             for (int i = 0; i < actions.Length; i++)
             {
-                Rect button = new Rect(rect.x + 18 + (i % 2) * 236, rect.y + 216 + (i / 2) * 32, 228, 28);
-                if (GUI.Toggle(button, selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i];
+                Rect button = new Rect(rect.x + 18 + (i % 2) * 238, rect.y + 198 + (i / 2) * 52, 226, 46);
+                if (DrawHudActionButton(button, iconIds[i], actions[i], selectedAction == actions[i])) selectedAction = actions[i];
             }
 
-            DrawHudSection(rect, 324, 134, "快捷栏", "使用消耗 1 AP");
+            DrawHudSection(rect, 370, "快捷栏", "使用消耗 1 AP");
             for (int i = 0; i < state.Quickbar.Length; i++)
             {
                 ConsumableDefinition item = state.Quickbar[i];
                 string label = item == null ? (i + 1) + " 空" : (i + 1) + " " + item.DisplayName;
-                Rect button = new Rect(rect.x + 18 + (i % 2) * 236, rect.y + 374 + (i / 2) * 25, 228, 23);
-                if (GUI.Button(button, label) && item != null) TryCommand(CombatCommand.UseQuickbar("hero", i));
+                Rect button = new Rect(rect.x + 18 + (i % 2) * 238, rect.y + 408 + (i / 2) * 28, 226, 24);
+                if (DrawHudTextButton(button, label, item != null, false) && item != null) TryCommand(CombatCommand.UseQuickbar("hero", i));
             }
 
-            DrawHudSection(rect, 468, 98, "构筑与回合", "切换构筑不消耗 AP");
-            if (GUI.Button(new Rect(rect.x + 18, rect.y + 516, 148, 26), "步枪")) ApplyBuild(0);
-            if (GUI.Button(new Rect(rect.x + 176, rect.y + 516, 148, 26), "战锤")) ApplyBuild(1);
-            if (GUI.Button(new Rect(rect.x + 334, rect.y + 516, 148, 26), "法杖")) ApplyBuild(2);
-            if (GUI.Button(new Rect(rect.x + 18, rect.y + 548, 230, 26), "结束行动")) TryCommand(CombatCommand.EndTurn("hero"));
-            if (GUI.Button(new Rect(rect.x + 258, rect.y + 548, 224, 26), "战术重开")) TacticalRestartDeveloperCombat();
+            DrawHudSection(rect, 530, "构筑与回合", "构筑切换不消耗 AP");
+            if (DrawHudTextButton(new Rect(rect.x + 18, rect.y + 568, 148, 26), "步枪", true, false)) ApplyBuild(0);
+            if (DrawHudTextButton(new Rect(rect.x + 176, rect.y + 568, 148, 26), "战锤", true, false)) ApplyBuild(1);
+            if (DrawHudTextButton(new Rect(rect.x + 334, rect.y + 568, 148, 26), "法杖", true, false)) ApplyBuild(2);
+            if (DrawHudTextButton(new Rect(rect.x + 18, rect.y + 600, 226, 28), "结束行动", true, true)) TryCommand(CombatCommand.EndTurn("hero"));
+            if (DrawHudTextButton(new Rect(rect.x + 258, rect.y + 600, 224, 28), "战术重开", true, true)) TacticalRestartDeveloperCombat();
 
-            DrawHudSection(rect, 578, 124, "行动条", "数值低者先行动");
+            DrawHudSection(rect, 648, "行动条", "数值低者先行动");
             int row = 0;
             foreach (UnitState unit in state.Units.Values.OrderBy(unit => unit.InitiativeTime).Take(4))
             {
-                float y = 628 + row * 18;
-                DrawHudLabel(rect, y, unit.DisplayName + "  " + unit.Health + " HP", 14);
-                DrawHudMeter(new Rect(rect.x + 278, rect.y + y + 4, 204, 11), Math.Min(100, unit.InitiativeTime) / 100f, unit.IsHero ? new Color(.18f, .75f, .9f) : new Color(.82f, .25f, .2f));
+                float y = 678 + row * 18;
+                DrawHudLabel(rect, y, unit.DisplayName + "  " + unit.Health + " HP", 13);
+                DrawHudMeter(new Rect(rect.x + 278, rect.y + y + 4, 204, 10), Math.Min(100, unit.InitiativeTime) / 100f, unit.IsHero ? HudCyan : HudRed);
                 row++;
             }
 
-            DrawHudSection(rect, 712, 66, "战斗记录", "最新信息");
-            for (int i = 0; i < Math.Min(2, state.EventLog.Count); i++) DrawHudLabel(rect, 752 + i * 16, state.EventLog[i], 12);
+            DrawHudSection(rect, 736, "记录", "最新信息");
+            if (state.EventLog.Count > 0) DrawHudLabel(rect, 764, state.EventLog[0], 12);
+        }
+
+        private static readonly Color HudInk = new Color(.035f, .04f, .04f, .985f);
+        private static readonly Color HudSurface = new Color(.07f, .075f, .07f, 1f);
+        private static readonly Color HudLine = new Color(.82f, .8f, .72f, .62f);
+        private static readonly Color HudText = new Color(.92f, .9f, .84f, 1f);
+        private static readonly Color HudMuted = new Color(.58f, .57f, .52f, 1f);
+        private static readonly Color HudCyan = new Color(.1f, .82f, .87f, 1f);
+        private static readonly Color HudRed = new Color(.84f, .25f, .19f, 1f);
+        private static readonly Color HudAmber = new Color(.95f, .62f, .14f, 1f);
+
+        private static void DrawHudFrame(Rect rect)
+        {
+            GUI.color = HudInk;
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            DrawHudLine(new Vector2(rect.x, rect.y), new Vector2(rect.xMax, rect.y));
+            DrawHudLine(new Vector2(rect.x, rect.yMax), new Vector2(rect.xMax, rect.yMax));
+            DrawHudLine(new Vector2(rect.x, rect.y), new Vector2(rect.x, rect.yMax));
+            DrawHudLine(new Vector2(rect.xMax, rect.y), new Vector2(rect.xMax, rect.yMax));
+            DrawHudCorner(rect.x + 8, rect.y + 8, 1, 1); DrawHudCorner(rect.xMax - 8, rect.y + 8, -1, 1);
+            DrawHudCorner(rect.x + 8, rect.yMax - 8, 1, -1); DrawHudCorner(rect.xMax - 8, rect.yMax - 8, -1, -1);
+            GUI.color = Color.white;
         }
 
         private static void DrawHudHeader(Rect panel, UnitState active, UnitState hero)
         {
-            GUI.color = new Color(.08f, .19f, .28f, 1f);
-            GUI.Box(new Rect(panel.x + 10, panel.y + 10, panel.width - 20, 142), "");
+            GUI.color = HudText;
+            GUI.Label(new Rect(panel.x + 18, panel.y + 16, 260, 22), "战斗控制台");
+            GUI.color = HudMuted;
+            GUI.Label(new Rect(panel.x + 18, panel.y + 42, panel.width - 36, 18), "行动：" + active.DisplayName + "  /  AP " + active.ActionPoints);
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 70, panel.width - 36, 8), hero.Health / (float)hero.MaxHealth, HudText);
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 88, panel.width - 36, 8), hero.Shield / (float)Math.Max(1, hero.MaxShield), HudCyan);
+            DrawHudMeter(new Rect(panel.x + 18, panel.y + 106, panel.width - 36, 8), hero.Mana / (float)hero.MaxMana, HudCyan);
+            GUI.color = HudMuted;
+            GUI.Label(new Rect(panel.x + 18, panel.y + 124, panel.width - 36, 18), "主手：" + hero.MainHand.DisplayName + "  状态：" + GetStatusText(hero));
             GUI.color = Color.white;
-            GUI.color = new Color(.35f, .9f, 1f);
-            GUI.Label(new Rect(panel.x + 18, panel.y + 18, 290, 24), "战斗控制台");
-            GUI.color = new Color(.78f, .85f, .92f);
-            GUI.Label(new Rect(panel.x + 18, panel.y + 42, panel.width - 36, 20), "行动：" + active.DisplayName + "  ·  AP " + active.ActionPoints);
-            DrawHudMeter(new Rect(panel.x + 18, panel.y + 68, panel.width - 36, 12), hero.Health / (float)hero.MaxHealth, new Color(.2f, .82f, .43f));
-            DrawHudMeter(new Rect(panel.x + 18, panel.y + 88, panel.width - 36, 12), hero.Shield / (float)Math.Max(1, hero.MaxShield), new Color(.45f, .72f, .95f));
-            DrawHudMeter(new Rect(panel.x + 18, panel.y + 108, panel.width - 36, 12), hero.Mana / (float)hero.MaxMana, new Color(.36f, .85f, .82f));
-            GUI.color = Color.white;
-            GUI.Label(new Rect(panel.x + 18, panel.y + 124, panel.width - 36, 20), "主手：" + hero.MainHand.DisplayName + "  状态：" + GetStatusText(hero));
         }
 
-        private static void DrawHudSection(Rect panel, float y, float height, string title, string subtitle)
+        private static void DrawHudSection(Rect panel, float y, string title, string subtitle)
         {
-            GUI.color = new Color(.055f, .12f, .18f, .96f);
-            GUI.Box(new Rect(panel.x + 10, panel.y + y, panel.width - 20, height), "");
-            GUI.color = new Color(.35f, .9f, 1f);
-            GUI.Label(new Rect(panel.x + 18, panel.y + y + 8, 180, 20), title);
-            GUI.color = new Color(.52f, .62f, .7f);
-            GUI.Label(new Rect(panel.x + 198, panel.y + y + 8, panel.width - 226, 20), subtitle);
+            DrawHudLine(new Vector2(panel.x + 18, panel.y + y), new Vector2(panel.xMax - 18, panel.y + y));
+            GUI.color = HudText;
+            GUI.Label(new Rect(panel.x + 18, panel.y + y + 8, 150, 18), title);
+            GUI.color = HudMuted;
+            GUI.Label(new Rect(panel.x + 176, panel.y + y + 8, panel.width - 204, 18), subtitle);
             GUI.color = Color.white;
         }
 
         private static void DrawHudMeter(Rect rect, float value, Color fill)
         {
-            GUI.color = new Color(.01f, .025f, .04f, 1f);
+            GUI.color = new Color(.015f, .018f, .018f, 1f);
             GUI.DrawTexture(rect, Texture2D.whiteTexture);
             GUI.color = fill;
-            GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, (rect.width - 2) * Mathf.Clamp01(value), rect.height - 2), Texture2D.whiteTexture);
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width * Mathf.Clamp01(value), rect.height), Texture2D.whiteTexture);
             GUI.color = Color.white;
+        }
+
+        private bool DrawHudActionButton(Rect rect, string iconId, string label, bool selected)
+        {
+            Color accent = iconId == "loot" ? HudAmber : selected ? HudCyan : HudText;
+            GUI.color = selected ? new Color(HudCyan.r, HudCyan.g, HudCyan.b, .12f) : HudSurface;
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            DrawHudLine(new Vector2(rect.x, rect.y), new Vector2(rect.xMax, rect.y), accent);
+            DrawHudLine(new Vector2(rect.x, rect.yMax), new Vector2(rect.xMax, rect.yMax), accent);
+            DrawHudLine(new Vector2(rect.x, rect.y), new Vector2(rect.x, rect.yMax), accent);
+            DrawHudLine(new Vector2(rect.xMax, rect.y), new Vector2(rect.xMax, rect.yMax), accent);
+            Texture2D icon = GetHudIcon(iconId, accent);
+            GUI.DrawTexture(new Rect(rect.x + 8, rect.y + 7, 32, 32), icon, ScaleMode.StretchToFill, true);
+            GUI.color = accent;
+            GUI.Label(new Rect(rect.x + 50, rect.y + 13, rect.width - 56, 20), label);
+            GUI.color = Color.white;
+            return GUI.Button(rect, GUIContent.none, GUIStyle.none);
+        }
+
+        private static bool DrawHudTextButton(Rect rect, string text, bool enabled, bool emphasis)
+        {
+            Color line = emphasis ? HudCyan : HudLine;
+            GUI.color = enabled ? HudSurface : new Color(HudSurface.r, HudSurface.g, HudSurface.b, .35f);
+            GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            DrawHudLine(new Vector2(rect.x, rect.y), new Vector2(rect.xMax, rect.y), line);
+            DrawHudLine(new Vector2(rect.x, rect.yMax), new Vector2(rect.xMax, rect.yMax), line);
+            GUI.color = enabled ? HudText : HudMuted;
+            GUI.Label(rect, text, CenteredHudLabel());
+            GUI.color = Color.white;
+            return enabled && GUI.Button(rect, GUIContent.none, GUIStyle.none);
+        }
+
+        private static GUIStyle CenteredHudLabel()
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontSize = 14 };
+            return style;
+        }
+
+        private static void DrawHudLine(Vector2 from, Vector2 to) => DrawHudLine(from, to, HudLine);
+        private static void DrawHudLine(Vector2 from, Vector2 to, Color color)
+        {
+            GUI.color = color;
+            if (Mathf.Abs(from.y - to.y) < .1f) GUI.DrawTexture(new Rect(Mathf.Min(from.x, to.x), from.y, Mathf.Abs(to.x - from.x), 1f), Texture2D.whiteTexture);
+            else GUI.DrawTexture(new Rect(from.x, Mathf.Min(from.y, to.y), 1f, Mathf.Abs(to.y - from.y)), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+        }
+
+        private static void DrawHudCorner(float x, float y, int horizontal, int vertical)
+        {
+            DrawHudLine(new Vector2(x, y), new Vector2(x + horizontal * 10, y));
+            DrawHudLine(new Vector2(x, y), new Vector2(x, y + vertical * 10));
+        }
+
+        private Texture2D GetHudIcon(string iconId, Color color)
+        {
+            string cacheKey = iconId + color.ToString();
+            if (hudIcons.TryGetValue(cacheKey, out Texture2D icon)) return icon;
+            icon = new Texture2D(32, 32, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave };
+            Color transparent = new Color(0f, 0f, 0f, 0f);
+            Color[] pixels = Enumerable.Repeat(transparent, 32 * 32).ToArray();
+            Action<int, int> pixel = (x, y) => { if (x >= 0 && x < 32 && y >= 0 && y < 32) pixels[y * 32 + x] = color; };
+            Action<int, int, int, int> line = (x0, y0, x1, y1) =>
+            {
+                int dx = Mathf.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1, dy = -Mathf.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1, error = dx + dy;
+                while (true) { pixel(x0, y0); if (x0 == x1 && y0 == y1) break; int twice = 2 * error; if (twice >= dy) { error += dy; x0 += sx; } if (twice <= dx) { error += dx; y0 += sy; } }
+            };
+            if (iconId == "move") { line(4, 16, 25, 16); line(19, 9, 26, 16); line(19, 23, 26, 16); }
+            else if (iconId == "attack") { for (int i = 4; i <= 28; i += 6) { pixel(i, 16); pixel(16, i); } line(8, 8, 24, 24); line(24, 8, 8, 24); }
+            else if (iconId == "skillOne") { line(16, 3, 16, 29); line(3, 16, 29, 16); line(7, 7, 25, 25); line(25, 7, 7, 25); }
+            else if (iconId == "skillTwo") { line(16, 4, 16, 28); line(6, 22, 16, 4); line(26, 22, 16, 4); line(6, 22, 26, 22); }
+            else if (iconId == "loot") { line(5, 10, 16, 5); line(16, 5, 27, 10); line(5, 10, 5, 25); line(27, 10, 27, 25); line(5, 25, 27, 25); line(16, 5, 16, 25); line(5, 10, 16, 16); line(27, 10, 16, 16); }
+            else { line(16, 4, 16, 27); line(6, 14, 16, 4); line(26, 14, 16, 4); line(9, 27, 23, 27); }
+            icon.SetPixels(pixels); icon.Apply(false, true); hudIcons.Add(cacheKey, icon); return icon;
         }
 
         private static void DrawHudLabel(Rect panel, float y, string text, int size)
