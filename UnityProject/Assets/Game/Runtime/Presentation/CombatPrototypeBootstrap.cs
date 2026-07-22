@@ -25,8 +25,11 @@ namespace OCC.Combat.Presentation
         private int sandboxTemplateIndex;
         private bool rogueliteMenuOpen;
         private bool outcomeHandled;
+        private RogueliteMapRun mapRun;
+        private bool mapMenuOpen;
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
+        private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
 
         private void OnEnable()
         {
@@ -104,7 +107,14 @@ namespace OCC.Combat.Presentation
             foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit)) { GridPosition p = ScenePosition(marker); bool hero = marker.name.Contains("主角"); string id = hero ? "hero" : marker.name.Contains("步枪") ? "rifle" : marker.name.Contains("盾") ? "guard" : "caster"; string name = hero ? "\u963f\u65af\u7279\u62c9" : id == "rifle" ? "\u6b65\u67aa\u5175" : id == "guard" ? "\u76fe\u536b" : "\u706b\u672f\u5e08"; units.Add(new UnitState(id, hero, p, hero ? Facing.East : Facing.West) { DisplayName = name, Armor = hero ? 1 : id == "guard" ? 2 : 0, Block = id == "guard" ? 2 : hero ? 1 : 0, Speed = hero ? 11 : id == "guard" ? 7 : id == "caster" ? 9 : 8 }); }
             if (units.Count == 0) return;
             state = new CombatState(map, units);
-            if (rogueliteRun != null)
+            if (mapRun != null)
+            {
+                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.CurrentNodeId);
+                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
+                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+            }
+            else if (rogueliteRun != null)
             {
                 RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
                 developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
@@ -113,6 +123,7 @@ namespace OCC.Combat.Presentation
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
             ApplyShortRunChoices();
+            mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             CombatResolver.BeginTurn(state, "hero");
         }
@@ -140,7 +151,14 @@ namespace OCC.Combat.Presentation
             }
             if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
             state = new CombatState(map, units);
-            if (rogueliteRun != null)
+            if (mapRun != null)
+            {
+                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.CurrentNodeId);
+                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
+                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+            }
+            else if (rogueliteRun != null)
             {
                 RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
                 developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
@@ -151,6 +169,7 @@ namespace OCC.Combat.Presentation
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
             ApplyShortRunChoices();
+            mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
@@ -161,7 +180,7 @@ namespace OCC.Combat.Presentation
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); }
         public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); RefreshSceneHud(); }
         public void TacticalRestartDeveloperCombat() { developerFlow.TacticalRestart(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); }
-        public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteRun = null; rogueliteMenuOpen = false; RefreshSceneHud(); }
+        public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteRun = null; rogueliteMenuOpen = false; mapRun = null; mapMenuOpen = false; RefreshSceneHud(); }
         public void OpenRogueliteMenu() { rogueliteMenuOpen = true; rogueliteRun = null; }
         public void CloseRogueliteMenu() { rogueliteMenuOpen = false; }
         public void StartRogueliteStory(bool continueSave)
@@ -180,6 +199,13 @@ namespace OCC.Combat.Presentation
         }
         public void DeleteShortRogueliteSave() { PlayerPrefs.DeleteKey(ShortRogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasShortRogueliteSave => PlayerPrefs.HasKey(ShortRogueliteSaveKey);
+        public void StartMapRoguelite(bool continueSave) { mapRun = continueSave && PlayerPrefs.HasKey(MapRogueliteSaveKey) ? RogueliteMapRun.FromJson(PlayerPrefs.GetString(MapRogueliteSaveKey)) : new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue)); mapMenuOpen = true; rogueliteMenuOpen = false; }
+        public void DeleteMapRogueliteSave() { PlayerPrefs.DeleteKey(MapRogueliteSaveKey); PlayerPrefs.Save(); }
+        public bool HasMapRogueliteSave => PlayerPrefs.HasKey(MapRogueliteSaveKey);
+        public void SelectMapNode(string nodeId) { mapRun.SelectNode(nodeId); SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
+        public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); }
+        public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
+        private void SaveMapRun() { PlayerPrefs.SetString(MapRogueliteSaveKey, mapRun.ToJson()); PlayerPrefs.Save(); }
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
         public void ChooseShortSalvage() { rogueliteRun.ShortRun.ChooseSalvage("shield_cell"); SaveShortRun(); }
         public void ChooseShortUpgrade() { rogueliteRun.ShortRun.ChooseUpgrade("calibrated_rifle"); SaveShortRun(); }
@@ -221,6 +247,10 @@ namespace OCC.Combat.Presentation
         }
         private void HandleRogueliteOutcome()
         {
+            if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
+            {
+                outcomeHandled = true; mapRun.CompleteCurrentCombat(); SaveMapRun(); return;
+            }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
             outcomeHandled = true;
             string summary = "胜利 | " + rogueliteRun.CurrentMission.TemplateId + " | 种子 " + rogueliteRun.Package.Seed;
@@ -231,6 +261,7 @@ namespace OCC.Combat.Presentation
         }
         public void ContinueRogueliteAfterVictory()
         {
+            if (mapRun != null && developerFlow.Phase == CombatFlowPhase.Victory) { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); return; }
             if (rogueliteRun == null || (developerFlow.Phase != CombatFlowPhase.Victory && developerFlow.Phase != CombatFlowPhase.Defeat)) return;
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.IsShortRun) { OpenShortRunPhase(); return; }
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
@@ -243,7 +274,7 @@ namespace OCC.Combat.Presentation
         }
         private void RefreshSceneHud() { TacticalHudSceneBinder binder = transform.Find("场景UI")?.GetComponent<TacticalHudSceneBinder>(); if (binder != null) binder.RefreshNow(); }
         private void RunEnemyTurn() { UnitState enemy = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); if (enemy == null || !enemy.IsAlive) { if (enemy != null) CombatResolver.EndTurn(state, enemy); return; } try { if (Distance(enemy.Position, hero.Position) <= 4 && enemy.ActionPoints > 0) CombatResolver.Resolve(state, enemy.Id == "caster" ? CombatCommand.Cast(enemy.Id, hero.Id) : CombatCommand.Attack(enemy.Id, hero.Id)); else if (enemy.ActionPoints > 0) CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, StepToward(enemy.Position, hero.Position), FacingToward(enemy.Position, hero.Position))); if (state.ActiveUnitId == enemy.Id) CombatResolver.EndTurn(state, enemy); } catch (InvalidOperationException error) { state.AddLog(error.Message); CombatResolver.EndTurn(state, enemy); } }
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
+        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (mapMenuOpen) DrawMapRun(); else if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
             GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
@@ -261,7 +292,7 @@ namespace OCC.Combat.Presentation
             GUI.Label(new Rect(590, 300, 740, 38), "OCC  开发测试菜单"); GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(590, 352, 740, 28), "从战前简报进入一场完整战斗，并可随时战术重开。"); GUI.color = Color.white;
             GUI.Label(new Rect(590, 410, 740, 28), "任务：" + developerPreparation.MissionId + "  ·  破坏目标"); GUI.Label(new Rect(590, 448, 740, 28), "敌人：" + developerPreparation.EnemySummary);
             if (GUI.Button(new Rect(590, 510, 350, 54), "剧情测试：查看战前简报")) OpenDeveloperBriefing();
-            if (GUI.Button(new Rect(980, 510, 350, 54), "肉鸽测试：配置入口")) OpenRogueliteMenu();
+            if (GUI.Button(new Rect(980, 510, 350, 54), "肉鸽地图：开始推进")) StartMapRoguelite(false);
             GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(590, 620, 740, 28), "开发菜单  →  战前简报  →  战斗  →  结算  →  战术重开"); GUI.color = Color.white;
         }
         private void DrawRogueliteMenu()
@@ -284,6 +315,31 @@ namespace OCC.Combat.Presentation
             if (GUI.Button(new Rect(440, 640, 300, 42), "切换演练模板")) SelectNextSandboxTemplate();
             if (GUI.Button(new Rect(1080, 640, 300, 42), "返回测试模式")) CloseRogueliteMenu();
             GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(440, 706, 900, 28), "事件：现场修复(+1 护甲)  收获：护盾电池  升级：校准步枪(伤害 5)。"); GUI.color = Color.white;
+        }
+        private void DrawMapRun()
+        {
+            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
+            GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 900, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
+            if (mapRun.AwaitingReward)
+            {
+                GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
+                IReadOnlyList<RogueliteReward> rewards = mapRun.CurrentRewards;
+                for (int i = 0; i < rewards.Count; i++) if (GUI.Button(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName + "\n" + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"))) ClaimMapReward(rewards[i].Id);
+                GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); return;
+            }
+            GUI.Label(new Rect(390, 320, 900, 30), "选择已解锁的战斗节点推进；完成节点后解锁下一条路径。无时间压力。");
+            DrawMapNode("rail_patrol", new Rect(470, 440, 260, 96), "铁路巡逻 / 歼灭");
+            DrawMapNode("relay_raid", new Rect(1110, 440, 260, 96), "野战中继 / 破坏");
+            DrawMapNode("core_finale", new Rect(790, 650, 260, 96), "主干站 / 终点");
+            if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
+            if (GUI.Button(new Rect(1350, 820, 180, 42), "返回菜单")) ReturnToDeveloperMenu();
+        }
+        private void DrawMapNode(string id, Rect rect, string label)
+        {
+            bool unlocked = mapRun.UnlockedNodes.Contains(id); bool completed = mapRun.CompletedNodes.Contains(id); GUI.enabled = unlocked && !completed;
+            if (GUI.Button(rect, label + "\n" + (completed ? "已完成" : unlocked ? "可进入" : "未解锁"))) SelectMapNode(id);
+            GUI.enabled = true;
         }
         private void DrawShortRunInterlude()
         {
@@ -321,7 +377,7 @@ namespace OCC.Combat.Presentation
             GUI.Label(new Rect(550, 470, 800, 28), context);
             if (rogueliteRun != null) GUI.Label(new Rect(550, 506, 800, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
             if (GUI.Button(new Rect(550, 620, 350, 54), "开始正式战斗")) StartDeveloperCombat();
-            if (GUI.Button(new Rect(960, 620, 350, 54), "返回开发菜单")) ReturnToDeveloperMenu();
+            if (GUI.Button(new Rect(960, 620, 350, 54), mapRun != null ? "返回推进地图" : "返回开发菜单")) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
         }
         private void DrawDeveloperFlowBar()
         {
@@ -336,6 +392,7 @@ namespace OCC.Combat.Presentation
                 if (GUI.Button(new Rect(1340, 944, 95, 42), "测试失败")) ForceCurrentOutcome(false);
             }
             if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && rogueliteRun != null && GUI.Button(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "继续/结算" : "返回肉鸽菜单")) ContinueRogueliteAfterVictory();
+            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && mapRun != null && GUI.Button(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "查看战斗结算" : "返回推进地图")) ReturnToMapRun();
         }
         private void DrawGrid(Rect board)
         {

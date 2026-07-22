@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -77,6 +78,30 @@ namespace OCC.Combat.Tests
             Assert.That(restored.Phase, Is.EqualTo(ShortRoguelitePhase.Salvage));
             restored.ChooseSalvage("shield_cell"); restored.ChooseUpgrade("calibrated_rifle"); restored.CompleteCombat();
             Assert.That(restored.Phase, Is.EqualTo(ShortRoguelitePhase.Complete));
+        }
+
+        [Test]
+        public void MapRun_UnlocksBranchesSettlesAndRoundTrips()
+        {
+            var run = new RogueliteMapRun(901);
+            Assert.That(run.UnlockedNodes, Does.Contain("start"));
+            Assert.Throws<InvalidOperationException>(() => run.SelectNode("core_finale"));
+            run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
+            Assert.That(run.Level, Is.EqualTo(2)); Assert.That(run.AwaitingReward, Is.True); Assert.That(run.UnlockedNodes, Does.Contain("core_finale"));
+            string reward = run.CurrentRewards[0].Id; run.ClaimReward(reward);
+            var restored = RogueliteMapRun.FromJson(run.ToJson());
+            Assert.That(restored.ClaimedRewards, Does.Contain(reward)); Assert.That(restored.AwaitingReward, Is.False);
+        }
+
+        [Test]
+        public void MapRun_RewardChoicesAreDeterministicAndApplyToBuild()
+        {
+            var first = new RogueliteMapRun(77); first.SelectNode("rail_patrol"); first.CompleteCurrentCombat();
+            var second = new RogueliteMapRun(77); second.SelectNode("rail_patrol"); second.CompleteCurrentCombat();
+            Assert.That(first.CurrentRewards.Select(reward => reward.Id), Is.EqualTo(second.CurrentRewards.Select(reward => reward.Id)));
+            string weaponId = first.CurrentRewards.First(reward => reward.Kind == RogueliteRewardKind.Weapon).Id; first.ClaimReward(weaponId);
+            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); first.ApplyBuild(hero);
+            Assert.That(hero.MainHand.Id, Is.EqualTo(RogueliteMapCatalog.Rewards.First(reward => reward.Id == weaponId).Weapon.Id));
         }
     }
 }
