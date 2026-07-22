@@ -114,5 +114,28 @@ namespace OCC.Combat.Tests
                 Assert.That(run.CurrentRewards.Select(reward => reward.Kind).Distinct().Count(), Is.GreaterThanOrEqualTo(2));
             }
         }
+
+        [Test]
+        public void MapRun_RewardCardsHaveDisplayableCombatStatistics()
+        {
+            var run = new RogueliteMapRun(321);
+            run.SelectNode("rail_patrol");
+            run.CompleteCurrentCombat();
+
+            foreach (RogueliteReward reward in run.CurrentRewards)
+            {
+                Assert.That(reward.DisplayName, Is.Not.Empty);
+                if (reward.Kind == RogueliteRewardKind.Weapon)
+                {
+                    Assert.That(reward.Weapon.Damage, Is.GreaterThan(0));
+                    Assert.That(reward.Weapon.Range, Is.GreaterThan(0));
+                }
+                else
+                {
+                    Assert.That(reward.Spell.Damage, Is.GreaterThan(0));
+                    Assert.That(reward.Spell.Range, Is.GreaterThan(0));
+                }
+            }
+        }
     }
 }

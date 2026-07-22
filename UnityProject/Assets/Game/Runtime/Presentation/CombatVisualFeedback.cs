@@ -45,6 +45,12 @@ namespace OCC.Combat.Presentation
             sequence.AppendInterval(.7f).Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .22f)).OnComplete(() => Destroy(card));
         }
 
+        public void ResetBattleFeedback()
+        {
+            lastOutcome = null;
+            healthCache.Clear();
+        }
+
         private void ShowFloatingText(GridPosition position, string message, Color color)
         {
             EnsureCanvas();

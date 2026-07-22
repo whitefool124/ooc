@@ -32,6 +32,7 @@ namespace OCC.Combat.Presentation
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
         private CombatVisualFeedback visualFeedback;
+        private RogueliteSettlementPresentation settlementPresentation;
         private float mapPanelAlpha = 1f;
         private float mapPanelScale = 1f;
 
@@ -46,6 +47,7 @@ namespace OCC.Combat.Presentation
             if (sceneUi != null) sceneUi.gameObject.SetActive(true);
             developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "步枪兵、盾卫、火术师、突袭者、精英先锋");
             visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
+            settlementPresentation = gameObject.AddComponent<RogueliteSettlementPresentation>(); settlementPresentation.Initialize(this);
             BuildCombatFromSceneStageTwo();
         }
 
@@ -183,8 +185,8 @@ namespace OCC.Combat.Presentation
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); }
-        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); RefreshSceneHud(); }
-        public void TacticalRestartDeveloperCombat() { developerFlow.TacticalRestart(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); }
+        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; visualFeedback?.ResetBattleFeedback(); CombatResolver.BeginTurn(state, "hero"); RefreshSceneHud(); }
+        public void TacticalRestartDeveloperCombat() { developerFlow.TacticalRestart(); state = developerFlow.State; visualFeedback?.ResetBattleFeedback(); CombatResolver.BeginTurn(state, "hero"); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); }
         public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteRun = null; rogueliteMenuOpen = false; mapRun = null; mapMenuOpen = false; RefreshSceneHud(); }
         public void OpenRogueliteMenu() { rogueliteMenuOpen = true; rogueliteRun = null; }
         public void CloseRogueliteMenu() { rogueliteMenuOpen = false; }
@@ -208,7 +210,7 @@ namespace OCC.Combat.Presentation
         public void DeleteMapRogueliteSave() { PlayerPrefs.DeleteKey(MapRogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasMapRogueliteSave => PlayerPrefs.HasKey(MapRogueliteSaveKey);
         public void SelectMapNode(string nodeId) { mapRun.SelectNode(nodeId); SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
-        public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); }
+        public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); settlementPresentation?.RefreshNow(); }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
         private void SaveMapRun() { PlayerPrefs.SetString(MapRogueliteSaveKey, mapRun.ToJson()); PlayerPrefs.Save(); }
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
@@ -239,6 +241,7 @@ namespace OCC.Combat.Presentation
         public void DeleteRogueliteSave() { PlayerPrefs.DeleteKey(RogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasRogueliteSave => PlayerPrefs.HasKey(RogueliteSaveKey);
         public CombatState CurrentState => state;
+        public RogueliteMapRun CurrentMapRun => mapRun;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
         public void SelectHudAction(string action) { selectedAction = action; }
         public void UseQuickbarSlot(int slot) { if (state?.Quickbar[slot] != null) TryCommand(CombatCommand.UseQuickbar("hero", slot)); }
@@ -254,7 +257,7 @@ namespace OCC.Combat.Presentation
         {
             if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
             {
-                outcomeHandled = true; visualFeedback?.PlayOutcome(true); mapRun.CompleteCurrentCombat(); SaveMapRun(); return;
+                outcomeHandled = true; visualFeedback?.PlayOutcome(true); mapRun.CompleteCurrentCombat(); SaveMapRun(); settlementPresentation?.RefreshNow(); return;
             }
             if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat) { outcomeHandled = true; visualFeedback?.PlayOutcome(false); }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
