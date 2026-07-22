@@ -11,17 +11,16 @@
 
 ## 当前进行
 
-### P1-05：定制战术 HUD 视觉系统 - COMPLETE
+### P1-06：场景化战术 HUD 与固定像素图标 - COMPLETE
 
 - **归属**：剧情模式与肉鸽模式共用。
-- **目标**：以黑白基底的极简工业视觉重绘开发战斗 HUD，建立可复用的细线面板、资源条、像素风指令图标、快捷栏和行动条组件。
-- **涉及文件/系统**：`CombatPrototypeBootstrap` 运行时 IMGUI HUD、UI 参考图审查、Play Mode 截图验证。
+- **目标**：将战术 HUD 的视觉结构、按钮和 `32x32` 像素图标从运行时绘制迁移为 `CombatPrototype` 场景中的固定 Canvas 层级与资产，脚本只进行状态绑定和交互转发。
+- **涉及文件/系统**：`CombatPrototype.unity`、`TacticalHudSceneBinder`、`Icons32` 图标资产、Play Mode 验证。
 - **验收标准**：
-  - 左侧战场与右侧 HUD 保持清晰层级；HUD 以黑白/灰阶与细线框架为主，冷青、锈红和安全黄只作小面积语义色。
-  - 指令图标按 `32x32` 独立像素资产规范化；不使用厚重金属框架、AI 图图标或 AI 文字。
-  - AI 生成图只作视觉参考；正式界面的中文文本、图标与控件全部在 Unity 中独立实现，不直接导入未 QA 的 AI 图。
-  - 1920x1080 和 960x540 截图中 HUD 不越界，按钮可识别，中文不重叠或截断。
-  - Funplay 编译错误为 0、Console 无项目错误；不保存场景或替换正式资产。
+  - `场景UI/战术HUD` 保存完整的状态、指令、快捷栏、构筑/回合、行动条和记录层级；Canvas 上有固定 `TacticalHudSceneBinder`。
+  - 6 枚指令图标作为 `Assets/Game/Art/UI/Icons32/` 的 `32x32`、Point filter 资产保存；不使用 AI 图图标或文字。
+  - 保存的“攻击”场景按钮可在 Play Mode 切换实际战术选择；战斗开始时 HUD 同帧显示。
+  - Funplay 编译错误为 0、Console 无项目错误；场景保存后通过 Git 记录。
 - **完成后解锁**：P3 肉鸽故事包与任务模板开发菜单入口。
 
 ## 接下来
@@ -71,3 +70,4 @@
 | 2026-07-22 | P1-04 | COMPLETE | 控制台改为 500px 宽的分区侧栏：资源条摘要、双列战术指令、快捷栏、构筑/回合、精简行动条与战斗记录。Funplay 编译无错误、Console 无项目错误；Game View 实测无文字重叠，未保存场景。 |
 | 2026-07-22 | 本地 UI 方向图 | PASS | 已启动 `E:\数据库\图片生成` Relay Canvas 并通过本机接口生成 UI 概念参考图：`E:\数据库\图片生成\outputs\gpt-image-2-2026-07-22T12-24-18-570Z-4dcd4cf3.png`。图仅用于布局/材质/色彩审查，未导入 Unity。 |
 | 2026-07-22 | P1-05 | COMPLETE | 实装黑白极简工业战术 HUD：细线框架、灰阶面板、限量冷青/锈红/安全黄语义色，以及运行时生成的 6 枚独立 32x32 点过滤像素指令图标。Funplay 编译无错误、Console 为空；1920x1080 Game View 与 960x540 截图确认 HUD 可见且无重叠/越界；未保存场景、未导入 AI 图。下一步：P3 肉鸽故事包与任务模板开发菜单入口。 |
+| 2026-07-22 | P1-06 | COMPLETE | HUD 已场景化：`CombatPrototype` 的 `场景UI/战术HUD` 保存了全部细线分区、`Button`、`RawImage` 图标槽、资源条和行动条，Canvas 保存 `TacticalHudSceneBinder`。6 枚固定 32x32 Point-filter 图标资产保存到 `Assets/Game/Art/UI/Icons32/`；Play Mode 验证 HUD 同帧激活及“攻击”按钮实际切换选择。编译无错误、Console 无错误。 |
