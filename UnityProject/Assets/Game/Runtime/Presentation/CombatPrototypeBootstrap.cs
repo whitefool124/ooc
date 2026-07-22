@@ -26,6 +26,7 @@ namespace OCC.Combat.Presentation
         private bool rogueliteMenuOpen;
         private bool outcomeHandled;
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
+        private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
 
         private void OnEnable()
         {
@@ -111,6 +112,7 @@ namespace OCC.Combat.Presentation
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
+            ApplyShortRunChoices();
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             CombatResolver.BeginTurn(state, "hero");
         }
@@ -148,6 +150,7 @@ namespace OCC.Combat.Presentation
                     state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
+            ApplyShortRunChoices();
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
@@ -167,6 +170,33 @@ namespace OCC.Combat.Presentation
                 ? RogueliteStoryPackage.FromJson(PlayerPrefs.GetString(RogueliteSaveKey))
                 : RogueliteStoryCatalog.CreateDefault(UnityEngine.Random.Range(1, int.MaxValue));
             rogueliteRun = new RogueliteDeveloperRun(package); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
+        public void StartShortRoguelite(bool continueSave)
+        {
+            ShortRogueliteRun run = continueSave && PlayerPrefs.HasKey(ShortRogueliteSaveKey)
+                ? ShortRogueliteRun.FromJson(PlayerPrefs.GetString(ShortRogueliteSaveKey))
+                : new ShortRogueliteRun(UnityEngine.Random.Range(1, int.MaxValue));
+            rogueliteRun = new RogueliteDeveloperRun(run); OpenShortRunPhase();
+        }
+        public void DeleteShortRogueliteSave() { PlayerPrefs.DeleteKey(ShortRogueliteSaveKey); PlayerPrefs.Save(); }
+        public bool HasShortRogueliteSave => PlayerPrefs.HasKey(ShortRogueliteSaveKey);
+        public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
+        public void ChooseShortSalvage() { rogueliteRun.ShortRun.ChooseSalvage("shield_cell"); SaveShortRun(); }
+        public void ChooseShortUpgrade() { rogueliteRun.ShortRun.ChooseUpgrade("calibrated_rifle"); SaveShortRun(); }
+        private void OpenShortRunPhase()
+        {
+            if (rogueliteRun?.IsShortRun != true) return;
+            if (rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.FirstCombat || rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.SecondCombat) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
+            else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteMenuOpen = true; }
+        }
+        private void SaveShortRun() { PlayerPrefs.SetString(ShortRogueliteSaveKey, rogueliteRun.ShortRun.ToJson()); PlayerPrefs.Save(); }
+        private void ApplyShortRunChoices()
+        {
+            if (rogueliteRun?.IsShortRun != true || rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) return;
+            UnitState hero = state.GetUnit("hero");
+            if (rogueliteRun.ShortRun.EventChoiceId == "field_repair") hero.Armor += 1;
+            if (rogueliteRun.ShortRun.UpgradeChoiceId == "calibrated_rifle") hero.Equip(StageTwoBuilds.CalibratedRifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+            if (rogueliteRun.ShortRun.SalvageChoiceId == "shield_cell") state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell, CombatCatalog.ShieldCell);
         }
         public void StartRogueliteSandbox()
         {
@@ -195,11 +225,14 @@ namespace OCC.Combat.Presentation
             outcomeHandled = true;
             string summary = "胜利 | " + rogueliteRun.CurrentMission.TemplateId + " | 种子 " + rogueliteRun.Package.Seed;
             if (rogueliteRun.Kind == RogueliteLaunchKind.TemplateSandbox) return;
-            rogueliteRun.Complete(summary); PlayerPrefs.SetString(RogueliteSaveKey, rogueliteRun.Package.ToJson()); PlayerPrefs.Save();
+            rogueliteRun.Complete(summary);
+            if (rogueliteRun.IsShortRun) SaveShortRun();
+            else { PlayerPrefs.SetString(RogueliteSaveKey, rogueliteRun.Package.ToJson()); PlayerPrefs.Save(); }
         }
         public void ContinueRogueliteAfterVictory()
         {
             if (rogueliteRun == null || (developerFlow.Phase != CombatFlowPhase.Victory && developerFlow.Phase != CombatFlowPhase.Defeat)) return;
+            if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.IsShortRun) { OpenShortRunPhase(); return; }
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
             else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteRun = null; rogueliteMenuOpen = true; RefreshSceneHud(); }
         }
@@ -233,21 +266,51 @@ namespace OCC.Combat.Presentation
         }
         private void DrawRogueliteMenu()
         {
+            if (rogueliteRun?.IsShortRun == true && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.FirstCombat && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) { DrawShortRunInterlude(); return; }
             IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
             TaskTemplate selected = templates[sandboxTemplateIndex % templates.Count];
             GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(390, 170, 1140, 720), ""); GUI.color = Color.white;
             GUI.Label(new Rect(440, 216, 960, 38), "OCC  肉鸽测试配置");
             GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 268, 900, 28), "故事链：死信号  →  工厂突破  →  最终导管"); GUI.Label(new Rect(440, 302, 900, 28), "每次新开生成并保存随机种子；相同种子的目标与结算保持稳定。"); GUI.color = Color.white;
-            GUI.Label(new Rect(440, 370, 500, 28), "故事包测试");
-            if (GUI.Button(new Rect(440, 408, 300, 52), "新开故事包")) StartRogueliteStory(false);
-            GUI.enabled = HasRogueliteSave; if (GUI.Button(new Rect(760, 408, 300, 52), "继续故事包")) StartRogueliteStory(true); GUI.enabled = true;
-            if (GUI.Button(new Rect(1080, 408, 300, 52), "删除故事包存档")) DeleteRogueliteSave();
-            GUI.Label(new Rect(440, 516, 600, 28), "模板沙盒：" + selected.Id + "  /  " + selected.Type);
-            GUI.Label(new Rect(440, 548, 840, 25), selected.Type == CombatObjectiveType.Elimination ? "目标：清除全部敌对单位。" : "目标：破坏地图中的中继器。 ");
-            if (GUI.Button(new Rect(440, 592, 300, 52), "切换开放模板")) SelectNextSandboxTemplate();
-            if (GUI.Button(new Rect(760, 592, 300, 52), "开始模板沙盒")) StartRogueliteSandbox();
-            if (GUI.Button(new Rect(1080, 592, 300, 52), "返回测试模式")) CloseRogueliteMenu();
-            GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(440, 706, 900, 28), "开放模板：歼灭、破坏。其余模板及新地图/敌人/奖励不在本轮范围内。"); GUI.color = Color.white;
+            GUI.Label(new Rect(440, 370, 500, 28), "最短完整肉鸽");
+            if (GUI.Button(new Rect(440, 408, 300, 52), "新开两关肉鸽")) StartShortRoguelite(false);
+            GUI.enabled = HasShortRogueliteSave; if (GUI.Button(new Rect(760, 408, 300, 52), "继续两关肉鸽")) StartShortRoguelite(true); GUI.enabled = true;
+            if (GUI.Button(new Rect(1080, 408, 300, 52), "删除两关存档")) DeleteShortRogueliteSave();
+            GUI.Label(new Rect(440, 480, 840, 25), "第一关 → 事件 → 收获 → 升级 → 第二关 → 结算；每次选择都会影响第二关。");
+            GUI.Label(new Rect(440, 530, 500, 28), "旧版故事包/模板演练");
+            if (GUI.Button(new Rect(440, 568, 300, 52), "新开旧故事包")) StartRogueliteStory(false);
+            GUI.enabled = HasRogueliteSave; if (GUI.Button(new Rect(760, 568, 300, 52), "继续旧故事包")) StartRogueliteStory(true); GUI.enabled = true;
+            if (GUI.Button(new Rect(1080, 568, 300, 52), "开始 " + selected.Type + " 演练")) StartRogueliteSandbox();
+            if (GUI.Button(new Rect(440, 640, 300, 42), "切换演练模板")) SelectNextSandboxTemplate();
+            if (GUI.Button(new Rect(1080, 640, 300, 42), "返回测试模式")) CloseRogueliteMenu();
+            GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(440, 706, 900, 28), "事件：现场修复(+1 护甲)  收获：护盾电池  升级：校准步枪(伤害 5)。"); GUI.color = Color.white;
+        }
+        private void DrawShortRunInterlude()
+        {
+            ShortRogueliteRun run = rogueliteRun.ShortRun;
+            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(500, 220, 920, 600), ""); GUI.color = Color.white;
+            GUI.Label(new Rect(550, 270, 800, 38), run.Phase == ShortRoguelitePhase.Event ? "现场事件：损坏的导流阀" : run.Phase == ShortRoguelitePhase.Salvage ? "收获：回收箱" : run.Phase == ShortRoguelitePhase.Upgrade ? "角色升级：校准台" : "两关肉鸽结算");
+            if (run.Phase == ShortRoguelitePhase.Event)
+            {
+                GUI.Label(new Rect(550, 334, 760, 56), "用以太素修复护甲衬层。第二关获得 +1 护甲。");
+                if (GUI.Button(new Rect(550, 460, 350, 54), "执行现场修复")) ChooseShortEvent();
+            }
+            else if (run.Phase == ShortRoguelitePhase.Salvage)
+            {
+                GUI.Label(new Rect(550, 334, 760, 56), "回收一枚护盾电池。第二关快捷栏获得额外护盾电池。");
+                if (GUI.Button(new Rect(550, 460, 350, 54), "收取护盾电池")) ChooseShortSalvage();
+            }
+            else if (run.Phase == ShortRoguelitePhase.Upgrade)
+            {
+                GUI.Label(new Rect(550, 334, 760, 56), "校准主武器。第二关装备校准步枪，伤害从 4 提升到 5。");
+                if (GUI.Button(new Rect(550, 460, 350, 54), "安装校准组件")) { ChooseShortUpgrade(); OpenShortRunPhase(); }
+            }
+            else
+            {
+                GUI.Label(new Rect(550, 334, 760, 80), "两关行动完成。已应用：" + string.Join(" / ", run.Choices));
+                if (GUI.Button(new Rect(550, 460, 350, 54), "返回肉鸽配置")) { DeleteShortRogueliteSave(); rogueliteRun = null; }
+            }
+            if (GUI.Button(new Rect(960, 650, 350, 54), "返回开发菜单")) ReturnToDeveloperMenu();
         }
         private void DrawDeveloperBriefing()
         {

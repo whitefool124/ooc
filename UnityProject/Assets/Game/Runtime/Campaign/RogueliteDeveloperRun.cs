@@ -5,6 +5,40 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum RogueliteLaunchKind { StoryChain, TemplateSandbox }
+    public enum ShortRoguelitePhase { FirstCombat, Event, Salvage, Upgrade, SecondCombat, Complete }
+
+    // R0 is deliberately small but every non-combat choice changes the second combat.
+    public sealed class ShortRogueliteRun
+    {
+        public int Seed { get; }
+        public ShortRoguelitePhase Phase { get; private set; }
+        public string EventChoiceId { get; private set; }
+        public string SalvageChoiceId { get; private set; }
+        public string UpgradeChoiceId { get; private set; }
+        public IReadOnlyList<string> Choices => new[] { EventChoiceId, SalvageChoiceId, UpgradeChoiceId }.Where(id => !string.IsNullOrEmpty(id)).ToArray();
+
+        public ShortRogueliteRun(int seed) { Seed = seed; }
+        private ShortRogueliteRun(int seed, ShortRoguelitePhase phase, string eventChoiceId, string salvageChoiceId, string upgradeChoiceId)
+        { Seed = seed; Phase = phase; EventChoiceId = eventChoiceId; SalvageChoiceId = salvageChoiceId; UpgradeChoiceId = upgradeChoiceId; }
+        public string CurrentMissionId => Phase == ShortRoguelitePhase.FirstCombat ? "dead_signal" : Phase == ShortRoguelitePhase.SecondCombat ? "factory_breach" : null;
+        public void CompleteCombat()
+        {
+            if (Phase == ShortRoguelitePhase.FirstCombat) Phase = ShortRoguelitePhase.Event;
+            else if (Phase == ShortRoguelitePhase.SecondCombat) Phase = ShortRoguelitePhase.Complete;
+            else throw new InvalidOperationException("No combat is active.");
+        }
+        public void ChooseEvent(string id) { Require(ShortRoguelitePhase.Event); EventChoiceId = id == "field_repair" ? id : throw new ArgumentException("Unknown event choice.", nameof(id)); Phase = ShortRoguelitePhase.Salvage; }
+        public void ChooseSalvage(string id) { Require(ShortRoguelitePhase.Salvage); SalvageChoiceId = id == "shield_cell" ? id : throw new ArgumentException("Unknown salvage choice.", nameof(id)); Phase = ShortRoguelitePhase.Upgrade; }
+        public void ChooseUpgrade(string id) { Require(ShortRoguelitePhase.Upgrade); UpgradeChoiceId = id == "calibrated_rifle" ? id : throw new ArgumentException("Unknown upgrade choice.", nameof(id)); Phase = ShortRoguelitePhase.SecondCombat; }
+        public string ToJson() => string.Join("|", "short1", Seed, (int)Phase, EventChoiceId ?? string.Empty, SalvageChoiceId ?? string.Empty, UpgradeChoiceId ?? string.Empty);
+        public static ShortRogueliteRun FromJson(string json)
+        {
+            string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
+            if (parts.Length != 6 || parts[0] != "short1") throw new InvalidOperationException("Unsupported short roguelite save version.");
+            return new ShortRogueliteRun(int.Parse(parts[1]), (ShortRoguelitePhase)int.Parse(parts[2]), parts[3], parts[4], parts[5]);
+        }
+        private void Require(ShortRoguelitePhase phase) { if (Phase != phase) throw new InvalidOperationException("Expected " + phase + ", current " + Phase + "."); }
+    }
 
     public sealed class RogueliteMissionDefinition
     {
@@ -43,14 +77,18 @@ namespace OCC.Combat
         public RogueliteLaunchKind Kind { get; }
         public RogueliteStoryPackage Package { get; }
         public string SandboxTemplateId { get; }
-        public RogueliteMissionDefinition CurrentMission => Kind == RogueliteLaunchKind.StoryChain ? RogueliteDeveloperCatalog.FindMission(Package.CurrentMissionId) : RogueliteDeveloperCatalog.SandboxForTemplate(SandboxTemplateId);
+        public ShortRogueliteRun ShortRun { get; }
+        public bool IsShortRun => ShortRun != null;
+        public RogueliteMissionDefinition CurrentMission => IsShortRun ? RogueliteDeveloperCatalog.FindMission(ShortRun.CurrentMissionId) : Kind == RogueliteLaunchKind.StoryChain ? RogueliteDeveloperCatalog.FindMission(Package.CurrentMissionId) : RogueliteDeveloperCatalog.SandboxForTemplate(SandboxTemplateId);
 
         public RogueliteDeveloperRun(RogueliteStoryPackage package)
         { Kind = RogueliteLaunchKind.StoryChain; Package = package ?? throw new ArgumentNullException(nameof(package)); }
         public RogueliteDeveloperRun(string sandboxTemplateId, int seed)
         { if (RogueliteDeveloperCatalog.OpenSandboxTemplates.All(template => template.Id != sandboxTemplateId)) throw new ArgumentException("Template is not open for sandbox testing.", nameof(sandboxTemplateId)); Kind = RogueliteLaunchKind.TemplateSandbox; SandboxTemplateId = sandboxTemplateId; Package = RogueliteStoryCatalog.CreateDefault(seed); }
+        public RogueliteDeveloperRun(ShortRogueliteRun shortRun)
+        { ShortRun = shortRun ?? throw new ArgumentNullException(nameof(shortRun)); Kind = RogueliteLaunchKind.StoryChain; Package = RogueliteStoryCatalog.CreateDefault(shortRun.Seed); }
         public void Complete(string summary)
-        { if (Kind == RogueliteLaunchKind.StoryChain) Package.CompleteCurrentMission(summary); }
+        { if (IsShortRun) ShortRun.CompleteCombat(); else if (Kind == RogueliteLaunchKind.StoryChain) Package.CompleteCurrentMission(summary); }
     }
 
     // This store deliberately accepts only roguelite package JSON and never references CampaignState.

@@ -52,6 +52,31 @@ namespace OCC.Combat.Tests
             victory.ResolveDebugOutcome(true); Assert.That(victory.IsVictory, Is.True);
             var defeat = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East), new UnitState("enemy", false, new GridPosition(1, 0), Facing.West) });
             defeat.ResolveDebugOutcome(false); Assert.That(defeat.IsDefeat, Is.True);
+
+            var objectiveMap = new GridMap(2, 2); objectiveMap.SetTile(new GridPosition(1, 1), new TileState { IsObjective = true, Durability = 6 });
+            var destruction = new CombatState(objectiveMap, new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) }, new CombatObjective[] { new DestructionObjective(new[] { new GridPosition(1, 1) }) });
+            destruction.ResolveDebugOutcome(true); Assert.That(destruction.IsVictory, Is.True);
+        }
+
+        [Test]
+        public void ShortRun_RequiresEventSalvageAndUpgradeBeforeSecondCombat()
+        {
+            var run = new ShortRogueliteRun(777);
+            Assert.That(run.CurrentMissionId, Is.EqualTo("dead_signal"));
+            run.CompleteCombat(); Assert.That(run.Phase, Is.EqualTo(ShortRoguelitePhase.Event));
+            run.ChooseEvent("field_repair"); run.ChooseSalvage("shield_cell"); run.ChooseUpgrade("calibrated_rifle");
+            Assert.That(run.CurrentMissionId, Is.EqualTo("factory_breach"));
+            Assert.That(run.Choices, Is.EquivalentTo(new[] { "field_repair", "shield_cell", "calibrated_rifle" }));
+        }
+
+        [Test]
+        public void ShortRun_RoundTripsAtEveryInterlude()
+        {
+            var run = new ShortRogueliteRun(88); run.CompleteCombat(); run.ChooseEvent("field_repair");
+            var restored = ShortRogueliteRun.FromJson(run.ToJson());
+            Assert.That(restored.Phase, Is.EqualTo(ShortRoguelitePhase.Salvage));
+            restored.ChooseSalvage("shield_cell"); restored.ChooseUpgrade("calibrated_rifle"); restored.CompleteCombat();
+            Assert.That(restored.Phase, Is.EqualTo(ShortRoguelitePhase.Complete));
         }
     }
 }

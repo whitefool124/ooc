@@ -90,6 +90,11 @@ namespace OCC.Combat
                 if (victory && !unit.IsHero) unit.TakeDamage(int.MaxValue);
                 if (!victory && unit.IsHero) unit.TakeDamage(int.MaxValue);
             }
+            if (victory)
+            {
+                foreach (DestructionObjective objective in Objectives.OfType<DestructionObjective>())
+                    foreach (GridPosition position in objective.Positions) Map.GetTile(position).Durability = 0;
+            }
             EvaluateOutcome();
         }
         public CombatState Clone()
