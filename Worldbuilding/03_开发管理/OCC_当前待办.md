@@ -92,6 +92,7 @@
 
 | 日期 | 任务 | 结果 | 备注 |
 | --- | --- | --- | --- |
+| 2026-07-23 | V1-02b 结算奖励卡输入与悬停反馈 | COMPLETE | 将战术控制台的 Input System 兼容方案同步至 `RogueliteSettlementPresentation`：奖励卡由运行时鼠标命中兜底执行领取，不再依赖当前异常的 uGUI 射线命中；移除不兼容的 `StandaloneInputModule`，并为奖励卡增加 DOTween 悬停提亮与 1.025 缩放。Funplay 编译 0 错误/警告、Console 无错误；Play Mode 建立三选一结算后点击左侧奖励卡，`AwaitingReward` 由 `True` 变为 `False` 且领取 `aether_wand` 成功。未保存场景。下一步：V1-03 攻击源/目标/击破地图内视觉反馈与双分辨率验收。 |
 | 2026-07-23 | V1-02a 战术控制台输入与悬停反馈 | COMPLETE | 定位到场景 HUD 缺少 `EventSystem`，导致 `GraphicRaycaster` 下的 uGUI `Button` 不能接收用户鼠标。`TacticalHudSceneBinder` 现于运行时补齐 `EventSystem`/`StandaloneInputModule`；为每个指令、快捷栏、构筑和回合按钮添加 DOTween 悬停亮色、1.035 缩放和按下缩放反馈，并提供 IMGUI 鼠标命中兜底以绕过当前 Canvas 射线命中异常。Funplay 编译 0 错误/警告、Console 无错误；Play Mode 点击“攻击”后状态切换为 `攻击`，再点“移动”切回 `移动`，按钮均实际命中；悬停触发器 4 项存在并可启动反馈 Tween。未保存场景。下一步：V1-03 攻击源/目标/击破的地图内视觉反馈与双分辨率视觉验收。 |
 | 2026-07-23 | V1-02 肉鸽结算层与可重复胜负反馈 | COMPLETE | 新增运行时 `RogueliteSettlementPresentation`：战斗胜利后以 DOTween 进入的全屏结算层展示等级、经验、三张武器/法术奖励卡、伤害/射程/穿甲或耗能数值；卡片点击后真实领取、保存并关闭结算层。`CombatVisualFeedback` 在开始/战术重开时清空结局去重与生命缓存，允许同一会话连续多场胜利/失败都有反馈。Funplay 编译 0 错误/警告、Console 为空；Play Mode 中确认结算 Canvas 创建，并用真实 UI 点击领取 `aether_wand` 后 `AwaitingReward=False`、已领取列表正确；新增 EditMode 奖励数值可展示测试并通过聚焦检查。未保存场景。下一步：V1-03 接入攻击源/目标/击破的地图内表现，并完成 1920x1080 与 960x540 可视化验收。 |
 | 2026-07-22 | V1-01 DOTween 与表现基础 | COMPLETE | 已从本机现有 Unity 项目引入完整 DOTween 插件目录并完成 Funplay 域重载；编译 0 错误/警告。新增运行时战斗结果与伤害浮字反馈组件，以及地图面板可见性保护。首份本地生成角色原料已去除绿幕，但 QA 为 1024×1024、约 4 万色，不符合 64×64/受控调色板正式资源标准，已隔离至 `Art/Raw/Units`，未导入 Unity 正式资源目录。下一步：制作并 QA 首批 64×64 单位与 32×32 地块/背景资源，再接入正式视觉层。 |

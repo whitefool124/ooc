@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -6,12 +7,24 @@ using UnityEngine.UI;
 namespace OCC.Combat.Presentation
 {
     // Runtime settlement layer keeps the authored combat HUD untouched while reward UI is iterated.
+    [DefaultExecutionOrder(-100)]
     public sealed class RogueliteSettlementPresentation : MonoBehaviour
     {
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private GameObject panel;
         private int presentedSeed = int.MinValue;
+        private readonly List<RewardCardInput> rewardCards = new List<RewardCardInput>();
+
+        private sealed class RewardCardInput
+        {
+            public string RewardId;
+            public RectTransform Rect;
+            public Image Image;
+            public Color Normal;
+            public Color Hover;
+            public bool IsHovering;
+        }
 
         public void Initialize(CombatPrototypeBootstrap source)
         {
@@ -36,10 +49,29 @@ namespace OCC.Combat.Presentation
             RefreshNow();
         }
 
+        private void OnGUI()
+        {
+            if (panel == null || Event.current == null) return;
+            Vector2 screenPoint = new Vector2(Event.current.mousePosition.x, Screen.height - Event.current.mousePosition.y);
+            foreach (RewardCardInput card in rewardCards)
+            {
+                if (card.Rect == null || !card.Rect.gameObject.activeInHierarchy) continue;
+                bool hovering = RectTransformUtility.RectangleContainsScreenPoint(card.Rect, screenPoint);
+                SetHover(card, hovering);
+                if (hovering && Event.current.type == EventType.MouseDown && Event.current.button == 0)
+                {
+                    bootstrap.ClaimMapReward(card.RewardId);
+                    Event.current.Use();
+                    return;
+                }
+            }
+        }
+
         private void Show(RogueliteMapRun run)
         {
             Hide();
             EnsureCanvas();
+            rewardCards.Clear();
             presentedSeed = run.Seed;
             panel = CreateObject("肉鸽结算面板", canvas.transform);
             RectTransform root = panel.AddComponent<RectTransform>();
@@ -87,6 +119,14 @@ namespace OCC.Combat.Presentation
             Button button = card.AddComponent<Button>();
             ColorBlock colors = button.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1.12f, 1.12f, 1.12f, 1f); colors.pressedColor = new Color(.72f, .72f, .72f, 1f); button.colors = colors;
             button.onClick.AddListener(() => bootstrap.ClaimMapReward(reward.Id));
+            rewardCards.Add(new RewardCardInput
+            {
+                RewardId = reward.Id,
+                Rect = rect,
+                Image = image,
+                Normal = image.color,
+                Hover = new Color(.16f, .19f, .20f, 1f)
+            });
 
             AddLabel(card.transform, "序号", "0" + (index + 1), new Vector2(24, -24), new Vector2(80, 24), 18, accent, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "类型", weapon ? "武器模块" : "法术模块", new Vector2(24, -58), new Vector2(320, 28), 19, accent, TextAnchor.MiddleLeft);
@@ -104,6 +144,7 @@ namespace OCC.Combat.Presentation
             if (panel != null) Destroy(panel);
             panel = null;
             presentedSeed = int.MinValue;
+            rewardCards.Clear();
         }
 
         private void EnsureCanvas()
@@ -114,11 +155,20 @@ namespace OCC.Combat.Presentation
             canvas = root.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 80;
             CanvasScaler scaler = root.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); scaler.matchWidthOrHeight = .5f;
             root.AddComponent<GraphicRaycaster>();
-            if (FindFirstObjectByType<EventSystem>() == null)
+            if (FindAnyObjectByType<EventSystem>() == null)
             {
                 GameObject events = new GameObject("EventSystem"); DontDestroyOnLoad(events);
-                events.AddComponent<EventSystem>(); events.AddComponent<StandaloneInputModule>();
+                events.AddComponent<EventSystem>();
             }
+        }
+
+        private static void SetHover(RewardCardInput card, bool hovering)
+        {
+            if (card.IsHovering == hovering) return;
+            card.IsHovering = hovering;
+            card.Image.DOKill(); card.Rect.DOKill();
+            DOTween.To(() => card.Image.color, value => card.Image.color = value, hovering ? card.Hover : card.Normal, hovering ? .10f : .12f).SetUpdate(true);
+            card.Rect.DOScale(hovering ? 1.025f : 1f, hovering ? .10f : .12f).SetUpdate(true);
         }
 
         private static GameObject CreateObject(string name, Transform parent)
