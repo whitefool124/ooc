@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC P3 自动开发决策问卷</title>
+  <style>
+    :root { --bg:#101214; --panel:#171a1d; --line:#363b40; --text:#f2eee5; --muted:#a9b0b5; --cyan:#81d8e8; --amber:#e7bc6a; --red:#d87871; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--text); font:15px/1.55 "Microsoft YaHei UI", "Noto Sans CJK SC", sans-serif; }
+    header { padding:34px max(24px, calc((100% - 1160px)/2)); border-bottom:1px solid var(--line); background:#131619; }
+    h1,h2,h3,p { margin-top:0; } h1 { font-size:28px; letter-spacing:.06em; margin-bottom:8px; } h2 { font-size:19px; margin:0; } h3 { font-size:15px; color:var(--cyan); margin:0 0 13px; }
+    .lede,.hint { color:var(--muted); } .warn { color:var(--amber); } main { max-width:1160px; margin:0 auto; padding:24px; }
+    .toolbar { position:sticky; top:0; z-index:2; padding:12px 0; background:linear-gradient(var(--bg) 80%,transparent); display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    button,.file-label { border:1px solid var(--line); background:#1e2327; color:var(--text); padding:8px 12px; cursor:pointer; font:inherit; } button:hover,.file-label:hover { border-color:var(--cyan); } button.primary { border-color:var(--cyan); color:var(--cyan); } #progress { margin-left:auto; color:var(--cyan); font-variant-numeric:tabular-nums; }
+    .section { margin:24px 0; border:1px solid var(--line); background:var(--panel); } .section-head { padding:18px 20px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:baseline; } .section-body { padding:20px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .question { padding:14px; background:#121518; border-left:2px solid #3d464d; } .question.required { border-left-color:var(--cyan); } .question.full { grid-column:1/-1; } label.q { display:block; font-weight:600; margin-bottom:6px; } .id { color:var(--cyan); font-family:monospace; margin-right:6px; } .help { display:block; color:var(--muted); font-size:13px; margin-bottom:10px; }
+    input[type=text],input[type=number],textarea,select { width:100%; background:#0d0f11; color:var(--text); border:1px solid var(--line); padding:8px; font:inherit; } textarea { min-height:92px; resize:vertical; } .options { display:grid; gap:6px; } .options label { display:flex; gap:8px; align-items:flex-start; cursor:pointer; } input[type=radio],input[type=checkbox] { accent-color:var(--cyan); margin-top:5px; }
+    .status { padding:12px 14px; border:1px solid var(--line); background:#131619; color:var(--muted); } .status.ok { color:var(--cyan); border-color:#47727b; } .status.bad { color:var(--red); border-color:#7b4845; }
+    dialog { max-width:720px; width:calc(100% - 32px); color:var(--text); background:#171a1d; border:1px solid var(--line); } dialog textarea { height:360px; } .dialog-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:12px; }
+    footer { padding:24px 0 50px; color:var(--muted); } @media (max-width:720px) { .section-body { grid-template-columns:1fr; } .question.full { grid-column:auto; } #progress { margin-left:0; width:100%; } }
+  </style>
+</head>
+<body>
+  <header><h1>OCC / P3 自动开发决策问卷</h1><p class="lede">用途：锁定“肉鸽故事包与任务模板开发菜单入口”的产品规则与验收边界。答案会被转为策划约束、待办验收项和实现任务；未回答的必答项将阻止进入自动开发。</p><p class="warn">既有硬约束：剧情模式绝不加入时间压力、敌情推进、倒计时或拖延关闭地点；肉鸽进度不得污染剧情存档；本问卷不授权替换正式美术资产。</p></header>
+  <main><div class="toolbar"><button class="primary" type="button" id="save">保存本机草稿</button><button type="button" id="exportJson">导出 JSON</button><button type="button" id="exportMd">导出 Markdown</button><label class="file-label">导入 JSON<input id="import" type="file" accept="application/json" hidden></label><button type="button" id="reset">清空本页</button><span id="progress"></span></div><div id="status" class="status">问卷加载完成；请优先填写带青色边线的必答项。</div><form id="survey"></form><footer>提交方式：保存草稿后，可将导出的 JSON 文件交给我，或直接将 Markdown 内容粘贴到聊天中。若某项暂未决定，请明确填写“由 Codex 采用推荐默认值”，不要留空。</footer></main>
+  <dialog id="output"><h2 id="outputTitle"></h2><textarea id="outputText" spellcheck="false"></textarea><div class="dialog-actions"><button type="button" id="copy">复制</button><button type="button" id="download">下载</button><button type="button" onclick="output.close()">关闭</button></div></dialog>
+<script>
+const sections = [
+ {title:'A. 目标与交付边界', desc:'决定这次 P3 的终点，避免把内容生产、平衡和基础链路混在同一轮。', qs:[
+  ['A01','单选','本次 P3 的交付定位','推荐：开发验证切片。它要证明“数据选择可可靠进入共用流程”，而不是交付完整肉鸽模式。',['开发验证切片','可公开试玩的肉鸽前序版','完整 60 分钟故事包'],1],
+  ['A02','多选','本次必须完成的能力','选择最小但可验证的集合。',['菜单选故事包','菜单选任务模板','简报注入数据','共用战斗目标','胜负结算','战术重开','返回菜单','独立存档','EditMode 测试','Play Mode 测试'],1],
+  ['A03','多选','本次明确不做的内容','选中的内容将列入范围外，自动开发不会主动扩展。',['新地图变体','新敌人','新装备/奖励池','完整角色成长','正式文本润色','正式像素资产','性能优化','多语言','手柄导航'],0],
+  ['A04','文本','完成后的下一优先级','例如：故事包内容扩展、地图变体、剧情区域原型、HUD 细节。',[],1]
+ ]},
+ {title:'B. 入口、菜单与可发现性', desc:'决定测试入口在现有“开发菜单 → 战前简报”中的位置与行为。', qs:[
+  ['B01','单选','顶层入口结构','不改变现有战斗流程，只决定进入肉鸽配置的层级。',['剧情测试与肉鸽测试并列（推荐）','先进入测试模式，再选剧情/肉鸽','仅替换现有开发菜单为肉鸽入口'],1],
+  ['B02','单选','肉鸽配置界面形态','',['同屏分区选择：故事包、模板、种子、操作（推荐）','分步向导','多个独立子页面'],1],
+  ['B03','单选','故事链入口与模板沙盒入口','',['两者都提供（推荐）','只提供故事链','只提供模板沙盒'],1],
+  ['B04','多选','菜单应显示的只读开发信息','这些信息不会进入正常战斗 HUD。',['包 ID','任务 ID','模板 ID','种子','目标 ID','存档状态','版本号'],0],
+  ['B05','单选','未开放内容的呈现','',['隐藏','显示为锁定并附原因（推荐）','可选择但弹出不可用提示'],1],
+  ['B06','文本','入口名称与玩家可见文案偏好','可填写中文名称，例如“独立故事测试”“任务演练”。',[],0]
+ ]},
+ {title:'C. 故事包、人物与种子', desc:'现有基线只有 iron_echoes / nara_veld / 4242 / 三任务链；这里决定是否把它扩展成通用目录。', qs:[
+  ['C01','单选','首轮故事包数量','',['只启用“铁之回响”（推荐）','一个可玩包 + 多个锁定占位包','多个可玩包'],1],
+  ['C02','文本','首轮可玩故事包展示名、简介与主角名','若采用默认值，请填写“采用现有：铁之回响 / 纳拉·维尔德”。',[],1],
+  ['C03','单选','故事任务链是否固定','',['固定：死信号 → 工厂突破 → 最终导管（推荐）','由模板选择临时组成','按种子从目录抽取'],1],
+  ['C04','单选','种子编辑规则','',['固定 4242，允许重置默认（推荐）','预设种子列表','允许任意整数输入','每局随机生成'],1],
+  ['C05','单选','相同种子的确定性承诺','',['任务次序、目标、结算均稳定（推荐）','仅任务次序稳定','仅记录种子，不承诺一致结果'],1],
+  ['C06','多选','故事包运行时需保存的状态','',['包 ID','人物 ID','种子','任务链位置','已完成任务','已解锁内容','最近结算','本局失败次数','玩家自定义名称'],1],
+  ['C07','文本','故事包完成后的叙事收束','例如只显示摘要、回到菜单、解锁下一包；不填则使用简短完成摘要。',[],0]
+ ]},
+ {title:'D. 任务模板与目标语义', desc:'策划已列六类：歼灭、破坏、营救、夺取、撤离、调查/现场取证。此处锁定每个入口要代表真实规则还是仅测试数据桥。', qs:[
+  ['D01','多选','首轮开放的模板','未选择的模板会显示锁定或不显示，取决于 B05。',['歼灭','破坏','营救','夺取','撤离','调查/现场取证'],1],
+  ['D02','单选','模板最低完成标准','',['每个开放模板有不同目标、胜负判定与结算（推荐）','可共享胜负判定，但简报与结算不同','仅完成选择与数据注入'],1],
+  ['D03','单选','故事链任务与模板的关系','',['故事链固定映射模板；沙盒可独立选（推荐）','故事链也由玩家自由选模板','模板仅用于沙盒'],1],
+  ['D04','文本','六类模板的目标定义或命名修订','按“模板：成功条件；失败条件；关键互动”填写。未填将沿用现有数据定义并标记待策划确认。',[],0],
+  ['D05','单选','撤离模板的结算条件','',['指定单位到达撤离点即胜（推荐）','全员撤离','携带目标且到达撤离点','本轮不开放撤离'],1],
+  ['D06','单选','调查/取证模板的完成方式','',['完成指定互动即胜（推荐）','收集全部证据','互动后撤离','本轮不开放调查'],1],
+  ['D07','单选','营救模板的失败条件','',['目标单位死亡即失败（推荐）','目标单位死亡或玩家全灭','仅玩家全灭','本轮不开放营救'],1],
+  ['D08','多选','绝对禁止进入任何模板的数据字段/规则','故事模式硬禁项会继续适用；此处也约束肉鸽测试入口。',['倒计时','回合限时','敌情推进','拖延关门','随机强制损失','不可逆剧情存档写入'],1]
+ ]},
+ {title:'E. 战前简报、战斗、结算与失败', desc:'决定现有共用流程接收到哪些上下文，以及每个出口如何恢复状态。', qs:[
+  ['E01','多选','战前简报必须展示的信息','',['包名/人物','种子','当前任务链进度','模板名','成功目标','失败条件','地图/敌方规则摘要','结算去向','开发 ID'],1],
+  ['E02','单选','进入战斗前是否允许返回改配置','',['允许，保留当前选择（推荐）','允许，但重置选择','不允许'],1],
+  ['E03','单选','故事链胜利后行为','',['记录本任务，进入下一任务简报（推荐）','记录本任务，返回肉鸽菜单','显示结算后自动进入下一战斗'],1],
+  ['E04','单选','故事链失败后行为','',['显示失败结算；可战术重开或返回肉鸽菜单（推荐）','失败即结束整个故事包','失败后自动重开本任务'],1],
+  ['E05','单选','模板沙盒胜利/失败后行为','',['显示结算，返回模板配置（推荐）','显示结算，返回顶层菜单','直接重开同模板'],1],
+  ['E06','单选','战术重开的快照边界','',['只回到当前战斗初始状态，不改故事进度（推荐）','回到进入简报前的状态','重置整个故事包'],1],
+  ['E07','多选','结算摘要必须记录的字段','',['胜负','模板','目标完成情况','种子','回合数','造成/承受伤害','重开次数','解锁内容','下一步建议'],1],
+  ['E08','文本','胜利、失败、故事完成的中文文案口吻','如不填，将使用克制、工业化、无倒计时暗示的短文案。',[],0]
+ ]},
+ {title:'F. 存档、隔离与重置', desc:'这是避免肉鸽测试污染剧情存档的核心约定。', qs:[
+  ['F01','单选','肉鸽进度持久化策略','',['独立本地持久化，菜单可继续（推荐）','仅运行期内存，退出即清除','不保存进度，但保留最近配置'],1],
+  ['F02','单选','肉鸽测试存档管理','',['新开 / 继续 / 删除（推荐）','仅新开 / 继续','自动覆盖单一存档','不提供菜单操作'],1],
+  ['F03','单选','同一故事包的新开行为','',['确认后覆盖该包的肉鸽存档（推荐）','允许多个槽位','禁止新开直到手动删除'],1],
+  ['F04','多选','必须隔离的状态','',['剧情 CampaignState','剧情存档文件/键','剧情任务完成记录','剧情装备/服务状态','战斗快照','肉鸽故事包存档'],1],
+  ['F05','单选','删除肉鸽存档后的期望','',['仅删除该肉鸽包，剧情状态不变（推荐）','删除所有肉鸽测试状态','删除后回到顶层菜单'],1],
+  ['F06','文本','存档命名、路径或可见标识要求','例如玩家界面只显示“肉鸽测试存档”，技术键名由 Codex 决定。',[],0]
+ ]},
+ {title:'G. UI、可访问性与美术边界', desc:'HUD 已按黑白极简工业方向场景化；本节只约束新增菜单和简报。', qs:[
+  ['G01','单选','新增菜单的视觉处理','',['复用现有开发菜单样式，针对性增加分区（推荐）','采用与战术 HUD 同等细线仪表风','先功能性布局，后续统一美化'],1],
+  ['G02','单选','菜单目标分辨率验收','',['1920×1080 与 960×540（推荐）','只验收 1920×1080','再加入：____'],1],
+  ['G03','多选','可读性硬指标','',['中文不截断/重叠','主要正文不小于当前 HUD 正文','按钮文字与状态不重叠','小分辨率可滚动或重排','颜色不是唯一信息来源'],1],
+  ['G04','单选','长故事简介/目标文本的处理','',['限制摘要长度并提供完整详情区（推荐）','自动缩小字体','只显示全文，允许面板变高'],1],
+  ['G05','单选','输入方式范围','',['鼠标优先；键盘快捷键不作为本轮验收（推荐）','鼠标 + 基础键盘','鼠标 + 键盘 + 手柄'],1],
+  ['G06','文本','禁止或偏好的术语、配色、符号','例如禁止“倒计时”“期限”；是否使用冷青表示可执行。',[],0]
+ ]},
+ {title:'H. 测试、诊断与验收', desc:'决定“自动开发完成”可如何证明，而不是靠观察代码。', qs:[
+  ['H01','多选','必须新增的 EditMode 覆盖','',['故事包目录与固定种子','模板选择数据','模板目标/胜负','故事链推进','失败不推进','战术重开不污染进度','剧情/肉鸽存档隔离','序列化/反序列化','删除肉鸽存档'],1],
+  ['H02','多选','必须自主执行的 Play Mode 路径','',['肉鸽菜单→故事链简报→战斗→胜利→下一简报','肉鸽菜单→模板沙盒→战斗→失败→重开','返回菜单→重新进入→状态恢复','删除存档→新开','1920×1080 截图','960×540 截图'],1],
+  ['H03','单选','开发辅助指令的开放程度','',['只读显示 ID/种子（推荐）','额外提供一键胜利/失败用于测试','不显示任何开发信息'],1],
+  ['H04','多选','每次脚本改动后的强制验证','',['Funplay request_recompile','编译错误检查','Console 检查','EditMode 测试','Git diff 检查'],1],
+  ['H05','单选','Git 提交粒度','',['数据/逻辑/测试按可验证节点提交（推荐）','P3 完成后一次提交','每个文件单独提交'],1],
+  ['H06','文本','你认可的最终验收描述','请用一句话描述“P3 已完成”时你要亲眼看到什么。',[],1]
+ ]},
+ {title:'I. 授权、风险与默认裁决', desc:'让自动开发能在小问题上持续推进，同时把真正的产品决策留给你。', qs:[
+  ['I01','单选','未指定的纯技术细节','',['Codex 按现有架构做最小可逆实现，并记录决定（推荐）','每项暂停询问','仅在影响玩家可见行为时询问'],1],
+  ['I02','多选','出现下列情况时必须暂停请示','',['改变玩法胜负语义','改变剧情模式规则','需要保存正式场景','需要替换正式资产','需要新增外部依赖','需要迁移/删除既有存档','无法通过编译或 Console 有错误'],1],
+  ['I03','单选','是否授权进入 Play Mode 自主测试','',['授权，限本次 P3 验收路径（推荐）','仅在通知后进入','不授权'],1],
+  ['I04','单选','是否授权保存正式场景','',['不授权；优先运行时代码与数据（推荐）','仅 UI 必要时可保存','授权保存场景'],1],
+  ['I05','文本','其他不可妥协的规则、参考或担忧','可任意填写；它将成为实施前检查清单的一部分。',[],0]
+ ]}
+];
+const form=document.querySelector('#survey'), key='occ-p3-survey-v1';
+function field(q){const [id,type,label,help,opts,required]=q; const cls=`question ${required?'required':''} ${type==='文本'?'full':''}`; let input=''; if(type==='单选'||type==='多选'){input=`<div class="options">${opts.map((o,i)=>`<label><input data-id="${id}" type="${type==='单选'?'radio':'checkbox'}" name="${id}" value="${o}"><span>${o}</span></label>`).join('')}</div>`; if(id==='G02') input+=`<input data-id="${id}" class="other" type="text" placeholder="若选择“再加入”，填写额外分辨率">`; } else { input=`<textarea data-id="${id}" placeholder="${required?'必填：可填写“采用推荐默认值”':''}"></textarea>`; } return `<article class="${cls}"><label class="q"><span class="id">${id}</span>${label}${required?' *':''}</label><span class="help">${help}</span>${input}</article>`; }
+sections.forEach((s,i)=>form.insertAdjacentHTML('beforeend',`<section class="section"><div class="section-head"><h2>${String.fromCharCode(65+i)} / ${s.title}</h2><span class="hint">${s.desc}</span></div><div class="section-body">${s.qs.map(field).join('')}</div></section>`));
+function values(){const out={version:1,title:'OCC P3 自动开发决策问卷',exportedAt:new Date().toISOString(),answers:{}}; form.querySelectorAll('[data-id]').forEach(el=>{const id=el.dataset.id; if(!out.answers[id])out.answers[id]=[]; if((el.type==='radio'||el.type==='checkbox')&&!el.checked)return; if(el.value.trim())out.answers[id].push(el.value.trim());}); return out;}
+function apply(data){form.reset(); Object.entries(data.answers||{}).forEach(([id,vs])=>{form.querySelectorAll(`[data-id="${id}"]`).forEach(el=>{if(el.type==='radio'||el.type==='checkbox')el.checked=vs.includes(el.value); else if(el.classList.contains('other')){if(vs.length)el.value=vs[vs.length-1];} else el.value=vs.join('\n');});}); update();}
+function requiredMissing(){return sections.flatMap(s=>s.qs).filter(q=>q[5]).filter(q=>!values().answers[q[0]]?.length).map(q=>q[0]);}
+function update(){const answered=Object.keys(values().answers).length, total=sections.flatMap(s=>s.qs).length, missing=requiredMissing(); document.querySelector('#progress').textContent=`已答 ${answered}/${total} · 必答缺 ${missing.length}`; const st=document.querySelector('#status'); st.className='status '+(missing.length?'bad':'ok'); st.textContent=missing.length?`尚缺必答项：${missing.join('、')}。可填写“采用推荐默认值”以授权默认裁决。`:'所有必答项已完成，可以导出并交给 Codex 固化为开发约束。'; localStorage.setItem(key,JSON.stringify(values()));}
+function markdown(){const v=values(), lines=['# OCC P3 自动开发决策问卷答卷','',`- 导出时间：${v.exportedAt}`,'']; sections.forEach(s=>{lines.push(`## ${s.title}`,''); s.qs.forEach(q=>{const a=v.answers[q[0]]||['（未回答）']; lines.push(`### ${q[0]} ${q[2]}`,'',a.map(x=>`- ${x}`).join('\n'),'');});});return lines.join('\n');}
+function show(title,text,name,type){outputTitle.textContent=title;outputText.value=text;output.showModal(); download.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href);};}
+document.querySelector('#save').onclick=()=>{update();document.querySelector('#status').textContent='草稿已保存到此浏览器的本地存储。'};
+document.querySelector('#exportJson').onclick=()=>show('导出 JSON',JSON.stringify(values(),null,2),'OCC_P3_自动开发决策答卷.json','application/json');
+document.querySelector('#exportMd').onclick=()=>show('导出 Markdown',markdown(),'OCC_P3_自动开发决策答卷.md','text/markdown');
+document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(outputText.value);
+document.querySelector('#reset').onclick=()=>{if(confirm('清空本页与本机草稿？')){localStorage.removeItem(key);form.reset();update();}};
+document.querySelector('#import').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{apply(JSON.parse(r.result));}catch(_){alert('不是有效的问卷 JSON 文件。');}};r.readAsText(f,'utf-8');};
+form.addEventListener('input',update); const saved=localStorage.getItem(key); if(saved)try{apply(JSON.parse(saved));}catch(_){update();}else update();
+</script></body></html>

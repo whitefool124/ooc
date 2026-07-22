@@ -83,6 +83,15 @@ namespace OCC.Combat
             IsDefeat = !units.Values.Any(unit => unit.IsHero && unit.IsAlive);
             IsVictory = Objectives != null && Objectives.Count > 0 && Objectives.All(objective => objective.IsComplete(this));
         }
+        public void ResolveDebugOutcome(bool victory)
+        {
+            foreach (UnitState unit in units.Values)
+            {
+                if (victory && !unit.IsHero) unit.TakeDamage(int.MaxValue);
+                if (!victory && unit.IsHero) unit.TakeDamage(int.MaxValue);
+            }
+            EvaluateOutcome();
+        }
         public CombatState Clone()
         {
             CombatState clone = new CombatState(Map.Clone(), units.Values.Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));

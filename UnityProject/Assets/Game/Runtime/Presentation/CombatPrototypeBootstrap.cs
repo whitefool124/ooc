@@ -21,6 +21,11 @@ namespace OCC.Combat.Presentation
         private bool initialized;
         private MissionPreparation developerPreparation;
         private CombatFlowController developerFlow;
+        private RogueliteDeveloperRun rogueliteRun;
+        private int sandboxTemplateIndex;
+        private bool rogueliteMenuOpen;
+        private bool outcomeHandled;
+        private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
 
         private void OnEnable()
         {
@@ -98,6 +103,13 @@ namespace OCC.Combat.Presentation
             foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit)) { GridPosition p = ScenePosition(marker); bool hero = marker.name.Contains("主角"); string id = hero ? "hero" : marker.name.Contains("步枪") ? "rifle" : marker.name.Contains("盾") ? "guard" : "caster"; string name = hero ? "\u963f\u65af\u7279\u62c9" : id == "rifle" ? "\u6b65\u67aa\u5175" : id == "guard" ? "\u76fe\u536b" : "\u706b\u672f\u5e08"; units.Add(new UnitState(id, hero, p, hero ? Facing.East : Facing.West) { DisplayName = name, Armor = hero ? 1 : id == "guard" ? 2 : 0, Block = id == "guard" ? 2 : hero ? 1 : 0, Speed = hero ? 11 : id == "guard" ? 7 : id == "caster" ? 9 : 8 }); }
             if (units.Count == 0) return;
             state = new CombatState(map, units);
+            if (rogueliteRun != null)
+            {
+                RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
+                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
+                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+            }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             CombatResolver.BeginTurn(state, "hero");
@@ -126,27 +138,79 @@ namespace OCC.Combat.Presentation
             }
             if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
             state = new CombatState(map, units);
+            if (rogueliteRun != null)
+            {
+                RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
+                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
+                if (mission.ObjectiveType == CombatObjectiveType.Elimination)
+                    state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                else
+                    state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+            }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
+            outcomeHandled = false;
         }
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); }
         public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); RefreshSceneHud(); }
         public void TacticalRestartDeveloperCombat() { developerFlow.TacticalRestart(); state = developerFlow.State; CombatResolver.BeginTurn(state, "hero"); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); }
-        public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; RefreshSceneHud(); }
+        public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteRun = null; rogueliteMenuOpen = false; RefreshSceneHud(); }
+        public void OpenRogueliteMenu() { rogueliteMenuOpen = true; rogueliteRun = null; }
+        public void CloseRogueliteMenu() { rogueliteMenuOpen = false; }
+        public void StartRogueliteStory(bool continueSave)
+        {
+            RogueliteStoryPackage package = continueSave && PlayerPrefs.HasKey(RogueliteSaveKey)
+                ? RogueliteStoryPackage.FromJson(PlayerPrefs.GetString(RogueliteSaveKey))
+                : RogueliteStoryCatalog.CreateDefault(UnityEngine.Random.Range(1, int.MaxValue));
+            rogueliteRun = new RogueliteDeveloperRun(package); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
+        public void StartRogueliteSandbox()
+        {
+            IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
+            rogueliteRun = new RogueliteDeveloperRun(templates[sandboxTemplateIndex % templates.Count].Id, UnityEngine.Random.Range(1, int.MaxValue));
+            BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
+        public void SelectNextSandboxTemplate() { sandboxTemplateIndex = (sandboxTemplateIndex + 1) % RogueliteDeveloperCatalog.OpenSandboxTemplates.Count; }
+        public void DeleteRogueliteSave() { PlayerPrefs.DeleteKey(RogueliteSaveKey); PlayerPrefs.Save(); }
+        public bool HasRogueliteSave => PlayerPrefs.HasKey(RogueliteSaveKey);
         public CombatState CurrentState => state;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
         public void SelectHudAction(string action) { selectedAction = action; }
         public void UseQuickbarSlot(int slot) { if (state?.Quickbar[slot] != null) TryCommand(CombatCommand.UseQuickbar("hero", slot)); }
         public void ApplyHudBuild(int build) { if (state != null) ApplyBuild(build); }
         public void EndHeroTurn() { if (state != null) TryCommand(CombatCommand.EndTurn("hero")); }
-        private void Update() { if (!Application.isPlaying || developerFlow == null || developerFlow.Phase != CombatFlowPhase.Active || state == null || state.IsVictory || state.IsDefeat || state.ActiveUnitId == "hero") return; RunEnemyTurn(); developerFlow.RefreshOutcome(); }
+        private void Update()
+        {
+            if (!Application.isPlaying || developerFlow == null || state == null) return;
+            if (developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
+            developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
+        }
+        private void HandleRogueliteOutcome()
+        {
+            if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
+            outcomeHandled = true;
+            string summary = "胜利 | " + rogueliteRun.CurrentMission.TemplateId + " | 种子 " + rogueliteRun.Package.Seed;
+            if (rogueliteRun.Kind == RogueliteLaunchKind.TemplateSandbox) return;
+            rogueliteRun.Complete(summary); PlayerPrefs.SetString(RogueliteSaveKey, rogueliteRun.Package.ToJson()); PlayerPrefs.Save();
+        }
+        public void ContinueRogueliteAfterVictory()
+        {
+            if (rogueliteRun == null || (developerFlow.Phase != CombatFlowPhase.Victory && developerFlow.Phase != CombatFlowPhase.Defeat)) return;
+            if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
+            else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteRun = null; rogueliteMenuOpen = true; RefreshSceneHud(); }
+        }
+        public void ForceCurrentOutcome(bool victory)
+        {
+            if (developerFlow?.Phase != CombatFlowPhase.Active) return;
+            state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
+        }
         private void RefreshSceneHud() { TacticalHudSceneBinder binder = transform.Find("场景UI")?.GetComponent<TacticalHudSceneBinder>(); if (binder != null) binder.RefreshNow(); }
         private void RunEnemyTurn() { UnitState enemy = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); if (enemy == null || !enemy.IsAlive) { if (enemy != null) CombatResolver.EndTurn(state, enemy); return; } try { if (Distance(enemy.Position, hero.Position) <= 4 && enemy.ActionPoints > 0) CombatResolver.Resolve(state, enemy.Id == "caster" ? CombatCommand.Cast(enemy.Id, hero.Id) : CombatCommand.Attack(enemy.Id, hero.Id)); else if (enemy.ActionPoints > 0) CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, StepToward(enemy.Position, hero.Position), FacingToward(enemy.Position, hero.Position))); if (state.ActiveUnitId == enemy.Id) CombatResolver.EndTurn(state, enemy); } catch (InvalidOperationException error) { state.AddLog(error.Message); CombatResolver.EndTurn(state, enemy); } }
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
+        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
             GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
@@ -163,16 +227,36 @@ namespace OCC.Combat.Presentation
             GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(540, 250, 840, 470), ""); GUI.color = Color.white;
             GUI.Label(new Rect(590, 300, 740, 38), "OCC  开发测试菜单"); GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(590, 352, 740, 28), "从战前简报进入一场完整战斗，并可随时战术重开。"); GUI.color = Color.white;
             GUI.Label(new Rect(590, 410, 740, 28), "任务：" + developerPreparation.MissionId + "  ·  破坏目标"); GUI.Label(new Rect(590, 448, 740, 28), "敌人：" + developerPreparation.EnemySummary);
-            if (GUI.Button(new Rect(590, 510, 350, 54), "查看战前简报")) OpenDeveloperBriefing();
-            if (GUI.Button(new Rect(980, 510, 350, 54), "重新加载场景数据")) { BuildCombatFromSceneStageTwo(); }
+            if (GUI.Button(new Rect(590, 510, 350, 54), "剧情测试：查看战前简报")) OpenDeveloperBriefing();
+            if (GUI.Button(new Rect(980, 510, 350, 54), "肉鸽测试：配置入口")) OpenRogueliteMenu();
             GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(590, 620, 740, 28), "开发菜单  →  战前简报  →  战斗  →  结算  →  战术重开"); GUI.color = Color.white;
+        }
+        private void DrawRogueliteMenu()
+        {
+            IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
+            TaskTemplate selected = templates[sandboxTemplateIndex % templates.Count];
+            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(390, 170, 1140, 720), ""); GUI.color = Color.white;
+            GUI.Label(new Rect(440, 216, 960, 38), "OCC  肉鸽测试配置");
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 268, 900, 28), "故事链：死信号  →  工厂突破  →  最终导管"); GUI.Label(new Rect(440, 302, 900, 28), "每次新开生成并保存随机种子；相同种子的目标与结算保持稳定。"); GUI.color = Color.white;
+            GUI.Label(new Rect(440, 370, 500, 28), "故事包测试");
+            if (GUI.Button(new Rect(440, 408, 300, 52), "新开故事包")) StartRogueliteStory(false);
+            GUI.enabled = HasRogueliteSave; if (GUI.Button(new Rect(760, 408, 300, 52), "继续故事包")) StartRogueliteStory(true); GUI.enabled = true;
+            if (GUI.Button(new Rect(1080, 408, 300, 52), "删除故事包存档")) DeleteRogueliteSave();
+            GUI.Label(new Rect(440, 516, 600, 28), "模板沙盒：" + selected.Id + "  /  " + selected.Type);
+            GUI.Label(new Rect(440, 548, 840, 25), selected.Type == CombatObjectiveType.Elimination ? "目标：清除全部敌对单位。" : "目标：破坏地图中的中继器。 ");
+            if (GUI.Button(new Rect(440, 592, 300, 52), "切换开放模板")) SelectNextSandboxTemplate();
+            if (GUI.Button(new Rect(760, 592, 300, 52), "开始模板沙盒")) StartRogueliteSandbox();
+            if (GUI.Button(new Rect(1080, 592, 300, 52), "返回测试模式")) CloseRogueliteMenu();
+            GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(440, 706, 900, 28), "开放模板：歼灭、破坏。其余模板及新地图/敌人/奖励不在本轮范围内。"); GUI.color = Color.white;
         }
         private void DrawDeveloperBriefing()
         {
             GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(500, 220, 920, 580), ""); GUI.color = Color.white;
             GUI.Label(new Rect(550, 270, 800, 38), "OCC  战前简报");
             GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(550, 326, 800, 28), "任务编号：" + developerPreparation.MissionId); GUI.Label(new Rect(550, 364, 800, 28), "任务目标：" + developerPreparation.RulesSummary); GUI.Label(new Rect(550, 402, 800, 28), "敌方编成：" + developerPreparation.EnemySummary); GUI.color = Color.white;
-            GUI.Label(new Rect(550, 470, 800, 28), "行动准则：破坏中继器；战术重开会恢复到本次战斗的初始状态。");
+            string context = rogueliteRun == null ? "行动准则：战术重开会恢复到本次战斗的初始状态。" : "肉鸽测试 | 模板：" + rogueliteRun.CurrentMission.TemplateId + " | 失败条件：" + rogueliteRun.CurrentMission.FailureSummary;
+            GUI.Label(new Rect(550, 470, 800, 28), context);
+            if (rogueliteRun != null) GUI.Label(new Rect(550, 506, 800, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
             if (GUI.Button(new Rect(550, 620, 350, 54), "开始正式战斗")) StartDeveloperCombat();
             if (GUI.Button(new Rect(960, 620, 350, 54), "返回开发菜单")) ReturnToDeveloperMenu();
         }
@@ -183,6 +267,12 @@ namespace OCC.Combat.Presentation
             GUI.Label(new Rect(52, 950, 600, 30), "当前流程：" + developerFlow.Phase);
             if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && GUI.Button(new Rect(1450, 944, 190, 42), "战术重开")) TacticalRestartDeveloperCombat();
             if (GUI.Button(new Rect(1660, 944, 190, 42), "返回开发菜单")) ReturnToDeveloperMenu();
+            if (developerFlow.Phase == CombatFlowPhase.Active && rogueliteRun != null)
+            {
+                if (GUI.Button(new Rect(1240, 944, 95, 42), "测试胜利")) ForceCurrentOutcome(true);
+                if (GUI.Button(new Rect(1340, 944, 95, 42), "测试失败")) ForceCurrentOutcome(false);
+            }
+            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && rogueliteRun != null && GUI.Button(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "继续/结算" : "返回肉鸽菜单")) ContinueRogueliteAfterVictory();
         }
         private void DrawGrid(Rect board)
         {
