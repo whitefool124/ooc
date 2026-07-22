@@ -103,5 +103,16 @@ namespace OCC.Combat.Tests
             var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); first.ApplyBuild(hero);
             Assert.That(hero.MainHand.Id, Is.EqualTo(RogueliteMapCatalog.Rewards.First(reward => reward.Id == weaponId).Weapon.Id));
         }
+
+        [Test]
+        public void MapRun_OffersMixedWeaponAndSpellRewards()
+        {
+            for (int seed = 1; seed < 20; seed++)
+            {
+                var run = new RogueliteMapRun(seed); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
+                Assert.That(run.CurrentRewards.Count, Is.EqualTo(3));
+                Assert.That(run.CurrentRewards.Select(reward => reward.Kind).Distinct().Count(), Is.GreaterThanOrEqualTo(2));
+            }
+        }
     }
 }

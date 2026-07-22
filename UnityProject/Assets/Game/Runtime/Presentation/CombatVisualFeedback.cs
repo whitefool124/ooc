@@ -1,0 +1,71 @@
+using System.Collections.Generic;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace OCC.Combat.Presentation
+{
+    // Runtime-only presentation layer: it adds readable feedback without changing the authored scene HUD.
+    public sealed class CombatVisualFeedback : MonoBehaviour
+    {
+        private readonly Dictionary<string, int> healthCache = new Dictionary<string, int>();
+        private CombatPrototypeBootstrap bootstrap;
+        private Canvas canvas;
+        private string lastOutcome;
+
+        public void Initialize(CombatPrototypeBootstrap source)
+        {
+            bootstrap = source;
+            DOTween.Init(true, true, LogBehaviour.ErrorsOnly).SetCapacity(160, 32);
+        }
+
+        private void Update()
+        {
+            if (bootstrap == null || !bootstrap.IsDeveloperCombatActive || bootstrap.CurrentState == null) return;
+            foreach (UnitState unit in bootstrap.CurrentState.Units.Values)
+            {
+                if (healthCache.TryGetValue(unit.Id, out int previous) && unit.Health < previous)
+                    ShowFloatingText(unit.Position, "-" + (previous - unit.Health), unit.IsHero ? new Color(.8f, .94f, 1f) : new Color(.9f, .34f, .3f));
+                healthCache[unit.Id] = unit.Health;
+            }
+        }
+
+        public void PlayOutcome(bool victory)
+        {
+            string outcome = victory ? "victory" : "defeat";
+            if (lastOutcome == outcome) return;
+            lastOutcome = outcome;
+            EnsureCanvas();
+            GameObject card = new GameObject("战斗结果反馈"); card.transform.SetParent(canvas.transform, false);
+            RectTransform rect = card.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f); rect.sizeDelta = new Vector2(520, 100);
+            Text label = card.AddComponent<Text>(); label.font = Resources.Load<Font>("Fonts/SimHei"); label.fontSize = 36; label.alignment = TextAnchor.MiddleCenter; label.text = victory ? "战斗胜利" : "战斗失败"; label.color = victory ? new Color(.48f, .92f, 1f, 0f) : new Color(.94f, .36f, .32f, 0f);
+            CanvasGroup group = card.AddComponent<CanvasGroup>(); group.alpha = 0f; rect.localScale = Vector3.one * .84f;
+            Sequence sequence = DOTween.Sequence().SetUpdate(true);
+            sequence.Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, .16f)).Join(rect.DOScale(1f, .2f).SetEase(Ease.OutBack));
+            sequence.AppendInterval(.7f).Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .22f)).OnComplete(() => Destroy(card));
+        }
+
+        private void ShowFloatingText(GridPosition position, string message, Color color)
+        {
+            EnsureCanvas();
+            GameObject textObject = new GameObject("伤害反馈"); textObject.transform.SetParent(canvas.transform, false);
+            RectTransform rect = textObject.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
+            // The board occupies the left 75% of the 1920 reference canvas.
+            rect.anchoredPosition = new Vector2(-690 + position.X * 78, -80 + position.Y * 78); rect.sizeDelta = new Vector2(96, 36);
+            Text text = textObject.AddComponent<Text>(); text.font = Resources.Load<Font>("Fonts/SimHei"); text.fontSize = 24; text.alignment = TextAnchor.MiddleCenter; text.text = message; text.color = color;
+            CanvasGroup group = textObject.AddComponent<CanvasGroup>();
+            float targetY = rect.anchoredPosition.y + 44f;
+            Sequence sequence = DOTween.Sequence().SetUpdate(true);
+            sequence.Join(DOTween.To(() => rect.anchoredPosition.y, value => rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, value), targetY, .42f).SetEase(Ease.OutCubic)).Join(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .42f));
+            sequence.OnComplete(() => Destroy(textObject));
+        }
+
+        private void EnsureCanvas()
+        {
+            if (canvas != null) return;
+            GameObject root = new GameObject("运行时战斗反馈"); DontDestroyOnLoad(root);
+            canvas = root.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 60;
+            CanvasScaler scaler = root.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080);
+        }
+    }
+}

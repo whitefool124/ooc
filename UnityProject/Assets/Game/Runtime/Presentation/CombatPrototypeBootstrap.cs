@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,9 @@ namespace OCC.Combat.Presentation
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
+        private CombatVisualFeedback visualFeedback;
+        private float mapPanelAlpha = 1f;
+        private float mapPanelScale = 1f;
 
         private void OnEnable()
         {
@@ -41,6 +45,7 @@ namespace OCC.Combat.Presentation
             Transform sceneUi = transform.Find("场景UI");
             if (sceneUi != null) sceneUi.gameObject.SetActive(true);
             developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "步枪兵、盾卫、火术师、突袭者、精英先锋");
+            visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
             BuildCombatFromSceneStageTwo();
         }
 
@@ -199,7 +204,7 @@ namespace OCC.Combat.Presentation
         }
         public void DeleteShortRogueliteSave() { PlayerPrefs.DeleteKey(ShortRogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasShortRogueliteSave => PlayerPrefs.HasKey(ShortRogueliteSaveKey);
-        public void StartMapRoguelite(bool continueSave) { mapRun = continueSave && PlayerPrefs.HasKey(MapRogueliteSaveKey) ? RogueliteMapRun.FromJson(PlayerPrefs.GetString(MapRogueliteSaveKey)) : new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue)); mapMenuOpen = true; rogueliteMenuOpen = false; }
+        public void StartMapRoguelite(bool continueSave) { mapRun = continueSave && PlayerPrefs.HasKey(MapRogueliteSaveKey) ? RogueliteMapRun.FromJson(PlayerPrefs.GetString(MapRogueliteSaveKey)) : new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue)); mapMenuOpen = true; rogueliteMenuOpen = false; PlayMapEntrance(); }
         public void DeleteMapRogueliteSave() { PlayerPrefs.DeleteKey(MapRogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasMapRogueliteSave => PlayerPrefs.HasKey(MapRogueliteSaveKey);
         public void SelectMapNode(string nodeId) { mapRun.SelectNode(nodeId); SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
@@ -249,9 +254,11 @@ namespace OCC.Combat.Presentation
         {
             if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
             {
-                outcomeHandled = true; mapRun.CompleteCurrentCombat(); SaveMapRun(); return;
+                outcomeHandled = true; visualFeedback?.PlayOutcome(true); mapRun.CompleteCurrentCombat(); SaveMapRun(); return;
             }
+            if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat) { outcomeHandled = true; visualFeedback?.PlayOutcome(false); }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
+            visualFeedback?.PlayOutcome(true);
             outcomeHandled = true;
             string summary = "胜利 | " + rogueliteRun.CurrentMission.TemplateId + " | 种子 " + rogueliteRun.Package.Seed;
             if (rogueliteRun.Kind == RogueliteLaunchKind.TemplateSandbox) return;
@@ -318,7 +325,8 @@ namespace OCC.Combat.Presentation
         }
         private void DrawMapRun()
         {
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
+            Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
+            GUI.color = new Color(.035f, .075f, .13f, .98f * mapPanelAlpha); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
             GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
             GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 900, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
             if (mapRun.AwaitingReward)
@@ -326,7 +334,7 @@ namespace OCC.Combat.Presentation
                 GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
                 IReadOnlyList<RogueliteReward> rewards = mapRun.CurrentRewards;
                 for (int i = 0; i < rewards.Count; i++) if (GUI.Button(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName + "\n" + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"))) ClaimMapReward(rewards[i].Id);
-                GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); return;
+                GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); GUI.matrix = previous; return;
             }
             GUI.Label(new Rect(390, 320, 900, 30), "选择已解锁的战斗节点推进；完成节点后解锁下一条路径。无时间压力。");
             DrawMapNode("rail_patrol", new Rect(470, 440, 260, 96), "铁路巡逻 / 歼灭");
@@ -334,6 +342,13 @@ namespace OCC.Combat.Presentation
             DrawMapNode("core_finale", new Rect(790, 650, 260, 96), "主干站 / 终点");
             if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
             if (GUI.Button(new Rect(1350, 820, 180, 42), "返回菜单")) ReturnToDeveloperMenu();
+            GUI.matrix = previous;
+        }
+        private void PlayMapEntrance()
+        {
+            DOTween.Kill(this); mapPanelAlpha = 1f; mapPanelScale = 1f;
+            // The map must remain readable even when an editor execution path does not tick tween updates.
+            DOTween.To(() => mapPanelScale, value => mapPanelScale = value, 1.015f, .12f).SetLoops(2, LoopType.Yoyo).SetId(this);
         }
         private void DrawMapNode(string id, Rect rect, string label)
         {
