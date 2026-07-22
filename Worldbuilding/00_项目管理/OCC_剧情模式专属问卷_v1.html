@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC 剧情模式玩法问卷 v2</title>
+  <style>
+    :root{--bg:#152126;--card:#fffdf8;--ink:#172126;--muted:#627177;--line:#d9d8cf;--accent:#a54835;--soft:#f5e2d8}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#34494f,transparent 36%),var(--bg);color:var(--ink);font:15px/1.6 "Microsoft YaHei","Noto Sans SC",system-ui,sans-serif}.shell{max-width:1140px;margin:auto;padding:30px 20px 64px}.hero{color:#eef4f1;margin-bottom:22px}.hero h1{margin:0;font-size:30px}.hero p{margin:8px 0 0;color:#c4d2cf}.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px}.side{position:sticky;top:15px;align-self:start;background:#1c2d32;border:1px solid #385158;border-radius:10px;padding:13px}.side a{display:block;padding:7px 8px;border-radius:5px;text-decoration:none;color:#c7d8d4;font-size:13px}.side a:hover{color:#fff;background:#31494e}.progress{padding:2px 8px 13px;color:#e3eeeb;font-size:13px}.bar{height:7px;border-radius:6px;background:#3b5358;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#e98462;transition:.2s}.baseline,.section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:16px}.baseline h2,.section h2{margin:0 0 6px;font-size:20px}.baseline ul{margin:8px 0 0;padding-left:20px}.note{margin:0 0 17px;color:var(--muted)}.q{border-top:1px solid #e7e3d9;padding:17px 0}.q:first-of-type{border-top:0;padding-top:0}.q h3{font-size:16px;margin:0 0 6px}.tag{display:inline-block;font-size:12px;margin-left:7px;padding:1px 7px;border-radius:999px;background:var(--soft);color:var(--accent)}.why{margin:0 0 10px;color:var(--muted);font-size:13px}.choices{display:grid;gap:7px}.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:7px;padding:9px 11px;cursor:pointer}.choice:hover{background:#fff7f3;border-color:#d39581}.choice input{margin-top:5px;accent-color:var(--accent)}.choice small{display:block;color:var(--muted)}input[type=text],textarea{width:100%;border:1px solid var(--line);border-radius:7px;padding:10px;font:inherit;background:#fff}textarea{min-height:92px;resize:vertical}.actions{position:sticky;bottom:0;display:flex;gap:9px;flex-wrap:wrap;padding:16px 0 0;background:linear-gradient(transparent,#f5f1e8 35%)}button{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;padding:9px 13px;font:inherit;cursor:pointer}.secondary{background:#fff;color:var(--ink);border-color:var(--line)}.danger{background:#fff;color:#a14444;border-color:#d9aaaa}#status{align-self:center;color:var(--muted);font-size:13px}@media(max-width:760px){.shell{padding:20px 12px 42px}.layout{grid-template-columns:1fr}.side{position:static;display:flex;overflow:auto}.side a{white-space:nowrap}.baseline,.section{padding:17px}.hero h1{font-size:24px}}
+  </style>
+</head>
+<body><main class="shell">
+  <header class="hero"><h1>OCC 剧情模式玩法问卷 v2</h1><p>只讨论开放世界战棋 RPG 的玩法细节：不讨论剧情内容、角色设定、主线走向或结局文本。剧情模式鼓励自由探索、回访与支线补完，没有时间压力或敌情压力。</p></header>
+  <div class="layout"><aside class="side"><div class="progress"><strong id="count">0 / 0</strong> 个问题已回答<div class="bar"><i id="bar"></i></div></div><nav id="nav"></nav></aside><div>
+    <section class="baseline"><h2>已确认玩法基线</h2><ul><li>单主角、约 20 小时、三大开放区域的战棋 RPG。</li><li>探索、支线和回访不会因拖延失败或关闭；没有时间压力与敌情倒计时。</li><li>自由存档/读档、重大选择自动备份、任务前重试；终局才可能出现明确标记的永久风险。</li><li>核心战斗是确定性单人战棋：行动条、朝向、掩体、护甲/护盾/格挡、状态和可破坏互动。</li><li>总问卷已确定：混合移动力、完整防御体系、耐久与义体、工坊付费重置、12—16 敌人原型。</li></ul></section>
+    <form id="form"></form><div class="actions"><button type="button" id="save">保存草稿</button><button class="secondary" type="button" id="json">导出 JSON</button><button class="secondary" type="button" id="md">导出 Markdown</button><button class="secondary" type="button" id="copy">复制摘要</button><button class="danger" type="button" id="clear">清空</button><span id="status"></span></div>
+  </div></div>
+</main>
+<script>
+/* Gameplay-only questionnaire: plot, characters, and story direction are deliberately excluded. */
+const sections=[
+ {id:'explore',title:'探索与区域结构',qs:[
+  ['区域地图的自由度','决定玩家在区域内是自行规划路线，还是按功能点串联。','single',[['hub','中心据点 + 多个可自由往返地点'],['district','多个相连街区/子地图，自由步行探索'],['hybrid','区域地图选点 + 关键地点内自由探索']]],
+  ['区域首次进入时的信息公开程度','没有敌情压力，但探索仍应有发现感。','single',[['all','所有功能地点和主支线入口公开'],['major','主要地点公开，隐藏地点需线索发现'],['fog','只有据点公开，其余通过探索逐步发现']]],
+  ['区域解锁的玩法门槛','只允许叙事、交通、关系或能力门槛，不使用倒计时。','multi',[['travel','交通设施、通行证或路线修复'],['tool','专用工具、钥匙或防护装备'],['skill','职业能力/术式能力'],['relation','服务权限或组织关系'],['clue','地图、情报与现场线索']]],
+  ['回访区域时优先变化什么','让无压力回访具有持续玩法价值。','multi',[['quest','新增支线、委托和任务后续'],['service','商店、工坊、医院服务升级'],['shortcut','新捷径、交通与可达区域'],['interaction','新调查物、互动与可破坏入口'],['combat','新战斗挑战或任务变体']]],
+  ['探索发现最应奖励什么','选择 3 项，避免探索只掉材料。','multi',[['gear','特殊装备、改装件或消耗品'],['service','新功能服务、制作配方或折扣'],['route','新地点、捷径与旅行方式'],['combat','新战术工具或可选技能'],['collection','档案、收藏与成就'],['ending','终局准备资源或条件']]]
+ ]},
+ {id:'loop',title:'主循环与任务结构',qs:[
+  ['剧情模式的核心循环','决定区域内行动、战斗、经营与探索的比例。','single',[['quest','接任务 -> 探索/准备 -> 战斗 -> 结算 -> 回据点'],['discovery','自由探索 -> 发现问题 -> 接受/拒绝任务 -> 结算'],['case','调查线索 -> 选择处理方式 -> 战斗/交互 -> 状态变化'],['mixed','以上混合，但需要一个主导循环']]],
+  ['单个地点的任务密度','决定开放区域是否更像沉浸地图或任务清单。','single',[['one','一个地点通常只承载一个主玩法'],['two','一个地点有主任务 + 1 个隐藏/回访内容'],['dense','一个地点有多阶段、多个任务和可重复挑战']]],
+  ['支线对玩法的影响','不讨论支线故事，只讨论它们带来的系统价值。','multi',[['service','解锁服务、制作、交通或折扣'],['location','改变地点状态或开放区域'],['combat','解锁战术工具、敌人变体或挑战'],['resource','获得装备、材料、消耗品'],['ending','提供终局前的可选准备'],['none','只提供独立体验和收藏']]],
+  ['支线的理想重复度','决定总内容量与模板复用程度。','single',[['unique','多数支线一次性手工设计'],['template','固定模板 + 地图/敌人/条件变体'],['hybrid','角色/重要支线手工，日常委托模板化']]],
+  ['首发优先任务模板','请选择至少 4 项作为关卡原型优先级。','multi',[['eliminate','歼灭'],['destroy','破坏'],['rescue','营救'],['capture','夺取'],['defend','守点'],['escort','护送'],['evacuate','撤离'],['investigate','调查与现场取证']]]
+ ]},
+ {id:'combat',title:'战斗进入、撤离与重试',qs:[
+  ['战斗任务前的准备自由度','剧情模式没有时间压力，玩家应能进行何种准备？','multi',[['loadout','自由调整装备、技能和快捷栏'],['intel','查看敌人原型、地图规则和目标'],['supply','购买/制作补给与维修'],['scout','用侦察获得额外地图或敌人信息'],['entry','选择出生点或初始战术方案']]],
+  ['战斗任务的撤离规则','撤离应是明确战术工具，而非只在失败时出现。','single',[['always','多数任务随时可撤离，按完成度结算'],['objective','只有完成部分目标或到达撤离点后可撤离'],['limited','仅少数任务允许撤离，强调必须完成']]],
+  ['失败与重试的默认体验','已确定可任务前重试，仍需定义失败界面的玩法选项。','multi',[['restart','立即战术重开'],['prepare','返回据点调整配装后重试'],['lower','提供可选的辅助难度/战术提示'],['partial','保留已获得的情报或地图认知'],['cost','以资源消耗换取重试便利']]],
+  ['战斗内外的资源边界','决定补给、耐久和伤病是否真正影响探索循环。','single',[['combat','资源主要在单场战斗内消耗和恢复'],['region','资源跨多个地点持续消耗'],['hybrid','基础资源按区域管理，关键消耗品按战斗管理']]],
+  ['剧情模式中可重复挑战的定位','无倒计时下，玩家可能想练构筑或补资源。','single',[['none','不做重复挑战，所有战斗一次性'],['arena','提供独立训练/模拟战'],['contracts','少量可重复委托与战斗变体'],['revisit','旧地点可重访，出现可选挑战']]]
+ ]},
+ {id:'growth',title:'成长、装备与长期运营',qs:[
+  ['成长节奏','20 小时流程中，玩家多久应获得一次可感知的构筑变化？','single',[['often','约每 20—30 分钟一次小变化'],['chapter','每个区域/章节获得一次明显转折'],['mixed','高频小改装 + 每区域一次大升级']]],
+  ['装备获得方式的比例','决定探索、商店、任务与制作在成长中的权重。','multi',[['quest','任务固定奖励'],['explore','探索发现/隐藏容器'],['shop','商店购买'],['craft','工坊制作和改装'],['enemy','精英或首领战利品'],['reputation','服务权限、组织关系或许可']]],
+  ['耐久系统的压力强度','已决定首发包含耐久；这里决定它是否会打断自由探索。','single',[['light','只影响高风险装备，常规装备几乎不坏'],['medium','常规装备需要维修，但不会失效'],['hard','耐久不足会明显削弱或锁定装备']]],
+  ['义体/高风险物品的使用节奏','已决定首发包含义体与强化剂。','single',[['optional','完全可选，作为特殊构筑路线'],['tempting','强而有代价，鼓励尝试但不强迫'],['core','中后期大多数构筑都要依赖']]],
+  ['工坊付费重置的成本形式','已确定重置需要成本，仍需决定成本类型。','multi',[['money','金钱'],['parts','零件/材料'],['service','工坊服务次数或许可'],['resource','以太材料/能源'],['none','仅不重置关键装备，技能可免费调整']]]
+ ]},
+ {id:'services',title:'据点、服务与非战斗玩法',qs:[
+  ['区域据点的核心功能','选择 3—5 项，决定玩家回到据点时做什么。','multi',[['workshop','维修、制作、改装、重置'],['clinic','治疗伤病、处理污染'],['market','交易、补给、委托'],['training','训练、试用战术工具'],['storage','仓库、收藏与装备整理'],['travel','交通、区域路线与快速旅行'],['board','任务板、情报与地图管理']]],
+  ['快速旅行规则','没有时间压力，快速旅行的作用是减少摩擦而非节省倒计时。','single',[['all','已发现地点之间自由快速旅行'],['network','只在铁路/道路网络节点间旅行'],['hub','只能返回据点，再前往其他区域'],['cost','可旅行但消耗少量补给或服务费用']]],
+  ['背包整理的频率','决定格子背包是战术乐趣还是操作负担。','single',[['field','仅在战斗/地点内处理关键拾取'],['hub','主要回据点整理，战斗内少量取舍'],['anywhere','非战斗时随时打开整理']]],
+  ['调查互动的玩法形式','用于让剧情模式的开放探索有除战斗外的操作内容。','multi',[['inspect','可调查物与环境提示'],['tools','用工具/术式打开或分析'],['puzzle','轻量机关、线路或设备谜题'],['dialogue','通过对话/服务获得线索'],['map','地图标记、照片或档案拼合']]],
+  ['生活化玩法的轻重','不讨论剧情内容，只决定日常空间是否有可玩的系统。','single',[['minimal','只作氛围与功能 UI'],['light','少量制作、收藏、住处布置或小游戏'],['deep','有较完整的工作、经营或社区系统']]]
+ ]},
+ {id:'guidance',title:'引导、难度与可访问性',qs:[
+  ['开放探索的引导强度','无压力不等于迷路；决定任务提示与地图标记。','single',[['clear','主支线目标和推荐地点明确标记'],['soft','只标记大方向，具体入口需探索'],['minimal','尽量少标记，依靠日志和环境线索']]],
+  ['是否允许错过内容','自由回访已确定，仍需明确隐藏内容是否永久可补。','single',[['none','所有内容最终都可回收/补完'],['some','少量选择内容互斥，但明确告知'],['many','允许大量不可逆错过，鼓励多周目']]],
+  ['战术辅助选项','确定性战棋适合提供信息辅助，而不改变基础规则。','multi',[['preview','攻击伤害和减伤预览'],['range','移动/攻击/技能范围高亮'],['undo','非随机操作的单步撤销'],['hint','敌人意图与目标格解释'],['speed','战斗演出速度调整'],['access','字体、配色、按键和 UI 缩放']]],
+  ['难度模式的结构','决定是否用数值、规则或辅助项调整体验。','single',[['one','只做一个精心平衡的默认难度'],['preset','故事/标准/战术等预设难度'],['custom','可单独调整资源、敌人、撤销和重试辅助']]],
+  ['玩家完成度的主要追踪方式','不要只追踪战斗胜率，也要服务探索与构筑。','multi',[['map','区域地点与秘密发现'],['build','装备、技能与改装图鉴'],['tasks','任务与挑战完成'],['archive','档案、收藏和调查记录'],['combat','战斗复盘、成就和无伤挑战']]]
+ ]},
+ {id:'scope',title:'首发范围与验证',qs:[
+  ['首个可玩垂直切片应验证什么','请选择最多 3 项，避免切片过大。','multi',[['explore','一个可回访小区域的探索体验'],['combat','一张确定性战棋地图'],['service','工坊/医院/商店的区域循环'],['save','完整存档、读档和自动备份'],['side','一个可改变地点状态的支线'],['growth','一次明确的装备或构筑升级']]],
+  ['剧情模式与肉鸽模式共用内容的优先级','只讨论生产复用，不讨论肉鸽故事。','multi',[['combat','战斗规则、敌人原型和任务模板'],['gear','装备、技能、改装和消耗品'],['locations','地点美术、地图模块和互动物'],['services','工坊、医院、商店和数据系统'],['none','剧情模式优先独立打磨，再考虑复用']]],
+  ['目前最担心的玩法风险','选择最多 3 项，后续开发计划应优先防线化。','multi',[['empty','开放区域空洞，只是跑图'],['busy','系统太多，整理和 UI 压过战斗'],['repeat','任务模板重复'],['growth','构筑差异不够明显'],['save','存档/读档规则让选择失重'],['scope','20 小时内容规模失控'],['combat','战斗与探索循环割裂']]],
+  ['其他玩法问题或必须避免的设计','不填写剧情、人物或走向；只写交互、系统、节奏、界面与范围。','textarea',null,'例如：不想要大量跑腿；希望每个区域都有可反复使用的战术训练设施。']
+ ]}
+];
+const form=document.querySelector('#form'),nav=document.querySelector('#nav'),key='occ-story-gameplay-questionnaire-v2';
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function render(){sections.forEach((s,si)=>{nav.insertAdjacentHTML('beforeend',`<a href="#${s.id}">${si+1}. ${s.title}</a>`);const sec=document.createElement('section');sec.className='section';sec.id=s.id;sec.innerHTML=`<h2>${si+1}. ${s.title}</h2><p class="note">本组只讨论剧情模式玩法；不讨论角色、故事内容、剧情走向或结局文本。</p>`;s.qs.forEach((q,qi)=>{const id=`${s.id}_${qi}`;let body;if(q[2]==='textarea')body=`<textarea name="${id}" placeholder="${esc(q[4]||'请输入玩法问题或答案')}"></textarea>`;else body=`<div class="choices">${q[3].map(o=>`<label class="choice"><input type="${q[2]==='multi'?'checkbox':'radio'}" name="${id}" value="${esc(o[0])}"><span>${esc(o[1])}${o[2]?`<small>${esc(o[2])}</small>`:''}</span></label>`).join('')}</div>`;sec.insertAdjacentHTML('beforeend',`<div class="q"><h3>${qi+1}. ${esc(q[0])}<span class="tag">玩法</span></h3><p class="why">${esc(q[1])}</p>${body}</div>`)});form.appendChild(sec)})}
+function values(){const out={};new FormData(form).forEach((v,k)=>out[k]=out[k]?[].concat(out[k],v):v);return out}function restore(data){Object.entries(data||{}).forEach(([k,v])=>{const vals=Array.isArray(v)?v:[v];vals.forEach(x=>{const f=form.querySelector(`[name="${CSS.escape(k)}"][value="${CSS.escape(x)}"]`);if(f)f.checked=true});const t=form.querySelector(`[name="${CSS.escape(k)}"]:not([type=radio]):not([type=checkbox])`);if(t&&typeof v==='string')t.value=v})}function progress(){const qs=[...form.querySelectorAll('.q')],done=qs.filter(q=>q.querySelector(':checked')||q.querySelector('textarea')?.value.trim()).length;document.querySelector('#count').textContent=`${done} / ${qs.length}`;document.querySelector('#bar').style.width=`${done*100/qs.length}%`}function save(msg='已自动保存到当前浏览器'){localStorage.setItem(key,JSON.stringify(values()));document.querySelector('#status').textContent=msg;progress()}function md(){const a=values();return '# OCC 剧情模式玩法问卷 v2：回答\n\n导出时间：'+new Date().toLocaleString()+'\n\n'+sections.map(s=>'## '+s.title+'\n\n'+s.qs.map((q,i)=>`- ${q[0]}：${Array.isArray(a[`${s.id}_${i}`])?a[`${s.id}_${i}`].join('、'):(a[`${s.id}_${i}`]||'未回答')}`).join('\n')).join('\n\n')}function download(name,type,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+render();restore(JSON.parse(localStorage.getItem(key)||'{}'));progress();form.addEventListener('input',()=>save());document.querySelector('#save').onclick=()=>save('草稿已保存');document.querySelector('#json').onclick=()=>download('OCC_剧情模式玩法问卷_v2_回答.json','application/json',JSON.stringify({exportedAt:new Date().toISOString(),answers:values()},null,2));document.querySelector('#md').onclick=()=>download('OCC_剧情模式玩法问卷_v2_回答.md','text/markdown;charset=utf-8',md());document.querySelector('#copy').onclick=async()=>{await navigator.clipboard.writeText(md());document.querySelector('#status').textContent='已复制 Markdown 摘要'};document.querySelector('#clear').onclick=()=>{if(confirm('清空本浏览器保存的全部回答？')){form.reset();localStorage.removeItem(key);progress();document.querySelector('#status').textContent='已清空'}};
+</script></body></html>

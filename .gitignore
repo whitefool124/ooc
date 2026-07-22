@@ -1,0 +1,34 @@
+# Unity generated files and local editor state
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Generated IDE project files
+.vs/
+.vscode/
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Unity crash reports and local captures
+sysinfo.txt
+UnityCrashHandler64.exe
+UnityPlayer.log
+UnityProject/Library/FunplayMcp/
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak

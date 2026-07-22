@@ -1,0 +1,14 @@
+{
+  "name": "OCC.Combat.Presentation",
+  "rootNamespace": "OCC.Combat.Presentation",
+  "references": ["OCC.Combat.Runtime"],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

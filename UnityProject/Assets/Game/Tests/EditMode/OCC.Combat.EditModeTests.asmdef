@@ -1,0 +1,21 @@
+{
+  "name": "OCC.Combat.EditModeTests",
+  "rootNamespace": "OCC.Combat.Tests",
+  "references": [
+    "OCC.Combat.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": true,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

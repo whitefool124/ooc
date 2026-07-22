@@ -1,0 +1,403 @@
+fileFormatVersion: 2
+guid: 5b9d86e555351914f9bd030b62ff9e2f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3049130558649647808
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_0
+  - first:
+      213: 1191351905610566187
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_1
+  - first:
+      213: 8757349660504430423
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_2
+  - first:
+      213: -4418601180297874316
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_3
+  - first:
+      213: 5470633109570641138
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_4
+  - first:
+      213: -3604089818767216975
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_5
+  - first:
+      213: -8606323044077886517
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_6
+  - first:
+      213: -619291182837030759
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_7
+  - first:
+      213: 5990226692979464676
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_8
+  - first:
+      213: 2742059661309447302
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_9
+  - first:
+      213: -5496531032023363028
+    second: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_0
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 751
+        width: 530
+        height: 268
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c2c91e8610b05a20800000000000000
+      internalID: 3049130558649647808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_1
+      rect:
+        serializedVersion: 2
+        x: 622
+        y: 672
+        width: 378
+        height: 322
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2a07600f38888010800000000000000
+      internalID: 1191351905610566187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_2
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 641
+        width: 532
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75711482e1b588970800000000000000
+      internalID: 8757349660504430423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_3
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 558
+        width: 181
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 474393423a9fda2c0800000000000000
+      internalID: -4418601180297874316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_4
+      rect:
+        serializedVersion: 2
+        x: 813
+        y: 552
+        width: 164
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fcd27814d79beb40800000000000000
+      internalID: 5470633109570641138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_5
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 515
+        width: 562
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be27c5b763bbfdc0800000000000000
+      internalID: -3604089818767216975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_6
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 431
+        width: 158
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc3aa772ac2309880800000000000000
+      internalID: -8606323044077886517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_7
+      rect:
+        serializedVersion: 2
+        x: 815
+        y: 431
+        width: 154
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 990a77a43f5d767f0800000000000000
+      internalID: -619291182837030759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_8
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 295
+        width: 530
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e99a1f807f812350800000000000000
+      internalID: 5990226692979464676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_9
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 16
+        width: 387
+        height: 386
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68c0741ebb0cd0620800000000000000
+      internalID: 2742059661309447302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_10
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 0
+        width: 553
+        height: 282
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c221653f52668b3b0800000000000000
+      internalID: -5496531032023363028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_0: 3049130558649647808
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_1: 1191351905610566187
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_10: -5496531032023363028
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_2: 8757349660504430423
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_3: -4418601180297874316
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_4: 5470633109570641138
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_5: -3604089818767216975
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_6: -8606323044077886517
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_7: -619291182837030759
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_8: 5990226692979464676
+      gpt-image-2-2026-07-20T13-01-05-795Z-489030a7_9: 2742059661309447302
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

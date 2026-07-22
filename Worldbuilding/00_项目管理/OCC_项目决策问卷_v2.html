@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC 项目决策问卷 v2</title>
+  <style>
+    :root { --bg:#11191c; --paper:#f2f0e9; --panel:#fffdf8; --ink:#172226; --muted:#607075; --line:#d7d8cf; --accent:#087f78; --gold:#b97b20; --danger:#a94b4b; }
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#152125,#0c1418);color:var(--ink);font:15px/1.6 "Microsoft YaHei","Noto Sans SC",system-ui,sans-serif}
+    .shell{max-width:1160px;margin:auto;padding:28px 20px 64px}.hero{color:#edf7f4;padding:4px 4px 24px}.hero h1{margin:0;font-size:30px}.hero p{margin:8px 0 0;color:#bdd0ce}.layout{display:grid;grid-template-columns:235px minmax(0,1fr);gap:22px}.sidebar{position:sticky;top:16px;align-self:start;background:#17262a;border:1px solid #294247;border-radius:10px;padding:14px}.sidebar a{display:block;color:#bed1cf;text-decoration:none;padding:7px 8px;border-radius:5px;font-size:13px}.sidebar a:hover{background:#244146;color:white}.progress{margin:12px 8px 14px;color:#d8ece8;font-size:13px}.bar{height:7px;background:#355055;border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#3ac6b6;transition:.2s}.base,.section{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;margin-bottom:16px}.base h2,.section h2{margin:0 0 5px;font-size:20px}.note{color:var(--muted);margin:0 0 18px}.base ul{margin:8px 0 0;padding-left:20px}.group{padding:18px 0;border-top:1px solid #e6e3d9}.group:first-of-type{border-top:0;padding-top:0}.group h3{margin:0 0 7px;font-size:16px}.source{display:inline-block;margin-left:7px;padding:1px 6px;border-radius:99px;background:#e3f1ef;color:#087f78;font-size:12px;font-weight:500}.why{margin:0 0 10px;color:var(--muted);font-size:13px}.choices{display:grid;gap:7px}.choice{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1px solid var(--line);border-radius:7px;cursor:pointer}.choice:hover{border-color:#69a9a2;background:#f4fbf9}.choice input{margin-top:5px;accent-color:var(--accent)}.choice small{display:block;color:var(--muted)}textarea,input[type=text]{width:100%;border:1px solid var(--line);border-radius:7px;padding:10px;background:#fff;min-height:42px;font:inherit}textarea{min-height:85px;resize:vertical}.actions{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:9px;padding:16px 0 0;background:linear-gradient(transparent,#f2f0e9 35%)}button{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:6px;padding:9px 13px;font:inherit;cursor:pointer}button.secondary{background:#fff;color:var(--ink);border-color:var(--line)}button.danger{background:#fff;color:var(--danger);border-color:#dbaaaa}#status{align-self:center;color:var(--muted);font-size:13px}.empty{color:var(--muted);font-style:italic}@media(max-width:760px){.shell{padding:20px 12px 44px}.layout{grid-template-columns:1fr}.sidebar{position:static;display:flex;overflow:auto;gap:3px}.sidebar a{white-space:nowrap}.hero h1{font-size:24px}.base,.section{padding:17px}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero"><h1>OCC 项目决策问卷 v2</h1><p>面向“OC 世界观背景的开放区域战棋 RPG + 同世界异人肉鸽”。回答会保存在当前浏览器，也可以导出 JSON 或 Markdown。</p></header>
+    <div class="layout">
+      <aside class="sidebar"><div class="progress"><strong id="count">0 / 0</strong> 个核心问题已答<div class="bar"><i id="bar"></i></div></div><nav id="nav"></nav></aside>
+      <div>
+        <section class="base"><h2>已确认基线</h2><ul><li>PC、2D 像素、1920×1080 战斗 UI（地图 75% / HUD 25%）。</li><li>剧情模式讲一名主角的故事；主线、支线与完整探索约 20 小时。</li><li>以太素是唯一超凡来源；魔法是可测量、可维护、有代价的能量工程。</li><li>核心战斗是单人、回合制、确定性战棋；无隐藏命中、暴击或 AI 随机。</li><li>剧情模式需要完整存档/读档；肉鸽模式讲同世界不同背景人物的独立故事。</li></ul></section>
+        <form id="survey"></form>
+        <div class="actions"><button type="button" id="save">保存草稿</button><button class="secondary" type="button" id="json">导出 JSON</button><button class="secondary" type="button" id="markdown">导出 Markdown</button><button class="secondary" type="button" id="copy">复制摘要</button><button class="danger" type="button" id="clear">清空回答</button><span id="status"></span></div>
+      </div>
+    </div>
+  </main>
+  <script>
+    const sections = [
+      {id:'story', title:'剧情与正史锚点', questions:[
+        ['主角的可定制程度','v2.0 §九','决定角色档案、剧情演出和配音文本的生产方式。','single',[['fixed','姓名、性别与外观均固定','强调作者叙事与精确的人物塑造'],['look','姓名/身份固定，只定制外观','兼顾明确主角与代入感'],['full','允许姓名、性别与外观定义','文本、镜头和关系成本显著提升']]],
+        ['剧情发生在 OC 世界观的哪个历史节点','v2.0 §九','需要先对齐世界史、国家格局与战争状态，才能写主线。','text',null,'请写已知年代、战争阶段或希望优先使用的历史事件。'],
+        ['主角的终局失败规则','v2.0 §九','决定存档压力、任务容错和人生叙事的基调。','single',[['permadeath','可永久死亡，进入结局','风险最强，需避免无预警失败'],['consequence','以重伤、失踪、撤离或关系代价替代','推荐；保留代价且保护 20 小时流程'],['mixed','仅关键终局任务允许永久死亡','需要清楚标注任务风险']]],
+        ['剧情结局结构','v2.0 §九','决定分支规模与后期文本、美术、测试成本。','single',[['state','一个主结局，按状态显示差异','成本可控，强调人生后果'],['branch','2—3 个互斥主结局','阵营选择更有重量'],['many','多路线、多终局','内容和测试成本最高']]],
+        ['主角的核心身份与人生起点','策划案 §九','出身、职业渠道与初始事件池尚未冻结。','textarea',null,'例如：铁路工坊学徒、军属子女、污染区诊所助理；并说明为何会卷入主线。']
+      ]},
+      {id:'openworld', title:'开放区域与流程节奏', questions:[
+        ['开放区域的最终数量','v2.0 §三、四','当前草案是工业城市、铁路边境、矿区污染带三大区域。','single',[['three','3 个高密度可回访区域','推荐；适合 20 小时完整探索'],['four','4 个中等区域','需要增加一种鲜明环境与系统'],['more','5 个以上较小区域','探索广度高，但制作压力大']]],
+        ['区域时间压力的表现','旧问卷 Q4 + 技术规划','需要确定天数、敌情、地点状态如何共同推进。','single',[['days','以天数/时段为主','直观，适合剧情日程'],['threat','以敌情进度为主','更战术化'],['both','两者并存','信息丰富，但 UI 与平衡更复杂']]],
+        ['主线推进后区域是否可回访','流程草案','决定探索补完、支线补救和地点状态设计。','single',[['open','始终可回访，内容按状态变化','推荐；符合开放区域 RPG'],['window','仅在章节窗口内回访','压力更强'],['locked','推进后封锁大部分旧区域','不可逆感强，需提前告知']]],
+        ['秘密地点的发现规则','策划案 §九','需确定情报、关系、技能和探索各自的作用。','multi',[['intel','购买/交换情报'],['relation','NPC 关系或阵营许可'],['gear','装备、术式或职业能力'],['event','旅途事件线索'],['map','纯地图探索与观察']]],
+        ['你最想优先保留的区域主题','总策划案 §八','用于确定前三个区域的环境与资产优先级。','multi',[['city','工业城市与铁路枢纽'],['front','战壕、废墟与前线阵地'],['mine','矿区、工厂与污染禁区'],['border','边境荒野与殖民城镇'],['ruin','古代遗迹与以太设施']]]
+      ]},
+      {id:'save', title:'剧情存档、读档与后果', questions:[
+        ['允许的读档自由度','v2.0 §五','完整存档已确定，仍需明确是否限制“选项回溯”。','single',[['free','任意手动存档/读档','最友好，适合探索与叙事'],['checkpoint','仅区域/任务/自动节点','后果更有重量'],['hybrid','区域自由读档；战斗只允许快照重开','推荐；兼顾探索与确定性战斗']]],
+        ['重大选择前是否生成专用备份','v2.0 §五','影响玩家是否敢于承担不可逆关系与阵营后果。','single',[['always','所有重大选择前自动备份'],['once','每章只保留一次选择前备份'],['none','不提供专用备份，只用普通存档']]],
+        ['任务失败的默认处理','v2.0 §二','需要统一撤离、重伤、声望损失和区域恶化的适用范围。','multi',[['retry','允许从任务前重试'],['retreat','撤离并保留部分损失'],['injury','留下伤病/污染'],['world','改变地点或 NPC 状态'],['lock','少数关键任务直接进入坏结局']]],
+        ['希望在存档界面看到什么','v2.0 §五','决定存档卡片信息层级。','multi',[['chapter','章节与最近任务'],['location','区域、地点、游戏内时间'],['portrait','主角头像、生命、伤病、污染'],['relation','关键关系/阵营状态'],['thumbnail','场景缩略图']]]
+      ]},
+      {id:'combat', title:'战棋规则与数值公式', questions:[
+        ['移动力的基础来源','策划案 §九','当前原型固定为 3 格，正式版需确定敏捷、负重和装备关系。','single',[['fixed','固定移动力，技能临时改变'],['attribute','敏捷直接决定移动力'],['loadout','轻/中/重装档位决定，属性小修正'],['hybrid','敏捷、负重和装备共同决定']]],
+        ['防御体系的首发复杂度','策划案 §九','护甲、护盾、格挡与伤害类型的公式尚未冻结。','single',[['simple','生命 + 护盾 + 少量固定减伤'],['full','护甲、护盾、格挡并存'],['fullplus','再加入部位、穿透和有限百分比抗性']]],
+        ['首发通用状态表','策划案 §九','需要限制状态数量，保证确定性可读。','multi',[['burn','燃烧'],['slow','迟缓'],['bound','束缚'],['break','破甲'],['pollution','污染'],['bleed','出血'],['jam','回路/武器故障']]],
+        ['职业资源压力应重点来自哪里','策划案 §九','决定技能数值、冷却与补给体系。','multi',[['ammo','弹药/零件'],['aether','以太/负荷'],['cooldown','冷却与行动条延时'],['health','伤病与体力'],['durability','装备耐久与维护']]],
+        ['任务模板首发优先级','总策划案 §八','至少选择 4 项，以安排关卡原型。','multi',[['eliminate','歼灭'],['destroy','破坏'],['escort','护送'],['hunt','猎杀'],['defend','守点'],['evacuate','撤离'],['rescue','营救'],['capture','夺取']]]
+      ]},
+      {id:'growth', title:'成长、装备与运营', questions:[
+        ['三大主修的锁定强度','策划案 §九','需决定跨系学习与高阶资格门槛。','single',[['soft','软鼓励：都能学，专精效率高'],['medium','高阶技能/装备要求主修资格'],['hard','选定主修后锁定高阶路线']]],
+        ['主角出身原型首发数量','策划案 §九','需要平衡开局差异与内容生产量。','single',[['three','3 个'],['five','5 个'],['eight','8 个以上']]],
+        ['负重、以太负荷、耐久与义体的首发范围','策划案 §九','这是长期运营深度的主要来源，也是系统复杂度风险。','multi',[['weight','负重'],['load','以太负荷'],['durability','装备耐久'],['injury','伤病'],['prosthetic','义体'],['none','首发先不做复杂长期代价']]],
+        ['工坊的重置规则','技术规划 §4.5','决定任务前配装自由度。','single',[['free','章节/区域间免费重置'],['cost','消耗金钱、零件或时间'],['limited','只允许有限次数'],['none','不允许重置']]],
+        ['高风险装备优先类型','流程草案','需要确定污染、强化剂和义体的首发重点。','multi',[['stim','短时强化剂'],['forbidden','禁术媒介'],['implant','一次性义体模块'],['contaminated','污染武器/晶体'],['prototype','不稳定军用原型机']]]
+      ]},
+      {id:'content', title:'敌人、首领与美术生产', questions:[
+        ['首发敌人规模','流程草案 + 开发计划','当前候选为 12—16 原型；需要确定是否为 20 小时剧情扩容。','single',[['twelve','12—16 个原型 + 2—3 首领'],['twenty','18—24 个原型 + 3 首领'],['large','30+ 原型 + 5 首领']]],
+        ['第三名剧情首领的战区主题','策划案 §九','装甲列车指挥官与战场术师长已列为优先，第三名待定。','single',[['pollution','污染区执政官'],['fortress','叛军要塞主将'],['mining','矿业财阀/处理厂总监'],['ruin','古代设施守卫者']]],
+        ['敌对阵营的首发美术策略','策划案 §九','决定单位复用与识别成本。','single',[['silhouette','共享基础骨架，以轮廓、装备和色彩区分'],['faction','每阵营有完整独立单位集'],['hybrid','普通敌人复用，精英/首领独立']]],
+        ['剧情模式要优先介绍哪些世界观面向','产品定位','用于安排支线和环境叙事。','multi',[['industry','以太素开采与工业'],['law','许可、法律与国家机器'],['class','阶层、工人生活与财阀'],['war','近代战争与后勤'],['medical','污染、医疗与义体'],['colonial','边境/殖民扩张'],['religion','宗教与思想']]]
+      ]},
+      {id:'roguelite', title:'肉鸽模式：同世界的其他故事', questions:[
+        ['首批肉鸽故事包数量','流程草案 §六','每个故事包包含人物档案、专属事件池和结算摘要。','single',[['one','先做 1 个，验证循环'],['three','首发 3 个'],['five','首发 5 个']]],
+        ['首批人物背景','流程草案 §六','选择要优先落地的故事视角。','multi',[['miner','矿井护卫'],['rail','铁路术式学徒'],['doctor','污染诊所医生'],['scout','边境侦察员'],['mechanic','黑市维修师'],['militia','地方民兵']]],
+        ['肉鸽与剧情模式的互相引用','v2.0 §九','决定档案、传闻和 NPC 是否跨模式出现。','single',[['none','完全分离'],['lore','只共享传闻/档案/世界观条目'],['cameo','允许角色或地点彩蛋互相出现'],['linked','肉鸽结果可影响剧情世界状态']]],
+        ['肉鸽局外成长上限','流程草案','需避免强制刷局才能体验剧情或基础战斗。','single',[['content','只解锁内容与起始选项'],['minor','少量便利和信息优势'],['power','允许明确永久数值成长']]]
+      ]},
+      {id:'other', title:'其他未覆盖事项', questions:[
+        ['必须保留、必须避免或需要补充的问题','自由填写','用于记录上面未覆盖的设计原则、参考作品、风险与优先级。','textarea',null,'请尽量写清楚：问题、期望结果、为什么重要。']
+      ]}
+    ];
+    const form = document.querySelector('#survey'), nav = document.querySelector('#nav'), key = 'occ-project-questionnaire-v2';
+    function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+    function render(){sections.forEach((s,si)=>{nav.insertAdjacentHTML('beforeend',`<a href="#${s.id}">${si+1}. ${s.title}</a>`); const el=document.createElement('section');el.className='section';el.id=s.id;el.innerHTML=`<h2>${si+1}. ${s.title}</h2><p class="note">请优先回答有明确取舍的问题；多选题可选择多个方向。</p>`;s.questions.forEach((q,qi)=>{const id=`q_${s.id}_${qi}`;let body='';if(q[3]==='text')body=`<input type="text" name="${id}" placeholder="${esc(q[5]||'请输入回答')}">`;else if(q[3]==='textarea')body=`<textarea name="${id}" placeholder="${esc(q[5]||'请输入回答')}"></textarea>`;else body=`<div class="choices">${q[4].map(o=>`<label class="choice"><input type="${q[3]==='multi'?'checkbox':'radio'}" name="${id}" value="${esc(o[0])}"><span>${esc(o[1])}${o[2]?`<small>${esc(o[2])}</small>`:''}</span></label>`).join('')}</div>`;el.insertAdjacentHTML('beforeend',`<div class="group" data-question="${id}"><h3>${qi+1}. ${esc(q[0])}<span class="source">${esc(q[1])}</span></h3><p class="why">${esc(q[2])}</p>${body}</div>`)});form.appendChild(el)})}
+    function values(){const out={};new FormData(form).forEach((v,k)=>out[k]=out[k]?[].concat(out[k],v):v);return out}
+    function restore(data){Object.entries(data||{}).forEach(([k,v])=>{const vals=Array.isArray(v)?v:[v];vals.forEach(x=>{const f=form.querySelector(`[name="${CSS.escape(k)}"][value="${CSS.escape(x)}"]`);if(f)f.checked=true});const t=form.querySelector(`[name="${CSS.escape(k)}"]:not([type=radio]):not([type=checkbox])`);if(t&&typeof v==='string')t.value=v})}
+    function progress(){const all=[...form.querySelectorAll('.group')], done=all.filter(g=>g.querySelector(':checked')||g.querySelector('input[type=text]')?.value.trim()||g.querySelector('textarea')?.value.trim()).length;document.querySelector('#count').textContent=`${done} / ${all.length}`;document.querySelector('#bar').style.width=`${done/all.length*100}%`}
+    function save(msg='已自动保存到当前浏览器'){localStorage.setItem(key,JSON.stringify(values()));document.querySelector('#status').textContent=msg;progress()}
+    function download(name,type,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+    function markdown(){const a=values();return '# OCC 项目决策问卷 v2：回答\n\n导出时间：'+new Date().toLocaleString()+'\n\n'+sections.map(s=>'## '+s.title+'\n\n'+s.questions.map((q,i)=>`- ${i+1}. ${q[0]}：${Array.isArray(a[`q_${s.id}_${i}`])?a[`q_${s.id}_${i}`].join('、'):(a[`q_${s.id}_${i}`]||'未回答')}`).join('\n')).join('\n\n')+'\n'}
+    render();restore(JSON.parse(localStorage.getItem(key)||'{}'));progress();form.addEventListener('input',()=>save());
+    document.querySelector('#save').onclick=()=>save('草稿已保存');document.querySelector('#json').onclick=()=>download('OCC_项目决策问卷_v2_回答.json','application/json',JSON.stringify({exportedAt:new Date().toISOString(),answers:values()},null,2));document.querySelector('#markdown').onclick=()=>download('OCC_项目决策问卷_v2_回答.md','text/markdown;charset=utf-8',markdown());document.querySelector('#copy').onclick=async()=>{await navigator.clipboard.writeText(markdown());document.querySelector('#status').textContent='已复制 Markdown 摘要'};document.querySelector('#clear').onclick=()=>{if(confirm('清空本浏览器保存的全部回答？')){form.reset();localStorage.removeItem(key);progress();document.querySelector('#status').textContent='已清空'}};
+  </script>
+</body>
+</html>
