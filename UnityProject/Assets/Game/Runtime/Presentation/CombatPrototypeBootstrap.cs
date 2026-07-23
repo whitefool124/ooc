@@ -373,38 +373,55 @@ namespace OCC.Combat.Presentation
             GUI.color = Color.white;
             return GUI.Button(rect, GUIContent.none, GUIStyle.none);
         }
+
+        private static void DrawConsolePanel(Rect rect, string title, string subtitle, Color accent)
+        {
+            GUI.color = new Color(.018f, .03f, .043f, .985f); GUI.Box(rect, "");
+            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 4, rect.height), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(rect.x + 26, rect.y + 24, 88, 3), Texture2D.whiteTexture);
+            GUI.color = new Color(.9f, .95f, .97f); GUI.Label(new Rect(rect.x + 26, rect.y + 38, rect.width - 52, 32), title);
+            GUI.color = new Color(.56f, .66f, .71f); GUI.Label(new Rect(rect.x + 26, rect.y + 78, rect.width - 52, 28), subtitle);
+            GUI.color = Color.white;
+        }
+
+        private static bool DrawConsoleButton(Rect rect, string title, string subtitle, Color accent)
+        {
+            bool enabled = GUI.enabled;
+            bool hover = enabled && rect.Contains(Event.current.mousePosition);
+            GUI.color = enabled ? (hover ? new Color(accent.r, accent.g, accent.b, .22f) : new Color(.04f, .065f, .08f, 1f)) : new Color(.025f, .035f, .045f, 1f);
+            GUI.Box(rect, ""); GUI.color = enabled ? accent : new Color(.28f, .32f, .34f); GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, 3), Texture2D.whiteTexture);
+            GUI.color = enabled ? new Color(.92f, .96f, .98f) : new Color(.38f, .42f, .44f); GUI.Label(new Rect(rect.x + 18, rect.y + 10, rect.width - 36, 25), title);
+            GUI.color = enabled ? new Color(.55f, .64f, .69f) : new Color(.3f, .34f, .36f); GUI.Label(new Rect(rect.x + 18, rect.y + 35, rect.width - 36, rect.height - 40), subtitle);
+            GUI.color = Color.white;
+            return GUI.Button(rect, GUIContent.none, GUIStyle.none);
+        }
         private void DrawRogueliteMenu()
         {
             if (rogueliteRun?.IsShortRun == true && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.FirstCombat && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) { DrawShortRunInterlude(); return; }
             IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
             TaskTemplate selected = templates[sandboxTemplateIndex % templates.Count];
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(390, 170, 1140, 720), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(440, 216, 960, 38), "OCC  肉鸽测试配置");
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 268, 900, 28), "故事链：死信号  →  工厂突破  →  最终导管"); GUI.Label(new Rect(440, 302, 900, 28), "每次新开生成并保存随机种子；相同种子的目标与结算保持稳定。"); GUI.color = Color.white;
-            GUI.Label(new Rect(440, 370, 500, 28), "最短完整肉鸽");
-            if (GUI.Button(new Rect(440, 408, 300, 52), "新开两关肉鸽")) StartShortRoguelite(false);
-            GUI.enabled = HasShortRogueliteSave; if (GUI.Button(new Rect(760, 408, 300, 52), "继续两关肉鸽")) StartShortRoguelite(true); GUI.enabled = true;
-            if (GUI.Button(new Rect(1080, 408, 300, 52), "删除两关存档")) DeleteShortRogueliteSave();
-            GUI.Label(new Rect(440, 480, 840, 25), "第一关 → 事件 → 收获 → 升级 → 第二关 → 结算；每次选择都会影响第二关。");
-            GUI.Label(new Rect(440, 530, 500, 28), "旧版故事包/模板演练");
-            if (GUI.Button(new Rect(440, 568, 300, 52), "新开旧故事包")) StartRogueliteStory(false);
-            GUI.enabled = HasRogueliteSave; if (GUI.Button(new Rect(760, 568, 300, 52), "继续旧故事包")) StartRogueliteStory(true); GUI.enabled = true;
-            if (GUI.Button(new Rect(1080, 568, 300, 52), "开始 " + selected.Type + " 演练")) StartRogueliteSandbox();
-            if (GUI.Button(new Rect(440, 640, 300, 42), "切换演练模板")) SelectNextSandboxTemplate();
-            if (GUI.Button(new Rect(1080, 640, 300, 42), "返回测试模式")) CloseRogueliteMenu();
-            GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(440, 706, 900, 28), "事件：现场修复(+1 护甲)  收获：护盾电池  升级：校准步枪(伤害 5)。"); GUI.color = Color.white;
+            DrawConsolePanel(new Rect(330, 140, 1260, 800), "肉鸽行动配置", "随机种子 / 独立存档 / 无倒计时推进", new Color(1f, .72f, .24f));
+            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(390, 260, 1080, 26), "故事链：死信号  /  工厂突破  /  最终导管。相同种子的目标与结算保持稳定。");
+            DrawConsolePanel(new Rect(390, 330, 1140, 180), "最短完整肉鸽", "第一关 / 事件 / 收获 / 升级 / 第二关 / 结算", new Color(.35f, .9f, 1f));
+            if (DrawConsoleButton(new Rect(420, 430, 300, 62), "新开两关肉鸽", "生成新的行动种子", new Color(.35f, .9f, 1f))) StartShortRoguelite(false);
+            GUI.enabled = HasShortRogueliteSave; if (DrawConsoleButton(new Rect(760, 430, 300, 62), "继续两关肉鸽", "恢复独立存档", new Color(.35f, .9f, 1f))) StartShortRoguelite(true); GUI.enabled = true;
+            if (DrawConsoleButton(new Rect(1100, 430, 300, 62), "删除两关存档", "仅删除最短肉鸽记录", new Color(.8f, .32f, .23f))) DeleteShortRogueliteSave();
+            DrawConsolePanel(new Rect(390, 560, 1140, 190), "故事包与模板演练", "用于回归测试的旧版入口，和自由推进地图保持隔离", new Color(.56f, .66f, .71f));
+            if (DrawConsoleButton(new Rect(420, 660, 300, 62), "新开旧故事包", "固定三任务故事链", new Color(.56f, .66f, .71f))) StartRogueliteStory(false);
+            GUI.enabled = HasRogueliteSave; if (DrawConsoleButton(new Rect(760, 660, 300, 62), "继续旧故事包", "恢复故事包存档", new Color(.56f, .66f, .71f))) StartRogueliteStory(true); GUI.enabled = true;
+            if (DrawConsoleButton(new Rect(1100, 660, 300, 62), "开始 " + selected.Type + " 演练", "当前模板", new Color(.56f, .66f, .71f))) StartRogueliteSandbox();
+            if (DrawConsoleButton(new Rect(420, 790, 300, 52), "切换演练模板", "当前：" + selected.Type, new Color(.56f, .66f, .71f))) SelectNextSandboxTemplate();
+            if (DrawConsoleButton(new Rect(1230, 790, 170, 52), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) CloseRogueliteMenu();
         }
         private void DrawMapRun()
         {
             Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
-            GUI.color = new Color(.035f, .075f, .13f, .98f * mapPanelAlpha); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1140, 28), "种子 " + mapRun.Seed + " / 等级 " + mapRun.Level + " / 零件 " + mapRun.Parts + " / 以太 " + mapRun.Aether + " / 补给 " + mapRun.Supplies + " / 信标 " + mapRun.ScoutingBeacons + " / 权限卡 " + mapRun.AccessCards); GUI.color = Color.white;
+            DrawConsolePanel(new Rect(330, 150, 1260, 760), "肉鸽区域推进", "自由回访网络 / 已清理房间永久安全 / 无时间压力", new Color(1f, .72f, .24f));
+            GUI.color = new Color(.68f, .78f, .88f, mapPanelAlpha); GUI.Label(new Rect(390, 250, 1140, 28), "种子 " + mapRun.Seed + " / 等级 " + mapRun.Level + " / 零件 " + mapRun.Parts + " / 以太 " + mapRun.Aether + " / 补给 " + mapRun.Supplies + " / 信标 " + mapRun.ScoutingBeacons + " / 权限卡 " + mapRun.AccessCards); GUI.color = Color.white;
             if (mapRun.AwaitingReward)
             {
-                GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
+                GUI.Label(new Rect(390, 320, 900, 30), "战斗结算 // 等级 " + mapRun.Level + "  选择一项构筑奖励");
                 IReadOnlyList<RogueliteReward> rewards = mapRun.CurrentRewards;
-                for (int i = 0; i < rewards.Count; i++) if (GUI.Button(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName + " / " + rewards[i].BuildPath + "\n" + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"))) ClaimMapReward(rewards[i].Id);
+                for (int i = 0; i < rewards.Count; i++) if (DrawConsoleButton(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName, rewards[i].BuildPath + " / " + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"), new Color(1f, .72f, .24f))) ClaimMapReward(rewards[i].Id);
                 GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); GUI.matrix = previous; return;
             }
             GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
@@ -412,8 +429,8 @@ namespace OCC.Combat.Presentation
             if (DrawMapWorkshop()) { GUI.matrix = previous; return; }
             DrawMapConnections();
             foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
-            if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
-            if (GUI.Button(new Rect(1350, 820, 180, 42), "返回菜单")) ReturnToDeveloperMenu();
+            if (DrawConsoleButton(new Rect(390, 820, 240, 48), "读取推进", "继续已有地图", new Color(.35f, .9f, 1f))) StartMapRoguelite(true);
+            if (DrawConsoleButton(new Rect(1350, 820, 180, 48), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
             GUI.matrix = previous;
         }
         private void PlayMapEntrance()
@@ -439,13 +456,12 @@ namespace OCC.Combat.Presentation
             if (node.IsCombat || node.Type == RogueliteMapNodeType.Start || mapRun.CompletedNodes.Contains(node.Id)) return false;
             IReadOnlyList<RogueliteNodeContentChoice> choices = mapRun.CurrentContentChoices;
             if (choices.Count == 0) return false;
-            GUI.color = new Color(.06f, .11f, .17f, .98f); GUI.Box(new Rect(430, 385, 1060, 270), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(480, 415, 940, 32), node.DisplayName + " / " + node.Type + "：选择一项已预览的结算");
+            DrawConsolePanel(new Rect(430, 385, 1060, 270), node.DisplayName + " / " + node.Type, "选择一项已预览的结算", new Color(1f, .72f, .24f));
             GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(480, 455, 940, 50), node.Summary + " 事件失败只会进入标明的额外战斗，不会强制扣血。"); GUI.color = Color.white;
             for (int i = 0; i < choices.Count; i++)
             {
                 RogueliteNodeContentChoice choice = choices[i];
-                if (GUI.Button(new Rect(480 + i * 480, 530, 440, 72), choice.DisplayName + "\n" + choice.Preview)) ChooseMapNodeContent(choice.Id);
+                if (DrawConsoleButton(new Rect(480 + i * 480, 530, 440, 72), choice.DisplayName, choice.Preview, new Color(1f, .72f, .24f))) ChooseMapNodeContent(choice.Id);
             }
             return true;
         }
@@ -453,17 +469,16 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
             if (node.Type != RogueliteMapNodeType.Workshop || !mapRun.CompletedNodes.Contains(node.Id)) return false;
-            GUI.color = new Color(.06f, .11f, .17f, .98f); GUI.Box(new Rect(430, 385, 1060, 270), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(480, 415, 940, 32), "野战工坊 / 仅可装备本局已获得的奖励");
+            DrawConsolePanel(new Rect(430, 385, 1060, 270), "野战工坊", "仅可装备本局已获得的奖励", new Color(.35f, .9f, 1f));
             GUI.Label(new Rect(480, 455, 940, 32), "当前：武器 " + (mapRun.EquippedWeaponId ?? "制式步枪") + " / 术式 " + (mapRun.EquippedSpellId ?? "火矢") + " / 校准 " + (mapRun.IsAetherCalibrated ? "已完成" : "未完成"));
             RogueliteReward[] owned = mapRun.ClaimedRewards.Select(id => RogueliteMapCatalog.Rewards.First(item => item.Id == id)).ToArray();
             for (int i = 0; i < owned.Length && i < 2; i++)
             {
                 RogueliteReward reward = owned[i];
-                if (GUI.Button(new Rect(480 + i * 300, 520, 270, 54), "装备 " + reward.DisplayName + " / " + (reward.Kind == RogueliteRewardKind.Weapon ? "武器" : "术式"))) EquipMapReward(reward.Id);
+                if (DrawConsoleButton(new Rect(480 + i * 300, 520, 270, 54), "装备 " + reward.DisplayName, reward.Kind == RogueliteRewardKind.Weapon ? "武器" : "术式", new Color(.35f, .9f, 1f))) EquipMapReward(reward.Id);
             }
             GUI.enabled = !mapRun.IsAetherCalibrated && mapRun.Aether >= 2;
-            if (GUI.Button(new Rect(1100, 520, 290, 54), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准：2 以太 / +1 护甲")) CalibrateMapAether();
+            if (DrawConsoleButton(new Rect(1100, 520, 290, 54), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准", mapRun.IsAetherCalibrated ? "本局校准已注入" : "2 以太 / 下一场 +1 护甲", new Color(.35f, .9f, 1f))) CalibrateMapAether();
             GUI.enabled = true;
             return true;
         }
@@ -486,61 +501,60 @@ namespace OCC.Combat.Presentation
             string name = identified ? node.DisplayName : "未知房间";
             string state = node.Id == mapRun.CurrentNodeId ? "当前位置" : completed ? (node.IsCombat ? "安全" : "已访问") : available ? "可进入" : node.RequiredAccessCards > mapRun.AccessCards ? "权限门" : "未接壤";
             GUI.enabled = available;
-            if (GUI.Button(rect, name + "\n" + type + " / " + state)) SelectMapNode(node.Id);
+            Color accent = completed ? new Color(.35f, .72f, .62f) : node.Id == mapRun.CurrentNodeId ? new Color(.35f, .9f, 1f) : node.RequiredAccessCards > mapRun.AccessCards ? new Color(.7f, .3f, .22f) : new Color(1f, .72f, .24f);
+            if (DrawConsoleButton(rect, name, type + " / " + state, accent)) SelectMapNode(node.Id);
             GUI.enabled = true;
         }
         private void DrawShortRunInterlude()
         {
             ShortRogueliteRun run = rogueliteRun.ShortRun;
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(500, 220, 920, 600), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(550, 270, 800, 38), run.Phase == ShortRoguelitePhase.Event ? "现场事件：损坏的导流阀" : run.Phase == ShortRoguelitePhase.Salvage ? "收获：回收箱" : run.Phase == ShortRoguelitePhase.Upgrade ? "角色升级：校准台" : "两关肉鸽结算");
+            DrawConsolePanel(new Rect(500, 220, 920, 600), run.Phase == ShortRoguelitePhase.Event ? "现场事件：损坏的导流阀" : run.Phase == ShortRoguelitePhase.Salvage ? "收获：回收箱" : run.Phase == ShortRoguelitePhase.Upgrade ? "角色升级：校准台" : "两关肉鸽结算", "短局阶段选择", new Color(1f, .72f, .24f));
             if (run.Phase == ShortRoguelitePhase.Event)
             {
                 GUI.Label(new Rect(550, 334, 760, 56), "用以太素修复护甲衬层。第二关获得 +1 护甲。");
-                if (GUI.Button(new Rect(550, 460, 350, 54), "执行现场修复")) ChooseShortEvent();
+                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "执行现场修复", "第二关获得 +1 护甲", new Color(.35f, .9f, 1f))) ChooseShortEvent();
             }
             else if (run.Phase == ShortRoguelitePhase.Salvage)
             {
                 GUI.Label(new Rect(550, 334, 760, 56), "回收一枚护盾电池。第二关快捷栏获得额外护盾电池。");
-                if (GUI.Button(new Rect(550, 460, 350, 54), "收取护盾电池")) ChooseShortSalvage();
+                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "收取护盾电池", "第二关快捷栏追加道具", new Color(.35f, .9f, 1f))) ChooseShortSalvage();
             }
             else if (run.Phase == ShortRoguelitePhase.Upgrade)
             {
                 GUI.Label(new Rect(550, 334, 760, 56), "校准主武器。第二关装备校准步枪，伤害从 4 提升到 5。");
-                if (GUI.Button(new Rect(550, 460, 350, 54), "安装校准组件")) { ChooseShortUpgrade(); OpenShortRunPhase(); }
+                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "安装校准组件", "校准步枪伤害 4 → 5", new Color(.35f, .9f, 1f))) { ChooseShortUpgrade(); OpenShortRunPhase(); }
             }
             else
             {
                 GUI.Label(new Rect(550, 334, 760, 80), "两关行动完成。已应用：" + string.Join(" / ", run.Choices));
-                if (GUI.Button(new Rect(550, 460, 350, 54), "返回肉鸽配置")) { DeleteShortRogueliteSave(); rogueliteRun = null; }
+                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "返回肉鸽配置", "结束当前短局", new Color(.56f, .66f, .71f))) { DeleteShortRogueliteSave(); rogueliteRun = null; }
             }
-            if (GUI.Button(new Rect(960, 650, 350, 54), "返回开发菜单")) ReturnToDeveloperMenu();
+            if (DrawConsoleButton(new Rect(960, 650, 350, 54), "返回开发菜单", "离开当前流程", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
         }
         private void DrawDeveloperBriefing()
         {
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(500, 220, 920, 580), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(550, 270, 800, 38), "OCC  战前简报");
+            DrawConsolePanel(new Rect(500, 220, 920, 580), "战前简报", "确认任务与撤回路径", new Color(.35f, .9f, 1f));
             GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(550, 326, 800, 28), "任务编号：" + developerPreparation.MissionId); GUI.Label(new Rect(550, 364, 800, 28), "任务目标：" + developerPreparation.RulesSummary); GUI.Label(new Rect(550, 402, 800, 28), "敌方编成：" + developerPreparation.EnemySummary); GUI.color = Color.white;
             string context = rogueliteRun == null ? "行动准则：战术重开会恢复到本次战斗的初始状态。" : "肉鸽测试 | 模板：" + rogueliteRun.CurrentMission.TemplateId + " | 失败条件：" + rogueliteRun.CurrentMission.FailureSummary;
             GUI.Label(new Rect(550, 470, 800, 28), context);
             if (rogueliteRun != null) GUI.Label(new Rect(550, 506, 800, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
-            if (GUI.Button(new Rect(550, 620, 350, 54), "开始正式战斗")) StartDeveloperCombat();
-            if (GUI.Button(new Rect(960, 620, 350, 54), mapRun != null ? "返回推进地图" : "返回开发菜单")) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
+            if (DrawConsoleButton(new Rect(550, 620, 350, 54), "开始正式战斗", "进入已确认的任务", new Color(.35f, .9f, 1f))) StartDeveloperCombat();
+            if (DrawConsoleButton(new Rect(960, 620, 350, 54), mapRun != null ? "返回推进地图" : "返回开发菜单", "不改变当前规则", new Color(.56f, .66f, .71f))) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
         }
         private void DrawDeveloperFlowBar()
         {
             developerFlow.RefreshOutcome();
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(24, 930, 1866, 72), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(52, 950, 600, 30), "当前流程：" + developerFlow.Phase);
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && GUI.Button(new Rect(1450, 944, 190, 42), "战术重开")) TacticalRestartDeveloperCombat();
-            if (GUI.Button(new Rect(1660, 944, 190, 42), "返回开发菜单")) ReturnToDeveloperMenu();
+            GUI.color = new Color(.018f, .03f, .043f, .98f); GUI.Box(new Rect(24, 930, 1866, 72), ""); GUI.color = new Color(.35f, .9f, 1f); GUI.DrawTexture(new Rect(24, 930, 1866, 3), Texture2D.whiteTexture);
+            GUI.color = new Color(.9f, .95f, .97f); GUI.Label(new Rect(52, 950, 600, 30), "当前流程 // " + developerFlow.Phase);
+            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && DrawConsoleButton(new Rect(1450, 944, 190, 42), "战术重开", "恢复初始状态", new Color(.35f, .9f, 1f))) TacticalRestartDeveloperCombat();
+            if (DrawConsoleButton(new Rect(1660, 944, 190, 42), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
             if (developerFlow.Phase == CombatFlowPhase.Active && rogueliteRun != null)
             {
-                if (GUI.Button(new Rect(1240, 944, 95, 42), "测试胜利")) ForceCurrentOutcome(true);
-                if (GUI.Button(new Rect(1340, 944, 95, 42), "测试失败")) ForceCurrentOutcome(false);
+                if (DrawConsoleButton(new Rect(1240, 944, 95, 42), "胜利", "测试", new Color(.35f, .9f, 1f))) ForceCurrentOutcome(true);
+                if (DrawConsoleButton(new Rect(1340, 944, 95, 42), "失败", "测试", new Color(.8f, .32f, .23f))) ForceCurrentOutcome(false);
             }
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && rogueliteRun != null && GUI.Button(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "继续/结算" : "返回肉鸽菜单")) ContinueRogueliteAfterVictory();
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && mapRun != null && GUI.Button(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "查看战斗结算" : "返回推进地图")) ReturnToMapRun();
+            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && rogueliteRun != null && DrawConsoleButton(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "继续 / 结算" : "返回肉鸽菜单", "推进当前流程", new Color(1f, .72f, .24f))) ContinueRogueliteAfterVictory();
+            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && mapRun != null && DrawConsoleButton(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "查看战斗结算" : "返回推进地图", "区域推进", new Color(1f, .72f, .24f))) ReturnToMapRun();
         }
         private void DrawGrid(Rect board)
         {
