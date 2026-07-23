@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace OCC.Combat
 {
-    public enum RogueliteMapNodeType { Start, Combat, Finale }
+    public enum RogueliteMapNodeType { Start, Combat, Event, Workshop, Finale }
     public sealed class RogueliteMapNode
     {
         public string Id { get; }
         public RogueliteMapNodeType Type { get; }
         public IReadOnlyList<string> NextIds { get; }
-        public RogueliteMapNode(string id, RogueliteMapNodeType type, params string[] nextIds) { Id = id; Type = type; NextIds = nextIds ?? Array.Empty<string>(); }
+        public string DisplayName { get; }
+        public string Summary { get; }
+        public RogueliteMapNode(string id, RogueliteMapNodeType type, params string[] nextIds) : this(id, type, id, string.Empty, nextIds) { }
+        public RogueliteMapNode(string id, RogueliteMapNodeType type, string displayName, string summary, params string[] nextIds) { Id = id; Type = type; DisplayName = displayName; Summary = summary; NextIds = nextIds ?? Array.Empty<string>(); }
     }
     public enum RogueliteRewardKind { Weapon, Spell }
     public sealed class RogueliteReward
@@ -28,9 +31,10 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<RogueliteMapNode> Nodes = new[]
         {
             new RogueliteMapNode("start", RogueliteMapNodeType.Start, "rail_patrol", "relay_raid"),
-            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "core_finale"),
-            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "core_finale"),
-            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale)
+            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "Rail Patrol", "Eliminate the patrol.", "relay_event"),
+            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "Relay Raid", "Destroy the relay.", "core_finale"),
+            new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "Relay Event", "Recover a signal cache.", "core_finale"),
+            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "Core Finale", "Reach the industrial core.")
         };
         public static readonly IReadOnlyList<RogueliteReward> Rewards = new[]
         {
@@ -67,8 +71,13 @@ namespace OCC.Combat
         public void CompleteCurrentCombat()
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
-            if (node.Type == RogueliteMapNodeType.Start || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
+            if (node.Type == RogueliteMapNodeType.Start || node.Type == RogueliteMapNodeType.Finale || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
             completed.Add(node.Id); Experience++; if (Experience >= Level) Level++; foreach (string next in node.NextIds) unlocked.Add(next); AwaitingReward = true;
+        }
+        public void CompleteCurrentNode()
+        {
+            if (CurrentNodeId == "start" || completed.Contains(CurrentNodeId)) throw new InvalidOperationException("Current node is not available.");
+            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId); completed.Add(node.Id); Experience++; if (Experience >= Level) Level++; foreach (string next in node.NextIds) unlocked.Add(next); AwaitingReward = node.Type == RogueliteMapNodeType.Combat;
         }
         public void ClaimReward(string rewardId) { if (!AwaitingReward || CurrentRewards.All(reward => reward.Id != rewardId)) throw new InvalidOperationException("Reward is not available."); claimedRewards.Add(rewardId); AwaitingReward = false; }
         public string ToJson() => string.Join("|", "map1", Seed, CurrentNodeId, Level, Experience, string.Join(",", unlocked), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
