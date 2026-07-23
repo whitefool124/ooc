@@ -543,6 +543,7 @@ namespace OCC.Combat.Presentation
                     GUI.color = Color.white;
                     DrawUnitBars(unit, new Rect(cell.x + 5, cell.y + 3, cell.width - 10, 5));
                     if (!unit.IsHero) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));
+                    DrawStatusMarkers(unit, cell);
                 }
                 if (tile.IsObjective && !tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
                 if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
@@ -580,6 +581,25 @@ namespace OCC.Combat.Presentation
 
         private static string StatusName(StatusType status) => status == StatusType.Burning ? "\u71c3\u70e7" : status == StatusType.Slow ? "\u7f13\u6162" : status == StatusType.Bound ? "\u675f\u7f1a" : "\u7834\u7532";
 
+        private static void DrawStatusMarkers(UnitState unit, Rect cell)
+        {
+            int index = 0;
+            foreach (KeyValuePair<StatusType, int> status in unit.Statuses)
+            {
+                GUI.color = StatusColor(status.Key);
+                GUI.DrawTexture(new Rect(cell.x + 5 + index * 13, cell.yMax - 9, 10, 5), Texture2D.whiteTexture);
+                index++;
+            }
+            GUI.color = Color.white;
+        }
+
+        private static Color StatusColor(StatusType status)
+        {
+            return status == StatusType.Burning ? new Color(1f, .34f, .2f) :
+                status == StatusType.Bound ? new Color(.3f, .86f, 1f) :
+                status == StatusType.ArmorBreak ? new Color(1f, .78f, .2f) : new Color(.45f, .78f, .7f);
+        }
+
         private string GetRangeDescriptionStageTwo()
         {
             int count = 0;
@@ -600,7 +620,7 @@ namespace OCC.Combat.Presentation
                 int tileDurabilityBefore = command.Type == CombatCommandType.Interact && state.Map.IsInside(command.Destination) ? state.Map.GetTile(command.Destination).Durability : -1;
                 CombatResolver.Resolve(state, command);
                 if (target != null && healthBefore > target.Health) visualFeedback?.NotifyAttack(source, target.Position, healthBefore - target.Health, !target.IsAlive);
-                if (tileDurabilityBefore >= 0 && state.Map.GetTile(command.Destination).Durability < tileDurabilityBefore) visualFeedback?.NotifyDestructible(command.Destination, state.Map.GetTile(command.Destination).IsDestroyed);
+                if (tileDurabilityBefore >= 0 && state.Map.GetTile(command.Destination).Durability < tileDurabilityBefore) visualFeedback?.NotifyDestructible(command.Destination, state.Map.GetTile(command.Destination));
                 if (state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0) CombatResolver.EndTurn(state, state.GetUnit("hero")); developerFlow.RefreshOutcome();
             }
             catch (InvalidOperationException error) { state.AddLog(error.Message); }

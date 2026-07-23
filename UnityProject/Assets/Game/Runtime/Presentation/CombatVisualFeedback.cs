@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace OCC.Combat.Presentation
     {
         private readonly Dictionary<string, int> healthCache = new Dictionary<string, int>();
         private readonly Dictionary<GridPosition, int> durabilityCache = new Dictionary<GridPosition, int>();
-        private readonly Dictionary<string, int> statusCache = new Dictionary<string, int>();
+        private readonly Dictionary<string, string> statusCache = new Dictionary<string, string>();
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private string lastOutcome;
@@ -29,16 +30,22 @@ namespace OCC.Combat.Presentation
                 if (healthCache.TryGetValue(unit.Id, out int previous) && unit.Health < previous)
                     ShowFloatingText(unit.Position, "-" + (previous - unit.Health), unit.IsHero ? new Color(.8f, .94f, 1f) : new Color(.9f, .34f, .3f));
                 healthCache[unit.Id] = unit.Health;
-                int statusCount = unit.Statuses.Count;
-                if (statusCache.TryGetValue(unit.Id, out int oldStatusCount) && statusCount != oldStatusCount && statusCount > 0)
-                    ShowFloatingText(unit.Position, "状态", new Color(1f, .8f, .25f));
-                statusCache[unit.Id] = statusCount;
+                string statuses = string.Join(",", unit.Statuses.Select(entry => entry.Key + ":" + entry.Value));
+                if (statusCache.TryGetValue(unit.Id, out string previousStatuses) && statuses != previousStatuses && unit.Statuses.Count > 0)
+                {
+                    foreach (KeyValuePair<StatusType, int> status in unit.Statuses)
+                    {
+                        string token = status.Key + ":";
+                        if (!previousStatuses.Contains(token)) NotifyStatusApplied(unit.Position, status.Key, status.Value);
+                    }
+                }
+                statusCache[unit.Id] = statuses;
             }
             for (int y = 0; y < bootstrap.CurrentState.Map.Height; y++) for (int x = 0; x < bootstrap.CurrentState.Map.Width; x++)
             {
                 GridPosition position = new GridPosition(x, y); TileState tile = bootstrap.CurrentState.Map.GetTile(position);
                 if (!durabilityCache.TryGetValue(position, out int oldDurability)) durabilityCache[position] = tile.Durability;
-                else if (tile.Durability < oldDurability) { NotifyDestructible(position, tile.IsDestroyed); durabilityCache[position] = tile.Durability; }
+                else if (tile.Durability < oldDurability) { NotifyDestructible(position, tile); durabilityCache[position] = tile.Durability; }
             }
         }
 
@@ -64,11 +71,22 @@ namespace OCC.Combat.Presentation
             durabilityCache.Clear(); statusCache.Clear();
         }
 
-        public void NotifyDestructible(GridPosition position, bool destroyed)
+        public void NotifyDestructible(GridPosition position, TileState tile)
         {
             EnsureCanvas();
+            bool destroyed = tile.IsDestroyed;
+            durabilityCache[position] = tile.Durability;
             PulseCell(position, destroyed ? new Color(1f, .35f, .08f, .85f) : new Color(1f, .75f, .2f, .65f), destroyed ? .24f : .14f);
             ShowFloatingText(position, destroyed ? "摧毁" : "受损", destroyed ? new Color(1f, .42f, .18f) : new Color(1f, .82f, .25f));
+            if (destroyed) ShowBreakText(position);
+        }
+
+        public void NotifyStatusApplied(GridPosition position, StatusType status, int duration)
+        {
+            EnsureCanvas();
+            Color color = StatusColor(status);
+            PulseCell(position, color, .2f);
+            ShowFloatingText(position, StatusLabel(status) + " " + duration, color);
         }
 
         public void NotifyAttack(GridPosition source, GridPosition target, int damage, bool defeated)
@@ -112,6 +130,18 @@ namespace OCC.Combat.Presentation
             Sequence sequence = DOTween.Sequence().SetUpdate(true);
             sequence.Join(DOTween.To(() => rect.anchoredPosition.y, value => rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, value), targetY, .42f).SetEase(Ease.OutCubic)).Join(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .42f));
             sequence.OnComplete(() => Destroy(textObject));
+        }
+
+        private static Color StatusColor(StatusType status)
+        {
+            return status == StatusType.Burning ? new Color(1f, .34f, .2f) :
+                status == StatusType.Bound ? new Color(.3f, .86f, 1f) :
+                status == StatusType.ArmorBreak ? new Color(1f, .78f, .2f) : new Color(.45f, .78f, .7f);
+        }
+
+        private static string StatusLabel(StatusType status)
+        {
+            return status == StatusType.Burning ? "燃烧" : status == StatusType.Bound ? "束缚" : status == StatusType.ArmorBreak ? "破甲" : "缓慢";
         }
 
         private void EnsureCanvas()
