@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC 肉鸽玩法决策问卷 v2</title>
+  <style>
+    :root{--bg:#101214;--panel:#171a1d;--line:#363b40;--text:#f2eee5;--muted:#a9b0b5;--cyan:#81d8e8;--amber:#e7bc6a;--red:#d87871}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 "Microsoft YaHei UI",sans-serif}header,main{max-width:1160px;margin:auto;padding:28px 24px}header{max-width:none;border-bottom:1px solid var(--line);background:#131619}h1{margin:0 0 8px;font-size:28px}p,.hint{color:var(--muted)}.bar{position:sticky;top:0;background:var(--bg);padding:12px 0;display:flex;gap:8px;z-index:2}.bar button{margin:0}.progress{margin-left:auto;color:var(--cyan)}button{border:1px solid var(--line);background:#1e2327;color:var(--text);padding:8px 12px;cursor:pointer;font:inherit}button:hover{border-color:var(--cyan)}button.primary{color:var(--cyan);border-color:var(--cyan)}section{margin:20px 0;border:1px solid var(--line);background:var(--panel)}section header{padding:16px 18px;border:0;border-bottom:1px solid var(--line);background:transparent}h2{margin:0;font-size:19px}.grid{padding:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.q{padding:14px;background:#121518;border-left:2px solid #3d464d}.q.required{border-left-color:var(--cyan)}.q.full{grid-column:1/-1}.qid{font:13px monospace;color:var(--cyan);margin-right:7px}.label{font-weight:700}.help{display:block;font-size:13px;margin:6px 0 10px}.options{display:grid;gap:6px}.options label{display:flex;gap:8px;cursor:pointer}input[type=radio],input[type=checkbox]{accent-color:var(--cyan);margin-top:5px}textarea{width:100%;min-height:76px;background:#0d0f11;color:var(--text);border:1px solid var(--line);padding:8px;font:inherit}.status{padding:12px;border:1px solid var(--line);color:var(--muted)}dialog{width:min(860px,95vw);background:#171a1d;color:var(--text);border:1px solid var(--line)}dialog textarea{height:55vh}dialog menu{display:flex;gap:8px;justify-content:flex-end}@media(max-width:760px){.grid{grid-template-columns:1fr}.q.full{grid-column:auto}.progress{display:none}}
+  </style>
+</head>
+<body>
+  <header><h1>OCC 肉鸽玩法决策问卷 v2</h1><p>目标：补齐“自由回访房间节点图”肉鸽模式的玩法决策。此问卷只定义肉鸽，不改变剧情模式的无时间压力约束。</p></header>
+  <main><div class="bar"><button id="save">保存草稿</button><button id="json" class="primary">导出 JSON</button><button id="md">导出 Markdown</button><button id="reset">清空</button><span class="progress" id="progress"></span></div><div class="status" id="status"></div><form id="form"></form></main>
+  <dialog id="output"><h2 id="outTitle"></h2><textarea id="outText" readonly></textarea><menu><button id="copy">复制</button><button id="download">下载</button><button onclick="output.close()">关闭</button></menu></dialog>
+<script>
+const sections=[
+ {title:'A. 局外结构与目标',desc:'先确定一局肉鸽在玩家视角中的开始、结束和可重玩的理由。',qs:[
+  ['A01','single','一局的主要终局目标',['击败区域核心首领','收集指定核心物并撤离','抵达最终区域后自由选择结算'],1],
+  ['A02','single','单局预期时长',['20-30 分钟','35-50 分钟','60-90 分钟'],1],
+  ['A03','single','失败后的局外保留',['只保留解锁与图鉴，不保留本局构筑','保留少量局外资源','保留部分装备或成长'],1],
+  ['A04','text','本模式最重要的玩家幻想','例如：在失控工业城区中做风险评估、临时拼装以太装备、从多条路撤离。',[],1]
+ ]},
+ {title:'B. 自由回访节点图',desc:'地图采用以撒式正交房间节点网络：可来回移动、有环路，不是汇合到终点的线性树。',qs:[
+  ['B01','single','房间可回访规则',['已访问房间可无限回访','已访问房间可回访但每次有代价','只允许有限次数回访'],1],
+  ['B02','multi','首局应包含的节点类型',['普通战斗','精英战斗','事件','工坊','商店/补给','治疗/休整','宝藏','隐藏异常房','首领'],1],
+  ['B03','single','未知节点何时可见',['仅显示相邻未知节点','显示完整拓扑但隐藏类型','显示完整拓扑且类型模糊'],1],
+  ['B04','single','隐藏房的发现方式',['靠相邻探索/线索发现','消耗资源侦测','固定条件触发','不设置隐藏房'],1],
+  ['B05','single','区域推进限制',['不设置时间或追击限制','使用钥匙/电力等空间资源开门','完成区域目标后解锁门'],1],
+  ['B06','text','地图节点数量与区域数量偏好','例如：每区 12-18 房，3 区；或一张 30 房大图。',[],1]
+ ]},
+ {title:'C. 探索资源与风险',desc:'自由回访必须有取舍，但不使用剧情模式禁止的倒计时、敌情推进或地点关闭。',qs:[
+  ['C01','multi','肉鸽可使用的探索资源',['以太能量','补给/医疗','钥匙/权限卡','工坊零件','侦测信标','弹药或武器耐久'],1],
+  ['C02','single','回访的主要成本',['无成本，以战斗和资源消耗形成取舍','消耗少量以太能量','部分房间重置为新风险','不设置回访成本'],1],
+  ['C03','single','战斗房清理后的状态',['永久安全，可自由通过','保留环境风险但无敌人','可能以低概率重新出现敌人'],1],
+  ['C04','single','事件房的重复访问',['一次性事件','可重复使用但效果递减','可重复使用且消耗资源'],1],
+  ['C05','text','你不希望出现的风险机制','例如：不要强制倒计时、不要随机扣血、不要无法预警的封路。',[],0]
+ ]},
+ {title:'D. 构筑与奖励',desc:'决定奖励出现时机、选择压力和构筑上限。',qs:[
+  ['D01','multi','首版奖励来源',['战斗结算三选一','宝藏房','工坊改装','事件交易','商店购买','首领奖励'],1],
+  ['D02','single','奖励选择形式',['大多数为三选一','按稀有度给 1-3 个候选','直接掉落并允许后续替换'],1],
+  ['D03','multi','首版构筑维度',['主武器','技能/法术','护盾/防具','消耗品','被动模块','以太回路/异常代价'],1],
+  ['D04','single','装备替换规则',['允许随时替换，旧物丢弃','只能在工坊替换','背包容量限制替换'],1],
+  ['D05','single','构筑完成感来源',['围绕 1 个核心效果叠加','2-3 个系统联动','大量小强化自由组合'],1],
+  ['D06','text','首版必做的三种构筑方向','例如：步枪压制、以太灼烧、护盾反击。',[],1]
+ ]},
+ {title:'E. 战斗、生命与撤离',desc:'决定肉鸽与现有确定性战棋战斗如何衔接。',qs:[
+  ['E01','single','生命/失败规则',['主角生命归零即本局失败','可由一次性救援装置避免一次失败','允许队伍/雇员系统后续扩展'],1],
+  ['E02','single','战后恢复方式',['仅通过房间、道具和奖励恢复','每次战斗后少量自动恢复','回到安全房完全恢复'],1],
+  ['E03','single','撤离的定位',['只在完成终局目标后可用','中途可撤离并结算部分奖励','不提供撤离，只有胜利/失败'],1],
+  ['E04','multi','战斗需要继承到下一房的状态',['当前生命/护盾','弹药或以太','消耗品','技能冷却','临时状态','地图破坏状态'],1],
+  ['E05','text','肉鸽战斗与剧情战斗必须保持相同的规则','例如：无命中率随机、格子移动和掩体规则一致。',[],0]
+ ]},
+ {title:'F. 商店、工坊与事件',desc:'这些节点决定探索路线是否真的有分歧。',qs:[
+  ['F01','single','商店货币',['本局统一货币','零件与以太双货币','无商店'],1],
+  ['F02','multi','工坊可执行操作',['修复/治疗','升级武器','重铸奖励','替换技能','拆解换资源','移除异常代价'],1],
+  ['F03','single','事件选择的后果',['可预览风险与奖励','只预览部分信息','完全未知但高收益'],1],
+  ['F04','single','事件失败的代价',['失去资源','获得异常状态','进入额外战斗','不设事件失败'],1],
+  ['F05','text','首版想要的三个事件主题','例如：故障导管、失踪维修班、污染净化阀。',[],0]
+ ]},
+ {title:'G. 内容密度与长期目标',desc:'确定首个可玩的内容包边界，避免系统很多但没有完整体验。',qs:[
+  ['G01','single','首个可玩版本的区域数',['1 个完整区域','2 个短区域','3 个完整区域'],1],
+  ['G02','single','首版敌人规模',['5-6 种敌人 + 1 首领','8-10 种敌人 + 2 首领','12 种以上敌人'],1],
+  ['G03','single','局外解锁节奏',['每局至少解锁一项','达成挑战才解锁','首版不做局外解锁'],1],
+  ['G04','multi','首版需要追踪的长期内容',['敌人图鉴','事件记录','可解锁构筑','区域发现','挑战成就','叙事档案'],1],
+  ['G05','text','你认为“首版肉鸽可玩”的最低验收描述','用一句话描述你愿意反复玩的状态。',[],1]
+ ]},
+ {title:'H. 明确禁区与授权',desc:'把不能猜测的决策和可以由 Codex 落地的技术细节分开。',qs:[
+  ['H01','multi','肉鸽模式绝对不应出现的内容',['强制倒计时','无预警的地点永久关闭','不可逆的剧情存档污染','未说明的随机强制扣血','无法撤回的正式资产替换'],1],
+  ['H02','single','未指定的数值细节如何处理',['先做可配置默认值并记录','每项暂停询问','仅在不影响玩法时自行决定'],1],
+  ['H03','text','其他必须先做决定的疑问或担忧','留空表示没有额外限制。',[],0]
+ ]}
+];
+const form=document.querySelector('#form'),key='occ-roguelite-survey-v2';
+function make(q){const[id,type,label,help,opts,req]=q;let input;if(type==='text')input=`<textarea data-id="${id}" placeholder="${req?'必填；可填写“采用推荐默认值”':''}"></textarea>`;else{const mode=type==='single'?'radio':'checkbox';input=`<div class="options">${opts.map(v=>`<label><input data-id="${id}" name="${id}" type="${mode}" value="${v}"><span>${v}</span></label>`).join('')}</div>`}return `<article class="q ${req?'required':''} ${type==='text'?'full':''}"><div class="label"><span class="qid">${id}</span>${label}${req?' *':''}</div><span class="help">${help}</span>${input}</article>`}
+sections.forEach(s=>form.insertAdjacentHTML('beforeend',`<section><header><h2>${s.title}</h2><p>${s.desc}</p></header><div class="grid">${s.qs.map(make).join('')}</div></section>`));
+function data(){const a={version:2,title:'OCC 肉鸽玩法决策问卷 v2',exportedAt:new Date().toISOString(),answers:{}};form.querySelectorAll('[data-id]').forEach(e=>{if((e.type==='radio'||e.type==='checkbox')&&!e.checked)return;(a.answers[e.dataset.id]??=[]).push(e.value.trim())});return a}
+function missing(){return sections.flatMap(s=>s.qs).filter(q=>q[5]&&!data().answers[q[0]]?.length).map(q=>q[0])}
+function refresh(){const d=data(),m=missing(),n=Object.keys(d.answers).length,total=sections.flatMap(s=>s.qs).length;progress.textContent=`已答 ${n}/${total} · 必答缺 ${m.length}`;status.textContent=m.length?`尚缺必答项：${m.join('、')}`:'所有必答项已完成，可导出交给 Codex 固化为设计与开发任务。';localStorage.setItem(key,JSON.stringify(d))}
+function markdown(){const d=data(),lines=['# OCC 肉鸽玩法决策问卷 v2 答卷','',`- 导出时间：${d.exportedAt}`,''];sections.forEach(s=>{lines.push(`## ${s.title}`,'');s.qs.forEach(q=>{lines.push(`### ${q[0]} ${q[2]}`,'',(d.answers[q[0]]||['（未回答）']).map(x=>`- ${x}`).join('\n'),'')})});return lines.join('\n')}
+function show(title,text,name,type){outTitle.textContent=title;outText.value=text;output.showModal();download.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}}
+save.onclick=()=>{refresh();status.textContent='草稿已保存到此浏览器本地存储。'};json.onclick=()=>show('导出 JSON',JSON.stringify(data(),null,2),'OCC_肉鸽玩法决策_v2.json','application/json');md.onclick=()=>show('导出 Markdown',markdown(),'OCC_肉鸽玩法决策_v2.md','text/markdown');copy.onclick=()=>navigator.clipboard.writeText(outText.value);reset.onclick=()=>{if(confirm('清空本页和本地草稿？')){localStorage.removeItem(key);form.reset();refresh()}};form.addEventListener('input',refresh);const old=localStorage.getItem(key);if(old){try{const d=JSON.parse(old);Object.entries(d.answers||{}).forEach(([id,v])=>form.querySelectorAll(`[data-id="${id}"]`).forEach(e=>{if(e.type==='radio'||e.type==='checkbox')e.checked=v.includes(e.value);else e.value=v.join('\n')}))}catch(_){}}refresh();
+</script>
+</body>
+</html>
