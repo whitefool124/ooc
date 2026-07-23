@@ -613,13 +613,21 @@ namespace OCC.Combat.Presentation
         }
         private void DrawDeveloperBriefing()
         {
-            DrawConsolePanel(new Rect(500, 220, 920, 580), "战前简报", "确认任务与撤回路径", new Color(.35f, .9f, 1f));
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(550, 326, 800, 28), "任务编号：" + developerPreparation.MissionId); GUI.Label(new Rect(550, 364, 800, 28), "任务目标：" + developerPreparation.RulesSummary); GUI.Label(new Rect(550, 402, 800, 28), "敌方编成：" + developerPreparation.EnemySummary); GUI.color = Color.white;
-            string context = rogueliteRun == null ? "行动准则：战术重开会恢复到本次战斗的初始状态。" : "肉鸽测试 | 模板：" + rogueliteRun.CurrentMission.TemplateId + " | 失败条件：" + rogueliteRun.CurrentMission.FailureSummary;
-            GUI.Label(new Rect(550, 470, 800, 28), context);
-            if (rogueliteRun != null) GUI.Label(new Rect(550, 506, 800, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
-            if (DrawConsoleButton(new Rect(550, 620, 350, 54), "开始正式战斗", "进入已确认的任务", new Color(.35f, .9f, 1f))) StartDeveloperCombat();
-            if (DrawConsoleButton(new Rect(960, 620, 350, 54), mapRun != null ? "返回推进地图" : "返回开发菜单", "不改变当前规则", new Color(.56f, .66f, .71f))) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
+            DrawConsolePanel(new Rect(390, 150, 1140, 760), "战前简报", mapRun == null ? "剧情行动 / 确认任务与撤回路径" : "肉鸽区域 / 确认当前节点与资源状态", new Color(.35f, .9f, 1f));
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(450, 265, 1040, 30), "任务编号：" + developerPreparation.MissionId + "   /   节点：" + (mapRun == null ? "剧情测试" : RogueliteMapCatalog.Node(mapRun.CurrentNodeId).DisplayName)); GUI.Label(new Rect(450, 310, 1040, 30), "任务目标：" + developerPreparation.RulesSummary); GUI.Label(new Rect(450, 355, 1040, 30), "敌方编成：" + developerPreparation.EnemySummary); GUI.color = Color.white;
+            GUI.color = new Color(.04f, .065f, .08f, .9f); GUI.Box(new Rect(450, 420, 1040, 110), "");
+            GUI.color = new Color(.55f, .64f, .69f); GUI.Label(new Rect(475, 440, 980, 24), "行动规则");
+            GUI.color = new Color(.9f, .94f, .96f); GUI.Label(new Rect(475, 472, 980, 42), "无倒计时  /  战术重开恢复本场初始状态  /  战斗结束后返回当前推进节点"); GUI.color = Color.white;
+            if (mapRun != null)
+            {
+                DrawMapResourceChip(new Rect(450, 570, 150, 42), "零件", mapRun.Parts, new Color(.95f, .76f, .36f));
+                DrawMapResourceChip(new Rect(620, 570, 150, 42), "以太", mapRun.Aether, new Color(.35f, .9f, 1f));
+                DrawMapResourceChip(new Rect(790, 570, 150, 42), "补给", mapRun.Supplies, new Color(.48f, .78f, .66f));
+                DrawMapResourceChip(new Rect(960, 570, 150, 42), "权限卡", mapRun.AccessCards, new Color(.82f, .34f, .24f));
+            }
+            if (rogueliteRun != null) GUI.Label(new Rect(450, 640, 1040, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
+            if (DrawConsoleButton(new Rect(450, 745, 490, 64), "开始正式战斗", "进入已确认的任务", new Color(.35f, .9f, 1f))) StartDeveloperCombat();
+            if (DrawConsoleButton(new Rect(1000, 745, 490, 64), mapRun != null ? "返回推进地图" : "返回开发菜单", "不改变当前规则", new Color(.56f, .66f, .71f))) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
         }
         private void DrawDeveloperFlowBar()
         {
