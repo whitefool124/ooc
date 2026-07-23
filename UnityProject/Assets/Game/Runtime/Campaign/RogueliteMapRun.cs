@@ -5,6 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum RogueliteMapNodeType { Start, Combat, Elite, Event, Workshop, Shop, Rest, Treasure, Finale }
+    public enum RogueliteMapNodeVisualState { Current, Available, Locked, Cleared, Visited, Known, Unknown }
 
     public sealed class RogueliteMapNode
     {
@@ -177,6 +178,17 @@ namespace OCC.Combat
             return IsAdjacentToCurrent(nodeId) && AccessCards >= node.RequiredAccessCards;
         }
         public bool IsNodeKnown(string nodeId) => visited.Contains(nodeId) || RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
+        public RogueliteMapNodeVisualState VisualStateFor(string nodeId)
+        {
+            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
+            if (node.Id == CurrentNodeId) return RogueliteMapNodeVisualState.Current;
+            if (completed.Contains(node.Id)) return RogueliteMapNodeVisualState.Cleared;
+            if (IsNodeAvailable(node.Id)) return RogueliteMapNodeVisualState.Available;
+            if (IsAdjacentToCurrent(node.Id) && AccessCards < node.RequiredAccessCards) return RogueliteMapNodeVisualState.Locked;
+            if (visited.Contains(node.Id) || IsNodeKnown(node.Id)) return RogueliteMapNodeVisualState.Known;
+            return RogueliteMapNodeVisualState.Unknown;
+        }
+        public IReadOnlyList<RogueliteMapNode> AvailableNodes => RogueliteMapCatalog.Nodes.Where(node => IsNodeAvailable(node.Id)).ToArray();
         public void SelectNode(string nodeId)
         {
             if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException("Node is not adjacent or its permission gate is locked.");

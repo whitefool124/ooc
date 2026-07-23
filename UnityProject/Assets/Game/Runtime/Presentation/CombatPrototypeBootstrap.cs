@@ -446,7 +446,10 @@ namespace OCC.Combat.Presentation
             {
                 RogueliteMapNode next = RogueliteMapCatalog.Node(nextId);
                 Vector2 from = MapNodeCenter(node); Vector2 to = MapNodeCenter(next);
-                Color color = mapRun.AccessCards >= Math.Max(node.RequiredAccessCards, next.RequiredAccessCards) ? new Color(.22f, .5f, .58f, .8f) : new Color(.62f, .3f, .18f, .85f);
+                RogueliteMapNodeVisualState fromState = mapRun.VisualStateFor(node.Id); RogueliteMapNodeVisualState toState = mapRun.VisualStateFor(next.Id);
+                bool traversable = mapRun.IsNodeAvailable(node.Id) || mapRun.IsNodeAvailable(next.Id);
+                bool explored = fromState == RogueliteMapNodeVisualState.Cleared || toState == RogueliteMapNodeVisualState.Cleared || fromState == RogueliteMapNodeVisualState.Visited || toState == RogueliteMapNodeVisualState.Visited;
+                Color color = traversable ? new Color(.35f, .9f, 1f, .9f) : explored ? new Color(.34f, .68f, .61f, .65f) : (fromState == RogueliteMapNodeVisualState.Locked || toState == RogueliteMapNodeVisualState.Locked) ? new Color(.82f, .34f, .24f, .9f) : new Color(.23f, .3f, .34f, .55f);
                 DrawMapLine(from, to, color);
             }
         }
@@ -493,18 +496,21 @@ namespace OCC.Combat.Presentation
         }
         private void DrawMapNode(RogueliteMapNode node)
         {
-            bool visited = mapRun.VisitedNodes.Contains(node.Id); bool completed = mapRun.CompletedNodes.Contains(node.Id);
-            bool available = mapRun.IsNodeAvailable(node.Id); bool known = mapRun.IsNodeKnown(node.Id);
+            RogueliteMapNodeVisualState visualState = mapRun.VisualStateFor(node.Id);
+            bool available = visualState == RogueliteMapNodeVisualState.Available;
             Vector2 center = MapNodeCenter(node); Rect rect = new Rect(center.x - 54, center.y - 24, 108, 48);
-            bool identified = visited || known;
-            string type = identified ? node.Type.ToString() : "???";
+            bool identified = visualState != RogueliteMapNodeVisualState.Unknown;
+            string type = identified ? MapNodeTypeLabel(node.Type) : "未识别";
             string name = identified ? node.DisplayName : "未知房间";
-            string state = node.Id == mapRun.CurrentNodeId ? "当前位置" : completed ? (node.IsCombat ? "安全" : "已访问") : available ? "可进入" : node.RequiredAccessCards > mapRun.AccessCards ? "权限门" : "未接壤";
+            string state = MapNodeStateLabel(visualState, node);
             GUI.enabled = available;
-            Color accent = completed ? new Color(.35f, .72f, .62f) : node.Id == mapRun.CurrentNodeId ? new Color(.35f, .9f, 1f) : node.RequiredAccessCards > mapRun.AccessCards ? new Color(.7f, .3f, .22f) : new Color(1f, .72f, .24f);
+            Color accent = MapNodeStateColor(visualState);
             if (DrawConsoleButton(rect, name, type + " / " + state, accent)) SelectMapNode(node.Id);
             GUI.enabled = true;
         }
+        private static string MapNodeTypeLabel(RogueliteMapNodeType type) => type == RogueliteMapNodeType.Combat ? "战斗" : type == RogueliteMapNodeType.Elite ? "精英" : type == RogueliteMapNodeType.Event ? "事件" : type == RogueliteMapNodeType.Workshop ? "工坊" : type == RogueliteMapNodeType.Shop ? "商店" : type == RogueliteMapNodeType.Rest ? "休整" : type == RogueliteMapNodeType.Treasure ? "库房" : type == RogueliteMapNodeType.Finale ? "核心" : "入口";
+        private static string MapNodeStateLabel(RogueliteMapNodeVisualState state, RogueliteMapNode node) => state == RogueliteMapNodeVisualState.Current ? "当前位置" : state == RogueliteMapNodeVisualState.Available ? "可进入" : state == RogueliteMapNodeVisualState.Locked ? "需权限卡 " + node.RequiredAccessCards : state == RogueliteMapNodeVisualState.Cleared ? "已清理" : state == RogueliteMapNodeVisualState.Visited ? "已访问" : state == RogueliteMapNodeVisualState.Known ? "已知未探索" : "未知";
+        private static Color MapNodeStateColor(RogueliteMapNodeVisualState state) => state == RogueliteMapNodeVisualState.Current || state == RogueliteMapNodeVisualState.Available ? new Color(.35f, .9f, 1f) : state == RogueliteMapNodeVisualState.Cleared ? new Color(.34f, .72f, .62f) : state == RogueliteMapNodeVisualState.Locked ? new Color(.82f, .34f, .24f) : state == RogueliteMapNodeVisualState.Known ? new Color(1f, .72f, .24f) : new Color(.28f, .34f, .38f);
         private void DrawShortRunInterlude()
         {
             ShortRogueliteRun run = rogueliteRun.ShortRun;

@@ -112,6 +112,22 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MapRun_VisualStatesDescribeCurrentReachabilityAndPermissionGates()
+        {
+            var run = new RogueliteMapRun(903);
+            Assert.That(run.VisualStateFor("start"), Is.EqualTo(RogueliteMapNodeVisualState.Current));
+            Assert.That(run.VisualStateFor("rail_patrol"), Is.EqualTo(RogueliteMapNodeVisualState.Available));
+            Assert.That(run.VisualStateFor("core_finale"), Is.EqualTo(RogueliteMapNodeVisualState.Unknown));
+
+            run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
+            Assert.That(run.VisualStateFor("rail_patrol"), Is.EqualTo(RogueliteMapNodeVisualState.Current));
+            Assert.That(run.VisualStateFor("start"), Is.EqualTo(RogueliteMapNodeVisualState.Available));
+            run.SelectNode("switchyard"); run.ChooseCurrentNodeContent("survey");
+            run.SelectNode("relay_event"); run.ChooseCurrentNodeContent("survey"); run.SelectNode("gatehouse"); run.SelectNode("elite_foundry");
+            Assert.That(run.VisualStateFor("transmission_tower"), Is.EqualTo(RogueliteMapNodeVisualState.Locked));
+        }
+
+        [Test]
         public void MapRun_ImportsLegacyMap1Save()
         {
             var restored = RogueliteMapRun.FromJson("map1|17|rail_patrol|2|1|start,rail_patrol|rail_patrol|war_hammer|0");
