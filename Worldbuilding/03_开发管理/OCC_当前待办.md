@@ -17,8 +17,8 @@
 - **目标**：为攻击、技能、命中、击破和目标选择提供不遮挡 HUD 的运行时视觉反馈。
 - **涉及文件**：`UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs`、`UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs`。
 - **验收结果**：攻击源与目标格 DOTween 脉冲、选中目标黄色轮廓、伤害数字锚定地图格、击破提示均已接入；击破单位因 `IsAlive` 过滤不再绘制行动条/意图/交互状态；未修改场景 YAML。
-- **验证**：Funplay 重编译完成；编译错误/警告 0。Console 仅存既有 `FindFirstObjectByType` 弃用警告。Play Mode 交互待完成端到端复测。
-- **下一步**：进入 Play Mode 逐项点击攻击/技能、击破目标并完成双分辨率截图 QA，然后聚焦 EditMode 检查并提交。
+- **验证**：Funplay 重编译完成；编译错误/警告 0。Play Mode 已进入战斗并确认 `IsDeveloperCombatActive=True`；运行时调用 `NotifyAttack` 成功生成攻击/命中反馈对象（4 个）及击破反馈对象（8 个）；1920×1080 与 960×540 截图均成功生成。Console 无新增运行时错误，仅既有 `FindFirstObjectByType` 弃用警告。
+- **下一步**：继续扩展同一表现层的可破坏物受损/摧毁反馈；不引入新战斗规则。
 
 - **归属**：肉鸽模式与共用战斗表现。
 - **目标**：建立可持续迭代的完成品表现基线：DOTween 驱动的界面/战斗反馈、完整胜负与奖励结算 UI、战斗信息显示、角色/背景/地块资源目录及符合规范的首批像素资源。
