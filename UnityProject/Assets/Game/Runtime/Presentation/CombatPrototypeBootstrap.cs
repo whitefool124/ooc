@@ -34,6 +34,8 @@ namespace OCC.Combat.Presentation
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
         private CombatVisualFeedback visualFeedback;
         private RogueliteSettlementPresentation settlementPresentation;
+        private FormalCombatHud formalCombatHud;
+        private DeveloperConsolePanel developerConsole;
         private float mapPanelAlpha = 1f;
         private float mapPanelScale = 1f;
         private float menuPanelAlpha = 1f;
@@ -47,10 +49,12 @@ namespace OCC.Combat.Presentation
             chineseFont = Resources.Load<Font>("Fonts/SimHei");
             barTexture = Resources.Load<Texture2D>("UI/Bar");
             Transform sceneUi = transform.Find("场景UI");
-            if (sceneUi != null) sceneUi.gameObject.SetActive(true);
+            if (sceneUi != null) sceneUi.gameObject.SetActive(false);
             developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "步枪兵、盾卫、火术师、突袭者、精英先锋");
             visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
             settlementPresentation = gameObject.AddComponent<RogueliteSettlementPresentation>(); settlementPresentation.Initialize(this);
+            formalCombatHud = gameObject.AddComponent<FormalCombatHud>(); formalCombatHud.Initialize(this);
+            developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this);
             BuildCombatFromSceneStageTwo();
             menuPanelAlpha = 0f; menuPanelScale = .96f;
             DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
@@ -282,6 +286,8 @@ namespace OCC.Combat.Presentation
         public string SelectedAction => selectedAction;
         public RogueliteMapRun CurrentMapRun => mapRun;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
+        public bool IsCombatOutcomeVisible => developerFlow != null && (developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat);
+        public void ToggleDeveloperConsole() { developerConsole?.Toggle(); }
         public void SelectHudAction(string action) { selectedAction = action; }
         public void UseQuickbarSlot(int slot) { if (state?.Quickbar[slot] != null) TryCommand(CombatCommand.UseQuickbar("hero", slot)); }
         public void ApplyHudBuild(int build) { if (state != null) ApplyBuild(build); }
@@ -323,9 +329,16 @@ namespace OCC.Combat.Presentation
             if (developerFlow?.Phase != CombatFlowPhase.Active) return;
             state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
         }
-        private void RefreshSceneHud() { TacticalHudSceneBinder binder = transform.Find("场景UI")?.GetComponent<TacticalHudSceneBinder>(); if (binder != null) binder.RefreshNow(); }
+        private void RefreshSceneHud()
+        {
+            // The authored HUD is retired in favour of FormalCombatHud; keep it inert during the transition.
+            Transform sceneUi = transform.Find("场景UI");
+            if (sceneUi == null || !sceneUi.gameObject.activeInHierarchy) return;
+            TacticalHudSceneBinder binder = sceneUi.GetComponent<TacticalHudSceneBinder>();
+            if (binder != null) binder.RefreshNow();
+        }
         private void RunEnemyTurn() { UnitState enemy = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); if (enemy == null || !enemy.IsAlive) { if (enemy != null) CombatResolver.EndTurn(state, enemy); return; } try { if (Distance(enemy.Position, hero.Position) <= 4 && enemy.ActionPoints > 0) CombatResolver.Resolve(state, enemy.Id == "caster" ? CombatCommand.Cast(enemy.Id, hero.Id) : CombatCommand.Attack(enemy.Id, hero.Id)); else if (enemy.ActionPoints > 0) CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, StepToward(enemy.Position, hero.Position), FacingToward(enemy.Position, hero.Position))); if (state.ActiveUnitId == enemy.Id) CombatResolver.EndTurn(state, enemy); } catch (InvalidOperationException error) { state.AddLog(error.Message); CombatResolver.EndTurn(state, enemy); } }
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (mapMenuOpen) DrawMapRun(); else if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawHeader(); DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); DrawDeveloperFlowBar(); GUI.matrix = previous; }
+        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (mapMenuOpen) DrawMapRun(); else if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
             GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
