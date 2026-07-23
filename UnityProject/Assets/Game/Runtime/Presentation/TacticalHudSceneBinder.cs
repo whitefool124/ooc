@@ -23,6 +23,8 @@ namespace OCC.Combat.Presentation
         private Text eventText;
         private readonly List<Button> boundButtons = new List<Button>();
         private readonly HashSet<Button> hoveredButtons = new HashSet<Button>();
+        private readonly Dictionary<Image, float> displayedBarValues = new Dictionary<Image, float>();
+        private readonly Dictionary<Button, Color> buttonBaseColors = new Dictionary<Button, Color>();
 
         private void Awake()
         {
@@ -67,6 +69,7 @@ namespace OCC.Combat.Presentation
             if (!visible) return;
             CombatState state = bootstrap.CurrentState; UnitState hero = state.GetUnit("hero"); UnitState active = state.GetUnit(state.ActiveUnitId);
             activeText.text = "行动：" + active.DisplayName + "  /  AP " + active.ActionPoints;
+            weaponText.supportRichText = true;
             weaponText.text = "主手：" + hero.MainHand.DisplayName + "  状态：" + StatusText(hero);
             SetBar(healthBar, hero.Health / (float)hero.MaxHealth); SetBar(shieldBar, hero.Shield / (float)Math.Max(1, hero.MaxShield)); SetBar(manaBar, hero.Mana / (float)hero.MaxMana);
             UnitState[] units = state.Units.Values.OrderBy(unit => unit.InitiativeTime).Take(4).ToArray();
@@ -74,9 +77,13 @@ namespace OCC.Combat.Presentation
             {
                 bool exists = i < units.Length; initiativeRows[i].gameObject.SetActive(exists); initiativeBars[i].transform.parent.gameObject.SetActive(exists);
                 if (!exists) continue;
-                initiativeRows[i].text = units[i].DisplayName + "  " + units[i].Health + " HP"; SetBar(initiativeBars[i], Mathf.Min(100, units[i].InitiativeTime) / 100f);
+                bool activeUnit = units[i].Id == state.ActiveUnitId;
+                initiativeRows[i].text = (activeUnit ? "▶ " : "  ") + units[i].DisplayName + "  " + units[i].Health + " HP";
+                initiativeRows[i].color = activeUnit ? new Color(.35f, .85f, 1f) : new Color(.78f, .82f, .84f);
+                SetBar(initiativeBars[i], Mathf.Min(100, units[i].InitiativeTime) / 100f);
             }
             eventText.text = state.EventLog.Count == 0 ? "等待指令" : state.EventLog[0];
+            RefreshActionSelection();
         }
 
         private void BindButtons()
@@ -94,6 +101,7 @@ namespace OCC.Combat.Presentation
             button.onClick.RemoveAllListeners();
             button.onClick.AddListener(action);
             boundButtons.Add(button);
+            buttonBaseColors[button] = button.GetComponent<Image>().color;
             AddHoverFeedback(button);
         }
 
@@ -109,9 +117,6 @@ namespace OCC.Combat.Presentation
             EventTrigger trigger = button.GetComponent<EventTrigger>();
             if (trigger == null) trigger = button.gameObject.AddComponent<EventTrigger>();
             trigger.triggers.Clear();
-            Image image = button.GetComponent<Image>();
-            Color normal = image.color;
-            Color highlight = new Color(.12f, .20f, .22f, 1f);
             AddTrigger(trigger, EventTriggerType.PointerEnter, _ =>
             {
                 SetHover(button, true);
@@ -142,7 +147,7 @@ namespace OCC.Combat.Presentation
             bool wasHovering = hoveredButtons.Contains(button);
             if (hovering == wasHovering) return;
             Image image = button.GetComponent<Image>();
-            Color target = hovering ? new Color(.12f, .20f, .22f, 1f) : new Color(.07f, .075f, .07f, 1f);
+            Color target = hovering ? new Color(.12f, .20f, .22f, 1f) : ButtonColor(button);
             image.DOKill(); button.transform.DOKill();
             DOTween.To(() => image.color, value => image.color = value, target, hovering ? .10f : .12f).SetUpdate(true);
             button.transform.DOScale(hovering ? 1.035f : 1f, hovering ? .10f : .12f).SetUpdate(true);
@@ -150,7 +155,46 @@ namespace OCC.Combat.Presentation
         }
         private Text FindText(string path) => hudRoot.Find(path).GetComponent<Text>();
         private Image FindImage(string path) => hudRoot.Find(path).GetComponent<Image>();
-        private static void SetBar(Image image, float value) { image.type = Image.Type.Filled; image.fillMethod = Image.FillMethod.Horizontal; image.fillAmount = Mathf.Clamp01(value); }
-        private static string StatusText(UnitState unit) => unit.Statuses.Count == 0 ? "无" : string.Join(" ", unit.Statuses.Select(entry => entry.Key + entry.Value));
+        private void RefreshActionSelection()
+        {
+            foreach (Button button in boundButtons)
+            {
+                if (!IsActionButton(button)) continue;
+                Image image = button.GetComponent<Image>();
+                if (!hoveredButtons.Contains(button)) image.color = ButtonColor(button);
+            }
+        }
+
+        private Color ButtonColor(Button button)
+        {
+            return button.name.Equals(bootstrap.SelectedAction, StringComparison.Ordinal) ? new Color(.12f, .38f, .43f, 1f) : buttonBaseColors[button];
+        }
+
+        private static bool IsActionButton(Button button)
+        {
+            return button.name == "移动" || button.name == "攻击" || button.name == "技能1" || button.name == "技能2" || button.name == "搜刮" || button.name == "互动";
+        }
+
+        private void SetBar(Image image, float value)
+        {
+            value = Mathf.Clamp01(value); image.type = Image.Type.Filled; image.fillMethod = Image.FillMethod.Horizontal;
+            if (!displayedBarValues.TryGetValue(image, out float previous)) previous = value;
+            if (!Mathf.Approximately(previous, value))
+            {
+                image.DOKill(); DOTween.To(() => image.fillAmount, next => image.fillAmount = next, value, .16f).SetEase(Ease.OutQuad).SetUpdate(true).SetTarget(image);
+                image.transform.DOKill(); image.transform.DOPunchScale(Vector3.one * .05f, .16f, 1, 0f).SetUpdate(true);
+            }
+            else image.fillAmount = value;
+            displayedBarValues[image] = value;
+        }
+
+        private static string StatusText(UnitState unit)
+        {
+            if (unit.Statuses.Count == 0) return "无";
+            return string.Join(" ", unit.Statuses.Select(entry => "<color=" + StatusColor(entry.Key) + ">" + StatusName(entry.Key) + entry.Value + "</color>"));
+        }
+
+        private static string StatusName(StatusType status) => status == StatusType.Burning ? "燃烧" : status == StatusType.Bound ? "束缚" : status == StatusType.ArmorBreak ? "破甲" : "缓慢";
+        private static string StatusColor(StatusType status) => status == StatusType.Burning ? "#E75642" : status == StatusType.Bound ? "#52D6FF" : status == StatusType.ArmorBreak ? "#FFC738" : "#79BFAF";
     }
 }

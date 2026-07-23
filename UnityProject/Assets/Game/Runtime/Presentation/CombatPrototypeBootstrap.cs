@@ -274,6 +274,7 @@ namespace OCC.Combat.Presentation
         public void DeleteRogueliteSave() { PlayerPrefs.DeleteKey(RogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasRogueliteSave => PlayerPrefs.HasKey(RogueliteSaveKey);
         public CombatState CurrentState => state;
+        public string SelectedAction => selectedAction;
         public RogueliteMapRun CurrentMapRun => mapRun;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
         public void SelectHudAction(string action) { selectedAction = action; }
