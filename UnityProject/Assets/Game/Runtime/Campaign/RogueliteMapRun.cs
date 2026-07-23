@@ -27,6 +27,61 @@ namespace OCC.Combat
     }
 
     public enum RogueliteRewardKind { Weapon, Spell }
+    public enum RogueliteNodeContentEffect { Supplies, ScoutingBeacon, AccessCard, Reward }
+    public sealed class RogueliteNodeContentChoice
+    {
+        public string Id { get; }
+        public string DisplayName { get; }
+        public string Preview { get; }
+        public RogueliteNodeContentEffect Effect { get; }
+        public string RewardId { get; }
+        public bool RequiresCombat { get; }
+        public string CombatMissionId { get; }
+        public RogueliteNodeContentChoice(string id, string displayName, string preview, RogueliteNodeContentEffect effect, string rewardId = null, bool requiresCombat = false, string combatMissionId = null)
+        { Id = id; DisplayName = displayName; Preview = preview; Effect = effect; RewardId = rewardId; RequiresCombat = requiresCombat; CombatMissionId = combatMissionId; }
+    }
+
+    public static class RogueliteNodeContentCatalog
+    {
+        public static IReadOnlyList<RogueliteNodeContentChoice> ChoicesFor(RogueliteMapNode node)
+        {
+            switch (node.Type)
+            {
+                case RogueliteMapNodeType.Event:
+                    return new[]
+                    {
+                        new RogueliteNodeContentChoice("survey", "低风险勘测", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon),
+                        new RogueliteNodeContentChoice("overload", "超载回收", "收益：+1 权限卡；后果：进入一场额外战斗。", RogueliteNodeContentEffect.AccessCard, requiresCombat: true, combatMissionId: "relay_event")
+                    };
+                case RogueliteMapNodeType.Rest:
+                    return new[]
+                    {
+                        new RogueliteNodeContentChoice("field_repair", "现场整备", "收益：+1 补给；无敌情推进。", RogueliteNodeContentEffect.Supplies),
+                        new RogueliteNodeContentChoice("scan_routes", "校准信标", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon)
+                    };
+                case RogueliteMapNodeType.Workshop:
+                    return new[]
+                    {
+                        new RogueliteNodeContentChoice("wand_calibration", "以太聚焦校准", "收益：获得以太聚焦手杖；替换操作将在 R2-03 工坊系统开放。", RogueliteNodeContentEffect.Reward, "arcane_wand"),
+                        new RogueliteNodeContentChoice("supply_strip", "拆解补给", "收益：+1 补给；无额外战斗。", RogueliteNodeContentEffect.Supplies)
+                    };
+                case RogueliteMapNodeType.Shop:
+                    return new[]
+                    {
+                        new RogueliteNodeContentChoice("medical_cache", "医疗补给", "收益：+1 补给；双货币价格将在 R2-03 接入。", RogueliteNodeContentEffect.Supplies),
+                        new RogueliteNodeContentChoice("signal_contract", "情报合约", "收益：+1 侦测信标；双货币价格将在 R2-03 接入。", RogueliteNodeContentEffect.ScoutingBeacon)
+                    };
+                case RogueliteMapNodeType.Treasure:
+                    return new[]
+                    {
+                        new RogueliteNodeContentChoice("vault_wand", "以太器械箱", "收益：获得以太手杖。", RogueliteNodeContentEffect.Reward, "aether_wand"),
+                        new RogueliteNodeContentChoice("vault_spell", "术式档案箱", "收益：获得火矢术式。", RogueliteNodeContentEffect.Reward, "fire_bolt")
+                    };
+                default: return Array.Empty<RogueliteNodeContentChoice>();
+            }
+        }
+    }
+
     public sealed class RogueliteReward
     {
         public string Id { get; }
@@ -90,6 +145,10 @@ namespace OCC.Combat
         public int Level { get; private set; } = 1;
         public int Experience { get; private set; }
         public int AccessCards { get; private set; }
+        public int Supplies { get; private set; }
+        public int ScoutingBeacons { get; private set; }
+        public string PendingContentChoiceId { get; private set; }
+        public string PendingContentCombatMissionId { get; private set; }
         public bool AwaitingReward { get; private set; }
         public bool IsComplete => completed.Contains("core_finale") && !AwaitingReward;
         public IReadOnlyCollection<string> UnlockedNodes => visited;
@@ -97,6 +156,8 @@ namespace OCC.Combat
         public IReadOnlyCollection<string> CompletedNodes => completed;
         public IReadOnlyList<string> ClaimedRewards => claimedRewards;
         public IReadOnlyList<RogueliteReward> CurrentRewards => AwaitingReward ? RogueliteMapCatalog.RollRewards(Seed, completed.Count) : Array.Empty<RogueliteReward>();
+        public IReadOnlyList<RogueliteNodeContentChoice> CurrentContentChoices => RogueliteNodeContentCatalog.ChoicesFor(RogueliteMapCatalog.Node(CurrentNodeId));
+        public bool HasPendingContentCombat => !string.IsNullOrEmpty(PendingContentCombatMissionId);
         public RogueliteMapRun(int seed) { Seed = seed; }
 
         public bool IsAdjacentToCurrent(string nodeId) => RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
@@ -123,6 +184,29 @@ namespace OCC.Combat
             if (node.Type == RogueliteMapNodeType.Start || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not available.");
             Complete(node, node.IsCombat);
         }
+        public void ChooseCurrentNodeContent(string choiceId)
+        {
+            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
+            if (node.IsCombat || completed.Contains(node.Id) || HasPendingContentCombat) throw new InvalidOperationException("Current node content is not available.");
+            RogueliteNodeContentChoice choice = CurrentContentChoices.FirstOrDefault(item => item.Id == choiceId) ?? throw new InvalidOperationException("Unknown node content choice.");
+            PendingContentChoiceId = choice.Id;
+            if (choice.RequiresCombat) { PendingContentCombatMissionId = choice.CombatMissionId; return; }
+            ApplyContentChoice(choice); Complete(node, false); PendingContentChoiceId = null;
+        }
+        public void CompletePendingContentCombat()
+        {
+            if (!HasPendingContentCombat) throw new InvalidOperationException("No event combat is active.");
+            RogueliteNodeContentChoice choice = CurrentContentChoices.First(item => item.Id == PendingContentChoiceId);
+            ApplyContentChoice(choice); Complete(RogueliteMapCatalog.Node(CurrentNodeId), false);
+            PendingContentChoiceId = null; PendingContentCombatMissionId = null;
+        }
+        private void ApplyContentChoice(RogueliteNodeContentChoice choice)
+        {
+            if (choice.Effect == RogueliteNodeContentEffect.Supplies) Supplies++;
+            else if (choice.Effect == RogueliteNodeContentEffect.ScoutingBeacon) ScoutingBeacons++;
+            else if (choice.Effect == RogueliteNodeContentEffect.AccessCard) AccessCards++;
+            else if (choice.Effect == RogueliteNodeContentEffect.Reward && !claimedRewards.Contains(choice.RewardId)) claimedRewards.Add(choice.RewardId);
+        }
         private void Complete(RogueliteMapNode node, bool offerReward)
         {
             completed.Add(node.Id); Experience++; if (Experience >= Level) Level++;
@@ -130,12 +214,18 @@ namespace OCC.Combat
             AwaitingReward = offerReward;
         }
         public void ClaimReward(string rewardId) { if (!AwaitingReward || CurrentRewards.All(reward => reward.Id != rewardId)) throw new InvalidOperationException("Reward is not available."); claimedRewards.Add(rewardId); AwaitingReward = false; }
-        public string ToJson() => string.Join("|", "map2", Seed, CurrentNodeId, Level, Experience, AccessCards, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
+        public string ToJson() => string.Join("|", "map3", Seed, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
         public static RogueliteMapRun FromJson(string json)
         {
             string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
             if (parts.Length == 9 && parts[0] == "map1") return FromMap1(parts);
-            if (parts.Length != 10 || parts[0] != "map2") throw new InvalidOperationException("Unsupported map run save version.");
+            if (parts.Length == 10 && parts[0] == "map2") return FromMap2(parts);
+            if (parts.Length != 14 || parts[0] != "map3") throw new InvalidOperationException("Unsupported map run save version.");
+            var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), Supplies = int.Parse(parts[6]), ScoutingBeacons = int.Parse(parts[7]), PendingContentChoiceId = parts[8], PendingContentCombatMissionId = parts[9], AwaitingReward = parts[13] == "1" };
+            Restore(run.visited, parts[10]); Restore(run.completed, parts[11]); run.claimedRewards.AddRange(parts[12].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
+        }
+        private static RogueliteMapRun FromMap2(string[] parts)
+        {
             var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), AwaitingReward = parts[9] == "1" };
             Restore(run.visited, parts[6]); Restore(run.completed, parts[7]); run.claimedRewards.AddRange(parts[8].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
         }

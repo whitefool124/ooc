@@ -119,7 +119,7 @@ namespace OCC.Combat.Presentation
             state = new CombatState(map, units);
             if (mapRun != null)
             {
-                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.CurrentNodeId);
+                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
                 developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
                 if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
@@ -163,7 +163,7 @@ namespace OCC.Combat.Presentation
             state = new CombatState(map, units);
             if (mapRun != null)
             {
-                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.CurrentNodeId);
+                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
                 developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
                 if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
@@ -218,10 +218,15 @@ namespace OCC.Combat.Presentation
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
             if (!node.IsCombat)
             {
-                if (!mapRun.CompletedNodes.Contains(nodeId) && node.Type != RogueliteMapNodeType.Start) mapRun.CompleteCurrentNode();
                 SaveMapRun(); PlayMapEntrance(); return;
             }
             SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
+        public void ChooseMapNodeContent(string choiceId)
+        {
+            mapRun.ChooseCurrentNodeContent(choiceId);
+            if (mapRun.HasPendingContentCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); return; }
+            SaveMapRun(); PlayMapEntrance();
         }
         public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); settlementPresentation?.RefreshNow(); }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
@@ -270,7 +275,9 @@ namespace OCC.Combat.Presentation
         {
             if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
             {
-                outcomeHandled = true; visualFeedback?.PlayOutcome(true); mapRun.CompleteCurrentCombat(); SaveMapRun(); settlementPresentation?.RefreshNow(); return;
+                outcomeHandled = true; visualFeedback?.PlayOutcome(true);
+                if (mapRun.HasPendingContentCombat) mapRun.CompletePendingContentCombat(); else mapRun.CompleteCurrentCombat();
+                SaveMapRun(); settlementPresentation?.RefreshNow(); return;
             }
             if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat) { outcomeHandled = true; visualFeedback?.PlayOutcome(false); }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
@@ -344,7 +351,7 @@ namespace OCC.Combat.Presentation
             Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
             GUI.color = new Color(.035f, .075f, .13f, .98f * mapPanelAlpha); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
             GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1050, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  权限卡 " + mapRun.AccessCards + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1120, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  补给 " + mapRun.Supplies + "  /  信标 " + mapRun.ScoutingBeacons + "  /  权限卡 " + mapRun.AccessCards + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
             if (mapRun.AwaitingReward)
             {
                 GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
@@ -353,6 +360,7 @@ namespace OCC.Combat.Presentation
                 GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); GUI.matrix = previous; return;
             }
             GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
+            if (DrawMapContentChoices()) { GUI.matrix = previous; return; }
             DrawMapConnections();
             foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
             if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
@@ -375,6 +383,22 @@ namespace OCC.Combat.Presentation
                 Color color = mapRun.AccessCards >= Math.Max(node.RequiredAccessCards, next.RequiredAccessCards) ? new Color(.22f, .5f, .58f, .8f) : new Color(.62f, .3f, .18f, .85f);
                 DrawMapLine(from, to, color);
             }
+        }
+        private bool DrawMapContentChoices()
+        {
+            RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
+            if (node.IsCombat || node.Type == RogueliteMapNodeType.Start || mapRun.CompletedNodes.Contains(node.Id)) return false;
+            IReadOnlyList<RogueliteNodeContentChoice> choices = mapRun.CurrentContentChoices;
+            if (choices.Count == 0) return false;
+            GUI.color = new Color(.06f, .11f, .17f, .98f); GUI.Box(new Rect(430, 385, 1060, 270), ""); GUI.color = Color.white;
+            GUI.Label(new Rect(480, 415, 940, 32), node.DisplayName + " / " + node.Type + "：选择一项已预览的结算");
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(480, 455, 940, 50), node.Summary + " 事件失败只会进入标明的额外战斗，不会强制扣血。"); GUI.color = Color.white;
+            for (int i = 0; i < choices.Count; i++)
+            {
+                RogueliteNodeContentChoice choice = choices[i];
+                if (GUI.Button(new Rect(480 + i * 480, 530, 440, 72), choice.DisplayName + "\n" + choice.Preview)) ChooseMapNodeContent(choice.Id);
+            }
+            return true;
         }
         private static Vector2 MapNodeCenter(RogueliteMapNode node) => new Vector2(486 + node.GridX * 145, 402 + node.GridY * 82);
         private void DrawMapLine(Vector2 from, Vector2 to, Color color)

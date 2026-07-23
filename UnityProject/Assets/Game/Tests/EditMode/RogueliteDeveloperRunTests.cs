@@ -121,6 +121,35 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MapRun_ContentChoicesPreviewAndPersistTheirResults()
+        {
+            var run = new RogueliteMapRun(515);
+            run.SelectNode("supply_checkpoint");
+            Assert.That(run.CurrentContentChoices.Select(choice => choice.Preview), Has.All.Not.Empty);
+            run.ChooseCurrentNodeContent("medical_cache");
+            Assert.That(run.Supplies, Is.EqualTo(1));
+            Assert.That(run.CompletedNodes, Does.Contain("supply_checkpoint"));
+            Assert.That(RogueliteMapRun.FromJson(run.ToJson()).Supplies, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MapRun_RiskyEventOnlyStartsDisclosedCombatThenGrantsCard()
+        {
+            var run = new RogueliteMapRun(516);
+            run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
+            run.SelectNode("switchyard");
+            RogueliteNodeContentChoice riskyChoice = run.CurrentContentChoices.Single(choice => choice.Id == "overload");
+            Assert.That(riskyChoice.RequiresCombat, Is.True);
+            Assert.That(riskyChoice.Preview, Does.Contain("额外战斗"));
+            run.ChooseCurrentNodeContent("overload");
+            Assert.That(run.HasPendingContentCombat, Is.True);
+            Assert.That(run.AccessCards, Is.EqualTo(0));
+            run.CompletePendingContentCombat();
+            Assert.That(run.AccessCards, Is.EqualTo(1));
+            Assert.That(run.CompletedNodes, Does.Contain("switchyard"));
+        }
+
+        [Test]
         public void MapRun_RewardChoicesAreDeterministicAndApplyToBuild()
         {
             var first = new RogueliteMapRun(77); first.SelectNode("rail_patrol"); first.CompleteCurrentCombat();
