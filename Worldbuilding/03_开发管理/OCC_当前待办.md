@@ -77,7 +77,15 @@
 #### V1 连续交付路线（已锁定）
 - **执行顺序**：V1-04 可破坏物与状态效果反馈 → V1-05 战斗 UI 组件与状态规范 → M1-01 大地图节点状态与路径数据 → M1-02 工业城市大地图视觉原型 → V1-06 战斗/大地图/结算统一视觉 QA。
 - **统一验收**：完成上述五项后一次性执行 Play Mode、Funplay 编译/Console、聚焦 EditMode、1920×1080 / 960×540 截图与完整流程回归；中途不切换其他主任务。
-- **当前主任务**：V1-06 战斗/大地图/结算统一视觉 QA。
+- **当前主任务**：无；V1-06 已完成，等待确认 R3 扩容优先级。
+
+#### V1-06：战斗/大地图/结算统一视觉 QA - COMPLETE（2026-07-24）
+- **归属**：剧情模式与肉鸽模式共用战斗表现。
+- **目标**：对 V1-04、V1-05、M1-01、M1-02 与既有结算界面执行同一轮运行时流程、双分辨率、编译、Console 和聚焦 EditMode 验收。
+- **涉及文件/系统**：`CombatVisualFeedback`、`RogueliteSettlementPresentation`、`TacticalHudSceneBinder`、`CombatPrototypeBootstrap`、`RogueliteMapRun`；本次仅更新本待办验证记录，不修改场景 YAML 或玩法规则。
+- **验收标准**：开发菜单、简报、战斗、攻击/状态/可破坏物反馈、战术重开、返回入口、地图节点、胜利结算与奖励领取可回归；1920x1080 和 960x540 不溢出；编译/Console 无项目错误；场景不 dirty。
+- **验证结果（2026-07-24）**：Play Mode 运行时断言通过剧情入口→战前简报→正式战斗→攻击/状态/可破坏物 DOTween 反馈→战术重开→返回入口；肉鸽地图新局→铁路巡逻→正式战斗→胜利→三选一奖励领取→返回地图也通过，奖励领取后可进入节点为 4。`Camera.main`、`CombatVisualFeedback` 与 `RogueliteSettlementPresentation` 均存在；反馈层运行时生成攻击、燃烧与可破坏物提示对象。聚焦 EditMode 5/5 通过：`FireBolt_AppliesBurningAndCooldown_Deterministically`、`BoundUnit_CannotMove`、地图视觉状态、商店/工坊持久化、跨流派奖励。Funplay 编译错误/警告 0；Console 仅 2 条既有 `RenderTexture.active` 释放警告，无项目错误；`Assets/Scenes/CombatPrototype.unity` 为 `isDirty=false`。1920x1080 与 960x540 截图实际可见、无溢出且菜单文字可读；截图工具在阶段切换后仍缓存入口帧，因此地图/战斗阶段以真实运行时状态断言作为验收依据。IMGUI 不提供 uGUI 射线命中，无法用 `simulate_mouse_click` 单独证明控件命中，但流程公开方法与状态完成验证均通过。
+- **完成后解锁**：R3-01 事件池扩容与回访递减、R3-02 构筑/装备内容池、R3-03 第二地区与敌人美术资产 QA；需由产品确认优先级后再开始。
 - **归属**：剧情模式与肉鸽模式共用战斗表现。
 - **V1-04 目标**：为中继器、掩体等可破坏物提供受损/摧毁反馈，并建立燃烧、束缚、破甲、护盾等状态的统一视觉语义。
 - **涉及文件/系统**：`CombatVisualFeedback`、`CombatPrototypeBootstrap`、可破坏物运行时表现、状态效果表现；不直接修改场景 YAML。
