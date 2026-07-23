@@ -434,7 +434,11 @@ namespace OCC.Combat.Presentation
         {
             Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
             DrawConsolePanel(new Rect(330, 150, 1260, 760), "肉鸽区域推进", "自由回访网络 / 已清理房间永久安全 / 无时间压力", new Color(1f, .72f, .24f));
-            GUI.color = new Color(.68f, .78f, .88f, mapPanelAlpha); GUI.Label(new Rect(390, 250, 1140, 28), "种子 " + mapRun.Seed + " / 等级 " + mapRun.Level + " / 零件 " + mapRun.Parts + " / 以太 " + mapRun.Aether + " / 补给 " + mapRun.Supplies + " / 信标 " + mapRun.ScoutingBeacons + " / 权限卡 " + mapRun.AccessCards); GUI.color = Color.white;
+            GUI.color = new Color(.68f, .78f, .88f, mapPanelAlpha); GUI.Label(new Rect(390, 244, 560, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  当前 " + RogueliteMapCatalog.Node(mapRun.CurrentNodeId).DisplayName); GUI.color = Color.white;
+            DrawMapResourceChip(new Rect(980, 240, 110, 34), "零件", mapRun.Parts, new Color(.95f, .76f, .36f));
+            DrawMapResourceChip(new Rect(1100, 240, 110, 34), "以太", mapRun.Aether, new Color(.35f, .9f, 1f));
+            DrawMapResourceChip(new Rect(1220, 240, 110, 34), "补给", mapRun.Supplies, new Color(.48f, .78f, .66f));
+            DrawMapResourceChip(new Rect(1340, 240, 110, 34), "权限卡", mapRun.AccessCards, new Color(.82f, .34f, .24f));
             if (mapRun.AwaitingReward)
             {
                 GUI.Label(new Rect(390, 320, 900, 30), "战斗结算 // 等级 " + mapRun.Level + "  选择一项构筑奖励");
@@ -511,6 +515,15 @@ namespace OCC.Combat.Presentation
         {
             GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture);
             GUI.color = new Color(.67f, .73f, .76f); GUI.Label(new Rect(rect.x + 18, rect.y - 4, 78, 20), label);
+        }
+
+        private static void DrawMapResourceChip(Rect rect, string label, int value, Color accent)
+        {
+            GUI.color = new Color(.025f, .04f, .052f, .96f); GUI.Box(rect, "");
+            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 3, rect.height), Texture2D.whiteTexture);
+            GUI.color = new Color(.56f, .64f, .68f); GUI.Label(new Rect(rect.x + 12, rect.y + 4, rect.width - 18, 14), label);
+            GUI.color = new Color(.92f, .95f, .96f); GUI.Label(new Rect(rect.x + 12, rect.y + 16, rect.width - 18, 18), value.ToString());
+            GUI.color = Color.white;
         }
         private bool DrawMapContentChoices()
         {
