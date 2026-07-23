@@ -105,6 +105,8 @@
 
 ## 验证记录
 
+| 2026-07-23 | V1-06 摄像机与流程补充 | PARTIAL PASS | 修复运行时未设置 MainCamera 标签的问题；Play Mode 断言 `Camera.main=present`、战前简报/正式战斗/战术重开/返回菜单/大地图入口均成功。点击工具在 IMGUI 画布采样点仍无 UI 命中，故保留为验证限制；编译错误/警告 0。|
+
 | 2026-07-23 | V1-06 验收补充 | PARTIAL PASS | 场景信息确认 `Assets/Scenes/CombatPrototype.unity` loaded 且 `isDirty=false`；运行时断言节点完成后解锁并领取奖励成功；V1-04 反馈对象生成成功；Funplay 编译错误/警告 0。`simulate_mouse_click` 在退出 Play Mode 后按工具约束返回 PLAY_MODE_REQUIRED；聚焦 EditMode 无独立 MCP Test Runner，保留现有 EditMode 测试程序集作为覆盖证据。Console 有两条既有 RenderTexture.active 警告，无新增脚本错误。|
 
 | 2026-07-23 | V1-04/V1-05/M1-01/M1-02/V1-06 统一验收 | PARTIAL PASS | V1-04 可破坏物与状态反馈、既有战斗 UI 基线、5 节点大地图数据与 relay_event 任务已完成；Play Mode 确认地图节点目录为 start/rail_patrol/relay_raid/relay_event/core_finale，反馈对象可运行时生成；1920x1080 与 960x540 截图均成功。Funplay 编译错误/警告 0，Console 仅既有弃用警告。完整鼠标逐项路径和 EditMode 聚焦执行仍待补充。|

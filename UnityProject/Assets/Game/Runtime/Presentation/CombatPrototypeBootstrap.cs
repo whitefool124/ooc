@@ -56,6 +56,8 @@ namespace OCC.Combat.Presentation
         {
             if (!Application.isPlaying) return;
             Application.targetFrameRate = 60;
+            Camera sceneCamera = FindFirstObjectByType<Camera>();
+            if (sceneCamera != null && sceneCamera.CompareTag("Untagged")) sceneCamera.tag = "MainCamera";
         }
 
         public void EnsureEditorVisuals()
