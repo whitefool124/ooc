@@ -13,6 +13,14 @@
 
 ### V1：战斗表现、结算界面与像素资源完成品基线 - IN PROGRESS
 
+#### V1 连续交付路线（已锁定）
+- **执行顺序**：V1-04 可破坏物与状态效果反馈 → V1-05 战斗 UI 组件与状态规范 → M1-01 大地图节点状态与路径数据 → M1-02 工业城市大地图视觉原型 → V1-06 战斗/大地图/结算统一视觉 QA。
+- **统一验收**：完成上述五项后一次性执行 Play Mode、Funplay 编译/Console、聚焦 EditMode、1920×1080 / 960×540 截图与完整流程回归；中途不切换其他主任务。
+- **当前主任务**：V1-04 可破坏物与状态效果反馈。
+- **V1-04 目标**：为中继器、掩体等可破坏物提供受损/摧毁反馈，并建立燃烧、束缚、破甲、护盾等状态的统一视觉语义。
+- **涉及文件/系统**：`CombatVisualFeedback`、`CombatPrototypeBootstrap`、可破坏物运行时表现、状态效果表现；不直接修改场景 YAML。
+- **验收标准**：受损与摧毁状态可读，状态颜色与 HUD 语义一致，表现由 DOTween 驱动且不遮挡 HUD；完成后解锁 V1-05。
+
 #### V1-03：攻击源/命中目标/击破地图内视觉反馈 - COMPLETE（2026-07-23）
 - **目标**：为攻击、技能、命中、击破和目标选择提供不遮挡 HUD 的运行时视觉反馈。
 - **涉及文件**：`UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs`、`UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs`。
