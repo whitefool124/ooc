@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace OCC.Combat
 {
-    public enum RogueliteMapNodeType { Start, Combat, Event, Workshop, Finale }
+    public enum RogueliteMapNodeType { Start, Combat, Elite, Event, Workshop, Shop, Rest, Treasure, Finale }
+
     public sealed class RogueliteMapNode
     {
         public string Id { get; }
@@ -12,9 +13,19 @@ namespace OCC.Combat
         public IReadOnlyList<string> NextIds { get; }
         public string DisplayName { get; }
         public string Summary { get; }
-        public RogueliteMapNode(string id, RogueliteMapNodeType type, params string[] nextIds) : this(id, type, id, string.Empty, nextIds) { }
-        public RogueliteMapNode(string id, RogueliteMapNodeType type, string displayName, string summary, params string[] nextIds) { Id = id; Type = type; DisplayName = displayName; Summary = summary; NextIds = nextIds ?? Array.Empty<string>(); }
+        public int GridX { get; }
+        public int GridY { get; }
+        public int RequiredAccessCards { get; }
+        public int GrantedAccessCards { get; }
+        public bool IsCombat => Type == RogueliteMapNodeType.Combat || Type == RogueliteMapNodeType.Elite || Type == RogueliteMapNodeType.Finale;
+
+        public RogueliteMapNode(string id, RogueliteMapNodeType type, string displayName, string summary, int gridX, int gridY, int requiredAccessCards, int grantedAccessCards, params string[] nextIds)
+        {
+            Id = id; Type = type; DisplayName = displayName; Summary = summary; GridX = gridX; GridY = gridY;
+            RequiredAccessCards = requiredAccessCards; GrantedAccessCards = grantedAccessCards; NextIds = nextIds ?? Array.Empty<string>();
+        }
     }
+
     public enum RogueliteRewardKind { Weapon, Spell }
     public sealed class RogueliteReward
     {
@@ -26,15 +37,32 @@ namespace OCC.Combat
         public RogueliteReward(string id, string displayName, WeaponDefinition weapon) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Weapon; Weapon = weapon; }
         public RogueliteReward(string id, string displayName, SkillDefinition spell) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Spell; Spell = spell; }
     }
+
     public static class RogueliteMapCatalog
     {
+        // This is an orthogonal room graph: every listed connection is reciprocated by its neighbor.
         public static readonly IReadOnlyList<RogueliteMapNode> Nodes = new[]
         {
-            new RogueliteMapNode("start", RogueliteMapNodeType.Start, "rail_patrol", "relay_raid"),
-            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "Rail Patrol", "Eliminate the patrol.", "relay_event"),
-            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "Relay Raid", "Destroy the relay.", "core_finale"),
-            new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "Relay Event", "Recover a signal cache.", "core_finale"),
-            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "Core Finale", "Reach the industrial core.")
+            new RogueliteMapNode("start", RogueliteMapNodeType.Start, "前线入口", "区域入口。", 0, 2, 0, 0, "rail_patrol", "depot_wreck", "supply_checkpoint"),
+            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "铁路巡逻", "清除巡逻队。", 1, 2, 0, 0, "start", "switchyard", "relay_raid", "supply_checkpoint"),
+            new RogueliteMapNode("depot_wreck", RogueliteMapNodeType.Combat, "货场残骸", "夺回侧线。", 1, 1, 0, 0, "start", "switchyard"),
+            new RogueliteMapNode("supply_checkpoint", RogueliteMapNodeType.Shop, "补给检查站", "补给与零件交易。", 1, 3, 0, 0, "start", "rail_patrol", "field_workshop"),
+            new RogueliteMapNode("switchyard", RogueliteMapNodeType.Event, "道岔信号", "风险与收益预览事件。", 2, 1, 0, 0, "depot_wreck", "rail_patrol", "signal_hub", "relay_event"),
+            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "野战中继", "破坏敌方中继器。", 2, 2, 0, 0, "rail_patrol", "relay_event", "med_bay", "field_workshop"),
+            new RogueliteMapNode("field_workshop", RogueliteMapNodeType.Workshop, "野战工坊", "更换与维护构筑。", 2, 3, 0, 0, "supply_checkpoint", "relay_raid", "med_bay", "permit_archive"),
+            new RogueliteMapNode("signal_hub", RogueliteMapNodeType.Combat, "信号枢纽", "清除主干站守军。", 3, 1, 0, 0, "switchyard", "relay_event", "elite_foundry"),
+            new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "中继站事件", "回访时收益递减。", 3, 2, 0, 0, "switchyard", "relay_raid", "signal_hub", "med_bay", "gatehouse"),
+            new RogueliteMapNode("med_bay", RogueliteMapNodeType.Rest, "战地医疗站", "恢复与休整。", 3, 3, 0, 0, "relay_raid", "field_workshop", "relay_event", "permit_archive", "sealed_market"),
+            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "精英铸造厂", "高风险精英战斗。", 4, 1, 0, 0, "signal_hub", "gatehouse", "transmission_tower"),
+            new RogueliteMapNode("gatehouse", RogueliteMapNodeType.Combat, "阀门关卡", "打开通往深层的战线。", 4, 2, 0, 0, "relay_event", "elite_foundry", "sealed_market", "aether_refinery"),
+            new RogueliteMapNode("sealed_market", RogueliteMapNodeType.Shop, "封存商行", "双货币交易点。", 4, 3, 0, 0, "med_bay", "gatehouse", "permit_archive", "aether_refinery", "safety_room"),
+            new RogueliteMapNode("permit_archive", RogueliteMapNodeType.Event, "许可档案", "可预览的档案提取；完成后获得权限卡。", 4, 4, 0, 1, "field_workshop", "med_bay", "sealed_market", "safety_room"),
+            new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "传输塔", "权限门后的战斗节点。", 5, 1, 1, 0, "elite_foundry", "aether_refinery", "core_approach"),
+            new RogueliteMapNode("aether_refinery", RogueliteMapNodeType.Event, "以太精炼厂", "可预览的高收益事件。", 5, 2, 0, 0, "gatehouse", "sealed_market", "transmission_tower", "safety_room", "core_vault"),
+            new RogueliteMapNode("safety_room", RogueliteMapNodeType.Rest, "安全舱", "无敌情推进的休整点。", 5, 3, 0, 0, "sealed_market", "permit_archive", "aether_refinery", "core_vault"),
+            new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "核心前哨", "核心区精英守备。", 6, 1, 1, 0, "transmission_tower", "core_vault", "core_finale"),
+            new RogueliteMapNode("core_vault", RogueliteMapNodeType.Treasure, "核心库房", "战利品节点。", 6, 2, 1, 0, "aether_refinery", "safety_room", "core_approach", "core_finale"),
+            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "区域核心", "击败区域核心首领。", 7, 1, 1, 0, "core_approach", "core_vault")
         };
         public static readonly IReadOnlyList<RogueliteReward> Rewards = new[]
         {
@@ -51,43 +79,77 @@ namespace OCC.Combat
             return Rewards.OrderBy(_ => random.Next()).Take(3).ToArray();
         }
     }
+
     public sealed class RogueliteMapRun
     {
-        private readonly HashSet<string> unlocked = new HashSet<string>(StringComparer.Ordinal) { "start", "rail_patrol", "relay_raid" };
+        private readonly HashSet<string> visited = new HashSet<string>(StringComparer.Ordinal) { "start" };
         private readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
         private readonly List<string> claimedRewards = new List<string>();
         public int Seed { get; }
         public string CurrentNodeId { get; private set; } = "start";
         public int Level { get; private set; } = 1;
         public int Experience { get; private set; }
+        public int AccessCards { get; private set; }
         public bool AwaitingReward { get; private set; }
         public bool IsComplete => completed.Contains("core_finale") && !AwaitingReward;
-        public IReadOnlyCollection<string> UnlockedNodes => unlocked;
+        public IReadOnlyCollection<string> UnlockedNodes => visited;
+        public IReadOnlyCollection<string> VisitedNodes => visited;
         public IReadOnlyCollection<string> CompletedNodes => completed;
         public IReadOnlyList<string> ClaimedRewards => claimedRewards;
         public IReadOnlyList<RogueliteReward> CurrentRewards => AwaitingReward ? RogueliteMapCatalog.RollRewards(Seed, completed.Count) : Array.Empty<RogueliteReward>();
         public RogueliteMapRun(int seed) { Seed = seed; }
-        public void SelectNode(string nodeId) { if (!unlocked.Contains(nodeId) || RogueliteMapCatalog.Node(nodeId).Type == RogueliteMapNodeType.Start) throw new InvalidOperationException("Node is not available."); CurrentNodeId = nodeId; }
+
+        public bool IsAdjacentToCurrent(string nodeId) => RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
+        public bool IsNodeAvailable(string nodeId)
+        {
+            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
+            return IsAdjacentToCurrent(nodeId) && AccessCards >= node.RequiredAccessCards;
+        }
+        public bool IsNodeKnown(string nodeId) => visited.Contains(nodeId) || RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
+        public void SelectNode(string nodeId)
+        {
+            if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException("Node is not adjacent or its permission gate is locked.");
+            CurrentNodeId = nodeId; visited.Add(nodeId);
+        }
         public void CompleteCurrentCombat()
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
-            if (node.Type == RogueliteMapNodeType.Start || node.Type == RogueliteMapNodeType.Finale || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
-            completed.Add(node.Id); Experience++; if (Experience >= Level) Level++; foreach (string next in node.NextIds) unlocked.Add(next); AwaitingReward = true;
+            if (!node.IsCombat || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
+            Complete(node, true);
         }
         public void CompleteCurrentNode()
         {
-            if (CurrentNodeId == "start" || completed.Contains(CurrentNodeId)) throw new InvalidOperationException("Current node is not available.");
-            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId); completed.Add(node.Id); Experience++; if (Experience >= Level) Level++; foreach (string next in node.NextIds) unlocked.Add(next); AwaitingReward = node.Type == RogueliteMapNodeType.Combat;
+            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
+            if (node.Type == RogueliteMapNodeType.Start || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not available.");
+            Complete(node, node.IsCombat);
+        }
+        private void Complete(RogueliteMapNode node, bool offerReward)
+        {
+            completed.Add(node.Id); Experience++; if (Experience >= Level) Level++;
+            AccessCards += node.GrantedAccessCards;
+            AwaitingReward = offerReward;
         }
         public void ClaimReward(string rewardId) { if (!AwaitingReward || CurrentRewards.All(reward => reward.Id != rewardId)) throw new InvalidOperationException("Reward is not available."); claimedRewards.Add(rewardId); AwaitingReward = false; }
-        public string ToJson() => string.Join("|", "map1", Seed, CurrentNodeId, Level, Experience, string.Join(",", unlocked), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
+        public string ToJson() => string.Join("|", "map2", Seed, CurrentNodeId, Level, Experience, AccessCards, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
         public static RogueliteMapRun FromJson(string json)
         {
-            string[] parts = json.Split('|'); if (parts.Length != 9 || parts[0] != "map1") throw new InvalidOperationException("Unsupported map run save version.");
+            string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
+            if (parts.Length == 9 && parts[0] == "map1") return FromMap1(parts);
+            if (parts.Length != 10 || parts[0] != "map2") throw new InvalidOperationException("Unsupported map run save version.");
+            var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), AwaitingReward = parts[9] == "1" };
+            Restore(run.visited, parts[6]); Restore(run.completed, parts[7]); run.claimedRewards.AddRange(parts[8].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
+        }
+        private static RogueliteMapRun FromMap1(string[] parts)
+        {
             var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AwaitingReward = parts[8] == "1" };
-            run.unlocked.Clear(); foreach (string id in parts[5].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) run.unlocked.Add(id);
-            foreach (string id in parts[6].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) run.completed.Add(id);
-            run.claimedRewards.AddRange(parts[7].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
+            Restore(run.visited, parts[5]); Restore(run.completed, parts[6]); run.claimedRewards.AddRange(parts[7].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+            if (run.visited.Contains("core_finale")) run.AccessCards = 1;
+            return run;
+        }
+        private static void Restore(HashSet<string> destination, string source)
+        {
+            destination.Clear(); foreach (string id in source.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) if (RogueliteMapCatalog.Nodes.Any(node => node.Id == id)) destination.Add(id);
+            destination.Add("start");
         }
         public void ApplyBuild(UnitState hero)
         {

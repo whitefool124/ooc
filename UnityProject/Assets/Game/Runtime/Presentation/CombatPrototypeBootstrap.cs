@@ -212,7 +212,17 @@ namespace OCC.Combat.Presentation
         public void StartMapRoguelite(bool continueSave) { mapRun = continueSave && PlayerPrefs.HasKey(MapRogueliteSaveKey) ? RogueliteMapRun.FromJson(PlayerPrefs.GetString(MapRogueliteSaveKey)) : new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue)); mapMenuOpen = true; rogueliteMenuOpen = false; PlayMapEntrance(); }
         public void DeleteMapRogueliteSave() { PlayerPrefs.DeleteKey(MapRogueliteSaveKey); PlayerPrefs.Save(); }
         public bool HasMapRogueliteSave => PlayerPrefs.HasKey(MapRogueliteSaveKey);
-        public void SelectMapNode(string nodeId) { mapRun.SelectNode(nodeId); SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
+        public void SelectMapNode(string nodeId)
+        {
+            mapRun.SelectNode(nodeId);
+            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
+            if (!node.IsCombat)
+            {
+                if (!mapRun.CompletedNodes.Contains(nodeId) && node.Type != RogueliteMapNodeType.Start) mapRun.CompleteCurrentNode();
+                SaveMapRun(); PlayMapEntrance(); return;
+            }
+            SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
         public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); settlementPresentation?.RefreshNow(); }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
         private void SaveMapRun() { PlayerPrefs.SetString(MapRogueliteSaveKey, mapRun.ToJson()); PlayerPrefs.Save(); }
@@ -334,7 +344,7 @@ namespace OCC.Combat.Presentation
             Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
             GUI.color = new Color(.035f, .075f, .13f, .98f * mapPanelAlpha); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
             GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 900, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1050, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  权限卡 " + mapRun.AccessCards + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
             if (mapRun.AwaitingReward)
             {
                 GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
@@ -342,10 +352,9 @@ namespace OCC.Combat.Presentation
                 for (int i = 0; i < rewards.Count; i++) if (GUI.Button(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName + "\n" + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"))) ClaimMapReward(rewards[i].Id);
                 GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); GUI.matrix = previous; return;
             }
-            GUI.Label(new Rect(390, 320, 900, 30), "选择已解锁的战斗节点推进；完成节点后解锁下一条路径。无时间压力。");
-            DrawMapNode("rail_patrol", new Rect(470, 440, 260, 96), "铁路巡逻 / 歼灭");
-            DrawMapNode("relay_raid", new Rect(1110, 440, 260, 96), "野战中继 / 破坏");
-            DrawMapNode("core_finale", new Rect(790, 650, 260, 96), "主干站 / 终点");
+            GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
+            DrawMapConnections();
+            foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
             if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
             if (GUI.Button(new Rect(1350, 820, 180, 42), "返回菜单")) ReturnToDeveloperMenu();
             GUI.matrix = previous;
@@ -356,10 +365,37 @@ namespace OCC.Combat.Presentation
             // The map must remain readable even when an editor execution path does not tick tween updates.
             DOTween.To(() => mapPanelScale, value => mapPanelScale = value, 1.015f, .12f).SetLoops(2, LoopType.Yoyo).SetId(this);
         }
-        private void DrawMapNode(string id, Rect rect, string label)
+        private void DrawMapConnections()
         {
-            bool unlocked = mapRun.UnlockedNodes.Contains(id); bool completed = mapRun.CompletedNodes.Contains(id); GUI.enabled = unlocked && !completed;
-            if (GUI.Button(rect, label + "\n" + (completed ? "已完成" : unlocked ? "可进入" : "未解锁"))) SelectMapNode(id);
+            foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes)
+            foreach (string nextId in node.NextIds.Where(id => string.CompareOrdinal(node.Id, id) < 0))
+            {
+                RogueliteMapNode next = RogueliteMapCatalog.Node(nextId);
+                Vector2 from = MapNodeCenter(node); Vector2 to = MapNodeCenter(next);
+                Color color = mapRun.AccessCards >= Math.Max(node.RequiredAccessCards, next.RequiredAccessCards) ? new Color(.22f, .5f, .58f, .8f) : new Color(.62f, .3f, .18f, .85f);
+                DrawMapLine(from, to, color);
+            }
+        }
+        private static Vector2 MapNodeCenter(RogueliteMapNode node) => new Vector2(486 + node.GridX * 145, 402 + node.GridY * 82);
+        private void DrawMapLine(Vector2 from, Vector2 to, Color color)
+        {
+            Vector2 delta = to - from; float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+            Color previous = GUI.color; Matrix4x4 previousMatrix = GUI.matrix; GUI.color = color;
+            GUIUtility.RotateAroundPivot(angle, from);
+            GUI.DrawTexture(new Rect(from.x, from.y - 2f, delta.magnitude, 4f), barTexture != null ? barTexture : Texture2D.whiteTexture);
+            GUI.matrix = previousMatrix; GUI.color = previous;
+        }
+        private void DrawMapNode(RogueliteMapNode node)
+        {
+            bool visited = mapRun.VisitedNodes.Contains(node.Id); bool completed = mapRun.CompletedNodes.Contains(node.Id);
+            bool available = mapRun.IsNodeAvailable(node.Id); bool known = mapRun.IsNodeKnown(node.Id);
+            Vector2 center = MapNodeCenter(node); Rect rect = new Rect(center.x - 54, center.y - 24, 108, 48);
+            bool identified = visited || known;
+            string type = identified ? node.Type.ToString() : "???";
+            string name = identified ? node.DisplayName : "未知房间";
+            string state = node.Id == mapRun.CurrentNodeId ? "当前位置" : completed ? (node.IsCombat ? "安全" : "已访问") : available ? "可进入" : node.RequiredAccessCards > mapRun.AccessCards ? "权限门" : "未接壤";
+            GUI.enabled = available;
+            if (GUI.Button(rect, name + "\n" + type + " / " + state)) SelectMapNode(node.Id);
             GUI.enabled = true;
         }
         private void DrawShortRunInterlude()

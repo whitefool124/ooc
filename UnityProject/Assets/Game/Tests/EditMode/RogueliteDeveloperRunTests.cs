@@ -81,16 +81,43 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_UnlocksBranchesSettlesAndRoundTrips()
+        public void MapRun_VisitsAdjacentRoomsSettlesAndRoundTrips()
         {
             var run = new RogueliteMapRun(901);
-            Assert.That(run.UnlockedNodes, Does.Contain("start"));
+            Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(20));
+            Assert.That(run.VisitedNodes, Does.Contain("start"));
             Assert.Throws<InvalidOperationException>(() => run.SelectNode("core_finale"));
             run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
-            Assert.That(run.Level, Is.EqualTo(2)); Assert.That(run.AwaitingReward, Is.True); Assert.That(run.UnlockedNodes, Does.Contain("core_finale"));
+            Assert.That(run.Level, Is.EqualTo(2)); Assert.That(run.AwaitingReward, Is.True); Assert.That(run.CompletedNodes, Does.Contain("rail_patrol"));
             string reward = run.CurrentRewards[0].Id; run.ClaimReward(reward);
             var restored = RogueliteMapRun.FromJson(run.ToJson());
             Assert.That(restored.ClaimedRewards, Does.Contain(reward)); Assert.That(restored.AwaitingReward, Is.False);
+        }
+
+        [Test]
+        public void MapRun_VisitedRoomsCanBeRevisitedAndPermissionGateNeedsCard()
+        {
+            var run = new RogueliteMapRun(902);
+            run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
+            run.SelectNode("start"); run.SelectNode("rail_patrol");
+            Assert.That(run.VisitedNodes, Does.Contain("rail_patrol"));
+            Assert.Throws<InvalidOperationException>(() => run.SelectNode("relay_event"));
+
+            run.SelectNode("switchyard"); run.CompleteCurrentNode(); run.SelectNode("relay_event"); run.CompleteCurrentNode();
+            run.SelectNode("med_bay"); run.CompleteCurrentNode(); run.SelectNode("permit_archive"); run.CompleteCurrentNode();
+            Assert.That(run.AccessCards, Is.EqualTo(1));
+            run.SelectNode("safety_room"); run.SelectNode("aether_refinery"); run.SelectNode("transmission_tower");
+            Assert.That(run.CurrentNodeId, Is.EqualTo("transmission_tower"));
+            Assert.That(RogueliteMapRun.FromJson(run.ToJson()).AccessCards, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MapRun_ImportsLegacyMap1Save()
+        {
+            var restored = RogueliteMapRun.FromJson("map1|17|rail_patrol|2|1|start,rail_patrol|rail_patrol|war_hammer|0");
+            Assert.That(restored.CurrentNodeId, Is.EqualTo("rail_patrol"));
+            Assert.That(restored.VisitedNodes, Does.Contain("rail_patrol"));
+            Assert.That(restored.ClaimedRewards, Does.Contain("war_hammer"));
         }
 
         [Test]
