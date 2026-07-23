@@ -36,6 +36,8 @@ namespace OCC.Combat.Presentation
         private RogueliteSettlementPresentation settlementPresentation;
         private float mapPanelAlpha = 1f;
         private float mapPanelScale = 1f;
+        private float menuPanelAlpha = 1f;
+        private float menuPanelScale = 1f;
 
         private void OnEnable()
         {
@@ -50,6 +52,9 @@ namespace OCC.Combat.Presentation
             visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
             settlementPresentation = gameObject.AddComponent<RogueliteSettlementPresentation>(); settlementPresentation.Initialize(this);
             BuildCombatFromSceneStageTwo();
+            menuPanelAlpha = 0f; menuPanelScale = .96f;
+            DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
+            DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
         }
 
         private void Awake()
@@ -334,12 +339,39 @@ namespace OCC.Combat.Presentation
         }
         private void DrawDeveloperMenu()
         {
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(540, 250, 840, 470), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(590, 300, 740, 38), "OCC  开发测试菜单"); GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(590, 352, 740, 28), "从战前简报进入一场完整战斗，并可随时战术重开。"); GUI.color = Color.white;
-            GUI.Label(new Rect(590, 410, 740, 28), "任务：" + developerPreparation.MissionId + "  ·  破坏目标"); GUI.Label(new Rect(590, 448, 740, 28), "敌人：" + developerPreparation.EnemySummary);
-            if (GUI.Button(new Rect(590, 510, 350, 54), "剧情测试：查看战前简报")) OpenDeveloperBriefing();
-            if (GUI.Button(new Rect(980, 510, 350, 54), "肉鸽地图：开始推进")) StartMapRoguelite(false);
-            GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(590, 620, 740, 28), "开发菜单  →  战前简报  →  战斗  →  结算  →  战术重开"); GUI.color = Color.white;
+            Matrix4x4 previous = GUI.matrix;
+            GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * menuPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
+            GUI.color = new Color(.018f, .028f, .042f, .98f); GUI.DrawTexture(new Rect(0, 0, UiWidth, UiHeight), Texture2D.whiteTexture);
+            GUI.color = new Color(.10f, .68f, .78f, .16f * menuPanelAlpha); GUI.DrawTexture(new Rect(120, 140, 8, 760), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(1792, 140, 8, 760), Texture2D.whiteTexture);
+            GUI.color = new Color(.045f, .072f, .096f, .98f * menuPanelAlpha); GUI.Box(new Rect(220, 150, 1480, 760), "");
+            GUI.color = new Color(.35f, .9f, 1f, menuPanelAlpha); GUI.DrawTexture(new Rect(260, 202, 124, 4), Texture2D.whiteTexture); GUI.Label(new Rect(260, 228, 1080, 42), "OCC // 行动控制台");
+            GUI.color = new Color(.58f, .66f, .71f, menuPanelAlpha); GUI.Label(new Rect(260, 280, 1100, 28), "选择行动包。所有路径均可在战前简报确认目标、敌情和重开规则。");
+
+            DrawMenuInfoPanel(new Rect(260, 350, 650, 210), "剧情行动", "中继器破坏演练", "任务  " + developerPreparation.MissionId + "\n敌情  " + developerPreparation.EnemySummary, new Color(.35f, .9f, 1f));
+            DrawMenuInfoPanel(new Rect(1010, 350, 650, 210), "肉鸽区域", "自由回访推进", "20 节点正交网络  /  权限门\n商店、工坊、事件与区域首领", new Color(1f, .76f, .25f));
+            if (DrawMenuAction(new Rect(260, 610, 650, 86), "进入战前简报", "剧情测试  /  破坏目标", new Color(.20f, .78f, .94f))) OpenDeveloperBriefing();
+            if (DrawMenuAction(new Rect(1010, 610, 650, 86), "开始自由推进", "肉鸽地图  /  新开区域", new Color(1f, .70f, .20f))) StartMapRoguelite(false);
+            GUI.color = new Color(.42f, .52f, .57f, menuPanelAlpha); GUI.Label(new Rect(260, 770, 1300, 26), "开发菜单  /  战前简报  /  正式战斗  /  结算奖励  /  战术重开");
+            GUI.color = Color.white; GUI.matrix = previous;
+        }
+
+        private static void DrawMenuInfoPanel(Rect rect, string label, string title, string details, Color accent)
+        {
+            GUI.color = new Color(.025f, .04f, .055f, .98f); GUI.Box(rect, "");
+            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 4, rect.height), Texture2D.whiteTexture); GUI.Label(new Rect(rect.x + 28, rect.y + 22, rect.width - 50, 24), label);
+            GUI.color = new Color(.9f, .94f, .96f); GUI.Label(new Rect(rect.x + 28, rect.y + 58, rect.width - 50, 30), title);
+            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(rect.x + 28, rect.y + 106, rect.width - 50, 74), details);
+        }
+
+        private static bool DrawMenuAction(Rect rect, string title, string subtitle, Color accent)
+        {
+            bool hover = rect.Contains(Event.current.mousePosition);
+            GUI.color = hover ? new Color(accent.r, accent.g, accent.b, .22f) : new Color(.055f, .085f, .105f, 1f); GUI.Box(rect, "");
+            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, 3), Texture2D.whiteTexture);
+            GUI.color = new Color(.92f, .96f, .98f); GUI.Label(new Rect(rect.x + 26, rect.y + 16, rect.width - 52, 28), title);
+            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(rect.x + 26, rect.y + 48, rect.width - 52, 22), subtitle);
+            GUI.color = Color.white;
+            return GUI.Button(rect, GUIContent.none, GUIStyle.none);
         }
         private void DrawRogueliteMenu()
         {
