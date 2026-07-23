@@ -427,8 +427,10 @@ namespace OCC.Combat.Presentation
             GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
             if (DrawMapContentChoices()) { GUI.matrix = previous; return; }
             if (DrawMapWorkshop()) { GUI.matrix = previous; return; }
+            DrawIndustrialMapBackdrop();
             DrawMapConnections();
             foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
+            DrawMapLegend();
             if (DrawConsoleButton(new Rect(390, 820, 240, 48), "读取推进", "继续已有地图", new Color(.35f, .9f, 1f))) StartMapRoguelite(true);
             if (DrawConsoleButton(new Rect(1350, 820, 180, 48), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
             GUI.matrix = previous;
@@ -452,6 +454,45 @@ namespace OCC.Combat.Presentation
                 Color color = traversable ? new Color(.35f, .9f, 1f, .9f) : explored ? new Color(.34f, .68f, .61f, .65f) : (fromState == RogueliteMapNodeVisualState.Locked || toState == RogueliteMapNodeVisualState.Locked) ? new Color(.82f, .34f, .24f, .9f) : new Color(.23f, .3f, .34f, .55f);
                 DrawMapLine(from, to, color);
             }
+        }
+        private void DrawIndustrialMapBackdrop()
+        {
+            DrawDistrict(new Rect(400, 332, 300, 430), "01  铁路前线", "入口 / 巡逻 / 补给", new Color(.20f, .48f, .56f, .17f));
+            DrawDistrict(new Rect(708, 332, 510, 430), "02  工业网格", "中继 / 工坊 / 铸造", new Color(.42f, .36f, .22f, .16f));
+            DrawDistrict(new Rect(1226, 332, 300, 430), "03  核心隔离区", "权限门 / 传输 / 核心", new Color(.52f, .20f, .16f, .17f));
+            GUI.color = new Color(.37f, .49f, .52f, .22f);
+            for (int y = 378; y <= 714; y += 82) GUI.DrawTexture(new Rect(430, y, 1060, 2), Texture2D.whiteTexture);
+            GUI.color = new Color(.35f, .9f, 1f, .16f);
+            GUI.DrawTexture(new Rect(444, 372, 1030, 5), Texture2D.whiteTexture);
+            for (int x = 452; x < 1470; x += 56) GUI.DrawTexture(new Rect(x, 366, 12, 17), Texture2D.whiteTexture);
+            GUI.color = new Color(1f, .72f, .24f, .14f);
+            GUI.DrawTexture(new Rect(444, 706, 1030, 3), Texture2D.whiteTexture);
+            for (int x = 466; x < 1470; x += 92) GUI.DrawTexture(new Rect(x, 700, 4, 15), Texture2D.whiteTexture);
+            GUI.color = Color.white;
+        }
+
+        private static void DrawDistrict(Rect rect, string label, string detail, Color color)
+        {
+            GUI.color = color; GUI.Box(rect, "");
+            GUI.color = new Color(.55f, .64f, .68f, .48f); GUI.Label(new Rect(rect.x + 14, rect.y + 12, rect.width - 28, 20), label);
+            GUI.color = new Color(.45f, .53f, .57f, .38f); GUI.Label(new Rect(rect.x + 14, rect.y + 34, rect.width - 28, 18), detail);
+            GUI.color = Color.white;
+        }
+
+        private static void DrawMapLegend()
+        {
+            GUI.color = new Color(.025f, .04f, .052f, .96f); GUI.Box(new Rect(670, 770, 620, 38), "");
+            DrawLegendChip(new Rect(686, 780, 12, 12), new Color(.35f, .9f, 1f), "可走");
+            DrawLegendChip(new Rect(790, 780, 12, 12), new Color(.34f, .72f, .62f), "已探索");
+            DrawLegendChip(new Rect(910, 780, 12, 12), new Color(.82f, .34f, .24f), "权限门");
+            DrawLegendChip(new Rect(1035, 780, 12, 12), new Color(.28f, .34f, .38f), "未知");
+            GUI.color = Color.white;
+        }
+
+        private static void DrawLegendChip(Rect rect, Color color, string label)
+        {
+            GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture);
+            GUI.color = new Color(.67f, .73f, .76f); GUI.Label(new Rect(rect.x + 18, rect.y - 4, 78, 20), label);
         }
         private bool DrawMapContentChoices()
         {
