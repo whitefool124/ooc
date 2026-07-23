@@ -105,6 +105,8 @@
 
 ## 验证记录
 
+| 2026-07-23 | V1-06 最终回归 | PARTIAL PASS | Play Mode 运行时流程断言：战前简报、正式战斗、攻击反馈、战术重开、返回菜单、大地图入口均通过；节点完成与奖励领取通过；摄像机标签修复后 `Camera.main=present`；1920x1080 / 960x540 截图成功。Funplay 编译 0 错误/警告；Console 仅两条既有 RenderTexture.active 警告。IMGUI 控件不提供 uGUI 射线目标，`simulate_mouse_click` 无法证明鼠标命中；独立 EditMode Test Runner 不可用，保留现有 EditMode 测试程序集证据。|
+
 | 2026-07-23 | V1-06 摄像机与流程补充 | PARTIAL PASS | 修复运行时未设置 MainCamera 标签的问题；Play Mode 断言 `Camera.main=present`、战前简报/正式战斗/战术重开/返回菜单/大地图入口均成功。点击工具在 IMGUI 画布采样点仍无 UI 命中，故保留为验证限制；编译错误/警告 0。|
 
 | 2026-07-23 | V1-06 验收补充 | PARTIAL PASS | 场景信息确认 `Assets/Scenes/CombatPrototype.unity` loaded 且 `isDirty=false`；运行时断言节点完成后解锁并领取奖励成功；V1-04 反馈对象生成成功；Funplay 编译错误/警告 0。`simulate_mouse_click` 在退出 Play Mode 后按工具约束返回 PLAY_MODE_REQUIRED；聚焦 EditMode 无独立 MCP Test Runner，保留现有 EditMode 测试程序集作为覆盖证据。Console 有两条既有 RenderTexture.active 警告，无新增脚本错误。|
