@@ -27,7 +27,7 @@ namespace OCC.Combat
     }
 
     public enum RogueliteRewardKind { Weapon, Spell }
-    public enum RogueliteNodeContentEffect { Supplies, ScoutingBeacon, AccessCard, Reward }
+    public enum RogueliteNodeContentEffect { Supplies, ScoutingBeacon, AccessCard, Reward, Aether }
     public sealed class RogueliteNodeContentChoice
     {
         public string Id { get; }
@@ -53,6 +53,7 @@ namespace OCC.Combat
                     return new[]
                     {
                         new RogueliteNodeContentChoice("survey", "低风险勘测", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon),
+                        new RogueliteNodeContentChoice("purify", "净化导管", "收益：+1 补给、+1 以太；无额外战斗。", RogueliteNodeContentEffect.Aether),
                         new RogueliteNodeContentChoice("overload", "超载回收", "收益：+1 权限卡；后果：进入一场额外战斗。", RogueliteNodeContentEffect.AccessCard, requiresCombat: true, combatMissionId: "relay_event")
                     };
                 case RogueliteMapNodeType.Rest:
@@ -89,10 +90,11 @@ namespace OCC.Combat
         public string Id { get; }
         public string DisplayName { get; }
         public RogueliteRewardKind Kind { get; }
+        public string BuildPath { get; }
         public WeaponDefinition Weapon { get; }
         public SkillDefinition Spell { get; }
-        public RogueliteReward(string id, string displayName, WeaponDefinition weapon) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Weapon; Weapon = weapon; }
-        public RogueliteReward(string id, string displayName, SkillDefinition spell) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Spell; Spell = spell; }
+        public RogueliteReward(string id, string displayName, WeaponDefinition weapon, string buildPath) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Weapon; Weapon = weapon; BuildPath = buildPath; }
+        public RogueliteReward(string id, string displayName, SkillDefinition spell, string buildPath) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Spell; Spell = spell; BuildPath = buildPath; }
     }
 
     public static class RogueliteMapCatalog
@@ -123,11 +125,11 @@ namespace OCC.Combat
         };
         public static readonly IReadOnlyList<RogueliteReward> Rewards = new[]
         {
-            new RogueliteReward("war_hammer", "破甲战锤", CombatCatalog.Hammer),
-            new RogueliteReward("aether_wand", "以太手杖", CombatCatalog.Wand),
-            new RogueliteReward("fire_bolt", "火矢术式", CombatCatalog.FireBolt),
-            new RogueliteReward("frost_bind", "冰缚术式", CombatCatalog.FrostBind),
-            new RogueliteReward("arcane_wand", "以太聚焦手杖", StageTwoBuilds.ArcaneWand)
+            new RogueliteReward("war_hammer", "破甲战锤", CombatCatalog.Hammer, "突击"),
+            new RogueliteReward("aether_wand", "以太手杖", CombatCatalog.Wand, "控制"),
+            new RogueliteReward("fire_bolt", "火矢术式", CombatCatalog.FireBolt, "突击"),
+            new RogueliteReward("frost_bind", "冰缚术式", CombatCatalog.FrostBind, "控制"),
+            new RogueliteReward("arcane_wand", "以太聚焦手杖", StageTwoBuilds.ArcaneWand, "以太")
         };
         public static RogueliteMapNode Node(string id) => Nodes.First(node => node.Id == id);
         public static IReadOnlyList<RogueliteReward> RollRewards(int seed, int completedCombatCount)
@@ -151,6 +153,7 @@ namespace OCC.Combat
         public int ScoutingBeacons { get; private set; }
         public int Parts { get; private set; } = 4;
         public int Aether { get; private set; } = 2;
+        public string RegionBossId { get; private set; }
         public string EquippedWeaponId { get; private set; }
         public string EquippedSpellId { get; private set; }
         public bool IsAetherCalibrated { get; private set; }
@@ -165,7 +168,7 @@ namespace OCC.Combat
         public IReadOnlyList<RogueliteReward> CurrentRewards => AwaitingReward ? RogueliteMapCatalog.RollRewards(Seed, completed.Count) : Array.Empty<RogueliteReward>();
         public IReadOnlyList<RogueliteNodeContentChoice> CurrentContentChoices => RogueliteNodeContentCatalog.ChoicesFor(RogueliteMapCatalog.Node(CurrentNodeId));
         public bool HasPendingContentCombat => !string.IsNullOrEmpty(PendingContentCombatMissionId);
-        public RogueliteMapRun(int seed) { Seed = seed; }
+        public RogueliteMapRun(int seed) { Seed = seed; RegionBossId = seed % 2 == 0 ? "core_overseer" : "purifier_overseer"; }
 
         public bool IsAdjacentToCurrent(string nodeId) => RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
         public bool IsNodeAvailable(string nodeId)
@@ -214,6 +217,7 @@ namespace OCC.Combat
             if (choice.Effect == RogueliteNodeContentEffect.Supplies) Supplies++;
             else if (choice.Effect == RogueliteNodeContentEffect.ScoutingBeacon) ScoutingBeacons++;
             else if (choice.Effect == RogueliteNodeContentEffect.AccessCard) AccessCards++;
+            else if (choice.Effect == RogueliteNodeContentEffect.Aether) { Supplies++; Aether++; }
             else if (choice.Effect == RogueliteNodeContentEffect.Reward && !claimedRewards.Contains(choice.RewardId)) claimedRewards.Add(choice.RewardId);
         }
         private void Complete(RogueliteMapNode node, bool offerReward)
@@ -234,14 +238,20 @@ namespace OCC.Combat
             if (Aether < 2) throw new InvalidOperationException("Insufficient aether for calibration.");
             Aether -= 2; IsAetherCalibrated = true;
         }
-        public string ToJson() => string.Join("|", "map4", Seed, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, Parts, Aether, EquippedWeaponId ?? string.Empty, EquippedSpellId ?? string.Empty, IsAetherCalibrated ? "1" : "0", PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
+        public string ToJson() => string.Join("|", "map5", Seed, RegionBossId, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, Parts, Aether, EquippedWeaponId ?? string.Empty, EquippedSpellId ?? string.Empty, IsAetherCalibrated ? "1" : "0", PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
         public static RogueliteMapRun FromJson(string json)
         {
             string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
             if (parts.Length == 9 && parts[0] == "map1") return FromMap1(parts);
             if (parts.Length == 10 && parts[0] == "map2") return FromMap2(parts);
             if (parts.Length == 14 && parts[0] == "map3") return FromMap3(parts);
-            if (parts.Length != 19 || parts[0] != "map4") throw new InvalidOperationException("Unsupported map run save version.");
+            if (parts.Length == 19 && parts[0] == "map4") return FromMap4(parts);
+            if (parts.Length != 20 || parts[0] != "map5") throw new InvalidOperationException("Unsupported map run save version.");
+            var run = new RogueliteMapRun(int.Parse(parts[1])) { RegionBossId = parts[2], CurrentNodeId = parts[3], Level = int.Parse(parts[4]), Experience = int.Parse(parts[5]), AccessCards = int.Parse(parts[6]), Supplies = int.Parse(parts[7]), ScoutingBeacons = int.Parse(parts[8]), Parts = int.Parse(parts[9]), Aether = int.Parse(parts[10]), EquippedWeaponId = parts[11], EquippedSpellId = parts[12], IsAetherCalibrated = parts[13] == "1", PendingContentChoiceId = parts[14], PendingContentCombatMissionId = parts[15], AwaitingReward = parts[19] == "1" };
+            Restore(run.visited, parts[16]); Restore(run.completed, parts[17]); run.claimedRewards.AddRange(parts[18].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
+        }
+        private static RogueliteMapRun FromMap4(string[] parts)
+        {
             var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), Supplies = int.Parse(parts[6]), ScoutingBeacons = int.Parse(parts[7]), Parts = int.Parse(parts[8]), Aether = int.Parse(parts[9]), EquippedWeaponId = parts[10], EquippedSpellId = parts[11], IsAetherCalibrated = parts[12] == "1", PendingContentChoiceId = parts[13], PendingContentCombatMissionId = parts[14], AwaitingReward = parts[18] == "1" };
             Restore(run.visited, parts[15]); Restore(run.completed, parts[16]); run.claimedRewards.AddRange(parts[17].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
         }

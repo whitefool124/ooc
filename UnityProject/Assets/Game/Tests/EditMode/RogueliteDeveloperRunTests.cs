@@ -211,6 +211,39 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MapRun_SeedLocksBossVariantAndMap5PersistsIt()
+        {
+            var even = new RogueliteMapRun(620);
+            var odd = new RogueliteMapRun(621);
+            Assert.That(even.RegionBossId, Is.EqualTo("core_overseer")); Assert.That(odd.RegionBossId, Is.EqualTo("purifier_overseer"));
+            Assert.That(RogueliteMapRun.FromJson(odd.ToJson()).RegionBossId, Is.EqualTo("purifier_overseer"));
+            EnemyArchetype purifier = EnemyArchetypes.Get(odd.RegionBossId);
+            Assert.That(purifier.MaxHealth, Is.EqualTo(26)); Assert.That(purifier.Shield, Is.EqualTo(6)); Assert.That(purifier.Armor, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MapRun_EventPurifyPreviewGivesSuppliesAndAetherWithoutCombat()
+        {
+            var run = new RogueliteMapRun(622);
+            run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
+            run.SelectNode("switchyard");
+            RogueliteNodeContentChoice purify = run.CurrentContentChoices.Single(choice => choice.Id == "purify");
+            Assert.That(purify.RequiresCombat, Is.False); Assert.That(purify.Preview, Does.Contain("无额外战斗"));
+            int aether = run.Aether; run.ChooseCurrentNodeContent("purify");
+            Assert.That(run.Supplies, Is.EqualTo(1)); Assert.That(run.Aether, Is.EqualTo(aether + 1));
+        }
+
+        [Test]
+        public void MapRun_RewardChoicesAlwaysSpanAtLeastTwoBuildPaths()
+        {
+            for (int seed = 1; seed <= 30; seed++)
+            {
+                var run = new RogueliteMapRun(seed); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
+                Assert.That(run.CurrentRewards.Select(reward => reward.BuildPath).Distinct().Count(), Is.GreaterThanOrEqualTo(2));
+            }
+        }
+
+        [Test]
         public void MapRun_OffersMixedWeaponAndSpellRewards()
         {
             for (int seed = 1; seed < 20; seed++)

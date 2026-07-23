@@ -29,8 +29,10 @@ namespace OCC.Combat
             { "core_finale", new RogueliteEncounterDefinition("core_finale", false, true, "core_overseer", "warden", "binder", "shieldguard") }
         };
 
-        public static RogueliteEncounterDefinition For(string nodeId)
+        public static RogueliteEncounterDefinition For(string nodeId, string regionBossId = null)
         {
+            if (nodeId == "core_finale" && !string.IsNullOrEmpty(regionBossId))
+                return new RogueliteEncounterDefinition("core_finale", false, true, regionBossId, "warden", "binder", "shieldguard");
             return encounters.TryGetValue(nodeId, out RogueliteEncounterDefinition encounter)
                 ? encounter : new RogueliteEncounterDefinition(nodeId, false, false, "rifleman", "shieldguard", "pyromancer");
         }

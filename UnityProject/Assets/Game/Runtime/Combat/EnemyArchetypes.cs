@@ -41,6 +41,7 @@ namespace OCC.Combat
             new EnemyArchetype("binder", "束缚术士", 0, 2, 0, 8, CombatCatalog.Wand),
             new EnemyArchetype("elite_vanguard", "精英先锋", 2, 4, 2, 10, CombatCatalog.Hammer, true)
             ,new EnemyArchetype("core_overseer", "核心守备监工", 3, 4, 2, 8, CombatCatalog.Hammer, true, 30)
+            ,new EnemyArchetype("purifier_overseer", "以太净化监工", 1, 6, 1, 9, CombatCatalog.Wand, true, 26)
         };
 
         public static EnemyArchetype Get(string id)
