@@ -28,6 +28,9 @@ namespace OCC.Combat.Presentation
         private Image healthFill;
         private Image shieldFill;
         private Image manaFill;
+        private GameObject outcomeOverlay;
+        private Text outcomeTitle;
+        private Text[] quickbarLabels = new Text[4];
         private float displayedHealth = -1f;
         private float displayedShield = -1f;
         private float displayedMana = -1f;
@@ -100,6 +103,14 @@ namespace OCC.Combat.Presentation
             endTurn.onClick.AddListener(() => bootstrap.EndHeroTurn());
             Button console = Button(bottom.transform, "开发控制台", new Vector2(1160, -48), new Vector2(210, 70), "开发控制台  F1", new Color(.12f, .105f, .055f, 1f));
             console.onClick.AddListener(bootstrap.ToggleDeveloperConsole);
+            for (int i = 0; i < quickbarLabels.Length; i++)
+            {
+                int slot = i;
+                Button quick = Button(bottom.transform, "快捷栏" + i, new Vector2(20 + i * 112, 12), new Vector2(98, 28), "", new Color(.07f, .075f, .07f, 1f));
+                quickbarLabels[i] = quick.GetComponentInChildren<Text>();
+                quick.onClick.AddListener(() => bootstrap.UseQuickbarSlot(slot));
+            }
+            CreateOutcomeOverlay();
         }
 
         private void Refresh()
@@ -121,11 +132,28 @@ namespace OCC.Combat.Presentation
                 timeline[i].color = i < units.Length && units[i].Id == state.ActiveUnitId ? line : muted;
             }
             eventLabel.text = state.EventLog.Count == 0 ? "等待战术指令。" : state.EventLog[0];
+            for (int i = 0; i < quickbarLabels.Length; i++)
+                quickbarLabels[i].text = state.Quickbar[i] == null ? (i + 1) + "  空" : (i + 1) + "  " + state.Quickbar[i].DisplayName;
+            bool outcome = bootstrap.IsCombatOutcomeVisible;
+            outcomeOverlay.SetActive(outcome);
+            if (outcome) outcomeTitle.text = bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止";
             foreach (KeyValuePair<string, Button> pair in actionButtons)
             {
                 Image image = pair.Value.GetComponent<Image>();
                 image.color = pair.Key == bootstrap.SelectedAction ? new Color(.10f, .31f, .35f, 1f) : new Color(.055f, .08f, .09f, 1f);
             }
+        }
+
+        private void CreateOutcomeOverlay()
+        {
+            outcomeOverlay = Panel("战斗结果", root.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero, new Vector2(720, 330), new Color(.012f, .018f, .024f, .97f));
+            outcomeTitle = Label("结果标题", outcomeOverlay.transform, new Vector2(40, -34), new Vector2(640, 58), 36, text, TextAnchor.MiddleCenter);
+            Label("结果说明", outcomeOverlay.transform, new Vector2(40, -102), new Vector2(640, 34), 17, muted, TextAnchor.MiddleCenter).text = "战术记录已封存。请选择下一步。";
+            Button restart = Button(outcomeOverlay.transform, "结果重开", new Vector2(60, -180), new Vector2(280, 64), "战术重开", new Color(.08f, .20f, .22f, 1f));
+            restart.onClick.AddListener(bootstrap.TacticalRestartDeveloperCombat);
+            Button back = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -180), new Vector2(280, 64), "返回入口", new Color(.12f, .10f, .06f, 1f));
+            back.onClick.AddListener(bootstrap.ReturnToDeveloperMenu);
+            outcomeOverlay.SetActive(false);
         }
 
         private Image ResourceBar(Transform parent, string title, Vector2 position, Color color)
