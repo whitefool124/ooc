@@ -150,14 +150,42 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_RewardChoicesAreDeterministicAndApplyToBuild()
+        public void MapRun_RewardChoicesAreDeterministicAndRequireWorkshopEquip()
         {
             var first = new RogueliteMapRun(77); first.SelectNode("rail_patrol"); first.CompleteCurrentCombat();
             var second = new RogueliteMapRun(77); second.SelectNode("rail_patrol"); second.CompleteCurrentCombat();
             Assert.That(first.CurrentRewards.Select(reward => reward.Id), Is.EqualTo(second.CurrentRewards.Select(reward => reward.Id)));
             string weaponId = first.CurrentRewards.First(reward => reward.Kind == RogueliteRewardKind.Weapon).Id; first.ClaimReward(weaponId);
             var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); first.ApplyBuild(hero);
+            Assert.That(hero.MainHand.Id, Is.EqualTo(CombatCatalog.Rifle.Id));
+            first.EquipReward(weaponId); first.ApplyBuild(hero);
             Assert.That(hero.MainHand.Id, Is.EqualTo(RogueliteMapCatalog.Rewards.First(reward => reward.Id == weaponId).Weapon.Id));
+        }
+
+        [Test]
+        public void MapRun_ShopCostsAndWorkshopCalibrationPersist()
+        {
+            var run = new RogueliteMapRun(617);
+            Assert.That(run.Parts, Is.EqualTo(4)); Assert.That(run.Aether, Is.EqualTo(2));
+            run.SelectNode("supply_checkpoint"); run.ChooseCurrentNodeContent("medical_cache");
+            Assert.That(run.Parts, Is.EqualTo(2)); Assert.That(run.Supplies, Is.EqualTo(1));
+            run.SelectNode("field_workshop"); run.ChooseCurrentNodeContent("wand_calibration");
+            Assert.That(run.ClaimedRewards, Does.Contain("arcane_wand"));
+            run.EquipReward("arcane_wand"); run.CalibrateAether();
+            var restored = RogueliteMapRun.FromJson(run.ToJson());
+            Assert.That(restored.EquippedWeaponId, Is.EqualTo("arcane_wand")); Assert.That(restored.IsAetherCalibrated, Is.True); Assert.That(restored.Aether, Is.EqualTo(0));
+            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East) { Armor = 1 };
+            restored.ApplyBuild(hero);
+            Assert.That(hero.MainHand.Id, Is.EqualTo("arcane_wand")); Assert.That(hero.Armor, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void MapRun_ShopRejectsPurchaseWithoutEnoughCurrency()
+        {
+            var run = new RogueliteMapRun(618);
+            run.SelectNode("supply_checkpoint"); run.ChooseCurrentNodeContent("medical_cache");
+            Assert.Throws<InvalidOperationException>(() => run.ChooseCurrentNodeContent("signal_contract"));
+            Assert.That(run.ScoutingBeacons, Is.EqualTo(0));
         }
 
         [Test]

@@ -37,8 +37,10 @@ namespace OCC.Combat
         public string RewardId { get; }
         public bool RequiresCombat { get; }
         public string CombatMissionId { get; }
-        public RogueliteNodeContentChoice(string id, string displayName, string preview, RogueliteNodeContentEffect effect, string rewardId = null, bool requiresCombat = false, string combatMissionId = null)
-        { Id = id; DisplayName = displayName; Preview = preview; Effect = effect; RewardId = rewardId; RequiresCombat = requiresCombat; CombatMissionId = combatMissionId; }
+        public int PartsCost { get; }
+        public int AetherCost { get; }
+        public RogueliteNodeContentChoice(string id, string displayName, string preview, RogueliteNodeContentEffect effect, string rewardId = null, bool requiresCombat = false, string combatMissionId = null, int partsCost = 0, int aetherCost = 0)
+        { Id = id; DisplayName = displayName; Preview = preview; Effect = effect; RewardId = rewardId; RequiresCombat = requiresCombat; CombatMissionId = combatMissionId; PartsCost = partsCost; AetherCost = aetherCost; }
     }
 
     public static class RogueliteNodeContentCatalog
@@ -68,8 +70,8 @@ namespace OCC.Combat
                 case RogueliteMapNodeType.Shop:
                     return new[]
                     {
-                        new RogueliteNodeContentChoice("medical_cache", "医疗补给", "收益：+1 补给；双货币价格将在 R2-03 接入。", RogueliteNodeContentEffect.Supplies),
-                        new RogueliteNodeContentChoice("signal_contract", "情报合约", "收益：+1 侦测信标；双货币价格将在 R2-03 接入。", RogueliteNodeContentEffect.ScoutingBeacon)
+                        new RogueliteNodeContentChoice("medical_cache", "医疗补给", "价格：2 零件；收益：+1 补给。", RogueliteNodeContentEffect.Supplies, partsCost: 2),
+                        new RogueliteNodeContentChoice("signal_contract", "情报合约", "价格：1 零件 + 1 以太；收益：+1 侦测信标。", RogueliteNodeContentEffect.ScoutingBeacon, partsCost: 1, aetherCost: 1)
                     };
                 case RogueliteMapNodeType.Treasure:
                     return new[]
@@ -147,6 +149,11 @@ namespace OCC.Combat
         public int AccessCards { get; private set; }
         public int Supplies { get; private set; }
         public int ScoutingBeacons { get; private set; }
+        public int Parts { get; private set; } = 4;
+        public int Aether { get; private set; } = 2;
+        public string EquippedWeaponId { get; private set; }
+        public string EquippedSpellId { get; private set; }
+        public bool IsAetherCalibrated { get; private set; }
         public string PendingContentChoiceId { get; private set; }
         public string PendingContentCombatMissionId { get; private set; }
         public bool AwaitingReward { get; private set; }
@@ -189,6 +196,8 @@ namespace OCC.Combat
             RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
             if (node.IsCombat || completed.Contains(node.Id) || HasPendingContentCombat) throw new InvalidOperationException("Current node content is not available.");
             RogueliteNodeContentChoice choice = CurrentContentChoices.FirstOrDefault(item => item.Id == choiceId) ?? throw new InvalidOperationException("Unknown node content choice.");
+            if (Parts < choice.PartsCost || Aether < choice.AetherCost) throw new InvalidOperationException("Insufficient parts or aether.");
+            Parts -= choice.PartsCost; Aether -= choice.AetherCost;
             PendingContentChoiceId = choice.Id;
             if (choice.RequiresCombat) { PendingContentCombatMissionId = choice.CombatMissionId; return; }
             ApplyContentChoice(choice); Complete(node, false); PendingContentChoiceId = null;
@@ -210,17 +219,34 @@ namespace OCC.Combat
         private void Complete(RogueliteMapNode node, bool offerReward)
         {
             completed.Add(node.Id); Experience++; if (Experience >= Level) Level++;
+            if (node.IsCombat) { Parts += 2; Aether++; }
             AccessCards += node.GrantedAccessCards;
             AwaitingReward = offerReward;
         }
         public void ClaimReward(string rewardId) { if (!AwaitingReward || CurrentRewards.All(reward => reward.Id != rewardId)) throw new InvalidOperationException("Reward is not available."); claimedRewards.Add(rewardId); AwaitingReward = false; }
-        public string ToJson() => string.Join("|", "map3", Seed, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
+        public void EquipReward(string rewardId)
+        {
+            RogueliteReward reward = claimedRewards.Contains(rewardId) ? RogueliteMapCatalog.Rewards.First(item => item.Id == rewardId) : throw new InvalidOperationException("Reward is not owned.");
+            if (reward.Kind == RogueliteRewardKind.Weapon) EquippedWeaponId = rewardId; else EquippedSpellId = rewardId;
+        }
+        public void CalibrateAether()
+        {
+            if (Aether < 2) throw new InvalidOperationException("Insufficient aether for calibration.");
+            Aether -= 2; IsAetherCalibrated = true;
+        }
+        public string ToJson() => string.Join("|", "map4", Seed, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, Parts, Aether, EquippedWeaponId ?? string.Empty, EquippedSpellId ?? string.Empty, IsAetherCalibrated ? "1" : "0", PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited), string.Join(",", completed), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0");
         public static RogueliteMapRun FromJson(string json)
         {
             string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
             if (parts.Length == 9 && parts[0] == "map1") return FromMap1(parts);
             if (parts.Length == 10 && parts[0] == "map2") return FromMap2(parts);
-            if (parts.Length != 14 || parts[0] != "map3") throw new InvalidOperationException("Unsupported map run save version.");
+            if (parts.Length == 14 && parts[0] == "map3") return FromMap3(parts);
+            if (parts.Length != 19 || parts[0] != "map4") throw new InvalidOperationException("Unsupported map run save version.");
+            var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), Supplies = int.Parse(parts[6]), ScoutingBeacons = int.Parse(parts[7]), Parts = int.Parse(parts[8]), Aether = int.Parse(parts[9]), EquippedWeaponId = parts[10], EquippedSpellId = parts[11], IsAetherCalibrated = parts[12] == "1", PendingContentChoiceId = parts[13], PendingContentCombatMissionId = parts[14], AwaitingReward = parts[18] == "1" };
+            Restore(run.visited, parts[15]); Restore(run.completed, parts[16]); run.claimedRewards.AddRange(parts[17].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
+        }
+        private static RogueliteMapRun FromMap3(string[] parts)
+        {
             var run = new RogueliteMapRun(int.Parse(parts[1])) { CurrentNodeId = parts[2], Level = int.Parse(parts[3]), Experience = int.Parse(parts[4]), AccessCards = int.Parse(parts[5]), Supplies = int.Parse(parts[6]), ScoutingBeacons = int.Parse(parts[7]), PendingContentChoiceId = parts[8], PendingContentCombatMissionId = parts[9], AwaitingReward = parts[13] == "1" };
             Restore(run.visited, parts[10]); Restore(run.completed, parts[11]); run.claimedRewards.AddRange(parts[12].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)); return run;
         }
@@ -243,12 +269,9 @@ namespace OCC.Combat
         }
         public void ApplyBuild(UnitState hero)
         {
-            foreach (string id in claimedRewards)
-            {
-                RogueliteReward reward = RogueliteMapCatalog.Rewards.First(item => item.Id == id);
-                if (reward.Kind == RogueliteRewardKind.Weapon) hero.Equip(reward.Weapon, CombatCatalog.Shield, hero.SkillOne, hero.SkillTwo);
-                else hero.Equip(hero.MainHand, CombatCatalog.Shield, reward.Spell, hero.SkillTwo);
-            }
+            if (!string.IsNullOrEmpty(EquippedWeaponId)) hero.Equip(RogueliteMapCatalog.Rewards.First(item => item.Id == EquippedWeaponId).Weapon, CombatCatalog.Shield, hero.SkillOne, hero.SkillTwo);
+            if (!string.IsNullOrEmpty(EquippedSpellId)) hero.Equip(hero.MainHand, CombatCatalog.Shield, RogueliteMapCatalog.Rewards.First(item => item.Id == EquippedSpellId).Spell, hero.SkillTwo);
+            if (IsAetherCalibrated) hero.Armor += 1;
         }
     }
 }

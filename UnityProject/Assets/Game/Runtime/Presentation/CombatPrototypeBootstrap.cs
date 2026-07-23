@@ -229,6 +229,8 @@ namespace OCC.Combat.Presentation
             SaveMapRun(); PlayMapEntrance();
         }
         public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); settlementPresentation?.RefreshNow(); }
+        public void EquipMapReward(string rewardId) { mapRun.EquipReward(rewardId); SaveMapRun(); PlayMapEntrance(); }
+        public void CalibrateMapAether() { mapRun.CalibrateAether(); SaveMapRun(); PlayMapEntrance(); }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
         private void SaveMapRun() { PlayerPrefs.SetString(MapRogueliteSaveKey, mapRun.ToJson()); PlayerPrefs.Save(); }
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
@@ -351,7 +353,7 @@ namespace OCC.Combat.Presentation
             Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
             GUI.color = new Color(.035f, .075f, .13f, .98f * mapPanelAlpha); GUI.Box(new Rect(330, 150, 1260, 760), ""); GUI.color = Color.white;
             GUI.Label(new Rect(390, 200, 900, 38), "OCC  肉鸽推进地图");
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1120, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  经验 " + mapRun.Experience + "  /  补给 " + mapRun.Supplies + "  /  信标 " + mapRun.ScoutingBeacons + "  /  权限卡 " + mapRun.AccessCards + "  /  已获 " + (mapRun.ClaimedRewards.Count == 0 ? "无" : string.Join("、", mapRun.ClaimedRewards))); GUI.color = Color.white;
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(390, 250, 1140, 28), "种子 " + mapRun.Seed + " / 等级 " + mapRun.Level + " / 零件 " + mapRun.Parts + " / 以太 " + mapRun.Aether + " / 补给 " + mapRun.Supplies + " / 信标 " + mapRun.ScoutingBeacons + " / 权限卡 " + mapRun.AccessCards); GUI.color = Color.white;
             if (mapRun.AwaitingReward)
             {
                 GUI.Label(new Rect(390, 320, 900, 30), "战斗成功结算：等级 " + mapRun.Level + "。从 3 个随机法术/武器中选择 1 个：");
@@ -361,6 +363,7 @@ namespace OCC.Combat.Presentation
             }
             GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
             if (DrawMapContentChoices()) { GUI.matrix = previous; return; }
+            if (DrawMapWorkshop()) { GUI.matrix = previous; return; }
             DrawMapConnections();
             foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
             if (GUI.Button(new Rect(390, 820, 240, 42), "继续已有地图")) StartMapRoguelite(true);
@@ -398,6 +401,24 @@ namespace OCC.Combat.Presentation
                 RogueliteNodeContentChoice choice = choices[i];
                 if (GUI.Button(new Rect(480 + i * 480, 530, 440, 72), choice.DisplayName + "\n" + choice.Preview)) ChooseMapNodeContent(choice.Id);
             }
+            return true;
+        }
+        private bool DrawMapWorkshop()
+        {
+            RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
+            if (node.Type != RogueliteMapNodeType.Workshop || !mapRun.CompletedNodes.Contains(node.Id)) return false;
+            GUI.color = new Color(.06f, .11f, .17f, .98f); GUI.Box(new Rect(430, 385, 1060, 270), ""); GUI.color = Color.white;
+            GUI.Label(new Rect(480, 415, 940, 32), "野战工坊 / 仅可装备本局已获得的奖励");
+            GUI.Label(new Rect(480, 455, 940, 32), "当前：武器 " + (mapRun.EquippedWeaponId ?? "制式步枪") + " / 术式 " + (mapRun.EquippedSpellId ?? "火矢") + " / 校准 " + (mapRun.IsAetherCalibrated ? "已完成" : "未完成"));
+            RogueliteReward[] owned = mapRun.ClaimedRewards.Select(id => RogueliteMapCatalog.Rewards.First(item => item.Id == id)).ToArray();
+            for (int i = 0; i < owned.Length && i < 2; i++)
+            {
+                RogueliteReward reward = owned[i];
+                if (GUI.Button(new Rect(480 + i * 300, 520, 270, 54), "装备 " + reward.DisplayName + " / " + (reward.Kind == RogueliteRewardKind.Weapon ? "武器" : "术式"))) EquipMapReward(reward.Id);
+            }
+            GUI.enabled = !mapRun.IsAetherCalibrated && mapRun.Aether >= 2;
+            if (GUI.Button(new Rect(1100, 520, 290, 54), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准：2 以太 / +1 护甲")) CalibrateMapAether();
+            GUI.enabled = true;
             return true;
         }
         private static Vector2 MapNodeCenter(RogueliteMapNode node) => new Vector2(486 + node.GridX * 145, 402 + node.GridY * 82);
