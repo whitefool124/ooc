@@ -87,15 +87,15 @@ namespace OCC.Combat.Presentation
             cardImage.color = new Color(.075f, .085f, .095f, 1f);
             Outline outline = card.AddComponent<Outline>(); outline.effectColor = new Color(.36f, .85f, .95f, .75f); outline.effectDistance = new Vector2(1, -1);
 
-            AddLabel(card.transform, "标题", "行动结算 // 目标已清除", new Vector2(54, -48), new Vector2(1280, 54), 38, new Color(.86f, .94f, .96f), TextAnchor.MiddleLeft);
-            AddLabel(card.transform, "副标题", "以太回路稳定。选择一项新构筑并同步至下一场战斗。", new Vector2(56, -112), new Vector2(1260, 34), 20, new Color(.60f, .68f, .72f), TextAnchor.MiddleLeft);
-            AddLabel(card.transform, "等级", "等级 " + run.Level + "     经验 " + run.Experience + "     本次战利品：三选一", new Vector2(56, -166), new Vector2(1260, 34), 22, new Color(.98f, .77f, .38f), TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "标题", "行动结算  // 目标已清除", new Vector2(54, -48), new Vector2(1280, 54), 38, new Color(.86f, .94f, .96f), TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "副标题", "战斗记录已封存。选择一项构筑并同步至下一场战斗。", new Vector2(56, -112), new Vector2(1260, 34), 20, new Color(.60f, .68f, .72f), TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "等级", "等级 " + run.Level + "     经验 " + run.Experience + "     奖励选择：三选一", new Vector2(56, -166), new Vector2(1260, 34), 22, new Color(.98f, .77f, .38f), TextAnchor.MiddleLeft);
             AddLabel(card.transform, "分隔", "────────────────────────────────────────────────────────", new Vector2(56, -204), new Vector2(1260, 22), 18, new Color(.34f, .43f, .46f), TextAnchor.MiddleLeft);
 
             for (int i = 0; i < run.CurrentRewards.Count; i++)
                 AddRewardCard(card.transform, run.CurrentRewards[i], i);
 
-            AddLabel(card.transform, "说明", "选择后保存当前推进状态，并返回地图继续行动。", new Vector2(56, -586), new Vector2(1100, 28), 18, new Color(.58f, .65f, .69f), TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "说明", "选择后保存当前推进状态，并返回地图继续行动。奖励不会自动装备。", new Vector2(56, -586), new Vector2(1180, 28), 18, new Color(.58f, .65f, .69f), TextAnchor.MiddleLeft);
             CanvasGroup group = card.AddComponent<CanvasGroup>();
             group.alpha = 0f;
             cardRect.localScale = Vector3.one * .94f;

@@ -362,14 +362,14 @@ namespace OCC.Combat.Presentation
             GUI.color = new Color(.018f, .028f, .042f, .98f); GUI.DrawTexture(new Rect(0, 0, UiWidth, UiHeight), Texture2D.whiteTexture);
             GUI.color = new Color(.10f, .68f, .78f, .16f * menuPanelAlpha); GUI.DrawTexture(new Rect(120, 140, 8, 760), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(1792, 140, 8, 760), Texture2D.whiteTexture);
             GUI.color = new Color(.045f, .072f, .096f, .98f * menuPanelAlpha); GUI.Box(new Rect(220, 150, 1480, 760), "");
-            GUI.color = new Color(.35f, .9f, 1f, menuPanelAlpha); GUI.DrawTexture(new Rect(260, 202, 124, 4), Texture2D.whiteTexture); GUI.Label(new Rect(260, 228, 1080, 42), "OCC // 行动控制台");
-            GUI.color = new Color(.58f, .66f, .71f, menuPanelAlpha); GUI.Label(new Rect(260, 280, 1100, 28), "选择行动包。所有路径均可在战前简报确认目标、敌情和重开规则。");
+            GUI.color = new Color(.35f, .9f, 1f, menuPanelAlpha); GUI.DrawTexture(new Rect(260, 202, 124, 4), Texture2D.whiteTexture); GUI.Label(new Rect(260, 228, 1080, 42), "OCC // 正式行动入口");
+            GUI.color = new Color(.58f, .66f, .71f, menuPanelAlpha); GUI.Label(new Rect(260, 280, 1100, 28), "选择行动模式。战前简报确认目标、敌情与重开规则；开发控制台仅在战斗中由 F1 呼出。");
 
             DrawMenuInfoPanel(new Rect(260, 350, 650, 210), "剧情行动", "中继器破坏演练", "任务  " + developerPreparation.MissionId + "\n敌情  " + developerPreparation.EnemySummary, new Color(.35f, .9f, 1f));
             DrawMenuInfoPanel(new Rect(1010, 350, 650, 210), "肉鸽区域", "自由回访推进", "20 节点正交网络  /  权限门\n商店、工坊、事件与区域首领", new Color(1f, .76f, .25f));
             if (DrawMenuAction(new Rect(260, 610, 650, 86), "进入战前简报", "剧情测试  /  破坏目标", new Color(.20f, .78f, .94f))) OpenDeveloperBriefing();
             if (DrawMenuAction(new Rect(1010, 610, 650, 86), "开始自由推进", "肉鸽地图  /  新开区域", new Color(1f, .70f, .20f))) StartMapRoguelite(false);
-            GUI.color = new Color(.42f, .52f, .57f, menuPanelAlpha); GUI.Label(new Rect(260, 770, 1300, 26), "开发菜单  /  战前简报  /  正式战斗  /  结算奖励  /  战术重开");
+            GUI.color = new Color(.42f, .52f, .57f, menuPanelAlpha); GUI.Label(new Rect(260, 770, 1300, 26), "正式入口  /  战前简报  /  战术行动  /  结算奖励  /  地图回访");
             GUI.color = Color.white; GUI.matrix = previous;
         }
 
