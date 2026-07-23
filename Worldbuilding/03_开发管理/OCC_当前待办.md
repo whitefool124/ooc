@@ -13,6 +13,13 @@
 
 ### V1：战斗表现、结算界面与像素资源完成品基线 - IN PROGRESS
 
+#### V1-03：攻击源/命中目标/击破地图内视觉反馈 - COMPLETE（2026-07-23）
+- **目标**：为攻击、技能、命中、击破和目标选择提供不遮挡 HUD 的运行时视觉反馈。
+- **涉及文件**：`UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs`、`UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs`。
+- **验收结果**：攻击源与目标格 DOTween 脉冲、选中目标黄色轮廓、伤害数字锚定地图格、击破提示均已接入；击破单位因 `IsAlive` 过滤不再绘制行动条/意图/交互状态；未修改场景 YAML。
+- **验证**：Funplay 重编译完成；编译错误/警告 0。Console 仅存既有 `FindFirstObjectByType` 弃用警告。Play Mode 交互待完成端到端复测。
+- **下一步**：进入 Play Mode 逐项点击攻击/技能、击破目标并完成双分辨率截图 QA，然后聚焦 EditMode 检查并提交。
+
 - **归属**：肉鸽模式与共用战斗表现。
 - **目标**：建立可持续迭代的完成品表现基线：DOTween 驱动的界面/战斗反馈、完整胜负与奖励结算 UI、战斗信息显示、角色/背景/地块资源目录及符合规范的首批像素资源。
 - **涉及文件/系统**：DOTween 包与初始化、Canvas 结算层、战斗命中/伤害/目标反馈、HUD 与地图推进信息、`64x64` 单位及 `32x32` 地块/图标资源、导入 QA、Play Mode 截图验证。

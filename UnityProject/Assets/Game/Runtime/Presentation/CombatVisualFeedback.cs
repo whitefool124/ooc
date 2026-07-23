@@ -51,6 +51,34 @@ namespace OCC.Combat.Presentation
             healthCache.Clear();
         }
 
+        public void NotifyAttack(GridPosition source, GridPosition target, int damage, bool defeated)
+        {
+            EnsureCanvas();
+            PulseCell(source, new Color(.35f, .85f, 1f, .72f), .12f);
+            PulseCell(target, defeated ? new Color(1f, .18f, .12f, .85f) : new Color(1f, .35f, .28f, .72f), .18f);
+            if (damage > 0) ShowFloatingText(target, "-" + damage, new Color(1f, .45f, .35f));
+            if (defeated) ShowBreakText(target);
+        }
+
+        private void PulseCell(GridPosition position, Color color, float duration)
+        {
+            GameObject pulse = new GameObject("战斗反馈脉冲"); pulse.transform.SetParent(canvas.transform, false);
+            RectTransform rect = pulse.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
+            rect.anchoredPosition = new Vector2(-690 + position.X * 78, -80 + position.Y * 78); rect.sizeDelta = new Vector2(64, 64);
+            Image image = pulse.AddComponent<Image>(); image.color = color; image.raycastTarget = false;
+            CanvasGroup group = pulse.AddComponent<CanvasGroup>(); group.alpha = .85f; rect.localScale = Vector3.one * .7f;
+            DOTween.Sequence().SetUpdate(true).Join(rect.DOScale(1.18f, duration).SetEase(Ease.OutQuad)).Join(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, duration)).OnComplete(() => Destroy(pulse));
+        }
+
+        private void ShowBreakText(GridPosition position)
+        {
+            GameObject textObject = new GameObject("目标击破反馈"); textObject.transform.SetParent(canvas.transform, false);
+            RectTransform rect = textObject.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f); rect.anchoredPosition = new Vector2(-690 + position.X * 78, -80 + position.Y * 78 + 24); rect.sizeDelta = new Vector2(180, 30);
+            Text text = textObject.AddComponent<Text>(); text.font = Resources.Load<Font>("Fonts/SimHei"); text.fontSize = 18; text.alignment = TextAnchor.MiddleCenter; text.text = "目标击破"; text.color = new Color(1f, .8f, .3f);
+            CanvasGroup group = textObject.AddComponent<CanvasGroup>();
+            DOTween.Sequence().SetUpdate(true).Join(rect.DOScale(1.12f, .16f)).Join(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .5f)).OnComplete(() => Destroy(textObject));
+        }
+
         private void ShowFloatingText(GridPosition position, string message, Color color)
         {
             EnsureCanvas();
