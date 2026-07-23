@@ -531,12 +531,14 @@ namespace OCC.Combat.Presentation
             if (node.IsCombat || node.Type == RogueliteMapNodeType.Start || mapRun.CompletedNodes.Contains(node.Id)) return false;
             IReadOnlyList<RogueliteNodeContentChoice> choices = mapRun.CurrentContentChoices;
             if (choices.Count == 0) return false;
-            DrawConsolePanel(new Rect(430, 385, 1060, 270), node.DisplayName + " / " + node.Type, "选择一项已预览的结算", new Color(1f, .72f, .24f));
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(480, 455, 940, 50), node.Summary + " 事件失败只会进入标明的额外战斗，不会强制扣血。"); GUI.color = Color.white;
+            DrawConsolePanel(new Rect(390, 350, 1140, 360), node.DisplayName + " / " + MapNodeTypeLabel(node.Type), "选择一项已预览的结算  /  当前节点不会自动推进", new Color(1f, .72f, .24f));
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 420, 1040, 44), node.Summary + "\n风险与收益在确认前完整公开；额外战斗不会强制扣血。"); GUI.color = Color.white;
+            float gap = 18f; float cardWidth = (1040f - gap * (choices.Count - 1)) / Mathf.Max(1, choices.Count);
             for (int i = 0; i < choices.Count; i++)
             {
                 RogueliteNodeContentChoice choice = choices[i];
-                if (DrawConsoleButton(new Rect(480 + i * 480, 530, 440, 72), choice.DisplayName, choice.Preview, new Color(1f, .72f, .24f))) ChooseMapNodeContent(choice.Id);
+                Rect card = new Rect(440 + i * (cardWidth + gap), 505, cardWidth, 112);
+                if (DrawConsoleButton(card, choice.DisplayName, choice.Preview, new Color(1f, .72f, .24f))) ChooseMapNodeContent(choice.Id);
             }
             return true;
         }
@@ -544,16 +546,16 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
             if (node.Type != RogueliteMapNodeType.Workshop || !mapRun.CompletedNodes.Contains(node.Id)) return false;
-            DrawConsolePanel(new Rect(430, 385, 1060, 270), "野战工坊", "仅可装备本局已获得的奖励", new Color(.35f, .9f, 1f));
-            GUI.Label(new Rect(480, 455, 940, 32), "当前：武器 " + (mapRun.EquippedWeaponId ?? "制式步枪") + " / 术式 " + (mapRun.EquippedSpellId ?? "火矢") + " / 校准 " + (mapRun.IsAetherCalibrated ? "已完成" : "未完成"));
+            DrawConsolePanel(new Rect(390, 350, 1140, 360), "野战工坊", "装备替换与以太校准  /  奖励领取后不会自动装备", new Color(.35f, .9f, 1f));
+            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 420, 1040, 44), "当前配置：武器 " + (mapRun.EquippedWeaponId ?? "制式步枪") + "  /  术式 " + (mapRun.EquippedSpellId ?? "火矢") + "\n校准状态：" + (mapRun.IsAetherCalibrated ? "已完成，本局后续战斗生效" : "未完成，需要 2 以太")); GUI.color = Color.white;
             RogueliteReward[] owned = mapRun.ClaimedRewards.Select(id => RogueliteMapCatalog.Rewards.First(item => item.Id == id)).ToArray();
             for (int i = 0; i < owned.Length && i < 2; i++)
             {
                 RogueliteReward reward = owned[i];
-                if (DrawConsoleButton(new Rect(480 + i * 300, 520, 270, 54), "装备 " + reward.DisplayName, reward.Kind == RogueliteRewardKind.Weapon ? "武器" : "术式", new Color(.35f, .9f, 1f))) EquipMapReward(reward.Id);
+                if (DrawConsoleButton(new Rect(440 + i * 300, 510, 270, 70), "装备 " + reward.DisplayName, reward.Kind == RogueliteRewardKind.Weapon ? "武器  /  已拥有" : "术式  /  已拥有", new Color(.35f, .9f, 1f))) EquipMapReward(reward.Id);
             }
             GUI.enabled = !mapRun.IsAetherCalibrated && mapRun.Aether >= 2;
-            if (DrawConsoleButton(new Rect(1100, 520, 290, 54), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准", mapRun.IsAetherCalibrated ? "本局校准已注入" : "2 以太 / 下一场 +1 护甲", new Color(.35f, .9f, 1f))) CalibrateMapAether();
+            if (DrawConsoleButton(new Rect(1040, 600, 400, 64), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准", mapRun.IsAetherCalibrated ? "本局校准已注入" : "消耗 2 以太  /  下一场 +1 护甲", new Color(.35f, .9f, 1f))) CalibrateMapAether();
             GUI.enabled = true;
             return true;
         }
