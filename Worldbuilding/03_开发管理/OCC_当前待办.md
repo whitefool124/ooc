@@ -105,6 +105,8 @@
 
 ## 验证记录
 
+| 2026-07-23 | V1-04/V1-05/M1-01/M1-02/V1-06 统一验收 | PARTIAL PASS | V1-04 可破坏物与状态反馈、既有战斗 UI 基线、5 节点大地图数据与 relay_event 任务已完成；Play Mode 确认地图节点目录为 start/rail_patrol/relay_raid/relay_event/core_finale，反馈对象可运行时生成；1920x1080 与 960x540 截图均成功。Funplay 编译错误/警告 0，Console 仅既有弃用警告。完整鼠标逐项路径和 EditMode 聚焦执行仍待补充。|
+
 | 日期 | 任务 | 结果 | 备注 |
 | --- | --- | --- | --- |
 | 2026-07-23 | V1-02b 结算奖励卡输入与悬停反馈 | COMPLETE | 将战术控制台的 Input System 兼容方案同步至 `RogueliteSettlementPresentation`：奖励卡由运行时鼠标命中兜底执行领取，不再依赖当前异常的 uGUI 射线命中；移除不兼容的 `StandaloneInputModule`，并为奖励卡增加 DOTween 悬停提亮与 1.025 缩放。Funplay 编译 0 错误/警告、Console 无错误；Play Mode 建立三选一结算后点击左侧奖励卡，`AwaitingReward` 由 `True` 变为 `False` 且领取 `aether_wand` 成功。未保存场景。下一步：V1-03 攻击源/目标/击破地图内视觉反馈与双分辨率验收。 |
