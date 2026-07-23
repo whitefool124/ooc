@@ -9,6 +9,8 @@ namespace OCC.Combat.Presentation
     public sealed class CombatVisualFeedback : MonoBehaviour
     {
         private readonly Dictionary<string, int> healthCache = new Dictionary<string, int>();
+        private readonly Dictionary<GridPosition, int> durabilityCache = new Dictionary<GridPosition, int>();
+        private readonly Dictionary<string, int> statusCache = new Dictionary<string, int>();
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private string lastOutcome;
@@ -27,6 +29,16 @@ namespace OCC.Combat.Presentation
                 if (healthCache.TryGetValue(unit.Id, out int previous) && unit.Health < previous)
                     ShowFloatingText(unit.Position, "-" + (previous - unit.Health), unit.IsHero ? new Color(.8f, .94f, 1f) : new Color(.9f, .34f, .3f));
                 healthCache[unit.Id] = unit.Health;
+                int statusCount = unit.Statuses.Count;
+                if (statusCache.TryGetValue(unit.Id, out int oldStatusCount) && statusCount != oldStatusCount && statusCount > 0)
+                    ShowFloatingText(unit.Position, "状态", new Color(1f, .8f, .25f));
+                statusCache[unit.Id] = statusCount;
+            }
+            for (int y = 0; y < bootstrap.CurrentState.Map.Height; y++) for (int x = 0; x < bootstrap.CurrentState.Map.Width; x++)
+            {
+                GridPosition position = new GridPosition(x, y); TileState tile = bootstrap.CurrentState.Map.GetTile(position);
+                if (!durabilityCache.TryGetValue(position, out int oldDurability)) durabilityCache[position] = tile.Durability;
+                else if (tile.Durability < oldDurability) { NotifyDestructible(position, tile.IsDestroyed); durabilityCache[position] = tile.Durability; }
             }
         }
 
@@ -49,6 +61,14 @@ namespace OCC.Combat.Presentation
         {
             lastOutcome = null;
             healthCache.Clear();
+            durabilityCache.Clear(); statusCache.Clear();
+        }
+
+        public void NotifyDestructible(GridPosition position, bool destroyed)
+        {
+            EnsureCanvas();
+            PulseCell(position, destroyed ? new Color(1f, .35f, .08f, .85f) : new Color(1f, .75f, .2f, .65f), destroyed ? .24f : .14f);
+            ShowFloatingText(position, destroyed ? "摧毁" : "受损", destroyed ? new Color(1f, .42f, .18f) : new Color(1f, .82f, .25f));
         }
 
         public void NotifyAttack(GridPosition source, GridPosition target, int damage, bool defeated)

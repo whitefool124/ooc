@@ -501,8 +501,10 @@ namespace OCC.Combat.Presentation
                 UnitState target = command.TargetUnitId == null ? null : state.Units.Values.FirstOrDefault(u => u.Id == command.TargetUnitId);
                 int healthBefore = target == null ? 0 : target.Health;
                 GridPosition source = state.GetUnit(command.UnitId).Position;
+                int tileDurabilityBefore = command.Type == CombatCommandType.Interact && state.Map.IsInside(command.Destination) ? state.Map.GetTile(command.Destination).Durability : -1;
                 CombatResolver.Resolve(state, command);
                 if (target != null && healthBefore > target.Health) visualFeedback?.NotifyAttack(source, target.Position, healthBefore - target.Health, !target.IsAlive);
+                if (tileDurabilityBefore >= 0 && state.Map.GetTile(command.Destination).Durability < tileDurabilityBefore) visualFeedback?.NotifyDestructible(command.Destination, state.Map.GetTile(command.Destination).IsDestroyed);
                 if (state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0) CombatResolver.EndTurn(state, state.GetUnit("hero")); developerFlow.RefreshOutcome();
             }
             catch (InvalidOperationException error) { state.AddLog(error.Message); }
