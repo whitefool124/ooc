@@ -13,15 +13,17 @@ namespace OCC.Combat
         public int Speed { get; }
         public WeaponDefinition Weapon { get; }
         public bool IsElite { get; }
+        public int MaxHealth { get; }
 
-        public EnemyArchetype(string id, string displayName, int armor, int shield, int block, int speed, WeaponDefinition weapon, bool isElite = false)
-        { Id = id; DisplayName = displayName; Armor = armor; Shield = shield; Block = block; Speed = speed; Weapon = weapon; IsElite = isElite; }
+        public EnemyArchetype(string id, string displayName, int armor, int shield, int block, int speed, WeaponDefinition weapon, bool isElite = false, int maxHealth = 12)
+        { Id = id; DisplayName = displayName; Armor = armor; Shield = shield; Block = block; Speed = speed; Weapon = weapon; IsElite = isElite; MaxHealth = maxHealth; }
 
         public void Apply(UnitState unit)
         {
-            unit.DisplayName = DisplayName; unit.Armor = Armor; unit.Block = Block; unit.Speed = Speed;
+            unit.DisplayName = DisplayName; unit.ConfigureVitality(MaxHealth); unit.Armor = Armor; unit.Block = Block; unit.Speed = Speed;
             unit.Equip(Weapon, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
-            unit.RestoreShield(Shield);
+            // Archetype shield values are target totals, not bonuses over UnitState's base shield.
+            unit.RestoreShield(Math.Max(0, Shield - unit.Shield));
         }
     }
 
@@ -38,6 +40,7 @@ namespace OCC.Combat
             new EnemyArchetype("warden", "结界卫士", 1, 4, 1, 7, CombatCatalog.Wand),
             new EnemyArchetype("binder", "束缚术士", 0, 2, 0, 8, CombatCatalog.Wand),
             new EnemyArchetype("elite_vanguard", "精英先锋", 2, 4, 2, 10, CombatCatalog.Hammer, true)
+            ,new EnemyArchetype("core_overseer", "核心守备监工", 3, 4, 2, 8, CombatCatalog.Hammer, true, 30)
         };
 
         public static EnemyArchetype Get(string id)

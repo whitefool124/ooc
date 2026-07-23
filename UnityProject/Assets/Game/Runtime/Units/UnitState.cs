@@ -15,7 +15,7 @@ namespace OCC.Combat
         public int ActionPoints { get; private set; }
         public string DisplayName { get; set; }
         public int Health { get; private set; } = 12;
-        public int MaxHealth { get; }
+        public int MaxHealth { get; private set; }
         public int Mana { get; private set; }
         public int MaxMana { get; }
         public int Armor { get; set; } = 1;
@@ -47,6 +47,11 @@ namespace OCC.Combat
         public void Equip(WeaponDefinition mainHand, WeaponDefinition offHand, SkillDefinition skillOne, SkillDefinition skillTwo)
         {
             MainHand = mainHand ?? MainHand; OffHand = offHand ?? OffHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo;
+        }
+        public void ConfigureVitality(int maxHealth)
+        {
+            if (maxHealth < 1) throw new ArgumentOutOfRangeException(nameof(maxHealth));
+            MaxHealth = maxHealth; Health = maxHealth;
         }
 
         internal void BeginTurn(int actionPoints) => ActionPoints = actionPoints;

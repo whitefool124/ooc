@@ -150,13 +150,19 @@ namespace OCC.Combat.Presentation
                 if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, Durability = 6 });
             }
             List<UnitState> units = new List<UnitState>();
+            string encounterId = mapRun == null ? null : mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId;
+            RogueliteEncounterDefinition encounter = string.IsNullOrEmpty(encounterId) ? null : RogueliteEncounterCatalog.For(encounterId);
             int enemyIndex = 0;
             foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit).OrderBy(m => m.name, StringComparer.Ordinal))
             {
                 bool hero = marker.name.Contains("\u4e3b\u89d2");
                 UnitState unit = new UnitState(hero ? "hero" : "enemy_" + enemyIndex, hero, ScenePosition(marker), hero ? Facing.East : Facing.West);
                 if (hero) { unit.DisplayName = "\u963f\u65af\u7279\u62c9"; unit.Speed = 11; }
-                else { EnemyArchetypes.All[Math.Min(enemyIndex, EnemyArchetypes.All.Count - 1)].Apply(unit); enemyIndex++; }
+                else
+                {
+                    string archetypeId = encounter == null ? EnemyArchetypes.All[Math.Min(enemyIndex, EnemyArchetypes.All.Count - 1)].Id : encounter.EnemyArchetypeIds[Math.Min(enemyIndex, encounter.EnemyArchetypeIds.Count - 1)];
+                    EnemyArchetypes.Get(archetypeId).Apply(unit); enemyIndex++;
+                }
                 units.Add(unit);
             }
             if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
@@ -164,7 +170,7 @@ namespace OCC.Combat.Presentation
             if (mapRun != null)
             {
                 RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
-                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
+                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, DescribeEncounter(encounter, mission.EnemySummary));
                 if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
             }
@@ -221,6 +227,13 @@ namespace OCC.Combat.Presentation
                 SaveMapRun(); PlayMapEntrance(); return;
             }
             SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+        }
+
+        private static string DescribeEncounter(RogueliteEncounterDefinition encounter, string fallback)
+        {
+            if (encounter == null) return fallback;
+            string summary = string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName));
+            return (encounter.IsBoss ? "区域首领：" : encounter.IsElite ? "精英编成：" : "区域编成：") + summary;
         }
         public void ChooseMapNodeContent(string choiceId)
         {

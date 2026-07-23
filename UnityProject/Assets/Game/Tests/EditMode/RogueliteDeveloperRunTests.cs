@@ -189,6 +189,28 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void RegionEncounterCatalog_CoversNineArchetypesAndDifferentiatesEliteAndBoss()
+        {
+            Assert.That(EnemyArchetypes.All.Count, Is.GreaterThanOrEqualTo(10));
+            RogueliteEncounterDefinition normal = RogueliteEncounterCatalog.For("rail_patrol");
+            RogueliteEncounterDefinition elite = RogueliteEncounterCatalog.For("elite_foundry");
+            RogueliteEncounterDefinition boss = RogueliteEncounterCatalog.For("core_finale");
+            Assert.That(normal.IsElite, Is.False); Assert.That(normal.IsBoss, Is.False);
+            Assert.That(elite.IsElite, Is.True); Assert.That(elite.EnemyArchetypeIds, Does.Contain("elite_vanguard"));
+            Assert.That(boss.IsBoss, Is.True); Assert.That(boss.EnemyArchetypeIds, Does.Contain("core_overseer"));
+        }
+
+        [Test]
+        public void RegionBoss_HasDocumentedVitalityAndDefenses()
+        {
+            EnemyArchetype boss = EnemyArchetypes.Get("core_overseer");
+            var unit = new UnitState("boss", false, new GridPosition(1, 1), Facing.West);
+            boss.Apply(unit);
+            Assert.That(unit.DisplayName, Is.EqualTo("核心守备监工")); Assert.That(unit.MaxHealth, Is.EqualTo(30));
+            Assert.That(unit.Health, Is.EqualTo(30)); Assert.That(unit.Shield, Is.EqualTo(4)); Assert.That(unit.Armor, Is.EqualTo(3));
+        }
+
+        [Test]
         public void MapRun_OffersMixedWeaponAndSpellRewards()
         {
             for (int seed = 1; seed < 20; seed++)
