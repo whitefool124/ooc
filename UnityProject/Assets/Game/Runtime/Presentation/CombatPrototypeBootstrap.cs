@@ -284,6 +284,11 @@ namespace OCC.Combat.Presentation
         public bool HasRogueliteSave => PlayerPrefs.HasKey(RogueliteSaveKey);
         public CombatState CurrentState => state;
         public string SelectedAction => selectedAction;
+        public string SelectedTargetId => selectedTargetId;
+        public void SetSelectedTargetForUi(string unitId)
+        {
+            selectedTargetId = state != null && state.GetUnit(unitId) != null ? unitId : null;
+        }
         public RogueliteMapRun CurrentMapRun => mapRun;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
         public bool IsCombatOutcomeVisible => developerFlow != null && (developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat);

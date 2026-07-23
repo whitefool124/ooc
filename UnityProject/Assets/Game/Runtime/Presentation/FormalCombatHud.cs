@@ -23,6 +23,7 @@ namespace OCC.Combat.Presentation
         private Text activeLabel;
         private Text weaponLabel;
         private Text eventLabel;
+        private Text targetLabel;
         private Text[] timeline = new Text[4];
         private Image healthFill;
         private Image shieldFill;
@@ -76,13 +77,14 @@ namespace OCC.Combat.Presentation
             Line(side.transform, new Vector2(24, -60), new Vector2(390, 2), line);
             activeLabel = Label("行动状态", side.transform, new Vector2(24, -78), new Vector2(390, 48), 18, text, TextAnchor.UpperLeft);
             weaponLabel = Label("装备状态", side.transform, new Vector2(24, -132), new Vector2(390, 42), 16, muted, TextAnchor.UpperLeft);
-            healthFill = ResourceBar(side.transform, "结构", new Vector2(24, -196), new Color(.32f, .82f, .56f));
-            shieldFill = ResourceBar(side.transform, "护盾", new Vector2(24, -260), new Color(.44f, .72f, .63f));
-            manaFill = ResourceBar(side.transform, "以太", new Vector2(24, -324), line);
-            Label("行动序列", side.transform, new Vector2(24, -398), new Vector2(390, 26), 17, text, TextAnchor.MiddleLeft);
-            for (int i = 0; i < timeline.Length; i++) timeline[i] = Label("序列" + i, side.transform, new Vector2(24, -430 - i * 42), new Vector2(390, 34), 16, muted, TextAnchor.MiddleLeft);
-            Label("现场记录", side.transform, new Vector2(24, -610), new Vector2(390, 26), 17, text, TextAnchor.MiddleLeft);
-            eventLabel = Label("记录", side.transform, new Vector2(24, -642), new Vector2(390, 86), 15, muted, TextAnchor.UpperLeft);
+            targetLabel = Label("目标状态", side.transform, new Vector2(24, -176), new Vector2(390, 36), 15, new Color(.95f, .76f, .36f), TextAnchor.UpperLeft);
+            healthFill = ResourceBar(side.transform, "结构", new Vector2(24, -224), new Color(.32f, .82f, .56f));
+            shieldFill = ResourceBar(side.transform, "护盾", new Vector2(24, -288), new Color(.44f, .72f, .63f));
+            manaFill = ResourceBar(side.transform, "以太", new Vector2(24, -352), line);
+            Label("行动序列", side.transform, new Vector2(24, -426), new Vector2(390, 26), 17, text, TextAnchor.MiddleLeft);
+            for (int i = 0; i < timeline.Length; i++) timeline[i] = Label("序列" + i, side.transform, new Vector2(24, -458 - i * 42), new Vector2(390, 34), 16, muted, TextAnchor.MiddleLeft);
+            Label("现场记录", side.transform, new Vector2(24, -638), new Vector2(390, 26), 17, text, TextAnchor.MiddleLeft);
+            eventLabel = Label("记录", side.transform, new Vector2(24, -670), new Vector2(390, 70), 15, muted, TextAnchor.UpperLeft);
 
             GameObject bottom = Panel("战术指令", root.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(20, 18), new Vector2(1400, 148), ink);
             Label("战术指令", bottom.transform, new Vector2(20, -14), new Vector2(300, 26), 17, muted, TextAnchor.MiddleLeft);
@@ -107,6 +109,8 @@ namespace OCC.Combat.Presentation
             UnitState active = state.GetUnit(state.ActiveUnitId);
             activeLabel.text = "行动单位  " + (active == null ? "等待" : active.DisplayName) + "\n行动点  " + (active == null ? "--" : active.ActionPoints.ToString());
             weaponLabel.text = "主手  " + hero.MainHand.DisplayName + "\n以太回路  " + hero.Mana + " / " + hero.MaxMana + "   " + StatusText(hero);
+            UnitState target = state.Units.Values.FirstOrDefault(unit => !unit.IsHero && unit.IsAlive && unit.Id == bootstrap.SelectedTargetId);
+            targetLabel.text = target == null ? "目标  未锁定" : "目标  " + target.DisplayName + "  //  " + target.Health + " HP  护盾 " + target.Shield;
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
