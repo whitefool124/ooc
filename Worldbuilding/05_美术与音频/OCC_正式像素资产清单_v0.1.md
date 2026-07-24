@@ -69,6 +69,12 @@
 | --- | --- | --- | --- |
 | `floor_industrial`、`floor_rail`、`floor_warning` | `Assets/Game/Resources/Art/FormalRelay32/` | 普通地面、边界轨道、中心警戒区 | 三者均 `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 验证 78 / 24 / 6 个既有格实例，回退 0。 |
 
+## V2-10 中继器破损静态反馈（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `relay_destroyed` | `像素资产原料/V2-10/Relay32/` 与 `QA/relay_destroyed/` | `32×32`，原料库 `FORMAL` | 独立原料经硬 alpha、16 色、4x QA 与 JSON 报告复核；仅用于 `TileState.IsDestroyed` 的目标反馈。 |
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |

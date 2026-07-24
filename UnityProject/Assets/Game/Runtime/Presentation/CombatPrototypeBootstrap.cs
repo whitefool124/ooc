@@ -776,7 +776,17 @@ namespace OCC.Combat.Presentation
                     if (!unit.IsHero) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));
                     DrawStatusMarkers(unit, cell);
                 }
-                if (tile.IsObjective && !tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
+                if (tile.IsObjective)
+                {
+                    Texture2D objectiveTexture = Resources.Load<Texture2D>(tile.IsDestroyed ? "Art/FormalRelay32/relay_destroyed" : "Art/FormalRelay32/relay");
+                    if (objectiveTexture != null)
+                    {
+                        objectiveTexture.filterMode = FilterMode.Point;
+                        objectiveTexture.wrapMode = TextureWrapMode.Clamp;
+                        GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), objectiveTexture, ScaleMode.ScaleToFit, true);
+                    }
+                    if (!tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
+                }
                 if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
                 {
                     GUI.color = Color.white;
