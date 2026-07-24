@@ -30,6 +30,7 @@ namespace OCC.Combat.Presentation
         private RogueliteMapRun mapRun;
         private bool mapMenuOpen;
         private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
+        private Texture2D formalLootTexture;
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
@@ -59,6 +60,8 @@ namespace OCC.Combat.Presentation
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
             LoadFormalUnitTextures();
+            formalLootTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate");
+            if (formalLootTexture != null) { formalLootTexture.filterMode = FilterMode.Point; formalLootTexture.wrapMode = TextureWrapMode.Clamp; }
             menuPanelAlpha = 0f; menuPanelScale = .96f;
             DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
             DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
@@ -756,8 +759,14 @@ namespace OCC.Combat.Presentation
                 if (tile.IsObjective && !tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
                 if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
                 {
-                    GUI.color = new Color(1f, .78f, .18f);
-                    GUI.Box(new Rect(cell.x + 15, cell.y + 16, cell.width - 30, cell.height - 30), "\u7269");
+                    GUI.color = Color.white;
+                    if (formalLootTexture != null)
+                        GUI.DrawTexture(new Rect(cell.x + 12, cell.y + 12, cell.width - 24, cell.height - 24), formalLootTexture, ScaleMode.ScaleToFit, true);
+                    else
+                    {
+                        GUI.color = new Color(1f, .78f, .18f);
+                        GUI.Box(new Rect(cell.x + 15, cell.y + 16, cell.width - 30, cell.height - 30), "\u7269");
+                    }
                     GUI.color = Color.white;
                 }
                 if (e.type == EventType.MouseDown && e.button == 0 && cell.Contains(e.mousePosition)) { HandleCellClick(p); e.Use(); }
