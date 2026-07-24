@@ -37,8 +37,9 @@
 | 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
 | --- | --- | --- | --- |
 | `move`、`attack`、`skill`、`loot`、`interact` | `Assets/Game/Resources/Art/FormalIcons32/` | `FormalCombatHud` 指令按钮；`skill` 供两格技能共用 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 为 6 个按钮建立正式图标层 |
+| `floor`、`light_cover`、`heavy_cover`、`relay`、`loot_crate` | `Assets/Game/Resources/Art/FormalRelay32/` | 运行时 `地图可视化` 地块/掩体/中继器；战利品箱待实际节点出现 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 108 地块、2 轻掩体、2 重掩体、1 中继器，回退为 0 |
 
-旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站对象和单位静帧尚未导入，仍由 V2-05 后续逐批评审。
+旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站战利品箱仅完成导入，待实际节点出现后绑定；单位静帧尚未导入，仍由 V2-05 后续逐批评审。
 
 ## V2-03 实测导入审查（2026-07-24）
 

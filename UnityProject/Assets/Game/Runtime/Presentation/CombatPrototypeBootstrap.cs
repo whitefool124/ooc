@@ -56,6 +56,7 @@ namespace OCC.Combat.Presentation
             formalCombatHud = gameObject.AddComponent<FormalCombatHud>(); formalCombatHud.Initialize(this);
             developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this);
             BuildCombatFromSceneStageTwo();
+            ApplyFormalRelayVisuals();
             menuPanelAlpha = 0f; menuPanelScale = .96f;
             DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
             DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
@@ -79,17 +80,17 @@ namespace OCC.Combat.Presentation
         {
             if (transform.Find("地图可视化") != null) return;
             GameObject root = new GameObject("地图可视化"); root.transform.SetParent(transform, false);
-            Sprite sprite = CreateEditorSprite();
+            Sprite floorSprite = LoadFormalSprite("floor") ?? CreateEditorSprite();
             for (int y = 0; y < 9; y++) for (int x = 0; x < 12; x++)
             {
                 GameObject tile = new GameObject("格_" + x + "_" + y); tile.transform.SetParent(root.transform, false); tile.transform.position = new Vector3(x, y, 2f); tile.transform.localScale = Vector3.one * .96f;
-                SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.color = new Color(.12f, .19f, .29f, 1f); renderer.sortingOrder = -10;
+                SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>(); renderer.sprite = floorSprite; renderer.color = Color.white; renderer.sortingOrder = -10;
             }
-            AddEditorMarker(root, "轻掩体_A", new Vector3(4, 2, 1), new Color(.42f, .42f, .18f, 1f));
-            AddEditorMarker(root, "轻掩体_B", new Vector3(6, 5, 1), new Color(.42f, .42f, .18f, 1f));
-            AddEditorMarker(root, "重掩体_A", new Vector3(7, 3, 1), new Color(.34f, .28f, .48f, 1f));
-            AddEditorMarker(root, "重掩体_B", new Vector3(8, 6, 1), new Color(.34f, .28f, .48f, 1f));
-            AddEditorMarker(root, "目标_中继器", new Vector3(10, 4, 1), new Color(.7f, .25f, .16f, 1f));
+            AddEditorMarker(root, "轻掩体_A", new Vector3(4, 2, 1), "light_cover");
+            AddEditorMarker(root, "轻掩体_B", new Vector3(6, 5, 1), "light_cover");
+            AddEditorMarker(root, "重掩体_A", new Vector3(7, 3, 1), "heavy_cover");
+            AddEditorMarker(root, "重掩体_B", new Vector3(8, 6, 1), "heavy_cover");
+            AddEditorMarker(root, "目标_中继器", new Vector3(10, 4, 1), "relay");
         }
 
         public void EnsureEditorUiVisuals()
@@ -108,9 +109,39 @@ namespace OCC.Combat.Presentation
             GameObject textObject = new GameObject(name + "文字"); textObject.transform.SetParent(panel.transform, false); RectTransform textRect = textObject.AddComponent<RectTransform>(); textRect.anchorMin = Vector2.zero; textRect.anchorMax = Vector2.one; textRect.offsetMin = Vector2.zero; textRect.offsetMax = Vector2.zero; Text label = textObject.AddComponent<Text>(); label.text = text; label.alignment = TextAnchor.MiddleCenter; label.color = Color.white; label.fontSize = fontSize; label.font = Resources.Load<Font>("Fonts/SimHei");
         }
 
-        private static void AddEditorMarker(GameObject root, string name, Vector3 position, Color color)
+        private static void AddEditorMarker(GameObject root, string name, Vector3 position, string formalAsset)
         {
-            GameObject marker = new GameObject(name); marker.transform.SetParent(root.transform, false); marker.transform.position = position; marker.transform.localScale = Vector3.one * .72f; SpriteRenderer renderer = marker.AddComponent<SpriteRenderer>(); renderer.sprite = CreateEditorSprite(); renderer.color = color; renderer.sortingOrder = -5;
+            GameObject marker = new GameObject(name); marker.transform.SetParent(root.transform, false); marker.transform.position = position; marker.transform.localScale = Vector3.one * .96f; SpriteRenderer renderer = marker.AddComponent<SpriteRenderer>(); renderer.sprite = LoadFormalSprite(formalAsset) ?? CreateEditorSprite(); renderer.color = Color.white; renderer.sortingOrder = -5;
+        }
+
+        private static Sprite LoadFormalSprite(string name)
+        {
+            Texture2D texture = Resources.Load<Texture2D>("Art/FormalRelay32/" + name);
+            if (texture == null) return null;
+            texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(.5f, .5f), 32f);
+        }
+
+        private void ApplyFormalRelayVisuals()
+        {
+            Transform root = transform.Find("地图可视化");
+            if (root == null) return;
+            Sprite floor = LoadFormalSprite("floor");
+            Sprite light = LoadFormalSprite("light_cover");
+            Sprite heavy = LoadFormalSprite("heavy_cover");
+            Sprite relay = LoadFormalSprite("relay");
+            foreach (SpriteRenderer renderer in root.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                string objectName = renderer.gameObject.name;
+                Sprite replacement = objectName.StartsWith("格_") ? floor :
+                    objectName.StartsWith("轻掩体") ? light :
+                    objectName.StartsWith("重掩体") ? heavy :
+                    objectName.StartsWith("目标_中继器") ? relay : null;
+                if (replacement == null) continue;
+                renderer.sprite = replacement;
+                renderer.color = Color.white;
+            }
         }
 
         private static Sprite CreateEditorSprite()
