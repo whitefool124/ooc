@@ -767,6 +767,7 @@ namespace OCC.Combat.Presentation
                     {
                         GUI.color = Color.white;
                         Rect unitRect = StaticUnitPresentationRect(unit, new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8));
+                        unitRect.x += visualFeedback != null ? visualFeedback.UnitShakeOffset(unit) : 0f;
                         GUI.DrawTexture(unitRect, unitTexture, ScaleMode.ScaleToFit, true);
                     }
                     else

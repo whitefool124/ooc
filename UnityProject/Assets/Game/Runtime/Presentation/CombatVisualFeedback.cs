@@ -12,6 +12,7 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, int> healthCache = new Dictionary<string, int>();
         private readonly Dictionary<GridPosition, int> durabilityCache = new Dictionary<GridPosition, int>();
         private readonly Dictionary<string, string> statusCache = new Dictionary<string, string>();
+        private readonly Dictionary<string, float> hitUntil = new Dictionary<string, float>();
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private string lastOutcome;
@@ -68,7 +69,13 @@ namespace OCC.Combat.Presentation
         {
             lastOutcome = null;
             healthCache.Clear();
-            durabilityCache.Clear(); statusCache.Clear();
+            durabilityCache.Clear(); statusCache.Clear(); hitUntil.Clear();
+        }
+
+        public int UnitShakeOffset(UnitState unit)
+        {
+            if (unit == null || !hitUntil.TryGetValue(unit.Id, out float until) || until <= Time.unscaledTime) return 0;
+            return Mathf.RoundToInt(Mathf.Sin(Time.unscaledTime * 42f) * 2f);
         }
 
         public void NotifyDestructible(GridPosition position, TileState tile)
@@ -94,6 +101,8 @@ namespace OCC.Combat.Presentation
             EnsureCanvas();
             PulseCell(source, new Color(.35f, .85f, 1f, .72f), .12f);
             PulseCell(target, defeated ? new Color(1f, .18f, .12f, .85f) : new Color(1f, .35f, .28f, .72f), .18f);
+            UnitState targetUnit = bootstrap.CurrentState?.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == target);
+            if (targetUnit != null) hitUntil[targetUnit.Id] = Time.unscaledTime + .18f;
             if (damage > 0) ShowFloatingText(target, "-" + damage, new Color(1f, .45f, .35f));
             if (defeated) ShowBreakText(target);
         }
