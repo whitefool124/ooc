@@ -29,6 +29,7 @@ namespace OCC.Combat.Presentation
         private bool outcomeHandled;
         private RogueliteMapRun mapRun;
         private bool mapMenuOpen;
+        private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
@@ -57,6 +58,7 @@ namespace OCC.Combat.Presentation
             developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this);
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
+            LoadFormalUnitTextures();
             menuPanelAlpha = 0f; menuPanelScale = .96f;
             DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
             DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
@@ -142,6 +144,37 @@ namespace OCC.Combat.Presentation
                 renderer.sprite = replacement;
                 renderer.color = Color.white;
             }
+        }
+
+        private void LoadFormalUnitTextures()
+        {
+            string[] names = { "hero", "rifleman", "shieldguard", "pyromancer", "elite" };
+            foreach (string name in names)
+            {
+                Texture2D texture = Resources.Load<Texture2D>("Art/FormalUnits64/" + name);
+                if (texture == null) continue;
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                formalUnitTextures[name] = texture;
+            }
+        }
+
+        private Texture2D FormalUnitTexture(UnitState unit)
+        {
+            if (unit == null) return null;
+            if (unit.IsHero) return TextureFor("hero");
+            string name = unit.DisplayName;
+            if (name.Contains("步枪") || name.Contains("狙击")) return TextureFor("rifleman");
+            if (name.Contains("盾卫") || name.Contains("结界")) return TextureFor("shieldguard");
+            if (name.Contains("火术") || name.Contains("束缚") || name.Contains("净化")) return TextureFor("pyromancer");
+            if (name.Contains("精英") || name.Contains("监工")) return TextureFor("elite");
+            return null;
+        }
+
+        private Texture2D TextureFor(string name)
+        {
+            formalUnitTextures.TryGetValue(name, out Texture2D texture);
+            return texture;
         }
 
         private static Sprite CreateEditorSprite()
@@ -704,8 +737,17 @@ namespace OCC.Combat.Presentation
                 if (unit != null)
                 {
                     if (unit.Id == selectedTargetId) DrawOutline(cell, new Color(1f, .8f, .2f, 1f));
-                    GUI.color = unit.IsHero ? new Color(.25f, .72f, 1f) : new Color(1f, .35f, .3f);
-                    GUI.Box(new Rect(cell.x + 7, cell.y + 11, cell.width - 14, cell.height - 14), FacingGlyph(unit.Facing));
+                    Texture2D unitTexture = FormalUnitTexture(unit);
+                    if (unitTexture != null)
+                    {
+                        GUI.color = Color.white;
+                        GUI.DrawTexture(new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8), unitTexture, ScaleMode.ScaleToFit, true);
+                    }
+                    else
+                    {
+                        GUI.color = unit.IsHero ? new Color(.25f, .72f, 1f) : new Color(1f, .35f, .3f);
+                        GUI.Box(new Rect(cell.x + 7, cell.y + 11, cell.width - 14, cell.height - 14), FacingGlyph(unit.Facing));
+                    }
                     GUI.color = Color.white;
                     DrawUnitBars(unit, new Rect(cell.x + 5, cell.y + 3, cell.width - 10, 5));
                     if (!unit.IsHero) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));

@@ -38,8 +38,9 @@
 | --- | --- | --- | --- |
 | `move`、`attack`、`skill`、`loot`、`interact` | `Assets/Game/Resources/Art/FormalIcons32/` | `FormalCombatHud` 指令按钮；`skill` 供两格技能共用 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 为 6 个按钮建立正式图标层 |
 | `floor`、`light_cover`、`heavy_cover`、`relay`、`loot_crate` | `Assets/Game/Resources/Art/FormalRelay32/` | 运行时 `地图可视化` 地块/掩体/中继器；战利品箱待实际节点出现 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 108 地块、2 轻掩体、2 重掩体、1 中继器，回退为 0 |
+| `hero`、`rifleman`、`shieldguard`、`pyromancer`、`elite` | `Assets/Game/Resources/Art/FormalUnits64/` | 战斗网格的正式单位绘制；同系兵种复用相近静帧 | `64×64`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 5/5 可加载，主角/步枪兵/盾卫/火术师/精英及监工映射有效 |
 
-旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站战利品箱仅完成导入，待实际节点出现后绑定；单位静帧尚未导入，仍由 V2-05 后续逐批评审。
+旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站战利品箱仅完成导入，待实际节点出现后绑定；未有独立原料的突袭者仍使用原有标记，等待后续资产扩充。
 
 ## V2-03 实测导入审查（2026-07-24）
 
