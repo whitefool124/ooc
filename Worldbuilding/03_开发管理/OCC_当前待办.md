@@ -97,4 +97,8 @@
 | 2026-07-22 | 鏈湴 UI 鏂瑰悜鍥?| PASS | 宸插惎鍔?`E:\鏁版嵁搴揬鍥剧墖鐢熸垚` Relay Canvas 骞堕€氳繃鏈満鎺ュ彛鐢熸垚 UI 姒傚康鍙傝€冨浘锛歚E:\鏁版嵁搴揬鍥剧墖鐢熸垚\outputs\gpt-image-2-2026-07-22T12-24-18-570Z-4dcd4cf3.png`銆傚浘浠呯敤浜庡竷灞€/鏉愯川/鑹插僵瀹℃煡锛屾湭瀵煎叆 Unity銆?|
 | 2026-07-22 | P1-05 | COMPLETE | 瀹炶榛戠櫧鏋佺畝宸ヤ笟鎴樻湳 HUD锛氱粏绾挎鏋躲€佺伆闃堕潰鏉裤€侀檺閲忓喎闈?閿堢孩/瀹夊叏榛勮涔夎壊锛屼互鍙婅繍琛屾椂鐢熸垚鐨?6 鏋氱嫭绔?32x32 鐐硅繃婊ゅ儚绱犳寚浠ゅ浘鏍囥€侳unplay 缂栬瘧鏃犻敊璇€丆onsole 涓虹┖锛?920x1080 Game View 涓?960x540 鎴浘纭 HUD 鍙涓旀棤閲嶅彔/瓒婄晫锛涙湭淇濆瓨鍦烘櫙銆佹湭瀵煎叆 AI 鍥俱€備笅涓€姝ワ細P3 鑲夐附鏁呬簨鍖呬笌浠诲姟妯℃澘寮€鍙戣彍鍗曞叆鍙ｃ€?|
 | 2026-07-22 | P1-06 | COMPLETE | HUD 宸插満鏅寲锛歚CombatPrototype` 鐨?`鍦烘櫙UI/鎴樻湳HUD` 淇濆瓨浜嗗叏閮ㄧ粏绾垮垎鍖恒€乣Button`銆乣RawImage` 鍥炬爣妲姐€佽祫婧愭潯鍜岃鍔ㄦ潯锛孋anvas 淇濆瓨 `TacticalHudSceneBinder`銆? 鏋氬浐瀹?32x32 Point-filter 鍥炬爣璧勪骇淇濆瓨鍒?`Assets/Game/Art/UI/Icons32/`锛汸lay Mode 楠岃瘉 HUD 鍚屽抚婵€娲诲強鈥滄敾鍑烩€濇寜閽疄闄呭垏鎹㈤€夋嫨銆傜紪璇戞棤閿欒銆丆onsole 鏃犻敊璇€?|
-
+#### V2-16: floor_hazard static tile - COMPLETE (2026-07-25)
+- Goal: add one independent 32x32 hazard-marked relay-station floor tile as a static visual variant; no gameplay rule or scene YAML change.
+- Files: `Worldbuilding/05_美术与音频/像素资产原料/V2-16/`, `UnityProject/Assets/Game/Resources/Art/FormalRelay32/floor_hazard.png`.
+- Verification: normalization report PASS (16 colors, hard alpha, 32x32); Funplay compile/warnings 0; Play Mode load verified Point/Clamp; Console empty; scene `isDirty=false`.
+- Next: keep static-only asset iteration and choose one new single object when continuing.

@@ -105,4 +105,10 @@
 | skill_two | 32×32 | FORMAL 原料 / Unity 待修正采样 | 独立单图经硬 alpha、16 色、4x QA 与 JSON 报告通过；表面语义为第二技能的火焰/奥术闪击；禁止作为多帧动画来源。 |
 
 原料与 QA 位于 像素资产原料/V2-15/；Unity 运行时复核发现当前导入采样为 Bilinear，需下一步改为 Point 后再纳入正式导入清单。
+## V2-16 floor_hazard static tile (2026-07-25)
 
+| Asset | Size | Status | QA result |
+| --- | --- | --- | --- |
+| `floor_hazard` | 32x32 | `FORMAL` | Independent single-image source, hard alpha, 16-color palette, 4x QA and JSON report PASS; Unity import verified Point/Clamp. |
+
+Source and QA outputs are under `像素资产原料/V2-16/`. This is a static tile only and is not an animation source.
