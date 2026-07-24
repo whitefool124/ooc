@@ -118,7 +118,7 @@ namespace OCC.Combat.Presentation
 
         private void LoadActionIcons()
         {
-            string[] names = { "move", "attack", "skill", "loot", "interact" };
+            string[] names = { "move", "attack", "skill", "skill_two", "loot", "interact" };
             foreach (string name in names)
             {
                 Texture2D texture = Resources.Load<Texture2D>("Art/FormalIcons32/" + name);
@@ -131,7 +131,7 @@ namespace OCC.Combat.Presentation
 
         private void AddActionIcon(Transform parent, string action)
         {
-            string key = action == "移动" ? "move" : action == "攻击" ? "attack" : action == "技能1" || action == "技能2" ? "skill" : action == "搜刮" ? "loot" : "interact";
+            string key = action == "移动" ? "move" : action == "攻击" ? "attack" : action == "技能1" ? "skill" : action == "技能2" ? "skill_two" : action == "搜刮" ? "loot" : "interact";
             if (!actionIcons.TryGetValue(key, out Sprite sprite)) return;
             GameObject iconObject = new GameObject("正式图标"); iconObject.transform.SetParent(parent, false);
             RectTransform rect = iconObject.AddComponent<RectTransform>(); rect.anchorMin = new Vector2(0, .5f); rect.anchorMax = new Vector2(0, .5f); rect.pivot = new Vector2(0, .5f); rect.anchoredPosition = new Vector2(9, 0); rect.sizeDelta = new Vector2(28, 28);
