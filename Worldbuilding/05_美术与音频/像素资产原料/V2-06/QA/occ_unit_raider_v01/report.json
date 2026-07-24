@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_unit_raider_static_64",
+    "category": "character_static_frame",
+    "description": "Independent raider static frame normalized for the OCC 32px-tile tactical grid.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 32,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\input_occ_unit_raider_v01\\occ_unit_raider_v01.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\occ_unit_raider_v01\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\occ_unit_raider_v01\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\occ_unit_raider_v01\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\occ_unit_raider_v01\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-06\\QA\\input_occ_unit_raider_v01\\occ_unit_raider_v01.png",
+      "empty": false,
+      "sourceBounds": [
+        254,
+        86,
+        998,
+        1135
+      ],
+      "sourceBodyWidth": 744,
+      "sourceBodyHeight": 1049,
+      "scale": 0.0438512869399428,
+      "outputWidth": 33,
+      "outputHeight": 46,
+      "outputX": 16,
+      "outputY": 12,
+      "normalizedBounds": [
+        16,
+        12,
+        49,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

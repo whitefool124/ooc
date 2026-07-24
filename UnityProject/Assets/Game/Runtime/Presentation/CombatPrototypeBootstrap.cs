@@ -151,7 +151,7 @@ namespace OCC.Combat.Presentation
 
         private void LoadFormalUnitTextures()
         {
-            string[] names = { "hero", "rifleman", "shieldguard", "pyromancer", "elite" };
+            string[] names = { "hero", "rifleman", "shieldguard", "pyromancer", "raider", "elite" };
             foreach (string name in names)
             {
                 Texture2D texture = Resources.Load<Texture2D>("Art/FormalUnits64/" + name);
@@ -170,6 +170,7 @@ namespace OCC.Combat.Presentation
             if (name.Contains("步枪") || name.Contains("狙击")) return TextureFor("rifleman");
             if (name.Contains("盾卫") || name.Contains("结界")) return TextureFor("shieldguard");
             if (name.Contains("火术") || name.Contains("束缚") || name.Contains("净化")) return TextureFor("pyromancer");
+            if (name.Contains("突袭")) return TextureFor("raider");
             if (name.Contains("精英") || name.Contains("监工")) return TextureFor("elite");
             return null;
         }

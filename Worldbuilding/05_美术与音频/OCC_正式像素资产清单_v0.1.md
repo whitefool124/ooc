@@ -37,10 +37,17 @@
 | 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
 | --- | --- | --- | --- |
 | `move`、`attack`、`skill`、`loot`、`interact` | `Assets/Game/Resources/Art/FormalIcons32/` | `FormalCombatHud` 指令按钮；`skill` 供两格技能共用 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 为 6 个按钮建立正式图标层 |
-| `floor`、`light_cover`、`heavy_cover`、`relay`、`loot_crate` | `Assets/Game/Resources/Art/FormalRelay32/` | 运行时 `地图可视化` 地块/掩体/中继器；战利品箱待实际节点出现 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 108 地块、2 轻掩体、2 重掩体、1 中继器，回退为 0 |
+| `floor`、`light_cover`、`heavy_cover`、`relay`、`loot_crate` | `Assets/Game/Resources/Art/FormalRelay32/` | 运行时 `地图可视化` 地块/掩体/中继器；战利品箱用于既有 IMGUI 战利品容器 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 108 地块、2 轻掩体、2 重掩体、1 中继器，回退为 0 |
 | `hero`、`rifleman`、`shieldguard`、`pyromancer`、`elite` | `Assets/Game/Resources/Art/FormalUnits64/` | 战斗网格的正式单位绘制；同系兵种复用相近静帧 | `64×64`、Sprite、Point、Clamp、无 mipmap；Play Mode 复核 5/5 可加载，主角/步枪兵/盾卫/火术师/精英及监工映射有效 |
+| `raider` | `Assets/Game/Resources/Art/FormalUnits64/raider.png` | 突袭者的专用正式静帧 | `64×64`、Sprite、Point、Clamp、无 mipmap；Play Mode 确认 `突袭者` 映射到 `raider` |
 
-旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站战利品箱仅完成导入，待实际节点出现后绑定；未有独立原料的突袭者仍使用原有标记，等待后续资产扩充。
+旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站战利品箱已完成既有 IMGUI 战利品容器绘制接入；突袭者现在使用独立静帧。所有上述单位仍只具备静帧，动画须作为后续独立任务制作。
+
+## V2-06 突袭者独立静帧（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `raider` | `像素资产原料/V2-06/Units64/occ_unit_raider_v01.png` 与 `QA/occ_unit_raider_v01/` | `64×64`，原料库 `FORMAL` | 独立单图原料经硬 alpha、24 色调色板、`X=32` / `Y=58`、4x 审查图和 JSON 报告复核通过；已导入 `FormalUnits64/raider.png` 并通过运行时映射复核，动画仍缺失。 |
 
 ## V2-03 实测导入审查（2026-07-24）
 
