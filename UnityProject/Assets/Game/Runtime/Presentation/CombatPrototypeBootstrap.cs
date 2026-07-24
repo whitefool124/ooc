@@ -31,6 +31,7 @@ namespace OCC.Combat.Presentation
         private bool mapMenuOpen;
         private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
         private Texture2D formalLootTexture;
+        private Texture2D formalHeroIdleTexture;
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
@@ -60,6 +61,8 @@ namespace OCC.Combat.Presentation
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
             LoadFormalUnitTextures();
+            formalHeroIdleTexture = Resources.Load<Texture2D>("Art/FormalAnimations64/hero_idle_4f");
+            if (formalHeroIdleTexture != null) { formalHeroIdleTexture.filterMode = FilterMode.Point; formalHeroIdleTexture.wrapMode = TextureWrapMode.Clamp; }
             formalLootTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate");
             if (formalLootTexture != null) { formalLootTexture.filterMode = FilterMode.Point; formalLootTexture.wrapMode = TextureWrapMode.Clamp; }
             menuPanelAlpha = 0f; menuPanelScale = .96f;
@@ -745,7 +748,13 @@ namespace OCC.Combat.Presentation
                     if (unitTexture != null)
                     {
                         GUI.color = Color.white;
-                        GUI.DrawTexture(new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8), unitTexture, ScaleMode.ScaleToFit, true);
+                        Rect unitRect = new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8);
+                        if (unit.IsHero && formalHeroIdleTexture != null)
+                        {
+                            int idleFrame = Mathf.FloorToInt(Time.unscaledTime * 4f) % 4;
+                            GUI.DrawTextureWithTexCoords(unitRect, formalHeroIdleTexture, new Rect(idleFrame * .25f, 0f, .25f, 1f), true);
+                        }
+                        else GUI.DrawTexture(unitRect, unitTexture, ScaleMode.ScaleToFit, true);
                     }
                     else
                     {

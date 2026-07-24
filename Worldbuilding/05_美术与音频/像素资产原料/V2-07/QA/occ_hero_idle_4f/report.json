@@ -1,0 +1,137 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_hero_idle_4f_64",
+    "category": "character_idle_animation",
+    "description": "Four independently generated hero idle frames normalized for the OCC tactical grid.",
+    "frameCount": 4,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 4,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 32,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 14,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_00.png",
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_01.png",
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_02.png",
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_03.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\occ_hero_idle_4f\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\occ_hero_idle_4f\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\occ_hero_idle_4f\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\occ_hero_idle_4f\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_00.png",
+      "empty": false,
+      "sourceBounds": [
+        371,
+        188,
+        793,
+        1202
+      ],
+      "sourceBodyWidth": 422,
+      "sourceBodyHeight": 1014,
+      "scale": 0.045364891518737675,
+      "outputWidth": 19,
+      "outputHeight": 46,
+      "outputX": 22,
+      "outputY": 12,
+      "normalizedBounds": [
+        22,
+        12,
+        41,
+        58
+      ]
+    },
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_01.png",
+      "empty": false,
+      "sourceBounds": [
+        379,
+        126,
+        687,
+        896
+      ],
+      "sourceBodyWidth": 308,
+      "sourceBodyHeight": 770,
+      "scale": 0.05974025974025974,
+      "outputWidth": 18,
+      "outputHeight": 46,
+      "outputX": 23,
+      "outputY": 12,
+      "normalizedBounds": [
+        23,
+        12,
+        41,
+        58
+      ]
+    },
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_02.png",
+      "empty": false,
+      "sourceBounds": [
+        359,
+        153,
+        684,
+        871
+      ],
+      "sourceBodyWidth": 325,
+      "sourceBodyHeight": 718,
+      "scale": 0.06406685236768803,
+      "outputWidth": 21,
+      "outputHeight": 46,
+      "outputX": 22,
+      "outputY": 12,
+      "normalizedBounds": [
+        22,
+        12,
+        43,
+        58
+      ]
+    },
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-07\\QA\\raw_frames\\frame_03.png",
+      "empty": false,
+      "sourceBounds": [
+        353,
+        97,
+        691,
+        930
+      ],
+      "sourceBodyWidth": 338,
+      "sourceBodyHeight": 833,
+      "scale": 0.055222088835534214,
+      "outputWidth": 19,
+      "outputHeight": 46,
+      "outputX": 22,
+      "outputY": 12,
+      "normalizedBounds": [
+        22,
+        12,
+        41,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

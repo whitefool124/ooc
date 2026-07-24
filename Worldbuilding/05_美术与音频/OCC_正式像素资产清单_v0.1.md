@@ -49,6 +49,16 @@
 | --- | --- | --- | --- |
 | `raider` | `像素资产原料/V2-06/Units64/occ_unit_raider_v01.png` 与 `QA/occ_unit_raider_v01/` | `64×64`，原料库 `FORMAL` | 独立单图原料经硬 alpha、24 色调色板、`X=32` / `Y=58`、4x 审查图和 JSON 报告复核通过；已导入 `FormalUnits64/raider.png` 并通过运行时映射复核，动画仍缺失。 |
 
+## V2-07 主角待机动画（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `hero_idle_4f` | `像素资产原料/V2-07/QA/occ_hero_idle_4f/` | `4×64×64`，原料库 `FORMAL` | 4 张基于同一主角参考单独生成的输入，均经硬 alpha、24 色调色板、`X=32` / `Y=58`、GIF、4x QA 与 JSON 报告复核通过；可导入为 `256×64` 固定循环 strip。 |
+
+| Unity 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
+| --- | --- | --- | --- |
+| `hero_idle_4f` | `Assets/Game/Resources/Art/FormalAnimations64/hero_idle_4f.png` | 战斗网格主角的四帧待机循环 | `256×64`、Sprite、Point、Clamp、无 mipmap；Play Mode 确认资源绑定且按 4fps 计算当前循环帧。 |
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |
