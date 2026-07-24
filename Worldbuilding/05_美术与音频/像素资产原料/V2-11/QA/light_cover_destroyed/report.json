@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_static_tile_32",
+    "category": "tactical_tile_static",
+    "description": "One independent OCC cover-state tile source normalized for 32x32 review.",
+    "frameCount": 1,
+    "targetFrameWidth": 32,
+    "targetFrameHeight": 32,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 30,
+    "centerX": 16,
+    "targetBodyHeight": 28,
+    "minBodyHeight": 24,
+    "maxBodyHeight": 30,
+    "maxBodyWidth": 30,
+    "alphaThreshold": 32,
+    "paletteColors": 16,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\raw\\light_cover_destroyed.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\light_cover_destroyed\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\light_cover_destroyed\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\light_cover_destroyed\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\light_cover_destroyed\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-11\\QA\\raw\\light_cover_destroyed.png",
+      "empty": false,
+      "sourceBounds": [
+        159,
+        135,
+        867,
+        863
+      ],
+      "sourceBodyWidth": 708,
+      "sourceBodyHeight": 728,
+      "scale": 0.038461538461538464,
+      "outputWidth": 27,
+      "outputHeight": 28,
+      "outputX": 2,
+      "outputY": 2,
+      "normalizedBounds": [
+        2,
+        2,
+        29,
+        30
+      ]
+    }
+  ],
+  "failures": []
+}

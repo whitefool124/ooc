@@ -787,6 +787,16 @@ namespace OCC.Combat.Presentation
                     }
                     if (!tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
                 }
+                else if (tile.Cover == CoverType.Light && tile.IsDestroyed)
+                {
+                    Texture2D coverTexture = Resources.Load<Texture2D>("Art/FormalRelay32/light_cover_destroyed");
+                    if (coverTexture != null)
+                    {
+                        coverTexture.filterMode = FilterMode.Point;
+                        coverTexture.wrapMode = TextureWrapMode.Clamp;
+                        GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), coverTexture, ScaleMode.ScaleToFit, true);
+                    }
+                }
                 if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
                 {
                     GUI.color = Color.white;

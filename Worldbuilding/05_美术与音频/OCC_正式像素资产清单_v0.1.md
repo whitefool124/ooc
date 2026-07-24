@@ -75,6 +75,12 @@
 | --- | --- | --- | --- |
 | `relay_destroyed` | `像素资产原料/V2-10/Relay32/` 与 `QA/relay_destroyed/` | `32×32`，原料库 `FORMAL` | 独立原料经硬 alpha、16 色、4x QA 与 JSON 报告复核；仅用于 `TileState.IsDestroyed` 的目标反馈。 |
 
+## V2-11 轻掩体破损静态反馈（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `light_cover_destroyed` | `像素资产原料/V2-11/Covers32/` 与 `QA/light_cover_destroyed/` | `32×32`，原料库 `FORMAL` | 独立原料经硬 alpha、16 色、4x QA 与 JSON 报告复核；仅用于轻掩体 `TileState.IsDestroyed` 的静态反馈。 |
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |
