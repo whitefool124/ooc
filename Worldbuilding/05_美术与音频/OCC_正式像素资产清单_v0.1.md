@@ -57,7 +57,7 @@
 
 | Unity 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
 | --- | --- | --- | --- |
-| `hero_idle_4f` | `Assets/Game/Resources/Art/FormalAnimations64/hero_idle_4f.png` | 战斗网格主角的四帧待机循环 | `256×64`、Sprite、Point、Clamp、无 mipmap；Play Mode 确认资源绑定且按 4fps 计算当前循环帧。 |
+| `hero_idle_4f` | `Assets/Game/Resources/Art/FormalAnimations64/hero_idle_4f.png` | 已批准的独立帧审查样本，当前不作为运行时依赖 | `256×64`、Sprite、Point、Clamp、无 mipmap；因本地多帧一致性仍待成熟，运行时暂统一采用静帧与整像素微位移。 |
 
 ## V2-03 实测导入审查（2026-07-24）
 
