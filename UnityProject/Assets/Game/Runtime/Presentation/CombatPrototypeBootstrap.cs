@@ -132,14 +132,16 @@ namespace OCC.Combat.Presentation
         {
             Transform root = transform.Find("地图可视化");
             if (root == null) return;
-            Sprite floor = LoadFormalSprite("floor");
+            Sprite floor = LoadFormalSprite("floor_industrial") ?? LoadFormalSprite("floor");
+            Sprite railFloor = LoadFormalSprite("floor_rail") ?? floor;
+            Sprite warningFloor = LoadFormalSprite("floor_warning") ?? floor;
             Sprite light = LoadFormalSprite("light_cover");
             Sprite heavy = LoadFormalSprite("heavy_cover");
             Sprite relay = LoadFormalSprite("relay");
             foreach (SpriteRenderer renderer in root.GetComponentsInChildren<SpriteRenderer>(true))
             {
                 string objectName = renderer.gameObject.name;
-                Sprite replacement = objectName.StartsWith("格_") ? floor :
+                Sprite replacement = objectName.StartsWith("格_") ? RelayFloorSprite(objectName, floor, railFloor, warningFloor) :
                     objectName.StartsWith("轻掩体") ? light :
                     objectName.StartsWith("重掩体") ? heavy :
                     objectName.StartsWith("目标_中继器") ? relay : null;
@@ -147,6 +149,15 @@ namespace OCC.Combat.Presentation
                 renderer.sprite = replacement;
                 renderer.color = Color.white;
             }
+        }
+
+        private static Sprite RelayFloorSprite(string objectName, Sprite floor, Sprite railFloor, Sprite warningFloor)
+        {
+            string[] parts = objectName.Split('_');
+            if (parts.Length != 3 || !int.TryParse(parts[1], out int x) || !int.TryParse(parts[2], out int y)) return floor;
+            if (y == 0 || y == 8) return railFloor;
+            if ((x == 5 || x == 6) && y >= 3 && y <= 5) return warningFloor;
+            return floor;
         }
 
         private void LoadFormalUnitTextures()

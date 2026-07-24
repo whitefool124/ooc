@@ -59,6 +59,16 @@
 | --- | --- | --- | --- |
 | `hero_idle_4f` | `Assets/Game/Resources/Art/FormalAnimations64/hero_idle_4f.png` | 已批准的独立帧审查样本，当前不作为运行时依赖 | `256×64`、Sprite、Point、Clamp、无 mipmap；因本地多帧一致性仍待成熟，运行时暂统一采用静帧与整像素微位移。 |
 
+## V2-09 中继站静态地块变体（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `floor_industrial`、`floor_rail`、`floor_warning` | `像素资产原料/V2-09/` | `32×32`，原料库 `FORMAL` | 3 张独立输入均经硬 alpha、16 色调色板、4x QA 和 JSON 报告复核通过；可导入中继站地图的既有地块 SpriteRenderer。 |
+
+| Unity 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
+| --- | --- | --- | --- |
+| `floor_industrial`、`floor_rail`、`floor_warning` | `Assets/Game/Resources/Art/FormalRelay32/` | 普通地面、边界轨道、中心警戒区 | 三者均 `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 验证 78 / 24 / 6 个既有格实例，回退 0。 |
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |

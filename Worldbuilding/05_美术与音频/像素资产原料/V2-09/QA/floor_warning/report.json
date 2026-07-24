@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_static_tile_32",
+    "category": "tactical_tile_static",
+    "description": "One independent OCC relay-station tile source normalized for 32x32 review.",
+    "frameCount": 1,
+    "targetFrameWidth": 32,
+    "targetFrameHeight": 32,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 30,
+    "centerX": 16,
+    "targetBodyHeight": 28,
+    "minBodyHeight": 24,
+    "maxBodyHeight": 30,
+    "maxBodyWidth": 30,
+    "alphaThreshold": 32,
+    "paletteColors": 16,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\input_floor_warning\\floor_warning.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\floor_warning\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\floor_warning\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\floor_warning\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\floor_warning\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-09\\QA\\input_floor_warning\\floor_warning.png",
+      "empty": false,
+      "sourceBounds": [
+        81,
+        82,
+        943,
+        942
+      ],
+      "sourceBodyWidth": 862,
+      "sourceBodyHeight": 860,
+      "scale": 0.03255813953488372,
+      "outputWidth": 28,
+      "outputHeight": 28,
+      "outputX": 2,
+      "outputY": 2,
+      "normalizedBounds": [
+        2,
+        2,
+        30,
+        30
+      ]
+    }
+  ],
+  "failures": []
+}
