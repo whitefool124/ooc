@@ -1,0 +1,23 @@
+{
+  "id": "occ_static_unit_64",
+  "category": "static_unit",
+  "description": "One independent raw unit source normalized for 64x64 review only; not a formal Unity import.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 46,
+  "minBodyHeight": 38,
+  "maxBodyHeight": 50,
+  "maxBodyWidth": 60,
+  "alphaThreshold": 32,
+  "paletteColors": 24,
+  "allowChromaKey": true,
+  "chromaKeyTolerance": 72,
+  "despill": true,
+  "gifDelay": 12,
+  "export": { "strip": true, "frames": true, "gif": true, "qa": true, "report": true }
+}

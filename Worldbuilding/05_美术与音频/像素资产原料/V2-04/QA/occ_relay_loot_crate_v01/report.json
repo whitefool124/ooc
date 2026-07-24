@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_static_icon_object_32",
+    "category": "static_icon_or_object",
+    "description": "One independent raw source normalized for 32x32 review only; not a formal Unity import.",
+    "frameCount": 1,
+    "targetFrameWidth": 32,
+    "targetFrameHeight": 32,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 30,
+    "centerX": 16,
+    "targetBodyHeight": 28,
+    "minBodyHeight": 20,
+    "maxBodyHeight": 30,
+    "maxBodyWidth": 30,
+    "alphaThreshold": 32,
+    "paletteColors": 16,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\input_occ_relay_loot_crate_v01\\occ_relay_loot_crate_v01.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_relay_loot_crate_v01\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_relay_loot_crate_v01\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_relay_loot_crate_v01\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_relay_loot_crate_v01\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\input_occ_relay_loot_crate_v01\\occ_relay_loot_crate_v01.png",
+      "empty": false,
+      "sourceBounds": [
+        172,
+        161,
+        849,
+        854
+      ],
+      "sourceBodyWidth": 677,
+      "sourceBodyHeight": 693,
+      "scale": 0.04040404040404041,
+      "outputWidth": 27,
+      "outputHeight": 28,
+      "outputX": 2,
+      "outputY": 2,
+      "normalizedBounds": [
+        2,
+        2,
+        29,
+        30
+      ]
+    }
+  ],
+  "failures": []
+}

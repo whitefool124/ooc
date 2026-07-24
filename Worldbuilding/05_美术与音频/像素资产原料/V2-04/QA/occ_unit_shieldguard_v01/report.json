@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_static_unit_64",
+    "category": "static_unit",
+    "description": "One independent raw unit source normalized for 64x64 review only; not a formal Unity import.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 32,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\input_occ_unit_shieldguard_v01\\occ_unit_shieldguard_v01.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_shieldguard_v01\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_shieldguard_v01\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_shieldguard_v01\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_shieldguard_v01\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\input_occ_unit_shieldguard_v01\\occ_unit_shieldguard_v01.png",
+      "empty": false,
+      "sourceBounds": [
+        296,
+        57,
+        728,
+        956
+      ],
+      "sourceBodyWidth": 432,
+      "sourceBodyHeight": 899,
+      "scale": 0.05116796440489433,
+      "outputWidth": 22,
+      "outputHeight": 46,
+      "outputX": 21,
+      "outputY": 12,
+      "normalizedBounds": [
+        21,
+        12,
+        43,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}
