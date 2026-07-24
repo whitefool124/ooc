@@ -31,6 +31,7 @@ namespace OCC.Combat.Presentation
         private bool mapMenuOpen;
         private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
         private Texture2D formalLootTexture;
+        private Texture2D formalLootOpenTexture;
         private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
         private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
         private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
@@ -62,6 +63,8 @@ namespace OCC.Combat.Presentation
             LoadFormalUnitTextures();
             formalLootTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate");
             if (formalLootTexture != null) { formalLootTexture.filterMode = FilterMode.Point; formalLootTexture.wrapMode = TextureWrapMode.Clamp; }
+            formalLootOpenTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate_open");
+            if (formalLootOpenTexture != null) { formalLootOpenTexture.filterMode = FilterMode.Point; formalLootOpenTexture.wrapMode = TextureWrapMode.Clamp; }
             menuPanelAlpha = 0f; menuPanelScale = .96f;
             DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
             DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
@@ -807,11 +810,12 @@ namespace OCC.Combat.Presentation
                         GUI.DrawTexture(new Rect(cell.x + 6, cell.y + 6, cell.width - 12, cell.height - 12), coverTexture, ScaleMode.ScaleToFit, true);
                     }
                 }
-                if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
+                if (state.Loot != null && state.Loot.Position == p)
                 {
                     GUI.color = Color.white;
-                    if (formalLootTexture != null)
-                        GUI.DrawTexture(new Rect(cell.x + 12, cell.y + 12, cell.width - 24, cell.height - 24), formalLootTexture, ScaleMode.ScaleToFit, true);
+                    Texture2D lootTexture = state.Loot.IsLooted ? formalLootOpenTexture : formalLootTexture;
+                    if (lootTexture != null)
+                        GUI.DrawTexture(new Rect(cell.x + 12, cell.y + 12, cell.width - 24, cell.height - 24), lootTexture, ScaleMode.ScaleToFit, true);
                     else
                     {
                         GUI.color = new Color(1f, .78f, .18f);

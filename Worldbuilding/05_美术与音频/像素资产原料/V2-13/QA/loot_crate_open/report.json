@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_static_tile_32",
+    "category": "tactical_tile_static",
+    "description": "One independent OCC loot-state tile source normalized for 32x32 review.",
+    "frameCount": 1,
+    "targetFrameWidth": 32,
+    "targetFrameHeight": 32,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 30,
+    "centerX": 16,
+    "targetBodyHeight": 28,
+    "minBodyHeight": 24,
+    "maxBodyHeight": 30,
+    "maxBodyWidth": 30,
+    "alphaThreshold": 32,
+    "paletteColors": 16,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\raw\\loot_crate_open.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\loot_crate_open\\strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\loot_crate_open\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\loot_crate_open\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\loot_crate_open\\qa.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-13\\QA\\raw\\loot_crate_open.png",
+      "empty": false,
+      "sourceBounds": [
+        128,
+        77,
+        897,
+        934
+      ],
+      "sourceBodyWidth": 769,
+      "sourceBodyHeight": 857,
+      "scale": 0.03267211201866978,
+      "outputWidth": 25,
+      "outputHeight": 28,
+      "outputX": 4,
+      "outputY": 2,
+      "normalizedBounds": [
+        4,
+        2,
+        29,
+        30
+      ]
+    }
+  ],
+  "failures": []
+}
