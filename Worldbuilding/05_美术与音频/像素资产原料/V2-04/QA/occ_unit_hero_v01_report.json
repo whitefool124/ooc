@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_unit_hero_static_64",
+    "category": "character_static_frame",
+    "description": "One independent source image normalized only for review; not an animation strip or Unity import.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 32,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\hero_static_input\\occ_unit_hero_v01.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_hero_v01_strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_hero_v01_frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_hero_v01_preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\occ_unit_hero_v01_QA.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-04\\QA\\hero_static_input\\occ_unit_hero_v01.png",
+      "empty": false,
+      "sourceBounds": [
+        306,
+        24,
+        736,
+        992
+      ],
+      "sourceBodyWidth": 430,
+      "sourceBodyHeight": 968,
+      "scale": 0.047520661157024795,
+      "outputWidth": 20,
+      "outputHeight": 46,
+      "outputX": 22,
+      "outputY": 12,
+      "normalizedBounds": [
+        22,
+        12,
+        42,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}
