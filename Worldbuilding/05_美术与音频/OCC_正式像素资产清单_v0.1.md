@@ -81,6 +81,16 @@
 | --- | --- | --- | --- |
 | `light_cover_destroyed` | `像素资产原料/V2-11/Covers32/` 与 `QA/light_cover_destroyed/` | `32×32`，原料库 `FORMAL` | 独立原料经硬 alpha、16 色、4x QA 与 JSON 报告复核；仅用于轻掩体 `TileState.IsDestroyed` 的静态反馈。 |
 
+## V2-12 重掩体破损静态反馈（2026-07-25）
+
+| 资产 | 原料/QA 路径 | 尺寸与状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `heavy_cover_destroyed` | `像素资产原料/V2-12/Covers32/` 与 `QA/heavy_cover_destroyed/` | `32×32`，原料库 `FORMAL` | 独立原料经硬 alpha、16 色、4x QA 与 JSON 报告复核；仅用于重掩体 `TileState.IsDestroyed` 的静态反馈。 |
+
+| Unity 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
+| --- | --- | --- | --- |
+| `light_cover_destroyed`、`heavy_cover_destroyed` | `Assets/Game/Resources/Art/FormalRelay32/` | 轻/重掩体耐久归零后的静态反馈 | 均 `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 确认正常状态仍使用原掩体图，破损资源均可加载。 |
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |

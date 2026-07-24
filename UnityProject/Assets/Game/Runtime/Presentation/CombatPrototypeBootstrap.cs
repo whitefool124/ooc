@@ -797,6 +797,16 @@ namespace OCC.Combat.Presentation
                         GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), coverTexture, ScaleMode.ScaleToFit, true);
                     }
                 }
+                else if (tile.Cover == CoverType.Heavy && tile.IsDestroyed)
+                {
+                    Texture2D coverTexture = Resources.Load<Texture2D>("Art/FormalRelay32/heavy_cover_destroyed");
+                    if (coverTexture != null)
+                    {
+                        coverTexture.filterMode = FilterMode.Point;
+                        coverTexture.wrapMode = TextureWrapMode.Clamp;
+                        GUI.DrawTexture(new Rect(cell.x + 6, cell.y + 6, cell.width - 12, cell.height - 12), coverTexture, ScaleMode.ScaleToFit, true);
+                    }
+                }
                 if (state.Loot != null && !state.Loot.IsLooted && state.Loot.Position == p)
                 {
                     GUI.color = Color.white;

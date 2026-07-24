@@ -77,7 +77,7 @@
 #### V1 连续交付路线（已锁定）
 - **执行顺序**：V1-04 可破坏物与状态效果反馈 → V1-05 战斗 UI 组件与状态规范 → M1-01 大地图节点状态与路径数据 → M1-02 工业城市大地图视觉原型 → V1-06 战斗/大地图/结算统一视觉 QA。
 - **统一验收**：完成上述五项后一次性执行 Play Mode、Funplay 编译/Console、聚焦 EditMode、1920×1080 / 960×540 截图与完整流程回归；中途不切换其他主任务。
-- **当前主任务**：无；V2-11 已完成。后续美术扩充继续一次只处理一个静态对象或单位静帧，默认不创建多帧动画。
+- **当前主任务**：无；V2-12 已完成。后续美术扩充继续一次只处理一个静态对象或单位静帧，默认不创建多帧动画。
 
 #### V2-03：正式像素资产 QA 基线 - COMPLETE（2026-07-24）
 - **归属**：剧情模式与肉鸽模式共用战斗/界面资产。
@@ -166,6 +166,14 @@
 - **验收标准**：独立原料规范化为 `32×32`、16 色或更少、硬 alpha、4x QA、调色板和 JSON 报告；Unity 导入 Sprite / Point / Clamp / 无 mipmap；轻掩体耐久归零后显示破损图，未破坏时仍显示正常图。
 - **完成后解锁**：后续美术扩充继续一次只处理一个静态对象或单位静帧，默认不创建多帧动画。
 - **验证结果（2026-07-25）**：本地工作台独立生成并规范化 `light_cover_destroyed`，报告 PASS，`32×32`、16 色、硬 alpha、4x QA 与调色板齐全。Unity 导入复核为 Sprite / Point / Clamp / 无 mipmap；Play Mode 确认轻掩体初始 `durability=4`、`destroyed=false` 使用正常 `light_cover`，破损资源可加载且绘制逻辑按 `TileState.IsDestroyed` 切换。Funplay 编译错误/警告 0，退出 Play Mode 后 Console 无项目错误，场景 `isDirty=false`，未保存场景。
+
+#### V2-12：重掩体破损静态反馈 - COMPLETE（2026-07-25）
+- **归属**：剧情模式与肉鸽模式共用战斗地图资产。
+- **目标**：为重掩体补充一张独立 `32×32` 破损贴图，在既有 `TileState.IsDestroyed` 为真时替换重掩体视觉；不新增状态或玩法。
+- **涉及文件/系统**：`Worldbuilding/05_美术与音频/像素资产原料/V2-12/`、`Resources/Art/FormalRelay32/heavy_cover_destroyed.png`、`CombatPrototypeBootstrap`；不改掩体耐久规则、不保存场景。
+- **验收标准**：独立原料规范化为 `32×32`、16 色或更少、硬 alpha、4x QA、调色板和 JSON 报告；Unity 导入 Sprite / Point / Clamp / 无 mipmap；重掩体耐久归零后显示破损图，未破坏时仍显示正常图。
+- **完成后解锁**：后续美术扩充继续一次只处理一个静态对象或单位静帧，默认不创建多帧动画。
+- **验证结果（2026-07-25）**：本地工作台独立生成并规范化 `heavy_cover_destroyed`，报告 PASS，`32×32`、16 色、硬 alpha、4x QA 与调色板齐全。Unity 导入复核为 Sprite / Point / Clamp / 无 mipmap；Play Mode 确认重掩体初始 `durability=7`、`destroyed=false` 使用正常 `heavy_cover`，破损资源可加载且绘制逻辑按 `TileState.IsDestroyed` 切换。Funplay 编译错误/警告 0，退出 Play Mode 后 Console 无项目错误，场景 `isDirty=false`，未保存场景。
 
 #### V2-01：正式战斗 HUD 与独立开发控制台 - IN PROGRESS（2026-07-24）
 - **归属**：剧情模式与肉鸽模式共用界面表现。
