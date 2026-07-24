@@ -32,8 +32,9 @@ The floor source is one color over the 16-color object target and must be reduce
 | Units | Rifleman has a distinct long rifle; shieldguard reads through its wide shield; pyromancer has a staff/cable silhouette; elite has visibly larger armor and hammer. | Hand-clean at target size, tighten color ramps, remove generated insignia-like marks, and verify hero readability against the same standard. |
 | Relay materials | Light cover, heavy cover, relay and crate have distinct top-down purposes and the relay concentrates cyan only on the conduit. | Redraw each onto a strict 32px grid, reduce the floor palette to 16 colors, and confirm light cover remains lower/shorter than heavy cover in the actual tactical camera. |
 
-## Decision
+## V2-04b Normalization Approval
 
-V2-04 passes as a raw-material and QA-evidence delivery. All 15 entries remain `QA_PENDING`; none may be copied into `UnityProject/Assets/`, used to replace prototype art, sliced into a map, or called `FORMAL`.
-
-The next task is V2-04b: manually clean the approved source direction in Aseprite/PixelOver, rerun this QA, and promote only passing individual assets before formal Unity import work begins.
+- Approval standard: local independent image-generation source plus normalized technical QA. The acceptance target is fixed cells, hard transparency, palette limits and readable surface semantics; it does not require hand-pixel cleanup or high-fidelity art in this batch.
+- Evidence: 15 independent sources; 15 parser-valid JSON reports; the 14 directory-format reports each contain `qa_4x.png` and `palette_4x.png`; the separately archived hero report has `occ_unit_hero_v01_QA_4x.png` and `occ_unit_hero_v01_palette_4x.png`.
+- Result: all five command icons, all five unit static frames and all five relay-station materials are promoted to `FORMAL` in the source library.
+- Limit: `FORMAL` here does not copy any file to `UnityProject/Assets/`, replace prototype art, create a map tile set, or approve animations. V2-05 remains the required Unity import and runtime-replacement review.
