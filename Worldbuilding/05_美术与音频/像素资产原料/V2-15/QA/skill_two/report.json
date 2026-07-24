@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "icon_32_static",
+    "frameCount": 1,
+    "targetFrameWidth": 32,
+    "targetFrameHeight": 32,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 31,
+    "centerX": 16,
+    "targetBodyHeight": 26,
+    "minBodyHeight": 8,
+    "maxBodyHeight": 30,
+    "maxBodyWidth": 30,
+    "alphaThreshold": 32,
+    "paletteColors": 16,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\Icons32\\skill_two_input\\skill_two_raw.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\Icons32\\skill_two_strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\QA\\skill_two\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\QA\\skill_two\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\QA\\skill_two\\qa_4x.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-15\\Icons32\\skill_two_input\\skill_two_raw.png",
+      "empty": false,
+      "sourceBounds": [
+        254,
+        111,
+        794,
+        898
+      ],
+      "sourceBodyWidth": 540,
+      "sourceBodyHeight": 787,
+      "scale": 0.03303684879288437,
+      "outputWidth": 18,
+      "outputHeight": 26,
+      "outputX": 7,
+      "outputY": 5,
+      "normalizedBounds": [
+        7,
+        5,
+        25,
+        31
+      ]
+    }
+  ],
+  "failures": []
+}
