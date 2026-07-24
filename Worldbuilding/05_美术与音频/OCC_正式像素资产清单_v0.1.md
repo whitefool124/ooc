@@ -32,6 +32,14 @@
 
 集中审查结果位于 `像素资产原料/V2-04/QA/OCC_V2-04_集中审查.md`。上述 `FORMAL` 是已批准的原料库资产，不代表 Unity 已导入；Unity 运行时替换须由 V2-05 单独评审。
 
+## V2-05 首批 Unity 导入（2026-07-24）
+
+| 资产 | Unity 路径 | 运行时用途 | 导入/运行时复核 |
+| --- | --- | --- | --- |
+| `move`、`attack`、`skill`、`loot`、`interact` | `Assets/Game/Resources/Art/FormalIcons32/` | `FormalCombatHud` 指令按钮；`skill` 供两格技能共用 | `32×32`、Sprite、Point、Clamp、无 mipmap；Play Mode 为 6 个按钮建立正式图标层 |
+
+旧 `Assets/Game/Art/UI/Icons32/*.asset` 继续是 `PROTOTYPE`，未被覆盖。中继站对象和单位静帧尚未导入，仍由 V2-05 后续逐批评审。
+
 ## V2-03 实测导入审查（2026-07-24）
 
 | 资产 | 尺寸 | Unity 导入实测 | QA 结论 |

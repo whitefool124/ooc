@@ -17,6 +17,7 @@ namespace OCC.Combat.Presentation
         private readonly Color muted = new Color(.57f, .64f, .68f, 1f);
         private readonly Color text = new Color(.90f, .94f, .95f, 1f);
         private readonly Dictionary<string, Button> actionButtons = new Dictionary<string, Button>();
+        private readonly Dictionary<string, Sprite> actionIcons = new Dictionary<string, Sprite>();
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private GameObject root;
@@ -38,6 +39,7 @@ namespace OCC.Combat.Presentation
         public void Initialize(CombatPrototypeBootstrap source)
         {
             bootstrap = source;
+            LoadActionIcons();
             EnsureUi();
         }
 
@@ -96,6 +98,7 @@ namespace OCC.Combat.Presentation
             {
                 string action = actions[i];
                 Button button = Button(bottom.transform, action, new Vector2(20 + i * 152, -48), new Vector2(138, 70), action, new Color(.055f, .08f, .09f, 1f));
+                AddActionIcon(button.transform, action);
                 button.onClick.AddListener(() => bootstrap.SelectHudAction(action));
                 actionButtons.Add(action, button);
             }
@@ -111,6 +114,30 @@ namespace OCC.Combat.Presentation
                 quick.onClick.AddListener(() => bootstrap.UseQuickbarSlot(slot));
             }
             CreateOutcomeOverlay();
+        }
+
+        private void LoadActionIcons()
+        {
+            string[] names = { "move", "attack", "skill", "loot", "interact" };
+            foreach (string name in names)
+            {
+                Texture2D texture = Resources.Load<Texture2D>("Art/FormalIcons32/" + name);
+                if (texture == null) continue;
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                actionIcons[name] = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(.5f, .5f), 32f);
+            }
+        }
+
+        private void AddActionIcon(Transform parent, string action)
+        {
+            string key = action == "移动" ? "move" : action == "攻击" ? "attack" : action == "技能1" || action == "技能2" ? "skill" : action == "搜刮" ? "loot" : "interact";
+            if (!actionIcons.TryGetValue(key, out Sprite sprite)) return;
+            GameObject iconObject = new GameObject("正式图标"); iconObject.transform.SetParent(parent, false);
+            RectTransform rect = iconObject.AddComponent<RectTransform>(); rect.anchorMin = new Vector2(0, .5f); rect.anchorMax = new Vector2(0, .5f); rect.pivot = new Vector2(0, .5f); rect.anchoredPosition = new Vector2(9, 0); rect.sizeDelta = new Vector2(28, 28);
+            Image image = iconObject.AddComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false;
+            Text label = parent.GetComponentInChildren<Text>();
+            if (label != null) { label.rectTransform.offsetMin = new Vector2(28, 0); label.alignment = TextAnchor.MiddleCenter; }
         }
 
         private void Refresh()
