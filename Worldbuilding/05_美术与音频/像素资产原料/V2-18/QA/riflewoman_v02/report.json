@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "direct nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/Units64/raw/riflewoman_native64_v02_raw.png",
+  "output": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/Units64/riflewoman_native64_v02.png",
+  "qa": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/QA/riflewoman_v02/qa_4x.png",
+  "size": [
+    64,
+    64
+  ],
+  "paletteColors": 23,
+  "paletteLimit": 24,
+  "hardAlpha": true,
+  "bounds": [
+    18,
+    4,
+    53,
+    59
+  ],
+  "chromaKey": true
+}

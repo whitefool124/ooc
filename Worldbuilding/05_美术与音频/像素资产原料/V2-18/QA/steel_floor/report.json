@@ -1,0 +1,21 @@
+{
+  "status": "WARN",
+  "method": "direct nearest-neighbor sampling only; no crop, fit, or reposition",
+  "source": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/Tiles32/raw/steel_floor_native32_raw.png",
+  "output": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/Tiles32/steel_floor_native32.png",
+  "qa": "Worldbuilding/05_美术与音频/像素资产原料/V2-18/QA/steel_floor/qa_4x.png",
+  "size": [
+    32,
+    32
+  ],
+  "paletteColors": 347,
+  "paletteLimit": 16,
+  "hardAlpha": true,
+  "bounds": [
+    0,
+    0,
+    32,
+    32
+  ],
+  "chromaKey": false
+}
