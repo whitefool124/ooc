@@ -1,0 +1,20 @@
+{
+  "id": "tile_32_static",
+  "frameCount": 1,
+  "targetFrameWidth": 32,
+  "targetFrameHeight": 32,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 31,
+  "centerX": 16,
+  "targetBodyHeight": 30,
+  "minBodyHeight": 8,
+  "maxBodyHeight": 30,
+  "maxBodyWidth": 30,
+  "alphaThreshold": 32,
+  "paletteColors": 16,
+  "allowChromaKey": false,
+  "chromaKeyTolerance": 72,
+  "despill": true,
+  "gifDelay": 12
+}

@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "unit_64_static",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 32,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 72,
+    "despill": true,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\Units64\\raw\\riflewoman_raw.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\Units64\\riflewoman_strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\QA\\riflewoman\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\QA\\riflewoman\\preview.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\QA\\riflewoman\\qa_4x.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\像素资产原料\\V2-17\\Units64\\raw\\riflewoman_raw.png",
+      "empty": false,
+      "sourceBounds": [
+        308,
+        32,
+        1044,
+        1220
+      ],
+      "sourceBodyWidth": 736,
+      "sourceBodyHeight": 1188,
+      "scale": 0.03872053872053872,
+      "outputWidth": 28,
+      "outputHeight": 46,
+      "outputX": 18,
+      "outputY": 12,
+      "normalizedBounds": [
+        18,
+        12,
+        46,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

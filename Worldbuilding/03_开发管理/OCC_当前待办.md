@@ -102,3 +102,9 @@
 - Files: `Worldbuilding/05_美术与音频/像素资产原料/V2-16/`, `UnityProject/Assets/Game/Resources/Art/FormalRelay32/floor_hazard.png`.
 - Verification: normalization report PASS (16 colors, hard alpha, 32x32); Funplay compile/warnings 0; Play Mode load verified Point/Clamp; Console empty; scene `isDirty=false`.
 - Next: keep static-only asset iteration and choose one new single object when continuing.
+
+#### V2-17: 本地 image2 像素规范化路线样本 - COMPLETE (2026-07-27)
+- Goal: 固化“本地 `gpt-image-2` 独立单图初稿 → 本地 32×32/64×64 规范化 → 4x QA/JSON 报告”的可复核路线；不使用 AI 拼板硬切，不导入 Unity。
+- Files: `Worldbuilding/05_美术与音频/像素资产原料/V2-17/`、`OCC_正式像素资产清单_v0.1.md`。
+- Verification: `steel_floor` 为 32×32、16 色、硬 alpha，边界 `[1,1,31,31]`；`riflewoman` 为 64×64、24 色、硬 alpha，边界 `[18,12,46,58]`，两份 JSON 报告均为 `PASS`，4x QA 分别为 128×128/256×256。
+- Next: 按同一路线选择单个静态生产资产；地块保留完整表面时禁用色键，绿幕单位保持色键去背，再决定是否进入 Unity 导入评审。

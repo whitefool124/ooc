@@ -112,3 +112,12 @@
 | `floor_hazard` | 32x32 | `FORMAL` | Independent single-image source, hard alpha, 16-color palette, 4x QA and JSON report PASS; Unity import verified Point/Clamp. |
 
 Source and QA outputs are under `像素资产原料/V2-16/`. This is a static tile only and is not an animation source.
+
+## V2-17 本地 image2 规范化路线样本（2026-07-27）
+
+| 资产 | 尺寸 | 状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `steel_floor` | 32×32 | `QA_SAMPLE` | 本地工作台 `gpt-image-2` 单图初稿；关闭色键保留完整不透明钢铁表面，16 色规范化、硬 alpha、128×128 4x QA 和 JSON 报告均通过。 |
+| `riflewoman` | 64×64 | `QA_SAMPLE` | 本地工作台 `gpt-image-2` 独立绿幕单图；色键去背后锁定 `X=32`、脚底 `Y=58`，24 色规范化、硬 alpha、256×256 4x QA 和 JSON 报告均通过。 |
+
+两项原料、固定规格、规范化 PNG 与报告均位于 `像素资产原料/V2-17/`，仅用于验证“本地 image2 初稿 → 本地像素规范化 → QA”的生产路线，尚未导入 Unity，也不构成正式运行时替换。
