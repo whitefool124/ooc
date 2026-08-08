@@ -1,0 +1,2903 @@
+{
+  "schema": "occ.formal.noncharacter.qa.v0.1",
+  "count": 194,
+  "passed": 194,
+  "failed": 0,
+  "assets": [
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\floor_plain.png",
+      "sha256": "e15597901050617ad449c787eddedab49ebc2d240f3710b6ada5f1b41f887594",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\floor_industrial.png",
+      "sha256": "35a8dc5dbd8b0d040485b4006d200dd8e58fa397df33a58eee0bf07252415a9f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\floor_warning.png",
+      "sha256": "c2a07f82e254fd1f30373ff33dab92c2bb71cddcb2c9eb7703a151992f5e868f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\floor_hazard.png",
+      "sha256": "a07f602131704108dfb1d6f96764932e0d08e96a6721a43a8c7e3f4486fd419b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_horizontal.png",
+      "sha256": "dbe6a25ec7924f4a65ffb4ac9a49525927052721e8f51ad8cc095b074308373f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_vertical.png",
+      "sha256": "529a98200497c06d3266379f7b605d92132078f27174661bdbd0656c30baf1b8",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_end_n.png",
+      "sha256": "706dea82dd844efdac556547ec357a90b50887e86f96b8fa252a290e7626d0d4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_end_e.png",
+      "sha256": "1bf75b10f979633865af5b27e98dcc7956d23bccb545ad3eb71c6ec6e87ddedd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_end_s.png",
+      "sha256": "569677aee252951e7e3fdeee26e54574d390848a0966bdea74f78028d0abb551",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_end_w.png",
+      "sha256": "464c3a6b29c6c997adaa0f12ba5a43d9930f3bf44168d4c95a119771be8e23ff",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_corner_ne.png",
+      "sha256": "6f8e5735d133b505fd58ec6ddfd9c294708025389d7e400013937f2299c43ddb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_corner_se.png",
+      "sha256": "62427e1e0c906c1056372a5a007d4c2f0a652f96d7ab523c268c1273bda0f7b5",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_corner_sw.png",
+      "sha256": "e26828a877e1564d946250d768d3589d215c374383b80926c0c3c232d3098b54",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_corner_nw.png",
+      "sha256": "a28578ed638e21e39c880e2ee2e742b04a3f66e7d6fb6ea027bffacd35753029",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\rail_cross.png",
+      "sha256": "9c69084fbec1efb0ac750af66d832a6b772cabe2e44e77313f4296ff2f0066dc",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\light_cover_intact.png",
+      "sha256": "654108a236e68cd40d37e647fb2a94739b41d94134a2e539ebec84b698cf84aa",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\light_cover_damaged.png",
+      "sha256": "6c366380abe44c9c54f47a8722d76969fdd2d0dc498fdc22d0f0dd208717d156",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\light_cover_rubble.png",
+      "sha256": "2fd0f57d42118cc3467e7a64f43266b285d929a8e86314faf7bdc48cfe5e79c6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\heavy_cover_intact.png",
+      "sha256": "94c55df21a30c11fa9e6d59fbb34c0804954ff87d1aff8b1ae1d4793a99182b6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\heavy_cover_damaged.png",
+      "sha256": "a0184ae22ddda1f57175397104787e7a62be409f7e879be55af666cbdfd93ab6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\heavy_cover_rubble.png",
+      "sha256": "2fd0f57d42118cc3467e7a64f43266b285d929a8e86314faf7bdc48cfe5e79c6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\relay_intact.png",
+      "sha256": "367995d84160f6b108722827dd127c4b40ca07280f9eb80c740b785dac1b5d0a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\relay_damaged.png",
+      "sha256": "21c280b221df12703af17c67d1bdf2f12c8e194ee578fc9136372761351c5bdf",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 11,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\relay_rubble.png",
+      "sha256": "3807a66fabafe0001423c233412ca09b6ce89998878b178d4d181053e50619f9",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\loot_crate_closed.png",
+      "sha256": "173053db95c3111182dc05f4a9c8de59ef37f230b7786f54c46337e1e874191c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\loot_crate_open.png",
+      "sha256": "096671fd15f5ddc5580750b1306cb8f7c9143adce03215cfadbcbe2bc9ffa0a4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelayV01\\loot_crate_empty.png",
+      "sha256": "f6f27b1848e6834f07b793c5efd37b39ef56ddd4382366003e4f188860550f16",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\burning_ground.png",
+      "sha256": "64d153e9154635191a74a0ffb8e20993f50070951cb1c8e25d7e3a22568ee307",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\water.png",
+      "sha256": "aca45f3565257e24d91817e3b4810de05351a9cbf32021939c0db764db78a46a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 2,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\ice.png",
+      "sha256": "2587ec3e61289e41d913085196a9cae24df2119458ca7d085bf2028736e1b384",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\smoke.png",
+      "sha256": "98f40d287fe1be74eb67d134c4078e1789e554f50cd980ef7328fbc11711843a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 2,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\bright_zone.png",
+      "sha256": "70aa9d6c17f574155403c5f091d082d2cf490a43a72373d18d2873c6b5b4b8f4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\dark_zone.png",
+      "sha256": "fc758ffe098df995da549ba3f8510d055868a8401eb3ac34a9da43acf13294ef",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\conductive_path.png",
+      "sha256": "8b1af68c3163bd8698a94bde55b355b8733a68d11864d2b41cce88cf49fbe25b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironment32\\obstacle_cover.png",
+      "sha256": "d8a2f57785a0fd216b139aa55d47a13810c0af3a6a3029a18905c069535adcae",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\spawn.png",
+      "sha256": "0bb96130669bacde08b6885ea687b1cd3f403e88be016d6eb684bb4f728d6069",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\exit.png",
+      "sha256": "cf5e74eec740d382144333510d81470275366b32d1127a633f8cb40a9dcdbc08",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\objective.png",
+      "sha256": "e7eef6b38ead23b168cfa5128205106e214a8e5ef503ce5f35f1cae5849d02cd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\high_risk.png",
+      "sha256": "9ab0c7cc4f86a3d11c8a59a5e261ee8877a83265b9ae7bf9949a4acd79ba2210",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\selected.png",
+      "sha256": "0a0f221ae7a02e89700670e9f36fb46e1ba540aac675e0201ee8b7d893d3cb2d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\move_range.png",
+      "sha256": "3fa5d5defd3e57501dbae5a80bce2f7c312f10e63a128de0c53b4d0b9bb5aab0",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\attack_range.png",
+      "sha256": "25412183ca537f9e69535e3ac149a7749f6bb8a9641d3222701f4e21cf10136c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\unreachable.png",
+      "sha256": "8752aa39800540fc45655b9f7de1e802c59178797c6b0ed894fe9671b036a691",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 1,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalTacticalOverlays32\\line_of_sight.png",
+      "sha256": "0de9993bfb4821ce35a49a6639fac85a845890dd87b655f29a402b540373383d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 2,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\burning.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\slow.png",
+      "sha256": "900622f86e0b0ff7fbded2532bd8d7327f41ab47f59ef13efbeea65b113cb121",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\bound.png",
+      "sha256": "2c6c9b757e906dc05cdd3fb56f8afb9975e05c2d397e488ae527f5250f83f358",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\armor_break.png",
+      "sha256": "b868f1e48118c0e17d649d33ece1b69bdca3b00ec1cc318648a04a7d1e5a37cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\dazzled.png",
+      "sha256": "e49d882d9800647ec53c4c185d535892e3bdda59f2ab1aa03643cf81c95741f0",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalStatusIcons32\\revealed.png",
+      "sha256": "46e1c9bc7785c756989a8ee42df42fcb1e09c17b636e49172526be3df2003af3",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\health.png",
+      "sha256": "d7792c3305ee1281b442798de4ad2f1e58fa38a563c4515d9adef36f7392e625",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\shield.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\mana.png",
+      "sha256": "1b898c255b46614c4dc6134d65f0fca66ab414d1a3b3bef188e3fc916622fd3f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\action_point.png",
+      "sha256": "e8ad69658c164b64d219419c349dcec90852d9f4f3af75f7ab63422e6a6cff44",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\parts.png",
+      "sha256": "ab4293d22f87693237f88e215366e1c1fbe0c385d860c377c7ab7e30c40cdcba",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalResourceIcons32\\operational_aether.png",
+      "sha256": "13fbabd775a9a512f085b4d76dcb08b8608fb24470b96b16d06cc7b0e30fb413",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\burning_ground.png",
+      "sha256": "64d153e9154635191a74a0ffb8e20993f50070951cb1c8e25d7e3a22568ee307",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\water.png",
+      "sha256": "aca45f3565257e24d91817e3b4810de05351a9cbf32021939c0db764db78a46a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 2,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\ice.png",
+      "sha256": "2587ec3e61289e41d913085196a9cae24df2119458ca7d085bf2028736e1b384",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\smoke.png",
+      "sha256": "98f40d287fe1be74eb67d134c4078e1789e554f50cd980ef7328fbc11711843a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 2,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\bright_zone.png",
+      "sha256": "70aa9d6c17f574155403c5f091d082d2cf490a43a72373d18d2873c6b5b4b8f4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\dark_zone.png",
+      "sha256": "fc758ffe098df995da549ba3f8510d055868a8401eb3ac34a9da43acf13294ef",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\conductive_path.png",
+      "sha256": "8b1af68c3163bd8698a94bde55b355b8733a68d11864d2b41cce88cf49fbe25b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalEnvironmentIcons32\\obstacle_cover.png",
+      "sha256": "d8a2f57785a0fd216b139aa55d47a13810c0af3a6a3029a18905c069535adcae",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\fire.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\water.png",
+      "sha256": "1b898c255b46614c4dc6134d65f0fca66ab414d1a3b3bef188e3fc916622fd3f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\wind.png",
+      "sha256": "dbf1daf21c6b239082aebe59aa089184461c61870182ec79a7b320d2c451912a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\earth.png",
+      "sha256": "8dce98f8d13512fb79b2a66421c387b7a66874679d457aa20b71723c3c8e18a3",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\lightning.png",
+      "sha256": "d74b74b0f112d5046711e29f17bfd16fa204d821686fdd5cc76cc79ec0ad78e4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\ice.png",
+      "sha256": "2e72df6575ada3386166ad9c61005d130aefd0d4603249a87e1ce6e3c9bbd64b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\light.png",
+      "sha256": "d1c0dd47b211a906f97b4fb3508363b318f7ceeb12794058dc98f68abd219c82",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalElementIcons32\\dark.png",
+      "sha256": "f665d15d21fd0f9880dd2ed10e189f46a3126817e910282e2d4e0117232087b1",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIntentIcons32\\move.png",
+      "sha256": "4689ba43d33ea827e5ee3cc719bed2b8c5ac4b7902d4d767c38bab9e22b16b83",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIntentIcons32\\attack.png",
+      "sha256": "18b58dd2c06a411d6f23dad3839818e93f5e88c08df53c68feb1cb45d3ef74d7",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIntentIcons32\\cast.png",
+      "sha256": "04badcfab39b675725dfb164c8c4a98ac0d13180672586a16a9f3679cc23733c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIntentIcons32\\defend.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIntentIcons32\\interact_destroy.png",
+      "sha256": "3e4f7e5183da54a96ed6ddfe6f719796d329d7ed7c5897d6f32293f98f7f4fbd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\start.png",
+      "sha256": "4fe7b7357d07f6bb0e14c81728a868b44b9b6de4c9191d1254f31bb8661897fc",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\combat.png",
+      "sha256": "c70802c84c9e5f75be5508f451f7c7a9b511a380224567681a1769094640ec90",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\elite.png",
+      "sha256": "595449285af4893f91c90edb29effe2611d4730951dcc246ed9bd516ccf913ce",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\event.png",
+      "sha256": "0199f36073177ac7879129584a2069ea3d6cd2ac93f02ce6ac708d972897de7d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\workshop.png",
+      "sha256": "955f6c8a798baf4da941c10f1a447e0b73d178264b83c029bb854c2cc846b6c6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\shop.png",
+      "sha256": "b7b01f565ca365b5279df9f008dc3d0d56d663fee36a789f782cc695934dadfb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\rest.png",
+      "sha256": "fd645b6959f857973471f14f76c91832187273d3c6fae6b98d606b5516914e45",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\treasure.png",
+      "sha256": "55cfba3ca327724e2479aa8799472439d2cc7ec1ea0332f9aa64617e643d4485",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalNodeIcons32\\types\\finale.png",
+      "sha256": "d94d5f5710d672c03d7f1d22d980cc7b9b2e03ce47ba4a264d1b00088f53e549",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\damage.png",
+      "sha256": "553973f5403ff532606675c6b161c9a9a13e8a52a765a9d890f7a18a8a171a8d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\shield_absorb.png",
+      "sha256": "e4276d62908d3794bfddb58cfd5d089d6ec2750fd1dc314fe8ef6ee5c0003d40",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\armor_break.png",
+      "sha256": "b868f1e48118c0e17d649d33ece1b69bdca3b00ec1cc318648a04a7d1e5a37cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\burning.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\bound.png",
+      "sha256": "2c6c9b757e906dc05cdd3fb56f8afb9975e05c2d397e488ae527f5250f83f358",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\slow.png",
+      "sha256": "900622f86e0b0ff7fbded2532bd8d7327f41ab47f59ef13efbeea65b113cb121",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\healing.png",
+      "sha256": "d7792c3305ee1281b442798de4ad2f1e58fa38a563c4515d9adef36f7392e625",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\shield_restore.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\mana_restore.png",
+      "sha256": "1b898c255b46614c4dc6134d65f0fca66ab414d1a3b3bef188e3fc916622fd3f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\status_cleared.png",
+      "sha256": "34d6ff12e44b77e61e2471a017770eaf7479eef4fc674ae03967e22ecc26ab7c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\movement.png",
+      "sha256": "4689ba43d33ea827e5ee3cc719bed2b8c5ac4b7902d4d767c38bab9e22b16b83",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\object_damaged.png",
+      "sha256": "4cc3957be87f58e3da6b985fd1035aee1bcf523717fa5ba00f939b749d22760c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\object_destroyed.png",
+      "sha256": "05fcffc0e7bbed16666a86ebbb424efd3168a3431668c79baddd527e78b28b2d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalFeedbackIcons32\\unit_defeated.png",
+      "sha256": "c1ad119f50d34d1a07427423a39eb24168d3be6a8fc9db49d505d8c550b1092e",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\rifle.png",
+      "sha256": "7fa1bad43c42ce091677cd5d8b7dbd6691eeb22b76690fe06d7f912d5b2b6ecf",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\hammer.png",
+      "sha256": "76a15f7f421a9135d346fead27d50265b38a075a36c517f039aa37d526c842dd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\wand.png",
+      "sha256": "f2d7123efbe3ee0f3534194835dabe8fe828709e4338848caf1f058bdeab91a8",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\shield.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\medkit.png",
+      "sha256": "ebac05241db1be425e2f62b3401399335ba5699d3f283651c18bde4766f99db9",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\shield_cell.png",
+      "sha256": "f23bf503fe2e01d0f49a12334e31f342ea01476d5d168e9e2194de0300e2786d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\war_hammer.png",
+      "sha256": "76a15f7f421a9135d346fead27d50265b38a075a36c517f039aa37d526c842dd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\aether_wand.png",
+      "sha256": "e64ee762a5265e82bdec8f144c55e25e4a3eee6664cfd975458b99e721293dff",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\arcane_wand.png",
+      "sha256": "6985f599c813b6899ab8d7ddb882eb9ba34d0dfccd3079746e1bfb0d826bef44",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\fire_bolt_reward.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalItemIcons32\\frost_bind_reward.png",
+      "sha256": "2e72df6575ada3386166ad9c61005d130aefd0d4603249a87e1ce6e3c9bbd64b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\fire_bolt.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\frost_bind.png",
+      "sha256": "2e72df6575ada3386166ad9c61005d130aefd0d4603249a87e1ce6e3c9bbd64b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\ember_lance.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\breach_shot.png",
+      "sha256": "b868f1e48118c0e17d649d33ece1b69bdca3b00ec1cc318648a04a7d1e5a37cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\hammer_pulse.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\searing_mark.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\rail_burst.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\cinder_sweep.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\tether_arc.png",
+      "sha256": "2c6c9b757e906dc05cdd3fb56f8afb9975e05c2d397e488ae527f5250f83f358",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\damping_field.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\armor_solvent.png",
+      "sha256": "b868f1e48118c0e17d649d33ece1b69bdca3b00ec1cc318648a04a7d1e5a37cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\cryo_pulse.png",
+      "sha256": "2e72df6575ada3386166ad9c61005d130aefd0d4603249a87e1ce6e3c9bbd64b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\anchor_seal.png",
+      "sha256": "2c6c9b757e906dc05cdd3fb56f8afb9975e05c2d397e488ae527f5250f83f358",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\arc_bolt.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\mana_siphon.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\shield_converter.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\aether_surge.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\prism_arc.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\phase_step.png",
+      "sha256": "f2fc16359a7cda19a85ac20faaa1758da73cf0f79e9487a7d5c12eb0a44ad7e2",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\overload_needle.png",
+      "sha256": "193af389f065fe45f2e7d4c8a7cf47f6f5a4fceebce7f257a278f5f46e8dcf4c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\field_repair.png",
+      "sha256": "d7792c3305ee1281b442798de4ad2f1e58fa38a563c4515d9adef36f7392e625",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\barrier_charge.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\thermal_purge.png",
+      "sha256": "a7103fb285e955b8a914204fa3d108f518ea3823810fe9ee0961d7111001096d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\regenerative_seal.png",
+      "sha256": "d7792c3305ee1281b442798de4ad2f1e58fa38a563c4515d9adef36f7392e625",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\rescue_beam.png",
+      "sha256": "d7792c3305ee1281b442798de4ad2f1e58fa38a563c4515d9adef36f7392e625",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\bastion_pulse.png",
+      "sha256": "e49ed838136d3c79ee5b99b4d9adaaf270c3869e1dca7c3238869af42ba3c75c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Runtime\\demolition_charge.png",
+      "sha256": "b868f1e48118c0e17d649d33ece1b69bdca3b00ec1cc318648a04a7d1e5a37cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p01.png",
+      "sha256": "e024c8b9b544ff7f8e9f369c3a09c2f01202caa6d17d8c14d32dcb8c0c0f5953",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p02.png",
+      "sha256": "1827e88273da4d6ea93c5852a8d7875a652b6210809fa3680d551c3b33e72e0a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p03.png",
+      "sha256": "10b7b2a64cf7dd6220324420603e28d5321a804adc3fc98697edea4a79468171",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p04.png",
+      "sha256": "568182dd878b2e47af977f4e07ac8d113d4526967761557d44d9caa0bf6ddb93",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p05.png",
+      "sha256": "262d3a876d18b2e729a90f27f4a30bbcf46cb474c3805e6f264316c62585fcfd",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p06.png",
+      "sha256": "e0e52acb41ac021b21ea5782819a0d92b8c46423524822841dcabcd364230523",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p07.png",
+      "sha256": "d0b0d1b37149c311b7ae07599dcff5ceef87a492a0dba8f88098227d479bb1ad",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p08.png",
+      "sha256": "b396acad30ef6008112741380cf5bb36b2fd79d0c8da2fcc42509212a72e61cb",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p09.png",
+      "sha256": "a9fa383b09fce5a39ab6afaa187aeb3b7a432bc4fc2cb160b54f38bd95ceb1a5",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p10.png",
+      "sha256": "b92bdf1640b331fda20fe4663031106087f1929c0937002a70777ef5344d8c6e",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p11.png",
+      "sha256": "f24ea7e9cd74134f846bc7fcf9d87171b219fd03c1d08372799a0f32abc79dc5",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p12.png",
+      "sha256": "561f2da01680e64288c002d5397698ebd716bbd1acf2a9ff20d17f0256eedd2b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p13.png",
+      "sha256": "70086153416a539645e78783581ae490f387269a74d97f84a6753ea991989253",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p14.png",
+      "sha256": "14c6220ab12334f2f47c70ca5c98ce4390bd513252f399ce58b480e2a9116c00",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p15.png",
+      "sha256": "d37ce53c109ac413cb17acc34a25770e366ef3bcb0774a1b2a30b99c58262156",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p16.png",
+      "sha256": "42320de392fe0e2e9ed6a38d3a7345116d213f6635d30bd7f0b4726a7a27a8f4",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p17.png",
+      "sha256": "000e42c57d648e9ea95aafaae85049f81b31f843e44150709c5ba8f229db8675",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p18.png",
+      "sha256": "005b59ee8302df9edfd696f96a644e99581079eb4d7caaa9f7e1f1b4b5ea778f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p19.png",
+      "sha256": "8afda7c10da46131503b0d37fe27eb115d91c6e6318c425146b89f1366334617",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p20.png",
+      "sha256": "ed4c5f683058e83318a3666ac410bcbd4d4fb5ab07c71a94bfd8b01031281d7c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p21.png",
+      "sha256": "74909ebb6aee3fc35a452def8a127adb5fb1ca7b4f87e402bdc1514cb0d8c3ad",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p22.png",
+      "sha256": "23a56c7eb3660cf752cad904929ad62fd835b24f74dca4a52cd438c78d49182c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p23.png",
+      "sha256": "2e0f283bb40d7722f027a788d84a99f6f75af7299914d23e5b5ba737bf9b49f9",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p24.png",
+      "sha256": "5e67be51d7be688831eb1797bd537a37871684413caf6f0768eaf3a9e4a01f19",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p25.png",
+      "sha256": "3c7dcc7f3325b84a86d0812c53000beb4f64f0c6c5d25de2b8f38f9733ec93cf",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p26.png",
+      "sha256": "1b1f78e30262f4c2bda30fe8209a9f8e36ac02363baed9212e202fd8f67084b0",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p27.png",
+      "sha256": "8841c508b9a7777eec8ab8ddaa250c7ebe1b0dc120e2cb1f0e36ec3ffe3b1b83",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p28.png",
+      "sha256": "9f65fa055d06ce4c88c41c1f96a0c01904ccb8e5af821a9bc614daa39ec5aafe",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p29.png",
+      "sha256": "db1a7c102320bbc60a3af4a533db1fa3d050c9ca55c733d452348ae1edfaf992",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p30.png",
+      "sha256": "bc23d9702112391d6999f727007f7373fae149ffe227501eae13a62855eb6b84",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p31.png",
+      "sha256": "b34897a15f29b6bd3574cc64fec22a1f25fe36b8d674cf79183e94c5f3f24070",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p32.png",
+      "sha256": "97ce25a0c9ef34c6662edd9924d37bda438b4e503dd7149081bd38bde5ebacbf",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p33.png",
+      "sha256": "c3a69b2b1cb5fc9371905df866567760cd6b8348fb0a5d957b3019ac27011c5e",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p34.png",
+      "sha256": "0b23cbe28b91fde7259d3ebddaae78cb2d32b7e1a31a2fc70d99f40585466400",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p35.png",
+      "sha256": "4174035142ac13cf3f892b37bf6f3d05d28b20bccc02102f655eb3de7367c3df",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p36.png",
+      "sha256": "1942caac6a5d85b1c30a6309828a5577a2b91ed5a5e04bed5c0c11ffa5d55813",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p37.png",
+      "sha256": "cee225ceb594edf6a7c6e11613740ecd44d393183d60b33982b347d3d4631eb3",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p38.png",
+      "sha256": "4b7265554a0564d68fdf9cbdbc1633f2ea7f32011e65debc75e4c8f54df0718a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p39.png",
+      "sha256": "5ee360bc6325ff09498470dd52ceaeb58be08542d3dbd458c8eb3e85bbbe927a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p40.png",
+      "sha256": "7dad210771011c67e9ca4757cc8459a37b50ce697b5d648a452a6e0f43d3653a",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p41.png",
+      "sha256": "695e7f87e29dca152de5caae1b24405cce65bb02c8bfd312db47a83983dafb08",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p42.png",
+      "sha256": "5942b73e4d607a53f4e9cc83572e26886317c048d1206a7732d5a6632089e60c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p43.png",
+      "sha256": "19a6b10c9c45c2b5ff3aa5663ac67db671690115fcd32096a8deccf45d258ac7",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p44.png",
+      "sha256": "fb634afa4167927d5b2de7db0de09a73005a55685edf43ca46906f063d49101b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p45.png",
+      "sha256": "b1707d8e60ceffb0d1e5775b525a1fd78790aff0d8526709c5cdaa61904acd65",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p46.png",
+      "sha256": "f1b3a260aaadbebb867614c272d96780948807c0434eb6b7378ea2d334748a42",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p47.png",
+      "sha256": "4791a4130549983033f8cb251aa1d1c128d71ffbf8acb7f47df83e2fcf5e2ab2",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p48.png",
+      "sha256": "228c8eb3aac22ee612ad2cb9689ff599cbbf1c2dcd0bfd4a8ed16fcd645b402b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p49.png",
+      "sha256": "f022ea6cc944920d8440161a7b7ddace1c60a551acb2c7fae48bd7bb8c14a639",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalSkillIcons32\\Fire\\f-p50.png",
+      "sha256": "da9d1b02197b47199e375d776ab8154fa8bcfec2c1fcee1af91230a6895682c2",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\panel.png",
+      "sha256": "085c1d0f71fc29521fd81863dc9cfe2ce748affca23e8a3ac5e892f39d8d8f07",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\slot.png",
+      "sha256": "f5e2896b2ca87beefe2380892bf4c5bf959bd7aca6951fdbfb0bbcd2760a27ad",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\slot_selected.png",
+      "sha256": "9e704f4b30ee8ef69441b1b0c5b6749d6b0c66bd25b462967c5e1ac02a47141b",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\slot_disabled.png",
+      "sha256": "461bf353ded7cd3d64132f90f32249e7b2ac3791ba0864306201434586be9e21",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 4,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\slot_cooldown.png",
+      "sha256": "c0fbc03c2eca42874f015ebabfcf06d15c6df0217eb38077bd9b117d0e1b41f6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUI32\\slot_empty.png",
+      "sha256": "2e7529cb1010538de693e2b8f56ed6ed87b06459058c8c5e88551ae236ace83c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_colors": 3,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "result": "PASS",
+      "failures": []
+    }
+  ]
+}

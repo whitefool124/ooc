@@ -1,0 +1,335 @@
+{
+  "status": "PASS",
+  "assets": [
+    {
+      "asset_id": "shieldguard",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/shieldguard.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/shieldguard_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        21,
+        12,
+        43,
+        58
+      ],
+      "body_height": 46,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.5,
+      "visible_rgb_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "pyromancer",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/pyromancer_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        18,
+        12,
+        46,
+        58
+      ],
+      "body_height": 46,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.5,
+      "visible_rgb_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "raider",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/raider.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/raider_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        16,
+        12,
+        49,
+        58
+      ],
+      "body_height": 46,
+      "bottom_pixel": 57,
+      "visual_center_x": 32.0,
+      "visible_rgb_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "elite_vanguard",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/elite.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/elite_vanguard_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        12,
+        51,
+        58
+      ],
+      "body_height": 46,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.5,
+      "visible_rgb_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "sigil_mauler",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/sigil_mauler.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/sigil_mauler_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        14,
+        20,
+        49,
+        58
+      ],
+      "body_height": 38,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.0,
+      "visible_rgb_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "barrier_mender",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/barrier_mender.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/barrier_mender_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        20,
+        20,
+        45,
+        58
+      ],
+      "body_height": 38,
+      "bottom_pixel": 57,
+      "visual_center_x": 32.0,
+      "visible_rgb_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "tether_hound",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/tether_hound_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        4,
+        24,
+        59,
+        58
+      ],
+      "body_height": 34,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.0,
+      "visible_rgb_colors": 18,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "stone_snare",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/stone_snare.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/stone_snare_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        18,
+        20,
+        47,
+        58
+      ],
+      "body_height": 38,
+      "bottom_pixel": 57,
+      "visual_center_x": 32.0,
+      "visible_rgb_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "lantern_revealer",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/lantern_revealer.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/lantern_revealer_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        20,
+        20,
+        45,
+        58
+      ],
+      "body_height": 38,
+      "bottom_pixel": 57,
+      "visual_center_x": 32.0,
+      "visible_rgb_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    },
+    {
+      "asset_id": "rune_arbalist",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/rune_arbalist.png",
+      "qa": "Tools/Art/EnemyPack01/final_qa/rune_arbalist_qa_4x.png",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        18,
+        20,
+        45,
+        58
+      ],
+      "body_height": 38,
+      "bottom_pixel": 57,
+      "visual_center_x": 31.0,
+      "visible_rgb_colors": 20,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "checks": {
+        "size_64": true,
+        "hard_alpha": true,
+        "palette_limit": true,
+        "body_height": true,
+        "baseline": true,
+        "center": true,
+        "transparent_corners": true
+      },
+      "status": "PASS"
+    }
+  ]
+}

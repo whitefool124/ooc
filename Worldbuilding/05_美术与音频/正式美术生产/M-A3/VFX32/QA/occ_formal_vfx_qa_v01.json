@@ -1,0 +1,1238 @@
+{
+  "schema": "occ.formal.vfx.qa.v0.1",
+  "effects": 29,
+  "frames": 174,
+  "passed": 174,
+  "failed": 0,
+  "event_frames": {
+    "shoot": 3,
+    "melee": 3,
+    "hit": 2,
+    "heavy_hit": 3,
+    "shield_break": 3,
+    "object_break": 3,
+    "fire_projectile": 4,
+    "fire_cross_blast": 3,
+    "fire_detonate": 3
+  },
+  "assets": [
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_00.png",
+      "sha256": "91b483fad8a45602abd0bf04fed31fa674d421ec87065d3b26bed95430302db8",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_01.png",
+      "sha256": "7c9fb1ca0bd2a1faae9f62f93a0548e51dc5d9faa95b68dfbd3459408a4c36bb",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_02.png",
+      "sha256": "f63561f4e6159b3454d727ec5c01142b55bc682f553716cceca69b212636f25c",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_03.png",
+      "sha256": "b1eaf48ed6fa9bc540211dbd6c48906b39bb9fdc69de1709a3fa7da673041ff9",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_04.png",
+      "sha256": "8cdb043dc9b2099968349cfa8f5bddae810007da0bdb5799e291d695b749b00a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\selection\\frame_05.png",
+      "sha256": "33a0e1037636c5907a33d5827323b9da4bb53a1722815bb20653de9a52224200",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_00.png",
+      "sha256": "77f6053c2f65352ed6bba3dae63bbd224363f1545e7ff6fcd47efc674e87b249",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_01.png",
+      "sha256": "3e88adecf27d0ad5d502acd66cf2da950ea7eede7d1291be6124792a7d926e57",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_02.png",
+      "sha256": "1e1390ee7cd0659d52946db649b5fcf60006fc8755cd74a59637fea4e2f8948d",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_03.png",
+      "sha256": "a41c216153632db54eec6cf6e8a1eba0072b17f7a3c215f63073192720b1abc4",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_04.png",
+      "sha256": "247958b0fdcf5e16840e6ed41288d7a4f8c3da30b0cf414582b0bafa6fed41b5",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\lock\\frame_05.png",
+      "sha256": "afe2ed002c52a9d1fceeda29de5d4583719d247171fe45638bbf4c9d44f07b7f",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_00.png",
+      "sha256": "d3487af97cff6f164d925a43a82903fa382694fa48a6b22906d1e6fda2736ba5",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_01.png",
+      "sha256": "56491ce6591a3148d64761c701d5bce586fad59f1fa91126c0b4ebaec1081d4f",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_02.png",
+      "sha256": "948b445c0825f56f67a6f5eb07700e8035f4f5ad3602b94529fa896eb6069742",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_03.png",
+      "sha256": "8cbeaebd59a4f589ed7f68e94d1d1506eb58af01dec73825b8925a059d775973",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_04.png",
+      "sha256": "ad13cc4a5f05d018b5458d8df2598c5b06b62af83d3c17474f556d478b277a40",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\path\\frame_05.png",
+      "sha256": "ad13cc4a5f05d018b5458d8df2598c5b06b62af83d3c17474f556d478b277a40",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_00.png",
+      "sha256": "426243fabe9fb6f8c2ee1de9dcb72766fea43cb1ec8e41611dfb8cb2fd9dbf7d",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_01.png",
+      "sha256": "3ec1d6ff7e2c2e5c7c2070c8be5e2678b6e52fa76b533aaca93be14d5adc9908",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_02.png",
+      "sha256": "17e8fdf4b41809b28aac90f26968c26af9fba92d2ff18f8dd3e545aecb1a7740",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_03.png",
+      "sha256": "531255a26f0f9341fab2240d272e83ab1f7fba6a5602d00a227ba5b43df3ee6e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_04.png",
+      "sha256": "680616d041d6e3e67a9bf32d7f109cfa47353174d81f76211245ec7ce1ecf2ac",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\landing\\frame_05.png",
+      "sha256": "a7a9a15698d2251e4ce4d7fbe3ec22d3c06165b896534effd6e6feb64eb6b061",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_00.png",
+      "sha256": "3617398f8136eb410dfad47f8a96094d4e0d5ae627093a5adf51ea34afebb269",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_01.png",
+      "sha256": "3b7a24fc106cc7ea2f289ba08783350bdcd474ca908613752f5ed61f7240ad16",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_02.png",
+      "sha256": "ecdbd2708c157ee030d0da07661e47ae470fe2ea657c7e88a51ab971bba09b6d",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_03.png",
+      "sha256": "0d10a8d6461dfd06f680f98bd1d00931e827d1fcdbb26fe31761f8f0fd8e8334",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_04.png",
+      "sha256": "bd1cdc404d358f19fa946d445fc520e834efff42d10db212bfc6f258b4865143",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shoot\\frame_05.png",
+      "sha256": "b79cf1d136eb9b15bf834bb525ff894d440e6ae7d3e86585203418857b81defc",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_00.png",
+      "sha256": "40b3425d1b747e69c08a4290aaa689e0ed2c93947d9c05e50909fea068cf885a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_01.png",
+      "sha256": "1f9724e9ef2527d513f37f32ef3dbc394e3db8f2d23d9a6480014962adfae22c",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_02.png",
+      "sha256": "8ec7f2391c62ebd8c6e4d1946bdafb018b662993f3869f959e41fc8e2df11db9",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_03.png",
+      "sha256": "58e261f7a2b6a1165b33fe2197060e21f791938df0148819e86218130ceaa70a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_04.png",
+      "sha256": "5ac5328db07fb34185fbac90024cd9b3e72295fa8c5bf963a19febc558ee1a31",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\melee\\frame_05.png",
+      "sha256": "4a61cd32ca3d59587aa29d2a0f27631ea5ce43f6be200e6c7539c2e252e520df",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_00.png",
+      "sha256": "1e8f55a4ce570440d405bed32cef7c085ce07a02cee063f68df4d24fe21d6605",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_01.png",
+      "sha256": "175a6c1712ff70fd03ed1d9c900ffb88f28952f8421a3246ed1077394798f442",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_02.png",
+      "sha256": "a9b3594eb9bff540466d96990fce6d928301222c834c2870e8ec8b81e3473d3a",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_03.png",
+      "sha256": "934206b09b9ca5d5f5bd0823a3a7dce2c7166bcfea9248ae3a21e6ddd78447b4",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_04.png",
+      "sha256": "317a2ee3223215cb49c91e23f7546b559fd1eb0ceb3b004a3c97f76c2501e922",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\hit\\frame_05.png",
+      "sha256": "723f387c57532a193385beb7df556bee6407870b5fbb6fe92edaeeff00158859",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_00.png",
+      "sha256": "e1fb630b7ad5754e217d63a79960eb170eec7eaa8896f1801cc6487971bcc70a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_01.png",
+      "sha256": "04d1d5af193970ec0eb3dc4d00ab8ec12a8a1fb60c270c623645e43ab6dcbc63",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_02.png",
+      "sha256": "4567fc8368318fb71d70fed4575c40d7ad9f59d557971a1b5d2ef824fc6a3dda",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_03.png",
+      "sha256": "2dc2b87f9a40388db374163cf67018dd6979568aa9079fcb118765a89b9ba171",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_04.png",
+      "sha256": "3c84c9508288192d7236b415cae6d78221306635b82db03386399f5e141b074e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\heavy_hit\\frame_05.png",
+      "sha256": "d1988fcbc00fbdd0486b434e7b05c3287d78d597f650a618b5b8d1fbc2eb1f6d",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_00.png",
+      "sha256": "e841114f090d52a758c1369621321f8f065912315a1b7d45b30c4574adaa1e00",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_01.png",
+      "sha256": "bb843260cb33af3aebef2e10a94c38265dbfa85aa36966a5f9b5aa20e09fa400",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_02.png",
+      "sha256": "478fcf98a09b5cfd78d324fd65430e5d6a9516c0fd3e2a12961493755f33aae9",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_03.png",
+      "sha256": "f3670cd6a7fa1ba85540aedc98045008d7b66eab67a35447be640a5c38b4e90f",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_04.png",
+      "sha256": "3a0c06076efe7a7d4c3365c293c47b7a3261cf02c3263783909063ed51d78d91",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_hit\\frame_05.png",
+      "sha256": "7ada157ea9600e2300c4cd5d20a567d87d298e93fb0c573129ade218ab8fc19e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_00.png",
+      "sha256": "9d728509ab43fdee414b02e5e50bfe72c49ca60bc42fb9e1bde4e283d4f3fec7",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_01.png",
+      "sha256": "7514ae4d5ebb71b67c4291f6a736bb72a03178a0aa270b4e2b90ca7898da3f18",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_02.png",
+      "sha256": "d6b1538e9e1060321961059af3ba9ee1228ea29101dd15cc9c1cc98f542ce455",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_03.png",
+      "sha256": "06231aed197596205a6bf556d20448b8bcee1dc577fb8fdbaf93805a57da144f",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_04.png",
+      "sha256": "aaea2c2a9959fbd5913fc781cf6201f3d33e3d7a09711fd02ae1ff12feab98d0",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_absorb\\frame_05.png",
+      "sha256": "3ff4dede989ac00995b1c89a07aa74677830e8daaa176ae6b0571bed58c47b49",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_00.png",
+      "sha256": "19aca2749e8eeb99fc5957f102af9acfcff3ab9661355281a4fa4af636a7b504",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_01.png",
+      "sha256": "b95be04452b589cad5db1aca684b5f191731562b26381f9b25cd817862efbc6c",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_02.png",
+      "sha256": "05de1f2e41d1b9b44878c9f3fbfcb55d6cf799e67e5d1a7e788f1f198f5db862",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_03.png",
+      "sha256": "d5be348b665426d6df538ee29bac838eafeab645bff96e6af271e3bd419d2575",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_04.png",
+      "sha256": "5b57b9e2a4d61792c5534a0f5a766753a953c25f36954ff12455c74bd06a9097",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_break\\frame_05.png",
+      "sha256": "cf6ccd5d6447a452a4746261381828f3fe0ccaaaaf37a6abc7cf1ad31a3b3085",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_00.png",
+      "sha256": "777bdc862f58f5438edc025b3973325c660c8932f93a1c654484c3c86d26fd00",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_01.png",
+      "sha256": "8e214938bc05522cf9dfbfdbf3d75c8dfb1254181af0f37d9d0ff8f74d9a0f0a",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_02.png",
+      "sha256": "292a0a2b6fa8cd9c1fb037b37f74caf064af0fd645c132252e23129449fc1bc2",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_03.png",
+      "sha256": "fb53a17ec951fca43195d97cfe68dd02b135572a62fb6f42a9fa73141d3aa8fb",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_04.png",
+      "sha256": "b4cfea8f864c110706f26298feac7b4d644c72c69338abc984e085cf7aa78b61",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\shield_restore\\frame_05.png",
+      "sha256": "5bd27c77c70879b4a159ea80b1fb3185dc613a6edd98a1041ccff9ba41271260",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_00.png",
+      "sha256": "0474f1b2c9700f9672a5a922e3ec0d8178449f9e58c1f8da4751fc90a508418c",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_01.png",
+      "sha256": "9b69168b53740b2f0c8470d6c5e6553425c84246686302857a406836de400883",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_02.png",
+      "sha256": "f7048181c269ec901947984efe46039c080ee3423d4015aa467a07db170e2c7a",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_03.png",
+      "sha256": "23c0cb438352139ea52656d2df3f1c75afb69705ca0862952cfcc3b27906ccf7",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_04.png",
+      "sha256": "f72896f18f4ab82c2d023e1a6b16b36fc10296518e0d0ba5a13ce364820395af",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\health_repair\\frame_05.png",
+      "sha256": "35ed35da7eb460814b9d5c5b7beda004834f598c0096e910e5693aa86d2d8713",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_00.png",
+      "sha256": "f414ecb7ce496fcaa1360a484ddc1b9c7cc12b4375bd13bfe72f699a1a7f8ffe",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_01.png",
+      "sha256": "346cea70b81ff862f1bfc226c09cff8b763bbb64ad3bc4351a2ac0a66b77049e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_02.png",
+      "sha256": "491cdd060ba72572922b46c198a658df63187ff229231b5eed6829f16bbb8c67",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_03.png",
+      "sha256": "559595ed1774ed19f7a4f0d175a44251c190c09767bf86df871bce3a4401454c",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_04.png",
+      "sha256": "648aa168339b9de6dcc450b11d996f9dc90a675822dd38f6b4e1c304e8f4abbc",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\mana_restore\\frame_05.png",
+      "sha256": "44ee60c05d1681134f4148ea2b4ec32270bc966d2f740d8006335d15f6ce3138",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_00.png",
+      "sha256": "2060ac4e032f8975729e16e4a598009dcc2562c2c817d4d321649250d7626b98",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_01.png",
+      "sha256": "cea46adfcdc4fd02ccdad0b054f70c4de05908b7eff2546e91a33780a3397a73",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_02.png",
+      "sha256": "b172b1b95a1495efa7384e533db8017f113d33ee45ba47425bff961fea2c3610",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_03.png",
+      "sha256": "c6b72b7fd7ba95359297ea779f210e8756688b8429af24ee0b0e4160fbb23d7f",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_04.png",
+      "sha256": "a1ca32523e880c561fa582e87c7df750bec4838846b480f0afb89ff89829c8df",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\cleanse\\frame_05.png",
+      "sha256": "892b6f6939ae92c994cf818dac7bff9d7bf96d6cb3c804b990df46dfca082a52",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_00.png",
+      "sha256": "1216d1e738e68adf345fa51efec353f6cb6870d8dbbde0a04042fc83ae0e3875",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_01.png",
+      "sha256": "ad8e2f850dcc7342c12f0a6aa0e44ff8e2f0d5d4ca7017b93f37a095773f31ef",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_02.png",
+      "sha256": "d2469e4438c85fb13721b52e1236b0d5419e85d9595d659855d633c745797a22",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_03.png",
+      "sha256": "5fa3283f615fc0e38b0c3c68f2965bf5eb30892f12b06b80cce8d22b3698f9c0",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_04.png",
+      "sha256": "aaa197fe468dc4dbd9162615ed6aabe6c778f4a4222f72550fce22cc3576ea58",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\burning\\frame_05.png",
+      "sha256": "1fc26fc5252b243639df5a43d505a2d489961cfa400b70c31c240803d7d9e17d",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_00.png",
+      "sha256": "09a4420ea96f5ea57adefb2c6acdba7df983258e2aa36cba58b5ee0a967751a6",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_01.png",
+      "sha256": "3bcf509ce4735609f64059e6d4d730998282be82bda6843d00216ae0933b5529",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_02.png",
+      "sha256": "7c59d31e9f616b6c6e88a4543b1b0f465ccc813e7692a29180b93d98d98410d9",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_03.png",
+      "sha256": "278bf52824a5d09e08264e1a1a822c4f3409802c0d90f806a4e53c8637521c25",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_04.png",
+      "sha256": "ec9b0392862b8981b897fb076e3c8894edce06b8c09fb475a7a936d2af0ad63d",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\slow\\frame_05.png",
+      "sha256": "0a42243e7fa9ef333373e379dd2004ff03fbed00745470e65782f1dd8d9a831a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_00.png",
+      "sha256": "6b86439d9f87da879ab7f5c87880337483c4fcbf8f2b44cb1d1af309020e6ebe",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_01.png",
+      "sha256": "8f0c83e6046ebe0a2cccd3aba29c5e64cb170932df300b7a3febe659d022a1da",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_02.png",
+      "sha256": "1a471130c191b143c85268b6c9b01cf29fe9d9fe2e9edf33d70ab7ae22a26aa4",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_03.png",
+      "sha256": "0ca33c2e1d4a89bcbba75c13cffbfee03cef40e31a6b22548f8f196c5b0ae2ae",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_04.png",
+      "sha256": "610bc37469ad8dacc353cff2b5c07fc8adda968a01f752fd3d6d71bd3ba7a74f",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\bound\\frame_05.png",
+      "sha256": "b30371b3d74068620f801627b29d59fb61c9ba77c45667c60197a2d8cf62be96",
+      "colors": 1,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_00.png",
+      "sha256": "e17cfdf132c391506426528c52ba53dd3907a2e98e0f2eae0285fdbc721bf221",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_01.png",
+      "sha256": "f2f388620b5f38b2d52b9d8f98bdeb2c04abbc969c066decbf2251ab545ae2a6",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_02.png",
+      "sha256": "2f3a535be44fa4571307d7485f804057ecf36abd4a045dbbacaa293210ae4e98",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_03.png",
+      "sha256": "df973a73e7dba5513f1db6b2e0deabb4d822e5490b6a3d1d4fb1339cf3185435",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_04.png",
+      "sha256": "12a1bff227c4ddebc77c0931d0275fe07183c02240c22cf7f671abbd024f4bf6",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\armor_break\\frame_05.png",
+      "sha256": "77ec01aeee3770f62b63cbb9c033db76fd8ef6fdea7e7f29c11ba62280a9db7e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_00.png",
+      "sha256": "dbc8bee98e1067f297786af3e1596d18230ac0820e07bff59041833f66ebb949",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_01.png",
+      "sha256": "44934d5e3e5c08c34a74414001d1e3cc0b922ef1a9371f27a203c68cffcfdd05",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_02.png",
+      "sha256": "6a3817d0735922f833017137b3a7507ef561666792c67d72460c0b7633fb4977",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_03.png",
+      "sha256": "50d77c8b26a7620cae965e4d38f9efe70b8a6d8cfd2f48087efe342d0879a608",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_04.png",
+      "sha256": "26bc888efb2db804080e23f9db7636536e0a5d6dddb94e99962b877c037d7ac6",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\dazzled\\frame_05.png",
+      "sha256": "32b36a65b7d9bcd4e2438df1215b179c66af80b735ac143ebf87e13137cabcfc",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_00.png",
+      "sha256": "26d26cecbff0011a08596130a9e9487b5da4ce5d93ab58e5e26774fc21f82934",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_01.png",
+      "sha256": "26d26cecbff0011a08596130a9e9487b5da4ce5d93ab58e5e26774fc21f82934",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_02.png",
+      "sha256": "85746832a19c1e1b5ebe998ccc66e93c04bd8ee12e1bc502fc11f6fba53bc356",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_03.png",
+      "sha256": "85746832a19c1e1b5ebe998ccc66e93c04bd8ee12e1bc502fc11f6fba53bc356",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_04.png",
+      "sha256": "1a73ec1da4f3300b5d32476c0c71d74ec84fd5af76f0eabd028d394bd1df780e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\revealed\\frame_05.png",
+      "sha256": "1a73ec1da4f3300b5d32476c0c71d74ec84fd5af76f0eabd028d394bd1df780e",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_00.png",
+      "sha256": "9b417b185571375df5d6189f189acd70f32377bc79f88e008a95bd84f94c010e",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_01.png",
+      "sha256": "c88b99ee064d87239347da7a36ee6e5ff003ffcaa64f62d1f2ab22c224dafd72",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_02.png",
+      "sha256": "c792ece2ae0a091085c249c2ab94d83d8c914a54f8a85e0809d7d2ec92cd3c73",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_03.png",
+      "sha256": "7952cd14528fcfc2f21b06b4d4afa24f39887c5d642213feb97de5ba6f3450c3",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_04.png",
+      "sha256": "9e2a43e4d13a7ea130aaa92e5ba2b675ddcbb03fc874254404c032b96b443e13",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_damage\\frame_05.png",
+      "sha256": "3fe45e08677a94ac97ae483413ec80088a09b056b1ba3b5d07d60a896b9e6ea8",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_00.png",
+      "sha256": "27c90e592b19dd731d2ad54df4ea037552b68bd4eac7e928b9012d2c4fb826bf",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_01.png",
+      "sha256": "315e4648176d5a3ad0cc29436463f3fc75d0139bb9618634beeac84937a730e7",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_02.png",
+      "sha256": "800e60abee02d6e37c11d529b2ac3cbdc2ebb8de3507370a6022cfdc2c431007",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_03.png",
+      "sha256": "a43b59973069219d2a68353de26c6d8ddd8471e945bed590b51a4dc1337f3ab9",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_04.png",
+      "sha256": "009b524e5abf29bbbf37248240d7634a88bc8c3396b7953b41b517ffa75965f4",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\object_break\\frame_05.png",
+      "sha256": "ffbdc293f8e217ddaebcdba08dd2349843fddd96ddfd7ffdc10bf038290553fe",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_00.png",
+      "sha256": "e6459250d662cf09af0c69a3bc2a1b4250c509590f8e86ec5ec9b8883a5a358b",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_01.png",
+      "sha256": "bc8889957beaf1df4f09e7709af124ecdba580fea7cf8615439b1a474bbe9a27",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_02.png",
+      "sha256": "9072ae801de174a7c4a3d9a6e1166f512d730c0d6bbb0bea4a9acc4e5f07d906",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_03.png",
+      "sha256": "657b3f16adfc6554b031b06c037b2326b7f7012b1bce77047b05ac02385838ce",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_04.png",
+      "sha256": "fe07d9cbeb3cf957103ca3e58b0a45128e4139e711abaebfd91cbc57168c9e8a",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\debris\\frame_05.png",
+      "sha256": "f0b6fdd137fe1cb1757d2ffeea7380834415b4d21cd5eca0fb05f2983e432130",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_00.png",
+      "sha256": "cad1bbd7f69681983f75e013523fbf6482407bf97d0980b8bc24cb28b367246b",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_01.png",
+      "sha256": "b9662a756db0a98be61cc2e105488b70edad44753373ecae7ec5ac9658c6b5dd",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_02.png",
+      "sha256": "cf16dbcd452ec7ac7eaac011875f6c3d27140819ba62baa2d35d268770c20c6f",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_03.png",
+      "sha256": "f3dc5f0129f5c8ee0d54646668a96c7635c222ad8b1196885718986acedc480d",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_04.png",
+      "sha256": "478b254864e99600333076bce645ceec2baa52ebdb6376c02fbb0137c29c55b5",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_projectile\\frame_05.png",
+      "sha256": "6e0eaca1ecb336a852d4adcbbbc144b1e687c372a40635c47a66436d7660547b",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_00.png",
+      "sha256": "9dfd0f2ef9a9ad9d42067850b1e22f51f324b5e632628410dd3d8786f03a0195",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_01.png",
+      "sha256": "af0b693938b52a04a52734e93fc3c6372451535d5b11630ae4fba03e3c974adc",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_02.png",
+      "sha256": "d99e13c99bd1b53f18739bebcc3ec690089dc766a983e73270e6a95aaec2ce76",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_03.png",
+      "sha256": "b274c5aa1be83711a5e73f7d0e4921cff646d5d79c0f7cb1e445073fc05b9e74",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_04.png",
+      "sha256": "29152e590a74537786ca1df3a83ee9f629233ef67583a6cf2aca112098d0a446",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_spray\\frame_05.png",
+      "sha256": "e38da00d9f1532a5a643fbb4f467d8ff0ecfda7f46bcfe8ed176d1349ef544c4",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_00.png",
+      "sha256": "5b381946ef97988163129339a6ad5e63b23b253b8899f0088d6d102b422fc2ed",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_01.png",
+      "sha256": "f30166fe60ea58055780ffbebecf0b5a6e40c33dfe879e42bf1db1667cae61a8",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_02.png",
+      "sha256": "3e2602cb7398a84f79d9109915a7a24849a88efd75c0b7af79f60bd6840265ff",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_03.png",
+      "sha256": "3338fab55d8e08b20711cb2ed329f06ef59cc21da3980d0f139b9562cbe1a865",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_04.png",
+      "sha256": "a33ad4c2ae643bc8139bc4201949abe05ed524623e8f637869c0038ed6819ab5",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_cross_blast\\frame_05.png",
+      "sha256": "d6dccba3b7db0b5b360963d3143ac8d81a24f506d693c405abd0b7aebe1f53b9",
+      "colors": 3,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_00.png",
+      "sha256": "0c444f7da05094420033b3a5df14837c75eaec38a53a6a1f837e2b8b4fd8f3e8",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_01.png",
+      "sha256": "16ea28d7d14d93e4bbacc1bb7f1dfe2ec5f615dc002523e7dd7e3f71e8bfd488",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_02.png",
+      "sha256": "6d2c12274979edd758db75708a0417a940eda374fdb4f23691abcdd99243e4c6",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_03.png",
+      "sha256": "0c444f7da05094420033b3a5df14837c75eaec38a53a6a1f837e2b8b4fd8f3e8",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_04.png",
+      "sha256": "16ea28d7d14d93e4bbacc1bb7f1dfe2ec5f615dc002523e7dd7e3f71e8bfd488",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_burning_ground\\frame_05.png",
+      "sha256": "6d2c12274979edd758db75708a0417a940eda374fdb4f23691abcdd99243e4c6",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_00.png",
+      "sha256": "ecb75d74df36d293336095baeb3f555c11e146466b19344befc343e8b38c0543",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_01.png",
+      "sha256": "96953e843014c8d89be14fe8f8b02596fcf0796e06ce9461c51e2c87001f3800",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_02.png",
+      "sha256": "412eb80f8052c5a41e45030eb3d1796a368b39c148c63926e24068e0f1eeb6b9",
+      "colors": 2,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_03.png",
+      "sha256": "38e2dc555fcb15f0852e544668e82a1037e970d34a25cf9d9207412772fc8e4d",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_04.png",
+      "sha256": "ba6dcefb6e1bff75a7cb9e04ea13f6521fb6fb1e3222c56bf77d2afe881adc7b",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalVfx32\\fire_detonate\\frame_05.png",
+      "sha256": "953549fc80757355bb96833425f1a6ac3f83812441fd06687f5a97801b04f655",
+      "colors": 4,
+      "result": "PASS",
+      "failures": []
+    }
+  ]
+}

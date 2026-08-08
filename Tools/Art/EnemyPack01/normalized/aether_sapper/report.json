@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 59,
+    "centerX": 32,
+    "targetBodyHeight": 49,
+    "maxBodyWidth": 44,
+    "minBodyHeight": 46,
+    "maxBodyHeight": 49,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 20,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\aether_sapper\\source.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\aether_sapper\\aether_sapper.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\aether_sapper\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\aether_sapper\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\aether_sapper\\qa.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\aether_sapper\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        270,
+        246,
+        969,
+        1001
+      ],
+      "sourceBodyWidth": 699,
+      "sourceBodyHeight": 755,
+      "scale": 0.06294706723891273,
+      "outputWidth": 44,
+      "outputHeight": 48,
+      "outputX": 10,
+      "outputY": 11,
+      "normalizedBounds": [
+        10,
+        11,
+        54,
+        59
+      ]
+    }
+  ],
+  "failures": []
+}

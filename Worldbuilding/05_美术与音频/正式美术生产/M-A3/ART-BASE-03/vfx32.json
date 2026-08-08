@@ -1,0 +1,16 @@
+{
+  "cell": [
+    32,
+    32
+  ],
+  "frame_count": [
+    4,
+    10
+  ],
+  "palette_limit": 16,
+  "pivot": [
+    0.5,
+    0.5
+  ],
+  "hard_alpha": true
+}

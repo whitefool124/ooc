@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 57,
+    "centerX": 32,
+    "targetBodyHeight": 39,
+    "maxBodyWidth": 56,
+    "minBodyHeight": 32,
+    "maxBodyHeight": 39,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 18,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\relay_hound\\source.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\relay_hound\\relay_hound.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\relay_hound\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\relay_hound\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\relay_hound\\qa.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\relay_hound\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        79,
+        295,
+        1187,
+        967
+      ],
+      "sourceBodyWidth": 1108,
+      "sourceBodyHeight": 672,
+      "scale": 0.05054151624548736,
+      "outputWidth": 56,
+      "outputHeight": 34,
+      "outputX": 4,
+      "outputY": 23,
+      "normalizedBounds": [
+        4,
+        23,
+        59,
+        57
+      ]
+    }
+  ],
+  "failures": []
+}

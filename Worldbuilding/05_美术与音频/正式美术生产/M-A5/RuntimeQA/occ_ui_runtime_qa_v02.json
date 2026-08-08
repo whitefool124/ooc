@@ -1,0 +1,136 @@
+{
+  "schema": "occ.pixel.ui.runtime.qa.v0.2",
+  "status": "QA_PASS",
+  "screenshots": 13,
+  "requirements": {
+    "reference": [
+      1920,
+      1080
+    ],
+    "compact": [
+      960,
+      540
+    ],
+    "battlefield_hud_split": "1440/480",
+    "character_art": "BLOCKED_CONTENT_NOT_PRODUCED"
+  },
+  "records": [
+    {
+      "file": "archive_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "362b966709c5aa39038dd7c1161b0f520027a2bc39b9851bf73e3c2d6779b070",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "briefing_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "2560af2c0dad71e679419ab89e11589784b76dd397e4164d3a0891f2553c0bad",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "combat_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "fbff00053eaa165fd50d0f9a7b835f1ba59615e5303852996f3e6dbd735c2626",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "combat_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "fa7f99d1fc18bb7b80924ec53f617d2db367d61f3b9e2bfa845bd54d84c2c4c8",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "confirmation_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "56e57333f6cc8cd37e73428499ba3d30fff5b429fb0e3180e026e43d64540516",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "failure_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "baf2c6c2e6b444511adc8ed5fc4b7f18fdd337ae85a8ea89daea503adca9e897",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "landing_continue_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "ef58426c06bfc1868686b944e0d7bc4a126d2af442b2c3717b5221c9152b23e0",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "landing_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "5c3bfbbbbbae7eb6672d98e0d25309dcc3ec1c11d0c25dff9fcdf0f838ea2d30",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "map_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "2818d5360369dc37a397e8d05e8e31422f9ee789f3312895374c3190f2142ad8",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "map_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "de7e25e1c680078d131641e2c3395381cf748bd6248d9d1b1437ae21ba6b5ef5",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "reward_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "47b21e412998b25ff2c3f19d007c114b04e3eeb7161301ee69ce9025cc2df98c",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "reward_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "703b60860f9748f0bc7da5505346a2c264e06968647764049722bd47c86de227",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "settings_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4e0eac4c60926aa5d00d778fdfe6cdd7a23124bd696725208c1cac3f4d031398",
+      "status": "VISUAL_PASS"
+    }
+  ]
+}

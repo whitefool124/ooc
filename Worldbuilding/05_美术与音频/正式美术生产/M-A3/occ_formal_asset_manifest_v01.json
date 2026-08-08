@@ -1,0 +1,1915 @@
+{
+  "schema_version": "0.1",
+  "task": "M-A3",
+  "generated_date": "2026-08-07",
+  "visual_contract": {
+    "tile_px": 32,
+    "icon_px": 32,
+    "unit_cell_px": 64,
+    "unit_center_x": 32,
+    "unit_baseline_y": 58,
+    "standard_body_height_px": "32-38",
+    "elite_body_height_px": "38-44",
+    "palette": "ART-BASE-01",
+    "hud_1920": {
+      "battlefield_width": 1440,
+      "hud_width": 480
+    },
+    "secondary_resolution": "960x540",
+    "filter": "Point",
+    "wrap": "Clamp",
+    "mipmaps": false,
+    "alpha": "hard"
+  },
+  "blocked_content": [
+    "character_and_unit_visuals_pending_frozen_character_direction",
+    "unapproved_dual_elements",
+    "remaining_seven_element_spell_pools",
+    "unfrozen_scroll_talisman_equipment_catalog",
+    "canon_story_hero_npc_story_boss_regions",
+    "marketing_art",
+    "audio"
+  ],
+  "entries": [
+    {
+      "domain": "screen",
+      "id": "landing",
+      "asset_id": "screen.landing",
+      "path": "Art/FormalUI/Screens/landing",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "map",
+      "asset_id": "screen.map",
+      "path": "Art/FormalUI/Screens/map",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "briefing",
+      "asset_id": "screen.briefing",
+      "path": "Art/FormalUI/Screens/briefing",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "combat",
+      "asset_id": "screen.combat",
+      "path": "Art/FormalUI/Screens/combat",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "settlement",
+      "asset_id": "screen.settlement",
+      "path": "Art/FormalUI/Screens/settlement",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "settings",
+      "asset_id": "screen.settings",
+      "path": "Art/FormalUI/Screens/settings",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "archive",
+      "asset_id": "screen.archive",
+      "path": "Art/FormalUI/Screens/archive",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "confirmation",
+      "asset_id": "screen.confirmation",
+      "path": "Art/FormalUI/Screens/confirmation",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "shop",
+      "asset_id": "screen.shop",
+      "path": "Art/FormalUI/Screens/shop",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "workshop",
+      "asset_id": "screen.workshop",
+      "path": "Art/FormalUI/Screens/workshop",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "rest",
+      "asset_id": "screen.rest",
+      "path": "Art/FormalUI/Screens/rest",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "event",
+      "asset_id": "screen.event",
+      "path": "Art/FormalUI/Screens/event",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "treasure",
+      "asset_id": "screen.treasure",
+      "path": "Art/FormalUI/Screens/treasure",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "reward",
+      "asset_id": "screen.reward",
+      "path": "Art/FormalUI/Screens/reward",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "victory",
+      "asset_id": "screen.victory",
+      "path": "Art/FormalUI/Screens/victory",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "screen",
+      "id": "failure",
+      "asset_id": "screen.failure",
+      "path": "Art/FormalUI/Screens/failure",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "FormalRogueliteUi / FormalCombatHud / RogueliteSettlementPresentation",
+      "notes": ""
+    },
+    {
+      "domain": "archetype",
+      "id": "hero",
+      "asset_id": "unit.hero",
+      "path": "Art/FormalUnits64/hero",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "rifleman",
+      "asset_id": "unit.rifleman",
+      "path": "Art/FormalUnits64/rifleman",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "shieldguard",
+      "asset_id": "unit.shieldguard",
+      "path": "Art/FormalUnits64/shieldguard",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "pyromancer",
+      "asset_id": "unit.pyromancer",
+      "path": "Art/FormalUnits64/pyromancer",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "raider",
+      "asset_id": "unit.raider",
+      "path": "Art/FormalUnits64/raider",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "sniper",
+      "asset_id": "unit.sniper",
+      "path": "Art/FormalUnits64/sniper",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "archetype",
+      "id": "breaker",
+      "asset_id": "unit.breaker",
+      "path": "Art/FormalUnits64/breaker",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "archetype",
+      "id": "warden",
+      "asset_id": "unit.warden",
+      "path": "Art/FormalUnits64/warden",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "archetype",
+      "id": "binder",
+      "asset_id": "unit.binder",
+      "path": "Art/FormalUnits64/binder",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "archetype",
+      "id": "elite_vanguard",
+      "asset_id": "unit.elite_vanguard",
+      "path": "Art/FormalUnits64/elite",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "existing static must be rescaled natively and expanded to directions/actions"
+    },
+    {
+      "domain": "archetype",
+      "id": "core_overseer",
+      "asset_id": "unit.core_overseer",
+      "path": "Art/FormalUnits64/core_overseer",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "archetype",
+      "id": "purifier_overseer",
+      "asset_id": "unit.purifier_overseer",
+      "path": "Art/FormalUnits64/purifier_overseer",
+      "status": "BLOCKED_CONTENT",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap unit rendering",
+      "notes": "currently reuses another archetype texture"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "fire_bolt",
+      "asset_id": "skill.runtime.fire_bolt",
+      "path": "Art/FormalSkillIcons32/Runtime/fire_bolt.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "frost_bind",
+      "asset_id": "skill.runtime.frost_bind",
+      "path": "Art/FormalSkillIcons32/Runtime/frost_bind.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "ember_lance",
+      "asset_id": "skill.runtime.ember_lance",
+      "path": "Art/FormalSkillIcons32/Runtime/ember_lance.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "breach_shot",
+      "asset_id": "skill.runtime.breach_shot",
+      "path": "Art/FormalSkillIcons32/Runtime/breach_shot.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "hammer_pulse",
+      "asset_id": "skill.runtime.hammer_pulse",
+      "path": "Art/FormalSkillIcons32/Runtime/hammer_pulse.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "searing_mark",
+      "asset_id": "skill.runtime.searing_mark",
+      "path": "Art/FormalSkillIcons32/Runtime/searing_mark.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "rail_burst",
+      "asset_id": "skill.runtime.rail_burst",
+      "path": "Art/FormalSkillIcons32/Runtime/rail_burst.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "cinder_sweep",
+      "asset_id": "skill.runtime.cinder_sweep",
+      "path": "Art/FormalSkillIcons32/Runtime/cinder_sweep.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "tether_arc",
+      "asset_id": "skill.runtime.tether_arc",
+      "path": "Art/FormalSkillIcons32/Runtime/tether_arc.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "damping_field",
+      "asset_id": "skill.runtime.damping_field",
+      "path": "Art/FormalSkillIcons32/Runtime/damping_field.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "armor_solvent",
+      "asset_id": "skill.runtime.armor_solvent",
+      "path": "Art/FormalSkillIcons32/Runtime/armor_solvent.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "cryo_pulse",
+      "asset_id": "skill.runtime.cryo_pulse",
+      "path": "Art/FormalSkillIcons32/Runtime/cryo_pulse.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "anchor_seal",
+      "asset_id": "skill.runtime.anchor_seal",
+      "path": "Art/FormalSkillIcons32/Runtime/anchor_seal.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "arc_bolt",
+      "asset_id": "skill.runtime.arc_bolt",
+      "path": "Art/FormalSkillIcons32/Runtime/arc_bolt.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "mana_siphon",
+      "asset_id": "skill.runtime.mana_siphon",
+      "path": "Art/FormalSkillIcons32/Runtime/mana_siphon.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "shield_converter",
+      "asset_id": "skill.runtime.shield_converter",
+      "path": "Art/FormalSkillIcons32/Runtime/shield_converter.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "aether_surge",
+      "asset_id": "skill.runtime.aether_surge",
+      "path": "Art/FormalSkillIcons32/Runtime/aether_surge.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "prism_arc",
+      "asset_id": "skill.runtime.prism_arc",
+      "path": "Art/FormalSkillIcons32/Runtime/prism_arc.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "phase_step",
+      "asset_id": "skill.runtime.phase_step",
+      "path": "Art/FormalSkillIcons32/Runtime/phase_step.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "overload_needle",
+      "asset_id": "skill.runtime.overload_needle",
+      "path": "Art/FormalSkillIcons32/Runtime/overload_needle.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "field_repair",
+      "asset_id": "skill.runtime.field_repair",
+      "path": "Art/FormalSkillIcons32/Runtime/field_repair.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "barrier_charge",
+      "asset_id": "skill.runtime.barrier_charge",
+      "path": "Art/FormalSkillIcons32/Runtime/barrier_charge.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "thermal_purge",
+      "asset_id": "skill.runtime.thermal_purge",
+      "path": "Art/FormalSkillIcons32/Runtime/thermal_purge.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "regenerative_seal",
+      "asset_id": "skill.runtime.regenerative_seal",
+      "path": "Art/FormalSkillIcons32/Runtime/regenerative_seal.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "rescue_beam",
+      "asset_id": "skill.runtime.rescue_beam",
+      "path": "Art/FormalSkillIcons32/Runtime/rescue_beam.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "bastion_pulse",
+      "asset_id": "skill.runtime.bastion_pulse",
+      "path": "Art/FormalSkillIcons32/Runtime/bastion_pulse.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "runtime_skill",
+      "id": "demolition_charge",
+      "asset_id": "skill.runtime.demolition_charge",
+      "path": "Art/FormalSkillIcons32/Runtime/demolition_charge.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / reward and build UI",
+      "notes": "validation-pool gameplay id; art-only coverage, no gameplay change"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P01",
+      "asset_id": "skill.fire.f-p01",
+      "path": "Art/FormalSkillIcons32/Fire/f-p01.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P02",
+      "asset_id": "skill.fire.f-p02",
+      "path": "Art/FormalSkillIcons32/Fire/f-p02.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P03",
+      "asset_id": "skill.fire.f-p03",
+      "path": "Art/FormalSkillIcons32/Fire/f-p03.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P04",
+      "asset_id": "skill.fire.f-p04",
+      "path": "Art/FormalSkillIcons32/Fire/f-p04.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P05",
+      "asset_id": "skill.fire.f-p05",
+      "path": "Art/FormalSkillIcons32/Fire/f-p05.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P06",
+      "asset_id": "skill.fire.f-p06",
+      "path": "Art/FormalSkillIcons32/Fire/f-p06.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P07",
+      "asset_id": "skill.fire.f-p07",
+      "path": "Art/FormalSkillIcons32/Fire/f-p07.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P08",
+      "asset_id": "skill.fire.f-p08",
+      "path": "Art/FormalSkillIcons32/Fire/f-p08.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P09",
+      "asset_id": "skill.fire.f-p09",
+      "path": "Art/FormalSkillIcons32/Fire/f-p09.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P10",
+      "asset_id": "skill.fire.f-p10",
+      "path": "Art/FormalSkillIcons32/Fire/f-p10.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P11",
+      "asset_id": "skill.fire.f-p11",
+      "path": "Art/FormalSkillIcons32/Fire/f-p11.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P12",
+      "asset_id": "skill.fire.f-p12",
+      "path": "Art/FormalSkillIcons32/Fire/f-p12.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P13",
+      "asset_id": "skill.fire.f-p13",
+      "path": "Art/FormalSkillIcons32/Fire/f-p13.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P14",
+      "asset_id": "skill.fire.f-p14",
+      "path": "Art/FormalSkillIcons32/Fire/f-p14.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P15",
+      "asset_id": "skill.fire.f-p15",
+      "path": "Art/FormalSkillIcons32/Fire/f-p15.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P16",
+      "asset_id": "skill.fire.f-p16",
+      "path": "Art/FormalSkillIcons32/Fire/f-p16.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P17",
+      "asset_id": "skill.fire.f-p17",
+      "path": "Art/FormalSkillIcons32/Fire/f-p17.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P18",
+      "asset_id": "skill.fire.f-p18",
+      "path": "Art/FormalSkillIcons32/Fire/f-p18.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P19",
+      "asset_id": "skill.fire.f-p19",
+      "path": "Art/FormalSkillIcons32/Fire/f-p19.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P20",
+      "asset_id": "skill.fire.f-p20",
+      "path": "Art/FormalSkillIcons32/Fire/f-p20.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P21",
+      "asset_id": "skill.fire.f-p21",
+      "path": "Art/FormalSkillIcons32/Fire/f-p21.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P22",
+      "asset_id": "skill.fire.f-p22",
+      "path": "Art/FormalSkillIcons32/Fire/f-p22.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P23",
+      "asset_id": "skill.fire.f-p23",
+      "path": "Art/FormalSkillIcons32/Fire/f-p23.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P24",
+      "asset_id": "skill.fire.f-p24",
+      "path": "Art/FormalSkillIcons32/Fire/f-p24.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P25",
+      "asset_id": "skill.fire.f-p25",
+      "path": "Art/FormalSkillIcons32/Fire/f-p25.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P26",
+      "asset_id": "skill.fire.f-p26",
+      "path": "Art/FormalSkillIcons32/Fire/f-p26.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P27",
+      "asset_id": "skill.fire.f-p27",
+      "path": "Art/FormalSkillIcons32/Fire/f-p27.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P28",
+      "asset_id": "skill.fire.f-p28",
+      "path": "Art/FormalSkillIcons32/Fire/f-p28.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P29",
+      "asset_id": "skill.fire.f-p29",
+      "path": "Art/FormalSkillIcons32/Fire/f-p29.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P30",
+      "asset_id": "skill.fire.f-p30",
+      "path": "Art/FormalSkillIcons32/Fire/f-p30.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P31",
+      "asset_id": "skill.fire.f-p31",
+      "path": "Art/FormalSkillIcons32/Fire/f-p31.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P32",
+      "asset_id": "skill.fire.f-p32",
+      "path": "Art/FormalSkillIcons32/Fire/f-p32.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P33",
+      "asset_id": "skill.fire.f-p33",
+      "path": "Art/FormalSkillIcons32/Fire/f-p33.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P34",
+      "asset_id": "skill.fire.f-p34",
+      "path": "Art/FormalSkillIcons32/Fire/f-p34.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P35",
+      "asset_id": "skill.fire.f-p35",
+      "path": "Art/FormalSkillIcons32/Fire/f-p35.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P36",
+      "asset_id": "skill.fire.f-p36",
+      "path": "Art/FormalSkillIcons32/Fire/f-p36.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P37",
+      "asset_id": "skill.fire.f-p37",
+      "path": "Art/FormalSkillIcons32/Fire/f-p37.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P38",
+      "asset_id": "skill.fire.f-p38",
+      "path": "Art/FormalSkillIcons32/Fire/f-p38.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P39",
+      "asset_id": "skill.fire.f-p39",
+      "path": "Art/FormalSkillIcons32/Fire/f-p39.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P40",
+      "asset_id": "skill.fire.f-p40",
+      "path": "Art/FormalSkillIcons32/Fire/f-p40.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P41",
+      "asset_id": "skill.fire.f-p41",
+      "path": "Art/FormalSkillIcons32/Fire/f-p41.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P42",
+      "asset_id": "skill.fire.f-p42",
+      "path": "Art/FormalSkillIcons32/Fire/f-p42.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P43",
+      "asset_id": "skill.fire.f-p43",
+      "path": "Art/FormalSkillIcons32/Fire/f-p43.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P44",
+      "asset_id": "skill.fire.f-p44",
+      "path": "Art/FormalSkillIcons32/Fire/f-p44.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P45",
+      "asset_id": "skill.fire.f-p45",
+      "path": "Art/FormalSkillIcons32/Fire/f-p45.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P46",
+      "asset_id": "skill.fire.f-p46",
+      "path": "Art/FormalSkillIcons32/Fire/f-p46.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P47",
+      "asset_id": "skill.fire.f-p47",
+      "path": "Art/FormalSkillIcons32/Fire/f-p47.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P48",
+      "asset_id": "skill.fire.f-p48",
+      "path": "Art/FormalSkillIcons32/Fire/f-p48.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P49",
+      "asset_id": "skill.fire.f-p49",
+      "path": "Art/FormalSkillIcons32/Fire/f-p49.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "fire_spell",
+      "id": "F-P50",
+      "asset_id": "skill.fire.f-p50",
+      "path": "Art/FormalSkillIcons32/Fire/f-p50.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "frozen fire-spell registry; bind when gameplay catalog adopts stable id",
+      "notes": "approved content, not currently runtime reachable"
+    },
+    {
+      "domain": "item",
+      "id": "rifle",
+      "asset_id": "item.rifle",
+      "path": "Art/FormalItemIcons32/rifle.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "hammer",
+      "asset_id": "item.hammer",
+      "path": "Art/FormalItemIcons32/hammer.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "wand",
+      "asset_id": "item.wand",
+      "path": "Art/FormalItemIcons32/wand.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "shield",
+      "asset_id": "item.shield",
+      "path": "Art/FormalItemIcons32/shield.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "medkit",
+      "asset_id": "item.medkit",
+      "path": "Art/FormalItemIcons32/medkit.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "shield_cell",
+      "asset_id": "item.shield_cell",
+      "path": "Art/FormalItemIcons32/shield_cell.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "war_hammer",
+      "asset_id": "item.war_hammer",
+      "path": "Art/FormalItemIcons32/war_hammer.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "aether_wand",
+      "asset_id": "item.aether_wand",
+      "path": "Art/FormalItemIcons32/aether_wand.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "arcane_wand",
+      "asset_id": "item.arcane_wand",
+      "path": "Art/FormalItemIcons32/arcane_wand.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "fire_bolt_reward",
+      "asset_id": "item.fire_bolt_reward",
+      "path": "Art/FormalItemIcons32/fire_bolt_reward.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "item",
+      "id": "frost_bind_reward",
+      "asset_id": "item.frost_bind_reward",
+      "path": "Art/FormalItemIcons32/frost_bind_reward.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "inventory / quickbar / reward / workshop",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "start",
+      "asset_id": "node.start",
+      "path": "Art/FormalNodeIcons32/start.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "rail_patrol",
+      "asset_id": "node.rail_patrol",
+      "path": "Art/FormalNodeIcons32/rail_patrol.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "depot_wreck",
+      "asset_id": "node.depot_wreck",
+      "path": "Art/FormalNodeIcons32/depot_wreck.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "supply_checkpoint",
+      "asset_id": "node.supply_checkpoint",
+      "path": "Art/FormalNodeIcons32/supply_checkpoint.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "switchyard",
+      "asset_id": "node.switchyard",
+      "path": "Art/FormalNodeIcons32/switchyard.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "relay_raid",
+      "asset_id": "node.relay_raid",
+      "path": "Art/FormalNodeIcons32/relay_raid.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "field_workshop",
+      "asset_id": "node.field_workshop",
+      "path": "Art/FormalNodeIcons32/field_workshop.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "signal_hub",
+      "asset_id": "node.signal_hub",
+      "path": "Art/FormalNodeIcons32/signal_hub.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "relay_event",
+      "asset_id": "node.relay_event",
+      "path": "Art/FormalNodeIcons32/relay_event.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "med_bay",
+      "asset_id": "node.med_bay",
+      "path": "Art/FormalNodeIcons32/med_bay.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "elite_foundry",
+      "asset_id": "node.elite_foundry",
+      "path": "Art/FormalNodeIcons32/elite_foundry.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "gatehouse",
+      "asset_id": "node.gatehouse",
+      "path": "Art/FormalNodeIcons32/gatehouse.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "sealed_market",
+      "asset_id": "node.sealed_market",
+      "path": "Art/FormalNodeIcons32/sealed_market.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "permit_archive",
+      "asset_id": "node.permit_archive",
+      "path": "Art/FormalNodeIcons32/permit_archive.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "transmission_tower",
+      "asset_id": "node.transmission_tower",
+      "path": "Art/FormalNodeIcons32/transmission_tower.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "aether_refinery",
+      "asset_id": "node.aether_refinery",
+      "path": "Art/FormalNodeIcons32/aether_refinery.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "safety_room",
+      "asset_id": "node.safety_room",
+      "path": "Art/FormalNodeIcons32/safety_room.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "core_approach",
+      "asset_id": "node.core_approach",
+      "path": "Art/FormalNodeIcons32/core_approach.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "core_vault",
+      "asset_id": "node.core_vault",
+      "path": "Art/FormalNodeIcons32/core_vault.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node",
+      "id": "core_finale",
+      "asset_id": "node.core_finale",
+      "path": "Art/FormalNodeIcons32/core_finale.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "FormalRogueliteUi map node",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "start",
+      "asset_id": "node_type.start",
+      "path": "Art/FormalNodeIcons32/types/start.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "combat",
+      "asset_id": "node_type.combat",
+      "path": "Art/FormalNodeIcons32/types/combat.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "elite",
+      "asset_id": "node_type.elite",
+      "path": "Art/FormalNodeIcons32/types/elite.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "event",
+      "asset_id": "node_type.event",
+      "path": "Art/FormalNodeIcons32/types/event.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "workshop",
+      "asset_id": "node_type.workshop",
+      "path": "Art/FormalNodeIcons32/types/workshop.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "shop",
+      "asset_id": "node_type.shop",
+      "path": "Art/FormalNodeIcons32/types/shop.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "rest",
+      "asset_id": "node_type.rest",
+      "path": "Art/FormalNodeIcons32/types/rest.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "treasure",
+      "asset_id": "node_type.treasure",
+      "path": "Art/FormalNodeIcons32/types/treasure.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "node_type",
+      "id": "finale",
+      "asset_id": "node_type.finale",
+      "path": "Art/FormalNodeIcons32/types/finale.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "map node icon family",
+      "notes": ""
+    },
+    {
+      "domain": "status",
+      "id": "burning",
+      "asset_id": "status.burning",
+      "path": "Art/FormalStatusIcons32/burning.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "status",
+      "id": "slow",
+      "asset_id": "status.slow",
+      "path": "Art/FormalStatusIcons32/slow.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "status",
+      "id": "bound",
+      "asset_id": "status.bound",
+      "path": "Art/FormalStatusIcons32/bound.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "status",
+      "id": "armor_break",
+      "asset_id": "status.armor_break",
+      "path": "Art/FormalStatusIcons32/armor_break.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "status",
+      "id": "dazzled",
+      "asset_id": "status.dazzled",
+      "path": "Art/FormalStatusIcons32/dazzled.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "status",
+      "id": "revealed",
+      "asset_id": "status.revealed",
+      "path": "Art/FormalStatusIcons32/revealed.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "combat feedback / HUD",
+      "notes": "dazzled and revealed are frozen formal vocabulary but not implemented in runtime"
+    },
+    {
+      "domain": "environment",
+      "id": "burning_ground",
+      "asset_id": "environment.burning_ground",
+      "path": "Art/FormalEnvironment32/burning_ground.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "water",
+      "asset_id": "environment.water",
+      "path": "Art/FormalEnvironment32/water.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "ice",
+      "asset_id": "environment.ice",
+      "path": "Art/FormalEnvironment32/ice.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "smoke",
+      "asset_id": "environment.smoke",
+      "path": "Art/FormalEnvironment32/smoke.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "bright_zone",
+      "asset_id": "environment.bright_zone",
+      "path": "Art/FormalEnvironment32/bright_zone.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "dark_zone",
+      "asset_id": "environment.dark_zone",
+      "path": "Art/FormalEnvironment32/dark_zone.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "conductive_path",
+      "asset_id": "environment.conductive_path",
+      "path": "Art/FormalEnvironment32/conductive_path.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "environment",
+      "id": "obstacle_cover",
+      "asset_id": "environment.obstacle_cover",
+      "path": "Art/FormalEnvironment32/obstacle_cover.png",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": false,
+      "use_point": "formal environment registry; runtime binding pending",
+      "notes": "frozen environment vocabulary, absent from current runtime map model"
+    },
+    {
+      "domain": "feedback",
+      "id": "damage",
+      "asset_id": "feedback.damage",
+      "path": "Art/FormalFeedbackVfx/damage",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "shield_absorb",
+      "asset_id": "feedback.shield_absorb",
+      "path": "Art/FormalFeedbackVfx/shield_absorb",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "armor_break",
+      "asset_id": "feedback.armor_break",
+      "path": "Art/FormalFeedbackVfx/armor_break",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "burning",
+      "asset_id": "feedback.burning",
+      "path": "Art/FormalFeedbackVfx/burning",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "bound",
+      "asset_id": "feedback.bound",
+      "path": "Art/FormalFeedbackVfx/bound",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "slow",
+      "asset_id": "feedback.slow",
+      "path": "Art/FormalFeedbackVfx/slow",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "healing",
+      "asset_id": "feedback.healing",
+      "path": "Art/FormalFeedbackVfx/healing",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "shield_restore",
+      "asset_id": "feedback.shield_restore",
+      "path": "Art/FormalFeedbackVfx/shield_restore",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "mana_restore",
+      "asset_id": "feedback.mana_restore",
+      "path": "Art/FormalFeedbackVfx/mana_restore",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "status_cleared",
+      "asset_id": "feedback.status_cleared",
+      "path": "Art/FormalFeedbackVfx/status_cleared",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "movement",
+      "asset_id": "feedback.movement",
+      "path": "Art/FormalFeedbackVfx/movement",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "object_damaged",
+      "asset_id": "feedback.object_damaged",
+      "path": "Art/FormalFeedbackVfx/object_damaged",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "object_destroyed",
+      "asset_id": "feedback.object_destroyed",
+      "path": "Art/FormalFeedbackVfx/object_destroyed",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "feedback",
+      "id": "unit_defeated",
+      "asset_id": "feedback.unit_defeated",
+      "path": "Art/FormalFeedbackVfx/unit_defeated",
+      "status": "NEEDS_PRODUCTION",
+      "runtime_reachable": true,
+      "use_point": "CombatVisualFeedback",
+      "notes": "currently reuses command icons and color pulses"
+    },
+    {
+      "domain": "command",
+      "id": "move",
+      "asset_id": "command.move",
+      "path": "Art/FormalIcons32/move.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "command",
+      "id": "attack",
+      "asset_id": "command.attack",
+      "path": "Art/FormalIcons32/attack.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "command",
+      "id": "skill",
+      "asset_id": "command.skill",
+      "path": "Art/FormalIcons32/skill.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "command",
+      "id": "skill_two",
+      "asset_id": "command.skill_two",
+      "path": "Art/FormalIcons32/skill_two.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "command",
+      "id": "loot",
+      "asset_id": "command.loot",
+      "path": "Art/FormalIcons32/loot.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "command",
+      "id": "interact",
+      "asset_id": "command.interact",
+      "path": "Art/FormalIcons32/interact.png",
+      "status": "EXISTING_FORMAL",
+      "runtime_reachable": true,
+      "use_point": "FormalCombatHud / CombatVisualFeedback",
+      "notes": ""
+    },
+    {
+      "domain": "environment_object",
+      "id": "floor",
+      "asset_id": "relay.floor",
+      "path": "Art/FormalRelay32/floor.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "floor_industrial",
+      "asset_id": "relay.floor_industrial",
+      "path": "Art/FormalRelay32/floor_industrial.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "floor_warning",
+      "asset_id": "relay.floor_warning",
+      "path": "Art/FormalRelay32/floor_warning.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "floor_hazard",
+      "asset_id": "relay.floor_hazard",
+      "path": "Art/FormalRelay32/floor_hazard.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "floor_rail",
+      "asset_id": "relay.floor_rail",
+      "path": "Art/FormalRelay32/floor_rail.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "light_cover",
+      "asset_id": "relay.light_cover",
+      "path": "Art/FormalRelay32/light_cover.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "heavy_cover",
+      "asset_id": "relay.heavy_cover",
+      "path": "Art/FormalRelay32/heavy_cover.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "relay",
+      "asset_id": "relay.relay",
+      "path": "Art/FormalRelay32/relay.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    },
+    {
+      "domain": "environment_object",
+      "id": "loot_crate",
+      "asset_id": "relay.loot_crate",
+      "path": "Art/FormalRelay32/loot_crate.png",
+      "status": "NEEDS_REWORK",
+      "runtime_reachable": true,
+      "use_point": "CombatPrototypeBootstrap map drawing",
+      "notes": "existing asset requires family completion / import readback"
+    }
+  ]
+}

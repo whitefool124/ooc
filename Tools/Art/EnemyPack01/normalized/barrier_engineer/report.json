@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 59,
+    "centerX": 32,
+    "targetBodyHeight": 49,
+    "maxBodyWidth": 44,
+    "minBodyHeight": 46,
+    "maxBodyHeight": 49,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 20,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\barrier_engineer\\source.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\barrier_engineer\\barrier_engineer.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\barrier_engineer\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\barrier_engineer\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\barrier_engineer\\qa.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\barrier_engineer\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        278,
+        182,
+        863,
+        1070
+      ],
+      "sourceBodyWidth": 585,
+      "sourceBodyHeight": 888,
+      "scale": 0.05518018018018018,
+      "outputWidth": 32,
+      "outputHeight": 49,
+      "outputX": 16,
+      "outputY": 10,
+      "normalizedBounds": [
+        16,
+        10,
+        48,
+        59
+      ]
+    }
+  ],
+  "failures": []
+}

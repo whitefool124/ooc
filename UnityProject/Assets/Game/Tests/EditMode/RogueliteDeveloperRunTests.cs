@@ -166,16 +166,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_RewardChoicesAreDeterministicAndRequireWorkshopEquip()
+        public void MapRun_FireRewardChoicesAreDeterministicAndDoNotAutoEquip()
         {
-            var first = new RogueliteMapRun(77); first.SelectNode("rail_patrol"); first.CompleteCurrentCombat();
-            var second = new RogueliteMapRun(77); second.SelectNode("rail_patrol"); second.CompleteCurrentCombat();
-            Assert.That(first.CurrentRewards.Select(reward => reward.Id), Is.EqualTo(second.CurrentRewards.Select(reward => reward.Id)));
-            string weaponId = first.CurrentRewards.First(reward => reward.Kind == RogueliteRewardKind.Weapon).Id; first.ClaimReward(weaponId);
-            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); first.ApplyBuild(hero);
-            Assert.That(hero.MainHand.Id, Is.EqualTo(CombatCatalog.Rifle.Id));
-            first.EquipReward(weaponId); first.ApplyBuild(hero);
-            Assert.That(hero.MainHand.Id, Is.EqualTo(RogueliteMapCatalog.Rewards.First(reward => reward.Id == weaponId).Weapon.Id));
+            var first = new RogueliteMapRun(77, FireRogueliteStarterCatalog.Universal); first.SelectNode("rail_patrol"); first.CompleteCurrentCombat();
+            var second = new RogueliteMapRun(77, FireRogueliteStarterCatalog.Universal); second.SelectNode("rail_patrol"); second.CompleteCurrentCombat();
+            Assert.That(first.CurrentFireSpellChoices.Select(spell => spell.Id), Is.EqualTo(second.CurrentFireSpellChoices.Select(spell => spell.Id)));
+            string[] before = first.EquippedFireSpellIds.ToArray(); string spellId = first.CurrentFireSpellChoices[0].Id; first.ClaimFireSpell(spellId);
+            Assert.That(first.OwnedFireSpellIds, Does.Contain(spellId));
+            Assert.That(first.EquippedFireSpellIds, Is.EqualTo(before));
         }
 
         [Test]
@@ -250,23 +248,28 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_RewardChoicesAlwaysSpanAtLeastTwoBuildPaths()
+        public void MapRun_NormalFireRewardsAreTwoCompatibleSpellsAndOneArtifact()
         {
             for (int seed = 1; seed <= 30; seed++)
             {
-                var run = new RogueliteMapRun(seed); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
-                Assert.That(run.CurrentRewards.Select(reward => reward.BuildPath).Distinct().Count(), Is.GreaterThanOrEqualTo(2));
+                var run = new RogueliteMapRun(seed, FireRogueliteStarterCatalog.Melee); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
+                Assert.That(run.CurrentFireSpellChoices.Count, Is.EqualTo(2));
+                Assert.That(run.CurrentFireSpellChoices.All(spell => FireSpellCatalog.IsWeaponCompatible(spell, run.EquippedWeapon)), Is.True);
+                RogueliteReward reward = run.CurrentRewards.Single();
+                Assert.That(reward.Kind, Is.EqualTo(RogueliteRewardKind.Item));
+                Assert.That(reward.Item.Category, Is.EqualTo(ItemCategory.Artifact));
+                Assert.That((ArtifactCatalog.Get(reward.Id).ContentSources & ArtifactContentSource.NormalReward) != 0, Is.True, reward.Id);
             }
         }
 
         [Test]
-        public void MapRun_OffersMixedWeaponAndSpellRewards()
+        public void MapRun_FireRewardCompositionIsPublicThreeChoiceContract()
         {
             for (int seed = 1; seed < 20; seed++)
             {
-                var run = new RogueliteMapRun(seed); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
-                Assert.That(run.CurrentRewards.Count, Is.EqualTo(3));
-                Assert.That(run.CurrentRewards.Select(reward => reward.Kind).Distinct().Count(), Is.GreaterThanOrEqualTo(2));
+                var run = new RogueliteMapRun(seed, FireRogueliteStarterCatalog.Ranged); run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();
+                Assert.That(run.CurrentFireSpellChoices.Count + run.CurrentRewards.Count, Is.EqualTo(3));
+                Assert.That(run.CurrentRewards.Single().Kind, Is.EqualTo(RogueliteRewardKind.Item));
             }
         }
 
@@ -285,11 +288,12 @@ namespace OCC.Combat.Tests
                     Assert.That(reward.Weapon.Damage, Is.GreaterThan(0));
                     Assert.That(reward.Weapon.Range, Is.GreaterThan(0));
                 }
-                else
+                else if (reward.Kind == RogueliteRewardKind.Spell)
                 {
                     Assert.That(reward.Spell.Damage, Is.GreaterThan(0));
                     Assert.That(reward.Spell.Range, Is.GreaterThan(0));
                 }
+                else Assert.That(reward.Item.IconPath, Is.Not.Empty);
             }
         }
     }

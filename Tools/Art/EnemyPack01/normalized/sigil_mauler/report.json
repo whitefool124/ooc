@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 38,
+    "maxBodyWidth": 44,
+    "minBodyHeight": 32,
+    "maxBodyHeight": 38,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 20,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "Tools\\Art\\EnemyPack01\\raw\\aether_sapper\\source.png"
+  ],
+  "strip": "Tools\\Art\\EnemyPack01\\normalized\\sigil_mauler\\sigil_mauler.png",
+  "frames": "Tools\\Art\\EnemyPack01\\normalized\\sigil_mauler\\frames",
+  "gif": "Tools\\Art\\EnemyPack01\\normalized\\sigil_mauler\\preview.gif",
+  "qa": "Tools\\Art\\EnemyPack01\\normalized\\sigil_mauler\\qa.png",
+  "metrics": [
+    {
+      "source": "Tools\\Art\\EnemyPack01\\raw\\aether_sapper\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        270,
+        246,
+        969,
+        1001
+      ],
+      "sourceBodyWidth": 699,
+      "sourceBodyHeight": 755,
+      "scale": 0.05033112582781457,
+      "outputWidth": 35,
+      "outputHeight": 38,
+      "outputX": 14,
+      "outputY": 20,
+      "normalizedBounds": [
+        14,
+        20,
+        49,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OCC.Combat
 {
@@ -16,25 +17,12 @@ namespace OCC.Combat
 
     public static class RogueliteEncounterCatalog
     {
-        private static readonly Dictionary<string, RogueliteEncounterDefinition> encounters = new Dictionary<string, RogueliteEncounterDefinition>(StringComparer.Ordinal)
-        {
-            { "rail_patrol", new RogueliteEncounterDefinition("rail_patrol", false, false, "rifleman", "shieldguard", "pyromancer") },
-            { "depot_wreck", new RogueliteEncounterDefinition("depot_wreck", false, false, "raider", "rifleman", "breaker") },
-            { "relay_raid", new RogueliteEncounterDefinition("relay_raid", false, false, "rifleman", "raider", "sniper") },
-            { "signal_hub", new RogueliteEncounterDefinition("signal_hub", false, false, "sniper", "binder", "warden") },
-            { "gatehouse", new RogueliteEncounterDefinition("gatehouse", false, false, "shieldguard", "breaker", "rifleman") },
-            { "transmission_tower", new RogueliteEncounterDefinition("transmission_tower", false, false, "pyromancer", "binder", "raider") },
-            { "elite_foundry", new RogueliteEncounterDefinition("elite_foundry", true, false, "elite_vanguard", "warden", "breaker") },
-            { "core_approach", new RogueliteEncounterDefinition("core_approach", true, false, "elite_vanguard", "binder", "shieldguard") },
-            { "core_finale", new RogueliteEncounterDefinition("core_finale", false, true, "core_overseer", "warden", "binder", "shieldguard") }
-        };
-
         public static RogueliteEncounterDefinition For(string nodeId, string regionBossId = null)
         {
-            if (nodeId == "core_finale" && !string.IsNullOrEmpty(regionBossId))
-                return new RogueliteEncounterDefinition("core_finale", false, true, regionBossId, "warden", "binder", "shieldguard");
-            return encounters.TryGetValue(nodeId, out RogueliteEncounterDefinition encounter)
-                ? encounter : new RogueliteEncounterDefinition(nodeId, false, false, "rifleman", "shieldguard", "pyromancer");
+            if (!FirstRegionLevelCatalog.TryFor(nodeId, out FirstRegionLevelDefinition level))
+                return new RogueliteEncounterDefinition(nodeId, false, false, "shieldguard", "pyromancer", "raider");
+            return new RogueliteEncounterDefinition(level.Id, level.IsElite, level.IsBoss,
+                level.ResolveEnemyArchetypeIds(regionBossId).ToArray());
         }
     }
 }

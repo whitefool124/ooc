@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC 策划一致性决策问卷 v1</title>
+  <style>
+    :root{--bg:#101214;--panel:#171a1d;--panel2:#121518;--line:#3b4248;--text:#f2eee5;--muted:#a9b0b5;--cyan:#81d8e8;--amber:#e7bc6a;--red:#d87871;--green:#8ccf9c}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 "Microsoft YaHei UI",sans-serif}header,main{max-width:1160px;margin:auto;padding:26px 24px}body>header{max-width:none;border-bottom:1px solid var(--line);background:#131619}h1{margin:0 0 8px;font-size:28px}h2{margin:0;font-size:19px}p,.hint{color:var(--muted)}.warning{border-left:3px solid var(--amber);padding:10px 13px;background:#211d16;color:#ddd0af}.bar{position:sticky;top:0;z-index:2;display:flex;gap:8px;align-items:center;padding:12px 0;background:var(--bg)}button{border:1px solid var(--line);background:#20262a;color:var(--text);padding:8px 12px;cursor:pointer;font:inherit}button:hover{border-color:var(--cyan)}button.primary{border-color:var(--cyan);color:var(--cyan)}.progress{margin-left:auto;color:var(--cyan)}.status{padding:10px 12px;border:1px solid var(--line);color:var(--muted)}section{margin:20px 0;border:1px solid var(--line);background:var(--panel)}section header{padding:15px 18px;border-bottom:1px solid var(--line)}.grid{padding:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.q{padding:14px;background:var(--panel2);border-left:2px solid #4a545c}.q.required{border-left-color:var(--cyan)}.q.full{grid-column:1/-1}.qid{font:13px monospace;color:var(--cyan);margin-right:7px}.label{font-weight:700}.help{display:block;font-size:13px;margin:5px 0 10px;color:var(--muted)}.options{display:grid;gap:6px}.options label{display:flex;gap:8px;cursor:pointer}.options input{accent-color:var(--cyan);margin-top:5px}textarea{width:100%;min-height:82px;background:#0d0f11;color:var(--text);border:1px solid var(--line);padding:8px;font:inherit}dialog{width:min(900px,95vw);background:var(--panel);color:var(--text);border:1px solid var(--line)}dialog textarea{height:55vh}dialog menu{display:flex;justify-content:flex-end;gap:8px}@media(max-width:760px){.grid{grid-template-columns:1fr}.q.full{grid-column:auto}.progress{display:none}.bar{flex-wrap:wrap}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OCC 策划一致性决策问卷 v1</h1>
+    <p>用途：一次性敲定本轮审计发现的冲突、边界与优先级。提交后，答案将用于修订策划案、开发计划、技术规划与当前待办；本页本身不改动 Unity 或正式资产。</p>
+    <div class="warning">已锁定硬约束：所有超凡力量来自可测量、可维护且有代价的以太素；剧情与肉鸽均不使用追击、倒计时或因拖延关闭地点。请在此范围内作答。</div>
+  </header>
+  <main>
+    <div class="bar"><button id="save">保存草稿</button><button id="json" class="primary">导出 JSON</button><button id="md">导出 Markdown</button><button id="reset">清空</button><span class="progress" id="progress"></span></div>
+    <div class="status" id="status"></div><form id="form"></form>
+  </main>
+  <dialog id="output"><h2 id="outTitle"></h2><textarea id="outText" readonly></textarea><menu><button id="copy">复制</button><button id="download">下载</button><button onclick="document.querySelector('#output').close()">关闭</button></menu></dialog>
+  <script>
+    const sections=[
+      {title:'A. 本轮文档收口授权',desc:'先确认本轮应如何处理旧路线，避免在措辞上保留已废止机制。',qs:[
+        ['A01','single','旧版“四阶段人生肉鸽 / 两小时单局”路线如何处理？',['标记为历史路线；提取可复用战斗内容，不再作为产品目标','改写为肉鸽模式的长期扩展路线','保留为与双模式并行的第三路线'],1],
+        ['A02','single','策划与计划的一致性事实源优先级',['世界观圣经 → 双模式流程 → 肉鸽定义 → 当前待办 → 其他策划/技术文件','世界观圣经 → 当前待办 → 双模式流程 → 其他文件','请在备注中自定义'],1],
+        ['A03','single','本轮是否将“策划一致性修订”设为唯一当前任务？',['是；暂时暂停美术执行，只处理文档收口','否；保持 V2-15，问卷只作为后续参考','仅创建修订草案，不改待办状态'],1],
+        ['A04','text','若你选择“自定义优先级”或有额外收口规则，请说明。',[],0]
+      ]},
+      {title:'B. 剧情模式：无时间压力的具体边界',desc:'这组问题消除旧策划中“天数、硬期限、敌情推进、地点关闭”的残留。',qs:[
+        ['B01','single','剧情模式是否彻底删除区域级天数/时段、硬期限和敌情推进字段？',['是；不保留任何等价替代机制','删除玩家可见字段，但保留隐藏推进','仅删除硬期限，保留天数推进'],1],
+        ['B02','multi','剧情地点状态允许由哪些原因变化？',['主线章节推进','已完成任务','阵营关系/玩家选择','据点或服务升级','明确设计的战斗结果','玩家停留时长或旅行次数'],1],
+        ['B03','single','若地点被封锁、毁坏或污染，如何保证“最终可补完”？',['提供替代地点/替代证据/替代奖励','保留原地点的回访入口与替代交互','允许少量内容永久错过','不采用会导致不可达的地点变化'],1],
+        ['B04','single','剧情任务中的回合时限如何界定？',['仅限任务内部、事先公开且有叙事依据的撤离/爆破/守点目标','剧情模式完全不用回合时限','可加入一般战斗倒计时'],1],
+        ['B05','text','你允许剧情任务内部出现回合时限的具体例外，或明确禁止项。',[],0]
+      ]},
+      {title:'C. 两种模式的产品边界',desc:'确定共用什么、隔离什么，以及当前各自的定位。',qs:[
+        ['C01','multi','两种模式应共用哪些内容层？',['确定性战斗规则','任务目标模板','敌人原型与战场交互','装备/术式数据格式','地点与服务数据格式','剧情存档或人物成长档案'],1],
+        ['C02','single','肉鸽首区的正式目标时长',['60–90 分钟（推荐，贴合现有肉鸽定义）','60–120 分钟','约两小时'],1],
+        ['C03','single','肉鸽最短循环与正式地图的关系',['最短循环是教学/回归子集；正式首区为 20 节点自由回访网络','正式地图改回线性前进节点','两者均保留为不同肉鸽地图类型'],1],
+        ['C04','single','肉鸽人物与剧情正史的关系',['只留下档案、传闻或 NPC 痕迹，不改变剧情正史','可成为剧情中的可选支线人物','完全隔离，不在剧情中出现'],1],
+        ['C05','text','还有哪些系统必须隔离，或必须共用？',[],0]
+      ]},
+      {title:'D. 剧情产品的关键未决事项',desc:'这些问题已有记录但尚未决定，会影响剧情内容与存档设计。',qs:[
+        ['D01','single','剧情主角的定义',['固定角色身份、姓名与性别','固定故事角色，但允许定义外观','允许选择不同出身主角，但共用核心剧情'],1],
+        ['D02','single','剧情模式的时代节点',['统历 742 年秋的裂线危机','以裂线危机为背景但允许调整具体年份','另定时代；请在备注说明'],1],
+        ['D03','single','终局前主角生命归零的处理',['以重伤/撤离/关系或声望后果替代永久死亡','允许永久死亡，但提供明确的确认与存档保护','仅关键任务允许永久死亡'],1],
+        ['D04','single','剧情结局结构',['一个主结局，按世界/关系/角色状态呈现差异','多个互斥终局','一个主结局加少量重大分支终局'],1],
+        ['D05','text','若选择“另定时代”或有主角、死亡、结局的补充，请说明。',[],0]
+      ]},
+      {title:'E. 近期垂直切片与优先级',desc:'确认在不做美术、不改场景的前提下，下一批可落地的策划/开发任务。',qs:[
+        ['E01','single','文档收口后，第一项系统性工作',['共用任务契约：六类目标、失败、撤离、奖励与存档边界','工业城市剧情切片规格','肉鸽事件池与回访价值扩容'],1],
+        ['E02','multi','工业城市剧情切片的最低范围',['一个据点服务闭环','6–8 个主要地点','一条多阶段手工支线','两场不同任务目标的战斗','一次明显构筑/服务升级','自由快速旅行与回访变化','多槽剧情存档恢复'],1],
+        ['E03','single','肉鸽 R3 的顺序',['先事件池与回访收益递减，再构筑池，最后第二地区','先构筑池，再事件池','直接进入第二地区'],1],
+        ['E04','single','当前 V2-15 与 V2-22 的关系处理',['V2-15 继续是唯一美术主任务；V2-22 改为其子项/待开始','V2-22 升为唯一主任务','两者都暂停，直到剧情垂直切片规格完成'],1],
+        ['E05','text','请写出你认为下一阶段最小、最能验收的完成描述。',[],1]
+      ]},
+      {title:'F. 验收与工程约束',desc:'把“完成”定义为可验证结果，避免再次产生只有标题的任务。',qs:[
+        ['F01','multi','每个后续任务必须具备的字段',['模式归属（剧情/肉鸽/共用）','目标','涉及文件/系统','验收标准','完成后解锁项','验证记录','风险或待决事项'],1],
+        ['F02','single','策划文档验收方式',['冲突关键词检索 + 交叉链接核对 + 任务字段检查','只做人工阅读','需要额外制作自动化文档检查'],1],
+        ['F03','single','对现有“完成但只部分通过”的验证记录如何处理？',['保留历史记录并标明限制；不将其等同正式验收','全部补做后才可视为完成','保留为完成，不再处理'],1],
+        ['F04','text','其他必须在文档中明确的验收规则或风险。',[],0]
+      ]},
+      {title:'G. 以太素与世界观约束复核',desc:'确保策划重写不会把近代魔法工业文明重新写成泛奇幻。',qs:[
+        ['G01','multi','每个新增术式/装备/任务交互至少要写明哪些内容？',['以太素或普通工业能量来源','媒介/设备/维护条件','资源、负荷、污染或故障代价','可观察、可反制的效果边界','所属模式与叙事后果'],1],
+        ['G02','single','首个工业城市剧情切片的叙事焦点',['以太供能事故与劳动/资本/监管冲突','铁路中继破坏与阵营调查','污染诊所与医疗资源分配','组合，但限定一条主冲突'],1],
+        ['G03','text','世界观上绝不能被简化或误写的原则。',[],0]
+      ]}
+    ];
+    const form=document.querySelector('#form'),key='occ-planning-consistency-survey-v1',status=document.querySelector('#status'),progress=document.querySelector('#progress'),dialog=document.querySelector('#output'),outTitle=document.querySelector('#outTitle'),outText=document.querySelector('#outText'),download=document.querySelector('#download');
+    function render(q){const[id,type,label,options,required]=q;const input=type==='text'?`<textarea data-id="${id}" placeholder="${required?'必答；可填写“采用推荐默认值”':'可留空'}"></textarea>`:`<div class="options">${options.map(x=>`<label><input data-id="${id}" name="${id}" type="${type==='single'?'radio':'checkbox'}" value="${x}"><span>${x}</span></label>`).join('')}</div>`;return `<article class="q ${required?'required':''} ${type==='text'?'full':''}"><div class="label"><span class="qid">${id}</span>${label}${required?' *':''}</div>${input}</article>`}
+    sections.forEach(s=>form.insertAdjacentHTML('beforeend',`<section><header><h2>${s.title}</h2><p>${s.desc}</p></header><div class="grid">${s.qs.map(render).join('')}</div></section>`));
+    function data(){const a={version:1,title:'OCC 策划一致性决策问卷 v1',exportedAt:new Date().toISOString(),answers:{}};form.querySelectorAll('[data-id]').forEach(e=>{if((e.type==='radio'||e.type==='checkbox')&&!e.checked)return;(a.answers[e.dataset.id]??=[]).push(e.value.trim())});return a}
+    function questions(){return sections.flatMap(s=>s.qs)}function missing(){const d=data().answers;return questions().filter(q=>q[4]&&!d[q[0]]?.length).map(q=>q[0])}
+    function refresh(){const d=data(),m=missing(),n=Object.keys(d.answers).length,total=questions().length;progress.textContent=`已答 ${n}/${total} · 必答缺 ${m.length}`;status.textContent=m.length?`尚缺必答项：${m.join('、')}`:'所有必答项已完成。导出后发回此任务，我会据此形成可确认的修订稿。';localStorage.setItem(key,JSON.stringify(d))}
+    function markdown(){const d=data(),lines=['# OCC 策划一致性决策问卷 v1 答卷','',`- 导出时间：${d.exportedAt}`,''];sections.forEach(s=>{lines.push(`## ${s.title}`,'');s.qs.forEach(q=>lines.push(`### ${q[0]} ${q[2]}`,'',(d.answers[q[0]]||['（未回答）']).map(x=>`- ${x}`).join('\n'),''))});return lines.join('\n')}
+    function show(title,text,name,type){outTitle.textContent=title;outText.value=text;dialog.showModal();download.onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}}
+    document.querySelector('#save').onclick=()=>{refresh();status.textContent='草稿已保存在此浏览器的本地存储。'};document.querySelector('#json').onclick=()=>show('导出 JSON',JSON.stringify(data(),null,2),'OCC_策划一致性决策_v1.json','application/json');document.querySelector('#md').onclick=()=>show('导出 Markdown',markdown(),'OCC_策划一致性决策_v1.md','text/markdown');document.querySelector('#copy').onclick=()=>navigator.clipboard.writeText(outText.value);document.querySelector('#reset').onclick=()=>{if(confirm('清空本页和本地草稿？')){localStorage.removeItem(key);form.reset();refresh()}};form.addEventListener('input',refresh);
+    const old=localStorage.getItem(key);if(old){try{const d=JSON.parse(old);Object.entries(d.answers||{}).forEach(([id,v])=>form.querySelectorAll(`[data-id="${id}"]`).forEach(e=>{if(e.type==='radio'||e.type==='checkbox')e.checked=v.includes(e.value);else e.value=v.join('\n')}))}catch(_){}}refresh();
+  </script>
+</body>
+</html>

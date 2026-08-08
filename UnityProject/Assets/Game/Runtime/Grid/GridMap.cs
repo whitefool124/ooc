@@ -33,7 +33,7 @@ namespace OCC.Combat
         public bool IsInside(GridPosition position) =>
             position.X >= 0 && position.X < Width && position.Y >= 0 && position.Y < Height;
 
-        public bool IsBlocked(GridPosition position) => blockedPositions.Contains(position);
+        public bool IsBlocked(GridPosition position) => blockedPositions.Contains(position) || GetTile(position).BlocksMovement;
 
         public bool HasLineOfSight(GridPosition from, GridPosition to)
         {
@@ -69,7 +69,6 @@ namespace OCC.Combat
         {
             if (!IsInside(position)) throw new ArgumentOutOfRangeException(nameof(position));
             tiles[position] = tile ?? TileState.Empty;
-            if (tiles[position].BlocksMovement) blockedPositions.Add(position); else blockedPositions.Remove(position);
         }
 
         public GridMap Clone()

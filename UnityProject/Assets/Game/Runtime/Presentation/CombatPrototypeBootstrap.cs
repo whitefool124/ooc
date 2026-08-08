@@ -10,10 +10,11 @@ namespace OCC.Combat.Presentation
     [ExecuteAlways]
     public sealed class CombatPrototypeBootstrap : MonoBehaviour
     {
-        private const float CellSize = 78f;
         private const float UiWidth = 1920f;
         private const float UiHeight = 1080f;
+        private readonly BattlefieldPresentationAdapter battlefield = new BattlefieldPresentationAdapter();
         private CombatState state;
+        private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
         private CombatState snapshot;
         private string selectedAction = "\u79fb\u52a8";
@@ -23,59 +24,80 @@ namespace OCC.Combat.Presentation
         private bool initialized;
         private MissionPreparation developerPreparation;
         private CombatFlowController developerFlow;
-        private RogueliteDeveloperRun rogueliteRun;
+        private readonly RogueliteFlowCoordinator rogueliteFlow = new RogueliteFlowCoordinator();
+        private RogueliteDeveloperRun rogueliteRun { get => rogueliteFlow.DeveloperRun; set => rogueliteFlow.SetDeveloperRun(value); }
         private int sandboxTemplateIndex;
-        private bool rogueliteMenuOpen;
+        private bool rogueliteMenuOpen { get => rogueliteFlow.IsRogueliteMenuOpen; set => rogueliteFlow.SetRogueliteMenuOpen(value); }
         private bool outcomeHandled;
-        private RogueliteMapRun mapRun;
-        private bool mapMenuOpen;
+        private RogueliteMapRun mapRun { get => rogueliteFlow.MapRun; set => rogueliteFlow.SetMapRun(value); }
+        private bool mapMenuOpen { get => rogueliteFlow.IsMapMenuOpen; set => rogueliteFlow.SetMapMenuOpen(value); }
         private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
         private Texture2D formalLootTexture;
         private Texture2D formalLootOpenTexture;
-        private const string RogueliteSaveKey = "occ.roguelite.iron_echoes";
-        private const string ShortRogueliteSaveKey = "occ.roguelite.short_run";
-        private const string MapRogueliteSaveKey = "occ.roguelite.map_run";
+        private readonly Dictionary<string, Texture2D> formalRelayTextures = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D> formalOverlayTextures = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<StatusType, Texture2D> formalStatusTextures = new Dictionary<StatusType, Texture2D>();
+        private readonly Texture2D[] formalFiregroundFrames = new Texture2D[6];
+        private readonly Texture2D[] formalSmokeFrames = new Texture2D[6];
+        private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
         private CombatVisualFeedback visualFeedback;
+        private FireBattleState fireBattle;
+        private ArtifactBattleState artifactBattle;
+        private string fireLifecycleActiveUnitId;
         private RogueliteSettlementPresentation settlementPresentation;
         private FormalCombatHud formalCombatHud;
+        private FormalRogueliteUi formalRogueliteUi;
+        private FormalUiInteractionLayer interactionLayer;
+        private FormalStartupPresentation startupPresentation;
         private DeveloperConsolePanel developerConsole;
-        private float mapPanelAlpha = 1f;
-        private float mapPanelScale = 1f;
-        private float menuPanelAlpha = 1f;
-        private float menuPanelScale = 1f;
+        private TarkovInventoryPanel inventoryPanel;
+        private TrainingRangeSession trainingRangeSession;
+        private bool trainingRangeActive;
+        private int trainingRangeArtifactUsesRemaining;
+        private string armedInventoryItemId;
+        private RogueliteUiPreferences uiPreferences = new RogueliteUiPreferences();
+        private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
+        private readonly UiPresentationVersions uiPresentationVersions = new UiPresentationVersions();
 
         private void OnEnable()
         {
             if (!Application.isPlaying) return;
             if (initialized) return;
             initialized = true;
-            chineseFont = Resources.Load<Font>("Fonts/SimHei");
+            chineseFont = FormalUiKit.Font;
             barTexture = Resources.Load<Texture2D>("UI/Bar");
+            uiPreferences = saveGateway.LoadUiPreferences();
+            ApplyUiPreferences();
             Transform sceneUi = transform.Find("场景UI");
             if (sceneUi != null) sceneUi.gameObject.SetActive(false);
-            developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "步枪兵、盾卫、火术师、突袭者、精英先锋");
+            GameObject editorMap = GameObject.Find("地图可视化");
+            if (editorMap != null) editorMap.SetActive(false);
+            developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
             visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
+            interactionLayer = gameObject.AddComponent<FormalUiInteractionLayer>(); interactionLayer.Initialize(this);
             settlementPresentation = gameObject.AddComponent<RogueliteSettlementPresentation>(); settlementPresentation.Initialize(this);
             formalCombatHud = gameObject.AddComponent<FormalCombatHud>(); formalCombatHud.Initialize(this);
+            formalRogueliteUi = gameObject.AddComponent<FormalRogueliteUi>(); formalRogueliteUi.Initialize(this);
+            startupPresentation = gameObject.AddComponent<FormalStartupPresentation>(); startupPresentation.Initialize(this);
             developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this);
+            inventoryPanel = gameObject.AddComponent<TarkovInventoryPanel>(); inventoryPanel.Initialize(this);
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
             LoadFormalUnitTextures();
-            formalLootTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate");
-            if (formalLootTexture != null) { formalLootTexture.filterMode = FilterMode.Point; formalLootTexture.wrapMode = TextureWrapMode.Clamp; }
-            formalLootOpenTexture = Resources.Load<Texture2D>("Art/FormalRelay32/loot_crate_open");
-            if (formalLootOpenTexture != null) { formalLootOpenTexture.filterMode = FilterMode.Point; formalLootOpenTexture.wrapMode = TextureWrapMode.Clamp; }
-            menuPanelAlpha = 0f; menuPanelScale = .96f;
-            DOTween.To(() => menuPanelAlpha, value => menuPanelAlpha = value, 1f, .28f).SetUpdate(true);
-            DOTween.To(() => menuPanelScale, value => menuPanelScale = value, 1f, .32f).SetEase(Ease.OutCubic).SetUpdate(true);
+            LoadFormalBattlefieldTextures();
         }
 
         private void Awake()
         {
             if (!Application.isPlaying) return;
             Application.targetFrameRate = 60;
-            Camera sceneCamera = FindFirstObjectByType<Camera>();
-            if (sceneCamera != null && sceneCamera.CompareTag("Untagged")) sceneCamera.tag = "MainCamera";
+            Camera sceneCamera = FindAnyObjectByType<Camera>();
+            if (sceneCamera != null)
+            {
+                if (sceneCamera.CompareTag("Untagged")) sceneCamera.tag = "MainCamera";
+                sceneCamera.clearFlags = CameraClearFlags.SolidColor;
+                sceneCamera.backgroundColor = new Color(.012f, .018f, .025f, 1f);
+            }
         }
 
         public void EnsureEditorVisuals()
@@ -114,7 +136,7 @@ namespace OCC.Combat.Presentation
         private static void AddUiPanel(GameObject parent, string name, Vector2 position, Vector2 size, string text, int fontSize)
         {
             GameObject panel = new GameObject(name); panel.transform.SetParent(parent.transform, false); RectTransform rect = panel.AddComponent<RectTransform>(); rect.anchorMin = new Vector2(0, 1); rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = size; Image image = panel.AddComponent<Image>(); image.color = new Color(.07f, .13f, .22f, .72f);
-            GameObject textObject = new GameObject(name + "文字"); textObject.transform.SetParent(panel.transform, false); RectTransform textRect = textObject.AddComponent<RectTransform>(); textRect.anchorMin = Vector2.zero; textRect.anchorMax = Vector2.one; textRect.offsetMin = Vector2.zero; textRect.offsetMax = Vector2.zero; Text label = textObject.AddComponent<Text>(); label.text = text; label.alignment = TextAnchor.MiddleCenter; label.color = Color.white; label.fontSize = fontSize; label.font = Resources.Load<Font>("Fonts/SimHei");
+            GameObject textObject = new GameObject(name + "文字"); textObject.transform.SetParent(panel.transform, false); RectTransform textRect = textObject.AddComponent<RectTransform>(); textRect.anchorMin = Vector2.zero; textRect.anchorMax = Vector2.one; textRect.offsetMin = Vector2.zero; textRect.offsetMax = Vector2.zero; Text label = textObject.AddComponent<Text>(); label.text = text; label.alignment = TextAnchor.MiddleCenter; label.color = Color.white; label.fontSize = fontSize; label.font = FormalUiKit.Font;
         }
 
         private static void AddEditorMarker(GameObject root, string name, Vector3 position, string formalAsset)
@@ -165,28 +187,60 @@ namespace OCC.Combat.Presentation
 
         private void LoadFormalUnitTextures()
         {
-            string[] names = { "hero", "rifleman", "shieldguard", "pyromancer", "raider", "elite" };
-            foreach (string name in names)
+            foreach (FormalArtEntry entry in FormalArtRegistry.Units)
             {
-                Texture2D texture = Resources.Load<Texture2D>("Art/FormalUnits64/" + name);
+                Texture2D texture = Resources.Load<Texture2D>(entry.ResourcePath);
                 if (texture == null) continue;
                 texture.filterMode = FilterMode.Point;
                 texture.wrapMode = TextureWrapMode.Clamp;
-                formalUnitTextures[name] = texture;
+                formalUnitTextures[entry.RuntimeId] = texture;
             }
+            foreach (string artId in EnemyArchetypes.All.Select(archetype => archetype.ArtId).Distinct(StringComparer.Ordinal))
+            {
+                Texture2D texture = Resources.Load<Texture2D>("Art/FormalUnits64/" + artId);
+                if (texture == null) continue;
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                formalUnitTextures[artId] = texture;
+            }
+        }
+
+        private void LoadFormalBattlefieldTextures()
+        {
+            string[] relay = { "floor_plain", "floor_industrial", "floor_warning", "floor_hazard", "rail_horizontal", "rail_vertical",
+                "light_cover_intact", "light_cover_damaged", "light_cover_rubble", "heavy_cover_intact", "heavy_cover_damaged", "heavy_cover_rubble",
+                "relay_intact", "relay_damaged", "relay_rubble", "loot_crate_closed", "loot_crate_open", "loot_crate_empty" };
+            foreach (string name in relay) formalRelayTextures[name] = RequiredTexture("Art/FormalRelayV01/" + name);
+            foreach (string name in new[] { "selected", "move_range", "attack_range", "objective", "high_risk", "unreachable", "line_of_sight" })
+                formalOverlayTextures[name] = RequiredTexture("Art/FormalTacticalOverlays32/" + name);
+            formalStatusTextures[StatusType.Burning] = RequiredTexture(FormalArtRegistry.StatusPath("burning"));
+            formalStatusTextures[StatusType.Slow] = RequiredTexture(FormalArtRegistry.StatusPath("slow"));
+            formalStatusTextures[StatusType.Bound] = RequiredTexture(FormalArtRegistry.StatusPath("bound"));
+            formalStatusTextures[StatusType.ArmorBreak] = RequiredTexture(FormalArtRegistry.StatusPath("armor_break"));
+            for (int frame = 0; frame < 6; frame++)
+            {
+                formalFiregroundFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_burning_ground/frame_{frame:00}");
+                formalSmokeFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_smoke/frame_{frame:00}");
+            }
+            formalLootTexture = formalRelayTextures["loot_crate_closed"];
+            formalLootOpenTexture = formalRelayTextures["loot_crate_open"];
+        }
+
+        private static Texture2D RequiredTexture(string path)
+        {
+            Texture2D texture = Resources.Load<Texture2D>(path);
+            if (texture == null) throw new KeyNotFoundException("Missing formal texture: " + path);
+            texture.filterMode = FilterMode.Point; texture.wrapMode = TextureWrapMode.Clamp;
+            return texture;
         }
 
         private Texture2D FormalUnitTexture(UnitState unit)
         {
             if (unit == null) return null;
             if (unit.IsHero) return TextureFor("hero");
-            string name = unit.DisplayName;
-            if (name.Contains("步枪") || name.Contains("狙击")) return TextureFor("rifleman");
-            if (name.Contains("盾卫") || name.Contains("结界")) return TextureFor("shieldguard");
-            if (name.Contains("火术") || name.Contains("束缚") || name.Contains("净化")) return TextureFor("pyromancer");
-            if (name.Contains("突袭")) return TextureFor("raider");
-            if (name.Contains("精英") || name.Contains("监工")) return TextureFor("elite");
-            return null;
+            if (string.IsNullOrEmpty(unit.EnemyArchetypeId)) return null;
+            Texture2D texture = TextureFor(unit.EnemyArchetypeId);
+            return texture != null ? texture : TextureFor(EnemyArchetypes.Get(unit.EnemyArchetypeId).ArtId);
         }
 
         private Texture2D TextureFor(string name)
@@ -209,12 +263,15 @@ namespace OCC.Combat.Presentation
 
         private void BuildCombatFromScene()
         {
+            currentLevel = null;
             GridMap map = new GridMap(12, 9); CombatSceneMarker[] markers = FindObjectsByType<CombatSceneMarker>();
             foreach (CombatSceneMarker marker in markers) { GridPosition p = ScenePosition(marker); if (marker.MarkerType == CombatSceneMarkerType.LightCover) map.SetTile(p, new TileState { Cover = CoverType.Light, Durability = 4 }); if (marker.MarkerType == CombatSceneMarkerType.HeavyCover) map.SetTile(p, new TileState { Cover = CoverType.Heavy, Durability = 7 }); if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, Durability = 6 }); }
             List<UnitState> units = new List<UnitState>();
-            foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit)) { GridPosition p = ScenePosition(marker); bool hero = marker.name.Contains("主角"); string id = hero ? "hero" : marker.name.Contains("步枪") ? "rifle" : marker.name.Contains("盾") ? "guard" : "caster"; string name = hero ? "\u963f\u65af\u7279\u62c9" : id == "rifle" ? "\u6b65\u67aa\u5175" : id == "guard" ? "\u76fe\u536b" : "\u706b\u672f\u5e08"; units.Add(new UnitState(id, hero, p, hero ? Facing.East : Facing.West) { DisplayName = name, Armor = hero ? 1 : id == "guard" ? 2 : 0, Block = id == "guard" ? 2 : hero ? 1 : 0, Speed = hero ? 11 : id == "guard" ? 7 : id == "caster" ? 9 : 8 }); }
+            foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit)) { GridPosition p = ScenePosition(marker); bool hero = marker.name.Contains("主角"); string id = hero ? "hero" : marker.name.Contains("盾") ? "guard" : marker.name.Contains("火术") ? "caster" : "raider"; string name = hero ? "\u963f\u65af\u7279\u62c9" : id == "guard" ? "\u76fe\u536b" : id == "caster" ? "\u706b\u672f\u5e08" : "\u7a81\u88ad\u8005"; units.Add(new UnitState(id, hero, p, hero ? Facing.East : Facing.West) { DisplayName = name, Armor = hero ? 1 : id == "guard" ? 2 : 0, Block = id == "guard" ? 2 : hero ? 1 : 0, Speed = hero ? 11 : id == "guard" ? 7 : id == "caster" ? 9 : 8 }); }
             if (units.Count == 0) return;
             state = new CombatState(map, units);
+            fireBattle = new FireBattleState(state);
+            fireLifecycleActiveUnitId = null;
             if (mapRun != null)
             {
                 RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
@@ -230,101 +287,227 @@ namespace OCC.Combat.Presentation
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
+            if (mapRun != null) state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
             ApplyShortRunChoices();
             mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
-            CombatResolver.BeginTurn(state, "hero");
+            string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";
+            ArtifactDefinition lootArtifact = ArtifactRewardPool.RollLoot(mapRun?.Seed ?? 0, lootKey);
+            state.SetLootSource(new LootSourceState(lootKey, new GridPosition(2, 0), new[]
+            {
+                new ItemInstance(lootKey + "-medkit", "medkit", 0),
+                new ItemInstance(lootKey + "-scroll-F-S01", "F-S01", 1),
+                new ItemInstance(lootKey + "-artifact-" + lootArtifact.Id, lootArtifact.Id, 2)
+            }));
+            mapRun?.RestoreLootProgress(state.LootSource);
+            PublishCombatEffects(CombatResolver.BeginTurn(state, "hero"));
         }
 
         private void BuildCombatFromSceneStageTwo()
         {
-            GridMap map = new GridMap(12, 9);
-            CombatSceneMarker[] markers = FindObjectsByType<CombatSceneMarker>();
-            foreach (CombatSceneMarker marker in markers)
-            {
-                GridPosition p = ScenePosition(marker);
-                if (marker.MarkerType == CombatSceneMarkerType.LightCover) map.SetTile(p, new TileState { Cover = CoverType.Light, Durability = 4 });
-                if (marker.MarkerType == CombatSceneMarkerType.HeavyCover) map.SetTile(p, new TileState { Cover = CoverType.Heavy, Durability = 7 });
-                if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, Durability = 6 });
-            }
-            List<UnitState> units = new List<UnitState>();
-            string encounterId = mapRun == null ? null : mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId;
+            string encounterId = mapRun != null
+                ? (mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId)
+                : rogueliteRun?.CurrentMission.Id;
             RogueliteEncounterDefinition encounter = string.IsNullOrEmpty(encounterId) ? null : RogueliteEncounterCatalog.For(encounterId, mapRun?.RegionBossId);
-            int enemyIndex = 0;
-            foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit).OrderBy(m => m.name, StringComparer.Ordinal))
+            GridMap map;
+            if (FirstRegionLevelCatalog.TryFor(encounterId, out FirstRegionLevelDefinition level))
             {
-                bool hero = marker.name.Contains("\u4e3b\u89d2");
-                UnitState unit = new UnitState(hero ? "hero" : "enemy_" + enemyIndex, hero, ScenePosition(marker), hero ? Facing.East : Facing.West);
-                if (hero) { unit.DisplayName = "\u963f\u65af\u7279\u62c9"; unit.Speed = 11; }
-                else
-                {
-                    string archetypeId = encounter == null ? EnemyArchetypes.All[Math.Min(enemyIndex, EnemyArchetypes.All.Count - 1)].Id : encounter.EnemyArchetypeIds[Math.Min(enemyIndex, encounter.EnemyArchetypeIds.Count - 1)];
-                    EnemyArchetypes.Get(archetypeId).Apply(unit); enemyIndex++;
-                }
-                units.Add(unit);
+                FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(level, mapRun?.RegionBossId);
+                currentLevel = build.Definition;
+                state = build.State;
+                map = state.Map;
             }
-            if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
-            state = new CombatState(map, units);
+            else
+            {
+                currentLevel = null;
+                map = new GridMap(12, 9);
+                CombatSceneMarker[] markers = FindObjectsByType<CombatSceneMarker>();
+                foreach (CombatSceneMarker marker in markers)
+                {
+                    GridPosition p = ScenePosition(marker);
+                    if (marker.MarkerType == CombatSceneMarkerType.LightCover) map.SetTile(p, new TileState { Cover = CoverType.Light, Durability = 4 });
+                    if (marker.MarkerType == CombatSceneMarkerType.HeavyCover) map.SetTile(p, new TileState { Cover = CoverType.Heavy, Durability = 7 });
+                    if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, IsDevice = true, Durability = 6 });
+                }
+                List<UnitState> units = new List<UnitState>();
+                int enemyIndex = 0;
+                foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit).OrderBy(m => m.name, StringComparer.Ordinal))
+                {
+                    bool hero = marker.name.Contains("\u4e3b\u89d2");
+                    if (!hero && encounter != null && enemyIndex >= encounter.EnemyArchetypeIds.Count) continue;
+                    UnitState unit = new UnitState(hero ? "hero" : "enemy_" + enemyIndex, hero, ScenePosition(marker), hero ? Facing.East : Facing.West);
+                    if (hero) { unit.DisplayName = "\u963f\u65af\u7279\u62c9"; unit.Speed = 11; unit.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind); }
+                    else
+                    {
+                        string archetypeId = encounter == null ? EnemyArchetypes.All[Math.Min(enemyIndex, EnemyArchetypes.All.Count - 1)].Id : encounter.EnemyArchetypeIds[Math.Min(enemyIndex, encounter.EnemyArchetypeIds.Count - 1)];
+                        EnemyArchetypes.Get(archetypeId).Apply(unit); enemyIndex++;
+                    }
+                    units.Add(unit);
+                }
+                if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
+                state = new CombatState(map, units);
+            }
             if (mapRun != null)
             {
                 RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
-                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, DescribeEncounter(encounter, mission.EnemySummary));
-                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+                developerPreparation = new MissionPreparation().Configure(mission.Id,
+                    currentLevel?.ObjectiveSummary ?? mission.ObjectiveSummary,
+                    currentLevel == null ? DescribeEncounter(encounter, mission.EnemySummary) : DescribeEncounter(encounter, currentLevel.EnemySummary(mapRun.RegionBossId)));
+                if (currentLevel == null)
+                {
+                    if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                    else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+                }
             }
             else if (rogueliteRun != null)
             {
                 RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
-                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
-                if (mission.ObjectiveType == CombatObjectiveType.Elimination)
-                    state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                else
-                    state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+                developerPreparation = new MissionPreparation().Configure(mission.Id,
+                    currentLevel?.ObjectiveSummary ?? mission.ObjectiveSummary,
+                    currentLevel == null ? mission.EnemySummary : DescribeEncounter(encounter, currentLevel.EnemySummary()));
+                if (currentLevel == null)
+                {
+                    if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
+                    else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
+                }
             }
             state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
+            if (mapRun != null) state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
             ApplyShortRunChoices();
             mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
+            string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";
+            ArtifactDefinition lootArtifact = ArtifactRewardPool.RollLoot(mapRun?.Seed ?? 0, lootKey);
+            state.SetLootSource(new LootSourceState(lootKey, new GridPosition(2, 0), new[]
+            {
+                new ItemInstance(lootKey + "-medkit", "medkit", 0),
+                new ItemInstance(lootKey + "-scroll-F-S01", "F-S01", 1),
+                new ItemInstance(lootKey + "-artifact-" + lootArtifact.Id, lootArtifact.Id, 2)
+            }));
+            mapRun?.RestoreLootProgress(state.LootSource);
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
             outcomeHandled = false;
         }
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
-        public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); }
-        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; visualFeedback?.ResetBattleFeedback(); CombatResolver.BeginTurn(state, "hero"); RefreshSceneHud(); }
-        public void TacticalRestartDeveloperCombat() { developerFlow.TacticalRestart(); state = developerFlow.State; visualFeedback?.ResetBattleFeedback(); CombatResolver.BeginTurn(state, "hero"); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); }
-        public void ReturnToDeveloperMenu() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteRun = null; rogueliteMenuOpen = false; mapRun = null; mapMenuOpen = false; RefreshSceneHud(); }
-        public void OpenRogueliteMenu() { rogueliteMenuOpen = true; rogueliteRun = null; }
-        public void CloseRogueliteMenu() { rogueliteMenuOpen = false; }
+        public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
+        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
+        public void TacticalRestartDeveloperCombat()
+        {
+            if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
+            developerFlow.TacticalRestart(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
+        }
+        public void ReturnToDeveloperMenu()
+        {
+            if (trainingRangeActive)
+            {
+                trainingRangeActive = false; rogueliteFlow.Reset();
+                developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
+                BuildCombatFromSceneStageTwo(); selectedAction = "移动"; selectedTargetId = null;
+                RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); return;
+            }
+            developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteFlow.Reset(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow);
+        }
+        public void OpenRogueliteMenu() => rogueliteFlow.OpenRogueliteMenu();
+        public void CloseRogueliteMenu() => rogueliteFlow.CloseRogueliteMenu();
         public void StartRogueliteStory(bool continueSave)
         {
-            RogueliteStoryPackage package = continueSave && PlayerPrefs.HasKey(RogueliteSaveKey)
-                ? RogueliteStoryPackage.FromJson(PlayerPrefs.GetString(RogueliteSaveKey))
-                : RogueliteStoryCatalog.CreateDefault(UnityEngine.Random.Range(1, int.MaxValue));
-            rogueliteRun = new RogueliteDeveloperRun(package); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+            RogueliteStoryPackage package;
+            if (continueSave)
+            {
+                if (!saveGateway.TryLoadStory(out package))
+                {
+                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "剧情存档无法读取；原始数据已保留，请先删除该存档或修复后重试"));
+                    return;
+                }
+            }
+            else package = RogueliteStoryCatalog.CreateDefault(UnityEngine.Random.Range(1, int.MaxValue));
+            rogueliteFlow.BeginDeveloperRun(new RogueliteDeveloperRun(package)); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
         }
         public void StartShortRoguelite(bool continueSave)
         {
-            ShortRogueliteRun run = continueSave && PlayerPrefs.HasKey(ShortRogueliteSaveKey)
-                ? ShortRogueliteRun.FromJson(PlayerPrefs.GetString(ShortRogueliteSaveKey))
-                : new ShortRogueliteRun(UnityEngine.Random.Range(1, int.MaxValue));
-            rogueliteRun = new RogueliteDeveloperRun(run); OpenShortRunPhase();
+            ShortRogueliteRun run;
+            if (continueSave)
+            {
+                if (!saveGateway.TryLoadShortRun(out run))
+                {
+                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "短局存档无法读取；原始数据已保留，请先删除该存档或修复后重试"));
+                    return;
+                }
+            }
+            else run = new ShortRogueliteRun(UnityEngine.Random.Range(1, int.MaxValue));
+            rogueliteFlow.BeginDeveloperRun(new RogueliteDeveloperRun(run)); OpenShortRunPhase();
         }
-        public void DeleteShortRogueliteSave() { PlayerPrefs.DeleteKey(ShortRogueliteSaveKey); PlayerPrefs.Save(); }
-        public bool HasShortRogueliteSave => PlayerPrefs.HasKey(ShortRogueliteSaveKey);
-        public void StartMapRoguelite(bool continueSave) { mapRun = continueSave && PlayerPrefs.HasKey(MapRogueliteSaveKey) ? RogueliteMapRun.FromJson(PlayerPrefs.GetString(MapRogueliteSaveKey)) : new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue)); mapMenuOpen = true; rogueliteMenuOpen = false; PlayMapEntrance(); }
-        public void DeleteMapRogueliteSave() { PlayerPrefs.DeleteKey(MapRogueliteSaveKey); PlayerPrefs.Save(); }
-        public bool HasMapRogueliteSave => PlayerPrefs.HasKey(MapRogueliteSaveKey);
+        public void DeleteShortRogueliteSave() => saveGateway.DeleteShortRun();
+        public bool HasShortRogueliteSave => saveGateway.HasShortRun;
+        public void StartMapRoguelite(bool continueSave)
+        {
+            TryStartMapRoguelite(continueSave, FireRogueliteStarterCatalog.Universal);
+        }
+        public void StartMapRoguelite(bool continueSave, string starterId)
+        {
+            TryStartMapRoguelite(continueSave, starterId);
+        }
+        private bool TryStartMapRoguelite(bool continueSave, string starterId)
+        {
+            RogueliteMapRun run;
+            if (continueSave)
+            {
+                if (!saveGateway.TryLoadMapRun(out run))
+                {
+                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "地图存档无法读取；原始数据已保留，请先删除该存档或修复后重试"));
+                    return false;
+                }
+            }
+            else run = new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue), starterId);
+            rogueliteFlow.BeginMapRun(run);
+            if (!continueSave) saveGateway.SaveMapRun(run);
+            MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure);
+            return true;
+        }
+        public void RequestStartMapRoguelite(bool continueSave)
+            => RequestStartMapRoguelite(continueSave, FireRogueliteStarterCatalog.Universal);
+        public void RequestStartMapRoguelite(bool continueSave, string starterId)
+        {
+            if (!continueSave && HasMapRogueliteSave)
+            {
+                RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.ReplaceExistingRun, "覆盖现有推进？",
+                    "新开推进会替换当前肉鸽地图存档。已完成的本局进度无法从该槽位恢复。", "覆盖并新开"), () =>
+                    {
+                        if (!saveGateway.DeleteMapRun())
+                        {
+                            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "旧地图存档无法删除，未启动新推进"));
+                            return;
+                        }
+                        StartMapRoguelite(false, starterId);
+                        ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Saved, "已创建并保存新的首区推进"));
+                    });
+                return;
+            }
+            if (!TryStartMapRoguelite(continueSave, starterId)) return;
+            ShowUiFeedback(new UiActionFeedback(continueSave ? UiFeedbackKind.Information : UiFeedbackKind.Saved,
+                continueSave ? "已读取最近一次地图推进" : "已创建并保存新的首区推进"));
+        }
+        public void DeleteMapRogueliteSave() => saveGateway.DeleteMapRun();
+        public bool HasMapRogueliteSave => saveGateway.HasMapRun;
         public void SelectMapNode(string nodeId)
         {
-            mapRun.SelectNode(nodeId);
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
-            if (!node.IsCombat)
+            bool resumesCurrentCombat = node.Id == mapRun.CurrentNodeId && RogueliteUiPreferences.CanOpenCombatBriefing(mapRun, node);
+            bool startsCombat = resumesCurrentCombat || RogueliteUiPreferences.StartsCombat(mapRun, node);
+            bool safeRevisit = mapRun.CompletedNodes.Contains(nodeId);
+            string previousNodeId = mapRun.CurrentNodeId;
+            if (!resumesCurrentCombat) mapRun.SelectNode(nodeId);
+            MarkPresentation(UiPresentationArea.MapStructure);
+            PublishUiVisual(new UiVisualEvent(safeRevisit ? UiVisualEventKind.SafeRevisit : UiVisualEventKind.MapLocationChanged,
+                nodeId, message: previousNodeId + "→" + nodeId));
+            if (!startsCombat)
             {
-                SaveMapRun(); PlayMapEntrance(); return;
+                SaveMapRun(); return;
             }
             SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, nodeId));
         }
 
         private static string DescribeEncounter(RogueliteEncounterDefinition encounter, string fallback)
@@ -335,15 +518,56 @@ namespace OCC.Combat.Presentation
         }
         public void ChooseMapNodeContent(string choiceId)
         {
+            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
             mapRun.ChooseCurrentNodeContent(choiceId);
-            if (mapRun.HasPendingContentCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); return; }
-            SaveMapRun(); PlayMapEntrance();
+            MarkPresentation(UiPresentationArea.MapStructure);
+            PublishResourceChanges(parts, aether, supplies, scouting, access);
+            if (mapRun.HasPendingContentCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, choiceId)); return; }
+            SaveMapRun();
         }
-        public void ClaimMapReward(string rewardId) { mapRun.ClaimReward(rewardId); SaveMapRun(); settlementPresentation?.RefreshNow(); }
-        public void EquipMapReward(string rewardId) { mapRun.EquipReward(rewardId); SaveMapRun(); PlayMapEntrance(); }
-        public void CalibrateMapAether() { mapRun.CalibrateAether(); SaveMapRun(); PlayMapEntrance(); }
-        public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); }
-        private void SaveMapRun() { PlayerPrefs.SetString(MapRogueliteSaveKey, mapRun.ToJson()); PlayerPrefs.Save(); }
+        public void ClaimMapReward(string rewardId)
+        {
+            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
+            mapRun.ClaimReward(rewardId);
+            MarkPresentation(UiPresentationArea.Settlement);
+            MarkPresentation(UiPresentationArea.MapStructure);
+            PublishResourceChanges(parts, aether, supplies, scouting, access);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, rewardId));
+            SaveMapRun(); settlementPresentation?.RefreshNow();
+        }
+        public void ClaimMapFireSpell(string spellId)
+        {
+            mapRun.ClaimFireSpell(spellId);
+            MarkPresentation(UiPresentationArea.Settlement); MarkPresentation(UiPresentationArea.MapStructure);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, spellId));
+            SaveMapRun(); settlementPresentation?.RefreshNow();
+        }
+        public void EquipMapFireSpell(string spellId, int slot) { mapRun.EquipFireSpell(spellId, slot); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat); }
+        public void EquipNextMapFireSpell(int slot)
+        {
+            if (mapRun == null || mapRun.OwnedFireSpellIds.Count == 0 || slot < 0 || slot >= mapRun.EquippedFireSpellIds.Count) return;
+            string current = mapRun.EquippedFireSpellIds[slot];
+            int currentIndex = mapRun.OwnedFireSpellIds.ToList().FindIndex(id => string.Equals(id, current, StringComparison.Ordinal));
+            for (int offset = 1; offset <= mapRun.OwnedFireSpellIds.Count; offset++)
+            {
+                string candidate = mapRun.OwnedFireSpellIds[(Math.Max(-1, currentIndex) + offset) % mapRun.OwnedFireSpellIds.Count];
+                if (mapRun.EquippedFireSpellIds.Where((id, index) => index != slot).Contains(candidate)) continue;
+                if (!FireSpellCatalog.IsWeaponCompatible(FireSpellCatalog.Get(candidate), mapRun.EquippedWeapon)) continue;
+                EquipMapFireSpell(candidate, slot);
+                return;
+            }
+        }
+        public void EquipMapReward(string rewardId) { mapRun.EquipReward(rewardId); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); }
+        public void CalibrateMapAether()
+        {
+            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
+            mapRun.CalibrateAether();
+            MarkPresentation(UiPresentationArea.MapStructure);
+            PublishResourceChanges(parts, aether, supplies, scouting, access);
+            SaveMapRun();
+        }
+        public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.ReturnToMap(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure); }
+        private void SaveMapRun() => saveGateway.SaveMapRun(mapRun);
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
         public void ChooseShortSalvage() { rogueliteRun.ShortRun.ChooseSalvage("shield_cell"); SaveShortRun(); }
         public void ChooseShortUpgrade() { rogueliteRun.ShortRun.ChooseUpgrade("calibrated_rifle"); SaveShortRun(); }
@@ -353,7 +577,7 @@ namespace OCC.Combat.Presentation
             if (rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.FirstCombat || rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.SecondCombat) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
             else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteMenuOpen = true; }
         }
-        private void SaveShortRun() { PlayerPrefs.SetString(ShortRogueliteSaveKey, rogueliteRun.ShortRun.ToJson()); PlayerPrefs.Save(); }
+        private void SaveShortRun() => saveGateway.SaveShortRun(rogueliteRun.ShortRun);
         private void ApplyShortRunChoices()
         {
             if (rogueliteRun?.IsShortRun != true || rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) return;
@@ -365,42 +589,284 @@ namespace OCC.Combat.Presentation
         public void StartRogueliteSandbox()
         {
             IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
-            rogueliteRun = new RogueliteDeveloperRun(templates[sandboxTemplateIndex % templates.Count].Id, UnityEngine.Random.Range(1, int.MaxValue));
+            rogueliteFlow.BeginDeveloperRun(new RogueliteDeveloperRun(templates[sandboxTemplateIndex % templates.Count].Id, UnityEngine.Random.Range(1, int.MaxValue)));
             BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
         }
         public void SelectNextSandboxTemplate() { sandboxTemplateIndex = (sandboxTemplateIndex + 1) % RogueliteDeveloperCatalog.OpenSandboxTemplates.Count; }
-        public void DeleteRogueliteSave() { PlayerPrefs.DeleteKey(RogueliteSaveKey); PlayerPrefs.Save(); }
-        public bool HasRogueliteSave => PlayerPrefs.HasKey(RogueliteSaveKey);
+        public void DeleteRogueliteSave() => saveGateway.DeleteStory();
+        public bool HasRogueliteSave => saveGateway.HasStory;
         public CombatState CurrentState => state;
+        public string CurrentLevelId => currentLevel?.Id;
+        public FireBattleState CurrentFireBattle => fireBattle;
+        public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
         public string SelectedAction => selectedAction;
         public string SelectedTargetId => selectedTargetId;
+        public CombatActionPreview CurrentActionPreview => BuildCurrentActionPreview();
+        public FireSpellDefinition FireSpellInSlot(int slot)
+        {
+            if (trainingRangeActive) return slot == 0 ? trainingRangeSession?.CurrentFireSpell : null;
+            if (slot == 0 && state?.ItemInventory.Get(armedInventoryItemId) is ItemInstance armed) return ItemAbilityCatalog.For(armed.DefinitionId);
+            if (mapRun == null || slot < 0 || slot >= mapRun.EquippedFireSpellIds.Count) return null;
+            string id = mapRun.EquippedFireSpellIds[slot];
+            return string.IsNullOrEmpty(id) ? null : FireSpellCatalog.Get(id);
+        }
+        private CombatActionPreview BuildCurrentActionPreview()
+        {
+            ArtifactDefinition armedArtifact = CurrentArmedInventoryItem != null &&
+                ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
+                ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
+            if (selectedAction == "技能1" && armedArtifact != null && state != null)
+            {
+                EnsureArtifactBattle(); int validArtifacts = 0;
+                for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
+                    if (BuildArtifactTarget(armedArtifact, new GridPosition(x, y), out ArtifactTarget candidate) &&
+                        ArtifactEngine.Preview(artifactBattle, "hero", armedArtifact, candidate,
+                            CurrentArmedInventoryItem?.RemainingUses ?? trainingRangeArtifactUsesRemaining).CanCommit) validArtifacts++;
+                return new CombatActionPreview(selectedAction, armedArtifact.TargetSummary, armedArtifact.PublicCost,
+                    armedArtifact.EffectSummary + "；风险：" + armedArtifact.RiskSummary, validArtifacts,
+                    validArtifacts == 0 ? "当前没有合法目标" : string.Empty);
+            }
+            int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
+            if (spell == null || state == null) return battlefield.BuildPreview(state, selectedAction, selectedTargetId);
+            if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+            int valid = 0;
+            for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsFireSpellCellValid(spell, new GridPosition(x, y))) valid++;
+            string failure = string.Empty;
+            UnitState selected = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
+            if (selected != null)
+            {
+                FireSpellPreview exact = FireSpellEngine.Preview(fireBattle, "hero", spell, FireSpellTarget.Unit(selected.Id, FacingToward(state.GetUnit("hero").Position, selected.Position)));
+                failure = string.Join("；", exact.Failures);
+            }
+            else if (valid == 0) failure = "当前没有合法目标";
+            string effects = string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty)));
+            string contract = spell.CombatAffinity + " / " + spell.DeliveryMode + " / " + spell.WeaponRequirement +
+                " / " + spell.TargetKind + " / " + spell.Shape + " / " + spell.TriggerWindow + " / " + spell.ConsumptionRule;
+            return new CombatActionPreview(selectedAction, contract, spell.ActionPointCost + " AP + " + spell.ManaCost + " 魔力", effects, valid, failure);
+        }
+        private bool IsFireSpellCellValid(FireSpellDefinition spell, GridPosition position)
+        {
+            return BuildFireSpellPreviewAt(spell, position).CanCommit;
+        }
+        private FireSpellPreview BuildFireSpellPreviewAt(FireSpellDefinition spell, GridPosition position)
+        {
+            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
+            Facing facing = FacingToward(state.GetUnit("hero").Position, position);
+            FireSpellTarget target = unit == null ? FireSpellTarget.At(position, facing) : FireSpellTarget.Unit(unit.Id, facing);
+            return FireSpellEngine.Preview(fireBattle, "hero", spell, target);
+        }
         public void SetSelectedTargetForUi(string unitId)
         {
             selectedTargetId = state != null && state.GetUnit(unitId) != null ? unitId : null;
+            MarkPresentation(UiPresentationArea.Combat);
         }
         public RogueliteMapRun CurrentMapRun => mapRun;
+        public RogueliteMapRun ArchivedMapRun
+        {
+            get
+            {
+                if (mapRun != null) return mapRun;
+                return saveGateway.TryLoadMapRun(out RogueliteMapRun archived) ? archived : null;
+            }
+        }
+        public CombatFlowPhase CurrentFlowPhase => developerFlow == null ? CombatFlowPhase.DeveloperMenu : developerFlow.Phase;
+        public MissionPreparation CurrentPreparation => developerFlow?.Preparation ?? developerPreparation;
+        public bool IsMapMenuOpen => mapMenuOpen;
+        public bool IsRogueliteMenuOpen => rogueliteMenuOpen;
+        public RogueliteUiPreferences UiPreferences => uiPreferences;
+        public UiVisualEventStream UiVisualEvents => uiVisualEvents;
+        public UiPresentationVersions UiPresentationVersions => uiPresentationVersions;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
+        public bool IsTrainingRangeActive => trainingRangeActive;
+        public TrainingRangeSession TrainingRange => trainingRangeSession;
+        public ArtifactDefinition CurrentTrainingRangeArtifact => trainingRangeSession?.CurrentArtifact;
+        public int TrainingRangeArtifactUsesRemaining => trainingRangeArtifactUsesRemaining;
+        public ItemInstance CurrentArmedInventoryItem => state?.ItemInventory.Get(armedInventoryItemId);
+        public ArtifactDefinition CurrentArmedArtifact => CurrentArmedInventoryItem != null &&
+            ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
+            ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : null;
         public bool IsCombatOutcomeVisible => developerFlow != null && (developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat);
+        public bool IsInteractionModalOpen => (interactionLayer != null && interactionLayer.IsConfirmationOpen) || (inventoryPanel != null && inventoryPanel.IsOpen);
         public void ToggleDeveloperConsole() { developerConsole?.Toggle(); }
-        public void SelectHudAction(string action) { selectedAction = action; }
+        public void StartTrainingRange()
+        {
+            startupPresentation?.DismissImmediately();
+            rogueliteFlow.Reset(); trainingRangeActive = true;
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            PrepareTrainingRangeCurrent();
+        }
+        public void SelectTrainingRangeAbility(string abilityId)
+        {
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            trainingRangeSession.Select(abilityId); PrepareTrainingRangeCurrent();
+        }
+        public void BrowseTrainingRangeAbility(string abilityId)
+        {
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            trainingRangeSession.Select(abilityId);
+        }
+        public void ShiftTrainingRangePage(int delta)
+        {
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            trainingRangeSession.ShiftPage(delta);
+        }
+        public void PrepareTrainingRangeCurrent()
+        {
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            trainingRangeActive = true;
+            currentLevel = null;
+            ITrainingRangeCase prepared = trainingRangeSession.PrepareCurrent();
+            state = prepared.Combat; fireBattle = trainingRangeSession.CurrentFireBattle; fireLifecycleActiveUnitId = state.ActiveUnitId;
+            artifactBattle = (prepared as ArtifactTrainingRangeCase)?.Battle ?? new ArtifactBattleState(state);
+            trainingRangeArtifactUsesRemaining = trainingRangeSession.CurrentArtifact?.MaximumUses ?? 0;
+            developerPreparation = new MissionPreparation().Configure("training_range", "能力验证与确定性回归", "标准靶兵、友军、掩体、设备、水面与核心样本");
+            developerFlow = new CombatFlowController(); developerFlow.Configure(developerPreparation, state); developerFlow.OpenBriefing(); developerFlow.BeginCombat();
+            selectedAction = "技能1"; selectedTargetId = prepared.RecommendedUnitId; outcomeHandled = false;
+            visualFeedback?.ResetBattleFeedback(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
+        }
+        public TrainingRangePreviewReport PreviewTrainingRangeCurrent()
+        {
+            TrainingRangePreviewReport report = trainingRangeSession.PreviewCurrent();
+            state.AddLog(trainingRangeSession.CurrentAbility.Id + " // " + report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;
+        }
+        public TrainingRangeExecutionReport ExecuteTrainingRangeCurrent()
+        {
+            if (trainingRangeSession.CurrentCase == null || trainingRangeSession.CurrentCase.Combat != state) PrepareTrainingRangeCurrent();
+            GridPosition source = state.GetUnit("hero").Position;
+            TrainingRangePreviewReport preview = trainingRangeSession.PreviewCurrent();
+            TrainingRangeExecutionReport report = trainingRangeSession.ExecuteCurrent();
+            state.AddLog(trainingRangeSession.CurrentAbility.Id + " // " + report.Summary);
+            if (preview.NativeResult is FireSpellPreview firePreview && trainingRangeSession.CurrentFireSpell != null)
+                visualFeedback?.NotifyFireSpell(trainingRangeSession.CurrentFireSpell, source, firePreview.Cells);
+            else if (trainingRangeSession.CurrentSkill != null)
+                visualFeedback?.NotifySkillDelivery(trainingRangeSession.CurrentSkill, source, trainingRangeSession.CurrentCase.RecommendedCell);
+            MarkPresentation(UiPresentationArea.Combat); return report;
+        }
+        public TrainingRangeAuditReport RunTrainingRangeAudit()
+        {
+            if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
+            TrainingRangeAuditReport report = trainingRangeSession.RunFullAudit();
+            state?.AddLog(report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;
+        }
+        public void RequestTacticalRestart()
+        {
+            RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.TacticalRestart, "战术重开？",
+                "当前战斗进度将被放弃，并恢复到本场战斗开始时的确定性快照。", "确认重开"), TacticalRestartDeveloperCombat);
+        }
+        public void RequestLeaveCombat()
+        {
+            if (!IsDeveloperCombatActive) return;
+            RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.LeaveCombat, "离开未完成战斗？",
+                "当前战斗内的行动不会结算。肉鸽地图与战斗开始前存档保持不变。", "离开战斗"), () =>
+                {
+                    if (mapRun != null) ReturnToMapRun();
+                    else ReturnToDeveloperMenu();
+                });
+        }
+        public void RequestConfirmation(UiConfirmationRequest request, Action onConfirm) => interactionLayer?.RequestConfirmation(request, onConfirm);
+        public void ShowUiFeedback(UiActionFeedback feedback) => interactionLayer?.ShowFeedback(feedback);
+        public void PublishUiVisual(UiVisualEvent visualEvent) => uiVisualEvents.Publish(visualEvent);
+        private void MarkPresentation(UiPresentationArea area) => uiPresentationVersions.Mark(area);
+        public void NotifyMapNodeSelected(string nodeId)
+        {
+            if (!string.IsNullOrWhiteSpace(nodeId)) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.MapNodeSelected, nodeId));
+        }
+
+        private void PublishResourceChanges(int parts, int aether, int supplies, int scouting, int access)
+        {
+            PublishResourceChange("零件", parts, mapRun.Parts);
+            PublishResourceChange("以太", aether, mapRun.Aether);
+            PublishResourceChange("补给", supplies, mapRun.Supplies);
+            PublishResourceChange("侦测", scouting, mapRun.ScoutingBeacons);
+            PublishResourceChange("权限卡", access, mapRun.AccessCards);
+        }
+
+        private void PublishResourceChange(string resource, int before, int after)
+        {
+            int delta = after - before;
+            if (delta != 0)
+            {
+                MarkPresentation(UiPresentationArea.MapResources);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.ResourceChanged, resource, delta));
+            }
+        }
+        public void UpdateUiPreferences(float masterVolume, float animationIntensity, bool screenShake, bool floatingText, bool highContrast, bool largeText, bool keyHints)
+        {
+            uiPreferences.Configure(masterVolume, animationIntensity, screenShake, floatingText, highContrast, largeText, keyHints);
+            saveGateway.SaveUiPreferences(uiPreferences);
+            ApplyUiPreferences();
+            MarkPresentation(UiPresentationArea.Settings);
+        }
+        private void ApplyUiPreferences()
+        {
+            AudioListener.volume = uiPreferences.MasterVolume;
+        }
+        public void SelectHudAction(string action)
+        {
+            selectedAction = action;
+            selectedTargetId = null;
+            MarkPresentation(UiPresentationArea.Combat);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatActionSelected, action));
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatRangeRevealed, action, message: GetRangeDescription()));
+        }
         public void UseQuickbarSlot(int slot) { if (state?.Quickbar[slot] != null) TryCommand(CombatCommand.UseQuickbar("hero", slot)); }
+        public void SearchCurrentLoot() { if (state != null) { TryCommand(CombatCommand.SearchLoot("hero")); PersistCombatInventory(); } }
+        public void TakeCurrentLoot(string instanceId) { if (state != null) { TryCommand(CombatCommand.TakeLoot("hero", instanceId)); PersistCombatInventory(); } }
+        public void EquipInventoryQuickbar(string instanceId, int slot) { if (state != null) { TryCommand(CombatCommand.EquipInventoryQuickbar("hero", instanceId, slot)); PersistCombatInventory(); } }
+        public void ActivateInventoryQuickbar(int slot)
+        {
+            if (state == null || slot < 0 || slot >= state.ItemQuickbar.Length) return; ItemInstance item = state.ItemInventory.Get(state.ItemQuickbar[slot]); if (item == null) return;
+            if (ItemCatalog.Get(item.DefinitionId).Category == ItemCategory.Artifact)
+            {
+                if (item.DefinitionId == "G-T13")
+                {
+                    armedInventoryItemId = null;
+                    state.AddLog("定锚支架已在快捷栏待机；受到推拉时自动抵消并消耗 1 次。");
+                    MarkPresentation(UiPresentationArea.Combat); return;
+                }
+                armedInventoryItemId = item.InstanceId; selectedAction = "技能1"; selectedTargetId = null;
+                EnsureArtifactBattle(); state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择合法目标。");
+                MarkPresentation(UiPresentationArea.Combat); return;
+            }
+            FireSpellDefinition ability = ItemAbilityCatalog.For(item.DefinitionId);
+            if (ability == null) { TryCommand(CombatCommand.UseInventoryItem("hero", item.InstanceId)); PersistCombatInventory(); return; }
+            armedInventoryItemId = item.InstanceId; selectedAction = "技能1"; selectedTargetId = null; state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择目标格。"); MarkPresentation(UiPresentationArea.Combat);
+        }
+        public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }
+        private void PersistCombatInventory() { if (mapRun == null || state == null) return; mapRun.CaptureCombatInventory(state); SaveMapRun(); }
         public void ApplyHudBuild(int build) { if (state != null) ApplyBuild(build); }
         public void EndHeroTurn() { if (state != null) TryCommand(CombatCommand.EndTurn("hero")); }
         private void Update()
         {
             if (!Application.isPlaying || developerFlow == null || state == null) return;
-            if (developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
+            if (state.ActiveUnitId != fireLifecycleActiveUnitId)
+            {
+                fireLifecycleActiveUnitId = state.ActiveUnitId;
+                if (!string.IsNullOrEmpty(fireLifecycleActiveUnitId)) fireBattle?.BeginUnitTurn(fireLifecycleActiveUnitId);
+                if (!string.IsNullOrEmpty(fireLifecycleActiveUnitId)) { EnsureArtifactBattle(); artifactBattle.BeginUnitTurn(fireLifecycleActiveUnitId); }
+            }
+            CombatFlowPhase phaseBeforeUpdate = developerFlow.Phase;
+            if (!trainingRangeActive && developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
             developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
+            if (developerFlow.Phase != phaseBeforeUpdate) { MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
         }
         private void HandleRogueliteOutcome()
         {
             if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
             {
                 outcomeHandled = true; visualFeedback?.PlayOutcome(true);
+                mapRun.CaptureCombatInventory(state);
                 if (mapRun.HasPendingContentCombat) mapRun.CompletePendingContentCombat(); else mapRun.CompleteCurrentCombat();
+                MarkPresentation(UiPresentationArea.Settlement);
+                MarkPresentation(UiPresentationArea.MapStructure);
                 SaveMapRun(); settlementPresentation?.RefreshNow(); return;
             }
-            if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat) { outcomeHandled = true; visualFeedback?.PlayOutcome(false); }
+            if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat)
+            {
+                outcomeHandled = true; visualFeedback?.PlayOutcome(false);
+                if (mapRun != null) { mapRun.CaptureCombatInventory(state); SaveMapRun(); }
+            }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
             visualFeedback?.PlayOutcome(true);
             outcomeHandled = true;
@@ -408,20 +874,20 @@ namespace OCC.Combat.Presentation
             if (rogueliteRun.Kind == RogueliteLaunchKind.TemplateSandbox) return;
             rogueliteRun.Complete(summary);
             if (rogueliteRun.IsShortRun) SaveShortRun();
-            else { PlayerPrefs.SetString(RogueliteSaveKey, rogueliteRun.Package.ToJson()); PlayerPrefs.Save(); }
+            else saveGateway.SaveStory(rogueliteRun.Package);
         }
         public void ContinueRogueliteAfterVictory()
         {
-            if (mapRun != null && developerFlow.Phase == CombatFlowPhase.Victory) { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; mapMenuOpen = true; RefreshSceneHud(); return; }
+            if (mapRun != null && developerFlow.Phase == CombatFlowPhase.Victory) { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.ReturnToMap(); RefreshSceneHud(); return; }
             if (rogueliteRun == null || (developerFlow.Phase != CombatFlowPhase.Victory && developerFlow.Phase != CombatFlowPhase.Defeat)) return;
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.IsShortRun) { OpenShortRunPhase(); return; }
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
-            else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteRun = null; rogueliteMenuOpen = true; RefreshSceneHud(); }
+            else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.OpenRogueliteMenu(); RefreshSceneHud(); }
         }
         public void ForceCurrentOutcome(bool victory)
         {
             if (developerFlow?.Phase != CombatFlowPhase.Active) return;
-            state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
+            state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
         }
         private void RefreshSceneHud()
         {
@@ -431,307 +897,43 @@ namespace OCC.Combat.Presentation
             TacticalHudSceneBinder binder = sceneUi.GetComponent<TacticalHudSceneBinder>();
             if (binder != null) binder.RefreshNow();
         }
-        private void RunEnemyTurn() { UnitState enemy = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); if (enemy == null || !enemy.IsAlive) { if (enemy != null) CombatResolver.EndTurn(state, enemy); return; } try { if (Distance(enemy.Position, hero.Position) <= 4 && enemy.ActionPoints > 0) CombatResolver.Resolve(state, enemy.Id == "caster" ? CombatCommand.Cast(enemy.Id, hero.Id) : CombatCommand.Attack(enemy.Id, hero.Id)); else if (enemy.ActionPoints > 0) CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, StepToward(enemy.Position, hero.Position), FacingToward(enemy.Position, hero.Position))); if (state.ActiveUnitId == enemy.Id) CombatResolver.EndTurn(state, enemy); } catch (InvalidOperationException error) { state.AddLog(error.Message); CombatResolver.EndTurn(state, enemy); } }
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu) { if (mapMenuOpen) DrawMapRun(); else if (rogueliteMenuOpen) DrawRogueliteMenu(); else DrawDeveloperMenu(); GUI.matrix = previous; return; } if (developerFlow.Phase == CombatFlowPhase.Briefing) { DrawDeveloperBriefing(); GUI.matrix = previous; return; } DrawGrid(new Rect(24, 112, 12 * CellSize, 9 * CellSize)); GUI.matrix = previous; }
+        private void RunEnemyTurn()
+        {
+            UnitState enemy = state.GetUnit(state.ActiveUnitId);
+            UnitState hero = state.GetUnit("hero");
+            if (enemy == null || !enemy.IsAlive) { if (enemy != null) PublishCombatEffects(CombatResolver.EndTurn(state, enemy)); return; }
+            try
+            {
+                if (enemy.ActionPoints > 0) TryCommand(BuildEnemyCommand(enemy, hero));
+                if (state.ActiveUnitId == enemy.Id) PublishCombatEffects(CombatResolver.EndTurn(state, enemy));
+            }
+            catch (InvalidOperationException error) { state.AddLog(error.Message); PublishCombatEffects(CombatResolver.EndTurn(state, enemy)); }
+            MarkPresentation(UiPresentationArea.Combat);
+        }
+
+        private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)
+            => EnemyTactics.Choose(state, enemy, hero);
+        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu || developerFlow.Phase == CombatFlowPhase.Briefing || (mapRun != null && mapRun.AwaitingReward)) { GUI.matrix = previous; return; } BattlefieldRect board = battlefield.BoardRect(state.Map.Width, state.Map.Height); DrawGrid(new Rect(board.X, board.Y, board.Width, board.Height)); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
+            GUI.skin.font = chineseFont != null ? chineseFont : FormalUiKit.Font;
             GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
             GUI.skin.button.padding = new RectOffset(12, 12, 8, 8);
             GUI.skin.box.normal.textColor = new Color(.88f, .94f, 1f);
         }
-        private void DrawHeader()
+        private string FloorKeyForCurrentLevel(int x, int y)
         {
-            GUI.color = new Color(.035f, .075f, .13f, .98f); GUI.Box(new Rect(24, 20, 1390, 68), ""); GUI.color = Color.white;
-            GUI.Label(new Rect(48, 30, 520, 28), "OCC // 正式战斗流程"); GUI.color = new Color(.35f, .9f, 1f); GUI.Label(new Rect(1040, 30, 320, 28), "开发测试构建  ·  1920×1080"); GUI.color = Color.white;
-        }
-        private void DrawDeveloperMenu()
-        {
-            Matrix4x4 previous = GUI.matrix;
-            GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * menuPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
-            GUI.color = new Color(.018f, .028f, .042f, .98f); GUI.DrawTexture(new Rect(0, 0, UiWidth, UiHeight), Texture2D.whiteTexture);
-            GUI.color = new Color(.10f, .68f, .78f, .16f * menuPanelAlpha); GUI.DrawTexture(new Rect(120, 140, 8, 760), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(1792, 140, 8, 760), Texture2D.whiteTexture);
-            GUI.color = new Color(.045f, .072f, .096f, .98f * menuPanelAlpha); GUI.Box(new Rect(220, 150, 1480, 760), "");
-            GUI.color = new Color(.35f, .9f, 1f, menuPanelAlpha); GUI.DrawTexture(new Rect(260, 202, 124, 4), Texture2D.whiteTexture); GUI.Label(new Rect(260, 228, 1080, 42), "OCC // 正式行动入口");
-            GUI.color = new Color(.58f, .66f, .71f, menuPanelAlpha); GUI.Label(new Rect(260, 280, 1100, 28), "选择行动模式。战前简报确认目标、敌情与重开规则；开发控制台仅在战斗中由 F1 呼出。");
-
-            DrawMenuInfoPanel(new Rect(260, 350, 650, 210), "剧情行动", "中继器破坏演练", "任务  " + developerPreparation.MissionId + "\n敌情  " + developerPreparation.EnemySummary, new Color(.35f, .9f, 1f));
-            DrawMenuInfoPanel(new Rect(1010, 350, 650, 210), "肉鸽区域", "自由回访推进", "20 节点正交网络  /  权限门\n商店、工坊、事件与区域首领", new Color(1f, .76f, .25f));
-            if (DrawMenuAction(new Rect(260, 610, 650, 86), "进入战前简报", "剧情测试  /  破坏目标", new Color(.20f, .78f, .94f))) OpenDeveloperBriefing();
-            if (DrawMenuAction(new Rect(1010, 610, 650, 86), "开始自由推进", "肉鸽地图  /  新开区域", new Color(1f, .70f, .20f))) StartMapRoguelite(false);
-            GUI.color = new Color(.42f, .52f, .57f, menuPanelAlpha); GUI.Label(new Rect(260, 770, 1300, 26), "正式入口  /  战前简报  /  战术行动  /  结算奖励  /  地图回访");
-            GUI.color = Color.white; GUI.matrix = previous;
-        }
-
-        private static void DrawMenuInfoPanel(Rect rect, string label, string title, string details, Color accent)
-        {
-            GUI.color = new Color(.025f, .04f, .055f, .98f); GUI.Box(rect, "");
-            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 4, rect.height), Texture2D.whiteTexture); GUI.Label(new Rect(rect.x + 28, rect.y + 22, rect.width - 50, 24), label);
-            GUI.color = new Color(.9f, .94f, .96f); GUI.Label(new Rect(rect.x + 28, rect.y + 58, rect.width - 50, 30), title);
-            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(rect.x + 28, rect.y + 106, rect.width - 50, 74), details);
-        }
-
-        private static bool DrawMenuAction(Rect rect, string title, string subtitle, Color accent)
-        {
-            bool hover = rect.Contains(Event.current.mousePosition);
-            GUI.color = hover ? new Color(accent.r, accent.g, accent.b, .22f) : new Color(.055f, .085f, .105f, 1f); GUI.Box(rect, "");
-            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, 3), Texture2D.whiteTexture);
-            GUI.color = new Color(.92f, .96f, .98f); GUI.Label(new Rect(rect.x + 26, rect.y + 16, rect.width - 52, 28), title);
-            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(rect.x + 26, rect.y + 48, rect.width - 52, 22), subtitle);
-            GUI.color = Color.white;
-            return GUI.Button(rect, GUIContent.none, GUIStyle.none);
-        }
-
-        private static void DrawConsolePanel(Rect rect, string title, string subtitle, Color accent)
-        {
-            GUI.color = new Color(.018f, .03f, .043f, .985f); GUI.Box(rect, "");
-            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 4, rect.height), Texture2D.whiteTexture); GUI.DrawTexture(new Rect(rect.x + 26, rect.y + 24, 88, 3), Texture2D.whiteTexture);
-            GUI.color = new Color(.9f, .95f, .97f); GUI.Label(new Rect(rect.x + 26, rect.y + 38, rect.width - 52, 32), title);
-            GUI.color = new Color(.56f, .66f, .71f); GUI.Label(new Rect(rect.x + 26, rect.y + 78, rect.width - 52, 28), subtitle);
-            GUI.color = Color.white;
-        }
-
-        private static bool DrawConsoleButton(Rect rect, string title, string subtitle, Color accent)
-        {
-            bool enabled = GUI.enabled;
-            bool hover = enabled && rect.Contains(Event.current.mousePosition);
-            GUI.color = enabled ? (hover ? new Color(accent.r, accent.g, accent.b, .22f) : new Color(.04f, .065f, .08f, 1f)) : new Color(.025f, .035f, .045f, 1f);
-            GUI.Box(rect, ""); GUI.color = enabled ? accent : new Color(.28f, .32f, .34f); GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, 3), Texture2D.whiteTexture);
-            GUI.color = enabled ? new Color(.92f, .96f, .98f) : new Color(.38f, .42f, .44f); GUI.Label(new Rect(rect.x + 18, rect.y + 10, rect.width - 36, 25), title);
-            GUI.color = enabled ? new Color(.55f, .64f, .69f) : new Color(.3f, .34f, .36f); GUI.Label(new Rect(rect.x + 18, rect.y + 35, rect.width - 36, rect.height - 40), subtitle);
-            GUI.color = Color.white;
-            return GUI.Button(rect, GUIContent.none, GUIStyle.none);
-        }
-        private void DrawRogueliteMenu()
-        {
-            if (rogueliteRun?.IsShortRun == true && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.FirstCombat && rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) { DrawShortRunInterlude(); return; }
-            IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;
-            TaskTemplate selected = templates[sandboxTemplateIndex % templates.Count];
-            DrawConsolePanel(new Rect(330, 140, 1260, 800), "肉鸽行动配置", "随机种子 / 独立存档 / 无倒计时推进", new Color(1f, .72f, .24f));
-            GUI.color = new Color(.58f, .66f, .71f); GUI.Label(new Rect(390, 260, 1080, 26), "故事链：死信号  /  工厂突破  /  最终导管。相同种子的目标与结算保持稳定。");
-            DrawConsolePanel(new Rect(390, 330, 1140, 180), "最短完整肉鸽", "第一关 / 事件 / 收获 / 升级 / 第二关 / 结算", new Color(.35f, .9f, 1f));
-            if (DrawConsoleButton(new Rect(420, 430, 300, 62), "新开两关肉鸽", "生成新的行动种子", new Color(.35f, .9f, 1f))) StartShortRoguelite(false);
-            GUI.enabled = HasShortRogueliteSave; if (DrawConsoleButton(new Rect(760, 430, 300, 62), "继续两关肉鸽", "恢复独立存档", new Color(.35f, .9f, 1f))) StartShortRoguelite(true); GUI.enabled = true;
-            if (DrawConsoleButton(new Rect(1100, 430, 300, 62), "删除两关存档", "仅删除最短肉鸽记录", new Color(.8f, .32f, .23f))) DeleteShortRogueliteSave();
-            DrawConsolePanel(new Rect(390, 560, 1140, 190), "故事包与模板演练", "用于回归测试的旧版入口，和自由推进地图保持隔离", new Color(.56f, .66f, .71f));
-            if (DrawConsoleButton(new Rect(420, 660, 300, 62), "新开旧故事包", "固定三任务故事链", new Color(.56f, .66f, .71f))) StartRogueliteStory(false);
-            GUI.enabled = HasRogueliteSave; if (DrawConsoleButton(new Rect(760, 660, 300, 62), "继续旧故事包", "恢复故事包存档", new Color(.56f, .66f, .71f))) StartRogueliteStory(true); GUI.enabled = true;
-            if (DrawConsoleButton(new Rect(1100, 660, 300, 62), "开始 " + selected.Type + " 演练", "当前模板", new Color(.56f, .66f, .71f))) StartRogueliteSandbox();
-            if (DrawConsoleButton(new Rect(420, 790, 300, 52), "切换演练模板", "当前：" + selected.Type, new Color(.56f, .66f, .71f))) SelectNextSandboxTemplate();
-            if (DrawConsoleButton(new Rect(1230, 790, 170, 52), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) CloseRogueliteMenu();
-        }
-        private void DrawMapRun()
-        {
-            Matrix4x4 previous = GUI.matrix; GUI.matrix = GUI.matrix * Matrix4x4.TRS(new Vector3(960, 540, 0), Quaternion.identity, Vector3.one * mapPanelScale) * Matrix4x4.TRS(new Vector3(-960, -540, 0), Quaternion.identity, Vector3.one);
-            DrawConsolePanel(new Rect(330, 150, 1260, 760), "肉鸽区域推进", "自由回访网络 / 已清理房间永久安全 / 无时间压力", new Color(1f, .72f, .24f));
-            GUI.color = new Color(.68f, .78f, .88f, mapPanelAlpha); GUI.Label(new Rect(390, 244, 560, 28), "种子 " + mapRun.Seed + "  /  等级 " + mapRun.Level + "  /  当前 " + RogueliteMapCatalog.Node(mapRun.CurrentNodeId).DisplayName); GUI.color = Color.white;
-            DrawMapResourceChip(new Rect(980, 240, 110, 34), "零件", mapRun.Parts, new Color(.95f, .76f, .36f));
-            DrawMapResourceChip(new Rect(1100, 240, 110, 34), "以太", mapRun.Aether, new Color(.35f, .9f, 1f));
-            DrawMapResourceChip(new Rect(1220, 240, 110, 34), "补给", mapRun.Supplies, new Color(.48f, .78f, .66f));
-            DrawMapResourceChip(new Rect(1340, 240, 110, 34), "权限卡", mapRun.AccessCards, new Color(.82f, .34f, .24f));
-            if (mapRun.AwaitingReward)
+            if (currentLevel == null)
+                return y == 0 || y == state.Map.Height - 1 ? "rail_horizontal" :
+                    (x == 5 || x == 6) && y >= 3 && y <= 5 ? "floor_warning" : "floor_industrial";
+            switch (currentLevel.FloorTheme)
             {
-                GUI.Label(new Rect(390, 320, 900, 30), "战斗结算 // 等级 " + mapRun.Level + "  选择一项构筑奖励");
-                IReadOnlyList<RogueliteReward> rewards = mapRun.CurrentRewards;
-                for (int i = 0; i < rewards.Count; i++) if (DrawConsoleButton(new Rect(390 + i * 390, 390, 350, 86), rewards[i].DisplayName, rewards[i].BuildPath + " / " + (rewards[i].Kind == RogueliteRewardKind.Weapon ? "武器" : "法术"), new Color(1f, .72f, .24f))) ClaimMapReward(rewards[i].Id);
-                GUI.Label(new Rect(390, 520, 900, 28), "选中后返回地图，奖励会注入下一场战斗构筑。"); GUI.matrix = previous; return;
+                case FirstRegionFloorTheme.StoneRoad: return y == 4 ? "floor_industrial" : "floor_plain";
+                case FirstRegionFloorTheme.Courtyard: return (x + y) % 5 == 0 ? "floor_industrial" : "floor_plain";
+                case FirstRegionFloorTheme.Ruins: return (x * 3 + y * 5) % 11 == 0 ? "floor_plain" : "floor_industrial";
+                case FirstRegionFloorTheme.AetherMarked: return x == 6 || y == 4 ? "floor_industrial" : "floor_plain";
+                default: return "floor_plain";
             }
-            GUI.Label(new Rect(390, 320, 1100, 30), "完整拓扑公开；相邻房间可自由往返，已清理战斗房永久安全。未知房型保持模糊；权限门不含时间压力。");
-            if (DrawMapContentChoices()) { GUI.matrix = previous; return; }
-            if (DrawMapWorkshop()) { GUI.matrix = previous; return; }
-            DrawIndustrialMapBackdrop();
-            DrawMapConnections();
-            foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes) DrawMapNode(node);
-            DrawMapLegend();
-            if (DrawConsoleButton(new Rect(390, 820, 240, 48), "读取推进", "继续已有地图", new Color(.35f, .9f, 1f))) StartMapRoguelite(true);
-            if (DrawConsoleButton(new Rect(1350, 820, 180, 48), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
-            GUI.matrix = previous;
-        }
-        private void PlayMapEntrance()
-        {
-            DOTween.Kill(this); mapPanelAlpha = 1f; mapPanelScale = 1f;
-            // The map must remain readable even when an editor execution path does not tick tween updates.
-            DOTween.To(() => mapPanelScale, value => mapPanelScale = value, 1.015f, .12f).SetLoops(2, LoopType.Yoyo).SetId(this);
-        }
-        private void DrawMapConnections()
-        {
-            foreach (RogueliteMapNode node in RogueliteMapCatalog.Nodes)
-            foreach (string nextId in node.NextIds.Where(id => string.CompareOrdinal(node.Id, id) < 0))
-            {
-                RogueliteMapNode next = RogueliteMapCatalog.Node(nextId);
-                Vector2 from = MapNodeCenter(node); Vector2 to = MapNodeCenter(next);
-                RogueliteMapNodeVisualState fromState = mapRun.VisualStateFor(node.Id); RogueliteMapNodeVisualState toState = mapRun.VisualStateFor(next.Id);
-                bool traversable = mapRun.IsNodeAvailable(node.Id) || mapRun.IsNodeAvailable(next.Id);
-                bool explored = fromState == RogueliteMapNodeVisualState.Cleared || toState == RogueliteMapNodeVisualState.Cleared || fromState == RogueliteMapNodeVisualState.Visited || toState == RogueliteMapNodeVisualState.Visited;
-                Color color = traversable ? new Color(.35f, .9f, 1f, .9f) : explored ? new Color(.34f, .68f, .61f, .65f) : (fromState == RogueliteMapNodeVisualState.Locked || toState == RogueliteMapNodeVisualState.Locked) ? new Color(.82f, .34f, .24f, .9f) : new Color(.23f, .3f, .34f, .55f);
-                DrawMapLine(from, to, color);
-            }
-        }
-        private void DrawIndustrialMapBackdrop()
-        {
-            DrawDistrict(new Rect(400, 332, 300, 430), "01  铁路前线", "入口 / 巡逻 / 补给", new Color(.20f, .48f, .56f, .17f));
-            DrawDistrict(new Rect(708, 332, 510, 430), "02  工业网格", "中继 / 工坊 / 铸造", new Color(.42f, .36f, .22f, .16f));
-            DrawDistrict(new Rect(1226, 332, 300, 430), "03  核心隔离区", "权限门 / 传输 / 核心", new Color(.52f, .20f, .16f, .17f));
-            GUI.color = new Color(.37f, .49f, .52f, .22f);
-            for (int y = 378; y <= 714; y += 82) GUI.DrawTexture(new Rect(430, y, 1060, 2), Texture2D.whiteTexture);
-            GUI.color = new Color(.35f, .9f, 1f, .16f);
-            GUI.DrawTexture(new Rect(444, 372, 1030, 5), Texture2D.whiteTexture);
-            for (int x = 452; x < 1470; x += 56) GUI.DrawTexture(new Rect(x, 366, 12, 17), Texture2D.whiteTexture);
-            GUI.color = new Color(1f, .72f, .24f, .14f);
-            GUI.DrawTexture(new Rect(444, 706, 1030, 3), Texture2D.whiteTexture);
-            for (int x = 466; x < 1470; x += 92) GUI.DrawTexture(new Rect(x, 700, 4, 15), Texture2D.whiteTexture);
-            GUI.color = Color.white;
-        }
-
-        private static void DrawDistrict(Rect rect, string label, string detail, Color color)
-        {
-            GUI.color = color; GUI.Box(rect, "");
-            GUI.color = new Color(.55f, .64f, .68f, .48f); GUI.Label(new Rect(rect.x + 14, rect.y + 12, rect.width - 28, 20), label);
-            GUI.color = new Color(.45f, .53f, .57f, .38f); GUI.Label(new Rect(rect.x + 14, rect.y + 34, rect.width - 28, 18), detail);
-            GUI.color = Color.white;
-        }
-
-        private static void DrawMapLegend()
-        {
-            GUI.color = new Color(.025f, .04f, .052f, .96f); GUI.Box(new Rect(670, 770, 620, 38), "");
-            DrawLegendChip(new Rect(686, 780, 12, 12), new Color(.35f, .9f, 1f), "可走");
-            DrawLegendChip(new Rect(790, 780, 12, 12), new Color(.34f, .72f, .62f), "已探索");
-            DrawLegendChip(new Rect(910, 780, 12, 12), new Color(.82f, .34f, .24f), "权限门");
-            DrawLegendChip(new Rect(1035, 780, 12, 12), new Color(.28f, .34f, .38f), "未知");
-            GUI.color = Color.white;
-        }
-
-        private static void DrawLegendChip(Rect rect, Color color, string label)
-        {
-            GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture);
-            GUI.color = new Color(.67f, .73f, .76f); GUI.Label(new Rect(rect.x + 18, rect.y - 4, 78, 20), label);
-        }
-
-        private static void DrawMapResourceChip(Rect rect, string label, int value, Color accent)
-        {
-            GUI.color = new Color(.025f, .04f, .052f, .96f); GUI.Box(rect, "");
-            GUI.color = accent; GUI.DrawTexture(new Rect(rect.x, rect.y, 3, rect.height), Texture2D.whiteTexture);
-            GUI.color = new Color(.56f, .64f, .68f); GUI.Label(new Rect(rect.x + 12, rect.y + 4, rect.width - 18, 14), label);
-            GUI.color = new Color(.92f, .95f, .96f); GUI.Label(new Rect(rect.x + 12, rect.y + 16, rect.width - 18, 18), value.ToString());
-            GUI.color = Color.white;
-        }
-        private bool DrawMapContentChoices()
-        {
-            RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
-            if (node.IsCombat || node.Type == RogueliteMapNodeType.Start || mapRun.CompletedNodes.Contains(node.Id)) return false;
-            IReadOnlyList<RogueliteNodeContentChoice> choices = mapRun.CurrentContentChoices;
-            if (choices.Count == 0) return false;
-            DrawConsolePanel(new Rect(390, 350, 1140, 360), node.DisplayName + " / " + MapNodeTypeLabel(node.Type), "选择一项已预览的结算  /  当前节点不会自动推进", new Color(1f, .72f, .24f));
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 420, 1040, 44), node.Summary + "\n风险与收益在确认前完整公开；额外战斗不会强制扣血。"); GUI.color = Color.white;
-            float gap = 18f; float cardWidth = (1040f - gap * (choices.Count - 1)) / Mathf.Max(1, choices.Count);
-            for (int i = 0; i < choices.Count; i++)
-            {
-                RogueliteNodeContentChoice choice = choices[i];
-                Rect card = new Rect(440 + i * (cardWidth + gap), 505, cardWidth, 112);
-                if (DrawConsoleButton(card, choice.DisplayName, choice.Preview, new Color(1f, .72f, .24f))) ChooseMapNodeContent(choice.Id);
-            }
-            return true;
-        }
-        private bool DrawMapWorkshop()
-        {
-            RogueliteMapNode node = RogueliteMapCatalog.Node(mapRun.CurrentNodeId);
-            if (node.Type != RogueliteMapNodeType.Workshop || !mapRun.CompletedNodes.Contains(node.Id)) return false;
-            DrawConsolePanel(new Rect(390, 350, 1140, 360), "野战工坊", "装备替换与以太校准  /  奖励领取后不会自动装备", new Color(.35f, .9f, 1f));
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(440, 420, 1040, 44), "当前配置：武器 " + (mapRun.EquippedWeaponId ?? "制式步枪") + "  /  术式 " + (mapRun.EquippedSpellId ?? "火矢") + "\n校准状态：" + (mapRun.IsAetherCalibrated ? "已完成，本局后续战斗生效" : "未完成，需要 2 以太")); GUI.color = Color.white;
-            RogueliteReward[] owned = mapRun.ClaimedRewards.Select(id => RogueliteMapCatalog.Rewards.First(item => item.Id == id)).ToArray();
-            for (int i = 0; i < owned.Length && i < 2; i++)
-            {
-                RogueliteReward reward = owned[i];
-                if (DrawConsoleButton(new Rect(440 + i * 300, 510, 270, 70), "装备 " + reward.DisplayName, reward.Kind == RogueliteRewardKind.Weapon ? "武器  /  已拥有" : "术式  /  已拥有", new Color(.35f, .9f, 1f))) EquipMapReward(reward.Id);
-            }
-            GUI.enabled = !mapRun.IsAetherCalibrated && mapRun.Aether >= 2;
-            if (DrawConsoleButton(new Rect(1040, 600, 400, 64), mapRun.IsAetherCalibrated ? "以太校准：已完成" : "以太校准", mapRun.IsAetherCalibrated ? "本局校准已注入" : "消耗 2 以太  /  下一场 +1 护甲", new Color(.35f, .9f, 1f))) CalibrateMapAether();
-            GUI.enabled = true;
-            return true;
-        }
-        private static Vector2 MapNodeCenter(RogueliteMapNode node) => new Vector2(486 + node.GridX * 145, 402 + node.GridY * 82);
-        private void DrawMapLine(Vector2 from, Vector2 to, Color color)
-        {
-            Vector2 delta = to - from; float angle = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
-            Color previous = GUI.color; Matrix4x4 previousMatrix = GUI.matrix; GUI.color = color;
-            GUIUtility.RotateAroundPivot(angle, from);
-            GUI.DrawTexture(new Rect(from.x, from.y - 2f, delta.magnitude, 4f), barTexture != null ? barTexture : Texture2D.whiteTexture);
-            GUI.matrix = previousMatrix; GUI.color = previous;
-        }
-        private void DrawMapNode(RogueliteMapNode node)
-        {
-            RogueliteMapNodeVisualState visualState = mapRun.VisualStateFor(node.Id);
-            bool available = visualState == RogueliteMapNodeVisualState.Available;
-            Vector2 center = MapNodeCenter(node); Rect rect = new Rect(center.x - 54, center.y - 24, 108, 48);
-            bool identified = visualState != RogueliteMapNodeVisualState.Unknown;
-            string type = identified ? MapNodeTypeLabel(node.Type) : "未识别";
-            string name = identified ? node.DisplayName : "未知房间";
-            string state = MapNodeStateLabel(visualState, node);
-            GUI.enabled = available;
-            Color accent = MapNodeStateColor(visualState);
-            if (DrawConsoleButton(rect, name, type + " / " + state, accent)) SelectMapNode(node.Id);
-            GUI.enabled = true;
-        }
-        private static string MapNodeTypeLabel(RogueliteMapNodeType type) => type == RogueliteMapNodeType.Combat ? "战斗" : type == RogueliteMapNodeType.Elite ? "精英" : type == RogueliteMapNodeType.Event ? "事件" : type == RogueliteMapNodeType.Workshop ? "工坊" : type == RogueliteMapNodeType.Shop ? "商店" : type == RogueliteMapNodeType.Rest ? "休整" : type == RogueliteMapNodeType.Treasure ? "库房" : type == RogueliteMapNodeType.Finale ? "核心" : "入口";
-        private static string MapNodeStateLabel(RogueliteMapNodeVisualState state, RogueliteMapNode node) => state == RogueliteMapNodeVisualState.Current ? "当前位置" : state == RogueliteMapNodeVisualState.Available ? "可进入" : state == RogueliteMapNodeVisualState.Locked ? "需权限卡 " + node.RequiredAccessCards : state == RogueliteMapNodeVisualState.Cleared ? "已清理" : state == RogueliteMapNodeVisualState.Visited ? "已访问" : state == RogueliteMapNodeVisualState.Known ? "已知未探索" : "未知";
-        private static Color MapNodeStateColor(RogueliteMapNodeVisualState state) => state == RogueliteMapNodeVisualState.Current || state == RogueliteMapNodeVisualState.Available ? new Color(.35f, .9f, 1f) : state == RogueliteMapNodeVisualState.Cleared ? new Color(.34f, .72f, .62f) : state == RogueliteMapNodeVisualState.Locked ? new Color(.82f, .34f, .24f) : state == RogueliteMapNodeVisualState.Known ? new Color(1f, .72f, .24f) : new Color(.28f, .34f, .38f);
-        private void DrawShortRunInterlude()
-        {
-            ShortRogueliteRun run = rogueliteRun.ShortRun;
-            DrawConsolePanel(new Rect(500, 220, 920, 600), run.Phase == ShortRoguelitePhase.Event ? "现场事件：损坏的导流阀" : run.Phase == ShortRoguelitePhase.Salvage ? "收获：回收箱" : run.Phase == ShortRoguelitePhase.Upgrade ? "角色升级：校准台" : "两关肉鸽结算", "短局阶段选择", new Color(1f, .72f, .24f));
-            if (run.Phase == ShortRoguelitePhase.Event)
-            {
-                GUI.Label(new Rect(550, 334, 760, 56), "用以太素修复护甲衬层。第二关获得 +1 护甲。");
-                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "执行现场修复", "第二关获得 +1 护甲", new Color(.35f, .9f, 1f))) ChooseShortEvent();
-            }
-            else if (run.Phase == ShortRoguelitePhase.Salvage)
-            {
-                GUI.Label(new Rect(550, 334, 760, 56), "回收一枚护盾电池。第二关快捷栏获得额外护盾电池。");
-                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "收取护盾电池", "第二关快捷栏追加道具", new Color(.35f, .9f, 1f))) ChooseShortSalvage();
-            }
-            else if (run.Phase == ShortRoguelitePhase.Upgrade)
-            {
-                GUI.Label(new Rect(550, 334, 760, 56), "校准主武器。第二关装备校准步枪，伤害从 4 提升到 5。");
-                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "安装校准组件", "校准步枪伤害 4 → 5", new Color(.35f, .9f, 1f))) { ChooseShortUpgrade(); OpenShortRunPhase(); }
-            }
-            else
-            {
-                GUI.Label(new Rect(550, 334, 760, 80), "两关行动完成。已应用：" + string.Join(" / ", run.Choices));
-                if (DrawConsoleButton(new Rect(550, 460, 350, 54), "返回肉鸽配置", "结束当前短局", new Color(.56f, .66f, .71f))) { DeleteShortRogueliteSave(); rogueliteRun = null; }
-            }
-            if (DrawConsoleButton(new Rect(960, 650, 350, 54), "返回开发菜单", "离开当前流程", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
-        }
-        private void DrawDeveloperBriefing()
-        {
-            DrawConsolePanel(new Rect(390, 150, 1140, 760), "战前简报", mapRun == null ? "剧情行动 / 确认任务与撤回路径" : "肉鸽区域 / 确认当前节点与资源状态", new Color(.35f, .9f, 1f));
-            GUI.color = new Color(.68f, .78f, .88f); GUI.Label(new Rect(450, 265, 1040, 30), "任务编号：" + developerPreparation.MissionId + "   /   节点：" + (mapRun == null ? "剧情测试" : RogueliteMapCatalog.Node(mapRun.CurrentNodeId).DisplayName)); GUI.Label(new Rect(450, 310, 1040, 30), "任务目标：" + developerPreparation.RulesSummary); GUI.Label(new Rect(450, 355, 1040, 30), "敌方编成：" + developerPreparation.EnemySummary); GUI.color = Color.white;
-            GUI.color = new Color(.04f, .065f, .08f, .9f); GUI.Box(new Rect(450, 420, 1040, 110), "");
-            GUI.color = new Color(.55f, .64f, .69f); GUI.Label(new Rect(475, 440, 980, 24), "行动规则");
-            GUI.color = new Color(.9f, .94f, .96f); GUI.Label(new Rect(475, 472, 980, 42), "无倒计时  /  战术重开恢复本场初始状态  /  战斗结束后返回当前推进节点"); GUI.color = Color.white;
-            if (mapRun != null)
-            {
-                DrawMapResourceChip(new Rect(450, 570, 150, 42), "零件", mapRun.Parts, new Color(.95f, .76f, .36f));
-                DrawMapResourceChip(new Rect(620, 570, 150, 42), "以太", mapRun.Aether, new Color(.35f, .9f, 1f));
-                DrawMapResourceChip(new Rect(790, 570, 150, 42), "补给", mapRun.Supplies, new Color(.48f, .78f, .66f));
-                DrawMapResourceChip(new Rect(960, 570, 150, 42), "权限卡", mapRun.AccessCards, new Color(.82f, .34f, .24f));
-            }
-            if (rogueliteRun != null) GUI.Label(new Rect(450, 640, 1040, 28), "包：铁之回响 / 种子 " + rogueliteRun.Package.Seed + " / " + (rogueliteRun.Kind == RogueliteLaunchKind.StoryChain ? "故事链" : "模板沙盒"));
-            if (DrawConsoleButton(new Rect(450, 745, 490, 64), "开始正式战斗", "进入已确认的任务", new Color(.35f, .9f, 1f))) StartDeveloperCombat();
-            if (DrawConsoleButton(new Rect(1000, 745, 490, 64), mapRun != null ? "返回推进地图" : "返回开发菜单", "不改变当前规则", new Color(.56f, .66f, .71f))) { if (mapRun != null) ReturnToMapRun(); else ReturnToDeveloperMenu(); }
-        }
-        private void DrawDeveloperFlowBar()
-        {
-            developerFlow.RefreshOutcome();
-            GUI.color = new Color(.018f, .03f, .043f, .98f); GUI.Box(new Rect(24, 930, 1866, 72), ""); GUI.color = new Color(.35f, .9f, 1f); GUI.DrawTexture(new Rect(24, 930, 1866, 3), Texture2D.whiteTexture);
-            GUI.color = new Color(.9f, .95f, .97f); GUI.Label(new Rect(52, 950, 600, 30), "当前流程 // " + developerFlow.Phase);
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && DrawConsoleButton(new Rect(1450, 944, 190, 42), "战术重开", "恢复初始状态", new Color(.35f, .9f, 1f))) TacticalRestartDeveloperCombat();
-            if (DrawConsoleButton(new Rect(1660, 944, 190, 42), "返回入口", "开发菜单", new Color(.56f, .66f, .71f))) ReturnToDeveloperMenu();
-            if (developerFlow.Phase == CombatFlowPhase.Active && rogueliteRun != null)
-            {
-                if (DrawConsoleButton(new Rect(1240, 944, 95, 42), "胜利", "测试", new Color(.35f, .9f, 1f))) ForceCurrentOutcome(true);
-                if (DrawConsoleButton(new Rect(1340, 944, 95, 42), "失败", "测试", new Color(.8f, .32f, .23f))) ForceCurrentOutcome(false);
-            }
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && rogueliteRun != null && DrawConsoleButton(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "继续 / 结算" : "返回肉鸽菜单", "推进当前流程", new Color(1f, .72f, .24f))) ContinueRogueliteAfterVictory();
-            if ((developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat) && mapRun != null && DrawConsoleButton(new Rect(1040, 944, 190, 42), developerFlow.Phase == CombatFlowPhase.Victory ? "查看战斗结算" : "返回推进地图", "区域推进", new Color(1f, .72f, .24f))) ReturnToMapRun();
         }
         private void DrawGrid(Rect board)
         {
@@ -739,35 +941,57 @@ namespace OCC.Combat.Presentation
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
             {
                 GridPosition p = new GridPosition(x, y);
-                Rect cell = new Rect(board.x + x * CellSize, board.y + (state.Map.Height - 1 - y) * CellSize, CellSize - 2, CellSize - 2);
+                BattlefieldRect cellContract = battlefield.CellRect(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Height, p);
+                Rect cell = new Rect(cellContract.X, cellContract.Y, cellContract.Width, cellContract.Height);
                 TileState tile = state.Map.GetTile(p);
-                GUI.color = tile.IsObjective ? new Color(.55f, .2f, .15f) : tile.Cover == CoverType.Light ? new Color(.3f, .32f, .18f) : tile.Cover == CoverType.Heavy ? new Color(.26f, .25f, .34f) : new Color(.13f, .16f, .18f);
-                GUI.Box(cell, "");
+                GUI.color = Color.white;
+                string floorKey = FloorKeyForCurrentLevel(x, y);
+                GUI.DrawTexture(cell, formalRelayTextures[floorKey], ScaleMode.StretchToFill, true);
+                int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % 6;
+                if (fireBattle?.HasFireground(p) == true)
+                {
+                    GUI.color = Color.white;
+                    GUI.DrawTexture(cell, formalFiregroundFrames[environmentFrame], ScaleMode.StretchToFill, true);
+                }
+                else if (tile.SmokeExpiresAt > state.CurrentTime)
+                {
+                    GUI.color = Color.white;
+                    GUI.DrawTexture(cell, formalSmokeFrames[environmentFrame], ScaleMode.StretchToFill, true);
+                }
 
                 // Both core tactical ranges stay visible during the hero turn.
                 if (IsInMoveRange(p))
                 {
-                    GUI.color = new Color(.1f, .8f, 1f, selectedAction == "\u79fb\u52a8" ? .75f : .35f);
-                    GUI.DrawTexture(new Rect(cell.x + 2, cell.y + 2, cell.width - 4, cell.height - 4), Texture2D.whiteTexture);
+                    GUI.color = new Color(1f, 1f, 1f, selectedAction == "\u79fb\u52a8" ? 1f : .45f);
+                    GUI.DrawTexture(cell, formalOverlayTextures["move_range"], ScaleMode.StretchToFill, true);
                 }
-                if (IsInAttackRange(p)) DrawOutline(cell, new Color(.25f, .58f, 1f, selectedAction == "\u653b\u51fb" ? 1f : .7f));
-                if ((selectedAction == "\u6280\u80fd1" || selectedAction == "\u6280\u80fd2") && IsInSelectedRange(p))
+                if (IsInAttackRange(p))
                 {
-                    GUI.color = new Color(1f, .45f, .1f, .75f);
-                    GUI.DrawTexture(new Rect(cell.x + 5, cell.y + 5, cell.width - 10, cell.height - 10), Texture2D.whiteTexture);
+                    GUI.color = new Color(1f, 1f, 1f, selectedAction == "\u653b\u51fb" ? 1f : .65f);
+                    GUI.DrawTexture(cell, formalOverlayTextures["attack_range"], ScaleMode.StretchToFill, true);
+                }
+                int selectedFireSlot = selectedAction == "\u6280\u80fd1" ? 0 : selectedAction == "\u6280\u80fd2" ? 1 : -1;
+                FireSpellDefinition selectedFireSpell = selectedFireSlot < 0 ? null : FireSpellInSlot(selectedFireSlot);
+                FireSpellPreview fireCellPreview = selectedFireSpell == null ? null : BuildFireSpellPreviewAt(selectedFireSpell, p);
+                if (fireCellPreview?.CanCommit == true)
+                {
+                    GUI.color = Color.white;
+                    GUI.DrawTexture(cell, formalOverlayTextures[fireCellPreview.FriendlyFireRisk ? "high_risk" : "attack_range"], ScaleMode.StretchToFill, true);
                 }
 
                 GUI.color = Color.white;
                 UnitState unit = state.Units.Values.FirstOrDefault(u => u.IsAlive && u.Position == p);
                 if (unit != null)
                 {
-                    if (unit.Id == selectedTargetId) DrawOutline(cell, new Color(1f, .8f, .2f, 1f));
+                    if (unit.Id == selectedTargetId) GUI.DrawTexture(cell, formalOverlayTextures["selected"], ScaleMode.StretchToFill, true);
                     Texture2D unitTexture = FormalUnitTexture(unit);
                     if (unitTexture != null)
                     {
-                        GUI.color = Color.white;
+                        GUI.color = visualFeedback != null ? visualFeedback.UnitPresentationTint(unit) : Color.white;
                         Rect unitRect = StaticUnitPresentationRect(unit, new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8));
-                        unitRect.x += visualFeedback != null ? visualFeedback.UnitShakeOffset(unit) : 0f;
+                        Vector2 motionOffset = visualFeedback != null ? visualFeedback.UnitPresentationOffset(unit) : Vector2.zero;
+                        unitRect.x += motionOffset.x + (visualFeedback != null ? visualFeedback.UnitShakeOffset(unit) : 0f);
+                        unitRect.y += motionOffset.y;
                         GUI.DrawTexture(unitRect, unitTexture, ScaleMode.ScaleToFit, true);
                     }
                     else
@@ -782,39 +1006,34 @@ namespace OCC.Combat.Presentation
                 }
                 if (tile.IsObjective)
                 {
-                    Texture2D objectiveTexture = Resources.Load<Texture2D>(tile.IsDestroyed ? "Art/FormalRelay32/relay_destroyed" : "Art/FormalRelay32/relay");
-                    if (objectiveTexture != null)
-                    {
-                        objectiveTexture.filterMode = FilterMode.Point;
-                        objectiveTexture.wrapMode = TextureWrapMode.Clamp;
-                        GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), objectiveTexture, ScaleMode.ScaleToFit, true);
-                    }
-                    if (!tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "\u4e2d\u7ee7\u5668");
+                    string relayState = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
+                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[relayState], ScaleMode.ScaleToFit, true);
+                    if (!tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "导能柱");
                 }
-                else if (tile.Cover == CoverType.Light && tile.IsDestroyed)
+                else if (tile.Cover == CoverType.Light)
                 {
-                    Texture2D coverTexture = Resources.Load<Texture2D>("Art/FormalRelay32/light_cover_destroyed");
-                    if (coverTexture != null)
-                    {
-                        coverTexture.filterMode = FilterMode.Point;
-                        coverTexture.wrapMode = TextureWrapMode.Clamp;
-                        GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), coverTexture, ScaleMode.ScaleToFit, true);
-                    }
+                    string coverState = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
+                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[coverState], ScaleMode.ScaleToFit, true);
                 }
-                else if (tile.Cover == CoverType.Heavy && tile.IsDestroyed)
+                else if (tile.Cover == CoverType.Heavy)
                 {
-                    Texture2D coverTexture = Resources.Load<Texture2D>("Art/FormalRelay32/heavy_cover_destroyed");
-                    if (coverTexture != null)
-                    {
-                        coverTexture.filterMode = FilterMode.Point;
-                        coverTexture.wrapMode = TextureWrapMode.Clamp;
-                        GUI.DrawTexture(new Rect(cell.x + 6, cell.y + 6, cell.width - 12, cell.height - 12), coverTexture, ScaleMode.ScaleToFit, true);
-                    }
+                    string coverState = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
+                    GUI.DrawTexture(new Rect(cell.x + 6, cell.y + 6, cell.width - 12, cell.height - 12), formalRelayTextures[coverState], ScaleMode.ScaleToFit, true);
+                }
+                else if (trainingRangeActive && tile.IsDevice)
+                {
+                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact"], ScaleMode.ScaleToFit, true);
+                    GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "设备");
+                }
+                if (trainingRangeActive && tile.IsWater)
+                {
+                    GUI.color = new Color(.38f, .82f, .94f, .92f);
+                    GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "水面"); GUI.color = Color.white;
                 }
                 if (state.Loot != null && state.Loot.Position == p)
                 {
                     GUI.color = Color.white;
-                    Texture2D lootTexture = state.Loot.IsLooted ? formalLootOpenTexture : formalLootTexture;
+                    Texture2D lootTexture = state.Loot.IsLooted ? formalRelayTextures["loot_crate_empty"] : formalLootTexture;
                     if (lootTexture != null)
                         GUI.DrawTexture(new Rect(cell.x + 12, cell.y + 12, cell.width - 24, cell.height - 24), lootTexture, ScaleMode.ScaleToFit, true);
                     else
@@ -824,8 +1043,8 @@ namespace OCC.Combat.Presentation
                     }
                     GUI.color = Color.white;
                 }
-                if (e.type == EventType.MouseDown && e.button == 0 && cell.Contains(e.mousePosition)) { HandleCellClick(p); e.Use(); }
             }
+            if (e.type == EventType.MouseDown && e.button == 0 && battlefield.TryResolveCell(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Width, state.Map.Height, e.mousePosition.x, e.mousePosition.y, out GridPosition clicked)) { HandleCellClick(clicked); e.Use(); }
         }
 
         private static void DrawOutline(Rect rect, Color color)
@@ -837,7 +1056,7 @@ namespace OCC.Combat.Presentation
             GUI.DrawTexture(new Rect(rect.xMax - 4, rect.y + 1, 3, rect.height - 2), Texture2D.whiteTexture);
             GUI.color = Color.white;
         }
-        private void DrawPanel(Rect rect) { GUI.Box(rect, "\u6218\u6597\u63a7\u5236\u53f0"); UnitState active = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); GUI.Label(new Rect(rect.x + 14, rect.y + 34, 280, 22), $"\u884c\u52a8\u5355\u4f4d：{active.DisplayName} | AP {active.ActionPoints}"); GUI.Label(new Rect(rect.x + 14, rect.y + 60, 280, 20), $"\u4e3b\u89d2\u8d44\u6e90：{hero.Health}/{hero.MaxHealth} HP  {hero.Shield} \u62a4\u76fe  {hero.Mana}/{hero.MaxMana} \u4ee5\u592a"); GUI.Label(new Rect(rect.x + 14, rect.y + 82, 280, 20), GetRangeDescription()); string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u65bd\u672f", "\u9053\u5177", "\u4e92\u52a8" }; for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 108 + (i / 2) * 34, 128, 28), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i]; if (GUI.Button(new Rect(rect.x + 14, rect.y + 216, 128, 30), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero")); if (GUI.Button(new Rect(rect.x + 150, rect.y + 216, 128, 30), "\u6218\u672f\u91cd\u5f00")) { state = snapshot.Clone(); CombatResolver.BeginTurn(state, "hero"); } GUI.Label(new Rect(rect.x + 14, rect.y + 256, 280, 20), "\u884c\u52a8\u6761\uff1a\u6570\u503c\u8d8a\u4f4e\u8d8a\u5148\u884c\u52a8"); int row = 0; foreach (UnitState unit in state.Units.Values) { GUI.Label(new Rect(rect.x + 14, rect.y + 280 + row * 27, 125, 20), $"{unit.DisplayName} HP{unit.Health} \u62a4{unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 142, rect.y + 284 + row * 27, 130, 16), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; } GUI.Label(new Rect(rect.x + 14, rect.y + 410, 280, 20), "\u654c\u4eba\u610f\u56fe\u548c\u6218\u6597\u8bb0\u5f55"); for (int i = 0; i < Math.Min(6, state.EventLog.Count); i++) GUI.Label(new Rect(rect.x + 14, rect.y + 434 + i * 18, 280, 18), state.EventLog[i]); }
+        private void DrawPanel(Rect rect) { GUI.Box(rect, "\u6218\u6597\u63a7\u5236\u53f0"); UnitState active = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); GUI.Label(new Rect(rect.x + 14, rect.y + 34, 280, 22), $"\u884c\u52a8\u5355\u4f4d：{active.DisplayName} | AP {active.ActionPoints}"); GUI.Label(new Rect(rect.x + 14, rect.y + 60, 280, 20), $"\u4e3b\u89d2\u8d44\u6e90：{hero.Health}/{hero.MaxHealth} HP  {hero.Shield} \u62a4\u76fe  {hero.Mana}/{hero.MaxMana} \u4ee5\u592a"); GUI.Label(new Rect(rect.x + 14, rect.y + 82, 280, 20), GetRangeDescription()); string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u65bd\u672f", "\u9053\u5177", "\u4e92\u52a8" }; for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 108 + (i / 2) * 34, 128, 28), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i]; if (GUI.Button(new Rect(rect.x + 14, rect.y + 216, 128, 30), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero")); if (GUI.Button(new Rect(rect.x + 150, rect.y + 216, 128, 30), "\u6218\u672f\u91cd\u5f00")) { state = snapshot.Clone(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); } GUI.Label(new Rect(rect.x + 14, rect.y + 256, 280, 20), "\u884c\u52a8\u6761\uff1a\u6570\u503c\u8d8a\u4f4e\u8d8a\u5148\u884c\u52a8"); int row = 0; foreach (UnitState unit in state.Units.Values) { GUI.Label(new Rect(rect.x + 14, rect.y + 280 + row * 27, 125, 20), $"{unit.DisplayName} HP{unit.Health} \u62a4{unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 142, rect.y + 284 + row * 27, 130, 16), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; } GUI.Label(new Rect(rect.x + 14, rect.y + 410, 280, 20), "\u654c\u4eba\u610f\u56fe\u548c\u6218\u6597\u8bb0\u5f55"); for (int i = 0; i < Math.Min(6, state.EventLog.Count); i++) GUI.Label(new Rect(rect.x + 14, rect.y + 434 + i * 18, 280, 18), state.EventLog[i]); }
         private void ApplyBuild(int build)
         {
             UnitState hero = state.GetUnit("hero");
@@ -851,15 +1070,15 @@ namespace OCC.Combat.Presentation
             return string.Join(" ", unit.Statuses.Select(entry => $"{StatusName(entry.Key)}{entry.Value}"));
         }
 
-        private static string StatusName(StatusType status) => status == StatusType.Burning ? "\u71c3\u70e7" : status == StatusType.Slow ? "\u7f13\u6162" : status == StatusType.Bound ? "\u675f\u7f1a" : "\u7834\u7532";
+        private static string StatusName(StatusType status) => CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(status)).ShortLabel;
 
-        private static void DrawStatusMarkers(UnitState unit, Rect cell)
+        private void DrawStatusMarkers(UnitState unit, Rect cell)
         {
             int index = 0;
             foreach (KeyValuePair<StatusType, int> status in unit.Statuses)
             {
-                GUI.color = StatusColor(status.Key);
-                GUI.DrawTexture(new Rect(cell.x + 5 + index * 13, cell.yMax - 9, 10, 5), Texture2D.whiteTexture);
+                GUI.color = Color.white;
+                GUI.DrawTexture(new Rect(cell.x + 4 + index * 15, cell.yMax - 17, 14, 14), formalStatusTextures[status.Key], ScaleMode.ScaleToFit, true);
                 index++;
             }
             GUI.color = Color.white;
@@ -867,9 +1086,8 @@ namespace OCC.Combat.Presentation
 
         private static Color StatusColor(StatusType status)
         {
-            return status == StatusType.Burning ? new Color(1f, .34f, .2f) :
-                status == StatusType.Bound ? new Color(.3f, .86f, 1f) :
-                status == StatusType.ArmorBreak ? new Color(1f, .78f, .2f) : new Color(.45f, .78f, .7f);
+            CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(status));
+            return ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color color) ? color : Color.white;
         }
 
         private string GetRangeDescriptionStageTwo()
@@ -881,57 +1099,249 @@ namespace OCC.Combat.Presentation
             return $"\u5f53\u524d\uff1a{rule} | \u9ad8\u4eae {count} \u683c";
         }
 
-        private void HandleCellClick(GridPosition p) { if (state.ActiveUnitId != "hero" || state.IsVictory || state.IsDefeat) return; UnitState target = state.Units.Values.FirstOrDefault(u => !u.IsHero && u.IsAlive && u.Position == p); if (target != null) selectedTargetId = target.Id; if (selectedAction == "\u79fb\u52a8") TryCommand(CombatCommand.Move("hero", p, FacingToward(state.GetUnit("hero").Position, p))); else if (selectedAction == "\u653b\u51fb" && target != null) TryCommand(CombatCommand.Attack("hero", target.Id)); else if (selectedAction == "\u6280\u80fd1" && target != null) TryCommand(CombatCommand.UseSkill("hero", 0, target.Id)); else if (selectedAction == "\u6280\u80fd2" && target != null) TryCommand(CombatCommand.UseSkill("hero", 1, target.Id)); else if (selectedAction == "\u641c\u522e") TryCommand(CombatCommand.Loot("hero")); else if (selectedAction == "\u4e92\u52a8") TryCommand(CombatCommand.Interact("hero", p)); }
+        private void HandleCellClick(GridPosition p)
+        {
+            UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
+            UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
+            if (selectedAction == "攻击" || selectedAction == "技能1" || selectedAction == "技能2")
+            {
+                selectedTargetId = enemy?.Id;
+                MarkPresentation(UiPresentationArea.Combat);
+                if (enemy != null) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatTargetConfirmed, enemy.Id));
+            }
+            int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
+            if (fireSpell != null)
+            {
+                TryFireSpellCell(fireSpell, clickedUnit, p);
+                return;
+            }
+            ArtifactDefinition artifact = CurrentArmedInventoryItem != null && ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
+                ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
+            if (selectedAction == "技能1" && artifact != null) { TryArtifactCell(artifact, clickedUnit, p); return; }
+            string invalidReason = battlefield.InvalidReasonForCell(state, selectedAction, p);
+            if (!string.IsNullOrEmpty(invalidReason))
+            {
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, selectedAction, message: invalidReason));
+                return;
+            }
+            if (selectedAction == "\u79fb\u52a8") TryCommand(CombatCommand.Move("hero", p, FacingToward(state.GetUnit("hero").Position, p)));
+            else if (selectedAction == "\u653b\u51fb" && enemy != null) TryCommand(CombatCommand.Attack("hero", enemy.Id));
+            else if (selectedAction == "\u6280\u80fd1") TrySkillCell(0, state.GetUnit("hero").SkillOne, clickedUnit, p);
+            else if (selectedAction == "\u6280\u80fd2") TrySkillCell(1, state.GetUnit("hero").SkillTwo, clickedUnit, p);
+            else if (selectedAction == "\u641c\u522e") TryCommand(CombatCommand.Loot("hero"));
+            else if (selectedAction == "\u4e92\u52a8") TryCommand(CombatCommand.Interact("hero", p));
+        }
+        private void EnsureArtifactBattle()
+        {
+            if (artifactBattle == null || artifactBattle.Combat != state) artifactBattle = new ArtifactBattleState(state);
+        }
+        private bool BuildArtifactTarget(ArtifactDefinition artifact, GridPosition position, out ArtifactTarget target)
+        {
+            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
+            if (artifact.TargetRule == ArtifactTargetRule.TwoAllies && unit != null)
+            { target = ArtifactTarget.Pair(unit.Id, "hero", position); return unit.Id != "hero"; }
+            target = unit == null ? ArtifactTarget.At(position) : ArtifactTarget.Unit(unit.Id, position); return true;
+        }
+        private void TryArtifactCell(ArtifactDefinition artifact, UnitState clickedUnit, GridPosition position)
+        {
+            EnsureArtifactBattle();
+            if (!BuildArtifactTarget(artifact, position, out ArtifactTarget target)) return;
+            GridPosition source = state.GetUnit("hero").Position;
+            int uses = CurrentArmedInventoryItem?.RemainingUses ?? trainingRangeArtifactUsesRemaining;
+            ArtifactPreview preview = ArtifactEngine.Preview(artifactBattle, "hero", artifact, target, uses);
+            if (!preview.CanCommit)
+            {
+                string reason = string.Join("；", preview.Failures); state.AddLog(reason);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, artifact.Id, message: reason));
+                MarkPresentation(UiPresentationArea.Combat); return;
+            }
+            ArtifactExecution execution;
+            if (CurrentArmedInventoryItem != null)
+            {
+                string instanceId = CurrentArmedInventoryItem.InstanceId;
+                execution = ArtifactEngine.ExecuteInventory(artifactBattle, "hero", instanceId, target);
+                if (state.ItemInventory.Get(instanceId) == null) armedInventoryItemId = null;
+                PersistCombatInventory();
+            }
+            else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
+            state.AddLog(artifact.DisplayName + " // " + execution.Steps.Count + " 项确定性结果");
+            selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, artifact.Id));
+            visualFeedback?.NotifyArtifact(artifact, source, preview.Cells, execution);
+            if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0)
+                PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
+            developerFlow.RefreshOutcome();
+        }
+        private void TryFireSpellCell(FireSpellDefinition spell, UnitState clickedUnit, GridPosition position)
+        {
+            if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+            if (trainingRangeSession?.CurrentArtifact != null && trainingRangeArtifactUsesRemaining <= 0)
+            {
+                const string depleted = "法宝封装次数已耗尽；请打开靶场配置并重新装载。";
+                state.AddLog(depleted);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, spell.Id, message: depleted));
+                MarkPresentation(UiPresentationArea.Combat);
+                return;
+            }
+            Facing facing = FacingToward(state.GetUnit("hero").Position, position);
+            FireSpellTarget target = clickedUnit == null ? FireSpellTarget.At(position, facing) : FireSpellTarget.Unit(clickedUnit.Id, facing);
+            FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", spell, target);
+            selectedTargetId = clickedUnit?.Id;
+            if (!preview.CanCommit)
+            {
+                string reason = string.Join("；", preview.Failures); state.AddLog(reason);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, spell.Id, message: reason)); MarkPresentation(UiPresentationArea.Combat); return;
+            }
+            GridPosition source = state.GetUnit("hero").Position;
+            FireSpellExecution execution = FireSpellEngine.Execute(fireBattle, "hero", spell, target);
+            if (trainingRangeSession?.CurrentArtifact != null) trainingRangeArtifactUsesRemaining--;
+            if (!trainingRangeActive && !string.IsNullOrEmpty(armedInventoryItemId))
+            {
+                string usedId = armedInventoryItemId; state.ConsumeInventoryItem(usedId); if (state.ItemInventory.Get(usedId) == null) armedInventoryItemId = null; PersistCombatInventory();
+            }
+            if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
+            state.AddLog(spell.DisplayName + " // " + execution.Steps.Count + " 项确定性结果");
+            selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, spell.Id));
+            visualFeedback?.NotifyFireSpell(spell, source, preview.Cells);
+            if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0) PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
+            developerFlow.RefreshOutcome();
+        }
+
+        private void TrySkillCell(int slot, SkillDefinition skill, UnitState clickedUnit, GridPosition position)
+        {
+            if (!battlefield.IsSkillTargetInRange(state, skill, position))
+            {
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, skill == null ? "技能" : skill.DisplayName, message: "目标超出有效范围"));
+                return;
+            }
+            if (skill.TargetRule == SkillTargetRule.GridCell || skill.TargetRule == SkillTargetRule.Destructible)
+                TryCommand(CombatCommand.UseSkillAt("hero", slot, position, FacingToward(state.GetUnit("hero").Position, position)));
+            else if (skill.TargetRule == SkillTargetRule.Self)
+                TryCommand(CombatCommand.UseSkill("hero", slot, null));
+            else if (clickedUnit != null)
+                TryCommand(CombatCommand.UseSkill("hero", slot, clickedUnit.Id));
+        }
         private void TryCommand(CombatCommand command)
         {
             try
             {
-                UnitState target = command.TargetUnitId == null ? null : state.Units.Values.FirstOrDefault(u => u.Id == command.TargetUnitId);
-                int healthBefore = target == null ? 0 : target.Health;
-                GridPosition source = state.GetUnit(command.UnitId).Position;
-                int tileDurabilityBefore = command.Type == CombatCommandType.Interact && state.Map.IsInside(command.Destination) ? state.Map.GetTile(command.Destination).Durability : -1;
-                CombatResolver.Resolve(state, command);
-                if (target != null && healthBefore > target.Health) visualFeedback?.NotifyAttack(source, target.Position, healthBefore - target.Health, !target.IsAlive);
-                if (tileDurabilityBefore >= 0 && state.Map.GetTile(command.Destination).Durability < tileDurabilityBefore) visualFeedback?.NotifyDestructible(command.Destination, state.Map.GetTile(command.Destination));
-                if (state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0) CombatResolver.EndTurn(state, state.GetUnit("hero")); developerFlow.RefreshOutcome();
+                UnitState commandUnit = state.GetUnit(command.UnitId);
+                SkillDefinition deliveredSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null
+                    ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
+                GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
+                GridPosition movementSource = deliverySource;
+                UnitState commandTarget = string.IsNullOrWhiteSpace(command.TargetUnitId) ? null : state.GetUnit(command.TargetUnitId);
+                GridPosition deliveryTarget = commandTarget?.Position ??
+                    (deliveredSkill != null && (deliveredSkill.TargetRule == SkillTargetRule.GridCell || deliveredSkill.TargetRule == SkillTargetRule.Destructible)
+                        ? command.Destination : deliverySource);
+                CombatEffectExecution execution;
+                IReadOnlyList<FireSpellExecution> fireTriggers = Array.Empty<FireSpellExecution>();
+                if (command.Type == CombatCommandType.Attack)
+                {
+                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+                    FireWeaponAttackResolution attack = FireSpellEngine.ResolveWeaponAttack(fireBattle, command.UnitId,
+                        command.TargetUnitId);
+                    execution = attack.WeaponExecution;
+                    fireTriggers = attack.TriggerExecutions;
+                }
+                else execution = CombatResolver.Resolve(state, command);
+                if (trainingRangeActive && deliveredSkill != null) trainingRangeSession?.RecordExternal(execution);
+                if (command.Type == CombatCommandType.Move && commandUnit != null && fireBattle != null)
+                {
+                    fireBattle.ResolveEntry(commandUnit, movementSource);
+                    PublishFireExecutions(FireSpellEngine.TriggerMarkedTargetMove(fireBattle, commandUnit.Id, movementSource));
+                    PublishFireExecutions(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
+                }
+                selectedTargetId = null;
+                MarkPresentation(UiPresentationArea.Combat);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
+                PublishCombatEffects(execution);
+                PublishFireExecutions(fireTriggers);
+                visualFeedback?.NotifySkillDelivery(deliveredSkill, deliverySource, deliveryTarget);
+                if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0)
+                    PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
+                developerFlow.RefreshOutcome();
             }
-            catch (InvalidOperationException error) { state.AddLog(error.Message); }
+            catch (InvalidOperationException error)
+            {
+                state.AddLog(error.Message);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, command.Type.ToString(), message: error.Message));
+            }
+        }
+
+        private void PublishFireExecutions(IEnumerable<FireSpellExecution> executions)
+        {
+            if (executions == null) return;
+            foreach (FireSpellExecution execution in executions)
+            {
+                if (execution == null) continue;
+                FireSpellDefinition spell = execution.Preview?.Spell;
+                FireSpellResultStep firstStep = execution.Steps.FirstOrDefault();
+                UnitState stepTarget = string.IsNullOrEmpty(firstStep.TargetId) ? null : state.GetUnit(firstStep.TargetId);
+                if (spell != null) visualFeedback?.NotifyFireSpell(spell,
+                    stepTarget?.Position ?? execution.Preview.Cells.FirstOrDefault(), execution.Preview.Cells);
+                state.AddLog((spell?.DisplayName ?? "火术触发") + " // " + execution.Steps.Count + " 项触发结果");
+            }
+        }
+        private void PublishCombatEffects(CombatEffectExecution execution)
+        {
+            if (visualFeedback == null || execution == null) return;
+            foreach (CombatEffectResult result in execution.Results)
+            {
+                UnitState source = state.GetUnit(result.SourceUnitId);
+                GridPosition sourcePosition = source == null ? result.PositionBefore : source.Position;
+                if (result.Kind == CombatEffectKind.Move && result.Changed)
+                    visualFeedback.NotifyMovement(result.PositionBefore, result.PositionAfter);
+                else if (result.Kind == CombatEffectKind.AbsorbShield && result.AppliedAmount > 0)
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb, sourcePosition, result.PositionAfter, result.AppliedAmount));
+                else if (result.Kind == CombatEffectKind.DamageHealth && result.AppliedAmount > 0)
+                {
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.Damage, sourcePosition, result.PositionAfter, result.AppliedAmount));
+                    if (result.ValueBefore > 0 && result.ValueAfter == 0)
+                        visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.UnitDefeated, sourcePosition, result.PositionAfter));
+                }
+                else if (result.Kind == CombatEffectKind.RestoreHealth && result.AppliedAmount > 0)
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.Healing, result.PositionAfter, result.AppliedAmount));
+                else if (result.Kind == CombatEffectKind.RestoreShield && result.AppliedAmount > 0)
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ShieldRestore, result.PositionAfter, result.AppliedAmount));
+                else if (result.Kind == CombatEffectKind.RestoreMana && result.AppliedAmount > 0)
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ManaRestore, result.PositionAfter, result.AppliedAmount));
+                else if (result.Kind == CombatEffectKind.ApplyStatus && result.AppliedAmount > 0)
+                    visualFeedback.NotifyStatusApplied(result.PositionAfter, result.Status, result.ValueAfter);
+                else if (result.Kind == CombatEffectKind.ClearStatus && result.AppliedAmount > 0)
+                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.StatusCleared, result.PositionAfter));
+                else if (result.Kind == CombatEffectKind.DamageObject && result.AppliedAmount > 0)
+                    visualFeedback.NotifyDestructible(result.PositionAfter, state.Map.GetTile(result.PositionAfter));
+            }
         }
         private void DrawUnitBars(UnitState unit, Rect rect) { GUI.color = Color.black; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = unit.IsHero ? new Color(.2f, .85f, .45f) : new Color(.9f, .22f, .22f); GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, (rect.width - 2) * unit.Health / unit.MaxHealth, rect.height - 2), Texture2D.whiteTexture); GUI.color = Color.white; }
-        private string GetEnemyIntent(UnitState enemy) => Distance(enemy.Position, state.GetUnit("hero").Position) <= 4 ? (enemy.Id == "caster" ? "\u706b\u672f" : "\u653b\u51fb") : "\u9760\u8fd1";
+        private string GetEnemyIntent(UnitState enemy)
+        {
+            UnitState hero = state.GetUnit("hero");
+            if (enemy.SkillOne != null && Distance(enemy.Position, hero.Position) <= enemy.SkillOne.Range &&
+                enemy.Mana >= enemy.SkillOne.ManaCost && enemy.IsSkillReady(enemy.SkillOne)) return "\u706b\u672f";
+            return Distance(enemy.Position, hero.Position) <= (enemy.MainHand ?? CombatCatalog.Rifle).Range ? "\u653b\u51fb" : "\u9760\u8fd1";
+        }
         private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selectedAction == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selectedAction == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selectedAction == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)
         {
-            if (state == null || state.ActiveUnitId != "hero") return false;
-            UnitState hero = state.GetUnit("hero");
-            int distance = Distance(hero.Position, p);
-            if (selectedAction == "\u79fb\u52a8") return IsInMoveRange(p);
-            if (selectedAction == "\u653b\u51fb") return IsInAttackRange(p);
-            if (selectedAction == "\u6280\u80fd1") return distance > 0 && distance <= hero.SkillOne.Range && state.Map.HasLineOfSight(hero.Position, p);
-            if (selectedAction == "\u6280\u80fd2") return distance > 0 && distance <= hero.SkillTwo.Range && state.Map.HasLineOfSight(hero.Position, p);
-            if (selectedAction == "\u641c\u522e") return state.Loot != null && !state.Loot.IsLooted && p == state.Loot.Position && distance == 1;
-            if (selectedAction == "\u4e92\u52a8") return distance == 1;
-            return false;
+            int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
+            if (spell != null)
+            {
+                if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+                return IsFireSpellCellValid(spell, p);
+            }
+            return battlefield.IsInSelectedRange(state, selectedAction, p);
         }
-
-        private bool IsInMoveRange(GridPosition p)
-        {
-            if (state == null || state.ActiveUnitId != "hero") return false;
-            UnitState hero = state.GetUnit("hero");
-            int distance = Distance(hero.Position, p);
-            return distance > 0 && distance <= 3 && state.Map.IsInside(p) && !state.Map.IsBlocked(p) && !state.IsOccupied(p);
-        }
-
-        private bool IsInAttackRange(GridPosition p)
-        {
-            if (state == null || state.ActiveUnitId != "hero") return false;
-            UnitState hero = state.GetUnit("hero");
-            int distance = Distance(hero.Position, p);
-            return distance > 0 && distance <= hero.MainHand.Range && state.Map.HasLineOfSight(hero.Position, p);
-        }
-        private static int Distance(GridPosition a, GridPosition b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
-        private static GridPosition StepToward(GridPosition a, GridPosition b) => Math.Abs(b.X - a.X) >= Math.Abs(b.Y - a.Y) ? new GridPosition(a.X + Math.Sign(b.X - a.X), a.Y) : new GridPosition(a.X, a.Y + Math.Sign(b.Y - a.Y));
-        private static Facing FacingToward(GridPosition a, GridPosition b) => Math.Abs(b.X - a.X) >= Math.Abs(b.Y - a.Y) ? (b.X >= a.X ? Facing.East : Facing.West) : (b.Y >= a.Y ? Facing.North : Facing.South);
+        private bool IsSkillTargetInRange(SkillDefinition skill, GridPosition position) => battlefield.IsSkillTargetInRange(state, skill, position);
+        private bool IsInMoveRange(GridPosition p) => battlefield.IsInMoveRange(state, p);
+        private bool IsInAttackRange(GridPosition p) => battlefield.IsInAttackRange(state, p);
+        private static int Distance(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.Distance(a, b);
+        private static GridPosition StepToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.StepToward(a, b);
+        private static Facing FacingToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.FacingToward(a, b);
         private static string FacingGlyph(Facing facing) => facing == Facing.North ? "^" : facing == Facing.South ? "v" : facing == Facing.East ? ">" : "<";
     }
 }

@@ -26,6 +26,9 @@ sysinfo.txt
 UnityCrashHandler64.exe
 UnityPlayer.log
 UnityProject/Library/FunplayMcp/
+UnityProject/Assets/_Recovery/
+UnityProject/Assets/_Recovery.meta
+UnityProject/Artifacts/
 
 # OS and temporary files
 .DS_Store

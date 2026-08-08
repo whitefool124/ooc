@@ -17,6 +17,31 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void CampaignState_V2IsDeterministicAndEscapesDelimiterBearingValues()
+        {
+            var first = new CampaignState("hub|north");
+            first.AddLocation(new LocationState("factory,west"));
+            first.SetQuest("relay=alpha", "active;urgent");
+            first.Story.Set("met|engineer", "yes,twice");
+            string data = first.ToJson();
+            CampaignState restored = CampaignState.FromJson(data);
+
+            Assert.That(data, Does.StartWith("v2|"));
+            Assert.That(restored.ToJson(), Is.EqualTo(data));
+            Assert.That(restored.Quests["relay=alpha"], Is.EqualTo("active;urgent"));
+            Assert.That(restored.Story.Get("met|engineer"), Is.EqualTo("yes,twice"));
+        }
+
+        [Test]
+        public void CampaignState_V1StillLoadsThroughExplicitCompatibilityPath()
+        {
+            CampaignState restored = CampaignState.FromJson("v1|hub|1,2,3,4|hub,1,0,default|||flag=yes");
+            Assert.That(restored.Version, Is.EqualTo(SaveVersion.V1));
+            Assert.That(restored.Story.Get("flag"), Is.EqualTo("yes"));
+            Assert.That(restored.ToJson(), Does.StartWith("v2|"));
+        }
+
+        [Test]
         public void CampaignState_CloneIsIndependent()
         {
             var state = new CampaignState("hub"); state.AddLocation(new LocationState("factory"));

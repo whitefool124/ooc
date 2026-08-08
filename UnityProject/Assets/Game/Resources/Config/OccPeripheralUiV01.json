@@ -1,0 +1,21 @@
+{
+  "schema": "occ.ui.peripheral.v0.1",
+  "startupBackdrop": "Art/FormalUIBackdrops/startup",
+  "scanlineSprite": "Art/FormalUIBackdrops/scanlines",
+  "transitionSprite": "Art/FormalUIBackdrops/transition_wipe",
+  "backdrops": [
+    { "id": "landing", "resourcePath": "Art/FormalUIBackdrops/landing" },
+    { "id": "map", "resourcePath": "Art/FormalUIBackdrops/map" },
+    { "id": "briefing", "resourcePath": "Art/FormalUIBackdrops/briefing" },
+    { "id": "archive", "resourcePath": "Art/FormalUIBackdrops/landing" },
+    { "id": "settings", "resourcePath": "Art/FormalUIBackdrops/briefing" }
+  ],
+  "feedback": [
+    { "id": "click", "resourcePath": "Art/FormalUIFeedback/click", "frameCount": 6, "framesPerSecond": 18 },
+    { "id": "success", "resourcePath": "Art/FormalUIFeedback/success", "frameCount": 6, "framesPerSecond": 14 },
+    { "id": "rejected", "resourcePath": "Art/FormalUIFeedback/rejected", "frameCount": 6, "framesPerSecond": 18 }
+  ],
+  "startupHoldSeconds": 0.35,
+  "transitionSeconds": 0.32,
+  "ambientScanSeconds": 4.8
+}

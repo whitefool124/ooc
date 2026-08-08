@@ -1,0 +1,178 @@
+{
+  "schema": "occ.pixel.ui.skin.v0.1",
+  "status": "QA_PASS",
+  "asset_count": 15,
+  "slice_border": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "records": [
+    {
+      "id": "panel",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "dc705f8df8282d121b143e13391e5d325e45fe6d3f1c2bc80c2289cf822d534c",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_elevated",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "6134babed33b813c26b61aafb6d51adb5f61b4d37ecf620011af34e6a4d85178",
+      "status": "PASS"
+    },
+    {
+      "id": "header",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "0406399988ea312c9ce63d2273a64ef79c4ca8f1b0471c35bd7028586f37d84e",
+      "status": "PASS"
+    },
+    {
+      "id": "button_idle",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "7d4d285879628db327529e02965600c31aedbb713c18d0737fc12e8c1438bd27",
+      "status": "PASS"
+    },
+    {
+      "id": "button_hover",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "dbf59af5033889e8303e81fcce04f8cc51ee9978d213c379234eed6f0ad5527e",
+      "status": "PASS"
+    },
+    {
+      "id": "button_pressed",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "0afe148ece6db3261a1b915c1b394cd390bb869e70862381d27ebffda05ba57f",
+      "status": "PASS"
+    },
+    {
+      "id": "button_disabled",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "5ff9772f761774d01e83ec0c49627e37389a2af23196d56f06c6f86fc2fd0fb0",
+      "status": "PASS"
+    },
+    {
+      "id": "tab_idle",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "c3b562b58f7ef18dfa98498821a7ffcdb998f0916115eff3ee0ae1bc42d84cc4",
+      "status": "PASS"
+    },
+    {
+      "id": "tab_active",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "6477e80f9ce03617b7fcc493fcf5ed0783a926d644f8aee690a9bbe88acb50de",
+      "status": "PASS"
+    },
+    {
+      "id": "slot",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "a3217d14f0ab1c2afabd66ec01f9c45f224ec2f75a5c07daf3cc93d84add2ab4",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_track",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "1b87457c936ba44c4840ae935a99fe8718244d1767bc98a63f979e2d97610715",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_fill",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "62ef4b377caf22b76288b823dbe90ab84cf9723675f647a0af4ddb1c1c34e8a6",
+      "status": "PASS"
+    },
+    {
+      "id": "focus",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 2,
+      "hard_alpha": true,
+      "sha256": "90e5bd46f4fa62887b42bce20c3e16ffff61a34e69d3cff551292ebf6b3f19cc",
+      "status": "PASS"
+    },
+    {
+      "id": "danger",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "252e7b2bee2d133a464bb633247b4c7032c2ac63931d2d92ac948d565b577f58",
+      "status": "PASS"
+    },
+    {
+      "id": "reward",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "hard_alpha": true,
+      "sha256": "dae43ae55697a685473d2fc48c86a6b341f87e4e69f95f470184d7e7e614a893",
+      "status": "PASS"
+    }
+  ]
+}

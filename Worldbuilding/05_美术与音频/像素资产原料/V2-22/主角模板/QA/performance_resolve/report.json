@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "full-canvas nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-22\\主角模板\\演出\\raw\\occ_hero_template_performance_resolve_v01_codex_raw.png",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-22\\主角模板\\演出\\occ_hero_template_performance_resolve_v01.png",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-22\\主角模板\\QA\\performance_resolve\\qa_2x.png",
+  "palette": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-22\\主角模板\\QA\\performance_resolve\\palette.png",
+  "size": [
+    512,
+    768
+  ],
+  "paletteColors": 48,
+  "paletteLimit": 48,
+  "hardAlpha": true,
+  "bounds": [
+    0,
+    0,
+    512,
+    768
+  ]
+}

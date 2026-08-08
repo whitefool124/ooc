@@ -1,0 +1,305 @@
+{
+  "asset_ids": [
+    "ART-BASE-01",
+    "ART-BASE-02"
+  ],
+  "version": "0.1",
+  "result": "BASELINE_QA_PASS",
+  "approval": "PRODUCT_REVIEW_PENDING",
+  "checks": {
+    "canvas_1920x1080": true,
+    "battle_hud_split": [
+      1440,
+      480
+    ],
+    "grid": [
+      12,
+      9
+    ],
+    "tile_source_px": [
+      32,
+      32
+    ],
+    "map_scale": 3,
+    "resampling": "NEAREST",
+    "unit_anchor_contract": {
+      "center_x": 32,
+      "baseline_y": 58
+    },
+    "palette_master_colors": 32
+  },
+  "outputs": [
+    {
+      "path": "Worldbuilding\\05_美术与音频\\正式美术基准\\ART-BASE\\occ_art_base01_master_palette_v01.png",
+      "size": [
+        1440,
+        900
+      ],
+      "sha256": "8e895f7a4b55b2c0dc32545ae7a93da1ce919aaafcddeeb87d862d5619428e2a"
+    },
+    {
+      "path": "Worldbuilding\\05_美术与音频\\正式美术基准\\ART-BASE\\occ_art_base02_contact_sheet_1920x1080_v01.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "0ecc154050e9022bfc149cb739c3442ab5d7c2258f12d255311fc12dac7f6d78"
+    },
+    {
+      "path": "Worldbuilding\\05_美术与音频\\正式美术基准\\ART-BASE\\occ_art_base02_contact_sheet_grayscale_v01.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "359c75025ef9b9f87ca2c089bb3897eb9cbad6ff28f776290d09a87b4be36f29"
+    },
+    {
+      "path": "Worldbuilding\\05_美术与音频\\正式美术基准\\ART-BASE\\occ_art_base02_contact_sheet_deuteranopia_v01.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "01193284fe288a3a11576a67075bad9795d6013cd3bb07324b45db435f824366"
+    },
+    {
+      "path": "Worldbuilding\\05_美术与音频\\正式美术基准\\ART-BASE\\occ_art_base02_contact_qa_v01.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "a54dc78a0c7ab8874a51c5d143adea843846ca446c76235276d9afd9e9a1bff9"
+    }
+  ],
+  "known_gaps": [
+    "6 status icons and 8 environment icons are represented only by semantic-color review slots.",
+    "24 basic VFX effects remain unproduced.",
+    "sniper, breaker, warden, binder, core_overseer and purifier_overseer still lack unique static sprites."
+  ],
+  "sources": [
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\elite.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "ecfc83fbd6da111ce4391413b8b63a621a532c3b56b4972a6f957d87d7eb6422"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\hero.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "38d50884e9ae6607b09502eb979d316e6198f52490a113d2220e1217fbe30855"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\pyromancer.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "37e6bcc1f8626b48acb3562f5e4a6ae925794efeeb7e0ca6a637769220c19af1"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\raider.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "baf7bc965b0ddd8bd9d36fdd65709c569c32360c2410760ad501f147edd0214d"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\rifleman.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "4b644ae56340f9403fd190430bf9809d92c9abf763a1a41a2f198ea07890d573"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\shieldguard.png",
+      "size": [
+        64,
+        64
+      ],
+      "visible_rgb_count": 24,
+      "sha256": "1ed94a75a030af7deea6add9e847666e52c36989d796c0bfda2c5b78fa223d60"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\floor.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "c13a260635aee3be71adfa44d40d04d73e1c9910e1fc409cf39b6d17666f275b"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\floor_hazard.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 14,
+      "sha256": "f390b58d41827cc659b0df74ecbb5ee20d6363768bbd59d8806bf8b79cbde0b8"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\floor_industrial.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "d4d481a8de781fdf056293b1e6b3285a3ccfdf45f7821a6a1d92a161fee76f9d"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\floor_rail.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "0fbc12234ba1ef4245555ecc3e32f16712f78b1ee623d0120b99a05c962a3f69"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\floor_warning.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "825d8c7fa3a5bfd01703e420e647ba9f227be3ddc0ed8cada4d537df90b237c5"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\heavy_cover.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "e0f7bc9d6dafd0e3eb5ea4f9944a4dc177a2c07ee207708b5f33e1fa8563702c"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\heavy_cover_destroyed.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "d421d5950dff9e925d3c5e1fcb9391540c795f4c2c11d2ebc1bf539166c178c3"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\light_cover.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "5fb7bd2f623c8ee208d6d717d436b28073d00462193d73f5643bb2d65df77f13"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\light_cover_destroyed.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "1668fbb69cb0ff6108479867946ab66bd2b6c412dba2ce0107717e670a2d095b"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\loot_crate.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "898fec5926ba408c58f6c68081c367a19ae01b8b28e0690f35de14f3f7eecdbf"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\loot_crate_open.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "bd1e23e45a6cc558906457dd3e9e258964e81e0d7e57925bf53a238ac4ea551c"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\relay.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "75dd7eaa070be78598ac0b0252f14c58be6a5515ffb56d40a552e66e56d600c6"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalRelay32\\relay_destroyed.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "c1f9c6029491c47fda823f39e9d853b9298017804783f0a7eeb12c6a238b0611"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\attack.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "55b45be0347cdd8960694efd1a8eb43080c6d75aebccd1b1a6224eef0d051ac6"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\interact.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "abc4ca98cc136495ac3d116c2430207d3fc32dbedf89f453a56c747a5d80fb4f"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\loot.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "cd9d02c262cccd782bf5b459af9f4b257b6b621c23f8680371a25d73d9d3d06a"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\move.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "ffc842a4ebfa17130db23ccaae02913e015b868b73b8880f080126631b2062e7"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\skill.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 16,
+      "sha256": "76ad3d570a8387dc7b4c45de3026c24bd47676bcd45be016f57eabfb5a55d225"
+    },
+    {
+      "path": "UnityProject\\Assets\\Game\\Resources\\Art\\FormalIcons32\\skill_two.png",
+      "size": [
+        32,
+        32
+      ],
+      "visible_rgb_count": 15,
+      "sha256": "3b563c67087a169b0a0a2b599f6083ac046e5a317e58acf1842caa5314b540ff"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "occ.pixel.ui.runtime.qa.v0.2",
+  "status": "QA_PASS",
+  "screenshots": 8,
+  "requirements": {
+    "reference": [
+      1920,
+      1080
+    ],
+    "compact": [
+      960,
+      540
+    ],
+    "battlefield_hud_split": "1440/480",
+    "character_art": "BLOCKED_CONTENT_NOT_PRODUCED"
+  },
+  "records": [
+    {
+      "file": "briefing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "c87b9a77b9cfc0dd9de5a395fdea9b113bc94c3a80f39d8900eeea487f95e22e",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "briefing_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "2a7f82538c7bcbf971fcf7e1ada67bbed4620c1854e21d62ac5835abc9eb8ee5",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "feedback_rejected_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "fe395cc2177a63b11b5dd034b8ad6e303a4f14ef5a69464ab51642546d53e270",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "landing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "3757bda7cfe0983cdf46b9283b926dd21c5c321c2517212deedcb8addd9488f3",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "map_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "7f15dbbea1916bd2a1ab4eef90a9ac3d53d5e2e91c2ec1b140544e7c59c4df91",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "map_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "e8a8bbe229b03fd492954b1e44dff73e7703eb351d4c4cf716978caeb549face",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "startup_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "eabf01591d036bf7a88669d411aa3166e0688be4e993e74cca72d5ced37e220a",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "startup_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "daf0f4010512e429814ec01505402e180bc05345a23dd98e563702d7b8879761",
+      "status": "VISUAL_PASS"
+    }
+  ]
+}

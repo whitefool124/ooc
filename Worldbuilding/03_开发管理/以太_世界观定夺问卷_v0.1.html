@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>以太世界观定夺问卷 v0.1</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101417; --panel:#182025; --line:#34434a; --text:#edf3f4; --muted:#a9b8bc; --accent:#7bd2d5; --warn:#e8bf70; }
+    * { box-sizing:border-box; } body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,"Microsoft YaHei",sans-serif; }
+    main { max-width:980px; margin:auto; padding:32px 20px 70px; } h1 { margin:0 0 8px; } h2 { margin:34px 0 12px; font-size:1.25rem; } .note { color:var(--muted); } .fixed { padding:14px 16px; border-left:4px solid var(--accent); background:#132126; }
+    .card { margin:14px 0; padding:18px; background:var(--panel); border:1px solid var(--line); border-radius:10px; } .tag { color:var(--warn); font-size:.85rem; } label { display:block; margin:10px 0 4px; font-weight:650; } .hint { color:var(--muted); font-size:.9rem; margin:0 0 8px; }
+    select, textarea, input { width:100%; border:1px solid var(--line); border-radius:6px; background:#0d1215; color:var(--text); padding:9px; font:inherit; } textarea { min-height:88px; resize:vertical; }
+    .toolbar { position:sticky; bottom:0; padding:12px 0; background:linear-gradient(transparent,var(--bg) 30%); display:flex; gap:10px; flex-wrap:wrap; } button { border:1px solid #4f8184; border-radius:7px; padding:9px 13px; background:#1b5559; color:white; font:inherit; cursor:pointer; } button.secondary { background:#26343a; border-color:#52636b; } button.danger { background:#593330; border-color:#8c5048; }
+    .status { color:var(--muted); align-self:center; } code { color:#bcebed; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>《以太》世界观定夺问卷 v0.1</h1>
+  <p class="note">离线单文件。答案自动保存在本浏览器；可导出 JSON 供回填，或导出 Markdown 供审阅。此问卷不改写任何世界观源文件。</p>
+  <div class="fixed"><strong>已锁定，不在本问卷重新表决：</strong>近代魔法工业文明；以太素是唯一超凡来源；魔法有媒介、成本、维护与故障；剧情自由探索/可回访且无时间压力、敌情推进、倒计时或拖延关门；肉鸽节点可自由回访且不改写正史；两模式档案与存档隔离。</div>
+
+  <section>
+    <h2>一、命名与叙事边界</h2>
+    <div class="card"><span class="tag">需要决定</span><label for="worldName">“以太 / Aether”的正式用途</label><p class="hint">推荐将其保留为世界的常用名，但把能源的工程名称固定为“以太素”。可避免“世界与燃料同名”在法律、设备和台词中混淆。</p><select id="worldName"><option value="">请选择</option><option>推荐：世界通称“以太”，能源工程名“以太素”；正式地图可另有行星/大陆学名</option><option>世界与能源都正式称“以太”；以语境区分</option><option>另定世界正式名；“以太”只指能源/时代</option></select><label for="worldNameNote">若另定名称，请写候选与语感要求</label><textarea id="worldNameNote"></textarea></div>
+    <div class="card"><span class="tag">需要决定</span><label for="faith">晨祷会的性质与边界</label><p class="hint">它决定“宗教冲突”是信仰、公共伦理，还是医疗互助的冲突；所有异常仍不能脱离以太素。</p><select id="faith"><option value="">请选择</option><option>推荐：以劳动尊严与照护伦理为核心的民间信仰/互助网络，无独立神迹</option><option>世俗慈善与工人教育组织，仅保留历史性宗教称呼</option><option>保留更强宗教性，但其仪式仅是以太医学与社群实践</option></select></div>
+  </section>
+
+  <section>
+    <h2>二、时代、主角与正史</h2>
+    <div class="card"><span class="tag">需要决定</span><label for="warState">统历 742 的战争状态</label><p class="hint">推荐“裂线危机 / 未宣战的第二次以太战争前夜”：让剧情有真实压力但不把开放探索变成倒计时。</p><select id="warState"><option value="">请选择</option><option>推荐：未宣战的第二次以太战争前夜；冲突局部化、制度化</option><option>第二次以太战争已正式爆发</option><option>维持长期冷战，只在裂线走廊发生代理冲突</option></select><label for="warStateNote">希望首发故事的情绪：调查、动员、内战、抵抗、灾后修复或其他</label><textarea id="warStateNote"></textarea></div>
+    <div class="card"><span class="tag">需要决定</span><label for="protagonist">剧情固定主角的身份入口</label><select id="protagonist"><option value="">请选择</option><option>推荐：裂线走廊工业城的维修/工坊学徒，兼具工人、技术与家庭关系入口</option><option>医院污染科的医护学徒</option><option>铁路巡检/通信学徒</option><option>矿区家庭出身的准军人或工兵</option><option>由你另定</option></select><label for="protagonistNote">请补充年龄段、家庭关系、是否已有服役经历，以及绝不想出现的主角设定</label><textarea id="protagonistNote"></textarea></div>
+    <div class="card"><span class="tag">需要决定</span><label for="death">剧情永久死亡与存档保护</label><p class="hint">推荐“铁人模式可选”：普通档永久死亡前明确二次确认并自动保留不可覆盖的事故前备份；确认后该角色结局封存。</p><select id="death"><option value="">请选择</option><option>推荐：可选铁人；普通档二次确认 + 自动备份，确认后封存人生档案</option><option>剧情主线不允许永久死亡；以重伤/撤离结算替代</option><option>所有剧情档默认永久死亡，但提供强制备份与恢复窗口</option></select></div>
+    <div class="card"><span class="tag">需要决定</span><label for="ending">单主结局的“固定”范围</label><select id="ending"><option value="">请选择</option><option>推荐：同一核心事件与结局行动固定；世界、关系、伤病、身份和档案决定尾声差异</option><option>结局地点与行动固定，只让人物关系变化</option><option>允许少量终局行动路线，但均汇入同一历史结果</option></select></div>
+  </section>
+
+  <section>
+    <h2>三、制度与工程口径</h2>
+    <div class="card"><span class="tag">需要决定</span><label for="schools">七系的正式命名与游戏呈现</label><p class="hint">推荐保留七系作为“应用相位”，不称元素本体；玩家职业标签中的“牧师”统一改为“医护/结界术师”。</p><select id="schools"><option value="">请选择</option><option>推荐：七系=应用相位；火、水、土、风、金属、自然、光影</option><option>七系=行业标准分类；另设更底层物理相位名</option><option>调整系别数量或名称（请在备注说明）</option></select><label for="schoolsNote">对“元素”“牧师”“法师”等词的保留/替换意见</label><textarea id="schoolsNote"></textarea></div>
+    <div class="card"><span class="tag">需要决定</span><label for="prosthetics">义体的社会定位</label><select id="prosthetics"><option value="">请选择</option><option>推荐：医疗修复与工业增效并存；军用高端义体受专利、维护债务与监管限制</option><option>主要是退伍伤残者的医疗技术</option><option>已广泛消费化，成为明显的阶级符号</option></select></div>
+    <div class="card"><span class="tag">需要决定</span><label for="law">许可证执行力度</label><select id="law"><option value="">请选择</option><option>推荐：城市严、边境松、灰环碎片化；执照也是阶级与黑市的入口</option><option>中央监管严格且覆盖广泛</option><option>制度名义严格、实际普遍失效</option></select></div>
+  </section>
+
+  <section>
+    <h2>四、首发内容锚点</h2>
+    <div class="card"><span class="tag">需要决定</span><label for="region">剧情主舞台的地域范围</label><select id="region"><option value="">请选择</option><option>推荐：阿斯特拉“裂线走廊”——工业城、铁路枢纽、矿区/灰环边缘三开放区</option><option>裂线走廊加塞恩高原的一段遗迹争端</option><option>另定地区</option></select></div>
+    <div class="card"><span class="tag">需要决定</span><label for="rogueScope">肉鸽档案的地理覆盖</label><select id="rogueScope"><option value="">请选择</option><option>推荐：首发以裂线走廊为主，后续档案包扩至其他地区；只留传闻/NPC 痕迹</option><option>首发即可跨所有六大区域</option><option>严格只在剧情未到达地区活动</option></select></div>
+    <div class="card"><span class="tag">可由我自行补全，除非你反对</span><label for="hooks">优先生产的内容钩子（可多写）</label><p class="hint">默认会先建立：设施维护事故、许可证与债务、污染医疗、铁路与军需、工会/资本冲突、封存与走私、义体维修、遗迹勘验等可转任务包。</p><textarea id="hooks" placeholder="写下必须优先或必须避开的主题"></textarea></div>
+    <div class="card"><span class="tag">开放意见</span><label for="other">其他边界、参考作品或禁区</label><textarea id="other"></textarea></div>
+  </section>
+
+  <div class="toolbar"><button id="save">保存草稿</button><button id="json" class="secondary">导出 JSON</button><button id="md" class="secondary">导出 Markdown</button><button id="import" class="secondary">导入 JSON</button><input id="file" type="file" accept="application/json" hidden><button id="reset" class="danger">清除本机草稿</button><span id="status" class="status"></span></div>
+</main>
+<script>
+(() => {
+  const key='occ-aether-worldbuilding-questionnaire-v01';
+  const fields=[...document.querySelectorAll('select,textarea')]; const status=document.querySelector('#status');
+  const data=()=>Object.fromEntries(fields.map(x=>[x.id,x.value]));
+  const save=()=>{localStorage.setItem(key,JSON.stringify({version:'0.1',savedAt:new Date().toISOString(),answers:data()})); status.textContent='已保存到此浏览器。';};
+  const load=o=>fields.forEach(x=>x.value=(o?.answers?.[x.id]??o?.[x.id]??''));
+  try { load(JSON.parse(localStorage.getItem(key))); } catch (_) {}
+  fields.forEach(x=>x.addEventListener('change',save)); fields.filter(x=>x.tagName==='TEXTAREA').forEach(x=>x.addEventListener('input',()=>{status.textContent='草稿有未显式保存的输入。';}));
+  const download=(name,type,text)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href);};
+  document.querySelector('#save').onclick=save;
+  document.querySelector('#json').onclick=()=>{save();download('以太_世界观定夺问卷_答卷.json','application/json;charset=utf-8',JSON.stringify({version:'0.1',exportedAt:new Date().toISOString(),answers:data()},null,2));};
+  document.querySelector('#md').onclick=()=>{save();const lines=['# 《以太》世界观定夺问卷答卷','','- 导出时间：'+new Date().toLocaleString('zh-CN'),''];fields.forEach(x=>{const label=document.querySelector(`label[for="${x.id}"]`)?.textContent||x.id;lines.push('## '+label,'',x.value||'（未填写）','');});download('以太_世界观定夺问卷_答卷.md','text/markdown;charset=utf-8',lines.join('\n'));};
+  document.querySelector('#import').onclick=()=>document.querySelector('#file').click(); document.querySelector('#file').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{load(JSON.parse(r.result));save();status.textContent='已导入并保存。';}catch(_){status.textContent='导入失败：不是有效的问卷 JSON。';}};r.readAsText(f,'utf-8');};
+  document.querySelector('#reset').onclick=()=>{if(confirm('确定清除本浏览器保存的问卷草稿？')){localStorage.removeItem(key);fields.forEach(x=>x.value='');status.textContent='本机草稿已清除。';}};
+})();
+</script>
+</body>
+</html>

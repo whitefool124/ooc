@@ -1,0 +1,17 @@
+{
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 38,
+  "maxBodyWidth": 44,
+  "minBodyHeight": 32,
+  "maxBodyHeight": 38,
+  "alphaThreshold": 64,
+  "allowChromaKey": true,
+  "chromaKeyTolerance": 42,
+  "despill": true,
+  "paletteColors": 20,
+  "gifDelay": 12
+}

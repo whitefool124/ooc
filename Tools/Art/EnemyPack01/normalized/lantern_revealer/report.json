@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 38,
+    "maxBodyWidth": 44,
+    "minBodyHeight": 32,
+    "maxBodyHeight": 38,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 20,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\lantern_revealer\\source.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\lantern_revealer\\lantern_revealer.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\lantern_revealer\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\lantern_revealer\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\normalized\\lantern_revealer\\qa.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Tools\\Art\\EnemyPack01\\raw\\lantern_revealer\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        292,
+        47,
+        1039,
+        1182
+      ],
+      "sourceBodyWidth": 747,
+      "sourceBodyHeight": 1135,
+      "scale": 0.033480176211453744,
+      "outputWidth": 25,
+      "outputHeight": 38,
+      "outputX": 20,
+      "outputY": 20,
+      "normalizedBounds": [
+        20,
+        20,
+        45,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

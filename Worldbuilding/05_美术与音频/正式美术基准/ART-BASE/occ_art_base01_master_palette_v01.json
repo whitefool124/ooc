@@ -1,0 +1,364 @@
+{
+  "asset_id": "ART-BASE-01",
+  "version": "0.1",
+  "status": "BASELINE_APPROVED",
+  "master_color_count": 32,
+  "budgets": {
+    "unit_visible_rgb_max": 24,
+    "tile_icon_recommended_rgb_max": 16
+  },
+  "colors": [
+    {
+      "code": "N0",
+      "name": "铁黑",
+      "hex": "#080A0C",
+      "rgb": [
+        8,
+        10,
+        12
+      ],
+      "role": "background"
+    },
+    {
+      "code": "N1",
+      "name": "煤黑",
+      "hex": "#101317",
+      "rgb": [
+        16,
+        19,
+        23
+      ],
+      "role": "background"
+    },
+    {
+      "code": "N2",
+      "name": "深煤灰",
+      "hex": "#171A1D",
+      "rgb": [
+        23,
+        26,
+        29
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N3",
+      "name": "深钢灰",
+      "hex": "#21242B",
+      "rgb": [
+        33,
+        36,
+        43
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N4",
+      "name": "钢板灰",
+      "hex": "#30343A",
+      "rgb": [
+        48,
+        52,
+        58
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N5",
+      "name": "转折灰",
+      "hex": "#40454A",
+      "rgb": [
+        64,
+        69,
+        74
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N6",
+      "name": "器材灰",
+      "hex": "#565C60",
+      "rgb": [
+        86,
+        92,
+        96
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N7",
+      "name": "混凝土灰",
+      "hex": "#70767A",
+      "rgb": [
+        112,
+        118,
+        122
+      ],
+      "role": "structure"
+    },
+    {
+      "code": "N8",
+      "name": "旧银灰",
+      "hex": "#909497",
+      "rgb": [
+        144,
+        148,
+        151
+      ],
+      "role": "text-secondary"
+    },
+    {
+      "code": "N9",
+      "name": "浅钢灰",
+      "hex": "#B5B7B4",
+      "rgb": [
+        181,
+        183,
+        180
+      ],
+      "role": "text"
+    },
+    {
+      "code": "N10",
+      "name": "暖白",
+      "hex": "#D7D8D2",
+      "rgb": [
+        215,
+        216,
+        210
+      ],
+      "role": "text"
+    },
+    {
+      "code": "N11",
+      "name": "高亮白",
+      "hex": "#F0F0E8",
+      "rgb": [
+        240,
+        240,
+        232
+      ],
+      "role": "text-primary"
+    },
+    {
+      "code": "C0",
+      "name": "深以太青",
+      "hex": "#07343E",
+      "rgb": [
+        7,
+        52,
+        62
+      ],
+      "role": "friendly-aether"
+    },
+    {
+      "code": "C1",
+      "name": "导管青",
+      "hex": "#086377",
+      "rgb": [
+        8,
+        99,
+        119
+      ],
+      "role": "friendly-aether"
+    },
+    {
+      "code": "C2",
+      "name": "冷青",
+      "hex": "#038FA9",
+      "rgb": [
+        3,
+        143,
+        169
+      ],
+      "role": "friendly-action"
+    },
+    {
+      "code": "C3",
+      "name": "冷青高亮",
+      "hex": "#2DDDFE",
+      "rgb": [
+        45,
+        221,
+        254
+      ],
+      "role": "friendly-highlight"
+    },
+    {
+      "code": "R0",
+      "name": "深氧化红",
+      "hex": "#351615",
+      "rgb": [
+        53,
+        22,
+        21
+      ],
+      "role": "enemy-damage"
+    },
+    {
+      "code": "R1",
+      "name": "暗锈红",
+      "hex": "#5E2421",
+      "rgb": [
+        94,
+        36,
+        33
+      ],
+      "role": "enemy-damage"
+    },
+    {
+      "code": "R2",
+      "name": "氧化红",
+      "hex": "#90312B",
+      "rgb": [
+        144,
+        49,
+        43
+      ],
+      "role": "enemy-threat"
+    },
+    {
+      "code": "R3",
+      "name": "损伤高亮",
+      "hex": "#D85B49",
+      "rgb": [
+        216,
+        91,
+        73
+      ],
+      "role": "enemy-highlight"
+    },
+    {
+      "code": "Y0",
+      "name": "深安全黄",
+      "hex": "#4B3816",
+      "rgb": [
+        75,
+        56,
+        22
+      ],
+      "role": "interaction-loot"
+    },
+    {
+      "code": "Y1",
+      "name": "旧黄铜",
+      "hex": "#80601E",
+      "rgb": [
+        128,
+        96,
+        30
+      ],
+      "role": "interaction-loot"
+    },
+    {
+      "code": "Y2",
+      "name": "安全黄橙",
+      "hex": "#C9A456",
+      "rgb": [
+        201,
+        164,
+        86
+      ],
+      "role": "interaction"
+    },
+    {
+      "code": "Y3",
+      "name": "警示高亮",
+      "hex": "#F3B722",
+      "rgb": [
+        243,
+        183,
+        34
+      ],
+      "role": "interaction-highlight"
+    },
+    {
+      "code": "G0",
+      "name": "深灰绿",
+      "hex": "#1C2C25",
+      "rgb": [
+        28,
+        44,
+        37
+      ],
+      "role": "healing-shield"
+    },
+    {
+      "code": "G1",
+      "name": "医疗绿",
+      "hex": "#31513F",
+      "rgb": [
+        49,
+        81,
+        63
+      ],
+      "role": "healing-shield"
+    },
+    {
+      "code": "G2",
+      "name": "护盾绿",
+      "hex": "#587C62",
+      "rgb": [
+        88,
+        124,
+        98
+      ],
+      "role": "healing-shield"
+    },
+    {
+      "code": "G3",
+      "name": "修复高亮",
+      "hex": "#8EB08B",
+      "rgb": [
+        142,
+        176,
+        139
+      ],
+      "role": "healing-highlight"
+    },
+    {
+      "code": "P0",
+      "name": "深污染紫",
+      "hex": "#2B1728",
+      "rgb": [
+        43,
+        23,
+        40
+      ],
+      "role": "pollution-risk"
+    },
+    {
+      "code": "P1",
+      "name": "暗紫红",
+      "hex": "#4F274A",
+      "rgb": [
+        79,
+        39,
+        74
+      ],
+      "role": "pollution-risk"
+    },
+    {
+      "code": "P2",
+      "name": "污染紫",
+      "hex": "#7A3B69",
+      "rgb": [
+        122,
+        59,
+        105
+      ],
+      "role": "pollution"
+    },
+    {
+      "code": "P3",
+      "name": "越限高亮",
+      "hex": "#B35D92",
+      "rgb": [
+        179,
+        93,
+        146
+      ],
+      "role": "pollution-highlight"
+    }
+  ]
+}

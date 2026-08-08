@@ -1,0 +1,322 @@
+{
+  "schema": "occ.runtime.visual.qa.v0.1",
+  "status": "VISUAL_QA_PASS_REVIEWED_2026_08_07",
+  "screenshot_count": 23,
+  "target_resolutions": [
+    [
+      1920,
+      1080
+    ],
+    [
+      960,
+      540
+    ]
+  ],
+  "contact_sheet": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\occ_runtime_visual_contact_v01.png",
+  "contact_sha256": "e040455b1a160646a8b876f787b301fc2548ff690b6b56af72faa7e578679828",
+  "records": [
+    {
+      "id": "archive_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\archive_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "25228b353c62ac104e0b5972d9d47b918d2ea1ac23ce10d89da54ef5a9b65eeb",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\archive_1920x1080_grayscale.png",
+      "grayscale_sha256": "37bf4bddd7150b6452eb425021f5c17202eb01bf073f83c1bbfe01a4406174b7",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\archive_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "44381d403ae7ea5ac874c1907ceb4fa37dea74c559157c0f69d8ab44b0adbb0a"
+    },
+    {
+      "id": "boss_core_briefing_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\boss_core_briefing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "8c3c3e2a11eebe81fa195d198fa71aceec20d1efc7a3d897cb7b44b0db5eca4d",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_core_briefing_1920x1080_grayscale.png",
+      "grayscale_sha256": "262b24e460f86ce57addfc195bde639eb6ff59237aaa46a58bdcaab69a45a590",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_core_briefing_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "f4b9cb24b30a1f68dd374b0967cab249a7caa7ebf1e2fa1e6419a81b784aedd7"
+    },
+    {
+      "id": "boss_core_combat_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\boss_core_combat_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "267dd9de7ba98b79dc81f3799316a3ffa232550efe482ef39134b1b6a4351e9b",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_core_combat_1920x1080_grayscale.png",
+      "grayscale_sha256": "f07bf502dbda5a11e942201b8f500e9b641333389a666d22a4d1026a05789e2d",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_core_combat_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "0f431e5c791bc372660d68de812f13b6849297a877a96568c76c9ebcd1965f96"
+    },
+    {
+      "id": "boss_purifier_combat_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\boss_purifier_combat_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "5d09ba2aacd7257871932493f212cb0dfa5e6ac24461c2b9643a8acf6630763d",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_purifier_combat_960x540_grayscale.png",
+      "grayscale_sha256": "55d046a0dc89a7b861b8fcb0576870b95d494879eaac29ffd13af6f58d330db9",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_purifier_combat_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "fefaa303a3885b65e28f1923caa7b8f08a1d52be08d3d9f533e1eb74a5747d02"
+    },
+    {
+      "id": "boss_purifier_victory_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\boss_purifier_victory_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "03845f787ada73a233e6c0c8a52ea2da65cc351507527e446a7e7d9296fed5cf",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_purifier_victory_1920x1080_grayscale.png",
+      "grayscale_sha256": "0fff5db1b35d15b3cdf18b69750d36108a19fa9836ba9138b78d95f1b520d9d2",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_purifier_victory_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "1ac7e13f86a3eab3ab9e5c67b1c7e555467aafa8f25f6d2abdfd4fa4830dbab4"
+    },
+    {
+      "id": "boss_reward_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\boss_reward_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "79eeb186f86f2e82aa4eb7251dd3c07b8c3689a794b8956f5078f949d08b36fb",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_reward_1920x1080_grayscale.png",
+      "grayscale_sha256": "f097112faa1ad4e1f2400e8e7b81c7315292fc3ff06e617aaa399631cdb3b5b0",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\boss_reward_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "d1f130c89bfe2f67112168b9ae2fd8ffc4c8255fc9e6299f9b7f058c4e2c9e80"
+    },
+    {
+      "id": "briefing_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\briefing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "65dc7a37e94db5fd90eda7d5f235d64978c8fe6469fb4f08a517ad85c714b697",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\briefing_1920x1080_grayscale.png",
+      "grayscale_sha256": "dbc54b7fd43855aa3b40bbc3c15f808fc25e55a80bc8dbd900a95ac0a4c4aa1e",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\briefing_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "c859f60b9f0f3c8b150a93fb8a64bb984d039d19860d86637546ad2e1cb7e9c1"
+    },
+    {
+      "id": "combat_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\combat_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "f0b6eb85ed930583316161bd4d20dd63c2472ccb3a627e983bac24f5018c3c30",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_1920x1080_grayscale.png",
+      "grayscale_sha256": "c810283dc4ba3a975c63955c9b8db2773aab5f7fffdae60890e70c0a46af9460",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "6016064fb5b5a01f66079d85b4cd522966f161f926abc38a164b1bafd052ce88"
+    },
+    {
+      "id": "combat_fire_vfx_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\combat_fire_vfx_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "8acc98567d997992b07ed39331f767050be3d742e9e537a475efe257168068fa",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_fire_vfx_1920x1080_grayscale.png",
+      "grayscale_sha256": "db082507d9c7e87bd674e18eb13048753df25b2d97b3d9a94e13aedf8977cf15",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_fire_vfx_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "7c9a28e2805f49f6b67079b8366283ef93f540f397deee08ebcc3cd16f4b642f"
+    },
+    {
+      "id": "combat_icons_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\combat_icons_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "f7e7dd3030d452c09077a6240af23db7319f83737097d97787e328576e9ed6f0",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_icons_960x540_grayscale.png",
+      "grayscale_sha256": "9b0f9568f98cbd4f0b18291df28ff59d0f2617994bbb29463afec78e217166ab",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\combat_icons_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "3fb2f4129a51a9ede2c61e86f1ecc4d571056a90064b6a0a4b41d9a601a7f931"
+    },
+    {
+      "id": "defeat_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\defeat_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "ebe2b260932e3882f5eef94b8b2602d1c70f31cec93df483be5374a3922dc129",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\defeat_1920x1080_grayscale.png",
+      "grayscale_sha256": "4e7cc9fd4e68e98b50a9efcd75154553d6fd14d675be234ec777a936aac2b958",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\defeat_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "0daa1430b79a02f45ad411cbb54bf6492e2ae3780680e603bc29317e96230f7b"
+    },
+    {
+      "id": "landing_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\landing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "5064d50c39d2542096994f2aef6f033cd1bf794eb2529de054722f6b0ae28a1f",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\landing_1920x1080_grayscale.png",
+      "grayscale_sha256": "ac9494811a41c38ea52c25406553c3ffd439250bd9195be6aabf4139cb9470ac",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\landing_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "77cc02cecf59385c758464e1cc96083e728679e538cb8a21edd76dafbb7a7483"
+    },
+    {
+      "id": "landing_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\landing_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "3e5a3ad1b0b1a2f61a2bf176403bc74c4b3e6d8ead39f28246d88b1268d6aaf1",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\landing_960x540_grayscale.png",
+      "grayscale_sha256": "c37d34a518bd62ca73687e80f890c7b7e6db382dce3491c2462bcb2385523004",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\landing_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "e669969cf753de1c74c2e9a9c9527503692e29e3032ab144982a9407556e005f"
+    },
+    {
+      "id": "map_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\map_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "11573a1ab3a111526c581cc75c3a6e3b6a3df3ff0dd166f08835564099e6ff51",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_1920x1080_grayscale.png",
+      "grayscale_sha256": "08f1326e06293faa860827a94d5030f2f18a95007dbb27c2f7e0c08a3f55c11c",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "976a8afee99ad88eaae8299f958b1eaa79cdba7051dfb53dd92728f202b18a61"
+    },
+    {
+      "id": "map_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\map_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "eadecd1241ecbbc9a29c2c9e2b811375202233cc6269ac7f6b63bdfb542f7c62",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_960x540_grayscale.png",
+      "grayscale_sha256": "05f4d4c14f9e057adaea95f69e6f9d776d187651a94367c702efad8954ac0e0b",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "29d68d5c6c51e2bc585a6d7d864e1708524c15f3e126930c88e10d37bf6d0659"
+    },
+    {
+      "id": "map_icons_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\map_icons_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "8e882affbb3828efc7d4e3714e627db346ec4638bf4a8bd0c240990cad339986",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_icons_1920x1080_grayscale.png",
+      "grayscale_sha256": "cb43503a3d3419bfcd4837aed81bebac4de9e9957402d2816f001aaba64782e7",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\map_icons_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "01c123bc409c43b288c92446b7fbe6a982dd28b7f85963be7d387a4daf26af26"
+    },
+    {
+      "id": "new_run_confirmation_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\new_run_confirmation_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "aa2ec279b5e3f03738af8f50845dc481baf370656d560d4a6677d2e2d018b102",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\new_run_confirmation_1920x1080_grayscale.png",
+      "grayscale_sha256": "0792e2b25df4796b57eb6b8f47a7e954b24b8e37ecc0fbce7e663d581db6e51d",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\new_run_confirmation_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "5304f4a86c340fb5f46bd8a5ecf81fc91517511742e419da09c98dd1ea33b9db"
+    },
+    {
+      "id": "node_event_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\node_event_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "e5a422c95b22f68f88cb7517c87af38edc8673d4a2b64b513a4271fd797481ab",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_event_1920x1080_grayscale.png",
+      "grayscale_sha256": "a122e93feeef482cac1a90efba0a470362cf76ae0e03623113df2979967404eb",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_event_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "066e07c7f45a3ac12a8d39e7bae168359af70b71d4e24faf95ab045127b82fe8"
+    },
+    {
+      "id": "node_rest_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\node_rest_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "19d479aeea3ccac216d443a3bad737b59bc884d10520d8cd3c916dbd5dd4989c",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_rest_1920x1080_grayscale.png",
+      "grayscale_sha256": "b5f5253a3de899c773fb1743f544dd481c1682f7c31e2165ac7b01a87933108d",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_rest_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "3d5fae4b6408db7a3e3c50d911efc2e138a038c7098a2f10f2abdb5921ff142c"
+    },
+    {
+      "id": "node_shop_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\node_shop_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "e2dda1c0a9dddc8491766f9fdc8bd14a26f7112077c4c67745a4de05aff08bb8",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_shop_1920x1080_grayscale.png",
+      "grayscale_sha256": "b7ea648901813c6b4382edea73abfd41880aced17318c4961ffd52e18bd161b9",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_shop_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "dcb3612cabb4a453dfb1565b7e11bb8ff84357333f6e6f05afad2fa8b1b5e909"
+    },
+    {
+      "id": "node_treasure_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\node_treasure_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "11f1e7f4673f91a1804bbd5fd9fc2cf307209a48d8ae02cd0395f3c9c0e82c6f",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_treasure_1920x1080_grayscale.png",
+      "grayscale_sha256": "3a9ac4b285941a67ba2662ad798501c82b869277ac4d1a51debc2f472da8ff34",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_treasure_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "e9b6cfde29f8aa798dc49a2b3898a9d9841f419c31a56f59ba94ed3fb4efe807"
+    },
+    {
+      "id": "node_workshop_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\node_workshop_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "f0a91a771ef79fc23f7421f8d5c7c584fac1b05e238cfed429c8cc14ffb9fde1",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_workshop_1920x1080_grayscale.png",
+      "grayscale_sha256": "fca1abb0ded9d10ddbcc5d4c466d8e0873d2e57114e682c772e1356ab219fb55",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\node_workshop_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "7a0278427174985dc3401c25b80a54116ecfb242410efc66000dd7d7fc2245da"
+    },
+    {
+      "id": "settings_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A3\\Runtime\\settings_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "512a07d8c2be18e37dceb438efef690a2c2ed873b4eca8187ebddfebf9aee113",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\settings_1920x1080_grayscale.png",
+      "grayscale_sha256": "c270d0fbd408372a3df5b78e839280e5c9e4e11e4f28ab731c0b8f25284868cb",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A3\\VisualAudit\\settings_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "87fb3fecdb721d897d49b107b5cf7350032bdfdd6d651985c5370c5fae7fbd4f"
+    }
+  ],
+  "notes": [
+    "Character and unit visual approval is explicitly blocked and excluded from pass claims.",
+    "Deuteranopia output is a deterministic risk preview; shape and luminance remain the primary acceptance criteria."
+  ]
+}

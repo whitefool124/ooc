@@ -22,6 +22,12 @@ namespace OCC.Combat
 
         public override string ToString() => $"({X}, {Y})";
 
+        public int ManhattanDistance(GridPosition other) => Math.Abs(X - other.X) + Math.Abs(Y - other.Y);
+
+        public static GridPosition operator +(GridPosition left, GridPosition right) => new GridPosition(left.X + right.X, left.Y + right.Y);
+
+        public static GridPosition operator *(GridPosition value, int scalar) => new GridPosition(value.X * scalar, value.Y * scalar);
+
         public static bool operator ==(GridPosition left, GridPosition right) => left.Equals(right);
 
         public static bool operator !=(GridPosition left, GridPosition right) => !left.Equals(right);

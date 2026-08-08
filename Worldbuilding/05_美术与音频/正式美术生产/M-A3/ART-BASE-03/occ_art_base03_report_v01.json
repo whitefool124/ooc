@@ -1,0 +1,24 @@
+{
+  "asset_id": "ART-BASE-03",
+  "result": "TEMPLATE_QA_PASS",
+  "files": [
+    "icon32.json",
+    "icon32_template.png",
+    "tile32.json",
+    "tile32_template.png",
+    "ui_9slice.json",
+    "ui_9slice_template.png",
+    "unit64.json",
+    "unit64_template.png",
+    "unit_action_strip.json",
+    "unity_import.json",
+    "vfx32.json"
+  ],
+  "rules": [
+    "32x32 tile/icon",
+    "64x64 unit X=32 Y=58",
+    "hard alpha",
+    "nearest-neighbor",
+    "Point/Clamp/no mipmap"
+  ]
+}

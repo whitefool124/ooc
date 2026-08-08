@@ -1,0 +1,66 @@
+﻿{
+    "schema_version":  "fire-vfx-qa-v0.1",
+    "effect":  "fire_smoke",
+    "source":  "Tools/Art/build_fire_smoke_vfx.ps1",
+    "requirements":  {
+                         "dimensions":  "32x32",
+                         "maximum_palette_colors":  8,
+                         "maximum_alpha_levels":  2,
+                         "importer":  "Point/Clamp/no mipmap/uncompressed"
+                     },
+    "frames":  [
+                   {
+                       "file":  "frame_00.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   },
+                   {
+                       "file":  "frame_01.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   },
+                   {
+                       "file":  "frame_02.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   },
+                   {
+                       "file":  "frame_03.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   },
+                   {
+                       "file":  "frame_04.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   },
+                   {
+                       "file":  "frame_05.png",
+                       "width":  32,
+                       "height":  32,
+                       "palette_colors":  4,
+                       "alpha_levels":  2,
+                       "pass":  true
+                   }
+               ],
+    "summary":  {
+                    "total":  6,
+                    "passed":  6,
+                    "failed":  0
+                }
+}

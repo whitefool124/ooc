@@ -1,0 +1,91 @@
+{
+  "schema": "occ.pixel.ui.runtime.qa.v0.2",
+  "status": "QA_PASS",
+  "screenshots": 8,
+  "requirements": {
+    "reference": [
+      1920,
+      1080
+    ],
+    "compact": [
+      960,
+      540
+    ],
+    "battlefield_hud_split": "1440/480",
+    "character_art": "BLOCKED_CONTENT_NOT_PRODUCED"
+  },
+  "records": [
+    {
+      "file": "font_combat_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "dfef4a422bc0b08ce01ede0adbfcc5ed6d75b2df0cffa2eedaa89da720714168",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_combat_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "534fb28170ab213c8537a2297bf45e2e1998d8319d211c58205f7bbec6de4a5b",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_landing_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "3482636f2c8f9b45a37779c216ab4954bc5d3b5af5f320973a17701c94437574",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_landing_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "efd09c5a7bf2d443ac34b133cbde96c304ca76d50ec762ee0b4354e94548f9e5",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_map_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "a05574a1237c4567958de40d0dea79d1fad74a81f983d32e1e84339080fcc127",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_map_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "1c74ff20c8fcc1af530f21ff8eb4e70c42bd48bf28f500a912d094618bb4a227",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_reward_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "e8983573b923cbc70127ab3a084bdda4df29ff2d9224e6491bb5d6c813abbbb1",
+      "status": "VISUAL_PASS"
+    },
+    {
+      "file": "font_reward_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "df27138f72e3ba93c15af07800f76c3386464e506cd78137adf709d0b50b459d",
+      "status": "VISUAL_PASS"
+    }
+  ]
+}

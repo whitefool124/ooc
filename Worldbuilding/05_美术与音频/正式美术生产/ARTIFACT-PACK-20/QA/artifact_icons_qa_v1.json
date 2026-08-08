@@ -1,0 +1,1169 @@
+{
+  "schema": "occ.artifact-icons.qa.v1",
+  "method": "independent_imagegen_mother_to_auto_guide_to_individual_authored_pixel_cleanup",
+  "count": 20,
+  "passed": 20,
+  "failed": 0,
+  "importer_passed": 20,
+  "importer_failed": 0,
+  "palette": {
+    "outline": "#121618",
+    "coal": "#22282B",
+    "iron_dark": "#374044",
+    "iron": "#5B676B",
+    "iron_light": "#919B9A",
+    "ivory": "#D7CDB1",
+    "brass_dark": "#63461F",
+    "brass": "#B18236",
+    "brass_light": "#E5BC5D",
+    "cyan_dark": "#056D7A",
+    "cyan": "#12C2D5",
+    "heal": "#77976F",
+    "rust": "#A24335",
+    "risk": "#703D5B"
+  },
+  "guide_metadata": {
+    "demolition_canister": {
+      "background_rgb": [
+        19,
+        241,
+        17
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "17006ec39a6623222f9bdfad4d371e09115d3c0fa78ab0a21ac2934514fcc02c"
+    },
+    "aegis_fold": {
+      "background_rgb": [
+        22,
+        241,
+        23
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "1f887504b62a6f070e18e3a2d6cdbf48fbc4117787d22ad0fa039f0f2e99b954"
+    },
+    "phase_spindle": {
+      "background_rgb": [
+        21,
+        240,
+        23
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "92fa6d6d274b77fcdb9c55a349470ea6481adb4bcd4285a898b228ae5f7a2f17"
+    },
+    "binding_frame": {
+      "background_rgb": [
+        18,
+        241,
+        17
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "d6e3e0ee6af75986b5f5052b57fad45a5d7c8445768c3dab55416da3afdb348d"
+    },
+    "survey_lens": {
+      "background_rgb": [
+        17,
+        241,
+        17
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "d53692e58947a588bbb4fb63f869daf74754c5851b0842ece717cb8856f9502d"
+    },
+    "field_siphon": {
+      "background_rgb": [
+        18,
+        241,
+        16
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "61baac46deff1e755ac8542d53775f1752b5cdd39625471b157880770338fe6f"
+    },
+    "mending_lattice": {
+      "background_rgb": [
+        17,
+        238,
+        15
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "613222523cf78ee73e5ff2e90a9af6a2e7e7237a57460844e6ffb99a2424ac14"
+    },
+    "cover_stamp": {
+      "background_rgb": [
+        20,
+        241,
+        20
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "7e6102a040c73958a64e12cd8ee9aaed778d9e0310281431d4bbe7009d34d104"
+    },
+    "breach_wedge": {
+      "background_rgb": [
+        16,
+        242,
+        17
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "8462e3a4e73ed7dbba2df7c1cc82b9e6793b476b74291e3280dd0446d18fcadd"
+    },
+    "relay_compass": {
+      "background_rgb": [
+        22,
+        241,
+        26
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "d911fa6b3e74286f487d40ef9213b6ddf907a17a19bca056427b6e87b09f33fc"
+    },
+    "reaction_bell": {
+      "background_rgb": [
+        19,
+        241,
+        16
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "9ea9d0df9542bb37b582d291600865e12f6c58919002f7372f71cd7ee53ad32b"
+    },
+    "hazard_condenser": {
+      "background_rgb": [
+        19,
+        241,
+        18
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "644103aeb1df29e62107a3f232dc48981c5808cf52f704bc977a2e56a16c2ed1"
+    },
+    "turn_ledger": {
+      "background_rgb": [
+        20,
+        241,
+        20
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "e5d54de4534f48dcbf825011066a9e723909899b0d676d8265f1ffdbab8fcbb1"
+    },
+    "anchor_brace": {
+      "background_rgb": [
+        18,
+        241,
+        18
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "3b849db7de8a7eb3ab7e7060768007db99d43d4fc84c9fd60c2dc965507a4cc6"
+    },
+    "prism_regulator": {
+      "background_rgb": [
+        33,
+        230,
+        31
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "7bc0496e37a5bcef066c2dd7b550ce9e85a2f6080314af2c9d5a60864e255078"
+    },
+    "decoy_lantern": {
+      "background_rgb": [
+        20,
+        241,
+        17
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "064d805672e5eef087fa4236d360af8cd492ebf9d12e590f09de7bc391b923f3"
+    },
+    "shield_balancer": {
+      "background_rgb": [
+        24,
+        240,
+        31
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "e0bb1145ef3405e48b63b2868dd597760cca59eacc70cda7ba7feda77dd3d672"
+    },
+    "seismic_plumb": {
+      "background_rgb": [
+        18,
+        241,
+        16
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "bf59f3fe45903c6ad97d3b4c1919f1b723917f518366d1899181deba3592c67c"
+    },
+    "null_veil": {
+      "background_rgb": [
+        20,
+        241,
+        16
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "3b44c4b1bbff87dc13c77dc2db3f0e018dbab97d15b15d4c32c7276535282507"
+    },
+    "fortune_seal": {
+      "background_rgb": [
+        20,
+        240,
+        20
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "guide_sha256": "a579836d460f7ee650960b595748d27ea43dfe4c1124ab08cc5b0d3864f686b0"
+    }
+  },
+  "assets": [
+    {
+      "id": "F-T01",
+      "slug": "demolition_canister",
+      "display_name": "炎脉封装筒",
+      "semantic": "横卧陶铜双封筒 / 破障火场",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/demolition_canister.png",
+      "formal_sha256": "5f950df2018595090a8b385f1d1c74d1e4f5310e229a910fa15015ee9ac37441",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/F-T01_demolition_canister_raw.png",
+      "source_sha256": "fe1a184876aca58720f82a0f536a8363666de683fdb9743a93af78a51a20e0e6",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 392,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        1,
+        11,
+        31,
+        28
+      ],
+      "center_xy": [
+        15.658,
+        18.217
+      ],
+      "center_offset_xy": [
+        0.158,
+        2.717
+      ],
+      "baseline_bottom_y": 27,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/demolition_canister.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T01",
+      "slug": "aegis_fold",
+      "display_name": "折盾匣",
+      "semantic": "折叠甲片匣 / 加盾",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/aegis_fold.png",
+      "formal_sha256": "aadae786f67f68a11f734ca8e91e20dbd17eb6ce6b6d1354aeab680217645699",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T01_aegis_fold_raw.png",
+      "source_sha256": "e2aa1ebb3222f47fb3c379b8912930a014d356700cc18ca13fe66a6549e343ae",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 465,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        4,
+        6,
+        28,
+        29
+      ],
+      "center_xy": [
+        15.458,
+        17.873
+      ],
+      "center_offset_xy": [
+        -0.042,
+        2.373
+      ],
+      "baseline_bottom_y": 28,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/aegis_fold.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T02",
+      "slug": "phase_spindle",
+      "display_name": "移相线轴",
+      "semantic": "双叉绕线轴 / 位移",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/phase_spindle.png",
+      "formal_sha256": "0aa1ab764a5ddafaef2ef7302c9a0a88b0b29322706be99f5416c742eb6b78a0",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T02_phase_spindle_raw.png",
+      "source_sha256": "354dbfeb369c637aebe1752bc3024b19c2dde42f6cf1f37ce00aa33b1e6ada06",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 456,
+      "visible_colors": 8,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        5,
+        4,
+        28,
+        29
+      ],
+      "center_xy": [
+        15.993,
+        15.842
+      ],
+      "center_offset_xy": [
+        0.493,
+        0.342
+      ],
+      "baseline_bottom_y": 28,
+      "outline_boundary_ratio": 0.8527,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/phase_spindle.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T03",
+      "slug": "binding_frame",
+      "display_name": "缚位框",
+      "semantic": "方框四角钉 / 束缚",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/binding_frame.png",
+      "formal_sha256": "23b3c415ae544733a9529b0470c3a945a57bf81a0f2414c57a3cebe5c3c73da1",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T03_binding_frame_raw.png",
+      "source_sha256": "ec47ef1c6abf8601205f4b171c16e49d27c3020c3820aee91a32af346f26302c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 616,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        3,
+        3,
+        30,
+        30
+      ],
+      "center_xy": [
+        16.0,
+        16.136
+      ],
+      "center_offset_xy": [
+        0.5,
+        0.636
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/binding_frame.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T04",
+      "slug": "survey_lens",
+      "display_name": "显迹测镜",
+      "semantic": "手柄圆镜 / 显迹",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/survey_lens.png",
+      "formal_sha256": "da27e85296162f1415c98e8786e69cd6fe158aba8c7f11ae36fbc5fdff02d641",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T04_survey_lens_raw.png",
+      "source_sha256": "f1a82ad2a50210e568573e81fdb5a8757fdc0bbc8ff89351fa471289323e2a36",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 415,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        3,
+        3,
+        31,
+        30
+      ],
+      "center_xy": [
+        14.945,
+        14.802
+      ],
+      "center_offset_xy": [
+        -0.555,
+        -0.698
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.9744,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/survey_lens.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T05",
+      "slug": "field_siphon",
+      "display_name": "以太虹吸泵",
+      "semantic": "手压泵与弯管 / 回魔反噬",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/field_siphon.png",
+      "formal_sha256": "d1fd096bb83cd28cb78f14954f463c8dcf1b38c039ffddd1a470b4c612ef0ae8",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T05_field_siphon_raw.png",
+      "source_sha256": "b48a8769899ff907220f70d91f088ccea53897882e6ccc5b5c04808700ed8e01",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 417,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        4,
+        3,
+        30,
+        30
+      ],
+      "center_xy": [
+        14.101,
+        17.329
+      ],
+      "center_offset_xy": [
+        -1.399,
+        1.829
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.7717,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/field_siphon.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T06",
+      "slug": "mending_lattice",
+      "display_name": "复元编架",
+      "semantic": "十字编织夹架 / 治疗掉盾",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/mending_lattice.png",
+      "formal_sha256": "ea2b2c6f615a36b4c1f899b4e0296e74ab0810e355d4b38df2abe2e3e61195ab",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T06_mending_lattice_raw.png",
+      "source_sha256": "eff95b8227fed375d8e293ec8175ec61e17c43c6fe4770919b1a0bafe6e2d740",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 462,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        3,
+        3,
+        30,
+        30
+      ],
+      "center_xy": [
+        16.087,
+        16.041
+      ],
+      "center_offset_xy": [
+        0.587,
+        0.541
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.9263,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/mending_lattice.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T07",
+      "slug": "cover_stamp",
+      "display_name": "掩体压模",
+      "semantic": "厚矩形压模 / 造掩体",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/cover_stamp.png",
+      "formal_sha256": "8b691064f79f62c196125527e1d14a21f0941fe9aa80f34d33c2d2b2fa38db69",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T07_cover_stamp_raw.png",
+      "source_sha256": "fb826670eeb9185b9134191d0bf4b67066ddb66a5e4c355d3a1ef3cc7b73d23e",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 649,
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        1,
+        31,
+        30
+      ],
+      "center_xy": [
+        16.0,
+        17.102
+      ],
+      "center_offset_xy": [
+        0.5,
+        1.602
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/cover_stamp.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T08",
+      "slug": "breach_wedge",
+      "display_name": "解构楔",
+      "semantic": "刻纹楔与锤帽 / 近距破障",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/breach_wedge.png",
+      "formal_sha256": "71ce16e858c3c547aaefda131e9afaea1261cb0b2fae4e5ec54b72f5a78542fb",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T08_breach_wedge_raw.png",
+      "source_sha256": "c27b5f93705b0075a778137d8999cd387945e182457e0a6fda19df16b840bcc3",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 428,
+      "visible_colors": 5,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        4,
+        29,
+        30
+      ],
+      "center_xy": [
+        16.799,
+        18.43
+      ],
+      "center_offset_xy": [
+        1.299,
+        2.93
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.7765,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/breach_wedge.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T09",
+      "slug": "relay_compass",
+      "display_name": "导位罗盘",
+      "semantic": "八向罗盘与牵引针 / 推拉",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/relay_compass.png",
+      "formal_sha256": "d02dd42ab0ea941d5aa6c5cbe5c0e24c17f154de530aff38203f39356944d3fc",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T09_relay_compass_raw.png",
+      "source_sha256": "29bfc108dd4ed8c48c34853bc927f7accf0d6a1ce2052c9ca7a7cfbf2bd2d320",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 540,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        3,
+        31,
+        31
+      ],
+      "center_xy": [
+        16.037,
+        16.226
+      ],
+      "center_offset_xy": [
+        0.537,
+        0.726
+      ],
+      "baseline_bottom_y": 30,
+      "outline_boundary_ratio": 0.9024,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/relay_compass.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T10",
+      "slug": "reaction_bell",
+      "display_name": "截击铃",
+      "semantic": "护框小铃 / 反应截击",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/reaction_bell.png",
+      "formal_sha256": "698d75501ac79fef98a5bc0a35cf8e8951a68186e1e71576a18345417686b8d7",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T10_reaction_bell_raw.png",
+      "source_sha256": "96b10650e2bee78f4e6b7b8402c8533c9ba0a73c573c080c477883e3a6b31bb2",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 514,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        4,
+        30,
+        30
+      ],
+      "center_xy": [
+        15.94,
+        16.708
+      ],
+      "center_offset_xy": [
+        0.44,
+        1.208
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.788,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/reaction_bell.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T11",
+      "slug": "hazard_condenser",
+      "display_name": "险地冷凝器",
+      "semantic": "盘管冷凝壶 / 清危险地形",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/hazard_condenser.png",
+      "formal_sha256": "ea6e9a68028a5e3d8f6f124a89746b5476a9c6bc14a7c5263e97335f7a52c931",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T11_hazard_condenser_raw.png",
+      "source_sha256": "089c5c9888c38f4af895636ef05a56a55147cfff51f6a8b5ffeacc98879a38f1",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 422,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        4,
+        4,
+        29,
+        30
+      ],
+      "center_xy": [
+        15.294,
+        17.711
+      ],
+      "center_offset_xy": [
+        -0.206,
+        2.211
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.6696,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/hazard_condenser.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T12",
+      "slug": "turn_ledger",
+      "display_name": "行程簿",
+      "semantic": "扣带账簿与行动刻线 / AP 调度",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/turn_ledger.png",
+      "formal_sha256": "2dfd5bf7bf6558a43c8377f2a3cca99931d3fb95c39b0e011b54e9abc0a5b3c8",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T12_turn_ledger_raw.png",
+      "source_sha256": "dec35d71488a12ed4a0a7325db389978cf1044884bdfb59cd4031b45323a6d21",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 502,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        6,
+        3,
+        29,
+        30
+      ],
+      "center_xy": [
+        16.58,
+        15.629
+      ],
+      "center_offset_xy": [
+        1.08,
+        0.129
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.931,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/turn_ledger.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T13",
+      "slug": "anchor_brace",
+      "display_name": "定锚支架",
+      "semantic": "三脚撑架 / 抗推拉反应",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/anchor_brace.png",
+      "formal_sha256": "a57674b4d33722fc27921cb288d5741af1a3c9a4a83ead9cf1d80c3e7d5d86a2",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T13_anchor_brace_raw.png",
+      "source_sha256": "969ee8c83f97589a70d98c2c2a191a28e95adc43fa176975f315d06beca6964d",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 317,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        4,
+        31,
+        31
+      ],
+      "center_xy": [
+        15.972,
+        19.208
+      ],
+      "center_offset_xy": [
+        0.472,
+        3.708
+      ],
+      "baseline_bottom_y": 30,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/anchor_brace.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T14",
+      "slug": "prism_regulator",
+      "display_name": "棱返调节器",
+      "semantic": "框装三棱镜 / 远程反射",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/prism_regulator.png",
+      "formal_sha256": "3eeef8dabf45e0ab3fcd58d753111d0b410e358614be2450eda7fc923b0c7e34",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T14_prism_regulator_raw.png",
+      "source_sha256": "c61db4892fb0a4c5d3ad4006f8b0b009250e9d4030c20c7af69db7bd6f8cc832",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 589,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        2,
+        31,
+        31
+      ],
+      "center_xy": [
+        16.0,
+        16.0
+      ],
+      "center_offset_xy": [
+        0.5,
+        0.5
+      ],
+      "baseline_bottom_y": 30,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/prism_regulator.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T15",
+      "slug": "decoy_lantern",
+      "display_name": "诱导灯",
+      "semantic": "四足百叶灯笼 / 诱饵部署",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/decoy_lantern.png",
+      "formal_sha256": "d993d223dfe6e745e6cf510e7132f138a5a55fee4f8ba3369c1018f9b4ca83f4",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T15_decoy_lantern_raw.png",
+      "source_sha256": "53c3f9d2b60a3c4396f339a4b9cd4e5c0136334edd08b13fd9960c520761351f",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 414,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        5,
+        3,
+        28,
+        31
+      ],
+      "center_xy": [
+        16.012,
+        16.568
+      ],
+      "center_offset_xy": [
+        0.512,
+        1.068
+      ],
+      "baseline_bottom_y": 30,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/decoy_lantern.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T16",
+      "slug": "shield_balancer",
+      "display_name": "护盾均衡阀",
+      "semantic": "双表盘阀体 / 护盾转移",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/shield_balancer.png",
+      "formal_sha256": "eda1f6df776d0618981aa9941a3c2cb29d047b77faa4bceb5f9a92a2598086cc",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T16_shield_balancer_raw.png",
+      "source_sha256": "1551bf7c1762ede1ad168291dc63b661c9f83b8d76fc0debce694060aecdd23c",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 493,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        2,
+        4,
+        31,
+        30
+      ],
+      "center_xy": [
+        16.004,
+        15.72
+      ],
+      "center_offset_xy": [
+        0.504,
+        0.22
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.7724,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/shield_balancer.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T17",
+      "slug": "seismic_plumb",
+      "display_name": "震测铅锤",
+      "semantic": "悬锤与刻度架 / 范围延迟",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/seismic_plumb.png",
+      "formal_sha256": "44ad2d826af1a8f29a4b7bae6a2cf555583bb308d716a6c5f11934758b6cb392",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T17_seismic_plumb_raw.png",
+      "source_sha256": "a167a159df6b9dc46d05143fd8001171d2eb37bfdb2d31a654a9e53334b9c0c9",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 459,
+      "visible_colors": 6,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        3,
+        3,
+        30,
+        30
+      ],
+      "center_xy": [
+        16.0,
+        16.017
+      ],
+      "center_offset_xy": [
+        0.5,
+        0.517
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.5311,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/seismic_plumb.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T18",
+      "slug": "null_veil",
+      "display_name": "静默幕",
+      "semantic": "卷起刻纹帘幕 / 净化代价",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/null_veil.png",
+      "formal_sha256": "9a9645f096643abb6587219720fda5a68be6b886cd39bdba28bb8b86fd132c09",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T18_null_veil_raw.png",
+      "source_sha256": "e09c0ac56b2b2b224e5a6888b02d9e7860351d029dc664991697f4f7ebe1cfde",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 540,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        3,
+        4,
+        30,
+        30
+      ],
+      "center_xy": [
+        16.0,
+        14.739
+      ],
+      "center_offset_xy": [
+        0.5,
+        -0.761
+      ],
+      "baseline_bottom_y": 29,
+      "outline_boundary_ratio": 0.9896,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/null_veil.png.meta",
+        "missing": []
+      }
+    },
+    {
+      "id": "G-T19",
+      "slug": "fortune_seal",
+      "display_name": "冒险封签",
+      "semantic": "蜡封签牌与断裂护环 / 风险伤害",
+      "formal_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/fortune_seal.png",
+      "formal_sha256": "1893506760f3b4c331726014e8f1ce2d29298b6f50fe2349eaf256a976aec843",
+      "source_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T19_fortune_seal_raw.png",
+      "source_sha256": "a8d26baba5d53018cd1696478d211b45c91c1229b4b7c2e072e9c625932a65f1",
+      "size": [
+        32,
+        32
+      ],
+      "visible_pixels": 571,
+      "visible_colors": 7,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds_xyxy": [
+        4,
+        4,
+        29,
+        31
+      ],
+      "center_xy": [
+        16.0,
+        16.016
+      ],
+      "center_offset_xy": [
+        0.5,
+        0.516
+      ],
+      "baseline_bottom_y": 30,
+      "outline_boundary_ratio": 1.0,
+      "connected_components": 1,
+      "main_component_ratio": 1.0,
+      "result": "PASS",
+      "failures": [],
+      "unity_importer": {
+        "result": "PASS",
+        "meta_path": "E:/数据库/OCC_Codex/UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/fortune_seal.png.meta",
+        "missing": []
+      }
+    }
+  ]
+}

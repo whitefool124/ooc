@@ -1,0 +1,344 @@
+{
+  "schema": "occ.pixel.ui.assets.v0.2",
+  "status": "QA_PASS",
+  "asset_count": 30,
+  "slice_border": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "logical_pixel_scale": 4,
+  "records": [
+    {
+      "id": "panel",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "47d4a1e8533a96d311175f5441c14865af4e171ba147cc9e685bd8945dc147a8",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_elevated",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "f1598a6b63e4d4f99bc2d22bf7325568382a04b6bff3d9ab854c19792cda858a",
+      "status": "PASS"
+    },
+    {
+      "id": "header",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "e86a2289891525401aecf114168f8bb05e2b7d85fcc632f9f7f31d925089c381",
+      "status": "PASS"
+    },
+    {
+      "id": "button_idle",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "443e7155880b6fb4bbcc2696bc322ed0a5fba06d6e85ebf56c5053d8dc23b9b2",
+      "status": "PASS"
+    },
+    {
+      "id": "button_hover",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "c423c2f564f3b02983ac90ba839fa63f4a102ebdfd68fa7d9c31494c70c9aee6",
+      "status": "PASS"
+    },
+    {
+      "id": "button_pressed",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "8fee3112dd1be371093d55be7be5ee0e0f24567425c0fa75ccd5af3ea121e268",
+      "status": "PASS"
+    },
+    {
+      "id": "button_disabled",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "c7d3cb162c6e9e499f9c4c51a71e061505f926bafea6e6e2ccf1cd0615f511f0",
+      "status": "PASS"
+    },
+    {
+      "id": "tab_idle",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "981eb50b137afca30f161bba11d794a0d2dbefaa520d311ab7982109f02331e4",
+      "status": "PASS"
+    },
+    {
+      "id": "tab_active",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "bcd9dbf6ce1377d3d98ba2daf6365b2e080da565706aa3d2bdeaa824e3106084",
+      "status": "PASS"
+    },
+    {
+      "id": "slot",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "e0caea71bdd8b9719c9e60c424dcb16f829a2e24fb5360b5302faa1b2368545a",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_track",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "e61c3fc2eac57872d4b95f81d9e537e1636b7a3ad29471532bde7621d7392f34",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_fill",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "ad9b7daec14387cc92f0b3fdda9e5f33f0d4349e5ffe401247596c84250ea06b",
+      "status": "PASS"
+    },
+    {
+      "id": "focus",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 3,
+      "hard_alpha": true,
+      "sha256": "7a8c0eb2dd78e743d1ecadf441a1ef708a9936a3dfc10cf88046112d0606eba6",
+      "status": "PASS"
+    },
+    {
+      "id": "danger",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "df2b56b799a2070d1aea6ccb54907785152b62ac4f32952ecb57b15374e5aba2",
+      "status": "PASS"
+    },
+    {
+      "id": "reward",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "6c88afc4fe8c49c13a73adef7daadfac10e4eecb14926f7aaca9c6b83336ada3",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_console",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "46d7fb8634a7f3b9de566b3d0f60a3b86576f309cf12e0891dd35e38252500e9",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_module",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "7fb8348553e7e4fe51aabf51082459cb302685ac3df358a12fc0b59fc723bdd6",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_target",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "9a9da91aacf4c18e562376ee1ccd8c6cb154bfa81acbbcb03f1a190c8274f7c4",
+      "status": "PASS"
+    },
+    {
+      "id": "panel_log",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "daf5343c8478366c77facf7586245c676b491e36f2037bcbaa4ddaf959b1421c",
+      "status": "PASS"
+    },
+    {
+      "id": "group_weapon",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "f974da1ad9a9175bb23e591356c4059380b506f521429aa2a1026943d3ca8f56",
+      "status": "PASS"
+    },
+    {
+      "id": "group_spell",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "7fdf8e5a6100663cfa0dbbe7ac1836f9d7e391a3a8af7d8735ba341de931c0b2",
+      "status": "PASS"
+    },
+    {
+      "id": "group_interaction",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "8f5a6853b01177b1b893ac79240be46484966d7ed27eef745709ec626d322e1c",
+      "status": "PASS"
+    },
+    {
+      "id": "group_item",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "fda2f9602d1278bf415e640e5229d071ad46be2efedcfc792b3d0913b45a752c",
+      "status": "PASS"
+    },
+    {
+      "id": "button_end_turn",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "77a08a4e5c646b28bbf1ae490cfc2149f7a7be69796be85add63067bc9d69b72",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_segment_health",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "7d3375041bf0fcf9902e5aec14b7d3cc328cde6361e497460d24e65b53e5c758",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_segment_shield",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "6ea614cc96a7331e4067021c5789cfa18efa92bf4edf89f0dc840518547a6aa8",
+      "status": "PASS"
+    },
+    {
+      "id": "bar_segment_mana",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "9f112af7db312af5834668cdf914e63c6d23dc484a6e19eca8bb9382544377e5",
+      "status": "PASS"
+    },
+    {
+      "id": "badge_cost",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "e09ae4f0bc548c0d591db1f998b0b4e8873f093dc11a53e743adad4883c93b5b",
+      "status": "PASS"
+    },
+    {
+      "id": "slot_locked",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "hard_alpha": true,
+      "sha256": "b7ca560326bc9673355ae7b4d665391d28ca1e611e90ecf3ea4af88fc364eb5a",
+      "status": "PASS"
+    },
+    {
+      "id": "timeline_node",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 6,
+      "hard_alpha": true,
+      "sha256": "fcb279de950eb716069c58d1aa222fc3535dd605b9119674bcd9e7b7053ac250",
+      "status": "PASS"
+    }
+  ]
+}

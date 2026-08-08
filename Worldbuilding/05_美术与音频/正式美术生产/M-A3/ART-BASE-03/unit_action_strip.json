@@ -1,0 +1,29 @@
+{
+  "cell": [
+    64,
+    64
+  ],
+  "center_x": 32,
+  "baseline_y": 58,
+  "frame_counts": {
+    "idle": 4,
+    "move": 6,
+    "attack_or_cast": [
+      6,
+      8
+    ],
+    "hit": [
+      3,
+      4
+    ],
+    "defeat": [
+      6,
+      8
+    ]
+  },
+  "directions": [
+    "left",
+    "right"
+  ],
+  "palette_limit": 24
+}

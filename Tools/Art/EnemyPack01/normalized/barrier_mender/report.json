@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "spec": {
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 38,
+    "maxBodyWidth": 44,
+    "minBodyHeight": 32,
+    "maxBodyHeight": 38,
+    "alphaThreshold": 64,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 42,
+    "despill": true,
+    "paletteColors": 20,
+    "gifDelay": 12
+  },
+  "inputs": [
+    "Tools\\Art\\EnemyPack01\\raw\\barrier_engineer\\source.png"
+  ],
+  "strip": "Tools\\Art\\EnemyPack01\\normalized\\barrier_mender\\barrier_mender.png",
+  "frames": "Tools\\Art\\EnemyPack01\\normalized\\barrier_mender\\frames",
+  "gif": "Tools\\Art\\EnemyPack01\\normalized\\barrier_mender\\preview.gif",
+  "qa": "Tools\\Art\\EnemyPack01\\normalized\\barrier_mender\\qa.png",
+  "metrics": [
+    {
+      "source": "Tools\\Art\\EnemyPack01\\raw\\barrier_engineer\\source.png",
+      "empty": false,
+      "sourceBounds": [
+        278,
+        182,
+        863,
+        1070
+      ],
+      "sourceBodyWidth": 585,
+      "sourceBodyHeight": 888,
+      "scale": 0.04279279279279279,
+      "outputWidth": 25,
+      "outputHeight": 38,
+      "outputX": 20,
+      "outputY": 20,
+      "normalizedBounds": [
+        20,
+        20,
+        45,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

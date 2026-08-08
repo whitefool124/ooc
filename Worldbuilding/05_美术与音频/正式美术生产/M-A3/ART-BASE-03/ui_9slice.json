@@ -1,0 +1,14 @@
+{
+  "size": [
+    32,
+    32
+  ],
+  "border": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "palette_limit": 8,
+  "style": "minimal industrial 1-2px lines"
+}

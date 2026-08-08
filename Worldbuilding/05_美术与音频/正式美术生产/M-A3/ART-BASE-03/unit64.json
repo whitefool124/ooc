@@ -1,0 +1,20 @@
+{
+  "size": [
+    64,
+    64
+  ],
+  "palette_limit": 24,
+  "transparent_corners": true,
+  "center_x": 32,
+  "baseline_y": 58,
+  "max_bottom_y": 59,
+  "standard_body_height": [
+    32,
+    38
+  ],
+  "elite_body_height": [
+    38,
+    44
+  ],
+  "qa_scale": 4
+}

@@ -1,0 +1,88 @@
+{
+  "schema": "occ.runtime.visual.qa.v0.1",
+  "status": "VISUAL_QA_PASS_REVIEWED_2026_08_07",
+  "screenshot_count": 5,
+  "target_resolutions": [
+    [
+      1920,
+      1080
+    ],
+    [
+      960,
+      540
+    ]
+  ],
+  "contact_sheet": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\occ_runtime_visual_contact_v01.png",
+  "contact_sha256": "ea0caabf7237fde23f69fb3630d8e5e4f99163a1c207d24e4f8d6cc7f0f213e5",
+  "records": [
+    {
+      "id": "combat_pixel_ui_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A4\\Runtime\\combat_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "08e0ec787f97bfe4acd2509612408db32bcbca5de0461aef2ae6b4b0a6102598",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\combat_pixel_ui_1920x1080_grayscale.png",
+      "grayscale_sha256": "2aea289d0b361ab6af9e48e54177ddc83a4fd5dd20172231e1bcf963e919e573",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\combat_pixel_ui_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "ecd62d6e095931e5ab857c92ccea7c89bb2f3373e9b592c14333d377a4b87153"
+    },
+    {
+      "id": "combat_pixel_ui_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A4\\Runtime\\combat_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "2a0602eeeda58fee64938ffafeff6bf7d1c9257957bcfc4a11a138d1a13cf269",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\combat_pixel_ui_960x540_grayscale.png",
+      "grayscale_sha256": "8312c6085a4bd009c7867fff2da2d7be4a04d04e45193236654c0e46da2a041b",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\combat_pixel_ui_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "f4f323bcfb5a1c525743e67dc5afd90feb0268fcce9bb62e255035a912da098a"
+    },
+    {
+      "id": "landing_pixel_ui_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A4\\Runtime\\landing_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "4b02365ef943b2ce60bbbe616102829981729114812087301c8ad4bd6489bff5",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\landing_pixel_ui_1920x1080_grayscale.png",
+      "grayscale_sha256": "afd2051d4bed7b49a2d3d0cdb68d62d3e23f4ee3a1498230b23c5f2ca19cb75c",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\landing_pixel_ui_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "3ed75f513a40c7fe0fa75c74f43d7bb4810f87f01fc72c259aa1a5f7896c4cdd"
+    },
+    {
+      "id": "landing_pixel_ui_960x540",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A4\\Runtime\\landing_pixel_ui_960x540.png",
+      "size": [
+        960,
+        540
+      ],
+      "sha256": "4d22ac2224cdd14639dfc7b2446e0244b8cf9fdd3168511df54c1c0b5019e1ff",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\landing_pixel_ui_960x540_grayscale.png",
+      "grayscale_sha256": "6f9b92aae7709d9758618fa5e55fe9c5b43d2290d007ed9cb999f568977be580",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\landing_pixel_ui_960x540_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "8e857235db72ce8e9cc9aae4c9826b22915d29a928d00aeffdc436ea9509d845"
+    },
+    {
+      "id": "map_pixel_ui_1920x1080",
+      "source": "UnityProject\\Assets\\Game\\QA\\M-A4\\Runtime\\map_pixel_ui_1920x1080.png",
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "506c326ff7ad27d2bb0553f6bed7a9922a832d25848b42be0070a246cf111c0f",
+      "grayscale": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\map_pixel_ui_1920x1080_grayscale.png",
+      "grayscale_sha256": "31813949d6ffc548ec6fea8237e28c8d2cb464d29d278620370d49b80484ca85",
+      "deuteranopia_risk": "UnityProject\\Assets\\Game\\QA\\M-A4\\VisualAudit\\map_pixel_ui_1920x1080_deuteranopia_risk.png",
+      "deuteranopia_risk_sha256": "275477bb2ed4780af2eb274b708dba19922eb7d232d3fa5f83cc16998ebf8e05"
+    }
+  ],
+  "notes": [
+    "Character and unit visual approval is explicitly blocked and excluded from pass claims.",
+    "Deuteranopia output is a deterministic risk preview; shape and luminance remain the primary acceptance criteria."
+  ]
+}

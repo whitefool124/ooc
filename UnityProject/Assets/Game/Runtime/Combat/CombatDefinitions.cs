@@ -1,10 +1,47 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OCC.Combat
 {
     public enum DamageType { Physical, Fire, Arcane }
-    public enum StatusType { Burning, Slow, Bound, ArmorBreak }
+    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed }
     public enum EquipmentSlot { MainHand, OffHand }
+
+    public enum SkillTargetRule { Self, EnemyUnit, AllyUnit, AnyUnit, GridCell, Destructible }
+    public enum SkillDeliveryMethod { Direct, Projectile, Area }
+    public enum SkillEffectType { Damage, RestoreHealth, RestoreShield, RestoreMana, ApplyStatus, ClearStatus, MoveSource, DamageObject }
+    public enum SkillEffectRecipient { PrimaryTarget, Source }
+    public enum SkillModifierType { ArmorPierce, InitiativeDelay, Radius, IgnoreLineOfSight }
+
+    public readonly struct SkillEffectDefinition
+    {
+        public SkillEffectType Type { get; }
+        public SkillEffectRecipient Recipient { get; }
+        public int Amount { get; }
+        public DamageType DamageType { get; }
+        public StatusType Status { get; }
+        public int Duration { get; }
+
+        private SkillEffectDefinition(SkillEffectType type, int amount, DamageType damageType, StatusType status, int duration, SkillEffectRecipient recipient)
+        { Type = type; Amount = amount; DamageType = damageType; Status = status; Duration = duration; Recipient = recipient; }
+
+        public static SkillEffectDefinition Damage(int amount, DamageType type) => new SkillEffectDefinition(SkillEffectType.Damage, amount, type, default, 0, SkillEffectRecipient.PrimaryTarget);
+        public static SkillEffectDefinition RestoreHealth(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.RestoreHealth, amount, default, default, 0, recipient);
+        public static SkillEffectDefinition RestoreShield(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.RestoreShield, amount, default, default, 0, recipient);
+        public static SkillEffectDefinition RestoreMana(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.Source) => new SkillEffectDefinition(SkillEffectType.RestoreMana, amount, default, default, 0, recipient);
+        public static SkillEffectDefinition ApplyStatus(StatusType status, int duration) => new SkillEffectDefinition(SkillEffectType.ApplyStatus, 0, default, status, duration, SkillEffectRecipient.PrimaryTarget);
+        public static SkillEffectDefinition ClearStatus(StatusType status, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.ClearStatus, 0, default, status, 0, recipient);
+        public static SkillEffectDefinition MoveSource(int distance) => new SkillEffectDefinition(SkillEffectType.MoveSource, distance, default, default, 0, SkillEffectRecipient.Source);
+        public static SkillEffectDefinition DamageObject(int amount) => new SkillEffectDefinition(SkillEffectType.DamageObject, amount, default, default, 0, SkillEffectRecipient.PrimaryTarget);
+    }
+
+    public readonly struct SkillModifierDefinition
+    {
+        public SkillModifierType Type { get; }
+        public int Value { get; }
+        public SkillModifierDefinition(SkillModifierType type, int value = 1) { Type = type; Value = value; }
+    }
 
     public sealed class WeaponDefinition
     {
@@ -35,11 +72,41 @@ namespace OCC.Combat
         public StatusType? Status { get; }
         public int StatusDuration { get; }
         public int InitiativeDelay { get; }
+        public SkillTargetRule TargetRule { get; }
+        public SkillDeliveryMethod Delivery { get; }
+        public IReadOnlyList<SkillEffectDefinition> Effects { get; }
+        public IReadOnlyList<SkillModifierDefinition> Modifiers { get; }
+        public CombatFeedbackKind PresentationKind { get; }
 
         public SkillDefinition(string id, string displayName, DamageType damageType, int damage, int range, int manaCost, int cooldown, StatusType? status = null, int statusDuration = 0, int initiativeDelay = 0)
         {
             Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; Range = range; ManaCost = manaCost; Cooldown = cooldown; Status = status; StatusDuration = statusDuration; InitiativeDelay = initiativeDelay;
+            TargetRule = SkillTargetRule.EnemyUnit;
+            Delivery = SkillDeliveryMethod.Projectile;
+            List<SkillEffectDefinition> effects = new List<SkillEffectDefinition>();
+            if (damage > 0) effects.Add(SkillEffectDefinition.Damage(damage, damageType));
+            if (status.HasValue) effects.Add(SkillEffectDefinition.ApplyStatus(status.Value, statusDuration));
+            Effects = effects;
+            Modifiers = initiativeDelay > 0 ? new[] { new SkillModifierDefinition(SkillModifierType.InitiativeDelay, initiativeDelay) } : Array.Empty<SkillModifierDefinition>();
+            PresentationKind = status.HasValue ? CombatFeedbackCatalog.ForStatus(status.Value) : CombatFeedbackKind.Damage;
         }
+
+        public SkillDefinition(string id, string displayName, SkillTargetRule targetRule, SkillDeliveryMethod delivery, int range, int manaCost, int cooldown, CombatFeedbackKind presentationKind, IEnumerable<SkillEffectDefinition> effects, IEnumerable<SkillModifierDefinition> modifiers = null)
+        {
+            Id = id; DisplayName = displayName; TargetRule = targetRule; Delivery = delivery; Range = range; ManaCost = manaCost; Cooldown = cooldown; PresentationKind = presentationKind;
+            Effects = (effects ?? throw new ArgumentNullException(nameof(effects))).ToArray();
+            Modifiers = modifiers == null ? Array.Empty<SkillModifierDefinition>() : modifiers.ToArray();
+            SkillEffectDefinition? damage = Effects.Where(effect => effect.Type == SkillEffectType.Damage).Select(effect => (SkillEffectDefinition?)effect).FirstOrDefault();
+            SkillEffectDefinition? status = Effects.Where(effect => effect.Type == SkillEffectType.ApplyStatus).Select(effect => (SkillEffectDefinition?)effect).FirstOrDefault();
+            DamageType = damage?.DamageType ?? DamageType.Physical;
+            Damage = damage?.Amount ?? 0;
+            Status = status?.Status;
+            StatusDuration = status?.Duration ?? 0;
+            InitiativeDelay = ModifierValue(SkillModifierType.InitiativeDelay);
+        }
+
+        public int ModifierValue(SkillModifierType type) => Modifiers.Where(modifier => modifier.Type == type).Select(modifier => modifier.Value).FirstOrDefault();
+        public bool HasModifier(SkillModifierType type) => Modifiers.Any(modifier => modifier.Type == type);
     }
 
     public sealed class ConsumableDefinition

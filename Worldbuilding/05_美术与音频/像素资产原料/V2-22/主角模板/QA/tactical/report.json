@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "direct nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "Worldbuilding/05_美术与音频/像素资产原料/V2-22/主角模板/战棋/occ_hero_template_tactical_v01_keyed.png",
+  "output": "Worldbuilding/05_美术与音频/像素资产原料/V2-22/主角模板/战棋/occ_hero_template_tactical_v01.png",
+  "qa": "Worldbuilding/05_美术与音频/像素资产原料/V2-22/主角模板/QA/tactical/qa_4x.png",
+  "size": [
+    64,
+    64
+  ],
+  "paletteColors": 24,
+  "paletteLimit": 24,
+  "hardAlpha": true,
+  "bounds": [
+    17,
+    3,
+    51,
+    60
+  ],
+  "chromaKey": false
+}

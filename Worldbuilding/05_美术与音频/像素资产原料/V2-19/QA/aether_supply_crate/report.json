@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "direct nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "Worldbuilding/05_美术与音频/像素资产原料/V2-19/Props32/aether_supply_crate_keyed.png",
+  "output": "Worldbuilding/05_美术与音频/像素资产原料/V2-19/Props32/aether_supply_crate.png",
+  "qa": "Worldbuilding/05_美术与音频/像素资产原料/V2-19/QA/aether_supply_crate/qa_4x.png",
+  "size": [
+    32,
+    32
+  ],
+  "paletteColors": 16,
+  "paletteLimit": 16,
+  "hardAlpha": true,
+  "bounds": [
+    6,
+    8,
+    26,
+    24
+  ],
+  "chromaKey": false
+}

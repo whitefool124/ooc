@@ -107,9 +107,7 @@ namespace OCC.Combat.Presentation
 
         private static void EnsureEventSystem()
         {
-            if (FindAnyObjectByType<EventSystem>() != null) return;
-            GameObject input = new GameObject("EventSystem");
-            input.AddComponent<EventSystem>();
+            RuntimeUiEventSystem.Ensure();
         }
 
         private void AddHoverFeedback(Button button)

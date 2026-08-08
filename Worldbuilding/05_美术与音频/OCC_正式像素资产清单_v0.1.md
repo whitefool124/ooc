@@ -130,3 +130,54 @@ Source and QA outputs are under `像素资产原料/V2-16/`. This is a static ti
 | `riflewoman_native64_v02` | 64×64 | `QA_SAMPLE` | 提示词要求 64×64 逻辑像素母版、每格等宽、最多 24 色、绿幕与脚底固定于逻辑 `Y=58`；本地只做最近邻取样、绿幕去背和无抖动调色板压缩，输出为 23 色，透明边界末行为 59，报告 `PASS`。 |
 
 该路线禁止按轮廓裁切、缩放拟合或重定位。`V2-18/direct_pixel_master_qa.py` 仅允许整画布最近邻取样、硬 alpha/绿幕去背、调色板压缩和 QA 叠线；素材仍未导入 Unity。
+
+## V2-19 Codex 单图生成与规范化样本（2026-08-02）
+
+| 资产 | 尺寸 | 状态 | 审查结论 |
+| --- | --- | --- | --- |
+| `aether_supply_crate_v02` | 32×32 | `FORMAL` 原料 / Unity 未导入 | 使用 Codex 内建 ImageGen 生成两张独立绿幕单图；第二版经 chroma-key 去背、整画布最近邻采样和无抖动压缩后为 14 色、硬 alpha，4× QA、调色板和 JSON 规格报告均为 `PASS`，边界为 `[6,8,26,23]`。按产品决定接受其低饱和冷青/安全黄表现；不替换现有 `loot_crate`。 |
+
+原图、去背中间文件、规范化 PNG 与 QA 位于 `像素资产原料/V2-19/`。此条目验证 Codex 生成可纳入 OCC 的“单图原料 → 本地规范化 → QA”路径，并已通过本项人工目视门禁；在专门导入任务完成前不得复制到 Unity 正式资源目录。
+
+## R-F5-02 战斗反馈静态图标复用基线（2026-08-04）
+
+本项未生成、复制或替换像素资产，仅将已经导入 `Assets/Game/Resources/Art/FormalIcons32/` 的六张正式静态图标收束为基础效果语义入口。
+
+| Unity 资源键 | 复用语义 | 导入复核 |
+| --- | --- | --- |
+| `attack` | 伤害、破甲、物件摧毁、目标击破 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+| `skill` | 护盾吸收、束缚、护盾恢复 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+| `skill_two` | 燃烧、以太恢复 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+| `move` | 迟缓、位移 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+| `loot` | 生命修复 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+| `interact` | 状态净化、物件受损 | 32×32 / Sprite / Point / Clamp / 透明 / 无 mipmap |
+
+14 类反馈通过“资源键 + 固定颜色 + 中文短标签”形成唯一组合；27 个验证技能只引用基础表现语义，不为单个技能创建专属图标或多帧动画。后续资产扩容必须继续经过独立原料、硬 alpha、调色板与 4× QA 门禁，不能把本次语义复用视为未审资产的批准入口。
+# 2026-08-08 类塔科夫背包与搜索图标增量
+
+- `FormalItemIcons32/fire_scroll`、`demolition_canister`：F-S01/F-T01 专属内容图标。
+- `FormalItemIcons32/category_*`：武器、防具、消耗品、卷轴、法宝、材料、任务物、容器 8 类。
+- `FormalItemIcons32/inventory_*`：搜索、筛选、排序、自动放入、快捷栏、使用、拆解、丢弃、旋转、清除条件、负重 11 项。
+- `FormalItemIcons32/loot_*`：未知、搜索中、空容器 3 项；与容器状态文字共同呈现，不依赖颜色单独识别。
+- 合计 18 张，全部 32×32、硬 Alpha、3–7 色；Sprite / Point / Clamp / 无 mipmap，18/18 PASS。
+- QA：`UnityProject/Artifacts/Inventory/inventory_icons_contact_sheet.png` 与 `inventory_icons_qa.json`。
+- 2026-08-08 新系统补缺 QA：`inventory_missing_icons_contact_sheet.png`、`inventory_missing_icons_qa.json`；6/6 为 32×32、硬 Alpha、3–5 个不透明色，Unity Importer 6/6 为 Sprite/Point/Clamp/无 mipmap。
+
+## ENEMY-PACK-01 当前时代特色敌人（2026-08-08）
+
+| 资产 | Unity 路径 | 最终像素门禁 | 运行时语义 |
+| --- | --- | --- | --- |
+| `sigil_mauler` | `Assets/Game/Resources/Art/FormalUnits64/sigil_mauler.png` | 64×64、38 px 高、20 色、硬 Alpha、中心 X=31、接地点 Y=57，PASS | 刻印锤手；大锤近战与接触破甲，不含爆破箱、弹体、枪械或现代工兵语义 |
+| `barrier_mender` | `Assets/Game/Resources/Art/FormalUnits64/barrier_mender.png` | 64×64、38 px 高、20 色、硬 Alpha、中心 X=32、接地点 Y=57，PASS | 屏障修补师；手杖、符片与线轴施术，不含现代工程兵轮廓 |
+| `tether_hound` | `Assets/Game/Resources/Art/FormalUnits64/tether_hound.png` | 64×64、34 px 高、18 色、硬 Alpha、中心 X=31、接地点 Y=57，PASS | 缚环猎兽；原生魔法生物与项圈定式，不是机械犬、污染变异或智慧异族 |
+| `shieldguard` | `Assets/Game/Resources/Art/FormalUnits64/shieldguard.png` | 64×64、46 px 高、24 色、硬 Alpha、中心 X=31.5、接地点 Y=57，PASS | 铭盾卫；宽盾正面轮廓与接触迟缓 |
+| `pyromancer` | `Assets/Game/Resources/Art/FormalUnits64/pyromancer.png` | 64×64、46 px 高、24 色、硬 Alpha、中心 X=31.5、接地点 Y=57，PASS | 火矢术师；手杖与以太火纹，不含火器轮廓 |
+| `raider` | `Assets/Game/Resources/Art/FormalUnits64/raider.png` | 64×64、46 px 高、24 色、硬 Alpha、中心 X=32、接地点 Y=57，PASS | 钩刃突袭者；轻装前倾与钩刃牵制 |
+| `elite_vanguard` | `Assets/Game/Resources/Art/FormalUnits64/elite.png` | 64×64、46 px 高、24 色、硬 Alpha、中心 X=31.5、接地点 Y=57，PASS | 刻阵先锋；重甲、重锤和刻阵肩甲 |
+| `stone_snare` | `Assets/Game/Resources/Art/FormalUnits64/stone_snare.png` | 64×64、38 px 高、20 色、硬 Alpha、中心 X=32、接地点 Y=57，PASS | 石索缚师；绳索与双石坠轮廓，不读作爆炸物 |
+| `lantern_revealer` | `Assets/Game/Resources/Art/FormalUnits64/lantern_revealer.png` | 64×64、38 px 高、20 色、硬 Alpha、中心 X=32、接地点 Y=57，PASS | 显影灯使；冷青刻纹铜灯，不是电灯/现代侦察器材 |
+| `rune_arbalist` | `Assets/Game/Resources/Art/FormalUnits64/rune_arbalist.png` | 64×64、38 px 高、20 色、硬 Alpha、中心 X=31、接地点 Y=57，PASS | 重弩手；宽弩臂、弩弦与短矢槽，无枪管/枪托/瞄准镜 |
+
+- 旧 `aether_sapper`、`barrier_engineer`、`relay_hound` 母图、规范化输出与报告保留在 `Tools/Art/EnemyPack01/` 作为修订证据；旧 Unity 导入副本已移出正式资源目录并归档到 `retired_unity_drafts/`，不再可由 `FormalArtRegistry` 访问。
+- 最终母图追溯、规范化输出、GIF 与报告位于 `Tools/Art/EnemyPack01/raw/` 和 `normalized/`；1×/4×、灰阶、轮廓、中心/基线、调色板与汇总报告位于 `final_qa/`。
+- 十张扩展包单位图均经最终像素 QA；新增三张 Unity Importer 经 Funplay 实测为 Sprite / Point / Clamp / PPU32 / 无 mipmap，既有七张由全量门禁复核。运行时以 10 个稳定 ID/ArtId 注册且本包内不复用轮廓。

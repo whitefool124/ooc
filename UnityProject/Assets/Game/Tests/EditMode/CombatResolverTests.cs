@@ -108,7 +108,7 @@ namespace OCC.Combat.Tests
         public void FullBackpack_RejectsLootWithoutSpendingActionPoint()
         {
             CombatState state = CreateHeroState();
-            for (int i = 0; i < 12; i++) Assert.That(state.Backpack.TryAdd(new InventoryItem("fill" + i, "填充物")), Is.True);
+            for (int i = 0; i < 60; i++) Assert.That(state.Backpack.TryAdd(new InventoryItem("fill" + i, "填充物")), Is.True);
             state.SetLoot(new LootContainer(new GridPosition(1, 0), new InventoryItem("core", "以太核心")));
             CombatResolver.BeginTurn(state, "hero");
 
@@ -132,11 +132,11 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyArchetypes_ProvideEightBaseTypesAndOneElite()
+        public void EnemyArchetypes_ProvideTwelveBaseTypesAndThreeEliteOrBossVariants()
         {
-            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(9));
-            Assert.That(EnemyArchetypes.All, Has.Exactly(1).Matches<EnemyArchetype>(archetype => archetype.IsElite));
-            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("精英先锋"));
+            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(15));
+            Assert.That(EnemyArchetypes.All, Has.Exactly(3).Matches<EnemyArchetype>(archetype => archetype.IsElite));
+            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵先锋"));
         }
 
         [Test]
