@@ -6,12 +6,13 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
-### REPO-BASELINE-01：GitHub 私有仓库与版本管理基线 — IN PROGRESS（2026-08-08）
+### REPO-BASELINE-01：GitHub 私有仓库与版本管理基线 — COMPLETE（2026-08-08）
 
 - **归属：** 剧情模式与肉鸽模式共用的项目开发管理；不改变玩法、世界观、Unity 场景或正式资产。
-- **目标：** 保留现有本地 Git 历史，创建私有 GitHub 仓库 `OCC_Codex`，整理 Unity 忽略规则，将当前正式源码、测试、文档与资产纳入可复现的版本基线并推送 `main`。
+- **目标：** 保留现有本地 Git 历史，创建私有 GitHub 远程仓库，整理 Unity 忽略规则，将当前正式源码、测试、文档与资产纳入可复现的版本基线并推送 `main`。
 - **涉及文件/系统：** `.gitignore`、本待办、本地 Git 索引与提交历史、GitHub 远程仓库；排除 `Library/`、`Logs/`、`UnityProject/Artifacts/`、`Assets/_Recovery/` 等缓存、验证输出和恢复文件。
 - **验收标准：** 私有远程仓库创建成功；`origin` 指向该仓库；正式文件及 Unity `.meta` 已跟踪；缓存、恢复场景和生成物未进入提交；基线提交成功推送，`main` 与 `origin/main` 一致。
+- **完成记录：** 已建立私有仓库 `https://github.com/whitefool124/ooc`，`origin` 使用 HTTPS 并由 Git Credential Manager 验证访问。基线提交 `82e066e` 纳入 1,856 个正式文件、124,380 行新增与 991 行删除；`.gitignore` 新增排除 `UnityProject/Artifacts/`、`UnityProject/Assets/_Recovery/` 及其 `.meta`，恢复场景和生成截图均未进入提交。`main` 已成功推送并跟踪 `origin/main`；本任务未修改 Unity 场景、玩法或正式资产，也未进入 Play Mode。
 - **完成后解锁：** 后续功能按独立分支和可审查提交进行，支持远程备份、回滚及协作开发。
 
 ### ARTIFACT-PACK-20：20 件通用法宝设计、美术、运行时与正式流程全链路 — COMPLETE（2026-08-08）
