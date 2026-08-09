@@ -454,7 +454,7 @@ namespace OCC.Combat.Presentation
             {
                 if (!saveGateway.TryLoadMapRun(out run))
                 {
-                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "地图存档无法读取；原始数据已保留，请先删除该存档或修复后重试"));
+                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, DescribeMapSaveFailure()));
                     return false;
                 }
             }
@@ -463,6 +463,17 @@ namespace OCC.Combat.Presentation
             if (!continueSave) saveGateway.SaveMapRun(run);
             MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure);
             return true;
+        }
+        private string DescribeMapSaveFailure()
+        {
+            switch (saveGateway.LastLoadStatus)
+            {
+                case RogueliteSaveLoadStatus.Missing: return "没有可继续的地图存档；未创建或覆盖任何数据";
+                case RogueliteSaveLoadStatus.CorruptData: return "地图存档文本损坏；主槽与首份备份已保护，明确删槽前不可覆盖";
+                case RogueliteSaveLoadStatus.InvalidSemantics: return "地图存档状态不合法；主槽与首份备份已保护，明确删槽前不可覆盖";
+                case RogueliteSaveLoadStatus.StoreError: return "存档存储暂时不可用；未把故障当作无存档，也未启动新推进";
+                default: return "地图存档无法读取；未启动新推进";
+            }
         }
         public void RequestStartMapRoguelite(bool continueSave)
             => RequestStartMapRoguelite(continueSave, FireRogueliteStarterCatalog.Universal);
@@ -623,6 +634,9 @@ namespace OCC.Combat.Presentation
         public string SelectedAction => selectedAction;
         public string SelectedTargetId => selectedTargetId;
         public CombatActionPreview CurrentActionPreview => BuildCurrentActionPreview();
+        public CombatOutcomePresentation CurrentOutcomePresentation => state == null ? null : CombatInformationPresenter.BuildOutcome(state, mapRun != null);
+        public string CurrentPhaseText => CombatInformationPresenter.PhaseText(CurrentFlowPhase, state);
+        public EnemyIntentPresentation EnemyIntent(UnitState enemy) => enemy == null || state == null ? null : CombatInformationPresenter.BuildEnemyIntent(state, enemy, state.GetUnit("hero"));
         public FireSpellDefinition FireSpellInSlot(int slot)
         {
             if (trainingRangeActive) return slot == 0 ? trainingRangeSession?.CurrentFireSpell : null;
@@ -876,8 +890,7 @@ namespace OCC.Combat.Presentation
             if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
             {
                 outcomeHandled = true; visualFeedback?.PlayOutcome(true);
-                mapRun.CaptureCombatInventory(state);
-                if (mapRun.HasPendingContentCombat) mapRun.CompletePendingContentCombat(); else mapRun.CompleteCurrentCombat();
+                RogueliteCombatSettlement.TrySettleVictory(mapRun, state);
                 MarkPresentation(UiPresentationArea.Settlement);
                 MarkPresentation(UiPresentationArea.MapStructure);
                 SaveMapRun(); settlementPresentation?.RefreshNow(); return;
@@ -885,7 +898,8 @@ namespace OCC.Combat.Presentation
             if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat)
             {
                 outcomeHandled = true; visualFeedback?.PlayOutcome(false);
-                if (mapRun != null) { mapRun.CaptureCombatInventory(state); SaveMapRun(); }
+                // A defeat deliberately leaves the pre-combat map save untouched. The combat snapshot
+                // remains available to CombatFlowController for deterministic tactical restart.
             }
             if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
             visualFeedback?.PlayOutcome(true);
@@ -932,7 +946,7 @@ namespace OCC.Combat.Presentation
         }
 
         private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)
-            => EnemyTactics.Choose(state, enemy, hero);
+            => CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero).Command;
         private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu || developerFlow.Phase == CombatFlowPhase.Briefing || (mapRun != null && mapRun.AwaitingReward)) { GUI.matrix = previous; return; } BattlefieldRect board = battlefield.BoardRect(state.Map.Width, state.Map.Height); DrawGrid(new Rect(board.X, board.Y, board.Width, board.Height)); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
@@ -1267,6 +1281,8 @@ namespace OCC.Combat.Presentation
                     fireTriggers = attack.TriggerExecutions;
                 }
                 else execution = CombatResolver.Resolve(state, command);
+                string actionResult = CombatInformationPresenter.BuildActionResult(state, command, execution);
+                if (!string.IsNullOrEmpty(actionResult)) state.AddLog(actionResult);
                 if (trainingRangeActive && deliveredSkill != null) trainingRangeSession?.RecordExternal(execution);
                 if (command.Type == CombatCommandType.Move && commandUnit != null && fireBattle != null)
                 {
@@ -1339,10 +1355,7 @@ namespace OCC.Combat.Presentation
         private void DrawUnitBars(UnitState unit, Rect rect) { GUI.color = Color.black; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = unit.IsHero ? new Color(.2f, .85f, .45f) : new Color(.9f, .22f, .22f); GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, (rect.width - 2) * unit.Health / unit.MaxHealth, rect.height - 2), Texture2D.whiteTexture); GUI.color = Color.white; }
         private string GetEnemyIntent(UnitState enemy)
         {
-            UnitState hero = state.GetUnit("hero");
-            if (enemy.SkillOne != null && Distance(enemy.Position, hero.Position) <= enemy.SkillOne.Range &&
-                enemy.Mana >= enemy.SkillOne.ManaCost && enemy.IsSkillReady(enemy.SkillOne)) return "\u706b\u672f";
-            return Distance(enemy.Position, hero.Position) <= (enemy.MainHand ?? CombatCatalog.Rifle).Range ? "\u653b\u51fb" : "\u9760\u8fd1";
+            return EnemyIntent(enemy)?.CompactText ?? "无可用意图";
         }
         private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selectedAction == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selectedAction == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selectedAction == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)

@@ -6,21 +6,28 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
-### COMBAT-CLARITY-01：战斗信息、反馈与失败结算重构 — READY（2026-08-09）
+### 当前无进行中主任务（2026-08-09）
+
+- `COMBAT-CLARITY-01` 与 `SAVE-INTEGRITY-01` 已按顺序完成并验收。
+- 下一候选为 `STARTER-BUILD-01` 与 `SOURCE-OF-TRUTH-01`；尚未立项，不在本轮自动扩展范围。
+
+## 最近完成
+
+### SAVE-INTEGRITY-01：存档语义校验与坏档写保护 — COMPLETE（2026-08-09）
+
+- **归属：** 剧情模式与肉鸽模式共用的持久化基础设施；本轮保持 `map9` 字段顺序和版本号不变。
+- **目标：** 为 `map9` 增加节点、资源、生命、构筑、奖励、背包实例与快捷栏引用不变量；建立跨 Gateway 实例持久有效的坏档备份和写锁，并执行保存前与回读后复核。
+- **涉及文件/系统：** 新增 `RogueliteMapRunValidator`，扩展 `RogueliteMapRun`、`RogueliteSaveGateway`、地图入口错误反馈、Gateway 测试与新增语义篡改测试；未修改场景、正式资产或 `map9` 字段顺序。
+- **验收记录：** `CorruptData`、`InvalidSemantics`、`StoreError` 与 `Missing` 已分离；节点、资源、战斗快照、构筑、奖励/选择、背包和快捷栏八类篡改均保留主槽原文、不可覆盖的首份备份和 `.write_lock` 持久锁。新 Gateway 仍拒绝覆盖；只有显式删槽同时清主槽和锁，备份保留。保存前执行序列化/重解析/语义校验，回读要求原文完全一致并再次验证；回读失败会恢复原主槽并加锁。合法 `map9` 往返确定，合法 `map8` 可迁移为有效 `map9`。隔离 Unity 6000.5.2f1 全量 EditMode 286/286；Funplay 在其绑定的 `E:\数据库\OCC_Codex` 检出完成重编译，0 error / 0 warning、Console 无 error、非 Play Mode、`CombatPrototype.unity isDirty=false`，该结果仅作编辑器健康检查，本工作树证据以隔离编译与测试为准。Git 无 `.unity` 改动；未获授权，未执行 Play Mode 视觉检查。
+- **完成后解锁：** `STARTER-BUILD-01` 与 `SOURCE-OF-TRUTH-01` 可在后续单独立项；不自动扩展存档字段或玩法内容。
+
+### COMBAT-CLARITY-01：战斗信息、反馈与失败结算重构 — COMPLETE（2026-08-09）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗呈现与结算基础设施；不改变剧情探索规则，也不引入时间压力。
 - **目标：** 让阶段、当前行动、目标、敌人数值/技能/意图、提交前结果、实际伤害和失败后果全部可读；敌人意图与真实 AI 命令同源，失败不静默覆盖战前地图存档。
-- **涉及文件/系统：** 战斗信息展示模型、`EnemyTactics`、`BattlefieldPresentationAdapter`、`CombatPrototypeBootstrap`、`FormalCombatHud`、`CombatVisualFeedback`、失败结算、EditMode/Funplay 回归。联合计划见 `OCC_战斗可读性与存档完整性联合开发计划_v0.1.md`。
-- **验收标准：** 完整敌人档案和同源意图、结构化操作/伤害预览、单次明确伤害反馈、最近行动记录、按模式正确的失败结算与确定性重开全部通过；保持 75%/25% 基准，不保存场景。
-- **完成后解锁：** 立即把 `SAVE-INTEGRITY-01` 切换为唯一当前主任务并连续实施，不并行扩充敌人或玩法。
-
-### SAVE-INTEGRITY-01：存档语义校验与坏档写保护 — QUEUED（等待 COMBAT-CLARITY-01 完成）
-
-- **目标：** 为 `map9` 增加节点、资源、生命、构筑、奖励、背包实例与快捷栏引用不变量；建立跨 Gateway 实例持久有效的坏档备份和写锁，并执行保存前与回读后复核。
-- **验收标准：** 语义无效、解析失败和存储故障可区分；主槽不被隐式覆盖、首份备份不变、锁跨实例有效、显式删槽后可恢复保存；旧存档迁移和合法 `map9` 往返保持兼容。
-- **实施约束：** 当前仅排队，不计为并行主任务；`COMBAT-CLARITY-01` 完成记录写入后再改为 `IN PROGRESS`。
-
-## 最近完成
+- **涉及文件/系统：** 新增 `CombatInformationPresentation`，扩展 `BattlefieldPresentationAdapter`、`UiPresentationModels`、`CombatPrototypeBootstrap`、`FormalCombatHud` 与聚焦 EditMode 测试；未修改场景、正式资产、敌人数值或 AI 规则。
+- **验收记录：** 删除 HUD 旧 `GetEnemyIntent` 启发式，展示与执行均直接消费 `EnemyTactics.Choose` 的权威命令签名；敌人档案、阶段/操作、提交前后生命护盾、完整伤害分解、结构化行动记录、最近 5 条事件和失败结算已接入。肉鸽失败不再捕获或保存战败后的背包/生命状态，胜利经专用结算入口写回，战术重开继续使用 `CombatFlowController.RestartSnapshot`。隔离 Unity 6000.5.2f1 编译成功，全量 EditMode 272/272；Funplay 确认活动场景未脏且未处于 Play Mode，但当前 MCP Editor 绑定在 `E:\数据库\OCC_Codex` 而非本工作树，因此不把其重编译回报计作本工作树证据。Play Mode/1920×1080/960×540 视觉验收未获授权，未执行；Git 无 `.unity` 改动。
+- **完成后解锁：** `SAVE-INTEGRITY-01` 已切换为唯一当前主任务。
 
 ### CORE-INTEGRITY-01：战斗快捷栏单一数据源与跨战斗消耗品一致性 — COMPLETE（2026-08-09）
 
@@ -344,12 +351,12 @@
 ### 肉鸽完成线与当前主任务：权威状态（更新于 2026-08-09）
 
 - **当前交付状态：** “肉鸽首区完整切片”、交互/架构基线、火元素完整单局、背包/搜刮、20 件通用法宝、当前时代敌人包、首区关卡与 GitHub 版本基线均已完成；这些成果是后续修复的不可破坏基线。
-- **唯一当前主任务：** `COMBAT-CLARITY-01`（战斗信息层、反馈闭环与失败结算）已具备任务合同并准备实施。本轮不并行扩充地区、敌人、法宝或术式。
-- **当前路线：** 先完成战斗信息、反馈与失败结算，再按 `SAVE-INTEGRITY-01 → STARTER-BUILD-01 → SOURCE-OF-TRUTH-01` 处理存档、初始武器与源文件一致性。
+- **唯一当前主任务：** `SAVE-INTEGRITY-01`（存档语义校验与坏档写保护）正在实施。本轮不并行扩充地区、敌人、法宝或术式。
+- **当前路线：** `COMBAT-CLARITY-01` 已完成；现在按 `SAVE-INTEGRITY-01 → STARTER-BUILD-01 → SOURCE-OF-TRUTH-01` 处理存档、初始武器与源文件一致性。
 - **完成线顺序：** R-F1 → R-F2 → R-F3 → R-F4 → R-F5 → R-F6；全部完成并作为后续迭代的不可破坏基线保留。
 - **暂停：** V2-15「静态优先资产规范化与运行时表现收敛」；保留原记录和产物，不继续扩展。
 - **暂停：** V2-22「主角模板三层视觉样本」；保留原记录和产物，不补图、不导入、不替换现有主角。
-- **状态说明：** 下方 V1/V2-01/V2-15/V2-22 既有 `IN PROGRESS` 与“保持 V2-15 为唯一主任务”等文字是暂停前的历史快照；`CORE-INTEGRITY-01` 已完成，当前唯一有效准备实施任务是 `COMBAT-CLARITY-01`，`SAVE-INTEGRITY-01` 仅排队等待前者验收，历史状态不得重新解释为并行任务。
+- **状态说明：** 下方 V1/V2-01/V2-15/V2-22 既有 `IN PROGRESS` 与“保持 V2-15 为唯一主任务”等文字是暂停前的历史快照；`CORE-INTEGRITY-01` 与 `COMBAT-CLARITY-01` 已完成，当前唯一有效实施任务是 `SAVE-INTEGRITY-01`，历史状态不得重新解释为并行任务。
 
 #### R-UXR1：完整交互回归与架构基线冻结 — COMPLETE（2026-08-05）
 

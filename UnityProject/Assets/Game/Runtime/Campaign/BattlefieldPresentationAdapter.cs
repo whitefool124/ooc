@@ -11,9 +11,16 @@ namespace OCC.Combat
         public string ExpectedResult { get; }
         public int ValidCellCount { get; }
         public string FailureReason { get; }
+        public string TargetBefore { get; }
+        public string TargetAfter { get; }
+        public string DamageBreakdown { get; }
+        public string StatusResults { get; }
+        public int AffectedCellCount { get; }
+        public bool FriendlyFireRisk { get; }
         public bool CanSubmit => string.IsNullOrEmpty(FailureReason);
 
-        public CombatActionPreview(string action, string targetRule, string cost, string expectedResult, int validCellCount, string failureReason)
+        public CombatActionPreview(string action, string targetRule, string cost, string expectedResult, int validCellCount, string failureReason,
+            string targetBefore = "", string targetAfter = "", string damageBreakdown = "", string statusResults = "", int affectedCellCount = 0, bool friendlyFireRisk = false)
         {
             Action = action ?? string.Empty;
             TargetRule = targetRule ?? string.Empty;
@@ -21,6 +28,12 @@ namespace OCC.Combat
             ExpectedResult = expectedResult ?? string.Empty;
             ValidCellCount = validCellCount;
             FailureReason = failureReason ?? string.Empty;
+            TargetBefore = targetBefore ?? string.Empty;
+            TargetAfter = targetAfter ?? string.Empty;
+            DamageBreakdown = damageBreakdown ?? string.Empty;
+            StatusResults = statusResults ?? string.Empty;
+            AffectedCellCount = Math.Max(0, affectedCellCount);
+            FriendlyFireRisk = friendlyFireRisk;
         }
     }
 
@@ -129,7 +142,31 @@ namespace OCC.Combat
                 else if (Distance(hero.Position, state.Loot.Position) != 1) failure = "战利品不在相邻格";
             }
             if (string.IsNullOrEmpty(failure) && validCells == 0 && action != "结束行动") failure = "当前没有有效目标格";
-            return new CombatActionPreview(action, targetRule, cost, expected, validCells, failure);
+            string before = string.Empty, after = string.Empty, breakdown = string.Empty, statuses = string.Empty;
+            int affected = 0;
+            UnitState exactTarget = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
+            if (exactTarget != null && action == "攻击")
+            {
+                CombatResolver.AttackPreview damage = CombatResolver.PreviewAttack(state, hero.Id, exactTarget.Id, false);
+                before = "生命 " + exactTarget.Health + " // 护盾 " + exactTarget.Shield;
+                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " // 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                breakdown = CombatInformationPresenter.DamageBreakdown(damage);
+                affected = 1;
+            }
+            else if (exactTarget != null && (action == "技能1" || action == "技能2"))
+            {
+                SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
+                before = "生命 " + exactTarget.Health + " // 护盾 " + exactTarget.Shield;
+                if (skill != null && skill.Damage > 0)
+                {
+                    CombatResolver.AttackPreview damage = CombatResolver.PreviewSkillAttack(state, hero.Id, exactTarget.Id, skill);
+                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " // 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                    breakdown = CombatInformationPresenter.DamageBreakdown(damage);
+                }
+                statuses = skill == null ? string.Empty : string.Join("、", skill.Effects.Where(effect => effect.Type == SkillEffectType.ApplyStatus).Select(EffectLabel));
+                affected = 1;
+            }
+            return new CombatActionPreview(action, targetRule, cost, expected, validCells, failure, before, after, breakdown, statuses, affected, false);
         }
 
         public string InvalidReasonForCell(CombatState state, string action, GridPosition position)

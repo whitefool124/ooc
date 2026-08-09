@@ -175,3 +175,26 @@
 - `STARTER-BUILD-01`：统一正式初始武器权威 ID。
 - `SOURCE-OF-TRUTH-01`：收敛剧情探索与时代技术源文件。
 - 战斗可读性基线通过后，才进行敌人数值平衡、Boss 多阶段意图或更多战斗演出扩展。
+
+## 8. 验证记录与当前下一步（2026-08-09）
+
+### 8.1 COMBAT-CLARITY-01 — COMPLETE
+
+- 新增纯数据战斗信息层，覆盖阶段、权威敌人意图、完整敌人档案、结构化预览、实际行动记录与失败摘要。
+- HUD 与真实敌方执行均直接消费 `EnemyTactics.Choose` 的命令；旧 `GetEnemyIntent` 启发式已移除，意图签名测试覆盖技能、目标与命令一致性。
+- 基础攻击预览显示目标生命/护盾前后值、基础伤害、朝向、掩体、护甲、格挡、护盾吸收和最终生命伤害；行动结果继续写入既有 `EventLog`，HUD 显示最近 5 条而不创建第二日志源。
+- 肉鸽胜利经专用结算服务捕获战斗状态；失败不捕获、不保存战败后的生命/背包/快捷栏状态，返回地图继续使用战前存档；战术重开沿用确定性 `RestartSnapshot`。
+- 隔离 Unity 6000.5.2f1 完成编译与全量 EditMode 272/272。Funplay 场景检查为非 Play Mode、`CombatPrototype.unity isDirty=false`，但 MCP 当前绑定主目录而非本工作树，因此其重编译结果仅记录为环境门槛，不作为本工作树编译证据。未获授权，未执行 Play Mode 与双分辨率视觉检查。
+
+### 8.2 SAVE-INTEGRITY-01 — COMPLETE
+
+- 新增 `RogueliteMapRunValidator`，同时校验解析后的状态与会被兼容解析器规范化的 `map9` 原始字段；覆盖节点、非负资源、生命/护盾/魔力、战斗快照、Boss/武器/开局模板/个人术式、奖励与待处理选择、背包实例/次数/摆放/序列和八格快捷栏。
+- Gateway 明确区分 `Missing`、`CorruptData`、`InvalidSemantics` 与 `StoreError`。解析或语义失败不修改主槽，首份 `.corrupt_backup` 不可覆盖，并写入跨 Gateway 实例可见的 `.write_lock`；成功读取不解除锁，只有显式删槽清除主槽与锁，诊断备份继续保留。
+- `SaveMapRun` 在写入前完成序列化、重解析、语义与确定性文本复核；写入后要求原文回读一致并再次验证。回读不一致时返回失败、设置持久锁并恢复写入前主槽，不把故障伪装为成功。
+- 地图入口反馈已分别说明无存档、文本损坏、语义坏档和存储故障，不会把后三者当作“无存档”自动新开覆盖。
+- 八类篡改、跨实例锁、首份备份、显式删槽、保存前拒绝、回读回滚、合法 map9 往返和 map8 迁移均有自动化覆盖；隔离 Unity 6000.5.2f1 全量 EditMode 286/286。
+- Funplay 按 `request_recompile → wait_for_compilation → get_compilation_errors` 完成健康检查，0 error / 0 warning、Console 无 error、非 Play Mode、活动场景 `isDirty=false`；其 Editor 仍绑定 `E:\数据库\OCC_Codex`，不作为本工作树编译证据。本工作树未修改 `.unity`；未获授权，未执行 Play Mode 与双分辨率视觉检查。
+
+### 8.3 当前下一步
+
+- 两项联合任务已按冻结顺序完成。后续可单独立项 `STARTER-BUILD-01` 或 `SOURCE-OF-TRUTH-01`，本轮不自动继续。

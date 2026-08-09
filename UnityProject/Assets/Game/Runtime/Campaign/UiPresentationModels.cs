@@ -90,6 +90,8 @@ namespace OCC.Combat
         public string EventHead { get; }
         public string TimelineKey { get; }
         public string HeroKey { get; }
+        public string EnemyKey { get; }
+        public string EventKey { get; }
 
         private CombatHudPresentationModel(CombatState state, string selectedAction, string selectedTargetId, bool outcomeVisible)
         {
@@ -104,6 +106,7 @@ namespace OCC.Combat
             SelectedTargetId = selectedTargetId ?? string.Empty;
             OutcomeVisible = outcomeVisible;
             EventHead = state.EventLog.Count == 0 ? string.Empty : state.EventLog[0];
+            EventKey = string.Join("|", state.EventLog.Take(5));
             TimelineKey = string.Join("|", state.Units.Values.Where(unit => unit.IsAlive).OrderBy(unit => unit.InitiativeTime)
                 .Select(unit => unit.Id + ":" + unit.Health + ":" + unit.Shield + ":" + unit.InitiativeTime));
             HeroKey = hero == null ? string.Empty : string.Join("|", hero.MainHand?.Id ?? string.Empty, hero.Armor, hero.ActionPoints,
@@ -114,6 +117,10 @@ namespace OCC.Combat
                     ItemInstance item = state.ItemInventory.Get(instanceId);
                     return item == null ? string.Empty : item.InstanceId + ":" + item.DefinitionId + ":" + item.RemainingUses;
                 })));
+            EnemyKey = string.Join("|", state.Units.Values.Where(unit => !unit.IsHero && unit.IsAlive).OrderBy(unit => unit.Id, StringComparer.Ordinal)
+                .Select(unit => string.Join(":", unit.Id, unit.Health, unit.Shield, unit.Mana, unit.ActionPoints,
+                    unit.SkillOne == null ? 0 : unit.Cooldown(unit.SkillOne), unit.SkillTwo == null ? 0 : unit.Cooldown(unit.SkillTwo),
+                    string.Join(",", unit.Statuses.OrderBy(item => item.Key).Select(item => item.Key + "=" + item.Value)))));
         }
 
         public static CombatHudPresentationModel From(CombatState state, string selectedAction, string selectedTargetId, bool outcomeVisible) =>
@@ -121,7 +128,8 @@ namespace OCC.Combat
 
         public bool Equals(CombatHudPresentationModel other) => ActiveUnitId == other.ActiveUnitId && ActiveActionPoints == other.ActiveActionPoints &&
             Health == other.Health && Shield == other.Shield && Mana == other.Mana && SelectedAction == other.SelectedAction &&
-            SelectedTargetId == other.SelectedTargetId && OutcomeVisible == other.OutcomeVisible && EventHead == other.EventHead && TimelineKey == other.TimelineKey && HeroKey == other.HeroKey;
+            SelectedTargetId == other.SelectedTargetId && OutcomeVisible == other.OutcomeVisible && EventHead == other.EventHead && EventKey == other.EventKey &&
+            TimelineKey == other.TimelineKey && HeroKey == other.HeroKey && EnemyKey == other.EnemyKey;
         public override bool Equals(object obj) => obj is CombatHudPresentationModel other && Equals(other);
         public override int GetHashCode() => (ActiveUnitId ?? string.Empty).GetHashCode();
     }

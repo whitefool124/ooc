@@ -274,6 +274,9 @@ namespace OCC.Combat
         public IReadOnlyList<string> FireSpellMigrationWarnings => fireSpellMigrationWarnings;
         public InventoryContainerState Inventory { get; private set; }
         public string[] ItemQuickbar { get; private set; } = new string[8];
+        public int NextItemSequence => nextItemSequence;
+        public IReadOnlyDictionary<string, string> LootProgress => lootProgress;
+        public bool HasDeferredNodeReward => deferredNodeReward;
         public WeaponDefinition EquippedWeapon => string.IsNullOrEmpty(EquippedWeaponId) ? CombatCatalog.Rifle : RogueliteMapCatalog.Rewards.First(reward => reward.Id == EquippedWeaponId).Weapon;
         public IReadOnlyList<RogueliteReward> CurrentRewards => AwaitingReward
             ? RogueliteMapCatalog.RollFireSupportRewards(Seed, completed.Count, RogueliteMapCatalog.Node(CurrentNodeId).Type, Inventory.Items.Select(item => item.DefinitionId))
