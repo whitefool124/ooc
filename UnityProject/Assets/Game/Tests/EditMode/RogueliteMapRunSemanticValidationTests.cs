@@ -63,7 +63,7 @@ namespace OCC.Combat.Tests
 
             RogueliteMapRun migrated = RogueliteMapRun.FromJson(string.Join("|", fields));
 
-            Assert.That(migrated.ToJson(), Does.StartWith("map9|"));
+            Assert.That(migrated.ToJson(), Does.StartWith("map10|"));
             Assert.That(RogueliteMapRunValidator.Validate(migrated).IsValid, Is.True);
         }
 

@@ -60,11 +60,11 @@ namespace OCC.Combat
 
         // Validates semantic values that the compatibility parser intentionally normalizes
         // (unknown/duplicate ids, quickbar references and consumable counters).
-        public static RogueliteMapRunValidationResult ValidateSerializedMap9(string raw)
+        public static RogueliteMapRunValidationResult ValidateSerializedCurrent(string raw)
         {
             RogueliteMapRunValidationResult result = new RogueliteMapRunValidationResult();
             string[] parts = raw?.Split('|');
-            if (parts == null || parts.Length != 36 || parts[0] != "map9") return result;
+            if (parts == null || parts.Length != 36 || (parts[0] != "map10" && parts[0] != "map9")) return result;
 
             ValidateIdList(parts[16], NodeIds, "nodes.visited", true, result);
             ValidateIdList(parts[17], NodeIds, "nodes.completed", false, result);

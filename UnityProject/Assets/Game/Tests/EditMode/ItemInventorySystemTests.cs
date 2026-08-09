@@ -39,7 +39,7 @@ namespace OCC.Combat.Tests
         public void MoveSwapRemoveAndClone_AreIndependent()
         {
             InventoryContainerState inventory = new InventoryContainerState();
-            inventory.Place(new ItemInstance("a", "medkit", 0), 0, 0); inventory.Place(new ItemInstance("b", "shield_cell", 1), 1, 0);
+            inventory.Place(new ItemInstance("a", "medkit", 0), 0, 0); inventory.Place(new ItemInstance("b", "shield_cell", 1), 2, 0);
             Assert.That(inventory.Swap("a", "b").Success, Is.True); Assert.That(inventory.Move("a", 2, 2).Success, Is.True);
             InventoryContainerState clone = inventory.Clone(); Assert.That(clone.Remove("a"), Is.Not.Null); Assert.That(inventory.Get("a"), Is.Not.Null);
         }
@@ -159,7 +159,7 @@ namespace OCC.Combat.Tests
             RogueliteMapRun run = new RogueliteMapRun(401); ItemInstance artifact = run.GrantItem("F-T01", 2); artifact.TryConsume();
             InventoryPlacement original = run.Inventory.PlacementOf(artifact.InstanceId).Value; run.Inventory.Move(artifact.InstanceId, 4, 4, true);
             string data = run.ToJson(); RogueliteMapRun restored = RogueliteMapRun.FromJson(data);
-            Assert.That(data.StartsWith("map9|"), Is.True); Assert.That(restored.ToJson(), Is.EqualTo(data));
+            Assert.That(data.StartsWith("map10|"), Is.True); Assert.That(restored.ToJson(), Is.EqualTo(data));
             Assert.That(restored.Inventory.Get(artifact.InstanceId).RemainingUses, Is.EqualTo(1)); Assert.That(restored.ItemQuickbar[2], Is.EqualTo(artifact.InstanceId));
         }
 
@@ -168,7 +168,7 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapRun source = new RogueliteMapRun(402); string[] current = source.ToJson().Split('|'); current[0] = "map6";
             string legacy = string.Join("|", current.Take(22)); RogueliteMapRun migrated = RogueliteMapRun.FromJson(legacy);
-            Assert.That(migrated.ToJson().StartsWith("map9|"), Is.True); Assert.That(migrated.Inventory.Width, Is.EqualTo(6)); Assert.That(migrated.Inventory.Height, Is.EqualTo(10)); Assert.That(migrated.Inventory.Items.Count, Is.EqualTo(2));
+            Assert.That(migrated.ToJson().StartsWith("map10|"), Is.True); Assert.That(migrated.Inventory.Width, Is.EqualTo(6)); Assert.That(migrated.Inventory.Height, Is.EqualTo(10)); Assert.That(migrated.Inventory.Items.Count, Is.EqualTo(2));
         }
 
         [Test]

@@ -95,7 +95,7 @@ namespace OCC.Combat.Presentation
                 Rect itemRect = InventoryInteractionPresentation.PlacementRect(rect, placement, definition);
                 Color previous = GUI.color; if (dragState != null && dragState.InstanceId == item.InstanceId) GUI.color = new Color(1f, 1f, 1f, .28f);
                 DrawIcon(itemRect, "Art/FormalUI32/" + (item.InstanceId == selectedId ? "slot_selected" : "slot"), false);
-                Texture2D icon = Icon(definition.IconPath); if (icon != null) GUI.DrawTexture(new Rect(itemRect.x + 4, itemRect.y + 4, Math.Min(38, itemRect.width - 8), Math.Min(38, itemRect.height - 8)), icon, ScaleMode.ScaleToFit, true);
+                DrawInventoryArt(new Rect(itemRect.x + 4, itemRect.y + 4, itemRect.width - 8, itemRect.height - 8), definition.InventoryArtPath, placement.Rotated);
                 GUI.Label(new Rect(itemRect.x + 44, itemRect.y + 4, itemRect.width - 48, 24), definition.DisplayName);
                 if (definition.MaximumUses > 0) GUI.Label(new Rect(itemRect.x + 4, itemRect.yMax - 24, itemRect.width - 8, 22), item.RemainingUses + "/" + definition.MaximumUses + " 次");
                 GUI.color = previous;
@@ -213,7 +213,7 @@ namespace OCC.Combat.Presentation
                 ghost = InventoryInteractionPresentation.PlacementRect(inventoryPanelRect, new InventoryPlacement(item.InstanceId, anchor.x, anchor.y, dragState.Rotated), definition);
             Fill(ghost, new Color(Panel.r, Panel.g, Panel.b, .92f));
             Outline(ghost, preview.Success ? Cyan : new Color(.9f, .25f, .18f, 1f));
-            DrawIcon(new Rect(ghost.x + 6f, ghost.y + 6f, Math.Min(42f, ghost.width - 12f), Math.Min(42f, ghost.height - 12f)), definition.IconPath);
+            DrawInventoryArt(new Rect(ghost.x + 6f, ghost.y + 6f, ghost.width - 12f, ghost.height - 12f), definition.InventoryArtPath, dragState.Rotated);
             GUI.Label(new Rect(ghost.x + 52f, ghost.y + 6f, Math.Max(60f, ghost.width - 58f), 26f), definition.DisplayName);
             string status = preview.Success ? "可放置" : InventoryInteractionPresentation.ErrorName(preview.Error);
             GUI.Label(new Rect(ghost.x + 6f, ghost.yMax - 26f, Math.Max(80f, ghost.width - 12f), 22f), status + " · 右键旋转");
@@ -315,6 +315,16 @@ namespace OCC.Combat.Presentation
         {
             Texture2D texture = Icon(path);
             if (texture != null) GUI.DrawTexture(rect, texture, preserveAspect ? ScaleMode.ScaleToFit : ScaleMode.StretchToFill, true);
+        }
+        private void DrawInventoryArt(Rect rect, string path, bool rotated)
+        {
+            Texture2D texture = Icon(path); if (texture == null) return;
+            if (!rotated) { GUI.DrawTexture(rect, texture, ScaleMode.ScaleToFit, true); return; }
+            Matrix4x4 previous = GUI.matrix;
+            GUIUtility.RotateAroundPivot(90f, rect.center);
+            Rect rotatedRect = new Rect(rect.center.x - rect.height * .5f, rect.center.y - rect.width * .5f, rect.height, rect.width);
+            GUI.DrawTexture(rotatedRect, texture, ScaleMode.ScaleToFit, true);
+            GUI.matrix = previous;
         }
         private bool IconButton(Rect rect, string path, string label)
         {

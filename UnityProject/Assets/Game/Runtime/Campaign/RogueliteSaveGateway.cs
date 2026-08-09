@@ -47,7 +47,7 @@ namespace OCC.Combat
         public bool TryLoadStory(out RogueliteStoryPackage package) => TryLoad(StoryKey, RogueliteStoryPackage.FromJson, null, null, out package);
         public bool TryLoadShortRun(out ShortRogueliteRun run) => TryLoad(ShortRunKey, ShortRogueliteRun.FromJson, null, null, out run);
         public bool TryLoadMapRun(out RogueliteMapRun run) => TryLoad(MapRunKey, RogueliteMapRun.FromJson,
-            value => RogueliteMapRunValidator.Validate(value), RogueliteMapRunValidator.ValidateSerializedMap9, out run);
+            value => RogueliteMapRunValidator.Validate(value), RogueliteMapRunValidator.ValidateSerializedCurrent, out run);
 
         public RogueliteUiPreferences LoadUiPreferences()
         {
@@ -64,7 +64,7 @@ namespace OCC.Combat
             try { value = run?.ToJson(); }
             catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
             return SaveVerified(MapRunKey, value, RogueliteMapRun.FromJson,
-                candidate => RogueliteMapRunValidator.Validate(candidate), RogueliteMapRunValidator.ValidateSerializedMap9);
+                candidate => RogueliteMapRunValidator.Validate(candidate), RogueliteMapRunValidator.ValidateSerializedCurrent);
         }
         public bool SaveUiPreferences(RogueliteUiPreferences preferences) => SaveVerified(UiPreferencesKey, preferences?.ToDataString(), RogueliteUiPreferences.FromDataString, null, null);
 

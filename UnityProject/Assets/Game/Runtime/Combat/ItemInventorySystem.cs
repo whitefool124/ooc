@@ -27,16 +27,19 @@ namespace OCC.Combat
         public bool CanDiscard { get; }
         public bool CanQuickEquip { get; }
         public string IconPath { get; }
+        public string InventoryArtPath { get; }
 
         public ItemDefinition(string id, string displayName, string description, ItemCategory category, ItemRarity rarity,
             int width = 1, int height = 1, int weight = 0, int maximumUses = 0, string element = "", string provenance = "",
-            bool isQuestItem = false, bool canDiscard = true, bool canQuickEquip = false, string iconPath = "Art/FormalIcons32/loot")
+            bool isQuestItem = false, bool canDiscard = true, bool canQuickEquip = false, string iconPath = "Art/FormalIcons32/loot",
+            string inventoryArtPath = null)
         {
             if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(displayName)) throw new ArgumentException("Item identity is required.");
             if (width < 1 || height < 1 || weight < 0 || maximumUses < 0) throw new ArgumentOutOfRangeException(nameof(width));
             Id = id; DisplayName = displayName; Description = description ?? string.Empty; Category = category; Rarity = rarity;
             Width = width; Height = height; Weight = weight; MaximumUses = maximumUses; Element = element ?? string.Empty;
             Provenance = provenance ?? string.Empty; IsQuestItem = isQuestItem; CanDiscard = canDiscard; CanQuickEquip = canQuickEquip; IconPath = iconPath;
+            InventoryArtPath = string.IsNullOrWhiteSpace(inventoryArtPath) ? iconPath : inventoryArtPath;
         }
     }
 
@@ -75,6 +78,13 @@ namespace OCC.Combat
         public int Y { get; }
         public bool Rotated { get; }
         public InventoryPlacement(string instanceId, int x, int y, bool rotated = false) { InstanceId = instanceId; X = x; Y = y; Rotated = rotated; }
+    }
+
+    public readonly struct ItemFootprintSize
+    {
+        public int Width { get; }
+        public int Height { get; }
+        public ItemFootprintSize(int width, int height) { Width = width; Height = height; }
     }
 
     public readonly struct InventoryResult
@@ -217,6 +227,77 @@ namespace OCC.Combat
             }
             return result;
         }
+
+        public static InventoryContainerState FromLegacyMap9DataString(string data, string id = "backpack", int width = BaseWidth, int height = BaseHeight, int weightLimit = 0)
+        {
+            List<LegacyPlacement> rows = ParseLegacyRows(data);
+            bool[,] occupied = new bool[width, height];
+            foreach (LegacyPlacement row in rows)
+            {
+                ItemFootprintSize size = ItemCatalog.LegacyMap9Footprint(row.Item.DefinitionId);
+                int itemWidth = row.Rotated ? size.Height : size.Width;
+                int itemHeight = row.Rotated ? size.Width : size.Height;
+                if (row.X < 0 || row.Y < 0 || row.X + itemWidth > width || row.Y + itemHeight > height)
+                    throw new InvalidOperationException("Legacy inventory placement was out of bounds.");
+                for (int y = row.Y; y < row.Y + itemHeight; y++) for (int x = row.X; x < row.X + itemWidth; x++)
+                {
+                    if (occupied[x, y]) throw new InvalidOperationException("Legacy inventory placement overlapped another item.");
+                    occupied[x, y] = true;
+                }
+            }
+
+            InventoryContainerState preserved = new InventoryContainerState(id, width, height, weightLimit);
+            bool preservesCoordinates = true;
+            foreach (LegacyPlacement row in rows)
+                if (!preserved.Place(row.Item.Clone(), row.X, row.Y, row.Rotated).Success) { preservesCoordinates = false; break; }
+            if (preservesCoordinates) return preserved;
+
+            InventoryContainerState repacked = new InventoryContainerState(id, width, height, weightLimit);
+            foreach (LegacyPlacement row in rows.OrderBy(value => value.Item.AcquiredOrder).ThenBy(value => value.Item.InstanceId, StringComparer.Ordinal))
+            {
+                InventoryResult fit = FindPreferredFit(repacked, row.Item, row.Rotated);
+                if (!fit.Success) throw new InvalidOperationException("Legacy inventory does not fit the current footprint catalog.");
+                InventoryResult placed = repacked.Place(row.Item.Clone(), fit.X, fit.Y, fit.Rotated);
+                if (!placed.Success) throw new InvalidOperationException("Legacy inventory repack failed: " + placed.Error);
+            }
+            return repacked;
+        }
+
+        private static InventoryResult FindPreferredFit(InventoryContainerState inventory, ItemInstance item, bool preferredRotation)
+        {
+            for (int y = 0; y < inventory.Height; y++) for (int x = 0; x < inventory.Width; x++)
+            {
+                InventoryResult preferred = inventory.CanPlace(item, x, y, null, preferredRotation);
+                if (preferred.Success) return preferred;
+                ItemDefinition definition = ItemCatalog.Get(item.DefinitionId);
+                if (definition.Width == definition.Height) continue;
+                InventoryResult alternate = inventory.CanPlace(item, x, y, null, !preferredRotation);
+                if (alternate.Success) return alternate;
+            }
+            return new InventoryResult(InventoryError.NoSpace, item.InstanceId);
+        }
+
+        private static List<LegacyPlacement> ParseLegacyRows(string data)
+        {
+            List<LegacyPlacement> rows = new List<LegacyPlacement>(); HashSet<string> ids = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string row in (data ?? string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string[] fields = row.Split(','); if (fields.Length != 8) throw new InvalidOperationException("Invalid legacy inventory row.");
+                ItemInstance item = new ItemInstance(Decode(fields[0]), Decode(fields[1]), int.Parse(fields[2]), int.Parse(fields[3]), int.Parse(fields[4]));
+                if (!ids.Add(item.InstanceId)) throw new InvalidOperationException("Duplicate legacy inventory instance.");
+                rows.Add(new LegacyPlacement(item, int.Parse(fields[5]), int.Parse(fields[6]), fields[7] == "1"));
+            }
+            return rows;
+        }
+
+        private readonly struct LegacyPlacement
+        {
+            public ItemInstance Item { get; }
+            public int X { get; }
+            public int Y { get; }
+            public bool Rotated { get; }
+            public LegacyPlacement(ItemInstance item, int x, int y, bool rotated) { Item = item; X = x; Y = y; Rotated = rotated; }
+        }
         private static string Encode(string value) => Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
         private static string Decode(string value) => Encoding.UTF8.GetString(Convert.FromBase64String(value));
     }
@@ -262,14 +343,28 @@ namespace OCC.Combat
 
     public static class ItemCatalog
     {
-        public static readonly ItemDefinition Medkit = new ItemDefinition("medkit", "医疗包", "恢复结构的战地耗材。", ItemCategory.Consumable, ItemRarity.Common, maximumUses: 1, canQuickEquip: true, iconPath: "Art/FormalItemIcons32/medkit");
-        public static readonly ItemDefinition ShieldCell = new ItemDefinition("shield_cell", "护盾电池", "恢复护盾并清除燃烧。", ItemCategory.Consumable, ItemRarity.Common, maximumUses: 1, canQuickEquip: true, iconPath: "Art/FormalItemIcons32/shield_cell");
-        public static readonly ItemDefinition FirelineScroll = new ItemDefinition("F-S01", "火线卷轴", "一次性封装火术式。", ItemCategory.Scroll, ItemRarity.Uncommon, maximumUses: 1, element: "火", provenance: "现代制作", canQuickEquip: true, iconPath: "Art/FormalItemIcons32/fire_scroll");
+        public static readonly ItemDefinition Medkit = new ItemDefinition("medkit", "医疗包", "恢复结构的战地耗材。", ItemCategory.Consumable, ItemRarity.Common, width: 2, height: 1, maximumUses: 1, canQuickEquip: true, iconPath: "Art/FormalItemIcons32/medkit", inventoryArtPath: "Art/FormalInventoryFootprints/medkit");
+        public static readonly ItemDefinition ShieldCell = new ItemDefinition("shield_cell", "护盾电池", "恢复护盾并清除燃烧。", ItemCategory.Consumable, ItemRarity.Common, width: 1, height: 2, maximumUses: 1, canQuickEquip: true, iconPath: "Art/FormalItemIcons32/shield_cell", inventoryArtPath: "Art/FormalInventoryFootprints/shield_cell");
+        public static readonly ItemDefinition FirelineScroll = new ItemDefinition("F-S01", "火线卷轴", "一次性封装火术式。", ItemCategory.Scroll, ItemRarity.Uncommon, width: 2, height: 1, maximumUses: 1, element: "火", provenance: "现代制作", canQuickEquip: true, iconPath: "Art/FormalItemIcons32/fire_scroll", inventoryArtPath: "Art/FormalInventoryFootprints/fire_scroll");
         public static readonly ItemDefinition DemolitionCanister = ArtifactCatalog.DemolitionCanister.ToItemDefinition();
-        public static readonly ItemDefinition AetherCore = new ItemDefinition("aether_core", "以太核心", "任务回收用工业核心。", ItemCategory.Quest, ItemRarity.Rare, width: 2, height: 1, weight: 3, isQuestItem: true, canDiscard: false, iconPath: "Art/FormalItemIcons32/aether_core");
+        public static readonly ItemDefinition AetherCore = new ItemDefinition("aether_core", "以太核心", "任务回收用工业核心。", ItemCategory.Quest, ItemRarity.Rare, width: 2, height: 2, weight: 3, isQuestItem: true, canDiscard: false, iconPath: "Art/FormalResourceIcons32/operational_aether", inventoryArtPath: "Art/FormalInventoryFootprints/aether_core");
         public static readonly IReadOnlyList<ItemDefinition> All = new[] { Medkit, ShieldCell, FirelineScroll, AetherCore }
             .Concat(ArtifactCatalog.All.Select(artifact => artifact.ToItemDefinition())).ToArray();
         public static ItemDefinition Get(string id) => All.FirstOrDefault(item => item.Id == id) ?? throw new InvalidOperationException("Unknown item definition: " + id);
+
+        public static ItemFootprintSize LegacyMap9Footprint(string id)
+        {
+            switch (id)
+            {
+                case "aether_core": return new ItemFootprintSize(2, 1);
+                case "F-T01": case "G-T03": case "G-T05": case "G-T11": case "G-T13": case "G-T15": case "G-T16": case "G-T18": return new ItemFootprintSize(2, 1);
+                case "G-T06": case "G-T07": return new ItemFootprintSize(2, 2);
+                case "G-T08": case "G-T17": return new ItemFootprintSize(1, 2);
+                default:
+                    Get(id);
+                    return new ItemFootprintSize(1, 1);
+            }
+        }
     }
 
     public static class ItemAbilityCatalog

@@ -485,26 +485,27 @@ namespace OCC.Combat
             if (Aether < 2) throw new InvalidOperationException("Insufficient aether for calibration.");
             Aether -= 2; IsAetherCalibrated = true;
         }
-        public string ToJson() => string.Join("|", "map9", Seed, RegionBossId, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, Parts, Aether, EquippedWeaponId ?? string.Empty, EquippedSpellId ?? string.Empty, IsAetherCalibrated ? "1" : "0", PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited.OrderBy(id => id, StringComparer.Ordinal)), string.Join(",", completed.OrderBy(id => id, StringComparer.Ordinal)), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0", string.Join(",", ownedFireSpells), string.Join(",", equippedFireSpells.Select(id => id ?? string.Empty)), Convert.ToBase64String(Encoding.UTF8.GetBytes(Inventory.ToDataString())), string.Join(",", ItemQuickbar.Select(id => id ?? string.Empty)), nextItemSequence, Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Join(";", lootProgress.OrderBy(pair => pair.Key, StringComparer.Ordinal).Select(pair => pair.Key + "=" + pair.Value)))), FireSpellCatalog.Version, EncodeMigrationClaims(pendingFireSpellReselections), EncodeMigrationClaims(fireSpellRetirementCompensations), Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Join(",", fireSpellMigrationWarnings.OrderBy(id => id, StringComparer.Ordinal)))), deferredNodeReward ? "1" : "0", StarterId ?? string.Empty, HasCombatSnapshot ? "1" : "0", CurrentHealth, CurrentShield, CurrentMana);
+        public string ToJson() => string.Join("|", "map10", Seed, RegionBossId, CurrentNodeId, Level, Experience, AccessCards, Supplies, ScoutingBeacons, Parts, Aether, EquippedWeaponId ?? string.Empty, EquippedSpellId ?? string.Empty, IsAetherCalibrated ? "1" : "0", PendingContentChoiceId ?? string.Empty, PendingContentCombatMissionId ?? string.Empty, string.Join(",", visited.OrderBy(id => id, StringComparer.Ordinal)), string.Join(",", completed.OrderBy(id => id, StringComparer.Ordinal)), string.Join(",", claimedRewards), AwaitingReward ? "1" : "0", string.Join(",", ownedFireSpells), string.Join(",", equippedFireSpells.Select(id => id ?? string.Empty)), Convert.ToBase64String(Encoding.UTF8.GetBytes(Inventory.ToDataString())), string.Join(",", ItemQuickbar.Select(id => id ?? string.Empty)), nextItemSequence, Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Join(";", lootProgress.OrderBy(pair => pair.Key, StringComparer.Ordinal).Select(pair => pair.Key + "=" + pair.Value)))), FireSpellCatalog.Version, EncodeMigrationClaims(pendingFireSpellReselections), EncodeMigrationClaims(fireSpellRetirementCompensations), Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Join(",", fireSpellMigrationWarnings.OrderBy(id => id, StringComparer.Ordinal)))), deferredNodeReward ? "1" : "0", StarterId ?? string.Empty, HasCombatSnapshot ? "1" : "0", CurrentHealth, CurrentShield, CurrentMana);
         public static RogueliteMapRun FromJson(string json)
         {
             string[] parts = (json ?? throw new ArgumentNullException(nameof(json))).Split('|');
-            if (parts.Length == 36 && parts[0] == "map9")
+            if (parts.Length == 36 && (parts[0] == "map10" || parts[0] == "map9"))
             {
                 if (!string.Equals(parts[26], FireSpellCatalog.Version, StringComparison.Ordinal)) throw new InvalidOperationException("Unsupported fire spell catalog version.");
-                RogueliteMapRun map9Run = RestoreMap6Fields(parts, false); RestoreInventoryAndLoot(map9Run, parts);
-                map9Run.pendingFireSpellReselections.AddRange(DecodeMigrationClaims(parts[27], FireSpellSaveMigrationKind.ReselectSameRarity));
-                map9Run.fireSpellRetirementCompensations.AddRange(DecodeMigrationClaims(parts[28], FireSpellSaveMigrationKind.Compensation));
-                map9Run.fireSpellMigrationWarnings.AddRange(Encoding.UTF8.GetString(Convert.FromBase64String(parts[29])).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
-                map9Run.deferredNodeReward = parts[30] == "1"; map9Run.StarterId = parts[31]; map9Run.HasCombatSnapshot = parts[32] == "1";
-                map9Run.CurrentHealth = int.Parse(parts[33]); map9Run.CurrentShield = int.Parse(parts[34]); map9Run.CurrentMana = int.Parse(parts[35]);
-                return map9Run;
+                bool legacyLayout = parts[0] == "map9";
+                RogueliteMapRun currentRun = RestoreMap6Fields(parts, false); RestoreInventoryAndLoot(currentRun, parts, legacyLayout);
+                currentRun.pendingFireSpellReselections.AddRange(DecodeMigrationClaims(parts[27], FireSpellSaveMigrationKind.ReselectSameRarity));
+                currentRun.fireSpellRetirementCompensations.AddRange(DecodeMigrationClaims(parts[28], FireSpellSaveMigrationKind.Compensation));
+                currentRun.fireSpellMigrationWarnings.AddRange(Encoding.UTF8.GetString(Convert.FromBase64String(parts[29])).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+                currentRun.deferredNodeReward = parts[30] == "1"; currentRun.StarterId = parts[31]; currentRun.HasCombatSnapshot = parts[32] == "1";
+                currentRun.CurrentHealth = int.Parse(parts[33]); currentRun.CurrentShield = int.Parse(parts[34]); currentRun.CurrentMana = int.Parse(parts[35]);
+                return currentRun;
             }
             if (parts.Length == 31 && parts[0] == "map8")
             {
                 if (!string.Equals(parts[26], FireSpellCatalog.Version, StringComparison.Ordinal)) throw new InvalidOperationException("Unsupported fire spell catalog version.");
                 RogueliteMapRun map8Run = RestoreMap6Fields(parts, false);
-                RestoreInventoryAndLoot(map8Run, parts);
+                RestoreInventoryAndLoot(map8Run, parts, true);
                 map8Run.pendingFireSpellReselections.AddRange(DecodeMigrationClaims(parts[27], FireSpellSaveMigrationKind.ReselectSameRarity));
                 map8Run.fireSpellRetirementCompensations.AddRange(DecodeMigrationClaims(parts[28], FireSpellSaveMigrationKind.Compensation));
                 map8Run.fireSpellMigrationWarnings.AddRange(Encoding.UTF8.GetString(Convert.FromBase64String(parts[29])).Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
@@ -514,7 +515,7 @@ namespace OCC.Combat
             if ((parts.Length == 25 || parts.Length == 26) && parts[0] == "map7")
             {
                 RogueliteMapRun map7Run = RestoreMap6Fields(parts, true);
-                RestoreInventoryAndLoot(map7Run, parts);
+                RestoreInventoryAndLoot(map7Run, parts, true);
                 return map7Run;
             }
             if (parts.Length == 9 && parts[0] == "map1") return FromMap1(parts);
@@ -555,9 +556,10 @@ namespace OCC.Combat
             }
             return run;
         }
-        private static void RestoreInventoryAndLoot(RogueliteMapRun run, string[] parts)
+        private static void RestoreInventoryAndLoot(RogueliteMapRun run, string[] parts, bool legacyLayout)
         {
-            run.Inventory = InventoryContainerState.FromDataString(Encoding.UTF8.GetString(Convert.FromBase64String(parts[22])));
+            string inventoryData = Encoding.UTF8.GetString(Convert.FromBase64String(parts[22]));
+            run.Inventory = legacyLayout ? InventoryContainerState.FromLegacyMap9DataString(inventoryData) : InventoryContainerState.FromDataString(inventoryData);
             run.ItemQuickbar = new string[8]; string[] itemSlots = parts[23].Split(',');
             for (int i = 0; i < Math.Min(run.ItemQuickbar.Length, itemSlots.Length); i++) if (run.Inventory.Get(itemSlots[i]) != null) run.ItemQuickbar[i] = itemSlots[i];
             run.nextItemSequence = int.Parse(parts[24]);
