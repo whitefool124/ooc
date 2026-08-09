@@ -8,7 +8,6 @@ namespace OCC.Combat
         TurnInPlace,
         Attack,
         Cast,
-        UseItem,
         UseSkill,
         UseQuickbar,
         SearchLoot,
@@ -46,7 +45,6 @@ namespace OCC.Combat
             new CombatCommand(CombatCommandType.TurnInPlace, unitId, default, facing);
         public static CombatCommand Attack(string unitId, string targetUnitId) => new CombatCommand(CombatCommandType.Attack, unitId, default, default, targetUnitId);
         public static CombatCommand Cast(string unitId, string targetUnitId) => new CombatCommand(CombatCommandType.Cast, unitId, default, default, targetUnitId);
-        public static CombatCommand UseItem(string unitId) => new CombatCommand(CombatCommandType.UseItem, unitId, default, default);
         public static CombatCommand UseSkill(string unitId, int skillIndex, string targetUnitId) => new CombatCommand(CombatCommandType.UseSkill, unitId, default, default, targetUnitId, skillIndex);
         public static CombatCommand UseSkillAt(string unitId, int skillIndex, GridPosition destination, Facing facing) => new CombatCommand(CombatCommandType.UseSkill, unitId, destination, facing, null, skillIndex);
         public static CombatCommand UseQuickbar(string unitId, int slotIndex) => new CombatCommand(CombatCommandType.UseQuickbar, unitId, default, default, null, slotIndex);

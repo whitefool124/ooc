@@ -109,7 +109,11 @@ namespace OCC.Combat
             HeroKey = hero == null ? string.Empty : string.Join("|", hero.MainHand?.Id ?? string.Empty, hero.Armor, hero.ActionPoints,
                 hero.SkillOne == null ? 0 : hero.Cooldown(hero.SkillOne), hero.SkillTwo == null ? 0 : hero.Cooldown(hero.SkillTwo),
                 string.Join(",", hero.Statuses.OrderBy(item => item.Key).Select(item => item.Key + ":" + item.Value)),
-                string.Join(",", state.Quickbar.Select(item => item?.Id ?? string.Empty)));
+                string.Join(",", state.ItemQuickbar.Select(instanceId =>
+                {
+                    ItemInstance item = state.ItemInventory.Get(instanceId);
+                    return item == null ? string.Empty : item.InstanceId + ":" + item.DefinitionId + ":" + item.RemainingUses;
+                })));
         }
 
         public static CombatHudPresentationModel From(CombatState state, string selectedAction, string selectedTargetId, bool outcomeVisible) =>

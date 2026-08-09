@@ -332,7 +332,8 @@ namespace OCC.Combat
             if (quickbarSlot < 0 || quickbarSlot >= ItemQuickbar.Length) return new InventoryResult(InventoryError.OutOfBounds, instanceId);
             ItemInstance item = Inventory.Get(instanceId); if (item == null) return new InventoryResult(InventoryError.MissingInstance, instanceId);
             ItemDefinition definition = ItemCatalog.Get(item.DefinitionId); if (!definition.CanQuickEquip) return new InventoryResult(InventoryError.Restricted, instanceId);
-            int specialCount = ItemQuickbar.Where(id => !string.IsNullOrEmpty(id) && id != ItemQuickbar[quickbarSlot]).Select(id => Inventory.Get(id)).Where(value => value != null).Count(value => { ItemCategory c = ItemCatalog.Get(value.DefinitionId).Category; return c == ItemCategory.Scroll || c == ItemCategory.Artifact; });
+            string replacedId = ItemQuickbar[quickbarSlot];
+            int specialCount = ItemQuickbar.Where(id => !string.IsNullOrEmpty(id) && id != replacedId && id != instanceId).Select(id => Inventory.Get(id)).Where(value => value != null).Count(value => { ItemCategory c = ItemCatalog.Get(value.DefinitionId).Category; return c == ItemCategory.Scroll || c == ItemCategory.Artifact; });
             if ((definition.Category == ItemCategory.Scroll || definition.Category == ItemCategory.Artifact) && specialCount >= 4) return new InventoryResult(InventoryError.QuickbarFull, instanceId);
             for (int i = 0; i < ItemQuickbar.Length; i++) if (ItemQuickbar[i] == instanceId) ItemQuickbar[i] = null;
             ItemQuickbar[quickbarSlot] = instanceId; return InventoryResult.Ok(instanceId, quickbarSlot, 0);

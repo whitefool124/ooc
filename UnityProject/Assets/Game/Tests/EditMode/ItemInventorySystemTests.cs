@@ -6,6 +6,18 @@ namespace OCC.Combat.Tests
     public sealed class ItemInventorySystemTests
     {
         [Test]
+        public void CombatState_StartsWithoutImplicitInventoryOrQuickbarItems()
+        {
+            CombatState state = new CombatState(new GridMap(4, 4), new[]
+            {
+                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+            });
+
+            Assert.That(state.ItemInventory.Items, Is.Empty);
+            Assert.That(state.ItemQuickbar, Is.All.Null);
+        }
+
+        [Test]
         public void BaseBackpack_IsSixByTenAndUsesStableFirstFit()
         {
             InventoryContainerState inventory = new InventoryContainerState();
@@ -75,6 +87,70 @@ namespace OCC.Combat.Tests
             for (int i = 0; i < 5; i++) state.ItemInventory.AddFirstFit(new ItemInstance("scroll-" + i, "F-S01", i));
             for (int i = 0; i < 4; i++) Assert.That(state.EquipItemQuickbar("scroll-" + i, i).Success, Is.True);
             Assert.That(state.EquipItemQuickbar("scroll-4", 4).Error, Is.EqualTo(InventoryError.QuickbarFull));
+        }
+
+        [Test]
+        public void CombatState_SpecialQuickbarCapAllowsMovingAndReplacingAtTheLimit()
+        {
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            for (int i = 0; i < 5; i++) state.ItemInventory.AddFirstFit(new ItemInstance("scroll-" + i, "F-S01", i));
+            for (int i = 0; i < 4; i++) Assert.That(state.EquipItemQuickbar("scroll-" + i, i).Success, Is.True);
+
+            Assert.That(state.EquipItemQuickbar("scroll-0", 4).Success, Is.True);
+            Assert.That(state.ItemQuickbar[0], Is.Null);
+            Assert.That(state.EquipItemQuickbar("scroll-4", 1).Success, Is.True);
+            Assert.That(state.ItemQuickbar[1], Is.EqualTo("scroll-4"));
+            Assert.That(state.ItemQuickbar.Count(id => !string.IsNullOrEmpty(id)), Is.EqualTo(4));
+        }
+
+        [Test]
+        public void MapRun_SpecialQuickbarCapAllowsMovingAndReplacingAtTheLimit()
+        {
+            RogueliteMapRun run = new RogueliteMapRun(406);
+            ItemInstance[] scrolls = Enumerable.Range(0, 5).Select(_ => run.GrantItem("F-S01")).ToArray();
+            for (int i = 0; i < 4; i++) Assert.That(run.EquipInventoryItem(scrolls[i].InstanceId, i + 2).Success, Is.True);
+
+            Assert.That(run.EquipInventoryItem(scrolls[0].InstanceId, 6).Success, Is.True);
+            Assert.That(run.EquipInventoryItem(scrolls[4].InstanceId, 3).Success, Is.True);
+            Assert.That(run.ItemQuickbar.Count(id => !string.IsNullOrEmpty(id) && ItemCatalog.Get(run.Inventory.Get(id).DefinitionId).Category == ItemCategory.Scroll), Is.EqualTo(4));
+        }
+
+        [Test]
+        public void CombatState_AllEightInstanceQuickbarSlotsCanBeFilled()
+        {
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            for (int i = 0; i < 8; i++)
+            {
+                string id = "medkit-" + i;
+                Assert.That(state.ItemInventory.AddFirstFit(new ItemInstance(id, "medkit", i)).Success, Is.True);
+                Assert.That(state.EquipItemQuickbar(id, i).Success, Is.True);
+            }
+
+            Assert.That(state.ItemQuickbar.Where(id => !string.IsNullOrEmpty(id)).Count(), Is.EqualTo(8));
+            Assert.That(state.ItemQuickbar.Distinct().Count(), Is.EqualTo(8));
+        }
+
+        [Test]
+        public void MapRunStarterConsumable_DoesNotRespawnInNextCombatAfterItIsConsumed()
+        {
+            RogueliteMapRun run = new RogueliteMapRun(405);
+            CombatState first = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            first.ConfigureItemInventory(run.Inventory, run.ItemQuickbar);
+            CombatResolver.BeginTurn(first, "hero");
+
+            string medkitId = first.ItemQuickbar[0];
+            Assert.That(first.ItemInventory.Items.Count(item => item.DefinitionId == "medkit"), Is.EqualTo(1));
+            Assert.That(first.ItemInventory.Items.Count(item => item.DefinitionId == "shield_cell"), Is.EqualTo(1));
+            CombatResolver.Resolve(first, CombatCommand.UseQuickbar("hero", 0));
+            run.CaptureCombatInventory(first);
+
+            CombatState next = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            next.ConfigureItemInventory(run.Inventory, run.ItemQuickbar);
+
+            Assert.That(next.ItemInventory.Get(medkitId), Is.Null);
+            Assert.That(next.ItemInventory.Items.Any(item => item.DefinitionId == "medkit"), Is.False);
+            Assert.That(next.ItemInventory.Items.Count(item => item.DefinitionId == "shield_cell"), Is.EqualTo(1));
+            Assert.That(next.ItemQuickbar[0], Is.Null);
         }
 
         [Test]
@@ -166,6 +242,7 @@ namespace OCC.Combat.Tests
         public void InventoryConsumable_UsesRealEffectPathAndRemovesDepletedInstance()
         {
             CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East), new UnitState("enemy", false, new GridPosition(1, 0), Facing.West) }); UnitState hero = state.GetUnit("hero");
+            InventoryContainerState inventory = new InventoryContainerState(); inventory.AddFirstFit(new ItemInstance("combat-medkit", "medkit", 0)); state.ConfigureItemInventory(inventory, new[] { "combat-medkit" });
             CombatResolver.BeginTurn(state, "enemy"); CombatResolver.Resolve(state, CombatCommand.Attack("enemy", "hero")); CombatResolver.BeginTurn(state, "hero"); CombatResolver.Resolve(state, CombatCommand.UseInventoryItem("hero", "combat-medkit"));
             Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth)); Assert.That(hero.ActionPoints, Is.EqualTo(2)); Assert.That(state.ItemInventory.Get("combat-medkit"), Is.Null); Assert.That(state.ItemQuickbar[0], Is.Null);
         }

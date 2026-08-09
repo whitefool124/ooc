@@ -84,7 +84,9 @@ namespace OCC.Combat.Tests
         {
             CombatState state = CreateDuelState();
             UnitState hero = state.GetUnit("hero");
-            state.ConfigureQuickbar(CombatCatalog.ShieldCell);
+            InventoryContainerState inventory = new InventoryContainerState();
+            Assert.That(inventory.AddFirstFit(new ItemInstance("shield-cell", "shield_cell", 0)).Success, Is.True);
+            state.ConfigureItemInventory(inventory, new[] { "shield-cell" });
             CombatResolver.BeginTurn(state, hero.Id);
             hero.ApplyStatus(StatusType.Burning, 2);
 
@@ -93,7 +95,8 @@ namespace OCC.Combat.Tests
             Assert.That(execution.Results.Single(result => result.Kind == CombatEffectKind.RestoreShield).AppliedAmount, Is.EqualTo(4));
             Assert.That(execution.Results.Single(result => result.Kind == CombatEffectKind.ClearStatus).AppliedAmount, Is.EqualTo(2));
             Assert.That(hero.HasStatus(StatusType.Burning), Is.False);
-            Assert.That(state.Quickbar[0], Is.Null);
+            Assert.That(state.ItemInventory.Get("shield-cell"), Is.Null);
+            Assert.That(state.ItemQuickbar[0], Is.Null);
         }
 
         [Test]

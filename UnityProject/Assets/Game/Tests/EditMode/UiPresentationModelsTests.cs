@@ -47,5 +47,24 @@ namespace OCC.Combat.Tests
             Assert.That(after.Visible, Is.True);
             Assert.That(after.RewardKey, Is.Not.Empty);
         }
+
+        [Test]
+        public void CombatHudModel_ChangesWhenQuickbarInstanceUsesChange()
+        {
+            CombatState state = new CombatState(new GridMap(4, 4), new[]
+            {
+                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+            });
+            InventoryContainerState inventory = new InventoryContainerState();
+            Assert.That(inventory.AddFirstFit(new ItemInstance("artifact", "F-T01", 0, 2)).Success, Is.True);
+            state.ConfigureItemInventory(inventory, new[] { "artifact" });
+            CombatResolver.BeginTurn(state, "hero");
+            CombatHudPresentationModel before = CombatHudPresentationModel.From(state, "技能1", null, false);
+
+            Assert.That(state.ConsumeInventoryItem("artifact"), Is.True);
+            CombatHudPresentationModel after = CombatHudPresentationModel.From(state, "技能1", null, false);
+
+            Assert.That(before.Equals(after), Is.False);
+        }
     }
 }

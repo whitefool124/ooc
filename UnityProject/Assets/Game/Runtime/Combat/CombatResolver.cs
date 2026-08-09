@@ -80,7 +80,6 @@ namespace OCC.Combat
                 case CombatCommandType.Attack: return ResolveWeaponAttack(state, unit, command.TargetUnitId, 0);
                 case CombatCommandType.Cast: return ResolveSkill(state, unit, CombatCatalog.FireBolt, command);
                 case CombatCommandType.UseSkill: return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
-                case CombatCommandType.UseItem: return UseConsumable(state, unit, CombatCatalog.Medkit);
                 case CombatCommandType.UseQuickbar: return UseQuickbar(state, unit, command.SlotIndex);
                 case CombatCommandType.SearchLoot: return SearchLoot(state, unit);
                 case CombatCommandType.TakeLoot: return TakeLoot(state, unit, command.TargetUnitId);
@@ -278,10 +277,8 @@ namespace OCC.Combat
 
         private static CombatEffectExecution UseQuickbar(CombatState state, UnitState unit, int index)
         {
-            if (index < 0 || index >= state.Quickbar.Length || state.Quickbar[index] == null) throw new InvalidOperationException("\u8be5\u5feb\u6377\u680f\u6ca1\u6709\u53ef\u7528\u7269\u54c1\u3002");
-            CombatEffectExecution execution = UseConsumable(state, unit, state.Quickbar[index]);
-            state.ClearQuickbarSlot(index);
-            return execution;
+            if (index < 0 || index >= state.ItemQuickbar.Length || string.IsNullOrEmpty(state.ItemQuickbar[index])) throw new InvalidOperationException("\u8be5\u5feb\u6377\u680f\u6ca1\u6709\u53ef\u7528\u7269\u54c1\u3002");
+            return UseInventoryItem(state, unit, state.ItemQuickbar[index]);
         }
 
         private static CombatEffectExecution UseConsumable(CombatState state, UnitState unit, ConsumableDefinition item)

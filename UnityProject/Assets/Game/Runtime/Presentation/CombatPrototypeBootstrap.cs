@@ -286,8 +286,7 @@ namespace OCC.Combat.Presentation
                 if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
                 else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
             }
-            state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
-            if (mapRun != null) state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
+            ConfigureCombatInventory();
             ApplyShortRunChoices();
             mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
@@ -371,8 +370,7 @@ namespace OCC.Combat.Presentation
                     else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
                 }
             }
-            state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell);
-            if (mapRun != null) state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
+            ConfigureCombatInventory();
             ApplyShortRunChoices();
             mapRun?.ApplyBuild(state.GetUnit("hero"));
             state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
@@ -584,7 +582,30 @@ namespace OCC.Combat.Presentation
             UnitState hero = state.GetUnit("hero");
             if (rogueliteRun.ShortRun.EventChoiceId == "field_repair") hero.Armor += 1;
             if (rogueliteRun.ShortRun.UpgradeChoiceId == "calibrated_rifle") hero.Equip(StageTwoBuilds.CalibratedRifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
-            if (rogueliteRun.ShortRun.SalvageChoiceId == "shield_cell") state.ConfigureQuickbar(CombatCatalog.Medkit, CombatCatalog.ShieldCell, CombatCatalog.ShieldCell);
+        }
+
+        private void ConfigureCombatInventory()
+        {
+            if (mapRun != null)
+            {
+                state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
+                return;
+            }
+
+            InventoryContainerState inventory = new InventoryContainerState();
+            List<string> slots = new List<string>();
+            AddExplicitCombatItem(inventory, slots, "combat-medkit", "medkit", 0);
+            AddExplicitCombatItem(inventory, slots, "combat-shield-cell", "shield_cell", 1);
+            if (rogueliteRun?.IsShortRun == true && rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.SecondCombat && rogueliteRun.ShortRun.SalvageChoiceId == "shield_cell")
+                AddExplicitCombatItem(inventory, slots, "combat-shield-cell-salvage", "shield_cell", 2);
+            state.ConfigureItemInventory(inventory, slots);
+        }
+
+        private static void AddExplicitCombatItem(InventoryContainerState inventory, IList<string> slots, string instanceId, string definitionId, int acquisitionOrder)
+        {
+            InventoryResult result = inventory.AddFirstFit(new ItemInstance(instanceId, definitionId, acquisitionOrder));
+            if (!result.Success) throw new InvalidOperationException("Unable to configure explicit combat inventory: " + result.Error);
+            slots.Add(instanceId);
         }
         public void StartRogueliteSandbox()
         {
@@ -810,7 +831,6 @@ namespace OCC.Combat.Presentation
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatActionSelected, action));
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatRangeRevealed, action, message: GetRangeDescription()));
         }
-        public void UseQuickbarSlot(int slot) { if (state?.Quickbar[slot] != null) TryCommand(CombatCommand.UseQuickbar("hero", slot)); }
         public void SearchCurrentLoot() { if (state != null) { TryCommand(CombatCommand.SearchLoot("hero")); PersistCombatInventory(); } }
         public void TakeCurrentLoot(string instanceId) { if (state != null) { TryCommand(CombatCommand.TakeLoot("hero", instanceId)); PersistCombatInventory(); } }
         public void EquipInventoryQuickbar(string instanceId, int slot) { if (state != null) { TryCommand(CombatCommand.EquipInventoryQuickbar("hero", instanceId, slot)); PersistCombatInventory(); } }
@@ -830,7 +850,7 @@ namespace OCC.Combat.Presentation
                 MarkPresentation(UiPresentationArea.Combat); return;
             }
             FireSpellDefinition ability = ItemAbilityCatalog.For(item.DefinitionId);
-            if (ability == null) { TryCommand(CombatCommand.UseInventoryItem("hero", item.InstanceId)); PersistCombatInventory(); return; }
+            if (ability == null) { TryCommand(CombatCommand.UseQuickbar("hero", slot)); PersistCombatInventory(); return; }
             armedInventoryItemId = item.InstanceId; selectedAction = "技能1"; selectedTargetId = null; state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择目标格。"); MarkPresentation(UiPresentationArea.Combat);
         }
         public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }

@@ -37,8 +37,8 @@ namespace OCC.Combat.Presentation
         private Button outcomeBackButton;
         private GameObject outcomeOverlay;
         private Text outcomeTitle;
-        private Text[] quickbarLabels = new Text[4];
-        private Image[] quickbarIcons = new Image[4];
+        private Text[] quickbarLabels = new Text[8];
+        private Image[] quickbarIcons = new Image[8];
         private Image weaponIcon;
         private float displayedHealth = -1f;
         private float displayedShield = -1f;
@@ -151,11 +151,11 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
-                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(10 + (i % 2) * 138, -38 - (i / 2) * 46), new Vector2(128, 40), "", new Color(.07f, .075f, .07f, 1f), 14);
+                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(10 + (i % 4) * 68, -38 - (i / 4) * 46), new Vector2(64, 40), "", new Color(.07f, .075f, .07f, 1f), 10);
                 quickbarLabels[i] = quick.GetComponentInChildren<Text>();
-                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(5, 0));
-                if (quickbarLabels[i] != null) quickbarLabels[i].rectTransform.offsetMin = new Vector2(25, 0);
-                quick.onClick.AddListener(() => bootstrap.UseQuickbarSlot(slot));
+                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(2, 0));
+                if (quickbarLabels[i] != null) quickbarLabels[i].rectTransform.offsetMin = new Vector2(27, 0);
+                quick.onClick.AddListener(() => bootstrap.ActivateInventoryQuickbar(slot));
             }
             CreateOutcomeOverlay();
         }
@@ -222,12 +222,15 @@ namespace OCC.Combat.Presentation
             eventLabel.text = state.EventLog.Count == 0 ? "等待战术指令。" : state.EventLog[0];
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
-                ConsumableDefinition item = state.Quickbar[i];
-                quickbarLabels[i].text = item == null ? (i + 1) + " · 空" : (i + 1) + " · " + item.DisplayName;
-                quickbarIcons[i].gameObject.SetActive(item != null);
-                if (item == null) continue;
-                quickbarIcons[i].sprite = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(item.Id));
-                if (quickbarIcons[i].sprite == null) throw new KeyNotFoundException("Missing formal quickbar icon: " + item.Id);
+                ItemInstance item = state.ItemInventory.Get(state.ItemQuickbar[i]);
+                ItemDefinition definition = item == null ? null : ItemCatalog.Get(item.DefinitionId);
+                string displayName = definition == null ? "空" :
+                    (definition.DisplayName.Length <= 4 ? definition.DisplayName : definition.DisplayName.Substring(0, 4));
+                quickbarLabels[i].text = definition == null ? (i + 1) + "\n空" : displayName + "\n" + (i + 1) + "·×" + item.RemainingUses;
+                quickbarIcons[i].gameObject.SetActive(definition != null);
+                if (definition == null) continue;
+                quickbarIcons[i].sprite = Resources.Load<Sprite>(definition.IconPath);
+                if (quickbarIcons[i].sprite == null) throw new KeyNotFoundException("Missing formal quickbar icon: " + definition.Id);
             }
             bool outcome = bootstrap.IsCombatOutcomeVisible;
             outcomeOverlay.SetActive(outcome);

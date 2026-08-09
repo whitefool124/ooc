@@ -20,7 +20,6 @@ namespace OCC.Combat
         public InventoryContainerState ItemInventory { get; private set; } = new InventoryContainerState();
         public LootContainer Loot { get; private set; }
         public LootSourceState LootSource { get; private set; }
-        public ConsumableDefinition[] Quickbar { get; } = new ConsumableDefinition[8];
         public string[] ItemQuickbar { get; } = new string[8];
         public IReadOnlyList<CombatObjective> Objectives { get; private set; }
         internal ArtifactBattleState ArtifactBattle { get; private set; }
@@ -54,9 +53,6 @@ namespace OCC.Combat
                 GridPosition[] objectivePositions = Map.PositionsWith(tile => tile.IsObjective).ToArray();
                 Objectives = objectivePositions.Length == 0 ? new List<CombatObjective>() : new List<CombatObjective> { new DestructionObjective(objectivePositions) };
             }
-            ItemInventory.AddFirstFit(new ItemInstance("combat-medkit", "medkit", 0));
-            ItemInventory.AddFirstFit(new ItemInstance("combat-shield-cell", "shield_cell", 1));
-            ItemQuickbar[0] = "combat-medkit"; ItemQuickbar[1] = "combat-shield-cell";
         }
 
         public void ConfigureObjectives(params CombatObjective[] objectives)
@@ -78,25 +74,16 @@ namespace OCC.Combat
             ItemInventory = (inventory ?? throw new ArgumentNullException(nameof(inventory))).Clone(); Array.Clear(ItemQuickbar, 0, ItemQuickbar.Length);
             if (quickbarIds == null) return; int index = 0; foreach (string id in quickbarIds.Take(ItemQuickbar.Length)) { if (ItemInventory.Get(id) != null) ItemQuickbar[index] = id; index++; }
         }
-        public void ConfigureQuickbar(params ConsumableDefinition[] items)
-        {
-            Array.Clear(Quickbar, 0, Quickbar.Length);
-            if (items == null) return;
-            for (int i = 0; i < Math.Min(Quickbar.Length, items.Length); i++) Quickbar[i] = items[i];
-        }
-        internal void ClearQuickbarSlot(int index)
-        {
-            if (index >= 0 && index < Quickbar.Length) Quickbar[index] = null;
-        }
         public InventoryResult EquipItemQuickbar(string instanceId, int index)
         {
             if (index < 0 || index >= ItemQuickbar.Length) return new InventoryResult(InventoryError.OutOfBounds, instanceId);
             ItemInstance item = ItemInventory.Get(instanceId); if (item == null) return new InventoryResult(InventoryError.MissingInstance, instanceId);
             ItemDefinition definition = ItemCatalog.Get(item.DefinitionId); if (!definition.CanQuickEquip) return new InventoryResult(InventoryError.Restricted, instanceId);
-            if ((definition.Category == ItemCategory.Scroll || definition.Category == ItemCategory.Artifact) && ItemQuickbar.Where(id => !string.IsNullOrEmpty(id)).Select(id => ItemInventory.Get(id)).Where(value => value != null).Count(value =>
+            string replacedId = ItemQuickbar[index];
+            if ((definition.Category == ItemCategory.Scroll || definition.Category == ItemCategory.Artifact) && ItemQuickbar.Where(id => !string.IsNullOrEmpty(id) && id != replacedId && id != instanceId).Select(id => ItemInventory.Get(id)).Where(value => value != null).Count(value =>
             {
                 ItemCategory category = ItemCatalog.Get(value.DefinitionId).Category; return category == ItemCategory.Scroll || category == ItemCategory.Artifact;
-            }) >= 4 && ItemQuickbar[index] != instanceId) return new InventoryResult(InventoryError.QuickbarFull, instanceId);
+            }) >= 4) return new InventoryResult(InventoryError.QuickbarFull, instanceId);
             for (int i = 0; i < ItemQuickbar.Length; i++) if (ItemQuickbar[i] == instanceId) ItemQuickbar[i] = null;
             ItemQuickbar[index] = instanceId; return InventoryResult.Ok(instanceId, index, 0);
         }
@@ -133,7 +120,7 @@ namespace OCC.Combat
         {
             CombatState clone = new CombatState(Map.Clone(), units.Values.Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
             clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat;
-            clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(Quickbar, clone.Quickbar, Quickbar.Length); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
+            clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
             clone.EventLog.AddRange(EventLog); return clone;
         }

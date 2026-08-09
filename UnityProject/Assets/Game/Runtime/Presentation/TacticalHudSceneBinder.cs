@@ -90,7 +90,7 @@ namespace OCC.Combat.Presentation
         {
             string[] actions = { "移动", "攻击", "技能1", "技能2", "搜刮", "互动" };
             for (int i = 0; i < actions.Length; i++) { string action = actions[i]; Bind("战术指令/" + action, () => bootstrap.SelectHudAction(action)); }
-            for (int i = 0; i < 8; i++) { int slot = i; Bind("快捷栏/槽" + i, () => bootstrap.UseQuickbarSlot(slot)); }
+            for (int i = 0; i < 8; i++) { int slot = i; Bind("快捷栏/槽" + i, () => bootstrap.ActivateInventoryQuickbar(slot)); }
             Bind("构筑与回合/步枪", () => bootstrap.ApplyHudBuild(0)); Bind("构筑与回合/战锤", () => bootstrap.ApplyHudBuild(1)); Bind("构筑与回合/法杖", () => bootstrap.ApplyHudBuild(2));
             Bind("构筑与回合/结束行动", () => bootstrap.EndHeroTurn()); Bind("构筑与回合/战术重开", () => bootstrap.TacticalRestartDeveloperCombat());
         }
