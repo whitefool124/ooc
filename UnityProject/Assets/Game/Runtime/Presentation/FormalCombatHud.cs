@@ -21,6 +21,7 @@ namespace OCC.Combat.Presentation
         private CombatPrototypeBootstrap bootstrap;
         private Canvas canvas;
         private GameObject root;
+        private FormalHoverTooltip tooltip;
         private Text activeLabel;
         private Text phaseLabel;
         private Text weaponLabel;
@@ -96,6 +97,8 @@ namespace OCC.Combat.Presentation
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式战斗HUD", UiLayoutContract.CombatSortingOrder);
             root = canvas.gameObject;
+            tooltip = root.AddComponent<FormalHoverTooltip>();
+            tooltip.Initialize(canvas);
 
             GameObject top = FormalUiKit.LayoutPanel("战斗抬头", root.transform, "combat.header", ink);
             Label("OCC // 战术行动", top.transform, new Vector2(20, -10), new Vector2(420, 34), 22, text, TextAnchor.MiddleLeft);
@@ -105,7 +108,7 @@ namespace OCC.Combat.Presentation
 
             GameObject side = FormalUiKit.LayoutPanel("战术读数控制台", root.transform, "combat.rightConsole", panel);
             GameObject selectedModule = FormalUiKit.LayoutPanel("行动状态模块", side.transform, "combat.selected", panel);
-            Label("选中单位 // 状态资源", selectedModule.transform, new Vector2(16, -10), new Vector2(360, 26), 18, text, TextAnchor.MiddleLeft);
+            Label("当前行动 // 英雄状态", selectedModule.transform, new Vector2(16, -10), new Vector2(360, 26), 18, text, TextAnchor.MiddleLeft);
             activeLabel = Label("行动状态", selectedModule.transform, new Vector2(16, -42), new Vector2(350, 42), 17, text, TextAnchor.UpperLeft);
             weaponLabel = Label("装备状态", selectedModule.transform, new Vector2(16, -84), new Vector2(350, 38), 15, muted, TextAnchor.UpperLeft);
             weaponIcon = FormalUiKit.IconSlot("主手装备图标", selectedModule.transform, null, Vector2.zero);
@@ -115,10 +118,12 @@ namespace OCC.Combat.Presentation
             healthFill = ResourceBar(selectedModule.transform, "结构", new Vector2(16, -150), new Color(.32f, .82f, .56f));
             shieldFill = ResourceBar(selectedModule.transform, "护盾", new Vector2(16, -182), new Color(.44f, .72f, .63f));
             manaFill = ResourceBar(selectedModule.transform, "以太", new Vector2(16, -214), line);
+            BindTooltip(selectedModule, BuildHeroTooltip);
 
             targetModule = FormalUiKit.LayoutPanel("行动预览目标模块", side.transform, "combat.target", panel);
-            Label("目标预览 // 确定性结果", targetModule.transform, new Vector2(16, -10), new Vector2(380, 26), 17, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            Label("目标预览 // 悬停详情", targetModule.transform, new Vector2(16, -10), new Vector2(380, 26), 17, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             targetLabel = Label("行动预览", targetModule.transform, new Vector2(16, -42), new Vector2(380, 96), 12, new Color(.95f, .76f, .36f), TextAnchor.UpperLeft);
+            BindTooltip(targetModule, BuildTargetTooltip);
 
             timelineModule = FormalUiKit.LayoutPanel("行动序列模块", side.transform, "combat.timeline", panel);
             Label("行动序列", timelineModule.transform, new Vector2(16, -8), new Vector2(380, 24), 17, text, TextAnchor.MiddleLeft);
@@ -147,13 +152,17 @@ namespace OCC.Combat.Presentation
                 AddActionIcon(button.transform, action);
                 button.onClick.AddListener(() => bootstrap.SelectHudAction(action));
                 actionButtons.Add(action, button);
+                BindTooltip(button.gameObject, () => BuildActionTooltip(action));
             }
             endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1188, -14), new Vector2(204, 78), "结束行动\n剩余 AP 作废", new Color(.10f, .16f, .17f, 1f));
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
+            BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束行动", "结束当前英雄阶段；未使用的行动点会作废，随后按行动序列执行敌方权威决策。", line));
             restartButton = Button(bottom.transform, "战术重开", new Vector2(1188, -100), new Vector2(98, 40), "重开", new Color(.12f, .105f, .055f, 1f));
             restartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
+            BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("战术重开", "恢复本场战斗开始时的确定性快照；不会把当前战斗中的生命、背包或快捷栏变化写回地图存档。", FormalUiTheme.Amber));
             leaveButton = Button(bottom.transform, "离开战斗", new Vector2(1294, -100), new Vector2(98, 40), "离开", new Color(.16f, .075f, .06f, 1f));
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
+            BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("离开战斗", "打开离开确认。肉鸽战败返回地图时保留战前地图状态，不写回战败后的英雄与背包状态。", FormalUiTheme.Danger));
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
@@ -162,6 +171,7 @@ namespace OCC.Combat.Presentation
                 quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(2, 0));
                 if (quickbarLabels[i] != null) quickbarLabels[i].rectTransform.offsetMin = new Vector2(27, 0);
                 quick.onClick.AddListener(() => bootstrap.ActivateInventoryQuickbar(slot));
+                BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }
             CreateOutcomeOverlay();
         }
@@ -213,20 +223,9 @@ namespace OCC.Combat.Presentation
             if (fireTwo != null) RefreshFireSpellButton("技能2", fireTwo, hero); else RefreshSkillButton("技能2", hero.SkillTwo, hero);
             statusLabel.text = StatusText(hero);
             UnitState target = state.Units.Values.FirstOrDefault(unit => !unit.IsHero && unit.IsAlive && unit.Id == bootstrap.SelectedTargetId);
-            bool expandedEnemyProfile = target != null;
-            RectTransform targetRect = targetModule.GetComponent<RectTransform>();
-            targetRect.sizeDelta = new Vector2(targetRect.sizeDelta.x, expandedEnemyProfile ? 510f : 150f);
-            targetLabel.rectTransform.sizeDelta = new Vector2(380f, expandedEnemyProfile ? 448f : 96f);
-            timelineModule.SetActive(!expandedEnemyProfile);
-            logModule.SetActive(!expandedEnemyProfile);
             CombatActionPreview preview = bootstrap.CurrentActionPreview;
-            string targetText = target == null ? "目标  未锁定" : CombatInformationPresenter.BuildEnemyInformation(target).FullText;
             EnemyIntentPresentation intent = target == null ? null : bootstrap.EnemyIntent(target);
-            string resultText = string.IsNullOrEmpty(preview.FailureReason) ? "合法 // " + preview.ExpectedResult + " // 有效格 " + preview.ValidCellCount : "不可提交 // " + preview.FailureReason;
-            string structured = string.IsNullOrEmpty(preview.TargetBefore) ? string.Empty : "\n提交前 " + preview.TargetBefore + " → 提交后 " + preview.TargetAfter +
-                (string.IsNullOrEmpty(preview.DamageBreakdown) ? string.Empty : "\n" + preview.DamageBreakdown);
-            string intentText = intent == null ? string.Empty : "\n真实意图  " + intent.DetailedText;
-            targetLabel.text = "当前操作  " + preview.Action + " // " + preview.Cost + "\n" + preview.TargetRule + "\n" + resultText + structured + "\n" + targetText + intentText;
+            targetLabel.text = CombatInformationPresenter.BuildCompactTargetSummary(preview, target, intent);
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
@@ -257,7 +256,7 @@ namespace OCC.Combat.Presentation
             {
                 CombatOutcomePresentation summary = bootstrap.CurrentOutcomePresentation;
                 outcomeTitle.text = summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
-                outcomeDetail.text = summary?.DetailText ?? "战术记录已封存。请选择下一步。";
+                outcomeDetail.text = summary?.CompactDetailText ?? "战术记录已封存。请选择下一步。";
                 outcomeBackButton.GetComponentInChildren<Text>().text = bootstrap.CurrentMapRun != null ? "返回地图入口\n不写回战败状态" : "返回入口";
             }
             foreach (KeyValuePair<string, Button> pair in actionButtons)
@@ -332,7 +331,60 @@ namespace OCC.Combat.Presentation
             outcomeRestartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
             outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -180), new Vector2(280, 64), "返回入口", new Color(.12f, .10f, .06f, 1f));
             outcomeBackButton.onClick.AddListener(bootstrap.ReturnToDeveloperMenu);
+            BindTooltip(outcomeOverlay, BuildOutcomeTooltip);
+            BindTooltip(outcomeRestartButton.gameObject, () => new FormalTooltipContent("战术重开", "从本场确定性快照重新开始，不提交当前战斗状态。", line));
+            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("返回入口", "肉鸽战败不会把战败后的英雄、背包或快捷栏状态覆盖到战前地图存档。", FormalUiTheme.Amber));
             outcomeOverlay.SetActive(false);
+        }
+
+        private FormalTooltipContent BuildActionTooltip(string action)
+        {
+            CombatActionPreview preview = bootstrap?.ActionPreview(action);
+            string title = action;
+            if (actionButtons.TryGetValue(action, out Button button))
+            {
+                string label = button.GetComponentInChildren<Text>()?.text;
+                if (!string.IsNullOrWhiteSpace(label)) title = label.Split('\n')[0];
+            }
+            return new FormalTooltipContent(title + " // 完整规则", CombatInformationPresenter.BuildActionDetails(preview), line);
+        }
+
+        private FormalTooltipContent BuildTargetTooltip()
+        {
+            CombatState state = bootstrap?.CurrentState;
+            CombatActionPreview preview = bootstrap?.CurrentActionPreview;
+            UnitState target = state?.Units.Values.FirstOrDefault(unit => !unit.IsHero && unit.IsAlive && unit.Id == bootstrap.SelectedTargetId);
+            EnemyIntentPresentation intent = target == null ? null : bootstrap.EnemyIntent(target);
+            string title = target == null ? "当前操作 // 完整预览" : target.DisplayName + " // 档案与真实意图";
+            return new FormalTooltipContent(title, CombatInformationPresenter.BuildTargetDetails(preview, target, intent), FormalUiTheme.Amber);
+        }
+
+        private FormalTooltipContent BuildHeroTooltip()
+        {
+            UnitState hero = bootstrap?.CurrentState?.GetUnit("hero");
+            return new FormalTooltipContent("英雄完整状态", CombatInformationPresenter.BuildHeroDetails(hero), FormalUiTheme.Safe);
+        }
+
+        private FormalTooltipContent BuildQuickbarTooltip(int slot)
+        {
+            CombatState state = bootstrap?.CurrentState;
+            ItemInstance item = state == null || slot < 0 || slot >= state.ItemQuickbar.Length ? null : state.ItemInventory.Get(state.ItemQuickbar[slot]);
+            ItemDefinition definition = item == null ? null : ItemCatalog.Get(item.DefinitionId);
+            string title = definition == null ? "快捷栏 " + (slot + 1) : definition.DisplayName;
+            return new FormalTooltipContent(title, CombatInformationPresenter.BuildItemDetails(definition, item, slot), FormalUiTheme.Safe);
+        }
+
+        private FormalTooltipContent BuildOutcomeTooltip()
+        {
+            CombatOutcomePresentation summary = bootstrap?.CurrentOutcomePresentation;
+            return new FormalTooltipContent("最近关键事件", summary?.RecentEventsText ?? "最近事件：无", FormalUiTheme.Amber);
+        }
+
+        private void BindTooltip(GameObject target, Func<FormalTooltipContent> provider)
+        {
+            if (target == null) return;
+            FormalHoverTooltipTrigger trigger = target.GetComponent<FormalHoverTooltipTrigger>() ?? target.AddComponent<FormalHoverTooltipTrigger>();
+            trigger.Configure(tooltip, provider);
         }
 
         private Image ResourceBar(Transform parent, string title, Vector2 position, Color color)

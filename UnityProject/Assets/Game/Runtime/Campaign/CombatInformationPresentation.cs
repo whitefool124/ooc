@@ -49,6 +49,8 @@ namespace OCC.Combat
         public string ObjectiveState { get; }
         public string Consequence { get; }
         public IReadOnlyList<string> RecentEvents { get; }
+        public string CompactDetailText => string.Join("\n", Reason, HeroState + " // 剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence);
+        public string RecentEventsText => RecentEvents.Count == 0 ? "最近事件：无" : string.Join("\n", RecentEvents.Take(5));
         public string DetailText => string.Join("\n", Reason, HeroState + " // 剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence,
             RecentEvents.Count == 0 ? "最近事件：无" : "最近事件：" + string.Join(" / ", RecentEvents.Take(3)));
 
@@ -131,9 +133,89 @@ namespace OCC.Combat
             int complete = state.Objectives.Count(objective => objective.IsComplete(state));
             string objective = "目标 " + complete + "/" + state.Objectives.Count + " 完成";
             string consequence = victory ? "胜利状态将按当前模式结算。" : rogueliteMapCombat
-                ? "战斗内生命、背包与快捷栏变化不会覆盖战前地图存档；战术重开恢复本场确定性快照。"
+                ? "返回地图保留战前地图存档；战术重开恢复本场确定性快照。"
                 : "战斗内变化不会提交；战术重开恢复本场确定性快照。";
             return new CombatOutcomePresentation(title, reason, heroState, remaining, objective, consequence, state.EventLog.Take(5).ToArray());
+        }
+
+        public static string BuildCompactTargetSummary(CombatActionPreview preview, UnitState target, EnemyIntentPresentation intent)
+        {
+            if (preview == null) return "等待战斗状态";
+            string availability = preview.CanSubmit ? "合法 // 有效格 " + preview.ValidCellCount : "不可提交 // " + preview.FailureReason;
+            if (target == null)
+                return "当前操作  " + preview.Action + " // " + preview.Cost + "\n" + preview.TargetRule + "\n" + availability + "\n悬停查看完整规则";
+
+            string result = string.IsNullOrWhiteSpace(preview.ExpectedResult) ? "等待锁定有效目标" : preview.ExpectedResult;
+            string intentText = intent == null ? "等待权威决策" : intent.CompactText;
+            return target.DisplayName + " // 生命 " + target.Health + "/" + target.MaxHealth + " // 护盾 " + target.Shield + "/" + target.MaxShield +
+                "\n当前操作  " + preview.Action + " // " + preview.Cost + "\n" + availability + "\n预估  " + result + "\n意图  " + intentText;
+        }
+
+        public static string BuildActionDetails(CombatActionPreview preview)
+        {
+            if (preview == null) return "战斗状态尚未就绪。";
+            List<string> lines = new List<string>
+            {
+                "目标规则：" + preview.TargetRule,
+                "公开消耗：" + preview.Cost,
+                preview.CanSubmit ? "提交状态：合法 // 有效格 " + preview.ValidCellCount : "提交状态：不可提交 // " + preview.FailureReason,
+                "预期结果：" + preview.ExpectedResult
+            };
+            if (!string.IsNullOrWhiteSpace(preview.TargetBefore)) lines.Add("提交前：" + preview.TargetBefore);
+            if (!string.IsNullOrWhiteSpace(preview.TargetAfter)) lines.Add("提交后：" + preview.TargetAfter);
+            if (!string.IsNullOrWhiteSpace(preview.DamageBreakdown)) lines.Add("伤害公式：" + preview.DamageBreakdown);
+            if (!string.IsNullOrWhiteSpace(preview.StatusResults)) lines.Add("状态变化：" + preview.StatusResults);
+            if (preview.AffectedCellCount > 0) lines.Add("影响范围：" + preview.AffectedCellCount + " 格");
+            if (preview.FriendlyFireRisk) lines.Add("风险：可能波及友军");
+            return string.Join("\n", lines);
+        }
+
+        public static string BuildTargetDetails(CombatActionPreview preview, UnitState target, EnemyIntentPresentation intent)
+        {
+            List<string> sections = new List<string> { BuildActionDetails(preview) };
+            if (target != null)
+            {
+                sections.Add("敌人档案\n" + BuildEnemyInformation(target).FullText);
+                if (intent != null) sections.Add("真实意图（权威决策）\n" + intent.DetailedText);
+            }
+            return string.Join("\n\n", sections);
+        }
+
+        public static string EnemyInspectionTargetAt(CombatState state, GridPosition position)
+        {
+            if (state == null) return null;
+            UnitState enemy = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && !unit.IsHero && unit.Position == position);
+            return enemy?.Id;
+        }
+
+        public static string BuildEnemyHoverDetails(CombatState state, UnitState enemy, UnitState hero)
+        {
+            if (state == null || enemy == null || hero == null || enemy.IsHero) return string.Empty;
+            EnemyInformationPresentation profile = BuildEnemyInformation(enemy);
+            EnemyIntentPresentation intent = BuildEnemyIntent(state, enemy, hero);
+            return profile.FullText + "\n真实意图：" + intent.DetailedText + "\n右键选择查看目标；左键只执行当前行动。";
+        }
+
+        public static string BuildHeroDetails(UnitState hero)
+        {
+            if (hero == null) return "英雄状态尚未就绪。";
+            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + " // 伤害 " + hero.MainHand.Damage + " // 射程 " + hero.MainHand.Range;
+            string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
+            return string.Join("\n",
+                "生命 " + hero.Health + "/" + hero.MaxHealth + " // 护盾 " + hero.Shield + "/" + hero.MaxShield + " // 以太 " + hero.Mana + "/" + hero.MaxMana,
+                "行动点 " + hero.ActionPoints + " // 护甲 " + hero.EffectiveArmor + " // 格挡 " + hero.Block + " // 速度 " + hero.EffectiveSpeed,
+                weapon, statuses);
+        }
+
+        public static string BuildItemDetails(ItemDefinition definition, ItemInstance item, int slot)
+        {
+            if (definition == null || item == null) return "快捷栏 " + (slot + 1) + " // 空槽";
+            string uses = definition.MaximumUses > 0 ? item.RemainingUses + "/" + definition.MaximumUses : "无限制";
+            return string.Join("\n",
+                definition.Description,
+                "类别：" + ItemCategoryLabel(definition.Category) + " // 稀有度：" + ItemRarityLabel(definition.Rarity),
+                "占格 " + definition.Width + "×" + definition.Height + " // 重量 " + definition.Weight,
+                "快捷栏 " + (slot + 1) + " // 剩余次数 " + uses);
         }
 
         public static string PhaseText(CombatFlowPhase phase, CombatState state)
@@ -192,6 +274,34 @@ namespace OCC.Combat
                 case StatusType.Slow: return "迟缓";
                 case StatusType.ArmorBreak: return "破甲";
                 default: return status.ToString();
+            }
+        }
+
+        private static string ItemCategoryLabel(ItemCategory category)
+        {
+            switch (category)
+            {
+                case ItemCategory.Weapon: return "武器";
+                case ItemCategory.Armor: return "护具";
+                case ItemCategory.Consumable: return "消耗品";
+                case ItemCategory.Scroll: return "卷轴";
+                case ItemCategory.Artifact: return "法宝";
+                case ItemCategory.Material: return "材料";
+                case ItemCategory.Quest: return "任务物品";
+                case ItemCategory.Container: return "容器";
+                default: return category.ToString();
+            }
+        }
+
+        private static string ItemRarityLabel(ItemRarity rarity)
+        {
+            switch (rarity)
+            {
+                case ItemRarity.Common: return "普通";
+                case ItemRarity.Uncommon: return "优良";
+                case ItemRarity.Rare: return "稀有";
+                case ItemRarity.Exceptional: return "卓越";
+                default: return rarity.ToString();
             }
         }
 

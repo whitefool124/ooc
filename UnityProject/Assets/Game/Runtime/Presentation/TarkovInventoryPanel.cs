@@ -26,6 +26,7 @@ namespace OCC.Combat.Presentation
 
         public void Initialize(CombatPrototypeBootstrap source) { bootstrap = source; }
         public bool IsOpen => open;
+        public static Rect LauncherRect => new Rect(1472f, 936f, 416f, 64f);
 
         private void OnGUI()
         {
@@ -37,7 +38,7 @@ namespace OCC.Combat.Presentation
             GUI.depth = -1100; ConfigureFormalSkin(previousSkin);
             if (!open)
             {
-                if (GUI.Button(new Rect(1170, 944, 236, 54), "背包 / 搜索 [B]")) open = true;
+                if (GUI.Button(LauncherRect, "背包 / 搜索 [B]")) open = true;
                 GUI.skin = previousSkin; GUI.matrix = previous; return;
             }
             DrawPanel(); GUI.skin = previousSkin; GUI.matrix = previous;

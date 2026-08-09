@@ -633,7 +633,8 @@ namespace OCC.Combat.Presentation
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
         public string SelectedAction => selectedAction;
         public string SelectedTargetId => selectedTargetId;
-        public CombatActionPreview CurrentActionPreview => BuildCurrentActionPreview();
+        public CombatActionPreview CurrentActionPreview => BuildActionPreview(selectedAction);
+        public CombatActionPreview ActionPreview(string action) => BuildActionPreview(action);
         public CombatOutcomePresentation CurrentOutcomePresentation => state == null ? null : CombatInformationPresenter.BuildOutcome(state, mapRun != null);
         public string CurrentPhaseText => CombatInformationPresenter.PhaseText(CurrentFlowPhase, state);
         public EnemyIntentPresentation EnemyIntent(UnitState enemy) => enemy == null || state == null ? null : CombatInformationPresenter.BuildEnemyIntent(state, enemy, state.GetUnit("hero"));
@@ -645,25 +646,25 @@ namespace OCC.Combat.Presentation
             string id = mapRun.EquippedFireSpellIds[slot];
             return string.IsNullOrEmpty(id) ? null : FireSpellCatalog.Get(id);
         }
-        private CombatActionPreview BuildCurrentActionPreview()
+        private CombatActionPreview BuildActionPreview(string action)
         {
             ArtifactDefinition armedArtifact = CurrentArmedInventoryItem != null &&
                 ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
                 ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
-            if (selectedAction == "技能1" && armedArtifact != null && state != null)
+            if (action == "技能1" && armedArtifact != null && state != null)
             {
                 EnsureArtifactBattle(); int validArtifacts = 0;
                 for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
                     if (BuildArtifactTarget(armedArtifact, new GridPosition(x, y), out ArtifactTarget candidate) &&
                         ArtifactEngine.Preview(artifactBattle, "hero", armedArtifact, candidate,
                             CurrentArmedInventoryItem?.RemainingUses ?? trainingRangeArtifactUsesRemaining).CanCommit) validArtifacts++;
-                return new CombatActionPreview(selectedAction, armedArtifact.TargetSummary, armedArtifact.PublicCost,
+                return new CombatActionPreview(action, armedArtifact.TargetSummary, armedArtifact.PublicCost,
                     armedArtifact.EffectSummary + "；风险：" + armedArtifact.RiskSummary, validArtifacts,
                     validArtifacts == 0 ? "当前没有合法目标" : string.Empty);
             }
-            int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            int slot = action == "技能1" ? 0 : action == "技能2" ? 1 : -1;
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
-            if (spell == null || state == null) return battlefield.BuildPreview(state, selectedAction, selectedTargetId);
+            if (spell == null || state == null) return battlefield.BuildPreview(state, action, selectedTargetId);
             if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
             int valid = 0;
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsFireSpellCellValid(spell, new GridPosition(x, y))) valid++;
@@ -678,7 +679,7 @@ namespace OCC.Combat.Presentation
             string effects = string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty)));
             string contract = spell.CombatAffinity + " / " + spell.DeliveryMode + " / " + spell.WeaponRequirement +
                 " / " + spell.TargetKind + " / " + spell.Shape + " / " + spell.TriggerWindow + " / " + spell.ConsumptionRule;
-            return new CombatActionPreview(selectedAction, contract, spell.ActionPointCost + " AP + " + spell.ManaCost + " 魔力", effects, valid, failure);
+            return new CombatActionPreview(action, contract, spell.ActionPointCost + " AP + " + spell.ManaCost + " 魔力", effects, valid, failure);
         }
         private bool IsFireSpellCellValid(FireSpellDefinition spell, GridPosition position)
         {
@@ -972,6 +973,7 @@ namespace OCC.Combat.Presentation
         private void DrawGrid(Rect board)
         {
             Event e = Event.current;
+            UnitState hoveredEnemy = null;
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
             {
                 GridPosition p = new GridPosition(x, y);
@@ -1017,6 +1019,7 @@ namespace OCC.Combat.Presentation
                 UnitState unit = state.Units.Values.FirstOrDefault(u => u.IsAlive && u.Position == p);
                 if (unit != null)
                 {
+                    if (!unit.IsHero && cell.Contains(e.mousePosition)) hoveredEnemy = unit;
                     if (unit.Id == selectedTargetId) GUI.DrawTexture(cell, formalOverlayTextures["selected"], ScaleMode.StretchToFill, true);
                     Texture2D unitTexture = FormalUnitTexture(unit);
                     if (unitTexture != null)
@@ -1035,7 +1038,8 @@ namespace OCC.Combat.Presentation
                     }
                     GUI.color = Color.white;
                     DrawUnitBars(unit, new Rect(cell.x + 5, cell.y + 3, cell.width - 10, 5));
-                    if (!unit.IsHero) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));
+                    bool revealIntent = !unit.IsHero && (unit.Id == selectedTargetId || unit.Id == state.ActiveUnitId || cell.Contains(e.mousePosition));
+                    if (revealIntent) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));
                     DrawStatusMarkers(unit, cell);
                 }
                 if (tile.IsObjective)
@@ -1078,7 +1082,48 @@ namespace OCC.Combat.Presentation
                     GUI.color = Color.white;
                 }
             }
-            if (e.type == EventType.MouseDown && e.button == 0 && battlefield.TryResolveCell(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Width, state.Map.Height, e.mousePosition.x, e.mousePosition.y, out GridPosition clicked)) { HandleCellClick(clicked); e.Use(); }
+            if (hoveredEnemy != null) DrawEnemyHoverCard(hoveredEnemy, e.mousePosition);
+            if (e.type == EventType.MouseDown && battlefield.TryResolveCell(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Width, state.Map.Height, e.mousePosition.x, e.mousePosition.y, out GridPosition clicked))
+            {
+                if (e.button == 1) { HandleInspectionClick(clicked); e.Use(); }
+                else if (e.button == 0) { HandleCellClick(clicked); e.Use(); }
+            }
+        }
+
+        public static Rect EnemyHoverCardRect(Vector2 pointer)
+        {
+            const float width = 456f, height = 218f, margin = 16f, battlefieldRight = 1440f, commandsTop = 900f;
+            float x = pointer.x + 20f;
+            if (x + width > battlefieldRight - margin) x = pointer.x - width - 20f;
+            x = Mathf.Clamp(x, margin, battlefieldRight - margin - width);
+            float y = Mathf.Clamp(pointer.y + 20f, 64f, commandsTop - margin - height);
+            return new Rect(x, y, width, height);
+        }
+
+        private void DrawEnemyHoverCard(UnitState enemy, Vector2 pointer)
+        {
+            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, state.GetUnit("hero"));
+            if (string.IsNullOrEmpty(details)) return;
+            Rect card = EnemyHoverCardRect(pointer);
+            GUI.color = new Color(.025f, .045f, .052f, .98f);
+            GUI.Box(card, string.Empty);
+            DrawOutline(card, new Color(FormalUiTheme.Cyan.r, FormalUiTheme.Cyan.g, FormalUiTheme.Cyan.b, .9f));
+            GUIStyle titleStyle = new GUIStyle(GUI.skin.label) { fontSize = 17, fontStyle = FontStyle.Bold, wordWrap = false };
+            GUIStyle bodyStyle = new GUIStyle(GUI.skin.label) { fontSize = 14, wordWrap = true, alignment = TextAnchor.UpperLeft };
+            GUI.color = FormalUiTheme.Amber;
+            GUI.Label(new Rect(card.x + 16f, card.y + 10f, card.width - 32f, 26f), enemy.DisplayName + " // 敌情悬浮", titleStyle);
+            GUI.color = FormalUiTheme.Text;
+            GUI.Label(new Rect(card.x + 16f, card.y + 40f, card.width - 32f, card.height - 50f), details, bodyStyle);
+            GUI.color = Color.white;
+        }
+
+        private void HandleInspectionClick(GridPosition position)
+        {
+            string nextTargetId = CombatInformationPresenter.EnemyInspectionTargetAt(state, position);
+            if (selectedTargetId == nextTargetId) return;
+            selectedTargetId = nextTargetId;
+            MarkPresentation(UiPresentationArea.Combat);
+            if (!string.IsNullOrEmpty(nextTargetId)) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatTargetConfirmed, nextTargetId));
         }
 
         private static void DrawOutline(Rect rect, Color color)
@@ -1137,12 +1182,6 @@ namespace OCC.Combat.Presentation
         {
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
-            if (selectedAction == "攻击" || selectedAction == "技能1" || selectedAction == "技能2")
-            {
-                selectedTargetId = enemy?.Id;
-                MarkPresentation(UiPresentationArea.Combat);
-                if (enemy != null) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatTargetConfirmed, enemy.Id));
-            }
             int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
             if (fireSpell != null)
