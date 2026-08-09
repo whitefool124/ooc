@@ -10,6 +10,11 @@ namespace OCC.Combat.Presentation
         private CombatPrototypeBootstrap bootstrap;
         private bool open;
         private string selectedId;
+        private InventoryDragState dragState;
+        private string inventoryHoverText;
+        private Vector2 inventoryHoverPointer;
+        private Rect inventoryPanelRect;
+        private string inventoryInteractionMessage = "左键拖拽物品 · 拖拽中右键旋转";
         private string searchText = string.Empty;
         private ItemCategory? category;
         private Vector2 resultScroll;
@@ -47,29 +52,32 @@ namespace OCC.Combat.Presentation
         private void HandleHotkey()
         {
             Event current = Event.current; if (current == null || current.type != EventType.KeyDown) return;
-            if (current.keyCode == KeyCode.B) { open = !open; current.Use(); }
-            else if (open && current.keyCode == KeyCode.R && !string.IsNullOrEmpty(selectedId)) { bootstrap.CurrentState.ItemInventory.Rotate(selectedId); bootstrap.NotifyInventoryChanged(); current.Use(); }
+            if (current.keyCode == KeyCode.B) { open = !open; if (!open) dragState = null; current.Use(); }
+            else if (open && current.keyCode == KeyCode.R && dragState == null && !string.IsNullOrEmpty(selectedId)) { bootstrap.CurrentState.ItemInventory.Rotate(selectedId); bootstrap.NotifyInventoryChanged(); current.Use(); }
         }
 
         private void DrawPanel()
         {
             CombatState state = bootstrap.CurrentState; if (state == null) return;
+            inventoryHoverText = null;
             Fill(new Rect(0, 0, 1920, 1080), new Color(Ink.r, Ink.g, Ink.b, .82f));
             Rect panel = new Rect(32, 24, 1856, 1024); Fill(panel, new Color(Ink.r, Ink.g, Ink.b, .985f)); Outline(panel, new Color(Cyan.r, Cyan.g, Cyan.b, .72f));
             Fill(new Rect(34, 26, 1852, 112), new Color(Panel.r, Panel.g, Panel.b, .98f));
             Fill(new Rect(34, 136, 1852, 1), new Color(Cyan.r, Cyan.g, Cyan.b, .55f));
             GUI.Label(new Rect(100, 72, 880, 42), "OCC // 战术背包与容器搜索  6×10");
-            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1180, 30), "B 关闭 · 物品可旋转 · 容器逐项揭示 · 战斗内搜索/换入各 1 AP · 无倒计时"); GUI.color = Color.white;
-            if (GUI.Button(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) open = false;
+            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1380, 30), "B 关闭 · 左键拖拽 · 拖拽中右键旋转 · 悬停查看详情 · 战斗内搜索/换入各 1 AP"); GUI.color = Color.white;
+            if (GUI.Button(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
 
             DrawInventory(state, new Rect(100, 160, 600, 720));
             DrawDetailsAndSearch(state, new Rect(730, 160, 500, 720));
             DrawLoot(state, new Rect(1260, 160, 550, 720));
             DrawQuickbar(state, new Rect(100, 900, 1710, 96));
+            DrawInventoryOverlay(state);
         }
 
         private void DrawInventory(CombatState state, Rect rect)
         {
+            inventoryPanelRect = rect;
             DrawIcon(new Rect(rect.x + rect.width - 78, rect.y + 7, 28, 28), "Art/FormalItemIcons32/category_container");
             DrawIcon(new Rect(rect.x + rect.width - 44, rect.y + 7, 28, 28), "Art/FormalItemIcons32/inventory_weight");
             Box(rect, $"基础背包 // 6×10 // {state.ItemInventory.Items.Count} 件 // 负重 {state.ItemInventory.CurrentWeight}");
@@ -80,25 +88,135 @@ namespace OCC.Combat.Presentation
                 Rect slotRect = new Rect(gx + x * cell, gy + y * cell, cell - 3, cell - 3);
                 string slotSkin = occupied != null && occupied.InstanceId == selectedId ? "slot_selected" : "slot";
                 DrawIcon(slotRect, "Art/FormalUI32/" + slotSkin, false);
-                if (GUI.Button(slotRect, GUIContent.none, GUIStyle.none))
-                {
-                    if (occupied != null) selectedId = occupied.InstanceId;
-                    else if (!string.IsNullOrEmpty(selectedId)) { state.ItemInventory.Move(selectedId, x, y); bootstrap.NotifyInventoryChanged(); }
-                }
             }
             foreach (InventoryPlacement placement in state.ItemInventory.Placements)
             {
                 ItemInstance item = state.ItemInventory.Get(placement.InstanceId); ItemDefinition definition = ItemCatalog.Get(item.DefinitionId);
-                int width = placement.Rotated ? definition.Height : definition.Width; int height = placement.Rotated ? definition.Width : definition.Height;
-                Rect itemRect = new Rect(gx + placement.X * cell + 3, gy + placement.Y * cell + 3, width * cell - 9, height * cell - 9);
+                Rect itemRect = InventoryInteractionPresentation.PlacementRect(rect, placement, definition);
+                Color previous = GUI.color; if (dragState != null && dragState.InstanceId == item.InstanceId) GUI.color = new Color(1f, 1f, 1f, .28f);
                 DrawIcon(itemRect, "Art/FormalUI32/" + (item.InstanceId == selectedId ? "slot_selected" : "slot"), false);
                 Texture2D icon = Icon(definition.IconPath); if (icon != null) GUI.DrawTexture(new Rect(itemRect.x + 4, itemRect.y + 4, Math.Min(38, itemRect.width - 8), Math.Min(38, itemRect.height - 8)), icon, ScaleMode.ScaleToFit, true);
                 GUI.Label(new Rect(itemRect.x + 44, itemRect.y + 4, itemRect.width - 48, 24), definition.DisplayName);
                 if (definition.MaximumUses > 0) GUI.Label(new Rect(itemRect.x + 4, itemRect.yMax - 24, itemRect.width - 8, 22), item.RemainingUses + "/" + definition.MaximumUses + " 次");
+                GUI.color = previous;
             }
+            HandleInventoryPointer(state, rect);
             GUI.enabled = !string.IsNullOrEmpty(selectedId);
             if (IconButton(new Rect(gx + 330, gy, 220, 46), "Art/FormalItemIcons32/inventory_rotate", "旋转选中物品 [R]")) { state.ItemInventory.Rotate(selectedId); bootstrap.NotifyInventoryChanged(); }
             GUI.enabled = true;
+            GUI.color = Muted; GUI.Label(new Rect(gx, gy + 536, 548, 32), inventoryInteractionMessage); GUI.color = Color.white;
+        }
+
+        private void HandleInventoryPointer(CombatState state, Rect rect)
+        {
+            Event current = Event.current;
+            if (current == null) return;
+            Vector2 pointer = current.mousePosition;
+            Vector2Int pointerCell = InventoryInteractionPresentation.GridCellAt(rect, pointer);
+            bool insideGrid = pointerCell != InventoryInteractionPresentation.OutsideGrid;
+            ItemInstance hovered = insideGrid ? state.ItemInventory.GetAt(pointerCell.x, pointerCell.y) : null;
+
+            if (dragState == null && hovered != null)
+            {
+                InventoryPlacement placement = state.ItemInventory.PlacementOf(hovered.InstanceId).Value;
+                inventoryHoverText = InventoryInteractionPresentation.BuildHoverText(hovered, placement);
+                inventoryHoverPointer = pointer;
+            }
+
+            if (current.type == EventType.MouseDown && current.button == 1 && dragState != null)
+            {
+                ItemInstance dragged = state.ItemInventory.Get(dragState.InstanceId);
+                if (dragged != null)
+                {
+                    dragState.ToggleRotation(ItemCatalog.Get(dragged.DefinitionId));
+                    inventoryInteractionMessage = dragState.Rotated ? "拖拽预览：已旋转 · 松开左键放置" : "拖拽预览：标准朝向 · 松开左键放置";
+                }
+                current.Use();
+                return;
+            }
+
+            if (current.type == EventType.MouseDown && current.button == 0 && dragState == null && insideGrid)
+            {
+                if (hovered == null)
+                {
+                    selectedId = null;
+                    inventoryInteractionMessage = "空格 · 左键拖拽物品到这里";
+                }
+                else
+                {
+                    InventoryPlacement placement = state.ItemInventory.PlacementOf(hovered.InstanceId).Value;
+                    selectedId = hovered.InstanceId;
+                    dragState = new InventoryDragState(hovered.InstanceId, placement.Rotated, pointerCell.x - placement.X, pointerCell.y - placement.Y);
+                    inventoryHoverText = null;
+                    inventoryInteractionMessage = "正在拖拽 · 右键旋转 · 松开左键放置";
+                }
+                current.Use();
+                return;
+            }
+
+            if (dragState == null) return;
+            if (current.type == EventType.MouseDrag && current.button == 0)
+            {
+                current.Use();
+                return;
+            }
+            if (current.type != EventType.MouseUp || current.button != 0) return;
+
+            InventoryResult result = dragState.Commit(state.ItemInventory, pointerCell);
+            inventoryInteractionMessage = result.Success
+                ? "已移动物品 · 左键继续拖拽 · 拖拽中右键旋转"
+                : InventoryInteractionPresentation.ErrorName(result.Error) + " · 已保持原位置";
+            if (result.Success) bootstrap.NotifyInventoryChanged();
+            dragState = null;
+            current.Use();
+        }
+
+        private void DrawInventoryOverlay(CombatState state)
+        {
+            if (dragState == null)
+            {
+                if (string.IsNullOrEmpty(inventoryHoverText)) return;
+                Rect tooltip = InventoryInteractionPresentation.TooltipRect(inventoryHoverPointer);
+                Fill(tooltip, new Color(Ink.r, Ink.g, Ink.b, .985f));
+                Outline(tooltip, new Color(Cyan.r, Cyan.g, Cyan.b, .84f));
+                GUI.Label(new Rect(tooltip.x + 18f, tooltip.y + 14f, tooltip.width - 36f, tooltip.height - 28f), inventoryHoverText);
+                return;
+            }
+
+            ItemInstance item = state.ItemInventory.Get(dragState.InstanceId);
+            if (item == null) { dragState = null; return; }
+            ItemDefinition definition = ItemCatalog.Get(item.DefinitionId);
+            Vector2 pointer = Event.current.mousePosition;
+            Vector2Int pointerCell = InventoryInteractionPresentation.GridCellAt(inventoryPanelRect, pointer);
+            InventoryResult preview = dragState.Preview(state.ItemInventory, pointerCell);
+            Vector2Int anchor = dragState.AnchorFor(pointerCell);
+            int width = dragState.Rotated ? definition.Height : definition.Width;
+            int height = dragState.Rotated ? definition.Width : definition.Height;
+            Color previewColor = preview.Success ? new Color(Cyan.r, Cyan.g, Cyan.b, .42f) : new Color(.78f, .18f, .14f, .46f);
+
+            if (pointerCell != InventoryInteractionPresentation.OutsideGrid)
+            {
+                Rect grid = InventoryInteractionPresentation.GridRect(inventoryPanelRect);
+                for (int y = 0; y < height; y++) for (int x = 0; x < width; x++)
+                {
+                    int cellX = anchor.x + x; int cellY = anchor.y + y;
+                    if (cellX < 0 || cellY < 0 || cellX >= state.ItemInventory.Width || cellY >= state.ItemInventory.Height) continue;
+                    Fill(new Rect(grid.x + cellX * InventoryInteractionPresentation.CellSize, grid.y + cellY * InventoryInteractionPresentation.CellSize,
+                        InventoryInteractionPresentation.CellSize - 3f, InventoryInteractionPresentation.CellSize - 3f), previewColor);
+                }
+            }
+
+            Rect ghost;
+            if (pointerCell == InventoryInteractionPresentation.OutsideGrid)
+                ghost = new Rect(pointer.x + 18f, pointer.y + 18f, width * InventoryInteractionPresentation.CellSize - 9f, height * InventoryInteractionPresentation.CellSize - 9f);
+            else
+                ghost = InventoryInteractionPresentation.PlacementRect(inventoryPanelRect, new InventoryPlacement(item.InstanceId, anchor.x, anchor.y, dragState.Rotated), definition);
+            Fill(ghost, new Color(Panel.r, Panel.g, Panel.b, .92f));
+            Outline(ghost, preview.Success ? Cyan : new Color(.9f, .25f, .18f, 1f));
+            DrawIcon(new Rect(ghost.x + 6f, ghost.y + 6f, Math.Min(42f, ghost.width - 12f), Math.Min(42f, ghost.height - 12f)), definition.IconPath);
+            GUI.Label(new Rect(ghost.x + 52f, ghost.y + 6f, Math.Max(60f, ghost.width - 58f), 26f), definition.DisplayName);
+            string status = preview.Success ? "可放置" : InventoryInteractionPresentation.ErrorName(preview.Error);
+            GUI.Label(new Rect(ghost.x + 6f, ghost.yMax - 26f, Math.Max(80f, ghost.width - 12f), 22f), status + " · 右键旋转");
         }
 
         private void DrawDetailsAndSearch(CombatState state, Rect rect)
@@ -220,6 +338,7 @@ namespace OCC.Combat.Presentation
             GUI.skin.font = FormalUiKit.Font;
             GUI.skin.label.fontSize = FormalUiTheme.BodyFontSize;
             GUI.skin.label.normal.textColor = Text;
+            GUI.skin.label.wordWrap = true;
             GUI.skin.button.fontSize = 15;
             GUI.skin.button.normal.textColor = Text;
             GUI.skin.button.hover.textColor = Text;
