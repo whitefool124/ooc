@@ -95,8 +95,8 @@ namespace OCC.Combat.Presentation
 
         private static string PanelSkin(string name)
         {
-            if (name.Contains("战术读数") || name.Contains("控制台")) return "panel_console";
-            if (name.Contains("行动状态") || name.Contains("行动序列")) return "panel_module";
+            if (name.Contains("战术读数") || name.Contains("控制台") || name.Contains("战斗信息")) return "panel_console";
+            if (name.Contains("行动状态") || name.Contains("行动序列") || name.Contains("本轮行动") || name.Contains("英雄概况")) return "panel_module";
             if (name.Contains("行动预览") || name.Contains("目标")) return "panel_target";
             if (name.Contains("现场记录") || name.Contains("记录")) return "panel_log";
             if (name.Contains("武器组")) return "group_weapon";

@@ -21,11 +21,12 @@ namespace OCC.Combat.Tests
 
             Assert.That(compact, Does.Contain(enemy.DisplayName));
             Assert.That(compact, Does.Contain("生命"));
-            Assert.That(compact, Does.Contain("合法"));
+            Assert.That(compact, Does.Contain("可以行动"));
             Assert.That(compact, Does.Contain(intent.CompactText));
             Assert.That(compact, Does.Not.Contain("武器："));
             Assert.That(compact, Does.Not.Contain("技能："));
             Assert.That(compact, Does.Not.Contain("伤害公式："));
+            Assert.That(compact, Does.Not.Contain("有效格"));
         }
 
         [Test]
@@ -41,10 +42,11 @@ namespace OCC.Combat.Tests
 
             string details = CombatInformationPresenter.BuildTargetDetails(preview, enemy, intent);
 
-            Assert.That(details, Does.Contain("伤害公式："));
-            Assert.That(details, Does.Contain("敌人档案"));
+            Assert.That(details, Does.Contain("伤害："));
+            Assert.That(details, Does.Contain("敌人资料"));
             Assert.That(details, Does.Contain(enemy.MainHand.DisplayName));
-            Assert.That(details, Does.Contain("真实意图（权威决策）"));
+            Assert.That(details, Does.Contain("敌人打算"));
+            Assert.That(details, Does.Not.Contain("权威"));
             Assert.That(details, Does.Contain(intent.DetailedText));
         }
 
@@ -60,7 +62,7 @@ namespace OCC.Combat.Tests
 
             CombatOutcomePresentation outcome = CombatInformationPresenter.BuildOutcome(state, true);
 
-            Assert.That(outcome.CompactDetailText, Does.Contain("战前地图存档"));
+            Assert.That(outcome.CompactDetailText, Does.Contain("从战斗前继续"));
             Assert.That(outcome.CompactDetailText, Does.Not.Contain("事件0"));
             Assert.That(outcome.RecentEventsText, Does.Contain("事件0"));
         }
@@ -116,8 +118,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(details, Does.Contain(enemy.MainHand.DisplayName));
             Assert.That(details, Does.Contain("技能："));
-            Assert.That(details, Does.Contain("真实意图：" + intent.DetailedText));
-            Assert.That(details, Does.Contain("右键选择"));
+            Assert.That(details, Does.Contain("敌人打算：" + intent.DetailedText));
+            Assert.That(details, Does.Contain("右键查看敌人"));
         }
 
         [Test]

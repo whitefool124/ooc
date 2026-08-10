@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Linq;
 
 namespace OCC.Combat.Tests
 {
@@ -65,6 +66,36 @@ namespace OCC.Combat.Tests
             CombatHudPresentationModel after = CombatHudPresentationModel.From(state, "技能1", null, false);
 
             Assert.That(before.Equals(after), Is.False);
+        }
+
+        [Test]
+        public void CombatTurnTrack_OrdersLivingUnitsAndMarksTheCurrentActor()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            var earlyEnemy = new UnitState("enemy_early", false, new GridPosition(1, 0), Facing.West);
+            var lateEnemy = new UnitState("enemy_late", false, new GridPosition(2, 0), Facing.West);
+            var state = new CombatState(new GridMap(4, 4), new[] { hero, earlyEnemy, lateEnemy });
+            CombatResolver.BeginTurn(state, "hero");
+
+            CombatTurnTrackEntry[] track = CombatTurnTrackPresentation.Build(state, 5).ToArray();
+
+            Assert.That(track.Select(entry => entry.UnitId), Is.EqualTo(new[] { "hero", "enemy_early", "enemy_late" }));
+            Assert.That(track.Select(entry => entry.Order), Is.EqualTo(new[] { 1, 2, 3 }));
+            Assert.That(track.Single(entry => entry.IsActive).UnitId, Is.EqualTo("hero"));
+            Assert.That(track.Single(entry => entry.UnitId == "hero").IsHero, Is.True);
+            Assert.That(track.All(entry => entry.VitalityText.Contains("生命")), Is.True);
+        }
+
+        [Test]
+        public void CombatTurnTrack_RespectsVisibleSlotLimit()
+        {
+            UnitState[] units = Enumerable.Range(0, 7)
+                .Select(index => new UnitState("unit_" + index, index == 0, new GridPosition(index, 0), Facing.East))
+                .ToArray();
+            var state = new CombatState(new GridMap(8, 2), units);
+
+            Assert.That(CombatTurnTrackPresentation.Build(state, 5).Count, Is.EqualTo(5));
+            Assert.That(CombatTurnTrackPresentation.Build(state, 0), Is.Empty);
         }
     }
 }

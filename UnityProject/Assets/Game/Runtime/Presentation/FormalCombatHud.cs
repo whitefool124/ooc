@@ -27,15 +27,18 @@ namespace OCC.Combat.Presentation
         private Text weaponLabel;
         private Text statusLabel;
         private Text eventLabel;
-        private Text targetLabel;
-        private Image targetIntentIcon;
-        private GameObject targetModule;
         private GameObject timelineModule;
         private GameObject logModule;
-        private Text[] timeline = new Text[4];
+        private readonly Text[] timelineNames = new Text[5];
+        private readonly Text[] timelineDetails = new Text[5];
+        private readonly Image[] timelineNodes = new Image[5];
+        private readonly Image[] timelineRows = new Image[5];
         private Image healthFill;
         private Image shieldFill;
         private Image manaFill;
+        private Text healthValue;
+        private Text shieldValue;
+        private Text manaValue;
         private Button endTurnButton;
         private Button restartButton;
         private Button leaveButton;
@@ -104,32 +107,30 @@ namespace OCC.Combat.Presentation
             GameObject top = FormalUiKit.LayoutPanel("战斗抬头", root.transform, "combat.header", ink);
             Label("OCC // 战术行动", top.transform, new Vector2(20, -10), new Vector2(420, 34), 22, text, TextAnchor.MiddleLeft);
             phaseLabel = Label("准备阶段", top.transform, new Vector2(440, -10), new Vector2(620, 34), 17, line, TextAnchor.MiddleLeft);
-            Label("无时间压力  /  确定性结算", top.transform, new Vector2(1330, -10), new Vector2(500, 34), 16, muted, TextAnchor.MiddleRight);
+            Label("冷静部署  /  随时规划", top.transform, new Vector2(1330, -10), new Vector2(500, 34), 16, muted, TextAnchor.MiddleRight);
             Line(top.transform, new Vector2(18, -53), new Vector2(1836, 2), line);
 
-            GameObject side = FormalUiKit.LayoutPanel("战术读数控制台", root.transform, "combat.rightConsole", panel);
-            GameObject selectedModule = FormalUiKit.LayoutPanel("行动状态模块", side.transform, "combat.selected", panel);
-            Label("当前行动 // 英雄状态", selectedModule.transform, new Vector2(16, -10), new Vector2(360, 26), 18, text, TextAnchor.MiddleLeft);
-            activeLabel = Label("行动状态", selectedModule.transform, new Vector2(16, -42), new Vector2(350, 42), 17, text, TextAnchor.UpperLeft);
-            weaponLabel = Label("装备状态", selectedModule.transform, new Vector2(16, -84), new Vector2(350, 38), 15, muted, TextAnchor.UpperLeft);
-            weaponIcon = FormalUiKit.IconSlot("主手装备图标", selectedModule.transform, null, Vector2.zero);
+            GameObject side = FormalUiKit.LayoutPanel("战斗信息", root.transform, "combat.rightConsole", panel);
+            GameObject selectedModule = FormalUiKit.LayoutPanel("本轮行动", side.transform, "combat.selected", panel);
+            Label("本轮行动", selectedModule.transform, new Vector2(16, -10), new Vector2(360, 26), 18, text, TextAnchor.MiddleLeft);
+            activeLabel = Label("等待行动", selectedModule.transform, new Vector2(16, -42), new Vector2(380, 46), 17, text, TextAnchor.UpperLeft);
+
+            GameObject heroModule = FormalUiKit.LayoutPanel("英雄概况", side.transform, "combat.hero", panel);
+            Label("英雄", heroModule.transform, new Vector2(16, -10), new Vector2(360, 26), 18, text, TextAnchor.MiddleLeft);
+            weaponLabel = Label("主手装备", heroModule.transform, new Vector2(16, -42), new Vector2(330, 38), 15, muted, TextAnchor.UpperLeft);
+            weaponIcon = FormalUiKit.IconSlot("主手装备图标", heroModule.transform, null, Vector2.zero);
             weaponIcon.rectTransform.anchorMin = weaponIcon.rectTransform.anchorMax = new Vector2(0, 1);
             weaponIcon.rectTransform.pivot = new Vector2(0, 1); weaponIcon.rectTransform.anchoredPosition = new Vector2(364, -44);
-            statusLabel = Label("状态语义", selectedModule.transform, new Vector2(16, -120), new Vector2(380, 24), 14, muted, TextAnchor.UpperLeft);
-            healthFill = ResourceBar(selectedModule.transform, "结构", new Vector2(16, -150), new Color(.32f, .82f, .56f));
-            shieldFill = ResourceBar(selectedModule.transform, "护盾", new Vector2(16, -182), new Color(.44f, .72f, .63f));
-            manaFill = ResourceBar(selectedModule.transform, "以太", new Vector2(16, -214), line);
-            BindTooltip(selectedModule, BuildHeroTooltip);
-
-            targetModule = FormalUiKit.LayoutPanel("行动预览目标模块", side.transform, "combat.target", panel);
-            Label("目标预览 // 悬停详情", targetModule.transform, new Vector2(16, -10), new Vector2(380, 26), 17, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            targetLabel = Label("行动预览", targetModule.transform, new Vector2(16, -42), new Vector2(380, 96), 12, new Color(.95f, .76f, .36f), TextAnchor.UpperLeft);
-            targetIntentIcon = FormalUiKit.IconSlot("公开意图图标", targetModule.transform, null, new Vector2(344, -8));
-            BindTooltip(targetModule, BuildTargetTooltip);
+            statusLabel = Label("状态", heroModule.transform, new Vector2(16, -88), new Vector2(380, 24), 14, muted, TextAnchor.UpperLeft);
+            healthFill = ResourceBar(heroModule.transform, "生命", new Vector2(16, -116), new Color(.32f, .82f, .56f), out healthValue);
+            shieldFill = ResourceBar(heroModule.transform, "护盾", new Vector2(16, -158), new Color(.44f, .72f, .63f), out shieldValue);
+            manaFill = ResourceBar(heroModule.transform, "以太", new Vector2(16, -200), line, out manaValue);
+            BindTooltip(heroModule, BuildHeroTooltip);
 
             timelineModule = FormalUiKit.LayoutPanel("行动序列模块", side.transform, "combat.timeline", panel);
-            Label("行动序列", timelineModule.transform, new Vector2(16, -8), new Vector2(380, 24), 17, text, TextAnchor.MiddleLeft);
-            for (int i = 0; i < timeline.Length; i++) timeline[i] = Label("序列" + i, timelineModule.transform, new Vector2(16, -38 - i * 30), new Vector2(380, 28), 14, muted, TextAnchor.MiddleLeft);
+            Label("接下来", timelineModule.transform, new Vector2(16, -8), new Vector2(240, 24), 17, text, TextAnchor.MiddleLeft);
+            Label("越靠前越先行动", timelineModule.transform, new Vector2(228, -8), new Vector2(168, 24), 12, muted, TextAnchor.MiddleRight);
+            for (int i = 0; i < timelineNames.Length; i++) CreateTimelineSlot(i);
 
             logModule = FormalUiKit.LayoutPanel("现场记录模块", side.transform, "combat.log", panel);
             Label("现场记录", logModule.transform, new Vector2(16, -8), new Vector2(380, 24), 17, text, TextAnchor.MiddleLeft);
@@ -158,13 +159,13 @@ namespace OCC.Combat.Presentation
             }
             endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1188, -14), new Vector2(204, 78), "结束行动\n剩余 AP 作废", new Color(.10f, .16f, .17f, 1f));
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
-            BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束行动", "结束当前英雄阶段；未使用的行动点会作废，随后按行动序列执行敌方权威决策。", line));
+            BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束行动", "结束英雄的本轮行动；未使用的行动点会作废，随后敌方依次行动。", line));
             restartButton = Button(bottom.transform, "战术重开", new Vector2(1188, -100), new Vector2(98, 40), "重开", new Color(.12f, .105f, .055f, 1f));
             restartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
-            BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("战术重开", "恢复本场战斗开始时的确定性快照；不会把当前战斗中的生命、背包或快捷栏变化写回地图存档。", FormalUiTheme.Amber));
+            BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("战术重开", "重新开始本场战斗，当前战斗进度将被撤销。", FormalUiTheme.Amber));
             leaveButton = Button(bottom.transform, "离开战斗", new Vector2(1294, -100), new Vector2(98, 40), "离开", new Color(.16f, .075f, .06f, 1f));
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
-            BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("离开战斗", "打开离开确认。肉鸽战败返回地图时保留战前地图状态，不写回战败后的英雄与背包状态。", FormalUiTheme.Danger));
+            BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("离开战斗", "离开当前战斗并返回行动入口。", FormalUiTheme.Danger));
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
@@ -207,6 +208,19 @@ namespace OCC.Combat.Presentation
                 if (label != null) { label.rectTransform.offsetMin = new Vector2(FormalUiTheme.IconTextInset, 0); label.alignment = TextAnchor.MiddleCenter; FormalUiKit.PreventAutomaticWrapping(label); }
         }
 
+        private void CreateTimelineSlot(int index)
+        {
+            float y = -38f - index * 36f;
+            GameObject row = Panel("行动位" + (index + 1), timelineModule.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(14, y), new Vector2(388, 32), new Color(.025f, .035f, .04f, .76f));
+            timelineRows[index] = row.GetComponent<Image>();
+            if (index < timelineNames.Length - 1)
+                Line(timelineModule.transform, new Vector2(31, y - 27), new Vector2(2, 12), new Color(line.r, line.g, line.b, .28f));
+            GameObject node = Panel("行动节点" + (index + 1), row.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(10, 0), new Vector2(14, 14), muted);
+            timelineNodes[index] = node.GetComponent<Image>();
+            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, -3), new Vector2(220, 26), 14, muted, TextAnchor.MiddleLeft);
+            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(250, -3), new Vector2(124, 26), 12, muted, TextAnchor.MiddleRight);
+        }
+
         private void Refresh()
         {
             RefreshCount++;
@@ -214,8 +228,8 @@ namespace OCC.Combat.Presentation
             UnitState hero = state.GetUnit("hero");
             UnitState active = state.GetUnit(state.ActiveUnitId);
             phaseLabel.text = bootstrap.CurrentPhaseText;
-            activeLabel.text = "行动单位  " + (active == null ? "等待" : active.DisplayName) + "\n行动点  " + (active == null ? "--" : active.ActionPoints.ToString());
-            weaponLabel.text = "主手  " + hero.MainHand.DisplayName + "\n以太回路  " + hero.Mana + " / " + hero.MaxMana;
+            activeLabel.text = active == null ? "等待下一位行动者" : active.DisplayName + "正在行动\n剩余 " + active.ActionPoints + " 行动点";
+            weaponLabel.text = hero.DisplayName + "\n主手 · " + hero.MainHand.DisplayName;
             weaponIcon.sprite = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(hero.MainHand.Id));
             if (weaponIcon.sprite == null) throw new KeyNotFoundException("Missing formal item icon: " + hero.MainHand.Id);
             FireSpellDefinition fireOne = bootstrap.FireSpellInSlot(0), fireTwo = bootstrap.FireSpellInSlot(1);
@@ -223,20 +237,27 @@ namespace OCC.Combat.Presentation
             if (artifactOne != null) RefreshArtifactButton("技能1", artifactOne);
             else if (fireOne != null) RefreshFireSpellButton("技能1", fireOne, hero); else RefreshSkillButton("技能1", hero.SkillOne, hero);
             if (fireTwo != null) RefreshFireSpellButton("技能2", fireTwo, hero); else RefreshSkillButton("技能2", hero.SkillTwo, hero);
-            statusLabel.text = StatusText(hero);
-            UnitState target = state.Units.Values.FirstOrDefault(unit => !unit.IsHero && unit.IsAlive && unit.Id == bootstrap.SelectedTargetId);
-            CombatActionPreview preview = bootstrap.CurrentActionPreview;
-            EnemyIntentPresentation intent = target == null ? null : bootstrap.EnemyIntent(target);
-            targetLabel.text = CombatInformationPresenter.BuildCompactTargetSummary(preview, target, intent);
-            RefreshIntentIcon(intent);
+            statusLabel.text = "状态 · " + StatusText(hero);
+            healthValue.text = hero.Health + " / " + hero.MaxHealth;
+            shieldValue.text = hero.Shield + " / " + hero.MaxShield;
+            manaValue.text = hero.Mana + " / " + hero.MaxMana;
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
-            UnitState[] units = state.Units.Values.Where(unit => unit.IsAlive).OrderBy(unit => unit.InitiativeTime).Take(4).ToArray();
-            for (int i = 0; i < timeline.Length; i++)
+            IReadOnlyList<CombatTurnTrackEntry> track = CombatTurnTrackPresentation.Build(state, timelineNames.Length);
+            for (int i = 0; i < timelineNames.Length; i++)
             {
-                timeline[i].text = i < units.Length ? (units[i].Id == state.ActiveUnitId ? "▶ " : "   ") + units[i].DisplayName + "  // " + units[i].Health + " HP" : "";
-                timeline[i].color = i < units.Length && units[i].Id == state.ActiveUnitId ? line : muted;
+                bool visible = i < track.Count;
+                timelineRows[i].gameObject.SetActive(visible);
+                if (!visible) continue;
+                CombatTurnTrackEntry entry = track[i];
+                Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
+                timelineNodes[i].color = entry.IsActive ? faction : new Color(faction.r, faction.g, faction.b, .55f);
+                timelineRows[i].color = entry.IsActive ? new Color(faction.r, faction.g, faction.b, .16f) : new Color(.025f, .035f, .04f, .76f);
+                timelineNames[i].text = entry.Order + "  " + entry.DisplayName;
+                timelineNames[i].color = entry.IsActive ? text : muted;
+                timelineDetails[i].text = entry.IsActive ? "正在行动" : entry.VitalityText;
+                timelineDetails[i].color = entry.IsActive ? faction : muted;
             }
             eventLabel.text = state.EventLog.Count == 0 ? "等待战术指令。" : string.Join("\n", state.EventLog.Take(5).Select((entry, index) => (index == 0 ? "▶ " : "   ") + entry));
             for (int i = 0; i < quickbarLabels.Length; i++)
@@ -260,7 +281,7 @@ namespace OCC.Combat.Presentation
                 CombatOutcomePresentation summary = bootstrap.CurrentOutcomePresentation;
                 outcomeTitle.text = summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
                 outcomeDetail.text = summary?.CompactDetailText ?? "战术记录已封存。请选择下一步。";
-                outcomeBackButton.GetComponentInChildren<Text>().text = bootstrap.CurrentMapRun != null ? "返回地图入口\n不写回战败状态" : "返回入口";
+                outcomeBackButton.GetComponentInChildren<Text>().text = bootstrap.CurrentMapRun != null ? "返回地图" : "返回入口";
             }
             foreach (KeyValuePair<string, Button> pair in actionButtons)
             {
@@ -269,18 +290,6 @@ namespace OCC.Combat.Presentation
                 pair.Value.GetComponent<UiButtonFeedback>()?.SetSelectedState(pair.Key == bootstrap.SelectedAction);
             }
             RefreshAvailability(state, hero);
-        }
-
-        private void RefreshIntentIcon(EnemyIntentPresentation intent)
-        {
-            if (targetIntentIcon == null) return;
-            if (intent == null) { targetIntentIcon.gameObject.SetActive(false); return; }
-            string commandType = intent.Signature.Split('|')[0];
-            string intentId = commandType == "Attack" ? "attack" : commandType == "UseSkill" ? "cast" :
-                commandType == "Move" ? "move" : commandType == "Interact" ? "interact_destroy" : "defend";
-            targetIntentIcon.sprite = Resources.Load<Sprite>(FormalArtRegistry.IntentPath(intentId));
-            if (targetIntentIcon.sprite == null) throw new KeyNotFoundException("Missing formal intent icon: " + intentId);
-            targetIntentIcon.gameObject.SetActive(true);
         }
 
         private void RefreshSkillButton(string key, SkillDefinition skill, UnitState hero)
@@ -347,8 +356,8 @@ namespace OCC.Combat.Presentation
             outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -180), new Vector2(280, 64), "返回入口", new Color(.12f, .10f, .06f, 1f));
             outcomeBackButton.onClick.AddListener(bootstrap.ReturnToDeveloperMenu);
             BindTooltip(outcomeOverlay, BuildOutcomeTooltip);
-            BindTooltip(outcomeRestartButton.gameObject, () => new FormalTooltipContent("战术重开", "从本场确定性快照重新开始，不提交当前战斗状态。", line));
-            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("返回入口", "肉鸽战败不会把战败后的英雄、背包或快捷栏状态覆盖到战前地图存档。", FormalUiTheme.Amber));
+            BindTooltip(outcomeRestartButton.gameObject, () => new FormalTooltipContent("战术重开", "重新挑战本场战斗，当前进度将被撤销。", line));
+            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("返回入口", "返回地图，并从进入本场战斗前继续。", FormalUiTheme.Amber));
             outcomeOverlay.SetActive(false);
         }
 
@@ -361,23 +370,13 @@ namespace OCC.Combat.Presentation
                 string label = button.GetComponentInChildren<Text>()?.text;
                 if (!string.IsNullOrWhiteSpace(label)) title = label.Split('\n')[0];
             }
-            return new FormalTooltipContent(title + " // 完整规则", CombatInformationPresenter.BuildActionDetails(preview), line);
-        }
-
-        private FormalTooltipContent BuildTargetTooltip()
-        {
-            CombatState state = bootstrap?.CurrentState;
-            CombatActionPreview preview = bootstrap?.CurrentActionPreview;
-            UnitState target = state?.Units.Values.FirstOrDefault(unit => !unit.IsHero && unit.IsAlive && unit.Id == bootstrap.SelectedTargetId);
-            EnemyIntentPresentation intent = target == null ? null : bootstrap.EnemyIntent(target);
-            string title = target == null ? "当前操作 // 完整预览" : target.DisplayName + " // 档案与真实意图";
-            return new FormalTooltipContent(title, CombatInformationPresenter.BuildTargetDetails(preview, target, intent), FormalUiTheme.Amber);
+            return new FormalTooltipContent(title + " · 使用说明", CombatInformationPresenter.BuildActionDetails(preview), line);
         }
 
         private FormalTooltipContent BuildHeroTooltip()
         {
             UnitState hero = bootstrap?.CurrentState?.GetUnit("hero");
-            return new FormalTooltipContent("英雄完整状态", CombatInformationPresenter.BuildHeroDetails(hero), FormalUiTheme.Safe);
+            return new FormalTooltipContent("英雄详情", CombatInformationPresenter.BuildHeroDetails(hero), FormalUiTheme.Safe);
         }
 
         private FormalTooltipContent BuildQuickbarTooltip(int slot)
@@ -402,9 +401,10 @@ namespace OCC.Combat.Presentation
             trigger.Configure(tooltip, provider);
         }
 
-        private Image ResourceBar(Transform parent, string title, Vector2 position, Color color)
+        private Image ResourceBar(Transform parent, string title, Vector2 position, Color color, out Text valueLabel)
         {
             Label(title, parent, position, new Vector2(200, 22), 15, muted, TextAnchor.MiddleLeft);
+            valueLabel = Label(title + "数值", parent, position, new Vector2(374, 22), 13, muted, TextAnchor.MiddleRight);
             GameObject track = Panel(title + "轨道", parent, new Vector2(0, 1), new Vector2(0, 1), position + new Vector2(0, -28), new Vector2(390, 15), new Color(.015f, .02f, .026f, 1f));
             GameObject fill = Panel(title + "填充", track.transform, new Vector2(0, 0), new Vector2(1, 1), Vector2.zero, Vector2.zero, color);
             FormalUiKit.ApplySkin(track.GetComponent<Image>(), "bar_track", Color.white);
@@ -433,27 +433,27 @@ namespace OCC.Combat.Presentation
             foreach (KeyValuePair<string, Button> pair in actionButtons)
             {
                 bool available = heroTurn;
-                string reason = heroTurn ? string.Empty : "当前阶段不可执行：等待敌方行动";
+                string reason = heroTurn ? string.Empty : "等待敌方行动";
                 SkillDefinition skill = pair.Key == "技能1" ? hero.SkillOne : pair.Key == "技能2" ? hero.SkillTwo : null;
                 int fireSlot = pair.Key == "技能1" ? 0 : pair.Key == "技能2" ? 1 : -1;
                 FireSpellDefinition fire = fireSlot < 0 ? null : bootstrap.FireSpellInSlot(fireSlot);
                 ArtifactDefinition artifact = fireSlot == 0 ? (bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact) : null;
                 if (available && artifact != null && hero.ActionPoints < artifact.ActionPointCost) { available = false; reason = "行动点不足：需要 " + artifact.ActionPointCost; }
-                if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "当前阶段不可执行：术式冷却 " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id); }
+                if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "术式冷却中 · " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) + " 回合"; }
                 if (available && fire != null && hero.Mana < fire.ManaCost) { available = false; reason = "魔力不足：需要 " + fire.ManaCost; }
                 if (available && fire != null && hero.ActionPoints < fire.ActionPointCost) { available = false; reason = "行动点不足：需要 " + fire.ActionPointCost; }
                 if (fire != null || artifact != null) skill = null;
-                if (available && skill != null && hero.Cooldown(skill) > 0) { available = false; reason = "当前阶段不可执行：技能冷却 " + hero.Cooldown(skill); }
+                if (available && skill != null && hero.Cooldown(skill) > 0) { available = false; reason = "技能冷却中 · " + hero.Cooldown(skill) + " 回合"; }
                 if (available && skill != null && hero.Mana < skill.ManaCost) { available = false; reason = "以太不足：需要 " + skill.ManaCost; }
                 pair.Value.GetComponent<UiButtonFeedback>()?.SetAvailability(available, reason);
             }
-            endTurnButton?.GetComponent<UiButtonFeedback>()?.SetAvailability(heroTurn, heroTurn ? string.Empty : "当前阶段不可执行：等待敌方行动");
+            endTurnButton?.GetComponent<UiButtonFeedback>()?.SetAvailability(heroTurn, heroTurn ? string.Empty : "等待敌方行动");
         }
 
         private static string StatusText(UnitState unit)
         {
-            if (unit.Statuses.Count == 0) return "状态  //  正常";
-            return "状态  //  " + string.Join("  ", unit.Statuses.Select(item =>
+            if (unit.Statuses.Count == 0) return "正常";
+            return string.Join("  ", unit.Statuses.Select(item =>
             {
                 CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(item.Key));
                 return "<color=" + semantic.ColorHex + ">" + semantic.ShortLabel + " " + item.Value + "</color>";

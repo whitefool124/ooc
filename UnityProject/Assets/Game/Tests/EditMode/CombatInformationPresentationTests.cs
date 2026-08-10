@@ -85,7 +85,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(outcome.Title, Is.EqualTo("战斗失败"));
             Assert.That(outcome.Reason, Does.Contain("英雄倒下"));
-            Assert.That(outcome.Consequence, Does.Contain("战前地图存档"));
+            Assert.That(outcome.Consequence, Does.Contain("从战斗前继续"));
             Assert.That(outcome.RecentEvents.Count, Is.EqualTo(5));
             Assert.That(outcome.RemainingEnemyCount, Is.EqualTo(1));
         }

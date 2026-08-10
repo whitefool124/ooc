@@ -89,7 +89,7 @@ namespace OCC.Combat
                     break;
                 default:
                     action = command.Type.ToString();
-                    result = "按确定性规则结算";
+                    result = "按战斗规则结算";
                     break;
             }
             string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) : "自身/战场";
@@ -121,23 +121,23 @@ namespace OCC.Combat
             int remaining = state.Units.Values.Count(unit => !unit.IsHero && unit.IsAlive);
             int complete = state.Objectives.Count(objective => objective.IsComplete(state));
             string objective = "目标 " + complete + "/" + state.Objectives.Count + " 完成";
-            string consequence = victory ? "胜利状态将按当前模式结算。" : rogueliteMapCombat
-                ? "返回地图保留战前地图存档；战术重开恢复本场确定性快照。"
-                : "战斗内变化不会提交；战术重开恢复本场确定性快照。";
+            string consequence = victory ? "战利品与行动进度将在返回时结算。" : rogueliteMapCombat
+                ? "返回地图并从战斗前继续，或重新挑战本场战斗。"
+                : "离开将放弃本场进度，也可以重新挑战。";
             return new CombatOutcomePresentation(title, reason, heroState, remaining, objective, consequence, state.EventLog.Take(5).ToArray());
         }
 
         public static string BuildCompactTargetSummary(CombatActionPreview preview, UnitState target, EnemyIntentPresentation intent)
         {
             if (preview == null) return "等待战斗状态";
-            string availability = preview.CanSubmit ? "合法 // 有效格 " + preview.ValidCellCount : "不可提交 // " + preview.FailureReason;
+            string availability = preview.CanSubmit ? "可以行动" : preview.FailureReason;
             if (target == null)
-                return "当前操作  " + preview.Action + " // " + preview.Cost + "\n" + preview.TargetRule + "\n" + availability + "\n悬停查看完整规则";
+                return "行动  " + preview.Action + " · " + preview.Cost + "\n" + preview.TargetRule + "\n" + availability + "\n悬停查看说明";
 
-            string result = string.IsNullOrWhiteSpace(preview.ExpectedResult) ? "等待锁定有效目标" : preview.ExpectedResult;
-            string intentText = intent == null ? "等待权威决策" : intent.CompactText;
+            string result = string.IsNullOrWhiteSpace(preview.ExpectedResult) ? "请选择目标" : preview.ExpectedResult;
+            string intentText = intent == null ? "尚未显露" : intent.CompactText;
             return target.DisplayName + " // 生命 " + target.Health + "/" + target.MaxHealth + " // 护盾 " + target.Shield + "/" + target.MaxShield +
-                "\n当前操作  " + preview.Action + " // " + preview.Cost + "\n" + availability + "\n预估  " + result + "\n意图  " + intentText;
+                "\n行动  " + preview.Action + " · " + preview.Cost + "\n" + availability + "\n预计  " + result + "\n敌人打算  " + intentText;
         }
 
         public static string BuildActionDetails(CombatActionPreview preview)
@@ -145,14 +145,14 @@ namespace OCC.Combat
             if (preview == null) return "战斗状态尚未就绪。";
             List<string> lines = new List<string>
             {
-                "目标规则：" + preview.TargetRule,
-                "公开消耗：" + preview.Cost,
-                preview.CanSubmit ? "提交状态：合法 // 有效格 " + preview.ValidCellCount : "提交状态：不可提交 // " + preview.FailureReason,
-                "预期结果：" + preview.ExpectedResult
+                "目标：" + preview.TargetRule,
+                "消耗：" + preview.Cost,
+                preview.CanSubmit ? "现在可以使用" : "暂时无法使用：" + preview.FailureReason,
+                "效果：" + preview.ExpectedResult
             };
-            if (!string.IsNullOrWhiteSpace(preview.TargetBefore)) lines.Add("提交前：" + preview.TargetBefore);
-            if (!string.IsNullOrWhiteSpace(preview.TargetAfter)) lines.Add("提交后：" + preview.TargetAfter);
-            if (!string.IsNullOrWhiteSpace(preview.DamageBreakdown)) lines.Add("伤害公式：" + preview.DamageBreakdown);
+            if (!string.IsNullOrWhiteSpace(preview.TargetBefore)) lines.Add("当前：" + preview.TargetBefore);
+            if (!string.IsNullOrWhiteSpace(preview.TargetAfter)) lines.Add("行动后：" + preview.TargetAfter);
+            if (!string.IsNullOrWhiteSpace(preview.DamageBreakdown)) lines.Add("伤害：" + preview.DamageBreakdown);
             if (!string.IsNullOrWhiteSpace(preview.StatusResults)) lines.Add("状态变化：" + preview.StatusResults);
             if (preview.AffectedCellCount > 0) lines.Add("影响范围：" + preview.AffectedCellCount + " 格");
             if (preview.FriendlyFireRisk) lines.Add("风险：可能波及友军");
@@ -164,8 +164,8 @@ namespace OCC.Combat
             List<string> sections = new List<string> { BuildActionDetails(preview) };
             if (target != null)
             {
-                sections.Add("敌人档案\n" + BuildEnemyInformation(target).FullText);
-                if (intent != null) sections.Add("真实意图（权威决策）\n" + intent.DetailedText);
+                sections.Add("敌人资料\n" + BuildEnemyInformation(target).FullText);
+                if (intent != null) sections.Add("敌人打算\n" + intent.DetailedText);
             }
             return string.Join("\n\n", sections);
         }
@@ -181,7 +181,7 @@ namespace OCC.Combat
         {
             if (state == null || enemy == null || enemy.IsHero) return string.Empty;
             EnemyInformationPresentation profile = BuildEnemyInformation(enemy);
-            return profile.FullText + "\n真实意图：" + intent.DetailedText + "\n右键选择查看目标；左键只执行当前行动。";
+            return profile.FullText + "\n敌人打算：" + intent.DetailedText + "\n右键查看敌人；左键执行当前行动。";
         }
 
         public static string BuildHeroDetails(UnitState hero)
@@ -210,10 +210,10 @@ namespace OCC.Combat
         {
             if (phase == CombatFlowPhase.Victory) return "结算阶段 // 战斗胜利";
             if (phase == CombatFlowPhase.Defeat) return "结算阶段 // 战斗失败";
-            if (phase == CombatFlowPhase.TacticalRestart) return "重开阶段 // 正在恢复快照";
+            if (phase == CombatFlowPhase.TacticalRestart) return "重新部署 // 正在重整战场";
             if (phase != CombatFlowPhase.Active) return "准备阶段";
             UnitState active = state?.GetUnit(state.ActiveUnitId);
-            return active?.IsHero == true ? "玩家阶段 // 等待指令" : "敌方阶段 // 正在执行真实意图";
+            return active?.IsHero == true ? "你的行动 // 请选择指令" : "敌方行动 // 正在行动";
         }
 
         public static string CommandSignature(CombatCommand command) => string.Join("|", command.Type, command.UnitId ?? string.Empty,

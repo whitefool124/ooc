@@ -41,6 +41,42 @@ namespace OCC.Combat
         }
     }
 
+    public readonly struct CombatTurnTrackEntry
+    {
+        public int Order { get; }
+        public string UnitId { get; }
+        public string DisplayName { get; }
+        public string VitalityText { get; }
+        public bool IsHero { get; }
+        public bool IsActive { get; }
+
+        public CombatTurnTrackEntry(int order, UnitState unit, bool isActive)
+        {
+            Order = order;
+            UnitId = unit.Id;
+            DisplayName = unit.DisplayName;
+            VitalityText = unit.Health + " 生命";
+            IsHero = unit.IsHero;
+            IsActive = isActive;
+        }
+    }
+
+    public static class CombatTurnTrackPresentation
+    {
+        public static IReadOnlyList<CombatTurnTrackEntry> Build(CombatState state, int limit)
+        {
+            if (state == null || limit <= 0) return Array.Empty<CombatTurnTrackEntry>();
+            return state.Units.Values
+                .Where(unit => unit.IsAlive)
+                .OrderBy(unit => unit.Id == state.ActiveUnitId ? 0 : 1)
+                .ThenBy(unit => unit.InitiativeTime)
+                .ThenBy(unit => unit.Id, StringComparer.Ordinal)
+                .Take(limit)
+                .Select((unit, index) => new CombatTurnTrackEntry(index + 1, unit, unit.Id == state.ActiveUnitId))
+                .ToArray();
+        }
+    }
+
     public readonly struct RogueliteMapPresentationModel : IEquatable<RogueliteMapPresentationModel>
     {
         public int Seed { get; }
