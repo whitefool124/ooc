@@ -15,6 +15,8 @@ namespace OCC.Combat.Presentation
         private readonly BattlefieldPresentationAdapter battlefield = new BattlefieldPresentationAdapter();
         private readonly CombatAvailabilityQuery availability = new CombatAvailabilityQuery();
         private readonly EnemyTurnPlanBook enemyPlans = new EnemyTurnPlanBook();
+        private readonly EnemyTurnSequence enemyTurnSequence = new EnemyTurnSequence();
+        private CombatCommand? pendingEnemyCommand;
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
@@ -392,15 +394,16 @@ namespace OCC.Combat.Presentation
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
             outcomeHandled = false;
+            ResetEnemyTurnSequence();
         }
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
-        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
+        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
         public void TacticalRestartDeveloperCombat()
         {
             if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
-            developerFlow.TacticalRestart(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
+            developerFlow.TacticalRestart(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
         }
         public void ReturnToDeveloperMenu()
         {
@@ -634,6 +637,8 @@ namespace OCC.Combat.Presentation
         public void DeleteRogueliteSave() => saveGateway.DeleteStory();
         public bool HasRogueliteSave => saveGateway.HasStory;
         public CombatState CurrentState => state;
+        public EnemyTurnSequencePhase EnemyTurnPresentationPhase => enemyTurnSequence.Phase;
+        public string EnemyTurnPresentationUnitId => enemyTurnSequence.UnitId;
         public string CurrentLevelId => currentLevel?.Id;
         public FireBattleState CurrentFireBattle => fireBattle;
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
@@ -775,7 +780,7 @@ namespace OCC.Combat.Presentation
             developerPreparation = new MissionPreparation().Configure("training_range", "能力验证与确定性回归", "标准靶兵、友军、掩体、设备、水面与核心样本");
             developerFlow = new CombatFlowController(); developerFlow.Configure(developerPreparation, state); developerFlow.OpenBriefing(); developerFlow.BeginCombat();
             selectedAction = "技能1"; selectedTargetId = prepared.RecommendedUnitId; outcomeHandled = false;
-            visualFeedback?.ResetBattleFeedback(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
+            ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
         }
         public TrainingRangePreviewReport PreviewTrainingRangeCurrent()
         {
@@ -902,6 +907,7 @@ namespace OCC.Combat.Presentation
             }
             CombatFlowPhase phaseBeforeUpdate = developerFlow.Phase;
             if (!trainingRangeActive && developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
+            else if (state.ActiveUnitId == "hero" && enemyTurnSequence.IsRunning) ResetEnemyTurnSequence();
             developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
             if (developerFlow.Phase != phaseBeforeUpdate) { MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
         }
@@ -954,16 +960,75 @@ namespace OCC.Combat.Presentation
         }
         private void RunEnemyTurn()
         {
+            float now = Time.unscaledTime;
+            if (enemyTurnSequence.Phase == EnemyTurnSequencePhase.ActorGap)
+            {
+                if (enemyTurnSequence.Advance(now) == EnemyTurnSequenceSignal.ReadyForNext)
+                {
+                    pendingEnemyCommand = null;
+                    MarkPresentation(UiPresentationArea.Combat);
+                }
+                return;
+            }
+
             UnitState enemy = state.GetUnit(state.ActiveUnitId);
             UnitState hero = state.GetUnit("hero");
-            if (enemy == null || !enemy.IsAlive) { if (enemy != null) PublishCombatEffects(CombatResolver.EndTurn(state, enemy)); return; }
+            if (enemy == null || !enemy.IsAlive)
+            {
+                ResetEnemyTurnSequence();
+                if (enemy != null) PublishCombatEffects(CombatResolver.EndTurn(state, enemy));
+                return;
+            }
+
+            if (!enemyTurnSequence.IsRunning)
+            {
+                pendingEnemyCommand = enemy.ActionPoints > 0 ? BuildEnemyCommand(enemy, hero) : (CombatCommand?)null;
+                CombatCommandType commandType = pendingEnemyCommand?.Type ?? CombatCommandType.EndTurn;
+                enemyTurnSequence.Begin(enemy.Id, commandType, now);
+                visualFeedback?.BeginEnemyAction(enemy, EnemyIntent(enemy),
+                    EnemyTurnSequence.FocusSeconds + EnemyTurnSequence.ResultHoldFor(commandType));
+                MarkPresentation(UiPresentationArea.Combat);
+                return;
+            }
+
+            if (!string.Equals(enemyTurnSequence.UnitId, enemy.Id, StringComparison.Ordinal))
+            {
+                ResetEnemyTurnSequence();
+                return;
+            }
+
+            EnemyTurnSequenceSignal signal = enemyTurnSequence.Advance(now);
             try
             {
-                if (enemy.ActionPoints > 0) TryCommand(BuildEnemyCommand(enemy, hero));
-                if (state.ActiveUnitId == enemy.Id) PublishCombatEffects(CombatResolver.EndTurn(state, enemy));
+                if (signal == EnemyTurnSequenceSignal.ResolveCommand && pendingEnemyCommand.HasValue)
+                {
+                    TryCommand(pendingEnemyCommand.Value);
+                    MarkPresentation(UiPresentationArea.Combat);
+                }
+                else if (signal == EnemyTurnSequenceSignal.EndTurn)
+                {
+                    if (state.ActiveUnitId == enemy.Id) PublishCombatEffects(CombatResolver.EndTurn(state, enemy));
+                    pendingEnemyCommand = null;
+                    visualFeedback?.CompleteEnemyAction(enemy.Id);
+                    MarkPresentation(UiPresentationArea.Combat);
+                }
             }
-            catch (InvalidOperationException error) { state.AddLog(error.Message); PublishCombatEffects(CombatResolver.EndTurn(state, enemy)); }
-            MarkPresentation(UiPresentationArea.Combat);
+            catch (InvalidOperationException error)
+            {
+                state.AddLog(error.Message);
+                if (state.ActiveUnitId == enemy.Id) PublishCombatEffects(CombatResolver.EndTurn(state, enemy));
+                pendingEnemyCommand = null;
+                visualFeedback?.CompleteEnemyAction(enemy.Id);
+                enemyTurnSequence.Reset();
+                MarkPresentation(UiPresentationArea.Combat);
+            }
+        }
+
+        private void ResetEnemyTurnSequence()
+        {
+            pendingEnemyCommand = null;
+            enemyTurnSequence.Reset();
+            visualFeedback?.CancelEnemyAction();
         }
 
         private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)

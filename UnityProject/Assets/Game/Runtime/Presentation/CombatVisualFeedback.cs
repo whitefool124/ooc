@@ -23,6 +23,8 @@ namespace OCC.Combat.Presentation
         private Canvas canvas;
         private string lastOutcome;
         private string activeUnitId;
+        private string focusedEnemyId;
+        private GameObject enemyActionBanner;
 
         private enum UnitMotionKind { Move, Attack, Cast, Hit, ShieldHit, Recover, Ready }
 
@@ -116,6 +118,66 @@ namespace OCC.Combat.Presentation
             lastOutcome = null;
             healthCache.Clear();
             shieldCache.Clear(); positionCache.Clear(); durabilityCache.Clear(); statusCache.Clear(); hitUntil.Clear(); unitMotions.Clear(); activeUnitId = null;
+            CancelEnemyAction();
+        }
+
+        public void BeginEnemyAction(UnitState enemy, EnemyIntentPresentation intent, float visibleSeconds)
+        {
+            if (enemy == null) return;
+            CancelEnemyAction();
+            focusedEnemyId = enemy.Id;
+            PlayUnitMotion(enemy, UnitMotionKind.Ready, .58f, Vector2.zero, Vector2.zero);
+            if ((bootstrap?.UiPreferences.AnimationIntensity ?? 1f) > .01f)
+                PulseCell(enemy.Position, new Color(.98f, .42f, .28f), .62f);
+
+            EnsureCanvas();
+            enemyActionBanner = FormalUiKit.AnchoredPanel("敌方行动提示", canvas.transform,
+                new Vector2(.375f, 1f), new Vector2(.5f, 1f), new Vector2(0f, -42f),
+                new Vector2(560f, 78f), new Color(.12f, .025f, .022f, .98f));
+            Image panel = enemyActionBanner.GetComponent<Image>();
+            if (panel != null) panel.raycastTarget = false;
+            FormalUiKit.Label("敌方行动标题", "敌方行动 · " + enemy.DisplayName, enemyActionBanner.transform,
+                new Vector2(20f, -10f), new Vector2(520f, 28f), 22, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
+            FormalUiKit.Label("敌方行动内容", intent?.CompactText ?? "正在行动", enemyActionBanner.transform,
+                new Vector2(20f, -40f), new Vector2(520f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+
+            RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
+            CanvasGroup group = enemyActionBanner.AddComponent<CanvasGroup>();
+            group.alpha = 0f;
+            rect.localScale = new Vector3(.94f, .94f, 1f);
+            float stay = Mathf.Max(.4f, visibleSeconds - .32f);
+            DOTween.Sequence().SetUpdate(true).SetTarget(enemyActionBanner)
+                .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, .16f))
+                .Join(rect.DOScale(1f, .20f).SetEase(Ease.OutBack))
+                .AppendInterval(stay)
+                .Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .16f))
+                .OnComplete(() =>
+                {
+                    if (enemyActionBanner != null) Destroy(enemyActionBanner);
+                    enemyActionBanner = null;
+                });
+        }
+
+        public void CompleteEnemyAction(string enemyId)
+        {
+            if (string.Equals(focusedEnemyId, enemyId, System.StringComparison.Ordinal)) focusedEnemyId = null;
+            if (enemyActionBanner == null) return;
+            GameObject banner = enemyActionBanner;
+            enemyActionBanner = null;
+            DOTween.Kill(banner);
+            CanvasGroup group = banner.GetComponent<CanvasGroup>();
+            if (group == null) { Destroy(banner); return; }
+            DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .14f).SetUpdate(true)
+                .OnComplete(() => Destroy(banner));
+        }
+
+        public void CancelEnemyAction()
+        {
+            focusedEnemyId = null;
+            if (enemyActionBanner == null) return;
+            DOTween.Kill(enemyActionBanner);
+            Destroy(enemyActionBanner);
+            enemyActionBanner = null;
         }
 
         public int UnitShakeOffset(UnitState unit)
@@ -162,15 +224,19 @@ namespace OCC.Combat.Presentation
 
         public Color UnitPresentationTint(UnitState unit)
         {
-            if (unit == null || !unitMotions.TryGetValue(unit.Id, out UnitMotion motion)) return Color.white;
+            if (unit == null) return Color.white;
+            bool focused = string.Equals(focusedEnemyId, unit.Id, System.StringComparison.Ordinal);
+            if (!unitMotions.TryGetValue(unit.Id, out UnitMotion motion))
+                return focused ? Color.Lerp(Color.white, new Color(1f, .32f, .20f), .18f + Mathf.PingPong(Time.unscaledTime * .9f, .14f)) : Color.white;
             float progress = Mathf.Clamp01((Time.unscaledTime - motion.StartedAt) / Mathf.Max(.01f, motion.Duration));
             float flash = Mathf.Sin(progress * Mathf.PI) * (bootstrap?.UiPreferences.AnimationIntensity ?? 1f);
-            if (motion.Kind == UnitMotionKind.Hit) return Color.Lerp(Color.white, new Color(1f, .36f, .28f), flash * .72f);
-            if (motion.Kind == UnitMotionKind.ShieldHit) return Color.Lerp(Color.white, new Color(.35f, .92f, 1f), flash * .68f);
-            if (motion.Kind == UnitMotionKind.Recover) return Color.Lerp(Color.white, new Color(.48f, 1f, .66f), flash * .52f);
-            if (motion.Kind == UnitMotionKind.Cast) return Color.Lerp(Color.white, new Color(.55f, .86f, 1f), flash * .38f);
-            if (motion.Kind == UnitMotionKind.Ready) return Color.Lerp(Color.white, new Color(1f, .82f, .38f), flash * .28f);
-            return Color.white;
+            Color tint = Color.white;
+            if (motion.Kind == UnitMotionKind.Hit) tint = Color.Lerp(Color.white, new Color(1f, .36f, .28f), flash * .72f);
+            else if (motion.Kind == UnitMotionKind.ShieldHit) tint = Color.Lerp(Color.white, new Color(.35f, .92f, 1f), flash * .68f);
+            else if (motion.Kind == UnitMotionKind.Recover) tint = Color.Lerp(Color.white, new Color(.48f, 1f, .66f), flash * .52f);
+            else if (motion.Kind == UnitMotionKind.Cast) tint = Color.Lerp(Color.white, new Color(.55f, .86f, 1f), flash * .38f);
+            else if (motion.Kind == UnitMotionKind.Ready) tint = Color.Lerp(Color.white, new Color(1f, .52f, .28f), flash * .46f);
+            return focused ? Color.Lerp(tint, new Color(1f, .34f, .22f), .16f) : tint;
         }
 
         public void NotifyDestructible(GridPosition position, TileState tile)
@@ -259,18 +325,18 @@ namespace OCC.Combat.Presentation
                 // The resolved unit is already on the destination cell. Keep the feedback local so a
                 // multi-cell move does not sweep a sprite across most of the battlefield.
                 origin = Vector2.ClampMagnitude(origin, 28f);
-                PlayUnitMotion(targetUnit, UnitMotionKind.Move, .18f, Vector2.zero, origin);
+                PlayUnitMotion(targetUnit, UnitMotionKind.Move, targetUnit.IsHero ? .22f : .48f, Vector2.zero, origin);
             }
             else if (feedback.Kind == CombatFeedbackKind.Damage || feedback.Kind == CombatFeedbackKind.ShieldAbsorb)
             {
                 Vector2 direction = GridDirection(feedback.Source, feedback.Target);
-                if (sourceUnit != null && sourceUnit != targetUnit) PlayUnitMotion(sourceUnit, UnitMotionKind.Attack, .26f, direction, Vector2.zero);
-                if (targetUnit != null) PlayUnitMotion(targetUnit, feedback.Kind == CombatFeedbackKind.ShieldAbsorb ? UnitMotionKind.ShieldHit : UnitMotionKind.Hit, .24f, direction, Vector2.zero);
+                if (sourceUnit != null && sourceUnit != targetUnit) PlayUnitMotion(sourceUnit, UnitMotionKind.Attack, sourceUnit.IsHero ? .30f : .52f, direction, Vector2.zero);
+                if (targetUnit != null) PlayUnitMotion(targetUnit, feedback.Kind == CombatFeedbackKind.ShieldAbsorb ? UnitMotionKind.ShieldHit : UnitMotionKind.Hit, sourceUnit?.IsHero == false ? .42f : .30f, direction, Vector2.zero);
                 if (intensity > .01f) PulseCell(feedback.Target, color, duration * 1.5f);
             }
             else if (targetUnit != null && (feedback.Kind == CombatFeedbackKind.Healing || feedback.Kind == CombatFeedbackKind.ShieldRestore || feedback.Kind == CombatFeedbackKind.ManaRestore || feedback.Kind == CombatFeedbackKind.StatusCleared))
             {
-                PlayUnitMotion(targetUnit, UnitMotionKind.Recover, .30f, Vector2.zero, Vector2.zero);
+                PlayUnitMotion(targetUnit, UnitMotionKind.Recover, targetUnit.IsHero ? .30f : .44f, Vector2.zero, Vector2.zero);
                 if (intensity > .01f) PulseCell(feedback.Target, color, duration * 1.7f);
             }
             if (targetUnit != null)
@@ -297,7 +363,8 @@ namespace OCC.Combat.Presentation
                 bool usesContactMotion = skill.Id == "enemy_tether_pounce" || skill.Id == "enemy_sundering_sigil" ||
                     skill.Id == "enemy_shield_ram" || skill.Id == "enemy_hooking_strike" || skill.Id == "enemy_vanguard_crush";
                 UnitMotionKind motion = usesContactMotion ? UnitMotionKind.Attack : UnitMotionKind.Cast;
-                PlayUnitMotion(sourceUnit, motion, usesContactMotion ? .30f : .34f, GridDirection(source, target), Vector2.zero);
+                float duration = sourceUnit.IsHero ? (usesContactMotion ? .30f : .34f) : (usesContactMotion ? .54f : .58f);
+                PlayUnitMotion(sourceUnit, motion, duration, GridDirection(source, target), Vector2.zero);
             }
             if (skill.Id == "enemy_stone_snare") { PlayFormalVfx(target, "bound"); return; }
             if (skill.Id == "enemy_revealing_lantern") { PlayFormalVfx(target, "armor_break"); return; }

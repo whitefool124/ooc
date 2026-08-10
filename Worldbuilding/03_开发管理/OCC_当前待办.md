@@ -6,6 +6,19 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+- 当前无进行中主任务。
+
+## 最近完成
+
+### COMBAT-FLOW-01：敌方逐行动节奏与战斗反馈 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗执行协调与表现层；不修改敌人 AI、数值、AP、技能、伤害、行动顺序、公开意图或存档语义。
+- **目标：** 将当前每帧连续结算的敌方回合改为逐单位、逐动作可观察执行；每名敌人先获得明显聚焦和行动提示，再结算同一份权威计划，保留移动/攻击/施术与受击反馈，结果停留后才结束该单位行动并切换下一名敌人。
+- **涉及文件/系统：** 新增纯时序合同 `EnemyTurnSequence` 及 EditMode 测试；调整 `CombatPrototypeBootstrap` 的敌方回合协调、`CombatVisualFeedback` 的敌方聚焦/动作提示和动作时长；更新联合开发计划与 COMBAT-FLOW-01 验证记录。不修改 `.unity`、正式战斗数据、`EnemyTactics` 或 `EnemyTurnPlanBook` 的决策规则。
+- **验收标准：** 同一时刻最多一名敌人处于执行流程；聚焦阶段不改变战斗状态；每名敌人只消费一次既有权威计划；移动、攻击和技能具有不同但不低于可读门槛的结果停留时间；上一行动完成前下一敌人不得结算；动画强度降低不跳过信息停留；异常命令仍能安全结束当前敌人回合。聚焦与全量 EditMode 通过，Funplay 重编译 0 error / 0 warning、Console 无 error、场景 dirty=false、无 `.unity` 改动。
+- **验收记录：** 新增纯时序 `EnemyTurnSequence`，将每名敌人拆为聚焦、单次结算、结果停留、结束行动和行动间隔；初始节奏为聚焦 0.65 秒，移动/攻击/技能结果分别停留 0.70/0.90/1.00 秒，单位间隔 0.30 秒。`CombatPrototypeBootstrap` 只消费一次 `EnemyTurnPlanBook` 既有命令，`CombatVisualFeedback` 仅读取公开意图，并增加敌方行动标题签、当前单位脉冲及较慢的移动/攻击/施术反馈；未修改 AI、数值、行动顺序或玩法规则。5 项聚焦时序合同包含单次信号、动作差异、串行互斥和重置隔离，最终全量 EditMode **316/316 passed**。Funplay v0.6.0 重编译 0 error / 0 warning，Play Mode 运行态读回 `active=enemy_0; phase=Focus; focus=enemy_0; banner=True; text=敌方行动 · 铭盾卫 | 移动 → (7,2)`，并观察到下一行动者仅在前一流程结束后进入聚焦；退出后 Console 无 error、场景 dirty=0，未保存场景且无 `.unity` 改动。
+- **完成后解锁：** 当前主任务恢复为空；下一轮可在玩家实际试玩反馈后单独微调表现秒数或补充双分辨率截图，不自动修改战斗规则。
+
 ### COMBAT-HUD-04：战斗侧栏信息层级与行动轨道重构 — COMPLETE（2026-08-10）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗 HUD 呈现层；不修改行动结算、AI、数值、存档或场景。
@@ -21,8 +34,6 @@
 - **涉及文件/系统：** `CombatInformationPresentation`、战斗状态/解析器与 `EnemyTactics`、`CombatPrototypeBootstrap`、`FormalCombatHud`、`DeveloperConsolePanel`、相关 EditMode 测试、正式 HUD 图标/边框资产及 Importer QA；不修改 `.unity`、`Library/`、`Logs/` 或生成文件。
 - **验收记录：** `CombatAvailabilityQuery` 将普通行动预览和格子失败原因集中委托给既有权威适配器；HUD 继续只读消费预览。`EnemyTurnPlanBook` 只在计划仓调用 `EnemyTactics.Choose`，公开意图和敌方执行从同一缓存命令派生，任一命令结算后显式失效；`EnemyIntentPresentation` 不再暴露或持有 `CombatCommand`。默认编译符号下 `DeveloperBuildGate.IsEnabled=false`，控制台不创建、不监听 F1/F2，强制胜负和靶场 API 同样拒绝执行；仅 `UNITY_EDITOR`/`DEVELOPMENT_BUILD` 加显式 `OCC_DEVELOPER_TOOLS` 才可开启。新增边界测试与正式资产审计覆盖查询委托、计划同源/失效、默认开发门控、展示模型不泄露命令及 5 个意图图标注册。复用已有 Point/Clamp、硬 Alpha、PPU32 的 32×32 图标、细线分层面板和悬浮模板，保留 1920×1080 的 75% 战场/25% HUD。用户已授权本工作树 Unity 缓存；Unity 6000.5.2f1 CLI 在本工作树完成全量导入/编译，并复跑 EditMode **309/309 passed**、0 failed、0 skipped。`CombatPrototype.unity` 无 Git diff、未进入 Play Mode；日志无项目编译错误，只有 Unity 公共 CDN 配置请求超时。未保存场景。
 - **完成后解锁：** 将当前主任务恢复为空；在绑定本工作树的 Unity Editor 中补跑全量 EditMode，并在获授权后执行 1920×1080 / 960×540 Play Mode 视觉验收。
-
-## 最近完成
 
 ### INVENTORY-SCALE-01：多尺寸物品矩阵、背包占格美术与旧档迁移 — COMPLETE（2026-08-10）
 
