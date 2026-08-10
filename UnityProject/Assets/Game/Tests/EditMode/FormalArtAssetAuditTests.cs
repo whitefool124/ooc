@@ -44,7 +44,7 @@ namespace OCC.Combat.Tests
             string[] missing = active.Where(entry => Resources.Load<Sprite>(entry.ResourcePath) == null)
                 .Select(entry => entry.AssetId + " => " + entry.ResourcePath).ToArray();
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
-            Assert.That(active, Has.Length.EqualTo(184));
+            Assert.That(active, Has.Length.EqualTo(189), "Five approved 32px enemy-intent icons are now a formal HUD dependency.");
             Assert.That(blockedUnits.Count, Is.EqualTo(16), "Character/unit art is explicitly product-blocked, not silently omitted.");
         }
 

@@ -16,10 +16,10 @@
 
 ## Unity 健康检查
 
-- Funplay `request_recompile → wait_for_compilation → get_compilation_errors`：0 error / 0 warning。
-- 活动 `CombatPrototype.unity`：`isDirty=false`，编辑器非 Play Mode。
-- Console：仅发现既有 UnityConnect Token Exchange 网络错误，与本改动无关。
+- 本工作树 Unity 6000.5.2f1 CLI 完成全量导入和脚本编译，正常退出；随后全量 EditMode **309/309 passed**、0 failed、0 skipped。首轮 308/309 只暴露资产审计冻结数仍为 184；将 5 个已批准的意图图标纳入正式注册后更新为 189，复跑全绿。
+- CLI 测试未进入 Play Mode，`CombatPrototype.unity` 没有 Git diff。日志仅记录 Unity 公共 CDN 配置请求超时，未出现项目 C# error 或测试异常。
+- Funplay 旧连接仍可报告其已打开副本 0 error / 0 warning、场景 `isDirty=false`，但本记录不再将其作为本工作树测试证据。
 
-## 环境门槛
+## 剩余视觉门槛
 
-Funplay 当前连接的工程副本未包含本工作树新增的 `CombatBoundaryQueries` 与 `DeveloperBuildGate`，不能将其 EditMode 结果计入本工作树。待 Unity Editor 绑定本工作树后，先运行新增聚焦测试与全量 EditMode；随后在获得用户授权时进行双分辨率 Play Mode 视觉验收。
+未获授权，不进行 Play Mode；1920×1080 / 960×540 的人工视觉验收仍需用户明确授权。该门槛不影响本次 EditMode、资源导入、编译与场景文件完整性证据。
