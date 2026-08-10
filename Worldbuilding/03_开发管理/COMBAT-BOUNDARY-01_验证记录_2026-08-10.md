@@ -1,5 +1,13 @@
 # COMBAT-BOUNDARY-01 验证记录（2026-08-10）
 
+## Funplay Play Mode 补充验收（已获授权）
+
+- Funplay 已连接本工作树，并通过 `OpenScene` 打开 `Assets/Scenes/CombatPrototype.unity`；进入和退出 Play Mode 后均确认 `isPlaying=false`、`isDirty=false`。
+- 在 1920×1080 与 960×540 捕获中，正式启动页可稳定显示：硬边框标题面板、青色/琥珀状态条、像素工业背景与有限色调色板均符合正式模板方向。
+- 运行期检查确认 `CombatPrototypeBootstrap` 已初始化，启动层已创建；测试流程也确认战斗流处于 `Active`、`FormalCombatHud` 已存在并可刷新。
+- Funplay 的 Game View 捕获在启动遮罩销毁后的帧会回传上一帧启动页或仅背景，因而本次不将它作为战斗 HUD 的视觉通过证据；这是捕获刷新限制，不是 Console 运行错误。退出 Play Mode 后 Funplay Console 的 error 查询为 0 条。
+- 全程未保存场景；`CombatPrototype.unity` 保持无 Git diff。
+
 ## 范围
 
 - 共用战斗信息、敌方计划与开发入口边界；未修改 AI 数值、战斗规则、场景、存档或正式像素资产。
