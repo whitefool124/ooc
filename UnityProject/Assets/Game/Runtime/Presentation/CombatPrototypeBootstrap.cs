@@ -738,6 +738,7 @@ namespace OCC.Combat.Presentation
         }
         public void StartTrainingRange()
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             startupPresentation?.DismissImmediately();
             rogueliteFlow.Reset(); trainingRangeActive = true;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
@@ -745,21 +746,25 @@ namespace OCC.Combat.Presentation
         }
         public void SelectTrainingRangeAbility(string abilityId)
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
             trainingRangeSession.Select(abilityId); PrepareTrainingRangeCurrent();
         }
         public void BrowseTrainingRangeAbility(string abilityId)
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
             trainingRangeSession.Select(abilityId);
         }
         public void ShiftTrainingRangePage(int delta)
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
             trainingRangeSession.ShiftPage(delta);
         }
         public void PrepareTrainingRangeCurrent()
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
             trainingRangeActive = true;
             currentLevel = null;
@@ -774,11 +779,13 @@ namespace OCC.Combat.Presentation
         }
         public TrainingRangePreviewReport PreviewTrainingRangeCurrent()
         {
+            if (!DeveloperBuildGate.IsEnabled || trainingRangeSession == null) return null;
             TrainingRangePreviewReport report = trainingRangeSession.PreviewCurrent();
             state.AddLog(trainingRangeSession.CurrentAbility.Id + " // " + report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;
         }
         public TrainingRangeExecutionReport ExecuteTrainingRangeCurrent()
         {
+            if (!DeveloperBuildGate.IsEnabled || trainingRangeSession == null) return null;
             if (trainingRangeSession.CurrentCase == null || trainingRangeSession.CurrentCase.Combat != state) PrepareTrainingRangeCurrent();
             GridPosition source = state.GetUnit("hero").Position;
             TrainingRangePreviewReport preview = trainingRangeSession.PreviewCurrent();
@@ -792,6 +799,7 @@ namespace OCC.Combat.Presentation
         }
         public TrainingRangeAuditReport RunTrainingRangeAudit()
         {
+            if (!DeveloperBuildGate.IsEnabled) return null;
             if (trainingRangeSession == null) trainingRangeSession = new TrainingRangeSession();
             TrainingRangeAuditReport report = trainingRangeSession.RunFullAudit();
             state?.AddLog(report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;

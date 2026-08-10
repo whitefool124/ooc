@@ -70,6 +70,15 @@ namespace OCC.Combat
             new FormalArtEntry("feedback.unit_defeated", "unit_defeated", "Art/FormalFeedbackIcons32/unit_defeated")
         };
 
+        public static readonly IReadOnlyList<FormalArtEntry> Intents = new[]
+        {
+            new FormalArtEntry("intent.attack", "attack", "Art/FormalIntentIcons32/attack"),
+            new FormalArtEntry("intent.cast", "cast", "Art/FormalIntentIcons32/cast"),
+            new FormalArtEntry("intent.move", "move", "Art/FormalIntentIcons32/move"),
+            new FormalArtEntry("intent.defend", "defend", "Art/FormalIntentIcons32/defend"),
+            new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalIntentIcons32/interact_destroy")
+        };
+
         public static readonly IReadOnlyList<FormalArtEntry> Statuses = new[]
         {
             new FormalArtEntry("status.burning", "burning", "Art/FormalStatusIcons32/burning"),
@@ -216,7 +225,7 @@ namespace OCC.Combat
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> All = Units
-            .Concat(Commands).Concat(Feedback).Concat(Statuses).Concat(Environments)
+            .Concat(Commands).Concat(Feedback).Concat(Intents).Concat(Statuses).Concat(Environments)
             .Concat(NodeTypes).Concat(RuntimeSkills).Concat(FireSpells).Concat(Items).Concat(Vfx).ToArray();
 
         public static FormalArtEntry Required(IReadOnlyList<FormalArtEntry> entries, string runtimeId)
@@ -229,6 +238,7 @@ namespace OCC.Combat
         public static string UnitPath(string runtimeId) => Required(Units, runtimeId).ResourcePath;
         public static string CommandPath(string runtimeId) => Required(Commands, runtimeId).ResourcePath;
         public static string FeedbackPath(string runtimeId) => Required(Feedback, runtimeId).ResourcePath;
+        public static string IntentPath(string runtimeId) => Required(Intents, runtimeId).ResourcePath;
         public static string StatusPath(string runtimeId) => Required(Statuses, runtimeId).ResourcePath;
         public static string EnvironmentPath(string runtimeId) => Required(Environments, runtimeId).ResourcePath;
         public static string NodeTypePath(string runtimeId) => Required(NodeTypes, runtimeId).ResourcePath;

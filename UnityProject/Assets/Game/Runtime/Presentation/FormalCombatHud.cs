@@ -28,6 +28,7 @@ namespace OCC.Combat.Presentation
         private Text statusLabel;
         private Text eventLabel;
         private Text targetLabel;
+        private Image targetIntentIcon;
         private GameObject targetModule;
         private GameObject timelineModule;
         private GameObject logModule;
@@ -123,6 +124,7 @@ namespace OCC.Combat.Presentation
             targetModule = FormalUiKit.LayoutPanel("行动预览目标模块", side.transform, "combat.target", panel);
             Label("目标预览 // 悬停详情", targetModule.transform, new Vector2(16, -10), new Vector2(380, 26), 17, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             targetLabel = Label("行动预览", targetModule.transform, new Vector2(16, -42), new Vector2(380, 96), 12, new Color(.95f, .76f, .36f), TextAnchor.UpperLeft);
+            targetIntentIcon = FormalUiKit.IconSlot("公开意图图标", targetModule.transform, null, new Vector2(344, -8));
             BindTooltip(targetModule, BuildTargetTooltip);
 
             timelineModule = FormalUiKit.LayoutPanel("行动序列模块", side.transform, "combat.timeline", panel);
@@ -226,6 +228,7 @@ namespace OCC.Combat.Presentation
             CombatActionPreview preview = bootstrap.CurrentActionPreview;
             EnemyIntentPresentation intent = target == null ? null : bootstrap.EnemyIntent(target);
             targetLabel.text = CombatInformationPresenter.BuildCompactTargetSummary(preview, target, intent);
+            RefreshIntentIcon(intent);
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
@@ -266,6 +269,18 @@ namespace OCC.Combat.Presentation
                 pair.Value.GetComponent<UiButtonFeedback>()?.SetSelectedState(pair.Key == bootstrap.SelectedAction);
             }
             RefreshAvailability(state, hero);
+        }
+
+        private void RefreshIntentIcon(EnemyIntentPresentation intent)
+        {
+            if (targetIntentIcon == null) return;
+            if (intent == null) { targetIntentIcon.gameObject.SetActive(false); return; }
+            string commandType = intent.Signature.Split('|')[0];
+            string intentId = commandType == "Attack" ? "attack" : commandType == "UseSkill" ? "cast" :
+                commandType == "Move" ? "move" : commandType == "Interact" ? "interact_destroy" : "defend";
+            targetIntentIcon.sprite = Resources.Load<Sprite>(FormalArtRegistry.IntentPath(intentId));
+            if (targetIntentIcon.sprite == null) throw new KeyNotFoundException("Missing formal intent icon: " + intentId);
+            targetIntentIcon.gameObject.SetActive(true);
         }
 
         private void RefreshSkillButton(string key, SkillDefinition skill, UnitState hero)
