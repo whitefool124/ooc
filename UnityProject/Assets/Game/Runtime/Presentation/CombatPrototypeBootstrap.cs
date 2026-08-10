@@ -13,6 +13,8 @@ namespace OCC.Combat.Presentation
         private const float UiWidth = 1920f;
         private const float UiHeight = 1080f;
         private readonly BattlefieldPresentationAdapter battlefield = new BattlefieldPresentationAdapter();
+        private readonly CombatAvailabilityQuery availability = new CombatAvailabilityQuery();
+        private readonly EnemyTurnPlanBook enemyPlans = new EnemyTurnPlanBook();
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
@@ -49,7 +51,9 @@ namespace OCC.Combat.Presentation
         private FormalRogueliteUi formalRogueliteUi;
         private FormalUiInteractionLayer interactionLayer;
         private FormalStartupPresentation startupPresentation;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         private DeveloperConsolePanel developerConsole;
+#endif
         private TarkovInventoryPanel inventoryPanel;
         private TrainingRangeSession trainingRangeSession;
         private bool trainingRangeActive;
@@ -79,7 +83,9 @@ namespace OCC.Combat.Presentation
             formalCombatHud = gameObject.AddComponent<FormalCombatHud>(); formalCombatHud.Initialize(this);
             formalRogueliteUi = gameObject.AddComponent<FormalRogueliteUi>(); formalRogueliteUi.Initialize(this);
             startupPresentation = gameObject.AddComponent<FormalStartupPresentation>(); startupPresentation.Initialize(this);
-            developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DeveloperBuildGate.IsEnabled) { developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this); }
+#endif
             inventoryPanel = gameObject.AddComponent<TarkovInventoryPanel>(); inventoryPanel.Initialize(this);
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
@@ -637,7 +643,7 @@ namespace OCC.Combat.Presentation
         public CombatActionPreview ActionPreview(string action) => BuildActionPreview(action);
         public CombatOutcomePresentation CurrentOutcomePresentation => state == null ? null : CombatInformationPresenter.BuildOutcome(state, mapRun != null);
         public string CurrentPhaseText => CombatInformationPresenter.PhaseText(CurrentFlowPhase, state);
-        public EnemyIntentPresentation EnemyIntent(UnitState enemy) => enemy == null || state == null ? null : CombatInformationPresenter.BuildEnemyIntent(state, enemy, state.GetUnit("hero"));
+        public EnemyIntentPresentation EnemyIntent(UnitState enemy) => enemy == null || state == null ? null : enemyPlans.GetPublicIntent(state, enemy, state.GetUnit("hero"));
         public FireSpellDefinition FireSpellInSlot(int slot)
         {
             if (trainingRangeActive) return slot == 0 ? trainingRangeSession?.CurrentFireSpell : null;
@@ -664,7 +670,7 @@ namespace OCC.Combat.Presentation
             }
             int slot = action == "技能1" ? 0 : action == "技能2" ? 1 : -1;
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
-            if (spell == null || state == null) return battlefield.BuildPreview(state, action, selectedTargetId);
+            if (spell == null || state == null) return availability.Preview(state, action, selectedTargetId);
             if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
             int valid = 0;
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsFireSpellCellValid(spell, new GridPosition(x, y))) valid++;
@@ -724,7 +730,12 @@ namespace OCC.Combat.Presentation
             ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : null;
         public bool IsCombatOutcomeVisible => developerFlow != null && (developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat);
         public bool IsInteractionModalOpen => (interactionLayer != null && interactionLayer.IsConfirmationOpen) || (inventoryPanel != null && inventoryPanel.IsOpen);
-        public void ToggleDeveloperConsole() { developerConsole?.Toggle(); }
+        public void ToggleDeveloperConsole()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (DeveloperBuildGate.IsEnabled) developerConsole?.Toggle();
+#endif
+        }
         public void StartTrainingRange()
         {
             startupPresentation?.DismissImmediately();
@@ -921,6 +932,7 @@ namespace OCC.Combat.Presentation
         }
         public void ForceCurrentOutcome(bool victory)
         {
+            if (!DeveloperBuildGate.IsEnabled) return;
             if (developerFlow?.Phase != CombatFlowPhase.Active) return;
             state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
         }
@@ -947,7 +959,7 @@ namespace OCC.Combat.Presentation
         }
 
         private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)
-            => CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero).Command;
+            => enemyPlans.GetExecutionCommand(state, enemy, hero);
         private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu || developerFlow.Phase == CombatFlowPhase.Briefing || (mapRun != null && mapRun.AwaitingReward)) { GUI.matrix = previous; return; } BattlefieldRect board = battlefield.BoardRect(state.Map.Width, state.Map.Height); DrawGrid(new Rect(board.X, board.Y, board.Width, board.Height)); GUI.matrix = previous; }
         private void ConfigureGuiSkin()
         {
@@ -1102,7 +1114,7 @@ namespace OCC.Combat.Presentation
 
         private void DrawEnemyHoverCard(UnitState enemy, Vector2 pointer)
         {
-            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, state.GetUnit("hero"));
+            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, EnemyIntent(enemy));
             if (string.IsNullOrEmpty(details)) return;
             Rect card = EnemyHoverCardRect(pointer);
             GUI.color = new Color(.025f, .045f, .052f, .98f);
@@ -1330,6 +1342,7 @@ namespace OCC.Combat.Presentation
                     PublishFireExecutions(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
                 }
                 selectedTargetId = null;
+                enemyPlans.Invalidate();
                 MarkPresentation(UiPresentationArea.Combat);
                 PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
                 PublishCombatEffects(execution);

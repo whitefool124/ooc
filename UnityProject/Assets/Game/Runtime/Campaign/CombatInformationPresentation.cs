@@ -6,7 +6,6 @@ namespace OCC.Combat
 {
     public sealed class EnemyIntentPresentation
     {
-        public CombatCommand Command { get; }
         public string Signature { get; }
         public string ActionName { get; }
         public string TargetSummary { get; }
@@ -14,9 +13,8 @@ namespace OCC.Combat
         public string CompactText => ActionName + " → " + TargetSummary;
         public string DetailedText => CompactText + " // " + ResultSummary;
 
-        internal EnemyIntentPresentation(CombatCommand command, string signature, string actionName, string targetSummary, string resultSummary)
+        internal EnemyIntentPresentation(string signature, string actionName, string targetSummary, string resultSummary)
         {
-            Command = command;
             Signature = signature ?? string.Empty;
             ActionName = actionName ?? string.Empty;
             TargetSummary = targetSummary ?? string.Empty;
@@ -64,15 +62,6 @@ namespace OCC.Combat
 
     public static class CombatInformationPresenter
     {
-        public static EnemyIntentPresentation BuildEnemyIntent(CombatState state, UnitState enemy, UnitState hero)
-        {
-            if (state == null) throw new ArgumentNullException(nameof(state));
-            if (enemy == null || hero == null) throw new ArgumentNullException(enemy == null ? nameof(enemy) : nameof(hero));
-            // This is the sole intent decision: the presentation retains the exact authoritative command.
-            CombatCommand command = EnemyTactics.Choose(state, enemy, hero);
-            return BuildEnemyIntent(state, enemy, command);
-        }
-
         public static EnemyIntentPresentation BuildEnemyIntent(CombatState state, UnitState enemy, CombatCommand command)
         {
             UnitState target = string.IsNullOrEmpty(command.TargetUnitId) ? null : state.GetUnit(command.TargetUnitId);
@@ -104,7 +93,7 @@ namespace OCC.Combat
                     break;
             }
             string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) : "自身/战场";
-            return new EnemyIntentPresentation(command, CommandSignature(command), action, targetSummary, result);
+            return new EnemyIntentPresentation(CommandSignature(command), action, targetSummary, result);
         }
 
         public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy)
@@ -188,11 +177,10 @@ namespace OCC.Combat
             return enemy?.Id;
         }
 
-        public static string BuildEnemyHoverDetails(CombatState state, UnitState enemy, UnitState hero)
+        public static string BuildEnemyHoverDetails(CombatState state, UnitState enemy, EnemyIntentPresentation intent)
         {
-            if (state == null || enemy == null || hero == null || enemy.IsHero) return string.Empty;
+            if (state == null || enemy == null || enemy.IsHero) return string.Empty;
             EnemyInformationPresentation profile = BuildEnemyInformation(enemy);
-            EnemyIntentPresentation intent = BuildEnemyIntent(state, enemy, hero);
             return profile.FullText + "\n真实意图：" + intent.DetailedText + "\n右键选择查看目标；左键只执行当前行动。";
         }
 

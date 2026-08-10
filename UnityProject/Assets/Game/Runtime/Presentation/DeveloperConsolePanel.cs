@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
 namespace OCC.Combat.Presentation
 {
     // Opt-in development surface. The training range is runtime-only and never writes player progression or scene YAML.
@@ -20,7 +21,7 @@ namespace OCC.Combat.Presentation
 
         private void OnGUI()
         {
-            if (bootstrap == null || !Application.isPlaying) return;
+            if (!DeveloperBuildGate.IsEnabled || bootstrap == null || !Application.isPlaying) return;
             GUI.depth = -1000;
             HandleHotkeys();
             float scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f);
@@ -253,3 +254,4 @@ namespace OCC.Combat.Presentation
         }
     }
 }
+#endif

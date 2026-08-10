@@ -15,7 +15,7 @@ namespace OCC.Combat.Tests
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             CombatActionPreview preview = new BattlefieldPresentationAdapter().BuildPreview(state, "攻击", enemy.Id);
-            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero);
+            EnemyIntentPresentation intent = new EnemyTurnPlanBook().GetPublicIntent(state, enemy, hero);
 
             string compact = CombatInformationPresenter.BuildCompactTargetSummary(preview, enemy, intent);
 
@@ -37,7 +37,7 @@ namespace OCC.Combat.Tests
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             CombatActionPreview preview = new BattlefieldPresentationAdapter().BuildPreview(state, "攻击", enemy.Id);
-            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero);
+            EnemyIntentPresentation intent = new EnemyTurnPlanBook().GetPublicIntent(state, enemy, hero);
 
             string details = CombatInformationPresenter.BuildTargetDetails(preview, enemy, intent);
 
@@ -109,9 +109,10 @@ namespace OCC.Combat.Tests
             UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
-            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+            EnemyIntentPresentation intent = plans.GetPublicIntent(state, enemy, hero);
 
-            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, hero);
+            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, intent);
 
             Assert.That(details, Does.Contain(enemy.MainHand.DisplayName));
             Assert.That(details, Does.Contain("技能："));

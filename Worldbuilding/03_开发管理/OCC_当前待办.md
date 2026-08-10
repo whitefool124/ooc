@@ -6,7 +6,13 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
-- 当前无进行中主任务。
+### COMBAT-BOUNDARY-01：战斗玩家信息、开发诊断与 AI 权威边界 — COMPLETE（2026-08-10）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗规则查询、敌方回合计划、正式 HUD 与开发入口隔离；不改变 AI 数值、战斗玩法、场景或存档语义。
+- **目标：** 拆分常驻/悬停玩家信息与仅开发诊断，令 HUD 只渲染权威行动可用性和敌方计划；以同一份稳定的敌方回合计划驱动公开意图和执行，并在 Release 中隔离开发控制台、调试热键、强制胜负及靶场审计；使用正式像素图标和细线面板模板替换临时开发外观。
+- **涉及文件/系统：** `CombatInformationPresentation`、战斗状态/解析器与 `EnemyTactics`、`CombatPrototypeBootstrap`、`FormalCombatHud`、`DeveloperConsolePanel`、相关 EditMode 测试、正式 HUD 图标/边框资产及 Importer QA；不修改 `.unity`、`Library/`、`Logs/` 或生成文件。
+- **验收记录：** `CombatAvailabilityQuery` 将普通行动预览和格子失败原因集中委托给既有权威适配器；HUD 继续只读消费预览。`EnemyTurnPlanBook` 只在计划仓调用 `EnemyTactics.Choose`，公开意图和敌方执行从同一缓存命令派生，任一命令结算后显式失效；`EnemyIntentPresentation` 不再暴露或持有 `CombatCommand`。默认编译符号下 `DeveloperBuildGate.IsEnabled=false`，控制台不创建、不监听 F1/F2，强制胜负同样拒绝执行；仅 `UNITY_EDITOR`/`DEVELOPMENT_BUILD` 加显式 `OCC_DEVELOPER_TOOLS` 才可开启。新增 4 项 EditMode 覆盖查询委托、计划同源/失效、默认开发门控与展示模型不泄露命令。复用既有 `FormalCombatHud` 正式 32×32 指令/意图图标、细线分层面板和悬浮模板，保留 1920×1080 的 75% 战场/25% HUD；不引入未经 QA 的位图。Funplay 重编译/错误检查返回 0 error/0 warning，场景 `CombatPrototype.unity isDirty=false`、非 Play Mode；Console 仅有既有 UnityConnect Token Exchange 网络错误。注意：Funplay 绑定的编辑器副本未包含本工作树新增源文件，故其结果仅为编辑器健康门槛；本工作树新增 EditMode 测试需在绑定本工作树的 Unity Editor 中补跑。未保存场景、未进入 Play Mode。
+- **完成后解锁：** 将当前主任务恢复为空；在绑定本工作树的 Unity Editor 中补跑全量 EditMode，并在获授权后执行 1920×1080 / 960×540 Play Mode 视觉验收。
 
 ## 最近完成
 

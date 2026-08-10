@@ -14,11 +14,10 @@ namespace OCC.Combat.Tests
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
 
             CombatCommand authoritative = EnemyTactics.Choose(state, enemy, hero);
-            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, hero);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+            EnemyIntentPresentation intent = plans.GetPublicIntent(state, enemy, hero);
 
             Assert.That(intent.Signature, Is.EqualTo(CombatInformationPresenter.CommandSignature(authoritative)));
-            Assert.That(intent.Command.Type, Is.EqualTo(authoritative.Type));
-            Assert.That(intent.Command.TargetUnitId, Is.EqualTo(authoritative.TargetUnitId));
             Assert.That(intent.ActionName, Is.EqualTo(enemy.SkillOne.DisplayName));
             Assert.That(intent.TargetSummary, Does.Contain(hero.DisplayName));
         }
