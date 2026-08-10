@@ -8,6 +8,11 @@
 
 - `CombatBoundaryTests`：行动可用性查询委托、意图与执行同一计划、失效、默认开发入口关闭、展示模型不公开命令。
 - 既有 `CombatInformationPresentationTests` 与 `CombatHoverInformationTests` 改为通过 `EnemyTurnPlanBook` 获得公开意图，不允许展示层调用 AI。
+- `FormalArtRegistryTests` 现覆盖 5 个已批准 `FormalIntentIcons32` 映射；目标模块按公开计划签名显示攻击、施放、移动、据守或交互图标。所有图标均复用已有 Point/Clamp、硬 Alpha、PPU32 的正式资源，未引入未 QA 的位图。
+
+## 入口隔离
+
+- 训练靶场的启动、选择、预览、执行与审计 API 也要求 `DeveloperBuildGate.IsEnabled`；即使外部组件仍持有 Bootstrap，也无法在默认/Release 触发开发流程。
 
 ## Unity 健康检查
 
