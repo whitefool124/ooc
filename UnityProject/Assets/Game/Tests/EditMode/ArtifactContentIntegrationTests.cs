@@ -222,7 +222,7 @@ namespace OCC.Combat.Tests
             MonoScript archive = AssetDatabase.LoadAssetAtPath<MonoScript>(paths[2]);
             Assert.That(archive.text, Does.Contain("run.Inventory.Items.Where"), "Archive must enumerate artifacts actually owned by this run.");
             Assert.That(archive.text, Does.Contain("ItemCategory.Artifact"));
-            Assert.That(archive.text, Does.Contain("查看下一件法宝"), "Archive must allow every owned artifact to be inspected, not just the first one.");
+            Assert.That(archive.text, Does.Contain("下一件法宝"), "Archive must allow every owned artifact to be inspected, not just the first one.");
         }
 
         private static void AddDirectChoiceArtifacts(RogueliteMapNodeType nodeType, ArtifactContentSource source, ISet<string> reachable)

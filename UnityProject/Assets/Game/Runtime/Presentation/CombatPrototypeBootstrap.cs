@@ -8,14 +8,16 @@ using UnityEngine.UI;
 namespace OCC.Combat.Presentation
 {
     [ExecuteAlways]
-    public sealed class CombatPrototypeBootstrap : MonoBehaviour
+    public sealed class CombatPrototypeBootstrap : MonoBehaviour, ICombatPresentationCompositionHost, ITacticalHudHost
     {
         private const float UiWidth = 1920f;
         private const float UiHeight = 1080f;
         private readonly BattlefieldPresentationAdapter battlefield = new BattlefieldPresentationAdapter();
+        private BattlefieldViewport battlefieldViewport;
         private readonly CombatAvailabilityQuery availability = new CombatAvailabilityQuery();
         private readonly EnemyTurnPlanBook enemyPlans = new EnemyTurnPlanBook();
         private readonly EnemyTurnSequence enemyTurnSequence = new EnemyTurnSequence();
+        private readonly CombatTargetNavigationState targetNavigation = new CombatTargetNavigationState();
         private CombatCommand? pendingEnemyCommand;
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
@@ -40,28 +42,28 @@ namespace OCC.Combat.Presentation
         private Texture2D formalLootOpenTexture;
         private readonly Dictionary<string, Texture2D> formalRelayTextures = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> formalOverlayTextures = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D> formalIntentTextures = new Dictionary<string, Texture2D>();
         private readonly Dictionary<StatusType, Texture2D> formalStatusTextures = new Dictionary<StatusType, Texture2D>();
         private readonly Texture2D[] formalFiregroundFrames = new Texture2D[6];
         private readonly Texture2D[] formalSmokeFrames = new Texture2D[6];
         private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
-        private CombatVisualFeedback visualFeedback;
+        private CombatPresentationComposition presentation;
+        private CombatVisualFeedback visualFeedback => presentation?.Feedback;
+        private RogueliteSettlementPresentation settlementPresentation => presentation?.Settlement;
+        private FormalUiInteractionLayer interactionLayer => presentation?.Interaction;
+        private FormalStartupPresentation startupPresentation => presentation?.Startup;
+        private DeveloperConsolePanel developerConsole => presentation?.DeveloperConsole;
+        private TarkovInventoryPanel inventoryPanel => presentation?.Inventory;
         private FireBattleState fireBattle;
         private ArtifactBattleState artifactBattle;
         private string fireLifecycleActiveUnitId;
-        private RogueliteSettlementPresentation settlementPresentation;
-        private FormalCombatHud formalCombatHud;
-        private FormalRogueliteUi formalRogueliteUi;
-        private FormalUiInteractionLayer interactionLayer;
-        private FormalStartupPresentation startupPresentation;
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        private DeveloperConsolePanel developerConsole;
-#endif
-        private TarkovInventoryPanel inventoryPanel;
         private TrainingRangeSession trainingRangeSession;
         private bool trainingRangeActive;
         private int trainingRangeArtifactUsesRemaining;
         private string armedInventoryItemId;
         private RogueliteUiPreferences uiPreferences = new RogueliteUiPreferences();
+        private bool lastMapSaveSucceeded = true;
+        private bool lastSettingsSaveSucceeded = true;
         private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
         private readonly UiPresentationVersions uiPresentationVersions = new UiPresentationVersions();
 
@@ -79,16 +81,7 @@ namespace OCC.Combat.Presentation
             GameObject editorMap = GameObject.Find("地图可视化");
             if (editorMap != null) editorMap.SetActive(false);
             developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
-            visualFeedback = gameObject.AddComponent<CombatVisualFeedback>(); visualFeedback.Initialize(this);
-            interactionLayer = gameObject.AddComponent<FormalUiInteractionLayer>(); interactionLayer.Initialize(this);
-            settlementPresentation = gameObject.AddComponent<RogueliteSettlementPresentation>(); settlementPresentation.Initialize(this);
-            formalCombatHud = gameObject.AddComponent<FormalCombatHud>(); formalCombatHud.Initialize(this);
-            formalRogueliteUi = gameObject.AddComponent<FormalRogueliteUi>(); formalRogueliteUi.Initialize(this);
-            startupPresentation = gameObject.AddComponent<FormalStartupPresentation>(); startupPresentation.Initialize(this);
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (DeveloperBuildGate.IsEnabled) { developerConsole = gameObject.AddComponent<DeveloperConsolePanel>(); developerConsole.Initialize(this); }
-#endif
-            inventoryPanel = gameObject.AddComponent<TarkovInventoryPanel>(); inventoryPanel.Initialize(this);
+            presentation = CombatPresentationComposition.Attach(gameObject, this);
             BuildCombatFromSceneStageTwo();
             ApplyFormalRelayVisuals();
             LoadFormalUnitTextures();
@@ -137,7 +130,7 @@ namespace OCC.Combat.Presentation
             GameObject canvasObject = new GameObject("场景UI"); canvasObject.transform.SetParent(transform, false);
             Canvas canvas = canvasObject.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 20;
             CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); canvasObject.AddComponent<GraphicRaycaster>();
-            AddUiPanel(canvasObject, "标题栏", new Vector2(16, -16), new Vector2(640, 44), "OCC // \u786e\u5b9a\u6027\u6218\u6597\u539f\u578b", 18);
+            AddUiPanel(canvasObject, "标题栏", new Vector2(16, -16), new Vector2(640, 44), "OCC \u6218\u6597\u539f\u578b", 18);
             AddUiPanel(canvasObject, "战斗UI面板占位", new Vector2(658, -74), new Vector2(310, 560), "\u6218\u6597\u4fe1\u606f\u7531\u6218\u6597\u7ba1\u7406\u5668\u66f4\u65b0", 14);
         }
 
@@ -221,10 +214,14 @@ namespace OCC.Combat.Presentation
             foreach (string name in relay) formalRelayTextures[name] = RequiredTexture("Art/FormalRelayV01/" + name);
             foreach (string name in new[] { "selected", "move_range", "attack_range", "objective", "high_risk", "unreachable", "line_of_sight" })
                 formalOverlayTextures[name] = RequiredTexture("Art/FormalTacticalOverlays32/" + name);
+            foreach (FormalArtEntry entry in FormalArtRegistry.Intents)
+                formalIntentTextures[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
             formalStatusTextures[StatusType.Burning] = RequiredTexture(FormalArtRegistry.StatusPath("burning"));
             formalStatusTextures[StatusType.Slow] = RequiredTexture(FormalArtRegistry.StatusPath("slow"));
             formalStatusTextures[StatusType.Bound] = RequiredTexture(FormalArtRegistry.StatusPath("bound"));
             formalStatusTextures[StatusType.ArmorBreak] = RequiredTexture(FormalArtRegistry.StatusPath("armor_break"));
+            formalStatusTextures[StatusType.Dazzled] = RequiredTexture(FormalArtRegistry.StatusPath("dazzled"));
+            formalStatusTextures[StatusType.Revealed] = RequiredTexture(FormalArtRegistry.StatusPath("revealed"));
             for (int frame = 0; frame < 6; frame++)
             {
                 formalFiregroundFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_burning_ground/frame_{frame:00}");
@@ -255,13 +252,6 @@ namespace OCC.Combat.Presentation
         {
             formalUnitTextures.TryGetValue(name, out Texture2D texture);
             return texture;
-        }
-
-        private static Rect StaticUnitPresentationRect(UnitState unit, Rect rect)
-        {
-            float phase = unit.IsHero ? 0f : unit.Position.X * .71f + unit.Position.Y * .37f;
-            int offsetY = Mathf.RoundToInt(Mathf.Sin(Time.unscaledTime * 1.8f + phase));
-            return new Rect(rect.x, rect.y + offsetY, rect.width, rect.height);
         }
 
         private static Sprite CreateEditorSprite()
@@ -312,6 +302,7 @@ namespace OCC.Combat.Presentation
 
         private void BuildCombatFromSceneStageTwo()
         {
+            targetNavigation.End();
             string encounterId = mapRun != null
                 ? (mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId)
                 : rogueliteRun?.CurrentMission.Id;
@@ -393,17 +384,19 @@ namespace OCC.Combat.Presentation
             mapRun?.RestoreLootProgress(state.LootSource);
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
+            battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
+            battlefieldViewport.Focus(state.GetUnit("hero").Position);
             outcomeHandled = false;
             ResetEnemyTurnSequence();
         }
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
-        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
+        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; FocusHeroInBattlefield(); fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
         public void TacticalRestartDeveloperCombat()
         {
             if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
-            developerFlow.TacticalRestart(); state = developerFlow.State; fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
+            developerFlow.TacticalRestart(); state = developerFlow.State; FocusHeroInBattlefield(); fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
         }
         public void ReturnToDeveloperMenu()
         {
@@ -464,12 +457,23 @@ namespace OCC.Combat.Presentation
                 if (!saveGateway.TryLoadMapRun(out run))
                 {
                     ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, DescribeMapSaveFailure()));
+                    MarkPresentation(UiPresentationArea.Flow);
                     return false;
                 }
             }
-            else run = new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue), starterId);
+            else
+            {
+                run = new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue), starterId);
+                if (!saveGateway.SaveMapRun(run))
+                {
+                    lastMapSaveSucceeded = false;
+                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "新推进未能写入存档；仍停留在入口，未启动未保存的行动"));
+                    MarkPresentation(UiPresentationArea.Flow);
+                    return false;
+                }
+                lastMapSaveSucceeded = true;
+            }
             rogueliteFlow.BeginMapRun(run);
-            if (!continueSave) saveGateway.SaveMapRun(run);
             MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure);
             return true;
         }
@@ -491,14 +495,14 @@ namespace OCC.Combat.Presentation
             if (!continueSave && HasMapRogueliteSave)
             {
                 RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.ReplaceExistingRun, "覆盖现有推进？",
-                    "新开推进会替换当前肉鸽地图存档。已完成的本局进度无法从该槽位恢复。", "覆盖并新开"), () =>
+                    MapSavePresentation.ReplacementMessage, "覆盖并新开"), () =>
                     {
-                        if (!saveGateway.DeleteMapRun())
+                        if (!PrepareMapSlotForReplacement())
                         {
-                            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "旧地图存档无法删除，未启动新推进"));
+                            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "旧地图存档当前无法安全替换，未启动新推进"));
                             return;
                         }
-                        StartMapRoguelite(false, starterId);
+                        if (!TryStartMapRoguelite(false, starterId)) return;
                         ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Saved, "已创建并保存新的首区推进"));
                     });
                 return;
@@ -509,6 +513,17 @@ namespace OCC.Combat.Presentation
         }
         public void DeleteMapRogueliteSave() => saveGateway.DeleteMapRun();
         public bool HasMapRogueliteSave => saveGateway.HasMapRun;
+        public MapSaveUiPresentation MapSavePresentation => MapSaveUiPresentation.From(HasMapRogueliteSave, saveGateway.LastLoadStatus, lastMapSaveSucceeded);
+        public string SettingsSaveDetail => lastSettingsSaveSucceeded ? "所有设置已保存" : "设置已生效 · 持久化失败";
+
+        private bool PrepareMapSlotForReplacement()
+        {
+            if (saveGateway.TryLoadMapRun(out _)) return true;
+            if (saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.Missing) return true;
+            if (saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.CorruptData || saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.InvalidSemantics)
+                return saveGateway.DeleteMapRun();
+            return false;
+        }
         public void SelectMapNode(string nodeId)
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
@@ -585,7 +600,21 @@ namespace OCC.Combat.Presentation
             SaveMapRun();
         }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.ReturnToMap(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure); }
-        private void SaveMapRun() => saveGateway.SaveMapRun(mapRun);
+        public void RequestReturnToLanding()
+        {
+            if (mapRun != null && !SaveMapRun()) return;
+            ReturnToDeveloperMenu();
+        }
+        private bool SaveMapRun()
+        {
+            lastMapSaveSucceeded = mapRun != null && saveGateway.SaveMapRun(mapRun);
+            if (!lastMapSaveSucceeded)
+            {
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "地图进度未能写入；当前状态仍保留在内存中，请勿退出并稍后重试"));
+                MarkPresentation(UiPresentationArea.Flow);
+            }
+            return lastMapSaveSucceeded;
+        }
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
         public void ChooseShortSalvage() { rogueliteRun.ShortRun.ChooseSalvage("shield_cell"); SaveShortRun(); }
         public void ChooseShortUpgrade() { rogueliteRun.ShortRun.ChooseUpgrade("calibrated_rifle"); SaveShortRun(); }
@@ -637,6 +666,123 @@ namespace OCC.Combat.Presentation
         public void DeleteRogueliteSave() => saveGateway.DeleteStory();
         public bool HasRogueliteSave => saveGateway.HasStory;
         public CombatState CurrentState => state;
+        public BattlefieldViewport BattlefieldViewport
+        {
+            get
+            {
+                if (state == null) return null;
+                if (battlefieldViewport == null)
+                    battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
+                return battlefieldViewport;
+            }
+        }
+        public bool IsBattlefieldVisible => Application.isPlaying && developerFlow != null && state != null &&
+            developerFlow.Phase != CombatFlowPhase.DeveloperMenu && developerFlow.Phase != CombatFlowPhase.Briefing &&
+            (mapRun == null || !mapRun.AwaitingReward);
+        public void FocusBattlefieldOnHero() => FocusHeroInBattlefield();
+        public void SubmitBattlefieldCell(GridPosition position, bool inspection)
+        {
+            if (state == null || !state.Map.IsInside(position)) return;
+            if (inspection) HandleInspectionClick(position);
+            else HandleCellClick(position);
+        }
+        public BattlefieldCellPresentation PresentBattlefieldCell(GridPosition position)
+        {
+            if (state == null || !state.Map.IsInside(position)) return null;
+            TileState tile = state.Map.GetTile(position);
+            int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % formalFiregroundFrames.Length;
+            Texture2D environment = fireBattle?.HasFireground(position) == true
+                ? formalFiregroundFrames[environmentFrame]
+                : tile.SmokeExpiresAt > state.CurrentTime ? formalSmokeFrames[environmentFrame] : null;
+            Texture2D move = IsInMoveRange(position) ? formalOverlayTextures["move_range"] : null;
+            Texture2D attack = IsInAttackRange(position) ? formalOverlayTextures["attack_range"] : null;
+            Texture2D skill = null;
+            int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
+            FireSpellPreview firePreview = fireSpell == null ? null : BuildFireSpellPreviewAt(fireSpell, position);
+            if (firePreview?.CanCommit == true)
+                skill = formalOverlayTextures[firePreview.FriendlyFireRisk ? "high_risk" : "attack_range"];
+
+            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
+            Texture2D unitTexture = FormalUnitTexture(unit);
+            Vector2 unitOffset = Vector2.zero;
+            Color unitTint = Color.white;
+            if (unit != null)
+            {
+                float phase = unit.IsHero ? 0f : unit.Position.X * .71f + unit.Position.Y * .37f;
+                unitOffset.y = Mathf.RoundToInt(Mathf.Sin(Time.unscaledTime * 1.8f + phase));
+                if (visualFeedback != null)
+                {
+                    unitOffset += visualFeedback.UnitPresentationOffset(unit);
+                    unitOffset.x += visualFeedback.UnitShakeOffset(unit);
+                    unitTint = visualFeedback.UnitPresentationTint(unit);
+                }
+            }
+
+            CombatTargetDamageForecast forecast = unit != null && !unit.IsHero ? TargetDamageForecast(unit) : null;
+            CombatUnitVitalsPresentation vitals = unit == null ? null : CombatUnitVitalsPresentation.From(unit, forecast);
+            List<BattlefieldStatusVisual> statuses = unit == null ? new List<BattlefieldStatusVisual>() :
+                unit.Statuses.OrderBy(entry => entry.Key).Take(6)
+                    .Select(entry => new BattlefieldStatusVisual(CombatStatusPresentation.From(unit, entry.Key),
+                        formalStatusTextures.TryGetValue(entry.Key, out Texture2D texture) ? texture : null)).ToList();
+            EnemyIntentPresentation intent = unit != null && !unit.IsHero ? EnemyIntent(unit) : null;
+            Texture2D intentTexture = intent != null && formalIntentTextures.TryGetValue(intent.IconId, out Texture2D icon)
+                ? icon : null;
+
+            Texture2D objectTexture = null;
+            string objectLabel = string.Empty;
+            Color objectLabelColor = FormalUiTheme.Text;
+            if (tile.IsObjective)
+            {
+                string key = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
+                objectTexture = formalRelayTextures[key];
+                if (!tile.IsDestroyed) objectLabel = "导能柱";
+            }
+            else if (tile.Cover == CoverType.Light)
+            {
+                string key = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
+                objectTexture = formalRelayTextures[key];
+            }
+            else if (tile.Cover == CoverType.Heavy)
+            {
+                string key = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
+                objectTexture = formalRelayTextures[key];
+            }
+            else if (trainingRangeActive && tile.IsDevice)
+            {
+                objectTexture = formalRelayTextures[tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact"];
+                objectLabel = "设备";
+            }
+            if (trainingRangeActive && tile.IsWater)
+            {
+                objectLabel = "水面";
+                objectLabelColor = new Color(.38f, .82f, .94f, .92f);
+            }
+
+            Texture2D loot = state.Loot != null && state.Loot.Position == position
+                ? state.Loot.IsLooted ? formalRelayTextures["loot_crate_empty"] : formalLootTexture : null;
+            bool selected = targetNavigation.Active && targetNavigation.Position == position ||
+                unit != null && unit.Id == selectedTargetId;
+            Texture2D selection = selected ? formalOverlayTextures["selected"] : null;
+            string hover = unit == null ? string.Empty : unit.IsHero
+                ? CombatInformationPresenter.BuildHeroDetails(unit)
+                : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
+                  (forecast == null ? string.Empty : "\n伤害预览：" + forecast.PlayerSummary);
+            Texture2D floor = formalRelayTextures[FloorKeyForCurrentLevel(position.X, position.Y)];
+            Rect uv = unitTexture == null ? new Rect(0f, 0f, 1f, 1f) : CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
+            return new BattlefieldCellPresentation(position, floor, environment, move,
+                selectedAction == "移动" ? 1f : .45f, attack, selectedAction == "攻击" ? 1f : .65f,
+                skill, selection, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
+                objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover);
+        }
+        public BattlefieldRect CurrentBattlefieldBoard => battlefieldViewport?.BoardRect ?? battlefield.BoardRect(state?.Map.Width ?? BattlefieldPresentationAdapter.DefaultWidth, state?.Map.Height ?? BattlefieldPresentationAdapter.DefaultHeight);
+        public BattlefieldRect CurrentBattlefieldViewport => battlefieldViewport?.ViewportRect ?? battlefield.ViewportRect;
+        public Vector2 GridToFeedbackPosition(GridPosition position)
+        {
+            BattlefieldRect board = CurrentBattlefieldBoard;
+            BattlefieldRect cell = battlefield.CellRect(board, state?.Map.Height ?? BattlefieldPresentationAdapter.DefaultHeight, position);
+            return new Vector2(cell.X + cell.Width * .5f - UiWidth * .5f, UiHeight * .5f - cell.Y - cell.Height * .5f);
+        }
         public EnemyTurnSequencePhase EnemyTurnPresentationPhase => enemyTurnSequence.Phase;
         public string EnemyTurnPresentationUnitId => enemyTurnSequence.UnitId;
         public string CurrentLevelId => currentLevel?.Id;
@@ -644,6 +790,8 @@ namespace OCC.Combat.Presentation
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
         public string SelectedAction => selectedAction;
         public string SelectedTargetId => selectedTargetId;
+        public bool IsKeyboardTargeting => targetNavigation.Active;
+        public GridPosition KeyboardTargetPosition => targetNavigation.Position;
         public CombatActionPreview CurrentActionPreview => BuildActionPreview(selectedAction);
         public CombatActionPreview ActionPreview(string action) => BuildActionPreview(action);
         public CombatOutcomePresentation CurrentOutcomePresentation => state == null ? null : CombatInformationPresenter.BuildOutcome(state, mapRun != null);
@@ -687,10 +835,10 @@ namespace OCC.Combat.Presentation
                 failure = string.Join("；", exact.Failures);
             }
             else if (valid == 0) failure = "当前没有合法目标";
-            string effects = string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty)));
-            string contract = spell.CombatAffinity + " / " + spell.DeliveryMode + " / " + spell.WeaponRequirement +
-                " / " + spell.TargetKind + " / " + spell.Shape + " / " + spell.TriggerWindow + " / " + spell.ConsumptionRule;
-            return new CombatActionPreview(action, contract, spell.ActionPointCost + " AP + " + spell.ManaCost + " 魔力", effects, valid, failure);
+            string effects = RogueliteSettlementPresentation.FireSpellPlayerSummary(spell);
+            string targetSummary = RogueliteSettlementPresentation.FireSpellTargetSummary(spell);
+            return new CombatActionPreview(action, targetSummary,
+                spell.ActionPointCost + " 行动 + " + spell.ManaCost + " 以太", effects, valid, failure);
         }
         private bool IsFireSpellCellValid(FireSpellDefinition spell, GridPosition position)
         {
@@ -707,6 +855,60 @@ namespace OCC.Combat.Presentation
         {
             selectedTargetId = state != null && state.GetUnit(unitId) != null ? unitId : null;
             MarkPresentation(UiPresentationArea.Combat);
+        }
+        public bool BeginKeyboardTargeting()
+        {
+            UnitState hero = state?.GetUnit("hero");
+            if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id) return false;
+            UnitState selected = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
+            targetNavigation.Begin(selected?.Position ?? hero.Position, state.Map.Width, state.Map.Height);
+            MarkPresentation(UiPresentationArea.Combat);
+            return true;
+        }
+        public void MoveKeyboardTarget(int deltaX, int deltaY)
+        {
+            if (state == null || !targetNavigation.Active) return;
+            targetNavigation.Move(deltaX, deltaY, state.Map.Width, state.Map.Height);
+            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == targetNavigation.Position);
+            selectedTargetId = unit != null && !unit.IsHero ? unit.Id : null;
+            MarkPresentation(UiPresentationArea.Combat);
+        }
+        public void CommitKeyboardTarget()
+        {
+            if (state == null || !targetNavigation.Active) return;
+            GridPosition position = targetNavigation.Position;
+            targetNavigation.End();
+            HandleCellClick(position);
+            MarkPresentation(UiPresentationArea.Combat);
+        }
+        public void CancelKeyboardTargeting()
+        {
+            if (!targetNavigation.Active) return;
+            targetNavigation.End();
+            selectedTargetId = null;
+            MarkPresentation(UiPresentationArea.Combat);
+            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消战场目标选择"));
+        }
+        public void CancelCombatSelectionOrRequestLeave()
+        {
+            CombatCancelResolution resolution = CombatSelectionNavigation.ResolveCancel(selectedAction, selectedTargetId, !string.IsNullOrEmpty(armedInventoryItemId));
+            if (resolution == CombatCancelResolution.ClearTarget)
+            {
+                selectedTargetId = null;
+                MarkPresentation(UiPresentationArea.Combat);
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消目标查看"));
+                return;
+            }
+            if (resolution == CombatCancelResolution.ResetAction)
+            {
+                selectedAction = "移动";
+                selectedTargetId = null;
+                armedInventoryItemId = null;
+                MarkPresentation(UiPresentationArea.Combat);
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消当前行动选择"));
+                return;
+            }
+            RequestLeaveCombat();
         }
         public RogueliteMapRun CurrentMapRun => mapRun;
         public RogueliteMapRun ArchivedMapRun
@@ -812,7 +1014,7 @@ namespace OCC.Combat.Presentation
         public void RequestTacticalRestart()
         {
             RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.TacticalRestart, "战术重开？",
-                "当前战斗进度将被放弃，并恢复到本场战斗开始时的确定性快照。", "确认重开"), TacticalRestartDeveloperCombat);
+                "当前战斗进度将被放弃，并恢复到本场战斗开始时的状态。", "确认重开"), TacticalRestartDeveloperCombat);
         }
         public void RequestLeaveCombat()
         {
@@ -854,16 +1056,20 @@ namespace OCC.Combat.Presentation
         public void UpdateUiPreferences(float masterVolume, float animationIntensity, bool screenShake, bool floatingText, bool highContrast, bool largeText, bool keyHints)
         {
             uiPreferences.Configure(masterVolume, animationIntensity, screenShake, floatingText, highContrast, largeText, keyHints);
-            saveGateway.SaveUiPreferences(uiPreferences);
+            lastSettingsSaveSucceeded = saveGateway.SaveUiPreferences(uiPreferences);
+            if (!lastSettingsSaveSucceeded)
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "设置已在本次运行中生效，但未能持久化保存"));
             ApplyUiPreferences();
             MarkPresentation(UiPresentationArea.Settings);
         }
         private void ApplyUiPreferences()
         {
             AudioListener.volume = uiPreferences.MasterVolume;
+            FormalUiTheme.ConfigureAccessibility(uiPreferences.HighContrast, uiPreferences.LargeText);
         }
         public void SelectHudAction(string action)
         {
+            targetNavigation.End();
             selectedAction = action;
             selectedTargetId = null;
             MarkPresentation(UiPresentationArea.Combat);
@@ -895,7 +1101,7 @@ namespace OCC.Combat.Presentation
         public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }
         private void PersistCombatInventory() { if (mapRun == null || state == null) return; mapRun.CaptureCombatInventory(state); SaveMapRun(); }
         public void ApplyHudBuild(int build) { if (state != null) ApplyBuild(build); }
-        public void EndHeroTurn() { if (state != null) TryCommand(CombatCommand.EndTurn("hero")); }
+        public void EndHeroTurn() { if (state != null) TryCommand(CombatCommand.EndTurn("hero"), true); }
         private void Update()
         {
             if (!Application.isPlaying || developerFlow == null || state == null) return;
@@ -1033,14 +1239,6 @@ namespace OCC.Combat.Presentation
 
         private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)
             => enemyPlans.GetExecutionCommand(state, enemy, hero);
-        private void OnGUI() { if (!Application.isPlaying || developerFlow == null) return; float scale = Mathf.Min(Screen.width / UiWidth, Screen.height / UiHeight); Vector2 offset = new Vector2((Screen.width - UiWidth * scale) * .5f, (Screen.height - UiHeight * scale) * .5f); Matrix4x4 previous = GUI.matrix; GUI.matrix = Matrix4x4.TRS(offset, Quaternion.identity, Vector3.one * scale); ConfigureGuiSkin(); if (developerFlow.Phase == CombatFlowPhase.DeveloperMenu || developerFlow.Phase == CombatFlowPhase.Briefing || (mapRun != null && mapRun.AwaitingReward)) { GUI.matrix = previous; return; } BattlefieldRect board = battlefield.BoardRect(state.Map.Width, state.Map.Height); DrawGrid(new Rect(board.X, board.Y, board.Width, board.Height)); GUI.matrix = previous; }
-        private void ConfigureGuiSkin()
-        {
-            GUI.skin.font = chineseFont != null ? chineseFont : FormalUiKit.Font;
-            GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 18; GUI.skin.box.fontSize = 20;
-            GUI.skin.button.padding = new RectOffset(12, 12, 8, 8);
-            GUI.skin.box.normal.textColor = new Color(.88f, .94f, 1f);
-        }
         private string FloorKeyForCurrentLevel(int x, int y)
         {
             if (currentLevel == null)
@@ -1055,155 +1253,70 @@ namespace OCC.Combat.Presentation
                 default: return "floor_plain";
             }
         }
-        private void DrawGrid(Rect board)
+        private void FocusHeroInBattlefield()
         {
-            Event e = Event.current;
-            UnitState hoveredEnemy = null;
-            for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
-            {
-                GridPosition p = new GridPosition(x, y);
-                BattlefieldRect cellContract = battlefield.CellRect(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Height, p);
-                Rect cell = new Rect(cellContract.X, cellContract.Y, cellContract.Width, cellContract.Height);
-                TileState tile = state.Map.GetTile(p);
-                GUI.color = Color.white;
-                string floorKey = FloorKeyForCurrentLevel(x, y);
-                GUI.DrawTexture(cell, formalRelayTextures[floorKey], ScaleMode.StretchToFill, true);
-                int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % 6;
-                if (fireBattle?.HasFireground(p) == true)
-                {
-                    GUI.color = Color.white;
-                    GUI.DrawTexture(cell, formalFiregroundFrames[environmentFrame], ScaleMode.StretchToFill, true);
-                }
-                else if (tile.SmokeExpiresAt > state.CurrentTime)
-                {
-                    GUI.color = Color.white;
-                    GUI.DrawTexture(cell, formalSmokeFrames[environmentFrame], ScaleMode.StretchToFill, true);
-                }
-
-                // Both core tactical ranges stay visible during the hero turn.
-                if (IsInMoveRange(p))
-                {
-                    GUI.color = new Color(1f, 1f, 1f, selectedAction == "\u79fb\u52a8" ? 1f : .45f);
-                    GUI.DrawTexture(cell, formalOverlayTextures["move_range"], ScaleMode.StretchToFill, true);
-                }
-                if (IsInAttackRange(p))
-                {
-                    GUI.color = new Color(1f, 1f, 1f, selectedAction == "\u653b\u51fb" ? 1f : .65f);
-                    GUI.DrawTexture(cell, formalOverlayTextures["attack_range"], ScaleMode.StretchToFill, true);
-                }
-                int selectedFireSlot = selectedAction == "\u6280\u80fd1" ? 0 : selectedAction == "\u6280\u80fd2" ? 1 : -1;
-                FireSpellDefinition selectedFireSpell = selectedFireSlot < 0 ? null : FireSpellInSlot(selectedFireSlot);
-                FireSpellPreview fireCellPreview = selectedFireSpell == null ? null : BuildFireSpellPreviewAt(selectedFireSpell, p);
-                if (fireCellPreview?.CanCommit == true)
-                {
-                    GUI.color = Color.white;
-                    GUI.DrawTexture(cell, formalOverlayTextures[fireCellPreview.FriendlyFireRisk ? "high_risk" : "attack_range"], ScaleMode.StretchToFill, true);
-                }
-
-                GUI.color = Color.white;
-                UnitState unit = state.Units.Values.FirstOrDefault(u => u.IsAlive && u.Position == p);
-                if (unit != null)
-                {
-                    if (!unit.IsHero && cell.Contains(e.mousePosition)) hoveredEnemy = unit;
-                    if (unit.Id == selectedTargetId) GUI.DrawTexture(cell, formalOverlayTextures["selected"], ScaleMode.StretchToFill, true);
-                    Texture2D unitTexture = FormalUnitTexture(unit);
-                    if (unitTexture != null)
-                    {
-                        GUI.color = visualFeedback != null ? visualFeedback.UnitPresentationTint(unit) : Color.white;
-                        Rect unitRect = StaticUnitPresentationRect(unit, new Rect(cell.x + 4, cell.y + 4, cell.width - 8, cell.height - 8));
-                        Vector2 motionOffset = visualFeedback != null ? visualFeedback.UnitPresentationOffset(unit) : Vector2.zero;
-                        unitRect.x += motionOffset.x + (visualFeedback != null ? visualFeedback.UnitShakeOffset(unit) : 0f);
-                        unitRect.y += motionOffset.y;
-                        GUI.DrawTexture(unitRect, unitTexture, ScaleMode.ScaleToFit, true);
-                    }
-                    else
-                    {
-                        GUI.color = unit.IsHero ? new Color(.25f, .72f, 1f) : new Color(1f, .35f, .3f);
-                        GUI.Box(new Rect(cell.x + 7, cell.y + 11, cell.width - 14, cell.height - 14), FacingGlyph(unit.Facing));
-                    }
-                    GUI.color = Color.white;
-                    DrawUnitBars(unit, new Rect(cell.x + 5, cell.y + 3, cell.width - 10, 5));
-                    bool revealIntent = !unit.IsHero && (unit.Id == selectedTargetId || unit.Id == state.ActiveUnitId || cell.Contains(e.mousePosition));
-                    if (revealIntent) GUI.Label(new Rect(cell.x - 14, cell.y - 15, cell.width + 28, 16), GetEnemyIntent(unit));
-                    DrawStatusMarkers(unit, cell);
-                }
-                if (tile.IsObjective)
-                {
-                    string relayState = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
-                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[relayState], ScaleMode.ScaleToFit, true);
-                    if (!tile.IsDestroyed) GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "导能柱");
-                }
-                else if (tile.Cover == CoverType.Light)
-                {
-                    string coverState = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
-                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[coverState], ScaleMode.ScaleToFit, true);
-                }
-                else if (tile.Cover == CoverType.Heavy)
-                {
-                    string coverState = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
-                    GUI.DrawTexture(new Rect(cell.x + 6, cell.y + 6, cell.width - 12, cell.height - 12), formalRelayTextures[coverState], ScaleMode.ScaleToFit, true);
-                }
-                else if (trainingRangeActive && tile.IsDevice)
-                {
-                    GUI.DrawTexture(new Rect(cell.x + 8, cell.y + 8, cell.width - 16, cell.height - 16), formalRelayTextures[tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact"], ScaleMode.ScaleToFit, true);
-                    GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "设备");
-                }
-                if (trainingRangeActive && tile.IsWater)
-                {
-                    GUI.color = new Color(.38f, .82f, .94f, .92f);
-                    GUI.Label(new Rect(cell.x + 2, cell.y + 18, cell.width, 20), "水面"); GUI.color = Color.white;
-                }
-                if (state.Loot != null && state.Loot.Position == p)
-                {
-                    GUI.color = Color.white;
-                    Texture2D lootTexture = state.Loot.IsLooted ? formalRelayTextures["loot_crate_empty"] : formalLootTexture;
-                    if (lootTexture != null)
-                        GUI.DrawTexture(new Rect(cell.x + 12, cell.y + 12, cell.width - 24, cell.height - 24), lootTexture, ScaleMode.ScaleToFit, true);
-                    else
-                    {
-                        GUI.color = new Color(1f, .78f, .18f);
-                        GUI.Box(new Rect(cell.x + 15, cell.y + 16, cell.width - 30, cell.height - 30), "\u7269");
-                    }
-                    GUI.color = Color.white;
-                }
-            }
-            if (hoveredEnemy != null) DrawEnemyHoverCard(hoveredEnemy, e.mousePosition);
-            if (e.type == EventType.MouseDown && battlefield.TryResolveCell(new BattlefieldRect(board.x, board.y, board.width, board.height), state.Map.Width, state.Map.Height, e.mousePosition.x, e.mousePosition.y, out GridPosition clicked))
-            {
-                if (e.button == 1) { HandleInspectionClick(clicked); e.Use(); }
-                else if (e.button == 0) { HandleCellClick(clicked); e.Use(); }
-            }
+            UnitState hero = state?.GetUnit("hero");
+            if (hero == null) return;
+            if (battlefieldViewport == null) battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
+            battlefieldViewport.Focus(hero.Position);
         }
 
-        public static Rect EnemyHoverCardRect(Vector2 pointer)
+        private void FollowHeroAtSafeEdge()
         {
-            const float width = 456f, height = 218f, margin = 16f, battlefieldRight = 1440f, commandsTop = 900f;
-            float x = pointer.x + 20f;
-            if (x + width > battlefieldRight - margin) x = pointer.x - width - 20f;
-            x = Mathf.Clamp(x, margin, battlefieldRight - margin - width);
-            float y = Mathf.Clamp(pointer.y + 20f, 64f, commandsTop - margin - height);
-            return new Rect(x, y, width, height);
+            UnitState hero = state?.GetUnit("hero");
+            if (hero != null && battlefieldViewport != null && battlefieldViewport.IsNearSafeEdge(hero.Position))
+                battlefieldViewport.Focus(hero.Position);
         }
 
-        private void DrawEnemyHoverCard(UnitState enemy, Vector2 pointer)
+        public CombatTargetDamageForecast TargetDamageForecast(UnitState enemy)
         {
-            string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, EnemyIntent(enemy));
-            if (string.IsNullOrEmpty(details)) return;
-            Rect card = EnemyHoverCardRect(pointer);
-            GUI.color = new Color(.025f, .045f, .052f, .98f);
-            GUI.Box(card, string.Empty);
-            DrawOutline(card, new Color(FormalUiTheme.Cyan.r, FormalUiTheme.Cyan.g, FormalUiTheme.Cyan.b, .9f));
-            GUIStyle titleStyle = new GUIStyle(GUI.skin.label) { fontSize = 17, fontStyle = FontStyle.Bold, wordWrap = false };
-            GUIStyle bodyStyle = new GUIStyle(GUI.skin.label) { fontSize = 14, wordWrap = true, alignment = TextAnchor.UpperLeft };
-            GUI.color = FormalUiTheme.Amber;
-            GUI.Label(new Rect(card.x + 16f, card.y + 10f, card.width - 32f, 26f), enemy.DisplayName + " // 敌情悬浮", titleStyle);
-            GUI.color = FormalUiTheme.Text;
-            GUI.Label(new Rect(card.x + 16f, card.y + 40f, card.width - 32f, card.height - 50f), details, bodyStyle);
-            GUI.color = Color.white;
+            if (enemy == null || enemy.IsHero || !enemy.IsAlive || state == null || state.ActiveUnitId != "hero") return null;
+            try
+            {
+                if (selectedAction == "攻击")
+                {
+                    if (!string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selectedAction, enemy.Position))) return null;
+                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+                    return CombatTargetDamageForecaster.WeaponAttack(fireBattle, "hero", enemy.Id);
+                }
+
+                int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+                if (slot < 0) return null;
+                FireSpellDefinition fireSpell = FireSpellInSlot(slot);
+                if (fireSpell != null)
+                {
+                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+                    Facing facing = FacingToward(state.GetUnit("hero").Position, enemy.Position);
+                    FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, facing);
+                    FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", fireSpell, target);
+                    bool canDamage = fireSpell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage ||
+                        rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.Push);
+                    return preview.CanCommit && canDamage
+                        ? CombatTargetDamageForecaster.FireSpell(fireBattle, "hero", fireSpell, target, enemy.Id)
+                        : null;
+                }
+
+                ArtifactDefinition artifact = CurrentArmedInventoryItem != null &&
+                    ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
+                    ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId)
+                    : CurrentTrainingRangeArtifact;
+                if (slot == 0 && artifact != null) return null;
+
+                SkillDefinition skill = slot == 0 ? state.GetUnit("hero").SkillOne : state.GetUnit("hero").SkillTwo;
+                if (skill == null || skill.Damage <= 0 ||
+                    !string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selectedAction, enemy.Position))) return null;
+                return CombatTargetDamageForecaster.Skill(state,
+                    CombatCommand.UseSkill("hero", slot, enemy.Id), enemy.Id);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
 
         private void HandleInspectionClick(GridPosition position)
         {
+            targetNavigation.End();
             string nextTargetId = CombatInformationPresenter.EnemyInspectionTargetAt(state, position);
             if (selectedTargetId == nextTargetId) return;
             selectedTargetId = nextTargetId;
@@ -1211,16 +1324,6 @@ namespace OCC.Combat.Presentation
             if (!string.IsNullOrEmpty(nextTargetId)) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatTargetConfirmed, nextTargetId));
         }
 
-        private static void DrawOutline(Rect rect, Color color)
-        {
-            GUI.color = color;
-            GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, rect.width - 2, 3), Texture2D.whiteTexture);
-            GUI.DrawTexture(new Rect(rect.x + 1, rect.yMax - 4, rect.width - 2, 3), Texture2D.whiteTexture);
-            GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, 3, rect.height - 2), Texture2D.whiteTexture);
-            GUI.DrawTexture(new Rect(rect.xMax - 4, rect.y + 1, 3, rect.height - 2), Texture2D.whiteTexture);
-            GUI.color = Color.white;
-        }
-        private void DrawPanel(Rect rect) { GUI.Box(rect, "\u6218\u6597\u63a7\u5236\u53f0"); UnitState active = state.GetUnit(state.ActiveUnitId); UnitState hero = state.GetUnit("hero"); GUI.Label(new Rect(rect.x + 14, rect.y + 34, 280, 22), $"\u884c\u52a8\u5355\u4f4d：{active.DisplayName} | AP {active.ActionPoints}"); GUI.Label(new Rect(rect.x + 14, rect.y + 60, 280, 20), $"\u4e3b\u89d2\u8d44\u6e90：{hero.Health}/{hero.MaxHealth} HP  {hero.Shield} \u62a4\u76fe  {hero.Mana}/{hero.MaxMana} \u4ee5\u592a"); GUI.Label(new Rect(rect.x + 14, rect.y + 82, 280, 20), GetRangeDescription()); string[] actions = { "\u79fb\u52a8", "\u653b\u51fb", "\u65bd\u672f", "\u9053\u5177", "\u4e92\u52a8" }; for (int i = 0; i < actions.Length; i++) if (GUI.Toggle(new Rect(rect.x + 14 + (i % 2) * 136, rect.y + 108 + (i / 2) * 34, 128, 28), selectedAction == actions[i], actions[i], "Button")) selectedAction = actions[i]; if (GUI.Button(new Rect(rect.x + 14, rect.y + 216, 128, 30), "\u7ed3\u675f\u884c\u52a8")) TryCommand(CombatCommand.EndTurn("hero")); if (GUI.Button(new Rect(rect.x + 150, rect.y + 216, 128, 30), "\u6218\u672f\u91cd\u5f00")) { state = snapshot.Clone(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); } GUI.Label(new Rect(rect.x + 14, rect.y + 256, 280, 20), "\u884c\u52a8\u6761\uff1a\u6570\u503c\u8d8a\u4f4e\u8d8a\u5148\u884c\u52a8"); int row = 0; foreach (UnitState unit in state.Units.Values) { GUI.Label(new Rect(rect.x + 14, rect.y + 280 + row * 27, 125, 20), $"{unit.DisplayName} HP{unit.Health} \u62a4{unit.Shield}"); GUI.HorizontalScrollbar(new Rect(rect.x + 142, rect.y + 284 + row * 27, 130, 16), Math.Min(100, unit.InitiativeTime) / 100f, .12f, 0f, 1f); row++; } GUI.Label(new Rect(rect.x + 14, rect.y + 410, 280, 20), "\u654c\u4eba\u610f\u56fe\u548c\u6218\u6597\u8bb0\u5f55"); for (int i = 0; i < Math.Min(6, state.EventLog.Count); i++) GUI.Label(new Rect(rect.x + 14, rect.y + 434 + i * 18, 280, 18), state.EventLog[i]); }
         private void ApplyBuild(int build)
         {
             UnitState hero = state.GetUnit("hero");
@@ -1228,43 +1331,9 @@ namespace OCC.Combat.Presentation
             state.AddLog($"\u5de5\u574a\u5df2\u5207\u6362\u4e3a{hero.MainHand.DisplayName}\u6784\u7b51\u3002");
         }
 
-        private static string GetStatusText(UnitState unit)
-        {
-            if (unit.Statuses.Count == 0) return "\u65e0";
-            return string.Join(" ", unit.Statuses.Select(entry => $"{StatusName(entry.Key)}{entry.Value}"));
-        }
-
-        private static string StatusName(StatusType status) => CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(status)).ShortLabel;
-
-        private void DrawStatusMarkers(UnitState unit, Rect cell)
-        {
-            int index = 0;
-            foreach (KeyValuePair<StatusType, int> status in unit.Statuses)
-            {
-                GUI.color = Color.white;
-                GUI.DrawTexture(new Rect(cell.x + 4 + index * 15, cell.yMax - 17, 14, 14), formalStatusTextures[status.Key], ScaleMode.ScaleToFit, true);
-                index++;
-            }
-            GUI.color = Color.white;
-        }
-
-        private static Color StatusColor(StatusType status)
-        {
-            CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(status));
-            return ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color color) ? color : Color.white;
-        }
-
-        private string GetRangeDescriptionStageTwo()
-        {
-            int count = 0;
-            for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++;
-            UnitState hero = state.GetUnit("hero");
-            string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8 3 \u683c" : selectedAction == "\u653b\u51fb" ? $"{hero.MainHand.DisplayName} {hero.MainHand.Range} \u683c" : selectedAction == "\u6280\u80fd1" ? $"{hero.SkillOne.DisplayName} {hero.SkillOne.Range} \u683c" : selectedAction == "\u6280\u80fd2" ? $"{hero.SkillTwo.DisplayName} {hero.SkillTwo.Range} \u683c" : selectedAction == "\u641c\u522e" ? "\u641c\u522e\uff1a\u76f8\u90bb 1 \u683c" : "\u4ea4\u4e92\uff1a\u76f8\u90bb 1 \u683c";
-            return $"\u5f53\u524d\uff1a{rule} | \u9ad8\u4eae {count} \u683c";
-        }
-
         private void HandleCellClick(GridPosition p)
         {
+            targetNavigation.End();
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
             int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
@@ -1323,12 +1392,10 @@ namespace OCC.Combat.Presentation
                 PersistCombatInventory();
             }
             else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
-            state.AddLog(artifact.DisplayName + " // " + execution.Steps.Count + " 项确定性结果");
+            state.AddLog(artifact.DisplayName + "：产生 " + execution.Steps.Count + " 项结果");
             selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, artifact.Id));
             visualFeedback?.NotifyArtifact(artifact, source, preview.Cells, execution);
-            if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0)
-                PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
             developerFlow.RefreshOutcome();
         }
         private void TryFireSpellCell(FireSpellDefinition spell, UnitState clickedUnit, GridPosition position)
@@ -1359,11 +1426,10 @@ namespace OCC.Combat.Presentation
                 string usedId = armedInventoryItemId; state.ConsumeInventoryItem(usedId); if (state.ItemInventory.Get(usedId) == null) armedInventoryItemId = null; PersistCombatInventory();
             }
             if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
-            state.AddLog(spell.DisplayName + " // " + execution.Steps.Count + " 项确定性结果");
+            state.AddLog(spell.DisplayName + "：产生 " + execution.Steps.Count + " 项结果");
             selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, spell.Id));
             visualFeedback?.NotifyFireSpell(spell, source, preview.Cells);
-            if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0) PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
             developerFlow.RefreshOutcome();
         }
 
@@ -1381,8 +1447,15 @@ namespace OCC.Combat.Presentation
             else if (clickedUnit != null)
                 TryCommand(CombatCommand.UseSkill("hero", slot, clickedUnit.Id));
         }
-        private void TryCommand(CombatCommand command)
+        private void TryCommand(CombatCommand command, bool explicitHeroEndTurn = false)
         {
+            if (!CanSubmitTurnCommand(command, explicitHeroEndTurn))
+            {
+                const string reason = "玩家回合只能通过明确的结束行动操作推进。";
+                state.AddLog(reason);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, command.Type.ToString(), message: reason));
+                return;
+            }
             try
             {
                 UnitState commandUnit = state.GetUnit(command.UnitId);
@@ -1414,6 +1487,7 @@ namespace OCC.Combat.Presentation
                     PublishFireExecutions(FireSpellEngine.TriggerMarkedTargetMove(fireBattle, commandUnit.Id, movementSource));
                     PublishFireExecutions(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
                 }
+                if (command.Type == CombatCommandType.Move && command.UnitId == "hero") FollowHeroAtSafeEdge();
                 selectedTargetId = null;
                 enemyPlans.Invalidate();
                 MarkPresentation(UiPresentationArea.Combat);
@@ -1421,8 +1495,6 @@ namespace OCC.Combat.Presentation
                 PublishCombatEffects(execution);
                 PublishFireExecutions(fireTriggers);
                 visualFeedback?.NotifySkillDelivery(deliveredSkill, deliverySource, deliveryTarget);
-                if (!trainingRangeActive && state.ActiveUnitId == "hero" && state.GetUnit("hero").ActionPoints == 0)
-                    PublishCombatEffects(CombatResolver.EndTurn(state, state.GetUnit("hero")));
                 developerFlow.RefreshOutcome();
             }
             catch (InvalidOperationException error)
@@ -1443,7 +1515,7 @@ namespace OCC.Combat.Presentation
                 UnitState stepTarget = string.IsNullOrEmpty(firstStep.TargetId) ? null : state.GetUnit(firstStep.TargetId);
                 if (spell != null) visualFeedback?.NotifyFireSpell(spell,
                     stepTarget?.Position ?? execution.Preview.Cells.FirstOrDefault(), execution.Preview.Cells);
-                state.AddLog((spell?.DisplayName ?? "火术触发") + " // " + execution.Steps.Count + " 项触发结果");
+                state.AddLog((spell?.DisplayName ?? "火术触发") + "：产生 " + execution.Steps.Count + " 项结果");
             }
         }
         private void PublishCombatEffects(CombatEffectExecution execution)
@@ -1477,11 +1549,9 @@ namespace OCC.Combat.Presentation
                     visualFeedback.NotifyDestructible(result.PositionAfter, state.Map.GetTile(result.PositionAfter));
             }
         }
-        private void DrawUnitBars(UnitState unit, Rect rect) { GUI.color = Color.black; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = unit.IsHero ? new Color(.2f, .85f, .45f) : new Color(.9f, .22f, .22f); GUI.DrawTexture(new Rect(rect.x + 1, rect.y + 1, (rect.width - 2) * unit.Health / unit.MaxHealth, rect.height - 2), Texture2D.whiteTexture); GUI.color = Color.white; }
-        private string GetEnemyIntent(UnitState enemy)
-        {
-            return EnemyIntent(enemy)?.CompactText ?? "无可用意图";
-        }
+        public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
+            command.Type != CombatCommandType.EndTurn || command.UnitId != "hero" || explicitHeroEndTurn;
+
         private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selectedAction == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selectedAction == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selectedAction == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)
         {
@@ -1500,6 +1570,5 @@ namespace OCC.Combat.Presentation
         private static int Distance(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.Distance(a, b);
         private static GridPosition StepToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.StepToward(a, b);
         private static Facing FacingToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.FacingToward(a, b);
-        private static string FacingGlyph(Facing facing) => facing == Facing.North ? "^" : facing == Facing.South ? "v" : facing == Facing.East ? ">" : "<";
     }
 }

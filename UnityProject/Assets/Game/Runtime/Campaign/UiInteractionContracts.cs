@@ -123,6 +123,36 @@ namespace OCC.Combat
         }
     }
 
+    public readonly struct MapSaveUiPresentation
+    {
+        public bool CanContinue { get; }
+        public string ContinueDetail { get; }
+        public string ReturnDetail { get; }
+        public string ReplacementMessage { get; }
+
+        private MapSaveUiPresentation(bool canContinue, string continueDetail, string returnDetail, string replacementMessage)
+        {
+            CanContinue = canContinue;
+            ContinueDetail = continueDetail;
+            ReturnDetail = returnDetail;
+            ReplacementMessage = replacementMessage;
+        }
+
+        public static MapSaveUiPresentation From(bool hasSave, RogueliteSaveLoadStatus loadStatus, bool lastWriteSucceeded)
+        {
+            bool protectedSlot = loadStatus == RogueliteSaveLoadStatus.CorruptData || loadStatus == RogueliteSaveLoadStatus.InvalidSemantics;
+            bool storeUnavailable = loadStatus == RogueliteSaveLoadStatus.StoreError;
+            string continueDetail = !hasSave ? "暂无存档" :
+                protectedSlot ? "存档已保护 · 需新开覆盖" :
+                storeUnavailable ? "存储不可用 · 可重试" : "最近存档";
+            string replacementMessage = protectedSlot
+                ? "当前地图存档无法读取且已受写入保护。确认后会清除主槽保护并创建新推进；首份损坏备份仍会保留。"
+                : "新开推进会替换当前肉鸽地图存档。已完成的本局进度无法从该槽位恢复。";
+            return new MapSaveUiPresentation(hasSave && !protectedSlot, continueDetail,
+                lastWriteSucceeded ? "确认保存后返回" : "保存失败 · 留在当前页", replacementMessage);
+        }
+    }
+
     public readonly struct UiMotionProfile
     {
         public float Intensity { get; }

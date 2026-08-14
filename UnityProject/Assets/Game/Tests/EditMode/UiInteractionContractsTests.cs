@@ -77,5 +77,23 @@ namespace OCC.Combat.Tests
             Assert.Throws<ArgumentException>(() => new UiConfirmationRequest(UiConfirmationKind.TacticalRestart, "", "重开", "确认"));
             Assert.Throws<ArgumentException>(() => new UiActionFeedback(UiFeedbackKind.Rejected, ""));
         }
+
+        [Test]
+        public void MapSavePresentationDistinguishesMissingReadyProtectedAndFailedWrite()
+        {
+            MapSaveUiPresentation missing = MapSaveUiPresentation.From(false, RogueliteSaveLoadStatus.Missing, true);
+            MapSaveUiPresentation ready = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.Success, true);
+            MapSaveUiPresentation corrupt = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.CorruptData, true);
+            MapSaveUiPresentation failedWrite = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.Success, false);
+
+            Assert.That(missing.CanContinue, Is.False);
+            Assert.That(missing.ContinueDetail, Is.EqualTo("暂无存档"));
+            Assert.That(ready.CanContinue, Is.True);
+            Assert.That(ready.ContinueDetail, Is.EqualTo("最近存档"));
+            Assert.That(corrupt.CanContinue, Is.False);
+            StringAssert.Contains("已保护", corrupt.ContinueDetail);
+            StringAssert.Contains("损坏备份仍会保留", corrupt.ReplacementMessage);
+            StringAssert.Contains("保存失败", failedWrite.ReturnDetail);
+        }
     }
 }

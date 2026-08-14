@@ -8,7 +8,7 @@ namespace OCC.Combat.Presentation
 {
     public sealed class FormalUiInteractionLayer : MonoBehaviour
     {
-        private CombatPrototypeBootstrap bootstrap;
+        private IInteractionPresentationHost bootstrap;
         private Canvas canvas;
         private GameObject modalRoot;
         private GameObject toastRoot;
@@ -19,7 +19,7 @@ namespace OCC.Combat.Presentation
 
         public bool IsConfirmationOpen => modalRoot != null;
 
-        public void Initialize(CombatPrototypeBootstrap source)
+        public void Initialize(IInteractionPresentationHost source)
         {
             bootstrap = source;
             bootstrap.UiVisualEvents.Published += OnVisualEvent;
@@ -77,20 +77,20 @@ namespace OCC.Combat.Presentation
             confirmAction = onConfirm;
             submitting = false;
 
-            modalRoot = Panel("正式确认层", canvas.transform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(.006f, .010f, .014f, .76f));
+            modalRoot = Panel("正式确认层", canvas.transform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormalUiTheme.Overlay);
             RectTransform modalRect = modalRoot.GetComponent<RectTransform>();
             modalRect.offsetMin = modalRect.offsetMax = Vector2.zero;
-            GameObject card = FormalUiKit.LayoutPanel("确认卡", modalRoot.transform, "modal.confirm", new Color(.035f, .048f, .058f, .99f));
+            GameObject card = FormalUiKit.LayoutPanel("确认卡", modalRoot.transform, "modal.confirm", FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
             FormalUiKit.ApplySkin(card.GetComponent<Image>(), "danger", Color.white);
-            Label(card.transform, "确认类型", ConfirmationKindLabel(request.Kind), new Vector2(42, -34), new Vector2(636, 24), 15, new Color(.98f, .72f, .28f), TextAnchor.MiddleLeft);
-            Label(card.transform, "确认标题", request.Title, new Vector2(42, -70), new Vector2(636, 54), 31, new Color(.92f, .95f, .96f), TextAnchor.MiddleLeft);
-            Label(card.transform, "确认说明", request.Message, new Vector2(42, -138), new Vector2(636, 82), 19, new Color(.66f, .72f, .75f), TextAnchor.UpperLeft);
-            Button cancel = Button(card.transform, "取消", new Vector2(42, -264), new Vector2(292, 64), request.CancelLabel, new Color(.07f, .10f, .11f, 1f));
-            Button confirm = Button(card.transform, "确认", new Vector2(386, -264), new Vector2(292, 64), request.ConfirmLabel, new Color(.24f, .10f, .075f, 1f));
+            Label(card.transform, "确认类型", ConfirmationKindLabel(request.Kind), new Vector2(42, -34), new Vector2(636, 24), FormalUiTheme.CaptionFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            Label(card.transform, "确认标题", request.Title, new Vector2(42, -70), new Vector2(636, 54), FormalUiTheme.TitleFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            Label(card.transform, "确认说明", request.Message, new Vector2(42, -138), new Vector2(636, 82), 19, FormalUiTheme.Muted, TextAnchor.UpperLeft);
+            Button cancel = Button(card.transform, "取消", new Vector2(42, -264), new Vector2(292, 64), request.CancelLabel, FormalUiTheme.Interactive);
+            Button confirm = Button(card.transform, "确认", new Vector2(386, -264), new Vector2(292, 64), request.ConfirmLabel, Color.Lerp(FormalUiTheme.Interactive, FormalUiTheme.Danger, .18f));
             cancel.onClick.AddListener(CancelConfirmation);
             confirm.onClick.AddListener(Confirm);
-            ConfigureButton(cancel, new Color(.07f, .10f, .11f, 1f), new Color(.10f, .17f, .18f, 1f), new Color(.05f, .075f, .08f, 1f));
-            ConfigureButton(confirm, new Color(.24f, .10f, .075f, 1f), new Color(.34f, .14f, .09f, 1f), new Color(.16f, .07f, .055f, 1f));
+            ConfigureButton(cancel, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral));
+            ConfigureButton(confirm, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Dangerous));
             AnimateModal(card, modalRoot.GetComponent<Image>());
             RuntimeUiEventSystem.Select(cancel.gameObject);
         }
@@ -104,16 +104,16 @@ namespace OCC.Combat.Presentation
                 DOTween.Kill(toastRoot);
                 Destroy(toastRoot);
             }
-            Color accent = feedback.Kind == UiFeedbackKind.Rejected ? new Color(.82f, .34f, .28f) :
-                feedback.Kind == UiFeedbackKind.Success || feedback.Kind == UiFeedbackKind.Saved ? new Color(.32f, .72f, .60f) : new Color(.30f, .78f, .88f);
+            Color accent = feedback.Kind == UiFeedbackKind.Rejected ? FormalUiTheme.Danger :
+                feedback.Kind == UiFeedbackKind.Success || feedback.Kind == UiFeedbackKind.Saved ? FormalUiTheme.Safe : FormalUiTheme.Cyan;
             toastLayoutId = CurrentToastLayout();
-            toastRoot = FormalUiKit.LayoutPanel("短时提示条", canvas.transform, toastLayoutId, new Color(.03f, .045f, .054f, .98f));
+            toastRoot = FormalUiKit.LayoutPanel("短时提示条", canvas.transform, toastLayoutId, FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .98f));
             GameObject shownToast = toastRoot;
             Image image = toastRoot.GetComponent<Image>();
             GameObject edge = Panel("提示边线", toastRoot.transform, new Vector2(0, 0), new Vector2(0, 1), Vector2.zero, new Vector2(4, 0), accent);
             edge.GetComponent<RectTransform>().offsetMin = edge.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             float textWidth = toastRoot.GetComponent<RectTransform>().sizeDelta.x - 70f;
-            Label(toastRoot.transform, "提示文字", feedback.Message, new Vector2(58, -6), new Vector2(textWidth, 46), 18, new Color(.92f, .95f, .96f), TextAnchor.MiddleLeft);
+            Label(toastRoot.transform, "提示文字", feedback.Message, new Vector2(58, -6), new Vector2(textWidth, 46), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             UiMotionProfile motion = Motion();
             string feedbackId = feedback.Kind == UiFeedbackKind.Rejected ? "rejected" :
                 feedback.Kind == UiFeedbackKind.Success || feedback.Kind == UiFeedbackKind.Saved ? "success" : "click";
@@ -198,13 +198,13 @@ namespace OCC.Combat.Presentation
             CanvasGroup group = card.AddComponent<CanvasGroup>();
             if (motion.IsImmediate)
             {
-                veil.color = new Color(veil.color.r, veil.color.g, veil.color.b, .76f);
+                veil.color = FormalUiTheme.WithAlpha(veil.color, .76f);
                 group.alpha = 1f;
                 rect.localScale = Vector3.one;
                 return;
             }
             Color veilTarget = veil.color;
-            veil.color = new Color(veilTarget.r, veilTarget.g, veilTarget.b, 0f);
+            veil.color = FormalUiTheme.WithAlpha(veilTarget, 0f);
             group.alpha = 0f;
             rect.localScale = Vector3.one * (1f - motion.ModalScaleOffset);
             DOTween.Sequence().SetUpdate(true).SetTarget(modalRoot)
@@ -226,9 +226,9 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void ConfigureButton(Button button, Color normal, Color hover, Color pressed)
+        private void ConfigureButton(Button button, FormalUiButtonPalette palette)
         {
-            FormalUiKit.ConfigureButtonFeedback(button, new FormalUiButtonPalette(normal, hover, pressed, hover, FormalUiTheme.Disabled), Motion, ShowFeedback);
+            FormalUiKit.ConfigureButtonFeedback(button, palette, Motion, ShowFeedback);
         }
 
         private void EnsureCanvas()
@@ -250,7 +250,7 @@ namespace OCC.Combat.Presentation
         private static Button Button(Transform parent, string name, Vector2 position, Vector2 size, string title, Color color)
         {
             Button button = FormalUiKit.Button(name, title, parent, position, size, color, 18);
-            button.GetComponentInChildren<Text>().color = new Color(.92f, .95f, .96f);
+            button.GetComponentInChildren<Text>().color = FormalUiTheme.Text;
             return button;
         }
 

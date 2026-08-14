@@ -35,6 +35,37 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MapVisualSemantics_DoNotDependOnColorAndUseStableNodeFocusKeys()
+        {
+            Assert.That(RogueliteMapVisualPresentation.FocusKey("rail_patrol"), Is.EqualTo("map.node.rail_patrol"));
+            RogueliteMapNodeVisualState[] states = (RogueliteMapNodeVisualState[])System.Enum.GetValues(typeof(RogueliteMapNodeVisualState));
+            Assert.That(states.Select(RogueliteMapVisualPresentation.StateLabel).Distinct().Count(), Is.EqualTo(states.Length));
+            Assert.That(states.Select(RogueliteMapVisualPresentation.StateGlyph).Distinct().Count(), Is.EqualTo(states.Length));
+        }
+
+        [Test]
+        public void MapRouteSemantics_DistinguishAvailableSafeLockedAndUnknownConnections()
+        {
+            Assert.That(RogueliteMapVisualPresentation.RouteState(RogueliteMapNodeVisualState.Current, RogueliteMapNodeVisualState.Available), Is.EqualTo(RogueliteMapRouteVisualState.Available));
+            Assert.That(RogueliteMapVisualPresentation.RouteState(RogueliteMapNodeVisualState.Current, RogueliteMapNodeVisualState.Cleared), Is.EqualTo(RogueliteMapRouteVisualState.Safe));
+            Assert.That(RogueliteMapVisualPresentation.RouteState(RogueliteMapNodeVisualState.Current, RogueliteMapNodeVisualState.Locked), Is.EqualTo(RogueliteMapRouteVisualState.Locked));
+            Assert.That(RogueliteMapVisualPresentation.RouteState(RogueliteMapNodeVisualState.Known, RogueliteMapNodeVisualState.Unknown), Is.EqualTo(RogueliteMapRouteVisualState.Unknown));
+        }
+
+        [Test]
+        public void MapDetail_ExposesRestrictionAndKnownConnectionsWithoutChangingTravelRules()
+        {
+            var run = new RogueliteMapRun(123);
+            RogueliteMapNode available = RogueliteMapCatalog.Node("rail_patrol");
+            RogueliteMapNode unknown = RogueliteMapCatalog.Node("core_finale");
+
+            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, available), Is.EqualTo("路径可用"));
+            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, available), Does.Contain("连接："));
+            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, unknown), Is.EqualTo("尚未侦测"));
+            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, unknown), Is.EqualTo("连接信息尚未公开"));
+        }
+
+        [Test]
         public void SettlementModel_ChangesWhenRewardStateOpens()
         {
             var run = new RogueliteMapRun(321);
@@ -47,6 +78,55 @@ namespace OCC.Combat.Tests
             Assert.That(before.Visible, Is.False);
             Assert.That(after.Visible, Is.True);
             Assert.That(after.RewardKey, Is.Not.Empty);
+        }
+
+        [Test]
+        public void EconomyChoice_ExplainsCurrencyFailureBeforeSubmission()
+        {
+            var run = new RogueliteMapRun(123);
+            var shopChoice = new RogueliteNodeContentChoice("ui-cost-preview", "成本预览", "不执行", RogueliteNodeContentEffect.Supplies, partsCost: 9);
+
+            UiOperationAvailability availability = RogueliteEconomyPresentation.ForNodeChoice(run, shopChoice);
+
+            Assert.That(availability.CanExecute, Is.False);
+            Assert.That(availability.Status, Is.EqualTo("零件不足"));
+            Assert.That(availability.Reason, Does.Contain("当前 4"));
+        }
+
+        [Test]
+        public void EconomyReward_ExplainsBackpackCapacityBeforeClaiming()
+        {
+            var run = new RogueliteMapRun(124);
+            run.SelectNode("rail_patrol");
+            run.CompleteCurrentCombat();
+            RogueliteReward itemReward = run.CurrentRewards.Single(reward => reward.Kind == RogueliteRewardKind.Item);
+            for (int index = 0; ; index++)
+            {
+                InventoryResult result = run.Inventory.AddFirstFit(new ItemInstance("fill-" + index, "medkit", 1000 + index));
+                if (!result.Success) break;
+            }
+
+            UiOperationAvailability availability = RogueliteEconomyPresentation.ForReward(run, itemReward);
+
+            Assert.That(availability.CanExecute, Is.False);
+            Assert.That(availability.Status, Is.EqualTo("背包空间不足"));
+            Assert.That(RogueliteEconomyPresentation.RewardComparison(run, itemReward), Is.EqualTo("背包：空间不足"));
+        }
+
+        [Test]
+        public void EconomyWorkshop_BlocksIncompatibleWeaponAndExplainsRequiredRecovery()
+        {
+            var run = new RogueliteMapRun(8404, FireRogueliteStarterCatalog.Melee);
+            run.SelectNode("supply_checkpoint");
+            run.SelectNode("field_workshop");
+            run.ChooseCurrentNodeContent("wand_calibration");
+            RogueliteReward wand = RogueliteMapCatalog.Rewards.Single(reward => reward.Id == "arcane_wand");
+
+            UiOperationAvailability availability = RogueliteEconomyPresentation.ForEquipment(run, wand);
+
+            Assert.That(availability.CanExecute, Is.False);
+            Assert.That(availability.Status, Is.EqualTo("术式不兼容"));
+            Assert.That(availability.Reason, Does.Contain("调整"));
         }
 
         [Test]

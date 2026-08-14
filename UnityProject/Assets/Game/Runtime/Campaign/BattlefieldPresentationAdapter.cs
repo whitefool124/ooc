@@ -56,29 +56,40 @@ namespace OCC.Combat
 
     public sealed class BattlefieldPresentationAdapter
     {
-        public const float CellSize = 78f;
+        public const float CellSize = 128f;
+        public const float MinimumCellSize = 64f;
+        public const float MaximumCellSize = 160f;
+        public const float CellSizeStep = 32f;
         public const float BattlefieldWidth = 1440f;
-        public const float BoardTop = 112f;
+        public const float BattlefieldHeight = 900f;
+        public const float BoardTop = 24f;
         public const int DefaultWidth = 12;
         public const int DefaultHeight = 9;
 
+        public BattlefieldRect ViewportRect => new BattlefieldRect(0f, BoardTop, BattlefieldWidth, BattlefieldHeight - BoardTop);
+
+        public BattlefieldViewport CreateViewport(int width = DefaultWidth, int height = DefaultHeight)
+            => new BattlefieldViewport(ViewportRect, width, height, CellSize);
+
         public BattlefieldRect BoardRect(int width = DefaultWidth, int height = DefaultHeight)
         {
-            float left = (BattlefieldWidth - width * CellSize) * .5f;
-            return new BattlefieldRect(left, BoardTop, width * CellSize, height * CellSize);
+            return CreateViewport(width, height).BoardRect;
         }
 
         public BattlefieldRect CellRect(BattlefieldRect board, int mapHeight, GridPosition position)
         {
-            return new BattlefieldRect(board.X + position.X * CellSize, board.Y + (mapHeight - 1 - position.Y) * CellSize, CellSize - 2f, CellSize - 2f);
+            float size = board.Height / Math.Max(1, mapHeight);
+            return new BattlefieldRect(board.X + position.X * size, board.Y + (mapHeight - 1 - position.Y) * size, size, size);
         }
 
         public bool TryResolveCell(BattlefieldRect board, int mapWidth, int mapHeight, float pointX, float pointY, out GridPosition position)
         {
             position = default;
             if (!board.Contains(pointX, pointY)) return false;
-            int x = (int)Math.Floor((pointX - board.X) / CellSize);
-            int visualY = (int)Math.Floor((pointY - board.Y) / CellSize);
+            float cellWidth = board.Width / Math.Max(1, mapWidth);
+            float cellHeight = board.Height / Math.Max(1, mapHeight);
+            int x = (int)Math.Floor((pointX - board.X) / cellWidth);
+            int visualY = (int)Math.Floor((pointY - board.Y) / cellHeight);
             int y = mapHeight - 1 - visualY;
             if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) return false;
             GridPosition candidate = new GridPosition(x, y);
@@ -148,19 +159,19 @@ namespace OCC.Combat
             if (exactTarget != null && action == "攻击")
             {
                 CombatResolver.AttackPreview damage = CombatResolver.PreviewAttack(state, hero.Id, exactTarget.Id, false);
-                before = "生命 " + exactTarget.Health + " // 护盾 " + exactTarget.Shield;
-                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " // 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                before = "生命 " + exactTarget.Health + " · 护盾 " + exactTarget.Shield;
+                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " · 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
                 breakdown = CombatInformationPresenter.DamageBreakdown(damage);
                 affected = 1;
             }
             else if (exactTarget != null && (action == "技能1" || action == "技能2"))
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
-                before = "生命 " + exactTarget.Health + " // 护盾 " + exactTarget.Shield;
+                before = "生命 " + exactTarget.Health + " · 护盾 " + exactTarget.Shield;
                 if (skill != null && skill.Damage > 0)
                 {
                     CombatResolver.AttackPreview damage = CombatResolver.PreviewSkillAttack(state, hero.Id, exactTarget.Id, skill);
-                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " // 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " · 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
                     breakdown = CombatInformationPresenter.DamageBreakdown(damage);
                 }
                 statuses = skill == null ? string.Empty : string.Join("、", skill.Effects.Where(effect => effect.Type == SkillEffectType.ApplyStatus).Select(EffectLabel));
@@ -254,14 +265,14 @@ namespace OCC.Combat
         {
             UnitState target = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
             if (action == "移动") return "移动并朝向目标格；无随机判定";
-            if (action == "攻击") return target == null ? "命中后按护盾→护甲→格挡确定性结算" : DamageSummary(CombatResolver.PreviewAttack(state, hero.Id, target.Id, false));
+            if (action == "攻击") return target == null ? "命中后依次扣除护盾、护甲与格挡" : DamageSummary(CombatResolver.PreviewAttack(state, hero.Id, target.Id, false));
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
                 if (skill == null) return "无效果";
                 string effects = string.Join("、", skill.Effects.Select(EffectLabel));
                 if (target != null && skill.Damage > 0) effects = DamageSummary(CombatResolver.PreviewSkillAttack(state, hero.Id, target.Id, skill)) + (string.IsNullOrEmpty(effects) ? string.Empty : "；" + effects);
-                return string.IsNullOrEmpty(effects) ? "效果将确定性结算" : effects;
+                return string.IsNullOrEmpty(effects) ? "效果将在确认后生效" : effects;
             }
             if (action == "搜刮") return state.Loot == null || state.Loot.IsLooted ? "无战利品" : "获得 " + state.Loot.Item.DisplayName + "；无随机判定";
             if (action == "互动") return "调查或对物件造成 3 点耐久伤害";
@@ -329,5 +340,95 @@ namespace OCC.Combat
         public static int Distance(GridPosition from, GridPosition to) => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
         public static GridPosition StepToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? new GridPosition(from.X + Math.Sign(to.X - from.X), from.Y) : new GridPosition(from.X, from.Y + Math.Sign(to.Y - from.Y));
         public static Facing FacingToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? (to.X >= from.X ? Facing.East : Facing.West) : (to.Y >= from.Y ? Facing.North : Facing.South);
+    }
+
+    /// <summary>Pure presentation state: it never changes gameplay grid coordinates.</summary>
+    public sealed class BattlefieldViewport
+    {
+        private readonly BattlefieldRect viewport;
+        private readonly int mapWidth;
+        private readonly int mapHeight;
+        private float cellSize;
+        private float boardX;
+        private float boardY;
+
+        public BattlefieldViewport(BattlefieldRect viewport, int mapWidth, int mapHeight, float initialCellSize)
+        {
+            this.viewport = viewport;
+            this.mapWidth = Math.Max(1, mapWidth);
+            this.mapHeight = Math.Max(1, mapHeight);
+            cellSize = ClampCellSize(initialCellSize);
+            boardX = viewport.X + (viewport.Width - BoardWidth) * .5f;
+            boardY = viewport.Y + (viewport.Height - BoardHeight) * .5f;
+            ClampToViewport();
+        }
+
+        public float CellSize => cellSize;
+        public BattlefieldRect ViewportRect => viewport;
+        public BattlefieldRect BoardRect => new BattlefieldRect(boardX, boardY, BoardWidth, BoardHeight);
+        private float BoardWidth => mapWidth * cellSize;
+        private float BoardHeight => mapHeight * cellSize;
+
+        public void Pan(float deltaX, float deltaY)
+        {
+            boardX += deltaX;
+            boardY += deltaY;
+            ClampToViewport();
+        }
+
+        public bool ZoomAt(float pointerX, float pointerY, int wheelDirection)
+        {
+            float requested = cellSize + Math.Sign(wheelDirection) * BattlefieldPresentationAdapter.CellSizeStep;
+            float next = ClampCellSize(requested);
+            if (Math.Abs(next - cellSize) < .01f) return false;
+
+            float contentX = (pointerX - boardX) / cellSize;
+            float contentY = (pointerY - boardY) / cellSize;
+            cellSize = next;
+            boardX = pointerX - contentX * cellSize;
+            boardY = pointerY - contentY * cellSize;
+            ClampToViewport();
+            return true;
+        }
+
+        public void Focus(GridPosition position)
+        {
+            boardX = viewport.X + viewport.Width * .5f - (position.X + .5f) * cellSize;
+            boardY = viewport.Y + viewport.Height * .5f - (mapHeight - position.Y - .5f) * cellSize;
+            ClampToViewport();
+        }
+
+        public bool IsNearSafeEdge(GridPosition position, float safeInsetCells = 2f)
+        {
+            BattlefieldRect cell = CellRect(position);
+            float inset = Math.Max(0f, safeInsetCells) * cellSize;
+            return cell.X < viewport.X + inset || cell.XMax > viewport.XMax - inset ||
+                   cell.Y < viewport.Y + inset || cell.YMax > viewport.YMax - inset;
+        }
+
+        public BattlefieldRect CellRect(GridPosition position)
+        {
+            return new BattlefieldRect(boardX + position.X * cellSize,
+                boardY + (mapHeight - 1 - position.Y) * cellSize, cellSize, cellSize);
+        }
+
+        private void ClampToViewport()
+        {
+            boardX = (float)Math.Round(ClampAxis(boardX, BoardWidth, viewport.X, viewport.Width));
+            boardY = (float)Math.Round(ClampAxis(boardY, BoardHeight, viewport.Y, viewport.Height));
+        }
+
+        private static float ClampAxis(float contentStart, float contentSize, float viewportStart, float viewportSize)
+        {
+            if (contentSize <= viewportSize) return viewportStart + (viewportSize - contentSize) * .5f;
+            return Math.Max(viewportStart + viewportSize - contentSize, Math.Min(viewportStart, contentStart));
+        }
+
+        private static float ClampCellSize(float value)
+        {
+            float stepped = (float)Math.Round(value / BattlefieldPresentationAdapter.CellSizeStep) * BattlefieldPresentationAdapter.CellSizeStep;
+            return Math.Max(BattlefieldPresentationAdapter.MinimumCellSize,
+                Math.Min(BattlefieldPresentationAdapter.MaximumCellSize, stepped));
+        }
     }
 }

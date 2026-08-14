@@ -23,6 +23,40 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MoveIntent_ExposesTheAuthoritativeDestinationForHoverHighlight()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1), Facing.West);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 1), Facing.East);
+            CombatState state = new CombatState(new GridMap(6, 3), new[] { hero, enemy });
+            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(2, 1), Facing.East);
+
+            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+
+            Assert.That(intent.IconId, Is.EqualTo("move"));
+            Assert.That(intent.HasDestination, Is.True);
+            Assert.That(intent.Destination, Is.EqualTo(command.Destination));
+            Assert.That(intent.ExpectedDamage, Is.Zero);
+        }
+
+        [Test]
+        public void DamageIntent_RecalculatesAgainstTheCurrentDefenses()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0), Facing.West);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);
+            CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
+            CombatCommand command = CombatCommand.Attack(enemy.Id, hero.Id);
+
+            EnemyIntentPresentation before = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+            hero.ApplyStatus(StatusType.ArmorBreak, 2, 2);
+            EnemyIntentPresentation after = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+
+            Assert.That(before.IconId, Is.EqualTo("attack"));
+            Assert.That(before.ExpectedDamage, Is.GreaterThan(0));
+            Assert.That(after.ExpectedDamage, Is.GreaterThan(before.ExpectedDamage));
+            Assert.That(after.ResultSummary, Does.Contain(after.ExpectedDamage + " 点"));
+        }
+
+        [Test]
         public void EnemyProfile_ContainsVitalsWeaponSkillsCooldownsAndStatuses()
         {
             UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);

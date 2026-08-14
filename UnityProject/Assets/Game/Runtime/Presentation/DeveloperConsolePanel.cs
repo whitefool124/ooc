@@ -9,13 +9,13 @@ namespace OCC.Combat.Presentation
     // Opt-in development surface. The training range is runtime-only and never writes player progression or scene YAML.
     public sealed class DeveloperConsolePanel : MonoBehaviour
     {
-        private CombatPrototypeBootstrap bootstrap;
+        private IDeveloperConsoleHost bootstrap;
         private bool open;
         private Vector2 resultScroll;
         private string lastError;
         private readonly Dictionary<string, Texture2D> abilityIcons = new Dictionary<string, Texture2D>(StringComparer.Ordinal);
 
-        public void Initialize(CombatPrototypeBootstrap source) { bootstrap = source; }
+        public void Initialize(IDeveloperConsoleHost source) { bootstrap = source; }
         public void Toggle() { open = !open; }
         public bool IsOpen => open;
 

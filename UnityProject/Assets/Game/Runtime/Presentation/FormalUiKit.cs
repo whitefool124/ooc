@@ -1,34 +1,78 @@
 using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace OCC.Combat.Presentation
 {
+    public enum FormalUiButtonTone
+    {
+        Neutral,
+        Primary,
+        Positive,
+        Warning,
+        Dangerous
+    }
+
     public static class FormalUiTheme
     {
-        public static Color Ink => OccPixelUiConfig.Palette("ink");
-        public static Color Panel => OccPixelUiConfig.Palette("panel");
-        public static Color Cyan => OccPixelUiConfig.Palette("cyan");
-        public static Color Amber => OccPixelUiConfig.Palette("amber");
-        public static Color Safe => OccPixelUiConfig.Palette("safe");
-        public static Color Danger => OccPixelUiConfig.Palette("danger");
-        public static Color Text => OccPixelUiConfig.Palette("text");
-        public static Color Muted => OccPixelUiConfig.Palette("muted");
-        public static readonly Color Disabled = new Color(.04f, .046f, .05f, 1f);
-        public static readonly Color Surface = new Color(.028f, .040f, .050f, 1f);
+        private static bool highContrast;
+        private static bool largeText;
+        public static bool HighContrastEnabled => highContrast;
+        public static bool LargeTextEnabled => largeText;
+        public static Color Ink => highContrast ? new Color(.004f, .006f, .008f, 1f) : OccPixelUiConfig.Palette("ink");
+        public static Color Panel => highContrast ? new Color(.018f, .026f, .032f, 1f) : OccPixelUiConfig.Palette("panel");
+        public static Color Cyan => Accent(OccPixelUiConfig.Palette("cyan"));
+        public static Color Amber => Accent(OccPixelUiConfig.Palette("amber"));
+        public static Color Safe => Accent(OccPixelUiConfig.Palette("safe"));
+        public static Color Danger => Accent(OccPixelUiConfig.Palette("danger"));
+        public static Color Text => highContrast ? Color.white : OccPixelUiConfig.Palette("text");
+        public static Color Muted => highContrast ? new Color(.72f, .79f, .83f, 1f) : OccPixelUiConfig.Palette("muted");
+        public static Color Disabled => highContrast ? new Color(.025f, .029f, .032f, 1f) : new Color(.04f, .046f, .05f, 1f);
+        public static Color Surface => highContrast ? new Color(.012f, .018f, .022f, 1f) : new Color(.028f, .040f, .050f, 1f);
+        public static Color SurfaceRaised => highContrast ? new Color(.024f, .034f, .041f, 1f) : new Color(.035f, .048f, .058f, 1f);
+        public static readonly Color Interactive = new Color(.075f, .09f, .10f, 1f);
+        public static readonly Color InteractivePressed = new Color(.05f, .065f, .072f, 1f);
+        public static readonly Color Overlay = new Color(.006f, .010f, .014f, .76f);
         public static readonly Color Focus = new Color(.82f, .95f, 1f, 1f);
+        public static readonly Color Health = new Color(.32f, .82f, .56f, 1f);
+        public static readonly Color Shield = new Color(.44f, .72f, .63f, 1f);
+        public static readonly Color Magic = new Color(.70f, .48f, .86f, 1f);
 
         public const int CaptionFontSize = 15;
         public const int BodyFontSize = 18;
         public const int HeadingFontSize = 22;
         public const int TitleFontSize = 31;
+        public const int ButtonFontSize = 18;
+        public const int ButtonDetailFontSize = 14;
+        public const int MinimumInteractiveHeight = 40;
         public const int SpaceSmall = 8;
         public const int SpaceMedium = 16;
         public const int SpaceLarge = 24;
-        public const int IconSlotSize = 28;
-        public const int IconTextInset = 28;
+        public const int IconSlotSize = 32;
+        public const int IconTextInset = 36;
         public static readonly Vector2 FocusDistance = new Vector2(2f, -2f);
+
+        public static void ConfigureAccessibility(bool useHighContrast, bool useLargeText)
+        {
+            highContrast = useHighContrast;
+            largeText = useLargeText;
+        }
+
+        private static Color Accent(Color color) => highContrast ? Color.Lerp(color, Color.white, .14f) : color;
+
+        public static Color WithAlpha(Color color, float alpha) => new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
+
+        public static FormalUiButtonPalette ButtonPalette(FormalUiButtonTone tone)
+        {
+            Color accent = tone == FormalUiButtonTone.Primary ? Cyan :
+                tone == FormalUiButtonTone.Positive ? Safe :
+                tone == FormalUiButtonTone.Warning ? Amber :
+                tone == FormalUiButtonTone.Dangerous ? Danger : Muted;
+            Color normal = tone == FormalUiButtonTone.Dangerous ? Color.Lerp(Interactive, Danger, .12f) : Interactive;
+            return FormalUiButtonPalette.ForAccent(normal, accent);
+        }
 
         public static int PixelAlignedFontSize(int fontSize, bool compact)
         {
@@ -37,7 +81,13 @@ namespace OCC.Combat.Presentation
             return target % 2 == 0 ? target : target + 1;
         }
 
-        public static int ResponsiveFontSize(int fontSize) => PixelAlignedFontSize(fontSize, Screen.height <= UiLayoutContract.CompactHeightThreshold);
+        public static int ResponsiveFontSize(int fontSize)
+        {
+            int responsive = PixelAlignedFontSize(fontSize, Screen.height <= UiLayoutContract.CompactHeightThreshold);
+            if (!largeText) return responsive;
+            int accessible = Mathf.CeilToInt(responsive * 1.12f);
+            return accessible % 2 == 0 ? accessible : accessible + 1;
+        }
     }
 
     public readonly struct FormalUiButtonPalette
@@ -68,6 +118,42 @@ namespace OCC.Combat.Presentation
         public const float RewardStaggerMultiplier = .55f;
         public static Ease FeedbackEase => Ease.OutQuad;
         public static Ease StandardEase => Ease.OutCubic;
+    }
+
+    public readonly struct FormalUiPageChecklistEntry
+    {
+        public string Id { get; }
+        public string DefaultFocusKey { get; }
+        public bool HasBackPath { get; }
+        public bool CoversDisabledState { get; }
+        public bool CoversEmptyState { get; }
+
+        public FormalUiPageChecklistEntry(string id, string defaultFocusKey, bool hasBackPath, bool coversDisabledState, bool coversEmptyState)
+        {
+            Id = id;
+            DefaultFocusKey = defaultFocusKey;
+            HasBackPath = hasBackPath;
+            CoversDisabledState = coversDisabledState;
+            CoversEmptyState = coversEmptyState;
+        }
+    }
+
+    public static class FormalUiPageChecklist
+    {
+        private static readonly FormalUiPageChecklistEntry[] entries =
+        {
+            new FormalUiPageChecklistEntry("landing", "按钮_近战热压", false, true, true),
+            new FormalUiPageChecklistEntry("map", "map.node.{current}", true, true, true),
+            new FormalUiPageChecklistEntry("briefing", "按钮_开始战斗", true, true, false),
+            new FormalUiPageChecklistEntry("combat", "移动", true, true, false),
+            new FormalUiPageChecklistEntry("shop-workshop", "按钮_返回", true, true, true),
+            new FormalUiPageChecklistEntry("inventory-loot", "inventory.back", true, true, true),
+            new FormalUiPageChecklistEntry("settlement", "reward.first", true, true, false),
+            new FormalUiPageChecklistEntry("settings", "按钮_设置_0", true, true, false),
+            new FormalUiPageChecklistEntry("archive", "按钮_返回", true, false, true)
+        };
+
+        public static IReadOnlyList<FormalUiPageChecklistEntry> Entries => entries;
     }
 
     public static class FormalUiKit
@@ -238,6 +324,38 @@ namespace OCC.Combat.Presentation
             rect.anchorMin = rect.anchorMax = new Vector2(0, .5f); rect.pivot = new Vector2(0, .5f); rect.anchoredPosition = position; rect.sizeDelta = Vector2.one * FormalUiTheme.IconSlotSize;
             Image image = result.AddComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false;
             return image;
+        }
+
+        public static Text SemanticChip(string semanticId, string value, Transform parent, Vector2 position, FormalHoverTooltip tooltip,
+            int iconSize = 22, int valueFontSize = 14, Color? valueColor = null)
+        {
+            string word = semanticId == "action" ? "行动" : semanticId == "aether" ? "以太" : "注意";
+            string explanation = semanticId == "action" ? "使用这项能力需要的行动点。" : semanticId == "aether"
+                ? "使用这项能力需要的以太。" : "这项效果有需要留意的限制或风险。";
+            Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.SemanticPath(semanticId));
+            if (sprite == null) throw new KeyNotFoundException("Missing formal semantic icon: " + semanticId);
+
+            GameObject chip = Create("语义_" + semanticId, parent);
+            RectTransform chipRect = chip.AddComponent<RectTransform>();
+            chipRect.anchorMin = chipRect.anchorMax = new Vector2(0, 1); chipRect.pivot = new Vector2(0, 1);
+            chipRect.anchoredPosition = position; chipRect.sizeDelta = new Vector2(string.IsNullOrEmpty(value) ? iconSize : iconSize + 32, iconSize);
+
+            GameObject iconObject = Create("图标_" + word, chip.transform);
+            RectTransform iconRect = iconObject.AddComponent<RectTransform>();
+            iconRect.anchorMin = iconRect.anchorMax = new Vector2(0, .5f); iconRect.pivot = new Vector2(0, .5f);
+            iconRect.anchoredPosition = Vector2.zero; iconRect.sizeDelta = Vector2.one * iconSize;
+            Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.raycastTarget = tooltip != null;
+            if (tooltip != null)
+            {
+                FormalHoverTooltipTrigger trigger = iconObject.AddComponent<FormalHoverTooltipTrigger>();
+                trigger.Configure(tooltip, () => new FormalTooltipContent(word, explanation, semanticId == "notice" ? FormalUiTheme.Amber : FormalUiTheme.Cyan));
+            }
+
+            Text valueLabel = Label("数值", value ?? string.Empty, chip.transform, new Vector2(iconSize + 4, 0), new Vector2(28, iconSize),
+                valueFontSize, valueColor ?? FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            valueLabel.raycastTarget = false;
+            PreventAutomaticWrapping(valueLabel);
+            return valueLabel;
         }
 
         public static void Line(Transform parent, Vector2 position, Vector2 size, Color color, string name = "线")

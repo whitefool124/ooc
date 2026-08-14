@@ -8,6 +8,20 @@ namespace OCC.Combat
     public enum RogueliteMapNodeType { Start, Combat, Elite, Event, Workshop, Shop, Rest, Treasure, Finale }
     public enum RogueliteMapNodeVisualState { Current, Available, Locked, Cleared, Visited, Known, Unknown }
 
+    // Runtime tuning only: playtests can adjust these values without changing map topology or save data.
+    public static class AcademyMapTuning
+    {
+        public const int ExpectedBossProgress = 20;
+        public const int BossMinimumProgress = 12;
+        public const int CorePermitRequirement = 2;
+        public const int ConsolidationProgress = 21;
+        public const int TransitionProgress = 28;
+        public const bool EnforceBossGate = false;
+        public const bool EnforceTransition = false;
+    }
+
+    public enum AcademyMapPhase { NormalTerm, Consolidation, TransitionReady }
+
     public sealed class RogueliteMapNode
     {
         public string Id { get; }
@@ -64,6 +78,7 @@ namespace OCC.Combat
                     return new[]
                     {
                         new RogueliteNodeContentChoice("survey", "低风险勘测", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon),
+                        new RogueliteNodeContentChoice("scan_routes", "校准信标", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon),
                         new RogueliteNodeContentChoice("purify", "净化导管", "收益：+1 补给、+1 以太；无额外战斗。", RogueliteNodeContentEffect.Aether),
                         new RogueliteNodeContentChoice("recover_survey_lens", "回收显迹测镜", "收益：获得法宝“显迹测镜”；不触发额外战斗或时间压力。", RogueliteNodeContentEffect.Reward, "G-T04"),
                         new RogueliteNodeContentChoice("overload", "超载回收", "收益：+1 权限卡；后果：进入一场额外战斗。", RogueliteNodeContentEffect.AccessCard, requiresCombat: true, combatMissionId: "relay_event")
@@ -113,7 +128,8 @@ namespace OCC.Combat
 
     public static class RogueliteMapCatalog
     {
-        // This is an orthogonal room graph: every listed connection is reciprocated by its neighbor.
+        // This is an orthogonal room graph. Connections are interpreted as bidirectional at runtime,
+        // so content authors only need to list an edge once.
         public static readonly IReadOnlyList<RogueliteMapNode> Nodes = new[]
         {
             new RogueliteMapNode("start", RogueliteMapNodeType.Start, "学院郊道", "首区入口。", 0, 2, 0, 0, "rail_patrol", "depot_wreck", "supply_checkpoint"),
@@ -132,10 +148,30 @@ namespace OCC.Combat
             new RogueliteMapNode("permit_archive", RogueliteMapNodeType.Event, "许可档案", "可预览的档案提取；完成后获得权限卡。", 4, 4, 0, 1, "field_workshop", "med_bay", "sealed_market", "safety_room"),
             new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "传讯塔楼", "许可门后的战斗节点。", 5, 1, 1, 0, "elite_foundry", "aether_refinery", "core_approach"),
             new RogueliteMapNode("aether_refinery", RogueliteMapNodeType.Event, "以太校准室", "可预览的高收益事件。", 5, 2, 0, 0, "gatehouse", "sealed_market", "transmission_tower", "safety_room", "core_vault"),
-            new RogueliteMapNode("safety_room", RogueliteMapNodeType.Rest, "守夜营帐", "无敌情推进的休整点。", 5, 3, 0, 0, "sealed_market", "permit_archive", "aether_refinery", "core_vault"),
+            new RogueliteMapNode("safety_room", RogueliteMapNodeType.Event, "守夜值班记录", "公开选择补给、情报或追加战斗。", 5, 3, 0, 0, "sealed_market", "permit_archive", "aether_refinery", "core_vault"),
             new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "塔前石庭", "古塔前庭精英守备。", 6, 1, 1, 0, "transmission_tower", "core_vault", "core_finale"),
             new RogueliteMapNode("core_vault", RogueliteMapNodeType.Treasure, "学院封存库", "战利品节点。", 6, 2, 1, 0, "aether_refinery", "safety_room", "core_approach", "core_finale"),
-            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败古塔核心首领。", 7, 1, 1, 0, "core_approach", "core_vault")
+            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败封存塔的核心守卫。", 7, 1, 1, 0, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
+            new RogueliteMapNode("academy_gate", RogueliteMapNodeType.Event, "学院正门公告", "公开的入学期委托与路线情报。", 0, 0, 0, 0, "tutorial_hall", "dorm_drill"),
+            new RogueliteMapNode("tutorial_hall", RogueliteMapNodeType.Combat, "新生演练厅", "处理公开演练中的失控傀儡。", 0, 1, 0, 0, "academy_gate", "start", "dorm_watch"),
+            new RogueliteMapNode("dorm_watch", RogueliteMapNodeType.Combat, "宿舍夜间巡查", "清理夜间异常并保护宿舍区。", 0, 3, 0, 0, "tutorial_hall", "market_lane"),
+            new RogueliteMapNode("market_lane", RogueliteMapNodeType.Combat, "学院市集护送", "护送器材通过市集外廊。", 0, 4, 0, 0, "dorm_watch", "field_infirmary"),
+            new RogueliteMapNode("dorm_drill", RogueliteMapNodeType.Combat, "宿舍外实战演练", "近距离考核走位与护盾。", 1, 0, 0, 0, "academy_gate", "lecture_annex", "depot_wreck"),
+            new RogueliteMapNode("field_infirmary", RogueliteMapNodeType.Event, "临时医务站", "公开选择补给、恢复或额外救援战。", 1, 4, 0, 0, "market_lane", "study_vault"),
+            new RogueliteMapNode("lecture_annex", RogueliteMapNodeType.Combat, "讲坛公开考核", "在远程威胁下完成学院考核。", 2, 0, 0, 0, "dorm_drill", "archive_wing", "switchyard"),
+            new RogueliteMapNode("study_vault", RogueliteMapNodeType.Combat, "阅览室封存柜异常", "清理封存柜周边的异常防卫。", 2, 4, 0, 0, "field_infirmary", "sparring_ring"),
+            new RogueliteMapNode("archive_wing", RogueliteMapNodeType.Combat, "档案翼巡查", "处理档案翼中的显影误报。", 3, 0, 0, 0, "lecture_annex", "workshop_yard", "signal_hub"),
+            new RogueliteMapNode("sparring_ring", RogueliteMapNodeType.Combat, "圆形实训场", "对抗训练阵列并获得构筑奖励。", 3, 4, 0, 0, "study_vault", "permit_archive", "supply_depot"),
+            new RogueliteMapNode("workshop_yard", RogueliteMapNodeType.Combat, "工坊庭院回路过载", "处理失控校准回路。", 4, 0, 0, 0, "archive_wing", "clinic_hall", "elite_foundry"),
+            new RogueliteMapNode("clinic_hall", RogueliteMapNodeType.Combat, "诊疗厅导能泄漏", "在泄漏环境中保护治疗设备。", 5, 0, 0, 0, "workshop_yard", "wilds_path", "transmission_tower"),
+            new RogueliteMapNode("supply_depot", RogueliteMapNodeType.Elite, "封存器材护送", "精英护送考核，取得高风险奖励。", 5, 4, 0, 0, "sparring_ring", "permit_archive", "wilds_camp"),
+            new RogueliteMapNode("wilds_path", RogueliteMapNodeType.Combat, "郊野实训旧道", "开阔地中的学院实训巡查。", 6, 0, 0, 0, "clinic_hall", "seal_bridge", "core_approach"),
+            new RogueliteMapNode("observatory_path", RogueliteMapNodeType.Elite, "观测塔求援", "处理封存区外环的高阶异常。", 6, 3, 0, 0, "wilds_camp", "tower_foyer", "core_vault"),
+            new RogueliteMapNode("wilds_camp", RogueliteMapNodeType.Elite, "郊野导能柱考察", "高风险实训，提供核心许可来源。", 6, 4, 0, 1, "supply_depot", "observatory_path", "tower_records"),
+            new RogueliteMapNode("seal_bridge", RogueliteMapNodeType.Combat, "封存区石桥", "清理通往高塔的学院警戒装置。", 7, 0, 0, 0, "wilds_path", "tower_foyer", "core_finale"),
+            new RogueliteMapNode("tower_foyer", RogueliteMapNodeType.Elite, "封存塔门厅核验", "精英守卫与维护链的最终考核。", 7, 2, 0, 1, "seal_bridge", "observatory_path", "tower_lift", "core_finale"),
+            new RogueliteMapNode("tower_records", RogueliteMapNodeType.Event, "高塔值守记录", "公开选择首领情报或追加挑战。", 7, 3, 0, 0, "wilds_camp", "tower_lift"),
+            new RogueliteMapNode("tower_lift", RogueliteMapNodeType.Treasure, "封存管理员匣", "稀有法宝与核心许可的公开取舍。", 7, 4, 0, 1, "tower_records", "tower_foyer")
         };
         private static readonly IReadOnlyList<RogueliteReward> CoreRewards = new[]
         {
@@ -263,6 +299,17 @@ namespace OCC.Combat
         public int CurrentMana { get; private set; } = 12;
         public bool AwaitingReward { get; private set; }
         public bool IsComplete => completed.Contains("core_finale") && !AwaitingReward;
+        public int AcademyProgress => Math.Max(0, visited.Count - 1);
+        public int CorePermits => completed.Count(id => RogueliteMapCatalog.Node(id).GrantedAccessCards > 0);
+        public AcademyMapPhase AcademyPhase => AcademyProgress >= AcademyMapTuning.TransitionProgress
+            ? AcademyMapPhase.TransitionReady
+            : AcademyProgress >= AcademyMapTuning.ConsolidationProgress
+                ? AcademyMapPhase.Consolidation
+                : AcademyMapPhase.NormalTerm;
+        public bool CanChallengeAcademyFinale => AcademyProgress >= AcademyMapTuning.BossMinimumProgress
+            && CorePermits >= AcademyMapTuning.CorePermitRequirement;
+        public bool IsTransitionPending => AcademyMapTuning.EnforceTransition
+            && AcademyProgress >= AcademyMapTuning.TransitionProgress;
         public IReadOnlyCollection<string> UnlockedNodes => visited;
         public IReadOnlyCollection<string> VisitedNodes => visited;
         public IReadOnlyCollection<string> CompletedNodes => completed;
@@ -354,11 +401,19 @@ namespace OCC.Combat
         }
         public void RestoreLootProgress(LootSourceState loot) { if (loot != null && lootProgress.TryGetValue(loot.Id, out string progress)) loot.RestoreProgress(progress); }
 
-        public bool IsAdjacentToCurrent(string nodeId) => RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
+        public bool IsAdjacentToCurrent(string nodeId)
+        {
+            RogueliteMapNode current = RogueliteMapCatalog.Node(CurrentNodeId);
+            RogueliteMapNode target = RogueliteMapCatalog.Node(nodeId);
+            return current.NextIds.Contains(nodeId) || target.NextIds.Contains(CurrentNodeId);
+        }
         public bool IsNodeAvailable(string nodeId)
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
-            return IsAdjacentToCurrent(nodeId) && AccessCards >= node.RequiredAccessCards;
+            if (!IsAdjacentToCurrent(nodeId) || AccessCards < node.RequiredAccessCards) return false;
+            if (AcademyMapTuning.EnforceTransition && !visited.Contains(nodeId) && IsTransitionPending) return false;
+            if (node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale) return false;
+            return true;
         }
         public bool IsNodeKnown(string nodeId) => visited.Contains(nodeId) || RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
         public RogueliteMapNodeVisualState VisualStateFor(string nodeId)

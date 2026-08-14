@@ -11,7 +11,7 @@ namespace OCC.Combat.Presentation
     // The HUD hierarchy and icon assets are authored in the scene; this only binds live combat data.
     public sealed class TacticalHudSceneBinder : MonoBehaviour
     {
-        private CombatPrototypeBootstrap bootstrap;
+        private ITacticalHudHost bootstrap;
         private Transform hudRoot;
         private Text activeText;
         private Text weaponText;

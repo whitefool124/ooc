@@ -17,6 +17,8 @@ namespace OCC.Combat.Tests
             AssertDomain(FormalArtRegistry.Statuses);
             AssertDomain(FormalArtRegistry.Environments);
             AssertDomain(FormalArtRegistry.NodeTypes);
+            AssertDomain(FormalArtRegistry.Navigation);
+            AssertDomain(FormalArtRegistry.Semantics);
             AssertDomain(FormalArtRegistry.RuntimeSkills);
             AssertDomain(FormalArtRegistry.FireSpells);
             AssertDomain(FormalArtRegistry.Items);
@@ -39,6 +41,8 @@ namespace OCC.Combat.Tests
             Assert.That(FormalArtRegistry.Intents.Count, Is.EqualTo(5));
             Assert.That(FormalArtRegistry.Environments.Count, Is.EqualTo(8));
             Assert.That(FormalArtRegistry.NodeTypes.Count, Is.EqualTo(9));
+            Assert.That(FormalArtRegistry.Navigation.Count, Is.EqualTo(8));
+            Assert.That(FormalArtRegistry.Semantics.Count, Is.EqualTo(3));
             Assert.That(FormalArtRegistry.RuntimeSkills.Count, Is.EqualTo(27));
             Assert.That(FormalArtRegistry.FireSpells.Count, Is.EqualTo(60));
             Assert.That(FormalArtRegistry.Items.Count, Is.EqualTo(54));

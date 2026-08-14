@@ -84,7 +84,7 @@ namespace OCC.Combat.Tests
         public void MapRun_VisitsAdjacentRoomsSettlesAndRoundTrips()
         {
             var run = new RogueliteMapRun(901);
-            Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(20));
+            Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(40));
             Assert.That(run.VisitedNodes, Does.Contain("start"));
             Assert.Throws<InvalidOperationException>(() => run.SelectNode("core_finale"));
             run.SelectNode("rail_patrol"); run.CompleteCurrentCombat();

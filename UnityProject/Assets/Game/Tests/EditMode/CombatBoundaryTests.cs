@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 
@@ -43,6 +46,81 @@ namespace OCC.Combat.Tests
         public void PublicIntent_DoesNotExposeCombatCommand()
         {
             Assert.That(typeof(EnemyIntentPresentation).GetProperty("Command"), Is.Null);
+            Assert.That(typeof(EnemyIntentPresentation).GetProperty("Destination"), Is.Not.Null,
+                "Presentation may expose the read-only destination without exposing the executable command.");
+            Assert.That(typeof(EnemyIntentPresentation).GetProperty("ExpectedDamage"), Is.Not.Null);
+        }
+
+        [Test]
+        public void PresentationComponents_DependOnNarrowHostsInsteadOfBootstrap()
+        {
+            var expectedHosts = new Dictionary<Type, Type>
+            {
+                { typeof(CombatVisualFeedback), typeof(ICombatFeedbackHost) },
+                { typeof(DeveloperConsolePanel), typeof(IDeveloperConsoleHost) },
+                { typeof(FormalCombatHud), typeof(ICombatHudHost) },
+                { typeof(FormalRogueliteUi), typeof(IRogueliteUiHost) },
+                { typeof(FormalStartupPresentation), typeof(IStartupPresentationHost) },
+                { typeof(FormalUiInteractionLayer), typeof(IInteractionPresentationHost) },
+                { typeof(RogueliteSettlementPresentation), typeof(ISettlementPresentationHost) },
+                { typeof(TacticalHudSceneBinder), typeof(ITacticalHudHost) },
+                { typeof(TarkovInventoryPanel), typeof(IInventoryPresentationHost) },
+                { typeof(FormalBattlefieldView), typeof(IBattlefieldViewHost) }
+            };
+
+            foreach (KeyValuePair<Type, Type> pair in expectedHosts)
+            {
+                FieldInfo hostField = Array.Find(pair.Key.GetFields(BindingFlags.Instance | BindingFlags.NonPublic),
+                    field => field.FieldType == pair.Value);
+                Assert.That(hostField, Is.Not.Null, pair.Key.Name + " must retain an explicit injected host boundary.");
+                Assert.That(hostField.FieldType, Is.EqualTo(pair.Value), pair.Key.Name + " depends on the wrong host contract.");
+                Assert.That(hostField.FieldType, Is.Not.EqualTo(typeof(CombatPrototypeBootstrap)));
+            }
+        }
+
+        [Test]
+        public void Bootstrap_ImplementsEveryPresentationHostContract()
+        {
+            Type bootstrap = typeof(CombatPrototypeBootstrap);
+            Type[] contracts =
+            {
+                typeof(ICombatFeedbackHost), typeof(IDeveloperConsoleHost), typeof(ICombatHudHost),
+                typeof(IRogueliteUiHost), typeof(IStartupPresentationHost), typeof(IInteractionPresentationHost),
+                typeof(ISettlementPresentationHost), typeof(ITacticalHudHost), typeof(IInventoryPresentationHost),
+                typeof(IBattlefieldViewHost)
+            };
+
+            foreach (Type contract in contracts)
+                Assert.That(contract.IsAssignableFrom(bootstrap), Is.True, contract.Name + " is not wired by the composition root.");
+        }
+
+        [Test]
+        public void Bootstrap_DelegatesRuntimeComponentOwnershipToCompositionRegistry()
+        {
+            Type[] presentationComponents =
+            {
+                typeof(CombatVisualFeedback), typeof(FormalUiInteractionLayer), typeof(RogueliteSettlementPresentation),
+                typeof(FormalCombatHud), typeof(FormalRogueliteUi), typeof(FormalStartupPresentation),
+                typeof(DeveloperConsolePanel), typeof(TarkovInventoryPanel), typeof(FormalBattlefieldView)
+            };
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            foreach (Type component in presentationComponents)
+                Assert.That(Array.Exists(fields, field => field.FieldType == component), Is.False,
+                    "Bootstrap must not own a direct " + component.Name + " field.");
+
+            FieldInfo composition = Array.Find(fields, field => field.FieldType == typeof(CombatPresentationComposition));
+            Assert.That(composition, Is.Not.Null);
+            MethodInfo attach = typeof(CombatPresentationComposition).GetMethod("Attach", BindingFlags.Public | BindingFlags.Static);
+            Assert.That(attach, Is.Not.Null);
+            Assert.That(attach.GetParameters()[1].ParameterType, Is.EqualTo(typeof(ICombatPresentationCompositionHost)));
+        }
+
+        [Test]
+        public void Bootstrap_NoLongerOwnsImmediateModeBattlefieldRendering()
+        {
+            MethodInfo onGui = typeof(CombatPrototypeBootstrap).GetMethod("OnGUI",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            Assert.That(onGui, Is.Null, "Battlefield rendering must remain exclusively in FormalBattlefieldView.");
         }
     }
 }

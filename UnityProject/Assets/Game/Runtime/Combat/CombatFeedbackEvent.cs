@@ -115,7 +115,7 @@ namespace OCC.Combat
         public static string StatusHudText(StatusType status, int duration)
         {
             CombatFeedbackSemantic semantic = For(ForStatus(status));
-            return semantic.ShortLabel + " " + Math.Max(0, duration) + " // " + semantic.HudLabel;
+            return semantic.ShortLabel + " " + Math.Max(0, duration) + " · " + semantic.HudLabel;
         }
     }
 }

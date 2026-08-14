@@ -67,6 +67,30 @@ namespace OCC.Combat.Tests
             Assert.That(RogueliteMapRunValidator.Validate(migrated).IsValid, Is.True);
         }
 
+        [Test]
+        public void AcademyMap_HasFortyNodesAndThePublishedNodeMix()
+        {
+            Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(40));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Combat), Is.EqualTo(18));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Elite), Is.EqualTo(6));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Event), Is.EqualTo(8));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Workshop || node.Type == RogueliteMapNodeType.Shop || node.Type == RogueliteMapNodeType.Rest), Is.EqualTo(4));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Treasure), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void AcademyMap_ConnectionsAreBidirectionalAndExplorationIsVisible()
+        {
+            RogueliteMapRun run = new RogueliteMapRun(705);
+
+            Assert.That(run.AvailableNodes.Select(node => node.Id), Does.Contain("tutorial_hall"));
+            run.SelectNode("tutorial_hall");
+
+            Assert.That(run.AcademyProgress, Is.EqualTo(1));
+            Assert.That(run.AcademyPhase, Is.EqualTo(AcademyMapPhase.NormalTerm));
+            Assert.That(run.IsTransitionPending, Is.False);
+        }
+
         private static string Tamper(string source, string category)
         {
             string[] fields = source.Split('|');

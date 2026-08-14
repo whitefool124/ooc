@@ -44,7 +44,7 @@ namespace OCC.Combat.Tests
             string[] missing = active.Where(entry => Resources.Load<Sprite>(entry.ResourcePath) == null)
                 .Select(entry => entry.AssetId + " => " + entry.ResourcePath).ToArray();
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
-            Assert.That(active, Has.Length.EqualTo(189), "Five approved 32px enemy-intent icons are now a formal HUD dependency.");
+            Assert.That(active, Has.Length.EqualTo(200), "Formal player UI includes navigation and combat-semantic icon vocabularies.");
             Assert.That(blockedUnits.Count, Is.EqualTo(16), "Character/unit art is explicitly product-blocked, not silently omitted.");
         }
 
@@ -71,12 +71,70 @@ namespace OCC.Combat.Tests
             foreach (string path in paths)
             {
                 TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                bool semanticMicroIcon = path.Contains("/FormalIntentIcons16/", StringComparison.Ordinal) ||
+                                         path.EndsWith("/action_point.png", StringComparison.Ordinal) ||
+                                         path.EndsWith("/mana.png", StringComparison.Ordinal) ||
+                                         path.EndsWith("/notice.png", StringComparison.Ordinal);
+                float expectedPixelsPerUnit = semanticMicroIcon ? 16f : 32f;
                 if (importer == null || importer.textureType != TextureImporterType.Sprite || importer.filterMode != FilterMode.Point ||
-                    importer.wrapMode != TextureWrapMode.Clamp || importer.mipmapEnabled || Math.Abs(importer.spritePixelsPerUnit - 32f) > .01f)
+                    importer.wrapMode != TextureWrapMode.Clamp || importer.mipmapEnabled ||
+                    Math.Abs(importer.spritePixelsPerUnit - expectedPixelsPerUnit) > .01f)
                     failures.Add(path);
             }
             Assert.That(paths.Length, Is.GreaterThanOrEqualTo(433));
             Assert.That(failures, Is.Empty, string.Join("\n", failures));
+        }
+
+        [Test]
+        public void NavigationIcons_AreIndependent32PixelFormalAssets()
+        {
+            foreach (FormalArtEntry entry in FormalArtRegistry.Navigation)
+            {
+                Sprite sprite = Resources.Load<Sprite>(entry.ResourcePath);
+                Assert.That(sprite, Is.Not.Null, entry.AssetId);
+                Assert.That(sprite.rect.width, Is.EqualTo(32), entry.AssetId);
+                Assert.That(sprite.rect.height, Is.EqualTo(32), entry.AssetId);
+                TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
+                Assert.That(importer, Is.Not.Null, entry.AssetId);
+                Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), entry.AssetId);
+                Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), entry.AssetId);
+                Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
+                Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f), entry.AssetId);
+            }
+        }
+
+        [Test]
+        public void CombatSemanticIcons_Are16PixelFormalAssets()
+        {
+            foreach (FormalArtEntry entry in FormalArtRegistry.Semantics)
+            {
+                Sprite sprite = Resources.Load<Sprite>(entry.ResourcePath);
+                Assert.That(sprite, Is.Not.Null, entry.AssetId);
+                Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(16, 16)), entry.AssetId);
+                TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
+                Assert.That(importer, Is.Not.Null, entry.AssetId);
+                Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), entry.AssetId);
+                Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), entry.AssetId);
+                Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
+                Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(16f), entry.AssetId);
+            }
+        }
+
+        [Test]
+        public void EnemyIntentIcons_AreIndependent16PixelFormalAssets()
+        {
+            foreach (FormalArtEntry entry in FormalArtRegistry.Intents)
+            {
+                Sprite sprite = Resources.Load<Sprite>(entry.ResourcePath);
+                Assert.That(sprite, Is.Not.Null, entry.AssetId);
+                Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(16, 16)), entry.AssetId);
+                TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
+                Assert.That(importer, Is.Not.Null, entry.AssetId);
+                Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), entry.AssetId);
+                Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), entry.AssetId);
+                Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
+                Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(16f), entry.AssetId);
+            }
         }
 
         [Test]
@@ -136,7 +194,7 @@ namespace OCC.Combat.Tests
         {
             Assert.That(FormalUiEffectsConfig.Validate(), Is.Empty, string.Join("\n", FormalUiEffectsConfig.Validate()));
             OccPeripheralUiData config = FormalUiEffectsConfig.Data;
-            Assert.That(config.backdrops.Select(entry => entry.id), Is.SupersetOf(new[] { "landing", "map", "briefing", "archive", "settings" }));
+            Assert.That(config.backdrops.Select(entry => entry.id), Is.SupersetOf(new[] { "landing", "map", "briefing", "inventory", "settlement", "archive", "settings" }));
             Assert.That(config.feedback.Select(entry => entry.id), Is.EquivalentTo(new[] { "click", "success", "rejected" }));
             foreach (string path in new[] { config.startupBackdrop, config.scanlineSprite, config.transitionSprite })
                 Assert.That(Resources.Load<Sprite>(path), Is.Not.Null, path);
@@ -148,7 +206,7 @@ namespace OCC.Combat.Tests
 
             string[] paths = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Game/Resources/Art/FormalUIBackdrops", "Assets/Game/Resources/Art/FormalUIFeedback" })
                 .Select(AssetDatabase.GUIDToAssetPath).ToArray();
-            Assert.That(paths, Has.Length.EqualTo(24));
+            Assert.That(paths, Has.Length.EqualTo(26));
             foreach (string path in paths)
             {
                 TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
@@ -156,6 +214,12 @@ namespace OCC.Combat.Tests
                 Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), path);
                 Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), path);
                 Assert.That(importer.mipmapEnabled, Is.False, path);
+            }
+            foreach (string id in new[] { "landing", "map", "briefing", "inventory", "settlement" })
+            {
+                Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.BackdropPath(id));
+                Assert.That(sprite.texture.width, Is.EqualTo(480), id);
+                Assert.That(sprite.texture.height, Is.EqualTo(270), id);
             }
         }
     }

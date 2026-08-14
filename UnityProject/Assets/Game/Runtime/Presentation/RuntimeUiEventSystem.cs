@@ -67,5 +67,11 @@ namespace OCC.Combat.Presentation
             eventSystem.SetSelectedGameObject(null);
             eventSystem.SetSelectedGameObject(target);
         }
+
+        public static void ClearSelection()
+        {
+            EventSystem eventSystem = Ensure();
+            if (eventSystem.currentSelectedGameObject != null) eventSystem.SetSelectedGameObject(null);
+        }
     }
 }

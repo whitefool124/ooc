@@ -113,6 +113,171 @@ namespace OCC.Combat
         public override int GetHashCode() => Seed;
     }
 
+    public enum RogueliteMapRouteVisualState
+    {
+        Unknown,
+        Known,
+        Available,
+        Safe,
+        Locked
+    }
+
+    public static class RogueliteMapVisualPresentation
+    {
+        public static string FocusKey(string nodeId) => "map.node." + (nodeId ?? string.Empty);
+
+        public static string StateLabel(RogueliteMapNodeVisualState state)
+        {
+            switch (state)
+            {
+                case RogueliteMapNodeVisualState.Current: return "当前位置";
+                case RogueliteMapNodeVisualState.Available: return "可前往";
+                case RogueliteMapNodeVisualState.Cleared: return "已清理";
+                case RogueliteMapNodeVisualState.Visited: return "已访问";
+                case RogueliteMapNodeVisualState.Locked: return "权限不足";
+                case RogueliteMapNodeVisualState.Known: return "已知";
+                default: return "未知";
+            }
+        }
+
+        public static string StateGlyph(RogueliteMapNodeVisualState state)
+        {
+            switch (state)
+            {
+                case RogueliteMapNodeVisualState.Current: return "现";
+                case RogueliteMapNodeVisualState.Available: return "可";
+                case RogueliteMapNodeVisualState.Cleared: return "清";
+                case RogueliteMapNodeVisualState.Visited: return "访";
+                case RogueliteMapNodeVisualState.Locked: return "锁";
+                case RogueliteMapNodeVisualState.Known: return "知";
+                default: return "?";
+            }
+        }
+
+        public static RogueliteMapRouteVisualState RouteState(RogueliteMapNodeVisualState from, RogueliteMapNodeVisualState to)
+        {
+            if (from == RogueliteMapNodeVisualState.Unknown || to == RogueliteMapNodeVisualState.Unknown) return RogueliteMapRouteVisualState.Unknown;
+            if ((from == RogueliteMapNodeVisualState.Current && to == RogueliteMapNodeVisualState.Available) ||
+                (to == RogueliteMapNodeVisualState.Current && from == RogueliteMapNodeVisualState.Available)) return RogueliteMapRouteVisualState.Available;
+            if ((from == RogueliteMapNodeVisualState.Cleared || from == RogueliteMapNodeVisualState.Current) &&
+                (to == RogueliteMapNodeVisualState.Cleared || to == RogueliteMapNodeVisualState.Current)) return RogueliteMapRouteVisualState.Safe;
+            if (from == RogueliteMapNodeVisualState.Locked || to == RogueliteMapNodeVisualState.Locked) return RogueliteMapRouteVisualState.Locked;
+            return RogueliteMapRouteVisualState.Known;
+        }
+
+        public static string RouteGlyph(RogueliteMapRouteVisualState state)
+        {
+            switch (state)
+            {
+                case RogueliteMapRouteVisualState.Available: return "可";
+                case RogueliteMapRouteVisualState.Safe: return "安";
+                case RogueliteMapRouteVisualState.Locked: return "锁";
+                case RogueliteMapRouteVisualState.Known: return "联";
+                default: return "?";
+            }
+        }
+
+        public static string RestrictionText(RogueliteMapRun run, RogueliteMapNode node)
+        {
+            if (run == null || node == null) return "节点不可用";
+            RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
+            if (state == RogueliteMapNodeVisualState.Unknown) return "尚未侦测";
+            if (node.Id == run.CurrentNodeId) return "当前地点";
+            if (run.CompletedNodes.Contains(node.Id)) return "已完成；回访安全";
+            if (RogueliteUiPreferences.CanTravelTo(run, node)) return "路径可用";
+            if (state == RogueliteMapNodeVisualState.Locked) return "需要权限卡 " + node.RequiredAccessCards + "（当前 " + run.AccessCards + "）";
+            return "当前不可直达";
+        }
+
+        public static string ConnectionSummary(RogueliteMapRun run, RogueliteMapNode node)
+        {
+            if (run == null || node == null || run.VisualStateFor(node.Id) == RogueliteMapNodeVisualState.Unknown) return "连接信息尚未公开";
+            string[] known = node.NextIds.Select(RogueliteMapCatalog.Node)
+                .Where(next => run.VisualStateFor(next.Id) != RogueliteMapNodeVisualState.Unknown)
+                .Select(next => next.DisplayName).ToArray();
+            return known.Length == 0 ? "暂无已知连接" : "连接：" + string.Join(" / ", known);
+        }
+    }
+
+    public readonly struct UiOperationAvailability
+    {
+        public bool CanExecute { get; }
+        public string Status { get; }
+        public string Reason { get; }
+
+        public UiOperationAvailability(bool canExecute, string status, string reason)
+        {
+            CanExecute = canExecute;
+            Status = status ?? string.Empty;
+            Reason = reason ?? string.Empty;
+        }
+    }
+
+    public static class RogueliteEconomyPresentation
+    {
+        public static UiOperationAvailability ForNodeChoice(RogueliteMapRun run, RogueliteNodeContentChoice choice)
+        {
+            if (run == null || choice == null) return Blocked("不可执行", "选项不可用");
+            if (run.Parts < choice.PartsCost) return Blocked("零件不足", "需要 " + choice.PartsCost + " 零件；当前 " + run.Parts);
+            if (run.Aether < choice.AetherCost) return Blocked("以太不足", "需要 " + choice.AetherCost + " 以太；当前 " + run.Aether);
+            if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已拥有", "该奖励已收入本局档案");
+            ItemDefinition item = string.IsNullOrEmpty(choice.RewardId) ? null : ItemCatalog.All.FirstOrDefault(candidate => candidate.Id == choice.RewardId);
+            if (item != null && !CanAccept(run, item)) return Blocked("背包空间不足", "需要可容纳 " + item.Width + "×" + item.Height + " 的空位");
+            return new UiOperationAvailability(true, choice.PartsCost + choice.AetherCost > 0 ? "可购买" : "可确认", CostText(choice));
+        }
+
+        public static UiOperationAvailability ForReward(RogueliteMapRun run, RogueliteReward reward)
+        {
+            if (run == null || reward == null || !run.AwaitingReward) return Blocked("已结算", "奖励当前不可领取");
+            if (reward.Kind == RogueliteRewardKind.Item && !CanAccept(run, reward.Item))
+                return Blocked("背包空间不足", "需要可容纳 " + reward.Item.Width + "×" + reward.Item.Height + " 的空位");
+            if (reward.Kind != RogueliteRewardKind.Item && run.ClaimedRewards.Contains(reward.Id)) return Blocked("已拥有", "本局不可重复领取");
+            if (FireSpellCatalog.All.Any(spell => spell.Id == reward.Id) && run.OwnedFireSpellIds.Contains(reward.Id)) return Blocked("已拥有", "个人术式不可重复领取");
+            return new UiOperationAvailability(true, "可领取", reward.Kind == RogueliteRewardKind.Item ? "领取后放入背包" : "领取后收入构筑库");
+        }
+
+        public static UiOperationAvailability ForEquipment(RogueliteMapRun run, RogueliteReward reward)
+        {
+            if (run == null || reward == null || !run.ClaimedRewards.Contains(reward.Id)) return Blocked("未拥有", "需要先取得该构筑");
+            bool equipped = reward.Kind == RogueliteRewardKind.Weapon ? run.EquippedWeaponId == reward.Id : reward.Kind == RogueliteRewardKind.Spell && run.EquippedSpellId == reward.Id;
+            if (equipped) return Blocked("已装备", "当前已生效");
+            if (reward.Kind == RogueliteRewardKind.Weapon && run.EquippedFireSpellIds.Where(id => !string.IsNullOrEmpty(id)).Select(FireSpellCatalog.Get)
+                .Any(spell => !FireSpellCatalog.IsWeaponCompatible(spell, reward.Weapon)))
+                return Blocked("术式不兼容", "先在工坊调整与该武器冲突的已装备术式");
+            if (reward.Kind == RogueliteRewardKind.Item) return Blocked("请在背包装备", "法宝与消耗品不使用工坊装备槽");
+            return new UiOperationAvailability(true, "可装备", reward.Kind == RogueliteRewardKind.Weapon ? WeaponComparison(run.EquippedWeapon, reward.Weapon) : "将替换技能槽 1");
+        }
+
+        public static string RewardComparison(RogueliteMapRun run, RogueliteReward reward)
+        {
+            if (run == null || reward == null) return string.Empty;
+            if (reward.Kind == RogueliteRewardKind.Weapon) return WeaponComparison(run.EquippedWeapon, reward.Weapon);
+            if (reward.Kind == RogueliteRewardKind.Item) return CanAccept(run, reward.Item) ? "背包：存在合法落位" : "背包：空间不足";
+            return "构筑：收入术式库，不自动装备";
+        }
+
+        private static string WeaponComparison(WeaponDefinition current, WeaponDefinition candidate)
+        {
+            if (current == null || candidate == null) return string.Empty;
+            return "对比当前：伤害 " + Signed(candidate.Damage - current.Damage) + " / 射程 " + Signed(candidate.Range - current.Range) + " / 穿甲 " + Signed(candidate.ArmorPierce - current.ArmorPierce);
+        }
+
+        private static string CostText(RogueliteNodeContentChoice choice)
+        {
+            if (choice.PartsCost == 0 && choice.AetherCost == 0) return "无资源成本";
+            return "成本：" + choice.PartsCost + " 零件 / " + choice.AetherCost + " 以太";
+        }
+
+        private static bool CanAccept(RogueliteMapRun run, ItemDefinition item)
+        {
+            if (run?.Inventory == null || item == null) return false;
+            return run.Inventory.FindFirstFit(new ItemInstance("__ui_preview__", item.Id, int.MaxValue)).Success;
+        }
+
+        private static string Signed(int value) => value > 0 ? "+" + value : value.ToString();
+        private static UiOperationAvailability Blocked(string status, string reason) => new UiOperationAvailability(false, status, reason);
+    }
+
     public readonly struct CombatHudPresentationModel : IEquatable<CombatHudPresentationModel>
     {
         public string ActiveUnitId { get; }

@@ -100,5 +100,37 @@ namespace OCC.Combat.Tests
             Assert.That(tooltip.xMax, Is.LessThanOrEqualTo(1872f));
             Assert.That(tooltip.yMax, Is.LessThanOrEqualTo(1032f));
         }
+
+        [Test]
+        public void KeyboardSelection_UsesSpatialDirectionAndKeepsCurrentAtDeadEnd()
+        {
+            var inventory = new InventoryContainerState();
+            Assert.That(inventory.Place(new ItemInstance("left", "medkit", 0), 0, 0).Success, Is.True);
+            Assert.That(inventory.Place(new ItemInstance("right", "shield_cell", 1), 4, 0).Success, Is.True);
+
+            Assert.That(InventoryInteractionPresentation.NextSelection(inventory, null, 0, 0), Is.EqualTo("left"));
+            Assert.That(InventoryInteractionPresentation.NextSelection(inventory, "left", 1, 0), Is.EqualTo("right"));
+            Assert.That(InventoryInteractionPresentation.NextSelection(inventory, "left", -1, 0), Is.EqualTo("left"));
+        }
+
+        [Test]
+        public void LootTakePreview_UsesTheSameFirstFitRuleAsCommit()
+        {
+            var inventory = new InventoryContainerState();
+            var loot = new ItemInstance("loot", "medkit", 0);
+            UiOperationAvailability availability = InventoryInteractionPresentation.LootTakeAvailability(inventory, loot);
+
+            Assert.That(availability.CanExecute, Is.True);
+            Assert.That(availability.Reason, Does.Contain("0,0"));
+            Assert.That(inventory.AddFirstFit(loot).Success, Is.True);
+        }
+
+        [TestCase(false, 2, false, "需要移动到容器相邻格")]
+        [TestCase(true, 0, false, "行动点不足：需要 1 AP")]
+        [TestCase(true, 2, true, "容器已清空")]
+        public void LootSearchReason_ExplainsEveryBlockedState(bool adjacent, int actionPoints, bool complete, string expected)
+        {
+            Assert.That(InventoryInteractionPresentation.LootSearchReason(adjacent, actionPoints, complete), Is.EqualTo(expected));
+        }
     }
 }

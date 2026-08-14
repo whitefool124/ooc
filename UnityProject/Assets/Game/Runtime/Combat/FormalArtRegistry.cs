@@ -72,11 +72,11 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> Intents = new[]
         {
-            new FormalArtEntry("intent.attack", "attack", "Art/FormalIntentIcons32/attack"),
-            new FormalArtEntry("intent.cast", "cast", "Art/FormalIntentIcons32/cast"),
-            new FormalArtEntry("intent.move", "move", "Art/FormalIntentIcons32/move"),
-            new FormalArtEntry("intent.defend", "defend", "Art/FormalIntentIcons32/defend"),
-            new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalIntentIcons32/interact_destroy")
+            new FormalArtEntry("intent.attack", "attack", "Art/FormalIntentIcons16/attack"),
+            new FormalArtEntry("intent.cast", "cast", "Art/FormalIntentIcons16/cast"),
+            new FormalArtEntry("intent.move", "move", "Art/FormalIntentIcons16/move"),
+            new FormalArtEntry("intent.defend", "defend", "Art/FormalIntentIcons16/defend"),
+            new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalIntentIcons16/interact_destroy")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Statuses = new[]
@@ -112,6 +112,25 @@ namespace OCC.Combat
             new FormalArtEntry("node_type.rest", "rest", "Art/FormalNodeIcons32/types/rest"),
             new FormalArtEntry("node_type.treasure", "treasure", "Art/FormalNodeIcons32/types/treasure"),
             new FormalArtEntry("node_type.finale", "finale", "Art/FormalNodeIcons32/types/finale")
+        };
+
+        public static readonly IReadOnlyList<FormalArtEntry> Navigation = new[]
+        {
+            new FormalArtEntry("navigation.home", "home", "Art/FormalNavigationIcons32/home"),
+            new FormalArtEntry("navigation.continue", "continue", "Art/FormalNavigationIcons32/continue"),
+            new FormalArtEntry("navigation.archive", "archive", "Art/FormalNavigationIcons32/archive"),
+            new FormalArtEntry("navigation.settings", "settings", "Art/FormalNavigationIcons32/settings"),
+            new FormalArtEntry("navigation.back", "back", "Art/FormalNavigationIcons32/back"),
+            new FormalArtEntry("navigation.confirm", "confirm", "Art/FormalNavigationIcons32/confirm"),
+            new FormalArtEntry("navigation.save", "save", "Art/FormalNavigationIcons32/save"),
+            new FormalArtEntry("navigation.close", "close", "Art/FormalNavigationIcons32/close")
+        };
+
+        public static readonly IReadOnlyList<FormalArtEntry> Semantics = new[]
+        {
+            new FormalArtEntry("semantic.action", "action", "Art/FormalResourceIcons32/action_point"),
+            new FormalArtEntry("semantic.aether", "aether", "Art/FormalResourceIcons32/mana"),
+            new FormalArtEntry("semantic.notice", "notice", "Art/FormalResourceIcons32/notice")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> RuntimeSkills = new[]
@@ -226,7 +245,7 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> All = Units
             .Concat(Commands).Concat(Feedback).Concat(Intents).Concat(Statuses).Concat(Environments)
-            .Concat(NodeTypes).Concat(RuntimeSkills).Concat(FireSpells).Concat(Items).Concat(Vfx).ToArray();
+            .Concat(NodeTypes).Concat(Navigation).Concat(Semantics).Concat(RuntimeSkills).Concat(FireSpells).Concat(Items).Concat(Vfx).ToArray();
 
         public static FormalArtEntry Required(IReadOnlyList<FormalArtEntry> entries, string runtimeId)
         {
@@ -242,6 +261,8 @@ namespace OCC.Combat
         public static string StatusPath(string runtimeId) => Required(Statuses, runtimeId).ResourcePath;
         public static string EnvironmentPath(string runtimeId) => Required(Environments, runtimeId).ResourcePath;
         public static string NodeTypePath(string runtimeId) => Required(NodeTypes, runtimeId).ResourcePath;
+        public static string NavigationPath(string runtimeId) => Required(Navigation, runtimeId).ResourcePath;
+        public static string SemanticPath(string runtimeId) => Required(Semantics, runtimeId).ResourcePath;
         public static string RuntimeSkillPath(string runtimeId) => Required(RuntimeSkills, runtimeId).ResourcePath;
         public static string FireSpellPath(string runtimeId) => Required(FireSpells, runtimeId).ResourcePath;
         public static string ItemPath(string runtimeId) => Required(Items, runtimeId).ResourcePath;

@@ -93,7 +93,7 @@ namespace OCC.Combat.Presentation
             int width = placement.Rotated ? definition.Height : definition.Width;
             int height = placement.Rotated ? definition.Width : definition.Height;
             StringBuilder text = new StringBuilder();
-            text.AppendLine(definition.DisplayName + "  //  " + CategoryName(definition.Category) + " · " + RarityName(definition.Rarity));
+            text.AppendLine(definition.DisplayName + " · " + CategoryName(definition.Category) + " · " + RarityName(definition.Rarity));
             text.Append("占格：").Append(width).Append('×').Append(height).Append(placement.Rotated ? "（已旋转）" : "（标准朝向）")
                 .Append("  重量：").Append(definition.Weight);
             if (definition.MaximumUses > 0) text.Append("  次数：").Append(item.RemainingUses).Append('/').Append(definition.MaximumUses);
@@ -124,6 +124,46 @@ namespace OCC.Combat.Presentation
                 case InventoryError.MissingInstance: return "物品不存在";
                 default: return error == InventoryError.None ? "可放置" : "当前位置不可放置";
             }
+        }
+
+        public static string NextSelection(InventoryContainerState inventory, string currentId, int directionX, int directionY)
+        {
+            if (inventory == null || inventory.Placements.Count == 0) return null;
+            InventoryPlacement? current = string.IsNullOrEmpty(currentId) ? null : inventory.PlacementOf(currentId);
+            if (!current.HasValue || directionX == 0 && directionY == 0)
+                return inventory.Placements.OrderBy(item => item.Y).ThenBy(item => item.X).Select(item => item.InstanceId).FirstOrDefault();
+            Vector2 origin = PlacementCenter(inventory, current.Value);
+            return inventory.Placements.Where(item => item.InstanceId != currentId)
+                .Select(item => new { item.InstanceId, Delta = PlacementCenter(inventory, item) - origin })
+                .Where(item => item.Delta.x * directionX + item.Delta.y * directionY > 0f)
+                .OrderBy(item => Mathf.Abs(item.Delta.x * directionY - item.Delta.y * directionX) * 2f + item.Delta.magnitude)
+                .ThenBy(item => item.InstanceId, StringComparer.Ordinal)
+                .Select(item => item.InstanceId).FirstOrDefault() ?? currentId;
+        }
+
+        public static UiOperationAvailability LootTakeAvailability(InventoryContainerState inventory, ItemInstance item)
+        {
+            if (inventory == null || item == null) return new UiOperationAvailability(false, "不可拿取", "战利品不可用");
+            InventoryResult fit = inventory.FindFirstFit(item);
+            return fit.Success
+                ? new UiOperationAvailability(true, "可拿取", "将自动放入背包 " + fit.X + "," + fit.Y + (fit.Rotated ? "（旋转）" : string.Empty))
+                : new UiOperationAvailability(false, "背包无合法空位", ErrorName(fit.Error));
+        }
+
+        public static string LootSearchReason(bool adjacent, int actionPoints, bool complete)
+        {
+            if (complete) return "容器已清空";
+            if (!adjacent) return "需要移动到容器相邻格";
+            if (actionPoints < 1) return "行动点不足：需要 1 AP";
+            return "可继续搜索：消耗 1 AP";
+        }
+
+        private static Vector2 PlacementCenter(InventoryContainerState inventory, InventoryPlacement placement)
+        {
+            ItemDefinition definition = ItemCatalog.Get(inventory.Get(placement.InstanceId).DefinitionId);
+            int width = placement.Rotated ? definition.Height : definition.Width;
+            int height = placement.Rotated ? definition.Width : definition.Height;
+            return new Vector2(placement.X + width * .5f, placement.Y + height * .5f);
         }
 
         private static string RarityName(ItemRarity rarity) => rarity == ItemRarity.Common ? "普通" : rarity == ItemRarity.Uncommon ? "少见" : rarity == ItemRarity.Rare ? "稀有" : "珍奇";
