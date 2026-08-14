@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-12：地图推进存档协调器 — COMPLETE（2026-08-14）
+
+- **归属：** 肉鸽模式地图推进的持久化边界；不改变新开种子、职业起始包、继续游戏、坏档保护、覆盖确认、内存保留或存档格式。
+- **目标：** 从 Bootstrap 提取地图存档的新建/验证写入、继续读取、坏档状态说明、安全替换、删除与最近保存状态，复用现有 `RogueliteSaveGateway` 的保护语义。
+- **涉及文件/系统：** `TryStartMapRoguelite`、`DescribeMapSaveFailure`、`PrepareMapSlotForReplacement`、`SaveMapRun`、地图存档 UI 状态及新增 EditMode 协调器测试。
+- **验收标准：** Bootstrap 不再解释 `RogueliteSaveLoadStatus` 或持有 `lastMapSaveSucceeded`；新开必须先成功落盘，继续失败不覆盖，坏档只有明确替换路径可删除，运行中保存失败返回原文案；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `RogueliteMapSaveCoordinator`，统一新开前验证写入、继续读取、坏档说明、显式替换、删除、保存结果与 UI 存档状态；Bootstrap 已移除 `lastMapSaveSucceeded` 和 `RogueliteSaveLoadStatus` 分支，行数由 1433 降至 1403。新增写入失败阻止新开、无存档继续不写入、种子/职业往返与坏档显式替换测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `5/5 passed`，全量 EditMode `442/442 passed`，PlayMode `1/1 passed`；Play Mode 只读确认已有存档 `hasSave=True`、可继续且详情为“最近存档”，Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 地图节点导航与资源变化可以在不接触存储细节的情况下提取为独立应用服务。
+
 ### CORE-ARCH-11：玩家战斗选择状态控制器 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗交互架构；不改变行动类型、合法格、键盘移动、取消层级、鼠标行为、技能/法宝规则或 UI 文案。

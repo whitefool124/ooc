@@ -47,6 +47,8 @@ namespace OCC.Combat.Presentation
         private readonly Texture2D[] formalFiregroundFrames = new Texture2D[6];
         private readonly Texture2D[] formalSmokeFrames = new Texture2D[6];
         private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
+        private readonly RogueliteMapSaveCoordinator mapSaves = new RogueliteMapSaveCoordinator(
+            new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore()));
         private CombatPresentationComposition presentation;
         private CombatVisualFeedback visualFeedback => presentation?.Feedback;
         private RogueliteSettlementPresentation settlementPresentation => presentation?.Settlement;
@@ -61,7 +63,6 @@ namespace OCC.Combat.Presentation
         private int trainingRangeArtifactUsesRemaining;
         private string armedInventoryItemId;
         private RogueliteUiPreferences uiPreferences = new RogueliteUiPreferences();
-        private bool lastMapSaveSucceeded = true;
         private bool lastSettingsSaveSucceeded = true;
         private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
         private readonly UiPresentationVersions uiPresentationVersions = new UiPresentationVersions();
@@ -424,42 +425,17 @@ namespace OCC.Combat.Presentation
         }
         private bool TryStartMapRoguelite(bool continueSave, string starterId)
         {
-            RogueliteMapRun run;
-            if (continueSave)
+            RogueliteMapStartResult start = mapSaves.TryStart(continueSave, starterId,
+                UnityEngine.Random.Range(1, int.MaxValue));
+            if (!start.Success)
             {
-                if (!saveGateway.TryLoadMapRun(out run))
-                {
-                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, DescribeMapSaveFailure()));
-                    MarkPresentation(UiPresentationArea.Flow);
-                    return false;
-                }
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, start.FailureMessage));
+                MarkPresentation(UiPresentationArea.Flow);
+                return false;
             }
-            else
-            {
-                run = new RogueliteMapRun(UnityEngine.Random.Range(1, int.MaxValue), starterId);
-                if (!saveGateway.SaveMapRun(run))
-                {
-                    lastMapSaveSucceeded = false;
-                    ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "新推进未能写入存档；仍停留在入口，未启动未保存的行动"));
-                    MarkPresentation(UiPresentationArea.Flow);
-                    return false;
-                }
-                lastMapSaveSucceeded = true;
-            }
-            rogueliteFlow.BeginMapRun(run);
+            rogueliteFlow.BeginMapRun(start.Run);
             MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure);
             return true;
-        }
-        private string DescribeMapSaveFailure()
-        {
-            switch (saveGateway.LastLoadStatus)
-            {
-                case RogueliteSaveLoadStatus.Missing: return "没有可继续的地图存档；未创建或覆盖任何数据";
-                case RogueliteSaveLoadStatus.CorruptData: return "地图存档文本损坏；主槽与首份备份已保护，明确删槽前不可覆盖";
-                case RogueliteSaveLoadStatus.InvalidSemantics: return "地图存档状态不合法；主槽与首份备份已保护，明确删槽前不可覆盖";
-                case RogueliteSaveLoadStatus.StoreError: return "存档存储暂时不可用；未把故障当作无存档，也未启动新推进";
-                default: return "地图存档无法读取；未启动新推进";
-            }
         }
         public void RequestStartMapRoguelite(bool continueSave)
             => RequestStartMapRoguelite(continueSave, FireRogueliteStarterCatalog.Universal);
@@ -484,19 +460,13 @@ namespace OCC.Combat.Presentation
             ShowUiFeedback(new UiActionFeedback(continueSave ? UiFeedbackKind.Information : UiFeedbackKind.Saved,
                 continueSave ? "已读取最近一次地图推进" : "已创建并保存新的首区推进"));
         }
-        public void DeleteMapRogueliteSave() => saveGateway.DeleteMapRun();
-        public bool HasMapRogueliteSave => saveGateway.HasMapRun;
-        public MapSaveUiPresentation MapSavePresentation => MapSaveUiPresentation.From(HasMapRogueliteSave, saveGateway.LastLoadStatus, lastMapSaveSucceeded);
+        public void DeleteMapRogueliteSave() => mapSaves.Delete();
+        public bool HasMapRogueliteSave => mapSaves.HasSave;
+        public MapSaveUiPresentation MapSavePresentation => mapSaves.Presentation;
         public string SettingsSaveDetail => lastSettingsSaveSucceeded ? "所有设置已保存" : "设置已生效 · 持久化失败";
 
         private bool PrepareMapSlotForReplacement()
-        {
-            if (saveGateway.TryLoadMapRun(out _)) return true;
-            if (saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.Missing) return true;
-            if (saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.CorruptData || saveGateway.LastLoadStatus == RogueliteSaveLoadStatus.InvalidSemantics)
-                return saveGateway.DeleteMapRun();
-            return false;
-        }
+            => mapSaves.PrepareSlotForReplacement();
         public void SelectMapNode(string nodeId)
         {
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
@@ -580,13 +550,13 @@ namespace OCC.Combat.Presentation
         }
         private bool SaveMapRun()
         {
-            lastMapSaveSucceeded = mapRun != null && saveGateway.SaveMapRun(mapRun);
-            if (!lastMapSaveSucceeded)
+            bool saved = mapSaves.Save(mapRun);
+            if (!saved)
             {
-                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "地图进度未能写入；当前状态仍保留在内存中，请勿退出并稍后重试"));
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, RogueliteMapSaveCoordinator.ActiveRunSaveFailure));
                 MarkPresentation(UiPresentationArea.Flow);
             }
-            return lastMapSaveSucceeded;
+            return saved;
         }
         public void ChooseShortEvent() { rogueliteRun.ShortRun.ChooseEvent("field_repair"); SaveShortRun(); }
         public void ChooseShortSalvage() { rogueliteRun.ShortRun.ChooseSalvage("shield_cell"); SaveShortRun(); }
