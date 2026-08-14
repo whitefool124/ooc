@@ -20,13 +20,11 @@ namespace OCC.Combat.Presentation
         private readonly CombatSessionLifecycleController combatSession = new CombatSessionLifecycleController();
         private readonly CombatCommandExecutionService commandExecution = new CombatCommandExecutionService();
         private readonly CombatFeedbackPublisher feedbackPublisher = new CombatFeedbackPublisher();
-        private readonly CombatTargetNavigationState targetNavigation = new CombatTargetNavigationState();
+        private readonly CombatSelectionController selection = new CombatSelectionController();
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
         private CombatState snapshot;
-        private string selectedAction = "\u79fb\u52a8";
-        private string selectedTargetId;
         private Font chineseFont;
         private Texture2D barTexture;
         private bool initialized;
@@ -262,7 +260,7 @@ namespace OCC.Combat.Presentation
 
         private void BuildCombatFromSceneStageTwo()
         {
-            targetNavigation.End();
+            selection.EndKeyboardTargeting();
             string encounterId = mapRun != null
                 ? (mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId)
                 : rogueliteRun?.CurrentMission.Id;
@@ -379,10 +377,10 @@ namespace OCC.Combat.Presentation
             {
                 trainingRangeActive = false; rogueliteFlow.Reset();
                 developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
-                BuildCombatFromSceneStageTwo(); selectedAction = "移动"; selectedTargetId = null;
+                BuildCombatFromSceneStageTwo(); selection.Reset();
                 RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); return;
             }
-            developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selectedAction = "移动"; rogueliteFlow.Reset(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow);
+            developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; selection.Reset(); rogueliteFlow.Reset(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow);
         }
         public void OpenRogueliteMenu() => rogueliteFlow.OpenRogueliteMenu();
         public void CloseRogueliteMenu() => rogueliteFlow.CloseRogueliteMenu();
@@ -672,7 +670,7 @@ namespace OCC.Combat.Presentation
             Texture2D move = IsInMoveRange(position) ? formalOverlayTextures["move_range"] : null;
             Texture2D attack = IsInAttackRange(position) ? formalOverlayTextures["attack_range"] : null;
             Texture2D skill = null;
-            int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
             FireSpellPreview firePreview = fireSpell == null ? null : BuildFireSpellPreviewAt(fireSpell, position);
             if (firePreview?.CanCommit == true)
@@ -736,9 +734,9 @@ namespace OCC.Combat.Presentation
 
             Texture2D loot = state.Loot != null && state.Loot.Position == position
                 ? state.Loot.IsLooted ? formalRelayTextures["loot_crate_empty"] : formalLootTexture : null;
-            bool selected = targetNavigation.Active && targetNavigation.Position == position ||
-                unit != null && unit.Id == selectedTargetId;
-            Texture2D selection = selected ? formalOverlayTextures["selected"] : null;
+            bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
+                unit != null && unit.Id == selection.TargetId;
+            Texture2D selectionOverlay = selected ? formalOverlayTextures["selected"] : null;
             string hover = unit == null ? string.Empty : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
@@ -746,8 +744,8 @@ namespace OCC.Combat.Presentation
             Texture2D floor = formalRelayTextures[FloorKeyForCurrentLevel(position.X, position.Y)];
             Rect uv = unitTexture == null ? new Rect(0f, 0f, 1f, 1f) : CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
             return new BattlefieldCellPresentation(position, floor, environment, move,
-                selectedAction == "移动" ? 1f : .45f, attack, selectedAction == "攻击" ? 1f : .65f,
-                skill, selection, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
+                selection.Action == "移动" ? 1f : .45f, attack, selection.Action == "攻击" ? 1f : .65f,
+                skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover);
         }
         public BattlefieldRect CurrentBattlefieldBoard => battlefieldViewport?.BoardRect ?? battlefield.BoardRect(state?.Map.Width ?? BattlefieldPresentationAdapter.DefaultWidth, state?.Map.Height ?? BattlefieldPresentationAdapter.DefaultHeight);
@@ -763,11 +761,11 @@ namespace OCC.Combat.Presentation
         public string CurrentLevelId => currentLevel?.Id;
         public FireBattleState CurrentFireBattle => fireBattle;
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
-        public string SelectedAction => selectedAction;
-        public string SelectedTargetId => selectedTargetId;
-        public bool IsKeyboardTargeting => targetNavigation.Active;
-        public GridPosition KeyboardTargetPosition => targetNavigation.Position;
-        public CombatActionPreview CurrentActionPreview => BuildActionPreview(selectedAction);
+        public string SelectedAction => selection.Action;
+        public string SelectedTargetId => selection.TargetId;
+        public bool IsKeyboardTargeting => selection.IsKeyboardTargeting;
+        public GridPosition KeyboardTargetPosition => selection.KeyboardPosition;
+        public CombatActionPreview CurrentActionPreview => BuildActionPreview(selection.Action);
         public CombatActionPreview ActionPreview(string action) => BuildActionPreview(action);
         public CombatOutcomePresentation CurrentOutcomePresentation => state == null ? null : CombatInformationPresenter.BuildOutcome(state, mapRun != null);
         public string CurrentPhaseText => CombatInformationPresenter.PhaseText(CurrentFlowPhase, state);
@@ -798,12 +796,12 @@ namespace OCC.Combat.Presentation
             }
             int slot = action == "技能1" ? 0 : action == "技能2" ? 1 : -1;
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
-            if (spell == null || state == null) return availability.Preview(state, action, selectedTargetId);
+            if (spell == null || state == null) return availability.Preview(state, action, selection.TargetId);
             if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
             int valid = 0;
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsFireSpellCellValid(spell, new GridPosition(x, y))) valid++;
             string failure = string.Empty;
-            UnitState selected = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
+            UnitState selected = string.IsNullOrEmpty(selection.TargetId) ? null : state.GetUnit(selection.TargetId);
             if (selected != null)
             {
                 FireSpellPreview exact = FireSpellEngine.Preview(fireBattle, "hero", spell, FireSpellTarget.Unit(selected.Id, FacingToward(state.GetUnit("hero").Position, selected.Position)));
@@ -828,56 +826,45 @@ namespace OCC.Combat.Presentation
         }
         public void SetSelectedTargetForUi(string unitId)
         {
-            selectedTargetId = state != null && state.GetUnit(unitId) != null ? unitId : null;
+            selection.SetTarget(state, unitId);
             MarkPresentation(UiPresentationArea.Combat);
         }
         public bool BeginKeyboardTargeting()
         {
-            UnitState hero = state?.GetUnit("hero");
-            if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id) return false;
-            UnitState selected = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
-            targetNavigation.Begin(selected?.Position ?? hero.Position, state.Map.Width, state.Map.Height);
+            if (!selection.BeginKeyboardTargeting(state)) return false;
             MarkPresentation(UiPresentationArea.Combat);
             return true;
         }
         public void MoveKeyboardTarget(int deltaX, int deltaY)
         {
-            if (state == null || !targetNavigation.Active) return;
-            targetNavigation.Move(deltaX, deltaY, state.Map.Width, state.Map.Height);
-            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == targetNavigation.Position);
-            selectedTargetId = unit != null && !unit.IsHero ? unit.Id : null;
+            if (!selection.MoveKeyboardTarget(state, deltaX, deltaY)) return;
             MarkPresentation(UiPresentationArea.Combat);
         }
         public void CommitKeyboardTarget()
         {
-            if (state == null || !targetNavigation.Active) return;
-            GridPosition position = targetNavigation.Position;
-            targetNavigation.End();
+            if (state == null || !selection.TryCommitKeyboardTarget(out GridPosition position)) return;
             HandleCellClick(position);
             MarkPresentation(UiPresentationArea.Combat);
         }
         public void CancelKeyboardTargeting()
         {
-            if (!targetNavigation.Active) return;
-            targetNavigation.End();
-            selectedTargetId = null;
+            if (!selection.CancelKeyboardTargeting()) return;
             MarkPresentation(UiPresentationArea.Combat);
             ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消战场目标选择"));
         }
         public void CancelCombatSelectionOrRequestLeave()
         {
-            CombatCancelResolution resolution = CombatSelectionNavigation.ResolveCancel(selectedAction, selectedTargetId, !string.IsNullOrEmpty(armedInventoryItemId));
+            CombatCancelResolution resolution = CombatSelectionNavigation.ResolveCancel(selection.Action, selection.TargetId, !string.IsNullOrEmpty(armedInventoryItemId));
             if (resolution == CombatCancelResolution.ClearTarget)
             {
-                selectedTargetId = null;
+                selection.ClearTarget();
                 MarkPresentation(UiPresentationArea.Combat);
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消目标查看"));
                 return;
             }
             if (resolution == CombatCancelResolution.ResetAction)
             {
-                selectedAction = "移动";
-                selectedTargetId = null;
+                selection.Reset();
                 armedInventoryItemId = null;
                 MarkPresentation(UiPresentationArea.Combat);
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消当前行动选择"));
@@ -956,7 +943,7 @@ namespace OCC.Combat.Presentation
             trainingRangeArtifactUsesRemaining = trainingRangeSession.CurrentArtifact?.MaximumUses ?? 0;
             developerPreparation = new MissionPreparation().Configure("training_range", "能力验证与确定性回归", "标准靶兵、友军、掩体、设备、水面与核心样本");
             developerFlow = new CombatFlowController(); developerFlow.Configure(developerPreparation, state); developerFlow.OpenBriefing(); developerFlow.BeginCombat();
-            selectedAction = "技能1"; selectedTargetId = prepared.RecommendedUnitId; outcomeSettlement.Reset();
+            selection.Reset("技能1"); selection.SetKnownTarget(prepared.RecommendedUnitId); outcomeSettlement.Reset();
             ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
         }
         public TrainingRangePreviewReport PreviewTrainingRangeCurrent()
@@ -1044,9 +1031,7 @@ namespace OCC.Combat.Presentation
         }
         public void SelectHudAction(string action)
         {
-            targetNavigation.End();
-            selectedAction = action;
-            selectedTargetId = null;
+            selection.SelectAction(action);
             MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatActionSelected, action));
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatRangeRevealed, action, message: GetRangeDescription()));
@@ -1065,13 +1050,13 @@ namespace OCC.Combat.Presentation
                     state.AddLog("定锚支架已在快捷栏待机；受到推拉时自动抵消并消耗 1 次。");
                     MarkPresentation(UiPresentationArea.Combat); return;
                 }
-                armedInventoryItemId = item.InstanceId; selectedAction = "技能1"; selectedTargetId = null;
+                armedInventoryItemId = item.InstanceId; selection.SelectAction("技能1");
                 EnsureArtifactBattle(); state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择合法目标。");
                 MarkPresentation(UiPresentationArea.Combat); return;
             }
             FireSpellDefinition ability = ItemAbilityCatalog.For(item.DefinitionId);
             if (ability == null) { TryCommand(CombatCommand.UseQuickbar("hero", slot)); PersistCombatInventory(); return; }
-            armedInventoryItemId = item.InstanceId; selectedAction = "技能1"; selectedTargetId = null; state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择目标格。"); MarkPresentation(UiPresentationArea.Combat);
+            armedInventoryItemId = item.InstanceId; selection.SelectAction("技能1"); state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择目标格。"); MarkPresentation(UiPresentationArea.Combat);
         }
         public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }
         private void PersistCombatInventory() { if (mapRun == null || state == null) return; mapRun.CaptureCombatInventory(state); SaveMapRun(); }
@@ -1220,14 +1205,14 @@ namespace OCC.Combat.Presentation
             if (enemy == null || enemy.IsHero || !enemy.IsAlive || state == null || state.ActiveUnitId != "hero") return null;
             try
             {
-                if (selectedAction == "攻击")
+                if (selection.Action == "攻击")
                 {
-                    if (!string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selectedAction, enemy.Position))) return null;
+                    if (!string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selection.Action, enemy.Position))) return null;
                     if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
                     return CombatTargetDamageForecaster.WeaponAttack(fireBattle, "hero", enemy.Id);
                 }
 
-                int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+                int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
                 if (slot < 0) return null;
                 FireSpellDefinition fireSpell = FireSpellInSlot(slot);
                 if (fireSpell != null)
@@ -1251,7 +1236,7 @@ namespace OCC.Combat.Presentation
 
                 SkillDefinition skill = slot == 0 ? state.GetUnit("hero").SkillOne : state.GetUnit("hero").SkillTwo;
                 if (skill == null || skill.Damage <= 0 ||
-                    !string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selectedAction, enemy.Position))) return null;
+                    !string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selection.Action, enemy.Position))) return null;
                 return CombatTargetDamageForecaster.Skill(state,
                     CombatCommand.UseSkill("hero", slot, enemy.Id), enemy.Id);
             }
@@ -1263,10 +1248,9 @@ namespace OCC.Combat.Presentation
 
         private void HandleInspectionClick(GridPosition position)
         {
-            targetNavigation.End();
+            selection.EndKeyboardTargeting();
             string nextTargetId = CombatInformationPresenter.EnemyInspectionTargetAt(state, position);
-            if (selectedTargetId == nextTargetId) return;
-            selectedTargetId = nextTargetId;
+            if (!selection.SetKnownTarget(nextTargetId)) return;
             MarkPresentation(UiPresentationArea.Combat);
             if (!string.IsNullOrEmpty(nextTargetId)) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatTargetConfirmed, nextTargetId));
         }
@@ -1280,10 +1264,10 @@ namespace OCC.Combat.Presentation
 
         private void HandleCellClick(GridPosition p)
         {
-            targetNavigation.End();
+            selection.EndKeyboardTargeting();
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
-            int fireSlot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
             if (fireSpell != null)
             {
@@ -1292,19 +1276,19 @@ namespace OCC.Combat.Presentation
             }
             ArtifactDefinition artifact = CurrentArmedInventoryItem != null && ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
                 ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
-            if (selectedAction == "技能1" && artifact != null) { TryArtifactCell(artifact, clickedUnit, p); return; }
-            string invalidReason = battlefield.InvalidReasonForCell(state, selectedAction, p);
+            if (selection.Action == "技能1" && artifact != null) { TryArtifactCell(artifact, clickedUnit, p); return; }
+            string invalidReason = battlefield.InvalidReasonForCell(state, selection.Action, p);
             if (!string.IsNullOrEmpty(invalidReason))
             {
-                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, selectedAction, message: invalidReason));
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, selection.Action, message: invalidReason));
                 return;
             }
-            if (selectedAction == "\u79fb\u52a8") TryCommand(CombatCommand.Move("hero", p, FacingToward(state.GetUnit("hero").Position, p)));
-            else if (selectedAction == "\u653b\u51fb" && enemy != null) TryCommand(CombatCommand.Attack("hero", enemy.Id));
-            else if (selectedAction == "\u6280\u80fd1") TrySkillCell(0, state.GetUnit("hero").SkillOne, clickedUnit, p);
-            else if (selectedAction == "\u6280\u80fd2") TrySkillCell(1, state.GetUnit("hero").SkillTwo, clickedUnit, p);
-            else if (selectedAction == "\u641c\u522e") TryCommand(CombatCommand.Loot("hero"));
-            else if (selectedAction == "\u4e92\u52a8") TryCommand(CombatCommand.Interact("hero", p));
+            if (selection.Action == "\u79fb\u52a8") TryCommand(CombatCommand.Move("hero", p, FacingToward(state.GetUnit("hero").Position, p)));
+            else if (selection.Action == "\u653b\u51fb" && enemy != null) TryCommand(CombatCommand.Attack("hero", enemy.Id));
+            else if (selection.Action == "\u6280\u80fd1") TrySkillCell(0, state.GetUnit("hero").SkillOne, clickedUnit, p);
+            else if (selection.Action == "\u6280\u80fd2") TrySkillCell(1, state.GetUnit("hero").SkillTwo, clickedUnit, p);
+            else if (selection.Action == "\u641c\u522e") TryCommand(CombatCommand.Loot("hero"));
+            else if (selection.Action == "\u4e92\u52a8") TryCommand(CombatCommand.Interact("hero", p));
         }
         private void EnsureArtifactBattle()
         {
@@ -1340,7 +1324,7 @@ namespace OCC.Combat.Presentation
             }
             else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
             state.AddLog(artifact.DisplayName + "：产生 " + execution.Steps.Count + " 项结果");
-            selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
+            selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, artifact.Id));
             visualFeedback?.NotifyArtifact(artifact, source, preview.Cells, execution);
             developerFlow.RefreshOutcome();
@@ -1359,7 +1343,7 @@ namespace OCC.Combat.Presentation
             Facing facing = FacingToward(state.GetUnit("hero").Position, position);
             FireSpellTarget target = clickedUnit == null ? FireSpellTarget.At(position, facing) : FireSpellTarget.Unit(clickedUnit.Id, facing);
             FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", spell, target);
-            selectedTargetId = clickedUnit?.Id;
+            selection.SetKnownTarget(clickedUnit?.Id);
             if (!preview.CanCommit)
             {
                 string reason = string.Join("；", preview.Failures); state.AddLog(reason);
@@ -1374,7 +1358,7 @@ namespace OCC.Combat.Presentation
             }
             if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
             state.AddLog(spell.DisplayName + "：产生 " + execution.Steps.Count + " 项结果");
-            selectedTargetId = null; MarkPresentation(UiPresentationArea.Combat);
+            selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, spell.Id));
             visualFeedback?.NotifyFireSpell(spell, source, preview.Cells);
             developerFlow.RefreshOutcome();
@@ -1409,7 +1393,7 @@ namespace OCC.Combat.Presentation
             if (trainingRangeActive && result.DeliveredSkill != null) trainingRangeSession?.RecordExternal(result.Execution);
             PublishFireExecutions(result.MovementFireExecutions);
             if (result.HeroMoved) FollowHeroAtSafeEdge();
-            selectedTargetId = null;
+            selection.ClearTarget();
             enemyPlans.Invalidate();
             MarkPresentation(UiPresentationArea.Combat);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
@@ -1427,17 +1411,17 @@ namespace OCC.Combat.Presentation
         public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
             CombatCommandExecutionService.CanSubmit(command, explicitHeroEndTurn);
 
-        private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selectedAction == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selectedAction == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selectedAction == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
+        private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selection.Action == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selection.Action == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selection.Action == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selection.Action == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)
         {
-            int slot = selectedAction == "技能1" ? 0 : selectedAction == "技能2" ? 1 : -1;
+            int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
             if (spell != null)
             {
                 if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
                 return IsFireSpellCellValid(spell, p);
             }
-            return battlefield.IsInSelectedRange(state, selectedAction, p);
+            return battlefield.IsInSelectedRange(state, selection.Action, p);
         }
         private bool IsSkillTargetInRange(SkillDefinition skill, GridPosition position) => battlefield.IsSkillTargetInRange(state, skill, position);
         private bool IsInMoveRange(GridPosition p) => battlefield.IsInMoveRange(state, p);

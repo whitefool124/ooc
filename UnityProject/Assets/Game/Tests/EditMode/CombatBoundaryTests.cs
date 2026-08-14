@@ -164,5 +164,15 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatFeedbackPublisher)), Is.True);
             Assert.That(typeof(IResolvedCombatFeedbackSink).IsAssignableFrom(typeof(CombatVisualFeedback)), Is.True);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesTransientPlayerSelectionToController()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatSelectionController)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.Name == "selectedAction"), Is.False);
+            Assert.That(Array.Exists(fields, field => field.Name == "selectedTargetId"), Is.False);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatTargetNavigationState)), Is.False);
+        }
     }
 }
