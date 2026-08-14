@@ -34,7 +34,7 @@ namespace OCC.Combat.Presentation
         private RogueliteDeveloperRun rogueliteRun { get => rogueliteFlow.DeveloperRun; set => rogueliteFlow.SetDeveloperRun(value); }
         private int sandboxTemplateIndex;
         private bool rogueliteMenuOpen { get => rogueliteFlow.IsRogueliteMenuOpen; set => rogueliteFlow.SetRogueliteMenuOpen(value); }
-        private bool outcomeHandled;
+        private readonly CombatOutcomeSettlementCoordinator outcomeSettlement = new CombatOutcomeSettlementCoordinator();
         private RogueliteMapRun mapRun { get => rogueliteFlow.MapRun; set => rogueliteFlow.SetMapRun(value); }
         private bool mapMenuOpen { get => rogueliteFlow.IsMapMenuOpen; set => rogueliteFlow.SetMapMenuOpen(value); }
         private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
@@ -386,7 +386,7 @@ namespace OCC.Combat.Presentation
             developerFlow.Configure(developerPreparation, state);
             battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
             battlefieldViewport.Focus(state.GetUnit("hero").Position);
-            outcomeHandled = false;
+            outcomeSettlement.Reset();
             ResetEnemyTurnSequence();
         }
 
@@ -981,7 +981,7 @@ namespace OCC.Combat.Presentation
             trainingRangeArtifactUsesRemaining = trainingRangeSession.CurrentArtifact?.MaximumUses ?? 0;
             developerPreparation = new MissionPreparation().Configure("training_range", "能力验证与确定性回归", "标准靶兵、友军、掩体、设备、水面与核心样本");
             developerFlow = new CombatFlowController(); developerFlow.Configure(developerPreparation, state); developerFlow.OpenBriefing(); developerFlow.BeginCombat();
-            selectedAction = "技能1"; selectedTargetId = prepared.RecommendedUnitId; outcomeHandled = false;
+            selectedAction = "技能1"; selectedTargetId = prepared.RecommendedUnitId; outcomeSettlement.Reset();
             ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
         }
         public TrainingRangePreviewReport PreviewTrainingRangeCurrent()
@@ -1119,28 +1119,18 @@ namespace OCC.Combat.Presentation
         }
         private void HandleRogueliteOutcome()
         {
-            if (mapRun != null && !outcomeHandled && developerFlow.Phase == CombatFlowPhase.Victory)
+            CombatOutcomeSettlement settlement = outcomeSettlement.Process(developerFlow.Phase, state, mapRun, rogueliteRun);
+            if (!settlement.HandledNow) return;
+            visualFeedback?.PlayOutcome(settlement.Victory);
+            if (settlement.Persistence == CombatOutcomePersistence.MapRun)
             {
-                outcomeHandled = true; visualFeedback?.PlayOutcome(true);
-                RogueliteCombatSettlement.TrySettleVictory(mapRun, state);
                 MarkPresentation(UiPresentationArea.Settlement);
                 MarkPresentation(UiPresentationArea.MapStructure);
-                SaveMapRun(); settlementPresentation?.RefreshNow(); return;
+                SaveMapRun();
             }
-            if (!outcomeHandled && developerFlow.Phase == CombatFlowPhase.Defeat)
-            {
-                outcomeHandled = true; visualFeedback?.PlayOutcome(false);
-                // A defeat deliberately leaves the pre-combat map save untouched. The combat snapshot
-                // remains available to CombatFlowController for deterministic tactical restart.
-            }
-            if (rogueliteRun == null || outcomeHandled || developerFlow.Phase != CombatFlowPhase.Victory) return;
-            visualFeedback?.PlayOutcome(true);
-            outcomeHandled = true;
-            string summary = "胜利 | " + rogueliteRun.CurrentMission.TemplateId + " | 种子 " + rogueliteRun.Package.Seed;
-            if (rogueliteRun.Kind == RogueliteLaunchKind.TemplateSandbox) return;
-            rogueliteRun.Complete(summary);
-            if (rogueliteRun.IsShortRun) SaveShortRun();
-            else saveGateway.SaveStory(rogueliteRun.Package);
+            else if (settlement.Persistence == CombatOutcomePersistence.ShortRun) SaveShortRun();
+            else if (settlement.Persistence == CombatOutcomePersistence.Story) saveGateway.SaveStory(rogueliteRun.Package);
+            if (settlement.RefreshSettlement) settlementPresentation?.RefreshNow();
         }
         public void ContinueRogueliteAfterVictory()
         {

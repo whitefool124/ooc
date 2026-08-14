@@ -140,5 +140,13 @@ namespace OCC.Combat.Tests
             FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatCommandExecutionService)), Is.True);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesOutcomeIdempotenceToSettlementCoordinator()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatOutcomeSettlementCoordinator)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.Name == "outcomeHandled"), Is.False);
+        }
     }
 }

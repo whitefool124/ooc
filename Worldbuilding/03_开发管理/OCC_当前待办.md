@@ -6,6 +6,16 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-08：双运行形态统一战斗结算 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；保留 `mapRun` 与旧 `rogueliteRun` 两种运行形态，不改变奖励、失败回滚、短局、模板沙盒、剧情链或存档格式。
+- **用户决定：** 采用路线 A：两种运行形态通过统一结算接口隔离，暂不退役旧 `rogueliteRun`（2026-08-14）。
+- **目标：** 从 Bootstrap 提取胜负只处理一次的状态、地图运行结算与旧肉鸽运行结算差异，由统一协调器返回保存/刷新指令；Bootstrap 只执行表现和持久化端口。
+- **涉及文件/系统：** `HandleRogueliteOutcome`、`outcomeHandled`、`RogueliteCombatSettlement`、`MapRunState`、`RogueliteDeveloperRun`、短局/剧情存档与新增 EditMode 结算测试。
+- **验收标准：** Bootstrap 不再声明 `outcomeHandled`，也不直接决定地图运行与旧肉鸽运行的结算分支；协调器覆盖地图胜利、失败不覆盖战前存档、模板沙盒、短局、剧情链与重复调用幂等性；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `CombatOutcomeSettlementCoordinator`，统一持有结算幂等状态并将地图运行、模板沙盒、短局与剧情链适配为 `MapRun/ShortRun/Story/None` 持久化指令；Bootstrap 已移除 `outcomeHandled`，不再直接调用地图结算或旧运行 `Complete`，只执行视觉、保存与结算页刷新端口，行数由 1520 降至 1510。新增地图胜利、失败不落盘、模板沙盒不推进、短局/剧情链端口、重复调用与重置测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `6/6 passed`，全量 EditMode `425/425 passed`，PlayMode `1/1 passed`；现场强制失败后流程正确进入 `Defeat` 并显示结算，Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 将开战、战术重开和回合生命周期组合进 battle session controller，形成稳定的会话入口。
+
 ### CORE-ARCH-07：战斗命令执行服务 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；不改变命令合法性、伤害、火术触发、行动点、敌人计划失效时机或表现内容。
