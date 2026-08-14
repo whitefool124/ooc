@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-13：地图推进交互应用服务 — COMPLETE（2026-08-14）
+
+- **归属：** 肉鸽模式地图推进的应用层边界；不改变节点可达性、战斗触发、奖励/资源数值、火术装备兼容性、存档时机或 UI 文案。
+- **目标：** 从 Bootstrap 提取节点选择、内容选择、奖励领取、火术装备轮换、奖励装备与以太校准的领域调用和结果判定，以结构化结果驱动现有存档、表现刷新与视觉事件。
+- **涉及文件/系统：** `SelectMapNode`、`ChooseMapNodeContent`、`ClaimMapReward`、`ClaimMapFireSpell`、`EquipMapFireSpell`、`EquipNextMapFireSpell`、`EquipMapReward`、`CalibrateMapAether`、资源差值发布及新增 EditMode 应用服务测试。
+- **验收标准：** Bootstrap 不再直接调用上述 `RogueliteMapRun` 变更方法或自行遍历火术装备候选；服务结果明确战斗启动、安全回访、资源前后值与刷新边界；现有存档/反馈顺序不变；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `RogueliteMapInteractionService`、`RogueliteMapInteractionResult` 与资源快照，统一节点/内容/奖励/火术装备/奖励装备/校准调用并返回战斗启动、安全回访和资源前后值；Bootstrap 不再直接调用这八类 `RogueliteMapRun` 变更方法或遍历火术候选，行数由 1403 降至 1387。新增节点战斗结果、内容战斗结果、校准资源差值与既有火术轮换回退语义测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `20/20 passed`，全量 EditMode `447/447 passed`，PlayMode `1/1 passed`；Play Mode 临时运行对象验证 `start→rail_patrol`、战斗触发与以太 `-2` 差值，未触碰正式存档，Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** Bootstrap 的地图职责只剩流程跳转、持久化和表现适配，可继续拆战斗构建或场景资源加载边界并向 1000 行目标推进。
+
 ### CORE-ARCH-12：地图推进存档协调器 — COMPLETE（2026-08-14）
 
 - **归属：** 肉鸽模式地图推进的持久化边界；不改变新开种子、职业起始包、继续游戏、坏档保护、覆盖确认、内存保留或存档格式。

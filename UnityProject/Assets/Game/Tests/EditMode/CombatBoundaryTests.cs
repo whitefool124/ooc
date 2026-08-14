@@ -182,5 +182,12 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(RogueliteMapSaveCoordinator)), Is.True);
             Assert.That(Array.Exists(fields, field => field.Name == "lastMapSaveSucceeded"), Is.False);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesMapDomainInteractionsToApplicationService()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(RogueliteMapInteractionService)), Is.True);
+        }
     }
 }

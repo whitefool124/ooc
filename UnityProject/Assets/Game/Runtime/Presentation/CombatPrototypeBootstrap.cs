@@ -49,6 +49,7 @@ namespace OCC.Combat.Presentation
         private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
         private readonly RogueliteMapSaveCoordinator mapSaves = new RogueliteMapSaveCoordinator(
             new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore()));
+        private readonly RogueliteMapInteractionService mapInteractions = new RogueliteMapInteractionService();
         private CombatPresentationComposition presentation;
         private CombatVisualFeedback visualFeedback => presentation?.Feedback;
         private RogueliteSettlementPresentation settlementPresentation => presentation?.Settlement;
@@ -469,16 +470,11 @@ namespace OCC.Combat.Presentation
             => mapSaves.PrepareSlotForReplacement();
         public void SelectMapNode(string nodeId)
         {
-            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
-            bool resumesCurrentCombat = node.Id == mapRun.CurrentNodeId && RogueliteUiPreferences.CanOpenCombatBriefing(mapRun, node);
-            bool startsCombat = resumesCurrentCombat || RogueliteUiPreferences.StartsCombat(mapRun, node);
-            bool safeRevisit = mapRun.CompletedNodes.Contains(nodeId);
-            string previousNodeId = mapRun.CurrentNodeId;
-            if (!resumesCurrentCombat) mapRun.SelectNode(nodeId);
+            RogueliteMapInteractionResult result = mapInteractions.SelectNode(mapRun, nodeId);
             MarkPresentation(UiPresentationArea.MapStructure);
-            PublishUiVisual(new UiVisualEvent(safeRevisit ? UiVisualEventKind.SafeRevisit : UiVisualEventKind.MapLocationChanged,
-                nodeId, message: previousNodeId + "→" + nodeId));
-            if (!startsCombat)
+            PublishUiVisual(new UiVisualEvent(result.SafeRevisit ? UiVisualEventKind.SafeRevisit : UiVisualEventKind.MapLocationChanged,
+                result.SubjectId, message: result.PreviousNodeId + "→" + result.SubjectId));
+            if (!result.StartsCombat)
             {
                 SaveMapRun(); return;
             }
@@ -494,52 +490,40 @@ namespace OCC.Combat.Presentation
         }
         public void ChooseMapNodeContent(string choiceId)
         {
-            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
-            mapRun.ChooseCurrentNodeContent(choiceId);
+            RogueliteMapInteractionResult result = mapInteractions.ChooseContent(mapRun, choiceId);
             MarkPresentation(UiPresentationArea.MapStructure);
-            PublishResourceChanges(parts, aether, supplies, scouting, access);
-            if (mapRun.HasPendingContentCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, choiceId)); return; }
+            PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
+            if (result.StartsCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, choiceId)); return; }
             SaveMapRun();
         }
         public void ClaimMapReward(string rewardId)
         {
-            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
-            mapRun.ClaimReward(rewardId);
+            RogueliteMapInteractionResult result = mapInteractions.ClaimReward(mapRun, rewardId);
             MarkPresentation(UiPresentationArea.Settlement);
             MarkPresentation(UiPresentationArea.MapStructure);
-            PublishResourceChanges(parts, aether, supplies, scouting, access);
+            PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, rewardId));
             SaveMapRun(); settlementPresentation?.RefreshNow();
         }
         public void ClaimMapFireSpell(string spellId)
         {
-            mapRun.ClaimFireSpell(spellId);
+            mapInteractions.ClaimFireSpell(mapRun, spellId);
             MarkPresentation(UiPresentationArea.Settlement); MarkPresentation(UiPresentationArea.MapStructure);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, spellId));
             SaveMapRun(); settlementPresentation?.RefreshNow();
         }
-        public void EquipMapFireSpell(string spellId, int slot) { mapRun.EquipFireSpell(spellId, slot); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat); }
+        public void EquipMapFireSpell(string spellId, int slot) { mapInteractions.EquipFireSpell(mapRun, spellId, slot); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat); }
         public void EquipNextMapFireSpell(int slot)
         {
-            if (mapRun == null || mapRun.OwnedFireSpellIds.Count == 0 || slot < 0 || slot >= mapRun.EquippedFireSpellIds.Count) return;
-            string current = mapRun.EquippedFireSpellIds[slot];
-            int currentIndex = mapRun.OwnedFireSpellIds.ToList().FindIndex(id => string.Equals(id, current, StringComparison.Ordinal));
-            for (int offset = 1; offset <= mapRun.OwnedFireSpellIds.Count; offset++)
-            {
-                string candidate = mapRun.OwnedFireSpellIds[(Math.Max(-1, currentIndex) + offset) % mapRun.OwnedFireSpellIds.Count];
-                if (mapRun.EquippedFireSpellIds.Where((id, index) => index != slot).Contains(candidate)) continue;
-                if (!FireSpellCatalog.IsWeaponCompatible(FireSpellCatalog.Get(candidate), mapRun.EquippedWeapon)) continue;
-                EquipMapFireSpell(candidate, slot);
-                return;
-            }
+            if (!mapInteractions.TryEquipNextFireSpell(mapRun, slot)) return;
+            SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat);
         }
-        public void EquipMapReward(string rewardId) { mapRun.EquipReward(rewardId); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); }
+        public void EquipMapReward(string rewardId) { mapInteractions.EquipReward(mapRun, rewardId); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); }
         public void CalibrateMapAether()
         {
-            int parts = mapRun.Parts, aether = mapRun.Aether, supplies = mapRun.Supplies, scouting = mapRun.ScoutingBeacons, access = mapRun.AccessCards;
-            mapRun.CalibrateAether();
+            RogueliteMapInteractionResult result = mapInteractions.CalibrateAether(mapRun);
             MarkPresentation(UiPresentationArea.MapStructure);
-            PublishResourceChanges(parts, aether, supplies, scouting, access);
+            PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
             SaveMapRun();
         }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.ReturnToMap(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure); }
@@ -967,13 +951,13 @@ namespace OCC.Combat.Presentation
             if (!string.IsNullOrWhiteSpace(nodeId)) PublishUiVisual(new UiVisualEvent(UiVisualEventKind.MapNodeSelected, nodeId));
         }
 
-        private void PublishResourceChanges(int parts, int aether, int supplies, int scouting, int access)
+        private void PublishResourceChanges(RogueliteMapResources before, RogueliteMapResources after)
         {
-            PublishResourceChange("零件", parts, mapRun.Parts);
-            PublishResourceChange("以太", aether, mapRun.Aether);
-            PublishResourceChange("补给", supplies, mapRun.Supplies);
-            PublishResourceChange("侦测", scouting, mapRun.ScoutingBeacons);
-            PublishResourceChange("权限卡", access, mapRun.AccessCards);
+            PublishResourceChange("零件", before.Parts, after.Parts);
+            PublishResourceChange("以太", before.Aether, after.Aether);
+            PublishResourceChange("补给", before.Supplies, after.Supplies);
+            PublishResourceChange("侦测", before.Scouting, after.Scouting);
+            PublishResourceChange("权限卡", before.AccessCards, after.AccessCards);
         }
 
         private void PublishResourceChange(string resource, int before, int after)
