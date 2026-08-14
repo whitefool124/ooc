@@ -6,9 +6,368 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
-- 当前无进行中主任务。
+### CORE-INTEGRITY-03：混合工作区拆分提交 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的开发治理；不新增玩法、不修改正式资产内容、不保存场景。
+- **目标：** 将当前跨运行时、测试、治理文档与美术资源的混合工作区整理为依赖清晰、可独立复核和回滚的 Git 提交，排除缓存、临时截图与无法归类的生成物。
+- **涉及文件/系统：** 当前 Git 工作区、Unity Runtime/Tests、Worldbuilding 开发记录、正式美术资源及其生成工具与 Meta。
+- **验收标准：** 每个提交主题单一且包含必要依赖；提交前后 `git diff --check` 与项目完整性检查无 failure；Unity 源码批次保持已验证的 409/409 EditMode、1/1 PlayMode 基线；剩余未提交项有明确归类或阻塞原因。
+- **验收记录：** 已形成 `f9d1bdb docs(roguelite): define academy first-region contract`、`7bc8d6c feat(art): add formal UI asset production set`、`e027a86 feat(ui): unify combat presentation and academy map runtime` 三个依赖递进提交；第四个治理提交包含工作树约束、完整性检查、ADR/模板、复核报告和本记录。Python `__pycache__` 已排除并加入 `.gitignore`；Unity `.meta` 按引擎原生序列化保留。源码批次沿用本轮 Funplay 编译 0 error/0 warning、EditMode `409/409 passed`、PlayMode `1/1 passed`、Console 无项目错误与 0 dirty scenes 的验证结果。
+- **完成后解锁：** 在干净或已清楚标注的工作区上继续提取 battle session controller，避免后续架构改动与历史资产生产混为一体。
+
+### CORE-ARCH-05：正式 UGUI 战场迁移 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗表现架构；本项决定后续重构顺序，不改变已锁定玩法。
+- **目标：** 将当前 IMGUI 战场绘制、裁切和格子交互迁移到正式 UGUI 战场视图；迁移完成后关闭旧 OnGUI 战场路径，不长期维护两套实现。
+- **涉及文件/系统：** Bootstrap 的 OnGUI/DrawGrid/HandleCellClick、战斗命令编排、FormalCombatHud、战场反馈坐标与后续 Play Mode 视觉验证。
+- **验收标准：** UGUI 承担地块、范围/选择覆盖、单位、生命/护盾、状态、敌人意图与格子点击；视口继续支持滚轮、Home、中键/空格左键和侧键拖动；旧 OnGUI 战场不再运行；全量 EditMode、Play Mode 战场交互与双分辨率视觉回归通过。
+- **用户决定：** 采用路线 B，并明确允许进入 Play Mode 测试（2026-08-14）。
+- **验收记录：** 新增 `IBattlefieldViewHost`、`BattlefieldCellPresentation` 与运行时生成的 `FormalBattlefieldView`，由 composition registry 统一挂载；UGUI 已承接 108 个格子的地块、环境、范围/选择、单位、血盾、状态、敌人意图、悬停和左右键交互，视口输入由独立控制器负责。Bootstrap 的 `OnGUI`、`DrawGrid` 及全部战场 IMGUI 绘制工具已删除，并新增反射门禁防止回流。Funplay 编译 0 error/0 warning；EditMode `409/409 passed`，PlayMode `1/1 passed`；现场验证左键移动 `(1,4)→(2,4)` 且 AP `3→2`、右键选中 `enemy_2`、中键拖动棋盘偏移；1920×1080 与 960×540 截图通过；Console 无项目错误，0 dirty scenes，未保存场景。
+- **完成后解锁：** 提取 battle session controller，将战斗命令编排、回合推进和模式流程从 Bootstrap 继续下沉；该项开始前仍须登记为唯一“当前进行”。
+
+### CORE-ARCH-04：战斗单位 HUD 纯布局提取 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗表现布局；不改变单位占格、数值、交互或正式贴图。
+- **目标：** 将 Bootstrap 中单位可见区域、贴图裁切、生命/护盾条、状态图标、敌人意图徽记与悬停卡的纯几何规则提取到无状态布局类，避免组装入口继续充当 UI 工具箱。
+- **涉及文件/系统：** 新的 `CombatUnitHudLayout`、Bootstrap 绘制调用和现有悬停/单位 HUD EditMode 测试；不保存场景。
+- **验收标准：** 对应纯静态布局方法不再属于 Bootstrap；所有调用与测试改用布局类；既有矩形、裁切和边界断言保持通过；Funplay 编译与 Console 无项目错误。
+- **验收记录：** 新增无状态 CombatUnitHudLayout，迁移单位可见区、64×64 裁切、生命/护盾条、状态图标、意图徽记和悬停卡几何；Bootstrap 删除对应工具方法并从 2143 行降至 1984 行。Funplay 编译 0 error/0 warning，Console 无错误，全量 EditMode 408/408 passed；0 dirty scenes，未进入 Play Mode、未保存场景。
+- **完成后解锁：** Bootstrap 剩余职责将集中在战斗会话编排与 IMGUI 绘制，可据此判断下一步是提取战斗会话还是淘汰遗留 IMGUI。
+
+### CORE-ARCH-03：运行时表现组件组装注册表 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的运行时表现组装；不改变页面内容、显示时机、玩法状态或场景序列化。
+- **目标：** 将 Bootstrap 中逐个 `AddComponent`、初始化和保存表现组件引用的职责收敛到一个运行时 composition registry，Bootstrap 只发起一次组装并通过注册表访问组件。
+- **涉及文件/系统：** 表现宿主合同、新的组装注册表、`CombatPrototypeBootstrap.OnEnable` 与架构边界测试；不保存场景。
+- **验收标准：** Bootstrap 不再声明各 HUD/结算/背包/交互/反馈组件字段，也不逐项执行 `AddComponent`；注册表按既有顺序组装且只暴露 Bootstrap 后续确实需要的组件；全量 EditMode 通过，Funplay 编译与 Console 无项目错误。
+- **验收记录：** 新增 `ICombatPresentationCompositionHost` 与 `CombatPresentationComposition`；注册表按既有顺序挂载表现组件并复用已存在实例。Bootstrap 已移除八个具体组件字段和逐项 `AddComponent`，只持有一个注册表并通过只读属性访问实际需要的反馈、交互、结算、启动、控制台和背包组件。新增架构反射门禁；Funplay 编译 0 error/0 warning，全量 EditMode `408/408 passed`；未进入 Play Mode、未保存场景。
+- **完成后解锁：** Bootstrap 生命周期组装边界稳定后，可开始提取战斗会话控制器，不让其继续直接拥有 UI 创建逻辑。
+
+### CORE-ARCH-02：战场视口输入控制器提取 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现输入；只处理镜头平移、空格/中键/侧键拖动与视口复位，不改变格子坐标、行动规则或地图内容。
+- **目标：** 将 Bootstrap 内的战场视口输入状态与事件判定提取为独立控制器，使 Bootstrap 只提供当前视口、可见性和每帧调用，不再保存三组拖动布尔状态。
+- **涉及文件/系统：** `BattlefieldViewport`、新的 Presentation 输入控制器、`CombatPrototypeBootstrap` 与 EditMode 输入状态测试；不进入 Play Mode、不保存场景。
+- **验收标准：** Bootstrap 不再声明 `battlefieldPanning`、`battlefieldSideButtonPanning`、`battlefieldSpaceHeld`；控制器可独立验证 Home 复位、中键/空格左键拖动与侧键拖动的开始/继续/结束；全量 EditMode 通过，Funplay 编译与 Console 无项目错误。
+- **验收记录：** 新增 `BattlefieldViewportInputController`，Bootstrap 已移除三组输入布尔状态和 IMGUI 状态机，仅负责把 Unity Input System 当前帧数据交给控制器。新增空格左键生命周期、Home 复位、侧键视口门禁和字母箱坐标换算测试。Funplay 编译 0 error/0 warning，全量 EditMode `407/407 passed`；未进入 Play Mode、未保存场景。
+- **完成后解锁：** 继续提取战斗会话命令与肉鸽流程控制器，并把 `ICombatHudHost`/`IRogueliteUiHost` 的实现从 Bootstrap 下沉到实际控制器。
+
+### CORE-ARCH-01：Bootstrap 表现层依赖隔离 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的技术架构；不改变玩法、数值、存档格式、正式资产或场景布局。
+- **目标：** 将正式 HUD、肉鸽页面、结算、背包、交互层和战斗反馈对 `CombatPrototypeBootstrap` 整对象的依赖，改为按页面职责划分的最小宿主接口，阻止新 UI 继续把 Bootstrap 当作全局服务定位器。
+- **涉及文件/系统：** `UnityProject/Assets/Game/Runtime/Presentation/` 的宿主接口、Bootstrap 与运行时生成的表现组件，以及对应 EditMode 架构测试；不保存场景。
+- **验收标准：** 非组装入口的表现组件不再声明 `CombatPrototypeBootstrap` 字段；接口只暴露各组件实际使用的只读状态/命令；现有行为测试与新增依赖边界测试通过；Funplay 编译与 Console 无项目错误。
+- **验收记录：** 新增九个按实际用途划分的宿主接口，九个表现组件已移除具体 Bootstrap 字段；Bootstrap 只作为 composition root 实现接口。新增两项反射边界测试并登记 ADR-001。Funplay 编译 0 error/0 warning，Console 无错误，全量 EditMode `404/404 passed`；0 dirty scenes，未进入 Play Mode、未保存场景。
+- **完成后解锁：** 按接口接缝把战斗会话、肉鸽流程与战场输入逐步从 Bootstrap 提取为独立控制器，并开始减少 Bootstrap 行数。
+
+### CORE-INTEGRITY-02：提交、代码与决策完整性复核 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的开发治理；只整理提交边界、代码依赖、验证门禁和决策来源，不新增玩法、不保存场景、不替换正式资产。
+- **目标：** 分离复核远端领先提交与当前未提交工作区，识别跨层耦合、超大职责类、重复规则、资源/Meta 缺口和不可追溯决策，并建立可重复执行的低成本防腐检查。
+- **涉及文件/系统：** Git 提交历史与工作区、`UnityProject/Assets/Game/Runtime`、EditMode 测试、`Worldbuilding/03_开发管理/`、项目质量检查工具；仅在证据充分时做低风险整理。
+- **验收标准：** 给出按严重度排序且能定位到文件的复核结论；新增检查能发现缺失 Meta、生成目录误入库、多个当前主任务和高风险大文件；Unity 身份、编译、Console 与相关测试结果有记录；不覆盖或拆改来源不明的用户改动。
+- **验收记录：** 已复核领先远端 15 个提交与当前混合工作区，建立 `OCC_工程完整性复核_2026-08-14.md`、技术决策记录模板和 `Tools/Quality/Test-OCCProjectIntegrity.ps1`。检查为 0 failure；结项后警告为无当前主任务、工作区规模、审计基线 268 个未跟踪文件和 2143 行 Bootstrap。Unity 身份与场景门禁通过；14:27 全量 EditMode `402/402 passed`，日志无脚本编译错误。Funplay RPC 在刷新后的回读连续超时，已按工具异常保留，不虚报 Console 回读成功；未进入 Play Mode、未保存场景。
+- **完成后解锁：** 依据复核结果把当前混合工作区拆成可独立验证的提交批次，再逐项治理职责过载类和过期决策。
+
+### ART-ITEM-STYLE-03：水果物品分辨率对照测试 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的材料、消耗品与拾取物微型图标探索；不改变物品数值、掉落、背包规则或 Unity 资源引用。
+- **目标：** 将用户确认的草药、炽果、金币、木杯、面包参考图的材质丰富方向，分别实测为独立原生 `16×16` 与 `24×24` 的多种水果，而不是展示大尺寸概念图。
+- **涉及文件/系统：** `OCC_美术规范_v0.1.md`、`Worldbuilding/05_美术与音频/像素资产原料/V2-23/新美术指导规格样本/Items16/` 与 QA 预览；不修改 Unity 工程。
+- **验收标准：** 每个输出 PNG 严格为目标尺寸、透明硬 Alpha、有限色板；以 1× 可辨类别、最近邻放大检查材质簇为准，并由用户选择能承担材质型物品的最小规格。测试图不导入 Unity，不认定为正式内容资产。
+- **验收记录：** 用户确认材质型水果采用 `24×24` 的方向；`16×16` 只保留为微型语义图标/极简读数层，不承担水果的材质阅读。所有测试仍未导入 Unity。
+- **完成后解锁：** 以 `24×24` 批量建立材料、食物与消耗品图标词典，并进行独立内容 QA。
 
 ## 最近完成
+
+### ART-UNIT-STYLE-01：64×64 战棋单位比例基准 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战棋单位表现；不改变兵种数值、行动、地图规则或 Unity 资源引用。
+- **目标：** 区分角色立绘与战棋单位比例：保留单位面部可读性，同时缩回格内，为武器、脚底状态和相邻地格留出空间。
+- **涉及文件/系统：** `OCC_美术规范_v0.1.md`、`Worldbuilding/05_美术与音频/像素资产原料/V2-23/新美术指导规格样本/References/occ_tactical_unit_scale_v01.png`；未修改 Unity 工程。
+- **验收记录：** 用户确认缩回比例。锁定 `64×64` 单位人形高约 `44–48px`、宽 `32–38px`、靴底基线 `Y=56`、中心线 `X=32`、头部 `12–14px` 且可读眼睛与基础表情；概念图仅作比例与色彩参考，未导入 Unity。
+- **完成后解锁：** 可为步枪兵、盾卫、术师、精英和主角分别建立独立单图原料与像素 QA，再由用户决定是否导入 Unity。
+
+### ART-ITEM-STYLE-02：原生 32×32 材质物品层与 16×16 微型物品试验 — COMPLETE（2026-08-13）
+
+- **归属：** 剧情模式与肉鸽模式共用的拾取物、消耗品和材料图标探索；不改变物品数值、掉落、背包规则或 Unity 资源引用。
+- **目标：** 将用户确认的金币、木酒杯、面包的原生 `32×32` 材质阅读方向写入规范，并以植物、果实、金币、木酒杯、面包重做一组独立的 `16×16` 可读性测试，不把 `32×32` 成品缩小冒充微型图标。
+- **涉及文件/系统：** `OCC_美术规范_v0.1.md`、`Worldbuilding/05_美术与音频/像素资产原料/V2-23/新美术指导规格样本/Items16/`、其 QA 预览与生成脚本；未修改 Unity 工程。
+- **验收记录：** 原生 `32×32` 层固定为近黑 `1px` 描边、`4–6` 个平涂色与单一材质线索；`16×16` V01 五项均为原生画布、透明硬 Alpha、每项 4 色。预览先给出 1× 可读性，再给出最近邻放大检查；它们仍是样本，尚未导入 Unity 或认定为正式内容资产。
+- **完成后解锁：** 用户选定 16×16 的轮廓密度后，可为材料、掉落和消耗品批量建立微型图标表，并进行独立内容 QA 与 Unity 导入决策。
+
+### ART-ITEM-STYLE-01：低像素物品图标视觉基准 — COMPLETE（2026-08-13）
+
+- **归属：** 剧情模式与肉鸽模式共用的背包、快捷栏与奖励物品表现；不改变物品数值、掉落、背包规则或 Unity 资源引用。
+- **目标：** 锁定用户确认的低像素物品图标密度，避免后续物品在 `32×32` 槽位中出现高分辨率缩小、机械细节堆叠或材质噪点。
+- **涉及文件/系统：** `OCC_美术规范_v0.1.md`、`Worldbuilding/05_美术与音频/像素资产原料/V2-23/新美术指导规格样本/Items32/` 与 QA 预览；未修改 Unity 工程。
+- **验收记录：** 固定为 `16×16` 逻辑稿最近邻 `2×` 至 `32×32`；限定一个主轮廓、2--3 个结构分区、一个功能识别点、近黑描边、5--6 色上限及透明安全边。炎脉封装筒、过载处置器与侦测信标 V4 被登记为密度/色彩/描边样本；未导入 Unity，未声称为正式内容资产。
+- **完成后解锁：** 依照该基准逐项制作并 QA 消耗品、法宝、战利品与装备图标，再由用户选择是否导入 Unity。
+
+### MAP-RUNTIME-01：学院首区地图运行时基线 — COMPLETE（2026-08-13）
+
+- **归属：** 仅肉鸽模式；战斗与构筑为核心，学院只替换首区地图、战斗和事件的世界语义。
+- **目标：** 将既有 20 节点肉鸽地图迁移为 40 节点学院首区，并提供可调的学院时序、核心许可和首领门槛基线。
+- **涉及文件/系统：** `RogueliteMapRun`、`FormalRogueliteUi`、地图独立存档、EditMode 测试；未保存场景。
+- **验收记录：** 地图目录现为 40 节点（18 普通战斗、6 精英、8 事件、4 服务、2 宝藏、起点与首领），以双向连接解释完整学院网络；现有 20 节点存档格式保持兼容，时序由首次访问数派生，回访不会增加进度。`AcademyMapTuning` 暴露 12 节点/2 核心许可首领门槛、21 节点收束与 28 节点阶段转入阈值；默认不强制阻断路线，等待试玩调参。正式地图页已显示学院探索数与学期状态。新增类型配比、双向连接与探索状态测试；Funplay 重编译 0 error，全量 EditMode **402/402 passed**，未进入 Play Mode，活动场景未保存。
+- **完成后解锁：** 学院首区实际试玩调参（节点数、时序阈值、许可/奖励节奏），再做 16×16 正式节点图标替换与关卡/事件学院内容扩容。
+
+### MAP-CONTENT-01：学院首区节点内容包 — COMPLETE（2026-08-13）
+
+- **归属：** 仅肉鸽模式；所有内容围绕战斗、构筑、资源与公开风险选择。
+- **目标：** 将 40 节点拓扑转化为可生产的 18 普通、6 精英、8 事件、4 服务、2 宝藏与首领内容表，并复用现有可验证战斗关卡作为首批学院变体。
+- **涉及文件/系统：** `OCC_学院首区节点内容包_v0.1.md`、首区关卡目录/敌人原型、肉鸽事件/服务/宝藏数据、地图种子与奖励合同。
+- **验收记录：** 已登记 N01--N18、E01--E06、EV01--EV08、S01--S04、T01--T02 和 B01；核心许可有精英、事件和宝藏并行来源，首领保留双种子；所有条目给出地点、底图、目标/敌群阅读或公开选择与奖励倾向，并明确不用课程、关系、日程或毕业数据。
+- **完成后解锁：** MAP-RUNTIME-01：实现 40 节点拓扑、学院时序/阶段转入、节点数据/存档、内容解析、学院正式地图 UI 与关卡/事件迁移；完成后再做数值平衡和美术生产。
+
+### MAP-DESIGN-02：学院首区拓扑与内容生产合同 — COMPLETE（2026-08-13）
+
+- **归属：** 仅肉鸽模式；学院背景只承载战斗/事件/服务语义，不建立生活模拟层。
+- **目标：** 为 40 节点、节点数量自由选择且以学院时序转入下一阶段的首区锁定可生成的六区骨架、环路、信息揭示、核心许可、首领路线和内容生产顺序。
+- **涉及文件/系统：** `OCC_学院首区地图拓扑与内容生产_v0.1.md`、学院首区地图系统、肉鸽地图种子/存档、节点 UI、路线生成测试与后续战斗/事件内容包。
+- **验收记录：** 固定六区节点数、40 节点类型分配、至少 12 环路/10 跨区连线/3 条首领路线、首五选保障、学院时序第 21 节点收束/第 28 节点转入、12 节点 + 两枚许可的首领条件、可见拓扑与分层信息揭示，以及 100 种子验证合同；明确 9 个既有关卡先迁移，再生产普通/精英变体、事件/服务/宝藏和首领内容。
+- **完成后解锁：** MAP-CONTENT-01：编制学院首区 18 普通、6 精英、8 事件、4 服务、2 宝藏与首领的具体内容表；随后 MAP-RUNTIME-01 按拓扑合同实现数据/存档/UI。
+
+### MAP-DESIGN-01：肉鸽学院首区地图策划 — COMPLETE（2026-08-13，修订）
+
+- **归属：** 仅肉鸽模式；不读取/写入剧情存档，不改变剧情自由探索的无时间压力约束。
+- **目标：** 将现有“三选一半线性战时首区”重写为 40 节点学院首区；节点数量自由选择，过度探索以公开的学院时序压力推入下一阶段，战斗和事件仍是核心，背景改为角色入学期的学院成长。
+- **涉及文件/系统：** `OCC_肉鸽学院首区地图系统_v0.1.md`、`OCC_肉鸽模式玩法定义_v0.1.md`，后续将涉及肉鸽地图状态、存档、正式地图 UI、事件和战斗入口。
+- **验收记录：** 已固定 18 普通战斗、6 精英、8 事件、4 服务、2 宝藏、1 首领与起点组成的 40 节点正交网络；节点可自由选择，首次处理新节点推进学院时序，已清节点免费回访，核心许可在至少 12 个处理节点后开启首领；第 21 节点进入公开学期收束、第 28 节点结算后转入下一阶段。学院背景仅替换战斗/事件/服务的世界语义，保留确定性战斗、三选一、风险预览及禁止隐藏压力/追击/强制伤血约束。明确禁止课程、关系养成、毕业路线与其他非战斗主循环。
+- **完成后解锁：** MAP-RUNTIME-01：迁移 40 节点地图、学院时序/阶段转入、存档和正式入口，再依序替换战斗关卡、事件、服务、宝藏和首领的学院内容；不得创建生活模拟数据层。
+
+### UXTURN-01：禁止玩家回合自动结束 — COMPLETE（2026-08-13）
+
+- **归属：** 剧情模式与肉鸽模式共用的玩家回合控制层；未改变 AP、先攻、敌人行动或战斗数值。
+- **目标：** 玩家 AP 降为 0 后仍停留在玩家回合，只有明确点击/确认“结束行动”才推进到下一单位；移除技能、火术、法宝与通用命令后的自动结束路径。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 玩家命令提交与结束回合授权、`CombatHoverInformationTests` 回合授权合同、本待办验证记录。
+- **验收记录：** 已移除法宝、火术及通用玩家命令完成后共三处 `ActionPoints == 0` 自动调用英雄 `CombatResolver.EndTurn` 的旧逻辑；英雄结束命令新增显式授权门禁，只有正式“结束行动”入口以授权参数提交，未来误从普通命令路径调用也会被拒绝。敌人逐单位行动结束仍由原敌人序列自动推进。源码审计确认表现层不再存在英雄 AP=0 自动结束判断。聚焦 EditMode **41/41 passed**，全量 EditMode **400/400 passed**；Funplay 重编译 0 error，Console 无项目 error，未进入 Play Mode，活动场景 `isDirty=false`，无 `.unity` Git diff，未保存场景。
+- **完成后解锁：** 玩家可在 0 AP 时继续检查战场、目标、状态和日志，再自主结束行动。
+
+### UXMAP-08：鼠标侧键独立按住拖动修正 — COMPLETE（2026-08-13）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场输入层；未改变地图坐标、点击、缩放或战斗规则。
+- **目标：** 鼠标指针在战术视口内时，单独按住后退或前进侧键即可开始并持续拖动地图，不要求 Space、左键、中键或其他组合键；兼容不持续发送 IMGUI `MouseDrag` 的鼠标驱动。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 战术视口输入与 Unity Input System 鼠标轮询、`CombatHoverInformationTests` 输入合同、本待办验证记录。
+- **验收记录：** 侧键拖动不再依赖 IMGUI 持续产生 button 3/4 `MouseDrag`：Unity Input System 直接轮询 `backButton`/`forwardButton`，任一侧键独立按下且指针位于战术视口内即进入拖动，持续按住时按每帧鼠标增量平移，全部释放后结束；不读取 Space、左键或中键状态。IMGUI 收到的侧键按下/拖动/释放事件仍全部消费，不下传为格子点击或检查；中键与 Space+左键维持原通道。聚焦 EditMode **40/40 passed**，全量 EditMode **399/399 passed**；Funplay 重编译 0 error，Console 无项目 error，未进入 Play Mode，活动场景 `isDirty=false`，无 `.unity` Git diff，未保存场景。
+- **完成后解锁：** 依据具体鼠标硬件反馈，仅扩展等价侧键映射，不改变战场交互范围。
+
+### UXMAP-07：单位占格面积与脚部信息带重排 — COMPLETE（2026-08-13）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；未改变 12×9 地图、单位占格、移动、射程、AI、伤害或状态规则。
+- **目标：** 将默认 128 px 档的人物绘制框从约 28% 占格面积提升到至少 80%，并在 64/96/128/160 px 四档保持相同比例；同步重排生命/护盾条，避免人物放大后越过所属格或关键信息互相遮挡。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 单位与脚部信息布局、`CombatHoverInformationTests` 缩放/边界合同、本待办验证记录。
+- **验收记录：** 人物框由 68×68 放大到 116×116，默认档占格面积由 28.2% 提升至 **82.1%**、最长可见轴占格 **90.6%**，四个缩放档比例一致。自审发现正式 64 px 人物资产含较大透明留白，绘制层现按 12 类正式人物各自 Alpha 边界裁掉空白、保留 1 px 安全边并保持原宽高比，不改源资产且不会横向拉伸。生命/护盾条重排为 108×13 与 108×11 的脚部信息带，互不重叠且始终留在格内；96 px 档保留色条但隐藏条内小字，128/160 px 保持可读数字。鼠标中键、Space+左键及侧键 button 3/4 拖动合同继续通过。聚焦 EditMode **38/38 passed**，全量 EditMode **397/397 passed**；Funplay 重编译 0 error，Console 无项目 error，未进入 Play Mode，活动场景 `isDirty=false`，无 `.unity` Git diff，未保存场景。
+- **完成后解锁：** 可依据玩家实际运行截图继续微调人物脚底遮挡与状态图标避让，不改变玩法范围。
+
+### UXMAP-06：鼠标侧键战场拖动 — COMPLETE（2026-08-12）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场输入层；未改变地图坐标、点击或战斗规则。
+- **目标：** 将鼠标后退/前进侧键加入默认战场拖动，保留中键与 Space+左键，并确保拖动事件不会下传为格子点击或右键检查。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 战术视口输入、`CombatHoverInformationTests` 输入合同。
+- **验收记录：** `button 3`（鼠标后退侧键）与 `button 4`（鼠标前进侧键）现均可直接按住拖动战场；中键与 Space+左键继续可用。侧键按下、拖动、释放全过程消费 IMGUI 事件，普通左键仍用于格子操作，右键仍用于检查。输入映射聚焦 EditMode **37/37 passed**，全量 EditMode **385/385 passed**；Funplay 编译 0 error，Console 无项目 error，0 dirty scene、无 `CombatPrototype.unity` diff；未进入 Play Mode、未保存场景。
+- **完成后解锁：** 玩家可用任一常见鼠标侧键直接拖动地图；后续可依据具体鼠标驱动对 button 3/4 的映射反馈做兼容微调。
+
+### UXMAP-05：地图边框、地块裁切与缩放比例复核 — COMPLETE（2026-08-12）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；未改变 12×9 逻辑地图、坐标、射程、移动、AI 或数值规则。
+- **目标：** 为固定战术视口补齐清晰的极简工业细线边框并真正裁切部分可见地块；修正地块边缘缺失；让角色与血条跨缩放档保持和地图格子的固定视觉比例。
+- **涉及文件/系统：** `BattlefieldViewport`、`CombatPrototypeBootstrap` 战场绘制/输入/单位信息布局、`CombatVisualFeedback` 反馈裁切坐标、相关 EditMode 合同测试。
+- **验收记录：** 战术视口新增 4 px 中性外框与 1 px 内高光，符合极简工业细线规范；地图内容改用真实 `GUI.BeginGroup` 裁切，边缘地块不能越过视口，边框始终最后覆盖。每格在全部内容与范围覆盖层之后重绘 1 px 内侧轮廓，且平移/缩放后板面强制整像素对齐，避免模糊或吃边。角色宽高固定为格宽 **53.125%**，生命/护盾条宽固定为 **56.25%**、高固定为 **10.9375%**；64/96/128/160 px 四档比例完全一致且均留在所属格内。64 px 隐藏条内数字，96 px 使用紧凑数字，128/160 px 保留 14 px 数字；低倍率状态图标继续隐藏以保证可读性。第一次复核后发现反馈裁切父节点存在绝对/局部坐标二次偏移，已自我迭代修正，并把浮字/跳字夹紧到真实 1440×876 战场边界。聚焦 EditMode **43/43 passed**，全量 EditMode **378/378 passed**；Funplay 编译 0 error，Console 无项目 error，0 dirty scene、无 `CombatPrototype.unity` diff；未进入 Play Mode、未保存场景。
+- **完成后解锁：** 依据用户实际运行截图仅微调边框色值、线宽或低倍率信息密度，不改变玩法与地图拓扑。
+
+### UXMAP-04：战术视口最终视觉与交互回归 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；未改变玩法或内容规则。
+- **目标：** 完成 1920×1080 / 960×540、缩放/平移/聚焦/命中/反馈坐标的最终回归。
+- **涉及文件/系统：** `BattlefieldViewport`、`CombatPrototypeBootstrap`、`CombatVisualFeedback`、布局/战斗 EditMode 测试和 Funplay 编辑器检查。
+- **验收记录：** 64/96/128/160 px 视口档、滚轮锚点缩放、中键/Space+左键平移、Home/聚焦按钮、战斗开始/重开主角聚焦与安全边缘跟随均由纯合同覆盖；所有格子点击、范围/单位/状态/意图与反馈继续使用同一逻辑格位置。双分辨率布局合同覆盖全部登记正式页面。聚焦回归 29/29 与 52/52 通过；全量 EditMode **372/372 passed**。Funplay 编译 0 error，Console 无项目 error，`CombatPrototype.unity` 无 Git diff、0 dirty scene；未进入 Play Mode、未保存场景。
+- **完成后解锁：** 战斗地图与全局可读性适配目标闭环；后续仅依据实际试玩反馈做不改变玩法的微调。
+
+### UXREAD-02：全页面紧凑分辨率可读性审计 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的 UI 表现层；不改变内容、地图、经济或战斗规则。
+- **目标：** 审计战斗 HUD、背包、奖励、地图、设置与档案，紧凑分辨率改为重排或省略次要说明，关键文字不再等比缩小到不可读。
+- **涉及文件/系统：** `FormalUiTheme`、`FormalCombatHud`、`FormalRogueliteUi`、`TarkovInventoryPanel`、`RogueliteSettlementPresentation`、布局/主题 EditMode 测试。
+- **验收记录：** 共用 `FormalUiTheme.ResponsiveFontSize` 在紧凑高度（≤600）将 ≤18 px 字号提升为 1.25× 的偶数像素值，而非等比缩小；大字设置继续在此基础上提升 12%。战斗 HUD、地图、奖励、设置与档案均经 `FormalUiKit.Label/Button` 接入该令牌；背包 IMGUI 标签、按钮和输入框也显式读取它。`UiLayoutContract` 对所有登记正式布局投影到 1920×1080 与 960×540，保证不越界；聚焦页面/布局/主题 EditMode **52/52 passed**。未改变任何内容或玩法规则。
+- **完成后解锁：** UXMAP-04 最终双分辨率交互与视觉回归。
+
+### UXREAD-01：战斗地图信息最小可读性 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；不改变战斗数值或规则。
+- **目标：** 关键生命/护盾/伤害/意图数字至少 14 px、状态层数至少 12 px、悬浮正文至少 15 px、标题至少 17 px；缩小时隐藏次要信息而非继续缩字。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 战场 IMGUI 信息层、`CombatVisualFeedback`、`CombatUnitHudPresentation`、战斗可读性测试。
+- **验收记录：** 生命/护盾条从 9/8 px 升至 14 px；伤害跳字既有 28 px、敌人意图既有 14 px 保持不变。状态层数图标与角标升至 14/12 px，状态说明卡标题/正文为 17/15 px。64 px 概览档保留生命关键行，隐藏次要护盾条，避免继续压缩数字；单位表现框缩至 68 px，状态图标重排到左右边缘且与角色、双条不重叠。聚焦 EditMode **29/29 passed**，编译无 error；未进入 Play Mode、未保存场景。
+- **完成后解锁：** UXREAD-02 的全页面紧凑分辨率审计。
+
+### UXMAP-03：统一网格↔屏幕变换、裁切与反馈坐标 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；不改变任何逻辑地图或战斗规则。
+- **目标：** 让地块、单位、血条、状态、意图、落点、范围、悬停命中、伤害跳字与 VFX 使用同一视口坐标变换，并接受战术视口裁切。
+- **涉及文件/系统：** `BattlefieldViewport`、`CombatPrototypeBootstrap`、`CombatVisualFeedback`、网格/反馈 EditMode 测试。
+- **验收记录：** 地块、范围、单位、单位信息、意图与敌人落点继续以 `BattlefieldViewport.BoardRect` 计算 `CellRect`；逆变换/悬停命中同样接收该板面矩形。反馈层新增 `CombatPrototypeBootstrap.GridToFeedbackPosition`，VFX、脉冲、浮字和伤害跳字不再使用静态默认板面，而是实时读取当前缩放/平移位置；它们全部置于 1440×876 战术 `RectMask2D` 容器中。聚焦 EditMode **22/22 passed**；未进入 Play Mode、未保存场景。
+- **完成后解锁：** UXREAD-01 的战斗信息最小字号与低倍率信息层级。
+
+### UXMAP-02：战术视口平移、聚焦与安全边缘跟随 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；不改变地图坐标或任何战斗规则。
+- **目标：** 完成中键/Space+左键平移、Home 与聚焦图标的主角复位，并让战斗开始、重开和返回战斗默认聚焦主角；手动移动后仅在主角接近安全边缘时跟随。
+- **涉及文件/系统：** `BattlefieldViewport`、`CombatPrototypeBootstrap` 运行时输入和战斗流转、EditMode 合同测试。
+- **验收记录：** 中键与 Space+左键在战场视口内平移并消费事件，不再下传为格子点击；Home 和极简 `⌂` 入口都回到主角。`StartDeveloperCombat`、战术重开及重新构建战斗均调用相同的主角聚焦路径。英雄完成移动后只有 `IsNearSafeEdge` 命中时才复位，手动平移不会被常规绘制或其他命令抢回。视口安全边缘合同新增测试，聚焦 EditMode **10/10 passed**；未进入 Play Mode、未保存场景。
+- **完成后解锁：** UXMAP-03 的全部地图元素、命中逆变换和反馈坐标统一变换。
+
+### UXMAP-01：固定逻辑网格的战术视口与缩放合同 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；不改变 12×9 逻辑地图、坐标、射程、移动、敌人 AI、伤害或状态规则。
+- **目标：** 建立 64/96/128/160 px 每格的整数缩放视口，默认 128 px；缩放以鼠标指针为锚并限制内容边界，避免出现可见黑边。
+- **涉及文件/系统：** `BattlefieldPresentationAdapter` 视口/网格↔屏幕合同、`CombatPrototypeBootstrap` 战场输入与绘制、对应 EditMode 布局测试。
+- **验收记录：** `BattlefieldViewport` 成为独立的纯表现状态：默认 128 px，缩放仅允许 64/96/128/160 px 整数档，视口为左侧 1440×876 区域；平移与聚焦均夹紧地图内容边界。运行时滚轮以指针内容坐标为锚，96 px 自动居中为完整概览，避免为强行锚定而暴露边缘。默认 12×9 内容尺寸为 1536×1152，大于战术视口；逻辑坐标和战斗判定保持不变。聚焦 EditMode 21/21、全量 EditMode 371/371 通过；Funplay 编译无 error，Console 无项目 error，0 dirty scene、无 `.unity` diff；未进入 Play Mode、未保存场景。
+- **完成后解锁：** UXMAP-02 的平移、回到主角与安全边缘跟随。
+
+### UXLAYOUT-01：战场合法放大与单位脚下信息重排 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现层；未修改地图拓扑、格数、移动、攻击、状态或伤害规则。
+- **目标：** 将生命/护盾条移到人物脚下并缩小相对体量；在 1440×900 战场安全区内放大 12×9 地图、地块、单位和反馈坐标，减少四周黑色空挡。
+- **涉及文件/系统：** `BattlefieldPresentationAdapter` 战场布局合同、`CombatPrototypeBootstrap` 单位/血条/状态布局、`CombatVisualFeedback` 格子反馈坐标、`BattlefieldPresentationAdapterTests`、`CombatFeedbackEventTests` 与 `CombatHoverInformationTests`。
+- **验收记录：** 默认格距由 78 px 提升至 **96 px**，对应 32 px 地块的 3×整数倍率；12×9 地图由 936×702 放大为 **1152×864**，在左侧 1440×900 安全区内保持左右各 144 px、顶部 24 px、底部 12 px，未侵入右 HUD 或底部命令区，最上排敌人意图仍完整留在画布内。格子绘制、鼠标命中、移动/攻击覆盖层及单位/浮字/VFX 反馈坐标统一消费新尺寸。人物框调整为居中的 70×70，生命/护盾条收窄至 72 px 并分别固定在人物脚下 72/84 px 位置，不再覆盖身体；最多六个状态图标改为人物左右两列 12 px 布局，与人物和血条均不重叠，仍保留数值角标与悬停详情。聚焦 EditMode **36/36 passed**，全量 EditMode **369/369 passed**；Funplay 编译 0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际截图仅微调人物锚点、条宽与地图边距，不改变玩法或地图格数。
+
+### UXBAR-01：敌人生命护盾预测条与状态图标带 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；未修改生命、护盾、状态、伤害、技能或敌人规则。
+- **目标：** 将指向敌人的伤害预览直接呈现在敌人血条上，以当前值、预计扣除段和预计剩余段表达生命与护盾；在血条附近常驻显示状态图标和剩余回合，悬停可阅读玩家化状态详情。
+- **涉及文件/系统：** `CombatUnitHudPresentation`、`CombatPrototypeBootstrap` 单位头顶信息层、既有 `FormalStatusIcons32` 六类正式状态资产、`CombatUnitHudPresentationTests` 与 `CombatHoverInformationTests`。
+- **验收记录：** 原 5 px 单生命色块升级为生命/护盾双行条，常态显示当前值/上限；合法攻击、伤害技能或火术指向敌人时，条内以“当前 - 预计扣除 → 剩余/上限”更新数字，并用独立预扣色段表示即将失去的生命和护盾，生命归零时直接标出“击杀”。预览继续消费 `CombatTargetDamageForecast` 的权威克隆结果，因此包含火场等环境伤害，非法目标不产生预扣段。六类既有状态图标移至血条下方的独立 18 px 图标带，右下角常驻显示剩余回合；悬停显示状态名称、剩余回合及燃烧直伤/无视护盾、迟缓降速、束缚禁移、破甲强度、目眩和显露标记详情。补齐 `Dazzled/Revealed` 正式图标加载与玩家文案，状态和血条改为地图内容绘制完成后的顶层信息，避免被地块遮挡。聚焦 EditMode **23/23 passed**，全量 EditMode **368/368 passed**；Funplay 编译 0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际截图仅调整条高、预扣色、图标间距和浮窗位置，不改变战斗规则。
+
+### UXPREVIEW-01：玩家指向目标的权威伤害与击杀预览 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；未修改攻击、技能、火术、环境伤害或结算规则。
+- **目标：** 玩家用攻击、伤害技能或火术指向敌人时，显示实际护盾损失、生命损失、剩余生命与可击杀结果，并计入当前火场及环境条件伤害。
+- **涉及文件/系统：** `CombatTargetDamageForecaster` 克隆状态预测器、`CombatPrototypeBootstrap` 敌人悬浮卡与 `CombatTargetDamageForecastTests`。
+- **验收记录：** 指向合法敌人时，悬浮卡新增独立“伤害预览”行，显示护盾损失、生命损失、剩余生命或“可击杀”，并明确标注环境伤害。预测只在克隆状态执行与实际提交同源的权威流程：武器攻击包含已武装的火术触发，普通技能调用 `CombatResolver`，火术调用 `FireSpellEngine` 并涵盖条件规则、位移及进入/已有火场造成的伤害；同时用移除现有火场的中性克隆隔离环境贡献。非法目标不显示误导数值，实战单位、资源、触发和火场均不被预览消耗。聚焦 EditMode **5/5 passed**，全量 EditMode **362/362 passed**；Funplay 编译 0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际截图仅调整预览位置、短句长度与危险色，不修改伤害规则。
+
+### UXINTENT-03：意图牌避让与实际伤害跳字 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗反馈表现层；未修改伤害、护盾、状态、敌人 AI 或结算规则。
+- **目标：** 上移敌人头顶意图牌并移除红/青外边框，避免遮挡血条；将现有通用反馈升级为同一目标同次结算合并显示的实际伤害跳字。
+- **涉及文件/系统：** `CombatPrototypeBootstrap` 意图牌布局、`CombatVisualFeedback` 伤害跳字生命周期/合并、`CombatDamagePopupPresentation` 玩家数字合同、`CombatFeedbackEventTests` 与 `CombatHoverInformationTests`。
+- **验收记录：** 意图牌由格顶 `-11 px` 上移至 `-22 px`，20 px 高牌面底边保持在血条上方；移除伤害红框与非伤害青框，只保留深色底、16×16 图标和预计伤害数字。新增实际伤害跳字：同一目标 0.10 秒内的护盾吸收与生命伤害合并为一个大号 `-N`，N 取权威 `CombatEffectResult.AppliedAmount` 总和；只伤护盾使用护盾色，触及生命改用伤害红，带深色文字描边并向上跳动 52 px。持续伤害/状态伤害经缓存差分同样进入该入口；浮字关闭时不创建，动画 0% 时保留 0.48 秒静态数字；重开会清理未完成跳字。聚焦 EditMode **5/5 passed**，全量 EditMode **358/358 passed**；Funplay 编译 0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际截图仅调整垂直偏移、字号、跳字高度与 0.10 秒合并窗口。
+
+### UXINTENT-02：攻击与破坏意图图标单色重制 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的正式非人物战斗 UI 美术；未改变意图类型、敌人 AI、伤害、交互或战斗规则。
+- **目标：** 将攻击意图重制为单色氧化红单手剑，将破坏意图重制为单色氧化红爆炸图形，保持 16×16 极简可读。
+- **涉及文件/系统：** `FormalIntentIcons16/attack|interact_destroy`、意图图标生成脚本、M-A10 v0.2 QA 与 Unity 导入门禁。
+- **验收记录：** 攻击图标现为仅含剑身、护手和短握柄的纯红单手剑剪影；破坏图标现为纯红八向爆炸剪影，不再使用锤/工具隐喻。两枚均严格 16×16、单一实体色、硬 Alpha，主体覆盖率分别为 23.8% 与 39.5%，M-A10 v0.2 QA **5/5 PASS**。Unity 读回两枚均为 16×16、PPU16、Point、Clamp、无 mipmap、Uncompressed；意图资产聚焦 EditMode **3/3 passed**，全量 EditMode **355/355 passed**；编译 0 error / 0 warning，Console 无 error，0 dirty scene；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 等待实际截图反馈，仅调整两枚图标的像素轮廓和留白，不扩展其他意图类型。
+
+### UXINTENT-01：敌人常驻意图、实时伤害与移动落点预览 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；未修改敌人 AI、伤害公式、移动规则、技能、数值或回合结算。
+- **目标：** 修复敌人意图被后绘制地图块遮挡的问题；让每名敌人头顶常驻 16×16 意图图标，伤害意图显示实时预计伤害，并在悬停移动敌人时高亮其权威目标地块。
+- **涉及文件/系统：** `EnemyIntentPresentation`/敌方计划公开边界、`CombatPrototypeBootstrap` 战场分层与单位头顶意图、`FormalArtRegistry`、`FormalArtImportPostprocessor`、`FormalIntentIcons16`、M-A10 QA、`CombatInformationPresentationTests`、`CombatBoundaryTests`、`FormalArtAssetAuditTests`。
+- **验收记录：** 地块、物件与单位完成绘制后才绘制移动落点、全部敌人头顶意图和悬浮卡，消除逐格循环的后绘制遮挡；悬浮移动敌人时按与实际执行命令相同的签名读取 `Destination` 并用青色选择框高亮，不需要坐标轴。公开意图只新增只读 `IconId / Destination / ExpectedDamage`，不暴露可执行 `CombatCommand`；武器与伤害技能通过当前朝向、掩体、护甲、格挡、护盾和状态的权威预估计算护盾+生命承伤，每次 IMGUI 刷新重新生成展示，攻击/施术图标旁常驻伤害数字。新增攻击、施术、移动、防御、破坏五枚独立 16×16 图标，硬 Alpha、2–4 色、覆盖率 25.8%–48.1%，M-A10 QA **5/5 PASS**；Unity 读回全部 16×16、PPU16、Point、Clamp、无 mipmap、Uncompressed。聚焦 EditMode **8/8 passed**，全量 EditMode **355/355 passed**；Funplay 编译 0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际截图仅微调图标头顶偏移、数字宽度与移动落点对比度；不自动扩展玩法。
+
+### UXCOPY-01：战斗法术、法宝与敌人玩家文案/图标补全 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；只补全现有法术、法宝和敌人的图标与玩家文案，未修改伤害、消耗、目标判定、敌人 AI、内容或战斗规则。
+- **目标：** 清除战斗悬浮说明中的实现枚举和开发式术语，让法术效果/目标/时机、法宝风险以及敌人生命/护盾/以太/意图均可用图标配合简洁中文直接读懂。
+- **涉及文件/系统：** `CombatPrototypeBootstrap`、`CombatInformationPresentation`、`FormalCombatHud`、`RogueliteSettlementPresentation`、`FormalUiThemeTests`、`CombatHoverInformationTests`；复用既有正式 16×16 语义微图标、32×32 法术/法宝/敌人意图及生命/护盾图标。
+- **验收记录：** 火术战斗预览不再显示 `CombatAffinity / DeliveryMode / TargetKind / Shape / TriggerWindow` 等实现枚举，现有 60 项火术按规则生成效果、目标、范围与触发时机中文；全部火术规则/条件枚举均有玩家短句门禁。法宝按钮保留正式内容图标、行动成本并在存在风险时显示“注意”图标。敌人悬浮卡顶栏以生命、护盾、以太和当前意图图标传达即时状态，正文保留特点、自然语言战法、状态和权威当前意图；技能效果不再回退为英文枚举。聚焦 EditMode **4/4 passed**，全量 EditMode **352/352 passed**；Funplay 重编译成功，0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 等待实际界面截图或试玩反馈，仅对单项文案长度、图标留白与信息密度做可逆微调；不自动扩展玩法或内容。
+
+### UXICON-02：战斗语义微图标 16×16 实装 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的玩家信息呈现与正式非人物美术层；只改变 `行动 / 以太 / 注意` 三枚语义词汇的源资产规格与显示素材，未修改资源消耗、技能、法宝、敌人、数值或战斗规则。
+- **目标：** 将三枚已确认内容的极简图标从 32×32 改为 16×16 正式源资产，在 1920×1080 的既有 32 px UI 槽中以 2×、960×540 以 1×整数显示，避免为微图标引入无效细节。
+- **涉及文件/系统：** `OCC_美术规范_v0.1.md`、`FormalArtImportPostprocessor`、`FormalArtAssetAuditTests`、`FormalResourceIcons32/action_point|mana|notice`、M-A9 16 px 主资产/QA 与部署脚本。
+- **验收记录：** 正式内容分别为“指令筹码 + 短箭头”“六边形能量核心 + 亮点”“独立粗感叹号”；三张均为严格 16×16、硬 Alpha、2–3 个实体色，M-A9 v0.3 QA **3/3 PASS**。Unity 定向重导读回三张均为 Sprite、16×16、PPU16、Point、Clamp、无 mipmap、Uncompressed；其他正式图标继续由门禁要求 PPU32。全量 EditMode **350/350 passed**，Funplay 重编译成功、Console 无项目 error，场景 dirty=false；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际界面截图只调整三枚微图标的 RectTransform 留白或色值；不再提升源尺寸或增加物件细节，也不自动扩展到其他 32×32 内容图标。
+
+### UXICON-01：战斗语义词图标化与悬停释义 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗信息呈现层；只调整法术、法宝与敌人说明的视觉词汇和玩家文案，未改变技能、物品、敌人、数值或战斗规则。
+- **目标：** 用正式像素图标替换“行动”“以太”“注意”三个常驻词，并让鼠标悬停显示词义；同时把法术、法宝和敌人说明改成效果优先的玩家语言。
+- **涉及文件/系统：** `FormalArtRegistry`、`FormalUiKit`/`FormalHoverTooltip`、`FormalCombatHud`、`RogueliteSettlementPresentation`、`FormalRogueliteUi`、`TarkovInventoryPanel`、`CombatInformationPresentation`、战斗语义图标生成/QA 与相关 EditMode 测试。
+- **验收记录：** 三者统一登记为 `action/aether/notice` 语义词汇；战斗技能按钮、奖励卡、法宝档案、背包详情和敌人悬浮卡均只常驻显示数值/效果，鼠标悬停图标显示“行动/以太/注意”。法术奖励由实现枚举改为按规则生成的伤害、状态、位移、护盾、火场等玩家短句；法宝保留来源、每次消耗、目标、效果、限制和剩余次数；敌人改为生命/防御、特点、自然语言战法和当前意图，去除 `CD` 与重复操作说明。根据玩家审美反馈完成图标 v0.2 重绘：AI 仅提供物件造型/材质概念，正式 32×32 独立重绘为无内置边框的行动棘轮继电器、密封以太压力芯与危险区校准表，移除闪电、水滴和交通警示三角隐喻；单图 11–14 色、硬 Alpha、主体覆盖率 50.7%–53.8%，QA **3/3 PASS**。Unity Sprite/Point/Clamp/PPU32/无 mipmap 读回通过；全量 EditMode **350/350 passed**，Funplay 编译 0 error / 0 warning，Console 无 error，`CombatPrototype.unity isDirty=false`；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 依据实际试玩反馈决定是否将同一语义词汇扩展到非战斗商店与地图资源栏；不自动改变玩法范围。
+
+### UXRED-01：玩家界面信息减法与通用图标化 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的正式玩家界面表现层；只精简现有信息与补充非人物通用 UI 图标，未改变玩法、内容、数值或存档语义。
+- **目标：** 将“图标 + 短标签 + 按需详情”落实到入口、地图、简报、设置、档案、战斗 HUD、背包与奖励结算，移除重复说明、文字分隔线及开发式措辞。
+- **涉及文件/系统：** `FormalRogueliteUi`、`FormalCombatHud`、`TarkovInventoryPanel`、`RogueliteSettlementPresentation`、`CombatInformationPresentation`、`BattlefieldPresentationAdapter`、展示日志/反馈合同、`FormalArtRegistry`、正式导航图标生成器与 EditMode 资产/文案测试。
+- **验收记录：** 正式玩家路径中的 `//`、确定性快照/结算、开发原型等内部语言已清除，重复的背包操作说明、显而易见的行动序列说明、按钮“点击切换状态”及奖励结算长说明已删减；空详情按钮不再创建冗余文本层。新增 `home/continue/archive/settings/back/confirm/save/close` 共 8 张独立 32×32 通用导航图标并接入入口、地图、简报、设置与档案按钮，仍保留短标签和禁用原因；QA JSON **8/8 PASS**，硬 Alpha、每张 5–6 色、Sprite/Point/Clamp/PPU32/无 mipmap 通过。全量 EditMode **344/344 passed**；Funplay 域重载恢复成功，编译 0 error / 0 warning，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** 等待实际试玩反馈，再决定是否针对单一页面做第二轮信息密度调整；不自动扩展内容或玩法。
+
+### UXVIS-08：跨页面动效、可访问性与最终体验回归 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的正式表现与交互层最终回归；未新增玩法、事件、地图、敌人、法宝、角色、资源规则或数值。
+- **目标：** 收口跨页面动效、回执、焦点、Toast/模态、0%/100% 动画、非颜色编码、全局字体/对比度、双分辨率布局与正式非人物美术缺口。
+- **涉及文件/系统：** `FormalUiTheme/FormalUiKit`、`FormalRogueliteUi`、`FormalUiEffects`、`TarkovInventoryPanel`、`RogueliteSettlementPresentation`、周边 UI 配置/生成器/背景资产、`FormalArtAssetAuditTests`、`FormalUiThemeTests` 与 `UiLayoutContractTests`。
+- **验收记录：** 高对比和大号文字已下沉至共用主题/响应式字号，正式 uGUI 页面及背包 IMGUI 统一消费；正文/说明对比与字号增量有纯测试门禁。新增全部登记布局的 1920×1080、960×540 锚点投影回归；页面/模态/Toast/按钮/结算动效继续保证 0% 立即终态且文字、图标、边框不依赖动画或颜色单独传意。复用正式周边资产生成器新增 `inventory.png` 与 `settlement.png` 两张独立 480×270 工业魔导背景并接入背包/结算；QA 图和 JSON 共登记 26 项，硬 Alpha、固定尺寸、受控调色板、Sprite/Point/Clamp/无 mipmap 审计通过。聚焦 **42/42 passed**；全量 EditMode **343/343 passed**。Funplay 编译 0 error / 0 warning，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `OCC_体验与视觉收口开发计划_v0.1` 完成；等待玩家实际试玩反馈或下一份批准计划，不自动扩展内容范围。
+
+### UXVIS-07：入口、存档、结算与设置页面收口 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的现有入口、存档保护、战前简报、胜负/奖励结算与设置表现层；未新增剧情、事件、存档槽规则或玩法后果。
+- **目标：** 收口新局/继续、存档缺失/损坏/写入失败、简报、胜负/奖励结算、返回入口、设置和开发隔离中的反馈、确认与恢复路径。
+- **涉及文件/系统：** `UiInteractionContracts`、`CombatPrototypeBootstrap`、`FormalRogueliteUi`、`RogueliteSaveGateway` 既有验证路径与 `UiInteractionContractsTests`。
+- **验收记录：** 新增纯展示 `MapSaveUiPresentation`，将暂无存档、可继续、坏档受保护、存储异常和最近写入失败转换为明确非颜色文案。新推进必须在首次 `SaveMapRun` 成功后才进入地图；覆盖确认会先读验旧槽，有效档走既有可回滚替换，损坏/非法档只在确认后清除主槽写锁且保留首份损坏备份，存储异常不启动新推进。地图返回入口前强制再保存，失败则保留内存状态并停在当前页；设置持久化失败会说明“本次生效但未保存”。启动、简报、胜负、奖励、确认取消/焦点恢复和默认关闭的开发工具复核无新增断链。聚焦 **22/22 passed**；全量 EditMode **341/341 passed**。Funplay 编译 0 error / 0 warning，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-08` 已成为唯一当前主任务。
+
+### UXVIS-06：背包、搜刮与快捷栏体验收口 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的现有背包、搜刮和快捷栏表现/交互层；未新增物品、容器、资源规则或数值。
+- **目标：** 在既有鼠标拖拽基线上补齐键盘整理/快捷栏/搜刮闭环，并让 AP、相邻和背包落位失败在提交前可读。
+- **涉及文件/系统：** `TarkovInventoryPanel`、`InventoryInteractionPresentation`、`InventoryInteractionPresentationTests`、既有库存/搜刮命令入口。
+- **验收记录：** 保留 6×10 网格的尺寸/朝向、拖拽、右键旋转、合法/非法落点、原子提交和完整物品详情；新增按占格中心计算的稳定方向键选择、`R` 旋转、数字 `1–8` 快捷栏关联、`F` 逐项搜索/拿取及 `B/Esc` 返回。搜索文本框聚焦时快捷键暂停，避免吞掉输入。搜刮区常驻相邻、1 AP 和已清空原因；已揭示战利品用与实际提交相同的 `FindFirstFit` 显示自动落位或背包无合法空位，所有操作仍走既有确定性命令和跨战斗持久化。新增聚焦测试 **5/5 passed**；全量 EditMode **340/340 passed**。Funplay 域重载恢复成功，0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-07` 已成为唯一当前主任务。
+
+### UXVIS-05：商店、工坊与奖励页面交互收口 — COMPLETE（2026-08-11）
+
+- **归属：** 肉鸽模式现有商店、工坊和战后奖励表现/交互层；未新增商品、装备、奖励、资源规则、养成数值或事件内容。
+- **目标：** 统一成本、拥有/已领取、可执行性、失败、比较与提交回执，消除库存满和装备不兼容导致的正式流程异常。
+- **涉及文件/系统：** `RogueliteEconomyPresentation`、`FormalRogueliteUi`、`RogueliteSettlementPresentation`、`UiPresentationModelsTests`。
+- **验收记录：** 新增只读经济操作合同，商店/节点选项在提交前显示成本、余额不足、已拥有和背包所需空位；不可执行项禁用但保留明确原因。工坊卡显示已装备状态、武器伤害/射程/穿甲相对值及已装备术式不兼容恢复建议；校准继续复用一次性状态和资源变化。战后奖励卡预检现有 `FindFirstFit`、跳过禁用卡恢复首焦点，保留重复提交锁，并在异常时恢复可用卡和显示失败信息；成功仍通过既有资源/构筑/背包版本与 `RewardClaimed` 事件即时刷新。新增 3 项聚焦合同覆盖货币不足、背包满和术式不兼容，**3/3 passed**；全量 EditMode **335/335 passed**。Funplay 域重载恢复成功，0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-06` 已成为唯一当前主任务。
+
+### UXVIS-04：地图页面与路线交互收口 — COMPLETE（2026-08-11）
+
+- **归属：** 肉鸽模式现有地图页面的表现与输入层；未新增地图、节点、事件、资源规则或时间压力。
+- **目标：** 统一顶栏/资源、节点/路径/图例/详情的视觉语义，并闭合存档恢复、选择、检查、确认、取消和返回焦点。
+- **涉及文件/系统：** `FormalRogueliteUi`、`RogueliteMapVisualPresentation`、`FormalUiPageChecklist`、`UiPresentationModelsTests`。
+- **验收记录：** 新增地图纯展示合同，为七类节点状态和五类路径状态建立唯一中文标签/字符标记，不再仅靠颜色；节点卡、路径标记和图例同步。地图默认焦点从“主菜单”改为当前节点，所有节点使用 `map.node.{id}` 稳定键，选择重建后焦点保持；未知节点现可检查但只显示“尚未侦测/连接信息未公开”。详情常驻节点类型、摘要、已知连接、权限/不可直达原因、回访安全和进入结果；真正移动仍只调用既有 `CanTravelTo`/`SelectMapNode`，未改变地图拓扑、状态、收益或规则。新增 3 项地图聚焦合同，**3/3 passed**；全量 EditMode **332/332 passed**。Funplay 域重载恢复成功，0 error / 0 warning，Console 无 error，0 dirty scene，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-05` 已成为唯一当前主任务。
+
+### UXVIS-03：战斗动画与结果反馈收口 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗表现与信息反馈层；未修改战斗数值、AI、行动结算、事件内容、资源规则或场景。
+- **目标：** 收口单位聚焦、移动、攻击、技能、受击、资源/状态/物件结果、敌方逐单位行动和胜负反馈的时序、互斥与 0% 动画降级。
+- **涉及文件/系统：** `CombatVisualFeedback`、`EnemyTurnSequence`、`FormalUiEffects`、`CombatPrototypeBootstrap`、`CombatFeedbackEventTests`、`EnemyTurnSequenceTests`。
+- **验收记录：** 保留敌方行动“聚焦→结算停留→单位间隔”序列及其并发拒绝合同；单位动作继续按单位 ID 单通道覆盖，并新增按格子单通道的正式 VFX 互斥。资源缓存补齐以太恢复，状态差分补齐自然移除/消退的通用净化反馈，显式结算同步缓存以避免重复播报。统一 `CombatFeedbackPresentationPolicy`：动画 0% 时不再播放单位运动、格子 VFX、脉冲、浮字漂移/淡出或聚焦闪烁，但静态敌方行动提示、胜负卡、浮字结果与既有结算停留仍保留；100% 路径继续使用原正式帧、单位动作和结果色。新增 2 项聚焦合同覆盖动画阈值与状态移除差分，**2/2 passed**；全量 EditMode **329/329 passed**。Funplay 域重载恢复成功，0 error / 0 warning，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-04` 已成为唯一当前主任务。
+
+### UXVIS-02：战斗 HUD 信息层级与操作闭环 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗 HUD 呈现与输入闭环；未修改战斗数值、AI、行动结算、事件内容、资源规则或场景。
+- **目标：** 统一常驻/选中/悬停三层信息，以及移动、攻击、技能、互动、搜刮、物品和结束行动的选择、预览、确认、失败与取消路径。
+- **涉及文件/系统：** `FormalCombatHud`、`CombatInformationPresentation`、`CombatPrototypeBootstrap`、`RuntimeUiEventSystem`、`FormalHoverTooltip`、`TarkovInventoryPanel`、`CombatHoverInformationTests` 与战斗 HUD 展示模型。
+- **验收记录：** “本轮行动”在 96 px 模块内新增两行决策摘要，常驻显示行动者/AP、所选行动、成本、可执行性、目标与预计结果；完整目标资料、敌方意图、伤害/状态结果与失败原因继续由同一悬停/键盘焦点浮窗承载，行动序列和最近五条现场记录保持常驻。Esc/手柄返回改为先取消查看目标，再取消已装载物品或非默认行动，最后才请求离开。新增 `CombatTargetNavigationState`：`T`/右肩键进入，方向键/WASD/十字键移动，Enter/Space/南键确认，Esc/东键取消并恢复行动按钮焦点；确认仍调用既有 `HandleCellClick`，未复制或改变结算规则。新增 3 项聚焦合同覆盖决策摘要、取消优先级和选点边界。Funplay 域重载恢复成功，0 error / 0 warning，UXVIS-01+02 聚焦 **19/19 passed**，全量 EditMode **327/327 passed**，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff；未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-03` 已成为唯一当前主任务。
+
+### UXVIS-01：统一 UI 视觉语言与基础组件 — COMPLETE（2026-08-11）
+
+- **归属：** 剧情模式与肉鸽模式共用的正式 UI 呈现与输入基础；未修改玩法、数值、事件内容、资源规则、场景或正式人物资产。
+- **目标：** 统一正式界面的面板、按钮、卡片、标签、图标槽、状态色、字号、间距、焦点、禁用态及悬停/按下/选中反馈，为后续页面收口建立唯一可复用视觉与交互基线。
+- **涉及文件/系统：** `OCC_体验与视觉收口开发计划_v0.1.md`、`FormalUiKit`/`UiButtonFeedback`、`FormalCombatHud`、`FormalRogueliteUi`、`FormalStartupPresentation`、`FormalUiInteractionLayer`、`RogueliteSettlementPresentation`、`TarkovInventoryPanel`、`FormalUiThemeTests`。
+- **验收记录：** `FormalUiTheme` 新增中性/抬升/交互/遮罩及生命、护盾、魔力语义色，锁定标题/正文/说明字号、8 px 间距阶梯、32 px 图标槽和最小 40 px 交互高度；`FormalUiButtonTone`/`FormalUiButtonPalette` 统一普通、主要、正向、警示、危险按钮的 normal/hover/pressed/selected/disabled/focus 状态。九类 `FormalUiPageChecklist` 登记入口、地图、简报、战斗、商店/工坊、背包/搜刮、结算、设置、档案的默认焦点、返回、禁用与空内容状态；入口和设置修复为稳定焦点键。正式页面统一读取语义令牌，并移除“完整切片、确定性规则、开发控制”等开发措辞。1920×1080 参考布局、960×540 compact 字号合同、鼠标/键盘焦点和动画 0%/100% 由现有布局/交互合同及新增 8 项主题测试覆盖；未获 Play Mode 授权，因此未新增运行时截图。Funplay 域重载恢复成功，0 error / 0 warning，聚焦 **8/8 passed**，全量 EditMode **324/324 passed**，Console 无 error，`CombatPrototype.unity isDirty=false`，无 `.unity` Git diff，未保存场景、未进入 Play Mode。
+- **完成后解锁：** `UXVIS-02` 已成为唯一当前主任务。
 
 ### COMBAT-FLOW-01：敌方逐行动节奏与战斗反馈 — COMPLETE（2026-08-11）
 

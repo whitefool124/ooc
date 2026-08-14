@@ -6,6 +6,9 @@
 
 ## 开发规则
 
+- 所有任务必须直接在主工作树 `E:/数据库/OCC_Codex` 中开发；Unity 工程的绝对路径为 `E:/数据库/OCC_Codex/UnityProject`。
+- 禁止为本项目创建或使用 Git 附加 worktree、Codex 临时 worktree 或其他仓库副本；开始任务前必须确认当前仓库根目录为 `E:/数据库/OCC_Codex`。
+- Unity/Funplay 操作前必须确认 `Application.dataPath` 为 `E:/数据库/OCC_Codex/UnityProject/Assets`；路径不一致时停止操作并切换到主工作树，不得在错误副本中实现或验证。
 - Unity 工程位于 `UnityProject/`，默认场景是 `Assets/Scenes/CombatPrototype.unity`。
 - 通过 Funplay MCP 检查或修改 Unity；改动脚本后必须重新编译并验证 Console。
 - 不要直接修改 `Library/`、`Logs/`、临时缓存或生成的工程文件。
