@@ -138,7 +138,7 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun;
             if (string.IsNullOrEmpty(selectedNodeId) || !RogueliteMapCatalog.Nodes.Any(node => node.Id == selectedNodeId)) selectedNodeId = run.CurrentNodeId;
-            Header("学院实训网络", FireRogueliteStarterCatalog.DisplayName(run.StarterId) + " · 探索 " + run.AcademyProgress + " 节点 · " + AcademyPhaseLabel(run.AcademyPhase) + " · 生命 " + run.CurrentHealth + " · 护盾 " + run.CurrentShield + " · 以太 " + run.CurrentMana + " · " + RogueliteMapCatalog.Node(run.CurrentNodeId).DisplayName);
+            Header("学院实训网络", FireRogueliteStarterCatalog.DisplayName(run.StarterId) + " · " + RogueliteMapVisualPresentation.AcademyStatus(run) + " · 生命 " + run.CurrentHealth + " · 护盾 " + run.CurrentShield + " · 以太 " + run.CurrentMana + " · " + RogueliteMapCatalog.Node(run.CurrentNodeId).DisplayName);
             GameObject status = FormalUiKit.LayoutPanel("行动状态栏", content.transform, "map.status", panel);
             ResourceChip(status.transform, 18, "等级", run.Level, cyan);
             ResourceChip(status.transform, 185, "经验", run.Experience, cyan);

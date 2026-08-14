@@ -105,7 +105,14 @@ namespace OCC.Combat.Tests
             run.SelectNode("permit_archive"); run.ChooseCurrentNodeContent("survey");
             run.SelectNode("safety_room"); run.ChooseCurrentNodeContent("scan_routes");
             run.SelectNode("aether_refinery"); run.ChooseCurrentNodeContent("purify");
-            CompleteCombat(ref run, "transmission_tower"); CompleteCombat(ref run, "core_approach"); CompleteCombat(ref run, "core_finale");
+            CompleteCombat(ref run, "transmission_tower");
+            CompleteCombat(ref run, "core_approach");
+            CompleteRewardNode(ref run, "core_vault");
+            CompleteCombat(ref run, "observatory_path");
+            CompleteCombat(ref run, "wilds_camp");
+            run.SelectNode("observatory_path");
+            run.SelectNode("core_vault");
+            CompleteCombat(ref run, "core_finale");
             Assert.That(run.IsComplete, Is.True); Assert.That(run.StarterId, Is.EqualTo(starterId));
             Assert.That(run.ToJson(), Is.EqualTo(RoundTrip(run).ToJson()));
         }
@@ -113,6 +120,16 @@ namespace OCC.Combat.Tests
         private static void CompleteCombat(ref RogueliteMapRun run, string nodeId)
         {
             run.SelectNode(nodeId); run.CompleteCurrentCombat(); run = RoundTrip(run);
+            FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
+            if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
+            run = RoundTrip(run);
+        }
+
+        private static void CompleteRewardNode(ref RogueliteMapRun run, string nodeId)
+        {
+            run.SelectNode(nodeId);
+            run.ChooseCurrentNodeContent("vault_fire_cache");
+            run = RoundTrip(run);
             FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
             if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
             run = RoundTrip(run);

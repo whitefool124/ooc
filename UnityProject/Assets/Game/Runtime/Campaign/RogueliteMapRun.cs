@@ -16,7 +16,7 @@ namespace OCC.Combat
         public const int CorePermitRequirement = 2;
         public const int ConsolidationProgress = 21;
         public const int TransitionProgress = 28;
-        public const bool EnforceBossGate = false;
+        public const bool EnforceBossGate = true;
         public const bool EnforceTransition = false;
     }
 
@@ -415,6 +415,10 @@ namespace OCC.Combat
             if (node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale) return false;
             return true;
         }
+        public bool IsAcademyFinaleGateLocked(RogueliteMapNode node)
+        {
+            return node != null && node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale;
+        }
         public bool IsNodeKnown(string nodeId) => visited.Contains(nodeId) || RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
         public RogueliteMapNodeVisualState VisualStateFor(string nodeId)
         {
@@ -422,14 +426,16 @@ namespace OCC.Combat
             if (node.Id == CurrentNodeId) return RogueliteMapNodeVisualState.Current;
             if (completed.Contains(node.Id)) return RogueliteMapNodeVisualState.Cleared;
             if (IsNodeAvailable(node.Id)) return RogueliteMapNodeVisualState.Available;
-            if (IsAdjacentToCurrent(node.Id) && AccessCards < node.RequiredAccessCards) return RogueliteMapNodeVisualState.Locked;
+            if (IsAdjacentToCurrent(node.Id) && (AccessCards < node.RequiredAccessCards || IsAcademyFinaleGateLocked(node))) return RogueliteMapNodeVisualState.Locked;
             if (visited.Contains(node.Id) || IsNodeKnown(node.Id)) return RogueliteMapNodeVisualState.Known;
             return RogueliteMapNodeVisualState.Unknown;
         }
         public IReadOnlyList<RogueliteMapNode> AvailableNodes => RogueliteMapCatalog.Nodes.Where(node => IsNodeAvailable(node.Id)).ToArray();
         public void SelectNode(string nodeId)
         {
-            if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException("Node is not adjacent or its permission gate is locked.");
+            if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
+                ? "Academy finale requires 12 explored nodes and 2 core permits."
+                : "Node is not adjacent or its permission gate is locked.");
             CurrentNodeId = nodeId; visited.Add(nodeId);
         }
         public void CompleteCurrentCombat()

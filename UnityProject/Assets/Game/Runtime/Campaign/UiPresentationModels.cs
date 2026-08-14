@@ -185,8 +185,23 @@ namespace OCC.Combat
             if (node.Id == run.CurrentNodeId) return "当前地点";
             if (run.CompletedNodes.Contains(node.Id)) return "已完成；回访安全";
             if (RogueliteUiPreferences.CanTravelTo(run, node)) return "路径可用";
+            if (run.IsAcademyFinaleGateLocked(node))
+                return "首领门槛：时序 " + run.AcademyProgress + "/" + AcademyMapTuning.BossMinimumProgress +
+                    "，核心许可 " + run.CorePermits + "/" + AcademyMapTuning.CorePermitRequirement;
             if (state == RogueliteMapNodeVisualState.Locked) return "需要权限卡 " + node.RequiredAccessCards + "（当前 " + run.AccessCards + "）";
             return "当前不可直达";
+        }
+
+        public static string AcademyStatus(RogueliteMapRun run)
+        {
+            if (run == null) return "学院时序不可用";
+            string phase = run.AcademyPhase == AcademyMapPhase.Consolidation ? "学期收束" :
+                run.AcademyPhase == AcademyMapPhase.TransitionReady ? "阶段转换就绪" : "正常学期";
+            string finale = run.CanChallengeAcademyFinale ? "首领可挑战" :
+                "首领缺口 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) + " 节点/" +
+                Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 许可";
+            return "时序 " + run.AcademyProgress + "/" + AcademyMapTuning.TransitionProgress + " · " + phase +
+                " · 核心许可 " + run.CorePermits + "/" + AcademyMapTuning.CorePermitRequirement + " · " + finale;
         }
 
         public static string ConnectionSummary(RogueliteMapRun run, RogueliteMapNode node)

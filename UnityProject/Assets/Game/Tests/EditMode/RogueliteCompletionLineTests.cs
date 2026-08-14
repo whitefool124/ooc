@@ -43,6 +43,11 @@ namespace OCC.Combat.Tests
 
             CompleteCombatAndSettle(ref run, "transmission_tower");
             CompleteCombatAndSettle(ref run, "core_approach");
+            CompleteRewardNodeAndSettle(ref run, "core_vault");
+            CompleteCombatAndSettle(ref run, "observatory_path");
+            CompleteCombatAndSettle(ref run, "wilds_camp");
+            run.SelectNode("observatory_path");
+            run.SelectNode("core_vault");
             CompleteCombatAndSettle(ref run, "core_finale");
 
             Assert.That(run.IsComplete, Is.True);
@@ -90,6 +95,15 @@ namespace OCC.Combat.Tests
         {
             run.SelectNode(nodeId);
             run.CompleteCurrentCombat();
+            run = RoundTrip(run);
+            SettleUniqueReward(run);
+            run = RoundTrip(run);
+        }
+
+        private static void CompleteRewardNodeAndSettle(ref RogueliteMapRun run, string nodeId)
+        {
+            run.SelectNode(nodeId);
+            run.ChooseCurrentNodeContent("vault_fire_cache");
             run = RoundTrip(run);
             SettleUniqueReward(run);
             run = RoundTrip(run);
