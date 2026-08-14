@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-10：战斗结果反馈发布器 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗表现架构；不改变伤害、火术结算、日志文本、动画类型、反馈顺序或可访问性设置。
+- **目标：** 将 `CombatEffectExecution` 与 `FireSpellExecution` 到视觉反馈/日志端口的映射从 Bootstrap 提取为独立发布器，避免会话入口继续理解每一种效果类型。
+- **涉及文件/系统：** `PublishCombatEffects`、`PublishFireExecutions`、`CombatVisualFeedback`、战斗反馈事件、火术触发日志及新增 EditMode 映射测试。
+- **验收标准：** Bootstrap 不再逐类分派 `CombatEffectKind` 或解析火术执行步骤；发布器通过窄反馈接口覆盖移动、盾吸收、伤害/击败、恢复、状态、可破坏物和火术通知；原反馈顺序保持；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `IResolvedCombatFeedbackSink` 与 `CombatFeedbackPublisher`，把移动、盾吸收、生命伤害/击败、恢复、状态、可破坏物和火术通知/日志映射集中到独立发布器；`CombatVisualFeedback` 实现窄端口，Bootstrap 只转交已解析结果，行数由 1488 降至 1449。新增移动/伤害顺序、火术目标坐标/日志文本及结构接线测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `3/3 passed`，全量 EditMode `432/432 passed`，PlayMode `1/1 passed`；现场英雄移动后敌方完整执行并返回英雄回合，Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 继续拆分玩家交互编排与肉鸽导航，不让 Bootstrap 回收规则或表现细节。
+
 ### CORE-ARCH-09：正式战斗会话生命周期控制器 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的正式战斗会话架构；开发训练场保持独立适配器，不改变开战、战术重开、英雄先手、火术/法宝回合生命周期、胜负或存档。

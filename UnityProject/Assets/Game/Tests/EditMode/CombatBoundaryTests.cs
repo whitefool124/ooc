@@ -156,5 +156,13 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatSessionLifecycleController)), Is.True);
             Assert.That(Array.Exists(fields, field => field.Name == "fireLifecycleActiveUnitId"), Is.False);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesResolvedEffectMappingToFeedbackPublisher()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatFeedbackPublisher)), Is.True);
+            Assert.That(typeof(IResolvedCombatFeedbackSink).IsAssignableFrom(typeof(CombatVisualFeedback)), Is.True);
+        }
     }
 }

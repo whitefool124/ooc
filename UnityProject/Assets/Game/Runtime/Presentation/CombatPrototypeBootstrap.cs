@@ -19,6 +19,7 @@ namespace OCC.Combat.Presentation
         private readonly EnemyTurnCoordinator enemyTurn = new EnemyTurnCoordinator();
         private readonly CombatSessionLifecycleController combatSession = new CombatSessionLifecycleController();
         private readonly CombatCommandExecutionService commandExecution = new CombatCommandExecutionService();
+        private readonly CombatFeedbackPublisher feedbackPublisher = new CombatFeedbackPublisher();
         private readonly CombatTargetNavigationState targetNavigation = new CombatTargetNavigationState();
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
@@ -1419,50 +1420,10 @@ namespace OCC.Combat.Presentation
         }
 
         private void PublishFireExecutions(IEnumerable<FireSpellExecution> executions)
-        {
-            if (executions == null) return;
-            foreach (FireSpellExecution execution in executions)
-            {
-                if (execution == null) continue;
-                FireSpellDefinition spell = execution.Preview?.Spell;
-                FireSpellResultStep firstStep = execution.Steps.FirstOrDefault();
-                UnitState stepTarget = string.IsNullOrEmpty(firstStep.TargetId) ? null : state.GetUnit(firstStep.TargetId);
-                if (spell != null) visualFeedback?.NotifyFireSpell(spell,
-                    stepTarget?.Position ?? execution.Preview.Cells.FirstOrDefault(), execution.Preview.Cells);
-                state.AddLog((spell?.DisplayName ?? "火术触发") + "：产生 " + execution.Steps.Count + " 项结果");
-            }
-        }
+            => feedbackPublisher.PublishFireExecutions(state, visualFeedback, executions,
+                message => state.AddLog(message));
         private void PublishCombatEffects(CombatEffectExecution execution)
-        {
-            if (visualFeedback == null || execution == null) return;
-            foreach (CombatEffectResult result in execution.Results)
-            {
-                UnitState source = state.GetUnit(result.SourceUnitId);
-                GridPosition sourcePosition = source == null ? result.PositionBefore : source.Position;
-                if (result.Kind == CombatEffectKind.Move && result.Changed)
-                    visualFeedback.NotifyMovement(result.PositionBefore, result.PositionAfter);
-                else if (result.Kind == CombatEffectKind.AbsorbShield && result.AppliedAmount > 0)
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb, sourcePosition, result.PositionAfter, result.AppliedAmount));
-                else if (result.Kind == CombatEffectKind.DamageHealth && result.AppliedAmount > 0)
-                {
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.Damage, sourcePosition, result.PositionAfter, result.AppliedAmount));
-                    if (result.ValueBefore > 0 && result.ValueAfter == 0)
-                        visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.UnitDefeated, sourcePosition, result.PositionAfter));
-                }
-                else if (result.Kind == CombatEffectKind.RestoreHealth && result.AppliedAmount > 0)
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.Healing, result.PositionAfter, result.AppliedAmount));
-                else if (result.Kind == CombatEffectKind.RestoreShield && result.AppliedAmount > 0)
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ShieldRestore, result.PositionAfter, result.AppliedAmount));
-                else if (result.Kind == CombatEffectKind.RestoreMana && result.AppliedAmount > 0)
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ManaRestore, result.PositionAfter, result.AppliedAmount));
-                else if (result.Kind == CombatEffectKind.ApplyStatus && result.AppliedAmount > 0)
-                    visualFeedback.NotifyStatusApplied(result.PositionAfter, result.Status, result.ValueAfter);
-                else if (result.Kind == CombatEffectKind.ClearStatus && result.AppliedAmount > 0)
-                    visualFeedback.Publish(new CombatFeedbackEvent(CombatFeedbackKind.StatusCleared, result.PositionAfter));
-                else if (result.Kind == CombatEffectKind.DamageObject && result.AppliedAmount > 0)
-                    visualFeedback.NotifyDestructible(result.PositionAfter, state.Map.GetTile(result.PositionAfter));
-            }
-        }
+            => feedbackPublisher.PublishCombatEffects(state, visualFeedback, execution);
         public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
             CombatCommandExecutionService.CanSubmit(command, explicitHeroEndTurn);
 

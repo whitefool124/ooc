@@ -43,7 +43,7 @@ namespace OCC.Combat.Presentation
     }
 
     // Runtime-only presentation layer: it adds readable feedback without changing the authored scene HUD.
-    public sealed class CombatVisualFeedback : MonoBehaviour
+    public sealed class CombatVisualFeedback : MonoBehaviour, IResolvedCombatFeedbackSink
     {
         private readonly Dictionary<string, int> healthCache = new Dictionary<string, int>();
         private readonly Dictionary<string, int> shieldCache = new Dictionary<string, int>();
