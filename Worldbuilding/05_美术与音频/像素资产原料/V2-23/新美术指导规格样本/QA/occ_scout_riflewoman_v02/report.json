@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Units64\\raw\\occ_scout_riflewoman_v02_codex_raw.png",
+  "keyed": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Units64\\occ_scout_riflewoman_v02_keyed.png",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Units64\\occ_scout_riflewoman_v02.png",
+  "method": "full-canvas nearest-neighbor sampling, chroma-key removal, hard-alpha threshold and no-dither palette quantization; no crop, fit or reposition",
+  "size": [
+    64,
+    64
+  ],
+  "paletteColors": 24,
+  "paletteLimit": 24,
+  "hardAlpha": true,
+  "bounds": [
+    21,
+    11,
+    49,
+    51
+  ],
+  "baselineY": 58
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "occ.ui.semantic-icons.compact-comparison.v0.1",
+  "status": "PASS",
+  "recommendedSourceSize": 16,
+  "displayContract": "16px source; 2x at 1920x1080, 1x at 960x540",
+  "records": [
+    {
+      "id": "action",
+      "canvas": 16,
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 120,
+      "sha256": "ec303e7ed2f69ccb48b79abd7fe10826646dd98f9eb0143462920ea017899e6f"
+    },
+    {
+      "id": "aether",
+      "canvas": 16,
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 88,
+      "sha256": "2d93fc9caf915f4eb243d85d44e8ce3628c699cb5925d089eb0c55877db5f363"
+    },
+    {
+      "id": "notice",
+      "canvas": 16,
+      "colorsIncludingTransparency": 3,
+      "hardAlpha": true,
+      "opaquePixels": 44,
+      "sha256": "a0669aeab66346638663716bf902ebd20ffecb03b94f97b09a0847d67994db18"
+    },
+    {
+      "id": "action",
+      "canvas": 12,
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 69,
+      "sha256": "e93cdc85023342649845388784265f8de483733e71ece7b846df39788e15bbc2"
+    },
+    {
+      "id": "aether",
+      "canvas": 12,
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 54,
+      "sha256": "200835cfdd34cd3fb53731f2a9e551c91764d96b4f3576c767c8567818d8ce4d"
+    },
+    {
+      "id": "notice",
+      "canvas": 12,
+      "colorsIncludingTransparency": 3,
+      "hardAlpha": true,
+      "opaquePixels": 25,
+      "sha256": "dbbf9d9b308f8dbdd50c03b7c646bc00ab22ab77fb1f2d25044019b87863581e"
+    }
+  ]
+}

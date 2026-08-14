@@ -1,0 +1,95 @@
+{
+  "schema": "occ.ui.navigation.qa.v0.1",
+  "status": "PASS",
+  "assetCount": 8,
+  "records": [
+    {
+      "id": "home",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/home.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "hardAlpha": true,
+      "sha256": "b4595440170a408168a90683b6b8aa5bfac47724c52f1cc7d42ba662f5224e6f"
+    },
+    {
+      "id": "continue",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/continue.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "hardAlpha": true,
+      "sha256": "541d7d4fa93448b5957035f063ce14a7b798503e75db9ccfbae530024a8566be"
+    },
+    {
+      "id": "archive",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/archive.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "hardAlpha": true,
+      "sha256": "c5d8ec82cc6dd068c73565248529b0fba3eff0b14a9032bf693891ac763eb346"
+    },
+    {
+      "id": "settings",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/settings.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "hardAlpha": true,
+      "sha256": "9789e8851111a726e261a6eec0c8a623fa62547b1f8eb405aa965707e5f89d23"
+    },
+    {
+      "id": "back",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/back.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "hardAlpha": true,
+      "sha256": "fcfdc019789660c7a7f78ac7bda26d6c0f49ebd2e1922d55c89e9a8938168111"
+    },
+    {
+      "id": "confirm",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/confirm.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "hardAlpha": true,
+      "sha256": "cc4283c74a965e892313ed345e51f9843d8e63a78b6df928c3dde5d7cf81ce07"
+    },
+    {
+      "id": "save",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/save.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "hardAlpha": true,
+      "sha256": "7201a1061fcef434e64156331d18213a6bbdc21dc647426e00ffb0ab745a3dc6"
+    },
+    {
+      "id": "close",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalNavigationIcons32/close.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "hardAlpha": true,
+      "sha256": "d1aede9d3f09261a4b655b65399d46ee8f95ccf8e2976547eb7a062542bde305"
+    }
+  ]
+}

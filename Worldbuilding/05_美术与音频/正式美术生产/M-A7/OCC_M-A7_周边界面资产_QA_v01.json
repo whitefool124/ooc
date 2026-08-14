@@ -1,7 +1,7 @@
 {
   "schema": "occ.ui.peripheral.qa.v0.1",
   "status": "PASS",
-  "assetCount": 24,
+  "assetCount": 26,
   "records": [
     {
       "id": "backdrop.startup",
@@ -46,6 +46,28 @@
       "colors": 11,
       "hardAlpha": true,
       "sha256": "9291e760d2405c986f5c2506617e483f57a9ed6932572d9e1c81493d2471cd78"
+    },
+    {
+      "id": "backdrop.inventory",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUIBackdrops/inventory.png",
+      "size": [
+        480,
+        270
+      ],
+      "colors": 8,
+      "hardAlpha": true,
+      "sha256": "0e7ff64ee5c7a6a8c2a84decb88536b6a08baa43e77eb18282cb875a97104b7e"
+    },
+    {
+      "id": "backdrop.settlement",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUIBackdrops/settlement.png",
+      "size": [
+        480,
+        270
+      ],
+      "colors": 9,
+      "hardAlpha": true,
+      "sha256": "e041f743d4d43cabe6d8e8e071ed750d9ffa5022f3d24d6306b9640f5b6a23c1"
     },
     {
       "id": "backdrop.scanlines",

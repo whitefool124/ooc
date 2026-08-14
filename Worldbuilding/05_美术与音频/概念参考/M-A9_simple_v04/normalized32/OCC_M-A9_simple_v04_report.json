@@ -1,0 +1,69 @@
+{
+  "schema": "occ.ui.semantic-icons.normalization.v0.1",
+  "status": "PASS",
+  "source": "direct image generation; simple approved semantic content",
+  "operations": [
+    "alpha crop",
+    "fit inside 24x24",
+    "area reduction",
+    "semantic palette mapping",
+    "hard alpha",
+    "center in 32x32"
+  ],
+  "records": [
+    {
+      "id": "action",
+      "path": "Worldbuilding/05_美术与音频/概念参考/M-A9_simple_v04/normalized32/action_32.png",
+      "size": [
+        32,
+        32
+      ],
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "boundsInclusive": [
+        4,
+        4,
+        26,
+        27
+      ],
+      "opaqueCoverage": 0.439,
+      "sha256": "a6d33f08e2f5d54e91277ad6a4dfe917d90c30d52198bf4e0efa19a8043e1aa2"
+    },
+    {
+      "id": "aether",
+      "path": "Worldbuilding/05_美术与音频/概念参考/M-A9_simple_v04/normalized32/aether_32.png",
+      "size": [
+        32,
+        32
+      ],
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "boundsInclusive": [
+        6,
+        4,
+        25,
+        27
+      ],
+      "opaqueCoverage": 0.35,
+      "sha256": "b0b2530c17205f86c66007d959dc894d5b78583158c9fa3c553089113aa78b18"
+    },
+    {
+      "id": "notice",
+      "path": "Worldbuilding/05_美术与音频/概念参考/M-A9_simple_v04/normalized32/notice_32.png",
+      "size": [
+        32,
+        32
+      ],
+      "colorsIncludingTransparency": 3,
+      "hardAlpha": true,
+      "boundsInclusive": [
+        12,
+        4,
+        19,
+        27
+      ],
+      "opaqueCoverage": 0.172,
+      "sha256": "36753be19ba67e36b348c6b7659b5a6a15d5c439515a13ff1aa7bb56156cf29e"
+    }
+  ]
+}

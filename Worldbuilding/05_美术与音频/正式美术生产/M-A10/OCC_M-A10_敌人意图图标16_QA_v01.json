@@ -1,0 +1,56 @@
+{
+  "asset_set": "OCC_M-A10_enemy_intent_icons16_v01",
+  "target_size": [
+    16,
+    16
+  ],
+  "icons": {
+    "attack": {
+      "width": 16,
+      "height": 16,
+      "opaque_pixels": 66,
+      "coverage": 0.2578,
+      "solid_color_count": 4,
+      "invalid_alpha_pixels": 0,
+      "pass": true
+    },
+    "cast": {
+      "width": 16,
+      "height": 16,
+      "opaque_pixels": 69,
+      "coverage": 0.2695,
+      "solid_color_count": 3,
+      "invalid_alpha_pixels": 0,
+      "pass": true
+    },
+    "move": {
+      "width": 16,
+      "height": 16,
+      "opaque_pixels": 76,
+      "coverage": 0.2969,
+      "solid_color_count": 2,
+      "invalid_alpha_pixels": 0,
+      "pass": true
+    },
+    "defend": {
+      "width": 16,
+      "height": 16,
+      "opaque_pixels": 123,
+      "coverage": 0.4805,
+      "solid_color_count": 3,
+      "invalid_alpha_pixels": 0,
+      "pass": true
+    },
+    "interact_destroy": {
+      "width": 16,
+      "height": 16,
+      "opaque_pixels": 70,
+      "coverage": 0.2734,
+      "solid_color_count": 4,
+      "invalid_alpha_pixels": 0,
+      "pass": true
+    }
+  },
+  "pass_count": 5,
+  "total_count": 5
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "file": "occ_medic_herb_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 4,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_cinder_pear_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 3,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_coin_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 4,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_wood_cup_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 4,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_bread_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 4,
+    "hard_alpha": true
+  }
+]

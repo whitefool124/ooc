@@ -1,0 +1,122 @@
+[
+  {
+    "name": "occ_fire_canister_v03",
+    "source": "raw_v03\\01_fire_canister.png",
+    "asset": "Items32\\occ_fire_canister_v03.png",
+    "qa": "QA\\occ_fire_canister_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      32,
+      32
+    ],
+    "paletteColors": 14,
+    "hardAlpha": true,
+    "visibleBounds": [
+      8,
+      7,
+      24,
+      25
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "QA_PENDING"
+  },
+  {
+    "name": "occ_grid_disposer_v03",
+    "source": "raw_v03\\02_grid_disposer.png",
+    "asset": "Items32\\occ_grid_disposer_v03.png",
+    "qa": "QA\\occ_grid_disposer_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      32,
+      32
+    ],
+    "paletteColors": 11,
+    "hardAlpha": true,
+    "visibleBounds": [
+      6,
+      6,
+      26,
+      26
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "QA_PENDING"
+  },
+  {
+    "name": "occ_recon_beacon_v03",
+    "source": "raw_v03\\03_recon_beacon.png",
+    "asset": "Items32\\occ_recon_beacon_v03.png",
+    "qa": "QA\\occ_recon_beacon_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      32,
+      32
+    ],
+    "paletteColors": 15,
+    "hardAlpha": true,
+    "visibleBounds": [
+      5,
+      12,
+      27,
+      22
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "QA_PENDING"
+  },
+  {
+    "name": "occ_action_v03",
+    "source": "hand-authored 16x16 glyph",
+    "asset": "Icons16\\occ_action_v03.png",
+    "qa": "QA\\occ_action_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      16,
+      16
+    ],
+    "paletteColors": 2,
+    "hardAlpha": true,
+    "visibleBounds": [
+      2,
+      3,
+      14,
+      13
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "READY_FOR_REVIEW"
+  },
+  {
+    "name": "occ_aether_v03",
+    "source": "hand-authored 16x16 glyph",
+    "asset": "Icons16\\occ_aether_v03.png",
+    "qa": "QA\\occ_aether_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      16,
+      16
+    ],
+    "paletteColors": 3,
+    "hardAlpha": true,
+    "visibleBounds": [
+      5,
+      2,
+      11,
+      14
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "READY_FOR_REVIEW"
+  },
+  {
+    "name": "occ_enemy_ranged_v03",
+    "source": "hand-authored 16x16 glyph",
+    "asset": "Icons16\\occ_enemy_ranged_v03.png",
+    "qa": "QA\\occ_enemy_ranged_v03\\qa_pixel_grid.png",
+    "logicalSize": [
+      16,
+      16
+    ],
+    "paletteColors": 2,
+    "hardAlpha": true,
+    "visibleBounds": [
+      2,
+      2,
+      14,
+      14
+    ],
+    "machineStatus": "PASS",
+    "manualStatus": "READY_FOR_REVIEW"
+  }
+]

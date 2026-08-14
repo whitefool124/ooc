@@ -20,7 +20,11 @@ namespace OCC.Combat.Editor
             importer.alphaIsTransparency = true;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.npotScale = TextureImporterNPOTScale.None;
-            importer.spritePixelsPerUnit = 32f;
+            bool semanticMicroIcon = assetPath.Contains("/FormalIntentIcons16/", StringComparison.Ordinal) ||
+                                     assetPath.EndsWith("/action_point.png", StringComparison.Ordinal) ||
+                                     assetPath.EndsWith("/mana.png", StringComparison.Ordinal) ||
+                                     assetPath.EndsWith("/notice.png", StringComparison.Ordinal);
+            importer.spritePixelsPerUnit = semanticMicroIcon ? 16f : 32f;
             TextureImporterSettings settings = new TextureImporterSettings();
             importer.ReadTextureSettings(settings);
             if (assetPath.Contains("FormalUISkin16/"))

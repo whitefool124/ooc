@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Props32\\raw\\occ_relay_light_cover_v01_codex_raw.png",
+  "keyed": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Props32\\occ_relay_light_cover_v01_keyed.png",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\像素资产原料\\V2-23\\新美术指导规格样本\\Props32\\occ_relay_light_cover_v01.png",
+  "method": "full-canvas nearest-neighbor sampling, chroma-key removal, hard-alpha threshold and no-dither palette quantization; no crop, fit or reposition",
+  "size": [
+    32,
+    32
+  ],
+  "paletteColors": 16,
+  "paletteLimit": 16,
+  "hardAlpha": true,
+  "bounds": [
+    3,
+    10,
+    29,
+    21
+  ],
+  "baselineY": null
+}

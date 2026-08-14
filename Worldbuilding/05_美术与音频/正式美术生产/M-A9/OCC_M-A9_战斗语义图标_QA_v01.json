@@ -1,0 +1,40 @@
+{
+  "schema": "occ.ui.combat-semantics.qa.v0.1",
+  "status": "PASS",
+  "assetCount": 3,
+  "records": [
+    {
+      "id": "action",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/action_point.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "hardAlpha": true,
+      "sha256": "e8ad69658c164b64d219419c349dcec90852d9f4f3af75f7ab63422e6a6cff44"
+    },
+    {
+      "id": "aether",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/mana.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "hardAlpha": true,
+      "sha256": "1b898c255b46614c4dc6134d65f0fca66ab414d1a3b3bef188e3fc916622fd3f"
+    },
+    {
+      "id": "notice",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/notice.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "hardAlpha": true,
+      "sha256": "27f90e4dbcee2bee46b1baca8aaedc6e1906379915997e9e40e236b552ec3037"
+    }
+  ]
+}

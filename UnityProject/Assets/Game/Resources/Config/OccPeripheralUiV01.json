@@ -7,6 +7,8 @@
     { "id": "landing", "resourcePath": "Art/FormalUIBackdrops/landing" },
     { "id": "map", "resourcePath": "Art/FormalUIBackdrops/map" },
     { "id": "briefing", "resourcePath": "Art/FormalUIBackdrops/briefing" },
+    { "id": "inventory", "resourcePath": "Art/FormalUIBackdrops/inventory" },
+    { "id": "settlement", "resourcePath": "Art/FormalUIBackdrops/settlement" },
     { "id": "archive", "resourcePath": "Art/FormalUIBackdrops/landing" },
     { "id": "settings", "resourcePath": "Art/FormalUIBackdrops/briefing" }
   ],
