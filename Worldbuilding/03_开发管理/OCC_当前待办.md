@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-16：战场格只读展示构建器 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场只读表现边界；不改变合法格、伤害预览、敌人意图、单位动效、地块主题、状态图标、对象/战利品显示或输入行为。
+- **目标：** 从 Bootstrap 提取单格 `BattlefieldCellPresentation` 组装、地板主题选择与目标伤害预测，以只读上下文和结构化预测结果生成正式战场展示。
+- **涉及文件/系统：** `PresentBattlefieldCell`、`FloorKeyForCurrentLevel`、`TargetDamageForecast`、火术预览只读路径、正式视觉资产库及新增 EditMode 展示/预测测试。
+- **验收标准：** Bootstrap 不再逐字段组装格展示或解释地板主题/伤害预测规则；预测服务显式返回可能初始化的 `FireBattleState`；单位/环境/覆盖层/意图/状态/对象/战利品展示保持；Bootstrap 低于 1000 行；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `CombatBattlefieldCellPresenter` 与 `CombatTargetForecastService`，统一环境/范围/单位动效/生命护盾预测/状态/意图/对象/水面/战利品/选择/悬停/地板展示，并让伤害预测显式返回只读预测与可复用的 `FireBattleState`。Bootstrap 删除逐格组装、四类地板主题和武器/火术/技能预测分支，仅保留薄适配，行数由 1111 降至 984，达到本轮小于 1000 行目标。新增格展示、原型地板图案、预测上下文与不改目标生命测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `26/26 passed`，全量 EditMode `458/458 passed`，PlayMode `1/1 passed`；实际 Play Mode 攻击模式格展示确认敌人 `enemy_2`、`floor_industrial`、`raider` 纹理与 `move` 意图均存在，最近 120 秒 Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 本轮架构整理达到 Bootstrap 小于 1000 行目标，可转入职责审计并决定下一阶段是继续拆玩家指令路由还是回到玩法迭代。
+
 ### CORE-ARCH-15：战斗正式视觉资产库 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战场表现资源边界；不替换正式资产、不改变资源路径、Importer、地块选择、单位映射、状态/意图/VFX 图像或场景序列化。

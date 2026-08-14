@@ -205,5 +205,13 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.Name.StartsWith("formal") &&
                 field.FieldType != typeof(CombatFormalVisualAssets)), Is.False);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesCellAssemblyAndTargetForecasting()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatBattlefieldCellPresenter)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatTargetForecastService)), Is.True);
+        }
     }
 }

@@ -21,6 +21,8 @@ namespace OCC.Combat.Presentation
         private readonly CombatFeedbackPublisher feedbackPublisher = new CombatFeedbackPublisher();
         private readonly CombatSelectionController selection = new CombatSelectionController();
         private readonly CombatSceneSessionBuilder sceneSessionBuilder = new CombatSceneSessionBuilder();
+        private readonly CombatTargetForecastService targetForecasts = new CombatTargetForecastService();
+        private CombatBattlefieldCellPresenter battlefieldCells;
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
@@ -38,6 +40,8 @@ namespace OCC.Combat.Presentation
         private RogueliteMapRun mapRun { get => rogueliteFlow.MapRun; set => rogueliteFlow.SetMapRun(value); }
         private bool mapMenuOpen { get => rogueliteFlow.IsMapMenuOpen; set => rogueliteFlow.SetMapMenuOpen(value); }
         private readonly CombatFormalVisualAssets formalAssets = new CombatFormalVisualAssets();
+        private CombatBattlefieldCellPresenter BattlefieldCells => battlefieldCells ??
+            (battlefieldCells = new CombatBattlefieldCellPresenter(battlefield, formalAssets));
         private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
         private readonly RogueliteMapSaveCoordinator mapSaves = new RogueliteMapSaveCoordinator(
             new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore()));
@@ -339,93 +343,9 @@ namespace OCC.Combat.Presentation
             else HandleCellClick(position);
         }
         public BattlefieldCellPresentation PresentBattlefieldCell(GridPosition position)
-        {
-            if (state == null || !state.Map.IsInside(position)) return null;
-            TileState tile = state.Map.GetTile(position);
-            int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % formalAssets.EnvironmentFrameCount;
-            Texture2D environment = fireBattle?.HasFireground(position) == true
-                ? formalAssets.FiregroundFrame(environmentFrame)
-                : tile.SmokeExpiresAt > state.CurrentTime ? formalAssets.SmokeFrame(environmentFrame) : null;
-            Texture2D move = IsInMoveRange(position) ? formalAssets.Overlay("move_range") : null;
-            Texture2D attack = IsInAttackRange(position) ? formalAssets.Overlay("attack_range") : null;
-            Texture2D skill = null;
-            int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
-            FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
-            FireSpellPreview firePreview = fireSpell == null ? null : BuildFireSpellPreviewAt(fireSpell, position);
-            if (firePreview?.CanCommit == true)
-                skill = formalAssets.Overlay(firePreview.FriendlyFireRisk ? "high_risk" : "attack_range");
-
-            UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
-            Texture2D unitTexture = formalAssets.Unit(unit);
-            Vector2 unitOffset = Vector2.zero;
-            Color unitTint = Color.white;
-            if (unit != null)
-            {
-                float phase = unit.IsHero ? 0f : unit.Position.X * .71f + unit.Position.Y * .37f;
-                unitOffset.y = Mathf.RoundToInt(Mathf.Sin(Time.unscaledTime * 1.8f + phase));
-                if (visualFeedback != null)
-                {
-                    unitOffset += visualFeedback.UnitPresentationOffset(unit);
-                    unitOffset.x += visualFeedback.UnitShakeOffset(unit);
-                    unitTint = visualFeedback.UnitPresentationTint(unit);
-                }
-            }
-
-            CombatTargetDamageForecast forecast = unit != null && !unit.IsHero ? TargetDamageForecast(unit) : null;
-            CombatUnitVitalsPresentation vitals = unit == null ? null : CombatUnitVitalsPresentation.From(unit, forecast);
-            List<BattlefieldStatusVisual> statuses = unit == null ? new List<BattlefieldStatusVisual>() :
-                unit.Statuses.OrderBy(entry => entry.Key).Take(6)
-                    .Select(entry => new BattlefieldStatusVisual(CombatStatusPresentation.From(unit, entry.Key),
-                        formalAssets.Status(entry.Key))).ToList();
-            EnemyIntentPresentation intent = unit != null && !unit.IsHero ? EnemyIntent(unit) : null;
-            Texture2D intentTexture = intent == null ? null : formalAssets.Intent(intent.IconId);
-
-            Texture2D objectTexture = null;
-            string objectLabel = string.Empty;
-            Color objectLabelColor = FormalUiTheme.Text;
-            if (tile.IsObjective)
-            {
-                string key = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
-                objectTexture = formalAssets.Relay(key);
-                if (!tile.IsDestroyed) objectLabel = "导能柱";
-            }
-            else if (tile.Cover == CoverType.Light)
-            {
-                string key = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
-                objectTexture = formalAssets.Relay(key);
-            }
-            else if (tile.Cover == CoverType.Heavy)
-            {
-                string key = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
-                objectTexture = formalAssets.Relay(key);
-            }
-            else if (trainingRangeActive && tile.IsDevice)
-            {
-                objectTexture = formalAssets.Relay(tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact");
-                objectLabel = "设备";
-            }
-            if (trainingRangeActive && tile.IsWater)
-            {
-                objectLabel = "水面";
-                objectLabelColor = new Color(.38f, .82f, .94f, .92f);
-            }
-
-            Texture2D loot = state.Loot != null && state.Loot.Position == position
-                ? state.Loot.IsLooted ? formalAssets.Relay("loot_crate_empty") : formalAssets.LootClosed : null;
-            bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
-                unit != null && unit.Id == selection.TargetId;
-            Texture2D selectionOverlay = selected ? formalAssets.Overlay("selected") : null;
-            string hover = unit == null ? string.Empty : unit.IsHero
-                ? CombatInformationPresenter.BuildHeroDetails(unit)
-                : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
-                  (forecast == null ? string.Empty : "\n伤害预览：" + forecast.PlayerSummary);
-            Texture2D floor = formalAssets.Relay(FloorKeyForCurrentLevel(position.X, position.Y));
-            Rect uv = unitTexture == null ? new Rect(0f, 0f, 1f, 1f) : CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
-            return new BattlefieldCellPresentation(position, floor, environment, move,
-                selection.Action == "移动" ? 1f : .45f, attack, selection.Action == "攻击" ? 1f : .65f,
-                skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
-                objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover);
-        }
+            => BattlefieldCells.Build(state, currentLevel, fireBattle, selection, trainingRangeActive,
+                visualFeedback, position, FireSpellInSlot, BuildFireSpellPreviewAt,
+                TargetDamageForecast, EnemyIntent);
         public BattlefieldRect CurrentBattlefieldBoard => battlefieldViewport?.BoardRect ?? battlefield.BoardRect(state?.Map.Width ?? BattlefieldPresentationAdapter.DefaultWidth, state?.Map.Height ?? BattlefieldPresentationAdapter.DefaultHeight);
         public BattlefieldRect CurrentBattlefieldViewport => battlefieldViewport?.ViewportRect ?? battlefield.ViewportRect;
         public Vector2 GridToFeedbackPosition(GridPosition position)
@@ -849,20 +769,6 @@ namespace OCC.Combat.Presentation
 
         private CombatCommand BuildEnemyCommand(UnitState enemy, UnitState hero)
             => enemyPlans.GetExecutionCommand(state, enemy, hero);
-        private string FloorKeyForCurrentLevel(int x, int y)
-        {
-            if (currentLevel == null)
-                return y == 0 || y == state.Map.Height - 1 ? "rail_horizontal" :
-                    (x == 5 || x == 6) && y >= 3 && y <= 5 ? "floor_warning" : "floor_industrial";
-            switch (currentLevel.FloorTheme)
-            {
-                case FirstRegionFloorTheme.StoneRoad: return y == 4 ? "floor_industrial" : "floor_plain";
-                case FirstRegionFloorTheme.Courtyard: return (x + y) % 5 == 0 ? "floor_industrial" : "floor_plain";
-                case FirstRegionFloorTheme.Ruins: return (x * 3 + y * 5) % 11 == 0 ? "floor_plain" : "floor_industrial";
-                case FirstRegionFloorTheme.AetherMarked: return x == 6 || y == 4 ? "floor_industrial" : "floor_plain";
-                default: return "floor_plain";
-            }
-        }
         private void FocusHeroInBattlefield()
         {
             UnitState hero = state?.GetUnit("hero");
@@ -880,48 +786,15 @@ namespace OCC.Combat.Presentation
 
         public CombatTargetDamageForecast TargetDamageForecast(UnitState enemy)
         {
-            if (enemy == null || enemy.IsHero || !enemy.IsAlive || state == null || state.ActiveUnitId != "hero") return null;
-            try
-            {
-                if (selection.Action == "攻击")
-                {
-                    if (!string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selection.Action, enemy.Position))) return null;
-                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
-                    return CombatTargetDamageForecaster.WeaponAttack(fireBattle, "hero", enemy.Id);
-                }
-
-                int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
-                if (slot < 0) return null;
-                FireSpellDefinition fireSpell = FireSpellInSlot(slot);
-                if (fireSpell != null)
-                {
-                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
-                    Facing facing = FacingToward(state.GetUnit("hero").Position, enemy.Position);
-                    FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, facing);
-                    FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", fireSpell, target);
-                    bool canDamage = fireSpell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage ||
-                        rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.Push);
-                    return preview.CanCommit && canDamage
-                        ? CombatTargetDamageForecaster.FireSpell(fireBattle, "hero", fireSpell, target, enemy.Id)
-                        : null;
-                }
-
-                ArtifactDefinition artifact = CurrentArmedInventoryItem != null &&
-                    ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
-                    ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId)
-                    : CurrentTrainingRangeArtifact;
-                if (slot == 0 && artifact != null) return null;
-
-                SkillDefinition skill = slot == 0 ? state.GetUnit("hero").SkillOne : state.GetUnit("hero").SkillTwo;
-                if (skill == null || skill.Damage <= 0 ||
-                    !string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, selection.Action, enemy.Position))) return null;
-                return CombatTargetDamageForecaster.Skill(state,
-                    CombatCommand.UseSkill("hero", slot, enemy.Id), enemy.Id);
-            }
-            catch (InvalidOperationException)
-            {
-                return null;
-            }
+            int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
+            FireSpellDefinition fireSpell = slot < 0 ? null : FireSpellInSlot(slot);
+            bool artifactArmed = slot == 0 && ((CurrentArmedInventoryItem != null &&
+                ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact ||
+                CurrentTrainingRangeArtifact != null));
+            CombatTargetForecastResult result = targetForecasts.Evaluate(
+                battlefield, state, fireBattle, selection.Action, enemy, fireSpell, artifactArmed);
+            fireBattle = result.FireBattle;
+            return result.Forecast;
         }
 
         private void HandleInspectionClick(GridPosition position)
