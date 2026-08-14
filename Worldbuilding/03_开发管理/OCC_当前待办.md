@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-06：战斗会话敌方回合协调器 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；不改变敌人 AI、行动顺序、伤害、时间轴、动画节奏或存档格式。
+- **目标：** 从 Bootstrap 提取敌方回合的待执行命令、阶段推进与表现等待状态，由独立协调器管理一次敌方行动的生命周期；Bootstrap 只提供权威规则查询、命令执行与表现回调。
+- **涉及文件/系统：** `CombatPrototypeBootstrap.RunEnemyTurn`、`EnemyTurnSequence`、敌人公开意图/命令计划、`CombatVisualFeedback` 以及新增 EditMode 协调器测试。
+- **验收标准：** Bootstrap 不再声明 `pendingEnemyCommand` 与 `enemyTurnSequence` 字段；协调器独立覆盖开始、等待移动、等待行动、提交命令、结束行动和取消/重置；敌人执行命令仍与公开意图签名一致；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `EnemyTurnCoordinator`，统一持有待执行命令与 `Focus → ResultHold → ActorGap` 生命周期，并以窄指令让 Bootstrap 只负责规则执行和表现回调；Bootstrap 已移除 `pendingEnemyCommand`、`enemyTurnSequence` 两个字段，行数由 1574 降至 1551。新增生命周期、零 AP、行动者切换、重置及 Bootstrap 结构门禁测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `5/5 passed`，全量 EditMode `414/414 passed`，PlayMode `1/1 passed`；现场结束英雄回合后多名敌人依次完成移动并正确回到英雄回合；Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 继续把玩家命令提交、战斗结果刷新与会话重开从 Bootstrap 下沉，逐步形成完整 battle session controller。
+
 ### CORE-INTEGRITY-03：混合工作区拆分提交 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的开发治理；不新增玩法、不修改正式资产内容、不保存场景。

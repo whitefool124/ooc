@@ -122,5 +122,16 @@ namespace OCC.Combat.Tests
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             Assert.That(onGui, Is.Null, "Battlefield rendering must remain exclusively in FormalBattlefieldView.");
         }
+
+        [Test]
+        public void Bootstrap_DelegatesEnemyTurnTransientStateToCoordinator()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(EnemyTurnCoordinator)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(EnemyTurnSequence)), Is.False);
+            Assert.That(Array.Exists(fields, field => field.Name == "pendingEnemyCommand"), Is.False);
+            Assert.That(Array.Exists(fields, field => field.Name == "enemyTurnSequence"), Is.False);
+        }
     }
 }
