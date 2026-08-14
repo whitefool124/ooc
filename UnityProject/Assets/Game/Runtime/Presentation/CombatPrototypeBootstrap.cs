@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace OCC.Combat.Presentation
 {
@@ -38,15 +37,7 @@ namespace OCC.Combat.Presentation
         private readonly CombatOutcomeSettlementCoordinator outcomeSettlement = new CombatOutcomeSettlementCoordinator();
         private RogueliteMapRun mapRun { get => rogueliteFlow.MapRun; set => rogueliteFlow.SetMapRun(value); }
         private bool mapMenuOpen { get => rogueliteFlow.IsMapMenuOpen; set => rogueliteFlow.SetMapMenuOpen(value); }
-        private readonly Dictionary<string, Texture2D> formalUnitTextures = new Dictionary<string, Texture2D>();
-        private Texture2D formalLootTexture;
-        private Texture2D formalLootOpenTexture;
-        private readonly Dictionary<string, Texture2D> formalRelayTextures = new Dictionary<string, Texture2D>();
-        private readonly Dictionary<string, Texture2D> formalOverlayTextures = new Dictionary<string, Texture2D>();
-        private readonly Dictionary<string, Texture2D> formalIntentTextures = new Dictionary<string, Texture2D>();
-        private readonly Dictionary<StatusType, Texture2D> formalStatusTextures = new Dictionary<StatusType, Texture2D>();
-        private readonly Texture2D[] formalFiregroundFrames = new Texture2D[6];
-        private readonly Texture2D[] formalSmokeFrames = new Texture2D[6];
+        private readonly CombatFormalVisualAssets formalAssets = new CombatFormalVisualAssets();
         private readonly RogueliteSaveGateway saveGateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
         private readonly RogueliteMapSaveCoordinator mapSaves = new RogueliteMapSaveCoordinator(
             new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore()));
@@ -85,9 +76,8 @@ namespace OCC.Combat.Presentation
             developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
             presentation = CombatPresentationComposition.Attach(gameObject, this);
             BuildCombatFromSceneStageTwo();
-            ApplyFormalRelayVisuals();
-            LoadFormalUnitTextures();
-            LoadFormalBattlefieldTextures();
+            formalAssets.ApplySceneSprites(transform);
+            formalAssets.LoadRuntime();
         }
 
         private void Awake()
@@ -103,163 +93,9 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        public void EnsureEditorVisuals()
-        {
-            EnsureEditorMapVisuals();
-            EnsureEditorUiVisuals();
-        }
-
-        public void EnsureEditorMapVisuals()
-        {
-            if (transform.Find("地图可视化") != null) return;
-            GameObject root = new GameObject("地图可视化"); root.transform.SetParent(transform, false);
-            Sprite floorSprite = LoadFormalSprite("floor") ?? CreateEditorSprite();
-            for (int y = 0; y < 9; y++) for (int x = 0; x < 12; x++)
-            {
-                GameObject tile = new GameObject("格_" + x + "_" + y); tile.transform.SetParent(root.transform, false); tile.transform.position = new Vector3(x, y, 2f); tile.transform.localScale = Vector3.one * .96f;
-                SpriteRenderer renderer = tile.AddComponent<SpriteRenderer>(); renderer.sprite = floorSprite; renderer.color = Color.white; renderer.sortingOrder = -10;
-            }
-            AddEditorMarker(root, "轻掩体_A", new Vector3(4, 2, 1), "light_cover");
-            AddEditorMarker(root, "轻掩体_B", new Vector3(6, 5, 1), "light_cover");
-            AddEditorMarker(root, "重掩体_A", new Vector3(7, 3, 1), "heavy_cover");
-            AddEditorMarker(root, "重掩体_B", new Vector3(8, 6, 1), "heavy_cover");
-            AddEditorMarker(root, "目标_中继器", new Vector3(10, 4, 1), "relay");
-        }
-
-        public void EnsureEditorUiVisuals()
-        {
-            if (transform.Find("场景UI") != null) return;
-            GameObject canvasObject = new GameObject("场景UI"); canvasObject.transform.SetParent(transform, false);
-            Canvas canvas = canvasObject.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 20;
-            CanvasScaler scaler = canvasObject.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(1920, 1080); canvasObject.AddComponent<GraphicRaycaster>();
-            AddUiPanel(canvasObject, "标题栏", new Vector2(16, -16), new Vector2(640, 44), "OCC \u6218\u6597\u539f\u578b", 18);
-            AddUiPanel(canvasObject, "战斗UI面板占位", new Vector2(658, -74), new Vector2(310, 560), "\u6218\u6597\u4fe1\u606f\u7531\u6218\u6597\u7ba1\u7406\u5668\u66f4\u65b0", 14);
-        }
-
-        private static void AddUiPanel(GameObject parent, string name, Vector2 position, Vector2 size, string text, int fontSize)
-        {
-            GameObject panel = new GameObject(name); panel.transform.SetParent(parent.transform, false); RectTransform rect = panel.AddComponent<RectTransform>(); rect.anchorMin = new Vector2(0, 1); rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = size; Image image = panel.AddComponent<Image>(); image.color = new Color(.07f, .13f, .22f, .72f);
-            GameObject textObject = new GameObject(name + "文字"); textObject.transform.SetParent(panel.transform, false); RectTransform textRect = textObject.AddComponent<RectTransform>(); textRect.anchorMin = Vector2.zero; textRect.anchorMax = Vector2.one; textRect.offsetMin = Vector2.zero; textRect.offsetMax = Vector2.zero; Text label = textObject.AddComponent<Text>(); label.text = text; label.alignment = TextAnchor.MiddleCenter; label.color = Color.white; label.fontSize = fontSize; label.font = FormalUiKit.Font;
-        }
-
-        private static void AddEditorMarker(GameObject root, string name, Vector3 position, string formalAsset)
-        {
-            GameObject marker = new GameObject(name); marker.transform.SetParent(root.transform, false); marker.transform.position = position; marker.transform.localScale = Vector3.one * .96f; SpriteRenderer renderer = marker.AddComponent<SpriteRenderer>(); renderer.sprite = LoadFormalSprite(formalAsset) ?? CreateEditorSprite(); renderer.color = Color.white; renderer.sortingOrder = -5;
-        }
-
-        private static Sprite LoadFormalSprite(string name)
-        {
-            Texture2D texture = Resources.Load<Texture2D>("Art/FormalRelay32/" + name);
-            if (texture == null) return null;
-            texture.filterMode = FilterMode.Point;
-            texture.wrapMode = TextureWrapMode.Clamp;
-            return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(.5f, .5f), 32f);
-        }
-
-        private void ApplyFormalRelayVisuals()
-        {
-            Transform root = transform.Find("地图可视化");
-            if (root == null) return;
-            Sprite floor = LoadFormalSprite("floor_industrial") ?? LoadFormalSprite("floor");
-            Sprite railFloor = LoadFormalSprite("floor_rail") ?? floor;
-            Sprite warningFloor = LoadFormalSprite("floor_warning") ?? floor;
-            Sprite light = LoadFormalSprite("light_cover");
-            Sprite heavy = LoadFormalSprite("heavy_cover");
-            Sprite relay = LoadFormalSprite("relay");
-            foreach (SpriteRenderer renderer in root.GetComponentsInChildren<SpriteRenderer>(true))
-            {
-                string objectName = renderer.gameObject.name;
-                Sprite replacement = objectName.StartsWith("格_") ? RelayFloorSprite(objectName, floor, railFloor, warningFloor) :
-                    objectName.StartsWith("轻掩体") ? light :
-                    objectName.StartsWith("重掩体") ? heavy :
-                    objectName.StartsWith("目标_中继器") ? relay : null;
-                if (replacement == null) continue;
-                renderer.sprite = replacement;
-                renderer.color = Color.white;
-            }
-        }
-
-        private static Sprite RelayFloorSprite(string objectName, Sprite floor, Sprite railFloor, Sprite warningFloor)
-        {
-            string[] parts = objectName.Split('_');
-            if (parts.Length != 3 || !int.TryParse(parts[1], out int x) || !int.TryParse(parts[2], out int y)) return floor;
-            if (y == 0 || y == 8) return railFloor;
-            if ((x == 5 || x == 6) && y >= 3 && y <= 5) return warningFloor;
-            return floor;
-        }
-
-        private void LoadFormalUnitTextures()
-        {
-            foreach (FormalArtEntry entry in FormalArtRegistry.Units)
-            {
-                Texture2D texture = Resources.Load<Texture2D>(entry.ResourcePath);
-                if (texture == null) continue;
-                texture.filterMode = FilterMode.Point;
-                texture.wrapMode = TextureWrapMode.Clamp;
-                formalUnitTextures[entry.RuntimeId] = texture;
-            }
-            foreach (string artId in EnemyArchetypes.All.Select(archetype => archetype.ArtId).Distinct(StringComparer.Ordinal))
-            {
-                Texture2D texture = Resources.Load<Texture2D>("Art/FormalUnits64/" + artId);
-                if (texture == null) continue;
-                texture.filterMode = FilterMode.Point;
-                texture.wrapMode = TextureWrapMode.Clamp;
-                formalUnitTextures[artId] = texture;
-            }
-        }
-
-        private void LoadFormalBattlefieldTextures()
-        {
-            string[] relay = { "floor_plain", "floor_industrial", "floor_warning", "floor_hazard", "rail_horizontal", "rail_vertical",
-                "light_cover_intact", "light_cover_damaged", "light_cover_rubble", "heavy_cover_intact", "heavy_cover_damaged", "heavy_cover_rubble",
-                "relay_intact", "relay_damaged", "relay_rubble", "loot_crate_closed", "loot_crate_open", "loot_crate_empty" };
-            foreach (string name in relay) formalRelayTextures[name] = RequiredTexture("Art/FormalRelayV01/" + name);
-            foreach (string name in new[] { "selected", "move_range", "attack_range", "objective", "high_risk", "unreachable", "line_of_sight" })
-                formalOverlayTextures[name] = RequiredTexture("Art/FormalTacticalOverlays32/" + name);
-            foreach (FormalArtEntry entry in FormalArtRegistry.Intents)
-                formalIntentTextures[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
-            formalStatusTextures[StatusType.Burning] = RequiredTexture(FormalArtRegistry.StatusPath("burning"));
-            formalStatusTextures[StatusType.Slow] = RequiredTexture(FormalArtRegistry.StatusPath("slow"));
-            formalStatusTextures[StatusType.Bound] = RequiredTexture(FormalArtRegistry.StatusPath("bound"));
-            formalStatusTextures[StatusType.ArmorBreak] = RequiredTexture(FormalArtRegistry.StatusPath("armor_break"));
-            formalStatusTextures[StatusType.Dazzled] = RequiredTexture(FormalArtRegistry.StatusPath("dazzled"));
-            formalStatusTextures[StatusType.Revealed] = RequiredTexture(FormalArtRegistry.StatusPath("revealed"));
-            for (int frame = 0; frame < 6; frame++)
-            {
-                formalFiregroundFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_burning_ground/frame_{frame:00}");
-                formalSmokeFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_smoke/frame_{frame:00}");
-            }
-            formalLootTexture = formalRelayTextures["loot_crate_closed"];
-            formalLootOpenTexture = formalRelayTextures["loot_crate_open"];
-        }
-
-        private static Texture2D RequiredTexture(string path)
-        {
-            Texture2D texture = Resources.Load<Texture2D>(path);
-            if (texture == null) throw new KeyNotFoundException("Missing formal texture: " + path);
-            texture.filterMode = FilterMode.Point; texture.wrapMode = TextureWrapMode.Clamp;
-            return texture;
-        }
-
-        private Texture2D FormalUnitTexture(UnitState unit)
-        {
-            if (unit == null) return null;
-            if (unit.IsHero) return TextureFor("hero");
-            if (string.IsNullOrEmpty(unit.EnemyArchetypeId)) return null;
-            Texture2D texture = TextureFor(unit.EnemyArchetypeId);
-            return texture != null ? texture : TextureFor(EnemyArchetypes.Get(unit.EnemyArchetypeId).ArtId);
-        }
-
-        private Texture2D TextureFor(string name)
-        {
-            formalUnitTextures.TryGetValue(name, out Texture2D texture);
-            return texture;
-        }
-
-        private static Sprite CreateEditorSprite()
-        {
-            Texture2D texture = new Texture2D(1, 1) { hideFlags = HideFlags.HideAndDontSave }; texture.SetPixel(0, 0, Color.white); texture.Apply(); return Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(.5f, .5f), 1f);
-        }
+        public void EnsureEditorVisuals() => formalAssets.EnsureEditorVisuals(transform);
+        public void EnsureEditorMapVisuals() => formalAssets.EnsureEditorMapVisuals(transform);
+        public void EnsureEditorUiVisuals() => formalAssets.EnsureEditorUiVisuals(transform);
 
         private void BuildCombatFromSceneStageTwo()
         {
@@ -506,21 +342,21 @@ namespace OCC.Combat.Presentation
         {
             if (state == null || !state.Map.IsInside(position)) return null;
             TileState tile = state.Map.GetTile(position);
-            int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % formalFiregroundFrames.Length;
+            int environmentFrame = Mathf.FloorToInt(Time.unscaledTime * 8f) % formalAssets.EnvironmentFrameCount;
             Texture2D environment = fireBattle?.HasFireground(position) == true
-                ? formalFiregroundFrames[environmentFrame]
-                : tile.SmokeExpiresAt > state.CurrentTime ? formalSmokeFrames[environmentFrame] : null;
-            Texture2D move = IsInMoveRange(position) ? formalOverlayTextures["move_range"] : null;
-            Texture2D attack = IsInAttackRange(position) ? formalOverlayTextures["attack_range"] : null;
+                ? formalAssets.FiregroundFrame(environmentFrame)
+                : tile.SmokeExpiresAt > state.CurrentTime ? formalAssets.SmokeFrame(environmentFrame) : null;
+            Texture2D move = IsInMoveRange(position) ? formalAssets.Overlay("move_range") : null;
+            Texture2D attack = IsInAttackRange(position) ? formalAssets.Overlay("attack_range") : null;
             Texture2D skill = null;
             int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
             FireSpellPreview firePreview = fireSpell == null ? null : BuildFireSpellPreviewAt(fireSpell, position);
             if (firePreview?.CanCommit == true)
-                skill = formalOverlayTextures[firePreview.FriendlyFireRisk ? "high_risk" : "attack_range"];
+                skill = formalAssets.Overlay(firePreview.FriendlyFireRisk ? "high_risk" : "attack_range");
 
             UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
-            Texture2D unitTexture = FormalUnitTexture(unit);
+            Texture2D unitTexture = formalAssets.Unit(unit);
             Vector2 unitOffset = Vector2.zero;
             Color unitTint = Color.white;
             if (unit != null)
@@ -540,10 +376,9 @@ namespace OCC.Combat.Presentation
             List<BattlefieldStatusVisual> statuses = unit == null ? new List<BattlefieldStatusVisual>() :
                 unit.Statuses.OrderBy(entry => entry.Key).Take(6)
                     .Select(entry => new BattlefieldStatusVisual(CombatStatusPresentation.From(unit, entry.Key),
-                        formalStatusTextures.TryGetValue(entry.Key, out Texture2D texture) ? texture : null)).ToList();
+                        formalAssets.Status(entry.Key))).ToList();
             EnemyIntentPresentation intent = unit != null && !unit.IsHero ? EnemyIntent(unit) : null;
-            Texture2D intentTexture = intent != null && formalIntentTextures.TryGetValue(intent.IconId, out Texture2D icon)
-                ? icon : null;
+            Texture2D intentTexture = intent == null ? null : formalAssets.Intent(intent.IconId);
 
             Texture2D objectTexture = null;
             string objectLabel = string.Empty;
@@ -551,22 +386,22 @@ namespace OCC.Combat.Presentation
             if (tile.IsObjective)
             {
                 string key = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
-                objectTexture = formalRelayTextures[key];
+                objectTexture = formalAssets.Relay(key);
                 if (!tile.IsDestroyed) objectLabel = "导能柱";
             }
             else if (tile.Cover == CoverType.Light)
             {
                 string key = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
-                objectTexture = formalRelayTextures[key];
+                objectTexture = formalAssets.Relay(key);
             }
             else if (tile.Cover == CoverType.Heavy)
             {
                 string key = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
-                objectTexture = formalRelayTextures[key];
+                objectTexture = formalAssets.Relay(key);
             }
             else if (trainingRangeActive && tile.IsDevice)
             {
-                objectTexture = formalRelayTextures[tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact"];
+                objectTexture = formalAssets.Relay(tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact");
                 objectLabel = "设备";
             }
             if (trainingRangeActive && tile.IsWater)
@@ -576,15 +411,15 @@ namespace OCC.Combat.Presentation
             }
 
             Texture2D loot = state.Loot != null && state.Loot.Position == position
-                ? state.Loot.IsLooted ? formalRelayTextures["loot_crate_empty"] : formalLootTexture : null;
+                ? state.Loot.IsLooted ? formalAssets.Relay("loot_crate_empty") : formalAssets.LootClosed : null;
             bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
                 unit != null && unit.Id == selection.TargetId;
-            Texture2D selectionOverlay = selected ? formalOverlayTextures["selected"] : null;
+            Texture2D selectionOverlay = selected ? formalAssets.Overlay("selected") : null;
             string hover = unit == null ? string.Empty : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
                   (forecast == null ? string.Empty : "\n伤害预览：" + forecast.PlayerSummary);
-            Texture2D floor = formalRelayTextures[FloorKeyForCurrentLevel(position.X, position.Y)];
+            Texture2D floor = formalAssets.Relay(FloorKeyForCurrentLevel(position.X, position.Y));
             Rect uv = unitTexture == null ? new Rect(0f, 0f, 1f, 1f) : CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
             return new BattlefieldCellPresentation(position, floor, environment, move,
                 selection.Action == "移动" ? 1f : .45f, attack, selection.Action == "攻击" ? 1f : .65f,

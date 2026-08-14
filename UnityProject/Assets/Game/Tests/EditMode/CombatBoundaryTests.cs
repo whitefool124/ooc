@@ -196,5 +196,14 @@ namespace OCC.Combat.Tests
             FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatSceneSessionBuilder)), Is.True);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesFormalBattlefieldAssetsToLibrary()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatFormalVisualAssets)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.Name.StartsWith("formal") &&
+                field.FieldType != typeof(CombatFormalVisualAssets)), Is.False);
+        }
     }
 }

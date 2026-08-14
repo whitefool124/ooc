@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-15：战斗正式视觉资产库 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战场表现资源边界；不替换正式资产、不改变资源路径、Importer、地块选择、单位映射、状态/意图/VFX 图像或场景序列化。
+- **目标：** 从 Bootstrap 提取编辑器预览物体构建、场景 Sprite 应用和运行时纹理缓存/必需资源门禁，以单一正式视觉资产库服务战场展示。
+- **涉及文件/系统：** `EnsureEditorVisuals`、`EnsureEditorMapVisuals`、`EnsureEditorUiVisuals`、`ApplyFormalRelayVisuals`、`LoadFormalUnitTextures`、`LoadFormalBattlefieldTextures`、纹理字典/数组及战场格展示读取。
+- **验收标准：** Bootstrap 不再持有正式单位/地块/覆盖层/意图/状态/VFX 纹理集合或解释资源路径；编辑器入口保持兼容薄封装；全部正式资源仍由缺失即失败门禁加载；不保存场景；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `CombatFormalVisualAssets`，统一单位/敌人映射、地块/覆盖层/意图/状态/VFX 必需资源加载、Point/Clamp 运行时配置、场景 Sprite 应用与编辑器地图/UI 预览构建；Bootstrap 删除八组纹理缓存及全部资源路径解释，仅保留兼容入口和资产读取，行数由 1276 降至 1111。新增正式资源族加载/像素采样和英雄/敌人映射测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `20/20 passed`，全量 EditMode `454/454 passed`，PlayMode `1/1 passed`；实际 Play Mode 格展示确认 `floor_industrial`、英雄纹理、Point/Clamp 与关闭战利品箱纹理，最近 60 秒 Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 战场格展示可只依赖资产库与只读战斗上下文，便于下一步整体提取展示构建器并达到 Bootstrap 1000 行目标。
+
 ### CORE-ARCH-14：战斗场景会话构建器 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗会话装配边界；不改变关卡目录、场景 Marker 回退、敌人编成、任务目标、起始构筑、短程选择、战利品或战斗流程。
