@@ -21,6 +21,7 @@ namespace OCC.Combat.Presentation
         private readonly CombatCommandExecutionService commandExecution = new CombatCommandExecutionService();
         private readonly CombatFeedbackPublisher feedbackPublisher = new CombatFeedbackPublisher();
         private readonly CombatSelectionController selection = new CombatSelectionController();
+        private readonly CombatSceneSessionBuilder sceneSessionBuilder = new CombatSceneSessionBuilder();
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
         // Legacy panel helpers still use this editor-only snapshot; active flow restarts use developerFlow.
@@ -263,85 +264,12 @@ namespace OCC.Combat.Presentation
         private void BuildCombatFromSceneStageTwo()
         {
             selection.EndKeyboardTargeting();
-            string encounterId = mapRun != null
-                ? (mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId)
-                : rogueliteRun?.CurrentMission.Id;
-            RogueliteEncounterDefinition encounter = string.IsNullOrEmpty(encounterId) ? null : RogueliteEncounterCatalog.For(encounterId, mapRun?.RegionBossId);
-            GridMap map;
-            if (FirstRegionLevelCatalog.TryFor(encounterId, out FirstRegionLevelDefinition level))
-            {
-                FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(level, mapRun?.RegionBossId);
-                currentLevel = build.Definition;
-                state = build.State;
-                map = state.Map;
-            }
-            else
-            {
-                currentLevel = null;
-                map = new GridMap(12, 9);
-                CombatSceneMarker[] markers = FindObjectsByType<CombatSceneMarker>();
-                foreach (CombatSceneMarker marker in markers)
-                {
-                    GridPosition p = ScenePosition(marker);
-                    if (marker.MarkerType == CombatSceneMarkerType.LightCover) map.SetTile(p, new TileState { Cover = CoverType.Light, Durability = 4 });
-                    if (marker.MarkerType == CombatSceneMarkerType.HeavyCover) map.SetTile(p, new TileState { Cover = CoverType.Heavy, Durability = 7 });
-                    if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, IsDevice = true, Durability = 6 });
-                }
-                List<UnitState> units = new List<UnitState>();
-                int enemyIndex = 0;
-                foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit).OrderBy(m => m.name, StringComparer.Ordinal))
-                {
-                    bool hero = marker.name.Contains("\u4e3b\u89d2");
-                    if (!hero && encounter != null && enemyIndex >= encounter.EnemyArchetypeIds.Count) continue;
-                    UnitState unit = new UnitState(hero ? "hero" : "enemy_" + enemyIndex, hero, ScenePosition(marker), hero ? Facing.East : Facing.West);
-                    if (hero) { unit.DisplayName = "\u963f\u65af\u7279\u62c9"; unit.Speed = 11; unit.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind); }
-                    else
-                    {
-                        string archetypeId = encounter == null ? EnemyArchetypes.All[Math.Min(enemyIndex, EnemyArchetypes.All.Count - 1)].Id : encounter.EnemyArchetypeIds[Math.Min(enemyIndex, encounter.EnemyArchetypeIds.Count - 1)];
-                        EnemyArchetypes.Get(archetypeId).Apply(unit); enemyIndex++;
-                    }
-                    units.Add(unit);
-                }
-                if (units.Count == 0 || !units.Any(unit => unit.IsHero)) return;
-                state = new CombatState(map, units);
-            }
-            if (mapRun != null)
-            {
-                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
-                developerPreparation = new MissionPreparation().Configure(mission.Id,
-                    currentLevel?.ObjectiveSummary ?? mission.ObjectiveSummary,
-                    currentLevel == null ? DescribeEncounter(encounter, mission.EnemySummary) : DescribeEncounter(encounter, currentLevel.EnemySummary(mapRun.RegionBossId)));
-                if (currentLevel == null)
-                {
-                    if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                    else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
-                }
-            }
-            else if (rogueliteRun != null)
-            {
-                RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
-                developerPreparation = new MissionPreparation().Configure(mission.Id,
-                    currentLevel?.ObjectiveSummary ?? mission.ObjectiveSummary,
-                    currentLevel == null ? mission.EnemySummary : DescribeEncounter(encounter, currentLevel.EnemySummary()));
-                if (currentLevel == null)
-                {
-                    if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                    else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
-                }
-            }
-            ConfigureCombatInventory();
-            ApplyShortRunChoices();
-            mapRun?.ApplyBuild(state.GetUnit("hero"));
-            state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
-            string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";
-            ArtifactDefinition lootArtifact = ArtifactRewardPool.RollLoot(mapRun?.Seed ?? 0, lootKey);
-            state.SetLootSource(new LootSourceState(lootKey, new GridPosition(2, 0), new[]
-            {
-                new ItemInstance(lootKey + "-medkit", "medkit", 0),
-                new ItemInstance(lootKey + "-scroll-F-S01", "F-S01", 1),
-                new ItemInstance(lootKey + "-artifact-" + lootArtifact.Id, lootArtifact.Id, 2)
-            }));
-            mapRun?.RestoreLootProgress(state.LootSource);
+            CombatSceneSessionBuild build = sceneSessionBuilder.Build(mapRun, rogueliteRun,
+                FindObjectsByType<CombatSceneMarker>(), developerPreparation);
+            if (build == null) return;
+            state = build.State;
+            developerPreparation = build.Preparation;
+            currentLevel = build.Level;
             developerFlow = new CombatFlowController();
             developerFlow.Configure(developerPreparation, state);
             battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
@@ -349,8 +277,6 @@ namespace OCC.Combat.Presentation
             outcomeSettlement.Reset();
             ResetEnemyTurnSequence();
         }
-
-        private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
         public void StartDeveloperCombat()
         {
@@ -482,12 +408,6 @@ namespace OCC.Combat.Presentation
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, nodeId));
         }
 
-        private static string DescribeEncounter(RogueliteEncounterDefinition encounter, string fallback)
-        {
-            if (encounter == null) return fallback;
-            string summary = string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName));
-            return (encounter.IsBoss ? "区域首领：" : encounter.IsElite ? "精英编成：" : "区域编成：") + summary;
-        }
         public void ChooseMapNodeContent(string choiceId)
         {
             RogueliteMapInteractionResult result = mapInteractions.ChooseContent(mapRun, choiceId);
@@ -552,37 +472,6 @@ namespace OCC.Combat.Presentation
             else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteMenuOpen = true; }
         }
         private void SaveShortRun() => saveGateway.SaveShortRun(rogueliteRun.ShortRun);
-        private void ApplyShortRunChoices()
-        {
-            if (rogueliteRun?.IsShortRun != true || rogueliteRun.ShortRun.Phase != ShortRoguelitePhase.SecondCombat) return;
-            UnitState hero = state.GetUnit("hero");
-            if (rogueliteRun.ShortRun.EventChoiceId == "field_repair") hero.Armor += 1;
-            if (rogueliteRun.ShortRun.UpgradeChoiceId == "calibrated_rifle") hero.Equip(StageTwoBuilds.CalibratedRifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
-        }
-
-        private void ConfigureCombatInventory()
-        {
-            if (mapRun != null)
-            {
-                state.ConfigureItemInventory(mapRun.Inventory, mapRun.ItemQuickbar);
-                return;
-            }
-
-            InventoryContainerState inventory = new InventoryContainerState();
-            List<string> slots = new List<string>();
-            AddExplicitCombatItem(inventory, slots, "combat-medkit", "medkit", 0);
-            AddExplicitCombatItem(inventory, slots, "combat-shield-cell", "shield_cell", 1);
-            if (rogueliteRun?.IsShortRun == true && rogueliteRun.ShortRun.Phase == ShortRoguelitePhase.SecondCombat && rogueliteRun.ShortRun.SalvageChoiceId == "shield_cell")
-                AddExplicitCombatItem(inventory, slots, "combat-shield-cell-salvage", "shield_cell", 2);
-            state.ConfigureItemInventory(inventory, slots);
-        }
-
-        private static void AddExplicitCombatItem(InventoryContainerState inventory, IList<string> slots, string instanceId, string definitionId, int acquisitionOrder)
-        {
-            InventoryResult result = inventory.AddFirstFit(new ItemInstance(instanceId, definitionId, acquisitionOrder));
-            if (!result.Success) throw new InvalidOperationException("Unable to configure explicit combat inventory: " + result.Error);
-            slots.Add(instanceId);
-        }
         public void StartRogueliteSandbox()
         {
             IReadOnlyList<TaskTemplate> templates = RogueliteDeveloperCatalog.OpenSandboxTemplates;

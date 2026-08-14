@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-14：战斗场景会话构建器 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗会话装配边界；不改变关卡目录、场景 Marker 回退、敌人编成、任务目标、起始构筑、短程选择、战利品或战斗流程。
+- **目标：** 从 Bootstrap 提取正式关卡/场景 Marker 两条构建路径、任务简报、目标、背包、短程选择、地图构筑与战利品初始化，返回可验证的战斗会话构建结果。
+- **涉及文件/系统：** `BuildCombatFromSceneStageTwo`、`DescribeEncounter`、`ScenePosition`、`ConfigureCombatInventory`、`AddExplicitCombatItem`、`ApplyShortRunChoices` 及新增 EditMode 构建器测试。
+- **验收标准：** Bootstrap 不再解释关卡目录或遍历 Marker 组建地图/单位，不再组装默认背包与战利品；构建器结果包含 `CombatState`、`MissionPreparation` 与当前关卡定义；九张正式关卡和 Marker 回退合同保持；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `CombatSceneSessionBuilder` 与构建结果，统一九张正式关卡和场景 Marker 回退、编成、目标、简报、地图/默认背包、短程第二战选择、地图构筑及战利品装配；Bootstrap 只接收状态/简报/关卡并初始化流程，行数由 1387 降至 1276。首轮 Play Mode 暴露“无肉鸽运行对象时应沿用 `relay_test` 预置简报”的回退缺口，已纳入构建器参数与独立回归测试；最终聚焦 EditMode `52/52 passed`、全量 EditMode `451/451 passed`、PlayMode `1/1 passed`，Funplay 编译 0 error/0 warning。实际 Play Mode 启动确认 Marker 回退为 `mission=relay_test`、英雄存在、6 单位、`relay-crate`，清理后的最近 60 秒 Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 战斗构建与 MonoBehaviour 生命周期解耦，可继续提取玩家格子指令路由并进一步压缩 Bootstrap。
+
 ### CORE-ARCH-13：地图推进交互应用服务 — COMPLETE（2026-08-14）
 
 - **归属：** 肉鸽模式地图推进的应用层边界；不改变节点可达性、战斗触发、奖励/资源数值、火术装备兼容性、存档时机或 UI 文案。

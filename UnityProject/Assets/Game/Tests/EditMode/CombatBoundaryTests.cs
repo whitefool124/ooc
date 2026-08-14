@@ -189,5 +189,12 @@ namespace OCC.Combat.Tests
             FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(RogueliteMapInteractionService)), Is.True);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesProductionCombatConstructionToSceneSessionBuilder()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatSceneSessionBuilder)), Is.True);
+        }
     }
 }
