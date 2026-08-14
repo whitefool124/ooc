@@ -148,5 +148,13 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatOutcomeSettlementCoordinator)), Is.True);
             Assert.That(Array.Exists(fields, field => field.Name == "outcomeHandled"), Is.False);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesProductionSessionLifecycleToController()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatSessionLifecycleController)), Is.True);
+            Assert.That(Array.Exists(fields, field => field.Name == "fireLifecycleActiveUnitId"), Is.False);
+        }
     }
 }

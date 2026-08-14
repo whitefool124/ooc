@@ -17,6 +17,7 @@ namespace OCC.Combat.Presentation
         private readonly CombatAvailabilityQuery availability = new CombatAvailabilityQuery();
         private readonly EnemyTurnPlanBook enemyPlans = new EnemyTurnPlanBook();
         private readonly EnemyTurnCoordinator enemyTurn = new EnemyTurnCoordinator();
+        private readonly CombatSessionLifecycleController combatSession = new CombatSessionLifecycleController();
         private readonly CombatCommandExecutionService commandExecution = new CombatCommandExecutionService();
         private readonly CombatTargetNavigationState targetNavigation = new CombatTargetNavigationState();
         private CombatState state;
@@ -56,7 +57,6 @@ namespace OCC.Combat.Presentation
         private TarkovInventoryPanel inventoryPanel => presentation?.Inventory;
         private FireBattleState fireBattle;
         private ArtifactBattleState artifactBattle;
-        private string fireLifecycleActiveUnitId;
         private TrainingRangeSession trainingRangeSession;
         private bool trainingRangeActive;
         private int trainingRangeArtifactUsesRemaining;
@@ -259,47 +259,6 @@ namespace OCC.Combat.Presentation
             Texture2D texture = new Texture2D(1, 1) { hideFlags = HideFlags.HideAndDontSave }; texture.SetPixel(0, 0, Color.white); texture.Apply(); return Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(.5f, .5f), 1f);
         }
 
-        private void BuildCombatFromScene()
-        {
-            currentLevel = null;
-            GridMap map = new GridMap(12, 9); CombatSceneMarker[] markers = FindObjectsByType<CombatSceneMarker>();
-            foreach (CombatSceneMarker marker in markers) { GridPosition p = ScenePosition(marker); if (marker.MarkerType == CombatSceneMarkerType.LightCover) map.SetTile(p, new TileState { Cover = CoverType.Light, Durability = 4 }); if (marker.MarkerType == CombatSceneMarkerType.HeavyCover) map.SetTile(p, new TileState { Cover = CoverType.Heavy, Durability = 7 }); if (marker.MarkerType == CombatSceneMarkerType.Objective) map.SetTile(p, new TileState { IsObjective = true, Durability = 6 }); }
-            List<UnitState> units = new List<UnitState>();
-            foreach (CombatSceneMarker marker in markers.Where(m => m.MarkerType == CombatSceneMarkerType.Unit)) { GridPosition p = ScenePosition(marker); bool hero = marker.name.Contains("主角"); string id = hero ? "hero" : marker.name.Contains("盾") ? "guard" : marker.name.Contains("火术") ? "caster" : "raider"; string name = hero ? "\u963f\u65af\u7279\u62c9" : id == "guard" ? "\u76fe\u536b" : id == "caster" ? "\u706b\u672f\u5e08" : "\u7a81\u88ad\u8005"; units.Add(new UnitState(id, hero, p, hero ? Facing.East : Facing.West) { DisplayName = name, Armor = hero ? 1 : id == "guard" ? 2 : 0, Block = id == "guard" ? 2 : hero ? 1 : 0, Speed = hero ? 11 : id == "guard" ? 7 : id == "caster" ? 9 : 8 }); }
-            if (units.Count == 0) return;
-            state = new CombatState(map, units);
-            fireBattle = new FireBattleState(state);
-            fireLifecycleActiveUnitId = null;
-            if (mapRun != null)
-            {
-                RogueliteMissionDefinition mission = RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat ? mapRun.PendingContentCombatMissionId : mapRun.CurrentNodeId);
-                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
-                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
-            }
-            else if (rogueliteRun != null)
-            {
-                RogueliteMissionDefinition mission = rogueliteRun.CurrentMission;
-                developerPreparation = new MissionPreparation().Configure(mission.Id, mission.ObjectiveSummary, mission.EnemySummary);
-                if (mission.ObjectiveType == CombatObjectiveType.Elimination) state.ConfigureObjectives(new EliminationObjective(mission.Id + "_objective"));
-                else state.ConfigureObjectives(new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), mission.Id + "_objective"));
-            }
-            ConfigureCombatInventory();
-            ApplyShortRunChoices();
-            mapRun?.ApplyBuild(state.GetUnit("hero"));
-            state.SetLoot(new LootContainer(new GridPosition(2, 0), new InventoryItem("aether_core", "\u4ee5\u592a\u6838\u5fc3", 2, 1)));
-            string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";
-            ArtifactDefinition lootArtifact = ArtifactRewardPool.RollLoot(mapRun?.Seed ?? 0, lootKey);
-            state.SetLootSource(new LootSourceState(lootKey, new GridPosition(2, 0), new[]
-            {
-                new ItemInstance(lootKey + "-medkit", "medkit", 0),
-                new ItemInstance(lootKey + "-scroll-F-S01", "F-S01", 1),
-                new ItemInstance(lootKey + "-artifact-" + lootArtifact.Id, lootArtifact.Id, 2)
-            }));
-            mapRun?.RestoreLootProgress(state.LootSource);
-            PublishCombatEffects(CombatResolver.BeginTurn(state, "hero"));
-        }
-
         private void BuildCombatFromSceneStageTwo()
         {
             targetNavigation.End();
@@ -392,11 +351,26 @@ namespace OCC.Combat.Presentation
 
         private static GridPosition ScenePosition(CombatSceneMarker marker) => new GridPosition(Mathf.RoundToInt(marker.transform.position.x), Mathf.RoundToInt(marker.transform.position.y));
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
-        public void StartDeveloperCombat() { developerFlow.BeginCombat(); state = developerFlow.State; FocusHeroInBattlefield(); fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
+        public void StartDeveloperCombat()
+        {
+            ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement));
+            MarkPresentation(UiPresentationArea.Flow);
+        }
         public void TacticalRestartDeveloperCombat()
         {
             if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
-            developerFlow.TacticalRestart(); state = developerFlow.State; FocusHeroInBattlefield(); fireBattle = new FireBattleState(state); fireLifecycleActiveUnitId = null; ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback(); PublishCombatEffects(CombatResolver.BeginTurn(state, "hero")); developerFlow.ResumeAfterRestart(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
+            ApplyCombatSessionActivation(combatSession.Restart(developerFlow, enemyTurn, outcomeSettlement));
+        }
+        private void ApplyCombatSessionActivation(CombatSessionActivation activation)
+        {
+            state = activation.State;
+            fireBattle = activation.FireBattle;
+            FocusHeroInBattlefield();
+            visualFeedback?.CancelEnemyAction();
+            visualFeedback?.ResetBattleFeedback();
+            PublishCombatEffects(activation.InitialTurnEffects);
+            RefreshSceneHud();
+            MarkPresentation(UiPresentationArea.Combat);
         }
         public void ReturnToDeveloperMenu()
         {
@@ -976,7 +950,7 @@ namespace OCC.Combat.Presentation
             trainingRangeActive = true;
             currentLevel = null;
             ITrainingRangeCase prepared = trainingRangeSession.PrepareCurrent();
-            state = prepared.Combat; fireBattle = trainingRangeSession.CurrentFireBattle; fireLifecycleActiveUnitId = state.ActiveUnitId;
+            state = prepared.Combat; fireBattle = trainingRangeSession.CurrentFireBattle;
             artifactBattle = (prepared as ArtifactTrainingRangeCase)?.Battle ?? new ArtifactBattleState(state);
             trainingRangeArtifactUsesRemaining = trainingRangeSession.CurrentArtifact?.MaximumUses ?? 0;
             developerPreparation = new MissionPreparation().Configure("training_range", "能力验证与确定性回归", "标准靶兵、友军、掩体、设备、水面与核心样本");
@@ -1105,11 +1079,15 @@ namespace OCC.Combat.Presentation
         private void Update()
         {
             if (!Application.isPlaying || developerFlow == null || state == null) return;
-            if (state.ActiveUnitId != fireLifecycleActiveUnitId)
+            if (!trainingRangeActive)
             {
-                fireLifecycleActiveUnitId = state.ActiveUnitId;
-                if (!string.IsNullOrEmpty(fireLifecycleActiveUnitId)) fireBattle?.BeginUnitTurn(fireLifecycleActiveUnitId);
-                if (!string.IsNullOrEmpty(fireLifecycleActiveUnitId)) { EnsureArtifactBattle(); artifactBattle.BeginUnitTurn(fireLifecycleActiveUnitId); }
+                CombatUnitLifecycleAdvance lifecycle = combatSession.ObserveActiveUnit(state.ActiveUnitId);
+                if (lifecycle.Changed && !string.IsNullOrEmpty(lifecycle.UnitId))
+                {
+                    fireBattle?.BeginUnitTurn(lifecycle.UnitId);
+                    EnsureArtifactBattle();
+                    artifactBattle.BeginUnitTurn(lifecycle.UnitId);
+                }
             }
             CombatFlowPhase phaseBeforeUpdate = developerFlow.Phase;
             if (!trainingRangeActive && developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }

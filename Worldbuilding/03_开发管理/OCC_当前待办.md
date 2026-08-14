@@ -6,6 +6,16 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-09：正式战斗会话生命周期控制器 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的正式战斗会话架构；开发训练场保持独立适配器，不改变开战、战术重开、英雄先手、火术/法宝回合生命周期、胜负或存档。
+- **实施边界：** 技术边界按推荐方案自主收敛：正式战斗与训练场分离，训练场继续复用命令执行服务；此项不构成玩法大方向决定。
+- **目标：** 将正式开战、战术重开后的运行时状态初始化和单位回合生命周期推进从 Bootstrap 组合进独立控制器，统一重置敌方协调器、结算幂等、火术战斗状态与英雄首回合。
+- **涉及文件/系统：** `StartDeveloperCombat`、`TacticalRestartDeveloperCombat`、`Update` 中火术/法宝回合开始逻辑、`EnemyTurnCoordinator`、`CombatOutcomeSettlementCoordinator`、`FireBattleState` 及新增 EditMode 生命周期测试。
+- **验收标准：** 正式战斗初始化与重开不再在 Bootstrap 重复组装；单位切换时的火术/法宝生命周期由控制器给出窄指令；训练场入口不被正式会话控制器接管；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增 `CombatSessionLifecycleController`，统一正式开战、战术重开、敌方/结算协调器重置、火术战斗状态创建、英雄首回合与活动单位边界信号；训练场明确不进入该控制器。Bootstrap 删除 `fireLifecycleActiveUnitId`，开战/重开改为消费统一 activation，并删除无调用且会提前开启英雄回合的旧 `BuildCombatFromScene` 路径，行数由 1510 降至 1488。新增开战重置、快照重开和单位边界幂等测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `4/4 passed`，全量 EditMode `429/429 passed`，PlayMode `1/1 passed`；现场验证开战英雄 AP=3、失败进入结算、战术重开恢复活动态/英雄 AP=3，并可再次失败进入结算，Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** Bootstrap 的战斗会话核心只剩端口调用，可继续拆分肉鸽导航与开发菜单职责。
+
 ### CORE-ARCH-08：双运行形态统一战斗结算 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；保留 `mapRun` 与旧 `rogueliteRun` 两种运行形态，不改变奖励、失败回滚、短局、模板沙盒、剧情链或存档格式。
