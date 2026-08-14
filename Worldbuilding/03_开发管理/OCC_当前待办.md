@@ -6,6 +6,15 @@
 - 姣忛」浠诲姟蹇呴』鍐欐槑鐩爣銆佹秹鍙婃枃浠?绯荤粺銆侀獙鏀舵爣鍑嗕笌瀹屾垚鍚庤В閿佺殑涓嬩竴姝ャ€?- 鐜╂硶鏀瑰彉鍏堟洿鏂?`Worldbuilding/01_娓告垙绛栧垝/` 婧愭枃浠讹紝鍐嶅悓姝ュ紑鍙戣鍒掍笌鏈枃銆?- 鍓ф儏妯″紡涓嶅緱寮曞叆鏃堕棿鍘嬪姏銆佹晫鎯呮帹杩涖€佸€掕鏃舵垨鎷栧欢鍏抽棴鍦扮偣鏈哄埗銆?- Unity 鑴氭湰鏀瑰姩蹇呴』缁?Funplay 閲嶆柊缂栬瘧骞舵鏌?Console锛涢櫎闈炴槑纭姹傦紝涓嶄繚瀛樺満鏅€?
 ## 褰撳墠杩涜
 
+### CORE-ARCH-07：战斗命令执行服务 — COMPLETE（2026-08-14）
+
+- **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；不改变命令合法性、伤害、火术触发、行动点、敌人计划失效时机或表现内容。
+- **目标：** 从 Bootstrap 的 `TryCommand` 提取命令授权、权威规则执行、火术武器/移动触发与技能投递上下文计算，由无 Unity 生命周期依赖的服务返回结构化结果；Bootstrap 只负责发布日志、视觉事件和刷新流程结果。
+- **涉及文件/系统：** `CombatPrototypeBootstrap.TryCommand`、`CombatResolver`、`FireSpellEngine`、玩家显式结束行动门禁、敌方协调器的命令提交路径及新增 EditMode 服务测试。
+- **验收标准：** Bootstrap 不再直接调用 `CombatResolver.Resolve` 或 `FireSpellEngine.ResolveWeaponAttack`；服务独立覆盖普通命令、火术武器攻击、移动触发、技能投递上下文、拒绝与异常结果；敌人与玩家仍共用同一执行路径；Funplay 编译、全量 EditMode、PlayMode 和 Console 回归通过。
+- **验收记录：** 新增无 Unity 生命周期依赖的 `CombatCommandExecutionService` 与结构化执行结果，统一处理显式英雄结束门禁、普通规则命令、火术武器攻击、移动触发、技能投递坐标和规则异常；Bootstrap 不再直接调用 `CombatResolver.Resolve` 或 `FireSpellEngine.ResolveWeaponAttack`，只发布日志、反馈与流程刷新，行数由 1551 降至 1520。新增移动、攻击、技能上下文、门禁/异常及 Bootstrap 委托边界测试。Funplay 编译 0 error/0 warning；聚焦 EditMode `4/4 passed`，全量 EditMode `419/419 passed`，PlayMode `1/1 passed`；现场英雄移动 `(1,4)→(2,4)`、AP `3→2`，显式结束后敌人完整执行并返回英雄回合且 AP 恢复为 3；Console 无错误，活动场景 `isDirty=false`，未保存场景。
+- **完成后解锁：** 将回合结果刷新和战斗重开快照归并为 battle session controller，进一步缩小 Bootstrap 的会话编排职责。
+
 ### CORE-ARCH-06：战斗会话敌方回合协调器 — COMPLETE（2026-08-14）
 
 - **归属：** 剧情模式与肉鸽模式共用的战斗会话架构；不改变敌人 AI、行动顺序、伤害、时间轴、动画节奏或存档格式。

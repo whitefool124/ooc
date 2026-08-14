@@ -17,6 +17,7 @@ namespace OCC.Combat.Presentation
         private readonly CombatAvailabilityQuery availability = new CombatAvailabilityQuery();
         private readonly EnemyTurnPlanBook enemyPlans = new EnemyTurnPlanBook();
         private readonly EnemyTurnCoordinator enemyTurn = new EnemyTurnCoordinator();
+        private readonly CombatCommandExecutionService commandExecution = new CombatCommandExecutionService();
         private readonly CombatTargetNavigationState targetNavigation = new CombatTargetNavigationState();
         private CombatState state;
         private FirstRegionLevelDefinition currentLevel;
@@ -1426,59 +1427,27 @@ namespace OCC.Combat.Presentation
         }
         private void TryCommand(CombatCommand command, bool explicitHeroEndTurn = false)
         {
-            if (!CanSubmitTurnCommand(command, explicitHeroEndTurn))
+            CombatCommandExecutionResult result = commandExecution.Execute(state, fireBattle, command, explicitHeroEndTurn);
+            fireBattle = result.FireBattle;
+            if (!result.Accepted)
             {
-                const string reason = "玩家回合只能通过明确的结束行动操作推进。";
-                state.AddLog(reason);
-                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, command.Type.ToString(), message: reason));
+                state.AddLog(result.RejectionReason);
+                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected,
+                    command.Type.ToString(), message: result.RejectionReason));
                 return;
             }
-            try
-            {
-                UnitState commandUnit = state.GetUnit(command.UnitId);
-                SkillDefinition deliveredSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null
-                    ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
-                GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
-                GridPosition movementSource = deliverySource;
-                UnitState commandTarget = string.IsNullOrWhiteSpace(command.TargetUnitId) ? null : state.GetUnit(command.TargetUnitId);
-                GridPosition deliveryTarget = commandTarget?.Position ??
-                    (deliveredSkill != null && (deliveredSkill.TargetRule == SkillTargetRule.GridCell || deliveredSkill.TargetRule == SkillTargetRule.Destructible)
-                        ? command.Destination : deliverySource);
-                CombatEffectExecution execution;
-                IReadOnlyList<FireSpellExecution> fireTriggers = Array.Empty<FireSpellExecution>();
-                if (command.Type == CombatCommandType.Attack)
-                {
-                    if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
-                    FireWeaponAttackResolution attack = FireSpellEngine.ResolveWeaponAttack(fireBattle, command.UnitId,
-                        command.TargetUnitId);
-                    execution = attack.WeaponExecution;
-                    fireTriggers = attack.TriggerExecutions;
-                }
-                else execution = CombatResolver.Resolve(state, command);
-                string actionResult = CombatInformationPresenter.BuildActionResult(state, command, execution);
-                if (!string.IsNullOrEmpty(actionResult)) state.AddLog(actionResult);
-                if (trainingRangeActive && deliveredSkill != null) trainingRangeSession?.RecordExternal(execution);
-                if (command.Type == CombatCommandType.Move && commandUnit != null && fireBattle != null)
-                {
-                    fireBattle.ResolveEntry(commandUnit, movementSource);
-                    PublishFireExecutions(FireSpellEngine.TriggerMarkedTargetMove(fireBattle, commandUnit.Id, movementSource));
-                    PublishFireExecutions(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
-                }
-                if (command.Type == CombatCommandType.Move && command.UnitId == "hero") FollowHeroAtSafeEdge();
-                selectedTargetId = null;
-                enemyPlans.Invalidate();
-                MarkPresentation(UiPresentationArea.Combat);
-                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
-                PublishCombatEffects(execution);
-                PublishFireExecutions(fireTriggers);
-                visualFeedback?.NotifySkillDelivery(deliveredSkill, deliverySource, deliveryTarget);
-                developerFlow.RefreshOutcome();
-            }
-            catch (InvalidOperationException error)
-            {
-                state.AddLog(error.Message);
-                PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected, command.Type.ToString(), message: error.Message));
-            }
+            if (!string.IsNullOrEmpty(result.ActionResult)) state.AddLog(result.ActionResult);
+            if (trainingRangeActive && result.DeliveredSkill != null) trainingRangeSession?.RecordExternal(result.Execution);
+            PublishFireExecutions(result.MovementFireExecutions);
+            if (result.HeroMoved) FollowHeroAtSafeEdge();
+            selectedTargetId = null;
+            enemyPlans.Invalidate();
+            MarkPresentation(UiPresentationArea.Combat);
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
+            PublishCombatEffects(result.Execution);
+            PublishFireExecutions(result.AttackFireExecutions);
+            visualFeedback?.NotifySkillDelivery(result.DeliveredSkill, result.DeliverySource, result.DeliveryTarget);
+            developerFlow.RefreshOutcome();
         }
 
         private void PublishFireExecutions(IEnumerable<FireSpellExecution> executions)
@@ -1527,7 +1496,7 @@ namespace OCC.Combat.Presentation
             }
         }
         public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
-            command.Type != CombatCommandType.EndTurn || command.UnitId != "hero" || explicitHeroEndTurn;
+            CombatCommandExecutionService.CanSubmit(command, explicitHeroEndTurn);
 
         private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selectedAction == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selectedAction == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selectedAction == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selectedAction == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)

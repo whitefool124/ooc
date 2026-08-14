@@ -133,5 +133,12 @@ namespace OCC.Combat.Tests
             Assert.That(Array.Exists(fields, field => field.Name == "pendingEnemyCommand"), Is.False);
             Assert.That(Array.Exists(fields, field => field.Name == "enemyTurnSequence"), Is.False);
         }
+
+        [Test]
+        public void Bootstrap_DelegatesAuthoritativeCommandExecutionToService()
+        {
+            FieldInfo[] fields = typeof(CombatPrototypeBootstrap).GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(Array.Exists(fields, field => field.FieldType == typeof(CombatCommandExecutionService)), Is.True);
+        }
     }
 }
