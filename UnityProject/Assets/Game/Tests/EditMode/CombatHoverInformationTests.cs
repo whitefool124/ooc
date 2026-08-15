@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace OCC.Combat.Tests
 {
@@ -217,6 +218,22 @@ namespace OCC.Combat.Tests
             Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.EqualTo(9));
             Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.EqualTo(14));
             Assert.That(CombatUnitHudLayout.VitalFontSize(160f, false), Is.EqualTo(14));
+        }
+
+        [Test]
+        public void UnitHealthPalette_DistinguishesEnemyAndKeepsForecastReadable()
+        {
+            Assert.That(CombatUnitHudLayout.HealthFillColor(true), Is.EqualTo(FormalUiTheme.Health));
+            Assert.That(CombatUnitHudLayout.HealthFillColor(false), Is.EqualTo(FormalUiTheme.Danger));
+            Assert.That(CombatUnitHudLayout.HealthForecastColor(false), Is.EqualTo(FormalUiTheme.Amber));
+        }
+
+        [Test]
+        public void BattlefieldCellPointer_UsesRightButtonPressForImmediateInspection()
+        {
+            Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Right), Is.True);
+            Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Left), Is.False);
+            Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Middle), Is.False);
         }
 
         [TestCase("hero")]

@@ -25,6 +25,8 @@ namespace OCC.Combat.Presentation
 
         public bool IsVisible => root != null && root.activeSelf;
         public int CellCount => cells.Count;
+        public static bool ShouldInspectOnPointerDown(PointerEventData.InputButton button) =>
+            button == PointerEventData.InputButton.Right;
 
         public void Initialize(IBattlefieldViewHost source)
         {
@@ -209,16 +211,22 @@ namespace OCC.Combat.Presentation
                 cell.Unit.color = model.UnitTint;
             }
 
-            RefreshVital(cell.Health, model.Vitals?.Health, viewport.CellRect(model.Position), true);
-            RefreshVital(cell.Shield, model.Vitals?.Shield, viewport.CellRect(model.Position), false);
+            bool isHero = model.Unit?.IsHero != false;
+            RefreshVital(cell.Health, model.Vitals?.Health, viewport.CellRect(model.Position), true,
+                CombatUnitHudLayout.HealthFillColor(isHero), CombatUnitHudLayout.HealthForecastColor(isHero));
+            RefreshVital(cell.Shield, model.Vitals?.Shield, viewport.CellRect(model.Position), false,
+                FormalUiTheme.Shield, FormalUiTheme.Danger);
             RefreshStatuses(cell, model.Statuses, viewport.CellRect(model.Position));
             RefreshIntent(cell, model.Intent, model.IntentTexture, viewport.CellRect(model.Position));
         }
 
-        private static void RefreshVital(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell, bool health)
+        private static void RefreshVital(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell, bool health,
+            Color fillColor, Color forecastColor)
         {
             bar.Root.SetActive(vital != null);
             if (vital == null) return;
+            bar.Fill.color = fillColor;
+            bar.Forecast.color = FormalUiTheme.WithAlpha(forecastColor, .82f);
             Rect absolute = health ? CombatUnitHudLayout.UnitHealthBarRect(cell) : CombatUnitHudLayout.UnitShieldBarRect(cell);
             SetTopLeft(bar.Rect, absolute.x - cell.X, absolute.y - cell.Y, absolute.width, absolute.height);
             bar.Fill.rectTransform.anchorMax = new Vector2(vital.RemainingRatio, 1f);
@@ -452,7 +460,8 @@ namespace OCC.Combat.Presentation
         public void OnScroll(PointerEventData eventData) => view?.Scroll(eventData);
     }
 
-    internal sealed class BattlefieldCellPointer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    internal sealed class BattlefieldCellPointer : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,
+        IPointerEnterHandler, IPointerExitHandler
     {
         private GridPosition position;
         private Action<GridPosition, bool> click;
@@ -471,6 +480,13 @@ namespace OCC.Combat.Presentation
         {
             if (eventData.button == PointerEventData.InputButton.Left) click?.Invoke(position, false);
             else if (eventData.button == PointerEventData.InputButton.Right) click?.Invoke(position, true);
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!FormalBattlefieldView.ShouldInspectOnPointerDown(eventData.button)) return;
+            click?.Invoke(position, true);
+            eventData.Use();
         }
 
         public void OnPointerEnter(PointerEventData eventData) => enter?.Invoke(position);

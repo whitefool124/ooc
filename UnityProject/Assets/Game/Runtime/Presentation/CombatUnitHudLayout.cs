@@ -88,6 +88,12 @@ namespace OCC.Combat.Presentation
             return health ? 16 : 14;
         }
 
+        public static Color HealthFillColor(bool isHero) =>
+            isHero ? FormalUiTheme.Health : FormalUiTheme.Danger;
+
+        public static Color HealthForecastColor(bool isHero) =>
+            isHero ? FormalUiTheme.Danger : FormalUiTheme.Amber;
+
         public static Rect UnitStatusIconRect(BattlefieldRect cell, int index)
         {
             int column = Math.Min(1, Math.Max(0, index) / 3);
