@@ -236,6 +236,23 @@ namespace OCC.Combat.Tests
             Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Middle), Is.False);
         }
 
+        [Test]
+        public void CompactEnemyIntent_UsesOneShortActionAndDamageReadout()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            EnemyArchetypes.Get("shieldguard").Apply(enemy);
+            CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
+            EnemyIntentPresentation intent = new EnemyTurnPlanBook().GetPublicIntent(state, enemy, hero);
+
+            string compact = FormalBattlefieldView.CompactIntent(intent);
+
+            Assert.That(compact, Does.StartWith(intent.ActionName));
+            Assert.That(compact, Does.Not.Contain(intent.TargetSummary));
+            Assert.That(compact, Does.Not.Contain(intent.ResultSummary));
+            Assert.That(compact.Length, Is.LessThanOrEqualTo(intent.ActionName.Length + 4));
+        }
+
         [TestCase("hero")]
         [TestCase("rifleman")]
         [TestCase("shieldguard")]

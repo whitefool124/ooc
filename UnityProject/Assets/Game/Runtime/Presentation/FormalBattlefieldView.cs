@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -19,7 +20,18 @@ namespace OCC.Combat.Presentation
         private RectTransform viewportRect;
         private RectTransform boardRect;
         private GameObject tooltipRoot;
-        private Text tooltipText;
+        private RawImage tooltipPortrait;
+        private Text tooltipName;
+        private Text tooltipHealth;
+        private Text tooltipShield;
+        private Text tooltipArmor;
+        private Image tooltipWeaponIcon;
+        private Text tooltipWeapon;
+        private RawImage tooltipIntentIcon;
+        private Text tooltipIntent;
+        private readonly GameObject[] tooltipStatusRoots = new GameObject[6];
+        private readonly RawImage[] tooltipStatusIcons = new RawImage[6];
+        private readonly Text[] tooltipStatusValues = new Text[6];
         private int mapWidth;
         private int mapHeight;
 
@@ -79,12 +91,43 @@ namespace OCC.Combat.Presentation
             home.onClick.AddListener(host.FocusBattlefieldOnHero);
             home.transform.SetAsLastSibling();
 
-            tooltipRoot = FormalUiKit.Panel("战场悬停详情", root.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(18f, -76f), new Vector2(456f, 196f), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .98f));
-            tooltipText = FormalUiKit.Label("详情文字", string.Empty, tooltipRoot.transform, new Vector2(14f, -12f),
-                new Vector2(428f, 170f), 14, FormalUiTheme.Text, TextAnchor.UpperLeft);
-            tooltipText.horizontalOverflow = HorizontalWrapMode.Wrap;
-            tooltipText.verticalOverflow = VerticalWrapMode.Truncate;
+            tooltipRoot = FormalUiKit.Panel("敌情速览卡", root.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(18f, -76f), new Vector2(404f, 142f), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .98f));
+            tooltipRoot.GetComponent<Image>().raycastTarget = false;
+            tooltipPortrait = TooltipRawIcon("敌人头像", tooltipRoot.transform, new Vector2(12f, -14f), 64f);
+            tooltipName = FormalUiKit.Label("敌人名称", string.Empty, tooltipRoot.transform, new Vector2(88f, -10f),
+                new Vector2(198f, 26f), 18, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(tooltipName);
+            Text hint = FormalUiKit.Label("锁定提示", "右键锁定", tooltipRoot.transform, new Vector2(300f, -12f),
+                new Vector2(90f, 22f), 12, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
+            FormalUiKit.PreventAutomaticWrapping(hint);
+            tooltipHealth = TooltipMetric("生命", "Art/FormalResourceIcons32/health", tooltipRoot.transform,
+                new Vector2(88f, -42f), FormalUiTheme.Danger);
+            tooltipShield = TooltipMetric("护盾", "Art/FormalResourceIcons32/shield", tooltipRoot.transform,
+                new Vector2(176f, -42f), FormalUiTheme.Shield);
+            tooltipArmor = TooltipMetric("护甲", FormalArtRegistry.ItemPath("category_armor"), tooltipRoot.transform,
+                new Vector2(264f, -42f), FormalUiTheme.Muted);
+            tooltipWeaponIcon = TooltipSpriteIcon("武器", tooltipRoot.transform, new Vector2(88f, -76f), 24f);
+            tooltipWeapon = FormalUiKit.Label("武器读数", string.Empty, tooltipRoot.transform, new Vector2(118f, -76f),
+                new Vector2(144f, 24f), 13, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(tooltipWeapon);
+            tooltipIntentIcon = TooltipRawIcon("意图", tooltipRoot.transform, new Vector2(270f, -76f), 24f);
+            tooltipIntent = FormalUiKit.Label("意图读数", string.Empty, tooltipRoot.transform, new Vector2(300f, -76f),
+                new Vector2(90f, 24f), 13, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(tooltipIntent);
+            for (int i = 0; i < tooltipStatusRoots.Length; i++)
+            {
+                GameObject status = FormalUiKit.Create("状态_" + i, tooltipRoot.transform);
+                RectTransform statusRect = status.AddComponent<RectTransform>();
+                SetTopLeft(statusRect, 88f + i * 34f, 110f, 28f, 24f);
+                tooltipStatusRoots[i] = status;
+                tooltipStatusIcons[i] = status.AddComponent<RawImage>();
+                tooltipStatusIcons[i].raycastTarget = false;
+                tooltipStatusValues[i] = Label("回合", statusRect);
+                tooltipStatusValues[i].fontSize = 10;
+                tooltipStatusValues[i].fontStyle = FontStyle.Bold;
+                tooltipStatusValues[i].alignment = TextAnchor.LowerRight;
+            }
             tooltipRoot.SetActive(false);
         }
 
@@ -322,13 +365,53 @@ namespace OCC.Combat.Presentation
         {
             if (!cells.TryGetValue(position, out CellView cell)) return;
             BattlefieldCellPresentation model = host.PresentBattlefieldCell(position);
-            if (model == null || string.IsNullOrEmpty(model.HoverText)) { HideTooltip(); return; }
-            tooltipText.text = model.HoverText;
+            if (model?.Unit == null || model.Unit.IsHero) { HideTooltip(); return; }
+            UnitState enemy = model.Unit;
+            tooltipPortrait.texture = model.UnitTexture;
+            tooltipPortrait.uvRect = model.UnitUv;
+            tooltipName.text = enemy.DisplayName;
+            tooltipHealth.text = enemy.Health + "/" + enemy.MaxHealth;
+            tooltipShield.text = enemy.Shield + "/" + enemy.MaxShield;
+            tooltipArmor.text = enemy.EffectiveArmor.ToString();
+            tooltipWeaponIcon.sprite = Resources.Load<Sprite>(WeaponIconPath(enemy));
+            tooltipWeapon.text = enemy.MainHand == null ? "无武器" :
+                enemy.MainHand.DisplayName + "  " + enemy.MainHand.Damage + "/R" + enemy.MainHand.Range;
+            bool hasIntent = model.Intent != null && model.IntentTexture != null;
+            tooltipIntentIcon.gameObject.SetActive(hasIntent);
+            tooltipIntent.gameObject.SetActive(hasIntent);
+            if (hasIntent)
+            {
+                tooltipIntentIcon.texture = model.IntentTexture;
+                tooltipIntent.text = CompactIntent(model.Intent);
+            }
+            for (int i = 0; i < tooltipStatusRoots.Length; i++)
+            {
+                bool active = i < model.Statuses.Count;
+                tooltipStatusRoots[i].SetActive(active);
+                if (!active) continue;
+                tooltipStatusIcons[i].texture = model.Statuses[i].Texture;
+                tooltipStatusValues[i].text = model.Statuses[i].Presentation.ValueText;
+                Stretch(tooltipStatusValues[i].rectTransform);
+            }
             tooltipRoot.SetActive(true);
             tooltipRoot.transform.SetAsLastSibling();
-            float x = Mathf.Min(960f, cell.Rect.anchoredPosition.x + host.BattlefieldViewport.BoardRect.X + host.BattlefieldViewport.CellSize + 18f);
-            float y = Mathf.Min(650f, -cell.Rect.anchoredPosition.y + host.BattlefieldViewport.BoardRect.Y + 18f);
+            float x = Mathf.Min(1018f, cell.Rect.anchoredPosition.x + host.BattlefieldViewport.BoardRect.X + host.BattlefieldViewport.CellSize + 18f);
+            float y = Mathf.Min(714f, -cell.Rect.anchoredPosition.y + host.BattlefieldViewport.BoardRect.Y + 18f);
             ((RectTransform)tooltipRoot.transform).anchoredPosition = new Vector2(x, -Mathf.Max(64f, y));
+        }
+
+        public static string CompactIntent(EnemyIntentPresentation intent)
+        {
+            if (intent == null) return string.Empty;
+            return intent.ExpectedDamage > 0 ? intent.ActionName + " -" + intent.ExpectedDamage : intent.ActionName;
+        }
+
+        private static string WeaponIconPath(UnitState unit)
+        {
+            string weaponId = unit?.MainHand?.Id;
+            FormalArtEntry entry = FormalArtRegistry.Items.FirstOrDefault(candidate =>
+                string.Equals(candidate.RuntimeId, weaponId, StringComparison.OrdinalIgnoreCase));
+            return entry?.ResourcePath ?? FormalArtRegistry.ItemPath("category_weapon");
         }
 
         private void HideTooltip()
@@ -352,6 +435,38 @@ namespace OCC.Combat.Presentation
                 FormalUiTheme.Text, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
             return label;
+        }
+
+        private static RawImage TooltipRawIcon(string name, Transform parent, Vector2 position, float size)
+        {
+            GameObject root = FormalUiKit.Create(name, parent);
+            RectTransform rect = root.AddComponent<RectTransform>();
+            SetTopLeft(rect, position.x, -position.y, size, size);
+            RawImage icon = root.AddComponent<RawImage>();
+            icon.raycastTarget = false;
+            return icon;
+        }
+
+        private static Image TooltipSpriteIcon(string name, Transform parent, Vector2 position, float size)
+        {
+            GameObject root = FormalUiKit.Create(name, parent);
+            RectTransform rect = root.AddComponent<RectTransform>();
+            SetTopLeft(rect, position.x, -position.y, size, size);
+            Image icon = root.AddComponent<Image>();
+            icon.preserveAspect = true;
+            icon.raycastTarget = false;
+            return icon;
+        }
+
+        private static Text TooltipMetric(string name, string iconPath, Transform parent, Vector2 position, Color color)
+        {
+            Image icon = TooltipSpriteIcon(name + "图标", parent, position, 22f);
+            icon.sprite = Resources.Load<Sprite>(iconPath);
+            icon.color = color;
+            Text value = FormalUiKit.Label(name + "数值", string.Empty, parent,
+                new Vector2(position.x + 26f, position.y), new Vector2(58f, 22f), 13, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(value);
+            return value;
         }
 
         private static BarView Bar(string name, Transform parent, Color color)
