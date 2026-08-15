@@ -124,10 +124,10 @@ namespace OCC.Combat.Presentation
                 Move = Layer("移动范围", rect),
                 Attack = Layer("攻击范围", rect),
                 Skill = Layer("技能范围", rect),
-                Selection = Layer("选中覆盖", rect),
                 Object = Layer("地形物件", rect),
                 Loot = Layer("战利品", rect),
                 Unit = Layer("单位", rect),
+                Selection = Layer("选中覆盖", rect),
                 ObjectLabel = Label("地形标签", rect),
                 Health = Bar("生命", rect, FormalUiTheme.Health),
                 Shield = Bar("护盾", rect, FormalUiTheme.Shield),
@@ -184,7 +184,7 @@ namespace OCC.Combat.Presentation
             Set(cell.Move, model.MoveOverlayTexture, new Color(1f, 1f, 1f, model.MoveOverlayAlpha));
             Set(cell.Attack, model.AttackOverlayTexture, new Color(1f, 1f, 1f, model.AttackOverlayAlpha));
             Set(cell.Skill, model.SkillOverlayTexture, Color.white);
-            Set(cell.Selection, model.SelectionOverlayTexture, Color.white);
+            Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
             Set(cell.Object, model.ObjectTexture, Color.white);
             Set(cell.Loot, model.LootTexture, Color.white);
             float cellSize = viewport.CellSize;
@@ -225,6 +225,10 @@ namespace OCC.Combat.Presentation
             bar.Forecast.gameObject.SetActive(vital.ForecastLoss > 0);
             bar.Forecast.rectTransform.anchorMin = new Vector2(vital.RemainingRatio, 0f);
             bar.Forecast.rectTransform.anchorMax = new Vector2(vital.CurrentRatio, 1f);
+            string text = CombatUnitHudLayout.VitalText(vital, cell.Width);
+            bar.Value.gameObject.SetActive(!string.IsNullOrEmpty(text));
+            bar.Value.text = text;
+            bar.Value.fontSize = CombatUnitHudLayout.VitalFontSize(cell.Width, health);
         }
 
         private static void RefreshStatuses(CellView cell, IReadOnlyList<BattlefieldStatusVisual> statuses, BattlefieldRect contract)
@@ -352,7 +356,16 @@ namespace OCC.Combat.Presentation
             background.raycastTarget = false;
             Image fill = ChildImage("当前", rect, color);
             Image forecast = ChildImage("预估损失", rect, FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .82f));
-            return new BarView { Root = root, Rect = rect, Fill = fill, Forecast = forecast };
+            Text value = Label("数值", rect);
+            value.color = FormalUiTheme.Text;
+            value.fontStyle = FontStyle.Bold;
+            value.alignment = TextAnchor.MiddleCenter;
+            value.verticalOverflow = VerticalWrapMode.Overflow;
+            Outline outline = value.gameObject.AddComponent<Outline>();
+            outline.effectColor = FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .98f);
+            outline.effectDistance = new Vector2(1f, -1f);
+            Stretch(value.rectTransform);
+            return new BarView { Root = root, Rect = rect, Fill = fill, Forecast = forecast, Value = value };
         }
 
         private static Image ChildImage(string name, Transform parent, Color color)
@@ -424,6 +437,7 @@ namespace OCC.Combat.Presentation
             public RectTransform Rect;
             public Image Fill;
             public Image Forecast;
+            public Text Value;
         }
     }
 

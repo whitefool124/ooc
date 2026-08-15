@@ -199,9 +199,24 @@ namespace OCC.Combat.Tests
             Assert.That(unit.height / cellSize, Is.EqualTo(116f / 128f).Within(.0001f));
             Assert.That(unit.width * unit.height / (cellSize * cellSize), Is.GreaterThanOrEqualTo(.8f));
             Assert.That(health.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
-            Assert.That(health.height / cellSize, Is.EqualTo(13f / 128f).Within(.0001f));
+            Assert.That(health.height / cellSize, Is.EqualTo(17f / 128f).Within(.0001f));
             Assert.That(shield.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
-            Assert.That(shield.height / cellSize, Is.EqualTo(11f / 128f).Within(.0001f));
+            Assert.That(shield.height / cellSize, Is.EqualTo(15f / 128f).Within(.0001f));
+        }
+
+        [Test]
+        public void VitalText_HidesAtOverviewAndPreservesForecastAtReadableZooms()
+        {
+            var vital = new CombatUnitVitalPresentation(8, 12, 3, 5);
+
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 64f), Is.Empty);
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.EqualTo("-3→5"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.EqualTo("8 -3 → 5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.EqualTo("8 -3 → 5/12"));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(64f, true), Is.Zero);
+            Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.EqualTo(9));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.EqualTo(14));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(160f, false), Is.EqualTo(14));
         }
 
         [TestCase("hero")]

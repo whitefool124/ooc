@@ -62,14 +62,30 @@ namespace OCC.Combat.Presentation
         {
             float scale = ElementScale(cell);
             float width = 108f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 101f * scale, width, 13f * scale);
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 94f * scale, width, 17f * scale);
         }
 
         public static Rect UnitShieldBarRect(BattlefieldRect cell)
         {
             float scale = ElementScale(cell);
             float width = 108f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 115f * scale, width, 11f * scale);
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 112f * scale, width, 15f * scale);
+        }
+
+        public static string VitalText(CombatUnitVitalPresentation vital, float cellSize)
+        {
+            if (vital == null || cellSize < 90f) return string.Empty;
+            if (cellSize < 112f)
+                return vital.ForecastLoss > 0 ? "-" + vital.ForecastLoss + "→" + vital.Remaining : vital.Current + "/" + vital.Maximum;
+            return vital.CompactText;
+        }
+
+        public static int VitalFontSize(float cellSize, bool health)
+        {
+            if (cellSize < 90f) return 0;
+            if (cellSize < 112f) return 9;
+            if (cellSize < 144f) return health ? 14 : 12;
+            return health ? 16 : 14;
         }
 
         public static Rect UnitStatusIconRect(BattlefieldRect cell, int index)
