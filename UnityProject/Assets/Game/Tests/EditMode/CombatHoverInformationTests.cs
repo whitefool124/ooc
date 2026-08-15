@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
@@ -157,6 +158,8 @@ namespace OCC.Combat.Tests
             Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 8);
             float healthBarTop = CombatUnitHudLayout.UnitHealthBarRect(cell).yMin;
 
+            Assert.That(badge.yMin, Is.GreaterThanOrEqualTo(cell.Y),
+                "The badge must stay inside its cell so later sibling cells cannot paint over it.");
             Assert.That(badge.yMax, Is.LessThan(healthBarTop));
             Assert.That(badge.height, Is.EqualTo(20f));
             Assert.That(badge.width, Is.EqualTo(43f));
@@ -251,6 +254,21 @@ namespace OCC.Combat.Tests
             Assert.That(compact, Does.Not.Contain(intent.TargetSummary));
             Assert.That(compact, Does.Not.Contain(intent.ResultSummary));
             Assert.That(compact.Length, Is.LessThanOrEqualTo(intent.ActionName.Length + 4));
+        }
+
+        [Test]
+        public void MoveIntentDestination_IsCollectedForBattlefieldHighlight()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            GridPosition destination = new GridPosition(1, 0);
+            EnemyIntentPresentation move = CombatInformationPresenter.BuildEnemyIntent(state, enemy,
+                CombatCommand.Move(enemy.Id, destination, Facing.West));
+
+            HashSet<GridPosition> destinations = FormalBattlefieldView.CollectIntentDestinations(new[] { null, move });
+
+            Assert.That(destinations, Is.EquivalentTo(new[] { destination }));
         }
 
         [TestCase("hero")]

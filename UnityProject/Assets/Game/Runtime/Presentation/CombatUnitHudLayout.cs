@@ -18,7 +18,7 @@ namespace OCC.Combat.Presentation
         public static Rect EnemyIntentBadgeRect(BattlefieldRect cell, int expectedDamage)
         {
             float width = expectedDamage > 0 ? 43f : 20f;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y - 22f, width, 20f);
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 2f, width, 20f);
         }
 
         public static Rect UnitPresentationRect(BattlefieldRect cell)

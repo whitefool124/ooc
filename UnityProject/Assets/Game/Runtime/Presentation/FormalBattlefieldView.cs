@@ -32,6 +32,7 @@ namespace OCC.Combat.Presentation
         private readonly GameObject[] tooltipStatusRoots = new GameObject[6];
         private readonly RawImage[] tooltipStatusIcons = new RawImage[6];
         private readonly Text[] tooltipStatusValues = new Text[6];
+        private Texture2D moveIntentTexture;
         private int mapWidth;
         private int mapHeight;
 
@@ -62,8 +63,12 @@ namespace OCC.Combat.Presentation
             EnsureCells(state.Map.Width, state.Map.Height);
             UpdateInput();
             RefreshGeometry(host.BattlefieldViewport);
+            HashSet<GridPosition> intentDestinations = CollectIntentDestinations(state.Units.Values
+                .Where(unit => unit.IsAlive && !unit.IsHero)
+                .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
             foreach (KeyValuePair<GridPosition, CellView> pair in cells)
-                RefreshCell(pair.Value, host.PresentBattlefieldCell(pair.Key), host.BattlefieldViewport);
+                RefreshCell(pair.Value, host.PresentBattlefieldCell(pair.Key), host.BattlefieldViewport,
+                    intentDestinations.Contains(pair.Key));
         }
 
         private void EnsureUi()
@@ -71,6 +76,7 @@ namespace OCC.Combat.Presentation
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式UGUI战场", UiLayoutContract.BattlefieldSortingOrder);
             root = canvas.gameObject;
+            moveIntentTexture = Resources.Load<Texture2D>(FormalArtRegistry.IntentPath("move"));
             GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
             viewportRect = viewport.AddComponent<RectTransform>();
             SetTopLeft(viewportRect, 0f, 0f, BattlefieldPresentationAdapter.BattlefieldWidth,
@@ -169,6 +175,7 @@ namespace OCC.Combat.Presentation
                 Move = Layer("移动范围", rect),
                 Attack = Layer("攻击范围", rect),
                 Skill = Layer("技能范围", rect),
+                IntentDestination = CreateIntentDestination("移动意图目标", rect),
                 Object = Layer("地形物件", rect),
                 Loot = Layer("战利品", rect),
                 Unit = Layer("单位", rect),
@@ -220,7 +227,8 @@ namespace OCC.Combat.Presentation
                 SetTopLeft(pair.Value.Rect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
         }
 
-        private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport)
+        private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport,
+            bool isIntentDestination)
         {
             if (model == null || viewport == null) { cell.Root.SetActive(false); return; }
             cell.Root.SetActive(true);
@@ -229,6 +237,15 @@ namespace OCC.Combat.Presentation
             Set(cell.Move, model.MoveOverlayTexture, new Color(1f, 1f, 1f, model.MoveOverlayAlpha));
             Set(cell.Attack, model.AttackOverlayTexture, new Color(1f, 1f, 1f, model.AttackOverlayAlpha));
             Set(cell.Skill, model.SkillOverlayTexture, Color.white);
+            cell.IntentDestination.Root.SetActive(isIntentDestination);
+            if (isIntentDestination)
+            {
+                float markerSize = Mathf.Max(14f, viewport.CellSize * .1875f);
+                SetTopLeft(cell.IntentDestination.Icon.rectTransform,
+                    (viewport.CellSize - markerSize) * .5f, (viewport.CellSize - markerSize) * .5f,
+                    markerSize, markerSize);
+                cell.IntentDestination.Icon.texture = moveIntentTexture;
+            }
             Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
             Set(cell.Object, model.ObjectTexture, Color.white);
             Set(cell.Loot, model.LootTexture, Color.white);
@@ -406,6 +423,15 @@ namespace OCC.Combat.Presentation
             return intent.ExpectedDamage > 0 ? intent.ActionName + " -" + intent.ExpectedDamage : intent.ActionName;
         }
 
+        public static HashSet<GridPosition> CollectIntentDestinations(IEnumerable<EnemyIntentPresentation> intents)
+        {
+            var destinations = new HashSet<GridPosition>();
+            if (intents == null) return destinations;
+            foreach (EnemyIntentPresentation intent in intents)
+                if (intent?.HasDestination == true) destinations.Add(intent.Destination);
+            return destinations;
+        }
+
         private static string WeaponIconPath(UnitState unit)
         {
             string weaponId = unit?.MainHand?.Id;
@@ -467,6 +493,23 @@ namespace OCC.Combat.Presentation
                 new Vector2(position.x + 26f, position.y), new Vector2(58f, 22f), 13, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(value);
             return value;
+        }
+
+        private static IntentDestinationView CreateIntentDestination(string name, Transform parent)
+        {
+            GameObject root = FormalUiKit.Create(name, parent);
+            RectTransform rect = root.AddComponent<RectTransform>();
+            Stretch(rect);
+            Image fill = root.AddComponent<Image>();
+            fill.color = FormalUiTheme.WithAlpha(FormalUiTheme.Amber, .18f);
+            fill.raycastTarget = false;
+            Outline outline = root.AddComponent<Outline>();
+            outline.effectColor = FormalUiTheme.WithAlpha(FormalUiTheme.Amber, .92f);
+            outline.effectDistance = new Vector2(2f, -2f);
+            RawImage icon = Layer("移动落点", rect);
+            icon.color = FormalUiTheme.Amber;
+            root.SetActive(false);
+            return new IntentDestinationView { Root = root, Icon = icon };
         }
 
         private static BarView Bar(string name, Transform parent, Color color)
@@ -538,6 +581,7 @@ namespace OCC.Combat.Presentation
             public RawImage Move;
             public RawImage Attack;
             public RawImage Skill;
+            public IntentDestinationView IntentDestination;
             public RawImage Selection;
             public RawImage Object;
             public RawImage Loot;
@@ -552,6 +596,12 @@ namespace OCC.Combat.Presentation
             public RectTransform IntentRect;
             public RawImage IntentIcon;
             public Text IntentDamage;
+        }
+
+        private sealed class IntentDestinationView
+        {
+            public GameObject Root;
+            public RawImage Icon;
         }
 
         private sealed class BarView
