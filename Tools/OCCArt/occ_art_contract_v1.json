@@ -1,0 +1,206 @@
+{
+  "schema": "occ-art-contract-v1",
+  "version": 1,
+  "canonical_document": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+  "machine_mirror_only": true,
+  "allowed_source_channels": [
+    "codex_builtin_imagegen",
+    "pixelover",
+    "aseprite",
+    "hand_pixel"
+  ],
+  "forbidden_source_fragments": [
+    "localhost",
+    "127.0.0.1",
+    "local-image-generation-workbench",
+    "本地生图工作台",
+    "private relay",
+    "私有 relay"
+  ],
+  "statuses": {
+    "CONCEPT": "reference only",
+    "PROTOTYPE": "temporary and forbidden from formal Unity paths",
+    "QA_PENDING": "machine or human review incomplete",
+    "REVIEW_READY": "machine checks passed; product review incomplete",
+    "FORMAL_CANDIDATE": "machine and human review passed; Unity import incomplete",
+    "FORMAL": "Unity import, stable GUID and runtime verification passed"
+  },
+  "roles": {
+    "semantic_icon_16": {
+      "delivery_size": [16, 16],
+      "logical_cells": null,
+      "palette_max": 4,
+      "transparent_border_min": 1,
+      "unity_ppu": 16
+    },
+    "material_pickup_24_to_ui32": {
+      "native_size": [24, 24],
+      "delivery_size": [32, 32],
+      "native_embed_offset": [4, 4],
+      "logical_cells": null,
+      "palette_max": 8,
+      "transparent_border_min": 1,
+      "unity_ppu": 32
+    },
+    "equipment_icon_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "floor_tile_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "edge_policy": "self_contained_tile_with_distinct_physical_perimeter",
+      "cross_tile_texture_continuation": false,
+      "directional_shadow_rotation": "forbidden",
+      "dominant_material_units_per_tile": 1,
+      "nested_masonry_grid": "forbidden",
+      "surface_detail_policy": "sparse_low_contrast_non_connecting_marks_only",
+      "surface_detail_edge_contact": "forbidden",
+      "perimeter_bevel_policy": "restrained_physical_seam_not_ui_button",
+      "runtime_review_sequence": ["single_tile_1x_4x", "four_variant_unlabelled_contact", "large_area_12x9_runtime"]
+    },
+    "multi_cell_ground_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "production_status": "legacy_transition_only_not_new_floor_baseline"
+    },
+    "single_cell_prop_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "multi_cell_prop_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "terrain_adjacency_overlay_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "rotation_policy": "allowed_only_when_shadow_neutral"
+    },
+    "modular_structure_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 12,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting"
+    },
+    "tactical_unit_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 24,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "center_x": 32,
+      "baseline_y": 58,
+      "standard_height": [44, 48],
+      "elite_height": [48, 54],
+      "head_height": [12, 14]
+    }
+  },
+  "color_families": {
+    "blue": {"description": "natural sapphire or blue cloth; blue exceeds red by 20 and green by 5"},
+    "cyan": {"description": "active aether only; green and blue both exceed red by 16"},
+    "red": {"description": "threat or damage; red exceeds green and blue by 20"},
+    "ochre": {"description": "spice, leather or service material; red exceeds green by 8 and green exceeds blue by 5"},
+    "yellow": {"description": "interaction or loot; red and green exceed blue by 20"},
+    "green": {"description": "treatment or plant; green exceeds red and blue by 16"},
+    "purple": {"description": "pollution only; red and blue exceed green by 12"}
+  },
+  "required_evidence": [
+    "one_x",
+    "four_x",
+    "grayscale",
+    "checker",
+    "application_contact"
+  ],
+  "human_review_dimensions": [
+    "silhouette",
+    "material",
+    "perspective",
+    "style",
+    "application"
+  ],
+  "consistency_checks": [
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+      "required": [
+        "ACTIVE / SINGLE SOURCE OF TRUTH",
+        "关键材质色额门禁",
+        "(W×32)×(H×32)",
+        "FORMAL_CANDIDATE"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_像素资产_QA流程_v0.1.md",
+      "required": [
+        "规范从属",
+        "多格对象 `(W×32)×(H×32)`",
+        "关键材质消失必须失败",
+        "人工审美结论必须明确为 `PASS`"
+      ],
+      "forbidden": [
+        "图标/地块严格 `32×32`",
+        "每张图恰占一格"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_单位像素美术规范_v0.1.md",
+      "required": [
+        "ACTIVE / SUBORDINATE",
+        "标准单位主体高度 `44–48px`",
+        "FORMAL_CANDIDATE"
+      ],
+      "forbidden": [
+        "standard visible body silhouette about 32–38",
+        "标准单位主体高度约 `32–38 px`"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_角色三层视觉规范_v0.1.md",
+      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_UI学院档案视觉规范_v0.1.md",
+      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_人物双状态帧临时动画规范_v0.1.md",
+      "required": ["ACTIVE TEMPORARY / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_正式像素资产清单_v0.1.md",
+      "required": ["登记表，不是规范源"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/artifact_imagegen_manifest_v1.json",
+      "required": ["HISTORICAL_PROVENANCE_ONLY", "\"executable\": false", "localhost fallback is forbidden"]
+    },
+    {
+      "path": "AGENTS.md",
+      "required": [
+        "是唯一美术规范源",
+        "occ-art-manifest-v1",
+        "禁止使用本地生图工作台"
+      ]
+    }
+  ]
+}
