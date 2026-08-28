@@ -42,7 +42,7 @@ namespace OCC.Combat.Presentation
 
             UnitState unit = state.Units.Values.FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == position);
-            Texture2D unitTexture = assets.Unit(unit);
+            Texture2D unitTexture = assets.Unit(unit, feedback?.EnemyAnimationFrame(unit) ?? -1);
             Vector2 unitOffset = Vector2.zero;
             Color unitTint = Color.white;
             if (unit != null)
@@ -58,7 +58,8 @@ namespace OCC.Combat.Presentation
             }
 
             CombatTargetDamageForecast forecast = unit != null && !unit.IsHero ? damageForecast(unit) : null;
-            CombatUnitVitalsPresentation vitals = unit == null ? null : CombatUnitVitalsPresentation.From(unit, forecast);
+            CombatUnitVitalsPresentation vitals = unit == null ? null : CombatUnitVitalsPresentation.From(unit, forecast,
+                state.Ruleset == CombatRuleset.Roguelite);
             List<BattlefieldStatusVisual> statuses = unit == null ? new List<BattlefieldStatusVisual>() :
                 unit.Statuses.OrderBy(entry => entry.Key).Take(6)
                     .Select(entry => new BattlefieldStatusVisual(
@@ -71,19 +72,27 @@ namespace OCC.Combat.Presentation
             Color objectLabelColor = FormalUiTheme.Text;
             if (tile.IsObjective)
             {
-                string key = tile.IsDestroyed ? "relay_rubble" : tile.Durability < 6 ? "relay_damaged" : "relay_intact";
-                objectTexture = assets.Relay(key);
+                string key = tile.IsDestroyed ? "academy_aether_pillar_rubble" : tile.Durability < 6 ? "academy_aether_pillar_damaged" : "academy_aether_pillar_intact";
+                objectTexture = assets.Academy(key);
                 if (!tile.IsDestroyed) objectLabel = "导能柱";
             }
             else if (tile.Cover == CoverType.Light)
             {
-                string key = tile.IsDestroyed ? "light_cover_rubble" : tile.Durability < 4 ? "light_cover_damaged" : "light_cover_intact";
-                objectTexture = assets.Relay(key);
+                string family = (position.X + position.Y) % 2 == 0 ? "academy_light_stone_bench_" : "academy_light_planter_";
+                string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 4 ? "damaged" : "intact";
+                string variant = stateKey == "intact"
+                    ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Light)
+                    : null;
+                objectTexture = assets.Academy(variant ?? family + stateKey);
             }
             else if (tile.Cover == CoverType.Heavy)
             {
-                string key = tile.IsDestroyed ? "heavy_cover_rubble" : tile.Durability < 7 ? "heavy_cover_damaged" : "heavy_cover_intact";
-                objectTexture = assets.Relay(key);
+                string family = (position.X + position.Y) % 2 == 0 ? "academy_heavy_archive_stack_" : "academy_heavy_masonry_screen_";
+                string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 7 ? "damaged" : "intact";
+                string variant = stateKey == "intact"
+                    ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Heavy)
+                    : null;
+                objectTexture = assets.Academy(variant ?? family + stateKey);
             }
             else if (trainingRangeActive && tile.IsDevice)
             {
@@ -97,36 +106,67 @@ namespace OCC.Combat.Presentation
             }
 
             Texture2D loot = state.Loot != null && state.Loot.Position == position
-                ? state.Loot.IsLooted ? assets.Relay("loot_crate_empty") : assets.LootClosed : null;
+                ? assets.Academy(state.Loot.IsLooted ? "academy_loot_chest_empty" : "academy_loot_chest_closed") : null;
             bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
                 unit != null && unit.Id == selection.TargetId;
             Texture2D selectionOverlay = selected ? assets.Overlay("selected") : null;
-            string hover = unit == null ? string.Empty : unit.IsHero
+            string hover = unit == null ? BuildTerrainHover(state, fireBattle, tile, position) : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
                   (forecast == null ? string.Empty : "\n伤害预览：" + forecast.PlayerSummary);
-            Texture2D floor = assets.Relay(FloorKey(level, state.Map.Height, position.X, position.Y));
+            Texture2D floor = assets.Academy(FloorKey(level, state.Map.Height, position.X, position.Y));
+            Rect floorUv = FloorUv(position.X, position.Y);
+            float floorRotation = FloorRotationDegrees(level, position.X, position.Y);
+            string boundaryId = AcademyBattlefieldLayoutCatalog.BoundaryOverlay(level, position.X, position.Y,
+                out int boundaryTurns);
+            Texture2D terrainBoundary = string.IsNullOrEmpty(boundaryId) ? null : assets.Academy(boundaryId);
+            float terrainBoundaryRotation = -90f * boundaryTurns;
             Rect uv = unitTexture == null ? new Rect(0f, 0f, 1f, 1f) :
                 CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
-            return new BattlefieldCellPresentation(position, floor, environment, move,
+            return new BattlefieldCellPresentation(position, floor, floorUv, floorRotation,
+                terrainBoundary, terrainBoundaryRotation, environment, move,
                 selection.Action == "移动" ? 1f : .45f, attack, selection.Action == "攻击" ? 1f : .65f,
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover);
         }
 
+        public static string BuildTerrainHover(CombatState state, FireBattleState fireBattle, TileState tile,
+            GridPosition position)
+        {
+            if (state == null || tile == null) return string.Empty;
+            if (state.Loot != null && state.Loot.Position == position)
+                return state.Loot.IsLooted ? "空战利品箱\n已经搜刮，不再产出物品。" : "战利品箱\n相邻时可搜刮；内容将在打开后结算。";
+            if (tile.IsObjective)
+                return tile.IsDestroyed ? "损毁导能柱\n目标物已失效。" : "导能柱\n任务目标 · 耐久 " + tile.Durability + "；可被互动或指定术式影响。";
+            if (tile.Cover == CoverType.Light)
+                return tile.IsDestroyed ? "轻掩体残骸\n已失去防护效果，可正常通行。" : "轻掩体\n耐久 " + tile.Durability + "；剧情战斗中站立其上使物理伤害 -1，肉鸽战斗回合开始获得 2 护盾。";
+            if (tile.Cover == CoverType.Heavy)
+                return tile.IsDestroyed ? "重掩体残骸\n已失去阻挡和防护效果。" : "重掩体\n耐久 " + tile.Durability + "；阻挡移动与视线，肉鸽战斗中正前方相邻时回合开始获得 4 护盾。";
+            if (tile.IsDevice)
+                return tile.IsDestroyed ? "损毁设备\n设备已经失效。" : "战场设备\n耐久 " + tile.Durability + "；可被互动、破坏或指定术式影响。";
+            if (fireBattle?.HasFireground(position) == true)
+                return "燃烧地面\n进入或停留可能触发火焰伤害；剩余时间由施术效果决定。";
+            if (tile.SmokeExpiresAt > state.CurrentTime)
+                return "烟雾\n临时环境效果；会在时序 " + tile.SmokeExpiresAt + " 消散。";
+            if (tile.IsWater)
+                return "水面\n特殊地表；移动与术式交互以当前预览为准。";
+            return string.Empty;
+        }
+
         public static string FloorKey(FirstRegionLevelDefinition level, int mapHeight, int x, int y)
         {
-            if (level == null)
-                return y == 0 || y == mapHeight - 1 ? "rail_horizontal" :
-                    (x == 5 || x == 6) && y >= 3 && y <= 5 ? "floor_warning" : "floor_industrial";
-            switch (level.FloorTheme)
-            {
-                case FirstRegionFloorTheme.StoneRoad: return y == 4 ? "floor_industrial" : "floor_plain";
-                case FirstRegionFloorTheme.Courtyard: return (x + y) % 5 == 0 ? "floor_industrial" : "floor_plain";
-                case FirstRegionFloorTheme.Ruins: return (x * 3 + y * 5) % 11 == 0 ? "floor_plain" : "floor_industrial";
-                case FirstRegionFloorTheme.AetherMarked: return x == 6 || y == 4 ? "floor_industrial" : "floor_plain";
-                default: return "floor_plain";
-            }
+            return AcademyBattlefieldLayoutCatalog.FloorAsset(level, x, y, out _);
+        }
+
+        public static float FloorRotationDegrees(FirstRegionLevelDefinition level, int x, int y)
+        {
+            AcademyBattlefieldLayoutCatalog.FloorAsset(level, x, y, out int quarterTurns);
+            return -90f * quarterTurns;
+        }
+
+        public static Rect FloorUv(int x, int y)
+        {
+            return new Rect(0f, 0f, 1f, 1f);
         }
     }
 }

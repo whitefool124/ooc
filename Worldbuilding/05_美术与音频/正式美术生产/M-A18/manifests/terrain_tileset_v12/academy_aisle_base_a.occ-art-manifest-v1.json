@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_aisle_base_a",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Explicit hand-authored RLE pixel matrix; generic renderer expands exact pixels only and adds no art structure",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_aisle_base_a_source.png",
+    "source_sha256": "9330ee559193a045f2a4e44ddf96a656328a4097c695e9b58188af47bb54a28d"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v12/academy_aisle_base_a.png",
+    "output_sha256": "9330ee559193a045f2a4e44ddf96a656328a4097c695e9b58188af47bb54a28d",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 logical battlefield cell in the authored Academy maintained-road region",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_base_a_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_base_a_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_base_a_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_base_a_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_p0_application_contact_12x9.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Machine and Codex preflight passed; product aesthetic review pending before FORMAL_CANDIDATE."
+  },
+  "unity_import": null
+}

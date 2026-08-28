@@ -24,7 +24,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.IsNodeAvailable("core_finale"), Is.False);
             Assert.That(run.VisualStateFor("core_finale"), Is.EqualTo(RogueliteMapNodeVisualState.Locked));
             Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")),
-                Is.EqualTo("首领门槛：时序 8/12，核心许可 2/2"));
+                Is.EqualTo("首领门槛：已探索 8/12，核心许可 2/2"));
 
             ProcessRoute(run, VerifiedRoute.Skip(8));
             run.SelectNode("core_vault");

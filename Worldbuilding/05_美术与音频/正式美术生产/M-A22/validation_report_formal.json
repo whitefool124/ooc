@@ -1,0 +1,448 @@
+{
+  "schema": "occ-art-batch-validation-report-v1",
+  "count": 20,
+  "pass": 20,
+  "fail": 0,
+  "reports": [
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.aegis_fold",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          5,
+          2,
+          59,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.anchor_brace",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          61
+        ],
+        "hard_alpha": true,
+        "visible_colors": 11,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.binding_frame",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          61
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.breach_wedge",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          3,
+          2,
+          29,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.cover_stamp",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          96,
+          64
+        ],
+        "bounds": [
+          2,
+          6,
+          94,
+          57
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.decoy_lantern",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          60
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.demolition_canister",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          4,
+          62,
+          27
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.field_siphon",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          96,
+          64
+        ],
+        "bounds": [
+          2,
+          4,
+          94,
+          60
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.fortune_seal",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          29
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.hazard_condenser",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          4,
+          2,
+          60,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.mending_lattice",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          96,
+          64
+        ],
+        "bounds": [
+          2,
+          10,
+          94,
+          53
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.null_veil",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          96,
+          64
+        ],
+        "bounds": [
+          4,
+          2,
+          92,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.phase_spindle",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          8,
+          2,
+          24,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.prism_regulator",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.reaction_bell",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          3,
+          2,
+          29,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.relay_compass",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          3,
+          2,
+          28,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.seismic_plumb",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          96
+        ],
+        "bounds": [
+          8,
+          2,
+          24,
+          93
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.shield_balancer",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          60
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.survey_lens",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          28,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 11,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "artifact.footprint.turn_ledger",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          6,
+          62,
+          25
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    }
+  ]
+}

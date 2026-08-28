@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
 {
@@ -11,6 +12,10 @@ namespace OCC.Combat.Presentation
         private bool open;
         private string selectedId;
         private InventoryDragState dragState;
+        private string rogueDragId;
+        private bool rogueDragRotated;
+        private int rogueGrabX;
+        private int rogueGrabY;
         private string inventoryHoverText;
         private Vector2 inventoryHoverPointer;
         private string semanticHoverText;
@@ -24,6 +29,9 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<int, Texture2D> swatches = new Dictionary<int, Texture2D>();
         private GUISkin formalSkin;
         private Texture2D inventoryBackdrop;
+        private readonly Texture2D[] clickFeedbackFrames = new Texture2D[6];
+        private Vector2 clickFeedbackPointer;
+        private float clickFeedbackStarted = -1f;
 
         private static Color Ink => FormalUiTheme.Ink;
         private static Color Panel => FormalUiTheme.Panel;
@@ -51,10 +59,11 @@ namespace OCC.Combat.Presentation
             GUI.depth = -1100; ConfigureFormalSkin(previousSkin);
             if (!open)
             {
-                if (GUI.Button(LauncherRect, "背包 / 搜索 [B]")) open = true;
+                if (ClickButton(LauncherRect, "背包 / 搜索 [B]")) open = true;
+                DrawClickFeedback();
                 GUI.skin = previousSkin; GUI.matrix = previous; return;
             }
-            DrawPanel(); GUI.skin = previousSkin; GUI.matrix = previous;
+            DrawPanel(); DrawClickFeedback(); GUI.skin = previousSkin; GUI.matrix = previous;
         }
 
         private void HandleHotkey()
@@ -68,11 +77,24 @@ namespace OCC.Combat.Presentation
                 current.Use(); return;
             }
             if (!open || dragState != null) return;
+            bool rogue = bootstrap.CurrentState?.Ruleset == CombatRuleset.Roguelite && bootstrap.CurrentState.RogueEquipment != null;
             int dx = current.keyCode == KeyCode.LeftArrow ? -1 : current.keyCode == KeyCode.RightArrow ? 1 : 0;
             int dy = current.keyCode == KeyCode.UpArrow ? -1 : current.keyCode == KeyCode.DownArrow ? 1 : 0;
-            if (dx != 0 || dy != 0) { selectedId = InventoryInteractionPresentation.NextSelection(bootstrap.CurrentState?.ItemInventory, selectedId, dx, dy); current.Use(); return; }
+            if (dx != 0 || dy != 0)
+            {
+                selectedId = rogue ? NextRogueSelection(bootstrap.CurrentState.RogueEquipment, selectedId, dx, dy) : InventoryInteractionPresentation.NextSelection(bootstrap.CurrentState?.ItemInventory, selectedId, dx, dy);
+                current.Use(); return;
+            }
             if (current.keyCode == KeyCode.R && !string.IsNullOrEmpty(selectedId))
             {
+                if (rogue && !string.IsNullOrEmpty(rogueDragId))
+                { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = "旋转预览"; current.Use(); return; }
+                if (rogue)
+                {
+                    bool rotated = bootstrap.RotateRogueBackpackItem(selectedId);
+                    inventoryInteractionMessage = rotated ? "已旋转" : "空间不足 · 保持原朝向";
+                    current.Use(); return;
+                }
                 InventoryResult result = bootstrap.CurrentState.ItemInventory.Rotate(selectedId);
                 inventoryInteractionMessage = result.Success ? "已旋转物品" : InventoryInteractionPresentation.ErrorName(result.Error) + " · 已保持原朝向";
                 if (result.Success) bootstrap.NotifyInventoryChanged(); current.Use(); return;
@@ -80,6 +102,7 @@ namespace OCC.Combat.Presentation
             int slot = NumberSlot(current.keyCode);
             if (slot >= 0)
             {
+                if (rogue) { if (slot < RogueRuntimeConstants.ItemQuickbarSize && !string.IsNullOrEmpty(selectedId)) bootstrap.AssignRogueQuickbar(selectedId, slot); current.Use(); return; }
                 if (!string.IsNullOrEmpty(selectedId)) { bootstrap.EquipInventoryQuickbar(selectedId, slot); inventoryInteractionMessage = "已关联快捷栏 " + (slot + 1); }
                 else { bootstrap.ActivateInventoryQuickbar(slot); open = false; }
                 current.Use(); return;
@@ -94,13 +117,16 @@ namespace OCC.Combat.Presentation
             semanticHoverText = null;
             GUI.DrawTexture(new Rect(0, 0, 1920, 1080), inventoryBackdrop, ScaleMode.StretchToFill, false);
             Fill(new Rect(0, 0, 1920, 1080), FormalUiTheme.WithAlpha(Ink, .82f));
-            Rect panel = new Rect(32, 24, 1856, 1024); Fill(panel, FormalUiTheme.WithAlpha(Ink, .985f)); Outline(panel, FormalUiTheme.WithAlpha(Cyan, .72f));
+            Rect panel = new Rect(32, 24, 1856, 1024); Fill(panel, FormalUiTheme.WithAlpha(Ink, .985f)); Outline(panel, FormalUiTheme.WithAlpha(FormalUiTheme.OnInk, .88f));
             Fill(new Rect(34, 26, 1852, 112), FormalUiTheme.WithAlpha(Panel, .98f));
-            Fill(new Rect(34, 136, 1852, 1), FormalUiTheme.WithAlpha(Cyan, .55f));
-            GUI.Label(new Rect(100, 72, 880, 42), "背包与搜索");
+            Fill(new Rect(36, 136, 1848, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f));
+            bool rogue = state.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null;
+            GUI.Label(new Rect(100, 72, 880, 42), rogue ? "学院整备" : "背包与搜索");
             Fill(new Rect(92, 106, 1460, 34), FormalUiTheme.WithAlpha(Panel, .98f));
-            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), "B/Esc 关闭 · 方向键选择 · R 旋转 · 1–8 关联快捷栏 · F 搜索/拿取 · 鼠标拖拽"); GUI.color = Color.white;
-            if (GUI.Button(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
+            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), rogue ? "B/Esc 关闭   ←↑↓→ 选择   R 旋转   1–4 关联   拖拽整理" : "B/Esc 关闭 · 方向键选择 · R 旋转 · 1–8 关联快捷栏 · F 搜索/拿取 · 鼠标拖拽"); GUI.color = Color.white;
+            if (ClickButton(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
+
+            if (rogue) { DrawRogueInventory(state); DrawSemanticTooltip(); return; }
 
             DrawInventory(state, new Rect(100, 160, 600, 720));
             DrawDetailsAndSearch(state, new Rect(730, 160, 500, 720));
@@ -109,6 +135,149 @@ namespace OCC.Combat.Presentation
             DrawInventoryOverlay(state);
             DrawSemanticTooltip();
         }
+
+        private void DrawRogueInventory(CombatState state)
+        {
+            RogueEquipmentRuntime runtime = state.RogueEquipment;
+            IReadOnlyList<RogueInventoryItemPresentation> items = RogueInventoryPresentation.Build(runtime);
+            if (string.IsNullOrEmpty(selectedId) || runtime.EquipmentItem(selectedId) == null && runtime.TacticalItem(selectedId) == null)
+                selectedId = items.FirstOrDefault()?.InstanceId ?? runtime.Equipped.Values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
+            DrawRogueEquipmentSlots(runtime, new Rect(100, 160, 500, 610));
+            DrawRogueBackpack(runtime, items, new Rect(630, 160, 430, 720));
+            DrawRogueDetails(runtime, new Rect(1090, 160, 720, 500));
+            DrawRogueQuickbar(runtime, new Rect(1090, 690, 720, 190));
+        }
+
+        private void DrawRogueEquipmentSlots(RogueEquipmentRuntime runtime, Rect rect)
+        {
+            Box(rect, "装备 11  ·  战斗中锁定");
+            OCC.Combat.Roguelite.EquipmentSlot[] slots = Enum.GetValues(typeof(OCC.Combat.Roguelite.EquipmentSlot)).Cast<OCC.Combat.Roguelite.EquipmentSlot>().ToArray();
+            for (int index = 0; index < slots.Length; index++)
+            {
+                OCC.Combat.Roguelite.EquipmentSlot slot = slots[index]; string id = runtime.Equipped[slot]; EquipmentDefinition definition = runtime.DefinitionFor(id);
+                Rect slotRect = new Rect(rect.x + 18 + (index % 2) * 232, rect.y + 58 + (index / 2) * 78, 216, 64);
+                DrawIcon(slotRect, "Art/FormalUI32/" + (id == selectedId ? "slot_selected" : "slot"), false);
+                DrawIcon(new Rect(slotRect.x + 8, slotRect.y + 14, 32, 32), definition == null ? EquipmentIconPath(slot) : FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
+                GUI.Label(new Rect(slotRect.x + 48, slotRect.y + 8, 156, 22), EquipmentSlotName(slot));
+                GUI.color = definition == null ? Muted : Text; GUI.Label(new Rect(slotRect.x + 48, slotRect.y + 30, 156, 26), definition?.DisplayName ?? "空"); GUI.color = Color.white;
+                if (ClickButton(slotRect, GUIContent.none, GUIStyle.none) && !string.IsNullOrEmpty(id)) { selectedId = id; inventoryInteractionMessage = "战斗中装备锁定"; }
+            }
+        }
+
+        private void DrawRogueBackpack(RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Rect rect)
+        {
+            Box(rect, "背包 6×10  ·  " + items.Count + " 件");
+            const float cell = 52f; float gx = rect.x + 26, gy = rect.y + 60;
+            for (int y = 0; y < 10; y++) for (int x = 0; x < 6; x++)
+                DrawIcon(new Rect(gx + x * cell, gy + y * cell, cell - 3, cell - 3), "Art/FormalUI32/slot", false);
+            Event current = Event.current; RogueInventoryItemPresentation hovered = null; Rect hoveredRect = default;
+            foreach (RogueInventoryItemPresentation item in items)
+            {
+                Rect itemRect = new Rect(gx + item.X * cell, gy + item.Y * cell, item.Width * cell - 3, item.Height * cell - 3);
+                bool dragging = rogueDragId == item.InstanceId;
+                if (RogueInventoryPresentation.ShouldDrawSourceItem(rogueDragId, item.InstanceId))
+                {
+                    DrawIcon(itemRect, "Art/FormalUI32/" + (item.InstanceId == selectedId ? "slot_selected" : "slot"), false);
+                    DrawInventoryArt(new Rect(itemRect.x + 5, itemRect.y + 5, itemRect.width - 10, itemRect.height - 10), RogueItemIconPath(item), item.Rotated);
+                    if (!item.IsEquipment) GUI.Label(new Rect(itemRect.x + 6, itemRect.yMax - 24, itemRect.width - 12, 22), "×" + item.ChargesCurrent);
+                }
+                if (!dragging && current != null && itemRect.Contains(current.mousePosition))
+                {
+                    hovered = item; hoveredRect = itemRect;
+                    semanticHoverText = item.DisplayName + "  ·  " + (item.IsEquipment ? EquipmentSlotName(item.Slot.Value) : item.ChargesCurrent + "/" + item.ChargesMaximum + " 次");
+                    semanticHoverPointer = current.mousePosition;
+                }
+            }
+            HandleRogueBackpackPointer(runtime, hovered, hoveredRect, gx, gy, cell);
+            DrawRogueDragPreview(runtime, gx, gy, cell);
+            GUI.color = Muted; GUI.Label(new Rect(rect.x + 24, rect.yMax - 48, rect.width - 48, 28), inventoryInteractionMessage); GUI.color = Color.white;
+        }
+
+        private void HandleRogueBackpackPointer(RogueEquipmentRuntime runtime, RogueInventoryItemPresentation hovered, Rect hoveredRect, float gx, float gy, float cell)
+        {
+            Event current = Event.current; if (current == null) return;
+            if (current.type == EventType.MouseDown && current.button == 1 && !string.IsNullOrEmpty(rogueDragId))
+            { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = "旋转预览"; current.Use(); return; }
+            if (current.type == EventType.MouseDown && current.button == 0 && hovered != null && string.IsNullOrEmpty(rogueDragId))
+            {
+                selectedId = hovered.InstanceId; rogueDragId = hovered.InstanceId; rogueDragRotated = hovered.Rotated;
+                rogueGrabX = Mathf.FloorToInt((current.mousePosition.x - hoveredRect.x) / cell); rogueGrabY = Mathf.FloorToInt((current.mousePosition.y - hoveredRect.y) / cell);
+                inventoryInteractionMessage = "拖拽中  ·  右键旋转"; current.Use(); return;
+            }
+            if (string.IsNullOrEmpty(rogueDragId) || current.type != EventType.MouseUp || current.button != 0) return;
+            int x = Mathf.FloorToInt((current.mousePosition.x - gx) / cell) - rogueGrabX;
+            int y = Mathf.FloorToInt((current.mousePosition.y - gy) / cell) - rogueGrabY;
+            bool moved = bootstrap.MoveRogueBackpackItem(rogueDragId, x, y, rogueDragRotated);
+            inventoryInteractionMessage = moved ? "已放置" : "不可放置  ·  保持原位"; rogueDragId = null; current.Use();
+        }
+
+        private void DrawRogueDragPreview(RogueEquipmentRuntime runtime, float gx, float gy, float cell)
+        {
+            if (string.IsNullOrEmpty(rogueDragId) || Event.current == null) return;
+            EquipmentDefinition equipment = runtime.DefinitionFor(rogueDragId); TacticalItemDefinition tactical = runtime.TacticalDefinitionFor(rogueDragId);
+            int baseWidth = equipment?.Width ?? tactical.Width, baseHeight = equipment?.Height ?? tactical.Height;
+            int width = rogueDragRotated ? baseHeight : baseWidth, height = rogueDragRotated ? baseWidth : baseHeight;
+            int x = Mathf.FloorToInt((Event.current.mousePosition.x - gx) / cell) - rogueGrabX;
+            int y = Mathf.FloorToInt((Event.current.mousePosition.y - gy) / cell) - rogueGrabY;
+            bool legal = runtime.CanMoveBackpack(rogueDragId, x, y, rogueDragRotated);
+            Rect ghost = new Rect(gx + x * cell, gy + y * cell, width * cell - 3, height * cell - 3);
+            Fill(ghost, FormalUiTheme.WithAlpha(legal ? Cyan : FormalUiTheme.Danger, .34f)); Outline(ghost, legal ? Cyan : FormalUiTheme.Danger);
+        }
+
+        private void DrawRogueDetails(RogueEquipmentRuntime runtime, Rect rect)
+        {
+            Box(rect, "物品详情"); RogueEquipmentInstance equipment = runtime.EquipmentItem(selectedId); RogueTacticalItemInstance tactical = runtime.TacticalItem(selectedId);
+            if (equipment == null && tactical == null) { GUI.Label(new Rect(rect.x + 24, rect.y + 70, 640, 40), "选择一个物品"); return; }
+            string name, icon, type, metrics, effects;
+            if (equipment != null)
+            {
+                EquipmentDefinition definition = runtime.DefinitionFor(selectedId); name = definition.DisplayName; icon = FormalArtRegistry.EquipmentIconPath(definition.DefinitionId);
+                type = EquipmentSlotName(definition.Slot) + "  ·  " + equipment.Rarity; metrics = definition.Width + "×" + definition.Height + "   ⚖ " + definition.BaseWeight + "   ◆ " + definition.BaseAetherLoad;
+                effects = string.Join("\n", definition.FixedEffectIds.Concat(equipment.MutableAffixIds).Concat(equipment.UpgradeBranchIds).Take(7));
+            }
+            else
+            {
+                TacticalItemDefinition definition = runtime.TacticalDefinitionFor(selectedId); name = definition.DisplayName; icon = FormalArtRegistry.ItemPath(tactical.DefinitionId);
+                type = "战术道具"; metrics = definition.Width + "×" + definition.Height + "   AP " + definition.ActionPointCost + "   " + tactical.ChargesCurrent + "/" + tactical.ChargesMaximum;
+                effects = "可关联至下方 4 格战术栏";
+            }
+            DrawIcon(new Rect(rect.x + 24, rect.y + 62, 72, 72), icon); GUI.Label(new Rect(rect.x + 116, rect.y + 62, 560, 34), name);
+            GUI.color = equipment != null ? Cyan : FormalUiTheme.Safe; GUI.Label(new Rect(rect.x + 116, rect.y + 98, 560, 28), type); GUI.color = Color.white;
+            GUI.Label(new Rect(rect.x + 24, rect.y + 154, 650, 34), metrics);
+            GUI.color = FormalUiTheme.Amber; GUI.Label(new Rect(rect.x + 24, rect.y + 212, 120, 28), "效果"); GUI.color = Color.white;
+            GUI.Label(new Rect(rect.x + 24, rect.y + 246, 650, 126), string.IsNullOrEmpty(effects) ? "—" : effects);
+            GUI.color = Muted; GUI.Label(new Rect(rect.x + 24, rect.yMax - 56, 650, 30), equipment != null ? "战斗中装备锁定" : "点击战术栏或按 1–4 关联"); GUI.color = Color.white;
+        }
+
+        private void DrawRogueQuickbar(RogueEquipmentRuntime runtime, Rect rect)
+        {
+            Box(rect, "战术栏 4"); string[] quickbar = runtime.ItemQuickbarInstanceIds;
+            for (int i = 0; i < RogueRuntimeConstants.ItemQuickbarSize; i++)
+            {
+                int slot = i; string id = quickbar[i]; RogueTacticalItemInstance item = runtime.TacticalItem(id); Rect slotRect = new Rect(rect.x + 20 + i * 170, rect.y + 62, 156, 84);
+                DrawIcon(slotRect, "Art/FormalUI32/slot", false); if (item != null) DrawIcon(new Rect(slotRect.x + 8, slotRect.y + 12, 40, 40), FormalArtRegistry.ItemPath(item.DefinitionId));
+                GUI.Label(new Rect(slotRect.x + 56, slotRect.y + 10, 92, 26), (i + 1) + "  " + (item == null ? "空" : runtime.TacticalDefinitionFor(id).DisplayName));
+                if (item != null) GUI.Label(new Rect(slotRect.x + 56, slotRect.y + 42, 92, 24), item.ChargesCurrent + "/" + item.ChargesMaximum);
+                if (ClickButton(slotRect, GUIContent.none, GUIStyle.none))
+                { if (runtime.TacticalItem(selectedId) != null) bootstrap.AssignRogueQuickbar(selectedId, slot); else if (item != null) selectedId = item.InstanceId; }
+            }
+        }
+
+        private static string NextRogueSelection(RogueEquipmentRuntime runtime, string currentId, int dx, int dy)
+        {
+            RogueInventoryItemPresentation[] items = RogueInventoryPresentation.Build(runtime).ToArray(); if (items.Length == 0) return null;
+            RogueInventoryItemPresentation current = items.FirstOrDefault(value => value.InstanceId == currentId) ?? items[0];
+            return items.Where(value => value.InstanceId != current.InstanceId).OrderBy(value =>
+            {
+                int deltaX = value.X - current.X, deltaY = value.Y - current.Y;
+                bool direction = dx < 0 ? deltaX < 0 : dx > 0 ? deltaX > 0 : dy < 0 ? deltaY > 0 : deltaY < 0;
+                return direction ? Math.Abs(deltaX) + Math.Abs(deltaY) : 1000 + Math.Abs(deltaX) + Math.Abs(deltaY);
+            }).FirstOrDefault()?.InstanceId ?? current.InstanceId;
+        }
+
+        private static string RogueItemIconPath(RogueInventoryItemPresentation item) => item.IsEquipment ? FormalArtRegistry.EquipmentFootprintPath(item.DefinitionId) : FormalArtRegistry.ItemPath(item.DefinitionId);
+        private static string EquipmentIconPath(OCC.Combat.Roguelite.EquipmentSlot slot) => FormalArtRegistry.EquipmentSlotPath(slot.ToString());
+        private static string EquipmentSlotName(OCC.Combat.Roguelite.EquipmentSlot slot) => slot == OCC.Combat.Roguelite.EquipmentSlot.MainHand ? "主手" : slot == OCC.Combat.Roguelite.EquipmentSlot.OffHand ? "副手" : slot == OCC.Combat.Roguelite.EquipmentSlot.Head ? "头部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Chest ? "胸甲" : slot == OCC.Combat.Roguelite.EquipmentSlot.Hands ? "手部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Legs ? "腿部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Backpack ? "背架" : slot == OCC.Combat.Roguelite.EquipmentSlot.AetherCore ? "以太核心" : slot == OCC.Combat.Roguelite.EquipmentSlot.Conduit ? "导器" : slot == OCC.Combat.Roguelite.EquipmentSlot.Accessory1 ? "饰品一" : "饰品二";
 
         private void DrawInventory(CombatState state, Rect rect)
         {
@@ -212,8 +381,8 @@ namespace OCC.Combat.Presentation
             {
                 if (string.IsNullOrEmpty(inventoryHoverText)) return;
                 Rect tooltip = InventoryInteractionPresentation.TooltipRect(inventoryHoverPointer);
-                Fill(tooltip, FormalUiTheme.WithAlpha(Ink, .985f));
-                Outline(tooltip, FormalUiTheme.WithAlpha(Cyan, .84f));
+                Fill(tooltip, FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
+                Outline(tooltip, FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .92f));
                 GUI.Label(new Rect(tooltip.x + 18f, tooltip.y + 14f, tooltip.width - 36f, tooltip.height - 28f), inventoryHoverText);
                 return;
             }
@@ -297,7 +466,7 @@ namespace OCC.Combat.Presentation
                 DrawIcon(resultRect, "Art/FormalUI32/" + (results[i].InstanceId == selectedId ? "slot_selected" : "slot"), false);
                 DrawIcon(new Rect(7, i * 48 + 5, 32, 32), d.IconPath);
                 GUI.Label(new Rect(48, i * 48 + 7, 348, 28), d.DisplayName + " · " + d.Width + "×" + d.Height);
-                if (GUI.Button(resultRect, GUIContent.none, GUIStyle.none)) selectedId = results[i].InstanceId;
+                if (ClickButton(resultRect, GUIContent.none, GUIStyle.none)) selectedId = results[i].InstanceId;
             }
             GUI.EndScrollView();
         }
@@ -349,7 +518,7 @@ namespace OCC.Combat.Presentation
                 Rect slotRect = new Rect(x + i * 166, rect.y + 42, 156, 40); DrawIcon(slotRect, "Art/FormalUI32/slot", false);
                 if (item != null) DrawIcon(new Rect(slotRect.x + 5, slotRect.y + 4, 32, 32), definition.IconPath);
                 GUI.Label(new Rect(slotRect.x + 42, slotRect.y + 7, 108, 28), label);
-                if (GUI.Button(slotRect, GUIContent.none, GUIStyle.none))
+                if (ClickButton(slotRect, GUIContent.none, GUIStyle.none))
                 {
                     if (!string.IsNullOrEmpty(selectedId)) bootstrap.EquipInventoryQuickbar(selectedId, slot); else { bootstrap.ActivateInventoryQuickbar(slot); open = false; }
                 }
@@ -362,8 +531,39 @@ namespace OCC.Combat.Presentation
         }
         private void DrawIcon(Rect rect, string path, bool preserveAspect = true)
         {
+            if (DrawReadingSlot(rect, path)) return;
             Texture2D texture = Icon(path);
             if (texture != null) GUI.DrawTexture(rect, texture, preserveAspect ? ScaleMode.ScaleToFit : ScaleMode.StretchToFill, true);
+        }
+
+        private static bool DrawReadingSlot(Rect rect, string path)
+        {
+            if (string.IsNullOrEmpty(path)) return false;
+            bool selected = path.EndsWith("/slot_selected", StringComparison.Ordinal);
+            bool locked = path.EndsWith("/slot_locked", StringComparison.Ordinal);
+            bool disabled = path.EndsWith("/slot_disabled", StringComparison.Ordinal);
+            bool normal = path.EndsWith("/slot", StringComparison.Ordinal);
+            if (!selected && !locked && !disabled && !normal) return false;
+
+            Color surface = selected ? FormalUiTheme.InventorySlotSelected :
+                locked || disabled ? FormalUiTheme.InventorySlotLocked : FormalUiTheme.InventorySlotSurface;
+            Color border = selected ? FormalUiTheme.Cyan :
+                locked || disabled ? FormalUiTheme.Muted : FormalUiTheme.Rule;
+            Fill(rect, surface);
+            bool repeatedEmptyCell = normal && rect.width <= 60f && rect.height <= 60f;
+            if (repeatedEmptyCell)
+            {
+                const float divider = 3f;
+                Fill(new Rect(rect.x, rect.y, rect.width, divider), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .82f));
+                Fill(new Rect(rect.xMax - divider, rect.y, divider, rect.height), FormalUiTheme.WithAlpha(border, .62f));
+                Fill(new Rect(rect.x, rect.yMax - divider, rect.width, divider), FormalUiTheme.WithAlpha(border, .62f));
+                return true;
+            }
+            Outline(rect, FormalUiTheme.WithAlpha(border, selected ? .96f : .78f));
+            if (selected)
+                Fill(new Rect(rect.x + FormalUiTheme.FrameThickness, rect.y + FormalUiTheme.FrameThickness,
+                    FormalUiTheme.FrameThickness, Mathf.Max(0f, rect.height - FormalUiTheme.FrameThickness * 2)), FormalUiTheme.Cyan);
+            return true;
         }
         private void DrawInventoryArt(Rect rect, string path, bool rotated)
         {
@@ -377,9 +577,44 @@ namespace OCC.Combat.Presentation
         }
         private bool IconButton(Rect rect, string path, string label)
         {
-            bool clicked = GUI.Button(rect, "       " + label);
+            bool clicked = ClickButton(rect, "       " + label);
             DrawIcon(new Rect(rect.x + 8, rect.y + (rect.height - 28) * .5f, 28, 28), path);
             return clicked;
+        }
+
+        private bool ClickButton(Rect rect, string label)
+        {
+            bool clicked = GUI.Button(rect, label);
+            if (clicked) RegisterClickFeedback();
+            return clicked;
+        }
+
+        private bool ClickButton(Rect rect, GUIContent content, GUIStyle style)
+        {
+            bool clicked = GUI.Button(rect, content, style);
+            if (clicked) RegisterClickFeedback();
+            return clicked;
+        }
+
+        private void RegisterClickFeedback()
+        {
+            clickFeedbackPointer = Event.current == null ? Vector2.zero : Event.current.mousePosition;
+            clickFeedbackStarted = Time.unscaledTime;
+        }
+
+        private void DrawClickFeedback()
+        {
+            if (clickFeedbackStarted < 0f) return;
+            OccPeripheralFeedbackEntry feedback = FormalUiEffectsConfig.Feedback("click");
+            int frame = Mathf.FloorToInt((Time.unscaledTime - clickFeedbackStarted) * feedback.framesPerSecond);
+            if (frame < 0 || frame >= feedback.frameCount) { clickFeedbackStarted = -1f; return; }
+            if (clickFeedbackFrames[frame] == null)
+                clickFeedbackFrames[frame] = Resources.Load<Texture2D>(feedback.resourcePath + "/frame_" + frame.ToString("00"));
+            Texture2D texture = clickFeedbackFrames[frame];
+            if (texture == null) throw new KeyNotFoundException("Missing formal inventory click feedback frame: " + frame);
+            Color previous = GUI.color; GUI.color = Color.white;
+            GUI.DrawTexture(new Rect(clickFeedbackPointer.x - 24f, clickFeedbackPointer.y - 24f, 48f, 48f), texture, ScaleMode.ScaleToFit, true);
+            GUI.color = previous;
         }
         private static string CategoryIcon(ItemCategory? value) => "Art/FormalItemIcons32/category_" + (value?.ToString().ToLowerInvariant() ?? "container");
         private static ItemCategory? NextCategory(ItemCategory? value) { if (!value.HasValue) return ItemCategory.Consumable; int next = (int)value.Value + 1; return next > (int)ItemCategory.Container ? (ItemCategory?)null : (ItemCategory)next; }
@@ -409,8 +644,20 @@ namespace OCC.Combat.Presentation
         private static string RarityName(ItemRarity rarity) => rarity == ItemRarity.Common ? "普通" : rarity == ItemRarity.Uncommon ? "少见" : rarity == ItemRarity.Rare ? "稀有" : "珍奇";
         private static string CategoryName(ItemCategory category) => category == ItemCategory.Consumable ? "消耗品" : category == ItemCategory.Weapon ? "武器" : category == ItemCategory.Armor ? "护具" : category == ItemCategory.Scroll ? "卷轴" : category == ItemCategory.Artifact ? "法宝" : "容器";
         private static void Fill(Rect rect, Color color) { Color old = GUI.color; GUI.color = color; GUI.DrawTexture(rect, Texture2D.whiteTexture); GUI.color = old; }
-        private static void Outline(Rect rect, Color color) { Fill(new Rect(rect.x, rect.y, rect.width, 1), color); Fill(new Rect(rect.x, rect.yMax - 1, rect.width, 1), color); Fill(new Rect(rect.x, rect.y, 1, rect.height), color); Fill(new Rect(rect.xMax - 1, rect.y, 1, rect.height), color); }
-        private static void Box(Rect rect, string title) { Fill(rect, FormalUiTheme.WithAlpha(Surface, .98f)); Outline(rect, FormalUiTheme.WithAlpha(Cyan, .34f)); Fill(new Rect(rect.x + 1, rect.y + 42, rect.width - 2, 1), FormalUiTheme.WithAlpha(Cyan, .22f)); GUI.Label(new Rect(rect.x + 16, rect.y + 10, rect.width - 32, 30), title); }
+        private static void Outline(Rect rect, Color color)
+        {
+            float edge = FormalUiTheme.FrameThickness;
+            float corner = FormalUiTheme.FrameCornerSize;
+            Fill(new Rect(rect.x, rect.y, rect.width, edge), color);
+            Fill(new Rect(rect.x, rect.yMax - edge, rect.width, edge), color);
+            Fill(new Rect(rect.x, rect.y, edge, rect.height), color);
+            Fill(new Rect(rect.xMax - edge, rect.y, edge, rect.height), color);
+            Fill(new Rect(rect.x, rect.y, corner, corner), color);
+            Fill(new Rect(rect.xMax - corner, rect.y, corner, corner), color);
+            Fill(new Rect(rect.x, rect.yMax - corner, corner, corner), color);
+            Fill(new Rect(rect.xMax - corner, rect.yMax - corner, corner, corner), color);
+        }
+        private static void Box(Rect rect, string title) { Fill(rect, FormalUiTheme.WithAlpha(Surface, .98f)); Outline(rect, FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f)); Fill(new Rect(rect.x + FormalUiTheme.FrameThickness, rect.y + 42, rect.width - FormalUiTheme.FrameThickness * 2, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .52f)); GUI.Label(new Rect(rect.x + 16, rect.y + 10, rect.width - 32, 30), title); }
 
         private void ConfigureFormalSkin(GUISkin source)
         {
@@ -424,14 +671,20 @@ namespace OCC.Combat.Presentation
             GUI.skin.button.normal.textColor = Text;
             GUI.skin.button.hover.textColor = Text;
             GUI.skin.button.active.textColor = Text;
-            GUI.skin.button.normal.background = Swatch(Panel);
-            GUI.skin.button.hover.background = Swatch(Color.Lerp(Panel, Cyan, .18f));
-            GUI.skin.button.active.background = Swatch(Color.Lerp(Panel, Cyan, .30f));
+            GUI.skin.button.focused.textColor = Text;
+            GUI.skin.button.border = new RectOffset(FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize);
+            GUI.skin.button.normal.background = FramedSwatch(Panel, FormalUiTheme.Rule);
+            GUI.skin.button.hover.background = FramedSwatch(Color.Lerp(Panel, Cyan, .18f), Cyan);
+            GUI.skin.button.active.background = FramedSwatch(Color.Lerp(Panel, Cyan, .30f), FormalUiTheme.Ink);
             GUI.skin.textField.fontSize = FormalUiTheme.ResponsiveFontSize(FormalUiTheme.BodyFontSize);
             GUI.skin.textField.normal.textColor = Text;
             GUI.skin.textField.focused.textColor = Text;
-            GUI.skin.textField.normal.background = Swatch(Surface);
-            GUI.skin.textField.focused.background = Swatch(Color.Lerp(Surface, Cyan, .10f));
+            GUI.skin.textField.border = new RectOffset(FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize);
+            GUI.skin.textField.normal.background = FramedSwatch(Surface, FormalUiTheme.Rule);
+            GUI.skin.textField.focused.background = FramedSwatch(Color.Lerp(Surface, Cyan, .10f), Cyan);
+            GUI.skin.box.normal.textColor = Text;
+            GUI.skin.box.border = new RectOffset(FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize, FormalUiTheme.FrameCornerSize);
+            GUI.skin.box.normal.background = FramedSwatch(FormalUiTheme.SurfaceRaised, FormalUiTheme.Rule);
         }
 
         private void DrawSemanticIcon(Rect rect, string semanticId, string word)
@@ -456,6 +709,19 @@ namespace OCC.Combat.Presentation
             if (swatches.TryGetValue(key, out Texture2D texture)) return texture;
             texture = new Texture2D(1, 1, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave };
             texture.SetPixel(0, 0, color); texture.Apply(false, true); swatches[key] = texture; return texture;
+        }
+
+        private Texture2D FramedSwatch(Color fill, Color border)
+        {
+            int key = (ColorUtility.ToHtmlStringRGBA(fill) + ColorUtility.ToHtmlStringRGBA(border) + ":frame").GetHashCode();
+            if (swatches.TryGetValue(key, out Texture2D texture)) return texture;
+            const int size = 32;
+            texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.HideAndDontSave };
+            Color[] pixels = new Color[size * size];
+            for (int y = 0; y < size; y++)
+            for (int x = 0; x < size; x++)
+                pixels[y * size + x] = x < FormalUiTheme.FrameThickness || x >= size - FormalUiTheme.FrameThickness || y < FormalUiTheme.FrameThickness || y >= size - FormalUiTheme.FrameThickness ? border : fill;
+            texture.SetPixels(pixels); texture.Apply(false, true); swatches[key] = texture; return texture;
         }
 
         private void OnDestroy()

@@ -19,6 +19,11 @@ namespace OCC.Combat.Presentation
         private GameObject root;
         private RectTransform viewportRect;
         private RectTransform boardRect;
+        private RectTransform structureLayerRect;
+        private RectTransform unitLayerRect;
+        private RectTransform overlayLayerRect;
+        private readonly List<RawImage> structures = new List<RawImage>();
+        private string structureLevelId;
         private GameObject tooltipRoot;
         private RawImage tooltipPortrait;
         private Text tooltipName;
@@ -33,6 +38,8 @@ namespace OCC.Combat.Presentation
         private readonly RawImage[] tooltipStatusIcons = new RawImage[6];
         private readonly Text[] tooltipStatusValues = new Text[6];
         private Texture2D moveIntentFrameTexture;
+        private FormalHoverTooltip cellTooltip;
+        private object cellTooltipOwner;
         private int mapWidth;
         private int mapHeight;
 
@@ -63,6 +70,7 @@ namespace OCC.Combat.Presentation
             EnsureCells(state.Map.Width, state.Map.Height);
             UpdateInput();
             RefreshGeometry(host.BattlefieldViewport);
+            RefreshStructures(host.CurrentLevelId, host.BattlefieldViewport);
             HashSet<GridPosition> intentDestinations = CollectIntentDestinations(state.Units.Values
                 .Where(unit => unit.IsAlive && !unit.IsHero)
                 .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
@@ -76,6 +84,8 @@ namespace OCC.Combat.Presentation
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式UGUI战场", UiLayoutContract.BattlefieldSortingOrder);
             root = canvas.gameObject;
+            cellTooltip = root.AddComponent<FormalHoverTooltip>();
+            cellTooltip.Initialize(canvas);
             moveIntentFrameTexture = Resources.Load<Texture2D>("Art/FormalTacticalOverlays32/move_range");
             GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
             viewportRect = viewport.AddComponent<RectTransform>();
@@ -95,6 +105,9 @@ namespace OCC.Combat.Presentation
                 new Vector2(BattlefieldPresentationAdapter.BattlefieldWidth - 42f, -8f), new Vector2(32f, 32f),
                 FormalUiTheme.SurfaceRaised, 18);
             home.onClick.AddListener(host.FocusBattlefieldOnHero);
+            FormalUiKit.ConfigureButtonFeedback(home,
+                FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+                () => UiMotionProfile.FromIntensity(1f), null);
             home.transform.SetAsLastSibling();
 
             tooltipRoot = FormalUiKit.Panel("敌情速览卡", root.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
@@ -141,9 +154,19 @@ namespace OCC.Combat.Presentation
         {
             if (mapWidth == width && mapHeight == height && cells.Count == width * height) return;
             foreach (CellView cell in cells.Values) Destroy(cell.Root);
+            if (unitLayerRect != null) Destroy(unitLayerRect.gameObject);
+            if (overlayLayerRect != null) Destroy(overlayLayerRect.gameObject);
+            if (structureLayerRect != null) Destroy(structureLayerRect.gameObject);
             cells.Clear();
+            structures.Clear();
+            structureLevelId = null;
+            unitLayerRect = null;
+            overlayLayerRect = null;
+            structureLayerRect = null;
             mapWidth = width;
             mapHeight = height;
+            EnsureUnitLayer();
+            EnsureOverlayLayer();
             for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++)
             {
@@ -151,26 +174,78 @@ namespace OCC.Combat.Presentation
                 CellView cell = CreateCell(position);
                 cells.Add(position, cell);
             }
+            foreach (CellView cell in cells.OrderByDescending(pair => pair.Key.Y).ThenBy(pair => pair.Key.X).Select(pair => pair.Value))
+                cell.Unit.transform.SetAsLastSibling();
+            EnsureStructureLayer();
+            structureLayerRect.SetAsLastSibling();
+            unitLayerRect.SetAsLastSibling();
+            overlayLayerRect.SetAsLastSibling();
+        }
+
+        private void EnsureStructureLayer()
+        {
+            if (structureLayerRect != null) return;
+            GameObject layer = FormalUiKit.Create("学院多格结构层", boardRect);
+            structureLayerRect = layer.AddComponent<RectTransform>();
+            Stretch(structureLayerRect);
+        }
+
+        private void RefreshStructures(string levelId, BattlefieldViewport viewport)
+        {
+            EnsureStructureLayer();
+            if (!string.Equals(levelId, structureLevelId, StringComparison.Ordinal))
+            {
+                foreach (RawImage structure in structures)
+                    if (structure != null) Destroy(structure.gameObject);
+                structures.Clear();
+                structureLevelId = levelId;
+                foreach (AcademyStructurePlacement placement in AcademyBattlefieldLayoutCatalog.VisualModules(levelId))
+                {
+                    GameObject root = FormalUiKit.Create("结构_" + placement.AssetId, structureLayerRect);
+                    RawImage image = root.AddComponent<RawImage>();
+                    image.texture = Resources.Load<Texture2D>("Art/FormalAcademyStructures32/" + placement.AssetId);
+                    image.raycastTarget = false;
+                    image.color = Color.white;
+                    structures.Add(image);
+                }
+            }
+
+            AcademyStructurePlacement[] placements = AcademyBattlefieldLayoutCatalog.VisualModules(levelId);
+            float cellSize = viewport.CellSize;
+            for (int index = 0; index < structures.Count && index < placements.Length; index++)
+            {
+                AcademyStructurePlacement placement = placements[index];
+                float top = (mapHeight - 1 - placement.TopY) * cellSize;
+                SetCenteredTopLeft(structures[index].rectTransform, placement.X * cellSize, top,
+                    placement.WidthCells * cellSize, placement.HeightCells * cellSize);
+                structures[index].rectTransform.localEulerAngles = new Vector3(0f, 0f, -90f * placement.QuarterTurns);
+            }
         }
 
         private CellView CreateCell(GridPosition position)
         {
+            EnsureUnitLayer();
+            EnsureOverlayLayer();
             GameObject rootObject = FormalUiKit.Create("格子_" + position.X + "_" + position.Y, boardRect);
             RectTransform rect = rootObject.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
-            RawImage floor = rootObject.AddComponent<RawImage>();
-            floor.raycastTarget = true;
-            Outline boundary = rootObject.AddComponent<Outline>();
-            boundary.effectColor = new Color(.27f, .34f, .37f, .78f);
-            boundary.effectDistance = new Vector2(1f, -1f);
+            RawImage hitSurface = rootObject.AddComponent<RawImage>();
+            hitSurface.color = Color.clear;
+            hitSurface.raycastTarget = true;
             BattlefieldCellPointer pointer = rootObject.AddComponent<BattlefieldCellPointer>();
             pointer.Initialize(position, SubmitCell, ShowTooltip, HideTooltip);
+
+            GameObject overlayObject = FormalUiKit.Create("格子信息_" + position.X + "_" + position.Y, overlayLayerRect);
+            RectTransform overlayRect = overlayObject.AddComponent<RectTransform>();
+            overlayRect.anchorMin = overlayRect.anchorMax = overlayRect.pivot = new Vector2(0f, 1f);
 
             var cell = new CellView
             {
                 Root = rootObject,
                 Rect = rect,
-                Floor = floor,
+                OverlayRect = overlayRect,
+                Floor = Layer("地面", rect),
+                TerrainBoundary = Layer("地台压边", rect),
                 Environment = Layer("环境效果", rect),
                 Move = Layer("移动范围", rect),
                 Attack = Layer("攻击范围", rect),
@@ -178,12 +253,12 @@ namespace OCC.Combat.Presentation
                 IntentDestination = Layer("移动意图目标", rect),
                 Object = Layer("地形物件", rect),
                 Loot = Layer("战利品", rect),
-                Unit = Layer("单位", rect),
-                Selection = Layer("选中覆盖", rect),
+                Unit = Layer("单位", unitLayerRect),
+                Selection = Layer("选中覆盖", overlayRect),
                 ObjectLabel = Label("地形标签", rect),
-                Health = Bar("生命", rect, FormalUiTheme.Health),
-                Shield = Bar("护盾", rect, FormalUiTheme.Shield),
-                IntentRoot = FormalUiKit.Create("敌人意图", rect)
+                Health = Bar("生命", overlayRect, FormalUiTheme.Health),
+                Shield = Bar("护盾", overlayRect, FormalUiTheme.Shield),
+                IntentRoot = FormalUiKit.Create("敌人意图", overlayRect)
             };
             cell.IntentRect = cell.IntentRoot.AddComponent<RectTransform>();
             cell.IntentRect.anchorMin = cell.IntentRect.anchorMax = cell.IntentRect.pivot = new Vector2(0f, 1f);
@@ -201,7 +276,7 @@ namespace OCC.Combat.Presentation
             cell.StatusValues = new Text[6];
             for (int i = 0; i < 6; i++)
             {
-                GameObject status = FormalUiKit.Create("状态_" + i, rect);
+                GameObject status = FormalUiKit.Create("状态_" + i, overlayRect);
                 RectTransform statusRect = status.AddComponent<RectTransform>();
                 statusRect.anchorMin = statusRect.anchorMax = statusRect.pivot = new Vector2(0f, 1f);
                 cell.StatusRoots[i] = status;
@@ -215,6 +290,22 @@ namespace OCC.Combat.Presentation
             return cell;
         }
 
+        private void EnsureUnitLayer()
+        {
+            if (unitLayerRect != null) return;
+            GameObject unitLayer = FormalUiKit.Create("单位独立层", boardRect);
+            unitLayerRect = unitLayer.AddComponent<RectTransform>();
+            Stretch(unitLayerRect);
+        }
+
+        private void EnsureOverlayLayer()
+        {
+            if (overlayLayerRect != null) return;
+            GameObject overlayLayer = FormalUiKit.Create("单位信息顶层", boardRect);
+            overlayLayerRect = overlayLayer.AddComponent<RectTransform>();
+            Stretch(overlayLayerRect);
+        }
+
         private void RefreshGeometry(BattlefieldViewport viewport)
         {
             if (viewport == null) return;
@@ -224,7 +315,10 @@ namespace OCC.Combat.Presentation
             SetTopLeft(boardRect, board.X - view.X, board.Y - view.Y, board.Width, board.Height);
             float cellSize = viewport.CellSize;
             foreach (KeyValuePair<GridPosition, CellView> pair in cells)
+            {
                 SetTopLeft(pair.Value.Rect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+                SetTopLeft(pair.Value.OverlayRect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+            }
         }
 
         private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport,
@@ -233,6 +327,11 @@ namespace OCC.Combat.Presentation
             if (model == null || viewport == null) { cell.Root.SetActive(false); return; }
             cell.Root.SetActive(true);
             Set(cell.Floor, model.FloorTexture, Color.white);
+            cell.Floor.uvRect = model.FloorUv;
+            cell.Floor.rectTransform.localEulerAngles = new Vector3(0f, 0f, model.FloorRotationDegrees);
+            Set(cell.TerrainBoundary, model.TerrainBoundaryTexture, Color.white);
+            cell.TerrainBoundary.rectTransform.localEulerAngles = new Vector3(0f, 0f,
+                model.TerrainBoundaryRotationDegrees);
             Set(cell.Environment, model.EnvironmentTexture, Color.white);
             Set(cell.Move, model.MoveOverlayTexture, new Color(1f, 1f, 1f, model.MoveOverlayAlpha));
             Set(cell.Attack, model.AttackOverlayTexture, new Color(1f, 1f, 1f, model.AttackOverlayAlpha));
@@ -242,8 +341,10 @@ namespace OCC.Combat.Presentation
             Set(cell.Object, model.ObjectTexture, Color.white);
             Set(cell.Loot, model.LootTexture, Color.white);
             float cellSize = viewport.CellSize;
-            SetInset(cell.Object.rectTransform, cellSize * .0625f);
-            SetInset(cell.Loot.rectTransform, cellSize * .09375f);
+            // 32x32 battlefield assets render across the complete logical cell. Their authored
+            // transparent margins determine visual footprint, preserving 2x/3x/4x/5x pixel scales.
+            SetInset(cell.Object.rectTransform, 0f);
+            SetInset(cell.Loot.rectTransform, 0f);
 
             cell.ObjectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.ObjectLabel));
             cell.ObjectLabel.text = model.ObjectLabel;
@@ -255,8 +356,8 @@ namespace OCC.Combat.Presentation
             {
                 BattlefieldRect contract = viewport.CellRect(model.Position);
                 Rect unit = CombatUnitHudLayout.UnitVisibleContentRect(contract, model.UnitTexture.name);
-                float localX = unit.x - contract.X + model.UnitOffset.x;
-                float localY = unit.y - contract.Y + model.UnitOffset.y;
+                float localX = cell.Rect.anchoredPosition.x + unit.x - contract.X + model.UnitOffset.x;
+                float localY = -cell.Rect.anchoredPosition.y + unit.y - contract.Y + model.UnitOffset.y;
                 SetTopLeft(cell.Unit.rectTransform, localX, localY, unit.width, unit.height);
                 cell.Unit.texture = model.UnitTexture;
                 cell.Unit.uvRect = model.UnitUv;
@@ -271,6 +372,7 @@ namespace OCC.Combat.Presentation
             RefreshStatuses(cell, model.Statuses, viewport.CellRect(model.Position));
             RefreshIntent(cell, model.Intent, model.IntentTexture, viewport.CellRect(model.Position));
         }
+
 
         private static void RefreshVital(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell, bool health,
             Color fillColor, Color forecastColor)
@@ -374,14 +476,30 @@ namespace OCC.Combat.Presentation
         {
             if (!cells.TryGetValue(position, out CellView cell)) return;
             BattlefieldCellPresentation model = host.PresentBattlefieldCell(position);
-            if (model?.Unit == null || model.Unit.IsHero) { HideTooltip(); return; }
+            if (model == null) { HideTooltip(); return; }
+            if (model.Unit == null || model.Unit.IsHero)
+            {
+                if (string.IsNullOrWhiteSpace(model.HoverText)) { HideTooltip(); return; }
+                HideTooltip();
+                string[] lines = model.HoverText.Split(new[] { '\n' }, 2);
+                string title = lines[0];
+                string body = lines.Length > 1 ? lines[1] : lines[0];
+                cellTooltipOwner = cell.Root;
+                Vector2 pointer = Mouse.current == null ? Vector2.zero : Mouse.current.position.ReadValue();
+                cellTooltip.Show(cellTooltipOwner, new FormalTooltipContent(title, body, FormalUiTheme.Amber), pointer);
+                return;
+            }
+            if (cellTooltipOwner != null) cellTooltip.Hide(cellTooltipOwner);
+            cellTooltipOwner = null;
             UnitState enemy = model.Unit;
             tooltipPortrait.texture = model.UnitTexture;
             tooltipPortrait.uvRect = model.UnitUv;
             tooltipName.text = enemy.DisplayName;
             tooltipHealth.text = enemy.Health + "/" + enemy.MaxHealth;
-            tooltipShield.text = enemy.Shield + "/" + enemy.MaxShield;
-            tooltipArmor.text = enemy.EffectiveArmor.ToString();
+            bool rogue = host.CurrentState.Ruleset == CombatRuleset.Roguelite;
+            tooltipShield.text = rogue ? enemy.Shield + "（无上限）" : enemy.Shield + "/" + enemy.MaxShield;
+            tooltipArmor.transform.parent.gameObject.SetActive(!rogue);
+            if (!rogue) tooltipArmor.text = enemy.EffectiveArmor.ToString();
             tooltipWeaponIcon.sprite = Resources.Load<Sprite>(WeaponIconPath(enemy));
             tooltipWeapon.text = enemy.MainHand == null ? "无武器" :
                 enemy.MainHand.DisplayName + "  " + enemy.MainHand.Damage + "/R" + enemy.MainHand.Range;
@@ -435,6 +553,8 @@ namespace OCC.Combat.Presentation
         private void HideTooltip()
         {
             if (tooltipRoot != null) tooltipRoot.SetActive(false);
+            if (cellTooltipOwner != null) cellTooltip?.Hide(cellTooltipOwner);
+            cellTooltipOwner = null;
         }
 
         private static RawImage Layer(string name, Transform parent)
@@ -498,7 +618,7 @@ namespace OCC.Combat.Presentation
             Image fill = ChildImage("当前", rect, color);
             Image forecast = ChildImage("预估损失", rect, FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .82f));
             Text value = Label("数值", rect);
-            value.color = FormalUiTheme.Text;
+            value.color = CombatUnitHudLayout.VitalTextColor();
             value.fontStyle = FontStyle.Bold;
             value.alignment = TextAnchor.MiddleCenter;
             value.verticalOverflow = VerticalWrapMode.Overflow;
@@ -539,6 +659,14 @@ namespace OCC.Combat.Presentation
             rect.sizeDelta = new Vector2(Mathf.Max(0f, width), Mathf.Max(0f, height));
         }
 
+        private static void SetCenteredTopLeft(RectTransform rect, float x, float y, float width, float height)
+        {
+            rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = new Vector2(x + width * .5f, -y - height * .5f);
+            rect.sizeDelta = new Vector2(Mathf.Max(0f, width), Mathf.Max(0f, height));
+        }
+
         private static void Stretch(RectTransform rect)
         {
             rect.anchorMin = Vector2.zero;
@@ -551,7 +679,9 @@ namespace OCC.Combat.Presentation
         {
             public GameObject Root;
             public RectTransform Rect;
+            public RectTransform OverlayRect;
             public RawImage Floor;
+            public RawImage TerrainBoundary;
             public RawImage Environment;
             public RawImage Move;
             public RawImage Attack;

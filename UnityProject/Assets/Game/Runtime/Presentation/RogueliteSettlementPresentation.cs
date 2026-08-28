@@ -99,7 +99,7 @@ namespace OCC.Combat.Presentation
             FormalUiEffects.ApplyBackdrop(veil, "settlement");
             FormalUiEffects.AddAmbientScanlines(panel.transform, bootstrap.UiPreferences.AnimationIntensity);
 
-            GameObject card = FormalUiKit.LayoutPanel("结算卡", panel.transform, "settlement.card", FormalUiTheme.Text);
+            GameObject card = FormalUiKit.LayoutPanel("结算卡", panel.transform, "settlement.card", FormalUiTheme.SurfaceRaised);
             RectTransform cardRect = card.GetComponent<RectTransform>();
 
             AddLabel(card.transform, "标题", "目标已清除", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
@@ -143,6 +143,7 @@ namespace OCC.Combat.Presentation
             Image image = card.AddComponent<Image>();
             bool weapon = reward.Kind == RogueliteRewardKind.Weapon;
             bool itemReward = reward.Kind == RogueliteRewardKind.Item;
+            bool equipmentReward = reward.Kind == RogueliteRewardKind.Equipment;
             FireSpellDefinition fireSpell = FireSpellCatalog.All.FirstOrDefault(spell => spell.Id == reward.Id);
             ArtifactDefinition artifact = itemReward ? ArtifactCatalog.All.FirstOrDefault(candidate => candidate.Id == reward.Id) : null;
             UiOperationAvailability availability = RogueliteEconomyPresentation.ForReward(run, reward);
@@ -176,23 +177,23 @@ namespace OCC.Combat.Presentation
             }
 
             AddLabel(card.transform, "序号", "0" + (index + 1), new Vector2(24, -24), new Vector2(80, 24), 18, accent, TextAnchor.MiddleLeft);
-            string iconRuntimeId = itemReward ? reward.Item.Id : weapon ? reward.Id : reward.Id + "_reward";
-            Sprite rewardSprite = itemReward ? Resources.Load<Sprite>(reward.Item.IconPath) : fireSpell == null ? Resources.Load<Sprite>(FormalArtRegistry.ItemPath(iconRuntimeId)) : Resources.Load<Sprite>(fireSpell.IconPath);
+            string iconRuntimeId = itemReward ? reward.Item.Id : reward.Id;
+            Sprite rewardSprite = itemReward ? Resources.Load<Sprite>(reward.Item.IconPath) : equipmentReward ? Resources.Load<Sprite>(FormalArtRegistry.EquipmentIconPath(reward.Equipment.DefinitionId)) : fireSpell == null ? Resources.Load<Sprite>(FormalArtRegistry.ItemPath(weapon ? reward.Id : reward.Id + "_reward")) : Resources.Load<Sprite>(fireSpell.IconPath);
             if (rewardSprite == null) throw new KeyNotFoundException("Missing formal reward icon: " + iconRuntimeId);
             GameObject iconObject = CreateObject("正式奖励图标_" + iconRuntimeId, card.transform);
             RectTransform iconRect = iconObject.AddComponent<RectTransform>(); iconRect.anchorMin = iconRect.anchorMax = new Vector2(0, 1);
             iconRect.pivot = new Vector2(0, 1); iconRect.anchoredPosition = new Vector2(326, -20); iconRect.sizeDelta = new Vector2(56, 56);
             Image rewardIcon = iconObject.AddComponent<Image>(); rewardIcon.sprite = rewardSprite; rewardIcon.preserveAspect = true; rewardIcon.raycastTarget = false;
-            AddLabel(card.transform, "类型", weapon ? "武器模块" : itemReward ? (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "卷轴") : "法术模块", new Vector2(24, -58), new Vector2(320, 28), 19, accent, TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "类型", weapon ? "武器模块" : equipmentReward ? "学院装备" : itemReward ? (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "卷轴") : "个人术式", new Vector2(24, -58), new Vector2(320, 28), 19, accent, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(24, -100), new Vector2(360, 42), 29, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            string stat = itemReward ? reward.Item.Width + "×" + reward.Item.Height + " · " + reward.Item.MaximumUses + " 次 · 重量 " + reward.Item.Weight : weapon
+            string stat = equipmentReward ? reward.Equipment.Slot + " · " + reward.Equipment.Handedness + " · 重量 " + reward.Equipment.BaseWeight + " · 以太负荷 " + reward.Equipment.BaseAetherLoad : itemReward ? reward.Item.Width + "×" + reward.Item.Height + " · " + reward.Item.MaximumUses + " 次 · 重量 " + reward.Item.Weight : weapon
                 ? "伤害 " + reward.Weapon.Damage + "   射程 " + reward.Weapon.Range + "   穿甲 " + reward.Weapon.ArmorPierce
-                : "伤害 " + reward.Spell.Damage + " · 射程 " + reward.Spell.Range;
+                : reward.RogueSpell != null ? reward.RogueSpell.ActionPointCost + " AP · " + reward.RogueSpell.ManaCost + " 个人魔力 · 射程 " + reward.RogueSpell.Range : "伤害 " + reward.Spell.Damage + " · 射程 " + reward.Spell.Range;
             float statX = 24f;
-            if (!weapon)
+            if (!weapon && !equipmentReward)
             {
                 int actionCost = fireSpell?.ActionPointCost ?? artifact?.ActionPointCost ?? 1;
-                int aetherCost = fireSpell?.ManaCost ?? (artifact == null ? reward.Spell.ManaCost : 0);
+                int aetherCost = fireSpell?.ManaCost ?? reward.RogueSpell?.ManaCost ?? (artifact == null ? reward.Spell.ManaCost : 0);
                 FormalUiKit.SemanticChip("action", actionCost.ToString(), card.transform, new Vector2(24, -158), tooltip);
                 statX = 84f;
                 if (aetherCost > 0)
@@ -208,7 +209,7 @@ namespace OCC.Combat.Presentation
                 stat = "每次 " + perUseCost + " · 共 " + artifact.MaximumUses + " 次 · " + artifact.Width + "×" + artifact.Height;
             }
             AddLabel(card.transform, "数值", stat, new Vector2(statX, -158), new Vector2(384 - statX, 30), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            string effect = weapon ? "工坊更换主手武器\n" + RogueliteEconomyPresentation.RewardComparison(run, reward) : itemReward ? "放入 6×10 背包" : "收入术式库；仅可在工坊装备";
+            string effect = weapon ? "工坊更换主手武器\n" + RogueliteEconomyPresentation.RewardComparison(run, reward) : equipmentReward ? "收入 6×10 装备背包；战外装入 11 槽" : itemReward ? "放入 6×10 背包" : "收入术式库；战外配置到 8 槽";
             if (fireSpell != null) effect = FireSpellPlayerSummary(fireSpell);
             if (artifact != null) effect = artifact.EffectSummary + "\n来源：" + artifact.Provenance + " · 目标：" + artifact.TargetSummary;
             AddLabel(card.transform, "效果", effect, new Vector2(24, -195), new Vector2(360, 44), artifact != null ? 13 : 15, FormalUiTheme.Muted, TextAnchor.UpperLeft);
@@ -253,6 +254,36 @@ namespace OCC.Combat.Presentation
             return target + " · " + spell.Range + " 格 · " + ShapeLabel(spell.Shape);
         }
 
+        public static string RogueSpellTargetSummary(OCC.Combat.Roguelite.SpellDefinition spell)
+        {
+            if (spell == null) return "未装备";
+            FireSpellDefinition fire = FireSpellCatalog.All.FirstOrDefault(value => value.Id == spell.DefinitionId);
+            if (fire != null) return FireSpellTargetSummary(fire);
+            switch (spell.DefinitionId)
+            {
+                case "BASE-FIRE-MELEE": return "相邻可见敌人";
+                case "BASE-FIRE-RANGED": return "4 格内可见敌人";
+                case "BASE-AETHER-SHIELD":
+                case "BASE-MANA-RECOVER": return "自身";
+                default: return spell.Range > 0 ? spell.Range + " 格内合法目标" : "自身";
+            }
+        }
+
+        public static string RogueSpellPlayerSummary(OCC.Combat.Roguelite.SpellDefinition spell)
+        {
+            if (spell == null) return "术式槽为空";
+            FireSpellDefinition fire = FireSpellCatalog.All.FirstOrDefault(value => value.Id == spell.DefinitionId);
+            if (fire != null) return FireSpellPlayerSummary(fire);
+            switch (spell.DefinitionId)
+            {
+                case "BASE-FIRE-MELEE": return "造成 8 点近战伤害";
+                case "BASE-FIRE-RANGED": return "造成 6 点火焰伤害";
+                case "BASE-AETHER-SHIELD": return "自身获得 6 点普通盾";
+                case "BASE-MANA-RECOVER": return "恢复 2 点个人魔力，最多恢复至 12";
+                default: return "按术式规则结算";
+            }
+        }
+
         private static string FireTimingPlayerText(FireTriggerWindow timing)
         {
             switch (timing)
@@ -290,6 +321,7 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.ApplyBurning: effect = "施加燃烧 " + rule.Duration + " 回合"; break;
                 case FireRuleKind.ExtendBurning: effect = "延长燃烧 " + rule.Duration + " 回合"; break;
                 case FireRuleKind.ApplyArmorBreak: effect = "施加破甲 " + rule.Duration + " 回合"; break;
+                case FireRuleKind.ApplyBreakStance: effect = "清除目标护盾并施加破势至其下一次自己回合结束"; break;
                 case FireRuleKind.CreateFireground: effect = "生成持续 " + rule.Duration + " 刻度的火场"; break;
                 case FireRuleKind.ExtendFireground: effect = "延长火场 " + rule.Duration + " 刻度"; break;
                 case FireRuleKind.RestoreShield: effect = "恢复 " + rule.Amount + " 点护盾"; break;
@@ -301,9 +333,11 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.SwapUnits: effect = "与目标交换位置"; break;
                 case FireRuleKind.Push: effect = "将目标推开 " + rule.Amount + " 格"; break;
                 case FireRuleKind.ReduceIncomingDamage: effect = "下一次受到的伤害减少 " + rule.Amount; break;
+                case FireRuleKind.GrantShieldBeforeRanged: effect = "首次符合条件的远距伤害前获得 " + rule.Amount + " 点护盾"; break;
                 case FireRuleKind.DamageDurability: effect = "对物件造成 " + rule.Amount + " 点耐久伤害"; break;
                 case FireRuleKind.DestroyLightCover: effect = "摧毁轻掩体"; break;
                 case FireRuleKind.ClearStatus: effect = "清除一个负面状态"; break;
+                case FireRuleKind.ClearOneSelfStatus: effect = "选择并清除自身一种可清洗负面状态"; break;
                 case FireRuleKind.ConsumeBurning: effect = "消耗目标的燃烧"; break;
                 case FireRuleKind.ConsumeFireground: effect = "消耗目标地格的火场"; break;
                 case FireRuleKind.SetBurningDuration: effect = "将燃烧调整为 " + rule.Duration + " 回合"; break;

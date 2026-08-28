@@ -1,0 +1,46 @@
+{
+  "size": [
+    32,
+    32
+  ],
+  "mode": "RGBA",
+  "alpha_values": [
+    255
+  ],
+  "colour_count": 6,
+  "palette": [
+    [
+      105,
+      102,
+      92
+    ],
+    [
+      125,
+      120,
+      108
+    ],
+    [
+      143,
+      137,
+      122
+    ],
+    [
+      148,
+      129,
+      102
+    ],
+    [
+      158,
+      151,
+      134
+    ],
+    [
+      174,
+      166,
+      146
+    ]
+  ],
+  "sha256": "cf21aca5a630f59b0461e381c7e2faa3c5d7f0b822957b274606d19921f39d6c",
+  "normalization_only": true,
+  "script_added_art_structure": false
+}

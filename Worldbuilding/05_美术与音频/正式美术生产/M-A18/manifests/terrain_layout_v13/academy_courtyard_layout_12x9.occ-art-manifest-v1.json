@@ -1,0 +1,49 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_courtyard_layout_12x9",
+  "role": "multi_cell_prop_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; one independent complete academy tactical-map composition raw",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_layout_v13/academy_courtyard_layout_12x9_raw.png",
+    "source_sha256": "c2b9959e4be38bed2fecce10a6c76279df8cfbcee27d58393c227ea75bb2a50b"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_layout_v13/academy_courtyard_layout_12x9.png",
+    "output_sha256": "d427717b6e0358021ff7dcb4f8c36ca6d56a8bb46a2dfddd66cc0c4af816d494",
+    "native_output_path": null,
+    "logical_cells": [12, 9],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 12x9 academy battlefield board behind per-cell hit, range, prop and unit layers",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_layout_v13/academy_courtyard_layout_12x9_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_layout_v13/academy_courtyard_layout_12x9_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_layout_v13/academy_courtyard_layout_12x9_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_layout_v13/academy_courtyard_layout_12x9_checker.png",
+    "application_contact": "UnityProject/Artifacts/Terrain36/terrain_layout_v13_review_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Codex visual and interaction audit",
+    "date": "2026-08-24",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "FAIL",
+    "notes": "Full composition, hierarchy and unit readability pass, and the background does not block UGUI clicks. It remains PROTOTYPE because current movement highlights include architectural walls and planting beds; permanent blocked cells, spawns and routes must be aligned before promotion."
+  },
+  "unity_import": {
+    "stable_guid": null,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

@@ -1,0 +1,712 @@
+{
+  "schema": "occ-art-batch-validation-report-v1",
+  "count": 32,
+  "pass": 32,
+  "fail": 0,
+  "reports": [
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          96
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          92
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          96
+        ],
+        "bounds": [
+          11,
+          2,
+          20,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 11,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh03",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          2,
+          4,
+          62,
+          92
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh04",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          93
+        ],
+        "hard_alpha": true,
+        "visible_colors": 11,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh05",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          93
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_mh06",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          96
+        ],
+        "bounds": [
+          7,
+          2,
+          25,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_oh01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_oh02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          17,
+          2,
+          46,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_oh03",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          7,
+          2,
+          24,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_oh04",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ch01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          93
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ch02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          3,
+          2,
+          60,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ch03",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          3,
+          2,
+          61,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ch04",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          8,
+          2,
+          56,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ch05",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_hd01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_hd02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          5,
+          62,
+          27
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_hn01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          6,
+          2,
+          58,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_hn02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_lg01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          2,
+          62,
+          61
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_lg02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          7,
+          2,
+          57,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_bp01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          4,
+          2,
+          59,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_bp02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          96
+        ],
+        "bounds": [
+          5,
+          2,
+          59,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_cr01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          7,
+          2,
+          56,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_cr02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          4,
+          2,
+          59,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_cr03",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          61
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_dg01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          96
+        ],
+        "bounds": [
+          11,
+          2,
+          20,
+          94
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_dg02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ac01",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          28,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ac02",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          28,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ac03",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          27,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 11,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "equipment.footprint.aca_eq_ac04",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          3,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    }
+  ]
+}

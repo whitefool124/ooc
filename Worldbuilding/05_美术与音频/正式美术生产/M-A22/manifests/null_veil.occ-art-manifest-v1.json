@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "artifact.footprint.null_veil",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single artifact footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/source.png",
+    "source_sha256": "47c84e842dbb9289325b04281c407cc6e262a2358c6b4684e4a32420fb3cd921"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/null_veil.png",
+    "output_sha256": "b35864f3cfabe8d8acad9ae461980dc5c2f713904a8cde93989b3fa9090651f9",
+    "native_output_path": null,
+    "logical_cells": [
+      3,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "3x2 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/1x.png",
+    "four_x": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/4x.png",
+    "grayscale": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/grayscale.png",
+    "checker": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtifactFootprints20/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct real-object silhouette, function-specific color, exact footprint, rotation-safe shadow-neutral presentation, and Unity Resources inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/null_veil.png",
+    "stable_guid": "34a7a8a805776aa391d058fb8a15f6bf",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

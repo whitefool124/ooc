@@ -1,0 +1,44 @@
+[
+  {
+    "stem": "binding_spine",
+    "role": "ui_trim_vertical_32x64",
+    "size": "32x64",
+    "subject": "a narrow dark charcoal cloth dossier binding spine, two coarse stitched seams and one tiny oxidized brass retaining plate",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 32x64\nPrimary request: a narrow dark charcoal cloth dossier binding spine, two coarse stitched seams and one tiny oxidized brass retaining plate\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  },
+  {
+    "stem": "index_tab",
+    "role": "ui_trim_horizontal_64x32",
+    "size": "64x32",
+    "subject": "a blank warm archive-paper index tab with a short cloth root and squared folded end",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 64x32\nPrimary request: a blank warm archive-paper index tab with a short cloth root and squared folded end\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  },
+  {
+    "stem": "measure_ruler",
+    "role": "ui_trim_horizontal_64x32",
+    "size": "64x32",
+    "subject": "a short worn wooden survey ruler with alternating long and short notch cuts, strictly no numbers",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 64x32\nPrimary request: a short worn wooden survey ruler with alternating long and short notch cuts, strictly no numbers\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  },
+  {
+    "stem": "corner_clasp",
+    "role": "ui_trim_square_32",
+    "size": "32x32",
+    "subject": "an L-shaped forged-iron dossier corner protector with one tiny oxidized brass rivet",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 32x32\nPrimary request: an L-shaped forged-iron dossier corner protector with one tiny oxidized brass rivet\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  },
+  {
+    "stem": "folded_corner",
+    "role": "ui_trim_corner_64",
+    "size": "64x64",
+    "subject": "one warm paper page corner folded into a clean triangular flap with a crisp hard-edged underside shadow",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 64x64\nPrimary request: one warm paper page corner folded into a clean triangular flap with a crisp hard-edged underside shadow\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  },
+  {
+    "stem": "status_clip",
+    "role": "ui_trim_square_32",
+    "size": "32x32",
+    "subject": "a compact forged-iron document clip gripping a short blank paper tongue with one restrained sealed-red edge",
+    "prompt": "Use case: stylized-concept\nAsset type: independent modular OCC UI edge decoration source; final logical pixel canvas 32x32\nPrimary request: a compact forged-iron document clip gripping a short blank paper tongue with one restrained sealed-red edge\nScene/backdrop: genuinely transparent background, isolated single object only\nStyle/medium: coarse hand-clustered pixel art, dominant readable silhouette, deliberate square stair-step contour, two or three structural partitions\nLighting/mood: restrained fixed upper-left light, no glow\nColor palette: warm paper, charcoal cloth or forged iron, muted wood brown, tiny oxidized brass; sealed red only where explicitly requested\nComposition/framing: original orientation exactly as described, centered with clean transparent safety space; do not rotate or mirror\nConstraints: one isolated trim component, transparent background, no interface, no text, no letters, no numbers, no symbols, no pseudo-writing, no button, no full frame, no drop shadow beyond the object\nAvoid: blue crystal, cyan energy, neon, hologram, terminal grid, scanlines, steampunk gears, pipes, medieval scroll curls, wax seals, gradients, bloom, soft focus, anti-aliasing, watermark"
+  }
+]

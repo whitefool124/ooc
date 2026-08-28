@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_stairs_2x1",
+  "source_size": [
+    1774,
+    887
+  ],
+  "source_alpha_bounds": [
+    33,
+    96,
+    1774,
+    804
+  ],
+  "cropped_size": [
+    1741,
+    708
+  ],
+  "delivery_size": [
+    64,
+    32
+  ],
+  "fitted_size": [
+    60,
+    24
+  ],
+  "fitted_offset": [
+    2,
+    4
+  ],
+  "visible_colors": 7,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "408f79162d0c73325b72372f05bcdd22264e90829a74b82bc06c3895fc0402b3",
+  "output_sha256": "0f4c0b17b53858502f994eccbacdf436dac96c2996408ccef2c19ff3156b154e",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 0,
+  "anchor": "center",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

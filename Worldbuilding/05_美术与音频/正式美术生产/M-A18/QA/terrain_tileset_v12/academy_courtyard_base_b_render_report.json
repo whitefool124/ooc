@@ -1,0 +1,29 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_courtyard_base_b",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_courtyard_base_b.pxart.json",
+  "source_size": [
+    16,
+    16
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": [
+    [
+      179,
+      170,
+      145,
+      255
+    ]
+  ],
+  "colour_count": 1,
+  "alpha_values": [
+    255
+  ],
+  "source_sha256": "9378864a251fbe508fe9782e2a3a461633fb0805a0c16f1a229faa8dae0ab926",
+  "output_sha256": "2d44c0d633c06f8b81525b5a40406ca8ea56ab6bf56bf4b9ced8a16d0faa1153",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

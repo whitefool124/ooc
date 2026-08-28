@@ -49,6 +49,81 @@
       "transparent_border_min": 2,
       "unity_ppu": 32
     },
+    "ui_backdrop_480x270": {
+      "delivery_size": [480, 270],
+      "logical_cells": null,
+      "palette_max": 24,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "alpha_policy": "fully_opaque_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_square_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_vertical_32x64": {
+      "delivery_size": [32, 64],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_horizontal_64x32": {
+      "delivery_size": [64, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_corner_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_chapter_marker_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "interaction_policy": "non_interactive_decoration_only"
+    },
+    "ui_chapter_divider_128x32": {
+      "delivery_size": [128, 32],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "rotation_policy": "forbidden"
+    },
+    "ui_empty_illustration_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "visibility_policy": "existing_empty_or_locked_state_only"
+    },
     "floor_tile_32": {
       "delivery_size": [32, 32],
       "logical_cells": [1, 1],

@@ -73,6 +73,7 @@ namespace OCC.Combat
         internal void SpendActionPoint(int amount) { if (amount < 0 || amount > ActionPoints) throw new InvalidOperationException("Unit does not have enough action points."); ActionPoints -= amount; }
         internal void TakeDamage(int amount) => Health = Math.Max(0, Health - amount);
         internal int AbsorbShield(int amount) { int absorbed = Math.Min(Shield, amount); Shield -= absorbed; return absorbed; }
+        internal void ClearShield() => Shield = 0;
         internal void Heal(int amount) => Health = Math.Min(MaxHealth, Health + amount);
         internal void RestoreShield(int amount) => Shield = Math.Min(MaxShield, Shield + amount);
         internal void GrantShield(int amount) { if (amount > 0) Shield += amount; }

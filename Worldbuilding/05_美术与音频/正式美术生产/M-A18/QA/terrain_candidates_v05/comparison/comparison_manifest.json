@@ -1,0 +1,14 @@
+{
+  "large_flags": {
+    "variants": 4,
+    "board": "large_flags_mixed_12x9_2x.png"
+  },
+  "cloister_courses": {
+    "variants": 4,
+    "board": "cloister_courses_mixed_12x9_2x.png"
+  },
+  "old_slate": {
+    "variants": 4,
+    "board": "old_slate_mixed_12x9_2x.png"
+  }
+}

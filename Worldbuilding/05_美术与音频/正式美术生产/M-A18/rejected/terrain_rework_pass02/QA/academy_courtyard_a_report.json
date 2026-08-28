@@ -1,0 +1,35 @@
+{
+  "size": [
+    32,
+    32
+  ],
+  "mode": "RGBA",
+  "alpha_values": [
+    255
+  ],
+  "colour_count": 4,
+  "palette": [
+    [
+      127,
+      122,
+      108
+    ],
+    [
+      148,
+      143,
+      127
+    ],
+    [
+      169,
+      163,
+      145
+    ],
+    [
+      190,
+      184,
+      164
+    ]
+  ],
+  "normalization_only": true,
+  "script_added_art_structure": false
+}

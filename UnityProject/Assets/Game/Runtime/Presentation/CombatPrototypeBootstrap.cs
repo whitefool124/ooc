@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
 {
@@ -59,6 +60,7 @@ namespace OCC.Combat.Presentation
         private bool trainingRangeActive;
         private int trainingRangeArtifactUsesRemaining;
         private string armedInventoryItemId;
+        private string armedRogueTacticalItemId;
         private RogueliteUiPreferences uiPreferences = new RogueliteUiPreferences();
         private bool lastSettingsSaveSucceeded = true;
         private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
@@ -77,7 +79,7 @@ namespace OCC.Combat.Presentation
             if (sceneUi != null) sceneUi.gameObject.SetActive(false);
             GameObject editorMap = GameObject.Find("地图可视化");
             if (editorMap != null) editorMap.SetActive(false);
-            developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
+            developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术陪练生、火矢陪练生、侧锋陪练生、承压检验偶、缚环寻迹兽");
             presentation = CombatPresentationComposition.Attach(gameObject, this);
             BuildCombatFromSceneStageTwo();
             formalAssets.ApplySceneSprites(transform);
@@ -144,7 +146,7 @@ namespace OCC.Combat.Presentation
             if (trainingRangeActive)
             {
                 trainingRangeActive = false; rogueliteFlow.Reset();
-                developerPreparation = new MissionPreparation().Configure("relay_test", "破坏任务目标并清理威胁", "盾卫、火术师、突袭者、刻印锤手、缚环猎兽");
+                developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术陪练生、火矢陪练生、侧锋陪练生、承压检验偶、缚环寻迹兽");
                 BuildCombatFromSceneStageTwo(); selection.Reset();
                 RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); return;
             }
@@ -372,27 +374,45 @@ namespace OCC.Combat.Presentation
         {
             if (trainingRangeActive) return slot == 0 ? trainingRangeSession?.CurrentFireSpell : null;
             if (slot == 0 && state?.ItemInventory.Get(armedInventoryItemId) is ItemInstance armed) return ItemAbilityCatalog.For(armed.DefinitionId);
+            if (state?.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+            {
+                OCC.Combat.Roguelite.SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(slot);
+                return rogue != null && FireSpellCatalog.All.Any(value => value.Id == rogue.DefinitionId) ? FireSpellCatalog.Get(rogue.DefinitionId) : null;
+            }
             if (mapRun == null || slot < 0 || slot >= mapRun.EquippedFireSpellIds.Count) return null;
             string id = mapRun.EquippedFireSpellIds[slot];
             return string.IsNullOrEmpty(id) ? null : FireSpellCatalog.Get(id);
         }
+        private static int RogueSkillSlot(string action)
+        {
+            return action != null && action.StartsWith("技能", StringComparison.Ordinal) && int.TryParse(action.Substring(2), out int oneBased) &&
+                oneBased >= 1 && oneBased <= OCC.Combat.Roguelite.RogueRuntimeConstants.SpellSlotCount ? oneBased - 1 : -1;
+        }
         private CombatActionPreview BuildActionPreview(string action)
         {
-            ArtifactDefinition armedArtifact = CurrentArmedInventoryItem != null &&
-                ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
-                ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
+            ArtifactDefinition armedArtifact = CurrentArmedArtifact ?? CurrentTrainingRangeArtifact;
             if (action == "技能1" && armedArtifact != null && state != null)
             {
                 EnsureArtifactBattle(); int validArtifacts = 0;
                 for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
                     if (BuildArtifactTarget(armedArtifact, new GridPosition(x, y), out ArtifactTarget candidate) &&
                         ArtifactEngine.Preview(artifactBattle, "hero", armedArtifact, candidate,
-                            CurrentArmedInventoryItem?.RemainingUses ?? trainingRangeArtifactUsesRemaining).CanCommit) validArtifacts++;
+                            CurrentArmedUses).CanCommit) validArtifacts++;
                 return new CombatActionPreview(action, armedArtifact.TargetSummary, armedArtifact.PublicCost,
                     armedArtifact.EffectSummary + "；风险：" + armedArtifact.RiskSummary, validArtifacts,
                     validArtifacts == 0 ? "当前没有合法目标" : string.Empty);
             }
-            int slot = action == "技能1" ? 0 : action == "技能2" ? 1 : -1;
+            int slot = RogueSkillSlot(action);
+            if (slot >= 0 && state?.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+            {
+                OCC.Combat.Roguelite.SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(slot);
+                if (rogue == null) return new CombatActionPreview(action, "空术式槽", "0 行动", "未装备术式", 0, "术式槽为空");
+                int validTargets = rogue.Targeting == "self" ? 1 : state.Units.Values.Count(unit => unit.IsAlive && unit.IsHero != state.GetUnit("hero").IsHero);
+                return new CombatActionPreview(action, RogueliteSettlementPresentation.RogueSpellTargetSummary(rogue),
+                    rogue.ActionPointCost + " 行动 + " + rogue.ManaCost + " 个人魔力",
+                    RogueliteSettlementPresentation.RogueSpellPlayerSummary(rogue), validTargets,
+                    state.RogueSpells.IsReady(rogue.DefinitionId) ? string.Empty : "术式冷却中");
+            }
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
             if (spell == null || state == null) return availability.Preview(state, action, selection.TargetId);
             if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
@@ -452,7 +472,8 @@ namespace OCC.Combat.Presentation
         }
         public void CancelCombatSelectionOrRequestLeave()
         {
-            CombatCancelResolution resolution = CombatSelectionNavigation.ResolveCancel(selection.Action, selection.TargetId, !string.IsNullOrEmpty(armedInventoryItemId));
+            CombatCancelResolution resolution = CombatSelectionNavigation.ResolveCancel(selection.Action, selection.TargetId,
+                !string.IsNullOrEmpty(armedInventoryItemId) || !string.IsNullOrEmpty(armedRogueTacticalItemId));
             if (resolution == CombatCancelResolution.ClearTarget)
             {
                 selection.ClearTarget();
@@ -464,6 +485,7 @@ namespace OCC.Combat.Presentation
             {
                 selection.Reset();
                 armedInventoryItemId = null;
+                armedRogueTacticalItemId = null;
                 MarkPresentation(UiPresentationArea.Combat);
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Information, "已取消当前行动选择"));
                 return;
@@ -492,9 +514,18 @@ namespace OCC.Combat.Presentation
         public ArtifactDefinition CurrentTrainingRangeArtifact => trainingRangeSession?.CurrentArtifact;
         public int TrainingRangeArtifactUsesRemaining => trainingRangeArtifactUsesRemaining;
         public ItemInstance CurrentArmedInventoryItem => state?.ItemInventory.Get(armedInventoryItemId);
-        public ArtifactDefinition CurrentArmedArtifact => CurrentArmedInventoryItem != null &&
-            ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
-            ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : null;
+        private RogueTacticalItemInstance CurrentArmedRogueTactical => state?.RogueEquipment?.TacticalItem(armedRogueTacticalItemId);
+        private int CurrentArmedUses => CurrentArmedInventoryItem?.RemainingUses ?? CurrentArmedRogueTactical?.ChargesCurrent ?? trainingRangeArtifactUsesRemaining;
+        public ArtifactDefinition CurrentArmedArtifact
+        {
+            get
+            {
+                if (CurrentArmedInventoryItem != null && ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact)
+                    return ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId);
+                return CurrentArmedRogueTactical != null && ArtifactCatalog.All.Any(value => value.Id == CurrentArmedRogueTactical.DefinitionId)
+                    ? ArtifactCatalog.Get(CurrentArmedRogueTactical.DefinitionId) : null;
+            }
+        }
         public bool IsCombatOutcomeVisible => developerFlow != null && (developerFlow.Phase == CombatFlowPhase.Victory || developerFlow.Phase == CombatFlowPhase.Defeat);
         public bool IsInteractionModalOpen => (interactionLayer != null && interactionLayer.IsConfirmationOpen) || (inventoryPanel != null && inventoryPanel.IsOpen);
         public void ToggleDeveloperConsole()
@@ -597,6 +628,11 @@ namespace OCC.Combat.Presentation
 
         private void PublishResourceChanges(RogueliteMapResources before, RogueliteMapResources after)
         {
+            if (after.UsesRogue11)
+            {
+                PublishResourceChange("金币", before.Gold, after.Gold); PublishResourceChange("阶段贡献", before.StageContribution, after.StageContribution);
+                PublishResourceChange("公开时间", before.StageTime, after.StageTime); return;
+            }
             PublishResourceChange("零件", before.Parts, after.Parts);
             PublishResourceChange("以太", before.Aether, after.Aether);
             PublishResourceChange("补给", before.Supplies, after.Supplies);
@@ -639,6 +675,18 @@ namespace OCC.Combat.Presentation
         public void EquipInventoryQuickbar(string instanceId, int slot) { if (state != null) { TryCommand(CombatCommand.EquipInventoryQuickbar("hero", instanceId, slot)); PersistCombatInventory(); } }
         public void ActivateInventoryQuickbar(int slot)
         {
+            if (state?.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null)
+            {
+                if (slot < 0 || slot >= RogueRuntimeConstants.ItemQuickbarSize) return;
+                string instanceId = state.RogueEquipment.ItemQuickbarInstanceIds[slot]; RogueTacticalItemInstance tactical = state.RogueEquipment.TacticalItem(instanceId);
+                TacticalItemDefinition definition = state.RogueEquipment.TacticalDefinitionFor(instanceId);
+                if (tactical == null || definition == null) return;
+                if (tactical.ChargesCurrent <= 0) { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战术道具次数已耗尽")); return; }
+                if (!ArtifactCatalog.All.Any(value => value.Id == tactical.DefinitionId))
+                { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "该战术道具尚无战斗执行适配")); return; }
+                armedInventoryItemId = null; armedRogueTacticalItemId = tactical.InstanceId; selection.SelectAction("技能1"); EnsureArtifactBattle();
+                state.AddLog("已装载" + definition.DisplayName + "；请选择合法目标。"); MarkPresentation(UiPresentationArea.Combat); return;
+            }
             if (state == null || slot < 0 || slot >= state.ItemQuickbar.Length) return; ItemInstance item = state.ItemInventory.Get(state.ItemQuickbar[slot]); if (item == null) return;
             if (ItemCatalog.Get(item.DefinitionId).Category == ItemCategory.Artifact)
             {
@@ -657,6 +705,47 @@ namespace OCC.Combat.Presentation
             armedInventoryItemId = item.InstanceId; selection.SelectAction("技能1"); state.AddLog("已从快捷栏装载" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择目标格。"); MarkPresentation(UiPresentationArea.Combat);
         }
         public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }
+        public bool MoveRogueBackpackItem(string instanceId, int x, int y, bool rotated)
+            => MutateRogueInventory(runtime => runtime.MoveBackpack(instanceId, x, y, rotated), "已移动", "该位置无法放置");
+        public bool RotateRogueBackpackItem(string instanceId)
+            => MutateRogueInventory(runtime => runtime.RotateBackpack(instanceId), "已旋转", "当前位置无法旋转");
+        public bool EquipRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot)
+        {
+            if (developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active)
+            { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战斗中不能更换装备")); return false; }
+            return MutateRogueInventory(runtime => runtime.Equip(instanceId, slot), "已装备", "槽位不匹配、被占用或副手被双手武器锁定");
+        }
+        public bool EquipOrReplaceRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot)
+        {
+            if (developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active)
+            { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战斗中不能更换装备")); return false; }
+            return MutateRogueInventory(runtime => runtime.EquipOrReplace(instanceId, slot), "已装备；原装备已放回背包", "槽位不匹配、背包空间不足或副手被双手武器锁定");
+        }
+        public bool UnequipRogueEquipment(OCC.Combat.Roguelite.EquipmentSlot slot)
+        {
+            if (developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active)
+            { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战斗中不能卸下装备")); return false; }
+            return MutateRogueInventory(runtime => runtime.Unequip(slot), "已放回背包", "背包空间不足或槽位为空");
+        }
+        public bool UnequipRogueEquipmentTo(OCC.Combat.Roguelite.EquipmentSlot slot, int x, int y, bool rotated)
+        {
+            if (developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active)
+            { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战斗中不能卸下装备")); return false; }
+            return MutateRogueInventory(runtime => runtime.UnequipToBackpack(slot, x, y, rotated), "已放入指定背包格", "该位置无法放置或槽位为空");
+        }
+        public bool AssignRogueQuickbar(string instanceId, int slot)
+            => MutateRogueInventory(runtime => runtime.AssignQuickbar(slot, instanceId), "已关联战术栏 " + (slot + 1), "只有背包中的战术道具可以关联");
+        private bool MutateRogueInventory(Func<RogueEquipmentRuntime, bool> operation, string success, string failure)
+        {
+            if (mapRun == null || !mapRun.UsesRogue11) return false;
+            bool combatRuntime = state != null && state.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null;
+            RogueEquipmentRuntime runtime = combatRuntime ? state.RogueEquipment : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState);
+            if (!operation(runtime)) { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, failure)); return false; }
+            if (combatRuntime) PersistCombatInventory();
+            else { runtime.WriteToDto(mapRun.RogueRunState); SaveMapRun(); }
+            MarkPresentation(combatRuntime ? UiPresentationArea.Combat : UiPresentationArea.MapStructure);
+            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, success)); return true;
+        }
         private void PersistCombatInventory() { if (mapRun == null || state == null) return; mapRun.CaptureCombatInventory(state); SaveMapRun(); }
         public void ApplyHudBuild(int build) { if (state != null) ApplyBuild(build); }
         public void EndHeroTurn() { if (state != null) TryCommand(CombatCommand.EndTurn("hero"), true); }
@@ -674,7 +763,8 @@ namespace OCC.Combat.Presentation
                 }
             }
             CombatFlowPhase phaseBeforeUpdate = developerFlow.Phase;
-            if (!trainingRangeActive && developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
+            if (!trainingRangeActive && developerFlow.Phase == CombatFlowPhase.Active && !state.IsVictory && !state.IsDefeat &&
+                !string.IsNullOrEmpty(state.ActiveUnitId) && state.ActiveUnitId != "hero") { RunEnemyTurn(); developerFlow.RefreshOutcome(); }
             else if (state.ActiveUnitId == "hero" && enemyTurn.IsRunning) ResetEnemyTurnSequence();
             developerFlow.RefreshOutcome(); HandleRogueliteOutcome();
             if (developerFlow.Phase != phaseBeforeUpdate) { MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
@@ -786,11 +876,9 @@ namespace OCC.Combat.Presentation
 
         public CombatTargetDamageForecast TargetDamageForecast(UnitState enemy)
         {
-            int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
+            int slot = RogueSkillSlot(selection.Action);
             FireSpellDefinition fireSpell = slot < 0 ? null : FireSpellInSlot(slot);
-            bool artifactArmed = slot == 0 && ((CurrentArmedInventoryItem != null &&
-                ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact ||
-                CurrentTrainingRangeArtifact != null));
+            bool artifactArmed = slot == 0 && (CurrentArmedArtifact != null || CurrentTrainingRangeArtifact != null);
             CombatTargetForecastResult result = targetForecasts.Evaluate(
                 battlefield, state, fireBattle, selection.Action, enemy, fireSpell, artifactArmed);
             fireBattle = result.FireBattle;
@@ -818,15 +906,22 @@ namespace OCC.Combat.Presentation
             selection.EndKeyboardTargeting();
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
-            int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
+            int fireSlot = RogueSkillSlot(selection.Action);
+            if (fireSlot >= 0 && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+            {
+                OCC.Combat.Roguelite.SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(fireSlot);
+                if (rogue == null) { state.AddLog("术式槽为空。"); MarkPresentation(UiPresentationArea.Combat); return; }
+                CombatCommand command = rogue.Targeting == "self" ? CombatCommand.UseSkill("hero", fireSlot, "hero") :
+                    clickedUnit != null ? CombatCommand.UseSkill("hero", fireSlot, clickedUnit.Id) : CombatCommand.UseSkillAt("hero", fireSlot, p, FacingToward(state.GetUnit("hero").Position, p));
+                TryCommand(command); return;
+            }
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
             if (fireSpell != null)
             {
                 TryFireSpellCell(fireSpell, clickedUnit, p);
                 return;
             }
-            ArtifactDefinition artifact = CurrentArmedInventoryItem != null && ItemCatalog.Get(CurrentArmedInventoryItem.DefinitionId).Category == ItemCategory.Artifact
-                ? ArtifactCatalog.Get(CurrentArmedInventoryItem.DefinitionId) : CurrentTrainingRangeArtifact;
+            ArtifactDefinition artifact = CurrentArmedArtifact ?? CurrentTrainingRangeArtifact;
             if (selection.Action == "技能1" && artifact != null) { TryArtifactCell(artifact, clickedUnit, p); return; }
             string invalidReason = battlefield.InvalidReasonForCell(state, selection.Action, p);
             if (!string.IsNullOrEmpty(invalidReason))
@@ -857,7 +952,7 @@ namespace OCC.Combat.Presentation
             EnsureArtifactBattle();
             if (!BuildArtifactTarget(artifact, position, out ArtifactTarget target)) return;
             GridPosition source = state.GetUnit("hero").Position;
-            int uses = CurrentArmedInventoryItem?.RemainingUses ?? trainingRangeArtifactUsesRemaining;
+            int uses = CurrentArmedUses;
             ArtifactPreview preview = ArtifactEngine.Preview(artifactBattle, "hero", artifact, target, uses);
             if (!preview.CanCommit)
             {
@@ -871,6 +966,13 @@ namespace OCC.Combat.Presentation
                 string instanceId = CurrentArmedInventoryItem.InstanceId;
                 execution = ArtifactEngine.ExecuteInventory(artifactBattle, "hero", instanceId, target);
                 if (state.ItemInventory.Get(instanceId) == null) armedInventoryItemId = null;
+                PersistCombatInventory();
+            }
+            else if (CurrentArmedRogueTactical != null)
+            {
+                RogueTacticalItemInstance tactical = CurrentArmedRogueTactical;
+                execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses);
+                tactical.Consume(); if (tactical.ChargesCurrent <= 0) armedRogueTacticalItemId = null;
                 PersistCombatInventory();
             }
             else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
@@ -965,7 +1067,7 @@ namespace OCC.Combat.Presentation
         private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; string rule = selection.Action == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：3 \u683c" : selection.Action == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selection.Action == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selection.Action == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)
         {
-            int slot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
+            int slot = RogueSkillSlot(selection.Action);
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
             if (spell != null)
             {

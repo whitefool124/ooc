@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.artifact.prism_regulator",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/artifact/prism_regulator/source.png",
+    "source_sha256": "85cd4645212ad2f97eb60b91823d70614e9400a55ad3252ea331d7c0f3b2d972"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/prism_regulator.png",
+    "output_sha256": "8f03fdb895ae071630fa28a136362067661008be47a986b22f0af187d69f3f67",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/artifact/prism_regulator/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/artifact/prism_regulator/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/artifact/prism_regulator/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/artifact/prism_regulator/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "棱返调节器，多层镜片与入射角校准轮 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "17ba375979dc2c149aa445d1a9823fac",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

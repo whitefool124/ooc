@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "direct nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\terrain\\academy_courtyard_a\\source_v02.png",
+  "output": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\terrain\\academy_courtyard_a.png",
+  "qa": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\terrain\\academy_courtyard_a_4x.png",
+  "size": [
+    32,
+    32
+  ],
+  "paletteColors": 8,
+  "paletteLimit": 8,
+  "hardAlpha": true,
+  "bounds": [
+    0,
+    0,
+    32,
+    32
+  ],
+  "chromaKey": false
+}

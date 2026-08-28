@@ -1,0 +1,62 @@
+{
+  "size": [
+    384,
+    288
+  ],
+  "logical_cells": [
+    12,
+    9
+  ],
+  "logical_source_size": [
+    192,
+    144
+  ],
+  "hard_alpha": true,
+  "visible_colors": 8,
+  "palette": [
+    [
+      105,
+      78,
+      55
+    ],
+    [
+      121,
+      90,
+      62
+    ],
+    [
+      124,
+      116,
+      101
+    ],
+    [
+      137,
+      103,
+      70
+    ],
+    [
+      148,
+      133,
+      108
+    ],
+    [
+      151,
+      115,
+      79
+    ],
+    [
+      166,
+      130,
+      91
+    ],
+    [
+      181,
+      145,
+      104
+    ]
+  ],
+  "sha256": "ebd88608a7c69be76ec65bd47e3363ca999f2caf85815b44651e3cf030f1018c",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "isolated_pixel_cleanup_passes": 1
+}

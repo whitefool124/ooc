@@ -1,0 +1,430 @@
+{
+  "schema": "occ.rogue.ui.semantic-assets.v0.1",
+  "status": "QA_PASS",
+  "assetCount": 27,
+  "rules": {
+    "mainCell": [
+      32,
+      32
+    ],
+    "mapStateCell": [
+      16,
+      16
+    ],
+    "hardAlpha": true,
+    "maxColorsIncludingClear": 7,
+    "filter": "Point",
+    "wrap": "Clamp",
+    "ppu": {
+      "main": 32,
+      "mapState": 16
+    }
+  },
+  "records": [
+    {
+      "id": "resource.gold",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/gold.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "c341ecc1ec1b77aa0ebc9570f82b1bf6a492836f6d84b7c3170134a7625ef0b8",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.contribution",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/contribution.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "ee4df074613b4f1e21de83a2fe12c533ac52607d505a39231f6f9fe2845d8403",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.stage_time",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/stage_time.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "7631b258fc5d16764d1633092089c3dabee8c41d4971aa44e0fe87d651bbef7b",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.explored",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/explored.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "c24e7dcecb05f0b2956676e2013d99a6330ce038cbf5c1f9ffb007044dde0f34",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.core_permit",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/core_permit.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "5a6840ab91efa91f928b5b68ee86838eb7f68184182eb3e28eb1d9e5a33bb94d",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.risk",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/risk.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "f3e0f991e04af83629d94e7f4883d1791d19c9a433b3c8fd4f48b6dda75333c2",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.weight",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/weight.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "381cefb5f7d28c0db2bb3f7f40674116b9dd6c14a23c9cb5c77cb9d0fa3c6bdb",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.aether_load",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/aether_load.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "ffb570cd51d198deab529f8b64c9441d9662d56eb0f67788497a31f5674e249a",
+      "status": "PASS"
+    },
+    {
+      "id": "resource.charges",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/charges.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "85ec95d8c4fc631a236f5c3ef9477f043c19a482961e99cb66b64e7d19adcc18",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.main_hand",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/main_hand.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "81dacedff3ddc9cfe5643c68b2762ff4d937470bfc5f599fed242484e66624da",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.off_hand",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/off_hand.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "d9db98b69caef425088e18a34f7778d4382b861ed49da9746668f9a22bb56785",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.head",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/head.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "40251444cc368ab5368ef375bbb26b7475b8bef3471c524da1f315e4538ece1f",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.chest",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/chest.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "c42dd25c7d2ef19de3378301e009c99950c54a0b513d27cd7819acd5822f9a53",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.hands",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/hands.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "4ca53581df4f4279584337cdd14f9e199b4d93123c039d29d40648007e4e3dca",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.legs",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/legs.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "23ecba6f72f874b174eb1fc74549242dccee853912abbe2f915adfc1c484fdf6",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.backpack",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/backpack.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "b63fae5407a616b4ab23bcb23122b0a73edf9c0f0e29b16e732d33fe3c170d6d",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.aether_core",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/aether_core.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "50604313de697e440dc25d042f7c5b949b6cc784a0d08720f7834f4a4f9254b5",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.conduit",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/conduit.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "b6ddb275335efa20453530349b25f370123c573b40926ae5b2331e2eabf78a6a",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.accessory_1",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/accessory_1.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "90f8b5694406ecd670c8cdac2743bc705419aef53e2c98b8bfa42a8a1f7aafb8",
+      "status": "PASS"
+    },
+    {
+      "id": "equipment_slot.accessory_2",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons32/accessory_2.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "5797e3f6ee0462353e645a6dc555af3d0a35675fac600c38049e2b94ebd1caeb",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.current",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/current.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "3a0599a0c59449861d0d5a043867c85c75f273d6198bf6a542c0849952ce94f1",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.available",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/available.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "a54f0da29336bfcaa0dcc8c7c242f994ca4484859bd4ef821e4cd5c59f1d4a77",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.cleared",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/cleared.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "1c5d46f2805af8aae384bcdaa621e7424f098f2f5eea4791623febb93500f9f2",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.visited",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/visited.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "8ec306c6056b497f436aa33fbaf2f5ccb3bf3c3e7a43ba798e3d389dd197d4c2",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.locked",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/locked.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "9015a5e3eddb3a8e85c5c1a6a6f2929c89281d41e536eb84d2f23e43a61b091b",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.known",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/known.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "a24aa4d1e3a29075a399e67eb59ed2e92e4e9582836d88f1e14020bd542ca760",
+      "status": "PASS"
+    },
+    {
+      "id": "map_state.unknown",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapStateIcons16/unknown.png",
+      "size": [
+        16,
+        16
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "sha256": "734a1152386b7e20bc5b0d8ecf195fd7d4697613e9e98df21350616c1d04ac9f",
+      "status": "PASS"
+    }
+  ]
+}

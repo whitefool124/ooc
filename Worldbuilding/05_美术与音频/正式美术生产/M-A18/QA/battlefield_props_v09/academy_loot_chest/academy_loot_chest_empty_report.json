@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_loot_chest_empty",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_loot_chest\\empty_source.png",
+  "sourceSha256": "042a4c741c74786e0c9944ce708752d56a1c01f6ee6242424e1919b741c3213d",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      25,
+      24
+    ],
+    "baselineY": 30
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    3,
+    7,
+    28,
+    30
+  ],
+  "hardAlpha": true,
+  "colors": 11,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

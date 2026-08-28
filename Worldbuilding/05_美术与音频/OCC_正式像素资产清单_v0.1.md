@@ -1,6 +1,29 @@
 ﻿# OCC 姝ｅ紡鍍忕礌璧勪骇娓呭崟 v0.1
 
 > 鐩殑锛氭妸姒傚康鍙傝€冦€佸師鍨嬪崰浣嶅拰鍙繘鍏ユ寮忕増鏈殑鍍忕礌璧勪骇鍒嗗紑绠＄悊銆?
+> **登记表，不是规范源（2026-08-23）。** 本文件包含历史编码损坏、旧批次状态与已废弃生产路线，只用于追溯资产记录。尺寸、来源、风格、状态晋级与QA一律以 `OCC_美术规范_v0.1.md` 为唯一依据，并由 `Tools/OCCArt/occ_art_contract_v1.json`／`validate_occ_art_asset.py` 执行。旧条目不得反向覆盖现行合同。
+
+## 2026-08-25 学院九图像素级终审地材（ART-ACADEMY-POLISH-39）
+
+- `FORMAL`：再次返工 `academy_ground_macro_{earth|earth_b|ruin|ruin_b}_3x3`，共 4 张 `96×96 / 3×3` 宏块；夯土采用每格 16px 的三档近似明度安静材质，遗迹保留每格 32px 的规则切石／不规则卵石轮廓并收紧为 4 色。
+- 运行时不再让夯土／遗迹 A、B 在同一地图按 `3×3` 棋盘交错；`rail_patrol`／`relay_raid` 与 `depot_wreck`／`elite_foundry` 分别使用稳定的地图级变体，既保留跨地图复用，也消除同图拼贴感。
+- 4/4 机器合同、稳定 GUID、Importer、1×／4×／灰阶／棋盘格、九图总览及 1:1 战场细节接触 PASS；manifest 位于 `正式美术生产/M-A18/manifests/terrain_ground_macros_v19/`，实机证据位于 `UnityProject/Artifacts/Terrain39/NineMaps/`。
+
+## 2026-08-25 学院九图二维体素结构与低噪底材（ART-ACADEMY-VOXEL-38）
+
+- `FORMAL`：`academy_curb_{edge|corner|opposite|three|enclosed}`，共 5 张 `32×32` 硬 Alpha 四邻接压边；运行时以掩码与 90° 旋转覆盖石路／庭院／夯土／遗迹边界。
+- `FORMAL`：`academy_wall_{straight|end|corner}` 与 `academy_stairs_2x1`，共 4 件模块化结构；允许连接边触及画布边界，非连接方向保留透明区，组合与永久阻挡一致。
+- `FORMAL`：返工 `academy_ground_macro_{earth|earth_b|ruin|ruin_b}_3x3`，共 4 张 `96×96 / 3×3` 连续地面宏块；夯土 4 色、遗迹 5 色，无车辙带、黑洞和玩法格边框。
+- `PROTOTYPE / REJECTED FOR UNITY`：`academy_gate_3x2` 的门柱轮廓与永久阻挡占格不一致，未部署；源图、规范化图和 QA 保留，Unity 正式路径副本已移出，可在重画占格后再评审。
+- 13/13 机器合同、Importer、稳定 GUID 与九图实机接触 PASS；合同新增 `terrain_adjacency_overlay_32` 与 `modular_structure_32` 两项真实角色并通过审计。manifest 位于 `正式美术生产/M-A18/manifests/terrain_voxel_v17/` 与 `manifests/terrain_ground_macros_v18/`。
+
+## 2026-08-25 学院九图连续地面宏块与结构层（ART-ACADEMY-TERRAIN-37）
+
+- `FORMAL`：`academy_ground_macro_{court|road|ruin|earth}{|_b}_3x3`，共 8 张独立 `96×96 / 3×3` 地面宏块；Point、Clamp、PPU32、Uncompressed、无 mipmap，运行时按完整宏块 UV 子区采样，不登记切片资产。
+- `FORMAL`：`academy_cloister_wall_4x1`（128×32）与 `academy_broken_wall_3x1`（96×32），透明硬 Alpha 跨格结构，复用于九图边界结构层且不参与射线。
+- 10/10 机器合同、Importer、稳定 GUID 与双分辨率运行时复核 PASS；九图截图见 `UnityProject/Artifacts/Terrain37/NineMaps/`。
+- 详细 manifest 位于 `Worldbuilding/05_美术与音频/正式美术生产/M-A18/manifests/terrain_ground_macros_v16/` 与 `manifests/terrain_structures_v15/`；登记表仅追踪状态，不覆盖 `OCC_美术规范_v0.1.md`。
+
 ## QA 闂ㄦ
 
 - `32x32` 鍥炬爣/鍦板潡锛氬浐瀹氬昂瀵搞€佺偣杩囨护銆佹暣鏁扮缉鏀俱€佺‖杈圭晫閫忔槑銆佸彲璇昏疆寤撱€?- `64x64` 鍗曚綅锛氳剼搴曞熀绾跨害 `Y=58`銆佷腑蹇冪嚎绾?`X=32`銆佽疆寤撳彲鍖哄垎鍏电锛屼笉浣跨敤 AI 鎷兼澘纭垏銆?- 鍔ㄧ敾锛氱嫭绔嬪抚浼樺厛锛涘繀椤绘湁鍥哄畾 cell銆佸熀绾?涓績绾裤€侀€忔槑杈圭晫銆佽皟鑹叉澘鍜?QA 鎶ュ憡銆?- 鏈€氳繃 QA 鐨勮祫婧愬彧鑳芥爣璁颁负 `PROTOTYPE` 鎴?`CONCEPT`锛屼笉寰椾綔涓烘寮忚祫浜ч獙鏀躲€?
@@ -181,3 +204,138 @@ Source and QA outputs are under `像素资产原料/V2-16/`. This is a static ti
 - 旧 `aether_sapper`、`barrier_engineer`、`relay_hound` 母图、规范化输出与报告保留在 `Tools/Art/EnemyPack01/` 作为修订证据；旧 Unity 导入副本已移出正式资源目录并归档到 `retired_unity_drafts/`，不再可由 `FormalArtRegistry` 访问。
 - 最终母图追溯、规范化输出、GIF 与报告位于 `Tools/Art/EnemyPack01/raw/` 和 `normalized/`；1×/4×、灰阶、轮廓、中心/基线、调色板与汇总报告位于 `final_qa/`。
 - 十张扩展包单位图均经最终像素 QA；新增三张 Unity Importer 经 Funplay 实测为 Sprite / Point / Clamp / PPU32 / 无 mipmap，既有七张由全量门禁复核。运行时以 10 个稳定 ID/ArtId 注册且本包内不复用轮廓。
+
+## M-A11 肉鸽 UI 正式语义资产（2026-08-17）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 资源与指标 | 9 | 32×32、硬 Alpha、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+| 11 装备位 | 11 | 32×32、硬 Alpha、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+| 地图节点状态 | 7 | 独立 16×16、硬 Alpha、Point、Clamp、PPU16 | FORMAL / QA_PASS |
+
+- 资源组覆盖金币、阶段贡献、公开时序、已探索、核心许可、风险、重量、以太负荷与剩余次数。
+- 装备位组覆盖主手、副手、头部、胸甲、手部、腿部、背架、以太核心、导器与两个饰品位；只表达槽位语义，不冒充逐件装备内容图标。
+- 地图状态组替换旧“现／可／清／锁／？”字符标记；运行时通过 `FormalArtRegistry` 严格加载，不存在通用占位回退。
+- 简报、4× QA 图和 JSON 报告位于 `正式美术生产/M-A11/`，`27/27 PASS`；Unity 导入与全量 EditMode 门禁通过。
+
+## M-A12 学院装备双分辨率正式资产（2026-08-17）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 32 件装备内容图标 | 32 | 独立 32×32、硬 Alpha、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+| 32 件装备背包占格图 | 32 | 严格 `Width×32 × Height×32`、硬 Alpha、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 内容图标覆盖学院目录 `ACA-EQ-MH01` 至 `ACA-EQ-AC04` 全部 32 个稳定 ID，主轮廓分别表达武器、防具、背架、核心、导器与饰品的具体结构。
+- 占格图在每件装备自己的 `Width×16 × Height×16` 逻辑画布上绘制，不由 32×32 图标拉伸；战外整备与战斗背包共用同一正式路径。
+- 空装备槽继续使用 M-A11 槽位语义图；已有装备、选中详情与结算奖励使用本批逐件内容图标，从视觉合同上区分“槽位”和“物品”。
+- 简报、4× QA 图和 JSON 报告位于 `正式美术生产/M-A12/`，`32 件 / 64 资产 / 64 PASS`；Unity 逐件尺寸与导入门禁通过。
+
+## M-A20 学院装备专属内容图标重制（2026-08-26）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 学院装备内容图标 | 32 | 独立原生 32×32、硬 Alpha、5–10 色、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- M-A20 只替换 M-A12 的 32 件内容图标 PNG，M-A12 的严格背包占格图保持不变；装备 ID、槽位、占格、数值和运行时注册不变。
+- 逐件轮廓改为真实剑／枪／锤／弓弩／导杖、盾具、穿戴服装、背架、核心、导具与饰品；不再使用程序化矩形符号或同槽模板换色。
+- 水晶只保留在真实储能／聚焦语义：三枚核心分别使用烟紫、橙红余烬与琥珀金介质；其余装备以锻铁、旧铜、木、皮、粗布、陶瓷、玻璃和刻线为主，不默认蓝晶或冷青能量。
+- 32 份 manifest、验证、Importer／GUID 报告和生产目录位于 `正式美术生产/M-A20/`；Unity 双分辨率接触与前后对照位于 `UnityProject/Artifacts/AcademyEquipment32/contacts/`。机器验证 `32/32 PASS`、合同审计 PASS、运行时加载与全量 EditMode 门禁通过。
+
+## M-A21 学院装备多格占格素材重制（2026-08-26）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 学院装备背包占格图 | 32 | `32×32` 至 `64×96`、严格 `(W×32)×(H×32)`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 逐件独立重制既有 `1×1／1×2／1×3／2×1／2×2／2×3` 占格素材；没有拉伸 M-A20 内容图标，也没有改变 `RogueContentCatalog` 的宽×高。
+- 长柄武器沿 1×3 纵轴展开，2×3 战锤／弓弩／服装／背架使用完整大画布，2×1 成对穿戴件横向组织，2×2 盾／靴／核心使用宽厚主体。
+- 资产采用无固定投影的旋转安全构图；材质和功能色延续 M-A20，三类核心分别为烟紫、余烬橙红和琥珀金，不使用统一蓝晶模板。
+- 32 份 manifest、验证及 Importer／GUID 报告位于 `正式美术生产/M-A21/`；两张正式 6×10 背包的双分辨率接触与前后对照位于 `UnityProject/Artifacts/AcademyEquipmentFootprints32/contacts/`。机器验证 `32/32 PASS`，合同、运行时和全量 EditMode 门禁通过。
+
+## M-A22 法宝背包占格素材重制（2026-08-26）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 法宝背包占格图 | 20 | `32×32` 至 `96×64`、严格 `(W×32)×(H×32)`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 逐件独立重制 `F-T01` 与 `G-T01` 至 `G-T19` 的既有占格素材，不放大 M-A19 内容图标，不改变 `ArtifactCatalog` 的稳定 ID、宽×高、旋转、重量、次数、效果或内容池。
+- 器物轮廓覆盖陶铜炎脉筒、折盾匣、线轴、缚位框、测镜、手压泵、编架、压模、楔、罗盘、铃、冷凝器、行程簿、锚架、棱镜调节器、诱导灯、均衡阀、铅锤、静默幕与封签；不再使用旧几何符号占格。
+- 功能色拆分为陶红／橙、乳白／灰绿／旧金、紫罗兰、草绿／象牙、烟紫／黑金与淡水绿；水晶只用于真实光学结构，全部无固定投影并支持既有背包旋转。
+- 20 份 manifest、验证及 Importer／GUID 报告位于 `正式美术生产/M-A22/`；Unity 双分辨率 6×10 背包接触与前后对照位于 `UnityProject/Artifacts/ArtifactFootprints20/contacts/`。机器验证 `20/20 PASS`、合同测试 `6/6`、Resources／Importer／GUID `20/20`、全量 EditMode `649/649`。
+
+## M-A23 通用物品背包占格素材重制（2026-08-26）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 通用物品背包占格图 | 4 | `64×32／32×64／64×32／64×64`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 独立重制医疗包、护盾单元、火线卷轴和任务以太核心；不拉伸内容图标，不改变稳定 ID、占格、旋转、次数、效果、重量或任务属性。
+- 医疗包改为象牙陶瓷医务箱与灰绿布扣，护盾单元改为乳白介质／灰绿绝缘／旧金阀帽，火线卷轴使用耐热皮纸与陶红／橙线路，以太核心使用深陶六瓣护壳和琥珀金内部储能窗；不再复用统一蓝晶或冷青电池模板。
+- 4 份 manifest、验证与 Importer／GUID 报告位于 `正式美术生产/M-A23/`；Unity 6×10 背包双分辨率接触及前后对照位于 `UnityProject/Artifacts/ItemFootprints4/contacts/`。机器验证 `4/4 PASS`、合同测试 `6/6`、Resources／Importer／GUID `4/4`、全量 EditMode `649/649`。
+
+## M-A24 战斗核心语义图标重制（2026-08-27）
+
+| 资产组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 玩家指令 | 6 | `16×16`、Point、Clamp、PPU16 | FORMAL / QA_PASS |
+| 敌方意图 | 5 | `16×16`、Point、Clamp、PPU16 | FORMAL / QA_PASS |
+| 持续状态 | 6 | `32×32`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+| 即时反馈 | 14 | `32×32`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 指令、意图、状态与反馈建立“按钮动作→敌人计划→持续状态→结算瞬间”的四层视觉语法；旧细剑、闪电框、眼睛、同盾换色和通用蓝晶语言退出核心战斗显示。
+- 色彩按功能分配：攻击／破坏用锈红，火焰用陶红／橙，防护用乳白／旧金，治疗用灰绿，法力用紫罗兰，束缚／减速用棕／赭黄，冷青仅保留给主动位移。
+- 31 份 manifest 与生产简报位于 `正式美术生产/M-A24/`；Unity 双分辨率实际战斗接触、离线清单与前后对照位于 `UnityProject/Artifacts/CombatSemantics31/contacts/`。机器验证 `31/31 PASS`、合同测试 `6/6`、Resources／Importer／GUID `31/31`、旧 GUID 稳定 `25/25`、全量 EditMode `650/650`。
+
+## M-A25 战斗语义弱项定点打磨（2026-08-27）
+
+| 返修组 | 数量 | 尺寸／导入 | 状态 |
+| --- | ---: | --- | --- |
+| 敌方意图 | 3 | `16×16`、Point、Clamp、PPU16 | FORMAL / QA_PASS |
+| 持续状态 | 2 | `32×32`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+| 即时反馈 | 5 | `32×32`、Point、Clamp、PPU32 | FORMAL / QA_PASS |
+
+- 返修对象仅限 M-A24 的 10 个 1× 弱项；将同形三叉意图、装饰花结、地面杂物、治疗罐、翅膀盾和黄色彗星替换为重斩楔、校准环、短锤断角、压靴重块、测绘锁定、夹紧、止动、缝合、护片合拢和扫除动作。
+- 10 份 manifest 与简报位于 `正式美术生产/M-A25/`；旧新对照和 Unity 双分辨率接触位于 `UnityProject/Artifacts/CombatSemanticPolish10/contacts/`。机器验证 `10/10 PASS`、合同测试 `6/6`、Resources／Importer／稳定 GUID `10/10`、全量 EditMode `650/650`。
+
+## M-A13 学院背景设定图探索（2026-08-17）
+
+| 概念图 | 视觉职责 | 状态 |
+| --- | --- | --- |
+| 学院中庭总览 | 开局／地图背景；开放中心、四向连接与受控中继器 | CONCEPT REFERENCE |
+| 校准工坊 | 整备背景；武器、装备、核心与导器同源校准 | CONCEPT REFERENCE |
+| 封存高塔外环 | 收束／首领背景；权限门、维护链与异常升级 | CONCEPT REFERENCE |
+
+- 三图位于 `正式美术生产/M-A13/`，共享煤灰／铁黑主体、受控冷青以太、安全黄维护和锈红危险语义。
+- 本批是宽画幅像素背景的构图、材质和光值探索，不进入 `FormalArtRegistry`，不得直接切作地图地块、UI、设备或角色正式资产。
+- 后续若选定具体画面进入游戏，必须另做目标分辨率、遮挡安全区、整数缩放、分层／静态方案和 Unity 导入 QA。
+
+## M-A17 学院 3D 沙盘地图（2026-08-18）
+
+| 运行时层 | 数量／规格 | 状态 |
+| --- | --- | --- |
+| 可编辑建筑地标 | 13 个稳定 ID；坐标、尺寸、高度、色彩独立 | RUNTIME FOUNDATION |
+| 道路与地理地标 | 6 条主路、岸线、中央石庭、封存塔、以太渠 | RUNTIME FOUNDATION |
+| 像素化输出 | 768×432 RenderTexture、Point、无 AA／Mip | QA_PASS |
+| 节点状态牌 | 7 张独立 32×32、硬 Alpha、Point／Clamp、PPU32 | FORMAL / QA_PASS |
+
+- M-A17 不使用静态美术底图；3D 模型经正交相机输出到 UGUI，节点和路线使用同一投影合同。
+- M-A16 的平面试产图是 `PRODUCT VISUAL REJECTED` 证据，不进入 `FormalArtRegistry`。
+- 运行截图和合同位于 `正式美术生产/M-A17/`；最终全量 EditMode 545/545、PlayMode 1/1、Console clean、场景未脏。
+
+## M-A18 学院阶段战斗美术生产包（2026-08-20）
+
+| 资产组 | 规划规模 | 当前状态 |
+| --- | ---: | --- |
+| 学院战斗地块与物件 | 48 张 32×32：27 张地面／连接件、18 张掩体／任务物三态、3 张战利品箱状态 | `FORMAL / QA_PASS`；庭院四图恢复已确认的 clean32 v07；21 张透明场地物以应用环境为 Gate 0 逐张独立生产为 v09，实际运行映射项为 `RUNTIME_COMPLETE`，无直接地图状态入口的草边与封印台保留正式导入 |
+| 学院敌人静帧 | 12 张独立 64×64：10 个学院敌人／役兽／构造体及 2 名首领 | `RUNTIME_COMPLETE / QA_PASS`；v05 全员以质朴西幻魔法侧身份重制，标准人形约 46px、精英／首领约 52px、四足按 52–62px 宽例外 |
+| 学院敌人标志动作 | 12 组 × 2 张 64×64 双状态端点 | `RUNTIME_COMPLETE / QA_PASS`；每组只保留 `frame_00` 预备态与 `frame_05` 峰值态，运行时硬切并使用 0–2px 整数抖动 |
+| 首发火系 VFX | 14 组 × 6 张 32×32 帧，共 84 帧 | `RUNTIME_COMPLETE`；十四模块覆盖 60 项术式并具有同格组合优先级 |
+
+- 正式生产总包、逐族 CSV 清单、P0 六帧分镜与审核门槛位于 `正式美术生产/M-A18/`。
+- 本包把旧 `FormalRelayV01` 视为尺寸和玩法语义参考，不延续铁路、黄黑警示漆、现代工业钢板与现代中继设备外形；新地块目标族为 `FormalAcademyCombat32`。
+- P0 先完成并验证庭院、两名首领、三种代表动作与 `fire_cast`；产品随后明确授权放宽锚点／规范化约束并要求完成全包。早期失败稿继续保持 `REWORK`，不与最终正式资产混淆。
+- 2026-08-22 产品把 OCC 全项目人物动画改为双状态端点；旧十二组六帧脚本部件动画已降为 `REWORK` 审计证据并移出 Unity 正式资源区。v05 的 12 张身份静帧与 24 张端点均有独立原料、规范化报告、逐项接触表和全员比例接触表；运行时只严格加载两个端点。完整证据见 `正式美术生产/M-A18/OCC_M-A18_双状态端点首批生产简报_v0.1.md` 与 `Worldbuilding/03_开发管理/OCC_M-A18_质朴双状态端点正式生产验证_2026-08-22.md`。
+- 2026-08-23 产品实机否决 v08：其中 21 张场地物／掩体三态属于脚本几何部件稿，不能因机械规格通过而登记为正式美术；该批已归档为 `PRODUCT_REJECTED / PROTOTYPE`。21 张场地物改为直接图像渠道的逐图独立来源并以实际战斗格占用先行定尺寸：1920×1080 默认 128px 格按 4×显示，960×540 按 2×显示。v09 全部 21/21 通过 1×／4×／灰阶／透明棋盘格、三态接触表、12×9 混合场景、Importer 与双分辨率 Play Mode 复核；详见 `正式美术生产/M-A18/OCC_M-A18_学院战场物件独立像素重制_v0.1.md`。
+- 2026-08-23 庭院 materialscale v10：clean32 v07 的“一格一板”与下／右边缘归属在实机中再次否决。正式 `academy_courtyard_a-d` 保持原路径、GUID、32×32 与 PPU32，改为每格 2×4 个 16×8px 小切石模块、1px 石缝；A–D 任意有向拼接横／纵边缘均 0 mismatch，4 个独立哈希、平均明度差 0.15、孤立像素 0。同步把 `move_range`／`attack_range`／`selected` 改为 1px 内缩方角语义框，旧粗边缺口稿归档为应用否决。直接图像候选因斜向噪点未进入 Unity，正式图来自逐像素明确源稿；详见 `正式美术生产/M-A18/OCC_M-A18_学院庭院材质尺度无缝返修_v0.1.md`。
+- 2026-08-24 学院连续底材 v11：`PRODUCT_REJECTED / PROTOTYPE`。本批四张 384×288 连续材质场虽然消除逐格接缝且通过机械门禁，但产品实机复核确认其斑驳、噪声化、缺少正交像素战棋 tileset 的地形语义与人工构图，原 `FORMAL` 结论撤销。四张底材只保留拒收审计；透明线路的分层原则进入新版邻接套件重新审核，不能沿用本批审美放行。
+- 2026-08-25 学院模块化地面 v14：19 张 `FORMAL` 独立模块进入 `FormalAcademyCombat32`，包括庭院／道路／遗迹／夯土四族 A–D 和道路直边／转角／端头；逐项 manifest、1×／4×／灰阶／棋盘格、九图接触、稳定 GUID、Importer 与九图双分辨率运行证据齐全。`academy_north_dais_6x2` 同步以 `FORMAL` 进入 `FormalAcademyStructures32`，复用于档案庭与校门门厅；九图不使用整张背景图。详见 `正式美术生产/M-A18/OCC_M-A18_学院九图模块化战场完成_v0.1.md`。

@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_light_stone_bench_rubble",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_light_stone_bench\\rubble_source.png",
+  "sourceSha256": "a4cb2c02be3ac09cea105a2b7ef357fbe23423f04b6c84f64399fd4604ee147e",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      28,
+      12
+    ],
+    "baselineY": 28
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    2,
+    18,
+    30,
+    28
+  ],
+  "hardAlpha": true,
+  "colors": 10,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

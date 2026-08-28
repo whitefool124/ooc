@@ -17,42 +17,53 @@ namespace OCC.Combat.Presentation
 
     public static class FormalUiTheme
     {
+        public const string ThemeId = "academy-archive-ledger";
+        public const bool UsesAmbientScanlines = false;
         private static bool highContrast;
         private static bool largeText;
         public static bool HighContrastEnabled => highContrast;
         public static bool LargeTextEnabled => largeText;
-        public static Color Ink => highContrast ? new Color(.004f, .006f, .008f, 1f) : OccPixelUiConfig.Palette("ink");
-        public static Color Panel => highContrast ? new Color(.018f, .026f, .032f, 1f) : OccPixelUiConfig.Palette("panel");
+        public static Color Ink => highContrast ? new Color(.035f, .031f, .025f, 1f) : OccPixelUiConfig.Palette("ink");
+        public static Color Panel => highContrast ? new Color(1f, .992f, .96f, 1f) : OccPixelUiConfig.Palette("panel");
         public static Color Cyan => Accent(OccPixelUiConfig.Palette("cyan"));
         public static Color Amber => Accent(OccPixelUiConfig.Palette("amber"));
         public static Color Safe => Accent(OccPixelUiConfig.Palette("safe"));
         public static Color Danger => Accent(OccPixelUiConfig.Palette("danger"));
-        public static Color Text => highContrast ? Color.white : OccPixelUiConfig.Palette("text");
-        public static Color Muted => highContrast ? new Color(.72f, .79f, .83f, 1f) : OccPixelUiConfig.Palette("muted");
-        public static Color Disabled => highContrast ? new Color(.025f, .029f, .032f, 1f) : new Color(.04f, .046f, .05f, 1f);
-        public static Color Surface => highContrast ? new Color(.012f, .018f, .022f, 1f) : new Color(.028f, .040f, .050f, 1f);
-        public static Color SurfaceRaised => highContrast ? new Color(.024f, .034f, .041f, 1f) : new Color(.035f, .048f, .058f, 1f);
-        public static readonly Color Interactive = new Color(.075f, .09f, .10f, 1f);
-        public static readonly Color InteractivePressed = new Color(.05f, .065f, .072f, 1f);
-        public static readonly Color Overlay = new Color(.006f, .010f, .014f, .76f);
-        public static readonly Color Focus = new Color(.82f, .95f, 1f, 1f);
-        public static readonly Color Health = new Color(.32f, .82f, .56f, 1f);
-        public static readonly Color Shield = new Color(.44f, .72f, .63f, 1f);
-        public static readonly Color Magic = new Color(.70f, .48f, .86f, 1f);
+        public static Color Text => highContrast ? new Color(.015f, .013f, .01f, 1f) : OccPixelUiConfig.Palette("text");
+        public static Color Muted => highContrast ? new Color(.24f, .22f, .19f, 1f) : OccPixelUiConfig.Palette("muted");
+        public static Color Disabled => highContrast ? new Color(.72f, .71f, .68f, 1f) : new Color(.70f, .68f, .64f, 1f);
+        public static Color Surface => highContrast ? new Color(1f, .995f, .975f, 1f) : OccPixelUiConfig.Palette("surface");
+        public static Color SurfaceRaised => highContrast ? Color.white : OccPixelUiConfig.Palette("raised");
+        public static Color Interactive => highContrast ? new Color(.90f, .87f, .80f, 1f) : new Color(.835f, .788f, .702f, 1f);
+        public static Color InteractivePressed => highContrast ? new Color(.76f, .71f, .62f, 1f) : new Color(.71f, .65f, .55f, 1f);
+        public static Color Overlay => new Color(.12f, .11f, .09f, .58f);
+        public static Color Focus => Cyan;
+        public static Color Rule => highContrast ? new Color(.12f, .11f, .09f, 1f) : new Color(.37f, .34f, .29f, 1f);
+        public static Color OnInk => highContrast ? Color.white : new Color(.96f, .93f, .85f, 1f);
+        public static Color InventorySlotSurface => highContrast ? SurfaceRaised : Color.Lerp(SurfaceRaised, Panel, .22f);
+        public static Color InventorySlotSelected => Color.Lerp(InventorySlotSurface, Cyan, .12f);
+        public static Color InventorySlotLocked => Color.Lerp(Panel, Disabled, .36f);
+        public static readonly Color Health = new Color(.28f, .47f, .34f, 1f);
+        public static readonly Color Shield = new Color(.38f, .52f, .48f, 1f);
+        public static readonly Color Magic = new Color(.44f, .34f, .51f, 1f);
 
-        public const int CaptionFontSize = 15;
-        public const int BodyFontSize = 18;
-        public const int HeadingFontSize = 22;
-        public const int TitleFontSize = 31;
-        public const int ButtonFontSize = 18;
-        public const int ButtonDetailFontSize = 14;
-        public const int MinimumInteractiveHeight = 40;
+        public const int CaptionFontSize = 17;
+        public const int BodyFontSize = 20;
+        public const int HeadingFontSize = 25;
+        public const int TitleFontSize = 36;
+        public const int ButtonFontSize = 20;
+        public const int ButtonDetailFontSize = 16;
+        public const int MinimumInteractiveHeight = 48;
         public const int SpaceSmall = 8;
         public const int SpaceMedium = 16;
         public const int SpaceLarge = 24;
         public const int IconSlotSize = 32;
         public const int IconTextInset = 36;
-        public static readonly Vector2 FocusDistance = new Vector2(2f, -2f);
+        public const int FrameThickness = 6;
+        public const int FrameCornerSize = 12;
+        public const int InnerHighlightThickness = 2;
+        public const int PressedOffset = 4;
+        public static readonly Vector2 FocusDistance = new Vector2(FrameThickness, -FrameThickness);
 
         public static void ConfigureAccessibility(bool useHighContrast, bool useLargeText)
         {
@@ -64,13 +75,23 @@ namespace OCC.Combat.Presentation
 
         public static Color WithAlpha(Color color, float alpha) => new Color(color.r, color.g, color.b, Mathf.Clamp01(alpha));
 
+        public static Color TextForSurface(Color surface) => RelativeLuminance(surface) < .42f ? OnInk : Text;
+
+        private static float RelativeLuminance(Color color)
+        {
+            float r = color.r <= .04045f ? color.r / 12.92f : Mathf.Pow((color.r + .055f) / 1.055f, 2.4f);
+            float g = color.g <= .04045f ? color.g / 12.92f : Mathf.Pow((color.g + .055f) / 1.055f, 2.4f);
+            float b = color.b <= .04045f ? color.b / 12.92f : Mathf.Pow((color.b + .055f) / 1.055f, 2.4f);
+            return .2126f * r + .7152f * g + .0722f * b;
+        }
+
         public static FormalUiButtonPalette ButtonPalette(FormalUiButtonTone tone)
         {
             Color accent = tone == FormalUiButtonTone.Primary ? Cyan :
                 tone == FormalUiButtonTone.Positive ? Safe :
                 tone == FormalUiButtonTone.Warning ? Amber :
                 tone == FormalUiButtonTone.Dangerous ? Danger : Muted;
-            Color normal = tone == FormalUiButtonTone.Dangerous ? Color.Lerp(Interactive, Danger, .12f) : Interactive;
+            Color normal = tone == FormalUiButtonTone.Dangerous ? Color.Lerp(Interactive, Danger, .16f) : Interactive;
             return FormalUiButtonPalette.ForAccent(normal, accent);
         }
 
@@ -84,8 +105,9 @@ namespace OCC.Combat.Presentation
         public static int ResponsiveFontSize(int fontSize)
         {
             int responsive = PixelAlignedFontSize(fontSize, Screen.height <= UiLayoutContract.CompactHeightThreshold);
+            responsive = Mathf.CeilToInt(responsive * 1.12f);
             if (!largeText) return responsive;
-            int accessible = Mathf.CeilToInt(responsive * 1.12f);
+            int accessible = Mathf.CeilToInt(responsive * 1.15f);
             return accessible % 2 == 0 ? accessible : accessible + 1;
         }
     }
@@ -109,7 +131,7 @@ namespace OCC.Combat.Presentation
 
         public static FormalUiButtonPalette ForAccent(Color normal, Color accent)
         {
-            return new FormalUiButtonPalette(normal, Color.Lerp(normal, accent, .24f), Color.Lerp(normal, Color.black, .24f), Color.Lerp(normal, accent, .36f), FormalUiTheme.Disabled);
+            return new FormalUiButtonPalette(normal, Color.Lerp(normal, accent, .24f), Color.Lerp(normal, Color.black, .28f), Color.Lerp(normal, accent, .48f), FormalUiTheme.Disabled);
         }
     }
 
@@ -174,9 +196,69 @@ namespace OCC.Combat.Presentation
 
         public static void ApplySkin(Image image, string id, Color tint)
         {
-            image.sprite = SkinSprite(id); image.type = Image.Type.Sliced;
-            image.color = new Color(Mathf.Lerp(1f, tint.r, .22f), Mathf.Lerp(1f, tint.g, .22f), Mathf.Lerp(1f, tint.b, .22f), tint.a);
-            image.pixelsPerUnitMultiplier = 1f;
+            if (image == null) return;
+            Outline legacyOutline = image.GetComponent<Outline>();
+            if (legacyOutline != null)
+            {
+                if (Application.isPlaying) UnityEngine.Object.Destroy(legacyOutline);
+                else UnityEngine.Object.DestroyImmediate(legacyOutline);
+            }
+
+            image.sprite = null;
+            image.type = Image.Type.Simple;
+            image.color = id == "focus" ? Color.clear : tint;
+            Transform existingFrame = image.transform.Find("像素框架");
+            if (id == "bar_fill")
+            {
+                if (existingFrame != null) existingFrame.gameObject.SetActive(false);
+                return;
+            }
+
+            Color border = id == "focus" ? FormalUiTheme.Focus :
+                id == "danger" ? FormalUiTheme.Danger :
+                id == "reward" ? FormalUiTheme.Amber :
+                id.StartsWith("button", StringComparison.Ordinal) ? FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .82f) :
+                FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .92f);
+            Color highlight = id == "focus" ? FormalUiTheme.WithAlpha(FormalUiTheme.Focus, .48f) :
+                FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .72f);
+            ApplyPixelFrame(image.transform, border, highlight);
+        }
+
+        private static void ApplyPixelFrame(Transform owner, Color border, Color highlight)
+        {
+            Transform frame = owner.Find("像素框架");
+            if (frame == null)
+            {
+                GameObject frameObject = Create("像素框架", owner);
+                RectTransform frameRect = frameObject.AddComponent<RectTransform>(); Stretch(frameRect);
+                frame = frameObject.transform;
+                AddFrameElement(frame, "上", new Vector2(0, 1), new Vector2(1, 1), new Vector2(.5f, 1), Vector2.zero, new Vector2(0, FormalUiTheme.FrameThickness));
+                AddFrameElement(frame, "下", new Vector2(0, 0), new Vector2(1, 0), new Vector2(.5f, 0), Vector2.zero, new Vector2(0, FormalUiTheme.FrameThickness));
+                AddFrameElement(frame, "左", new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, .5f), Vector2.zero, new Vector2(FormalUiTheme.FrameThickness, 0));
+                AddFrameElement(frame, "右", new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, .5f), Vector2.zero, new Vector2(FormalUiTheme.FrameThickness, 0));
+                AddFrameElement(frame, "左上", Vector2.up, Vector2.up, Vector2.up, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
+                AddFrameElement(frame, "右上", Vector2.one, Vector2.one, Vector2.one, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
+                AddFrameElement(frame, "左下", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
+                AddFrameElement(frame, "右下", Vector2.right, Vector2.right, Vector2.right, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
+                AddFrameElement(frame, "内高光_上", new Vector2(0, 1), new Vector2(1, 1), new Vector2(.5f, 1), new Vector2(0, -FormalUiTheme.FrameThickness), new Vector2(-FormalUiTheme.FrameCornerSize * 2, FormalUiTheme.InnerHighlightThickness));
+                AddFrameElement(frame, "内高光_左", new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, .5f), new Vector2(FormalUiTheme.FrameThickness, 0), new Vector2(FormalUiTheme.InnerHighlightThickness, -FormalUiTheme.FrameCornerSize * 2));
+            }
+
+            frame.gameObject.SetActive(true);
+            foreach (Image part in frame.GetComponentsInChildren<Image>(true))
+            {
+                part.color = part.name.StartsWith("内高光", StringComparison.Ordinal) ? highlight : border;
+                part.raycastTarget = false;
+            }
+            frame.SetAsFirstSibling();
+        }
+
+        private static void AddFrameElement(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 position, Vector2 size)
+        {
+            GameObject element = Create(name, parent);
+            RectTransform rect = element.AddComponent<RectTransform>();
+            rect.anchorMin = anchorMin; rect.anchorMax = anchorMax; rect.pivot = pivot; rect.anchoredPosition = position; rect.sizeDelta = size;
+            Image image = element.AddComponent<Image>(); image.sprite = null; image.type = Image.Type.Simple; image.raycastTarget = false;
         }
 
         private static string PanelSkin(string name)
@@ -201,7 +283,8 @@ namespace OCC.Combat.Presentation
         public static Image FocusFrame(Transform parent)
         {
             GameObject result = Create("像素焦点框", parent); RectTransform rect = result.AddComponent<RectTransform>(); Stretch(rect);
-            rect.offsetMin = new Vector2(-3, -3); rect.offsetMax = new Vector2(3, 3);
+            rect.offsetMin = new Vector2(-FormalUiTheme.FrameThickness, -FormalUiTheme.FrameThickness);
+            rect.offsetMax = new Vector2(FormalUiTheme.FrameThickness, FormalUiTheme.FrameThickness);
             Image image = result.AddComponent<Image>(); ApplySkin(image, "focus", Color.white); image.raycastTarget = false; return image;
         }
 
@@ -294,6 +377,26 @@ namespace OCC.Combat.Presentation
             if (label == null) return null;
             label.horizontalOverflow = HorizontalWrapMode.Overflow;
             label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.alignByGeometry = true;
+            return label;
+        }
+
+        public static Text ConfigureNumericLabel(Text label)
+        {
+            if (label == null) return null;
+            PreventAutomaticWrapping(label);
+            label.resizeTextForBestFit = false;
+            return label;
+        }
+
+        public static Text ConfigureParagraph(Text label, float lineSpacing = 1.08f)
+        {
+            if (label == null) return null;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.resizeTextForBestFit = false;
+            label.lineSpacing = lineSpacing;
+            label.alignByGeometry = true;
             return label;
         }
 
@@ -323,6 +426,20 @@ namespace OCC.Combat.Presentation
             RectTransform rect = result.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(0, .5f); rect.pivot = new Vector2(0, .5f); rect.anchoredPosition = position; rect.sizeDelta = Vector2.one * FormalUiTheme.IconSlotSize;
             Image image = result.AddComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.raycastTarget = false;
+            return image;
+        }
+
+        public static Image TopLeftIconSlot(string name, Transform parent, Sprite sprite, Vector2 position)
+        {
+            GameObject result = Create(name, parent);
+            RectTransform rect = result.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = position;
+            rect.sizeDelta = Vector2.one * FormalUiTheme.IconSlotSize;
+            Image image = result.AddComponent<Image>();
+            image.sprite = sprite;
+            image.preserveAspect = true;
+            image.raycastTarget = false;
             return image;
         }
 
@@ -360,8 +477,9 @@ namespace OCC.Combat.Presentation
 
         public static void Line(Transform parent, Vector2 position, Vector2 size, Color color, string name = "线")
         {
-            GameObject result = Panel(name, parent, new Vector2(0, 1), new Vector2(0, 1), position, size, color);
-            Image image = result.GetComponent<Image>(); ApplySkin(image, "bar_fill", color); image.raycastTarget = false;
+            GameObject result = Create(name, parent);
+            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = size;
+            Image image = result.AddComponent<Image>(); ApplySkin(image, "bar_fill", color); image.raycastTarget = false;
         }
 
         public static void Stretch(RectTransform rect)

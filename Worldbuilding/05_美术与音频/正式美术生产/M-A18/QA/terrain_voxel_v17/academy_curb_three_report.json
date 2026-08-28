@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_curb_three",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_alpha_bounds": [
+    41,
+    44,
+    1200,
+    1254
+  ],
+  "cropped_size": [
+    1159,
+    1210
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "fitted_size": [
+    31,
+    32
+  ],
+  "fitted_offset": [
+    0,
+    0
+  ],
+  "visible_colors": 7,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "436b6119297dbfa3c95907a28f919c6fcb263b81d712a4a0557af8910e83e1dc",
+  "output_sha256": "2c40aaca5f7789d35d5cbbe1f23d0c1cee3cc705e68bbbf2ac50c659accfbecd",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 0,
+  "anchor": "center",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

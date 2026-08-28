@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat
 {
@@ -50,10 +51,12 @@ namespace OCC.Combat
         {
             UnitState unit = GetUnit(state, unitId);
             state.SetActiveUnit(unitId);
+            state.BeginRogueliteTurn(unit);
+            state.RogueSpells?.BeginOwnTurn(unitId);
             CombatEffectExecution execution = CombatStatusLifecycle.ResolveTurnStart(state, unit);
             LogStatusLifecycle(state, unit, execution);
             state.EvaluateOutcome();
-            if (!unit.IsAlive) { state.AddLog($"{unit.DisplayName} \u88ab\u6301\u7eed\u6548\u679c\u51fb\u5012\u3002"); if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
+            if (!unit.IsAlive) { if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
             unit.BeginTurn(unit.IsHero ? HeroActionPointsPerTurn : 2);
             state.AddLog($"{unit.DisplayName} \u5f00\u59cb\u884c\u52a8\uff08{unit.ActionPoints} \u884c\u52a8\u70b9\uff09\u3002");
             return execution;
@@ -79,7 +82,9 @@ namespace OCC.Combat
                     return turn;
                 case CombatCommandType.Attack: return ResolveWeaponAttack(state, unit, command.TargetUnitId, 0);
                 case CombatCommandType.Cast: return ResolveSkill(state, unit, CombatCatalog.FireBolt, command);
-                case CombatCommandType.UseSkill: return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
+                case CombatCommandType.UseSkill:
+                    if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) return state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects;
+                    return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
                 case CombatCommandType.UseQuickbar: return UseQuickbar(state, unit, command.SlotIndex);
                 case CombatCommandType.SearchLoot: return SearchLoot(state, unit);
                 case CombatCommandType.TakeLoot: return TakeLoot(state, unit, command.TargetUnitId);
@@ -94,6 +99,7 @@ namespace OCC.Combat
 
         public static CombatEffectExecution EndTurn(CombatState state, UnitState unit)
         {
+            state.EndRogueliteTurn(unit);
             unit.SetInitiativeTime(Math.Max(unit.InitiativeTime, state.CurrentTime) + Math.Max(1, 12 - unit.EffectiveSpeed));
             unit.BeginTurn(0);
             state.AddLog($"{unit.DisplayName} \u7ed3\u675f\u884c\u52a8\u3002");
@@ -118,7 +124,9 @@ namespace OCC.Combat
             int flatIncomingDamageReduction)
         {
             WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
-            int reducedBaseDamage = Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
+            int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
+                ? weapon.Damage
+                : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
             return ResolveDamageAction(state, attacker, targetId, weapon.DisplayName, weapon.DamageType, reducedBaseDamage, weapon.Range, weapon.ArmorPierce, weapon.InitiativeDelay, weapon.ManaCost, null, 0);
         }
 
@@ -215,7 +223,8 @@ namespace OCC.Combat
                 case SkillEffectType.RestoreShield: effects.Add(CombatEffect.RestoreShield(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.RestoreMana: effects.Add(CombatEffect.RestoreMana(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.ApplyStatus:
-                    if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id, definition.Status, definition.Duration));
+                    if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id,
+                        state.Ruleset == CombatRuleset.Roguelite && definition.Status == StatusType.ArmorBreak ? StatusType.BreakStance : definition.Status, definition.Duration));
                     break;
                 case SkillEffectType.ClearStatus: effects.Add(CombatEffect.ClearStatus(recipient.Id, definition.Status)); break;
                 case SkillEffectType.MoveSource: effects.Add(CombatEffect.Move(command.Destination, command.Facing)); break;
@@ -261,7 +270,8 @@ namespace OCC.Combat
             effects.Add(CombatEffect.SpendActionPoints(BasicActionPointCost));
             effects.Add(CombatEffect.AbsorbShield(defender.Id, parts.Shield));
             effects.Add(CombatEffect.DamageHealth(defender.Id, parts.Final));
-            if (status.HasValue && defender.Health > parts.Final) effects.Add(CombatEffect.ApplyStatus(defender.Id, status.Value, statusDuration));
+            if (status.HasValue && defender.Health > parts.Final) effects.Add(CombatEffect.ApplyStatus(defender.Id,
+                state.Ruleset == CombatRuleset.Roguelite && status.Value == StatusType.ArmorBreak ? StatusType.BreakStance : status.Value, statusDuration));
             if (initiativeDelay > 0) effects.Add(CombatEffect.DelayInitiative(initiativeDelay));
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, attacker.Id, effects.ToArray());
             int shieldAbsorbed = Applied(execution, CombatEffectKind.AbsorbShield);
@@ -379,6 +389,15 @@ namespace OCC.Combat
 
         private static DamageParts CalculateDamage(CombatState state, UnitState attacker, UnitState defender, int baseDamage, DamageType damageType, int armorPierce)
         {
+            if (state.Ruleset == CombatRuleset.Roguelite)
+            {
+                DamageComponentKind kind = damageType == DamageType.Fire ? DamageComponentKind.Fire
+                    : damageType == DamageType.Arcane ? DamageComponentKind.Aether : DamageComponentKind.Physical;
+                DamagePacket packet = new DamagePacket("preview", attacker.Id, defender.Id, "combat_action",
+                    new[] { new DamageComponent(kind, Math.Max(0, baseDamage)) });
+                DamageResolution result = RogueDamageResolver.Resolve(packet, defender.Shield, defender.Health);
+                return new DamageParts(0, 0, result.ShieldAbsorbed, 0, 0, result.HealthDamage);
+            }
             int facing = FacingBonus(attacker.Position, defender.Position, defender.Facing);
             int cover = damageType == DamageType.Fire ? 0 : state.Map.GetTile(defender.Position).DamageReduction;
             int incoming = Math.Max(0, baseDamage + facing - cover);

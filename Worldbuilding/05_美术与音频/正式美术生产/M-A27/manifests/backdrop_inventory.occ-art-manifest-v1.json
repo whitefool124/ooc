@@ -1,0 +1,68 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.backdrop.inventory",
+  "role": "ui_backdrop_480x270",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single OCC page backdrop; no board slicing",
+    "source_path": "UnityProject/Artifacts/UiBackdrops8/inventory/source.png",
+    "source_sha256": "989f9f0b15ad1151359dcf9284f72f00aecc1dc55b39ac2d09c29aff9ce1c94b"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalUIBackdrops/inventory.png",
+    "output_sha256": "79a980e726458b31ac8889cd1f0700e78c0813ecd07d30d96d38c12a11048f78",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "480x270 full-screen page backdrop at integer 2x or 4x",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/UiBackdrops8/inventory/1x.png",
+    "four_x": "UnityProject/Artifacts/UiBackdrops8/inventory/4x.png",
+    "grayscale": "UnityProject/Artifacts/UiBackdrops8/inventory/grayscale.png",
+    "checker": "UnityProject/Artifacts/UiBackdrops8/inventory/checker.png",
+    "application_contact": "UnityProject/Artifacts/UiBackdrops8/contacts/inventory_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous UI art review",
+    "date": "2026-08-28",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "worn academy workshop table with a large empty cloth sorting mat, iron clamps and a few brass maintenance fittings at the edges; passed native 1x, integer 2x/4x, grayscale, checkerboard, 1920x1080 and 960x540 Unity contacts. The landing page also passed an offscreen UGUI application contact using FormalUiEffects.ApplyBackdrop."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalUIBackdrops/inventory.png",
+    "resource_path": "Art/FormalUIBackdrops/inventory",
+    "guid": "876c31d91ce7c7a47bd87b3c122d0634",
+    "stable_guid": "876c31d91ce7c7a47bd87b3c122d0634",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/UiBackdrops8/contacts/inventory_1920x1080.png",
+    "application_evidence": "UnityProject/Artifacts/UiBackdrops8/contacts/application_landing_1920x1080.png",
+    "audit_report": "UnityProject/Artifacts/UiBackdrops8/import_audit.json",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-28"
+  }
+}

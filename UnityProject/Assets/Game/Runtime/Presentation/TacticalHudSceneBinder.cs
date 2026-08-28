@@ -55,6 +55,7 @@ namespace OCC.Combat.Presentation
                 SetHover(button, hovering);
                 if (hovering && Event.current.type == EventType.MouseDown && Event.current.button == 0)
                 {
+                    FormalUiEffects.SpawnLocalFeedback(button.transform, "click", 1f);
                     button.onClick.Invoke();
                     Event.current.Use();
                     return;
@@ -102,6 +103,9 @@ namespace OCC.Combat.Presentation
             button.onClick.AddListener(action);
             boundButtons.Add(button);
             buttonBaseColors[button] = button.GetComponent<Image>().color;
+            FormalUiKit.ConfigureButtonFeedback(button,
+                FormalUiButtonPalette.ForAccent(buttonBaseColors[button], FormalUiTheme.Cyan),
+                () => UiMotionProfile.FromIntensity(1f), null);
             AddHoverFeedback(button);
         }
 

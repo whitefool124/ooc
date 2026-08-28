@@ -1,0 +1,156 @@
+{
+  "schema": "occ-combat-semantic-polish-catalog-v1",
+  "count": 10,
+  "assets": [
+    {
+      "asset_id": "combat.intent.attack",
+      "group": "intent",
+      "stem": "attack",
+      "subject": "单一锈红重斩楔与下缘撞点",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/intent/attack/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/intent/attack.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/attack.png"
+    },
+    {
+      "asset_id": "combat.intent.cast",
+      "group": "intent",
+      "stem": "cast",
+      "subject": "紫罗兰缺口校准环与内向刻点",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/intent/cast/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/intent/cast.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/cast.png"
+    },
+    {
+      "asset_id": "combat.intent.interact_destroy",
+      "group": "intent",
+      "stem": "interact_destroy",
+      "subject": "锈红短锤击断方块一角",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/intent/interact_destroy/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/intent/interact_destroy.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/interact_destroy.png"
+    },
+    {
+      "asset_id": "combat.status.slow",
+      "group": "status",
+      "stem": "slow",
+      "subject": "赭黄重块持续压住象牙靴跟",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/status/slow/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/status/slow.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/slow.png"
+    },
+    {
+      "asset_id": "combat.status.revealed",
+      "group": "status",
+      "stem": "revealed",
+      "subject": "暖金测绘括号持续围住象牙人形",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/status/revealed/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/status/revealed.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/revealed.png"
+    },
+    {
+      "asset_id": "combat.feedback.bound",
+      "group": "feedback",
+      "stem": "bound",
+      "subject": "两侧棕色夹具瞬间夹住中心腰线",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/feedback/bound/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/feedback/bound.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/bound.png"
+    },
+    {
+      "asset_id": "combat.feedback.slow",
+      "group": "feedback",
+      "stem": "slow",
+      "subject": "足迹拖线撞上赭黄垂直止动条",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/feedback/slow/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/feedback/slow.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/slow.png"
+    },
+    {
+      "asset_id": "combat.feedback.healing",
+      "group": "feedback",
+      "stem": "healing",
+      "subject": "灰绿缝线瞬间合拢锈红伤口",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/feedback/healing/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/feedback/healing.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/healing.png"
+    },
+    {
+      "asset_id": "combat.feedback.shield_restore",
+      "group": "feedback",
+      "stem": "shield_restore",
+      "subject": "三枚乳白护片向旧金铆点合拢",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/feedback/shield_restore/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/feedback/shield_restore.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/shield_restore.png"
+    },
+    {
+      "asset_id": "combat.feedback.status_cleared",
+      "group": "feedback",
+      "stem": "status_cleared",
+      "subject": "象牙扫弧把三枚暗色状态点推出",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemanticPolish10/feedback/status_cleared/source_v2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemanticPolish/feedback/status_cleared.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/status_cleared.png"
+    }
+  ]
+}

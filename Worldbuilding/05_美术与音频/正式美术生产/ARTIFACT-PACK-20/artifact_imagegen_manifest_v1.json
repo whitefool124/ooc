@@ -1,5 +1,10 @@
 {
   "schema": "occ.artifact-icons.image-generation.v1",
+  "status": "HISTORICAL_PROVENANCE_ONLY",
+  "executable": false,
+  "normative": false,
+  "superseded_by": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md + Tools/OCCArt/occ_art_contract_v1.json",
+  "warning": "This records an old production attempt. The localhost fallback is forbidden for all current and future OCC production.",
   "generator": "built-in imagegen / gpt-image-2",
   "local_workbench_attempt": {
     "service": "http://127.0.0.1:3000/api/generate-json",

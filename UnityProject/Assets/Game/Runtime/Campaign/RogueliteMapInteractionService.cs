@@ -10,21 +10,26 @@ namespace OCC.Combat
         public int Supplies { get; }
         public int Scouting { get; }
         public int AccessCards { get; }
+        public bool UsesRogue11 { get; }
+        public int Gold { get; }
+        public int StageContribution { get; }
+        public int StageTime { get; }
 
-        public RogueliteMapResources(int parts, int aether, int supplies, int scouting, int accessCards)
+        public RogueliteMapResources(int parts, int aether, int supplies, int scouting, int accessCards, bool usesRogue11 = false, int gold = 0, int stageContribution = 0, int stageTime = 0)
         {
             Parts = parts;
             Aether = aether;
             Supplies = supplies;
             Scouting = scouting;
             AccessCards = accessCards;
+            UsesRogue11 = usesRogue11; Gold = gold; StageContribution = stageContribution; StageTime = stageTime;
         }
 
         public static RogueliteMapResources Capture(RogueliteMapRun run)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             return new RogueliteMapResources(run.Parts, run.Aether, run.Supplies,
-                run.ScoutingBeacons, run.AccessCards);
+                run.ScoutingBeacons, run.AccessCards, run.UsesRogue11, run.Gold, run.StageContribution, run.StageTime);
         }
     }
 

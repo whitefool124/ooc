@@ -1,0 +1,47 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_aisle_corner",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_aisle_corner.pxart.json",
+  "source_size": [
+    32,
+    32
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": [
+    [
+      119,
+      118,
+      111,
+      255
+    ],
+    [
+      150,
+      149,
+      139,
+      255
+    ],
+    [
+      162,
+      159,
+      145,
+      255
+    ],
+    [
+      179,
+      170,
+      145,
+      255
+    ]
+  ],
+  "colour_count": 4,
+  "alpha_values": [
+    255
+  ],
+  "source_sha256": "2903826aa2b0a9e043c0c5defc0895519866368fc56a32c12b959b7012deb58b",
+  "output_sha256": "2903826aa2b0a9e043c0c5defc0895519866368fc56a32c12b959b7012deb58b",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

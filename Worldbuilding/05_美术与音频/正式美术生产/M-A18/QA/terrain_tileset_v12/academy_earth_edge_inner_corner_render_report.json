@@ -1,0 +1,41 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_earth_edge_inner_corner",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_earth_edge_inner_corner.pxart.json",
+  "source_size": [
+    32,
+    32
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": [
+    [
+      138,
+      107,
+      78,
+      255
+    ],
+    [
+      143,
+      129,
+      107,
+      255
+    ],
+    [
+      179,
+      170,
+      145,
+      255
+    ]
+  ],
+  "colour_count": 3,
+  "alpha_values": [
+    255
+  ],
+  "source_sha256": "11e7edfa99d76ad18f481349189f886a1d51f769dd20c020ee124d4528c6a442",
+  "output_sha256": "11e7edfa99d76ad18f481349189f886a1d51f769dd20c020ee124d4528c6a442",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

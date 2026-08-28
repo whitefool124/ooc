@@ -1,4 +1,5 @@
 using System;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat
 {
@@ -29,15 +30,20 @@ namespace OCC.Combat
         public const string UiPreferencesKey = "occ.roguelite.ui_preferences";
         public const string CorruptBackupSuffix = ".corrupt_backup";
         public const string WriteLockSuffix = ".write_lock";
+        public const string LegacyBackupSuffix = ".legacy_backup.";
+        public const string MigrationReportSuffix = ".migration_report.";
 
         private readonly IRogueliteSaveStore store;
+        private readonly Func<DateTime> utcNow;
+        private RogueRunDto activeRunDto;
         public string LastError { get; private set; } = string.Empty;
         public RogueliteSaveLoadStatus LastLoadStatus { get; private set; }
         public string LastFailedKey { get; private set; } = string.Empty;
 
-        public RogueliteSaveGateway(IRogueliteSaveStore store)
+        public RogueliteSaveGateway(IRogueliteSaveStore store, Func<DateTime> utcNow = null)
         {
             this.store = store ?? throw new ArgumentNullException(nameof(store));
+            this.utcNow = utcNow ?? (() => DateTime.UtcNow);
         }
 
         public bool HasStory => Has(StoryKey);
@@ -46,8 +52,39 @@ namespace OCC.Combat
 
         public bool TryLoadStory(out RogueliteStoryPackage package) => TryLoad(StoryKey, RogueliteStoryPackage.FromJson, null, null, out package);
         public bool TryLoadShortRun(out ShortRogueliteRun run) => TryLoad(ShortRunKey, ShortRogueliteRun.FromJson, null, null, out run);
-        public bool TryLoadMapRun(out RogueliteMapRun run) => TryLoad(MapRunKey, RogueliteMapRun.FromJson,
-            value => RogueliteMapRunValidator.Validate(value), RogueliteMapRunValidator.ValidateSerializedCurrent, out run);
+        public bool TryLoadMapRun(out RogueliteMapRun run)
+        {
+            ResetResult(); run = null; string raw;
+            try
+            {
+                if (!store.HasKey(MapRunKey)) { LastLoadStatus = RogueliteSaveLoadStatus.Missing; return false; }
+                raw = store.GetString(MapRunKey, string.Empty);
+            }
+            catch (Exception exception) { Fail(MapRunKey, RogueliteSaveLoadStatus.StoreError, exception); return false; }
+            try
+            {
+                if (raw.StartsWith(RogueRuntimeConstants.SaveVersion + "|", StringComparison.Ordinal))
+                {
+                    activeRunDto = Rogue11Serializer.Deserialize(raw); run = RogueliteMapRun.FromRogue11(activeRunDto);
+                    ThrowIfInvalid(RogueliteMapRunValidator.Validate(run));
+                    LastLoadStatus = RogueliteSaveLoadStatus.Success; return true;
+                }
+                ThrowIfInvalid(RogueliteMapRunValidator.ValidateSerializedCurrent(raw));
+                RogueliteMapRun legacy = RogueliteMapRun.FromLegacyMap10(raw);
+                ThrowIfInvalid(RogueliteMapRunValidator.Validate(legacy));
+                string migrationId = utcNow().ToString("yyyyMMddTHHmmssfffZ");
+                RogueMigrationReport report; RogueRunDto migrated = LegacyMap10Migrator.Migrate(legacy, migrationId, out report);
+                store.SetString(MapRunKey + LegacyBackupSuffix + migrationId, raw);
+                store.SetString(MapRunKey + MigrationReportSuffix + migrationId, report.Serialize());
+                store.Flush();
+                if (!SaveRogueRun(migrated)) throw new InvalidOperationException(LastError);
+                activeRunDto = migrated; run = RogueliteMapRun.FromRogue11(migrated); LastLoadStatus = RogueliteSaveLoadStatus.Success; return true;
+            }
+            catch (RogueliteSaveSemanticException exception)
+            { Fail(MapRunKey, RogueliteSaveLoadStatus.InvalidSemantics, exception); ProtectFailedValue(MapRunKey, raw); return false; }
+            catch (Exception exception)
+            { Fail(MapRunKey, RogueliteSaveLoadStatus.CorruptData, exception); ProtectFailedValue(MapRunKey, raw); return false; }
+        }
 
         public RogueliteUiPreferences LoadUiPreferences()
         {
@@ -59,12 +96,31 @@ namespace OCC.Combat
         public bool SaveStory(RogueliteStoryPackage package) => SaveVerified(StoryKey, package?.ToJson(), RogueliteStoryPackage.FromJson, null, null);
         public bool SaveShortRun(ShortRogueliteRun run) => SaveVerified(ShortRunKey, run?.ToJson(), ShortRogueliteRun.FromJson, null, null);
         public bool SaveMapRun(RogueliteMapRun run)
+            => SaveMapRun(run, activeRunDto);
+
+        public bool SaveNewMapRun(RogueliteMapRun run)
+            => SaveMapRun(run, null);
+
+        private bool SaveMapRun(RogueliteMapRun run, RogueRunDto preserved)
+        {
+            RogueRunDto dto;
+            try { dto = run?.ExportRogue11(preserved); }
+            catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
+            bool saved = SaveRogueRun(dto); if (saved) activeRunDto = dto; return saved;
+        }
+        public bool TryLoadRogueRun(out RogueRunDto run)
+        {
+            RogueliteMapRun ignored;
+            if (!TryLoadMapRun(out ignored)) { run = null; return false; }
+            run = activeRunDto; return true;
+        }
+        public bool SaveRogueRun(RogueRunDto run)
         {
             string value;
-            try { value = run?.ToJson(); }
+            try { value = Rogue11Serializer.Serialize(run); }
             catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
-            return SaveVerified(MapRunKey, value, RogueliteMapRun.FromJson,
-                candidate => RogueliteMapRunValidator.Validate(candidate), RogueliteMapRunValidator.ValidateSerializedCurrent);
+            bool saved = SaveVerified(MapRunKey, value, Rogue11Serializer.Deserialize, null, null);
+            if (saved) activeRunDto = run; return saved;
         }
         public bool SaveUiPreferences(RogueliteUiPreferences preferences) => SaveVerified(UiPreferencesKey, preferences?.ToDataString(), RogueliteUiPreferences.FromDataString, null, null);
 
@@ -199,8 +255,8 @@ namespace OCC.Combat
             T reparsed = parser(value);
             if (reparsed == null) throw new InvalidOperationException("Save parser returned null.");
             ThrowIfInvalid(validator?.Invoke(reparsed));
-            if (reparsed is RogueliteMapRun mapRun && mapRun.ToJson() != value)
-                throw new RogueliteSaveSemanticException(Invalid("serialization.text_changed"));
+            if (reparsed is RogueRunDto rogueRun && Rogue11Serializer.Serialize(rogueRun) != value)
+                throw new InvalidOperationException("rogue11 serialization text changed.");
         }
 
         private bool Delete(string key)

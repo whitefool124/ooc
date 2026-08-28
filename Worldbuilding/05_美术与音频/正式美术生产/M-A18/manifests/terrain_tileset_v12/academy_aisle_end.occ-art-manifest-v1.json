@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_aisle_end",
+  "role": "floor_tile_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Explicit hand-authored RLE pixel matrix; generic renderer expands exact pixels only and adds no art structure",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_aisle_end_source.png",
+    "source_sha256": "daa7f3f81d3bc476333f27339123b9bfa5b0a7f5cf5d379873d827a6193c142c"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v12/academy_aisle_end.png",
+    "output_sha256": "daa7f3f81d3bc476333f27339123b9bfa5b0a7f5cf5d379873d827a6193c142c",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 logical battlefield cell; orthographic floor layer below props, units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_end_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_end_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_end_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_end_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_p0_application_contact_12x9.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Codex visual audit",
+    "date": "2026-08-24",
+    "silhouette": "FAIL",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Rejected with the line-road family; road endpoints must be composed from region transition corners."
+  },
+  "unity_import": null
+}

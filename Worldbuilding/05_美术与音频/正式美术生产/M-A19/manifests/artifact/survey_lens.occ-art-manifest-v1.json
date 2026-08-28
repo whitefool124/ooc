@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.artifact.survey_lens",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/artifact/survey_lens/source.png",
+    "source_sha256": "43d491b73d9d98b36db6ba149db9a5ab82ec0e2b032e8698a04bef35c3459d41"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/survey_lens.png",
+    "output_sha256": "1eaf1f68317807bbe2467308fcfa53bc2f0c1dee984c2a995858324472115ca2",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/artifact/survey_lens/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/artifact/survey_lens/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/artifact/survey_lens/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/artifact/survey_lens/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "显迹测镜，黄铜支架、蓝色镜片和测绘刻度 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "42ca15f758f7d8041ab616c6c7ab1b75",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

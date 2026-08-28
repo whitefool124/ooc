@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_heavy_masonry_screen_damaged",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_heavy_masonry_screen\\damaged_source.png",
+  "sourceSha256": "19a45e77db826a4dc58efe94c08beda70a7599a8eb843121dd833e1f1b476cc7",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      28,
+      22
+    ],
+    "baselineY": 30
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    2,
+    11,
+    30,
+    30
+  ],
+  "hardAlpha": true,
+  "colors": 9,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

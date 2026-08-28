@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_rustic_alpha_v05",
+  "category": "occ_character_endpoint",
+  "description": "Rustic OCC humanoid endpoint with true source alpha, normalized to the global 46px tactical-unit scale without chroma keying.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 46,
+  "minBodyHeight": 44,
+  "maxBodyHeight": 48,
+  "maxBodyWidth": 60,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": false,
+  "chromaKeyTolerance": 0,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

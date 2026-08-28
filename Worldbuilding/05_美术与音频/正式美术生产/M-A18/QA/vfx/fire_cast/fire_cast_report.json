@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "frames": [
+    {
+      "frame": 0,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3
+    },
+    {
+      "frame": 1,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5
+    },
+    {
+      "frame": 2,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5
+    },
+    {
+      "frame": 3,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5
+    },
+    {
+      "frame": 4,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4
+    },
+    {
+      "frame": 5,
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4
+    }
+  ],
+  "note": "independently drawn native-pixel P0 fire_cast frames"
+}

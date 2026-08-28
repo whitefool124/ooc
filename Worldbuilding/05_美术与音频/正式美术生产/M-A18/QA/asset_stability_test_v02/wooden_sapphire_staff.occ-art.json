@@ -1,0 +1,47 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "wooden_sapphire_staff",
+  "role": "equipment_icon_32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single wooden sapphire staff source",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/raw/asset_stability_test_v02/wooden_sapphire_staff_source.png",
+    "source_sha256": "04b0eca0c3985542527a07244d42cace157d76bb6d47709426183620e9dcc514"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/asset_stability_test_v02/wooden_sapphire_staff_32.png",
+    "output_sha256": "5a5bf714b93c481ff323558a3930ecc46858a087abf2e3238805987efc24b0ff",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": [
+      {"family": "blue", "min_opaque_pixels": 4}
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "native 32px equipment icon in the current 32px equipment slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/wooden_sapphire_staff/wooden_sapphire_staff_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/wooden_sapphire_staff/wooden_sapphire_staff_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/wooden_sapphire_staff/wooden_sapphire_staff_grayscale_4x.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/wooden_sapphire_staff/wooden_sapphire_staff_checker_4x.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "product_user",
+    "date": "2026-08-23",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User accepted the second stability batch after semantic blue palette reservation retained the sapphire."
+  },
+  "unity_import": null
+}

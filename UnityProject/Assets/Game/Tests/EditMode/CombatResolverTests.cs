@@ -136,7 +136,7 @@ namespace OCC.Combat.Tests
         {
             Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(15));
             Assert.That(EnemyArchetypes.All, Has.Exactly(3).Matches<EnemyArchetype>(archetype => archetype.IsElite));
-            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵先锋"));
+            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵教官"));
         }
 
         [Test]

@@ -1,0 +1,37 @@
+{
+  "schema": "occ-hand-pixel-rle-v1",
+  "asset_id": "academy_north_dais_8x2",
+  "width": 256,
+  "height": 64,
+  "delivery_size": [256, 64],
+  "palette": {
+    "X": "00000000",
+    "D": "4A4038FF",
+    "S": "332D2DFF",
+    "F": "756B5BFF",
+    "T": "AAA18BFF",
+    "H": "D5C7A6FF",
+    "C": "A66B38FF"
+  },
+  "rows": [
+    {"row": "X:256", "repeat": 2},
+    {"row": "X:2,D:252,X:2", "repeat": 2},
+    {"row": "X:3,H:250,X:3", "repeat": 2},
+    {"row": "X:3,T:29,D:1,T:31,D:1,T:31,D:1,T:31,D:1,T:31,D:1,T:31,D:1,T:31,D:1,T:28,X:3", "repeat": 8},
+    {"row": "X:3,T:85,C:8,T:64,C:8,T:85,X:3", "repeat": 2},
+    {"row": "X:3,D:93,H:64,D:93,X:3", "repeat": 4},
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,H:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 4},
+    "X:3,D:93,D:64,D:93,X:3",
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,T:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 3},
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,H:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 4},
+    "X:3,D:93,D:64,D:93,X:3",
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,T:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 3},
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,H:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 4},
+    "X:3,D:93,D:64,D:93,X:3",
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,T:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 2},
+    {"row": "X:3,F:29,D:1,F:31,D:1,F:31,H:64,F:31,D:1,F:31,D:1,F:29,X:3", "repeat": 3},
+    {"row": "X:3,S:93,D:64,S:93,X:3", "repeat": 10},
+    {"row": "X:3,S:250,X:3", "repeat": 6},
+    {"row": "X:256", "repeat": 2}
+  ]
+}

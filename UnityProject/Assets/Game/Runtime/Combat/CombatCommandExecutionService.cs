@@ -70,8 +70,9 @@ namespace OCC.Combat
 
             try
             {
+                if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) fireBattle = state.RogueSpells.FireBattle;
                 UnitState commandUnit = state.GetUnit(command.UnitId);
-                SkillDefinition deliveredSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null
+                SkillDefinition deliveredSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null && state.Ruleset != CombatRuleset.Roguelite
                     ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
                 GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
                 GridPosition movementSource = deliverySource;

@@ -14,13 +14,15 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapRun run = new RogueliteMapRun(501, FireRogueliteStarterCatalog.Ranged);
             run.SelectNode("rail_patrol");
+            RogueliteEncounterDefinition assigned = RogueliteEncounterCatalog.For(run, "rail_patrol");
 
             CombatSceneSessionBuild build = new CombatSceneSessionBuilder().Build(
                 run, null, Array.Empty<CombatSceneMarker>());
 
             Assert.That(build, Is.Not.Null);
-            Assert.That(build.Level.Id, Is.EqualTo("rail_patrol"));
-            Assert.That(build.Preparation.MissionId, Is.EqualTo("rail_patrol"));
+            Assert.That(build.Level.Id, Is.EqualTo(assigned.LevelId));
+            Assert.That(build.Preparation.MissionId, Is.EqualTo(assigned.LevelId));
+            Assert.That(build.Preparation.EnemySummary, Does.Contain(EnemyArchetypes.Get(assigned.EnemyArchetypeIds[0]).DisplayName));
             Assert.That(build.State.GetUnit("hero"), Is.Not.Null);
             Assert.That(build.State.ItemQuickbar.Take(2).All(id => !string.IsNullOrEmpty(id)), Is.True);
             Assert.That(build.State.LootSource.Id, Is.EqualTo("rail_patrol-relay-crate"));

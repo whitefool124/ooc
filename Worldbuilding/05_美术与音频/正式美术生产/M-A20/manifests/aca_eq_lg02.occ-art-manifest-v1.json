@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "equipment.academy.aca_eq_lg02",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single equipment asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/AcademyEquipment32/aca_eq_lg02/source.png",
+    "source_sha256": "7aae1ef7ee36dd8a80bd6a385ecd6991b1381650e82502d0850031a314c95614"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_lg02.png",
+    "output_sha256": "23983e70caf0696442f44ef9a453b9d51d7ed47a08fb13093f6e16c3d3de5055",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 equipment content icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/AcademyEquipment32/aca_eq_lg02/1x.png",
+    "four_x": "UnityProject/Artifacts/AcademyEquipment32/aca_eq_lg02/4x.png",
+    "grayscale": "UnityProject/Artifacts/AcademyEquipment32/aca_eq_lg02/grayscale.png",
+    "checker": "UnityProject/Artifacts/AcademyEquipment32/aca_eq_lg02/checker.png",
+    "application_contact": "UnityProject/Artifacts/AcademyEquipment32/contacts/unity_context_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Independent real-object silhouette, restrained function-specific accent, and Unity equipment/backpack/reward/shop contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_lg02.png",
+    "stable_guid": "f2fbf1e1407d0574c808a541f622cec7",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

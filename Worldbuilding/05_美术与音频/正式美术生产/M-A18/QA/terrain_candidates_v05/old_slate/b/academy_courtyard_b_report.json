@@ -1,0 +1,56 @@
+{
+  "logical_size": [
+    16,
+    16
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "nearest_scale": 2,
+  "alpha_values": [
+    255
+  ],
+  "colour_count": 6,
+  "palette_name": "old_slate",
+  "palette": {
+    "0": [
+      68,
+      69,
+      65,
+      255
+    ],
+    "1": [
+      91,
+      92,
+      86,
+      255
+    ],
+    "2": [
+      116,
+      116,
+      106,
+      255
+    ],
+    "3": [
+      137,
+      136,
+      122,
+      255
+    ],
+    "4": [
+      158,
+      155,
+      136,
+      255
+    ],
+    "5": [
+      119,
+      99,
+      75,
+      255
+    ]
+  },
+  "authored_source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\source\\terrain_candidates_v05\\old_slate\\academy_courtyard_b.pxart",
+  "export_only": true
+}

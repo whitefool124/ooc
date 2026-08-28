@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1560" viewBox="0 0 2400 1560" role="img" aria-labelledby="title desc">
+<title id="title">OCC 学院城空间结构总图 v05</title><desc id="desc">六公里东西尺度的学院城结构图。中央图书馆为核心，学院核心只占主城区四分之一；其余由居住、工坊、市集医务、港口物流、城外供给与封存隔离区组成。</desc>
+<defs>
+ <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#8fc3d5" stroke-width="1" opacity=".16"/></pattern>
+ <pattern id="blocks" width="54" height="42" patternUnits="userSpaceOnUse"><rect x="5" y="5" width="38" height="25" rx="2" fill="#dbeaf0" stroke="#356984" stroke-width="2"/><path d="M0 36H54" stroke="#6e9db2" stroke-width="3"/></pattern>
+ <style>.t{font-family:Arial,'Microsoft YaHei',sans-serif;fill:#effaff}.m{font-family:Arial,'Microsoft YaHei',sans-serif;fill:#acd0dc}.ward{stroke:#2b607c;stroke-width:4}.boundary{fill:none;stroke:#bfe9f4;stroke-width:14}.road{fill:none;stroke:#709eb3;stroke-linecap:round}.street{fill:none;stroke:#8cb6c7;stroke-width:6}.def{fill:#275d79;stroke:#d8f5fb;stroke-width:3}.note{fill:none;stroke:#76cce5;stroke-width:2;stroke-dasharray:9 7}.water{fill:#092b43}.land{fill:#bdd7e1;stroke:#245a75;stroke-width:7}.green{fill:#8fb6b5;stroke:#366c7b;stroke-width:3}.civic{fill:#f5fbfd;stroke:#35b8df;stroke-width:6}.sealed{fill:#5a8096;stroke:#143e58;stroke-width:6}</style>
+</defs>
+<rect width="2400" height="1560" fill="#082c44"/><text x="70" y="58" class="t" font-size="34" font-weight="700">M-A17 · 学院城空间结构总图 · ISSUE 05</text><text x="72" y="91" class="m" font-size="16">规划范围 6.0 × 3.4 km · 主城区 3.8 × 2.3 km · 常住 9,000–12,000 · 学期峰值 14,000–18,000</text>
+<g transform="translate(70 125)"><rect width="2260" height="1260" class="water"/><rect width="2260" height="1260" fill="url(#grid)"/>
+ <!-- 城外供给圈与海岸 -->
+ <path class="land" d="M100 290L300 150 670 78 1120 58 1570 92 1960 210 2160 430 2190 820 2020 1070 1610 1185 1080 1200 570 1140 210 990 72 690Z"/>
+ <path class="green" d="M135 300L330 190 700 120 1090 105 1480 135 1850 240 2035 430 2040 565 1885 500 1640 390 1330 320 970 300 620 330 315 430 135 520Z"/>
+ <text x="740" y="165" class="t" font-size="18">北部农圃、牧地、蓄水池与猎团巡护带</text>
+ <path class="green" d="M145 760L310 1010 650 1110 1010 1150 910 1030 610 960 370 820Z"/><text x="250" y="1055" class="t" font-size="17">西南疏散绿带／采石与木料场</text>
+ <!-- 主城墙：城内只是整个规划的一部分 -->
+ <path class="boundary" d="M300 570L390 360 720 250 1110 220 1495 280 1800 430 1930 700 1840 930 1510 1040 1080 1060 650 1000 365 840Z"/>
+ <!-- 城区分区面 -->
+ <path d="M330 565L420 390 700 300 820 520 750 780 390 800Z" fill="url(#blocks)" class="ward"/><text x="440" y="510" class="t" font-size="22" font-weight="700">西门居民区</text><text x="440" y="540" class="m" font-size="14">客栈／长住民居／地方学校／车马院</text>
+ <path d="M700 300L1080 250 1220 390 1135 515 820 520Z" fill="#cfe4eb" class="ward"/><text x="835" y="350" class="t" font-size="22" font-weight="700">教学与档案区</text><text x="835" y="380" class="m" font-size="14">讲堂／抄写院／导师院／访学宿舍</text>
+ <path d="M1220 390L1495 315 1760 450 1835 650 1530 670 1360 540Z" fill="url(#blocks)" class="ward"/><text x="1420" y="470" class="t" font-size="22" font-weight="700">工坊试验区</text><text x="1420" y="500" class="m" font-size="14">导具工坊／材料场／事故隔离院</text>
+ <path d="M390 800L750 780 960 690 1080 1060 650 995 400 850Z" fill="url(#blocks)" class="ward"/><text x="550" y="870" class="t" font-size="22" font-weight="700">宿舍与城民生活区</text><text x="550" y="900" class="m" font-size="14">学生宿舍／食堂／浴场／手工业街</text>
+ <path d="M960 690L1260 680 1530 670 1580 930 1320 1020 1080 1060Z" fill="url(#blocks)" class="ward"/><text x="1110" y="820" class="t" font-size="22" font-weight="700">市集医务区</text><text x="1110" y="850" class="m" font-size="14">教会医院／药材市／公证所／集结广场</text>
+ <path d="M1580 680L1835 650 1885 790 1790 930 1580 930Z" fill="#b9d5df" class="ward"/><text x="1630" y="760" class="t" font-size="21" font-weight="700">港门与仓栈区</text><text x="1630" y="790" class="m" font-size="14">检验坪／仓库／吊臂／水手街</text>
+ <!-- 中央公共核心 -->
+ <ellipse cx="1060" cy="590" rx="290" ry="215" fill="#9ec5d3" stroke="#245a75" stroke-width="7"/>
+ <rect x="900" y="490" width="330" height="205" class="civic"/><circle cx="990" cy="575" r="72" fill="#6ba8c0" stroke="#1d526e" stroke-width="5"/><circle cx="990" cy="575" r="46" fill="#effaff"/><rect x="1040" y="550" width="145" height="92" fill="#d9edf3" stroke="#245a75" stroke-width="5"/>
+ <text x="930" y="525" class="t" font-size="24" font-weight="700">中央图书馆</text><text x="930" y="718" class="t" font-size="18">城市契约、档案与公共仲裁中心</text>
+ <!-- 道路骨架 -->
+ <path class="road" stroke-width="34" d="M300 615H770M1235 590H1855"/><path class="road" stroke-width="30" d="M1060 245V475M1060 705V1050"/><ellipse cx="1060" cy="590" rx="355" ry="270" class="road" stroke-width="24"/>
+ <path class="street" d="M450 470L750 570M470 720L790 650M1350 420L1260 550M1510 560L1450 710M1240 890L1060 760M750 900L900 690"/>
+ <!-- 港口前池与外部码头，不压缩进城墙 -->
+ <path d="M1510 1040L1730 950 2050 900 2140 1000 2020 1130 1650 1190Z" fill="#83aebf" stroke="#245a75" stroke-width="6"/><path d="M1690 1010L2030 965M1740 1080L2080 1035M1830 1140L2110 1095" class="road" stroke-width="22"/><text x="1760" y="1170" class="t" font-size="19">南港前池／码头／检验隔离坪</text>
+ <!-- 封存塔为远离中心的独立隔离区 -->
+ <path class="sealed" d="M1850 250L2070 305 2160 500 2080 680 1890 650 1810 470Z"/><circle cx="1990" cy="460" r="105" fill="#86aec0" stroke="#d9f5fb" stroke-width="6"/><path d="M1945 555V380l45-105 45 105v175z" fill="#1b4b67"/><text x="1875" y="705" class="t" font-size="20">封存塔隔离区</text><text x="1875" y="735" class="m" font-size="14">独立墙垣／受控桥／维护院／外部监察所</text>
+ <path d="M1765 450H1850M1770 620H1880" class="road" stroke-width="20"/>
+ <!-- 城防节点 -->
+ <g class="def"><rect x="280" y="580" width="50" height="72"/><rect x="1035" y="205" width="54" height="55"/><rect x="1815" y="680" width="54" height="70"/><rect x="1035" y="1025" width="54" height="55"/></g>
+ <g fill="#245a75" stroke="#d8f5fb" stroke-width="3"><circle cx="390" cy="360" r="24"/><circle cx="720" cy="250" r="24"/><circle cx="1110" cy="220" r="24"/><circle cx="1495" cy="280" r="24"/><circle cx="1800" cy="430" r="24"/><circle cx="1840" cy="930" r="24"/><circle cx="1080" cy="1060" r="24"/><circle cx="365" cy="840" r="24"/></g>
+ <text x="220" y="930" class="m" font-size="13">城防：四门／八座瞭望与信号塔／连续巡墙步道；局部防护阵只保护关键设施</text>
+ <!-- 尺度与占比 -->
+ <path d="M120 1210H495M120 1198V1222M495 1198V1222" stroke="#effaff" stroke-width="4"/><text x="235" y="1242" class="t" font-size="16">1 km</text>
+ <g transform="translate(1360 1080)"><rect width="720" height="138" fill="#0e3b56" stroke="#9ccddd" stroke-width="2"/><text x="18" y="28" class="t" font-size="17" font-weight="700">结构比例锁定</text><text x="18" y="56" class="m" font-size="14">学院公共核心约 24% · 城民居住与服务约 31% · 工坊/医务/市场约 20%</text><text x="18" y="82" class="m" font-size="14">港口物流约 10% · 城防/疏散/隔离约 15% · 城墙外供给圈另计</text><text x="18" y="110" class="m" font-size="14">完整地图不能一屏读单体：全貌读分区，1×读街坊，2×读建筑与动态节点。</text></g>
+</g>
+<text x="70" y="1435" class="t" font-size="20" font-weight="700">空间结论：</text><text x="185" y="1435" class="m" font-size="18">学院是城中的核心机构，不是整座城；港口、居民、供给、防御和封存体系都有独立面积与路线。</text><text x="70" y="1475" class="m" font-size="15">本图锁定城市层级与尺度，不登记 40 个动态节点，也不作为 Unity 已实现证明。后续工程总平面须以 6144×3456 逻辑坐标展开。</text>
+</svg>

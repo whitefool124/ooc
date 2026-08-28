@@ -16,6 +16,8 @@ namespace OCC.Combat
         None,
         Settings,
         Archive,
+        Loadout,
+        NodeRoom,
         Confirmation
     }
 

@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_stairs_2x1",
+  "role": "modular_structure_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "One independently generated raw; normalized under OCC M-A18 academy voxel-38 production brief",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_voxel_v17/academy_stairs_2x1_source.png",
+    "source_sha256": "408f79162d0c73325b72372f05bcdd22264e90829a74b82bc06c3895fc0402b3"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_voxel_v17/academy_stairs_2x1.png",
+    "output_sha256": "0f4c0b17b53858502f994eccbacdf436dac96c2996408ccef2c19ff3156b154e",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "reusable academy module below units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_stairs_2x1_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_stairs_2x1_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_stairs_2x1_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_stairs_2x1_checker.png",
+    "application_contact": "UnityProject/Artifacts/Terrain38/NineMaps/terrain38_nine_maps_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Reviewed in all nine academy maps with readability and visual hierarchy prioritized over setting ornament. Ground no longer creates rut bands or dark holes; adjacency curbs and modular walls remain subordinate to units and routes."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_stairs_2x1.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_stairs_2x1",
+    "guid": "5d85c6813a7ed9042a8349ab77ffc81a",
+    "stable_guid": "5d85c6813a7ed9042a8349ab77ffc81a",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/Terrain38/NineMaps/rail_patrol_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

@@ -53,11 +53,11 @@
   ],
   "layouts": [
     { "id": "global.header", "anchor": "top-center", "x": 0, "y": -12, "width": 1872, "height": 56 },
-    { "id": "landing.card", "anchor": "center", "x": 0, "y": 0, "width": 1040, "height": 680 },
-    { "id": "map.status", "anchor": "top-left", "x": 24, "y": -82, "width": 1192, "height": 60 },
-    { "id": "map.board", "anchor": "top-left", "x": 24, "y": -162, "width": 1392, "height": 850 },
-    { "id": "map.detail", "anchor": "top-right", "x": -24, "y": -162, "width": 456, "height": 850 },
-    { "id": "briefing.card", "anchor": "center", "x": 0, "y": 0, "width": 1120, "height": 680 },
+    { "id": "landing.card", "anchor": "center", "x": 0, "y": 0, "width": 1320, "height": 760 },
+    { "id": "map.status", "anchor": "top-left", "x": 24, "y": -78, "width": 1872, "height": 92 },
+    { "id": "map.board", "anchor": "top-left", "x": 24, "y": -182, "width": 1872, "height": 874 },
+    { "id": "map.detail", "anchor": "top-right", "x": -44, "y": -260, "width": 520, "height": 720 },
+    { "id": "briefing.card", "anchor": "center", "x": 0, "y": 0, "width": 1280, "height": 760 },
     { "id": "settings.card", "anchor": "center", "x": 0, "y": 0, "width": 1040, "height": 760 },
     { "id": "archive.card", "anchor": "center", "x": 0, "y": 0, "width": 1040, "height": 700 },
     { "id": "modal.confirm", "anchor": "center", "x": 0, "y": 0, "width": 720, "height": 360 },
@@ -72,19 +72,19 @@
     { "id": "combat.hero", "anchor": "top-left", "x": 16, "y": -126, "width": 416, "height": 248 },
     { "id": "combat.timeline", "anchor": "top-left", "x": 16, "y": -388, "width": 416, "height": 230 },
     { "id": "combat.log", "anchor": "top-left", "x": 16, "y": -632, "width": 416, "height": 172 },
-    { "id": "combat.commands", "anchor": "bottom-left", "x": 16, "y": 16, "width": 1408, "height": 164 },
+    { "id": "combat.commands", "anchor": "bottom-left", "x": 16, "y": 16, "width": 1408, "height": 200 },
     { "id": "combat.outcome", "anchor": "center", "x": 0, "y": 0, "width": 720, "height": 330 }
   ],
   "palette": [
-    { "id": "ink", "hex": "#05080B" },
-    { "id": "surface", "hex": "#0A1015" },
-    { "id": "panel", "hex": "#0F171D" },
-    { "id": "raised", "hex": "#161F26" },
-    { "id": "cyan", "hex": "#4DC7E0" },
-    { "id": "amber", "hex": "#FAB847" },
-    { "id": "safe", "hex": "#52B89A" },
-    { "id": "danger", "hex": "#D15747" },
-    { "id": "text", "hex": "#E6EFF2" },
-    { "id": "muted", "hex": "#8FA3AD" }
+    { "id": "ink", "hex": "#2A2823" },
+    { "id": "surface", "hex": "#F2EBDD" },
+    { "id": "panel", "hex": "#E4DBC8" },
+    { "id": "raised", "hex": "#FBF6EA" },
+    { "id": "cyan", "hex": "#2E7B82" },
+    { "id": "amber", "hex": "#A86F22" },
+    { "id": "safe", "hex": "#4F785B" },
+    { "id": "danger", "hex": "#A4493F" },
+    { "id": "text", "hex": "#2A2823" },
+    { "id": "muted", "hex": "#5F5A51" }
   ]
 }

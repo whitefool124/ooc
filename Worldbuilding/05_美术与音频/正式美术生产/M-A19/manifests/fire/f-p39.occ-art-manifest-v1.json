@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.fire.f-p39",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/fire/f-p39/source.png",
+    "source_sha256": "6d10237768a4ce252e77729ff9a32fabab7f5afa9adcb4b8a3deefadb56b7ff2"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p39.png",
+    "output_sha256": "17d40977913bb9e8e437cab268bc14ea991bdb553bfd546593698d03aab593a4",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/fire/f-p39/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/fire/f-p39/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/fire/f-p39/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/fire/f-p39/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "焚甲贯矢：5 格可见敌方：16 火伤害 + 破甲 -8，持续 1 回合 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "9c2f9cb2c738d044d81857079598b854",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

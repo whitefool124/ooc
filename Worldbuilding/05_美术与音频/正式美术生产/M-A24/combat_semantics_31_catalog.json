@@ -1,0 +1,471 @@
+{
+  "schema": "occ-combat-semantics-catalog-v1",
+  "count": 31,
+  "assets": [
+    {
+      "asset_id": "combat.command.move",
+      "group": "command",
+      "stem": "move",
+      "subject": "双步前进箭头，冷青动作点",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/move/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/move.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/move.png"
+    },
+    {
+      "asset_id": "combat.command.attack",
+      "group": "command",
+      "stem": "attack",
+      "subject": "两道锈红斩击在目标点交汇",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/attack/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/attack.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/attack.png"
+    },
+    {
+      "asset_id": "combat.command.skill",
+      "group": "command",
+      "stem": "skill",
+      "subject": "单个琥珀回路被手势启动",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/skill/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/skill.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/skill.png"
+    },
+    {
+      "asset_id": "combat.command.skill_two",
+      "group": "command",
+      "stem": "skill_two",
+      "subject": "两个紫罗兰回路依次启动",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/skill_two/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/skill_two.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/skill_two.png"
+    },
+    {
+      "asset_id": "combat.command.loot",
+      "group": "command",
+      "stem": "loot",
+      "subject": "打开小箱与向下取物手势",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/loot/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/loot.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/loot.png"
+    },
+    {
+      "asset_id": "combat.command.interact",
+      "group": "command",
+      "stem": "interact",
+      "subject": "手指压下旧金机械扣",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/command/interact/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/command/interact.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalCommandIcons16/interact.png"
+    },
+    {
+      "asset_id": "combat.intent.attack",
+      "group": "intent",
+      "stem": "attack",
+      "subject": "三枚锈红尖锋向中心逼近",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/intent/attack/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/intent/attack.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/attack.png"
+    },
+    {
+      "asset_id": "combat.intent.cast",
+      "group": "intent",
+      "stem": "cast",
+      "subject": "三点紫罗兰以太向中心聚拢",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/intent/cast/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/intent/cast.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/cast.png"
+    },
+    {
+      "asset_id": "combat.intent.move",
+      "group": "intent",
+      "stem": "move",
+      "subject": "一前一后两枚冷青足迹",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/intent/move/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/intent/move.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/move.png"
+    },
+    {
+      "asset_id": "combat.intent.defend",
+      "group": "intent",
+      "stem": "defend",
+      "subject": "乳白护面闭合在中心",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/intent/defend/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/intent/defend.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/defend.png"
+    },
+    {
+      "asset_id": "combat.intent.interact_destroy",
+      "group": "intent",
+      "stem": "interact_destroy",
+      "subject": "锈红短锤击中方形裂口",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/intent/interact_destroy/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/intent/interact_destroy.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalIntentIcons16/interact_destroy.png"
+    },
+    {
+      "asset_id": "combat.status.burning",
+      "group": "status",
+      "stem": "burning",
+      "subject": "持续燃烧的橙红闭环与中心余烬",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/burning/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/burning.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/burning.png"
+    },
+    {
+      "asset_id": "combat.status.slow",
+      "group": "status",
+      "stem": "slow",
+      "subject": "土黄色重坠压住一只靴底",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/slow/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/slow.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/slow.png"
+    },
+    {
+      "asset_id": "combat.status.bound",
+      "group": "status",
+      "stem": "bound",
+      "subject": "棕绳机械结形成封闭束缚环",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/bound/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/bound.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/bound.png"
+    },
+    {
+      "asset_id": "combat.status.armor_break",
+      "group": "status",
+      "stem": "armor_break",
+      "subject": "锈红裂缝贯穿断开的胸甲片",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/armor_break/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/armor_break.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/armor_break.png"
+    },
+    {
+      "asset_id": "combat.status.dazzled",
+      "group": "status",
+      "stem": "dazzled",
+      "subject": "暖金偏光星芒遮住半闭眼睑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/dazzled/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/dazzled.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/dazzled.png"
+    },
+    {
+      "asset_id": "combat.status.revealed",
+      "group": "status",
+      "stem": "revealed",
+      "subject": "暖金测绘轮廓围住显形人影",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/status/revealed/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/status/revealed.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/revealed.png"
+    },
+    {
+      "asset_id": "combat.feedback.damage",
+      "group": "feedback",
+      "stem": "damage",
+      "subject": "锈红冲击缺口和向外碎片",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/damage/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/damage.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/damage.png"
+    },
+    {
+      "asset_id": "combat.feedback.shield_absorb",
+      "group": "feedback",
+      "stem": "shield_absorb",
+      "subject": "乳白冲击波被旧金弧面截住",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/shield_absorb/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/shield_absorb.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/shield_absorb.png"
+    },
+    {
+      "asset_id": "combat.feedback.armor_break",
+      "group": "feedback",
+      "stem": "armor_break",
+      "subject": "甲片在锈红撞点向外碎裂",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/armor_break/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/armor_break.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/armor_break.png"
+    },
+    {
+      "asset_id": "combat.feedback.burning",
+      "group": "feedback",
+      "stem": "burning",
+      "subject": "橙红火舌在接触点瞬间窜起",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/burning.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/burning.png"
+    },
+    {
+      "asset_id": "combat.feedback.bound",
+      "group": "feedback",
+      "stem": "bound",
+      "subject": "棕色索套从四向猛然收紧",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/bound/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/bound.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/bound.png"
+    },
+    {
+      "asset_id": "combat.feedback.slow",
+      "group": "feedback",
+      "stem": "slow",
+      "subject": "土黄重线拖住前进足迹",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/slow/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/slow.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/slow.png"
+    },
+    {
+      "asset_id": "combat.feedback.healing",
+      "group": "feedback",
+      "stem": "healing",
+      "subject": "灰绿缝合弧合拢一道伤口",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/healing/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/healing.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/healing.png"
+    },
+    {
+      "asset_id": "combat.feedback.shield_restore",
+      "group": "feedback",
+      "stem": "shield_restore",
+      "subject": "三枚乳白护片向旧金核心合拢",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/shield_restore/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/shield_restore.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/shield_restore.png"
+    },
+    {
+      "asset_id": "combat.feedback.mana_restore",
+      "group": "feedback",
+      "stem": "mana_restore",
+      "subject": "紫罗兰流线注入刻度容器",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/mana_restore/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/mana_restore.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/mana_restore.png"
+    },
+    {
+      "asset_id": "combat.feedback.status_cleared",
+      "group": "feedback",
+      "stem": "status_cleared",
+      "subject": "象牙清扫弧带走三枚暗色状态点",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/status_cleared/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/status_cleared.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/status_cleared.png"
+    },
+    {
+      "asset_id": "combat.feedback.movement",
+      "group": "feedback",
+      "stem": "movement",
+      "subject": "两段冷青残线跨过中心格",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/movement/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/movement.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/movement.png"
+    },
+    {
+      "asset_id": "combat.feedback.object_damaged",
+      "group": "feedback",
+      "stem": "object_damaged",
+      "subject": "石木方块出现锈红单道裂纹",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/object_damaged/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/object_damaged.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/object_damaged.png"
+    },
+    {
+      "asset_id": "combat.feedback.object_destroyed",
+      "group": "feedback",
+      "stem": "object_destroyed",
+      "subject": "方块向四侧崩解成碎片",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/object_destroyed/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/object_destroyed.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/object_destroyed.png"
+    },
+    {
+      "asset_id": "combat.feedback.unit_defeated",
+      "group": "feedback",
+      "stem": "unit_defeated",
+      "subject": "暗色人形轮廓倒向下方终点线",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/unit_defeated/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationCombatSemantics/feedback/unit_defeated.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/unit_defeated.png"
+    }
+  ]
+}

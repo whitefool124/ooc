@@ -1,0 +1,24 @@
+{
+  "schema": "occ-academy-tileset-contact-v1",
+  "status": "PASS",
+  "board_size": [
+    384,
+    288
+  ],
+  "logical_map": [
+    12,
+    9
+  ],
+  "tile_size": [
+    32,
+    32
+  ],
+  "asset_count": 11,
+  "connection_mismatches": {
+    "map_horizontal_tile_seams": 0,
+    "map_vertical_tile_seams": 0,
+    "courtyard_a_to_b_n": 0,
+    "courtyard_a_to_b_e": 0
+  },
+  "contact_sha256": "8f6362b3a8c4dcba1173a34416b66404f98ac165ccbe87cefaab865c7b9b4dad"
+}

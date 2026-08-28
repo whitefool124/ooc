@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="2100" viewBox="0 0 3000 2100">
+  <defs>
+    <pattern id="g8" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#d4e4ee"/></pattern>
+    <style>.p{fill:#f7fbfe}.grid{fill:url(#g8)}.box{fill:#e8f3f9;stroke:#4f88a8;stroke-width:2}.b{fill:#fff;stroke:#174866;stroke-width:3}.roof{fill:#96c3d9;stroke:#174866;stroke-width:2}.yard{fill:#d9edf6;stroke:#4f88a8;stroke-width:2}.road{fill:#fff;stroke:#5c91ad;stroke-width:2}.fire{fill:#d7f0f6;stroke:#2c91aa;stroke-width:2;stroke-dasharray:8 6}.dim{stroke:#335f77;stroke-width:1.5}.title{font:700 38px 'Microsoft YaHei',sans-serif;fill:#123650}.h{font:700 24px 'Microsoft YaHei',sans-serif;fill:#153f5d}.t{font:17px 'Microsoft YaHei',sans-serif;fill:#315d76}.s{font:14px 'Microsoft YaHei',sans-serif;fill:#416b81}.id{font:700 14px Consolas,monospace;fill:#0e5a84}.water{fill:none;stroke:#1684a4;stroke-width:4}.drain{fill:none;stroke:#557f94;stroke-width:3;stroke-dasharray:8 6}</style>
+  </defs>
+  <rect class="p" width="3000" height="2100"/><text class="title" x="60" y="58">OCC 学院城典型街坊、道路与城防详图 · v10-D01</text><text class="t" x="60" y="94">用于模块化建模；所有尺寸为米。重复房屋按区域生成，但每栋仍保留独立基础、屋脊、入口与防火分段。</text>
+
+  <g transform="translate(60 130)">
+    <rect class="box" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="40">D01-A｜HR-A 窄面排屋街坊｜192×160m｜覆盖率 48–55%</text>
+    <rect class="road" x="40" y="90" width="1300" height="72"/><text class="t" x="560" y="134">12m 普通街 / 车行＋排水</text>
+    <rect class="road" x="625" y="162" width="96" height="520"/><text class="s" x="680" y="430" transform="rotate(90 680 430)">8m 次街</text>
+    <g id="row-a">
+      <rect class="b" x="70" y="190" width="82" height="165"/><rect class="b" x="160" y="190" width="70" height="165"/><rect class="b" x="238" y="190" width="96" height="165"/><rect class="b" x="342" y="190" width="74" height="165"/><rect class="b" x="424" y="190" width="88" height="165"/><rect class="b" x="520" y="190" width="75" height="165"/>
+      <rect class="b" x="70" y="480" width="72" height="170"/><rect class="b" x="150" y="480" width="92" height="170"/><rect class="b" x="250" y="480" width="78" height="170"/><rect class="b" x="336" y="480" width="84" height="170"/><rect class="b" x="428" y="480" width="70" height="170"/><rect class="b" x="506" y="480" width="89" height="170"/>
+      <rect class="b" x="755" y="190" width="88" height="165"/><rect class="b" x="851" y="190" width="72" height="165"/><rect class="b" x="931" y="190" width="96" height="165"/><rect class="b" x="1035" y="190" width="76" height="165"/><rect class="b" x="1119" y="190" width="85" height="165"/><rect class="b" x="1212" y="190" width="98" height="165"/>
+      <rect class="b" x="755" y="480" width="74" height="170"/><rect class="b" x="837" y="480" width="92" height="170"/><rect class="b" x="937" y="480" width="80" height="170"/><rect class="b" x="1025" y="480" width="88" height="170"/><rect class="b" x="1121" y="480" width="72" height="170"/><rect class="b" x="1201" y="480" width="109" height="170"/>
+    </g>
+    <rect class="road" x="70" y="380" width="525" height="66"/><rect class="road" x="755" y="380" width="555" height="66"/><text class="s" x="240" y="420">4–5m 后巷 / 清运</text><text class="s" x="940" y="420">4–5m 后巷 / 清运</text>
+    <rect class="fire" x="595" y="175" width="30" height="493"/><rect class="fire" x="721" y="175" width="34" height="493"/><text class="s" x="510" y="705">6m 防火缝</text><text class="s" x="735" y="705">转角＋消防取水点</text>
+    <text class="t" x="50" y="728">单栋典型 6–10×14–22m；2–3F；一户或一户＋临街铺。不得合成连续板楼。</text>
+  </g>
+
+  <g transform="translate(1560 130)">
+    <rect class="box" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="40">D01-B｜AR-A 学院围院｜224×176m｜覆盖率 30–40%</text>
+    <rect class="b" x="90" y="120" width="1160" height="110"/><text class="t" x="540" y="185">主讲堂翼 3F / 屋脊≤18m</text>
+    <rect class="b" x="90" y="250" width="150" height="360"/><rect class="b" x="1100" y="250" width="150" height="360"/>
+    <rect class="yard" x="270" y="270" width="800" height="300"/><text class="t" x="585" y="410">中央院 128×48m</text><text class="s" x="530" y="442">集会、采光、消防与疏散</text>
+    <rect class="b" x="270" y="590" width="260" height="90"/><rect class="b" x="810" y="590" width="260" height="90"/><rect class="fire" x="550" y="590" width="240" height="90"/><text class="s" x="592" y="642">对向双门 ≥4.5m</text>
+    <circle class="yard" cx="290" cy="175" r="34"/><text class="s" x="340" y="180">消防水池 180–260m³</text>
+    <path class="water" d="M290 210V620M290 400H240"/><path class="drain" d="M1050 270V650H1250"/>
+    <text class="t" x="50" y="728">档案库与住宅／厨房距离≥24m；石砌防火墙分段，连廊不得成为唯一疏散路径。</text>
+  </g>
+
+  <g transform="translate(60 930)">
+    <rect class="box" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="40">D01-C｜WK 工坊设备街坊｜224×176m｜覆盖率 32–48%</text>
+    <path class="b" d="M80 140h540v180H80z"/><path class="roof" d="M80 140l70-45 70 45 70-45 70 45 70-45 70 45 70-45 70 45"/><text class="t" x="250" y="235">长跨冷作／装配工房 1–2F</text>
+    <rect class="b" x="720" y="120" width="520" height="200"/><text class="t" x="855" y="220">材料库 1–2F</text>
+    <rect class="yard" x="80" y="370" width="740" height="250"/><text class="t" x="300" y="490">设备院 / 事故回转场</text><text class="s" x="285" y="522">净空 32m；石地坪；不设住宅</text>
+    <rect class="b" x="860" y="370" width="180" height="250"/><text class="s" x="895" y="490">监管仓</text><rect class="b" x="1060" y="370" width="180" height="250"/><text class="s" x="1095" y="490">消防所</text>
+    <rect class="fire" x="820" y="340" width="40" height="310"/><text class="s" x="742" y="680">住宅隔离≥32m</text>
+    <path class="drain" d="M100 600H800V690"/><path class="water" d="M1150 620V680H800"/>
+    <text class="t" x="50" y="728">废料院设遮雨、编号和石地坪；危险工房位于居住区下风侧，不共享井与生活排水。</text>
+  </g>
+
+  <g transform="translate(1560 930)">
+    <rect class="box" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="40">D01-D｜市集＋医务消防街坊｜224×176m｜覆盖率 38–50%</text>
+    <rect class="b" x="80" y="120" width="500" height="110"/><rect class="b" x="80" y="250" width="500" height="110"/><text class="t" x="250" y="190">市场棚列</text><text class="t" x="250" y="320">行会铺面</text>
+    <rect class="fire" x="610" y="100" width="150" height="550"/><text class="s" x="642" y="350">16m</text><text class="s" x="627" y="375">消防间隔</text>
+    <path class="b" d="M800 120h430v500H800z"/><path class="roof" d="M800 120h430M1015 120v500M800 365h430"/><text class="t" x="900" y="250">医务院四翼</text><text class="s" x="900" y="285">独立药材仓与担架门</text>
+    <circle class="yard" cx="680" cy="540" r="48"/><text class="s" x="610" y="610">公共井 / 消防池</text>
+    <path class="water" d="M680 492V420H1015"/><path class="drain" d="M1230 620H1290V690"/>
+    <text class="t" x="50" y="728">棚市火源与医务药材分离；每96m设置8–16m阻火线，后巷保持担架和泵车通行。</text>
+  </g>
+
+  <g transform="translate(60 1730)">
+    <rect class="box" width="2880" height="300"/><text class="h" x="30" y="42">D01-E｜门区平面控制｜门洞10m＋双检查院＋桥台独立</text>
+    <path class="road" d="M90 150H940" stroke-width="70"/><rect class="b" x="420" y="85" width="80" height="130"/><rect class="b" x="530" y="85" width="80" height="130"/><rect class="yard" x="650" y="70" width="250" height="75"/><rect class="yard" x="650" y="160" width="250" height="75"/><text class="s" x="675" y="115">入城检查院</text><text class="s" x="675" y="205">出城／消防通道</text>
+    <path d="M960 90h290v120H960" fill="#cbeaf4" stroke="#5798ba" stroke-width="3"/><path class="road" d="M900 150H1320" stroke-width="54"/><text class="s" x="1010" y="65">外壕 18–24m</text>
+    <line x1="1450" y1="55" x2="1450" y2="245" stroke="#4f88a8" stroke-width="2"/>
+    <text class="t" x="1500" y="90">城门守备：每门 18–28 人常班；门楼 3–4F、有效高≤20m。</text><text class="t" x="1500" y="128">检查院不堵主轴；关闭主门后侧门仍可供人员疏散和消防。</text><text class="t" x="1500" y="166">桥台、门楼和墙段分件替换；门前回转场直径≥24m。</text><text class="t" x="1500" y="204">门区住宅不得进入内侧32m清障带；临时棚可拆、不得作为永久街坊。</text>
+  </g>
+  <text class="s" x="60" y="2075">关联总图：OCC_M-A17_学院城详细工程控制总平面_v10.svg｜状态：结构候选，未建模，未接入 Unity。</text>
+</svg>

@@ -7,7 +7,7 @@ namespace OCC.Combat.Tests
     public sealed class RogueliteCompletionLineTests
     {
         [TestCase(620, "core_overseer")]
-        [TestCase(621, "purifier_overseer")]
+        [TestCase(621, "core_overseer")]
         public void TwoFixedSeeds_CompleteFirstRegionAndRoundTripEveryBoundary(int seed, string expectedBoss)
         {
             RogueliteMapRun run = RoundTrip(new RogueliteMapRun(seed));

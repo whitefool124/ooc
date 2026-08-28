@@ -173,7 +173,7 @@ namespace OCC.Combat
                 iconId, hasDestination, destination, expectedDamage);
         }
 
-        public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy)
+        public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy, bool roguelite = false)
         {
             if (enemy == null) throw new ArgumentNullException(nameof(enemy));
             string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + " · 伤害 " + enemy.MainHand.Damage + " · 射程 " + enemy.MainHand.Range;
@@ -183,7 +183,7 @@ namespace OCC.Combat
                 .Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
             return new EnemyInformationPresentation(enemy.DisplayName,
                 "生命 " + enemy.Health + "/" + enemy.MaxHealth + " · 护盾 " + enemy.Shield + "/" + enemy.MaxShield,
-                "护甲 " + enemy.EffectiveArmor + " · 格挡 " + enemy.Block + " · 速度 " + enemy.EffectiveSpeed,
+                roguelite ? "普通盾 " + enemy.Shield + " · 速度 " + enemy.EffectiveSpeed : "护甲 " + enemy.EffectiveArmor + " · 格挡 " + enemy.Block + " · 速度 " + enemy.EffectiveSpeed,
                 weapon, skills, statuses);
         }
 
@@ -239,25 +239,25 @@ namespace OCC.Combat
             if (preview == null) return "战斗状态尚未就绪。";
             List<string> lines = new List<string>
             {
-                "目标：" + preview.TargetRule,
-                preview.CanSubmit ? "现在可以使用" : "暂时无法使用：" + preview.FailureReason,
-                "效果：" + preview.ExpectedResult
+                preview.CanSubmit ? "● 可用" : "● 不可用 · " + preview.FailureReason,
+                "消耗 · " + (string.IsNullOrWhiteSpace(preview.Cost) ? "无" : preview.Cost),
+                "目标 · " + preview.TargetRule,
+                "效果 · " + preview.ExpectedResult
             };
-            if (!string.IsNullOrWhiteSpace(preview.TargetBefore)) lines.Add("当前：" + preview.TargetBefore);
-            if (!string.IsNullOrWhiteSpace(preview.TargetAfter)) lines.Add("行动后：" + preview.TargetAfter);
             if (!string.IsNullOrWhiteSpace(preview.DamageBreakdown)) lines.Add("伤害：" + preview.DamageBreakdown);
             if (!string.IsNullOrWhiteSpace(preview.StatusResults)) lines.Add("状态变化：" + preview.StatusResults);
-            if (preview.AffectedCellCount > 0) lines.Add("影响范围：" + preview.AffectedCellCount + " 格");
-            if (preview.FriendlyFireRisk) lines.Add("风险：可能波及友军");
+            if (preview.AffectedCellCount > 1) lines.Add("范围 · " + preview.AffectedCellCount + " 格" + (preview.FriendlyFireRisk ? " · 可能波及友军" : string.Empty));
+            else if (preview.FriendlyFireRisk) lines.Add("风险 · 可能波及友军");
             return string.Join("\n", lines);
         }
 
-        public static string BuildTargetDetails(CombatActionPreview preview, UnitState target, EnemyIntentPresentation intent)
+        public static string BuildTargetDetails(CombatActionPreview preview, UnitState target, EnemyIntentPresentation intent, bool roguelite = false)
         {
             List<string> sections = new List<string> { BuildActionDetails(preview) };
             if (target != null)
             {
-                sections.Add("敌人资料\n" + BuildEnemyInformation(target).FullText);
+                EnemyInformationPresentation profile = BuildEnemyInformation(target, roguelite);
+                sections.Add("敌人资料\n" + profile.Name + " · " + profile.Vitals + "\n" + profile.Weapon);
                 if (intent != null) sections.Add("敌人打算\n" + intent.DetailedText);
             }
             return string.Join("\n\n", sections);
@@ -273,7 +273,7 @@ namespace OCC.Combat
         public static string BuildEnemyHoverDetails(CombatState state, UnitState enemy, EnemyIntentPresentation intent)
         {
             if (state == null || enemy == null || enemy.IsHero) return string.Empty;
-            EnemyInformationPresentation profile = BuildEnemyInformation(enemy);
+            EnemyInformationPresentation profile = BuildEnemyInformation(enemy, state.Ruleset == CombatRuleset.Roguelite);
             return string.Join("\n", profile.Defenses, profile.Weapon, "特点：" + EnemyRoleSummary(enemy.EnemyArchetypeId),
                 profile.Skills, profile.Statuses, "当前意图：" + (intent?.DetailedText ?? "尚未显露"));
         }
@@ -282,15 +282,16 @@ namespace OCC.Combat
         {
             switch (archetypeId)
             {
-                case "shieldguard": return "正面防御坚固，会用盾击使目标迟缓。";
-                case "pyromancer": return "从远处施放火术，优先让目标燃烧。";
-                case "raider": return "行动迅速，贴近后用钩刃限制移动。";
-                case "elite_vanguard": return "攻防俱强，重击会造成破甲。";
-                case "barrier_mender": return "优先为护盾受损最严重的友军恢复护盾。";
-                case "tether_hound": return "移动迅速，扑咬会束缚目标。";
-                case "stone_snare": return "可从远处束缚目标，限制持续时间较长。";
-                case "lantern_revealer": return "用显影灯削弱防护，为友军创造攻击机会。";
-                case "rune_arbalist": return "移动缓慢，但能从远处发射高伤害重矢。";
+                case "shieldguard": return "盾术陪练生负责守线，会用铭盾冲撞使目标迟缓。";
+                case "pyromancer": return "火矢陪练生从远处施放受安全刻印约束的训练火矢。";
+                case "raider": return "侧锋陪练生行动迅速，贴近后用限位钩刃限制移动。";
+                case "elite_vanguard": return "刻阵教官主持高阶考核，重击会清除护盾并造成破势。";
+                case "sigil_mauler": return "承压检验偶必须邻接，锤印会清除护盾并造成破势。";
+                case "barrier_mender": return "护障助教优先为护盾受损最严重的友军续接护障。";
+                case "tether_hound": return "缚环寻迹兽移动迅速，扑咬会束缚目标。";
+                case "stone_snare": return "约束助教可从远处束缚目标，限制持续时间较长。";
+                case "lantern_revealer": return "档案巡查员用显影灯清除护盾并造成破势。";
+                case "rune_arbalist": return "重弩陪练生移动缓慢，但能从远处发射高伤害训练重矢。";
                 default: return "会根据距离选择攻击、施术或靠近目标。";
             }
         }
@@ -376,6 +377,14 @@ namespace OCC.Combat
                 }
             }));
             return string.IsNullOrEmpty(effects) ? "按技能规则结算" : effects;
+        }
+
+        public static string BuildRogueliteHeroDetails(UnitState hero)
+        {
+            if (hero == null) return "英雄状态尚未就绪。";
+            string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
+            return string.Join("\n", "生命 " + hero.Health + "/" + hero.MaxHealth + " · 普通盾 " + hero.Shield + " · 个人魔力 " + hero.Mana + "/" + hero.MaxMana,
+                "行动点 " + hero.ActionPoints + " · 速度 " + hero.EffectiveSpeed, statuses);
         }
 
         private static int IncomingDamage(CombatResolver.AttackPreview preview) =>

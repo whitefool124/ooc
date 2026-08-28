@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_wide_generated_v01",
+  "category": "occ_character_endpoint_wide",
+  "description": "Generated wide/quadruped OCC character endpoint normalized to 64x64 with border-key cleanup before pixel QA.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 36,
+  "minBodyHeight": 24,
+  "maxBodyHeight": 40,
+  "maxBodyWidth": 62,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": true,
+  "chromaKeyTolerance": 48,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

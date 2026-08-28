@@ -1,0 +1,58 @@
+{
+  "tiles": {
+    "a": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 5,
+      "exact_16x16_nearest_2x": true,
+      "mean_luma": 114.38,
+      "sha256": "7570fa215a087ae3f1d6d398ee2f889e4f8d58dce9e8d1b548de0520cc96823b"
+    },
+    "b": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 6,
+      "exact_16x16_nearest_2x": true,
+      "mean_luma": 113.61,
+      "sha256": "c94b983634a18265b7859003ced300a6fe46f76c0d1ce8d98a1f97f59e7884b4"
+    },
+    "c": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 5,
+      "exact_16x16_nearest_2x": true,
+      "mean_luma": 116.18,
+      "sha256": "cd6ebea05a13b18df667a71aa15eebbf765453d60bbcd693af247589fd378c52"
+    },
+    "d": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 5,
+      "exact_16x16_nearest_2x": true,
+      "mean_luma": 112.52,
+      "sha256": "d5185a1b980d246fea993a2d130274674b6ec7514b2fce549a4ce15284ef6bf9"
+    }
+  },
+  "family_mean_luma_delta": 3.66,
+  "unique_hash_count": 4
+}

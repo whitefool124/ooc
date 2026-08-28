@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_generated_v01",
+  "category": "occ_character_endpoint",
+  "description": "One generated OCC character endpoint normalized to 64x64; border-key cleanup is permitted only for removing a generated flat/checker preview background before pixel QA.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 50,
+  "minBodyHeight": 42,
+  "maxBodyHeight": 54,
+  "maxBodyWidth": 62,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": true,
+  "chromaKeyTolerance": 48,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

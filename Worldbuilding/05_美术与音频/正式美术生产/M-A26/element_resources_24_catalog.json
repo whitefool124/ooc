@@ -1,0 +1,390 @@
+{
+  "schema": "occ-element-resource-catalog-v1",
+  "count": 24,
+  "assets": [
+    {
+      "asset_id": "ui.element.fire",
+      "group": "element",
+      "stem": "fire",
+      "subject": "分叉热焰从压缩热核向上张开",
+      "palette": "橙红、陶红、暖黄",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/fire/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/fire.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/fire.png"
+    },
+    {
+      "asset_id": "ui.element.water",
+      "group": "element",
+      "stem": "water",
+      "subject": "一道受压水束穿过弧形压力环",
+      "palette": "深青蓝、灰蓝、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/water/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/water.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/water.png"
+    },
+    {
+      "asset_id": "ui.element.wind",
+      "group": "element",
+      "stem": "wind",
+      "subject": "三股气流绕过中央导流片",
+      "palette": "浅灰绿、象牙、暗灰",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/wind/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/wind.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/wind.png"
+    },
+    {
+      "asset_id": "ui.element.earth",
+      "group": "element",
+      "stem": "earth",
+      "subject": "两级承重阶石与底部锚脚",
+      "palette": "赭石、砂岩、炭灰",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/earth/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/earth.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/earth.png"
+    },
+    {
+      "asset_id": "ui.element.lightning",
+      "group": "element",
+      "stem": "lightning",
+      "subject": "两枚铜触点之间形成分叉导电路径",
+      "palette": "旧金、紫罗兰、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/lightning/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/lightning.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/lightning.png"
+    },
+    {
+      "asset_id": "ui.element.ice",
+      "group": "element",
+      "stem": "ice",
+      "subject": "四向霜夹围住不规则冰晶核",
+      "palette": "象牙、淡蓝、冷灰",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/ice/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/ice.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/ice.png"
+    },
+    {
+      "asset_id": "ui.element.light",
+      "group": "element",
+      "stem": "light",
+      "subject": "机械光阑向外投射三束暖光",
+      "palette": "暖白、旧金、炭灰",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/light/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/light.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/light.png"
+    },
+    {
+      "asset_id": "ui.element.dark",
+      "group": "element",
+      "stem": "dark",
+      "subject": "厚重吸光缺口吞没三枚入射光点",
+      "palette": "炭黑、梅紫、暗灰",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/element/dark/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/element/dark.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/dark.png"
+    },
+    {
+      "asset_id": "ui.resource.action_point",
+      "group": "resource",
+      "stem": "action_point",
+      "subject": "两段向前推进的节拍楔与一个落点",
+      "palette": "冷青、象牙、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/action_point/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/action_point.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/action_point.png"
+    },
+    {
+      "asset_id": "ui.resource.aether_load",
+      "group": "resource",
+      "stem": "aether_load",
+      "subject": "承压框架压住一段紫罗兰刻度柱",
+      "palette": "紫罗兰、铁灰、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/aether_load/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/aether_load.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/aether_load.png"
+    },
+    {
+      "asset_id": "ui.resource.charges",
+      "group": "resource",
+      "stem": "charges",
+      "subject": "三格由满到空的消耗槽",
+      "palette": "灰绿、象牙、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/charges/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/charges.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/charges.png"
+    },
+    {
+      "asset_id": "ui.resource.contribution",
+      "group": "resource",
+      "stem": "contribution",
+      "subject": "三枚学院登记筹码叠成稳定三角",
+      "palette": "灰绿、旧金、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/contribution/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/contribution.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/contribution.png"
+    },
+    {
+      "asset_id": "ui.resource.core_permit",
+      "group": "resource",
+      "stem": "core_permit",
+      "subject": "两张互锁的黄铜冲孔许可票",
+      "palette": "黄铜、象牙、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/core_permit/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/core_permit.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/core_permit.png"
+    },
+    {
+      "asset_id": "ui.resource.explored",
+      "group": "resource",
+      "stem": "explored",
+      "subject": "展开的路线折页与一个明确终点",
+      "palette": "灰蓝、象牙、冷青少量",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/explored/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/explored.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/explored.png"
+    },
+    {
+      "asset_id": "ui.resource.gold",
+      "group": "resource",
+      "stem": "gold",
+      "subject": "两枚错叠黄铜硬币，厚边与方形压印",
+      "palette": "黄铜、暖黄、棕黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/gold/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/gold.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/gold.png"
+    },
+    {
+      "asset_id": "ui.resource.health",
+      "group": "resource",
+      "stem": "health",
+      "subject": "交叉缝合的医务包扎带",
+      "palette": "灰绿、象牙、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/health/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/health.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/health.png"
+    },
+    {
+      "asset_id": "ui.resource.mana",
+      "group": "resource",
+      "stem": "mana",
+      "subject": "有三段刻度的紫罗兰储液容器",
+      "palette": "紫罗兰、梅紫、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/mana/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/mana.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/mana.png"
+    },
+    {
+      "asset_id": "ui.resource.notice",
+      "group": "resource",
+      "stem": "notice",
+      "subject": "机械示警片从底座抬起并露出两道警示刻痕",
+      "palette": "琥珀、炭黑、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/notice/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/notice.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/notice.png"
+    },
+    {
+      "asset_id": "ui.resource.operational_aether",
+      "group": "resource",
+      "stem": "operational_aether",
+      "subject": "闭合校准回路只有一段冷青正在工作",
+      "palette": "铁灰、象牙、冷青少量",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/operational_aether/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/operational_aether.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/operational_aether.png"
+    },
+    {
+      "asset_id": "ui.resource.parts",
+      "group": "resource",
+      "stem": "parts",
+      "subject": "垫片、短螺栓与小修补板组成紧凑零件堆",
+      "palette": "铁灰、旧金、炭黑",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/parts/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/parts.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/parts.png"
+    },
+    {
+      "asset_id": "ui.resource.risk",
+      "group": "resource",
+      "stem": "risk",
+      "subject": "一道锈红裂口劈开厚重危险楔",
+      "palette": "锈红、暗陶、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/risk/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/risk.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/risk.png"
+    },
+    {
+      "asset_id": "ui.resource.shield",
+      "group": "resource",
+      "stem": "shield",
+      "subject": "三枚象牙护片向旧金中心合拢",
+      "palette": "象牙、旧金、灰绿",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/shield/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/shield.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/shield.png"
+    },
+    {
+      "asset_id": "ui.resource.stage_time",
+      "group": "resource",
+      "stem": "stage_time",
+      "subject": "学院档案进度盘推进到下一枚刻度",
+      "palette": "旧金、灰蓝、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/stage_time/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/stage_time.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/stage_time.png"
+    },
+    {
+      "asset_id": "ui.resource.weight",
+      "group": "resource",
+      "stem": "weight",
+      "subject": "宽底铸铁砝码与顶部提环",
+      "palette": "铁灰、炭黑、象牙",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "source_path": "UnityProject/Artifacts/ElementResources24/resource/weight/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/weight.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/weight.png"
+    }
+  ]
+}

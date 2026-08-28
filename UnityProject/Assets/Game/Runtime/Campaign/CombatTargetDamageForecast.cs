@@ -11,6 +11,7 @@ namespace OCC.Combat
         public int RemainingHealth { get; }
         public int EnvironmentDamage { get; }
         public bool WillDefeat { get; }
+        public string DefeatSummary { get; }
         public int TotalDamage => ShieldLoss + HealthLoss;
 
         public string PlayerSummary
@@ -19,7 +20,7 @@ namespace OCC.Combat
             {
                 if (TotalDamage <= 0) return "不会造成伤害 · 生命剩余 " + RemainingHealth;
                 string result = WillDefeat
-                    ? "可击杀 · 生命归零"
+                    ? DefeatSummary + " · 生命归零"
                     : "生命 -" + HealthLoss + "（剩 " + RemainingHealth + "）";
                 if (ShieldLoss > 0) result += " · 护盾 -" + ShieldLoss;
                 if (EnvironmentDamage > 0) result += " · 含环境伤害 " + EnvironmentDamage;
@@ -28,7 +29,7 @@ namespace OCC.Combat
         }
 
         internal CombatTargetDamageForecast(int shieldLoss, int healthLoss, int remainingShield, int remainingHealth,
-            int environmentDamage)
+            int environmentDamage, string defeatSummary)
         {
             ShieldLoss = Math.Max(0, shieldLoss);
             HealthLoss = Math.Max(0, healthLoss);
@@ -36,6 +37,7 @@ namespace OCC.Combat
             RemainingHealth = Math.Max(0, remainingHealth);
             EnvironmentDamage = Math.Max(0, Math.Min(TotalDamage, environmentDamage));
             WillDefeat = RemainingHealth <= 0 && HealthLoss > 0;
+            DefeatSummary = string.IsNullOrWhiteSpace(defeatSummary) ? "可使目标失去行动能力" : defeatSummary;
         }
     }
 
@@ -99,7 +101,8 @@ namespace OCC.Combat
             int neutralTotal = Math.Max(0, before.Shield - neutralAfter.Shield) +
                                Math.Max(0, before.Health - neutralAfter.Health);
             int environment = Math.Max(0, shieldLoss + healthLoss - neutralTotal);
-            return new CombatTargetDamageForecast(shieldLoss, healthLoss, after.Shield, after.Health, environment);
+            return new CombatTargetDamageForecast(shieldLoss, healthLoss, after.Shield, after.Health, environment,
+                EnemyResolutionSemantics.Forecast(before));
         }
 
         private static FireBattleState WithoutFiregrounds(FireBattleState liveBattle)

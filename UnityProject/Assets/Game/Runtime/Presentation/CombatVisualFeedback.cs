@@ -12,6 +12,27 @@ namespace OCC.Combat.Presentation
         public static bool AnimationsEnabled(float intensity) => intensity > .01f;
     }
 
+    public static class UnitEndpointAnimationPolicy
+    {
+        public const int EndpointFrameCount = 2;
+
+        public static int FrameIndex(float normalizedProgress) =>
+            Mathf.Clamp01(normalizedProgress) < .5f ? 0 : 1;
+
+        public static Vector2 LocalJitter(float normalizedProgress, Vector2 direction, int maximumPixels)
+        {
+            float progress = Mathf.Clamp01(normalizedProgress);
+            int amplitude = Mathf.Clamp(maximumPixels, 0, 2);
+            if (amplitude == 0 || progress < .30f || progress > .78f) return Vector2.zero;
+            Vector2 axis = direction.sqrMagnitude > .001f
+                ? new Vector2(-direction.y, direction.x).normalized
+                : Vector2.right;
+            int phase = Mathf.FloorToInt((progress - .30f) / .12f);
+            int sign = phase % 2 == 0 ? 1 : -1;
+            return new Vector2(Mathf.Round(axis.x * amplitude * sign), Mathf.Round(axis.y * amplitude * sign));
+        }
+    }
+
     public static class CombatStatusFeedback
     {
         public static bool HasRemoval(IReadOnlyDictionary<StatusType, int> previous, IReadOnlyDictionary<StatusType, int> current) =>
@@ -56,6 +77,7 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Sprite> semanticIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite[]> vfxFrames = new Dictionary<string, Sprite[]>();
         private readonly Dictionary<GridPosition, GameObject> activeVfx = new Dictionary<GridPosition, GameObject>();
+        private readonly Dictionary<GridPosition, int> activeVfxPriority = new Dictionary<GridPosition, int>();
         private readonly Dictionary<GridPosition, DamagePopupState> activeDamagePopups = new Dictionary<GridPosition, DamagePopupState>();
         private ICombatFeedbackHost bootstrap;
         private Canvas canvas;
@@ -182,6 +204,7 @@ namespace OCC.Combat.Presentation
             shieldCache.Clear(); manaCache.Clear(); positionCache.Clear(); durabilityCache.Clear(); statusCache.Clear(); hitUntil.Clear(); unitMotions.Clear(); activeUnitId = null;
             foreach (GameObject root in activeVfx.Values) if (root != null) Destroy(root);
             activeVfx.Clear();
+            activeVfxPriority.Clear();
             foreach (DamagePopupState popup in activeDamagePopups.Values)
             {
                 if (popup?.Root == null) continue;
@@ -300,6 +323,12 @@ namespace OCC.Combat.Presentation
                     offset = new Vector2(0f, -Mathf.Sin(progress * Mathf.PI) * (motion.Kind == UnitMotionKind.Ready ? 5f : 3f));
                     break;
                 default: offset = Vector2.zero; break;
+            }
+            if (!unit.IsHero && (motion.Kind == UnitMotionKind.Attack || motion.Kind == UnitMotionKind.Cast ||
+                motion.Kind == UnitMotionKind.Hit || motion.Kind == UnitMotionKind.ShieldHit))
+            {
+                int jitterPixels = motion.Kind == UnitMotionKind.Hit || motion.Kind == UnitMotionKind.ShieldHit ? 2 : 1;
+                offset += UnitEndpointAnimationPolicy.LocalJitter(progress, motion.Direction, jitterPixels);
             }
             return new Vector2(Mathf.Round(offset.x * intensity), Mathf.Round(offset.y * intensity));
         }
@@ -475,17 +504,70 @@ namespace OCC.Combat.Presentation
             UnitState sourceUnit = bootstrap.CurrentState?.Units.Values.FirstOrDefault(unit => unit.Position == source);
             GridPosition primary = targetCells[0];
             if (sourceUnit != null) PlayUnitMotion(sourceUnit, UnitMotionKind.Cast, .34f, GridDirection(source, primary), Vector2.zero);
-            foreach (string module in spell.PresentationModules)
+            PlayFormalVfx(source, "fire_cast");
+            foreach (string module in FireVfxModules(spell).OrderBy(VfxPriority))
             {
                 IEnumerable<GridPosition> positions = spell.Shape == FireSelectionShape.Single ? new[] { primary } : targetCells;
                 foreach (GridPosition position in positions.Distinct()) PlayFormalVfx(position, module);
             }
         }
 
+        public static IReadOnlyList<string> FireVfxModules(FireSpellDefinition spell)
+        {
+            if (spell == null) return new string[0];
+            var modules = new HashSet<string>();
+            if (spell.DeliveryMode == FireDeliveryMode.WeaponAttachment || spell.DeliveryMode == FireDeliveryMode.BodyEnhancement ||
+                spell.DeliveryMode == FireDeliveryMode.SelfStance || spell.DeliveryMode == FireDeliveryMode.TargetMarking)
+                modules.Add("fire_attachment");
+            if (spell.CombatAffinity == FireCombatAffinity.MeleeOnly && spell.DeliveryMode == FireDeliveryMode.ContactConduction)
+                modules.Add("fire_melee_arc");
+            else if (spell.DeliveryMode == FireDeliveryMode.DetachedProjection || spell.DeliveryMode == FireDeliveryMode.FiregroundManipulation)
+                modules.Add("fire_projectile");
+            if (spell.Shape == FireSelectionShape.Cone) modules.Add("fire_spray");
+            if (spell.Shape == FireSelectionShape.Line || spell.Shape == FireSelectionShape.ContinuousLine || spell.Shape == FireSelectionShape.Path)
+                modules.Add("fire_line");
+            if (spell.Shape == FireSelectionShape.CenterAndOrthogonal || spell.Shape == FireSelectionShape.Square3)
+                modules.Add("fire_cross_blast");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.WeaponDamage))
+                modules.Add("fire_impact");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground))
+                modules.Add(spell.Shape == FireSelectionShape.ContinuousLine ? "fire_wall" : "fire_burning_ground");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground))
+                modules.Add("fire_detonate");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.RestoreShield || rule.Kind == FireRuleKind.RestoreMana || rule.Kind == FireRuleKind.GrantShieldBeforeRanged))
+                modules.Add("fire_absorb");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ApplyBreakStance)) modules.Add("fire_break_stance");
+            if (spell.Id == "F-P-M19" || spell.Id == "F-P-U20" || spell.Id == "F-P-R20") modules.Add("fire_overlimit");
+            if (modules.Count == 0) modules.Add("fire_attachment");
+            return modules.ToArray();
+        }
+
         private void PlayUnitMotion(UnitState unit, UnitMotionKind kind, float duration, Vector2 direction, Vector2 originOffset)
         {
             if (unit == null || (bootstrap?.UiPreferences.AnimationIntensity ?? 1f) <= .01f) return;
             unitMotions[unit.Id] = new UnitMotion(kind, duration, direction, originOffset);
+        }
+
+        public int EnemyAnimationFrame(UnitState unit)
+        {
+            if (unit == null || unit.IsHero || !unitMotions.TryGetValue(unit.Id, out UnitMotion motion)) return -1;
+            float elapsed = Time.unscaledTime - motion.StartedAt;
+            if (elapsed < 0f || elapsed >= motion.Duration) return -1;
+            return UnitEndpointAnimationPolicy.FrameIndex(elapsed / Mathf.Max(.01f, motion.Duration));
+        }
+
+        public static int VfxPriority(string effect)
+        {
+            switch (effect)
+            {
+                case "fire_overlimit": return 100;
+                case "fire_detonate": case "fire_cross_blast": case "fire_wall": return 90;
+                case "fire_impact": case "fire_melee_arc": case "fire_break_stance": case "fire_absorb": return 80;
+                case "fire_projectile": case "fire_spray": case "fire_line": return 70;
+                case "fire_cast": case "fire_attachment": return 60;
+                case "fire_burning_ground": return 30;
+                default: return 50;
+            }
         }
 
         private static Vector2 GridDirection(GridPosition source, GridPosition target)
@@ -499,12 +581,18 @@ namespace OCC.Combat.Presentation
             if (!AnimationsEnabled) return;
             EnsureCanvas();
             Sprite[] frames = FormalVfxFrames(effect);
-            if (activeVfx.TryGetValue(position, out GameObject previous) && previous != null) Destroy(previous);
+            int priority = VfxPriority(effect);
+            if (activeVfx.TryGetValue(position, out GameObject previous) && previous != null)
+            {
+                if (activeVfxPriority.TryGetValue(position, out int currentPriority) && priority < currentPriority) return;
+                Destroy(previous);
+            }
             GameObject root = new GameObject("正式VFX_" + effect); root.transform.SetParent(FeedbackParent, false);
             RectTransform rect = root.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
-            rect.anchoredPosition = CurrentGridFeedbackPosition(position); rect.sizeDelta = new Vector2(72, 72);
-            Image image = root.AddComponent<Image>(); image.preserveAspect = true; image.raycastTarget = false;
+            rect.anchoredPosition = CurrentGridFeedbackPosition(position); rect.sizeDelta = new Vector2(58, 58);
+            Image image = root.AddComponent<Image>(); image.preserveAspect = true; image.raycastTarget = false; image.color = new Color(1f, 1f, 1f, .88f);
             activeVfx[position] = root;
+            activeVfxPriority[position] = priority;
             StartCoroutine(AnimateVfx(position, root, image, frames));
         }
 
@@ -517,7 +605,11 @@ namespace OCC.Combat.Presentation
                 yield return new WaitForSecondsRealtime(.07f);
             }
             if (root != null) Destroy(root);
-            if (activeVfx.TryGetValue(position, out GameObject current) && current == root) activeVfx.Remove(position);
+            if (activeVfx.TryGetValue(position, out GameObject current) && current == root)
+            {
+                activeVfx.Remove(position);
+                activeVfxPriority.Remove(position);
+            }
         }
 
         private Sprite[] FormalVfxFrames(string effect)

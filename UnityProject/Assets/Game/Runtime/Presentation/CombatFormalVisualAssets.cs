@@ -12,6 +12,8 @@ namespace OCC.Combat.Presentation
     public sealed class CombatFormalVisualAssets
     {
         private readonly Dictionary<string, Texture2D> units = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D[]> enemyAnimations = new Dictionary<string, Texture2D[]>();
+        private readonly Dictionary<string, Texture2D> academy = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> relay = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> overlays = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> intents = new Dictionary<string, Texture2D>();
@@ -21,6 +23,7 @@ namespace OCC.Combat.Presentation
 
         public int EnvironmentFrameCount => firegroundFrames.Length;
         public Texture2D LootClosed => Relay("loot_crate_closed");
+        public Texture2D Academy(string id) => academy[id];
         public Texture2D Relay(string id) => relay[id];
         public Texture2D Overlay(string id) => overlays[id];
         public Texture2D Intent(string id) => !string.IsNullOrEmpty(id) && intents.TryGetValue(id, out Texture2D value) ? value : null;
@@ -28,18 +31,25 @@ namespace OCC.Combat.Presentation
         public Texture2D FiregroundFrame(int frame) => firegroundFrames[frame];
         public Texture2D SmokeFrame(int frame) => smokeFrames[frame];
 
-        public Texture2D Unit(UnitState unit)
+        public Texture2D Unit(UnitState unit, int animationFrame = -1)
         {
             if (unit == null) return null;
             if (unit.IsHero) return TextureFor("hero");
             if (string.IsNullOrEmpty(unit.EnemyArchetypeId)) return null;
+            if (animationFrame >= 0 && enemyAnimations.TryGetValue(unit.EnemyArchetypeId, out Texture2D[] frames))
+                return frames[Mathf.Clamp(animationFrame, 0, frames.Length - 1)];
             Texture2D texture = TextureFor(unit.EnemyArchetypeId);
-            return texture != null ? texture : TextureFor(EnemyArchetypes.Get(unit.EnemyArchetypeId).ArtId);
+            if (texture != null) return texture;
+            string artId = EnemyArchetypes.Get(unit.EnemyArchetypeId).ArtId;
+            if (animationFrame >= 0 && enemyAnimations.TryGetValue(artId, out frames))
+                return frames[Mathf.Clamp(animationFrame, 0, frames.Length - 1)];
+            return TextureFor(artId);
         }
 
         public void LoadRuntime()
         {
             LoadUnits();
+            LoadAcademy();
             string[] relayIds = { "floor_plain", "floor_industrial", "floor_warning", "floor_hazard", "rail_horizontal", "rail_vertical",
                 "light_cover_intact", "light_cover_damaged", "light_cover_rubble", "heavy_cover_intact", "heavy_cover_damaged", "heavy_cover_rubble",
                 "relay_intact", "relay_damaged", "relay_rubble", "loot_crate_closed", "loot_crate_open", "loot_crate_empty" };
@@ -52,6 +62,7 @@ namespace OCC.Combat.Presentation
             statuses[StatusType.Slow] = RequiredTexture(FormalArtRegistry.StatusPath("slow"));
             statuses[StatusType.Bound] = RequiredTexture(FormalArtRegistry.StatusPath("bound"));
             statuses[StatusType.ArmorBreak] = RequiredTexture(FormalArtRegistry.StatusPath("armor_break"));
+            statuses[StatusType.BreakStance] = statuses[StatusType.ArmorBreak];
             statuses[StatusType.Dazzled] = RequiredTexture(FormalArtRegistry.StatusPath("dazzled"));
             statuses[StatusType.Revealed] = RequiredTexture(FormalArtRegistry.StatusPath("revealed"));
             for (int frame = 0; frame < firegroundFrames.Length; frame++)
@@ -133,16 +144,63 @@ namespace OCC.Combat.Presentation
 
         private void LoadUnits()
         {
-            foreach (FormalArtEntry entry in FormalArtRegistry.Units)
+            units["hero"] = RequiredTexture(FormalArtRegistry.UnitPath("hero"));
+            string[] requiredEnemyIds = { "sigil_mauler", "barrier_mender", "tether_hound", "shieldguard", "pyromancer", "raider",
+                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer", "purifier_overseer"
+            };
+            foreach (string id in requiredEnemyIds)
+                units[EnemyArchetypes.Get(id).ArtId] = RequiredTexture(FormalArtRegistry.UnitPath(id));
+            foreach (string id in requiredEnemyIds)
             {
-                Texture2D texture = LoadOptionalTexture(entry.ResourcePath);
-                if (texture != null) units[entry.RuntimeId] = texture;
+                enemyAnimations[id] = new[]
+                {
+                    RequiredTexture($"Art/FormalEnemyAnimations64/{id}/frame_00"),
+                    RequiredTexture($"Art/FormalEnemyAnimations64/{id}/frame_05")
+                };
             }
-            foreach (string artId in EnemyArchetypes.All.Select(archetype => archetype.ArtId).Distinct(StringComparer.Ordinal))
+        }
+
+        private void LoadAcademy()
+        {
+            string[] ids =
             {
-                Texture2D texture = LoadOptionalTexture("Art/FormalUnits64/" + artId);
-                if (texture != null) units[artId] = texture;
+                "academy_stone_road_a", "academy_stone_road_b", "academy_stone_road_c", "academy_stone_road_d",
+                "academy_courtyard_a", "academy_courtyard_b", "academy_courtyard_c", "academy_courtyard_d",
+                "academy_ruins_a", "academy_ruins_b", "academy_ruins_c", "academy_ruins_d",
+                "academy_aether_inlay_a", "academy_aether_inlay_b", "academy_aether_inlay_c", "academy_aether_inlay_d",
+                "academy_packed_earth_a", "academy_packed_earth_b", "academy_packed_earth_c",
+                "academy_grass_edge_n", "academy_grass_edge_e", "academy_grass_edge_s", "academy_grass_edge_w",
+                "academy_light_stone_bench_intact", "academy_light_stone_bench_damaged", "academy_light_stone_bench_rubble",
+                "academy_light_planter_intact", "academy_light_planter_damaged", "academy_light_planter_rubble",
+                "academy_heavy_archive_stack_intact", "academy_heavy_archive_stack_damaged", "academy_heavy_archive_stack_rubble",
+                "academy_heavy_masonry_screen_intact", "academy_heavy_masonry_screen_damaged", "academy_heavy_masonry_screen_rubble",
+                "academy_aether_pillar_intact", "academy_aether_pillar_damaged", "academy_aether_pillar_rubble",
+                "academy_seal_plinth_intact", "academy_seal_plinth_damaged", "academy_seal_plinth_rubble",
+                "academy_loot_chest_closed", "academy_loot_chest_open", "academy_loot_chest_empty",
+                "academy_aether_line_straight", "academy_aether_line_corner", "academy_aether_line_tee", "academy_aether_line_cross"
+            };
+            foreach (string id in ids) academy[id] = RequiredTexture("Art/FormalAcademyCombat32/" + id);
+            foreach (string family in new[] { "court", "road", "ruin", "earth" })
+            for (char variant = 'a'; variant <= 'd'; variant++)
+            {
+                string id = $"academy_block_{family}_{variant}";
+                academy[id] = RequiredTexture("Art/FormalAcademyIndependentFloors32/" + id);
             }
+            foreach (string id in new[] { "academy_tactical_road_edge", "academy_tactical_road_corner", "academy_tactical_road_end" })
+                academy[id] = RequiredTexture("Art/FormalAcademyCombat32/" + id);
+            foreach (string family in new[] { "court", "road", "ruin", "earth" })
+            {
+                foreach (string variant in new[] { "", "_b" })
+                {
+                    string id = $"academy_ground_macro_{family}{variant}_3x3";
+                    academy[id] = RequiredTexture("Art/FormalAcademyGroundMacros32/" + id);
+                }
+            }
+            foreach (string id in new[] { "academy_curb_edge", "academy_curb_corner", "academy_curb_opposite",
+                         "academy_curb_three", "academy_curb_enclosed" })
+                academy[id] = RequiredTexture("Art/FormalAcademyTerrainOverlays32/" + id);
+            foreach (string id in AcademyBattlefieldLayoutCatalog.CoverVisualAssetIds())
+                academy[id] = RequiredTexture("Art/FormalAcademyStructures32/" + id);
         }
 
         private Texture2D TextureFor(string id) => units.TryGetValue(id, out Texture2D value) ? value : null;

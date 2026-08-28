@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "replace_me",
+  "role": "equipment_icon_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset",
+    "source_path": "repo/relative/source.png",
+    "source_sha256": "replace_me"
+  },
+  "delivery": {
+    "output_path": "repo/relative/output.png",
+    "output_sha256": "replace_me",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "describe the real slot or complete logical footprint",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "repo/relative/1x.png",
+    "four_x": "repo/relative/4x.png",
+    "grayscale": "repo/relative/grayscale.png",
+    "checker": "repo/relative/checker.png",
+    "application_contact": "repo/relative/contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": ""
+  },
+  "unity_import": null
+}

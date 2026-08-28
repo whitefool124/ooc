@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_seal_plinth_damaged",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_seal_plinth\\damaged_source.png",
+  "sourceSha256": "64e9e44d2f22c5f415425ee53333cd7585435e36d953496c11623fc41a939d68",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      25,
+      19
+    ],
+    "baselineY": 29
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    6,
+    10,
+    26,
+    29
+  ],
+  "hardAlpha": true,
+  "colors": 9,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

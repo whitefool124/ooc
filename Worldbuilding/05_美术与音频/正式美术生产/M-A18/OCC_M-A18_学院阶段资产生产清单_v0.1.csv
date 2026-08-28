@@ -1,0 +1,33 @@
+asset_family,category,priority,asset_count,frame_count_each,source_size,final_size,stable_ids,target_path,current_status,dependency
+academy_stone_road,terrain,P0,4,1,32x32,32x32,academy_stone_road_a-d,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,FloorKey four-variant mapping and Unity QA complete
+academy_courtyard,terrain,P0,4,1,32x32 native 16x8 material modules,32x32,academy_courtyard_a-d,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,2026-08-23 materialscale v10; 2x4 small masonry modules per gameplay cell; 1px low-contrast grout; four independent hashes; all 16 directed A-D horizontal and vertical edge pairs exact; no isolated pixels; family luma delta 0.15; integer 2x/3x/4x/5x cell previews; clean32 v07 application-rejected and archived; stable paths GUIDs and runtime mapping retained
+academy_ruins,terrain,P0,4,1,32x32,32x32,academy_ruins_a-d,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,FloorKey four-variant mapping complete
+academy_aether_inlay,terrain,P0,4,1,32x32,32x32,academy_aether_inlay_a-d,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,AetherMarked mapping complete
+academy_packed_earth,terrain,P1,3,1,32x32,32x32,academy_packed_earth_a-c,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,default academy floor mapping complete
+academy_grass_edge,terrain,P1,4,1,32x32,32x32,academy_grass_edge_n/e/s/w,Art/FormalAcademyCombat32/,FORMAL,imported and QA passed; no authoritative grass-edge map state
+academy_light_stone_bench,cover,P0,3,1,independent direct-image source,32x32,academy_light_stone_bench_intact/damaged/rubble,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; light-cover parity mapping complete; stable GUID retained
+academy_light_planter,cover,P0,3,1,independent direct-image source,32x32,academy_light_planter_intact/damaged/rubble,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; light-cover parity mapping complete; stable GUID retained
+academy_heavy_archive_stack,cover,P0,3,1,independent direct-image source,32x32,academy_heavy_archive_stack_intact/damaged/rubble,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; heavy-cover parity mapping complete; stable GUID retained
+academy_heavy_masonry_screen,cover,P0,3,1,independent direct-image source,32x32,academy_heavy_masonry_screen_intact/damaged/rubble,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; heavy-cover parity mapping complete; stable GUID retained
+academy_aether_pillar,objective,P0,3,1,independent direct-image source,32x32,academy_aether_pillar_intact/damaged/rubble,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; objective state mapping complete; stable GUID retained
+academy_seal_plinth,objective,P0,3,1,independent direct-image source,32x32,academy_seal_plinth_intact/damaged/rubble,Art/FormalAcademyCombat32/,FORMAL,v09 application-first 21/21 QA; imported with stable GUID; no separate seal-plinth gameplay state
+academy_loot_chest,loot,P0,3,1,independent direct-image source,32x32,academy_loot_chest_closed/open/empty,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,v09 application-first 21/21 QA; closed and empty mapped; open retained FORMAL; stable GUID retained
+academy_aether_line,terrain_connector,P1,4,1,32x32,32x32,academy_aether_line_straight/corner/tee/cross,Art/FormalAcademyCombat32/,RUNTIME_COMPLETE,AetherMarked straight/corner/tee/cross mapping complete
+core_overseer,enemy_static,P0,1,1,64x64,64x64,core_overseer,Art/FormalUnits64/,RUNTIME_COMPLETE,independent boss ArtId and runtime readback complete
+purifier_overseer,enemy_static,P0,1,1,64x64,64x64,purifier_overseer,Art/FormalUnits64/,RUNTIME_COMPLETE,authorized relaxed anchor normalization; independent boss ArtId and runtime readback complete
+enemy_signature_sample,enemy_animation,P0,3,6,64x64,64x64,sigil_mauler/barrier_mender/tether_hound_signature,Art/FormalEnemyAnimations64/,RUNTIME_COMPLETE,authorized relaxed normalization; six independent frames each and runtime action window complete
+enemy_signature_remaining,enemy_animation,P1,9,6,64x64,64x64,remaining_nine_signature_actions,Art/FormalEnemyAnimations64/,RUNTIME_COMPLETE,nine six-frame action families imported and runtime mapped
+fire_cast,vfx,P0,1,6,32x32,32x32,fire_cast,Art/FormalVfx32/fire_cast/,RUNTIME_COMPLETE,six-frame cast and source-cell runtime mapping complete
+fire_projectile,vfx,P0,1,6,32x32,32x32,fire_projectile,Art/FormalVfx32/fire_projectile/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_impact,vfx,P0,1,6,32x32,32x32,fire_impact,Art/FormalVfx32/fire_impact/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_melee_arc,vfx,P0,1,6,32x32,32x32,fire_melee_arc,Art/FormalVfx32/fire_melee_arc/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_attachment,vfx,P0,1,6,32x32,32x32,fire_attachment,Art/FormalVfx32/fire_attachment/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_spray,vfx,P0,1,6,32x32,32x32,fire_spray,Art/FormalVfx32/fire_spray/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_line,vfx,P0,1,6,32x32,32x32,fire_line,Art/FormalVfx32/fire_line/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_cross_blast,vfx,P0,1,6,32x32,32x32,fire_cross_blast,Art/FormalVfx32/fire_cross_blast/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_detonate,vfx,P0,1,6,32x32,32x32,fire_detonate,Art/FormalVfx32/fire_detonate/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_burning_ground,vfx,P0,1,6,32x32,32x32,fire_burning_ground,Art/FormalVfx32/fire_burning_ground/,RUNTIME_COMPLETE,formal six-frame environment module and lowest overlay priority complete
+fire_wall,vfx,P0,1,6,32x32,32x32,fire_wall,Art/FormalVfx32/fire_wall/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_absorb,vfx,P0,1,6,32x32,32x32,fire_absorb,Art/FormalVfx32/fire_absorb/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_break_stance,vfx,P0,1,6,32x32,32x32,fire_break_stance,Art/FormalVfx32/fire_break_stance/,RUNTIME_COMPLETE,formal six-frame module and priority mapping complete
+fire_overlimit,vfx,P0,1,6,32x32,32x32,fire_overlimit,Art/FormalVfx32/fire_overlimit/,RUNTIME_COMPLETE,formal six-frame module and highest overlay priority complete

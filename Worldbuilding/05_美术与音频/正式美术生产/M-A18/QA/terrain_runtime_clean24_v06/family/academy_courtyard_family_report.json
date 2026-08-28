@@ -1,0 +1,62 @@
+{
+  "tiles": {
+    "a": {
+      "size": [
+        24,
+        24
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 3,
+      "clean_surface_colour_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 134.97,
+      "sha256": "95bcf4d63fe4c3ff767003782bffc43f098f0107da5368f1733748a44bed6b59"
+    },
+    "b": {
+      "size": [
+        24,
+        24
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 3,
+      "clean_surface_colour_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 134.65,
+      "sha256": "a832a0d2799a75830870f80a2048139a176dbca7c7c9402fc6cc2ceb334e717b"
+    },
+    "c": {
+      "size": [
+        24,
+        24
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 3,
+      "clean_surface_colour_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 134.9,
+      "sha256": "60e7c158d2a2b51a9badbad48d09d36b4d94ca6fcf59067679cc1a8e538a1ef3"
+    },
+    "d": {
+      "size": [
+        24,
+        24
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 3,
+      "clean_surface_colour_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 134.69,
+      "sha256": "c32e2911ed9e1f85687fa66f3e5900ea6d7aeea6d83a16aa3db2bd2ed6071356"
+    }
+  },
+  "family_mean_luma_delta": 0.32,
+  "unique_hash_count": 4
+}

@@ -225,14 +225,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_SeedLocksBossVariantAndMap5PersistsIt()
+        public void MapRun_AlwaysUsesFixedAcademyCoreBossAndLegacyRoundTripNormalizesIt()
         {
             var even = new RogueliteMapRun(620);
             var odd = new RogueliteMapRun(621);
-            Assert.That(even.RegionBossId, Is.EqualTo("core_overseer")); Assert.That(odd.RegionBossId, Is.EqualTo("purifier_overseer"));
-            Assert.That(RogueliteMapRun.FromJson(odd.ToJson()).RegionBossId, Is.EqualTo("purifier_overseer"));
-            EnemyArchetype purifier = EnemyArchetypes.Get(odd.RegionBossId);
-            Assert.That(purifier.MaxHealth, Is.EqualTo(26)); Assert.That(purifier.Shield, Is.EqualTo(6)); Assert.That(purifier.Armor, Is.EqualTo(1));
+            Assert.That(even.RegionBossId, Is.EqualTo("core_overseer")); Assert.That(odd.RegionBossId, Is.EqualTo("core_overseer"));
+            Assert.That(RogueliteMapRun.FromJson(odd.ToJson()).RegionBossId, Is.EqualTo("core_overseer"));
+            EnemyArchetype fixedBoss = EnemyArchetypes.Get(odd.RegionBossId);
+            Assert.That(fixedBoss.MaxHealth, Is.EqualTo(30)); Assert.That(fixedBoss.Shield, Is.EqualTo(4)); Assert.That(fixedBoss.Armor, Is.EqualTo(3));
         }
 
         [Test]

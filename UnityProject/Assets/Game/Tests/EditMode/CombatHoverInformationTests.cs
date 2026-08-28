@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
@@ -50,6 +51,21 @@ namespace OCC.Combat.Tests
             Assert.That(details, Does.Contain("敌人打算"));
             Assert.That(details, Does.Not.Contain("权威"));
             Assert.That(details, Does.Contain(intent.DetailedText));
+            Assert.That(CombatInformationPresenter.BuildActionDetails(preview), Does.Contain("消耗 · "));
+            Assert.That(CombatInformationPresenter.BuildActionDetails(preview).Split('\n').Count(line => !string.IsNullOrWhiteSpace(line)), Is.LessThanOrEqualTo(7));
+        }
+
+        [Test]
+        public void RogueSpellTooltipCopy_UsesPlayerLanguageInsteadOfRuntimeRuleIds()
+        {
+            OCC.Combat.Roguelite.SpellDefinition spell = OCC.Combat.Roguelite.RogueContentCatalog.CreateAcademyV01().Spells.Single(value => value.DefinitionId == "BASE-FIRE-MELEE");
+            string target = RogueliteSettlementPresentation.RogueSpellTargetSummary(spell);
+            string effect = RogueliteSettlementPresentation.RogueSpellPlayerSummary(spell);
+
+            Assert.That(target, Does.Contain("相邻"));
+            Assert.That(effect, Does.Contain("8"));
+            Assert.That(target + effect, Does.Not.Contain("_"));
+            Assert.That(target + effect, Does.Not.Contain("damage:"));
         }
 
         [Test]
@@ -192,16 +208,17 @@ namespace OCC.Combat.Tests
         [TestCase(96f)]
         [TestCase(128f)]
         [TestCase(160f)]
-        public void UnitAndVitalBars_KeepConstantProportionAtEveryZoomStep(float cellSize)
+        public void UnitUsesWholeNativeScaleWhileVitalBarsKeepConstantProportionAtEveryZoomStep(float cellSize)
         {
             BattlefieldRect cell = new BattlefieldRect(0f, 0f, cellSize, cellSize);
             Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
             Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell);
             Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
 
-            Assert.That(unit.width / cellSize, Is.EqualTo(116f / 128f).Within(.0001f));
-            Assert.That(unit.height / cellSize, Is.EqualTo(116f / 128f).Within(.0001f));
-            Assert.That(unit.width * unit.height / (cellSize * cellSize), Is.GreaterThanOrEqualTo(.8f));
+            Assert.That(unit.width % 64f, Is.Zero.Within(.0001f));
+            Assert.That(unit.height, Is.EqualTo(unit.width));
+            Assert.That(unit.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
+            Assert.That(unit.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
             Assert.That(health.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
             Assert.That(health.height / cellSize, Is.EqualTo(17f / 128f).Within(.0001f));
             Assert.That(shield.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
@@ -283,19 +300,22 @@ namespace OCC.Combat.Tests
         [TestCase("sigil_mauler")]
         [TestCase("stone_snare")]
         [TestCase("tether_hound")]
-        public void FormalUnitCrop_RemovesTransparentCanvasWithoutDistortingAspect(string textureName)
+        public void FormalUnitCanvas_PreservesCompleteEquipmentSilhouetteAtSquareAspect(string textureName)
         {
             BattlefieldRect cell = new BattlefieldRect(0f, 0f, 128f, 128f);
             Rect uv = CombatUnitHudLayout.UnitTextureCropUv(textureName);
             Rect visible = CombatUnitHudLayout.UnitVisibleContentRect(cell, textureName);
+            Rect frame = CombatUnitHudLayout.UnitPresentationRect(cell);
 
-            Assert.That(uv, Is.Not.EqualTo(new Rect(0f, 0f, 1f, 1f)));
-            Assert.That(visible.width / visible.height, Is.EqualTo(uv.width / uv.height).Within(.0001f));
-            Assert.That(Mathf.Max(visible.width, visible.height), Is.EqualTo(116f).Within(.0001f));
-            Assert.That(visible.xMin, Is.GreaterThanOrEqualTo(cell.X));
+            Assert.That(uv, Is.EqualTo(new Rect(0f, 0f, 1f, 1f)));
+            Assert.That(visible, Is.EqualTo(frame));
+            Assert.That(visible.width / visible.height, Is.EqualTo(1f).Within(.0001f));
+            Assert.That(Mathf.Max(visible.width, visible.height), Is.EqualTo(128f).Within(.0001f));
+            Assert.That(visible.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
             Assert.That(visible.yMin, Is.GreaterThanOrEqualTo(cell.Y));
-            Assert.That(visible.xMax, Is.LessThanOrEqualTo(cell.X + cell.Width));
-            Assert.That(visible.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
+            Assert.That(visible.xMin, Is.EqualTo(cell.X).Within(.0001f));
+            Assert.That(visible.xMax, Is.EqualTo(cell.X + cell.Width).Within(.0001f));
+            Assert.That(visible.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
         }
 
         [Test]

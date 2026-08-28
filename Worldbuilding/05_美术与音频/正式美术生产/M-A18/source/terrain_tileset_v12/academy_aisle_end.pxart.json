@@ -1,0 +1,36 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_aisle_end",
+  "width": 32,
+  "height": 32,
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": {
+    "S": "#B3AA91",
+    "E": "#77766F",
+    "R": "#96958B",
+    "L": "#A29F91",
+    "D": "#85867F"
+  },
+  "rows": [
+    {
+      "row": "S:6,E:2,R:4,L:8,R:4,E:2,S:6",
+      "repeat": 18
+    },
+    {
+      "row": "S:6,E:2,R:16,E:2,S:6",
+      "repeat": 2
+    },
+    {
+      "row": "S:6,E:20,S:6",
+      "repeat": 2
+    },
+    {
+      "row": "S:32",
+      "repeat": 10
+    }
+  ],
+  "notes": "Explicitly authored pixel rows. Renderer may expand rows and nearest-neighbour scale only; it must not add art structure."
+}

@@ -53,6 +53,33 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void ReplacingAValidRun_ResetsAllRunScopedResourcesInsteadOfReusingTheActiveDto()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapStartResult first = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Ranged, 305);
+            Assert.That(first.Success, Is.True);
+
+            first.Run.SelectNode("supply_checkpoint");
+            first.Run.ChooseCurrentNodeContent("buy_hazard_condenser");
+            Assert.That(first.Run.Gold, Is.EqualTo(3));
+            Assert.That(coordinator.Save(first.Run), Is.True);
+
+            RogueliteMapStartResult replacement = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Melee, 306);
+
+            Assert.That(replacement.Success, Is.True);
+            Assert.That(replacement.Run.Seed, Is.EqualTo(306));
+            Assert.That(replacement.Run.CurrentNodeId, Is.EqualTo("start"));
+            Assert.That(replacement.Run.Gold, Is.EqualTo(8));
+            Assert.That(replacement.Run.StageContribution, Is.Zero);
+            Assert.That(replacement.Run.StageTime, Is.Zero);
+            Assert.That(replacement.Run.AcademyProgress, Is.Zero);
+            Assert.That(replacement.Run.CorePermits, Is.Zero);
+        }
+
+        [Test]
         public void CorruptSlot_RequiresExplicitReplacementPreparation()
         {
             MemoryStore store = new MemoryStore();

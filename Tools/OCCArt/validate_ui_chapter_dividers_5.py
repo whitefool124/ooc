@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+import json,subprocess,sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[2];M=ROOT/"Worldbuilding/05_美术与音频/正式美术生产/M-A30/manifests";V=ROOT/"Tools/OCCArt/validate_occ_art_asset.py";REPORT=ROOT/"UnityProject/Artifacts/UiChapterDividers5/validation_report.json";results=[]
+for p in sorted(M.glob("divider_*.occ-art-manifest-v1.json")):q=subprocess.run([sys.executable,str(V),str(p),"--root",str(ROOT)],capture_output=True,text=True,encoding="utf-8");results.append(json.loads(q.stdout))
+q=subprocess.run([sys.executable,str(V),"--root",str(ROOT),"--audit-contract"],capture_output=True,text=True,encoding="utf-8");contract=json.loads(q.stdout);passed=sum(x.get("status")=="PASS" for x in results);r={"schema":"occ-art-batch-validation-report-v1","batch":"ART-UI-DIVIDERS-63","status":"PASS" if passed==len(results)==5 and contract.get("status")=="PASS" else "FAIL","summary":{"passed":passed,"total":len(results),"contract":contract.get("status")},"contract_audit":contract,"assets":results};REPORT.write_text(json.dumps(r,ensure_ascii=False,indent=2)+"\n",encoding="utf-8");print(json.dumps(r,ensure_ascii=False,indent=2));raise SystemExit(0 if r["status"]=="PASS" else 1)

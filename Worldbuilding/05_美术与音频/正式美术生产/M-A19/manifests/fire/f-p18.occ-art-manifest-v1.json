@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.fire.f-p18",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/fire/f-p18/source.png",
+    "source_sha256": "b95f92cf4d329d8e1ef8aa990ad1c9a2663ac793d2721532612d464e972c8599"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p18.png",
+    "output_sha256": "9e7404010cd0bb9767a5112a938d7423742cca6c31f2a0758e60032e7eecadb7",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/fire/f-p18/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/fire/f-p18/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/fire/f-p18/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/fire/f-p18/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "炽焰墙：5 格内连续 5 格直线：创建 8 伤害燃烧地格，持续 8 刻度 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "33eb7a837b0c39548a82c44962adb022",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

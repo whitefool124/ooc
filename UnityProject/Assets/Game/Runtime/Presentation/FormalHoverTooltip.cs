@@ -23,9 +23,14 @@ namespace OCC.Combat.Presentation
     // One shared, raycast-transparent tooltip layer keeps dense reference text out of the combat HUD.
     public sealed class FormalHoverTooltip : MonoBehaviour
     {
-        private const float Width = 420f;
-        private const float MinimumHeight = 122f;
-        private const float MaximumHeight = 430f;
+        private const float MinimumWidth = 220f;
+        private const float MaximumWidth = 480f;
+        private const float MinimumHeight = 100f;
+        private const float MaximumHeight = 360f;
+        private const float HorizontalPadding = 16f;
+        private const float TitleHeight = 34f;
+        private const float BodyTop = 50f;
+        private const float BottomPadding = 14f;
         private const float EdgeMargin = 24f;
         private Canvas canvas;
         private RectTransform layer;
@@ -52,17 +57,18 @@ namespace OCC.Combat.Presentation
             group.blocksRaycasts = false;
 
             GameObject panelObject = FormalUiKit.AnchoredPanel("悬浮详情", layer.transform, new Vector2(.5f, .5f), new Vector2(0f, 1f),
-                Vector2.zero, new Vector2(Width, MinimumHeight), new Color(.025f, .045f, .052f, .98f));
+                Vector2.zero, new Vector2(MinimumWidth, MinimumHeight), FormalUiTheme.SurfaceRaised);
             panel = panelObject.GetComponent<RectTransform>();
             Image background = panelObject.GetComponent<Image>();
-            FormalUiKit.ApplySkin(background, "panel_elevated", new Color(.025f, .045f, .052f, .98f));
+            FormalUiKit.ApplySkin(background, "panel_elevated", FormalUiTheme.SurfaceRaised);
             background.raycastTarget = false;
 
-            titleLabel = FormalUiKit.Label("悬浮标题", string.Empty, panel, new Vector2(18f, -12f), new Vector2(Width - 36f, 28f),
-                17, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            bodyLabel = FormalUiKit.Label("悬浮正文", string.Empty, panel, new Vector2(18f, -48f), new Vector2(Width - 36f, MaximumHeight - 64f),
-                14, FormalUiTheme.Text, TextAnchor.UpperLeft);
-            bodyLabel.verticalOverflow = VerticalWrapMode.Truncate;
+            titleLabel = FormalUiKit.Label("悬浮标题", string.Empty, panel, new Vector2(HorizontalPadding, -10f), new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight),
+                20, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(titleLabel);
+            bodyLabel = FormalUiKit.Label("悬浮正文", string.Empty, panel, new Vector2(HorizontalPadding, -BodyTop), new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding),
+                16, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(bodyLabel);
             panelObject.SetActive(false);
         }
 
@@ -73,10 +79,21 @@ namespace OCC.Combat.Presentation
             titleLabel.text = content.Title;
             titleLabel.color = content.Accent;
             bodyLabel.text = content.Body;
-            bodyLabel.rectTransform.sizeDelta = new Vector2(Width - 36f, MaximumHeight - 64f);
-            float height = Mathf.Clamp(68f + bodyLabel.preferredHeight, MinimumHeight, MaximumHeight);
-            panel.sizeDelta = new Vector2(Width, height);
-            bodyLabel.rectTransform.sizeDelta = new Vector2(Width - 36f, height - 62f);
+            bodyLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+            titleLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight);
+            bodyLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding);
+            Canvas.ForceUpdateCanvases();
+            float width = Mathf.Clamp(Mathf.Ceil(Mathf.Max(titleLabel.preferredWidth, bodyLabel.preferredWidth)) + HorizontalPadding * 2f,
+                MinimumWidth, MaximumWidth);
+            float textWidth = width - HorizontalPadding * 2f;
+            titleLabel.rectTransform.sizeDelta = new Vector2(textWidth, TitleHeight);
+            bodyLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+            bodyLabel.lineSpacing = 1.08f;
+            bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, MaximumHeight - BodyTop - BottomPadding);
+            Canvas.ForceUpdateCanvases();
+            float height = Mathf.Clamp(BodyTop + bodyLabel.preferredHeight + BottomPadding, MinimumHeight, MaximumHeight);
+            panel.sizeDelta = new Vector2(width, height);
+            bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, height - BodyTop - BottomPadding);
             layer.SetAsLastSibling();
             panel.SetAsLastSibling();
             panel.gameObject.SetActive(true);

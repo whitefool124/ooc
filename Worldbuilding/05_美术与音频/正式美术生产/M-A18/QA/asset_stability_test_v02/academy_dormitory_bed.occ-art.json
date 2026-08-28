@@ -1,0 +1,47 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_dormitory_bed",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single academy dormitory bed source",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/raw/asset_stability_test_v02/academy_dormitory_bed_source.png",
+    "source_sha256": "09a0b3ddbefef95c05b21ed32b223ad19e0e9ce2037e605559d45e3a6d9844f0"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/asset_stability_test_v02/academy_dormitory_bed_64x32.png",
+    "output_sha256": "7dfcdc7455eafe6fa26b38f297e1cace8035b11310e8b991afa8f8587d472385",
+    "native_output_path": null,
+    "logical_cells": [2, 1],
+    "palette_max": 10,
+    "required_color_families": [
+      {"family": "blue", "min_opaque_pixels": 64}
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "complete horizontal two-cell footprint on the 12x9 map",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/academy_dormitory_bed/academy_dormitory_bed_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/academy_dormitory_bed/academy_dormitory_bed_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/academy_dormitory_bed/academy_dormitory_bed_grayscale_4x.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/academy_dormitory_bed/academy_dormitory_bed_checker_4x.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "product_user",
+    "date": "2026-08-23",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User accepted the second stability batch; the 64x32 bed remains coherent across the two-cell seam."
+  },
+  "unity_import": null
+}

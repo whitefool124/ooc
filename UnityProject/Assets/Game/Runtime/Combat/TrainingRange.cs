@@ -327,6 +327,7 @@ namespace OCC.Combat
         {
             FireSpellDefinition spell = FireSpellCatalog.Get(abilityId);
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatResolver.BeginTurn(combat, "hero");
             FireBattleState battle = new FireBattleState(combat);
             UnitState hero = combat.GetUnit("hero"), enemy = combat.GetUnit("range_normal"), ally = combat.GetUnit("range_ally");
@@ -338,6 +339,7 @@ namespace OCC.Combat
                 if (rule.Condition == FireCondition.SourceBurning) hero.ApplyStatus(StatusType.Burning, 2, 8);
                 if (rule.Condition == FireCondition.SourceBound) hero.ApplyStatus(StatusType.Bound, 2);
                 if (rule.Condition == FireCondition.SourceSlowed) hero.ApplyStatus(StatusType.Slow, 2);
+                if (rule.Kind == FireRuleKind.ClearOneSelfStatus) hero.ApplyStatus(StatusType.Burning, 2, 8);
             }
 
             GridPosition cell;

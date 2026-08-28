@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.semantic.inventory_salvage",
+  "role": "semantic_icon_16",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/semantic/inventory_salvage/source.png",
+    "source_sha256": "230c5b10325f290c1751dde6e2a9466caa314ff97c968052d02db52f4cfdb613"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_salvage.png",
+    "output_sha256": "a8645acf0781e46eb7525e061128a168417d4362164bde075ed052d60e4a7cd7",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 16x16 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/semantic/inventory_salvage/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/semantic/inventory_salvage/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/semantic/inventory_salvage/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/semantic/inventory_salvage/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "扳手拆解一枚齿轮 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "2b6c3d9b49ea8944ab075437de7c3995",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

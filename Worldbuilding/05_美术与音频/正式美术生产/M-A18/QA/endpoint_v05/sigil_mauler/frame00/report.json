@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_rustic_v05",
+    "category": "occ_character_endpoint",
+    "description": "Rustic western-fantasy-side OCC humanoid/construct endpoint normalized to the global 46px tactical-unit scale.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 44,
+    "maxBodyHeight": 48,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 48,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\sigil_mauler\\frame00\\frame_00.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\sigil_mauler\\frame00\\strip.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\sigil_mauler\\frame00\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\sigil_mauler\\frame00\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v05\\sigil_mauler\\frame00\\contact.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\sigil_mauler\\frame00\\frame_00.png",
+      "empty": false,
+      "sourceBounds": [
+        47,
+        45,
+        943,
+        1189
+      ],
+      "sourceBodyWidth": 896,
+      "sourceBodyHeight": 1144,
+      "scale": 0.04020979020979021,
+      "outputWidth": 36,
+      "outputHeight": 46,
+      "outputX": 14,
+      "outputY": 12,
+      "normalizedBounds": [
+        14,
+        12,
+        50,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

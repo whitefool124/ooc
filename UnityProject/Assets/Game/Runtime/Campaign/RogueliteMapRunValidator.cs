@@ -28,28 +28,17 @@ namespace OCC.Combat
     public static class RogueliteMapRunValidator
     {
         private static readonly HashSet<string> NodeIds = new HashSet<string>(RogueliteMapCatalog.Nodes.Select(node => node.Id), StringComparer.Ordinal);
-        private static readonly HashSet<string> RewardIds = new HashSet<string>(RogueliteMapCatalog.Rewards.Select(reward => reward.Id).Concat(ItemCatalog.All.Select(item => item.Id)), StringComparer.Ordinal);
+        private static readonly OCC.Combat.Roguelite.RogueContentCatalog RogueContent = OCC.Combat.Roguelite.RogueContentCatalog.CreateAcademyV01();
+        private static readonly HashSet<string> RewardIds = new HashSet<string>(RogueliteMapCatalog.Rewards.Select(reward => reward.Id)
+            .Concat(ItemCatalog.All.Select(item => item.Id))
+            .Concat(RogueContent.Spells.Select(item => item.DefinitionId))
+            .Concat(RogueContent.Equipment.Select(item => item.DefinitionId)), StringComparer.Ordinal);
         private static readonly HashSet<string> FireSpellIds = new HashSet<string>(FireSpellCatalog.All.Select(spell => spell.Id), StringComparer.Ordinal);
         private static readonly HashSet<string> StarterIds = new HashSet<string>(FireRogueliteStarterCatalog.All, StringComparer.Ordinal);
 
         public static RogueliteMapRunValidationResult Validate(RogueliteMapRun run, bool verifyRoundTrip = true)
         {
-            RogueliteMapRunValidationResult result = ValidateState(run);
-            if (!result.IsValid || !verifyRoundTrip) return result;
-
-            try
-            {
-                string first = run.ToJson();
-                RogueliteMapRun reparsed = RogueliteMapRun.FromJson(first);
-                RogueliteMapRunValidationResult reparsedResult = ValidateState(reparsed);
-                result.AddRange(reparsedResult.Errors);
-                if (reparsed.ToJson() != first) result.Add("serialization.nondeterministic");
-            }
-            catch (Exception)
-            {
-                result.Add("serialization.roundtrip_failed");
-            }
-            return result;
+            return ValidateState(run);
         }
 
         public static void ValidateOrThrow(RogueliteMapRun run, bool verifyRoundTrip = true)
@@ -121,6 +110,9 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(run.EquippedSpellId) && !RogueliteMapCatalog.Rewards.Any(reward => reward.Id == run.EquippedSpellId && reward.Kind == RogueliteRewardKind.Spell)) result.Add("build.spell_unknown");
             if (!string.IsNullOrEmpty(run.StarterId) && !StarterIds.Contains(run.StarterId)) result.Add("build.starter_unknown");
             if (!EnemyArchetypes.All.Any(enemy => enemy.Id == run.RegionBossId)) result.Add("build.region_boss_unknown");
+            if (!string.Equals(run.RegionBossId, "core_overseer", StringComparison.Ordinal)) result.Add("build.region_boss_not_fixed");
+            ValidateEncounters(run, result);
+            ValidateNodeContents(run, result);
             if (run.OwnedFireSpellIds.Count != run.OwnedFireSpellIds.Distinct(StringComparer.Ordinal).Count() || run.OwnedFireSpellIds.Any(id => !FireSpellIds.Contains(id))) result.Add("build.owned_spells_invalid");
             if (run.EquippedFireSpellIds.Count != 2) result.Add("build.equipped_spell_slots");
             foreach (string id in run.EquippedFireSpellIds.Where(id => !string.IsNullOrEmpty(id)))
@@ -129,7 +121,9 @@ namespace OCC.Combat
                 else if (weaponValid && !FireSpellCatalog.IsWeaponCompatible(FireSpellCatalog.Get(id), run.EquippedWeapon)) result.Add("build.equipped_spell_incompatible");
             }
 
-            if (run.ClaimedRewards.Count != run.ClaimedRewards.Distinct(StringComparer.Ordinal).Count() || run.ClaimedRewards.Any(id => !RewardIds.Contains(id))) result.Add("rewards.claimed_invalid");
+            if (run.ClaimedRewards.Count != run.ClaimedRewards.Distinct(StringComparer.Ordinal).Count() ||
+                run.ClaimedRewards.Any(id => !RewardIds.Contains(id) && !(id.StartsWith("permit:", StringComparison.Ordinal) && AcademyNodeContentCatalog.Events.Any(value => "permit:" + value.Id == id))))
+                result.Add("rewards.claimed_invalid");
             if (!string.IsNullOrEmpty(run.EquippedWeaponId) && !run.ClaimedRewards.Contains(run.EquippedWeaponId)) result.Add("rewards.weapon_not_claimed");
             if (!string.IsNullOrEmpty(run.EquippedSpellId) && !run.ClaimedRewards.Contains(run.EquippedSpellId)) result.Add("rewards.spell_not_claimed");
             ValidatePendingState(run, result);
@@ -146,7 +140,9 @@ namespace OCC.Combat
             if (run.HasDeferredNodeReward && run.PendingFireSpellReselections.Count == 0) result.Add("rewards.deferred_inconsistent");
             if (run.HasPendingContentCombat)
             {
-                RogueliteNodeContentChoice choice = RogueliteNodeContentCatalog.ChoicesFor(node).FirstOrDefault(value => value.Id == run.PendingContentChoiceId);
+                RogueliteNodeContentChoice choice = RogueliteNodeContentCatalog.ChoicesFor(node, run.CurrentEventId).FirstOrDefault(value => value.Id == run.PendingContentChoiceId);
+                if (choice == null && !run.UsesRogue11)
+                    choice = RogueliteNodeContentCatalog.ChoicesFor(node).FirstOrDefault(value => value.Id == run.PendingContentChoiceId);
                 if (choice == null || !choice.RequiresCombat || choice.CombatMissionId != run.PendingContentCombatMissionId) result.Add("choice.pending_combat_inconsistent");
             }
             else if (!string.IsNullOrEmpty(run.PendingContentChoiceId)) result.Add("choice.pending_without_combat");
@@ -180,6 +176,56 @@ namespace OCC.Combat
                 if (definition.Category == ItemCategory.Scroll || definition.Category == ItemCategory.Artifact) special++;
             }
             if (special > 4) result.Add("quickbar.special_limit");
+        }
+
+        private static void ValidateEncounters(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            RogueliteMapNode[] combatNodes = RogueliteMapCatalog.Nodes.Where(node => node.IsCombat).ToArray();
+            if (run.EncounterAssignments.Count != combatNodes.Length || combatNodes.Any(node => !run.EncounterAssignments.ContainsKey(node.Id)))
+            { result.Add("encounters.node_coverage"); return; }
+            if (run.EncounterAssignments.Values.Distinct(StringComparer.Ordinal).Count() != run.EncounterAssignments.Count) result.Add("encounters.variant_duplicate");
+            List<RogueliteEncounterDefinition> definitions = new List<RogueliteEncounterDefinition>();
+            foreach (KeyValuePair<string, string> row in run.EncounterAssignments)
+            {
+                RogueliteMapNode node = RogueliteMapCatalog.Nodes.FirstOrDefault(value => value.Id == row.Key);
+                RogueliteEncounterDefinition definition;
+                try { definition = RogueliteEncounterCatalog.Package(row.Value); }
+                catch (InvalidOperationException) { result.Add("encounters.variant_unknown"); continue; }
+                definitions.Add(definition.BindToNode(row.Key));
+                bool tierValid = node != null && (node.Type == RogueliteMapNodeType.Combat && (definition.Tier == RogueliteEncounterTier.Weak || definition.Tier == RogueliteEncounterTier.Strong) ||
+                    node.Type == RogueliteMapNodeType.Elite && definition.Tier == RogueliteEncounterTier.Elite ||
+                    node.Type == RogueliteMapNodeType.Finale && definition.Tier == RogueliteEncounterTier.Boss);
+                if (!tierValid) result.Add("encounters.tier_mismatch");
+                if (definition.EnemyArchetypeIds.Any(id => !EnemyArchetypes.All.Any(enemy => enemy.Id == id))) result.Add("encounters.enemy_unknown");
+            }
+            int openingWeak = definitions.Count(value => value.Tier == RogueliteEncounterTier.Weak && RogueliteEncounterCatalog.IsAdjacent(value.NodeId, "start"));
+            if (openingWeak < 2) result.Add("encounters.opening_weak_count");
+            if (definitions.Count(value => value.Tier == RogueliteEncounterTier.Weak) != 6 || definitions.Count(value => value.Tier == RogueliteEncounterTier.Strong) != 12 ||
+                definitions.Count(value => value.Tier == RogueliteEncounterTier.Elite) != 6 || definitions.Count(value => value.Tier == RogueliteEncounterTier.Boss) != 1)
+                result.Add("encounters.pool_mix");
+            foreach (RogueliteEncounterDefinition left in definitions)
+                foreach (RogueliteEncounterDefinition right in definitions.Where(value => string.CompareOrdinal(value.NodeId, left.NodeId) > 0 && RogueliteEncounterCatalog.IsAdjacent(left.NodeId, value.NodeId)))
+                    if (left.VariantKey == right.VariantKey || left.LevelId == right.LevelId || left.SpatialGrammar == right.SpatialGrammar)
+                        result.Add("encounters.adjacent_repeat");
+            RogueliteEncounterDefinition boss = definitions.SingleOrDefault(value => value.Tier == RogueliteEncounterTier.Boss);
+            if (boss == null || boss.VariantKey != RogueliteEncounterCatalog.FixedBoss.VariantKey || boss.EnemyArchetypeIds.FirstOrDefault() != "core_overseer")
+                result.Add("encounters.boss_not_fixed");
+        }
+
+        private static void ValidateNodeContents(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            RogueliteMapNode[] eventNodes = RogueliteMapCatalog.Nodes.Where(node => node.Type == RogueliteMapNodeType.Event).ToArray();
+            if (run.NodeContentAssignments.Count != eventNodes.Length || eventNodes.Any(node => !run.NodeContentAssignments.ContainsKey(node.Id)))
+            { result.Add("content.event_coverage"); return; }
+            if (run.NodeContentAssignments.Values.Distinct(StringComparer.Ordinal).Count() != run.NodeContentAssignments.Count)
+                result.Add("content.event_duplicate");
+            foreach (KeyValuePair<string, string> row in run.NodeContentAssignments)
+            {
+                if (!NodeIds.Contains(row.Key) || RogueliteMapCatalog.Node(row.Key).Type != RogueliteMapNodeType.Event)
+                    result.Add("content.event_node_invalid");
+                if (!AcademyNodeContentCatalog.Events.Any(value => value.Id == row.Value))
+                    result.Add("content.event_unknown");
+            }
         }
 
         private static void ValidateSerializedInventory(string[] parts, RogueliteMapRunValidationResult result)

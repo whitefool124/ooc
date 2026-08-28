@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.fire.f-p41",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/fire/f-p41/source.png",
+    "source_sha256": "1045cd153803fdd79bc7520ef2a0db56a84200446b1157a6c386e31fd64add30"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p41.png",
+    "output_sha256": "760b1edc19f6ea97cd3437d5a7a90a7089a2e52261a164422eac73c707d7ccde",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/fire/f-p41/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/fire/f-p41/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/fire/f-p41/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/fire/f-p41/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "灼热疾行：自身沿直线移动至多 2 格，路径与终点均须空地；起点创建 8 伤害燃烧地格，持续 4 刻度 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "b22613c94e9b0ec439ce0c5780f5d63d",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "schema": "occ-artifact-footprints-catalog-v1",
+  "count": 20,
+  "assets": [
+    {
+      "asset_id": "artifact.footprint.aegis_fold",
+      "group": "artifact",
+      "stem": "aegis_fold",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "可展开的折盾匣，层叠蓝钢折片与青白护盾芯",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/aegis_fold.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/aegis_fold.png",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.anchor_brace",
+      "group": "artifact",
+      "stem": "anchor_brace",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "定锚支架，三足锚爪和自动咬合弹簧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/anchor_brace.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/anchor_brace.png",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/anchor_brace/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.binding_frame",
+      "group": "artifact",
+      "stem": "binding_frame",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "四角缚位框，机械扣合束带",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/binding_frame.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/binding_frame.png",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/binding_frame/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.breach_wedge",
+      "group": "artifact",
+      "stem": "breach_wedge",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "解构楔与短锤，楔面有几何裂解槽",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/breach_wedge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/breach_wedge.png",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/breach_wedge/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.cover_stamp",
+      "group": "artifact",
+      "stem": "cover_stamp",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        96,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "重型掩体压模，方形模腔与双握把",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/cover_stamp.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/cover_stamp.png",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/cover_stamp/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.decoy_lantern",
+      "group": "artifact",
+      "stem": "decoy_lantern",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "诱导灯，暖金灯芯、遮光片与短支架",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/decoy_lantern.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/decoy_lantern.png",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/decoy_lantern/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.demolition_canister",
+      "group": "artifact",
+      "stem": "demolition_canister",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "炎脉封装筒，双手旋阀、红色安全箍和投放提梁",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/demolition_canister.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/demolition_canister.png",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/demolition_canister/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.field_siphon",
+      "group": "artifact",
+      "stem": "field_siphon",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        96,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "手压式以太虹吸泵，活塞、软管与青色储液窗",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/field_siphon.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/field_siphon.png",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/field_siphon/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.fortune_seal",
+      "group": "artifact",
+      "stem": "fortune_seal",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "冒险封签，黑金机械封印片与断裂拉环",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/fortune_seal.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/fortune_seal.png",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/fortune_seal/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.hazard_condenser",
+      "group": "artifact",
+      "stem": "hazard_condenser",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "险地冷凝器，水雾阀、冷凝鳍片与收集瓶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/hazard_condenser.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/hazard_condenser.png",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/hazard_condenser/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.mending_lattice",
+      "group": "artifact",
+      "stem": "mending_lattice",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        96,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "可折叠复元编架，柔白网格与医疗卡扣",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/mending_lattice.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/mending_lattice.png",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.null_veil",
+      "group": "artifact",
+      "stem": "null_veil",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        96,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "折叠静默幕，暗紫吸收布与金属收纳杆",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/null_veil.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/null_veil.png",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/null_veil/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.phase_spindle",
+      "group": "artifact",
+      "stem": "phase_spindle",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "移相线轴，缠绕发光导线与定距刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/phase_spindle.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/phase_spindle.png",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/phase_spindle/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.prism_regulator",
+      "group": "artifact",
+      "stem": "prism_regulator",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "棱返调节器，多层镜片与入射角校准轮",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/prism_regulator.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/prism_regulator.png",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/prism_regulator/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.reaction_bell",
+      "group": "artifact",
+      "stem": "reaction_bell",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "截击铃，铜铃、地钉与触发线圈",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/reaction_bell.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/reaction_bell.png",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/reaction_bell/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.relay_compass",
+      "group": "artifact",
+      "stem": "relay_compass",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "导位罗盘，主轴磁针与牵引弧刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/relay_compass.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/relay_compass.png",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.seismic_plumb",
+      "group": "artifact",
+      "stem": "seismic_plumb",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "震测铅锤，重锤、细线轴与同心波刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/seismic_plumb.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/seismic_plumb.png",
+      "logical_cells": [
+        1,
+        3
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.shield_balancer",
+      "group": "artifact",
+      "stem": "shield_balancer",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "护盾均衡阀，双阀表盘和双向青白导流管",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/shield_balancer.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/shield_balancer.png",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/shield_balancer/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.survey_lens",
+      "group": "artifact",
+      "stem": "survey_lens",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "显迹测镜，黄铜支架、蓝色镜片和测绘刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/survey_lens.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/survey_lens.png",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/survey_lens/source.png"
+    },
+    {
+      "asset_id": "artifact.footprint.turn_ledger",
+      "group": "artifact",
+      "stem": "turn_ledger",
+      "role": "multi_cell_prop_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "行程簿，硬壳账页、时间刻度与机械盖印器",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/turn_ledger.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationArtifactFootprints/turn_ledger.png",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "source_path": "UnityProject/Artifacts/ArtifactFootprints20/turn_ledger/source.png"
+    }
+  ]
+}

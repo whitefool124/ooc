@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_seal_court_2x2",
+  "role": "multi_cell_prop_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Explicit hand-authored RLE pixel matrix; generic renderer expands exact pixels only and adds no art structure",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_seal_court_2x2_source.png",
+    "source_sha256": "bd5e226a533b63a1574db027d28eae218df874bc9baf1963c36be7c2f594f794"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v12/academy_seal_court_2x2.png",
+    "output_sha256": "bd5e226a533b63a1574db027d28eae218df874bc9baf1963c36be7c2f594f794",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 64x64 two-by-two-cell Academy seal platform above floor and below units",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_seal_court_2x2_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_seal_court_2x2_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_seal_court_2x2_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_seal_court_2x2_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_p0_application_contact_12x9.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Codex visual audit",
+    "date": "2026-08-24",
+    "silhouette": "FAIL",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Rejected in the default 128px-cell Unity view: the full 2x2 ring dominates the battlefield and reads as a targeting reticle instead of an academy floor seal."
+  },
+  "unity_import": null
+}

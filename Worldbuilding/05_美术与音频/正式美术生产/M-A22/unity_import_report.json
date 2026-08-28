@@ -1,0 +1,287 @@
+{
+  "schema": "occ-unity-import-report-v1",
+  "count": 20,
+  "unique_guids": 20,
+  "assets": [
+    {
+      "stem": "aegis_fold",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "guid": "35539fd804b8d741efc04fe48258d52e",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "anchor_brace",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "guid": "548557dccc7e260016e8c5571782ac7a",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "binding_frame",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "guid": "494aeb43fb2357f5ea58ef6b1ff74244",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "breach_wedge",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "size": [
+        32,
+        64
+      ],
+      "guid": "828a73560ba07dcd87ab3254b8ca1129",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "cover_stamp",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "size": [
+        96,
+        64
+      ],
+      "guid": "804ea6fb1569c246472f03ee62e5bb97",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "decoy_lantern",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "size": [
+        32,
+        64
+      ],
+      "guid": "cf5b3e42e9556819ab705fda519c5f9a",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "demolition_canister",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "size": [
+        64,
+        32
+      ],
+      "guid": "dac1968b18946107035e1572c992affc",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "field_siphon",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "size": [
+        96,
+        64
+      ],
+      "guid": "badb83b33e8bdae51c1f25c6406dc45d",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "fortune_seal",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "guid": "d8ef0792942ec08e79e73aca7c35c8df",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "hazard_condenser",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "guid": "209adcdf2a61709196624fc7397a3420",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "mending_lattice",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "size": [
+        96,
+        64
+      ],
+      "guid": "66fb57065c1072518643ce07a69d2dfe",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "null_veil",
+      "logical_cells": [
+        3,
+        2
+      ],
+      "size": [
+        96,
+        64
+      ],
+      "guid": "34a7a8a805776aa391d058fb8a15f6bf",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "phase_spindle",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "size": [
+        32,
+        64
+      ],
+      "guid": "5a16b8f430d3e1c0e02d6aa9a9c267ce",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "prism_regulator",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "size": [
+        64,
+        32
+      ],
+      "guid": "f094ab8b8133f2dad281c214e3a05ec2",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "reaction_bell",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "size": [
+        32,
+        64
+      ],
+      "guid": "d46599af7caef90adb78188869c91ea7",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "relay_compass",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "guid": "0485a496d7da88140ce3934b7dd07cce",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "seismic_plumb",
+      "logical_cells": [
+        1,
+        3
+      ],
+      "size": [
+        32,
+        96
+      ],
+      "guid": "a6eaf38f35e73ef0f4e7746f081c2493",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "shield_balancer",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "size": [
+        64,
+        64
+      ],
+      "guid": "d9bde6687d0ff143f16a3094536c07b4",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "survey_lens",
+      "logical_cells": [
+        1,
+        1
+      ],
+      "size": [
+        32,
+        32
+      ],
+      "guid": "87a6f72f10298df598561e38f4cb06f0",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "turn_ledger",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "size": [
+        64,
+        32
+      ],
+      "guid": "475ce104b4e7ea4a272d1f395d8e656a",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    }
+  ]
+}

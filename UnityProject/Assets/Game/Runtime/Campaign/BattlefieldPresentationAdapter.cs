@@ -345,6 +345,7 @@ namespace OCC.Combat
     /// <summary>Pure presentation state: it never changes gameplay grid coordinates.</summary>
     public sealed class BattlefieldViewport
     {
+        public const float EdgeOverscrollCells = .75f;
         private readonly BattlefieldRect viewport;
         private readonly int mapWidth;
         private readonly int mapHeight;
@@ -414,14 +415,17 @@ namespace OCC.Combat
 
         private void ClampToViewport()
         {
-            boardX = (float)Math.Round(ClampAxis(boardX, BoardWidth, viewport.X, viewport.Width));
-            boardY = (float)Math.Round(ClampAxis(boardY, BoardHeight, viewport.Y, viewport.Height));
+            float overscroll = cellSize * EdgeOverscrollCells;
+            boardX = (float)Math.Round(ClampAxis(boardX, BoardWidth, viewport.X, viewport.Width, overscroll));
+            boardY = (float)Math.Round(ClampAxis(boardY, BoardHeight, viewport.Y, viewport.Height, overscroll));
         }
 
-        private static float ClampAxis(float contentStart, float contentSize, float viewportStart, float viewportSize)
+        private static float ClampAxis(float contentStart, float contentSize, float viewportStart, float viewportSize,
+            float overscroll)
         {
             if (contentSize <= viewportSize) return viewportStart + (viewportSize - contentSize) * .5f;
-            return Math.Max(viewportStart + viewportSize - contentSize, Math.Min(viewportStart, contentStart));
+            return Math.Max(viewportStart + viewportSize - contentSize - overscroll,
+                Math.Min(viewportStart + overscroll, contentStart));
         }
 
         private static float ClampCellSize(float value)

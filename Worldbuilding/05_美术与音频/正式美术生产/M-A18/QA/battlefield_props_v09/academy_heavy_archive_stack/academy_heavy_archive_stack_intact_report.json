@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_heavy_archive_stack_intact",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_heavy_archive_stack\\intact_source.png",
+  "sourceSha256": "7f8a7e5560d772f20518102e338118a491dfcecd8e49374288adcc710c190ab0",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      28,
+      22
+    ],
+    "baselineY": 30
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    2,
+    14,
+    30,
+    30
+  ],
+  "hardAlpha": true,
+  "colors": 12,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

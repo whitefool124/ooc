@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_aisle_corner",
+  "role": "floor_tile_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Explicit hand-authored RLE pixel matrix; generic renderer expands exact pixels only and adds no art structure",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_aisle_corner_source.png",
+    "source_sha256": "2903826aa2b0a9e043c0c5defc0895519866368fc56a32c12b959b7012deb58b"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v12/academy_aisle_corner.png",
+    "output_sha256": "2903826aa2b0a9e043c0c5defc0895519866368fc56a32c12b959b7012deb58b",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 logical battlefield cell; orthographic floor layer below props, units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_corner_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_corner_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_corner_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_aisle_corner_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_p0_application_contact_12x9.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Codex visual audit",
+    "date": "2026-08-24",
+    "silhouette": "FAIL",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Rejected with the line-road family; replaced by region-based road base and transition autotiles."
+  },
+  "unity_import": null
+}

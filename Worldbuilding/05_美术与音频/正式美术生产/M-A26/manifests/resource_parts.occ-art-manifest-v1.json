@@ -1,0 +1,50 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.resource.parts",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single 32px element/resource icon; no board slicing",
+    "source_path": "UnityProject/Artifacts/ElementResources24/resource/parts/source.png",
+    "source_sha256": "ef05782c53db07827602a66c48e8f584b057a624dd54ea1c6c57e473a31ef58e"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/parts.png",
+    "output_sha256": "d4577024067913a89dc99c8f794bfae428c402ea518aa6f63f23dfa86338c01d",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 element or resource UI slot",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ElementResources24/resource/parts/1x.png",
+    "four_x": "UnityProject/Artifacts/ElementResources24/resource/parts/4x.png",
+    "grayscale": "UnityProject/Artifacts/ElementResources24/resource/parts/grayscale.png",
+    "checker": "UnityProject/Artifacts/ElementResources24/resource/parts/checker.png",
+    "application_contact": "UnityProject/Artifacts/ElementResources24/contacts/unity_element_resources_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex art-direction review",
+    "date": "2026-08-27",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "垫片、短螺栓与小修补板组成紧凑零件堆"
+  },
+  "unity_import": {
+    "stable_guid": "13c1f0e1633d4fe4ca60069ad4ae29fa",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "audit_report": "UnityProject/Artifacts/ElementResources24/import_audit.json"
+  }
+}

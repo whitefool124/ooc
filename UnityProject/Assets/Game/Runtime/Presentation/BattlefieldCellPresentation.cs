@@ -20,6 +20,10 @@ namespace OCC.Combat.Presentation
     {
         public GridPosition Position { get; }
         public Texture2D FloorTexture { get; }
+        public Rect FloorUv { get; }
+        public float FloorRotationDegrees { get; }
+        public Texture2D TerrainBoundaryTexture { get; }
+        public float TerrainBoundaryRotationDegrees { get; }
         public Texture2D EnvironmentTexture { get; }
         public Texture2D MoveOverlayTexture { get; }
         public float MoveOverlayAlpha { get; }
@@ -42,7 +46,10 @@ namespace OCC.Combat.Presentation
         public Texture2D IntentTexture { get; }
         public string HoverText { get; }
 
-        public BattlefieldCellPresentation(GridPosition position, Texture2D floorTexture, Texture2D environmentTexture,
+        public BattlefieldCellPresentation(GridPosition position, Texture2D floorTexture, Rect floorUv,
+            float floorRotationDegrees,
+            Texture2D terrainBoundaryTexture, float terrainBoundaryRotationDegrees,
+            Texture2D environmentTexture,
             Texture2D moveOverlayTexture, float moveOverlayAlpha, Texture2D attackOverlayTexture, float attackOverlayAlpha,
             Texture2D skillOverlayTexture, Texture2D selectionOverlayTexture, Texture2D unitTexture, Rect unitUv,
             Color unitTint, Vector2 unitOffset, Texture2D objectTexture, string objectLabel, Color objectLabelColor,
@@ -52,6 +59,10 @@ namespace OCC.Combat.Presentation
         {
             Position = position;
             FloorTexture = floorTexture;
+            FloorUv = floorUv;
+            FloorRotationDegrees = floorRotationDegrees;
+            TerrainBoundaryTexture = terrainBoundaryTexture;
+            TerrainBoundaryRotationDegrees = terrainBoundaryRotationDegrees;
             EnvironmentTexture = environmentTexture;
             MoveOverlayTexture = moveOverlayTexture;
             MoveOverlayAlpha = moveOverlayAlpha;

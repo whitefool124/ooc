@@ -42,6 +42,13 @@ namespace OCC.Combat
             if (phase == CombatFlowPhase.Defeat)
             {
                 IsHandled = true;
+                UnitState hero = combat?.GetUnit("hero");
+                if (mapRun != null && hero != null && hero.IsAlive)
+                {
+                    mapRun.CaptureCombatInventory(combat);
+                    mapRun.FailCurrentCombatSurvived();
+                    return new CombatOutcomeSettlement(true, false, CombatOutcomePersistence.MapRun, true);
+                }
                 return new CombatOutcomeSettlement(true, false);
             }
 

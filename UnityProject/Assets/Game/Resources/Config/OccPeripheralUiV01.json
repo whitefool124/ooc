@@ -4,13 +4,45 @@
   "scanlineSprite": "Art/FormalUIBackdrops/scanlines",
   "transitionSprite": "Art/FormalUIBackdrops/transition_wipe",
   "backdrops": [
+    { "id": "startup", "resourcePath": "Art/FormalUIBackdrops/startup" },
     { "id": "landing", "resourcePath": "Art/FormalUIBackdrops/landing" },
     { "id": "map", "resourcePath": "Art/FormalUIBackdrops/map" },
     { "id": "briefing", "resourcePath": "Art/FormalUIBackdrops/briefing" },
     { "id": "inventory", "resourcePath": "Art/FormalUIBackdrops/inventory" },
     { "id": "settlement", "resourcePath": "Art/FormalUIBackdrops/settlement" },
-    { "id": "archive", "resourcePath": "Art/FormalUIBackdrops/landing" },
-    { "id": "settings", "resourcePath": "Art/FormalUIBackdrops/briefing" }
+    { "id": "archive", "resourcePath": "Art/FormalUIBackdrops/archive" },
+    { "id": "settings", "resourcePath": "Art/FormalUIBackdrops/settings" }
+  ],
+  "decorations": [
+    { "id": "binding_spine", "resourcePath": "Art/FormalUITrims/binding_spine" },
+    { "id": "index_tab", "resourcePath": "Art/FormalUITrims/index_tab" },
+    { "id": "measure_ruler", "resourcePath": "Art/FormalUITrims/measure_ruler" },
+    { "id": "corner_clasp", "resourcePath": "Art/FormalUITrims/corner_clasp" },
+    { "id": "folded_corner", "resourcePath": "Art/FormalUITrims/folded_corner" },
+    { "id": "status_clip", "resourcePath": "Art/FormalUITrims/status_clip" }
+  ],
+  "illustrations": [
+    { "id": "empty_archive_tray", "resourcePath": "Art/FormalUIEmptyIllustrations/empty_archive_tray" },
+    { "id": "empty_inventory_pouch", "resourcePath": "Art/FormalUIEmptyIllustrations/empty_inventory_pouch" },
+    { "id": "empty_route_case", "resourcePath": "Art/FormalUIEmptyIllustrations/empty_route_case" },
+    { "id": "empty_reward_crate", "resourcePath": "Art/FormalUIEmptyIllustrations/empty_reward_crate" },
+    { "id": "empty_loadout_rack", "resourcePath": "Art/FormalUIEmptyIllustrations/empty_loadout_rack" },
+    { "id": "locked_document_satchel", "resourcePath": "Art/FormalUIEmptyIllustrations/locked_document_satchel" }
+  ],
+  "chapterDividers": [
+    { "id": "teaching_record", "resourcePath": "Art/FormalUIChapterDividers/teaching_record" },
+    { "id": "workshop_record", "resourcePath": "Art/FormalUIChapterDividers/workshop_record" },
+    { "id": "infirmary_record", "resourcePath": "Art/FormalUIChapterDividers/infirmary_record" },
+    { "id": "field_survey", "resourcePath": "Art/FormalUIChapterDividers/field_survey" },
+    { "id": "sealed_dossier", "resourcePath": "Art/FormalUIChapterDividers/sealed_dossier" }
+  ],
+  "chapterMarkers": [
+    { "id": "teaching_chalk_clip", "resourcePath": "Art/FormalUIChapterMarkers/teaching_chalk_clip" },
+    { "id": "workshop_caliper_clip", "resourcePath": "Art/FormalUIChapterMarkers/workshop_caliper_clip" },
+    { "id": "infirmary_bandage_clip", "resourcePath": "Art/FormalUIChapterMarkers/infirmary_bandage_clip" },
+    { "id": "field_leaf_clip", "resourcePath": "Art/FormalUIChapterMarkers/field_leaf_clip" },
+    { "id": "sealed_red_clip", "resourcePath": "Art/FormalUIChapterMarkers/sealed_red_clip" },
+    { "id": "reward_brass_tag", "resourcePath": "Art/FormalUIChapterMarkers/reward_brass_tag" }
   ],
   "feedback": [
     { "id": "click", "resourcePath": "Art/FormalUIFeedback/click", "frameCount": 6, "framesPerSecond": 18 },

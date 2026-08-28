@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_light_stone_bench_intact",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_light_stone_bench\\intact_source.png",
+  "sourceSha256": "8df19b1025908598e1febf98ed6c63a0721bed45f4a30099134ebb9101e0c299",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      27,
+      16
+    ],
+    "baselineY": 29
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    2,
+    17,
+    29,
+    29
+  ],
+  "hardAlpha": true,
+  "colors": 9,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

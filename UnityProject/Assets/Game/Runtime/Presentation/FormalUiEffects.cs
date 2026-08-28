@@ -13,7 +13,7 @@ namespace OCC.Combat.Presentation
         public static void ApplyBackdrop(Image image, string id)
         {
             Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.BackdropPath(id));
-            if (sprite == null) throw new KeyNotFoundException("Missing formal UI backdrop sprite: " + id);
+            if (sprite == null) throw new KeyNotFoundException("Missing formal UI backdrop: " + id);
             image.sprite = sprite;
             image.type = Image.Type.Simple;
             image.preserveAspect = false;
@@ -22,18 +22,64 @@ namespace OCC.Combat.Presentation
 
         public static void AddAmbientScanlines(Transform parent, float intensity)
         {
-            Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.Data.scanlineSprite);
-            if (sprite == null) throw new KeyNotFoundException("Missing formal scanline sprite");
-            GameObject result = FormalUiKit.Create("环境扫描层", parent);
+            GameObject result = FormalUiKit.Create("学院档案纸纹层", parent);
             RectTransform rect = result.AddComponent<RectTransform>();
             FormalUiKit.Stretch(rect);
-            rect.offsetMin = new Vector2(0f, -12f); rect.offsetMax = new Vector2(0f, 12f);
-            Image image = result.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.color = new Color(1f, 1f, 1f, .42f); image.raycastTarget = false;
-            result.transform.SetAsFirstSibling();
-            if (intensity <= 0f) return;
-            rect.anchoredPosition = new Vector2(0f, -8f);
-            DOTween.To(() => rect.anchoredPosition.y, value => rect.anchoredPosition = new Vector2(0f, value), 8f,
-                FormalUiEffectsConfig.Data.ambientScanSeconds / Mathf.Max(.25f, intensity)).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo).SetUpdate(true).SetTarget(result);
+            Image image = result.AddComponent<Image>(); image.sprite = null; image.color = Color.clear; image.raycastTarget = false;
+            result.transform.SetSiblingIndex(Mathf.Min(1, parent.childCount - 1));
+            Sprite spine = Decoration("binding_spine");
+            for (int i = 0; i < 5; i++)
+                ArchiveSprite(result.transform, "布面页脊_" + i, spine, new Vector2(0f, -i * 230f), new Vector2(128f, 256f), new Vector2(0f, 1f), new Vector2(0f, 1f));
+            ArchiveSprite(result.transform, "档案角扣", Decoration("corner_clasp"), new Vector2(128f, -32f), new Vector2(128f, 128f), new Vector2(0f, 1f), new Vector2(0f, 1f));
+            ArchiveSprite(result.transform, "索引页签", Decoration("index_tab"), new Vector2(-24f, -300f), new Vector2(256f, 128f), Vector2.one, Vector2.one);
+            ArchiveSprite(result.transform, "折页", Decoration("folded_corner"), new Vector2(-8f, -8f), new Vector2(256f, 256f), Vector2.one, Vector2.one);
+            ArchiveSprite(result.transform, "测量尺", Decoration("measure_ruler"), new Vector2(160f, 20f), new Vector2(256f, 128f), Vector2.zero, Vector2.zero);
+            ArchiveSprite(result.transform, "状态纸夹", Decoration("status_clip"), new Vector2(-72f, 20f), new Vector2(128f, 128f), new Vector2(1f, 0f), new Vector2(1f, 0f));
+        }
+
+        public static void AddEmptyIllustration(Transform parent, string id, Vector2 position, float size)
+        {
+            Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.IllustrationPath(id));
+            if (sprite == null) throw new KeyNotFoundException("Missing formal UI empty illustration: " + id);
+            GameObject result = FormalUiKit.Create("空状态插图_" + id, parent);
+            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(size, size);
+            Image image = result.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.preserveAspect = true; image.color = Color.white; image.raycastTarget = false;
+        }
+
+        public static void AddChapterDivider(Transform parent, string id, Vector2 position, float scale)
+        {
+            Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.ChapterDividerPath(id));
+            if (sprite == null) throw new KeyNotFoundException("Missing formal UI chapter divider: " + id);
+            GameObject result = FormalUiKit.Create("章节分隔横幅_" + id, parent);
+            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(0f, .5f); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(128f * scale, 32f * scale);
+            Image image = result.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.preserveAspect = true; image.color = Color.white; image.raycastTarget = false;
+        }
+
+        public static void AddChapterMarker(Transform parent, string id, Vector2 position, float scale)
+        {
+            Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.ChapterMarkerPath(id));
+            if (sprite == null) throw new KeyNotFoundException("Missing formal UI chapter marker: " + id);
+            GameObject result = FormalUiKit.Create("章节角标_" + id, parent);
+            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(32f * scale, 32f * scale);
+            Image image = result.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.preserveAspect = true; image.color = Color.white; image.raycastTarget = false;
+        }
+
+        private static Sprite Decoration(string id)
+        {
+            Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.DecorationPath(id));
+            if (sprite == null) throw new KeyNotFoundException("Missing formal UI decoration: " + id);
+            return sprite;
+        }
+
+        private static void ArchiveSprite(Transform parent, string name, Sprite sprite, Vector2 position, Vector2 size, Vector2 anchor, Vector2 pivot)
+        {
+            GameObject mark = FormalUiKit.Create(name, parent);
+            RectTransform rect = mark.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = anchor;
+            rect.pivot = pivot; rect.anchoredPosition = position; rect.sizeDelta = size;
+            Image image = mark.AddComponent<Image>(); image.sprite = sprite; image.preserveAspect = true; image.color = Color.white; image.raycastTarget = false;
         }
 
         public static void PlayPageWipe(Transform parent, float intensity)

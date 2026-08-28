@@ -20,10 +20,11 @@ namespace OCC.Combat.Editor
             importer.alphaIsTransparency = true;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.npotScale = TextureImporterNPOTScale.None;
-            bool semanticMicroIcon = assetPath.Contains("/FormalIntentIcons16/", StringComparison.Ordinal) ||
-                                     assetPath.EndsWith("/action_point.png", StringComparison.Ordinal) ||
-                                     assetPath.EndsWith("/mana.png", StringComparison.Ordinal) ||
-                                     assetPath.EndsWith("/notice.png", StringComparison.Ordinal);
+            bool semanticMicroIcon = assetPath.Contains("/FormalCommandIcons16/", StringComparison.Ordinal) ||
+                                     assetPath.Contains("/FormalIntentIcons16/", StringComparison.Ordinal) ||
+                                     assetPath.Contains("/FormalMapStateIcons16/", StringComparison.Ordinal) ||
+                                     assetPath.Contains("/FormalItemSemanticIcons16/", StringComparison.Ordinal) ||
+                                     assetPath.Contains("/FormalEquipmentSlotIcons16/", StringComparison.Ordinal);
             importer.spritePixelsPerUnit = semanticMicroIcon ? 16f : 32f;
             TextureImporterSettings settings = new TextureImporterSettings();
             importer.ReadTextureSettings(settings);
@@ -33,10 +34,10 @@ namespace OCC.Combat.Editor
                 settings.spritePivot = new Vector2(.5f, .5f);
                 settings.spriteBorder = new Vector4(4f, 4f, 4f, 4f);
             }
-            else if (assetPath.Contains("FormalUnits64/"))
+            else if (assetPath.Contains("FormalUnits64/") || assetPath.Contains("FormalEnemyAnimations64/"))
             {
                 settings.spriteAlignment = (int)SpriteAlignment.Custom;
-                settings.spritePivot = new Vector2(.5f, .09375f); // logical X=32, Y=58 on a 64px cell
+                settings.spritePivot = new Vector2(.5f, .90625f); // logical X=32, Y=58 on a 64px cell
             }
             else
             {

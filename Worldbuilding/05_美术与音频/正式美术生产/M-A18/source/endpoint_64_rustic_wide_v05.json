@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_rustic_wide_v05",
+  "category": "occ_character_endpoint_wide",
+  "description": "Rustic western-fantasy-side OCC quadruped endpoint normalized to the global wide-unit scale.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 34,
+  "minBodyHeight": 26,
+  "maxBodyHeight": 36,
+  "maxBodyWidth": 62,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": true,
+  "chromaKeyTolerance": 48,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

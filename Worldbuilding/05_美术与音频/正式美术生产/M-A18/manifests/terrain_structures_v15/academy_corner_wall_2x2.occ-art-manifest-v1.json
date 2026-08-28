@@ -1,0 +1,25 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "asset_id": "academy_corner_wall_2x2",
+  "status": "FORMAL_CANDIDATE",
+  "role": "multi_cell_academy_structure",
+  "logical_cells": [
+    2,
+    2
+  ],
+  "source": "source/terrain_structures_v15/academy_corner_wall_2x2_source.png",
+  "source_sha256": "6471417f7a80acc34fc7b14b5ece5a395c5d4eddeb9292786fce2d0de65e4fbc",
+  "normalized": "normalized/terrain_structures_v15/academy_corner_wall_2x2.png",
+  "normalized_sha256": "28d8b2190f5448ee1e736a202d73eea0c3af0a1e86526c825d160a287198289d",
+  "generation_channel": "codex_builtin_imagegen",
+  "hard_alpha": true,
+  "opaque_color_count": 8,
+  "qa": [
+    "1x",
+    "4x",
+    "grayscale",
+    "checkerboard",
+    "application_contact_required"
+  ],
+  "review": "candidate pending Unity application contact and importer/runtime verification"
+}

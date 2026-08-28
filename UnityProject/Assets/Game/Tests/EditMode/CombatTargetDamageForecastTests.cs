@@ -29,7 +29,9 @@ namespace OCC.Combat.Tests
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
             UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatEffectExecutor.Execute(state, hero.Id,
                 CombatEffect.AbsorbShield(enemy.Id, enemy.Shield),
                 CombatEffect.DamageHealth(enemy.Id, enemy.Health - 1));
@@ -40,7 +42,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(forecast.WillDefeat, Is.True);
             Assert.That(forecast.RemainingHealth, Is.Zero);
-            Assert.That(forecast.PlayerSummary, Does.Contain("可击杀"));
+            Assert.That(forecast.PlayerSummary, Does.Contain("可迫使目标认输并退出考核"));
+            Assert.That(forecast.PlayerSummary, Does.Not.Contain("击杀"));
         }
 
         [Test]

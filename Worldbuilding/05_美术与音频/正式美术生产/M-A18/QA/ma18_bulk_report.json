@@ -1,0 +1,3228 @@
+{
+  "status": "PASS",
+  "assetFiles": 179,
+  "entries": [
+    {
+      "id": "academy_stone_road_a",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_stone_road_b",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_stone_road_c",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_stone_road_d",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_courtyard_b",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_courtyard_c",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_courtyard_d",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_ruins_a",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_ruins_b",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_ruins_c",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_ruins_d",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_inlay_a",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_inlay_b",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_inlay_c",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_inlay_d",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_packed_earth_a",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_packed_earth_b",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_packed_earth_c",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_grass_edge_n",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_grass_edge_e",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_grass_edge_s",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_grass_edge_w",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_stone_bench_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        4,
+        14,
+        28,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_stone_bench_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        4,
+        10,
+        28,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_stone_bench_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_planter_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        10,
+        27,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_planter_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        5,
+        10,
+        27,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_light_planter_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_archive_stack_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        5,
+        28,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_archive_stack_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        5,
+        5,
+        28,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_archive_stack_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_masonry_screen_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        3,
+        6,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_masonry_screen_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        3,
+        6,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_heavy_masonry_screen_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_pillar_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        9,
+        3,
+        24,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_pillar_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 8,
+      "bounds": [
+        9,
+        3,
+        25,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_pillar_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_seal_plinth_intact",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        5,
+        10,
+        28,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_seal_plinth_damaged",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 8,
+      "bounds": [
+        5,
+        10,
+        28,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_seal_plinth_rubble",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_loot_chest_closed",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 8,
+      "bounds": [
+        5,
+        11,
+        28,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_loot_chest_open",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 8,
+      "bounds": [
+        5,
+        6,
+        28,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_loot_chest_empty",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        5,
+        20,
+        29,
+        30
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_line_straight",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_line_corner",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_line_tee",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "academy_aether_line_cross",
+      "kind": "terrain",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        9,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        8,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        11,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "shieldguard/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        51,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        52,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        7,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        8,
+        54,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        8,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "pyromancer/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        6,
+        56,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        9,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        9,
+        8,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        11,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "raider/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        9,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        8,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        11,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "elite_vanguard/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        9,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        8,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        11,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "stone_snare/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 6,
+      "limit": 24,
+      "bounds": [
+        8,
+        10,
+        45,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        8,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        54,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "lantern_revealer/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        7,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        8,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        11,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "rune_arbalist/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        57,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        9,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        8,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        11,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "core_overseer/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 5,
+      "limit": 24,
+      "bounds": [
+        14,
+        10,
+        59,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_00",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        10,
+        50,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_01",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        51,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_02",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        8,
+        52,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_03",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        53,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_04",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        9,
+        54,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "purifier_overseer/frame_05",
+      "kind": "frame",
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 7,
+      "limit": 24,
+      "bounds": [
+        21,
+        7,
+        55,
+        59
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        3,
+        15,
+        12,
+        18
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        3,
+        14,
+        15,
+        19
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        18,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        20,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        22,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_projectile/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        3,
+        14,
+        23,
+        19
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        11,
+        11,
+        22,
+        22
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        9,
+        9,
+        24,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        7,
+        7,
+        26,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        28,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        7,
+        7,
+        26,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_impact/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        9,
+        9,
+        24,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        5,
+        26,
+        11
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        6,
+        5,
+        25,
+        13
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        24,
+        14
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        23,
+        16
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        22,
+        17
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_melee_arc/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        20,
+        18
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        9,
+        9,
+        23,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        9,
+        8,
+        24,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        9,
+        8,
+        24,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        8,
+        8,
+        24,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        9,
+        8,
+        24,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_attachment/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        9,
+        8,
+        24,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        12,
+        25,
+        21
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        11,
+        25,
+        22
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        10,
+        25,
+        23
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        9,
+        25,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        10,
+        25,
+        23
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_spray/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        8,
+        11,
+        25,
+        22
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        3,
+        15,
+        12,
+        18
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        3,
+        14,
+        15,
+        19
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        18,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        20,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        3,
+        13,
+        22,
+        20
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_line/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        3,
+        14,
+        23,
+        19
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_cross_blast/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        4,
+        4,
+        29,
+        29
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        11,
+        11,
+        22,
+        22
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        9,
+        9,
+        24,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        7,
+        7,
+        26,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        5,
+        5,
+        28,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        7,
+        7,
+        26,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_detonate/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        9,
+        9,
+        24,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_burning_ground/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        19,
+        27,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        20,
+        29,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        19,
+        29,
+        26
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        18,
+        29,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        17,
+        29,
+        24
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        16,
+        29,
+        23
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_wall/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        2,
+        20,
+        29,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_absorb/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        6,
+        8,
+        27,
+        25
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_break_stance/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 1,
+      "limit": 12,
+      "bounds": [
+        7,
+        8,
+        25,
+        27
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_00",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        15,
+        11,
+        18,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_01",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        14,
+        10,
+        19,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_02",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        13,
+        9,
+        20,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_03",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 4,
+      "limit": 12,
+      "bounds": [
+        12,
+        8,
+        21,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_04",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 3,
+      "limit": 12,
+      "bounds": [
+        13,
+        7,
+        20,
+        28
+      ],
+      "status": "PASS"
+    },
+    {
+      "id": "fire_overlimit/frame_05",
+      "kind": "frame",
+      "size": [
+        32,
+        32
+      ],
+      "hardAlpha": true,
+      "colors": 2,
+      "limit": 12,
+      "bounds": [
+        14,
+        6,
+        19,
+        28
+      ],
+      "status": "PASS"
+    }
+  ]
+}

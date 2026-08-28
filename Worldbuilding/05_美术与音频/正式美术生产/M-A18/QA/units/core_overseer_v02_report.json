@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "method": "direct nearest-neighbor sampling followed by palette quantization only; no crop, fit, or reposition",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\units\\core_overseer\\source_v02.png",
+  "output": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\units\\core_overseer_v02.png",
+  "qa": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\units\\core_overseer_v02_4x.png",
+  "size": [
+    64,
+    64
+  ],
+  "paletteColors": 24,
+  "paletteLimit": 24,
+  "hardAlpha": true,
+  "bounds": [
+    17,
+    4,
+    53,
+    57
+  ],
+  "chromaKey": true
+}

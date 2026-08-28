@@ -45,11 +45,12 @@ namespace OCC.Combat.Tests
             Assert.That(after.X + 40f, Is.EqualTo(anchorX).Within(.01f));
             Assert.That(after.Y + 60f, Is.EqualTo(anchorY).Within(.01f));
             viewport.Pan(10000f, 10000f);
-            Assert.That(viewport.BoardRect.X, Is.LessThanOrEqualTo(viewport.ViewportRect.X));
-            Assert.That(viewport.BoardRect.Y, Is.LessThanOrEqualTo(viewport.ViewportRect.Y));
+            float overscroll = viewport.CellSize * BattlefieldViewport.EdgeOverscrollCells;
+            Assert.That(viewport.BoardRect.X, Is.LessThanOrEqualTo(viewport.ViewportRect.X + overscroll));
+            Assert.That(viewport.BoardRect.Y, Is.LessThanOrEqualTo(viewport.ViewportRect.Y + overscroll));
             viewport.Pan(-10000f, -10000f);
-            Assert.That(viewport.BoardRect.XMax, Is.GreaterThanOrEqualTo(viewport.ViewportRect.XMax));
-            Assert.That(viewport.BoardRect.YMax, Is.GreaterThanOrEqualTo(viewport.ViewportRect.YMax));
+            Assert.That(viewport.BoardRect.XMax, Is.GreaterThanOrEqualTo(viewport.ViewportRect.XMax - overscroll));
+            Assert.That(viewport.BoardRect.YMax, Is.GreaterThanOrEqualTo(viewport.ViewportRect.YMax - overscroll));
         }
 
         [Test]
@@ -73,6 +74,18 @@ namespace OCC.Combat.Tests
             viewport.Focus(new GridPosition(6, 4));
             Assert.That(viewport.IsNearSafeEdge(new GridPosition(6, 4)), Is.False);
             Assert.That(viewport.IsNearSafeEdge(new GridPosition(0, 4)), Is.True);
+        }
+
+        [Test]
+        public void Viewport_FocusOnOuterRow_LeavesUnitAndBoundaryBelowTopHud()
+        {
+            BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            viewport.Focus(new GridPosition(5, 8));
+
+            BattlefieldRect topCell = viewport.CellRect(new GridPosition(5, 8));
+            Assert.That(topCell.Y, Is.EqualTo(viewport.ViewportRect.Y +
+                viewport.CellSize * BattlefieldViewport.EdgeOverscrollCells).Within(.01f));
+            Assert.That(topCell.Y, Is.GreaterThan(100f));
         }
 
         [Test]

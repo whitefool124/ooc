@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "equipment.footprint.aca_eq_mh02",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single inventory-footprint asset; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/source.png",
+    "source_sha256": "f9e9799923133e1cfe316b24d33e61229fbe74ef08034ed4e7472113896133e7"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh02.png",
+    "output_sha256": "5c091df69c8c45dbdc9f1023dfe5ca6cd9171cf08e139cc5d408fda384e04da0",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      3
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "1x3 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/1x.png",
+    "four_x": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/4x.png",
+    "grayscale": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/grayscale.png",
+    "checker": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/checker.png",
+    "application_contact": "UnityProject/Artifacts/AcademyEquipmentFootprints32/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Exact footprint canvas, real-object silhouette, rotation-safe shadow-neutral presentation, and formal 6x10 Unity inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh02.png",
+    "stable_guid": "145ba075c8af7b84d97767ad95a63fac",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

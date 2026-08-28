@@ -1,0 +1,10 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_aisle_edge_straight",
+  "width": 32,
+  "height": 32,
+  "delivery_size": [32, 32],
+  "palette": {"S": "#B3AA91", "K": "#85847A", "R": "#96958B"},
+  "rows": [{"row": "S:32", "repeat": 14}, {"row": "K:32", "repeat": 2}, {"row": "R:32", "repeat": 16}],
+  "notes": "North courtyard, south maintained road. Explicit per-pixel RLE rows."
+}

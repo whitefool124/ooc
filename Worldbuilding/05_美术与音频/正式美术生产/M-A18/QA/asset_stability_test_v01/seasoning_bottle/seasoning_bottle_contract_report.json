@@ -1,0 +1,24 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "seasoning_bottle",
+  "role": "material_pickup_24_to_ui32",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      9,
+      6,
+      23,
+      26
+    ],
+    "hard_alpha": true,
+    "visible_colors": 7,
+    "accent_pixels": {
+      "ochre": 207
+    }
+  },
+  "errors": []
+}

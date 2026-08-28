@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1200" viewBox="0 0 1920 1200" role="img" aria-labelledby="title desc">
+  <title id="title">OCC M-A17 学院空间工程总平面 v02 正交整理版</title>
+  <desc id="desc">按 48 单位模数整理的建模蓝图。中央图书馆外设完整道路环，建筑和道路均与主网格平行或垂直。</desc>
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#2d6886" stroke-width="1"/></pattern>
+    <style>.t{font-family:'Microsoft YaHei',sans-serif;fill:#e9fbff}.m{font-family:Consolas,'Microsoft YaHei',sans-serif;fill:#acd9e9}.b{fill:#15516f;stroke:#e9fbff;stroke-width:2}.lib{fill:#1b6686;stroke:#fff;stroke-width:3}.r1{fill:none;stroke:#e8fbff;stroke-width:18}.r2{fill:none;stroke:#90cfe2;stroke-width:10}.r3{fill:none;stroke:#5c9eb8;stroke-width:5}.d{fill:none;stroke:#7dd5ed;stroke-width:1.5;stroke-dasharray:7 5}</style>
+  </defs>
+  <rect width="1920" height="1200" fill="#082f4a"/>
+  <text x="120" y="74" class="t" font-size="30" font-weight="700">M-A17 学院空间工程总平面</text>
+  <text x="120" y="105" class="m" font-size="15">ISSUE 02 / 正交整理版 / 坐标原点：左上 / 单位：MAP PX / 模数：48</text>
+  <rect x="120" y="150" width="1536" height="864" fill="url(#grid)" stroke="#e9fbff" stroke-width="2"/>
+  <path d="M180 650L260 410 500 210 850 180 1190 220 1450 360 1540 570 1460 840 1210 940 760 950 390 870 180 650Z" fill="#10425f" stroke="#dff8ff" stroke-width="3"/>
+  <text x="198" y="677" class="m" font-size="11">COASTLINE CONTROL / C-01</text>
+
+  <!-- disciplined road hierarchy: two primary access spines and a complete library ring -->
+  <g stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M280 640H690 M950 640H1430" class="r1"/>
+    <path d="M690 415V805 M950 415V805" class="r1"/>
+    <path d="M690 415H950V805H690Z" class="r2"/>
+    <path d="M420 340H690 M950 340H1240 M420 820H690 M950 820H1370" class="r2"/>
+    <path d="M420 340V820 M1240 340V820" class="r3"/>
+  </g>
+  <text x="300" y="624" class="m" font-size="11">R-01 PRIMARY W52</text><text x="980" y="624" class="m" font-size="11">R-02 PRIMARY W48</text><text x="706" y="402" class="m" font-size="11">R-03..05 SECONDARY W28–30</text><text x="1252" y="808" class="m" font-size="11">R-06..07 TRAIL W15–16</text>
+
+  <!-- west gateway and academic row: every frontage is orthogonal -->
+  <g><rect x="252" y="610" width="150" height="62" class="b"/><path d="M274 610V672M380 610V672" class="d"/><text x="263" y="637" class="t" font-size="13">academy_gate</text><text x="263" y="657" class="m" font-size="11">150×62 · H .70</text>
+  <rect x="420" y="250" width="204" height="78" class="b"/><circle cx="522" cy="289" r="28" class="d"/><text x="432" y="280" class="t" font-size="13">archive_west</text><text x="432" y="303" class="m" font-size="11">204×78 · H 1.60</text>
+  <rect x="690" y="250" width="168" height="62" class="b"/><circle cx="774" cy="281" r="23" class="d"/><text x="702" y="278" class="t" font-size="13">archive_north</text><text x="702" y="299" class="m" font-size="11">168×62 · H 1.35</text>
+  <rect x="690" y="340" width="218" height="62" class="b"/><path d="M706 389L799 352 892 389" class="d"/><text x="702" y="366" class="t" font-size="13">lecture_hall</text><text x="702" y="386" class="m" font-size="11">218×94 · H 1.85</text></g>
+
+  <!-- central library is the sole central mass, with equal roads on all four sides -->
+  <g><rect x="690" y="445" width="260" height="190" class="lib"/><circle cx="820" cy="540" r="62" fill="none" stroke="#fff" stroke-width="3"/><path d="M758 540Q820 478 882 540M730 580H910M820 460V620" class="d"/><text x="710" y="476" class="t" font-size="18" font-weight="700">central_library</text><text x="710" y="501" class="m" font-size="12">CENTRE (770,430) · 260×190 · H 1.95</text><text x="710" y="523" class="m" font-size="12">ROTUNDA + READING HALL</text>
+  <path d="M690 428V410M950 428V410M690 419H950" class="d"/><text x="803" y="407" class="m" font-size="11">260</text><path d="M966 445H985M966 635H985M976 445V635" class="d"/><text x="990" y="545" class="m" font-size="11">190</text></g>
+
+  <!-- west residential precinct -->
+  <g><rect x="420" y="445" width="168" height="70" class="b"/><path d="M444 445V515M444 493H570" class="d"/><text x="432" y="474" class="t" font-size="13">dormitory_a</text><text x="432" y="495" class="m" font-size="11">168×70 · H .78</text>
+  <rect x="420" y="550" width="186" height="72" class="b"/><path d="M448 550V622M448 599H590" class="d"/><text x="432" y="579" class="t" font-size="13">dormitory_b</text><text x="432" y="601" class="m" font-size="11">186×72 · H 1.00</text>
+  <rect x="420" y="690" width="182" height="68" class="b"/><path d="M447 690V758M492 690V758M537 690V758" class="d"/><text x="432" y="719" class="t" font-size="13">market_hall</text><text x="432" y="741" class="m" font-size="11">182×68 · H .48</text></g>
+
+  <!-- eastern workshop precinct: aligned facades and clear service court -->
+  <g><rect x="1010" y="250" width="206" height="84" class="b"/><path d="M1028 318l28-52 28 52 28-52 28 52 28-52 28 52" class="d"/><text x="1022" y="280" class="t" font-size="13">workshop_north</text><text x="1022" y="302" class="m" font-size="11">206×84 · H 1.38</text>
+  <rect x="1010" y="370" width="220" height="100" class="b"/><path d="M1030 451l30-66 30 66 30-66 30 66 30-66 30 66" class="d"/><text x="1022" y="401" class="t" font-size="13">workshop_yard</text><text x="1022" y="423" class="m" font-size="11">220×100 · H .95</text>
+  <rect x="1010" y="515" width="218" height="92" class="b"/><path d="M1030 589L1119 531 1208 589" class="d"/><text x="1022" y="547" class="t" font-size="13">training_hall</text><text x="1022" y="570" class="m" font-size="11">218×92 · H 1.25</text></g>
+
+  <!-- south / outer edge assets -->
+  <g><rect x="690" y="700" width="154" height="56" class="b"/><path d="M705 740H829" class="d"/><text x="702" y="728" class="t" font-size="13">south_dormitory</text><text x="702" y="748" class="m" font-size="11">154×56 · H .72</text>
+  <rect x="885" y="700" width="138" height="66" class="b"/><path d="M954 714v38m-19-19h38" class="d"/><text x="897" y="728" class="t" font-size="13">infirmary</text><text x="897" y="748" class="m" font-size="11">138×66 · H .68</text>
+  <rect x="1080" y="700" width="150" height="58" class="b"/><text x="1092" y="728" class="t" font-size="13">wilds_station</text><text x="1092" y="748" class="m" font-size="11">150×58 · H .42</text>
+  <rect x="1280" y="430" width="116" height="66" class="b"/><circle cx="1338" cy="463" r="23" class="d"/><text x="1292" y="458" class="t" font-size="13">sealed_annex</text><text x="1292" y="480" class="m" font-size="11">116×66 · H 1.50</text>
+  <rect x="1280" y="680" width="170" height="42" class="b"/><path d="M1310 680V722M1350 680V722M1390 680V722" class="d"/><text x="1292" y="705" class="t" font-size="13">east_dock · 170×42 · H .28</text>
+  <rect x="1280" y="770" width="114" height="44" class="b"/><text x="1292" y="797" class="t" font-size="13">wilds_outpost · 114×44 · H .35</text></g>
+
+  <!-- bridge / conduit callouts -->
+  <g class="d"><path d="M300 670L420 670"/><path d="M1230 475L1280 475"/><path d="M1230 700L1280 700"/><path d="M1090 770L1320 815"/></g><g class="m" font-size="11"><text x="302" y="687">BR-01 / W28 / 3 PIERS</text><text x="1238" y="465">BR-02 TOWER LINK / W28</text><text x="1238" y="690">BR-03 DOCK LINK / W28</text><text x="1110" y="800">AC-01 AETHER CONDUIT / CORE W9 / BORDER W20</text></g>
+
+  <g transform="translate(120 1050)"><rect width="1536" height="95" fill="#0d3b58" stroke="#e9fbff" stroke-width="2"/><path d="M1040 0V95M1280 0V95" class="d"/><text x="20" y="31" class="t" font-size="21" font-weight="700">M-A17 · ORTHOGONAL MODEL CONTROL PLAN</text><text x="20" y="57" class="m" font-size="13">ALL BUILDING FACADES ALIGN TO 48-UNIT GRID. ROADWAY MUST NOT CROSS ANY BUILDING FOOTPRINT.</text><text x="20" y="78" class="m" font-size="12">LIBRARY RING CLEARANCE: 60 MINIMUM. DYNAMIC NODES / ROUTES REMAIN UGUI, NOT MESH.</text><text x="1060" y="35" class="t" font-size="13">ISSUE 02</text><text x="1060" y="60" class="m" font-size="12">2026-08-18</text><text x="1300" y="35" class="t" font-size="13">STATUS</text><text x="1300" y="60" class="m" font-size="12">BLUEPRINT / IMPLEMENTATION PENDING</text></g>
+</svg>

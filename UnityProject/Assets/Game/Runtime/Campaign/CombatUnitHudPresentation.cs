@@ -8,6 +8,7 @@ namespace OCC.Combat
         public int Maximum { get; }
         public int ForecastLoss { get; }
         public int Remaining { get; }
+        public bool Uncapped { get; }
         public bool WillEmpty => Current > 0 && Remaining <= 0 && ForecastLoss > 0;
         public float CurrentRatio => Current / (float)Math.Max(1, Maximum);
         public float RemainingRatio => Remaining / (float)Math.Max(1, Maximum);
@@ -16,17 +17,18 @@ namespace OCC.Combat
         {
             get
             {
-                if (ForecastLoss <= 0) return Current + "/" + Maximum;
-                return Current + " -" + ForecastLoss + " → " + Remaining + "/" + Maximum;
+                if (ForecastLoss <= 0) return Uncapped ? Current.ToString() : Current + "/" + Maximum;
+                return Current + " -" + ForecastLoss + " → " + Remaining + (Uncapped ? string.Empty : "/" + Maximum);
             }
         }
 
-        public CombatUnitVitalPresentation(int current, int maximum, int forecastLoss, int remaining)
+        public CombatUnitVitalPresentation(int current, int maximum, int forecastLoss, int remaining, bool uncapped = false)
         {
             Maximum = Math.Max(0, maximum);
             Current = Math.Max(0, current);
             ForecastLoss = Math.Max(0, Math.Min(Current, forecastLoss));
             Remaining = Math.Max(0, Math.Min(Current, remaining));
+            Uncapped = uncapped;
         }
     }
 
@@ -42,7 +44,7 @@ namespace OCC.Combat
             Shield = shield;
         }
 
-        public static CombatUnitVitalsPresentation From(UnitState unit, CombatTargetDamageForecast forecast)
+        public static CombatUnitVitalsPresentation From(UnitState unit, CombatTargetDamageForecast forecast, bool uncappedShield = false)
         {
             if (unit == null) throw new ArgumentNullException(nameof(unit));
             int healthLoss = forecast?.HealthLoss ?? 0;
@@ -51,7 +53,8 @@ namespace OCC.Combat
             int remainingShield = forecast?.RemainingShield ?? unit.Shield;
             return new CombatUnitVitalsPresentation(
                 new CombatUnitVitalPresentation(unit.Health, unit.MaxHealth, healthLoss, remainingHealth),
-                new CombatUnitVitalPresentation(unit.Shield, unit.MaxShield, shieldLoss, remainingShield));
+                new CombatUnitVitalPresentation(unit.Shield, uncappedShield ? Math.Max(1, unit.Shield) : unit.MaxShield,
+                    shieldLoss, remainingShield, uncappedShield));
         }
     }
 

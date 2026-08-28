@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "artifact.footprint.relay_compass",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single artifact footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/source.png",
+    "source_sha256": "2ebe0c949d72449c1a6ab13e3304d8ba0a26fa778d521dda8e95b555e83d333e"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/relay_compass.png",
+    "output_sha256": "826f6f8723e08d8d6005c097d159286a4fce2af68a44cbb4902c61c90851d819",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "1x1 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/1x.png",
+    "four_x": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/4x.png",
+    "grayscale": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/grayscale.png",
+    "checker": "UnityProject/Artifacts/ArtifactFootprints20/relay_compass/checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtifactFootprints20/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct real-object silhouette, function-specific color, exact footprint, rotation-safe shadow-neutral presentation, and Unity Resources inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/relay_compass.png",
+    "stable_guid": "0485a496d7da88140ce3934b7dd07cce",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

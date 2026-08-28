@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
 {
@@ -33,19 +34,23 @@ namespace OCC.Combat.Presentation
                 : developerRun?.CurrentMission.Id;
             RogueliteEncounterDefinition encounter = string.IsNullOrEmpty(encounterId)
                 ? null
-                : RogueliteEncounterCatalog.For(encounterId, mapRun?.RegionBossId);
+                : RogueliteEncounterCatalog.For(mapRun, encounterId);
+            string levelId = encounter?.LevelId ?? encounterId;
             FirstRegionLevelDefinition currentLevel;
             CombatState state;
             GridMap map;
-            if (FirstRegionLevelCatalog.TryFor(encounterId, out FirstRegionLevelDefinition level))
+            if (FirstRegionLevelCatalog.TryFor(levelId, out FirstRegionLevelDefinition level))
             {
-                FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(level, mapRun?.RegionBossId);
+                FirstRegionLevelDefinition resolvedLevel = encounter == null ? level : BindEncounterToLevel(level, encounter);
+                FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(resolvedLevel, "core_overseer");
                 currentLevel = build.Definition;
                 state = build.State;
                 map = state.Map;
             }
             else
             {
+                if (mapRun != null && encounter != null)
+                    throw new InvalidOperationException("Encounter package " + encounter.VariantKey + " references unknown level " + levelId + ".");
                 currentLevel = null;
                 map = new GridMap(12, 9);
                 CombatSceneMarker[] markers = (sceneMarkers ?? Array.Empty<CombatSceneMarker>()).ToArray();
@@ -88,11 +93,47 @@ namespace OCC.Combat.Presentation
             MissionPreparation preparation = mapRun == null && developerRun == null
                 ? (fallbackPreparation ?? throw new ArgumentNullException(nameof(fallbackPreparation))).Clone()
                 : PrepareMission(state, map, currentLevel, encounter, mapRun, developerRun);
-            ConfigureCombatInventory(state, mapRun, developerRun);
+            if (mapRun != null)
+            {
+                state.ConfigureRuleset(CombatRuleset.Roguelite);
+                RogueAcademyContentService academyContent = new RogueAcademyContentService();
+                foreach (UnitState enemy in state.Units.Values.Where(unit => !unit.IsHero)) academyContent.ApplyEnemyBaseline(state, enemy);
+                string[] mastered = new[] { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER" }
+                    .Concat(mapRun.OwnedFireSpellIds).Distinct(StringComparer.Ordinal).ToArray();
+                RogueSpellLoadout loadout = RogueSpellLoadout.Restore(mastered, mapRun.RogueEquippedSpellIds, true);
+                state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout));
+                state.AttachRogueEquipmentRuntime(mapRun.RogueRunState == null ? RogueEquipmentRuntime.CreateStarter(mapRun.Seed) : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState));
+            }
+            if (mapRun == null || !mapRun.UsesRogue11) ConfigureCombatInventory(state, mapRun, developerRun);
             ApplyShortRunChoices(state, developerRun);
             mapRun?.ApplyBuild(state.GetUnit("hero"));
             ConfigureLoot(state, mapRun);
             return new CombatSceneSessionBuild(state, preparation, currentLevel);
+        }
+
+        public static FirstRegionLevelDefinition BindEncounterToLevel(FirstRegionLevelDefinition level, RogueliteEncounterDefinition encounter)
+        {
+            IReadOnlyList<GridPosition> spawnPositions = encounter.Layout?.EnemySpawns ?? level.EnemyPlacements.Select(value => value.Position).ToArray();
+            if (encounter.EnemyArchetypeIds.Count > spawnPositions.Count)
+                throw new InvalidOperationException("Encounter " + encounter.VariantKey + " has more enemies than registered spawn positions in " + level.Id + ".");
+            LevelEnemyPlacement[] enemies = encounter.EnemyArchetypeIds.Select((archetypeId, index) =>
+            {
+                GridPosition spawn = spawnPositions[index];
+                Facing facing = encounter.Layout == null ? level.EnemyPlacements[index].Facing : Facing.West;
+                return new LevelEnemyPlacement(archetypeId, spawn.X, spawn.Y, facing);
+            }).ToArray();
+            RogueliteEncounterLayout layout = encounter.Layout;
+            GridPosition heroSpawn = layout?.HeroSpawn ?? level.HeroSpawn;
+            IReadOnlyList<LevelTerrainPlacement> terrain = layout?.Terrain ?? level.Terrain;
+            CombatObjectiveType objectiveType = layout == null ? level.ObjectiveType : CombatObjectiveType.Elimination;
+            IReadOnlyList<GridPosition> routeAnchors = layout == null ? level.SpaceContract.RouteAnchors :
+                new[] { new GridPosition(Math.Max(0, heroSpawn.X - 2), heroSpawn.Y), new GridPosition(Math.Min(layout.Width - 1, heroSpawn.X + 2), heroSpawn.Y) };
+            string objectiveSummary = string.IsNullOrEmpty(encounter.ObjectiveSummary) ? level.ObjectiveSummary : encounter.ObjectiveSummary;
+            return new FirstRegionLevelDefinition(level.Id, level.DisplayName, objectiveSummary, objectiveType,
+                level.Tier, heroSpawn, level.FloorTheme, encounter.IsElite, encounter.IsBoss,
+                level.PrerequisiteLevelIds, enemies, terrain,
+                new LevelSpaceContract(encounter.SpatialGrammar, routeAnchors,
+                    encounter.PublicRisk, encounter.SpawnRelationship), level.Width, level.Height, level.BlockedPositions);
         }
 
         private static MissionPreparation PrepareMission(CombatState state, GridMap map,
@@ -100,9 +141,9 @@ namespace OCC.Combat.Presentation
             RogueliteMapRun mapRun, RogueliteDeveloperRun developerRun)
         {
             RogueliteMissionDefinition mission = mapRun != null
-                ? RogueliteDeveloperCatalog.FindMission(mapRun.HasPendingContentCombat
+                ? RogueliteDeveloperCatalog.FindMission(encounter?.LevelId ?? (mapRun.HasPendingContentCombat
                     ? mapRun.PendingContentCombatMissionId
-                    : mapRun.CurrentNodeId)
+                    : mapRun.CurrentNodeId))
                 : developerRun.CurrentMission;
             string enemySummary = currentLevel == null
                 ? (mapRun != null ? DescribeEncounter(encounter, mission.EnemySummary) : mission.EnemySummary)

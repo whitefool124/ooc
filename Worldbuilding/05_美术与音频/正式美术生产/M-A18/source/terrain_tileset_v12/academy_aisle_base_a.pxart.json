@@ -1,0 +1,10 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_aisle_base_a",
+  "width": 32,
+  "height": 32,
+  "delivery_size": [32, 32],
+  "palette": {"R": "#96958B"},
+  "rows": [{"row": "R:32", "repeat": 32}],
+  "notes": "Explicitly authored quiet maintained-road interior. Flat by design; topology is carried by transition tiles."
+}

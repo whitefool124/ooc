@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_rustic_alpha_v05",
+    "category": "occ_character_endpoint",
+    "description": "Rustic OCC humanoid endpoint with true source alpha, normalized to the global 46px tactical-unit scale without chroma keying.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 44,
+    "maxBodyHeight": 48,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": false,
+    "chromaKeyTolerance": 0,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\pyromancer\\frame00\\frame_00.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\pyromancer\\frame00\\strip.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\pyromancer\\frame00\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\pyromancer\\frame00\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v05\\pyromancer\\frame00\\contact.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\pyromancer\\frame00\\frame_00.png",
+      "empty": false,
+      "sourceBounds": [
+        256,
+        97,
+        1014,
+        1176
+      ],
+      "sourceBodyWidth": 758,
+      "sourceBodyHeight": 1079,
+      "scale": 0.042632066728452274,
+      "outputWidth": 32,
+      "outputHeight": 46,
+      "outputX": 16,
+      "outputY": 12,
+      "normalizedBounds": [
+        16,
+        12,
+        48,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

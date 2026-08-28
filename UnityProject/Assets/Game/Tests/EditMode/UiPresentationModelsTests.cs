@@ -149,6 +149,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void CombatHudModel_IsStableBeforeTheFirstTurnBegins()
+        {
+            var state = new CombatState(new GridMap(4, 4), new[]
+            {
+                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+            });
+
+            CombatHudPresentationModel model = default;
+            Assert.DoesNotThrow(() => model = CombatHudPresentationModel.From(state, null, null, false));
+            Assert.That(model.ActiveUnitId, Is.Empty);
+            Assert.That(model.ActiveActionPoints, Is.EqualTo(-1));
+            Assert.That(model.Health, Is.GreaterThan(0));
+        }
+
+        [Test]
         public void CombatTurnTrack_OrdersLivingUnitsAndMarksTheCurrentActor()
         {
             var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);

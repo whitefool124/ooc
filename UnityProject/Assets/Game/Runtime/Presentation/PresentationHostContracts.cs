@@ -73,6 +73,13 @@ namespace OCC.Combat.Presentation
         void EquipMapReward(string rewardId);
         void EquipNextMapFireSpell(int slot);
         void CalibrateMapAether();
+        bool MoveRogueBackpackItem(string instanceId, int x, int y, bool rotated);
+        bool RotateRogueBackpackItem(string instanceId);
+        bool EquipRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot);
+        bool EquipOrReplaceRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot);
+        bool UnequipRogueEquipment(OCC.Combat.Roguelite.EquipmentSlot slot);
+        bool UnequipRogueEquipmentTo(OCC.Combat.Roguelite.EquipmentSlot slot, int x, int y, bool rotated);
+        bool AssignRogueQuickbar(string instanceId, int slot);
         void NotifyMapNodeSelected(string nodeId);
         void RequestReturnToLanding();
         void RequestStartMapRoguelite(bool continueSave);
@@ -111,6 +118,9 @@ namespace OCC.Combat.Presentation
         void ActivateInventoryQuickbar(int slot);
         void EquipInventoryQuickbar(string instanceId, int slot);
         void NotifyInventoryChanged();
+        bool MoveRogueBackpackItem(string instanceId, int x, int y, bool rotated);
+        bool RotateRogueBackpackItem(string instanceId);
+        bool AssignRogueQuickbar(string instanceId, int slot);
         void SearchCurrentLoot();
         void TakeCurrentLoot(string instanceId);
     }
@@ -156,6 +166,7 @@ namespace OCC.Combat.Presentation
         BattlefieldViewport BattlefieldViewport { get; }
         bool IsBattlefieldVisible { get; }
         bool IsInteractionModalOpen { get; }
+        string CurrentLevelId { get; }
         BattlefieldCellPresentation PresentBattlefieldCell(GridPosition position);
         void SubmitBattlefieldCell(GridPosition position, bool inspection);
         void FocusBattlefieldOnHero();

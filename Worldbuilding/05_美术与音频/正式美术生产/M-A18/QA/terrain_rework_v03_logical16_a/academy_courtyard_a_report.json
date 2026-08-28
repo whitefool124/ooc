@@ -1,0 +1,55 @@
+{
+  "logical_size": [
+    16,
+    16
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "nearest_scale": 2,
+  "alpha_values": [
+    255
+  ],
+  "colour_count": 6,
+  "palette": {
+    "0": [
+      96,
+      91,
+      80,
+      255
+    ],
+    "1": [
+      117,
+      111,
+      98,
+      255
+    ],
+    "2": [
+      143,
+      137,
+      122,
+      255
+    ],
+    "3": [
+      160,
+      153,
+      136,
+      255
+    ],
+    "4": [
+      178,
+      169,
+      149,
+      255
+    ],
+    "5": [
+      148,
+      127,
+      96,
+      255
+    ]
+  },
+  "authored_source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\source\\terrain_rework_v03_logical16\\academy_courtyard_a.pxart",
+  "export_only": true
+}

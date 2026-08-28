@@ -17,6 +17,18 @@ namespace OCC.Combat.Tests
             Assert.That(state.Overlay, Is.EqualTo(UiOverlay.None));
         }
 
+        [Test]
+        public void NodeRoomBackClosesTheFullScreenRoomWithoutLeavingTheMapScreen()
+        {
+            var state = new UiNavigationState(UiScreen.Map, "map.node.start");
+            state.OpenOverlay(UiOverlay.NodeRoom, "按钮_打开");
+
+            Assert.That(state.ResolveBack(), Is.EqualTo(UiBackAction.CloseOverlay));
+            Assert.That(state.CloseOverlay(), Is.EqualTo("按钮_打开"));
+            Assert.That(state.Screen, Is.EqualTo(UiScreen.Map));
+            Assert.That(state.Overlay, Is.EqualTo(UiOverlay.None));
+        }
+
         [TestCase(UiScreen.Map, UiBackAction.NavigateLanding)]
         [TestCase(UiScreen.Briefing, UiBackAction.NavigateMap)]
         [TestCase(UiScreen.Combat, UiBackAction.RequestLeaveCombat)]

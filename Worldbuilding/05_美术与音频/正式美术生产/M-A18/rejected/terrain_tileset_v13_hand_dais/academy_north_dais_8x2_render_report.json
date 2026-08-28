@@ -1,0 +1,66 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_north_dais_8x2",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v13/academy_north_dais_8x2.pxart.json",
+  "source_size": [
+    256,
+    64
+  ],
+  "delivery_size": [
+    256,
+    64
+  ],
+  "palette": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      51,
+      45,
+      45,
+      255
+    ],
+    [
+      74,
+      64,
+      56,
+      255
+    ],
+    [
+      117,
+      107,
+      91,
+      255
+    ],
+    [
+      166,
+      107,
+      56,
+      255
+    ],
+    [
+      170,
+      161,
+      139,
+      255
+    ],
+    [
+      213,
+      199,
+      166,
+      255
+    ]
+  ],
+  "colour_count": 7,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "10c370c3ede4ae57ce6c7ceedd9df59e9c2ef15c34bd62581b79c335408ba539",
+  "output_sha256": "10c370c3ede4ae57ce6c7ceedd9df59e9c2ef15c34bd62581b79c335408ba539",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

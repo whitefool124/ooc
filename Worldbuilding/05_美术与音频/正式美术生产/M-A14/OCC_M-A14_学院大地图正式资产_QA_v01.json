@@ -1,0 +1,257 @@
+{
+  "schema": "occ.formal.academy-map-art.v0.1",
+  "status": "QA_PASS",
+  "assetCount": 15,
+  "rules": {
+    "hardAlpha": true,
+    "filter": "Point",
+    "wrap": "Clamp",
+    "mipmap": false,
+    "ppu": 32,
+    "boardDisplayScale": {
+      "1920x1080": 2,
+      "960x540": 1
+    }
+  },
+  "records": [
+    {
+      "id": "map_board.academy_network",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapBoard/academy_network_board.png",
+      "size": [
+        670,
+        393
+      ],
+      "colors": 17,
+      "alphaValues": [
+        255
+      ],
+      "ppu": 32,
+      "sha256": "b1677ea4fd197882d4a144b1e13abcd569b80609eeca48973a4f77a669040e89",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.current",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/current.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "c4f03d14afdd1e52b03a46eb47827e9907048bcda5cf65b99341be925fce9188",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.available",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/available.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "fb950f3914d606c25a03e84698f01e3eedd197e5ea8e3aff83311a91894f8357",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.locked",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/locked.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "b0ad3a640801ddf0ac6fcd321046411d70b9a8ffd55d3c29d11a68666c31fdb4",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.cleared",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/cleared.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "8b45d81b9cb6b12619f21e2a8c49fbb664be0ffb5da2b011df7313004fcdaeed",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.visited",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/visited.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "fcdd5a3b79c7458faf9d95b44e7edd9bed85edf1205b1ec9c11c1f8cd3ae914e",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.known",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/known.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "1421b932034dea70d55a4b99c0922a1dbceae34cf48ba28a4d0f2f6ff2b286d8",
+      "status": "PASS"
+    },
+    {
+      "id": "map_node_frame.unknown",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapNodeFrames77x39/unknown.png",
+      "size": [
+        77,
+        39
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "55ce0a23b80f84d3f8e10241454d5ed99cb8dbff7012b1c94ac8ed8b2c63f142",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.courtyard_dormitory",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/courtyard_dormitory.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "c2f40cf887809b3284ba5f4aaf75e29feb1390d8fdea1e5b992e96e7e10bc08a",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.teaching_archive",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/teaching_archive.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "00432239ddd54cacd546e1380014b10103f50d3edcc5f1c26c25c38a8091f572",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.training_workshop",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/training_workshop.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "4d6001d59603b6c561d03b705f6c1686e0207bda84960d875865cf9ea7d25880",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.market_infirmary",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/market_infirmary.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "a7b4f96b87cbaa29a888156f5c536c381a0e5bc2dc4cb2c4099f2ea29426fc40",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.campus_wilds",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/campus_wilds.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "4e1ed497e53e2acdff5526944774709856b003515207c9f5e67a1ed6969489ff",
+      "status": "PASS"
+    },
+    {
+      "id": "map_region.sealed_tower",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRegionIcons32/sealed_tower.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 7,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "7f7046181da42d1f81d708c9afc3d121988088b7b1efc699b8f22153bfc71c82",
+      "status": "PASS"
+    },
+    {
+      "id": "map_route.joint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalMapRoute8/route_joint.png",
+      "size": [
+        8,
+        8
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "ppu": 32,
+      "sha256": "ea1fde3d99e2955f1e53ca51c938f7bbcfc32e454d9dbac638d4385a0b55c4d9",
+      "status": "PASS"
+    }
+  ]
+}

@@ -131,16 +131,16 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void InvalidMapObject_IsRejectedBeforeAnyStorageWrite()
+        public void DeletedLegacyCurrency_IsNotCopiedIntoRogue11Write()
         {
             MemoryStore store = new MemoryStore();
             string[] fields = new RogueliteMapRun(93).ToJson().Split('|');
             fields[9] = "-1";
             RogueliteMapRun invalid = RogueliteMapRun.FromJson(string.Join("|", fields));
 
-            Assert.That(new RogueliteSaveGateway(store).SaveMapRun(invalid), Is.False);
-            Assert.That(store.SetCount, Is.Zero);
-            Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.MapRunKey), Is.False);
+            Assert.That(new RogueliteSaveGateway(store).SaveMapRun(invalid), Is.True);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Does.StartWith("rogue11|"));
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Does.Not.Contain("map10"));
         }
 
         [Test]
