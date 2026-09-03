@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using OCC.Combat.Presentation;
 
 namespace OCC.Combat.Tests
 {
@@ -28,11 +29,11 @@ namespace OCC.Combat.Tests
             EnemyArchetype hound = EnemyArchetypes.Get("tether_hound");
 
             Assert.That((mauler.DisplayName, mauler.MaxHealth, mauler.Armor, mauler.Shield, mauler.Speed),
-                Is.EqualTo(("刻印锤手", 14, 1, 0, 8)));
+                Is.EqualTo(("承压检验偶", 14, 1, 0, 8)));
             Assert.That((mender.DisplayName, mender.MaxHealth, mender.Armor, mender.Shield, mender.Speed),
-                Is.EqualTo(("屏障修补师", 12, 0, 4, 7)));
+                Is.EqualTo(("护障助教", 12, 0, 4, 7)));
             Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
-                Is.EqualTo(("缚环猎兽", 10, 0, 0, 11)));
+                Is.EqualTo(("缚环寻迹兽", 10, 0, 0, 11)));
 
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_sundering_sigil", 1, 1, 2)));
@@ -40,6 +41,56 @@ namespace OCC.Combat.Tests
                 Is.EqualTo(("enemy_ward_mend", 4, 2, 2)));
             Assert.That((hound.PrimarySkill.Id, hound.PrimarySkill.Range, hound.PrimarySkill.ManaCost, hound.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_tether_pounce", 1, 1, 1)));
+        }
+
+        [Test]
+        public void AcademyIdentities_KeepStableIdsAndUseNonLethalResolutionSemantics()
+        {
+            var expected = new Dictionary<string, (string Name, EnemyResolutionKind Kind, string Resolution)>
+            {
+                ["shieldguard"] = ("高年级陪练生·盾术", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["pyromancer"] = ("高年级陪练生·火矢", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["raider"] = ("高年级陪练生·侧锋", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["rune_arbalist"] = ("高年级陪练生·重弩", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["barrier_mender"] = ("护障助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["stone_snare"] = ("约束助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["lantern_revealer"] = ("档案巡查员", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["elite_vanguard"] = ("刻阵教官", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["tether_hound"] = ("缚环寻迹兽", EnemyResolutionKind.Beast, "被制服并重新约束"),
+                ["sigil_mauler"] = ("承压检验偶", EnemyResolutionKind.Construct, "被摧毁")
+            };
+
+            foreach (KeyValuePair<string, (string Name, EnemyResolutionKind Kind, string Resolution)> pair in expected)
+            {
+                EnemyArchetype archetype = EnemyArchetypes.Get(pair.Key);
+                Assert.That(archetype.DisplayName, Is.EqualTo(pair.Value.Name), pair.Key);
+                Assert.That(archetype.ResolutionKind, Is.EqualTo(pair.Value.Kind), pair.Key);
+                UnitState unit = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+                archetype.Apply(unit);
+                string log = EnemyResolutionSemantics.DefeatLog(unit);
+                Assert.That(log, Does.Contain(pair.Value.Resolution), pair.Key);
+                if (pair.Value.Kind != EnemyResolutionKind.Construct)
+                    Assert.That(log, Does.Not.Contain("摧毁").And.Not.Contain("击杀").And.Not.Contain("死亡"), pair.Key);
+
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+                CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, unit });
+                CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(unit.Id, 99));
+                Assert.That(combat.EventLog.Last(), Does.Contain(pair.Value.Resolution), pair.Key + " combat log");
+            }
+        }
+
+        [Test]
+        public void FormalVisualLoader_RequiresEveryResolvedUnitTextureAndSixFrameAction()
+        {
+            var visuals = new CombatFormalVisualAssets();
+            Assert.DoesNotThrow(visuals.LoadRuntime);
+            foreach (string id in PackIds)
+            {
+                UnitState unit = new UnitState("enemy_" + id, false, new GridPosition(1, 0), Facing.West);
+                EnemyArchetypes.Get(id).Apply(unit);
+                Assert.That(visuals.Unit(unit), Is.Not.Null, id + " static");
+                for (int frame = 0; frame < 6; frame++) Assert.That(visuals.Unit(unit, frame), Is.Not.Null, id + " frame " + frame);
+            }
         }
 
         [Test]

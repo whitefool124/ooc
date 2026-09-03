@@ -1,0 +1,25 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "asset_id": "academy_gate_arch_3x2",
+  "status": "FORMAL_CANDIDATE",
+  "role": "multi_cell_academy_structure",
+  "logical_cells": [
+    3,
+    2
+  ],
+  "source": "source/terrain_structures_v15/academy_gate_arch_3x2_source.png",
+  "source_sha256": "064dd7179f36242f6a66c1422391ed9a63fb177b2adbd158f2fa181ee3d22b26",
+  "normalized": "normalized/terrain_structures_v15/academy_gate_arch_3x2.png",
+  "normalized_sha256": "ac1f725daac04e5c66380830ad63dafa8f2f187d1ded8d5167ba4806cc4a72bc",
+  "generation_channel": "codex_builtin_imagegen",
+  "hard_alpha": true,
+  "opaque_color_count": 10,
+  "qa": [
+    "1x",
+    "4x",
+    "grayscale",
+    "checkerboard",
+    "application_contact_required"
+  ],
+  "review": "candidate pending Unity application contact and importer/runtime verification"
+}

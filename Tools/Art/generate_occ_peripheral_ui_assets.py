@@ -121,6 +121,50 @@ def draw_briefing() -> Image.Image:
     return image
 
 
+def draw_inventory() -> Image.Image:
+    image = Image.new("RGBA", (480, 270), P["ink"]); draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, 479, 269), fill=P["deep"])
+    for x in range(0, 481, 24): draw.line((x, 0, x, 269), fill=P["panel"])
+    for y in range(0, 271, 18): draw.line((0, y, 479, y), fill=P["panel"])
+    # Recessed storage cabinets and a lower transfer rail; kept low contrast behind live UI.
+    for left in (18, 350):
+        draw.rectangle((left, 24, left + 112, 208), fill=P["panel"], outline=P["steel"], width=2)
+        for row in range(4):
+            top = 38 + row * 40
+            draw.rectangle((left + 12, top, left + 100, top + 28), fill=P["deep"], outline=P["line"])
+            draw.rectangle((left + 18, top + 8, left + 22, top + 12), fill=P["amber2"] if row % 2 else P["cyan2"])
+            draw.rectangle((left + 70, top + 9, left + 90, top + 11), fill=P["steel"])
+    draw.rectangle((152, 42, 328, 190), fill=P["deep"], outline=P["cyan2"], width=2)
+    for x in range(168, 320, 32): draw.line((x, 54, x, 178), fill=P["steel"])
+    for y in range(54, 179, 31): draw.line((164, y, 316, y), fill=P["steel"])
+    draw.rectangle((212, 102, 268, 132), outline=P["amber2"], width=2)
+    draw.rectangle((232, 112, 248, 122), fill=P["amber"])
+    draw.rectangle((0, 218, 479, 269), fill=P["ink"])
+    draw.line((0, 218, 479, 218), fill=P["line"], width=2)
+    for x in range(-20, 500, 36): draw.line((x, 269, x + 42, 218), fill=P["panel"], width=2)
+    return image
+
+
+def draw_settlement() -> Image.Image:
+    image = Image.new("RGBA", (480, 270), P["ink"]); draw = ImageDraw.Draw(image)
+    sky_bands(draw)
+    # Mechanical record seal: segmented conductor ring, not an occult/magical glyph.
+    cx, cy = 240, 136
+    for radius, color in ((94, P["steel"]), (76, P["cyan2"]), (50, P["line"])):
+        draw.ellipse((cx - radius, cy - radius, cx + radius, cy + radius), outline=color, width=2)
+    draw.rectangle((cx - 42, cy - 26, cx + 42, cy + 26), fill=P["deep"], outline=P["amber2"], width=2)
+    for y in (cy - 14, cy - 4, cy + 6, cy + 16): draw.rectangle((cx - 28, y, cx + 28 - (y % 3) * 4, y + 2), fill=P["line"])
+    for x, y in ((240, 42), (334, 136), (240, 230), (146, 136)):
+        draw.rectangle((x - 4, y - 4, x + 4, y + 4), fill=P["safe"])
+    draw.line((240, 42, 334, 136, 240, 230, 146, 136, 240, 42), fill=P["cyan2"], width=1)
+    draw.rectangle((18, 22, 132, 25), fill=P["safe"])
+    draw.rectangle((348, 244, 462, 247), fill=P["amber2"])
+    for x in (28, 452):
+        draw.rectangle((x - 8, 64, x + 8, 206), fill=P["panel"], outline=P["steel"])
+        for y in range(76, 198, 24): draw.rectangle((x - 3, y, x + 3, y + 7), fill=P["line"])
+    return image
+
+
 def draw_scanlines() -> Image.Image:
     image = Image.new("RGBA", (480, 270), P["clear"]); draw = ImageDraw.Draw(image)
     for y in range(0, 270, 4): draw.line((0, y, 479, y), fill=(5, 8, 11, 44))
@@ -177,6 +221,7 @@ def save_assets() -> list[dict]:
     records: list[dict] = []
     backdrop_images = {
         "startup": draw_startup(), "landing": draw_landing(), "map": draw_map(), "briefing": draw_briefing(),
+        "inventory": draw_inventory(), "settlement": draw_settlement(),
         "scanlines": draw_scanlines(), "transition_wipe": draw_transition(),
     }
     for name, image in backdrop_images.items():
@@ -193,17 +238,17 @@ def save_assets() -> list[dict]:
 
 
 def qa_sheet(records: list[dict]) -> None:
-    sheet = Image.new("RGBA", (960, 760), P["ink"]); draw = ImageDraw.Draw(sheet)
-    for index, name in enumerate(("startup", "landing", "map", "briefing")):
+    sheet = Image.new("RGBA", (1440, 760), P["ink"]); draw = ImageDraw.Draw(sheet)
+    for index, name in enumerate(("startup", "landing", "map", "briefing", "inventory", "settlement")):
         image = Image.open(BACKDROPS / f"{name}.png").convert("RGBA").resize((480, 270), Image.Resampling.NEAREST)
-        sheet.alpha_composite(image, ((index % 2) * 480, (index // 2) * 300))
-        draw.rectangle(((index % 2) * 480, (index // 2) * 300, (index % 2) * 480 + 110, (index // 2) * 300 + 18), fill=P["ink"])
-        draw.text(((index % 2) * 480 + 6, (index // 2) * 300 + 4), name.upper(), fill=P["white"])
+        sheet.alpha_composite(image, ((index % 3) * 480, (index // 3) * 300))
+        draw.rectangle(((index % 3) * 480, (index // 3) * 300, (index % 3) * 480 + 110, (index // 3) * 300 + 18), fill=P["ink"])
+        draw.text(((index % 3) * 480 + 6, (index // 3) * 300 + 4), name.upper(), fill=P["white"])
     for kind_index, kind in enumerate(("click", "success", "rejected")):
         for frame in range(6):
             image = Image.open(FEEDBACK / kind / f"frame_{frame:02d}.png").convert("RGBA").resize((64, 64), Image.Resampling.NEAREST)
-            sheet.alpha_composite(image, (80 + kind_index * 300 + frame * 36, 650))
-        draw.text((80 + kind_index * 300, 720), kind.upper(), fill=P["white"])
+            sheet.alpha_composite(image, (120 + kind_index * 420 + frame * 36, 650))
+        draw.text((120 + kind_index * 420, 720), kind.upper(), fill=P["white"])
     sheet.save(QA / "OCC_M-A7_周边界面资产_QA_v01.png", optimize=True)
     report = {"schema": "occ.ui.peripheral.qa.v0.1", "status": "PASS", "assetCount": len(records), "records": records}
     (QA / "OCC_M-A7_周边界面资产_QA_v01.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")

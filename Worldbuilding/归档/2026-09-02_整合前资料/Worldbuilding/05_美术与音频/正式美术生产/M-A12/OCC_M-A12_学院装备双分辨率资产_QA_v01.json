@@ -1,0 +1,1173 @@
+{
+  "schema": "occ.academy-equipment.art.v0.1",
+  "status": "QA_PASS",
+  "equipmentCount": 32,
+  "assetCount": 64,
+  "rules": {
+    "contentIcon": [
+      32,
+      32
+    ],
+    "footprintPixelsPerCell": 32,
+    "hardAlpha": true,
+    "maxColorsIncludingClear": 7,
+    "transparentSafetyBoundary": true,
+    "filter": "Point",
+    "wrap": "Clamp",
+    "ppu": 32
+  },
+  "records": [
+    {
+      "id": "ACA-EQ-MH01",
+      "name": "学院练习剑",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "02e1cb554ea17324db5a11a097a5a88e697dd73aced9ee8e3f6b05c944086fbf",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH01",
+      "name": "学院练习剑",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh01.png",
+      "size": [
+        32,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "9955e027cad1b9daf0ac1fd91ed6bd0782bc4dfd264ae5b721a2618f5d27a5d8",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH02",
+      "name": "钩刃长枪",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "2cd575136f976fc45fd4604cf6044e4e42f7ec8d1efebfecdf03216c213b3626",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH02",
+      "name": "钩刃长枪",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh02.png",
+      "size": [
+        32,
+        96
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "7cccda0ba90e4458d8588d54eea29ef32d984ba19bcd3a8ba72cfe5899f8c94b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH03",
+      "name": "刻印战锤",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "486ccd161b282a9b9860ef773956cbe8105bb6c9a4d94d41b8b19f0d441a1ac3",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH03",
+      "name": "刻印战锤",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh03.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "cfaac00b00035ea51e9a4d99e2c361b1c84eb99f740aa4b11f64597c214b3422",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH04",
+      "name": "猎团短弓",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "96c63f4f8e8fd1276be48ab845c3bb92053da765e494593ae036cd7f5f7df554",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH04",
+      "name": "猎团短弓",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh04.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "0d8db7670a70b3d30b4422f2e34bfd90d7b25046908bfde3e29891b8a76d81b8",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH05",
+      "name": "绞盘重弩",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh05.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "59cf6af201327393b8ab99f1901d342254d5e8f9f77d60e95d1bcf9ba1f77e00",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH05",
+      "name": "绞盘重弩",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh05.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "aa526a38aceb84b1d744817fc26752224081f583e8590e5c178164371505268c",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH06",
+      "name": "灰炉导杖",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_mh06.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "fccef91496ff65a428e60aba972a3ab3246c6124ae8e1f58661ea85e08a7febb",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-MH06",
+      "name": "灰炉导杖",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh06.png",
+      "size": [
+        32,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "2b39d903d02e3345f7c4e7bdf6973561e73f70c0391f808b1e281663c093732c",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH01",
+      "name": "学院圆盾",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_oh01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "b6c2c2439fe0155ab77c2ae07862795dad843f2e53c7f9ca9e10891bc812012b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH01",
+      "name": "学院圆盾",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh01.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "14128d4f513988dcd98b463438bea47122387e5e07d26f639735a9a1ba6acf30",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH02",
+      "name": "石闸长盾",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_oh02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "b2006bd2da2b075cfd83df3953646eebe0937ea7d7267d9f0e2d664096ce3bb9",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH02",
+      "name": "石闸长盾",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh02.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "39fb645b1e8575f3fa8e4613c6e5ebf21e2121006a207bf36ba12c33bc4ab85e",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH03",
+      "name": "反握短刃",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_oh03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "02e1cb554ea17324db5a11a097a5a88e697dd73aced9ee8e3f6b05c944086fbf",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH03",
+      "name": "反握短刃",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh03.png",
+      "size": [
+        32,
+        64
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "b9b070bca2983e2ef145337df903ff0ded13f1efb8c8721b874c9116fa2b588f",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH04",
+      "name": "导流副环",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_oh04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "a58569472292b0cdf52c5321bbe53ad54ed12dd2c737cb4cadfe62c53ed7a296",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-OH04",
+      "name": "导流副环",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "00d7ac1117630f647688a194b0ff0ff1820bb46e772527aab234fa0bac45cd2b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH01",
+      "name": "夹棉练习衣",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ch01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "9998501f5c2c4d1fac98653579921002e2a79df174f09acc8a678869b683ab1b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH01",
+      "name": "夹棉练习衣",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch01.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "70205f86aad917e89df9adf7daa0790b635b87a2b66b0e5bf3f76bb11bba048d",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH02",
+      "name": "补强巡行衣",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ch02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "9998501f5c2c4d1fac98653579921002e2a79df174f09acc8a678869b683ab1b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH02",
+      "name": "补强巡行衣",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch02.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "70205f86aad917e89df9adf7daa0790b635b87a2b66b0e5bf3f76bb11bba048d",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH03",
+      "name": "塔卫承压带",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ch03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "5abe81699518fa48c978946004f72d7e9c33ecfc9bbbe69bf6302f9251f83dc9",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH03",
+      "name": "塔卫承压带",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch03.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "a32d5a81fa9ff40b9a083a287e1ef03e3e14fb4ae186309ebd2093fb2c89e726",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH04",
+      "name": "轻装传令衣",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ch04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "084436ca71e34262120a5bab7e69a5e6d3da36c147eb6705de90f0e40987e69a",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH04",
+      "name": "轻装传令衣",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch04.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "2574e0873b79cb76d9e95165eef74284e1395a3a96f54303725a2e86edb9bc4b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH05",
+      "name": "封存巡检袍",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ch05.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "0bd3f9c3c1a3c74043d24705b892e7ed36686b2a4f0149f0438db6045a2c5ec0",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CH05",
+      "name": "封存巡检袍",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch05.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "afc2721b349d60d8b3882eaa55e6ce7bf40fdba3d85a5795cccec4be4788f1f4",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HD01",
+      "name": "测距护目镜",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_hd01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "b35819b36bc7aefb150b60a8b4c7d73265619be01c8e270fce58d5699658bc60",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HD01",
+      "name": "测距护目镜",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hd01.png",
+      "size": [
+        64,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c5cc52661fe359359f1148aa9c33f4f3dc85d9a73d4d8e9b83126bfe3af8983b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HD02",
+      "name": "低压回路护额",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_hd02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "f8b04371b05bc674c990c7fdf336dd1cb33db7b2acbf1c12e46e95682450e991",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HD02",
+      "name": "低压回路护额",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hd02.png",
+      "size": [
+        64,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "65141e7f8d4097e35422ec0bf5545daf16aa84d54aadb65b115e327eacb21b0b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HN01",
+      "name": "行进握带",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_hn01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c186a5c04b8aba7ac26b847694f879bf8d9c456a2d981c70bef2d36648a1e044",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HN01",
+      "name": "行进握带",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hn01.png",
+      "size": [
+        64,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "d9591460409bacbf981c745001dca2c31c9671f0a316dbfadf9ab97a4fed736c",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HN02",
+      "name": "回授护臂",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_hn02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "42a2cbeb944e3a26f3ea713afabd27162373374f087b3ce7b7c81b61a99d8a98",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-HN02",
+      "name": "回授护臂",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hn02.png",
+      "size": [
+        64,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c0188254b73897f41449d0bfe734276b952aa041cfea55f7d2c5a70b99f1a367",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-LG01",
+      "name": "石路行靴",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_lg01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c35da5e71a6a0460304613b2ec2416ffa8f502ff14f95c8539d7b6533d71b8d5",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-LG01",
+      "name": "石路行靴",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_lg01.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 3,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "e557e562810bf03679abac1eed436e97b3271fc231c5f0413d2f045c570f20b9",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-LG02",
+      "name": "定锚胫甲",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_lg02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "6093e977ffe0feb3b6ff5688c5192fa9d21b899825ec763563db9f6537f0b172",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-LG02",
+      "name": "定锚胫甲",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_lg02.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "94221e873f813eb5da8bedf4858fd5464038cc7d1a14a173511f7d12c9cb920f",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-BP01",
+      "name": "勘验背架",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_bp01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "1f8d8824ff0b8fdc3ffb2beb517ecc76358e6f151d86e6d976f5720619e5382e",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-BP01",
+      "name": "勘验背架",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_bp01.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "6b56f277214ec731a186d916682c7796e4a615da7aaa9e2a3d8f83b024dd08a0",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-BP02",
+      "name": "快挂整备架",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_bp02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "4ca147923fe57a1c376209b9fffaff2547722825b4083d46ee52d5068852e00c",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-BP02",
+      "name": "快挂整备架",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_bp02.png",
+      "size": [
+        64,
+        96
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "3496fa5d7544215cf795267be925f6a297805778288a47ae41135b320c3d6c19",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR01",
+      "name": "学院储能芯",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_cr01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "507c532bbae1c976768445d67f9b30fe2cec328d74f9f255eeb8d2dc938b02f2",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR01",
+      "name": "学院储能芯",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr01.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c584405cf19c49ee0e3256628cc1106df6ca2971861c46878c4008438511d89f",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR02",
+      "name": "余焰回收芯",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_cr02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "ea98e79ea733d5242cb6e30e230f994637522e61315cc2a35916fc9aa2091560",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR02",
+      "name": "余焰回收芯",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr02.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "5aa8f4042956c612e3f9e8e662a3a36d0bcf4e0f3f1af0e12141002c9a31253c",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR03",
+      "name": "塔心并联芯",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_cr03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "c4b88d238c9fac4a25c37b8a01f4d85fc4ae2d62f384abfb1c37d401bef96d41",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-CR03",
+      "name": "塔心并联芯",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr03.png",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 6,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "e94c7a77b2f47295ff5802a8747edd3827ff58bb600863ec37c5169d9bbd1df1",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-DG01",
+      "name": "远投定距杖",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_dg01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "444788412f40639e447cbdba029c47c853a71ef64eec0647125cb7e3bdf20634",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-DG01",
+      "name": "远投定距杖",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_dg01.png",
+      "size": [
+        32,
+        96
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "caf4967c0a3e868d66c9aeab9cc22131e447f176251e89a711e79e48a2ad6e88",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-DG02",
+      "name": "接触耦合环",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_dg02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "a58569472292b0cdf52c5321bbe53ad54ed12dd2c737cb4cadfe62c53ed7a296",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-DG02",
+      "name": "接触耦合环",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_dg02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "00d7ac1117630f647688a194b0ff0ff1820bb46e772527aab234fa0bac45cd2b",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC01",
+      "name": "余烬珠",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ac01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "dd02a82da70fd018ef7700494d95747a8a0a487f68f2f32bbe29ef374efd6718",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC01",
+      "name": "余烬珠",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac01.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "6736706caed883ca2935263ac49312e0101b46d45ea5c595a5ed5ee443950072",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC02",
+      "name": "空槽魔力计",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ac02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "bdce4774f90ce2871d338ccc87e084b68a79cbca317827928b13462415afd3e3",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC02",
+      "name": "空槽魔力计",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac02.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "b7c4df05dacfdd31e4cc51b03ccfb0e87ae9abfa1b41e7a9761573031cd8e13a",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC03",
+      "name": "贴身守誓牌",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ac03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "6d0f14f62aff817a4d32765e18bd458aabba334dcd9aa924b396d95f7bd5c805",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC03",
+      "name": "贴身守誓牌",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac03.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "5e3ba4900deee537a46f21aee4df0422114ca961a8e8c30587368b340ed5ba48",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC04",
+      "name": "灰线行程扣",
+      "kind": "content-icon",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentIcons32/aca_eq_ac04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 5,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "8dbba494314acf42c4f43b56cbd5e00acd5d8b19310c98f56f7b5a78b7b781f1",
+      "status": "PASS"
+    },
+    {
+      "id": "ACA-EQ-AC04",
+      "name": "灰线行程扣",
+      "kind": "inventory-footprint",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac04.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 4,
+      "alphaValues": [
+        0,
+        255
+      ],
+      "boundaryClear": true,
+      "sha256": "d67fd2d08693059d191c753cf46dff5666f0be954ed652b8d9906d4fce40f574",
+      "status": "PASS"
+    }
+  ]
+}

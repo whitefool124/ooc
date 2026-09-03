@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a39_harbor_cargo_net_rack_2x1",
+  "role": "multi_cell_prop_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A39 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/raw/harbor_cargo_net_rack_2x1/source.png",
+    "source_sha256": "383e3bf5d2ea15f2174ba4f1f03a474fe013e8787711eefa885655895ba3eb1c"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/normalized/harbor_cargo_net_rack_2x1.png",
+    "output_sha256": "dbf7c78225642be478aa02eea30bc7be191925dde042d8f780c3765cf5342965",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future academy-harbor tactical map; two-cell low cargo-net maintenance rack",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_cargo_net_rack_2x1/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_cargo_net_rack_2x1/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_cargo_net_rack_2x1/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_cargo_net_rack_2x1/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/contacts/m_a39_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

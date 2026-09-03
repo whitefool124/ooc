@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_wall_end",
+  "role": "modular_structure_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "One independently generated raw; normalized under OCC M-A18 academy voxel-38 production brief",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_voxel_v17/academy_wall_end_source.png",
+    "source_sha256": "3b2f886aaa5dbbf1667baef81dac9dcffa4d572656824dd247511dc846f4dbc1"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_voxel_v17/academy_wall_end.png",
+    "output_sha256": "88cc68998555f41679d589e67044749a99c3b21b1fd3b8d84417b1e513e8cbfe",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "reusable academy module below units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_wall_end_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_wall_end_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_wall_end_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_voxel_v17/academy_wall_end_checker.png",
+    "application_contact": "UnityProject/Artifacts/Terrain38/NineMaps/terrain38_nine_maps_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Reviewed in all nine academy maps with readability and visual hierarchy prioritized over setting ornament. Ground no longer creates rut bands or dark holes; adjacency curbs and modular walls remain subordinate to units and routes."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_wall_end.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_wall_end",
+    "guid": "b9e8c53d622e9d649af6fc07833df45d",
+    "stable_guid": "b9e8c53d622e9d649af6fc07833df45d",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/Terrain38/NineMaps/relay_raid_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

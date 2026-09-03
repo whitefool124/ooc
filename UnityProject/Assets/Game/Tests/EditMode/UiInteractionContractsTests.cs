@@ -17,6 +17,18 @@ namespace OCC.Combat.Tests
             Assert.That(state.Overlay, Is.EqualTo(UiOverlay.None));
         }
 
+        [Test]
+        public void NodeRoomBackClosesTheFullScreenRoomWithoutLeavingTheMapScreen()
+        {
+            var state = new UiNavigationState(UiScreen.Map, "map.node.start");
+            state.OpenOverlay(UiOverlay.NodeRoom, "按钮_打开");
+
+            Assert.That(state.ResolveBack(), Is.EqualTo(UiBackAction.CloseOverlay));
+            Assert.That(state.CloseOverlay(), Is.EqualTo("按钮_打开"));
+            Assert.That(state.Screen, Is.EqualTo(UiScreen.Map));
+            Assert.That(state.Overlay, Is.EqualTo(UiOverlay.None));
+        }
+
         [TestCase(UiScreen.Map, UiBackAction.NavigateLanding)]
         [TestCase(UiScreen.Briefing, UiBackAction.NavigateMap)]
         [TestCase(UiScreen.Combat, UiBackAction.RequestLeaveCombat)]
@@ -76,6 +88,27 @@ namespace OCC.Combat.Tests
         {
             Assert.Throws<ArgumentException>(() => new UiConfirmationRequest(UiConfirmationKind.TacticalRestart, "", "重开", "确认"));
             Assert.Throws<ArgumentException>(() => new UiActionFeedback(UiFeedbackKind.Rejected, ""));
+        }
+
+        [Test]
+        public void MapSavePresentationDistinguishesMissingReadyProtectedAndFailedWrite()
+        {
+            MapSaveUiPresentation missing = MapSaveUiPresentation.From(false, RogueliteSaveLoadStatus.Missing, true);
+            MapSaveUiPresentation ready = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.Success, true);
+            MapSaveUiPresentation corrupt = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.CorruptData, true);
+            MapSaveUiPresentation unavailable = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.StoreError, true);
+            MapSaveUiPresentation failedWrite = MapSaveUiPresentation.From(true, RogueliteSaveLoadStatus.Success, false);
+
+            Assert.That(missing.CanContinue, Is.False);
+            Assert.That(missing.ContinueDetail, Is.EqualTo("暂无存档"));
+            Assert.That(ready.CanContinue, Is.True);
+            Assert.That(ready.ContinueDetail, Is.EqualTo("从上次位置继续"));
+            Assert.That(corrupt.CanContinue, Is.False);
+            StringAssert.Contains("存档损坏", corrupt.ContinueDetail);
+            Assert.That(unavailable.CanContinue, Is.False);
+            StringAssert.Contains("请重试", unavailable.ContinueDetail);
+            StringAssert.Contains("保留一份损坏备份", corrupt.ReplacementMessage);
+            StringAssert.Contains("保存失败", failedWrite.ReturnDetail);
         }
     }
 }

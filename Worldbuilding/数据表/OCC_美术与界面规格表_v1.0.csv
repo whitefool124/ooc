@@ -1,0 +1,29 @@
+ID,类别,项目,规格,状态色或材质,限制
+ART-GRID-01,战场,逻辑格,32×32原生像素,中性地材,Point Clamp 无MipMap无压缩
+ART-ICON-16,图标,语义图标,16×16最多4色,功能状态色,不画材质体积文字或环境光
+ART-PICKUP-24,物品,材质拾取物源稿,24×24约5–8色,真实材质色,以4px留白居中到32×32交付画布
+ART-ASSET-32,资产,装备法宝术式地块单格物件,32×32,质朴材质,多格物不得压回单格
+ART-MULTI-32,资产,多格场景物与背包素材,(W×32)×(H×32),质朴材质,占格与画布一致
+ART-UNIT-64,单位,战棋单位,64×64,阵营与职业轮廓,人形高44–48目标46脚底Y58中心X32
+ART-BG-480,页面,周边页面背景,480×270最多24色,暖纸石材旧木锻铁,1920与960严格4倍和2倍显示
+ART-PORTRAIT-B,角色,立绘B层,384×576最多40色,身份材质,硬Alpha四边至少2px
+ART-PERFORM-C,角色,全身演出C层,192×288最多24色,身份材质,硬Alpha四边至少2px
+ART-VFX-32,特效,VFX单帧,32×32最多12色,元素状态色,完整效果4–10个独立帧
+ART-UI-BASE,界面,参考画布,1920×1080与960×540,暖纸档案主题,整数位置与Pixel Perfect
+ART-UI-SPLIT,界面,战场与右HUD,1440×1080上部区域与480×1080上部区域,中性与状态色,底栏以上75比25
+ART-UI-BOTTOM,界面,底部指令栏,1888×200外边距16,深色承重托盘,横跨全宽
+ART-UI-GROUPS,界面,底栏五组宽度,200/1100/152/176/204,功能分组,移动武器/术式/交互/战术栏/结束回合
+ART-MAP-REGION-BLOCK,地图界面,区域底图与边界,每个区域使用固定色块,区域色,不要求独立地貌建筑或区域背景资产
+ART-MAP-LEGEND,地图界面,地图说明,左上角常驻显示区域色块与名称,清晰文字与色块,不得遮挡节点和连线操作
+ART-MAP-REGION-MARK,地图界面,区域名称或标识,色块内补充显示,区域色,仅作辅助且不能替代色块和地图说明
+ART-SPELL-CARD,界面,术式卡,268×76共8张4×2,2px炭墨细框,无九宫格厚边灰底边白费用框
+ART-SPELL-ICON,界面,术式图标,64×64,元素轮廓,快捷键24×24叠左上
+ART-SPELL-COST,界面,术式资源块,60×64,深冷炭墨,两枚16px语义图严格2倍显示为32px
+ART-FONT-BODY,字体,正文按钮菜单关键数值,24px,FusionPixel12ProportionalZhHans,Normal字形无BestFit阴影或描边
+ART-FONT-TITLE,字体,页面标题,48px,FusionPixel12ProportionalZhHans,文字槽至少72px
+ART-FONT-FEEDBACK,字体,强反馈,72px,FusionPixel12ProportionalZhHans,短时显示
+ART-COLOR-AETHER,颜色,主动以太选中可执行,#2E7B82,冷青仅局部使用
+ART-COLOR-DANGER,颜色,敌对伤害非法危险,#A4493F,封存红不作常规底色
+ART-COLOR-LOOT,颜色,物资维护交互战利品,#A86F22,氧化黄铜
+ART-COLOR-HEAL,颜色,治疗安全成功,#4F785B,医务绿
+ART-PIPELINE,生产,资产状态机,CONCEPT→PROTOTYPE→QA_PENDING→REVIEW_READY→FORMAL_CANDIDATE→FORMAL,可追溯原料,仅FORMAL可进入正式运行时

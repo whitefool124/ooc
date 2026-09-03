@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "artifact.footprint.aegis_fold",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single artifact footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/source.png",
+    "source_sha256": "1538e94eecf3d4912898f01670f766b6d09a34eddfdc54437084cd5a4feeecd0"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/aegis_fold.png",
+    "output_sha256": "a82ccb6a90eb94f6da6a76e5094180c196f7e32c0708271657ea95bf1c20c3d2",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "2x2 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/1x.png",
+    "four_x": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/4x.png",
+    "grayscale": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/grayscale.png",
+    "checker": "UnityProject/Artifacts/ArtifactFootprints20/aegis_fold/checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtifactFootprints20/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct real-object silhouette, function-specific color, exact footprint, rotation-safe shadow-neutral presentation, and Unity Resources inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/aegis_fold.png",
+    "stable_guid": "35539fd804b8d741efc04fe48258d52e",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

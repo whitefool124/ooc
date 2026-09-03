@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.semantic.category_weapon",
+  "role": "semantic_icon_16",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/semantic/category_weapon/source.png",
+    "source_sha256": "913f03adad7346f4ea8042af4b15e2367d9dd228caf927e6d712090ef234cad7"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_weapon.png",
+    "output_sha256": "48d2b8c0f2b930e05284346d03c34443ea947d047d241b0d178b5a86dab50272",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 16x16 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/semantic/category_weapon/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/semantic/category_weapon/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/semantic/category_weapon/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/semantic/category_weapon/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "交叉的短剑与枪管 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "232e778ab48a2b34b88a56d98ef04fd8",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

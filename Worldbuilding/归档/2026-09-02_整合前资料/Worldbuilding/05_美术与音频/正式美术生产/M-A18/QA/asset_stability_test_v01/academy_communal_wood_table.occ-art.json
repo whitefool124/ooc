@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_communal_wood_table",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single table source",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/raw/asset_stability_test_v01/academy_communal_wood_table_source.png",
+    "source_sha256": "8c3978db0fd397f0ee63d3a1f27a94d4fa4f6ba8e75b270d34998d334f375a1d"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/asset_stability_test_v01/academy_communal_wood_table_32.png",
+    "output_sha256": "35358925d3a3d40a0c5fb075b9dfb3222b1fb9b715545f6b28ed41cbdb3683b5",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32px map cell; 128px default and 64px minimum cell display",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01/table/academy_communal_wood_table_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01/table/academy_communal_wood_table_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01/table/academy_communal_wood_table_grayscale_4x.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01/table/academy_communal_wood_table_checker_4x.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "product_user",
+    "date": "2026-08-23",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User accepted the first stability batch; table reads at 1x and in the current academy tile contact."
+  },
+  "unity_import": null
+}

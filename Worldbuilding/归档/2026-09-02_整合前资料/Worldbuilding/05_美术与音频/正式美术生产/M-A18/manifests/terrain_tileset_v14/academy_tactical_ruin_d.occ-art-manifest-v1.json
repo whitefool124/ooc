@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_tactical_ruin_d",
+  "role": "floor_tile_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Independent native 16x16 hand-pixel academy floor tile; deterministic hard-cluster renderer only",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v14/academy_tactical_ruin_d_source.png",
+    "source_sha256": "f93d6bd8a6ec1121780ed8d015e6fb99a698a6e0b62c351b2367779491120ddd"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v14/academy_tactical_ruin_d.png",
+    "output_sha256": "3d80f67b5ce76489c1e2dec86239cd36b0ce153c4aa194b693ef0a717d5f65cb",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v14/academy_tactical_ruin_d_source.png",
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 orthographic battlefield cell below props, units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_ruin_d_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_ruin_d_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_ruin_d_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_ruin_d_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_nine_maps_floor_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous map review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Approved as a cohesive pixel-tactics floor family after nine-map 12x9 contact review: large staggered masonry, deliberate coping and distinct court/road/ruin/earth readings replace the rejected flat disconnected field."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_tactical_ruin_d.png",
+    "resource_path": "Art/FormalAcademyCombat32/academy_tactical_ruin_d",
+    "guid": "f00b0f997390c354cb9485511de5dd99",
+    "stable_guid": "f00b0f997390c354cb9485511de5dd99",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/Terrain36/NineMaps/rail_patrol_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

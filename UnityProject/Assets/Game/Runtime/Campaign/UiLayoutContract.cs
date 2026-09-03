@@ -8,10 +8,11 @@ namespace OCC.Combat
         public const int SafeAreaPadding = 24;
         public const int CompactHeightThreshold = 600;
         public const int RogueliteSortingOrder = 40;
+        public const int BattlefieldSortingOrder = 42;
         public const int CombatSortingOrder = 45;
         public const int SettlementSortingOrder = 80;
         public const int InteractionSortingOrder = 100;
 
-        public static bool HasValidLayerOrder => RogueliteSortingOrder < CombatSortingOrder && CombatSortingOrder < SettlementSortingOrder && SettlementSortingOrder < InteractionSortingOrder;
+        public static bool HasValidLayerOrder => RogueliteSortingOrder < BattlefieldSortingOrder && BattlefieldSortingOrder < CombatSortingOrder && CombatSortingOrder < SettlementSortingOrder && SettlementSortingOrder < InteractionSortingOrder;
     }
 }

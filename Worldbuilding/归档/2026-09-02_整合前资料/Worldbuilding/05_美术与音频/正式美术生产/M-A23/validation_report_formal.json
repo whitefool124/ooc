@@ -1,0 +1,96 @@
+{
+  "schema": "occ-art-batch-validation-report-v1",
+  "count": 4,
+  "pass": 4,
+  "fail": 0,
+  "reports": [
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "item.footprint.medkit",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          62,
+          29
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "item.footprint.shield_cell",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          32,
+          64
+        ],
+        "bounds": [
+          6,
+          2,
+          25,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "item.footprint.fire_scroll",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          32
+        ],
+        "bounds": [
+          2,
+          5,
+          62,
+          27
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    },
+    {
+      "schema": "occ-art-validation-report-v1",
+      "asset_id": "item.footprint.aether_core",
+      "role": "multi_cell_prop_32",
+      "status": "PASS",
+      "metrics": {
+        "size": [
+          64,
+          64
+        ],
+        "bounds": [
+          8,
+          2,
+          56,
+          62
+        ],
+        "hard_alpha": true,
+        "visible_colors": 12,
+        "accent_pixels": {}
+      },
+      "errors": []
+    }
+  ]
+}

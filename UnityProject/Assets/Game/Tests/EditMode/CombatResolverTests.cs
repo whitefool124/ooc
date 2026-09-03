@@ -136,7 +136,42 @@ namespace OCC.Combat.Tests
         {
             Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(15));
             Assert.That(EnemyArchetypes.All, Has.Exactly(3).Matches<EnemyArchetype>(archetype => archetype.IsElite));
-            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵先锋"));
+            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵教官"));
+        }
+
+        [Test]
+        public void TemporaryEnemyAssist_LimitsEnemyTurnAndHalvesOutgoingDamage()
+        {
+            CombatDebugTuning.TemporaryEnemyAssistEnabled = true;
+            try
+            {
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+                {
+                    Armor = 0,
+                    Block = 0
+                };
+                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+                enemy.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+                CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
+                state.ConfigureRuleset(CombatRuleset.Roguelite);
+
+                CombatResolver.BeginTurn(state, enemy.Id);
+                CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, enemy.Id, hero.Id, false);
+                CombatResolver.AttackPreview skillPreview = CombatResolver.PreviewSkillAttack(state, enemy.Id, hero.Id, CombatCatalog.FireBolt);
+                int healthBefore = hero.Health;
+                CombatResolver.Resolve(state, CombatCommand.Attack(enemy.Id, hero.Id));
+
+                Assert.That(enemy.ActionPoints, Is.Zero);
+                Assert.That(preview.BaseDamage, Is.EqualTo(3));
+                Assert.That(preview.FinalDamage, Is.EqualTo(3));
+                Assert.That(skillPreview.BaseDamage, Is.EqualTo(3), "奇数伤害减半后应向上取整");
+                Assert.That(skillPreview.FinalDamage, Is.EqualTo(3));
+                Assert.That(hero.Health, Is.EqualTo(healthBefore - 3));
+            }
+            finally
+            {
+                CombatDebugTuning.TemporaryEnemyAssistEnabled = false;
+            }
         }
 
         [Test]

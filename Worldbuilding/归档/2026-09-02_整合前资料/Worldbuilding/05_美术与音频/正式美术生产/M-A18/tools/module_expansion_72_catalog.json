@@ -1,0 +1,794 @@
+[
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_drain_round",
+    "subject": "low circular wrought-iron floor drain",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_drain_round\nPrimary request: one low circular wrought-iron floor drain; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_drain_slot",
+    "subject": "low rectangular slotted stone-and-iron drain",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_drain_slot\nPrimary request: one low rectangular slotted stone-and-iron drain; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_service_hatch_round",
+    "subject": "flush round maintenance hatch with two recessed grips",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_service_hatch_round\nPrimary request: one flush round maintenance hatch with two recessed grips; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_service_hatch_square",
+    "subject": "flush square maintenance hatch with four corner bolts",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_service_hatch_square\nPrimary request: one flush square maintenance hatch with four corner bolts; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_repair_stone",
+    "subject": "self-contained inset replacement stone repair slab",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_repair_stone\nPrimary request: one self-contained inset replacement stone repair slab; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_repair_iron",
+    "subject": "self-contained flush iron repair plate",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_repair_iron\nPrimary request: one self-contained flush iron repair plate; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_cable_cap",
+    "subject": "flush capped aether cable access plate",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_cable_cap\nPrimary request: one flush capped aether cable access plate; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_pipe_socket",
+    "subject": "recessed capped pipe socket in a stone collar",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_pipe_socket\nPrimary request: one recessed capped pipe socket in a stone collar; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_anchor_plate",
+    "subject": "flat forged anchor plate with a central ring folded down",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_anchor_plate\nPrimary request: one flat forged anchor plate with a central ring folded down; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_inspection_window",
+    "subject": "flush dark inspection window protected by two iron bars",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_inspection_window\nPrimary request: one flush dark inspection window protected by two iron bars; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_mortar_inlay",
+    "subject": "self-contained pale mortar inlay with a simple converging geometry",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_mortar_inlay\nPrimary request: one self-contained pale mortar inlay with a simple converging geometry; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_threshold_studs",
+    "subject": "four low flush threshold studs on one stone insert",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_threshold_studs\nPrimary request: one four low flush threshold studs on one stone insert; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_safety_marker",
+    "subject": "small flush service marker with restrained safety-yellow corner wedges",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_safety_marker\nPrimary request: one small flush service marker with restrained safety-yellow corner wedges; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_herb_drain",
+    "subject": "low stone drain with a few contained moss pixels inside its rim",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_herb_drain\nPrimary request: one low stone drain with a few contained moss pixels inside its rim; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_rain_channel",
+    "subject": "short self-contained rain channel segment ending inside the tile",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_rain_channel\nPrimary request: one short self-contained rain channel segment ending inside the tile; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "44",
+    "asset_id": "academy_floor_conduit_blank",
+    "subject": "flush blank conduit cover with a single cold-cyan inactive glass bead",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_floor_conduit_blank\nPrimary request: one flush blank conduit cover with a single cold-cyan inactive glass bead; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: strict orthographic top-down, completely flush and low; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_wicker_basket",
+    "subject": "low closed wicker supply basket",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_wicker_basket\nPrimary request: one low closed wicker supply basket; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_book_crate",
+    "subject": "low wooden crate tightly packed with plain books",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_book_crate\nPrimary request: one low wooden crate tightly packed with plain books; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_scroll_case",
+    "subject": "low strapped wooden scroll case",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_scroll_case\nPrimary request: one low strapped wooden scroll case; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_tool_satchel",
+    "subject": "low square leather maintenance satchel",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_tool_satchel\nPrimary request: one low square leather maintenance satchel; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_folding_stool",
+    "subject": "compact folded wooden field stool",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_folding_stool\nPrimary request: one compact folded wooden field stool; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_clay_jar",
+    "subject": "stout lidded academy clay reagent jar",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_clay_jar\nPrimary request: one stout lidded academy clay reagent jar; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_coal_scuttle",
+    "subject": "low blackened iron coal scuttle",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_coal_scuttle\nPrimary request: one low blackened iron coal scuttle; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_rope_coil",
+    "subject": "thick neatly coiled hemp rope with one iron hook",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_rope_coil\nPrimary request: one thick neatly coiled hemp rope with one iron hook; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_specimen_cage",
+    "subject": "small empty wooden-and-iron specimen carrier cage",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_specimen_cage\nPrimary request: one small empty wooden-and-iron specimen carrier cage; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_practice_shields",
+    "subject": "low rack holding two plain wooden practice shields",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_practice_shields\nPrimary request: one low rack holding two plain wooden practice shields; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_oak_chest",
+    "subject": "stout closed oak equipment chest with iron bands",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_oak_chest\nPrimary request: one stout closed oak equipment chest with iron bands; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_iron_locker",
+    "subject": "short heavy academy iron locker cabinet",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_iron_locker\nPrimary request: one short heavy academy iron locker cabinet; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_stone_planter",
+    "subject": "heavy square stone herb planter with restrained foliage",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_stone_planter\nPrimary request: one heavy square stone herb planter with restrained foliage; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_reagent_cabinet",
+    "subject": "heavy single-cell reagent cabinet with opaque bottle silhouettes",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_reagent_cabinet\nPrimary request: one heavy single-cell reagent cabinet with opaque bottle silhouettes; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_field_lectern",
+    "subject": "sturdy low academy field lectern with a closed ledger",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_field_lectern\nPrimary request: one sturdy low academy field lectern with a closed ledger; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_gear_cabinet",
+    "subject": "heavy maintenance gear cabinet with one visible iron wheel",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_gear_cabinet\nPrimary request: one heavy maintenance gear cabinet with one visible iron wheel; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_warding_post",
+    "subject": "thick stone-and-copper warding post with a tiny inactive crystal",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_warding_post\nPrimary request: one thick stone-and-copper warding post with a tiny inactive crystal; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_fire_bucket_stand",
+    "subject": "sturdy iron stand holding two closed fire buckets",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_fire_bucket_stand\nPrimary request: one sturdy iron stand holding two closed fire buckets; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_medical_chest",
+    "subject": "heavy pale-wood medical supply chest with grey-green cloth strap",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_medical_chest\nPrimary request: one heavy pale-wood medical supply chest with grey-green cloth strap; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "45",
+    "asset_id": "academy_prop_sealed_trunk",
+    "subject": "heavy sealed specimen trunk with waxed iron clasps",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "single_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_prop_sealed_trunk\nPrimary request: one heavy sealed specimen trunk with waxed iron clasps; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_teaching_desk_2x1",
+    "subject": "wide two-cell academy teaching demonstration desk",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_teaching_desk_2x1\nPrimary request: one wide two-cell academy teaching demonstration desk; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_alchemy_bench_2x1",
+    "subject": "wide two-cell alchemy preparation bench with secured glassware",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_alchemy_bench_2x1\nPrimary request: one wide two-cell alchemy preparation bench with secured glassware; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_map_table_2x1",
+    "subject": "wide two-cell field map table with a blank rolled plan",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_map_table_2x1\nPrimary request: one wide two-cell field map table with a blank rolled plan; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_repair_bench_2x1",
+    "subject": "wide two-cell maintenance bench with a vice and hand tools",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_repair_bench_2x1\nPrimary request: one wide two-cell maintenance bench with a vice and hand tools; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_low_bookcase_2x1",
+    "subject": "wide low two-cell bookcase with closed cabinet doors",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_low_bookcase_2x1\nPrimary request: one wide low two-cell bookcase with closed cabinet doors; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_specimen_counter_2x1",
+    "subject": "wide two-cell specimen counter with lidded trays",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_specimen_counter_2x1\nPrimary request: one wide two-cell specimen counter with lidded trays; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_medical_cot_2x1",
+    "subject": "two-cell academy medical cot with folded grey-green blanket",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_medical_cot_2x1\nPrimary request: one two-cell academy medical cot with folded grey-green blanket; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_supply_rack_2x1",
+    "subject": "wide two-cell timber supply rack with strapped crates",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_supply_rack_2x1\nPrimary request: one wide two-cell timber supply rack with strapped crates; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_smithing_table_2x1",
+    "subject": "wide two-cell smithing table with a small cold anvil",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_smithing_table_2x1\nPrimary request: one wide two-cell smithing table with a small cold anvil; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_tool_cabinet_2x1",
+    "subject": "wide two-cell iron-and-wood tool cabinet",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_tool_cabinet_2x1\nPrimary request: one wide two-cell iron-and-wood tool cabinet; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_timber_barricade_2x1",
+    "subject": "wide low two-cell training barricade of joined timber beams",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_timber_barricade_2x1\nPrimary request: one wide low two-cell training barricade of joined timber beams; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_stone_balustrade_2x1",
+    "subject": "wide two-cell low academy stone balustrade",
+    "cells": [
+      2,
+      1
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_stone_balustrade_2x1\nPrimary request: one wide two-cell low academy stone balustrade; native logical 64x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_aether_pump_2x2",
+    "subject": "four-cell maintainable stone-and-copper aether circulation pump",
+    "cells": [
+      2,
+      2
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_aether_pump_2x2\nPrimary request: one four-cell maintainable stone-and-copper aether circulation pump; native logical 64x64 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_archive_sorter_2x2",
+    "subject": "four-cell manual academy archive sorting machine",
+    "cells": [
+      2,
+      2
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_archive_sorter_2x2\nPrimary request: one four-cell manual academy archive sorting machine; native logical 64x64 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_infirmary_station_2x2",
+    "subject": "four-cell academy infirmary treatment station",
+    "cells": [
+      2,
+      2
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_infirmary_station_2x2\nPrimary request: one four-cell academy infirmary treatment station; native logical 64x64 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "46",
+    "asset_id": "academy_sealing_apparatus_2x2",
+    "subject": "four-cell heavy sealing apparatus with a restrained cold-cyan core",
+    "cells": [
+      2,
+      2
+    ],
+    "role": "multi_cell_prop_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_sealing_apparatus_2x2\nPrimary request: one four-cell heavy sealing apparatus with a restrained cold-cyan core; native logical 64x64 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_corner_nw",
+    "subject": "independent academy wall corner facing NW",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_corner_nw\nPrimary request: one independent academy wall corner facing NW; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_corner_ne",
+    "subject": "independent academy wall corner facing NE",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_corner_ne\nPrimary request: one independent academy wall corner facing NE; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_corner_se",
+    "subject": "independent academy wall corner facing SE",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_corner_se\nPrimary request: one independent academy wall corner facing SE; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_corner_sw",
+    "subject": "independent academy wall corner facing SW",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_corner_sw\nPrimary request: one independent academy wall corner facing SW; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_gate_n",
+    "subject": "independent single-cell academy wall gate opening facing N",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_gate_n\nPrimary request: one independent single-cell academy wall gate opening facing N; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_gate_e",
+    "subject": "independent single-cell academy wall gate opening facing E",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_gate_e\nPrimary request: one independent single-cell academy wall gate opening facing E; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_gate_s",
+    "subject": "independent single-cell academy wall gate opening facing S",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_gate_s\nPrimary request: one independent single-cell academy wall gate opening facing S; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_gate_w",
+    "subject": "independent single-cell academy wall gate opening facing W",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_gate_w\nPrimary request: one independent single-cell academy wall gate opening facing W; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_stair_landing_n",
+    "subject": "independent single-cell academy stair landing facing N",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_stair_landing_n\nPrimary request: one independent single-cell academy stair landing facing N; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_stair_landing_e",
+    "subject": "independent single-cell academy stair landing facing E",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_stair_landing_e\nPrimary request: one independent single-cell academy stair landing facing E; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_stair_landing_s",
+    "subject": "independent single-cell academy stair landing facing S",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_stair_landing_s\nPrimary request: one independent single-cell academy stair landing facing S; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_stair_landing_w",
+    "subject": "independent single-cell academy stair landing facing W",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_stair_landing_w\nPrimary request: one independent single-cell academy stair landing facing W; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_buttress_n",
+    "subject": "independent academy wall buttress facing N",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_buttress_n\nPrimary request: one independent academy wall buttress facing N; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_buttress_e",
+    "subject": "independent academy wall buttress facing E",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_buttress_e\nPrimary request: one independent academy wall buttress facing E; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_buttress_s",
+    "subject": "independent academy wall buttress facing S",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_buttress_s\nPrimary request: one independent academy wall buttress facing S; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_wall_buttress_w",
+    "subject": "independent academy wall buttress facing W",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_wall_buttress_w\nPrimary request: one independent academy wall buttress facing W; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_pipe_terminal_n",
+    "subject": "independent capped wall-pipe terminal facing N",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_pipe_terminal_n\nPrimary request: one independent capped wall-pipe terminal facing N; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_pipe_terminal_e",
+    "subject": "independent capped wall-pipe terminal facing E",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_pipe_terminal_e\nPrimary request: one independent capped wall-pipe terminal facing E; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_pipe_terminal_s",
+    "subject": "independent capped wall-pipe terminal facing S",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_pipe_terminal_s\nPrimary request: one independent capped wall-pipe terminal facing S; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  },
+  {
+    "batch": "47",
+    "asset_id": "academy_pipe_terminal_w",
+    "subject": "independent capped wall-pipe terminal facing W",
+    "cells": [
+      1,
+      1
+    ],
+    "role": "modular_structure_32",
+    "prompt": "Use case: stylized-concept\nAsset type: independent OCC tactical-map production source for academy_pipe_terminal_w\nPrimary request: one independent capped wall-pipe terminal facing W; native logical 32x32 pixel-grid composition; one object only\nScene/backdrop: genuinely transparent background\nComposition/framing: orthographic tactical three-quarter top-down, visible top face, compressed front face, no vanishing point; centred; at least two logical pixels of transparent safety margin; fixed light from upper-left\nStyle/medium: deliberately coarse hand-clustered pixel art, hard stair-step near-black outline, 5 to 10 discrete flat colours, no anti-aliasing\nMaterials/textures: humble academy stone, worn timber, forged iron, old copper, ceramic or coarse cloth as appropriate; one readable material cue only\nColor palette: charcoal and warm stone neutrals; cold cyan only for active aether; restrained grey-green for medical; safety yellow only for service warning\nConstraints: readable at target size; all edges self-contained; no rotation-derived lighting; no dependence on neighbouring tiles\nAvoid: text, numbers, glyph labels, watermark, sprite sheet, board, multiple objects, grid overlay, UI frame, gradient, bloom, soft shadow, photorealism, medieval ornament, steampunk clutter, sci-fi console, LED array"
+  }
+]

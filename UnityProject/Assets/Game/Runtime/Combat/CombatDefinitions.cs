@@ -5,7 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum DamageType { Physical, Fire, Arcane }
-    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed }
+    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance }
     public enum EquipmentSlot { MainHand, OffHand }
 
     public enum SkillTargetRule { Self, EnemyUnit, AllyUnit, AnyUnit, GridCell, Destructible }

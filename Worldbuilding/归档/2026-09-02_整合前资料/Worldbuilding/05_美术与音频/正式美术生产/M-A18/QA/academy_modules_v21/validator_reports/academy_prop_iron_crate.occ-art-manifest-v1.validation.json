@@ -1,0 +1,22 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_prop_iron_crate",
+  "role": "single_cell_prop_32",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      2,
+      2,
+      28,
+      28
+    ],
+    "hard_alpha": true,
+    "visible_colors": 9,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

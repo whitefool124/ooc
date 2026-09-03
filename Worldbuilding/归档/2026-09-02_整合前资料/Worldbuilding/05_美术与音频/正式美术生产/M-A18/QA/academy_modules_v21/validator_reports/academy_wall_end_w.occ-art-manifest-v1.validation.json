@@ -1,0 +1,22 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_wall_end_w",
+  "role": "modular_structure_32",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      0,
+      5,
+      32,
+      26
+    ],
+    "hard_alpha": true,
+    "visible_colors": 11,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

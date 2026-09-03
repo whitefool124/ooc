@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "authorizedRelaxation": "uniform anchor translation after whole-canvas nearest normalization",
+  "translationY": -3,
+  "size": [
+    64,
+    64
+  ],
+  "hardAlpha": true,
+  "colors": 24,
+  "bounds": [
+    11,
+    0,
+    53,
+    58
+  ]
+}

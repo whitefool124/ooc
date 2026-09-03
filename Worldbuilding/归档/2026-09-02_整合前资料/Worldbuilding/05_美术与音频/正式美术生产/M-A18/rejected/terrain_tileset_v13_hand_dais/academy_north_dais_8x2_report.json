@@ -1,0 +1,46 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_north_dais_8x2",
+  "source_size": [
+    2172,
+    724
+  ],
+  "source_alpha_bounds": [
+    63,
+    41,
+    2110,
+    694
+  ],
+  "cropped_size": [
+    2047,
+    653
+  ],
+  "delivery_size": [
+    256,
+    64
+  ],
+  "fitted_size": [
+    188,
+    60
+  ],
+  "fitted_offset": [
+    34,
+    2
+  ],
+  "visible_colors": 8,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "da5753d88147adf0fb94a25a6919cac3cc74fa9697d1519a1d9f638aec711097",
+  "output_sha256": "e0bac9939d914075a1d4c332c299146c8599066d516b15db3a717b07da550d21",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "center_embed"
+  ]
+}

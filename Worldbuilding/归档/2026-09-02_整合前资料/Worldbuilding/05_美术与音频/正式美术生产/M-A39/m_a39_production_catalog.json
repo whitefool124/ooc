@@ -1,0 +1,60 @@
+{
+  "schema": "occ-m-a39-production-catalog-v1",
+  "batch": "M-A39",
+  "assets": [
+    {
+      "asset_id": "m_a39_harbor_freshwater_cask",
+      "stem": "harbor_freshwater_cask",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future academy-harbor tactical map; one-cell freshwater storage cask, unlabelled and non-interactive stock",
+      "prompt": "One independent OCC native 32x32 transparent single-cell harbor prop: one squat upright gray-brown freshwater cask with broad timber staves, two dark forged-iron hoops, a simple wooden stopper and a small rope carry loop; honest compact one-cell base, fixed weak upper-left light, three-quarter top-down tactical view. Hard near-black outline, 6-10 muted flat colors, at least 2px transparent border. Exclude wine emblem, tap, label, text, blue glow, modern drum, black backdrop."
+    },
+    {
+      "asset_id": "m_a39_harbor_signal_bell_post",
+      "stem": "harbor_signal_bell_post",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future academy-harbor tactical map; one-cell manual shift signal bell, no electrical function",
+      "prompt": "One independent OCC native 32x32 transparent single-cell harbor prop: a short weathered timber post on one square stone foot, with a small dull bronze hand bell hanging from a simple forged hook and one short pull cord; manual harbor shift signal, honest one-cell footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black outline, 6-10 muted colors, 2px transparent border. Exclude electric bell, clock, tower, flame, banner, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a39_harbor_crate_pair_2x1",
+      "stem": "harbor_crate_pair_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; two-cell low cargo pair with readable separate feet",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 harbor prop: two low mismatched weathered wooden cargo crates side by side across exactly two tactical cells, one closed slatted crate and one smaller canvas-wrapped parcel secured with coarse rope; no stack higher than waist. Honest two-cell horizontal footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black outline, 7-12 muted colors, 2px transparent border. Exclude modern pallet, printed markings, text, logo, hazard stripe, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a39_harbor_cargo_net_rack_2x1",
+      "stem": "harbor_cargo_net_rack_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; two-cell low cargo-net maintenance rack",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 harbor prop: a low horizontal wooden maintenance rack spanning two tactical cells, with a thick folded brown cargo net draped over one bar and two visible A-shaped end feet; net has broad rope diamonds, not dense mesh. Honest 2x1 footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black outline, 7-12 muted colors, 2px transparent border. Exclude fishing catch, modern cable, fence, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a39_harbor_hand_wash_pump_1x2",
+      "stem": "harbor_hand_wash_pump_1x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [1, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; one-by-two manual wash pump and shallow drain basin",
+      "prompt": "One independent OCC production sprite on true transparency, native 32x64 intent for an exact 1x2 tactical footprint. SIMPLE chunky manual harbor wash station in three-quarter top-down view: rear 32x32 cell contains one short thick dark forged-iron hand pump on a broad square warm-stone plinth, with one obvious side lever and one short forward spout; front 32x32 cell contains one broad shallow rectangular warm-stone catch basin, centered and nearly filling that cell. The spout points into the basin but NO flowing water is shown. Two large readable masses, minimal fittings, no bucket, no extra pipes, fixed weak upper-left light. Hard 1px near-black outline, 7-10 muted stone and iron colors, 2px transparent border. Exclude tall narrow silhouette, diagonal trough, fountain, electric motor, cyan water, pipe maze, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a39_harbor_tarped_cargo_stack_2x2",
+      "stem": "harbor_tarped_cargo_stack_2x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x2 covered cargo mass with four-cell footprint",
+      "prompt": "One independent OCC native 64x64 transparent 2x2 harbor prop: a broad low stack of three wooden cargo boxes and two bundled sacks under a weathered dull gray-green canvas tarp, rope tied around the full mass; four separated lower contact points make the 2x2 footprint honest, height below a small gate. Fixed weak upper-left light, three-quarter top-down tactical view. Hard near-black outline, 8-12 muted colors, at least 2px transparent border. Exclude modern pallet, shipping container, printed letters, treasure sparkle, hazard stripe, text, logo, glow, black backdrop."
+    }
+  ]
+}

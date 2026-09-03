@@ -1,0 +1,50 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.resource.core_permit",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single 32px element/resource icon; no board slicing",
+    "source_path": "UnityProject/Artifacts/ElementResources24/resource/core_permit/source.png",
+    "source_sha256": "bc51c5e48363456d0fdf0cdc81952ab435dbc8aad526f6ce472d585af591a3a8"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/core_permit.png",
+    "output_sha256": "089e4a9965adcf5b39acf60a17743e9a50ee3870a3c776f61218b2a617ceb1a3",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 element or resource UI slot",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ElementResources24/resource/core_permit/1x.png",
+    "four_x": "UnityProject/Artifacts/ElementResources24/resource/core_permit/4x.png",
+    "grayscale": "UnityProject/Artifacts/ElementResources24/resource/core_permit/grayscale.png",
+    "checker": "UnityProject/Artifacts/ElementResources24/resource/core_permit/checker.png",
+    "application_contact": "UnityProject/Artifacts/ElementResources24/contacts/unity_element_resources_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex art-direction review",
+    "date": "2026-08-27",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "两张互锁的黄铜冲孔许可票"
+  },
+  "unity_import": {
+    "stable_guid": "46fe86477bbb6de42b1d1eae46b89356",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "audit_report": "UnityProject/Artifacts/ElementResources24/import_audit.json"
+  }
+}

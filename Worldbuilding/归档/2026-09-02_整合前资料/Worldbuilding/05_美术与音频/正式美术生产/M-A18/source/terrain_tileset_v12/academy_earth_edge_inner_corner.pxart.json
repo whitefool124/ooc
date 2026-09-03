@@ -1,0 +1,26 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_earth_edge_inner_corner",
+  "width": 32,
+  "height": 32,
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": {"S": "#B3AA91", "K": "#8F816B", "E": "#8A6B4E"},
+  "rows": [
+    {
+      "row": "S:14,K:2,E:16",
+      "repeat": 14
+    },
+    {
+      "row": "K:16,E:16",
+      "repeat": 2
+    },
+    {
+      "row": "E:32",
+      "repeat": 16
+    }
+  ],
+  "notes": "Explicitly authored pixel rows. Renderer may expand rows and nearest-neighbour scale only; it must not add art structure."
+}

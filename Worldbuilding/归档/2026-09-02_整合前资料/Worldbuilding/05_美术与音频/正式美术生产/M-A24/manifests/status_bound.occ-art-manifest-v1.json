@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat.status.bound",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single combat semantic icon; no board slicing",
+    "source_path": "UnityProject/Artifacts/CombatSemantics31/status/bound/source.png",
+    "source_sha256": "4340d271bc88cafc49ed7e4cf361a78ac8a22525ee8e248806cfb1a860fefc79"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalStatusIcons32/bound.png",
+    "output_sha256": "cc1e4deb5cfa9808b71f5d0e4dad44a15fc18f22926445e7db6afb9a26693ea6",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 status or feedback slot",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/CombatSemantics31/status/bound/1x.png",
+    "four_x": "UnityProject/Artifacts/CombatSemantics31/status/bound/4x.png",
+    "grayscale": "UnityProject/Artifacts/CombatSemantics31/status/bound/grayscale.png",
+    "checker": "UnityProject/Artifacts/CombatSemantics31/status/bound/checker.png",
+    "application_contact": "UnityProject/Artifacts/CombatSemantics31/contacts/unity_combat_semantics_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-27",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct combat semantic silhouette, function-specific palette, native integer-scale readability, and Unity 1920x1080 / 960x540 contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalStatusIcons32/bound.png",
+    "stable_guid": "d766141fbf2b61f46bedb3b80db549d5",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
 namespace OCC.Combat.Presentation
 {
     // Opt-in development surface. The training range is runtime-only and never writes player progression or scene YAML.
     public sealed class DeveloperConsolePanel : MonoBehaviour
     {
-        private CombatPrototypeBootstrap bootstrap;
+        private IDeveloperConsoleHost bootstrap;
         private bool open;
         private Vector2 resultScroll;
         private string lastError;
         private readonly Dictionary<string, Texture2D> abilityIcons = new Dictionary<string, Texture2D>(StringComparer.Ordinal);
+        private readonly Texture2D[] clickFeedbackFrames = new Texture2D[6];
+        private Vector2 clickFeedbackPointer;
+        private float clickFeedbackStarted = -1f;
 
-        public void Initialize(CombatPrototypeBootstrap source) { bootstrap = source; }
+        public void Initialize(IDeveloperConsoleHost source) { bootstrap = source; }
         public void Toggle() { open = !open; }
         public bool IsOpen => open;
 
         private void OnGUI()
         {
-            if (bootstrap == null || !Application.isPlaying) return;
+            if (!DeveloperBuildGate.IsEnabled || bootstrap == null || !Application.isPlaying) return;
             GUI.depth = -1000;
             HandleHotkeys();
             float scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f);
@@ -31,10 +35,12 @@ namespace OCC.Combat.Presentation
             if (!open)
             {
                 if (bootstrap.IsTrainingRangeActive) DrawTrainingRangeLauncher();
+                DrawClickFeedback();
                 GUI.matrix = previous;
                 return;
             }
             if (bootstrap.IsTrainingRangeActive) DrawTrainingLoadout(); else DrawHome();
+            DrawClickFeedback();
             GUI.matrix = previous;
         }
 
@@ -54,15 +60,15 @@ namespace OCC.Combat.Presentation
         {
             Rect panel = new Rect(590, 220, 740, 520); Panel(panel, new Color(.95f, .72f, .24f));
             Title(panel, "开发控制台 // F1 关闭", "F2 可直接进入全游戏术式调试靶场。");
-            if (GUI.Button(new Rect(panel.x + 28, panel.y + 126, 684, 72), "进入全游戏术式调试靶场\n77 项能力 · 目标预览 · 确定性施放 · 数值复测"))
+            if (ClickButton(new Rect(panel.x + 28, panel.y + 126, 684, 72), "进入全游戏术式调试靶场\n77 项能力 · 目标预览 · 确定性施放 · 数值复测"))
             { bootstrap.StartTrainingRange(); lastError = null; }
             GUI.enabled = bootstrap.IsDeveloperCombatActive;
-            if (GUI.Button(new Rect(panel.x + 28, panel.y + 224, 212, 58), "战术重开")) bootstrap.TacticalRestartDeveloperCombat();
-            if (GUI.Button(new Rect(panel.x + 264, panel.y + 224, 212, 58), "测试胜利")) bootstrap.ForceCurrentOutcome(true);
-            if (GUI.Button(new Rect(panel.x + 500, panel.y + 224, 212, 58), "测试失败")) bootstrap.ForceCurrentOutcome(false);
+            if (ClickButton(new Rect(panel.x + 28, panel.y + 224, 212, 58), "战术重开")) bootstrap.TacticalRestartDeveloperCombat();
+            if (ClickButton(new Rect(panel.x + 264, panel.y + 224, 212, 58), "测试胜利")) bootstrap.ForceCurrentOutcome(true);
+            if (ClickButton(new Rect(panel.x + 500, panel.y + 224, 212, 58), "测试失败")) bootstrap.ForceCurrentOutcome(false);
             GUI.enabled = true;
-            if (GUI.Button(new Rect(panel.x + 28, panel.y + 310, 332, 58), "返回入口")) bootstrap.ReturnToDeveloperMenu();
-            if (GUI.Button(new Rect(panel.x + 380, panel.y + 310, 332, 58), "关闭控制台")) open = false;
+            if (ClickButton(new Rect(panel.x + 28, panel.y + 310, 332, 58), "返回入口")) bootstrap.ReturnToDeveloperMenu();
+            if (ClickButton(new Rect(panel.x + 380, panel.y + 310, 332, 58), "关闭控制台")) open = false;
             GUI.color = new Color(.58f, .65f, .68f);
             GUI.Label(new Rect(panel.x + 28, panel.y + 400, 684, 70), "靶场不推进剧情或肉鸽存档；敌方 AI、胜负收束与自动结束行动均停用。关闭控制台后仍可在棋盘上手动选格施术。");
             GUI.color = Color.white;
@@ -80,11 +86,11 @@ namespace OCC.Combat.Presentation
                 GUI.color = Color.white;
                 return;
             }
-            if (GUI.Button(new Rect(panel.x + 26, panel.y + 86, 190, 52), "重置靶场")) Safe(bootstrap.PrepareTrainingRangeCurrent);
-            if (GUI.Button(new Rect(panel.x + 230, panel.y + 86, 190, 52), "预览目标")) Safe(() => bootstrap.PreviewTrainingRangeCurrent());
-            if (GUI.Button(new Rect(panel.x + 434, panel.y + 86, 190, 52), "施放术式")) Safe(() => bootstrap.ExecuteTrainingRangeCurrent());
-            if (GUI.Button(new Rect(panel.x + 1310, panel.y + 86, 132, 52), "回到入口")) { bootstrap.ReturnToDeveloperMenu(); return; }
-            if (GUI.Button(new Rect(panel.x + 1456, panel.y + 86, 136, 52), "关闭 F1")) open = false;
+            if (ClickButton(new Rect(panel.x + 26, panel.y + 86, 190, 52), "重置靶场")) Safe(bootstrap.PrepareTrainingRangeCurrent);
+            if (ClickButton(new Rect(panel.x + 230, panel.y + 86, 190, 52), "预览目标")) Safe(() => bootstrap.PreviewTrainingRangeCurrent());
+            if (ClickButton(new Rect(panel.x + 434, panel.y + 86, 190, 52), "施放术式")) Safe(() => bootstrap.ExecuteTrainingRangeCurrent());
+            if (ClickButton(new Rect(panel.x + 1310, panel.y + 86, 132, 52), "回到入口")) { bootstrap.ReturnToDeveloperMenu(); return; }
+            if (ClickButton(new Rect(panel.x + 1456, panel.y + 86, 136, 52), "关闭 F1")) open = false;
 
             Rect list = new Rect(panel.x + 26, panel.y + 158, 420, 700); Box(list, "术式目录");
             GUI.Label(new Rect(list.x + 18, list.y + 42, 384, 28), $"第 {session.CurrentPage + 1}/{session.PageCount} 页 // {session.Abilities.Count} 项能力");
@@ -94,13 +100,13 @@ namespace OCC.Combat.Presentation
                 bool selected = ability.Id == session.CurrentAbility.Id;
                 Color old = GUI.backgroundColor; GUI.backgroundColor = selected ? new Color(.18f, .48f, .54f) : new Color(.10f, .13f, .14f);
                 float rowY = list.y + 78 + row * 52;
-                if (GUI.Button(new Rect(list.x + 18, rowY, 384, 44), $"       {ability.Id}  {ability.DisplayName}  // {ability.Group}"))
+                if (ClickButton(new Rect(list.x + 18, rowY, 384, 44), $"       {ability.Id}  {ability.DisplayName}  // {ability.Group}"))
                     Safe(() => bootstrap.SelectTrainingRangeAbility(ability.Id));
                 DrawAbilityIcon(ability, new Rect(list.x + 26, rowY + 6, 32, 32));
                 GUI.backgroundColor = old; row++;
             }
-            if (GUI.Button(new Rect(list.x + 18, list.y + 616, 178, 48), "◀ 上一页")) Safe(() => bootstrap.ShiftTrainingRangePage(-1));
-            if (GUI.Button(new Rect(list.x + 224, list.y + 616, 178, 48), "下一页 ▶")) Safe(() => bootstrap.ShiftTrainingRangePage(1));
+            if (ClickButton(new Rect(list.x + 18, list.y + 616, 178, 48), "◀ 上一页")) Safe(() => bootstrap.ShiftTrainingRangePage(-1));
+            if (ClickButton(new Rect(list.x + 224, list.y + 616, 178, 48), "下一页 ▶")) Safe(() => bootstrap.ShiftTrainingRangePage(1));
 
             Rect detail = new Rect(panel.x + 466, panel.y + 158, 438, 700); Box(detail, "当前术式 / 数值参数");
             TrainingRangeAbilityEntry current = session.CurrentAbility;
@@ -140,7 +146,7 @@ namespace OCC.Combat.Presentation
         {
             TrainingRangeAbilityEntry current = bootstrap.TrainingRange?.CurrentAbility;
             string label = current == null ? "靶场配置  F1" : $"靶场配置  F1\n{current.Id} · {current.DisplayName}";
-            if (GUI.Button(new Rect(1530, 940, 330, 66), label)) open = true;
+            if (ClickButton(new Rect(1530, 940, 330, 66), label)) open = true;
         }
 
         private void DrawTrainingLoadout()
@@ -154,12 +160,12 @@ namespace OCC.Combat.Presentation
                 return;
             }
 
-            if (GUI.Button(new Rect(panel.x + 780, panel.y + 82, 214, 52), "装载并重置战斗"))
+            if (ClickButton(new Rect(panel.x + 780, panel.y + 82, 214, 52), "装载并重置战斗"))
             {
                 Safe(bootstrap.PrepareTrainingRangeCurrent);
                 if (string.IsNullOrEmpty(lastError)) open = false;
             }
-            if (GUI.Button(new Rect(panel.x + 1010, panel.y + 82, 142, 52), "返回战斗")) open = false;
+            if (ClickButton(new Rect(panel.x + 1010, panel.y + 82, 142, 52), "返回战斗")) open = false;
 
             Rect list = new Rect(panel.x + 28, panel.y + 154, 520, 676); Box(list, "可选术式与法宝");
             GUI.Label(new Rect(list.x + 18, list.y + 42, 484, 28), $"第 {session.CurrentPage + 1}/{session.PageCount} 页 // 共 {session.Abilities.Count} 项");
@@ -171,14 +177,14 @@ namespace OCC.Combat.Presentation
                 GUI.backgroundColor = selected ? new Color(.18f, .48f, .54f) : new Color(.10f, .13f, .14f);
                 float rowY = list.y + 78 + row * 52;
                 string kind = ability.ProviderId == "artifact" ? "法宝" : "术式";
-                if (GUI.Button(new Rect(list.x + 18, rowY, 484, 44), $"       {ability.Id}  {ability.DisplayName}  // {kind} · {ability.Group}"))
+                if (ClickButton(new Rect(list.x + 18, rowY, 484, 44), $"       {ability.Id}  {ability.DisplayName}  // {kind} · {ability.Group}"))
                     Safe(() => bootstrap.BrowseTrainingRangeAbility(ability.Id));
                 DrawAbilityIcon(ability, new Rect(list.x + 26, rowY + 6, 32, 32));
                 GUI.backgroundColor = old;
                 row++;
             }
-            if (GUI.Button(new Rect(list.x + 18, list.y + 610, 224, 48), "◀ 上一页")) Safe(() => bootstrap.ShiftTrainingRangePage(-1));
-            if (GUI.Button(new Rect(list.x + 278, list.y + 610, 224, 48), "下一页 ▶")) Safe(() => bootstrap.ShiftTrainingRangePage(1));
+            if (ClickButton(new Rect(list.x + 18, list.y + 610, 224, 48), "◀ 上一页")) Safe(() => bootstrap.ShiftTrainingRangePage(-1));
+            if (ClickButton(new Rect(list.x + 278, list.y + 610, 224, 48), "下一页 ▶")) Safe(() => bootstrap.ShiftTrainingRangePage(1));
 
             Rect detail = new Rect(panel.x + 568, panel.y + 154, 584, 676); Box(detail, "装载详情");
             TrainingRangeAbilityEntry current = session.CurrentAbility;
@@ -210,6 +216,32 @@ namespace OCC.Combat.Presentation
         {
             try { action(); lastError = null; }
             catch (Exception error) { lastError = error.Message; }
+        }
+
+        private bool ClickButton(Rect rect, string label)
+        {
+            bool clicked = GUI.Button(rect, label);
+            if (clicked)
+            {
+                clickFeedbackPointer = Event.current == null ? Vector2.zero : Event.current.mousePosition;
+                clickFeedbackStarted = Time.unscaledTime;
+            }
+            return clicked;
+        }
+
+        private void DrawClickFeedback()
+        {
+            if (clickFeedbackStarted < 0f) return;
+            OccPeripheralFeedbackEntry feedback = FormalUiEffectsConfig.Feedback("click");
+            int frame = Mathf.FloorToInt((Time.unscaledTime - clickFeedbackStarted) * feedback.framesPerSecond);
+            if (frame < 0 || frame >= feedback.frameCount) { clickFeedbackStarted = -1f; return; }
+            if (clickFeedbackFrames[frame] == null)
+                clickFeedbackFrames[frame] = Resources.Load<Texture2D>(feedback.resourcePath + "/frame_" + frame.ToString("00"));
+            Texture2D texture = clickFeedbackFrames[frame];
+            if (texture == null) throw new KeyNotFoundException("Missing formal developer-console click feedback frame: " + frame);
+            Color previous = GUI.color; GUI.color = Color.white;
+            GUI.DrawTexture(new Rect(clickFeedbackPointer.x - 24f, clickFeedbackPointer.y - 24f, 48f, 48f), texture, ScaleMode.ScaleToFit, true);
+            GUI.color = previous;
         }
 
         private void DrawAbilityIcon(TrainingRangeAbilityEntry ability, Rect rect)
@@ -253,3 +285,4 @@ namespace OCC.Combat.Presentation
         }
     }
 }
+#endif

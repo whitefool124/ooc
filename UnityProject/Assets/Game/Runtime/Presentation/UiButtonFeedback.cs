@@ -10,8 +10,8 @@ namespace OCC.Combat.Presentation
     {
         private Button button;
         private Image image;
+        private Image skinOverlay;
         private Image focusFrame;
-        private Sprite normalSprite, hoverSprite, pressedSprite, selectedSprite, disabledSprite;
         private Func<UiMotionProfile> motionProfile;
         private Action<UiActionFeedback> feedback;
         private Color normal;
@@ -24,12 +24,15 @@ namespace OCC.Combat.Presentation
         private bool hovering;
         private bool pressing;
         private bool selectedState;
+        private bool usesFormalButtonSkin;
 
         public void Configure(Button target, Color normalColor, Color hoverColor, Color pressedColor, Color selectedColor, Color disabledColor,
             Func<UiMotionProfile> profile, Action<UiActionFeedback> feedbackSink, string reason = null)
         {
             button = target;
             image = target == null ? GetComponent<Image>() : target.targetGraphic as Image ?? target.GetComponent<Image>();
+            skinOverlay = FormalUiKit.SkinOverlay(image);
+            usesFormalButtonSkin = skinOverlay != null && FormalUiKit.IsStandardButtonSkin(skinOverlay.sprite);
             motionProfile = profile;
             feedback = feedbackSink;
             normal = normalColor;
@@ -40,12 +43,8 @@ namespace OCC.Combat.Presentation
             disabledReason = reason ?? string.Empty;
             RectTransform rect = transform as RectTransform;
             if (rect != null) basePosition = rect.anchoredPosition;
-            normalSprite = FormalUiKit.SkinSprite(gameObject.name.Contains("结束行动") ? "button_end_turn" : OccPixelUiConfig.StateSkin("button", "normal"));
-            hoverSprite = FormalUiKit.SkinSprite(OccPixelUiConfig.StateSkin("button", "hover"));
-            pressedSprite = FormalUiKit.SkinSprite(OccPixelUiConfig.StateSkin("button", "pressed"));
-            selectedSprite = FormalUiKit.SkinSprite(OccPixelUiConfig.StateSkin("button", "selected"));
-            disabledSprite = FormalUiKit.SkinSprite(OccPixelUiConfig.StateSkin("button", "disabled"));
-            if (image != null) { image.type = Image.Type.Sliced; image.sprite = normalSprite; }
+            // Feedback is presentation-only: preserve authored sprites and image types so
+            // pixel borders, nine-slice skins and icon-shaped buttons are never discarded.
             focusFrame = transform.Find("像素焦点框")?.GetComponent<Image>() ?? FormalUiKit.FocusFrame(transform);
             focusFrame.gameObject.SetActive(false);
             if (button != null) button.transition = Selectable.Transition.None;
@@ -66,15 +65,36 @@ namespace OCC.Combat.Presentation
             Apply(false);
         }
 
+        public void RefreshLayoutPosition()
+        {
+            RectTransform rect = transform as RectTransform;
+            if (rect == null) return;
+            rect.DOKill();
+            basePosition = rect.anchoredPosition;
+            ApplyImmediate();
+        }
+
         public void OnPointerEnter(PointerEventData eventData) { hovering = true; Apply(false); }
         public void OnPointerExit(PointerEventData eventData) { hovering = false; pressing = false; Apply(false); }
-        public void OnPointerDown(PointerEventData eventData) { pressing = true; Apply(false); }
-        public void OnPointerUp(PointerEventData eventData) { pressing = false; Apply(false); }
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!IsPrimaryPointer(eventData)) return;
+            pressing = true;
+            Apply(false);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            if (!IsPrimaryPointer(eventData)) return;
+            pressing = false;
+            Apply(false);
+        }
         public void OnSelect(BaseEventData eventData) { if (focusFrame != null) focusFrame.gameObject.SetActive(true); Apply(false); }
         public void OnDeselect(BaseEventData eventData) { if (focusFrame != null) focusFrame.gameObject.SetActive(false); pressing = false; Apply(false); }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (!IsPrimaryPointer(eventData)) return;
             if (button != null && !button.interactable) RejectDisabled();
             else PlayAcceptedFeedback();
         }
@@ -82,7 +102,28 @@ namespace OCC.Combat.Presentation
         public void OnSubmit(BaseEventData eventData)
         {
             if (button != null && !button.interactable) RejectDisabled();
-            else PlayAcceptedFeedback();
+            else
+            {
+                PlaySubmitPulse();
+                PlayAcceptedFeedback();
+            }
+        }
+
+        private static bool IsPrimaryPointer(PointerEventData eventData) => eventData != null && eventData.button == PointerEventData.InputButton.Left;
+
+        private void PlaySubmitPulse()
+        {
+            UiMotionProfile profile = motionProfile == null ? UiMotionProfile.FromIntensity(1f) : motionProfile();
+            if (profile.IsImmediate) return;
+            DOTween.Kill(this);
+            pressing = true;
+            Apply(false);
+            DOVirtual.DelayedCall(Mathf.Max(.06f, profile.QuickDuration), () =>
+            {
+                if (this == null) return;
+                pressing = false;
+                Apply(false);
+            }, true).SetTarget(this);
         }
 
         private void PlayAcceptedFeedback()
@@ -93,6 +134,8 @@ namespace OCC.Combat.Presentation
 
         private void RejectDisabled()
         {
+            UiMotionProfile profile = motionProfile == null ? UiMotionProfile.FromIntensity(1f) : motionProfile();
+            FormalUiEffects.SpawnLocalFeedback(transform, "rejected", profile.Intensity);
             feedback?.Invoke(new UiActionFeedback(UiFeedbackKind.Rejected,
                 string.IsNullOrWhiteSpace(disabledReason) ? "当前操作不可执行" : disabledReason));
         }
@@ -101,11 +144,19 @@ namespace OCC.Combat.Presentation
         {
             if (image == null) return;
             UiMotionProfile profile = motionProfile == null ? UiMotionProfile.FromIntensity(1f) : motionProfile();
-            Color source = button != null && !button.interactable ? disabled : pressing ? pressed : selectedState ? selected : hovering ? hover : normal;
-            Color target = new Color(Mathf.Lerp(1f, source.r, .22f), Mathf.Lerp(1f, source.g, .22f), Mathf.Lerp(1f, source.b, .22f), source.a);
-            image.sprite = button != null && !button.interactable ? disabledSprite : pressing ? pressedSprite : selectedState ? selectedSprite : hovering ? hoverSprite : normalSprite;
+            bool available = button == null || button.interactable;
+            bool visiblyPressing = pressing && available;
+            bool visiblyHovering = hovering && available;
+            Color source = !available ? disabled : visiblyPressing ? pressed : selectedState ? selected : visiblyHovering ? hover : normal;
+            Color target = source;
+            if (usesFormalButtonSkin)
+            {
+                skinOverlay.sprite = FormalUiKit.ButtonStateSprite(available, visiblyPressing, selectedState, visiblyHovering);
+                skinOverlay.type = Image.Type.Sliced;
+            }
             RectTransform rect = transform as RectTransform;
-            Vector2 position = basePosition + new Vector2(hovering && !pressing ? profile.PressOffset : 0f, pressing ? -profile.PressOffset : 0f);
+            float pixelOffset = FormalUiTheme.PressedOffset * profile.Intensity;
+            Vector2 position = basePosition + new Vector2(visiblyHovering && !visiblyPressing ? pixelOffset : 0f, visiblyPressing ? -pixelOffset : 0f);
             image.DOKill();
             rect?.DOKill();
             if (immediate || profile.IsImmediate)
@@ -122,6 +173,7 @@ namespace OCC.Combat.Presentation
 
         private void OnDestroy()
         {
+            DOTween.Kill(this);
             image?.DOKill();
             (transform as RectTransform)?.DOKill();
         }

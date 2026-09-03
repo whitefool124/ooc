@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a44_migration_track_cast_icon",
+  "role": "equipment_icon_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A44 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/raw/migration_track_cast_icon/source.png",
+    "source_sha256": "c5f900fda1d985e46c664244c6dc62610177d4740f3ff63984bf30cf6158441d"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/normalized/migration_track_cast_icon.png",
+    "output_sha256": "7c7be74783fad02999b6a3f9e51de00260d3e7704a054b9a4675ce2b4bb2a139",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/migration_track_cast_icon/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/migration_track_cast_icon/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/migration_track_cast_icon/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/migration_track_cast_icon/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/contacts/m_a44_task_item_inventory_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

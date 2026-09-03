@@ -1,0 +1,42 @@
+{
+  "schema": "occ-m-a36-production-catalog-v1",
+  "batch": "M-A36",
+  "assets": [
+    {
+      "asset_id": "m_a36_harbor_coiled_mooring_rope",
+      "stem": "harbor_coiled_mooring_rope",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future academy-harbor tactical map; one-cell low mooring-rope ground prop with honest compact footprint",
+      "prompt": "One independent OCC native 32x32 transparent single-cell harbor prop: a compact heavy coil of salt-stiffened tan mooring rope, one loose squared-off end tucked beside it, low ground silhouette and honest one-cell footprint, fixed weak upper-left light, three-quarter top-down tactical view. Hard 1px near-black outline, 6-10 flat muted colors, at least 2px transparent border. Exclude bollard, anchor, text, logo, grid, water, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a36_harbor_oil_lantern_post",
+      "stem": "harbor_oil_lantern_post",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future academy-harbor tactical map; one-cell manual oil-lantern post, non-electric and unlit",
+      "prompt": "One independent OCC native 32x32 transparent single-cell harbor prop: a short weathered timber post on a broad square stone foot, supporting one small CLOSED UNLIT oil lantern in a simple forged-iron cage; low-tech inspection-yard equipment, honest one-cell footprint, fixed upper-left light, three-quarter top-down tactical view. Hard 1px near-black outline, 6-10 muted colors, 2px transparent border. Exclude flame, electric bulb, cyan energy, cables, hazard stripe, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a36_harbor_cargo_balance_2x1",
+      "stem": "harbor_cargo_balance_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x1 manual cargo balance with two clear support feet",
+      "prompt": "One independent OCC native 64x32 transparent two-cell harbor prop: a low manual cargo balance bench spanning exactly 2x1 tactical cells, weathered timber beam on two squat stone-and-iron supports, one shallow cargo pan and one block counterweight; no printed numbers. Honest two-cell horizontal footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black outline, 7-12 muted flat colors, at least 2px transparent border. Exclude modern floor scale, dial, electricity, gears cluster, grid, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a36_harbor_canvas_drying_frame_2x1",
+      "stem": "harbor_canvas_drying_frame_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x1 low canvas drying and repair frame",
+      "prompt": "One independent OCC native 64x32 transparent two-cell harbor prop: a low horizontal wooden drying frame spanning exactly 2x1 tactical cells, two A-shaped end feet with a taut weathered ivory canvas strip lashed between them, one dark stitched repair patch; honest two-cell footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black outline, 7-12 muted colors, at least 2px transparent border. Exclude full sail, mast, flag, text, emblem, grid, electric equipment, glow, black backdrop."
+    }
+  ]
+}

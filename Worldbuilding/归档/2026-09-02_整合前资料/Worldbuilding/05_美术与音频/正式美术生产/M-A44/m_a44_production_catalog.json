@@ -1,0 +1,86 @@
+{
+  "schema": "occ-m-a44-production-catalog-v1",
+  "batch": "M-A44",
+  "assets": [
+    {
+      "asset_id": "m_a44_migration_track_cast_icon",
+      "stem": "migration_track_cast_icon",
+      "pair_id": "ORH-Q01",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+      "prompt": "One independent OCC native 32x32 transparent task-evidence icon: an angled palm-sized gray-white plaster track cast with one incomplete broad paired depression and one short lateral scrape, deliberately insufficient to identify the animal; add one tiny blank tan paper tie at the lower corner. Dominant irregular slab silhouette, fixed weak upper-left light, hard near-black stair-step outline, 6-10 muted plaster, clay and paper colors, 2px transparent border. Exclude readable species footprint, exact claws or hoof anatomy, boot print, fossil, rune, writing, number, emblem, glow, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_migration_track_cast_footprint",
+      "stem": "migration_track_cast_footprint",
+      "pair_id": "ORH-Q01",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence inventory/map footprint; exact 1x1 cell",
+      "prompt": "One independent OCC native 32x32 transparent 1x1 evidence object, composed independently from its icon: a flat compact plaster sampling board partly wrapped in folded gray-brown evidence cloth, with only one corner of an ambiguous shallow track depression visible and a blank paper tie tucked under the cord. Honest one-cell base, fixed weak upper-left light, three-quarter top-down tactical view, hard near-black outline, 6-10 muted colors, 2px transparent border. Exclude copied icon pose, readable animal anatomy, boot print, scroll, writing, emblem, glow, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_drainage_sediment_vial_icon",
+      "stem": "drainage_sediment_vial_icon",
+      "pair_id": "ORH-Q02",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+      "prompt": "One independent OCC native 32x32 transparent task-evidence icon: one short thick sampling vial held diagonally, sealed with a dull cork and dark iron wire, containing a visible bottom layer of matte gray-brown drainage sediment beneath a small clear empty upper zone; one blank cloth tie around the neck. Read as a laboratory sample, never a potion. Fixed weak upper-left light, hard near-black stair-step outline, 6-10 muted glass, cork, iron, cloth and earth colors, 2px transparent border. Exclude colored liquid, poison green, medicine red, magic blue, bubbles, glow, syringe, writing, number, emblem, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_drainage_sediment_vial_footprint",
+      "stem": "drainage_sediment_vial_footprint",
+      "pair_id": "ORH-Q02",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence inventory/map footprint; exact 1x1 cell",
+      "prompt": "One independent OCC native 32x32 transparent 1x1 evidence object, composed independently from its icon: a compact open hardwood sample carrier with a gray felt cradle holding one upright corked glass vial; a thin gray-brown sediment layer is visible at the bottom and the upper vial is clear. Fixed weak upper-left light, three-quarter top-down tactical view, honest one-cell base, hard near-black outline, 7-10 muted wood, glass, cork, felt and earth colors, 2px transparent border. Exclude copied diagonal icon, potion case, multiple bottles, colored liquid, poison, glow, writing, emblem, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_broken_hunter_tag_icon",
+      "stem": "broken_hunter_tag_icon",
+      "pair_id": "ORH-Q03",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+      "prompt": "One independent OCC native 32x32 transparent task-evidence icon: two mismatched halves of a small weathered hardwood hunter marker plate separated by a jagged break, joined visually by one loose dull brass rivet and a short dark cord. Both wooden faces are completely blank. Fixed weak upper-left light, hard near-black stair-step outline, 6-10 muted wood, brass and cord colors, 2px transparent border. Exclude readable writing, carved symbol, animal emblem, badge, military dog tag, key, treasure shine, blood, glow, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_broken_hunter_tag_footprint",
+      "stem": "broken_hunter_tag_footprint",
+      "pair_id": "ORH-Q03",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence inventory/map footprint; exact 1x1 cell",
+      "prompt": "One independent OCC native 32x32 transparent 1x1 evidence object: a folded muted-gray cloth square carrying two overlapping blank broken hardwood plate fragments, one dull brass rivet and a short coiled dark cord. Low compact three-quarter top-down composition, fixed weak upper-left light, hard near-black pixel outline, 6-10 muted colors and 2px transparent border. Independent from the matching icon. Exclude writing, symbol, emblem, metal tag, key, sparkle, glow, floor, frame, logo and backdrop."
+    },
+    {
+      "asset_id": "m_a44_strange_fodder_sample_icon",
+      "stem": "strange_fodder_sample_icon",
+      "pair_id": "ORH-Q04",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+      "prompt": "One independent OCC native 32x32 transparent task-evidence icon: a small tightly tied gray canvas sample packet with three short dry straw fibers protruding from the opening and one muted brown-green stained corner; one blank paper slip is trapped under the cord. It is suspicious fodder sent for examination, but the image makes no toxicity claim. Fixed weak upper-left light, hard near-black stair-step outline, 6-10 muted cloth, straw, stain, cord and paper colors, 2px transparent border. Exclude sack of grain, food ration, poison skull, vapor, flies, luminous green, glow, writing, number, emblem, cast shadow, floor, frame, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a44_strange_fodder_sample_footprint",
+      "stem": "strange_fodder_sample_footprint",
+      "pair_id": "ORH-Q04",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 task evidence inventory/map footprint; exact 1x1 cell",
+      "prompt": "One independent OCC native 32x32 transparent 1x1 evidence object, composed independently from its icon: exactly one low rectangular sealed gray-olive canvas sample packet bound crosswise with dark cord. A clearly visible cluster of five short dry yellow-brown straw fibers emerges from one corner beside the knot, and one tiny blank tan paper tab sits under the binding. Honest compact one-cell base, fixed weak upper-left light, three-quarter top-down tactical view, hard near-black outline, 6-10 muted cloth, cord, straw and paper colors, 2px transparent border. Exclude multiple packets, white cloth, bandage, medical roll, pillow, grain sack, meal ration, poison symbol, vapor, insects, luminous green, glow, writing, emblem, cast shadow, floor, frame, logo, black backdrop."
+    }
+  ]
+}

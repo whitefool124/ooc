@@ -178,7 +178,7 @@ namespace OCC.Combat
                 { ApplyCellEffect(battle, source, artifact, target.Cell, preview.Cells, effect, steps, ref sequence); continue; }
                 foreach (UnitState unit in targets) ApplyUnitEffect(battle, source, unit, secondary, effect, target.Cell, steps, ref sequence);
             }
-            battle.Combat.AddLog(artifact.DisplayName + " // " + steps.Count + " 项确定性结果"); battle.Combat.EvaluateOutcome(); return new ArtifactExecution(steps);
+            battle.Combat.AddLog(artifact.DisplayName + "已经生效。"); battle.Combat.EvaluateOutcome(); return new ArtifactExecution(steps);
         }
 
         private static void ValidateTarget(ArtifactBattleState battle, UnitState source, ArtifactDefinition artifact, ArtifactTarget target, UnitState primary, List<string> failures)

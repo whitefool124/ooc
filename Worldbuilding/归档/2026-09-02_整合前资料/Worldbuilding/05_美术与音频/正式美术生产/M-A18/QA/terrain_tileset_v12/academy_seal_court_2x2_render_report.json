@@ -1,0 +1,42 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_seal_court_2x2",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_seal_court_2x2.pxart.json",
+  "source_size": [
+    64,
+    64
+  ],
+  "delivery_size": [
+    64,
+    64
+  ],
+  "palette": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      110,
+      74,
+      58,
+      255
+    ],
+    [
+      154,
+      104,
+      76,
+      255
+    ]
+  ],
+  "colour_count": 3,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "bd5e226a533b63a1574db027d28eae218df874bc9baf1963c36be7c2f594f794",
+  "output_sha256": "bd5e226a533b63a1574db027d28eae218df874bc9baf1963c36be7c2f594f794",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

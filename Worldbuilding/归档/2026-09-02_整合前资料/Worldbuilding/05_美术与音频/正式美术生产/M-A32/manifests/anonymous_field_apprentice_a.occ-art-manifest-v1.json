@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a32_t04_anonymous_field_apprentice_a",
+  "role": "tactical_unit_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A32 trial source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/raw/anonymous_field_apprentice_a/source.png",
+    "source_sha256": "859133299eed5ff0db1eec43387dd13b8ac9d355d6c374506b10a6bf338e36ae"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/normalized/anonymous_field_apprentice_a.png",
+    "output_sha256": "dcdf05fdb965ef5c045ab86f181b0cfccd4c72c3070ad7dfe8faef72aa3d4e1a",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future friendly tactical-unit direction sample; 64px canvas, default 2x runtime scale",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_a/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_a/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_a/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_a/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/contacts/m_a32_trial_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Awaiting product review; trial only; must not enter Unity."
+  },
+  "unity_import": null
+}

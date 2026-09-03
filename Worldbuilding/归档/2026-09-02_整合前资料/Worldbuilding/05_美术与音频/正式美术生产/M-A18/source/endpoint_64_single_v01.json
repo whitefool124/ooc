@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_single_v01",
+  "category": "occ_character_endpoint",
+  "description": "One independently generated OCC character endpoint normalized for review.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 46,
+  "minBodyHeight": 38,
+  "maxBodyHeight": 50,
+  "maxBodyWidth": 60,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": false,
+  "chromaKeyTolerance": 0,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

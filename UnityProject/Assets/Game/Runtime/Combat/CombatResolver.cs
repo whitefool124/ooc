@@ -1,9 +1,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat
 {
+    public static class CombatDebugTuning
+    {
+        public const int EnemyActionPointsPerTurn = 1;
+
+        public static bool TemporaryEnemyAssistEnabled { get; set; }
+
+        public static int ActionPointsFor(UnitState unit, int configuredActionPoints)
+            => TemporaryEnemyAssistEnabled && unit != null && !unit.IsHero
+                ? EnemyActionPointsPerTurn
+                : configuredActionPoints;
+
+        public static int OutgoingDamageFor(UnitState attacker, int configuredDamage)
+        {
+            int damage = Math.Max(0, configuredDamage);
+            return TemporaryEnemyAssistEnabled && attacker != null && !attacker.IsHero
+                ? damage / 2 + damage % 2
+                : damage;
+        }
+    }
+
     public static class CombatResolver
     {
         public readonly struct AttackPreview
@@ -33,7 +54,7 @@ namespace OCC.Combat
             int armorPierce = isCast ? 0 : source.ArmorPierce;
             DamageType damageType = isCast ? CombatCatalog.FireBolt.DamageType : source.DamageType;
             DamageParts parts = CalculateDamage(state, attacker, defender, damage, damageType, armorPierce);
-            return new AttackPreview(damage, parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.Map.HasLineOfSight(attacker.Position, defender.Position));
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.Map.HasLineOfSight(attacker.Position, defender.Position));
         }
 
         public static AttackPreview PreviewSkillAttack(CombatState state, string attackerId, string targetId, SkillDefinition skill)
@@ -43,18 +64,20 @@ namespace OCC.Combat
             UnitState defender = GetUnit(state, targetId);
             DamageParts parts = CalculateDamage(state, attacker, defender, skill.Damage, skill.DamageType, skill.ModifierValue(SkillModifierType.ArmorPierce));
             bool lineOfSight = skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.Map.HasLineOfSight(attacker.Position, defender.Position);
-            return new AttackPreview(skill.Damage, parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage), parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
         }
 
         public static CombatEffectExecution BeginTurn(CombatState state, string unitId)
         {
             UnitState unit = GetUnit(state, unitId);
             state.SetActiveUnit(unitId);
+            state.BeginRogueliteTurn(unit);
+            state.RogueSpells?.BeginOwnTurn(unitId);
             CombatEffectExecution execution = CombatStatusLifecycle.ResolveTurnStart(state, unit);
             LogStatusLifecycle(state, unit, execution);
             state.EvaluateOutcome();
-            if (!unit.IsAlive) { state.AddLog($"{unit.DisplayName} \u88ab\u6301\u7eed\u6548\u679c\u51fb\u5012\u3002"); if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
-            unit.BeginTurn(unit.IsHero ? HeroActionPointsPerTurn : 2);
+            if (!unit.IsAlive) { if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
+            unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, unit.IsHero ? HeroActionPointsPerTurn : 2));
             state.AddLog($"{unit.DisplayName} \u5f00\u59cb\u884c\u52a8\uff08{unit.ActionPoints} \u884c\u52a8\u70b9\uff09\u3002");
             return execution;
         }
@@ -79,8 +102,9 @@ namespace OCC.Combat
                     return turn;
                 case CombatCommandType.Attack: return ResolveWeaponAttack(state, unit, command.TargetUnitId, 0);
                 case CombatCommandType.Cast: return ResolveSkill(state, unit, CombatCatalog.FireBolt, command);
-                case CombatCommandType.UseSkill: return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
-                case CombatCommandType.UseItem: return UseConsumable(state, unit, CombatCatalog.Medkit);
+                case CombatCommandType.UseSkill:
+                    if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) return state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects;
+                    return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
                 case CombatCommandType.UseQuickbar: return UseQuickbar(state, unit, command.SlotIndex);
                 case CombatCommandType.SearchLoot: return SearchLoot(state, unit);
                 case CombatCommandType.TakeLoot: return TakeLoot(state, unit, command.TargetUnitId);
@@ -95,6 +119,7 @@ namespace OCC.Combat
 
         public static CombatEffectExecution EndTurn(CombatState state, UnitState unit)
         {
+            state.EndRogueliteTurn(unit);
             unit.SetInitiativeTime(Math.Max(unit.InitiativeTime, state.CurrentTime) + Math.Max(1, 12 - unit.EffectiveSpeed));
             unit.BeginTurn(0);
             state.AddLog($"{unit.DisplayName} \u7ed3\u675f\u884c\u52a8\u3002");
@@ -119,7 +144,9 @@ namespace OCC.Combat
             int flatIncomingDamageReduction)
         {
             WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
-            int reducedBaseDamage = Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
+            int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
+                ? weapon.Damage
+                : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
             return ResolveDamageAction(state, attacker, targetId, weapon.DisplayName, weapon.DamageType, reducedBaseDamage, weapon.Range, weapon.ArmorPierce, weapon.InitiativeDelay, weapon.ManaCost, null, 0);
         }
 
@@ -216,7 +243,8 @@ namespace OCC.Combat
                 case SkillEffectType.RestoreShield: effects.Add(CombatEffect.RestoreShield(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.RestoreMana: effects.Add(CombatEffect.RestoreMana(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.ApplyStatus:
-                    if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id, definition.Status, definition.Duration));
+                    if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id,
+                        state.Ruleset == CombatRuleset.Roguelite && definition.Status == StatusType.ArmorBreak ? StatusType.BreakStance : definition.Status, definition.Duration));
                     break;
                 case SkillEffectType.ClearStatus: effects.Add(CombatEffect.ClearStatus(recipient.Id, definition.Status)); break;
                 case SkillEffectType.MoveSource: effects.Add(CombatEffect.Move(command.Destination, command.Facing)); break;
@@ -262,7 +290,8 @@ namespace OCC.Combat
             effects.Add(CombatEffect.SpendActionPoints(BasicActionPointCost));
             effects.Add(CombatEffect.AbsorbShield(defender.Id, parts.Shield));
             effects.Add(CombatEffect.DamageHealth(defender.Id, parts.Final));
-            if (status.HasValue && defender.Health > parts.Final) effects.Add(CombatEffect.ApplyStatus(defender.Id, status.Value, statusDuration));
+            if (status.HasValue && defender.Health > parts.Final) effects.Add(CombatEffect.ApplyStatus(defender.Id,
+                state.Ruleset == CombatRuleset.Roguelite && status.Value == StatusType.ArmorBreak ? StatusType.BreakStance : status.Value, statusDuration));
             if (initiativeDelay > 0) effects.Add(CombatEffect.DelayInitiative(initiativeDelay));
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, attacker.Id, effects.ToArray());
             int shieldAbsorbed = Applied(execution, CombatEffectKind.AbsorbShield);
@@ -278,10 +307,8 @@ namespace OCC.Combat
 
         private static CombatEffectExecution UseQuickbar(CombatState state, UnitState unit, int index)
         {
-            if (index < 0 || index >= state.Quickbar.Length || state.Quickbar[index] == null) throw new InvalidOperationException("\u8be5\u5feb\u6377\u680f\u6ca1\u6709\u53ef\u7528\u7269\u54c1\u3002");
-            CombatEffectExecution execution = UseConsumable(state, unit, state.Quickbar[index]);
-            state.ClearQuickbarSlot(index);
-            return execution;
+            if (index < 0 || index >= state.ItemQuickbar.Length || string.IsNullOrEmpty(state.ItemQuickbar[index])) throw new InvalidOperationException("\u8be5\u5feb\u6377\u680f\u6ca1\u6709\u53ef\u7528\u7269\u54c1\u3002");
+            return UseInventoryItem(state, unit, state.ItemQuickbar[index]);
         }
 
         private static CombatEffectExecution UseConsumable(CombatState state, UnitState unit, ConsumableDefinition item)
@@ -307,7 +334,7 @@ namespace OCC.Combat
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             state.Backpack.TryAdd(loot.Item);
             loot.MarkLooted();
-            state.AddLog($"{unit.DisplayName}\u82b1\u8d39 1 AP \u641c\u522e\u4e86{loot.Item.DisplayName}\u3002");
+            state.AddLog($"{unit.DisplayName}\u82b1\u8d39 1 \u884c\u52a8\u70b9\u641c\u522e\u4e86{loot.Item.DisplayName}\u3002");
             return execution;
         }
 
@@ -318,7 +345,7 @@ namespace OCC.Combat
             if (Manhattan(unit.Position, loot.Position) != 1) throw new InvalidOperationException("只能搜索相邻的战利品容器。");
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             ItemInstance revealed = loot.RevealNext(); if (revealed == null) throw new InvalidOperationException("容器已经搜索完成。");
-            state.AddLog($"{unit.DisplayName}花费 1 AP 搜索容器：发现{ItemCatalog.Get(revealed.DefinitionId).DisplayName}（剩余未知 {loot.HiddenCount}）。");
+            state.AddLog($"{unit.DisplayName}花费 1 行动点搜索容器：发现{ItemCatalog.Get(revealed.DefinitionId).DisplayName}（还有 {loot.HiddenCount} 件未知物品）。");
             return execution;
         }
 
@@ -329,7 +356,7 @@ namespace OCC.Combat
             if (Manhattan(unit.Position, loot.Position) != 1) throw new InvalidOperationException("只能拿取相邻容器中的物品。");
             InventoryResult result = loot.Take(instanceId, state.ItemInventory);
             if (!result.Success) throw new InvalidOperationException(result.Error == InventoryError.NoSpace ? "背包空间不足，需要先整理。" : "该物品尚未发现或不可拿取。");
-            ItemInstance item = state.ItemInventory.Get(instanceId); state.AddLog($"{unit.DisplayName}拿取了{ItemCatalog.Get(item.DefinitionId).DisplayName}；不重复消耗 AP。");
+            ItemInstance item = state.ItemInventory.Get(instanceId); state.AddLog($"{unit.DisplayName}拿取了{ItemCatalog.Get(item.DefinitionId).DisplayName}；拿取物品不再消耗行动点。");
             return CombatEffectExecution.Empty;
         }
 
@@ -339,7 +366,7 @@ namespace OCC.Combat
             if (!preview.Success) throw new InvalidOperationException("无法换入快捷栏：" + preview.Error);
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             InventoryResult result = state.EquipItemQuickbar(instanceId, slot); if (!result.Success) throw new InvalidOperationException("无法换入快捷栏：" + result.Error);
-            state.AddLog($"{unit.DisplayName}花费 1 AP 将{ItemCatalog.Get(state.ItemInventory.Get(instanceId).DefinitionId).DisplayName}换入快捷栏 {slot + 1}。");
+            state.AddLog($"{unit.DisplayName}花费 1 行动点，将{ItemCatalog.Get(state.ItemInventory.Get(instanceId).DefinitionId).DisplayName}换入快捷栏 {slot + 1}。");
             return execution;
         }
 
@@ -382,6 +409,16 @@ namespace OCC.Combat
 
         private static DamageParts CalculateDamage(CombatState state, UnitState attacker, UnitState defender, int baseDamage, DamageType damageType, int armorPierce)
         {
+            baseDamage = CombatDebugTuning.OutgoingDamageFor(attacker, baseDamage);
+            if (state.Ruleset == CombatRuleset.Roguelite)
+            {
+                DamageComponentKind kind = damageType == DamageType.Fire ? DamageComponentKind.Fire
+                    : damageType == DamageType.Arcane ? DamageComponentKind.Aether : DamageComponentKind.Physical;
+                DamagePacket packet = new DamagePacket("preview", attacker.Id, defender.Id, "combat_action",
+                    new[] { new DamageComponent(kind, Math.Max(0, baseDamage)) });
+                DamageResolution result = RogueDamageResolver.Resolve(packet, defender.Shield, defender.Health);
+                return new DamageParts(0, 0, result.ShieldAbsorbed, 0, 0, result.HealthDamage);
+            }
             int facing = FacingBonus(attacker.Position, defender.Position, defender.Facing);
             int cover = damageType == DamageType.Fire ? 0 : state.Map.GetTile(defender.Position).DamageReduction;
             int incoming = Math.Max(0, baseDamage + facing - cover);

@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a44_broken_hunter_tag_icon",
+  "role": "equipment_icon_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A44 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/raw/broken_hunter_tag_icon/source.png",
+    "source_sha256": "2f2e34e0ac45bd01ac8ea080ad1def2cefa2191e7be54e67603d54c3035e8c98"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/normalized/broken_hunter_tag_icon.png",
+    "output_sha256": "c4de4ba990e9995eb004680d896ffd471f579246b4ab9c634b3ab8dc675fdb50",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "REG-ORH-01 task evidence content icon; 32x32 inventory/detail slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/broken_hunter_tag_icon/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/broken_hunter_tag_icon/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/broken_hunter_tag_icon/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/broken_hunter_tag_icon/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A44/QA/contacts/m_a44_task_item_inventory_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

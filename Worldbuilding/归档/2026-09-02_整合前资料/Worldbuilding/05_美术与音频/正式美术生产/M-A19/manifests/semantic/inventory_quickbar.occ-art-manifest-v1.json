@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.semantic.inventory_quickbar",
+  "role": "semantic_icon_16",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/semantic/inventory_quickbar/source.png",
+    "source_sha256": "98c3a6df9870b2b3ec263ced8b5aa9a6272cc8d09711292e953391661c778ed6"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_quickbar.png",
+    "output_sha256": "b5260d4f2e60f49b9e6a5e087795c992edeea11ed55b56d37bf580c5802357a2",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 16x16 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/semantic/inventory_quickbar/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/semantic/inventory_quickbar/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/semantic/inventory_quickbar/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/semantic/inventory_quickbar/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "三格快捷栏并高亮一格 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "c73870b4712999e4e9236a1cc053bdd1",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

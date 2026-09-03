@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="1900" viewBox="0 0 3000 1900">
+  <title>OCC M-A17 学院城街坊与基础设施分层图 v08</title>
+  <desc>v07 宏观总平面的 B 层工程图，登记 36 个主街坊、给水消防、粮仓、排水、守备、疏散和 10 个岸线控制点。</desc>
+  <defs>
+    <style><![CDATA[
+      .bg{fill:#f7fbff}.map{fill:#eef5f8;stroke:#9db5c3;stroke-width:2}.water{fill:#dceff7}.wall{fill:none;stroke:#173f59;stroke-width:10}.zone{fill:none;stroke:#9ab0bd;stroke-width:3}.block{fill:#f8fbfd;stroke:#55788e;stroke-width:2}.blockAlt{fill:#e7f0f5;stroke:#55788e;stroke-width:2}.work{fill:#e3eef4;stroke:#3f6f89;stroke-width:2}.res{fill:#edf3f6;stroke:#6e8797;stroke-width:2}.market{fill:#e5eff3;stroke:#527b8f;stroke-width:2}.supply{fill:#e7f1e2;stroke:#789673;stroke-width:2}.harbor{fill:#deedf4;stroke:#447994;stroke-width:2}.core{fill:#d6eaf5;stroke:#175e85;stroke-width:4}.sealed{fill:#e8e3f3;stroke:#654f82;stroke-width:3}.infra{fill:#f7fbff;stroke:#23799e;stroke-width:3}.grain{fill:#e8f1e3;stroke:#698766;stroke-width:3}.guard{fill:#173f59;stroke:#f7fbff;stroke-width:2}.drain{fill:none;stroke:#5c7f92;stroke-width:4;stroke-dasharray:10 7}.shore{fill:none;stroke:#397f9e;stroke-width:6}.cp{fill:#f7fbff;stroke:#397f9e;stroke-width:3}.title{font:700 34px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349}.sub{font:500 16px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#557184}.label{font:700 18px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349;text-anchor:middle}.small{font:500 13px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#405f73;text-anchor:middle}.tiny{font:600 11px Consolas,monospace;fill:#31566d;text-anchor:middle}.id{font:700 12px Consolas,monospace;fill:#174f70}.panelTitle{font:700 20px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349}.panelText{font:500 14px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#37566a}.legend{font:600 13px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#37566a}
+    ]]></style>
+  </defs>
+  <rect class="bg" width="3000" height="1900"/>
+  <text class="title" x="90" y="60">OCC M-A17 学院城街坊与基础设施分层图 v08</text>
+  <text class="sub" x="90" y="92">v07 结构层 B ｜ 36 主街坊 ｜ 市政与岸线控制 ｜ 规划域 12288 × 6912 ｜ 原点西北</text>
+  <text class="sub" x="2910" y="60" text-anchor="end">NOT IMPLEMENTED IN UNITY</text>
+
+  <g transform="translate(180 180)">
+    <rect class="map" width="2176" height="1224"/>
+    <path class="water" d="M0 1088L363 1077L725 1093L1088 1065L1269 1065L1496 1077L1723 1077L1949 1065L2085 1077L2176 1088V1224H0Z"/>
+    <path class="shore" d="M0 1088L363 1077L725 1093L1088 1065L1269 1065L1496 1077L1723 1077L1949 1065L2085 1077L2176 1088"/>
+    <rect class="wall" x="397" y="193" width="1383" height="839"/>
+
+    <!-- macro zone boundaries retained as quiet reference -->
+    <rect class="zone" x="453" y="249" width="431" height="295"/><rect class="zone" x="930" y="249" width="317" height="181"/><rect class="zone" x="1292" y="249" width="431" height="295"/>
+    <rect class="zone" x="453" y="680" width="431" height="295"/><rect class="zone" x="930" y="793" width="317" height="181"/><rect class="zone" x="1292" y="680" width="431" height="295"/>
+
+    <!-- 36 block containers -->
+    <g id="blocks-ta">
+      <rect class="block" x="465" y="272" width="113" height="91"/><text class="tiny" x="521" y="322">TA-01</text>
+      <rect class="blockAlt" x="612" y="272" width="113" height="91"/><text class="tiny" x="669" y="322">TA-02</text>
+      <rect class="block" x="759" y="272" width="113" height="91"/><text class="tiny" x="816" y="322">TA-03</text>
+      <rect class="blockAlt" x="465" y="431" width="113" height="91"/><text class="tiny" x="521" y="481">TA-04</text>
+      <rect class="block" x="612" y="431" width="113" height="91"/><text class="tiny" x="669" y="481">TA-05</text>
+      <rect class="blockAlt" x="759" y="431" width="113" height="91"/><text class="tiny" x="816" y="481">TA-06</text>
+    </g>
+    <g id="blocks-acn">
+      <rect class="block" x="929" y="289" width="136" height="91"/><text class="tiny" x="997" y="339">ACN-01</text>
+      <rect class="blockAlt" x="1111" y="289" width="136" height="91"/><text class="tiny" x="1179" y="339">ACN-02</text>
+    </g>
+    <g id="blocks-wk">
+      <rect class="work" x="1303" y="272" width="113" height="91"/><text class="tiny" x="1360" y="322">WK-01</text>
+      <rect class="work" x="1451" y="272" width="113" height="91"/><text class="tiny" x="1507" y="322">WK-02</text>
+      <rect class="work" x="1598" y="272" width="113" height="91"/><text class="tiny" x="1655" y="322">WK-03</text>
+      <rect class="work" x="1303" y="431" width="113" height="91"/><text class="tiny" x="1360" y="481">WK-04</text>
+      <rect class="work" x="1451" y="431" width="113" height="91"/><text class="tiny" x="1507" y="481">WK-05</text>
+      <rect class="work" x="1598" y="431" width="113" height="91"/><text class="tiny" x="1655" y="481">WK-06</text>
+    </g>
+    <g id="blocks-rv">
+      <rect class="res" x="465" y="703" width="113" height="91"/><text class="tiny" x="521" y="753">RV-01</text>
+      <rect class="res" x="612" y="703" width="113" height="91"/><text class="tiny" x="669" y="753">RV-02</text>
+      <rect class="res" x="759" y="703" width="113" height="91"/><text class="tiny" x="816" y="753">RV-03</text>
+      <rect class="res" x="465" y="861" width="113" height="91"/><text class="tiny" x="521" y="911">RV-04</text>
+      <rect class="res" x="612" y="861" width="113" height="91"/><text class="tiny" x="669" y="911">RV-05</text>
+      <rect class="supply" x="759" y="861" width="113" height="91"/><text class="tiny" x="816" y="911">RV-06</text>
+    </g>
+    <g id="blocks-ds">
+      <rect class="res" x="929" y="816" width="136" height="136"/><text class="tiny" x="997" y="888">DS-01</text>
+      <rect class="blockAlt" x="1111" y="816" width="136" height="136"/><text class="tiny" x="1179" y="888">DS-02</text>
+    </g>
+    <g id="blocks-mm">
+      <rect class="market" x="1303" y="703" width="113" height="91"/><text class="tiny" x="1360" y="753">MM-01</text>
+      <rect class="market" x="1451" y="703" width="113" height="91"/><text class="tiny" x="1507" y="753">MM-02</text>
+      <rect class="market" x="1598" y="703" width="113" height="91"/><text class="tiny" x="1655" y="753">MM-03</text>
+      <rect class="res" x="1303" y="861" width="113" height="91"/><text class="tiny" x="1360" y="911">MM-04</text>
+      <rect class="res" x="1451" y="861" width="113" height="91"/><text class="tiny" x="1507" y="911">MM-05</text>
+      <rect class="blockAlt" x="1598" y="861" width="113" height="91"/><text class="tiny" x="1655" y="911">MM-06</text>
+    </g>
+    <g id="blocks-hp">
+      <rect class="harbor" x="1360" y="1077" width="136" height="68"/><text class="tiny" x="1428" y="1115">HP-01</text>
+      <rect class="harbor" x="1541" y="1077" width="113" height="68"/><text class="tiny" x="1598" y="1115">HP-02</text>
+      <rect class="harbor" x="1677" y="1077" width="113" height="68"/><text class="tiny" x="1734" y="1115">HP-03</text>
+      <rect class="harbor" x="1825" y="1077" width="113" height="68"/><text class="tiny" x="1881" y="1115">HP-04</text>
+    </g>
+    <g id="blocks-ob">
+      <rect class="supply" x="453" y="57" width="181" height="91"/><text class="tiny" x="544" y="106">OB-01</text>
+      <rect class="supply" x="816" y="57" width="181" height="91"/><text class="tiny" x="907" y="106">OB-02</text>
+      <rect class="supply" x="1269" y="57" width="363" height="91"/><text class="tiny" x="1451" y="106">OB-03</text>
+      <rect class="supply" x="453" y="1077" width="136" height="68"/><text class="tiny" x="521" y="1115">OB-04</text>
+    </g>
+
+    <!-- central public core remains the visual anchor -->
+    <rect class="core" x="952" y="555" width="147" height="113"/><circle class="core" cx="1156" cy="612" r="57"/><rect class="core" x="895" y="567" width="45" height="91"/>
+    <text class="label" x="1080" y="600">中央图书馆</text><text class="small" x="1080" y="628">阅览主厅＋档案圆厅</text>
+    <rect class="sealed" x="1883" y="430" width="204" height="408"/><text class="label" x="1985" y="500">封存塔隔离区</text>
+
+    <!-- drainage network -->
+    <path class="drain" d="M397 544H884V997M1292 544H1780V997M1088 771V1032M884 997V1065M1780 997V1065"/>
+    <text class="tiny" x="760" y="1008">DR-NW</text><text class="tiny" x="1640" y="1008">DR-NE</text><text class="tiny" x="1110" y="970">DR-C</text>
+
+    <!-- water/fire points -->
+    <g class="infra">
+      <circle cx="816" cy="363" r="12"/><circle cx="1088" cy="476" r="12"/><circle cx="1360" cy="363" r="12"/><circle cx="816" cy="816" r="12"/><circle cx="1088" cy="816" r="12"/><circle cx="1360" cy="816" r="12"/><circle cx="1451" cy="1077" r="12"/>
+    </g>
+    <text class="tiny" x="816" y="389">WTR-TA</text><text class="tiny" x="1088" y="502">WTR-CC</text><text class="tiny" x="1360" y="389">WTR-WK</text><text class="tiny" x="816" y="842">WTR-RV</text><text class="tiny" x="1088" y="842">WTR-DS</text><text class="tiny" x="1360" y="842">WTR-MM</text>
+
+    <!-- granaries and gate barracks -->
+    <g class="grain"><rect x="976" y="209" width="42" height="26"/><rect x="432" y="882" width="42" height="26"/><rect x="1701" y="882" width="42" height="26"/><rect x="1850" y="1084" width="42" height="26"/></g>
+    <text class="tiny" x="997" y="228">GRN-N</text><text class="tiny" x="453" y="901">GRN-W</text><text class="tiny" x="1722" y="901">GRN-E</text><text class="tiny" x="1871" y="1103">GRN-HP</text>
+    <g class="guard"><rect x="417" y="595" width="24" height="34"/><rect x="1071" y="213" width="34" height="24"/><rect x="1735" y="595" width="24" height="34"/><rect x="1071" y="987" width="34" height="24"/></g>
+
+    <!-- shoreline control points -->
+    <g>
+      <circle class="cp" cx="0" cy="1088" r="8"/><circle class="cp" cx="363" cy="1077" r="8"/><circle class="cp" cx="725" cy="1093" r="8"/><circle class="cp" cx="1088" cy="1065" r="8"/><circle class="cp" cx="1269" cy="1065" r="8"/><circle class="cp" cx="1496" cy="1077" r="8"/><circle class="cp" cx="1723" cy="1077" r="8"/><circle class="cp" cx="1949" cy="1065" r="8"/><circle class="cp" cx="2085" cy="1077" r="8"/><circle class="cp" cx="2176" cy="1088" r="8"/>
+      <text class="tiny" x="18" y="1070">SH-01</text><text class="tiny" x="363" y="1058">SH-02</text><text class="tiny" x="725" y="1074">SH-03</text><text class="tiny" x="1088" y="1046">SH-04</text><text class="tiny" x="1269" y="1046">SH-05</text><text class="tiny" x="1496" y="1058">SH-06</text><text class="tiny" x="1723" y="1058">SH-07</text><text class="tiny" x="1949" y="1046">SH-08</text><text class="tiny" x="2085" y="1058">SH-09</text><text class="tiny" x="2148" y="1070">SH-10</text>
+    </g>
+    <path d="M2110 145V55M2110 55l-12 24h24Z" fill="#153349"/><text class="label" x="2110" y="38">北</text>
+  </g>
+
+  <g transform="translate(2410 180)">
+    <text class="panelTitle" x="0" y="0">LAYER B REGISTER</text>
+    <text class="panelText" x="0" y="36">上位：v07 工程控制总平面</text><text class="panelText" x="0" y="62">本层：街坊 / 市政 / 岸线</text><text class="panelText" x="0" y="88">状态：拟实施，未接入 Unity</text>
+    <path d="M0 112H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="152">城市承载</text>
+    <text class="panelText" x="0" y="188">36 个主街坊容器</text><text class="panelText" x="0" y="214">街坊建筑：4,700 栋</text><text class="panelText" x="0" y="240">登记常住：6,240</text><text class="panelText" x="0" y="266">学期峰值：6,880</text><text class="panelText" x="0" y="292">全城建筑：4,960 栋</text><text class="panelText" x="0" y="318">居住建筑：2,080 栋</text><text class="panelText" x="0" y="344">2–3F：3,769 栋 / 76%</text>
+    <path d="M0 342H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="382">市政系统</text>
+    <text class="panelText" x="0" y="418">2 北部蓄水池 + 7 分区水池</text><text class="panelText" x="0" y="444">6 消防值守所 + 手压泵 / 桶车</text><text class="panelText" x="0" y="470">4 粮仓 + 独立防火带</text><text class="panelText" x="0" y="496">3 主排水渠 + 2 沉淀排口</text><text class="panelText" x="0" y="522">工坊废料院 / 港口检疫仓分离</text>
+    <path d="M0 546H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="586">守备与疏散</text>
+    <text class="panelText" x="0" y="622">4 门区守备院</text><text class="panelText" x="0" y="648">北 / 西 / 南 / 东 4 集结场</text><text class="panelText" x="0" y="674">图书馆环路四向疏散</text><text class="panelText" x="0" y="700">任一方向封闭仍保留两条出口</text><text class="panelText" x="0" y="726">不新增玩法门锁或路线规则</text>
+    <path d="M0 750H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="790">岸线控制</text>
+    <text class="panelText" x="0" y="826">SH-01..10 按序连接</text><text class="panelText" x="0" y="852">港池段允许石砌岸壁</text><text class="panelText" x="0" y="878">自然岸保留岩岸与潮滩</text><text class="panelText" x="0" y="904">桥台 / 栈桥 / 排口必须引用控制点</text><text class="panelText" x="0" y="930">禁止为单体模型自由扭曲岸线</text>
+    <path d="M0 954H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="994">图例</text>
+    <rect class="block" x="0" y="1020" width="28" height="18"/><text class="legend" x="42" y="1034">教学 / 公共街坊</text>
+    <rect class="work" x="0" y="1052" width="28" height="18"/><text class="legend" x="42" y="1066">工坊街坊</text>
+    <rect class="res" x="0" y="1084" width="28" height="18"/><text class="legend" x="42" y="1098">居民 / 宿舍街坊</text>
+    <rect class="market" x="0" y="1116" width="28" height="18"/><text class="legend" x="42" y="1130">市集 / 医务街坊</text>
+    <rect class="supply" x="0" y="1148" width="28" height="18"/><text class="legend" x="42" y="1162">供给 / 材料街坊</text>
+    <circle class="infra" cx="14" cy="1192" r="9"/><text class="legend" x="42" y="1197">给水 / 消防点</text>
+    <path class="drain" d="M0 1224H28"/><text class="legend" x="42" y="1229">排水控制线</text>
+  </g>
+
+  <g transform="translate(90 1510)">
+    <text class="panelTitle" x="0" y="0">分层说明</text>
+    <text class="panelText" x="0" y="40">1. v07 保持为整洁宏观总图；v08 只展开街坊与市政系统，避免道路、建筑、管线和文字全部叠在同一张图上。</text>
+    <text class="panelText" x="0" y="70">2. 街坊 ID 是固定底层替换容器，不是肉鸽节点；每个街坊由 3–9 个硬表面体量、院落、窄巷和消防间隔组成。</text>
+    <text class="panelText" x="0" y="100">3. 给水、消防、粮仓、排水、检疫和守备均依赖人工操作与维护；以太设备只承担少量局部应急。</text>
+    <text class="panelText" x="0" y="130">4. 10 个岸线控制点冻结港池、南门前池和自然海岬关系；港区以外不铺连续码头或成熟工业基础设施。</text>
+    <text class="panelText" x="0" y="160">5. 本层尚未进入 Unity；产品确认 v07/v08 后，先转成布局测试数据，再建模、投影、验证。</text>
+  </g>
+</svg>

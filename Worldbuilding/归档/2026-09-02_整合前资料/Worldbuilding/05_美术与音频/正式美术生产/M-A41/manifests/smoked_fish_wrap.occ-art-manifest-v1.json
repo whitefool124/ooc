@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a41_smoked_fish_wrap",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A41 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/raw/smoked_fish_wrap/source.png",
+    "source_sha256": "fcf8c52ba00bdcc6636dba370bba87b354322794368046173f84b0191947d862"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/smoked_fish_wrap.png",
+    "output_sha256": "1b42e01f95e625c8d484d618a5c1d9fe988a2c2b3059df4621c1c71bc3f4fafa",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/smoked_fish_wrap_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future common preserved ration and trade material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/smoked_fish_wrap/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/smoked_fish_wrap/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/smoked_fish_wrap/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/smoked_fish_wrap/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/contacts/m_a41_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

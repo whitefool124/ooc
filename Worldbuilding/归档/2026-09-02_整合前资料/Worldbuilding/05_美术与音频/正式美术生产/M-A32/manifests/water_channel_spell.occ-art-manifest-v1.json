@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a32_t08_water_channel_spell",
+  "role": "equipment_icon_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A32 trial source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/raw/water_channel_spell/source.png",
+    "source_sha256": "8ad5fce654e73375f00c4d4d41f4cfc198116471cd207cda4e57320c7111024a"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/normalized/water_channel_spell.png",
+    "output_sha256": "f6dfcdd150eacca4a50f6d71e625f77833b90eb0b917ab2eb503689107cc78af",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future non-fire spell icon grammar study; native 32px slot, not a final content ID",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/water_channel_spell/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/water_channel_spell/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/water_channel_spell/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/water_channel_spell/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/contacts/m_a32_trial_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Awaiting product review; trial only; must not enter Unity."
+  },
+  "unity_import": null
+}

@@ -11,7 +11,7 @@ namespace OCC.Combat.Presentation
     // The HUD hierarchy and icon assets are authored in the scene; this only binds live combat data.
     public sealed class TacticalHudSceneBinder : MonoBehaviour
     {
-        private CombatPrototypeBootstrap bootstrap;
+        private ITacticalHudHost bootstrap;
         private Transform hudRoot;
         private Text activeText;
         private Text weaponText;
@@ -55,6 +55,7 @@ namespace OCC.Combat.Presentation
                 SetHover(button, hovering);
                 if (hovering && Event.current.type == EventType.MouseDown && Event.current.button == 0)
                 {
+                    FormalUiEffects.SpawnLocalFeedback(button.transform, "click", 1f);
                     button.onClick.Invoke();
                     Event.current.Use();
                     return;
@@ -68,7 +69,7 @@ namespace OCC.Combat.Presentation
             if (hudRoot.gameObject.activeSelf != visible) hudRoot.gameObject.SetActive(visible);
             if (!visible) return;
             CombatState state = bootstrap.CurrentState; UnitState hero = state.GetUnit("hero"); UnitState active = state.GetUnit(state.ActiveUnitId);
-            activeText.text = "行动：" + active.DisplayName + "  /  AP " + active.ActionPoints;
+            activeText.text = "当前行动：" + active.DisplayName + "  /  行动点 " + active.ActionPoints;
             weaponText.supportRichText = true;
             weaponText.text = "主手：" + hero.MainHand.DisplayName + "  状态：" + StatusText(hero);
             SetBar(healthBar, hero.Health / (float)hero.MaxHealth); SetBar(shieldBar, hero.Shield / (float)Math.Max(1, hero.MaxShield)); SetBar(manaBar, hero.Mana / (float)hero.MaxMana);
@@ -90,7 +91,7 @@ namespace OCC.Combat.Presentation
         {
             string[] actions = { "移动", "攻击", "技能1", "技能2", "搜刮", "互动" };
             for (int i = 0; i < actions.Length; i++) { string action = actions[i]; Bind("战术指令/" + action, () => bootstrap.SelectHudAction(action)); }
-            for (int i = 0; i < 8; i++) { int slot = i; Bind("快捷栏/槽" + i, () => bootstrap.UseQuickbarSlot(slot)); }
+            for (int i = 0; i < 8; i++) { int slot = i; Bind("快捷栏/槽" + i, () => bootstrap.ActivateInventoryQuickbar(slot)); }
             Bind("构筑与回合/步枪", () => bootstrap.ApplyHudBuild(0)); Bind("构筑与回合/战锤", () => bootstrap.ApplyHudBuild(1)); Bind("构筑与回合/法杖", () => bootstrap.ApplyHudBuild(2));
             Bind("构筑与回合/结束行动", () => bootstrap.EndHeroTurn()); Bind("构筑与回合/战术重开", () => bootstrap.TacticalRestartDeveloperCombat());
         }
@@ -102,6 +103,9 @@ namespace OCC.Combat.Presentation
             button.onClick.AddListener(action);
             boundButtons.Add(button);
             buttonBaseColors[button] = button.GetComponent<Image>().color;
+            FormalUiKit.ConfigureButtonFeedback(button,
+                FormalUiButtonPalette.ForAccent(buttonBaseColors[button], FormalUiTheme.Cyan),
+                () => UiMotionProfile.FromIntensity(1f), null);
             AddHoverFeedback(button);
         }
 

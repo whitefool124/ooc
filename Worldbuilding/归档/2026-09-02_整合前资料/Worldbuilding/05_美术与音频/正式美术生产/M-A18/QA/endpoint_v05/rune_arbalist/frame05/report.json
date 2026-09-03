@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_rustic_alpha_v05",
+    "category": "occ_character_endpoint",
+    "description": "Rustic OCC humanoid endpoint with true source alpha, normalized to the global 46px tactical-unit scale without chroma keying.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 44,
+    "maxBodyHeight": 48,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": false,
+    "chromaKeyTolerance": 0,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\rune_arbalist\\frame05\\frame_05.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\rune_arbalist\\frame05\\strip.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\rune_arbalist\\frame05\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\rune_arbalist\\frame05\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v05\\rune_arbalist\\frame05\\contact.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\rune_arbalist\\frame05\\frame_05.png",
+      "empty": false,
+      "sourceBounds": [
+        22,
+        25,
+        1221,
+        1261
+      ],
+      "sourceBodyWidth": 1199,
+      "sourceBodyHeight": 1236,
+      "scale": 0.0372168284789644,
+      "outputWidth": 45,
+      "outputHeight": 46,
+      "outputX": 10,
+      "outputY": 12,
+      "normalizedBounds": [
+        10,
+        12,
+        54,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

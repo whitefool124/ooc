@@ -1,0 +1,41 @@
+{
+  "schema": "occ-hand-pixel-render-v1",
+  "asset_id": "academy_aisle_edge_straight",
+  "source_spec": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_aisle_edge_straight.pxart.json",
+  "source_size": [
+    32,
+    32
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "palette": [
+    [
+      133,
+      132,
+      122,
+      255
+    ],
+    [
+      150,
+      149,
+      139,
+      255
+    ],
+    [
+      179,
+      170,
+      145,
+      255
+    ]
+  ],
+  "colour_count": 3,
+  "alpha_values": [
+    255
+  ],
+  "source_sha256": "9c270c70d44f7ccbf56c30079aa6f6f2e21fb082290440321a75e23a77348729",
+  "output_sha256": "9c270c70d44f7ccbf56c30079aa6f6f2e21fb082290440321a75e23a77348729",
+  "renderer_added_art_structure": false,
+  "authorship": "explicit per-pixel RLE rows stored in the source spec"
+}

@@ -209,12 +209,14 @@ namespace OCC.Combat
                     before = target.Shield;
                     applied = target.AbsorbShield(effect.Amount);
                     after = target.Shield;
+                    state.RecordRogueliteShieldAbsorption(target.Id, source.Id, applied);
                     break;
                 case CombatEffectKind.DamageHealth:
                     before = target.Health;
                     target.TakeDamage(effect.Amount);
                     after = target.Health;
                     applied = before - after;
+                    if (before > 0 && after == 0) state.AddLog(EnemyResolutionSemantics.DefeatLog(target));
                     break;
                 case CombatEffectKind.RestoreHealth:
                     before = target.Health;
@@ -236,7 +238,11 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.ApplyStatus:
                     before = target.StatusDuration(effect.Status);
-                    if (target.IsAlive) target.ApplyStatus(effect.Status, effect.Duration);
+                    if (target.IsAlive)
+                    {
+                        if (state.Ruleset == CombatRuleset.Roguelite && effect.Status == StatusType.BreakStance) state.ApplyRogueliteBreakStance(target.Id);
+                        else target.ApplyStatus(effect.Status, effect.Duration);
+                    }
                     after = target.StatusDuration(effect.Status);
                     applied = after - before;
                     break;

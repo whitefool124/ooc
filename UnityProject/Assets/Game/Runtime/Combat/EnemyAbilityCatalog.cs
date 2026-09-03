@@ -20,7 +20,7 @@ namespace OCC.Combat
             CombatFeedbackKind.ArmorBreak,
             new[] { SkillEffectDefinition.Damage(4, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.ArmorBreak, 2) });
         public static readonly SkillDefinition SunderingSigil = new SkillDefinition(
-            "enemy_sundering_sigil", "碎甲锤印", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
+            "enemy_sundering_sigil", "碎势锤印", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
             CombatFeedbackKind.ArmorBreak,
             new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.ArmorBreak, 2) });
         public static readonly SkillDefinition WardMend = new SkillDefinition(

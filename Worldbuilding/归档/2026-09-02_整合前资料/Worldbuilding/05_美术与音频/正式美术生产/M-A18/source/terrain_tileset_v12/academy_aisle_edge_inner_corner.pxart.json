@@ -1,0 +1,10 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_aisle_edge_inner_corner",
+  "width": 32,
+  "height": 32,
+  "delivery_size": [32, 32],
+  "palette": {"S": "#B3AA91", "K": "#85847A", "R": "#96958B"},
+  "rows": [{"row": "S:14,K:2,R:16", "repeat": 14}, {"row": "K:16,R:16", "repeat": 2}, {"row": "R:32", "repeat": 16}],
+  "notes": "Courtyard northwest concave notch inside maintained road. Explicit per-pixel RLE rows."
+}

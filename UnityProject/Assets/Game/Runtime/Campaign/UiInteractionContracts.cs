@@ -16,6 +16,8 @@ namespace OCC.Combat
         None,
         Settings,
         Archive,
+        Loadout,
+        NodeRoom,
         Confirmation
     }
 
@@ -120,6 +122,36 @@ namespace OCC.Combat
             if (string.IsNullOrWhiteSpace(message)) throw new ArgumentException("A feedback message is required.", nameof(message));
             Kind = kind;
             Message = message;
+        }
+    }
+
+    public readonly struct MapSaveUiPresentation
+    {
+        public bool CanContinue { get; }
+        public string ContinueDetail { get; }
+        public string ReturnDetail { get; }
+        public string ReplacementMessage { get; }
+
+        private MapSaveUiPresentation(bool canContinue, string continueDetail, string returnDetail, string replacementMessage)
+        {
+            CanContinue = canContinue;
+            ContinueDetail = continueDetail;
+            ReturnDetail = returnDetail;
+            ReplacementMessage = replacementMessage;
+        }
+
+        public static MapSaveUiPresentation From(bool hasSave, RogueliteSaveLoadStatus loadStatus, bool lastWriteSucceeded)
+        {
+            bool protectedSlot = loadStatus == RogueliteSaveLoadStatus.CorruptData || loadStatus == RogueliteSaveLoadStatus.InvalidSemantics;
+            bool storeUnavailable = loadStatus == RogueliteSaveLoadStatus.StoreError;
+            string continueDetail = !hasSave ? "暂无存档" :
+                protectedSlot ? "存档损坏 · 可开始新游戏" :
+                storeUnavailable ? "暂时无法读取 · 请重试" : "从上次位置继续";
+            string replacementMessage = protectedSlot
+                ? "当前存档无法读取。继续后会保留一份损坏备份，再用新游戏覆盖主存档。"
+                : "开始新游戏会覆盖当前存档；这局已经完成的进度将无法恢复。";
+            return new MapSaveUiPresentation(hasSave && !protectedSlot && !storeUnavailable, continueDetail,
+                lastWriteSucceeded ? "当前进度已保存" : "保存失败 · 请留在当前页重试", replacementMessage);
         }
     }
 

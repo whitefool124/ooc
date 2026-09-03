@@ -1,0 +1,15 @@
+{
+  "schema": "occ-m-a37-production-catalog-v1",
+  "batch": "M-A37",
+  "assets": [
+    {
+      "asset_id": "m_a37_academy_gate_3x2_rework_candidate",
+      "stem": "academy_gate_3x2_rework_candidate",
+      "role": "modular_structure_32",
+      "logical_cells": [3, 2],
+      "palette_max": 12,
+      "application": "non-Unity replacement candidate for rejected academy_gate_3x2; outer columns blocked, full central column walkable",
+      "prompt": "A single plain production sprite, isolated on true transparency: OCC native 96x64 pixel-art academy inspection gate for an exact 3x2 tactical footprint, three-quarter top-down orthographic view. Build ONLY two simple squat rectangular warm-limestone piers and one shallow dark timber lintel. The left pier including every base stone is confined to the left one-third of the sprite; the right pier including every base stone is confined to the right one-third. The entire middle one-third is a clean open passage from bottom edge toward top, with a narrow muted stone walkway visible beneath the high lintel. No object, plant, step, base, brazier, banner, sign or support enters the middle passage. Fixed weak upper-left light, compressed front faces, hard square pixel clusters, 1px near-black stair-step contour, 7-10 muted cream, gray-brown, wood and iron colors, at least 2px transparent outer border. STRICTLY no background of any kind, no black field, no vignette, no floor outside the middle passage, no banners, no heraldry, no flames, no plants, no ornate finials, no doors, no portcullis, no rails, no magic, no text, no logo."
+    }
+  ]
+}

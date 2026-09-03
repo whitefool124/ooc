@@ -1,0 +1,44 @@
+{
+  "schema": "occ-m-a38-production-catalog-v1",
+  "batch": "M-A38",
+  "assets": [
+    {
+      "asset_id": "m_a38_harbor_warehouse_plank_floor_a",
+      "stem": "harbor_warehouse_plank_floor_a",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future harbor warehouse dry interior floor; plank family A, mixed only with A-D family",
+      "prompt": "One independent OCC pixel-game material source for a native 32x32 fully opaque TILEABLE warehouse plank floor tile A. Strict top-down orthographic surface, flat uniform ambient lighting with NO directional gradient and NO vignette; all four outer edges have the same average gray-brown value so copies can touch invisibly. Short staggered weathered gray-brown timber boards, broad 4px planks, charcoal 1px seams, one tiny pale salt-wear cluster contained away from edges. 4-6 discrete muted flat colors, hard square pixel clusters, no antialiasing. Break long seams with offset board ends. Exclude room lighting, highlight corner, cast shadow, rails, grid frame, puddles, text, logo."
+    },
+    {
+      "asset_id": "m_a38_harbor_warehouse_plank_floor_b",
+      "stem": "harbor_warehouse_plank_floor_b",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future harbor warehouse dry interior floor; plank family B, mixed only with A-D family",
+      "reference_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/raw/harbor_warehouse_plank_floor_a/source.png",
+      "prompt": "Create a NEW standalone tileable warehouse plank floor B variation, using the reference only for its exact overall neutral gray-brown palette, exposure, plank width, seam darkness and flat top-down pixel style. Do not copy the board-end layout. Native 32x32 intent, fully opaque square, uniform brightness and neutral four edges. Rearrange all staggered short board joints; add one small darker replacement segment in the central half. Keep 4-6 muted discrete colors and hard square clusters. No vignette, gradient, bright patch, rails, grid frame, text or logo."
+    },
+    {
+      "asset_id": "m_a38_harbor_warehouse_plank_floor_c",
+      "stem": "harbor_warehouse_plank_floor_c",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future harbor warehouse dry interior floor; plank family C, mixed only with A-D family",
+      "prompt": "One independent OCC pixel-game material source for a native 32x32 fully opaque TILEABLE warehouse plank floor tile C. Strict top-down flat material with identical exposure across the square: NO global gradient, NO vignette, NO bright or dark corner; top/bottom/left/right edges must share the same muted gray-brown value. Short staggered 4px timber boards, charcoal 1px seams, one tiny square repair plug away from edges, low-contrast scuff clusters. 4-6 discrete flat colors, hard pixel clusters, no antialiasing. Exclude perspective, room light, cast shadow, rails, trapdoor, grid frame, water, text, logo."
+    },
+    {
+      "asset_id": "m_a38_harbor_warehouse_plank_floor_d",
+      "stem": "harbor_warehouse_plank_floor_d",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future harbor warehouse dry interior floor; plank family D, mixed only with A-D family",
+      "reference_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/raw/harbor_warehouse_plank_floor_a/source.png",
+      "prompt": "Create a NEW standalone tileable warehouse plank floor D variation, using the reference only for its exact overall neutral gray-brown palette, exposure, plank width, seam darkness and flat top-down pixel style. Do not copy its board arrangement. Native 32x32 intent, fully opaque square, uniform brightness and neutral four edges. Use a different staggered joint pattern, two tiny muted iron nail pixels and one low-contrast central scuff. Keep 4-6 muted discrete colors and hard square clusters. No vignette, gradient, dark field, bright patch, rails, grid border, text or logo."
+    }
+  ]
+}

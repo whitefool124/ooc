@@ -1,0 +1,60 @@
+{
+  "schema": "occ-m-a41-production-catalog-v1",
+  "batch": "M-A41",
+  "assets": [
+    {
+      "asset_id": "m_a41_lard_soap_blocks",
+      "stem": "lard_soap_blocks",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common cleaning and maintenance material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: one rectangular off-white hard utility soap bar with one unmistakable straight scored groove across the flat top, one chipped square corner, and three curled waxy soap shavings beside the base; wrapped once with thin cool-gray twine. Thick near-black stair-step outline, muted ivory and cool gray shadows, 5-8 flat colors, transparent 1px safety border. Exclude cheese holes, cheese wedge, bread crust, food garnish, bubbles, sparkle, printed stamp, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a41_alum_crystal_pouch",
+      "stem": "alum_crystal_pouch",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common water-treatment mineral material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a small open gray cloth pouch holding three chunky cloudy off-white alum crystals with blunt irregular facets, read as practical mineral treatment material, not gems. Thick near-black outline, one pale gray highlight cluster, 5-8 low-saturation flat colors, transparent border. Exclude cyan crystal, magic glow, jewelry, coins, label, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a41_dried_seaweed_bundle",
+      "stem": "dried_seaweed_bundle",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common preserved food and trade material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a compact folded bundle of dried gray-olive seaweed strips tied with pale cord, three broad crinkled leaf edges and one salt-gray patch, read as preserved coastal food. Thick near-black outline, one muted olive highlight, 5-8 flat colors, transparent 1px border. Exclude fresh bright plant, potion herb, fish, glow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a41_smoked_fish_wrap",
+      "stem": "smoked_fish_wrap",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common preserved ration and trade material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: one small smoked fish portion wrapped halfway in coarse gray paper and tied with thin cord; visible tail end and dark amber smoked flesh make preserved ration readable without showing a whole animal. Thick near-black stair-step outline, 5-8 muted brown-gray colors, transparent safety border. Exclude plate, knife, blood, bright fresh fish, label, text, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a41_brass_wire_coil",
+      "stem": "brass_wire_coil",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common instrument and repair conductor material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a flat compact coil made from four clearly separated thin dull-brass wire loops, held by one rectangular cool-gray metal clamp; one short straight cut wire end protrudes with a blunt tip. Thick near-black stair-step silhouette, muted ochre-brown brass with restrained highlights, 5-8 flat colors, transparent 1px safety border. Exclude rope fibers, golden rope, gold coins, spring cylinder, electric spark, gem, jewelry, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a41_ceramic_sealing_rings",
+      "stem": "ceramic_sealing_rings",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common pipe and filter maintenance material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: three thick fired-clay sealing rings stacked and tied with coarse dark thread, warm gray terracotta with one chipped edge showing ceramic grain; read as maintenance washers, not jewelry. Thick near-black outline, one clay highlight cluster, 5-8 muted flat colors, transparent safety border. Exclude metal gears, magic rings, runes, glow, text, logo, watermark."
+    }
+  ]
+}

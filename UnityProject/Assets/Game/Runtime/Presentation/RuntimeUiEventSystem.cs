@@ -15,7 +15,7 @@ namespace OCC.Combat.Presentation
             if (eventSystem == null)
             {
                 GameObject events = new GameObject("EventSystem");
-                Object.DontDestroyOnLoad(events);
+                if (Application.isPlaying) Object.DontDestroyOnLoad(events);
                 eventSystem = events.AddComponent<EventSystem>();
             }
 
@@ -66,6 +66,12 @@ namespace OCC.Combat.Presentation
             if (eventSystem.currentSelectedGameObject == target) return;
             eventSystem.SetSelectedGameObject(null);
             eventSystem.SetSelectedGameObject(target);
+        }
+
+        public static void ClearSelection()
+        {
+            EventSystem eventSystem = Ensure();
+            if (eventSystem.currentSelectedGameObject != null) eventSystem.SetSelectedGameObject(null);
         }
     }
 }

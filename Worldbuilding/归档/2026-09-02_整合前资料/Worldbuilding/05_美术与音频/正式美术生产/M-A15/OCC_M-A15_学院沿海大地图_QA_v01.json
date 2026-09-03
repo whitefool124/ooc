@@ -1,0 +1,128 @@
+{
+  "schema": "occ.formal.academy-coastal-atlas.v0.1",
+  "status": "QA_PASS",
+  "asset": "UnityProject/Assets/Game/Resources/Art/FormalAcademyAtlas/academy_coastal_atlas.png",
+  "size": [
+    1600,
+    900
+  ],
+  "workingSize": [
+    800,
+    450
+  ],
+  "nearestScale": 2,
+  "colors": 30,
+  "alphaValues": [
+    255
+  ],
+  "anchorCount": 40,
+  "markerCount": 7,
+  "markers": [
+    {
+      "id": "current",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 6,
+      "sha256": "3dd219775052fcb7d9abfa46a78f7ec1eff95fda91564a47f004db4e4c4b5424",
+      "status": "PASS"
+    },
+    {
+      "id": "available",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 5,
+      "sha256": "5659ae7ee1d7cacb7d2c1f8079c599d50682428a0a94be140d51a3e5ae6f456e",
+      "status": "PASS"
+    },
+    {
+      "id": "cleared",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 5,
+      "sha256": "81ca1d14d4fc4c658c812ada67ee09f8d01e7708933e5301da5dbc6624db1faa",
+      "status": "PASS"
+    },
+    {
+      "id": "visited",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 5,
+      "sha256": "381344d51a19bb74de5d0f782afc31a63541b8b46f2812eb4d502c81f6de10d4",
+      "status": "PASS"
+    },
+    {
+      "id": "locked",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 5,
+      "sha256": "be7ddc83f5a27b4758c95cefcb8b88cc180f3422c99f0cc506e3d0ae43f45e2f",
+      "status": "PASS"
+    },
+    {
+      "id": "known",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 5,
+      "sha256": "22d115e4378201452e6b459f56a05dccee1506243363d3b5a7dec6129408af58",
+      "status": "PASS"
+    },
+    {
+      "id": "unknown",
+      "size": [
+        48,
+        48
+      ],
+      "alphaValues": [
+        0,
+        255
+      ],
+      "colors": 6,
+      "sha256": "6d9a33f1a1ae6ba3e09e2f7bd0947a081d2eaa9bd227051d497c28fbcc53b38e",
+      "status": "PASS"
+    }
+  ],
+  "import": {
+    "textureType": "Sprite",
+    "filter": "Point",
+    "wrap": "Clamp",
+    "mipmap": false,
+    "ppu": 32
+  },
+  "sha256": "f11a364fa4d1e1af3496db195169507f14b70103b9c5a3b251d35da67211f99a"
+}

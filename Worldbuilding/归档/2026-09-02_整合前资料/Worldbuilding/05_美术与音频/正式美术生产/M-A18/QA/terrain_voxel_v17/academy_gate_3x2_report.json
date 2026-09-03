@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_gate_3x2",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "source_alpha_bounds": [
+    71,
+    17,
+    1456,
+    1024
+  ],
+  "cropped_size": [
+    1385,
+    1007
+  ],
+  "delivery_size": [
+    96,
+    64
+  ],
+  "fitted_size": [
+    83,
+    60
+  ],
+  "fitted_offset": [
+    6,
+    2
+  ],
+  "visible_colors": 12,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "064dd7179f36242f6a66c1422391ed9a63fb177b2adbd158f2fa181ee3d22b26",
+  "output_sha256": "6d4cb0f6848d414ecbabd328529a4be5b627d520a9ed551fb5d6f415912c7828",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 91,
+  "anchor": "center",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

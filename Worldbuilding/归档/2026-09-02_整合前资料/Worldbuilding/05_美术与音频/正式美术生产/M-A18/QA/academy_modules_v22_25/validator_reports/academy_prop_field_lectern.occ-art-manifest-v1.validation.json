@@ -1,0 +1,24 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_prop_field_lectern",
+  "role": "single_cell_prop_32",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      6,
+      2,
+      25,
+      30
+    ],
+    "hard_alpha": true,
+    "visible_colors": 9,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "required evidence missing: application_contact"
+  ]
+}

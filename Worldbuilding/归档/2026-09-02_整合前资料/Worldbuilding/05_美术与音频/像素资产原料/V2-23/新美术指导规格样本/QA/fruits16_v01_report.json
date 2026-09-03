@@ -1,0 +1,56 @@
+[
+  {
+    "file": "occ_fruit_apple_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 7,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_fruit_citrus_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 6,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_fruit_plum_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 6,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_fruit_pear_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 5,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_fruit_blueberries_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 7,
+    "hard_alpha": true
+  },
+  {
+    "file": "occ_fruit_strawberry_16_v01.png",
+    "size": [
+      16,
+      16
+    ],
+    "opaque_colors": 6,
+    "hard_alpha": true
+  }
+]

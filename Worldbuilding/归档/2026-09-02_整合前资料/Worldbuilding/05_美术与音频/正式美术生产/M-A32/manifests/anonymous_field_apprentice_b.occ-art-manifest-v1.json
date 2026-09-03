@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a32_t11_anonymous_field_apprentice_b",
+  "role": "character_portrait_b_384x576",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A32 trial source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/raw/anonymous_field_apprentice_b/source.png",
+    "source_sha256": "70dce205947cdfa67a1480b69042cb70a7b0c08c7bffd4c771d82b750c9c5657"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/normalized/anonymous_field_apprentice_b.png",
+    "output_sha256": "cf721c4f1ab5980546c79debb3bdcd344e89d5f8a0ab1dc6a33a52e48b7fe5e8",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 40,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "anonymous B-layer identity/material study for archive, dialogue and character-detail layouts; not canonical protagonist art",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_b/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_b/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_b/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/anonymous_field_apprentice_b/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/contacts/m_a32_trial_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Awaiting product review; trial only; must not enter Unity."
+  },
+  "unity_import": null
+}

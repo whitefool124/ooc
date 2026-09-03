@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1560" viewBox="0 0 2400 1560">
+  <title>OCC 学院城正交结构总图 v06</title>
+  <desc>十二公里乘六点八公里规划域，七点六公里乘四点六公里连续城墙主城。中央图书馆位于城市几何与公共中心。</desc>
+  <defs>
+    <style><![CDATA[
+      .bg{fill:#f7fbff}.ink{fill:#15334a}.muted{fill:#587286}.land{fill:#e8f1f5}.water{fill:#d6edf7}.belt{fill:#edf5e8}.ward{fill:#eef5fa;stroke:#7292a8;stroke-width:3}.ward2{fill:#e6f0f7;stroke:#7292a8;stroke-width:3}.core{fill:#dbeaf6;stroke:#184d70;stroke-width:5}.special{fill:#e9e5f5;stroke:#665486;stroke-width:4}.wall{fill:none;stroke:#173f59;stroke-width:18}.setback{fill:none;stroke:#8ca3b2;stroke-width:2;stroke-dasharray:12 12}.road{fill:none;stroke:#ffffff;stroke-width:34}.roadEdge{fill:none;stroke:#7090a5;stroke-width:40}.minor{fill:none;stroke:#ffffff;stroke-width:18}.minorEdge{fill:none;stroke:#9ab0be;stroke-width:22}.def{fill:#173f59;stroke:#f7fbff;stroke-width:2}.label{font:700 18px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#15334a;text-anchor:middle}.small{font:500 14px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#38566b;text-anchor:middle}.tiny{font:500 12px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#587286}.title{font:700 34px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#15334a}.sub{font:500 17px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#587286}.id{font:700 12px Consolas,monospace;fill:#184d70}.coast{fill:none;stroke:#4c849f;stroke-width:5}.axis{fill:none;stroke:#2f6f95;stroke-width:4;stroke-dasharray:18 10}.plot{fill:#f8fbfd;stroke:#aac0cd;stroke-width:2}.green{fill:#e4f0df;stroke:#7f9f78;stroke-width:3}.harbor{fill:#e0eef4;stroke:#487b96;stroke-width:4}
+    ]]></style>
+  </defs>
+  <rect class="bg" width="2400" height="1560"/>
+  <text class="title" x="80" y="62">OCC 学院城正交结构总图 v06</text>
+  <text class="sub" x="80" y="94">规划域 12.0 × 6.8 km ｜ 连续城墙主城 7.6 × 4.6 km ｜ 逻辑坐标 12288 × 6912 ｜ 北向上</text>
+  <text class="sub" x="2320" y="62" text-anchor="end">规划冻结候选 · 未接入 Unity</text>
+
+  <g transform="translate(80 130)">
+    <rect class="land" x="0" y="0" width="2240" height="1260" rx="4"/>
+    <rect class="belt" x="70" y="45" width="1990" height="1080"/>
+    <path class="water" d="M0 1110H2240V1260H0Z"/>
+    <path class="coast" d="M0 1110H2240"/>
+
+    <!-- outer supply belt: large, clean, non-urban reservations -->
+    <rect class="green" x="120" y="90" width="620" height="145"/>
+    <text class="label" x="430" y="150">北部农圃与蓄水地</text><text class="small" x="430" y="178">粮食、菜圃、雨洪缓冲</text>
+    <rect class="green" x="790" y="90" width="560" height="145"/>
+    <text class="label" x="1070" y="150">北部疏散草场</text><text class="small" x="1070" y="178">集结、驮兽、临时营地</text>
+    <rect class="green" x="1400" y="90" width="580" height="145"/>
+    <text class="label" x="1690" y="150">猎团警戒林带</text><text class="small" x="1690" y="178">巡猎、薪材、防火隔离</text>
+    <rect class="green" x="120" y="285" width="170" height="610"/>
+    <text class="label" transform="translate(190 590) rotate(-90)">西部牧地与车队候场</text>
+    <rect class="green" x="120" y="945" width="540" height="120"/>
+    <text class="label" x="390" y="995">采石、木料与墓园缓冲</text><text class="small" x="390" y="1022">重载道路不穿居民区</text>
+
+    <!-- controlled urban footprint -->
+    <rect class="setback" x="305" y="250" width="1580" height="750"/>
+    <rect class="wall" x="335" y="280" width="1520" height="690"/>
+
+    <!-- district fields -->
+    <rect class="ward" x="380" y="325" width="430" height="250"/>
+    <text class="id" x="398" y="350">Z-TA</text><text class="label" x="595" y="430">教学 · 档案区</text><text class="small" x="595" y="458">讲堂、抄写院、导师庭</text>
+    <rect class="ward2" x="380" y="645" width="430" height="280"/>
+    <text class="id" x="398" y="670">Z-RV</text><text class="label" x="595" y="765">居民 · 访客区</text><text class="small" x="595" y="793">街坊、旅舍、车马服务</text>
+    <rect class="ward2" x="860" y="325" width="470" height="120"/>
+    <text class="id" x="878" y="350">Z-AC-N</text><text class="label" x="1095" y="382">学院北庭</text><text class="small" x="1095" y="408">公共讲席与仪式场</text>
+    <rect class="ward" x="1380" y="325" width="430" height="250"/>
+    <text class="id" x="1398" y="350">Z-WK</text><text class="label" x="1595" y="430">工坊 · 试验区</text><text class="small" x="1595" y="458">设备场、校准院、废料监管</text>
+    <rect class="ward" x="1380" y="645" width="430" height="280"/>
+    <text class="id" x="1398" y="670">Z-MM</text><text class="label" x="1595" y="765">市集 · 医务区</text><text class="small" x="1595" y="793">诊所、市场、救济与消防</text>
+    <rect class="ward2" x="860" y="805" width="470" height="120"/>
+    <text class="id" x="878" y="830">Z-DS</text><text class="label" x="1095" y="862">宿舍 · 城市服务区</text><text class="small" x="1095" y="890">食堂、浴场、维修与后勤</text>
+
+    <!-- orthogonal roads drawn behind central core -->
+    <path class="roadEdge" d="M335 610H1855"/><path class="road" d="M335 610H1855"/>
+    <path class="roadEdge" d="M1095 280V970"/><path class="road" d="M1095 280V970"/>
+    <path class="minorEdge" d="M835 280V970M1355 280V970M335 610H1855"/><path class="minor" d="M835 280V970M1355 280V970"/>
+    <path class="axis" d="M310 610H1880M1095 255V995"/>
+
+    <!-- central library compound -->
+    <rect class="core" x="875" y="470" width="440" height="280"/>
+    <rect class="core" x="925" y="510" width="205" height="200"/>
+    <circle class="core" cx="1195" cy="610" r="100"/>
+    <rect class="plot" x="825" y="525" width="50" height="170"/>
+    <text class="id" x="892" y="493">C-LIB-01</text>
+    <text class="label" x="1028" y="585">阅览主厅</text><text class="small" x="1028" y="613">城市最大公共建筑</text>
+    <text class="label" x="1195" y="604">档案</text><text class="label" x="1195" y="628">圆厅</text>
+    <text class="small" x="850" y="713">西侧入口中庭</text>
+
+    <!-- gates and towers -->
+    <g class="def">
+      <rect x="322" y="582" width="30" height="56"/><rect x="1838" y="582" width="30" height="56"/>
+      <rect x="1067" y="267" width="56" height="30"/><rect x="1067" y="953" width="56" height="30"/>
+      <rect x="325" y="270" width="36" height="36"/><rect x="820" y="270" width="36" height="36"/><rect x="1337" y="270" width="36" height="36"/><rect x="1829" y="270" width="36" height="36"/>
+      <rect x="325" y="944" width="36" height="36"/><rect x="820" y="944" width="36" height="36"/><rect x="1337" y="944" width="36" height="36"/><rect x="1829" y="944" width="36" height="36"/>
+    </g>
+    <text class="tiny" x="337" y="570" text-anchor="end">西门</text><text class="tiny" x="1853" y="570">东门</text>
+    <text class="tiny" x="1130" y="286">北门</text><text class="tiny" x="1130" y="969">南门</text>
+
+    <!-- harbour, logistics and sealed tower sit outside main wall -->
+    <rect class="harbor" x="1330" y="1015" width="650" height="95"/>
+    <text class="id" x="1348" y="1040">Z-HP</text><text class="label" x="1655" y="1058">港口 · 检验 · 仓栈区</text><text class="small" x="1655" y="1085">帆船、吊臂、检验坪、车队转运</text>
+    <path class="harbor" d="M1400 1110V1205H1450V1110M1570 1110V1230H1620V1110M1780 1110V1190H1830V1110"/>
+    <path class="roadEdge" d="M1095 970V1062H1330"/><path class="road" d="M1095 970V1062H1330"/>
+
+    <rect class="special" x="1955" y="350" width="205" height="430"/>
+    <rect class="setback" x="1925" y="320" width="265" height="490"/>
+    <text class="id" x="1975" y="378">Z-ST</text><text class="label" x="2058" y="500">封存高塔</text><text class="small" x="2058" y="528">独立隔离区</text>
+    <rect class="special" x="2025" y="550" width="65" height="145"/><circle class="special" cx="2058" cy="520" r="43"/>
+    <path class="roadEdge" d="M1855 610H1955"/><path class="road" d="M1855 610H1955"/>
+
+    <!-- clean annotations -->
+    <text class="tiny" x="320" y="1022">30–60 m 城墙退界 / 清障带</text>
+    <text class="tiny" x="1088" y="1228">南 / 海湾</text>
+    <path d="M2160 180V90M2160 90l-12 24h24Z" fill="#15334a"/><text class="label" x="2160" y="72">北</text>
+    <g transform="translate(80 1190)"><path d="M0 0H360" stroke="#15334a" stroke-width="5"/><path d="M0 -8V8M180 -8V8M360 -8V8" stroke="#15334a" stroke-width="4"/><text class="tiny" x="0" y="28">0</text><text class="tiny" x="172" y="28">1 km</text><text class="tiny" x="344" y="28">2 km</text></g>
+  </g>
+
+  <g transform="translate(80 1430)">
+    <text class="sub" x="0" y="0">结构原则：中央图书馆为几何与公共中心；四条正交主轴；六个独立城市分区；四门八塔连续城防；港区与封存区保持功能隔离。</text>
+    <text class="sub" x="0" y="34">防御逻辑：城墙与清障带延滞威胁，门楼执行人工检查，瞭望塔依赖值守；局部防护阵不构成覆盖全城的自动护盾。</text>
+    <text class="sub" x="0" y="68">人口建议：常住 18,000–24,000；学期峰值 28,000–36,000。全图读分区，放大后再布置街坊、建筑模块与动态节点。</text>
+  </g>
+</svg>

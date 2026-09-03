@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_tactical_road_a",
+  "role": "floor_tile_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Independent native 16x16 hand-pixel academy floor tile; deterministic hard-cluster renderer only",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v14/academy_tactical_road_a_source.png",
+    "source_sha256": "337aaad28a18b629c2008b62c43f6d8e489b4e7336f92d5d65d5e4a28e82017b"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v14/academy_tactical_road_a.png",
+    "output_sha256": "1f1d40bf7de497cfe6f677519cf17bfc9a6975d87ea85f00c25075dfc121c4b6",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v14/academy_tactical_road_a_source.png",
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 orthographic battlefield cell below props, units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_road_a_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_road_a_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_road_a_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_tactical_road_a_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v14/academy_nine_maps_floor_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous map review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Approved as a cohesive pixel-tactics floor family after nine-map 12x9 contact review: large staggered masonry, deliberate coping and distinct court/road/ruin/earth readings replace the rejected flat disconnected field."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_tactical_road_a.png",
+    "resource_path": "Art/FormalAcademyCombat32/academy_tactical_road_a",
+    "guid": "a2a3e31b1908d4d4ab9e00e24f8a86e9",
+    "stable_guid": "a2a3e31b1908d4d4ab9e00e24f8a86e9",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/Terrain36/NineMaps/rail_patrol_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_rustic_v05",
+    "category": "occ_character_endpoint",
+    "description": "Rustic western-fantasy-side OCC humanoid/construct endpoint normalized to the global 46px tactical-unit scale.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 44,
+    "maxBodyHeight": 48,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": true,
+    "chromaKeyTolerance": 48,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\barrier_mender\\frame00\\frame_00.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\barrier_mender\\frame00\\strip.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\barrier_mender\\frame00\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\barrier_mender\\frame00\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v05\\barrier_mender\\frame00\\contact.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\barrier_mender\\frame00\\frame_00.png",
+      "empty": false,
+      "sourceBounds": [
+        309,
+        171,
+        940,
+        1100
+      ],
+      "sourceBodyWidth": 631,
+      "sourceBodyHeight": 929,
+      "scale": 0.04951560818083961,
+      "outputWidth": 31,
+      "outputHeight": 46,
+      "outputX": 16,
+      "outputY": 12,
+      "normalizedBounds": [
+        16,
+        12,
+        47,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

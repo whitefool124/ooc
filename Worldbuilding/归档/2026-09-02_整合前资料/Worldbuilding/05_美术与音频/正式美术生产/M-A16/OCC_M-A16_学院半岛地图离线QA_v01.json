@@ -1,0 +1,35 @@
+{
+  "schema": "occ.formal.academy-map-redesign-review.v0.1",
+  "status": "QA_PASS",
+  "atlas": "Worldbuilding/05_美术与音频/正式美术生产/M-A16/OCC_M-A16_学院半岛全貌地图底图_v01.png",
+  "formalAtlas": "UnityProject/Assets/Game/Resources/Art/FormalAcademyAtlas/academy_peninsula_atlas.png",
+  "formalMarkers": [
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/current.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/available.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/cleared.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/visited.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/locked.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/known.png",
+    "UnityProject/Assets/Game/Resources/Art/FormalMapNodeMarkers32/unknown.png"
+  ],
+  "atlasSize": [
+    1536,
+    864
+  ],
+  "logicalWorkSize": [
+    768,
+    432
+  ],
+  "nearestScale": 2,
+  "colors": 30,
+  "alphaValues": [
+    255
+  ],
+  "nodeCount": 40,
+  "markerCount": 7,
+  "mockupSize": [
+    1920,
+    1080
+  ],
+  "sha256": "387c3170eb1e8811e8fe1709af97ebb78cc7ef7848d27a80ab7ffa0bd9bb30b0"
+}

@@ -1,0 +1,362 @@
+{
+  "schema": "occ-art-contract-v1",
+  "version": 1,
+  "canonical_document": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+  "machine_mirror_only": true,
+  "allowed_source_channels": [
+    "codex_builtin_imagegen",
+    "pixelover",
+    "aseprite",
+    "hand_pixel"
+  ],
+  "forbidden_source_fragments": [
+    "localhost",
+    "127.0.0.1",
+    "local-image-generation-workbench",
+    "本地生图工作台",
+    "private relay",
+    "私有 relay"
+  ],
+  "statuses": {
+    "CONCEPT": "reference only",
+    "PROTOTYPE": "temporary and forbidden from formal Unity paths",
+    "QA_PENDING": "machine or human review incomplete",
+    "REVIEW_READY": "machine checks passed; product review incomplete",
+    "FORMAL_CANDIDATE": "machine and human review passed; Unity import incomplete",
+    "FORMAL": "Unity import, stable GUID and runtime verification passed"
+  },
+  "typography": {
+    "combat_primary_font": "FusionPixel12ProportionalZhHans",
+    "native_face_grid": 12,
+    "allowed_reference_font_sizes": [24, 48, 72],
+    "reference_font_size_min": 24,
+    "compact_reference_font_size_min": 24,
+    "key_readout_font_size_min": 24,
+    "single_line_slot_height_min": 40,
+    "two_line_slot_height_min": 72,
+    "title_slot_height_min": 72,
+    "frame_thickness_reference": 6,
+    "framed_text_inner_clearance_min": 6,
+    "fully_framed_single_line_height_min": 48,
+    "context_menu_two_line_row_height_min": 76,
+    "combat_command_deck_width_reference": 1888,
+    "combat_weapon_group_width_reference": 200,
+    "combat_spell_group_width_reference": 1100,
+    "combat_spell_card_width_reference": 268,
+    "combat_interaction_group_width_reference": 152,
+    "combat_item_group_width_reference": 176,
+    "combat_end_turn_width_reference": 204,
+    "combat_spell_card_height_reference": 76,
+    "combat_spell_card_columns": 4,
+    "combat_spell_card_rows": 2,
+    "combat_spell_icon_display_size": 64,
+    "combat_spell_key_badge_reference": [24, 24],
+    "combat_spell_name_slot_reference": [122, 40],
+    "combat_spell_resource_block_reference": [60, 64],
+    "combat_spell_cost_chip_reference": [56, 32],
+    "combat_spell_resource_icon_display_size": 32,
+    "combat_spell_notice_chip_reference": [32, 28],
+    "combat_spell_cost_value_background_forbidden": true,
+    "combat_spell_standard_button_skin_forbidden": true,
+    "combat_spell_thin_frame_reference": 2,
+    "combat_spell_resource_block_color": "deep_cool_charcoal",
+    "combat_spell_empty_resource_block_neutral_gray_forbidden": true,
+    "spell_cost_visual_height_min": 32,
+    "spell_cost_text_generation_height_min": 40,
+    "combat_resource_track_height_min": 24,
+    "combat_resource_fill_inset_reference": 4,
+    "battlefield_unit_health_track_reference": [120, 22],
+    "battlefield_unit_shield_track_reference": [120, 14],
+    "battlefield_unit_resource_fill_inset_reference": 2,
+    "enemy_intent_badge_top_offset_reference": -22,
+    "enemy_intent_icon_native_size": 16,
+    "enemy_intent_icon_display_size": 32,
+    "synthetic_styles_forbidden": true,
+    "text_shadow_forbidden": true,
+    "multi_outline_forbidden": true,
+    "pixel_perfect_canvas_required": true,
+    "integer_position_required": true,
+    "best_fit_forbidden": true,
+    "dual_resolution_review": ["1920x1080", "960x540"]
+  },
+  "roles": {
+    "semantic_icon_16": {
+      "delivery_size": [16, 16],
+      "logical_cells": null,
+      "palette_max": 4,
+      "transparent_border_min": 1,
+      "unity_ppu": 16
+    },
+    "material_pickup_24_to_ui32": {
+      "native_size": [24, 24],
+      "delivery_size": [32, 32],
+      "native_embed_offset": [4, 4],
+      "logical_cells": null,
+      "palette_max": 8,
+      "transparent_border_min": 1,
+      "unity_ppu": 32
+    },
+    "equipment_icon_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "ui_backdrop_480x270": {
+      "delivery_size": [480, 270],
+      "logical_cells": null,
+      "palette_max": 24,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "alpha_policy": "fully_opaque_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_square_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_vertical_32x64": {
+      "delivery_size": [32, 64],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_horizontal_64x32": {
+      "delivery_size": [64, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_trim_corner_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4]
+    },
+    "ui_chapter_marker_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "interaction_policy": "non_interactive_decoration_only"
+    },
+    "ui_chapter_divider_128x32": {
+      "delivery_size": [128, 32],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "rotation_policy": "forbidden"
+    },
+    "ui_empty_illustration_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [2, 4],
+      "visibility_policy": "existing_empty_or_locked_state_only"
+    },
+    "floor_tile_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "edge_policy": "self_contained_tile_with_distinct_physical_perimeter",
+      "cross_tile_texture_continuation": false,
+      "directional_shadow_rotation": "forbidden",
+      "dominant_material_units_per_tile": 1,
+      "nested_masonry_grid": "forbidden",
+      "surface_detail_policy": "sparse_low_contrast_non_connecting_marks_only",
+      "surface_detail_edge_contact": "forbidden",
+      "perimeter_bevel_policy": "restrained_physical_seam_not_ui_button",
+      "runtime_review_sequence": ["single_tile_1x_4x", "four_variant_unlabelled_contact", "large_area_12x9_runtime"]
+    },
+    "multi_cell_ground_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "production_status": "legacy_transition_only_not_new_floor_baseline"
+    },
+    "single_cell_prop_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "multi_cell_prop_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32
+    },
+    "terrain_adjacency_overlay_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "rotation_policy": "allowed_only_when_shadow_neutral"
+    },
+    "modular_structure_32": {
+      "delivery_formula": "logical_cells_times_32",
+      "logical_cells": "manifest_required",
+      "palette_max": 12,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting"
+    },
+    "tactical_unit_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 24,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "center_x": 32,
+      "baseline_y": 58,
+      "standard_height": [44, 48],
+      "elite_height": [48, 54],
+      "head_height": [12, 14]
+    },
+    "character_portrait_b_384x576": {
+      "delivery_size": [384, 576],
+      "logical_cells": null,
+      "palette_max": 40,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "identity_card_required": true
+    },
+    "character_performance_c_192x288": {
+      "delivery_size": [192, 288],
+      "logical_cells": null,
+      "palette_max": 24,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "identity_card_required": true
+    },
+    "vfx_frame_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "sequence_length": [4, 10]
+    }
+  },
+  "color_families": {
+    "blue": {"description": "natural sapphire or blue cloth; blue exceeds red by 20 and green by 5"},
+    "cyan": {"description": "active aether only; green and blue both exceed red by 16"},
+    "red": {"description": "threat or damage; red exceeds green and blue by 20"},
+    "ochre": {"description": "spice, leather or service material; red exceeds green by 8 and green exceeds blue by 5"},
+    "yellow": {"description": "interaction or loot; red and green exceed blue by 20"},
+    "green": {"description": "treatment or plant; green exceeds red and blue by 16"},
+    "purple": {"description": "pollution only; red and blue exceed green by 12"}
+  },
+  "required_evidence": [
+    "one_x",
+    "four_x",
+    "grayscale",
+    "checker",
+    "application_contact"
+  ],
+  "human_review_dimensions": [
+    "silhouette",
+    "material",
+    "perspective",
+    "style",
+    "application"
+  ],
+  "consistency_checks": [
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+      "required": [
+        "ACTIVE / SINGLE SOURCE OF TRUTH",
+        "关键材质色额门禁",
+        "(W×32)×(H×32)",
+        "FORMAL_CANDIDATE"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_像素资产_QA流程_v0.1.md",
+      "required": [
+        "规范从属",
+        "多格对象 `(W×32)×(H×32)`",
+        "关键材质消失必须失败",
+        "人工审美结论必须明确为 `PASS`"
+      ],
+      "forbidden": [
+        "图标/地块严格 `32×32`",
+        "每张图恰占一格"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_单位像素美术规范_v0.1.md",
+      "required": [
+        "ACTIVE / SUBORDINATE",
+        "标准单位主体高度 `44–48px`",
+        "FORMAL_CANDIDATE"
+      ],
+      "forbidden": [
+        "standard visible body silhouette about 32–38",
+        "标准单位主体高度约 `32–38 px`"
+      ]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_角色三层视觉规范_v0.1.md",
+      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_UI学院档案视觉规范_v0.1.md",
+      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_人物双状态帧临时动画规范_v0.1.md",
+      "required": ["ACTIVE TEMPORARY / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/OCC_正式像素资产清单_v0.1.md",
+      "required": ["登记表，不是规范源"]
+    },
+    {
+      "path": "Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/artifact_imagegen_manifest_v1.json",
+      "required": ["HISTORICAL_PROVENANCE_ONLY", "\"executable\": false", "localhost fallback is forbidden"]
+    },
+    {
+      "path": "AGENTS.md",
+      "required": [
+        "是唯一美术规范源",
+        "occ-art-manifest-v1",
+        "禁止使用本地生图工作台"
+      ]
+    }
+  ]
+}

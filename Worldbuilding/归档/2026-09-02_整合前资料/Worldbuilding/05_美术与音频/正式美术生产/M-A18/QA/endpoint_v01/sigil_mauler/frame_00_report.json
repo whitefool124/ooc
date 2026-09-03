@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_single_v01",
+    "category": "occ_character_endpoint",
+    "description": "One independently generated OCC character endpoint normalized for review.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 46,
+    "minBodyHeight": 38,
+    "maxBodyHeight": 50,
+    "maxBodyWidth": 60,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": false,
+    "chromaKeyTolerance": 0,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v01\\sigil_mauler\\frame_00_source.png"
+  ],
+  "strip": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v01\\sigil_mauler\\frame_00_strip.png",
+  "frames": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v01\\sigil_mauler\\frames",
+  "gif": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v01\\sigil_mauler\\frame_00.gif",
+  "qa": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v01\\sigil_mauler\\frame_00_QA.png",
+  "metrics": [
+    {
+      "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v01\\sigil_mauler\\frame_00_source.png",
+      "empty": false,
+      "sourceBounds": [
+        105,
+        97,
+        993,
+        1165
+      ],
+      "sourceBodyWidth": 888,
+      "sourceBodyHeight": 1068,
+      "scale": 0.04307116104868914,
+      "outputWidth": 38,
+      "outputHeight": 46,
+      "outputX": 13,
+      "outputY": 12,
+      "normalizedBounds": [
+        13,
+        12,
+        51,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

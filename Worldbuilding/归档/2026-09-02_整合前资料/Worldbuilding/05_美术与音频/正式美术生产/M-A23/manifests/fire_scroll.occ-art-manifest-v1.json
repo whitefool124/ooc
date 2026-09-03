@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "item.footprint.fire_scroll",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single inventory footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/source.png",
+    "source_sha256": "fcdc9ae94e123c1abdfd5a731014dbd76f8759cbc8db62eed1da43a6a8b2cd35"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/fire_scroll.png",
+    "output_sha256": "53f7f788be8dff0db0341bdb1d7fa0e29360fa89580dcb8e8cd09e32f2b91503",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "2x1 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/1x.png",
+    "four_x": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/4x.png",
+    "grayscale": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/grayscale.png",
+    "checker": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/checker.png",
+    "application_contact": "UnityProject/Artifacts/ItemFootprints4/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct object silhouette and material, function-specific non-blue palette, exact footprint, rotation-safe presentation, and Unity inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/fire_scroll.png",
+    "stable_guid": "e8f637e1317dc1b5097a51cbba1fe85e",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

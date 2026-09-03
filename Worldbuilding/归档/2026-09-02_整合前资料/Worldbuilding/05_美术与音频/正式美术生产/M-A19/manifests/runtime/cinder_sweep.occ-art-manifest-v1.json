@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.runtime.cinder_sweep",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/runtime/cinder_sweep/source.png",
+    "source_sha256": "1bd944d4b4a2b6abfff2d006ca987b01d539282a9d3b7301590c55132907845e"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/cinder_sweep.png",
+    "output_sha256": "b1bae11788da40b95b924caa1580a47a1fd6562bf4d35f48aa3375c7d04d5bb3",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/runtime/cinder_sweep/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/runtime/cinder_sweep/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/runtime/cinder_sweep/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/runtime/cinder_sweep/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "宽阔近战横扫弧携带低伏余烬 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "530805b09c277cd4cb1124318847e4db",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

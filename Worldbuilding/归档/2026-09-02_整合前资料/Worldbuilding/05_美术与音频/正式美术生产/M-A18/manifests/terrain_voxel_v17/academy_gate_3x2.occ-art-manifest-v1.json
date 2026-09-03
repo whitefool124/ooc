@@ -1,0 +1,37 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_gate_3x2",
+  "role": "modular_structure_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent candidate rejected at runtime composition review",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_voxel_v17/academy_gate_3x2_source.png",
+    "source_sha256": "064dd7179f36242f6a66c1422391ed9a63fb177b2adbd158f2fa181ee3d22b26"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_voxel_v17/academy_gate_3x2.png",
+    "output_sha256": "6d4cb0f6848d414ecbabd328529a4be5b627d520a9ed551fb5d6f415912c7828",
+    "native_output_path": null,
+    "logical_cells": [
+      3,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "rejected: gate pier silhouette conflicts with permanent blocker occupancy",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {},
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "application": "FAIL",
+    "notes": "Not deployed. Source and normalized candidate retained for redesign; Unity formal-path copy removed."
+  }
+}

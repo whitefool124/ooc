@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.slot.accessory_2",
+  "role": "semantic_icon_16",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/slot/accessory_2/source.png",
+    "source_sha256": "5e76b94d1c1dca1033db4de8b678e22d4ee1840e3d58b32ae92d4b34458484fa"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/accessory_2.png",
+    "output_sha256": "32f52802269775b76c648364ae76a2e78ff9f8ff415678a27e9d6a36e6248f31",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 16x16 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/slot/accessory_2/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/slot/accessory_2/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/slot/accessory_2/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/slot/accessory_2/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "双环佩饰 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "13997c9a5f1aa464092ba9c6bbd33aa9",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

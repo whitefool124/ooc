@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a33_harbor_inspection_floor_a",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A33 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/raw/harbor_inspection_floor_a/source.png",
+    "source_sha256": "aff254235e56f9c4297abfcd1e84f1fbd804de26b7325621a01166cf3717ebd2"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/normalized/harbor_inspection_floor_a.png",
+    "output_sha256": "656ff39ccc1539f91e84a548201c73b58e803feda0ee08455b5d7e8e606a5d95",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future academy-harbor tactical map; standalone inspection-paving cell A at integer 2x to 5x scale",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_inspection_floor_a/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_inspection_floor_a/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_inspection_floor_a/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_inspection_floor_a/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/contacts/m_a33_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

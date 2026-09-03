@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a33_harbor_cargo_handcart_2x1",
+  "role": "multi_cell_prop_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A33 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/raw/harbor_cargo_handcart_2x1/source.png",
+    "source_sha256": "6e5a760f5a7428645dd1781f612860b52a01d1caa9ee0bf3adda91f57348eefd"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/normalized/harbor_cargo_handcart_2x1.png",
+    "output_sha256": "060e1bf00e3e43ead2ebd66d8cad72254db2fa35cc9cd07ecf369ade7fc801f0",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future academy-harbor tactical map; honest 2x1 low obstacle handcart",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_cargo_handcart_2x1/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_cargo_handcart_2x1/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_cargo_handcart_2x1/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_cargo_handcart_2x1/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/contacts/m_a33_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

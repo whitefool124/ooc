@@ -60,19 +60,19 @@ namespace OCC.Combat
     {
         private static readonly RogueliteMissionDefinition[] missions =
         {
-            new RogueliteMissionDefinition("dead_signal", "elimination_rail", CombatObjectiveType.Elimination, "清除阻断传讯的敌对单位", "主角失能则任务失败", "铭盾卫、火矢术师、钩刃突袭者、刻阵先锋"),
-            new RogueliteMissionDefinition("factory_breach", "destruction_factory", CombatObjectiveType.Destruction, "破坏敌方导能柱", "主角失能则任务失败", "铭盾卫、火矢术师、钩刃突袭者、刻阵先锋"),
-            new RogueliteMissionDefinition("rail_patrol", "elimination_rail", CombatObjectiveType.Elimination, "清除石路巡哨队", "主角失能则任务失败", "铭盾卫、火矢术师、钩刃突袭者"),
-            new RogueliteMissionDefinition("depot_wreck", "elimination_rail", CombatObjectiveType.Elimination, "清除废弃驿站守敌", "主角失能则任务失败", "缚环猎兽、刻印锤手、石索缚师"),
-            new RogueliteMissionDefinition("relay_raid", "destruction_factory", CombatObjectiveType.Destruction, "破坏被敌军占用的导能柱", "主角失能则任务失败", "钩刃突袭者、重弩手、缚环猎兽"),
-            new RogueliteMissionDefinition("signal_hub", "elimination_rail", CombatObjectiveType.Elimination, "清除传讯石庭守军", "主角失能则任务失败", "屏障修补师、显影灯使、铭盾卫"),
-            new RogueliteMissionDefinition("elite_foundry", "destruction_factory", CombatObjectiveType.Destruction, "摧毁刻阵工坊内的敌方导能柱", "主角失能则任务失败", "刻阵先锋、屏障修补师、刻印锤手"),
-            new RogueliteMissionDefinition("gatehouse", "elimination_rail", CombatObjectiveType.Elimination, "夺取石闸关口", "主角失能则任务失败", "铭盾卫、刻印锤手、重弩手"),
-            new RogueliteMissionDefinition("transmission_tower", "destruction_factory", CombatObjectiveType.Destruction, "破坏传讯塔楼内的敌方导能柱", "主角失能则任务失败", "火矢术师、石索缚师、显影灯使"),
-            new RogueliteMissionDefinition("core_approach", "elimination_rail", CombatObjectiveType.Elimination, "清除塔前石庭守军", "主角失能则任务失败", "刻阵先锋、重弩手、石索缚师"),
+            new RogueliteMissionDefinition("dead_signal", "elimination_rail", CombatObjectiveType.Elimination, "解除阻断传讯的考核拦截", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生、刻阵教官"),
+            new RogueliteMissionDefinition("factory_breach", "destruction_factory", CombatObjectiveType.Destruction, "处置考核场内的导能柱", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生、刻阵教官"),
+            new RogueliteMissionDefinition("rail_patrol", "elimination_rail", CombatObjectiveType.Elimination, "完成石路巡回对练", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生"),
+            new RogueliteMissionDefinition("depot_wreck", "elimination_rail", CombatObjectiveType.Elimination, "解除驿站约束考核", "主角失能则任务失败", "缚环寻迹兽、承压检验偶、约束助教"),
+            new RogueliteMissionDefinition("relay_raid", "destruction_factory", CombatObjectiveType.Destruction, "处置校准场内的导能柱", "主角失能则任务失败", "侧锋陪练生、重弩陪练生、缚环寻迹兽"),
+            new RogueliteMissionDefinition("signal_hub", "elimination_rail", CombatObjectiveType.Elimination, "解除传讯石庭权限拦截", "主角失能则任务失败", "护障助教、档案巡查员、盾术陪练生"),
+            new RogueliteMissionDefinition("elite_foundry", "destruction_factory", CombatObjectiveType.Destruction, "摧毁刻阵工坊内的考核导能柱", "主角失能则任务失败", "刻阵教官、护障助教、承压检验偶"),
+            new RogueliteMissionDefinition("gatehouse", "elimination_rail", CombatObjectiveType.Elimination, "通过石闸关口考核", "主角失能则任务失败", "盾术陪练生、承压检验偶、重弩陪练生"),
+            new RogueliteMissionDefinition("transmission_tower", "destruction_factory", CombatObjectiveType.Destruction, "处置传讯塔楼内的考核导能柱", "主角失能则任务失败", "火矢陪练生、约束助教、档案巡查员"),
+            new RogueliteMissionDefinition("core_approach", "elimination_rail", CombatObjectiveType.Elimination, "通过塔前高阶考核", "主角失能则任务失败", "刻阵教官、重弩陪练生、约束助教"),
             new RogueliteMissionDefinition("relay_event", "elimination_rail", CombatObjectiveType.Elimination, "\u4e2d\u7ee7\u7ad9\u4e8b\u4ef6", "\u65e0\u65f6\u95f4\u538b\u529b\uff0c\u5b8c\u6210\u8c03\u67e5", "\u73af\u5883\u8bb0\u5f55\u4e0e\u5730\u65b9\u9a7b\u5b88"),
-            new RogueliteMissionDefinition("core_finale", "elimination_rail", CombatObjectiveType.Elimination, "击败古塔核心守备", "主角失能则任务失败", "区域监工、刻阵先锋、屏障修补师、显影灯使"),
-            new RogueliteMissionDefinition("last_conduit", "elimination_rail", CombatObjectiveType.Elimination, "清除守备并完成故事包", "主角失能则任务失败", "铭盾卫、火矢术师、钩刃突袭者、刻阵先锋"),
+            new RogueliteMissionDefinition("core_finale", "elimination_rail", CombatObjectiveType.Elimination, "解除古塔核心守备", "主角失能则任务失败", "学院封存塔核心、刻阵教官、护障助教、档案巡查员"),
+            new RogueliteMissionDefinition("last_conduit", "elimination_rail", CombatObjectiveType.Elimination, "完成守备考核与故事包", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生、刻阵教官"),
             new RogueliteMissionDefinition("sandbox_elimination", "elimination_rail", CombatObjectiveType.Elimination, "\u6e05\u9664\u5168\u90e8\u654c\u5bf9\u5355\u4f4d", "\u4e3b\u89d2\u5931\u80fd\u5219\u6f14\u7ec3\u5931\u8d25", "\u6807\u51c6\u6f14\u7ec3\u7f16\u6210"),
             new RogueliteMissionDefinition("sandbox_destruction", "destruction_factory", CombatObjectiveType.Destruction, "\u7834\u574f\u5730\u56fe\u4e2d\u7684\u4e2d\u7ee7\u5668", "\u4e3b\u89d2\u5931\u80fd\u5219\u6f14\u7ec3\u5931\u8d25", "\u6807\u51c6\u6f14\u7ec3\u7f16\u6210")
         };

@@ -1,0 +1,62 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_supply_rack_2x1",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single-asset generation for batch 46; no board slicing",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/academy_modules_v22_25/academy_supply_rack_2x1_source.png",
+    "source_sha256": "2d04846886f6581bba32c81c6d36e6711a9208f80fdd3fa8d8a7dc89ddee8bb0"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/academy_modules_v22_25/academy_supply_rack_2x1.png",
+    "output_sha256": "9df981d938520912d7921faf60d802c8af2cc889151cedb47b3b0a7cfc2626a5",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "visual-only reusable academy map module; never changes logical cell state",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_supply_rack_2x1_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_supply_rack_2x1_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_supply_rack_2x1_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_supply_rack_2x1_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Passed target-size silhouette/material/perspective/style review and exact 12x9 Unity contact. Representative weak/strong/boss maps passed at 1920x1080 and 960x540; directional assets were neither rotated nor mirrored."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_supply_rack_2x1.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_supply_rack_2x1",
+    "guid": "106d2062127387e4aad3c27a3c0439b5",
+    "stable_guid": "106d2062127387e4aad3c27a3c0439b5",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_evidence": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png",
+    "representative_map_evidence": "UnityProject/Artifacts/ArtModules72/module72_three_maps_contact.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

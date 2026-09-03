@@ -1,0 +1,646 @@
+{
+  "schema": "occ-academy-equipment-footprints-catalog-v1",
+  "count": 32,
+  "assets": [
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh01",
+      "runtime_id": "ACA-EQ-MH01",
+      "name": "学院练习剑",
+      "stem": "aca_eq_mh01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "朴素直刃学院练习剑，短十字护手、皮革缠柄、钝圆钢剑尖；冷灰锻铁和棕皮，无晶体无能量光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh01/source.png",
+      "logical_cells": [
+        1,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh02",
+      "runtime_id": "ACA-EQ-MH02",
+      "name": "钩刃长枪",
+      "stem": "aca_eq_mh02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "长木枪，窄钢枪尖下带明显后弯钩刃和旧铜箍；长对角线轮廓，无晶体无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh02/source.png",
+      "logical_cells": [
+        1,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh03",
+      "runtime_id": "ACA-EQ-MH03",
+      "name": "刻印战锤",
+      "stem": "aca_eq_mh03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "双手战锤，宽厚方锤头、单侧破拆喙、锤面深刻几何解构纹与木柄铁箍；沉重锻铁，无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh03.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh03/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh04",
+      "runtime_id": "ACA-EQ-MH04",
+      "name": "猎团短弓",
+      "stem": "aca_eq_mh04",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "短而宽的猎团反曲木弓，皮革握把、清楚弓弦与一支短箭；暖木和骨白箭羽，无能量",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh04.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh04.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh04/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh05",
+      "runtime_id": "ACA-EQ-MH05",
+      "name": "绞盘重弩",
+      "stem": "aca_eq_mh05",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "粗重横弩，宽弩臂、方形木托、中央手摇绞盘和已扣弩矢；蓝黑钢与木，无晶体无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh05.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh05.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh05/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_mh06",
+      "runtime_id": "ACA-EQ-MH06",
+      "name": "灰炉导杖",
+      "stem": "aca_eq_mh06",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "手工灰木导杖，杖首是小型陶瓷灰炉与旧铜风门，内部仅有暗红余烬和一缕橙热刻线；禁止蓝晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_mh06.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_mh06.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_mh06/source.png",
+      "logical_cells": [
+        1,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_oh01",
+      "runtime_id": "ACA-EQ-OH01",
+      "name": "学院圆盾",
+      "stem": "aca_eq_oh01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "圆形木芯学院盾，铁边、中央圆盾钉、两道朴素旧铜固定带；无晶体无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_oh01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_oh01/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_oh02",
+      "runtime_id": "ACA-EQ-OH02",
+      "name": "石闸长盾",
+      "stem": "aca_eq_oh02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "高而窄的石闸长盾，层压木芯、厚铁包边、下端方脚和横向承压梁；重型垂直轮廓，无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_oh02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_oh02/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_oh03",
+      "runtime_id": "ACA-EQ-OH03",
+      "name": "反握短刃",
+      "stem": "aca_eq_oh03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "短宽单刃匕首，反握弯柄、护指环和背部锯齿；深钢与棕皮，无能量",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_oh03.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_oh03/source.png",
+      "logical_cells": [
+        1,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_oh04",
+      "runtime_id": "ACA-EQ-OH04",
+      "name": "导流副环",
+      "stem": "aca_eq_oh04",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "可握持的双层旧铜导流环，侧面陶瓷绝缘握片和一段小面积紫罗兰回路刻线；不是宝石戒指",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_oh04.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_oh04.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_oh04/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ch01",
+      "runtime_id": "ACA-EQ-CH01",
+      "name": "夹棉练习衣",
+      "stem": "aca_eq_ch01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "短款夹棉练习上衣，明显菱形绗缝、布腰带和加厚肩片；灰褐粗布，无金属装甲无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ch01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ch01/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ch02",
+      "runtime_id": "ACA-EQ-CH02",
+      "name": "补强巡行衣",
+      "stem": "aca_eq_ch02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "耐磨巡行外套，布料主体上有皮革肩肘补强片、双排扣带和短下摆；深灰粗布与棕皮",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ch02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ch02/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ch03",
+      "runtime_id": "ACA-EQ-CH03",
+      "name": "塔卫承压带",
+      "stem": "aca_eq_ch03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "穿戴式宽厚承压胸带，多层交叉皮带、旧铁胸扣与两侧受力环；不是完整胸甲，灰绿守备点缀，无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ch03.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ch03/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ch04",
+      "runtime_id": "ACA-EQ-CH04",
+      "name": "轻装传令衣",
+      "stem": "aca_eq_ch04",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "轻薄短款传令衣，单肩短披、斜跨文书带和分叉短下摆；灰蓝布与暖棕皮，无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch04.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ch04.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ch04/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ch05",
+      "runtime_id": "ACA-EQ-CH05",
+      "name": "封存巡检袍",
+      "stem": "aca_eq_ch05",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "及膝巡检袍，宽领、工具口袋、腰挂封签钳与米白耐污下摆；深炭布和少量暗紫封存缝线，无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ch05.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ch05.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ch05/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_hd01",
+      "runtime_id": "ACA-EQ-HD01",
+      "name": "测距护目镜",
+      "stem": "aca_eq_hd01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "双镜片测距护目镜，黄铜可翻镜架、棕皮头带，一枚淡黄色玻璃主镜和一枚烟灰副镜；无蓝晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hd01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_hd01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_hd01/source.png",
+      "logical_cells": [
+        2,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_hd02",
+      "runtime_id": "ACA-EQ-HD02",
+      "name": "低压回路护额",
+      "stem": "aca_eq_hd02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "弧形皮革护额，中央小型陶瓷电容片、两侧旧铜回路线，极少量灰绿低压指示；不含水晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hd02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_hd02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_hd02/source.png",
+      "logical_cells": [
+        2,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_hn01",
+      "runtime_id": "ACA-EQ-HN01",
+      "name": "行进握带",
+      "stem": "aca_eq_hn01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "一对缠绕手掌与手腕的行进握带，粗布包带、皮革掌垫和拉紧扣；无能量",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hn01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_hn01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_hn01/source.png",
+      "logical_cells": [
+        2,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_hn02",
+      "runtime_id": "ACA-EQ-HN02",
+      "name": "回授护臂",
+      "stem": "aca_eq_hn02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "成对前臂护具，层压皮革、陶瓷护板和旧铜回授扣，一条乳白灰绿防护刻线；无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_hn02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_hn02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_hn02/source.png",
+      "logical_cells": [
+        2,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_lg01",
+      "runtime_id": "ACA-EQ-LG01",
+      "name": "石路行靴",
+      "stem": "aca_eq_lg01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "一双结实行靴，厚分层鞋底、包脚踝皮带与石灰色防滑钉；棕皮和铁灰，无发光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_lg01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_lg01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_lg01/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_lg02",
+      "runtime_id": "ACA-EQ-LG02",
+      "name": "定锚胫甲",
+      "stem": "aca_eq_lg02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "一对高胫甲，外侧明显折叠锚钉、厚铁护板和皮革固定带；沉重下压轮廓，无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_lg02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_lg02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_lg02/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_bp01",
+      "runtime_id": "ACA-EQ-BP01",
+      "name": "勘验背架",
+      "stem": "aca_eq_bp01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "窄高木质勘验背架，绑有折叠测尺、两个样本盒和卷起的记录布袋；轮廓有横向测尺，不画成普通背包",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_bp01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_bp01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_bp01/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_bp02",
+      "runtime_id": "ACA-EQ-BP02",
+      "name": "快挂整备架",
+      "stem": "aca_eq_bp02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "宽肩式快速整备背架，三排不同大小的快挂扣、侧置工具筒和下方束带；铁木框架与安全黄小扣，无晶体",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_bp02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_bp02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_bp02/source.png",
+      "logical_cells": [
+        2,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_cr01",
+      "runtime_id": "ACA-EQ-CR01",
+      "name": "学院储能芯",
+      "stem": "aca_eq_cr01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "方形陶瓷储能盒，旧铜护角、机械锁扣和中央狭长烟紫玻璃储能管；紫色介质不发大光，禁止蓝晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_cr01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_cr01/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_cr02",
+      "runtime_id": "ACA-EQ-CR02",
+      "name": "余焰回收芯",
+      "stem": "aca_eq_cr02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "圆筒形焦黑铜回收芯，散热鳍、回流阀与中央橙红余烬观察窗；火系热色，禁止蓝晶青光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_cr02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_cr02/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_cr03",
+      "runtime_id": "ACA-EQ-CR03",
+      "name": "塔心并联芯",
+      "stem": "aca_eq_cr03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "subject": "三叶并联核心，旧金三臂框架围绕琥珀色多面介质，三条独立导接端；金色命名物，禁止蓝晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_cr03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_cr03.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_cr03/source.png",
+      "logical_cells": [
+        2,
+        2
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_dg01",
+      "runtime_id": "ACA-EQ-DG01",
+      "name": "远投定距杖",
+      "stem": "aca_eq_dg01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        96
+      ],
+      "palette_max": 12,
+      "subject": "细长定距导杖，木杆、可滑动黄铜测距环、顶端叉形瞄准片和一枚淡黄玻璃准星；无水晶球",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_dg01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_dg01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_dg01/source.png",
+      "logical_cells": [
+        1,
+        3
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_dg02",
+      "runtime_id": "ACA-EQ-DG02",
+      "name": "接触耦合环",
+      "stem": "aca_eq_dg02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "手掌大小的厚重耦合环，开口 C 形旧铜本体、陶瓷接触垫和机械夹扣；一小段暖白接通刻线，无宝石",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_dg02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_dg02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_dg02/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ac01",
+      "runtime_id": "ACA-EQ-AC01",
+      "name": "余烬珠",
+      "stem": "aca_eq_ac01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "挂在短皮绳上的焦陶余烬珠，表面开三道裂隙露出暗橙红余火；不是蓝水晶，不画火球",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ac01.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ac01/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ac02",
+      "runtime_id": "ACA-EQ-AC02",
+      "name": "空槽魔力计",
+      "stem": "aca_eq_ac02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "扁平黄铜魔力计，半圆刻度盘、机械指针停在空槽、烟灰玻璃面和小挂环；无发光宝石",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ac02.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ac02/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ac03",
+      "runtime_id": "ACA-EQ-AC03",
+      "name": "贴身守誓牌",
+      "stem": "aca_eq_ac03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "可贴身佩戴的矩形旧铁守誓牌，磨圆角、皮绳孔、盾形压印和一条灰绿珐琅；非宗教圣牌，无光晕",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ac03.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ac03/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    },
+    {
+      "asset_id": "equipment.footprint.aca_eq_ac04",
+      "runtime_id": "ACA-EQ-AC04",
+      "name": "灰线行程扣",
+      "stem": "aca_eq_ac04",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 12,
+      "subject": "小型矩形行程扣，黑铁外框、中央灰白滑轨、侧面方向拨片和一枚暗橙热标；不是芯片或水晶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyEquipmentFootprints/aca_eq_ac04.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationAcademyEquipmentFootprints/aca_eq_ac04.png",
+      "source_path": "UnityProject/Artifacts/AcademyEquipmentFootprints32/aca_eq_ac04/source.png",
+      "logical_cells": [
+        1,
+        1
+      ]
+    }
+  ]
+}

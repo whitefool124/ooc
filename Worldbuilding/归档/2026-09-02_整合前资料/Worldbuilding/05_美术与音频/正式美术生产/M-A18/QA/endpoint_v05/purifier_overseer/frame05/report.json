@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "spec": {
+    "id": "occ_endpoint_64_rustic_elite_alpha_v05",
+    "category": "occ_character_endpoint_elite",
+    "description": "Rustic OCC elite/boss endpoint with true source alpha, normalized to the global 52px elite scale without chroma keying.",
+    "frameCount": 1,
+    "targetFrameWidth": 64,
+    "targetFrameHeight": 64,
+    "targetSheetColumns": 1,
+    "targetSheetRows": 1,
+    "baselineY": 58,
+    "centerX": 32,
+    "targetBodyHeight": 52,
+    "minBodyHeight": 48,
+    "maxBodyHeight": 54,
+    "maxBodyWidth": 62,
+    "alphaThreshold": 127,
+    "paletteColors": 24,
+    "allowChromaKey": false,
+    "chromaKeyTolerance": 0,
+    "despill": false,
+    "gifDelay": 24,
+    "export": {
+      "strip": true,
+      "frames": true,
+      "gif": true,
+      "qa": true,
+      "report": true
+    }
+  },
+  "inputs": [
+    "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\purifier_overseer\\frame05\\frame_05.png"
+  ],
+  "strip": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\purifier_overseer\\frame05\\strip.png",
+  "frames": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\purifier_overseer\\frame05\\frames",
+  "gif": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\normalized\\endpoint_v05\\purifier_overseer\\frame05\\preview.gif",
+  "qa": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\QA\\endpoint_v05\\purifier_overseer\\frame05\\contact.png",
+  "metrics": [
+    {
+      "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\endpoint_v05\\purifier_overseer\\frame05\\frame_05.png",
+      "empty": false,
+      "sourceBounds": [
+        22,
+        9,
+        1023,
+        1529
+      ],
+      "sourceBodyWidth": 1001,
+      "sourceBodyHeight": 1520,
+      "scale": 0.034210526315789476,
+      "outputWidth": 34,
+      "outputHeight": 52,
+      "outputX": 15,
+      "outputY": 6,
+      "normalizedBounds": [
+        15,
+        6,
+        49,
+        58
+      ]
+    }
+  ],
+  "failures": []
+}

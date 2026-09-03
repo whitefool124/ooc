@@ -88,7 +88,8 @@ namespace OCC.Combat.Tests
             Assert.That(expiry.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Expired));
             Assert.That(state.IsDefeat, Is.True);
             Assert.That(hero.ActionPoints, Is.EqualTo(0));
-            Assert.That(state.EventLog[0], Does.Contain("\u6301\u7eed\u6548\u679c\u51fb\u5012"));
+            Assert.That(state.EventLog, Has.Some.Contains("失去行动能力"));
+            Assert.That(state.EventLog, Has.None.Contains("击杀"));
             Assert.That(state.EventLog, Has.Some.Contains("\u71c3\u70e7\u89e6\u53d1"));
             Assert.That(state.EventLog, Has.Some.Contains("\u71c3\u70e7\u5df2\u5230\u671f"));
         }

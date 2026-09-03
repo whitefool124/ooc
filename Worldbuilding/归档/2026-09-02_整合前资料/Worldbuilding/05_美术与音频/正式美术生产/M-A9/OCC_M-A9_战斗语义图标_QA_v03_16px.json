@@ -1,0 +1,49 @@
+{
+  "schema": "occ.ui.combat-semantics.qa.v0.3",
+  "status": "PASS",
+  "sourceSize": [
+    16,
+    16
+  ],
+  "displayContract": "2x at 1920x1080; 1x at 960x540",
+  "method": "direct generation, chroma removal, semantic palette normalization, hard-alpha 16x16 master",
+  "assetCount": 3,
+  "records": [
+    {
+      "id": "action",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/action_point.png",
+      "size": [
+        16,
+        16
+      ],
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 120,
+      "sha256": "ec303e7ed2f69ccb48b79abd7fe10826646dd98f9eb0143462920ea017899e6f"
+    },
+    {
+      "id": "aether",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/mana.png",
+      "size": [
+        16,
+        16
+      ],
+      "colorsIncludingTransparency": 4,
+      "hardAlpha": true,
+      "opaquePixels": 88,
+      "sha256": "2d93fc9caf915f4eb243d85d44e8ce3628c699cb5925d089eb0c55877db5f363"
+    },
+    {
+      "id": "notice",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/notice.png",
+      "size": [
+        16,
+        16
+      ],
+      "colorsIncludingTransparency": 3,
+      "hardAlpha": true,
+      "opaquePixels": 44,
+      "sha256": "a0669aeab66346638663716bf902ebd20ffecb03b94f97b09a0847d67994db18"
+    }
+  ]
+}

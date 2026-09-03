@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a38_harbor_warehouse_plank_floor_a",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A38 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/raw/harbor_warehouse_plank_floor_a/source.png",
+    "source_sha256": "89437cb04f634d8fffa8d7694cb7ddb10e4705e8a2d8c0b2225544cf16e3d26f"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/normalized/harbor_warehouse_plank_floor_a.png",
+    "output_sha256": "c149f8cc1233ff5a7aee69cafb363ab629dc2d6b791b453cef8a8b7208b28cd3",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future harbor warehouse dry interior floor; plank family A, mixed only with A-D family",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/QA/harbor_warehouse_plank_floor_a/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/QA/harbor_warehouse_plank_floor_a/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/QA/harbor_warehouse_plank_floor_a/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/QA/harbor_warehouse_plank_floor_a/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A38/QA/contacts/m_a38_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

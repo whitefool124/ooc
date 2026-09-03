@@ -1,0 +1,62 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_prop_medical_chest",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single-asset generation for batch 45; no board slicing",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/academy_modules_v22_25/academy_prop_medical_chest_source.png",
+    "source_sha256": "6a81b73fb6f6ed312db969c6292b5d609cb4d8e9f965200fb1f859b477f93bc9"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/academy_modules_v22_25/academy_prop_medical_chest.png",
+    "output_sha256": "b34325b809b76200f575a56098467d1b044aaab4882d794b852cc6606cf4180a",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "visual-only reusable academy map module; never changes logical cell state",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_medical_chest_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_medical_chest_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_medical_chest_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_medical_chest_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Passed target-size silhouette/material/perspective/style review and exact 12x9 Unity contact. Representative weak/strong/boss maps passed at 1920x1080 and 960x540; directional assets were neither rotated nor mirrored."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_medical_chest.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_prop_medical_chest",
+    "guid": "3422ed75482e12d4c8c083b3be4af615",
+    "stable_guid": "3422ed75482e12d4c8c083b3be4af615",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_evidence": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png",
+    "representative_map_evidence": "UnityProject/Artifacts/ArtModules72/module72_three_maps_contact.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

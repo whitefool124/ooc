@@ -1,0 +1,30 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_seal_court_2x2",
+  "width": 64,
+  "height": 64,
+  "delivery_size": [64, 64],
+  "palette": {"T": "#00000000", "D": "#6E4A3A", "C": "#9A684C", "H": "#BE875C"},
+  "rows": [
+    {"row": "T:64", "repeat": 4},
+    {"row": "T:24,D:16,T:24", "repeat": 2},
+    {"row": "T:18,D:6,T:16,D:6,T:18", "repeat": 2},
+    {"row": "T:14,D:4,T:12,C:4,T:12,D:4,T:14", "repeat": 2},
+    {"row": "T:12,D:4,T:14,C:4,T:14,D:4,T:12", "repeat": 2},
+    {"row": "T:10,D:4,T:16,C:4,T:16,D:4,T:10", "repeat": 4},
+    {"row": "T:8,D:4,T:18,C:4,T:18,D:4,T:8", "repeat": 4},
+    {"row": "T:6,D:4,T:20,C:4,T:20,D:4,T:6", "repeat": 4},
+    {"row": "T:4,D:4,T:22,C:4,T:22,D:4,T:4", "repeat": 6},
+    {"row": "T:4,D:4,C:48,D:4,T:4", "repeat": 4},
+    {"row": "T:4,D:4,T:22,C:4,T:22,D:4,T:4", "repeat": 6},
+    {"row": "T:6,D:4,T:20,C:4,T:20,D:4,T:6", "repeat": 4},
+    {"row": "T:8,D:4,T:18,C:4,T:18,D:4,T:8", "repeat": 4},
+    {"row": "T:10,D:4,T:16,C:4,T:16,D:4,T:10", "repeat": 4},
+    {"row": "T:12,D:4,T:14,C:4,T:14,D:4,T:12", "repeat": 2},
+    {"row": "T:14,D:4,T:12,C:4,T:12,D:4,T:14", "repeat": 2},
+    {"row": "T:18,D:6,T:16,D:6,T:18", "repeat": 2},
+    {"row": "T:24,D:16,T:24", "repeat": 2},
+    {"row": "T:64", "repeat": 4}
+  ],
+  "notes": "Explicitly authored low-profile old-copper octagonal calibration inlay with central cross; transparent outside."
+}

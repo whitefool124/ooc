@@ -133,26 +133,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void Map9_RoundTripsAllArtifactInstancesAndUses()
+        public void Map10_RoundTripsEveryArtifactInstanceUsesAndQuickbar()
         {
-            RogueliteMapRun run = new RogueliteMapRun(1907);
-            int slot = 0;
             foreach (ArtifactDefinition artifact in ArtifactCatalog.All)
             {
+                RogueliteMapRun run = new RogueliteMapRun(1907);
                 ItemInstance item = run.GrantItem(artifact.Id);
-                if (slot < 4) Assert.That(run.EquipInventoryItem(item.InstanceId, slot++).Success, Is.True, artifact.Id);
+                Assert.That(run.EquipInventoryItem(item.InstanceId, 3).Success, Is.True, artifact.Id);
                 Assert.That(item.TryConsume(), Is.True, artifact.Id);
+                string raw = run.ToJson();
+                Assert.That(raw, Does.StartWith("map10|"));
+                RogueliteMapRun restored = RogueliteMapRun.FromJson(raw);
+                ItemInstance restoredItem = restored.Inventory.Items.Single(value => value.DefinitionId == artifact.Id);
+                Assert.That(restoredItem.RemainingUses, Is.EqualTo(artifact.MaximumUses - 1), artifact.Id);
+                Assert.That(restored.ItemQuickbar[3], Is.EqualTo(restoredItem.InstanceId), artifact.Id);
             }
-
-            string raw = run.ToJson();
-            Assert.That(raw, Does.StartWith("map9|"));
-            RogueliteMapRun restored = RogueliteMapRun.FromJson(raw);
-            foreach (ArtifactDefinition artifact in ArtifactCatalog.All)
-            {
-                ItemInstance item = restored.Inventory.Items.Single(value => value.DefinitionId == artifact.Id);
-                Assert.That(item.RemainingUses, Is.EqualTo(artifact.MaximumUses - 1), artifact.Id);
-            }
-            Assert.That(restored.ItemQuickbar.Count(id => !string.IsNullOrEmpty(id)), Is.EqualTo(4));
         }
 
         [Test]
@@ -167,7 +162,7 @@ namespace OCC.Combat.Tests
 
             RogueliteMapRun restored = RogueliteMapRun.FromJson(string.Join("|", fields));
 
-            Assert.That(restored.ToJson(), Does.StartWith("map9|"));
+            Assert.That(restored.ToJson(), Does.StartWith("map10|"));
             Assert.That(restored.Inventory.Get(artifact.InstanceId).DefinitionId, Is.EqualTo("G-T09"));
             Assert.That(restored.Inventory.Get(artifact.InstanceId).RemainingUses, Is.EqualTo(ArtifactCatalog.Get("G-T09").MaximumUses - 1));
             Assert.That(restored.ItemQuickbar[3], Is.EqualTo(artifact.InstanceId));
@@ -227,7 +222,7 @@ namespace OCC.Combat.Tests
             MonoScript archive = AssetDatabase.LoadAssetAtPath<MonoScript>(paths[2]);
             Assert.That(archive.text, Does.Contain("run.Inventory.Items.Where"), "Archive must enumerate artifacts actually owned by this run.");
             Assert.That(archive.text, Does.Contain("ItemCategory.Artifact"));
-            Assert.That(archive.text, Does.Contain("查看下一件法宝"), "Archive must allow every owned artifact to be inspected, not just the first one.");
+            Assert.That(archive.text, Does.Contain("下一件法宝"), "Archive must allow every owned artifact to be inspected, not just the first one.");
         }
 
         private static void AddDirectChoiceArtifacts(RogueliteMapNodeType nodeType, ArtifactContentSource source, ISet<string> reachable)

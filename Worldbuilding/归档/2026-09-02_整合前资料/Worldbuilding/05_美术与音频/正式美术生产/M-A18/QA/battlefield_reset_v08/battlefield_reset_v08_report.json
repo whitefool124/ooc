@@ -1,0 +1,1037 @@
+{
+  "batch": "battlefield_reset_v08",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\tools\\produce_academy_battlefield_v08.py",
+  "asset_count": 48,
+  "status": "PASS",
+  "entries": [
+    {
+      "asset_id": "academy_stone_road_a",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_stone_road_b",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_stone_road_c",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_stone_road_d",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_courtyard_a",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_courtyard_b",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_courtyard_c",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_courtyard_d",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_ruins_a",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_ruins_b",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_ruins_c",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_ruins_d",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_inlay_a",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_inlay_b",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_inlay_c",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_inlay_d",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_packed_earth_a",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_packed_earth_b",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_packed_earth_c",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_grass_edge_n",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_grass_edge_e",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_grass_edge_s",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_grass_edge_w",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 8,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_line_straight",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 9,
+      "colour_limit": 9,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_line_corner",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 9,
+      "colour_limit": 9,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_line_tee",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 9,
+      "colour_limit": 9,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_line_cross",
+      "kind": "floor",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 9,
+      "bounds": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_stone_bench_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        11,
+        31,
+        28
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_stone_bench_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        11,
+        30,
+        29
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_stone_bench_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        20,
+        30,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_planter_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        5,
+        31,
+        28
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_planter_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        5,
+        31,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_light_planter_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        16,
+        30,
+        31
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_archive_stack_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        5,
+        30,
+        29
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_archive_stack_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        5,
+        30,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_archive_stack_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 3,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        18,
+        30,
+        31
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_masonry_screen_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 5,
+      "colour_limit": 12,
+      "bounds": [
+        2,
+        7,
+        31,
+        28
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_masonry_screen_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        2,
+        7,
+        31,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_heavy_masonry_screen_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 12,
+      "bounds": [
+        2,
+        18,
+        30,
+        31
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_pillar_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 7,
+      "colour_limit": 12,
+      "bounds": [
+        5,
+        5,
+        28,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_pillar_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 12,
+      "bounds": [
+        5,
+        5,
+        29,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_aether_pillar_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 4,
+      "colour_limit": 12,
+      "bounds": [
+        5,
+        18,
+        29,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_seal_plinth_intact",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        11,
+        29,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_seal_plinth_damaged",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 8,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        11,
+        30,
+        30
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_seal_plinth_rubble",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 3,
+      "colour_limit": 12,
+      "bounds": [
+        3,
+        19,
+        30,
+        31
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_loot_chest_closed",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 7,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        8,
+        30,
+        28
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_loot_chest_open",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 6,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        4,
+        30,
+        28
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    },
+    {
+      "asset_id": "academy_loot_chest_empty",
+      "kind": "prop",
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        0,
+        255
+      ],
+      "visible_colours": 3,
+      "colour_limit": 12,
+      "bounds": [
+        4,
+        12,
+        29,
+        29
+      ],
+      "safety_margin": true,
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a41_dried_seaweed_bundle",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A41 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/raw/dried_seaweed_bundle/source.png",
+    "source_sha256": "2da0d3c3491a20fde7702244e1fb60287561556ac5998dfd58cae17daabe2c24"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/dried_seaweed_bundle.png",
+    "output_sha256": "9015d69e4c63ce42bab863bd2cb15b143992f2c314322e79ac4138bf92ae8228",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/dried_seaweed_bundle_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future common preserved food and trade material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/dried_seaweed_bundle/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/dried_seaweed_bundle/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/dried_seaweed_bundle/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/dried_seaweed_bundle/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/contacts/m_a41_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

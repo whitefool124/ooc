@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_heavy_masonry_screen_rubble",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\battlefield_props_v09\\academy_heavy_masonry_screen\\rubble_source.png",
+  "sourceSha256": "d69af82efeaa52cd08b5b507be2d046f9d75aa74860181e45110546ba93e314d",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      29,
+      16
+    ],
+    "baselineY": 29
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    3,
+    13,
+    28,
+    29
+  ],
+  "hardAlpha": true,
+  "colors": 9,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

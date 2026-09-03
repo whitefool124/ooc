@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat.feedback.burning",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single combat semantic icon; no board slicing",
+    "source_path": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/source.png",
+    "source_sha256": "1497d9baee92491c4c6b83847fb50092c12afd6b48c9e95dfaea86819572d623"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalFeedbackIcons32/burning.png",
+    "output_sha256": "e24194f3e2326ec6b596e666f0f27cd2c5726828a9778d069f435664566bdab1",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 status or feedback slot",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/1x.png",
+    "four_x": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/4x.png",
+    "grayscale": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/grayscale.png",
+    "checker": "UnityProject/Artifacts/CombatSemantics31/feedback/burning/checker.png",
+    "application_contact": "UnityProject/Artifacts/CombatSemantics31/contacts/unity_combat_semantics_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-27",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct combat semantic silhouette, function-specific palette, native integer-scale readability, and Unity 1920x1080 / 960x540 contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalFeedbackIcons32/burning.png",
+    "stable_guid": "a65dea41d2702d04690959f3a6ff1644",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

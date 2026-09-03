@@ -1,0 +1,24 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_archive_sorter_2x2",
+  "role": "multi_cell_prop_32",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      4,
+      2,
+      59,
+      62
+    ],
+    "hard_alpha": true,
+    "visible_colors": 11,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "required evidence missing: application_contact"
+  ]
+}

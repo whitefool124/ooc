@@ -1,0 +1,61 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_prop_stone_bollard",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single-asset generation under ART-ACADEMY-MODULES-43 brief; no board slicing",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/academy_modules_v21/academy_prop_stone_bollard_source.png",
+    "source_sha256": "61881c881ea35f2cf4b67958cff9e1c690e33b982d991d0ee2fc628fe8252a53"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/academy_modules_v21/academy_prop_stone_bollard.png",
+    "output_sha256": "4ae15a73e137826665c287931deb6faae593d976d24bfe1e9da1cf40d7c327fc",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "reusable academy visual module below units and tactical overlays; no logical-cell mutation",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v21/academy_prop_stone_bollard_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v21/academy_prop_stone_bollard_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v21/academy_prop_stone_bollard_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v21/academy_prop_stone_bollard_checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtModules43/module43_application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Independent target-size asset passed silhouette, material, perspective, style, 12x9 runtime contact, occlusion and tactical-overlay review at 1920x1080 and 960x540; directional pieces remain unrotated and unmirrored."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_stone_bollard.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_prop_stone_bollard",
+    "guid": "989e0179e4aef2c42940d99896fc5665",
+    "stable_guid": "989e0179e4aef2c42940d99896fc5665",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_evidence": "UnityProject/Artifacts/ArtModules43/After/elite_foundry_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

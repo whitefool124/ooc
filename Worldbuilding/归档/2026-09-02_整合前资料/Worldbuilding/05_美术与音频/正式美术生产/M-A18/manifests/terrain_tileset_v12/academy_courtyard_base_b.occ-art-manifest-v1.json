@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_courtyard_base_b",
+  "role": "floor_tile_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "Explicit hand-authored RLE pixel matrix; generic renderer expands exact pixels only and adds no art structure",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_tileset_v12/academy_courtyard_base_b_source.png",
+    "source_sha256": "9378864a251fbe508fe9782e2a3a461633fb0805a0c16f1a229faa8dae0ab926"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_tileset_v12/academy_courtyard_base_b.png",
+    "output_sha256": "2d44c0d633c06f8b81525b5a40406ca8ea56ab6bf56bf4b9ced8a16d0faa1153",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 logical battlefield cell; orthographic floor layer below props, units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_courtyard_base_b_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_courtyard_base_b_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_courtyard_base_b_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_courtyard_base_b_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/qa/terrain_tileset_v12/academy_p0_application_contact_12x9.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "Codex visual audit",
+    "date": "2026-08-24",
+    "silhouette": "FAIL",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Redundant duplicate of base A; variation must return later as an authored multi-cell module, not a random per-cell variant."
+  },
+  "unity_import": null
+}

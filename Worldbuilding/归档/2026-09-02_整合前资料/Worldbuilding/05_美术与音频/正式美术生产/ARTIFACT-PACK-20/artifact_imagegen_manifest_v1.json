@@ -1,0 +1,179 @@
+{
+  "schema": "occ.artifact-icons.image-generation.v1",
+  "status": "HISTORICAL_PROVENANCE_ONLY",
+  "executable": false,
+  "normative": false,
+  "superseded_by": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md + Tools/OCCArt/occ_art_contract_v1.json",
+  "warning": "This records an old production attempt. The localhost fallback is forbidden for all current and future OCC production.",
+  "generator": "built-in imagegen / gpt-image-2",
+  "local_workbench_attempt": {
+    "service": "http://127.0.0.1:3000/api/generate-json",
+    "configured_model": "gpt-image-2",
+    "configured_size": "1024x1024",
+    "result": "fallback_used_after_two_generation_requests_failed",
+    "failure": "https://yunwu.ai/v1/images/generations ETIMEDOUT; no output file created"
+  },
+  "shared_prompt": "One isolated first-industrial-revolution aether artifact on a perfectly flat #00ff00 chroma-key background; orthographic front view, centered complete silhouette, crisp pixel-art-inspired hard forms, brass/wrought iron/fired ceramic/cloth, visible maintainable aether conduit; no modern weapon, battery, firearm, explosives pack, character, text, logo, UI, frame, watermark, shadow or background texture. Raw mother reference only.",
+  "assets": [
+    {
+      "id": "F-T01",
+      "slug": "demolition_canister",
+      "display_name": "炎脉封装筒",
+      "subject_prompt": "横卧陶铜双封筒 / 破障火场",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/F-T01_demolition_canister_raw.png",
+      "raw_sha256": "fe1a184876aca58720f82a0f536a8363666de683fdb9743a93af78a51a20e0e6"
+    },
+    {
+      "id": "G-T01",
+      "slug": "aegis_fold",
+      "display_name": "折盾匣",
+      "subject_prompt": "折叠甲片匣 / 加盾",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T01_aegis_fold_raw.png",
+      "raw_sha256": "e2aa1ebb3222f47fb3c379b8912930a014d356700cc18ca13fe66a6549e343ae"
+    },
+    {
+      "id": "G-T02",
+      "slug": "phase_spindle",
+      "display_name": "移相线轴",
+      "subject_prompt": "双叉绕线轴 / 位移",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T02_phase_spindle_raw.png",
+      "raw_sha256": "354dbfeb369c637aebe1752bc3024b19c2dde42f6cf1f37ce00aa33b1e6ada06"
+    },
+    {
+      "id": "G-T03",
+      "slug": "binding_frame",
+      "display_name": "缚位框",
+      "subject_prompt": "方框四角钉 / 束缚",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T03_binding_frame_raw.png",
+      "raw_sha256": "ec47ef1c6abf8601205f4b171c16e49d27c3020c3820aee91a32af346f26302c"
+    },
+    {
+      "id": "G-T04",
+      "slug": "survey_lens",
+      "display_name": "显迹测镜",
+      "subject_prompt": "手柄圆镜 / 显迹",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T04_survey_lens_raw.png",
+      "raw_sha256": "f1a82ad2a50210e568573e81fdb5a8757fdc0bbc8ff89351fa471289323e2a36"
+    },
+    {
+      "id": "G-T05",
+      "slug": "field_siphon",
+      "display_name": "以太虹吸泵",
+      "subject_prompt": "手压泵与弯管 / 回魔反噬",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T05_field_siphon_raw.png",
+      "raw_sha256": "b48a8769899ff907220f70d91f088ccea53897882e6ccc5b5c04808700ed8e01"
+    },
+    {
+      "id": "G-T06",
+      "slug": "mending_lattice",
+      "display_name": "复元编架",
+      "subject_prompt": "十字编织夹架 / 治疗掉盾",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T06_mending_lattice_raw.png",
+      "raw_sha256": "eff95b8227fed375d8e293ec8175ec61e17c43c6fe4770919b1a0bafe6e2d740"
+    },
+    {
+      "id": "G-T07",
+      "slug": "cover_stamp",
+      "display_name": "掩体压模",
+      "subject_prompt": "厚矩形压模 / 造掩体",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T07_cover_stamp_raw.png",
+      "raw_sha256": "fb826670eeb9185b9134191d0bf4b67066ddb66a5e4c355d3a1ef3cc7b73d23e"
+    },
+    {
+      "id": "G-T08",
+      "slug": "breach_wedge",
+      "display_name": "解构楔",
+      "subject_prompt": "刻纹楔与锤帽 / 近距破障",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T08_breach_wedge_raw.png",
+      "raw_sha256": "c27b5f93705b0075a778137d8999cd387945e182457e0a6fda19df16b840bcc3"
+    },
+    {
+      "id": "G-T09",
+      "slug": "relay_compass",
+      "display_name": "导位罗盘",
+      "subject_prompt": "八向罗盘与牵引针 / 推拉",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T09_relay_compass_raw.png",
+      "raw_sha256": "29bfc108dd4ed8c48c34853bc927f7accf0d6a1ce2052c9ca7a7cfbf2bd2d320"
+    },
+    {
+      "id": "G-T10",
+      "slug": "reaction_bell",
+      "display_name": "截击铃",
+      "subject_prompt": "护框小铃 / 反应截击",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T10_reaction_bell_raw.png",
+      "raw_sha256": "96b10650e2bee78f4e6b7b8402c8533c9ba0a73c573c080c477883e3a6b31bb2"
+    },
+    {
+      "id": "G-T11",
+      "slug": "hazard_condenser",
+      "display_name": "险地冷凝器",
+      "subject_prompt": "盘管冷凝壶 / 清危险地形",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T11_hazard_condenser_raw.png",
+      "raw_sha256": "089c5c9888c38f4af895636ef05a56a55147cfff51f6a8b5ffeacc98879a38f1"
+    },
+    {
+      "id": "G-T12",
+      "slug": "turn_ledger",
+      "display_name": "行程簿",
+      "subject_prompt": "扣带账簿与行动刻线 / AP 调度",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T12_turn_ledger_raw.png",
+      "raw_sha256": "dec35d71488a12ed4a0a7325db389978cf1044884bdfb59cd4031b45323a6d21"
+    },
+    {
+      "id": "G-T13",
+      "slug": "anchor_brace",
+      "display_name": "定锚支架",
+      "subject_prompt": "三脚撑架 / 抗推拉反应",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T13_anchor_brace_raw.png",
+      "raw_sha256": "969ee8c83f97589a70d98c2c2a191a28e95adc43fa176975f315d06beca6964d"
+    },
+    {
+      "id": "G-T14",
+      "slug": "prism_regulator",
+      "display_name": "棱返调节器",
+      "subject_prompt": "框装三棱镜 / 远程反射",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T14_prism_regulator_raw.png",
+      "raw_sha256": "c61db4892fb0a4c5d3ad4006f8b0b009250e9d4030c20c7af69db7bd6f8cc832"
+    },
+    {
+      "id": "G-T15",
+      "slug": "decoy_lantern",
+      "display_name": "诱导灯",
+      "subject_prompt": "四足百叶灯笼 / 诱饵部署",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T15_decoy_lantern_raw.png",
+      "raw_sha256": "53c3f9d2b60a3c4396f339a4b9cd4e5c0136334edd08b13fd9960c520761351f"
+    },
+    {
+      "id": "G-T16",
+      "slug": "shield_balancer",
+      "display_name": "护盾均衡阀",
+      "subject_prompt": "双表盘阀体 / 护盾转移",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T16_shield_balancer_raw.png",
+      "raw_sha256": "1551bf7c1762ede1ad168291dc63b661c9f83b8d76fc0debce694060aecdd23c"
+    },
+    {
+      "id": "G-T17",
+      "slug": "seismic_plumb",
+      "display_name": "震测铅锤",
+      "subject_prompt": "悬锤与刻度架 / 范围延迟",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T17_seismic_plumb_raw.png",
+      "raw_sha256": "a167a159df6b9dc46d05143fd8001171d2eb37bfdb2d31a654a9e53334b9c0c9"
+    },
+    {
+      "id": "G-T18",
+      "slug": "null_veil",
+      "display_name": "静默幕",
+      "subject_prompt": "卷起刻纹帘幕 / 净化代价",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T18_null_veil_raw.png",
+      "raw_sha256": "e09c0ac56b2b2b224e5a6888b02d9e7860351d029dc664991697f4f7ebe1cfde"
+    },
+    {
+      "id": "G-T19",
+      "slug": "fortune_seal",
+      "display_name": "冒险封签",
+      "subject_prompt": "蜡封签牌与断裂护环 / 风险伤害",
+      "raw_path": "E:/数据库/OCC_Codex/Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/RawMothers/G-T19_fortune_seal_raw.png",
+      "raw_sha256": "a8d26baba5d53018cd1696478d211b45c91c1229b4b7c2e072e9c625932a65f1"
+    }
+  ]
+}

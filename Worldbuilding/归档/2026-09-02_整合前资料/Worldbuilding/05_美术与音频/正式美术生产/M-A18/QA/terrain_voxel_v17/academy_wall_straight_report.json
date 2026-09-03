@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_wall_straight",
+  "source_size": [
+    1361,
+    1156
+  ],
+  "source_alpha_bounds": [
+    30,
+    79,
+    1361,
+    1082
+  ],
+  "cropped_size": [
+    1331,
+    1003
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "fitted_size": [
+    32,
+    24
+  ],
+  "fitted_offset": [
+    0,
+    0
+  ],
+  "visible_colors": 9,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "67aa44196e4777c3567372dc4a4fc05aac7cf07b5793b5e722dd2785876c68a9",
+  "output_sha256": "71958709fcc89156e3377520a7cde54a07032c1f44659d2def8889c2fef2c76c",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 0,
+  "anchor": "north",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_ground_macro_court_b_3x3",
+  "role": "multi_cell_ground_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "One independently generated raw; normalized under OCC M-A18 academy terrain-37 production brief",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3_source.png",
+    "source_sha256": "d2751322844726d09890170fb20f83fd6034f5ce4ce41edd22cd6b12325f9dcb"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3.png",
+    "output_sha256": "18e73d35ae23612cef324e5bd86ddaf3207796aa2c5f70edf1b63a3ba838ef1c",
+    "native_output_path": null,
+    "logical_cells": [
+      3,
+      3
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "reusable academy terrain module below units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v16/academy_ground_macro_court_b_3x3_checker.png",
+    "application_contact": "UnityProject/Artifacts/Terrain37/NineMaps/terrain37_nine_maps_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Reviewed at target size and in all nine academy maps after A/B macro alternation; removes one-cell giant masonry and three-cell periodic repeats while preserving unit, range and click readability."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyGroundMacros32/academy_ground_macro_court_b_3x3.png",
+    "resource_path": "Art/FormalAcademyGroundMacros32/academy_ground_macro_court_b_3x3",
+    "guid": "945e39a0c3eb27b4ca0ef93a4ef48867",
+    "stable_guid": "945e39a0c3eb27b4ca0ef93a4ef48867",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/Terrain37/NineMaps/signal_hub_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

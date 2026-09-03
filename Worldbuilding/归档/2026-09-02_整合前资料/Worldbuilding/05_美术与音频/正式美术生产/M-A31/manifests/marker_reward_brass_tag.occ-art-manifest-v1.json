@@ -1,0 +1,67 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.marker.reward_brass_tag",
+  "role": "ui_chapter_marker_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single transparent chapter marker source; no board slicing",
+    "source_path": "UnityProject/Artifacts/UiChapterMarkers6/reward_brass_tag/source.png",
+    "source_sha256": "74f83b565c97d45edcd10db947d9f82f87583fcabfaa71ca7c43e0070409b77d"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalUIChapterMarkers/reward_brass_tag.png",
+    "output_sha256": "3bd4b1f296da7987b706666067dd471b8185c3c94fe84e1fb73d8088858430fc",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "title-adjacent non-interactive marker at native 32x32, nearest-neighbour 2x or 4x",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/UiChapterMarkers6/reward_brass_tag/1x.png",
+    "four_x": "UnityProject/Artifacts/UiChapterMarkers6/reward_brass_tag/4x.png",
+    "grayscale": "UnityProject/Artifacts/UiChapterMarkers6/reward_brass_tag/grayscale.png",
+    "checker": "UnityProject/Artifacts/UiChapterMarkers6/reward_brass_tag/checker.png",
+    "application_contact": "UnityProject/Artifacts/UiChapterMarkers6/contacts/ui_chapter_markers_formal_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous UI art review",
+    "date": "2026-08-29",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "a compact worn wooden claim clip holding one small blank oxidized-brass inventory tag, no writing; distinct compact material cue, no blue-crystal/cyan-energy template, passed 1x/4x checker, grayscale and dual-resolution offscreen UGUI contact."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalUIChapterMarkers/reward_brass_tag.png",
+    "resource_path": "Art/FormalUIChapterMarkers/reward_brass_tag",
+    "guid": "172f58231f6f47b40bafe6e6cf89dc7b",
+    "stable_guid": "172f58231f6f47b40bafe6e6cf89dc7b",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "importer": {
+      "texture_type": "Sprite",
+      "pixels_per_unit": 32,
+      "filter_mode": "Point",
+      "wrap_mode": "Clamp",
+      "mipmap_enabled": false,
+      "compression": "Uncompressed"
+    },
+    "runtime_evidence": "UnityProject/Artifacts/UiChapterMarkers6/contacts/ui_chapter_markers_formal_1920x1080.png",
+    "audit_report": "UnityProject/Artifacts/UiChapterMarkers6/import_audit.json",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-29"
+  }
+}

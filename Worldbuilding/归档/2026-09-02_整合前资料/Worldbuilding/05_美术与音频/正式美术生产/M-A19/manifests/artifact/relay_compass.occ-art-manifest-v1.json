@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "icon.artifact.relay_compass",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset; no board slicing",
+    "source_path": "UnityProject/Artifacts/IconRegen143/artifact/relay_compass/source.png",
+    "source_sha256": "a393ae05debc8f42d0afcca05d2b5ddbd42214189205dba376907427a4750deb"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/relay_compass.png",
+    "output_sha256": "cda82aa510d6fa6146a6a7e0a7149be15380f12b670c522c748a6ad31d395c14",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "complete 32x32 icon slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/IconRegen143/artifact/relay_compass/1x.png",
+    "four_x": "UnityProject/Artifacts/IconRegen143/artifact/relay_compass/4x.png",
+    "grayscale": "UnityProject/Artifacts/IconRegen143/artifact/relay_compass/grayscale.png",
+    "checker": "UnityProject/Artifacts/IconRegen143/artifact/relay_compass/checker.png",
+    "application_contact": "UnityProject/Artifacts/IconRegen143/contacts/unity_formal_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "导位罗盘，主轴磁针与牵引弧刻度 | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs. | Reviewed at 1x/4x/grayscale/checker and Unity 1920x1080/960x540 contacts; palette repair removed repeated cyan crystal/energy motifs."
+  },
+  "unity_import": {
+    "status": "PASS",
+    "report": "UnityProject/Artifacts/IconRegen143/unity_import_report.json",
+    "stable_guid": "334d6bc1e6386dd4e85b09f64f3b03c2",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

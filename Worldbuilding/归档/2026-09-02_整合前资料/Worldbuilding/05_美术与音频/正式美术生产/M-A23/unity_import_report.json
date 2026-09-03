@@ -1,0 +1,63 @@
+{
+  "schema": "occ-unity-import-report-v1",
+  "count": 4,
+  "unique_guids": 4,
+  "assets": [
+    {
+      "stem": "medkit",
+      "size": [
+        64,
+        32
+      ],
+      "logical_cells": [
+        2,
+        1
+      ],
+      "guid": "f80b2fb65c1d9fb412601f60779a8c10",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "shield_cell",
+      "size": [
+        32,
+        64
+      ],
+      "logical_cells": [
+        1,
+        2
+      ],
+      "guid": "bef84ce2863e058aabc8071004ecf081",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "fire_scroll",
+      "size": [
+        64,
+        32
+      ],
+      "logical_cells": [
+        2,
+        1
+      ],
+      "guid": "e8f637e1317dc1b5097a51cbba1fe85e",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "stem": "aether_core",
+      "size": [
+        64,
+        64
+      ],
+      "logical_cells": [
+        2,
+        2
+      ],
+      "guid": "250a3fd5bba94c6b24d8ea1b829d3012",
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    }
+  ]
+}

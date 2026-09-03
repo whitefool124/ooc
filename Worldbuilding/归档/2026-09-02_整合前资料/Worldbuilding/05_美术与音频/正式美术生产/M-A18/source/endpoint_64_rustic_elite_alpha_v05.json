@@ -1,0 +1,29 @@
+{
+  "id": "occ_endpoint_64_rustic_elite_alpha_v05",
+  "category": "occ_character_endpoint_elite",
+  "description": "Rustic OCC elite/boss endpoint with true source alpha, normalized to the global 52px elite scale without chroma keying.",
+  "frameCount": 1,
+  "targetFrameWidth": 64,
+  "targetFrameHeight": 64,
+  "targetSheetColumns": 1,
+  "targetSheetRows": 1,
+  "baselineY": 58,
+  "centerX": 32,
+  "targetBodyHeight": 52,
+  "minBodyHeight": 48,
+  "maxBodyHeight": 54,
+  "maxBodyWidth": 62,
+  "alphaThreshold": 127,
+  "paletteColors": 24,
+  "allowChromaKey": false,
+  "chromaKeyTolerance": 0,
+  "despill": false,
+  "gifDelay": 24,
+  "export": {
+    "strip": true,
+    "frames": true,
+    "gif": true,
+    "qa": true,
+    "report": true
+  }
+}

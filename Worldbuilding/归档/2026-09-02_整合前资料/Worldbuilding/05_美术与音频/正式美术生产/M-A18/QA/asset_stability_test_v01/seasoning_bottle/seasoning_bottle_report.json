@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "name": "seasoning_bottle",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\asset_stability_test_v01\\seasoning_bottle_source.png",
+  "sourceSha256": "705a2a2dc42dd95cc73ecaf7420939324608247949198aa202f18199851b75ad",
+  "nativeCanvas": [
+    24,
+    24
+  ],
+  "nativeBounds": [
+    5,
+    2,
+    19,
+    22
+  ],
+  "deliveryCanvas": [
+    32,
+    32
+  ],
+  "deliveryBounds": [
+    9,
+    6,
+    23,
+    26
+  ],
+  "deliveryOffset": [
+    4,
+    4
+  ],
+  "deliveryUsesNoScale": true,
+  "hardAlpha24": true,
+  "hardAlpha32": true,
+  "colors": 7,
+  "transparentSafetyEdge24": true,
+  "normalization": "alpha crop + whole-silhouette BOX reduction + hard alpha + palette limit + native 24px centering + unscaled 32px UI embed; no structural drawing"
+}

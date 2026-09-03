@@ -1,0 +1,92 @@
+{
+  "tiles": {
+    "a": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 4,
+      "clean_surface_colour_count": 1,
+      "isolated_pixel_count": 0,
+      "top_edge_nonbase_count": 1,
+      "left_edge_nonbase_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 136.3,
+      "sha256": "b627693b9cd5ccd60f64345297d06fa2885c4458ba7358b22b6bb8364fa59fdf"
+    },
+    "b": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 4,
+      "clean_surface_colour_count": 1,
+      "isolated_pixel_count": 0,
+      "top_edge_nonbase_count": 1,
+      "left_edge_nonbase_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 136.12,
+      "sha256": "c37145a17917763291ed9c0e1f344b6305ff468025b9e888d20b9109df85f077"
+    },
+    "c": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 4,
+      "clean_surface_colour_count": 1,
+      "isolated_pixel_count": 0,
+      "top_edge_nonbase_count": 1,
+      "left_edge_nonbase_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 136.24,
+      "sha256": "527ccd5bd06759e78ac300cc89320c7d18ceba3e156636c62fc471d12b6e1deb"
+    },
+    "d": {
+      "size": [
+        32,
+        32
+      ],
+      "alpha_values": [
+        255
+      ],
+      "colour_count": 4,
+      "clean_surface_colour_count": 1,
+      "isolated_pixel_count": 0,
+      "top_edge_nonbase_count": 1,
+      "left_edge_nonbase_count": 1,
+      "exact_16x16_nearest_2x": false,
+      "mean_luma": 136.0,
+      "sha256": "b1c3b5e29a78915ec332b0acafcf3fcad66be9bd02cfab593b056298efa3b493"
+    }
+  },
+  "integer_cell_scale_previews": {
+    "64": {
+      "ratio": 2,
+      "file": "academy_courtyard_mixed_cell64_2x.png"
+    },
+    "96": {
+      "ratio": 3,
+      "file": "academy_courtyard_mixed_cell96_3x.png"
+    },
+    "128": {
+      "ratio": 4,
+      "file": "academy_courtyard_mixed_cell128_4x.png"
+    },
+    "160": {
+      "ratio": 5,
+      "file": "academy_courtyard_mixed_cell160_5x.png"
+    }
+  },
+  "family_mean_luma_delta": 0.3,
+  "unique_hash_count": 4
+}

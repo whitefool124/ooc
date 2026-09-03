@@ -1,0 +1,56 @@
+{
+  "logical_size": [
+    16,
+    16
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "nearest_scale": 2,
+  "alpha_values": [
+    255
+  ],
+  "colour_count": 6,
+  "palette_name": "archive_warm",
+  "palette": {
+    "0": [
+      88,
+      80,
+      67,
+      255
+    ],
+    "1": [
+      112,
+      101,
+      83,
+      255
+    ],
+    "2": [
+      145,
+      132,
+      108,
+      255
+    ],
+    "3": [
+      166,
+      151,
+      123,
+      255
+    ],
+    "4": [
+      188,
+      173,
+      143,
+      255
+    ],
+    "5": [
+      132,
+      106,
+      77,
+      255
+    ]
+  },
+  "authored_source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\source\\terrain_candidates_v05\\cloister_courses\\academy_courtyard_b.pxart",
+  "export_only": true
+}

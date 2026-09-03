@@ -1,0 +1,24 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_supply_rack_2x1",
+  "role": "multi_cell_prop_32",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      64,
+      32
+    ],
+    "bounds": [
+      11,
+      2,
+      53,
+      30
+    ],
+    "hard_alpha": true,
+    "visible_colors": 11,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "required evidence missing: application_contact"
+  ]
+}

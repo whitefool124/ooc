@@ -1,0 +1,94 @@
+{
+  "palette": [
+    [
+      76,
+      72,
+      63
+    ],
+    [
+      98,
+      94,
+      82
+    ],
+    [
+      119,
+      114,
+      100
+    ],
+    [
+      142,
+      137,
+      121
+    ],
+    [
+      162,
+      156,
+      137
+    ],
+    [
+      184,
+      177,
+      155
+    ],
+    [
+      132,
+      111,
+      82
+    ]
+  ],
+  "tiles": {
+    "a": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_values": [
+        255
+      ],
+      "colours": 6,
+      "mean_luma": 135.33,
+      "sha256": "29b1b3f9e93404fc9172c83e249b6d0603b8742123b01d9e50ccf847c1274834"
+    },
+    "b": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_values": [
+        255
+      ],
+      "colours": 5,
+      "mean_luma": 133.28,
+      "sha256": "cb7981dbe5fc3758207401c87ed484f3db6258ef835df690696b46eeaf5e9db3"
+    },
+    "c": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_values": [
+        255
+      ],
+      "colours": 6,
+      "mean_luma": 132.72,
+      "sha256": "f8240d512f031bc83395700dfedbfea9f80b4540a96c99bd159305309f418a26"
+    },
+    "d": {
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "alpha_values": [
+        255
+      ],
+      "colours": 6,
+      "mean_luma": 140.22,
+      "sha256": "a35aafa479788167e7110d9dec06743c0e1fe0471f11c423bec5c08ab3d7261d"
+    }
+  },
+  "family_mean_luma_delta": 7.5
+}

@@ -1,0 +1,391 @@
+{
+  "schema": "occ-unity-import-report-v1",
+  "count": 32,
+  "unique_guids": 32,
+  "assets": [
+    {
+      "runtime_id": "ACA-EQ-MH01",
+      "stem": "aca_eq_mh01",
+      "guid": "1ee0d3f4422467b469783baeb75d7402",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-MH02",
+      "stem": "aca_eq_mh02",
+      "guid": "349ab5e457fa0974da27dd68f75cc97d",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-MH03",
+      "stem": "aca_eq_mh03",
+      "guid": "bc8cc4b1a2af68046859736f87c3e233",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-MH04",
+      "stem": "aca_eq_mh04",
+      "guid": "228fc3b8aed98854587d31c6739fa220",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-MH05",
+      "stem": "aca_eq_mh05",
+      "guid": "3192ba2d48090644aade4a895a319605",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-MH06",
+      "stem": "aca_eq_mh06",
+      "guid": "39124fb784af0614484b92e8311dbfdf",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-OH01",
+      "stem": "aca_eq_oh01",
+      "guid": "6ee68a2e08cc8e940b76a91135c895ab",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-OH02",
+      "stem": "aca_eq_oh02",
+      "guid": "95391fa1cb569d34ebea882416c398cf",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-OH03",
+      "stem": "aca_eq_oh03",
+      "guid": "33b742cfe5d45684d92048bdd6907489",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-OH04",
+      "stem": "aca_eq_oh04",
+      "guid": "903389a11896b8641b62dc7d91858532",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CH01",
+      "stem": "aca_eq_ch01",
+      "guid": "a1df6e7b50f21e24793d65dd32be5a00",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CH02",
+      "stem": "aca_eq_ch02",
+      "guid": "10413be4e7a9a774bbc89f8e13aab259",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CH03",
+      "stem": "aca_eq_ch03",
+      "guid": "e544180d35b5abf4899bdfe2d58c1cb1",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CH04",
+      "stem": "aca_eq_ch04",
+      "guid": "067c7fef540f813468fe56df883f084b",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CH05",
+      "stem": "aca_eq_ch05",
+      "guid": "8b42c2d3da5892b4bb5c70a00ce0234a",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-HD01",
+      "stem": "aca_eq_hd01",
+      "guid": "691c53ce1bc35394cbc07f708b52d666",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-HD02",
+      "stem": "aca_eq_hd02",
+      "guid": "59ac927a19122f541a795f2de3a417d6",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-HN01",
+      "stem": "aca_eq_hn01",
+      "guid": "c74aeab62650f3e44bba4fdedfc5653d",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-HN02",
+      "stem": "aca_eq_hn02",
+      "guid": "0f92d9832721e7046bc25018a378ce44",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-LG01",
+      "stem": "aca_eq_lg01",
+      "guid": "9a5385a7538e56145a79fef0c368f0be",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-LG02",
+      "stem": "aca_eq_lg02",
+      "guid": "f2fbf1e1407d0574c808a541f622cec7",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-BP01",
+      "stem": "aca_eq_bp01",
+      "guid": "9d36d31b967ea68499abdbc3543c32ae",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-BP02",
+      "stem": "aca_eq_bp02",
+      "guid": "ba1dc6fbee55c2749b0f1bd2c8e8ed46",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CR01",
+      "stem": "aca_eq_cr01",
+      "guid": "81495a4a935c0f743a9ba2669049248b",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CR02",
+      "stem": "aca_eq_cr02",
+      "guid": "c37bab73b4e711e46b805528907cfcfe",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-CR03",
+      "stem": "aca_eq_cr03",
+      "guid": "5812bbd93bbf2d5459af9b423ae3464f",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-DG01",
+      "stem": "aca_eq_dg01",
+      "guid": "0b3ab256fffccfe469e5a6385af821ca",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-DG02",
+      "stem": "aca_eq_dg02",
+      "guid": "6e2dbfaa0b25a7742a924eba9eda730d",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-AC01",
+      "stem": "aca_eq_ac01",
+      "guid": "2c8c985e81483464bbb0625125a5ab37",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-AC02",
+      "stem": "aca_eq_ac02",
+      "guid": "47f21e71ae995434191b63569c418996",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-AC03",
+      "stem": "aca_eq_ac03",
+      "guid": "6277ef75987a5824a84ded37048688c6",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    },
+    {
+      "runtime_id": "ACA-EQ-AC04",
+      "stem": "aca_eq_ac04",
+      "guid": "18e0c8cdcbb19934baf86a59effc0622",
+      "size": [
+        32,
+        32
+      ],
+      "ppu": 32,
+      "importer": "PASS",
+      "runtime_load": "PASS"
+    }
+  ]
+}

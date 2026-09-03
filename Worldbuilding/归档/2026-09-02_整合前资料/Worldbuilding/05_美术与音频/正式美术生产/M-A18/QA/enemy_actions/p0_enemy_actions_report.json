@@ -1,0 +1,281 @@
+{
+  "status": "PASS",
+  "families": {
+    "sigil_mauler": [
+      {
+        "frame": 0,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          16,
+          10,
+          50,
+          59
+        ]
+      },
+      {
+        "frame": 1,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          16,
+          11,
+          51,
+          59
+        ]
+      },
+      {
+        "frame": 2,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          16,
+          11,
+          51,
+          59
+        ]
+      },
+      {
+        "frame": 3,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          16,
+          11,
+          50,
+          59
+        ]
+      },
+      {
+        "frame": 4,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          16,
+          11,
+          49,
+          59
+        ]
+      },
+      {
+        "frame": 5,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 5,
+        "bounds": [
+          16,
+          11,
+          49,
+          59
+        ]
+      }
+    ],
+    "barrier_mender": [
+      {
+        "frame": 0,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          17,
+          11,
+          46,
+          59
+        ]
+      },
+      {
+        "frame": 1,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          18,
+          11,
+          46,
+          59
+        ]
+      },
+      {
+        "frame": 2,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          18,
+          11,
+          48,
+          59
+        ]
+      },
+      {
+        "frame": 3,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          18,
+          11,
+          56,
+          59
+        ]
+      },
+      {
+        "frame": 4,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          18,
+          11,
+          56,
+          59
+        ]
+      },
+      {
+        "frame": 5,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          18,
+          11,
+          56,
+          59
+        ]
+      }
+    ],
+    "tether_hound": [
+      {
+        "frame": 0,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 5,
+        "bounds": [
+          7,
+          32,
+          53,
+          59
+        ]
+      },
+      {
+        "frame": 1,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 5,
+        "bounds": [
+          8,
+          31,
+          54,
+          59
+        ]
+      },
+      {
+        "frame": 2,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          10,
+          29,
+          59,
+          59
+        ]
+      },
+      {
+        "frame": 3,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          12,
+          27,
+          61,
+          59
+        ]
+      },
+      {
+        "frame": 4,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 6,
+        "bounds": [
+          10,
+          30,
+          59,
+          59
+        ]
+      },
+      {
+        "frame": 5,
+        "size": [
+          64,
+          64
+        ],
+        "hardAlpha": true,
+        "colors": 5,
+        "bounds": [
+          8,
+          32,
+          54,
+          59
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,2008 @@
+{
+  "schema": "occ-icon-regen-catalog-v1",
+  "count": 143,
+  "assets": [
+    {
+      "asset_id": "icon.fire.f-p01",
+      "group": "fire",
+      "stem": "f-p01",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火弹：3 格可见敌方：12 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p01.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p01.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p02",
+      "group": "fire",
+      "stem": "f-p02",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火带：4 格内连续 3 格：创建 8 伤害燃烧地格，持续 6 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p02.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p02.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p03",
+      "group": "fire",
+      "stem": "f-p03",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "烙印：3 格可见敌方：4 火伤害 + 燃烧 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p03.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p03.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p04",
+      "group": "fire",
+      "stem": "f-p04",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "引爆：3 格燃烧单位或站在燃烧格的单位：20 火伤害，按既定优先级清除燃烧来源",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p04.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p04.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p05",
+      "group": "fire",
+      "stem": "f-p05",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火矢：5 格可见敌方：8 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p05.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p05.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p06",
+      "group": "fire",
+      "stem": "f-p06",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火种：4 格可见敌方：燃烧 2 回合，不造成直接伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p06.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p06.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p07",
+      "group": "fire",
+      "stem": "f-p07",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焰线：4 格直线：直线内每个单位各受 8 火伤害；首个重掩体截断路径",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p07.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p07.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p08",
+      "group": "fire",
+      "stem": "f-p08",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "余烬火弹：4 格可见敌方：16 火伤害；若目标已燃烧，燃烧持续至少变为 2 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p08.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p08.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p09",
+      "group": "fire",
+      "stem": "f-p09",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焰击术：3 格可见敌方：20 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p09.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p09.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p10",
+      "group": "fire",
+      "stem": "f-p10",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火焰喷射：面前 3 格锥形：范围内每个单位各受 8 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p10.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p10.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p11",
+      "group": "fire",
+      "stem": "f-p11",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "点燃喷射：面前 3 格锥形：每个敌方单位受 4 火伤害 + 燃烧 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p11.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p11.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p12",
+      "group": "fire",
+      "stem": "f-p12",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "追火术：4 格可见敌方：8 火伤害；若目标已燃烧，改为 16 火伤害且保留燃烧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p12.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p12.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p13",
+      "group": "fire",
+      "stem": "f-p13",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火路：从相邻格起 4 格直线：创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p13.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p13.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p14",
+      "group": "fire",
+      "stem": "f-p14",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "热浪弧：面前 3 格扇形：每格创建 8 伤害燃烧地格，持续 6 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p14.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p14.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p15",
+      "group": "fire",
+      "stem": "f-p15",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "灼域火钉：3 格内空地：创建 1 格 12 伤害燃烧地格，持续 8 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p15.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p15.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p16",
+      "group": "fire",
+      "stem": "f-p16",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "围炉火环：3 格内可见单位周围正交四格：各创建 8 伤害燃烧地格，持续 6 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p16.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p16.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p17",
+      "group": "fire",
+      "stem": "f-p17",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炉口喷涌：4 格内 3×3 区域：中心与正交四格创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p17.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p17.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p18",
+      "group": "fire",
+      "stem": "f-p18",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炽焰墙：5 格内连续 5 格直线：创建 8 伤害燃烧地格，持续 8 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p18.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p18.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p19",
+      "group": "fire",
+      "stem": "f-p19",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "灰烬复燃：4 格内一个现有燃烧地格：将消失标记后移 4 刻度，最低不低于 8 伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p19.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p19.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p20",
+      "group": "fire",
+      "stem": "f-p20",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焦土十字：4 格内选择中心及正交四格：各创建 12 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p20.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p20.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p21",
+      "group": "fire",
+      "stem": "f-p21",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "熔火领域：4 格内 3×3 区域：所有空地创建 8 伤害燃烧地格，持续 6 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p21.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p21.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p22",
+      "group": "fire",
+      "stem": "f-p22",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "烬爆指令：4 格具有燃烧的单位：12 火伤害并清除其燃烧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p22.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p22.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p23",
+      "group": "fire",
+      "stem": "f-p23",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "地火抽爆：4 格燃烧地格上的单位：12 火伤害并清除该地格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p23.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p23.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p24",
+      "group": "fire",
+      "stem": "f-p24",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "爆燃横扫：面前 3 格扇形内每个具有燃烧的单位：各受 12 火伤害并清除自身燃烧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p24.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p24.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p25",
+      "group": "fire",
+      "stem": "f-p25",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焚心爆点：4 格具有燃烧的单位：16 火伤害、清除燃烧；其正交相邻单位各受 4 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p25.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p25.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p26",
+      "group": "fire",
+      "stem": "f-p26",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焦土回响：4 格燃烧地格：该格及正交相邻燃烧地格上的单位各受 8 火伤害；被选地格清除，其余地格保留",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p26.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p26.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p27",
+      "group": "fire",
+      "stem": "f-p27",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "余烬追爆：4 格具有燃烧的单位：16 火伤害，保留燃烧但将剩余时间固定为 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p27.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p27.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p28",
+      "group": "fire",
+      "stem": "f-p28",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "火场聚爆：4 格燃烧地格：中心及正交相邻格上的每个单位各受 16 火伤害；清除中心地格，邻近燃烧地格保留",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p28.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p28.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p29",
+      "group": "fire",
+      "stem": "f-p29",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焚烬穿刺：4 格直线内每个具有燃烧的单位：各受 16 火伤害并清除自身燃烧；重掩体截断",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p29.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p29.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p30",
+      "group": "fire",
+      "stem": "f-p30",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "终焰裁决：3 格内同时具有燃烧且站在燃烧地格的单位：28 火伤害，并清除其燃烧与所在燃烧地格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p30.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p30.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p31",
+      "group": "fire",
+      "stem": "f-p31",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "熔甲火钉：3 格可见敌方：8 火伤害 + 破甲 -4，持续 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p31.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p31.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p32",
+      "group": "fire",
+      "stem": "f-p32",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "赤炼爆点：4 格可见敌方：16 火伤害 + 破甲 -4，持续 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p32.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p32.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p33",
+      "group": "fire",
+      "stem": "f-p33",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "熔切束：4 格内轻掩体、重掩体或设备：造成 20 火耐久伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p33.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p33.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p34",
+      "group": "fire",
+      "stem": "f-p34",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炉压破门：2 格内轻掩体：立即摧毁；重掩体：造成 20 耐久伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p34.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p34.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p35",
+      "group": "fire",
+      "stem": "f-p35",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焦甲横扫：面前 3 格扇形：每个敌方单位受 8 火伤害 + 破甲 -4，持续 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p35.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p35.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p36",
+      "group": "fire",
+      "stem": "f-p36",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "热裂震波：3 格内中心及正交相邻轻掩体/设备：各受 12 火耐久伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p36.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p36.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p37",
+      "group": "fire",
+      "stem": "f-p37",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "熔障炮：5 格内掩体或设备：造成 28 火耐久伤害；若轻掩体被摧毁，所在格创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p37.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p37.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p38",
+      "group": "fire",
+      "stem": "f-p38",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炉芯过热：3 格内设备：20 火耐久伤害；若耐久归零，设备立即过载并失效至其下次行动结束",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p38.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p38.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p39",
+      "group": "fire",
+      "stem": "f-p39",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焚甲贯矢：5 格可见敌方：16 火伤害 + 破甲 -8，持续 1 回合",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p39.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p39.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p40",
+      "group": "fire",
+      "stem": "f-p40",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "高炉断层：4 格直线：每个轻掩体受 28 火耐久伤害、每个重掩体受 20；直线内单位各受 12 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p40.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p40.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p41",
+      "group": "fire",
+      "stem": "f-p41",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "灼热疾行：自身沿直线移动至多 2 格，路径与终点均须空地；起点创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p41.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p41.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p42",
+      "group": "fire",
+      "stem": "f-p42",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炽热障壁：自身获得 12 护盾",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p42.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p42.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p43",
+      "group": "fire",
+      "stem": "f-p43",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "余烬护甲：自身获得 20 护盾；若自身正在燃烧，先清除燃烧再获得护盾",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p43.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p43.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p44",
+      "group": "fire",
+      "stem": "f-p44",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "灼缚解离：自身清除束缚；相邻一个敌方单位受 8 火伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p44.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p44.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p45",
+      "group": "fire",
+      "stem": "f-p45",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "温血苏醒：自身清除迟缓，并在本次行动中移动力恢复至 5 格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p45.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p45.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p46",
+      "group": "fire",
+      "stem": "f-p46",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炉温护持：3 格内自身或友方 NPC 获得 12 护盾",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p46.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p46.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p47",
+      "group": "fire",
+      "stem": "f-p47",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焰压退击：相邻敌方：8 火伤害并推离使用者 1 格；目的格非法则只受伤害",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p47.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p47.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p48",
+      "group": "fire",
+      "stem": "f-p48",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "焦痕突进：自身向 3 格内空地直线移动；路径经过的相邻敌方各受 4 火伤害；终点创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p48.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p48.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p49",
+      "group": "fire",
+      "stem": "f-p49",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "热源回收：3 格内选择一个燃烧地格并清除；自身恢复 2 魔力",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p49.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p49.png"
+    },
+    {
+      "asset_id": "icon.fire.f-p50",
+      "group": "fire",
+      "stem": "f-p50",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炉火应急：自身具有燃烧时：清除燃烧、获得 20 护盾，并在相邻一个空地创建 8 伤害燃烧地格，持续 4 刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p50.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/fire/f-p50.png"
+    },
+    {
+      "asset_id": "icon.runtime.aether_surge",
+      "group": "runtime",
+      "stem": "aether_surge",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "青色以太压力表向上冲顶，带三段刻度与过载火花",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/aether_surge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/aether_surge.png"
+    },
+    {
+      "asset_id": "icon.runtime.anchor_seal",
+      "group": "runtime",
+      "stem": "anchor_seal",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "咬合地面的三足定锚印，粗重下压轮廓",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/anchor_seal.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/anchor_seal.png"
+    },
+    {
+      "asset_id": "icon.runtime.arc_bolt",
+      "group": "runtime",
+      "stem": "arc_bolt",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "短促折线电弧贯穿一枚导电螺栓",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/arc_bolt.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/arc_bolt.png"
+    },
+    {
+      "asset_id": "icon.runtime.armor_solvent",
+      "group": "runtime",
+      "stem": "armor_solvent",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "滴管把腐蚀液滴在开裂甲片上",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/armor_solvent.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/armor_solvent.png"
+    },
+    {
+      "asset_id": "icon.runtime.barrier_charge",
+      "group": "runtime",
+      "stem": "barrier_charge",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "蓄能电池向半圆护盾注入青白能量",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/barrier_charge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/barrier_charge.png"
+    },
+    {
+      "asset_id": "icon.runtime.bastion_pulse",
+      "group": "runtime",
+      "stem": "bastion_pulse",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "厚重城垛核心向外发出一圈防护脉冲",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/bastion_pulse.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/bastion_pulse.png"
+    },
+    {
+      "asset_id": "icon.runtime.breach_shot",
+      "group": "runtime",
+      "stem": "breach_shot",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "工业枪弹击穿开裂装甲板",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/breach_shot.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/breach_shot.png"
+    },
+    {
+      "asset_id": "icon.runtime.cinder_sweep",
+      "group": "runtime",
+      "stem": "cinder_sweep",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "宽阔近战横扫弧携带低伏余烬",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/cinder_sweep.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/cinder_sweep.png"
+    },
+    {
+      "asset_id": "icon.runtime.cryo_pulse",
+      "group": "runtime",
+      "stem": "cryo_pulse",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "冷凝线圈放出六角霜晶脉冲",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/cryo_pulse.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/cryo_pulse.png"
+    },
+    {
+      "asset_id": "icon.runtime.damping_field",
+      "group": "runtime",
+      "stem": "damping_field",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "同心抑制环压住中央以太波形",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/damping_field.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/damping_field.png"
+    },
+    {
+      "asset_id": "icon.runtime.demolition_charge",
+      "group": "runtime",
+      "stem": "demolition_charge",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "带警示扣与旋压阀的学院爆破药包",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/demolition_charge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/demolition_charge.png"
+    },
+    {
+      "asset_id": "icon.runtime.ember_lance",
+      "group": "runtime",
+      "stem": "ember_lance",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "细长熔红枪尖带聚焦尾焰",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/ember_lance.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/ember_lance.png"
+    },
+    {
+      "asset_id": "icon.runtime.field_repair",
+      "group": "runtime",
+      "stem": "field_repair",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "扳手与闭合裂缝的青色维修弧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/field_repair.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/field_repair.png"
+    },
+    {
+      "asset_id": "icon.runtime.fire_bolt",
+      "group": "runtime",
+      "stem": "fire_bolt",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "紧凑火弹从短导轨射出，清晰向右上推进",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/fire_bolt.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/fire_bolt.png"
+    },
+    {
+      "asset_id": "icon.runtime.frost_bind",
+      "group": "runtime",
+      "stem": "frost_bind",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "冰冷束带锁住一只机械靴",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/frost_bind.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/frost_bind.png"
+    },
+    {
+      "asset_id": "icon.runtime.hammer_pulse",
+      "group": "runtime",
+      "stem": "hammer_pulse",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "工坊锤砸下并产生低矮冲击环",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/hammer_pulse.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/hammer_pulse.png"
+    },
+    {
+      "asset_id": "icon.runtime.mana_siphon",
+      "group": "runtime",
+      "stem": "mana_siphon",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "虹吸泵从暗色容器抽出青色以太流",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/mana_siphon.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/mana_siphon.png"
+    },
+    {
+      "asset_id": "icon.runtime.overload_needle",
+      "group": "runtime",
+      "stem": "overload_needle",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "细针刺穿红区仪表盘并迸出火花",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/overload_needle.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/overload_needle.png"
+    },
+    {
+      "asset_id": "icon.runtime.phase_step",
+      "group": "runtime",
+      "stem": "phase_step",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "两枚错位足印由短程相位轨迹连接",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/phase_step.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/phase_step.png"
+    },
+    {
+      "asset_id": "icon.runtime.prism_arc",
+      "group": "runtime",
+      "stem": "prism_arc",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "棱镜将一道青白射线折成三段弧光",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/prism_arc.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/prism_arc.png"
+    },
+    {
+      "asset_id": "icon.runtime.rail_burst",
+      "group": "runtime",
+      "stem": "rail_burst",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "加速导轨发射一枚高亮穿甲弹芯",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/rail_burst.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/rail_burst.png"
+    },
+    {
+      "asset_id": "icon.runtime.regenerative_seal",
+      "group": "runtime",
+      "stem": "regenerative_seal",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "维修封印闭合一处结构裂纹，非宗教符号",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/regenerative_seal.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/regenerative_seal.png"
+    },
+    {
+      "asset_id": "icon.runtime.rescue_beam",
+      "group": "runtime",
+      "stem": "rescue_beam",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "定向救援灯向友军轮廓投射稳定青白光束",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/rescue_beam.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/rescue_beam.png"
+    },
+    {
+      "asset_id": "icon.runtime.searing_mark",
+      "group": "runtime",
+      "stem": "searing_mark",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "烙铁在装甲表面压出灼热靶印",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/searing_mark.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/searing_mark.png"
+    },
+    {
+      "asset_id": "icon.runtime.shield_converter",
+      "group": "runtime",
+      "stem": "shield_converter",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "双向换流阀把能量导入盾片",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/shield_converter.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/shield_converter.png"
+    },
+    {
+      "asset_id": "icon.runtime.tether_arc",
+      "group": "runtime",
+      "stem": "tether_arc",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "两枚绝缘端子间绷紧一条牵引电弧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/tether_arc.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/tether_arc.png"
+    },
+    {
+      "asset_id": "icon.runtime.thermal_purge",
+      "group": "runtime",
+      "stem": "thermal_purge",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "散热阀喷出白汽并清除红色热警示",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Runtime/thermal_purge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/runtime/thermal_purge.png"
+    },
+    {
+      "asset_id": "icon.item.aether_wand",
+      "group": "item",
+      "stem": "aether_wand",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "学院制以太导杖，黄铜套环、青色储能芯和绝缘握柄",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/aether_wand.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/aether_wand.png"
+    },
+    {
+      "asset_id": "icon.item.arcane_wand",
+      "group": "item",
+      "stem": "arcane_wand",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "旧式测术短杖，蓝钢杆体与精密刻度环",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/arcane_wand.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/arcane_wand.png"
+    },
+    {
+      "asset_id": "icon.item.demolition_canister",
+      "group": "item",
+      "stem": "demolition_canister",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "手提式炎脉封装筒，双旋阀和红色安全箍",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/demolition_canister.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/demolition_canister.png"
+    },
+    {
+      "asset_id": "icon.item.fire_bolt_reward",
+      "group": "item",
+      "stem": "fire_bolt_reward",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "装在奖励匣中的火弹术式晶片与火红封签",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/fire_bolt_reward.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/fire_bolt_reward.png"
+    },
+    {
+      "asset_id": "icon.item.fire_scroll",
+      "group": "item",
+      "stem": "fire_scroll",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "近代工程卷轴，火系线路图与金属压角",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/fire_scroll.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/fire_scroll.png"
+    },
+    {
+      "asset_id": "icon.item.frost_bind_reward",
+      "group": "item",
+      "stem": "frost_bind_reward",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "装在奖励匣中的冰缚术式晶片与冷凝锁扣",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/frost_bind_reward.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/frost_bind_reward.png"
+    },
+    {
+      "asset_id": "icon.item.hammer",
+      "group": "item",
+      "stem": "hammer",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "短柄学院维护锤，方形钢锤头和绝缘握把",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/hammer.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/hammer.png"
+    },
+    {
+      "asset_id": "icon.item.medkit",
+      "group": "item",
+      "stem": "medkit",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "学院现场医务箱，白瓷外壳、绿色扣带和药剂槽",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/medkit.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/medkit.png"
+    },
+    {
+      "asset_id": "icon.item.rifle",
+      "group": "item",
+      "stem": "rifle",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "近代魔法工业步枪，木质枪托、蓝钢机匣与以太导轨",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/rifle.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/rifle.png"
+    },
+    {
+      "asset_id": "icon.item.shield",
+      "group": "item",
+      "stem": "shield",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "学院制轻盾，蓝钢面板、黄铜边和青色能量节点",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/shield.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/shield.png"
+    },
+    {
+      "asset_id": "icon.item.shield_cell",
+      "group": "item",
+      "stem": "shield_cell",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "可更换护盾电池，蓝钢壳体与青色电量窗",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/shield_cell.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/shield_cell.png"
+    },
+    {
+      "asset_id": "icon.item.wand",
+      "group": "item",
+      "stem": "wand",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "通用学院短导杖，清晰握柄、导线和单枚以太芯",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/wand.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/wand.png"
+    },
+    {
+      "asset_id": "icon.item.war_hammer",
+      "group": "item",
+      "stem": "war_hammer",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "双手战锤，重型钢锤头、铆钉和以太减震环",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemIcons32/war_hammer.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/item/war_hammer.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_armor",
+      "group": "semantic",
+      "stem": "category_armor",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "胸甲正面轮廓",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_armor.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_armor.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_artifact",
+      "group": "semantic",
+      "stem": "category_artifact",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "带机械刻度的遗物核心",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_artifact.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_artifact.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_consumable",
+      "group": "semantic",
+      "stem": "category_consumable",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "带封口的药瓶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_consumable.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_consumable.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_container",
+      "group": "semantic",
+      "stem": "category_container",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "带扣小箱",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_container.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_container.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_material",
+      "group": "semantic",
+      "stem": "category_material",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "三枚堆叠材料锭",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_material.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_material.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_quest",
+      "group": "semantic",
+      "stem": "category_quest",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "带感叹刻记的任务文件夹",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_quest.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_quest.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_scroll",
+      "group": "semantic",
+      "stem": "category_scroll",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "卷起的工程图纸",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_scroll.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_scroll.png"
+    },
+    {
+      "asset_id": "icon.semantic.category_weapon",
+      "group": "semantic",
+      "stem": "category_weapon",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "交叉的短剑与枪管",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/category_weapon.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/category_weapon.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_autoplace",
+      "group": "semantic",
+      "stem": "inventory_autoplace",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "方格自动落入背包格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_autoplace.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_autoplace.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_clear",
+      "group": "semantic",
+      "stem": "inventory_clear",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "扫帚清空方格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_clear.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_clear.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_discard",
+      "group": "semantic",
+      "stem": "inventory_discard",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "物品落入废料桶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_discard.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_discard.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_filter",
+      "group": "semantic",
+      "stem": "inventory_filter",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "漏斗筛选器",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_filter.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_filter.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_quickbar",
+      "group": "semantic",
+      "stem": "inventory_quickbar",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "三格快捷栏并高亮一格",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_quickbar.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_quickbar.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_rotate",
+      "group": "semantic",
+      "stem": "inventory_rotate",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "方形物品配顺时针转向箭头",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_rotate.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_rotate.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_salvage",
+      "group": "semantic",
+      "stem": "inventory_salvage",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "扳手拆解一枚齿轮",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_salvage.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_salvage.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_search",
+      "group": "semantic",
+      "stem": "inventory_search",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "放大镜",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_search.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_search.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_sort",
+      "group": "semantic",
+      "stem": "inventory_sort",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "上下排序箭头与两条横线",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_sort.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_sort.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_use",
+      "group": "semantic",
+      "stem": "inventory_use",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "手指按下物品按钮",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_use.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_use.png"
+    },
+    {
+      "asset_id": "icon.semantic.inventory_weight",
+      "group": "semantic",
+      "stem": "inventory_weight",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "秤砣",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/inventory_weight.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/inventory_weight.png"
+    },
+    {
+      "asset_id": "icon.semantic.loot_empty",
+      "group": "semantic",
+      "stem": "loot_empty",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "打开且空置的小箱",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/loot_empty.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/loot_empty.png"
+    },
+    {
+      "asset_id": "icon.semantic.loot_searching",
+      "group": "semantic",
+      "stem": "loot_searching",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "放大镜检查开启一半的箱子",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/loot_searching.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/loot_searching.png"
+    },
+    {
+      "asset_id": "icon.semantic.loot_unknown",
+      "group": "semantic",
+      "stem": "loot_unknown",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "问号封条小箱",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalItemSemanticIcons16/loot_unknown.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/semantic/loot_unknown.png"
+    },
+    {
+      "asset_id": "icon.artifact.aegis_fold",
+      "group": "artifact",
+      "stem": "aegis_fold",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "可展开的折盾匣，层叠蓝钢折片与青白护盾芯",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/aegis_fold.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/aegis_fold.png"
+    },
+    {
+      "asset_id": "icon.artifact.anchor_brace",
+      "group": "artifact",
+      "stem": "anchor_brace",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "定锚支架，三足锚爪和自动咬合弹簧",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/anchor_brace.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/anchor_brace.png"
+    },
+    {
+      "asset_id": "icon.artifact.binding_frame",
+      "group": "artifact",
+      "stem": "binding_frame",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "四角缚位框，机械扣合束带",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/binding_frame.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/binding_frame.png"
+    },
+    {
+      "asset_id": "icon.artifact.breach_wedge",
+      "group": "artifact",
+      "stem": "breach_wedge",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "解构楔与短锤，楔面有几何裂解槽",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/breach_wedge.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/breach_wedge.png"
+    },
+    {
+      "asset_id": "icon.artifact.cover_stamp",
+      "group": "artifact",
+      "stem": "cover_stamp",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "重型掩体压模，方形模腔与双握把",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/cover_stamp.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/cover_stamp.png"
+    },
+    {
+      "asset_id": "icon.artifact.decoy_lantern",
+      "group": "artifact",
+      "stem": "decoy_lantern",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "诱导灯，暖金灯芯、遮光片与短支架",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/decoy_lantern.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/decoy_lantern.png"
+    },
+    {
+      "asset_id": "icon.artifact.demolition_canister",
+      "group": "artifact",
+      "stem": "demolition_canister",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "炎脉封装筒，双手旋阀、红色安全箍和投放提梁",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/demolition_canister.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/demolition_canister.png"
+    },
+    {
+      "asset_id": "icon.artifact.field_siphon",
+      "group": "artifact",
+      "stem": "field_siphon",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "手压式以太虹吸泵，活塞、软管与青色储液窗",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/field_siphon.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/field_siphon.png"
+    },
+    {
+      "asset_id": "icon.artifact.fortune_seal",
+      "group": "artifact",
+      "stem": "fortune_seal",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "冒险封签，黑金机械封印片与断裂拉环",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/fortune_seal.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/fortune_seal.png"
+    },
+    {
+      "asset_id": "icon.artifact.hazard_condenser",
+      "group": "artifact",
+      "stem": "hazard_condenser",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "险地冷凝器，水雾阀、冷凝鳍片与收集瓶",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/hazard_condenser.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/hazard_condenser.png"
+    },
+    {
+      "asset_id": "icon.artifact.mending_lattice",
+      "group": "artifact",
+      "stem": "mending_lattice",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "可折叠复元编架，柔白网格与医疗卡扣",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/mending_lattice.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/mending_lattice.png"
+    },
+    {
+      "asset_id": "icon.artifact.null_veil",
+      "group": "artifact",
+      "stem": "null_veil",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "折叠静默幕，暗紫吸收布与金属收纳杆",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/null_veil.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/null_veil.png"
+    },
+    {
+      "asset_id": "icon.artifact.phase_spindle",
+      "group": "artifact",
+      "stem": "phase_spindle",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "移相线轴，缠绕发光导线与定距刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/phase_spindle.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/phase_spindle.png"
+    },
+    {
+      "asset_id": "icon.artifact.prism_regulator",
+      "group": "artifact",
+      "stem": "prism_regulator",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "棱返调节器，多层镜片与入射角校准轮",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/prism_regulator.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/prism_regulator.png"
+    },
+    {
+      "asset_id": "icon.artifact.reaction_bell",
+      "group": "artifact",
+      "stem": "reaction_bell",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "截击铃，铜铃、地钉与触发线圈",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/reaction_bell.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/reaction_bell.png"
+    },
+    {
+      "asset_id": "icon.artifact.relay_compass",
+      "group": "artifact",
+      "stem": "relay_compass",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "导位罗盘，主轴磁针与牵引弧刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/relay_compass.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/relay_compass.png"
+    },
+    {
+      "asset_id": "icon.artifact.seismic_plumb",
+      "group": "artifact",
+      "stem": "seismic_plumb",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "震测铅锤，重锤、细线轴与同心波刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/seismic_plumb.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/seismic_plumb.png"
+    },
+    {
+      "asset_id": "icon.artifact.shield_balancer",
+      "group": "artifact",
+      "stem": "shield_balancer",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "护盾均衡阀，双阀表盘和双向青白导流管",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/shield_balancer.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/shield_balancer.png"
+    },
+    {
+      "asset_id": "icon.artifact.survey_lens",
+      "group": "artifact",
+      "stem": "survey_lens",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "显迹测镜，黄铜支架、蓝色镜片和测绘刻度",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/survey_lens.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/survey_lens.png"
+    },
+    {
+      "asset_id": "icon.artifact.turn_ledger",
+      "group": "artifact",
+      "stem": "turn_ledger",
+      "role": "equipment_icon_32",
+      "delivery_size": [
+        32,
+        32
+      ],
+      "palette_max": 10,
+      "subject": "行程簿，硬壳账页、时间刻度与机械盖印器",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalArtifactIcons32/turn_ledger.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/artifact/turn_ledger.png"
+    },
+    {
+      "asset_id": "icon.slot.accessory_1",
+      "group": "slot",
+      "stem": "accessory_1",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "单枚圆形佩饰",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/accessory_1.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/accessory_1.png"
+    },
+    {
+      "asset_id": "icon.slot.accessory_2",
+      "group": "slot",
+      "stem": "accessory_2",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "双环佩饰",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/accessory_2.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/accessory_2.png"
+    },
+    {
+      "asset_id": "icon.slot.aether_core",
+      "group": "slot",
+      "stem": "aether_core",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "六边以太核心",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/aether_core.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/aether_core.png"
+    },
+    {
+      "asset_id": "icon.slot.backpack",
+      "group": "slot",
+      "stem": "backpack",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "带扣背包",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/backpack.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/backpack.png"
+    },
+    {
+      "asset_id": "icon.slot.chest",
+      "group": "slot",
+      "stem": "chest",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "胸甲",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/chest.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/chest.png"
+    },
+    {
+      "asset_id": "icon.slot.conduit",
+      "group": "slot",
+      "stem": "conduit",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "弯曲导管与接头",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/conduit.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/conduit.png"
+    },
+    {
+      "asset_id": "icon.slot.hands",
+      "group": "slot",
+      "stem": "hands",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "一双手套",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/hands.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/hands.png"
+    },
+    {
+      "asset_id": "icon.slot.head",
+      "group": "slot",
+      "stem": "head",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "护额头盔",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/head.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/head.png"
+    },
+    {
+      "asset_id": "icon.slot.legs",
+      "group": "slot",
+      "stem": "legs",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "护胫长裤",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/legs.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/legs.png"
+    },
+    {
+      "asset_id": "icon.slot.main_hand",
+      "group": "slot",
+      "stem": "main_hand",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "右手握短柄武器",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/main_hand.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/main_hand.png"
+    },
+    {
+      "asset_id": "icon.slot.off_hand",
+      "group": "slot",
+      "stem": "off_hand",
+      "role": "semantic_icon_16",
+      "delivery_size": [
+        16,
+        16
+      ],
+      "palette_max": 4,
+      "subject": "左手持小盾",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalEquipmentSlotIcons16/off_hand.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationIconRegen143/slot/off_hand.png"
+    }
+  ]
+}

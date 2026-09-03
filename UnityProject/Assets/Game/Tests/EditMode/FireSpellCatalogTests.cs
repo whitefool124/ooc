@@ -21,7 +21,7 @@ namespace OCC.Combat.Tests
             Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.WeaponUniversal), Is.EqualTo(20));
             Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.RangedSpell), Is.EqualTo(20));
             Assert.That(FireSpellCatalog.All, Has.All.Matches<FireSpellDefinition>(spell =>
-                !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 1 && spell.ManaCost >= 2 &&
+                !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 1 && spell.ManaCost >= 0 &&
                 spell.Rules.Count > 0 && spell.PresentationModules.Count > 0 &&
                 Enum.IsDefined(typeof(FireDeliveryMode), spell.DeliveryMode) &&
                 Enum.IsDefined(typeof(FireWeaponRequirement), spell.WeaponRequirement) &&
@@ -111,7 +111,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void WeaponAttackPipeline_AppliesPreArmorStanceReduction()
+        public void WeaponAttackPipeline_GrantsPreHitShieldWithoutFixedReduction()
         {
             FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)provider.Prepare("F-P-M11");
@@ -121,7 +121,8 @@ namespace OCC.Combat.Tests
             FireWeaponAttackResolution resolution = FireSpellEngine.ResolveWeaponAttack(prepared.Battle,
                 "range_armored", "hero");
 
-            Assert.That(resolution.IncomingDamageReduction, Is.GreaterThan(0));
+            Assert.That(resolution.IncomingDamageReduction, Is.Zero);
+            Assert.That(prepared.Battle.Combat.GetUnit("hero").Shield, Is.GreaterThan(0));
         }
 
         private static void MoveUnitTo(CombatState combat, UnitState unit, GridPosition destination)

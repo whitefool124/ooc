@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a43_outer_ring_packed_trail_b",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A43 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/raw/outer_ring_packed_trail_b/source.png",
+    "source_sha256": "186b7273e8ad98ecb123b84086f66e3af7e5ac8815ff7b9dcfbbe566db9fc6f7"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/normalized/outer_ring_packed_trail_b.png",
+    "output_sha256": "39d870c67c25354e0a63aa5f09bed9a6effbd356f0e6444f8cb2167bf1cfe2a2",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "REG-ORH-01 12x9 tactical map; standalone packed hunt-trail cell B at integer 2x to 5x scale",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/QA/outer_ring_packed_trail_b/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/QA/outer_ring_packed_trail_b/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/QA/outer_ring_packed_trail_b/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/QA/outer_ring_packed_trail_b/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A43/QA/contacts/m_a43_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

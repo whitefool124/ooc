@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a33_salt_sample_sack",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A33 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/raw/salt_sample_sack/source.png",
+    "source_sha256": "4eb05ba0c9103500ca3a280446486a79db4990550afa406684533b76d95a4bc8"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/normalized/salt_sample_sack.png",
+    "output_sha256": "892b5f83925aaee561c589f40509497f9a019fffba5e0609df9f06819efe5790",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/normalized/salt_sample_sack_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future trade, inspection or alchemical material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/salt_sample_sack/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/salt_sample_sack/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/salt_sample_sack/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/salt_sample_sack/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/contacts/m_a33_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

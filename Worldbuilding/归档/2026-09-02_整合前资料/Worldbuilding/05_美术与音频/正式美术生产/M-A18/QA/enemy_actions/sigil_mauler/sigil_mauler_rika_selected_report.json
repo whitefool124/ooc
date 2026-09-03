@@ -1,0 +1,102 @@
+{
+  "status": "WARN",
+  "selection": "Rika frames 01-06 after human review; uniform whole-canvas nearest 128->64 sampling",
+  "frames": [
+    {
+      "targetFrame": 0,
+      "sourceFrame": 1,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 27,
+      "bounds": [
+        20,
+        15,
+        48,
+        58
+      ]
+    },
+    {
+      "targetFrame": 1,
+      "sourceFrame": 2,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 31,
+      "bounds": [
+        11,
+        0,
+        51,
+        60
+      ]
+    },
+    {
+      "targetFrame": 2,
+      "sourceFrame": 3,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 30,
+      "bounds": [
+        12,
+        0,
+        51,
+        59
+      ]
+    },
+    {
+      "targetFrame": 3,
+      "sourceFrame": 4,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 30,
+      "bounds": [
+        10,
+        13,
+        55,
+        58
+      ]
+    },
+    {
+      "targetFrame": 4,
+      "sourceFrame": 5,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 30,
+      "bounds": [
+        6,
+        13,
+        62,
+        58
+      ]
+    },
+    {
+      "targetFrame": 5,
+      "sourceFrame": 6,
+      "size": [
+        64,
+        64
+      ],
+      "hardAlpha": true,
+      "colors": 29,
+      "bounds": [
+        6,
+        11,
+        62,
+        58
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "occ-m-a40-production-catalog-v1",
+  "batch": "M-A40",
+  "assets": [
+    {
+      "asset_id": "m_a40_linen_thread_spool",
+      "stem": "linen_thread_spool",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common cloth-repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: one squat wooden spool tightly wound with coarse gray-ivory linen thread, a short loose thread end visible, read as repair thread not rope. Thick near-black stair-step outline, one wood highlight, one thread highlight, 5-8 muted flat colors, true transparent 1px border. Exclude needle, sewing kit, label, text, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a40_copper_rivet_pouch",
+      "stem": "copper_rivet_pouch",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common metal-repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC production sprite on true transparency, native 24x24 material pickup. A small folded LIGHT GRAY linen pouch lies open as a simple shallow base. Exactly THREE oversized blunt copper rivets rest in a fan on top: each rivet has one clearly separated round mushroom head and a short thick square-ended shank, so they cannot read as coins. Keep the copper medium muted orange-brown but visibly brighter than the pouch; compact centered silhouette. Thick 1px near-black stair-step outline, one copper highlight cluster, one pouch shadow, 6-8 flat colors, 1px transparent safety border. Exclude loose pile, rope coil, coins, buttons, nails, ammunition, sparkle, label, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a40_leather_patch_roll",
+      "stem": "leather_patch_roll",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common leather-repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a short roll of dark brown vegetable-tanned leather patch material tied once with gray cord, one cut edge showing layered thickness. Thick near-black stair-step outline, one leather highlight and one deep fold shadow, 5-8 muted colors, transparent 1px border. Exclude scroll, writing, belt buckle, tool, text, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a40_hardwood_repair_pegs",
+      "stem": "hardwood_repair_pegs",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common carpentry repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a bundle of four short squared hardwood repair pegs tied with one pale cord, blunt ends and visible wood grain notch, not arrows. Thick near-black outline, one highlight cluster, one shadow cluster, 5-8 flat muted colors, transparent safety border. Exclude weapon shafts, nails, runes, text, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a40_charcoal_filter_rods",
+      "stem": "charcoal_filter_rods",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common water and air filter material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: three short matte charcoal filter rods wrapped together by one gray cloth band, one broken blunt end showing porous dark texture. Thick near-black outline with cool gray edge light, 5-8 low-saturation flat colors, transparent 1px border. Exclude dynamite, fuse, glowing coal, smoke, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a40_marking_chalk_bundle",
+      "stem": "marking_chalk_bundle",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common survey and warehouse marking material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: three thick off-white marking chalk sticks bundled with a narrow gray paper band, one chipped blunt end and a tiny dust cluster, read as warehouse chalk not candles. Thick near-black outline, warm ivory highlight, 5-8 muted flat colors, transparent safety border. Exclude flame, writing, colored crayons, label, text, glow, logo, watermark."
+    }
+  ]
+}

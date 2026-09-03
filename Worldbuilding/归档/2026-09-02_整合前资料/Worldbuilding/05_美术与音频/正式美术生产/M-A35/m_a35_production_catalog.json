@@ -1,0 +1,114 @@
+{
+  "schema": "occ-m-a35-production-catalog-v1",
+  "batch": "M-A35",
+  "assets": [
+    {
+      "asset_id": "m_a35_harbor_quay_edge_north",
+      "stem": "harbor_quay_edge_north",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; north-facing stone quay edge, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain adjacency overlay: a single low salt-worn gray-brown stone quay curb runs horizontally along the NORTH edge only, touching left and right canvas boundaries; top-facing stone cap visible, compressed dark outer face toward the north, fixed weak upper-left light. Rest of cell transparent. Hard clusters, at most 10 colors. Exclude water, full floor tile, wall, hazard stripe, railway, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_edge_east",
+      "stem": "harbor_quay_edge_east",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; east-facing stone quay edge, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain adjacency overlay: a single low salt-worn gray-brown stone quay curb runs vertically along the EAST edge only, touching top and bottom canvas boundaries; narrow top cap and compressed outer face toward the east, fixed weak upper-left light. Rest transparent. Hard clusters, at most 10 colors. Exclude water, full tile, wall, hazard stripe, railway, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_edge_south",
+      "stem": "harbor_quay_edge_south",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; south-facing stone quay edge, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain adjacency overlay: a single low salt-worn gray-brown stone quay curb runs horizontally along the SOUTH edge only, touching left and right canvas boundaries; top cap visible and compressed darker front face toward the south, fixed weak upper-left light. Rest transparent. Hard clusters, at most 10 colors. Exclude water, full floor, wall, hazard stripe, railway, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_edge_west",
+      "stem": "harbor_quay_edge_west",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; west-facing stone quay edge, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain adjacency overlay: a single low salt-worn gray-brown stone quay curb runs vertically along the WEST edge only, touching top and bottom canvas boundaries; narrow top cap and compressed outer face toward the west, fixed weak upper-left light. Rest transparent. Hard clusters, at most 10 colors. Exclude water, full tile, wall, hazard stripe, railway, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_corner_ne",
+      "stem": "harbor_quay_corner_ne",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; north-east outer quay corner, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain overlay: one low L-shaped salt-worn stone quay curb follows the NORTH and EAST edges and meets in one honest north-east outer corner; visible cap, compressed outer faces, fixed weak upper-left light. Interior and opposite sides transparent. At most 10 colors. Exclude water, full tile, wall tower, diagonal bevel, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_corner_se",
+      "stem": "harbor_quay_corner_se",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; south-east outer quay corner, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain overlay: one low L-shaped salt-worn stone quay curb follows the SOUTH and EAST edges and meets in one honest south-east outer corner; visible cap, compressed outer faces, fixed weak upper-left light. Interior and opposite sides transparent. At most 10 colors. Exclude water, full tile, wall tower, diagonal bevel, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_corner_sw",
+      "stem": "harbor_quay_corner_sw",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; south-west outer quay corner, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain overlay: one low L-shaped salt-worn stone quay curb follows the SOUTH and WEST edges and meets in one honest south-west outer corner; visible cap, compressed outer faces, fixed weak upper-left light. Interior and opposite sides transparent. At most 10 colors. Exclude water, full tile, wall tower, diagonal bevel, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_harbor_quay_corner_nw",
+      "stem": "harbor_quay_corner_nw",
+      "role": "terrain_adjacency_overlay_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future harbor floor overlay; north-west outer quay corner, independently lit and never rotated",
+      "prompt": "One independent OCC native 32x32 transparent terrain overlay: one low L-shaped salt-worn stone quay curb follows the NORTH and WEST edges and meets in one honest north-west outer corner; visible cap, compressed outer faces, fixed weak upper-left light. Interior and opposite sides transparent. At most 10 colors. Exclude water, full tile, wall tower, diagonal bevel, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a35_sailcloth_patch",
+      "stem": "sailcloth_patch",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common cloth repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a single folded patch of weathered ivory sailcloth with two blue-gray stitched edges and one small tar-dark repair square. Thick near-black stair-step outline, one highlight mass, one shadow mass, 5-8 flat colors, true transparent border. Exclude whole sail, needle, text, emblem, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a35_filter_grit_pouch",
+      "stem": "filter_grit_pouch",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future water-filter maintenance material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a small gray linen pouch partly open to show one compact cluster of pale ceramic filter grit, tied with dark cord. Read filter medium, not money. Thick near-black outline, connected highlight and shadow, 5-8 colors, transparent safety border. Exclude coins, printed label, sparkle, cyan glow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a35_lamp_oil_bottle",
+      "stem": "lamp_oil_bottle",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common fuel material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: a squat brown ceramic lamp-oil bottle with a cork stopper, one leather carry loop and a tiny amber oil line visible at the mouth, not transparent glass. Thick near-black outline, one ceramic highlight, one shadow mass, 5-8 colors, transparent border. Exclude potion glow, flame, label, skull, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a35_beeswax_seal_sticks",
+      "stem": "beeswax_seal_sticks",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future archive and field-repair material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "One independent OCC native 24x24 material pickup: two short warm-amber beeswax sealing sticks tied together with coarse gray thread, one blunt cut end showing wax texture. Thick near-black outline, one highlight cluster, one shadow mass, 5-8 flat colors, transparent safety border. Exclude candle flame, official seal stamp, letters, magic glow, text, logo, watermark."
+    }
+  ]
+}

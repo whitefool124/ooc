@@ -1,0 +1,22 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "academy_aisle_edge_inner_corner",
+  "role": "floor_tile_32",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      0,
+      0,
+      32,
+      32
+    ],
+    "hard_alpha": true,
+    "visible_colors": 3,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

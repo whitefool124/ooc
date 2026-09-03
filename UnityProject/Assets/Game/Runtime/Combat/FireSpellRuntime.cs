@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat
 {
@@ -64,7 +65,7 @@ namespace OCC.Combat
             UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && firegrounds.TryGetValue(unit.Position, out FiregroundState ground))
             {
-                ApplyRawFireDamage(unit, ground.Damage);
+                ApplyRawFireDamage(unit, ground.Damage, Combat);
                 firegroundTriggeredThisTurn.Add(unit.Id);
                 Combat.EvaluateOutcome();
             }
@@ -76,7 +77,7 @@ namespace OCC.Combat
         {
             if (unit == null || unit.Position == previousPosition || firegroundTriggeredThisTurn.Contains(unit.Id) || !firegrounds.TryGetValue(unit.Position, out FiregroundState ground)) return 0;
             firegroundTriggeredThisTurn.Add(unit.Id);
-            int damage = ApplyRawFireDamage(unit, ground.Damage);
+            int damage = ApplyRawFireDamage(unit, ground.Damage, Combat);
             Combat.EvaluateOutcome();
             return damage;
         }
@@ -137,8 +138,15 @@ namespace OCC.Combat
             return health;
         }
 
+        internal static int ApplyRawFireDamage(UnitState target, int amount, CombatState combat)
+        {
+            if (combat == null || combat.Ruleset != CombatRuleset.Roguelite) return ApplyRawFireDamage(target, amount, combat?.Map);
+            return ApplyRogueliteDamage(target, amount, DamageComponentKind.Fire, "fire_runtime", combat);
+        }
+
         internal static int ApplyRawWeaponDamage(UnitState source, UnitState target, int amount, GridMap map)
         {
+            amount = CombatDebugTuning.OutgoingDamageFor(source, amount);
             int cover = map.GetTile(target.Position).DamageReduction;
             int incoming = Math.Max(0, amount - cover);
             int absorbed = target.AbsorbShield(incoming); incoming -= absorbed;
@@ -146,6 +154,23 @@ namespace OCC.Combat
             int block = Math.Min(incoming, target.Block); incoming -= block;
             target.TakeDamage(incoming);
             return incoming;
+        }
+
+        internal static int ApplyRawWeaponDamage(UnitState source, UnitState target, int amount, CombatState combat)
+        {
+            if (combat == null || combat.Ruleset != CombatRuleset.Roguelite) return ApplyRawWeaponDamage(source, target, amount, combat?.Map);
+            return ApplyRogueliteDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount), DamageComponentKind.Physical, "fire_weapon_rule", combat);
+        }
+
+        private static int ApplyRogueliteDamage(UnitState target, int amount, DamageComponentKind kind, string sourceEffectId, CombatState combat)
+        {
+            DamagePacket packet = new DamagePacket(sourceEffectId + "-packet", string.Empty, target.Id, sourceEffectId,
+                new[] { new DamageComponent(kind, Math.Max(0, amount)) });
+            DamageResolution resolution = RogueDamageResolver.Resolve(packet, target.Shield, target.Health);
+            target.AbsorbShield(resolution.ShieldAbsorbed);
+            combat.RecordRogueliteShieldAbsorption(target.Id, sourceEffectId, resolution.ShieldAbsorbed);
+            target.TakeDamage(resolution.HealthDamage);
+            return resolution.HealthDamage;
         }
     }
 
@@ -253,6 +278,10 @@ namespace OCC.Combat
             if (source.ActionPoints < spell.ActionPointCost) failures.Add("行动点不足");
             if (source.Mana < spell.ManaCost) failures.Add("魔力不足");
             if (battle.Cooldown(sourceUnitId, spell.Id) > 0) failures.Add("冷却中");
+            int selfLoss = spell.Rules.Where(rule => rule.Kind == FireRuleKind.LoseHealth).Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
+            if (selfLoss > 0 && source.Health <= selfLoss) failures.Add("你的生命太低，承受不了这次代价");
+            if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ClearOneSelfStatus) &&
+                !new[] { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.BreakStance }.Any(source.HasStatus)) failures.Add("没有可清除的自身状态");
             if (!FireSpellCatalog.IsWeaponCompatible(spell, source.MainHand)) failures.Add("武器要求不符");
             if (spell.TargetKind == FireTargetKind.Self && string.IsNullOrEmpty(target.UnitId) && target.Cell != source.Position)
                 failures.Add("只能选择自身");
@@ -324,8 +353,9 @@ namespace OCC.Combat
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
                 if (effect.Stage > 0)
                 {
-                    FireBattleState.ApplyRawFireDamage(target, 8, battle.Combat.Map);
-                    Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, 8, 8, "ally_followup");
+                    int requested = CombatDebugTuning.OutgoingDamageFor(source, 8);
+                    int applied = FireBattleState.ApplyRawFireDamage(target, requested, battle.Combat);
+                    Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, requested, applied, "ally_followup");
                 }
                 else
                 {
@@ -421,9 +451,16 @@ namespace OCC.Combat
             UnitState target = battle.Combat.GetUnit(targetUnitId), attacker = battle.Combat.GetUnit(attackerUnitId);
             if (target == null || attacker == null || requestedDamage <= 0 || explosion || target.Position.ManhattanDistance(attacker.Position) <= 1) return requestedDamage;
             int reduction = 0;
-            foreach (FirePendingEffect effect in battle.PendingEffects.Where(value => value.SourceUnitId == targetUnitId && value.Spell.TriggerWindow == FireTriggerWindow.UntilNextAction))
+            foreach (FirePendingEffect effect in battle.PendingEffects.Where(value => value.SourceUnitId == targetUnitId && value.Spell.TriggerWindow == FireTriggerWindow.UntilNextAction).ToArray())
             {
                 if (effect.Spell.CombatAffinity == FireCombatAffinity.MeleeOnly && !IsInFront(target, attacker.Position)) continue;
+                int preHitShield = effect.Spell.Rules.Where(rule => rule.Kind == FireRuleKind.GrantShieldBeforeRanged).Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
+                if (preHitShield > 0 && battle.Combat.Ruleset == CombatRuleset.Roguelite)
+                {
+                    battle.Combat.TryGrantRogueliteShield(target.Id, effect.Spell.Id, preHitShield);
+                    battle.Consume(effect);
+                    continue;
+                }
                 reduction = Math.Max(reduction, effect.Spell.Rules.Where(rule => rule.Kind == FireRuleKind.ReduceIncomingDamage).Select(rule => rule.Amount).DefaultIfEmpty(0).Max());
             }
             return Math.Max(0, requestedDamage - reduction);
@@ -483,7 +520,7 @@ namespace OCC.Combat
                     if (target == null || target.IsHero == source.IsHero || !target.HasStatus(StatusType.Burning) || source.Position.ManhattanDistance(target.Position) != 1) failures.Add("需要相邻燃烧敌方");
                     break;
                 case FireTargetKind.BurningOrArmorBrokenEnemy:
-                    if (target == null || target.IsHero == source.IsHero || (!target.HasStatus(StatusType.Burning) && !target.HasStatus(StatusType.ArmorBreak))) failures.Add("需要燃烧或破甲敌方");
+                    if (target == null || target.IsHero == source.IsHero || (!target.HasStatus(StatusType.Burning) && !target.HasStatus(battle.Combat.Ruleset == CombatRuleset.Roguelite ? StatusType.BreakStance : StatusType.ArmorBreak))) failures.Add("需要燃烧或破势敌方");
                     break;
                 case FireTargetKind.BurningCell: if (!battle.HasFireground(cell)) failures.Add("目标格不是燃烧地格"); break;
                 case FireTargetKind.Destructible:
@@ -523,7 +560,7 @@ namespace OCC.Combat
                 bool legal = consumption == FireSourceConsumption.BurningOnly ? hasBurning :
                     consumption == FireSourceConsumption.GroundOnly ? hasGround :
                     consumption == FireSourceConsumption.BurningAndGround ? hasBurning && hasGround : hasBurning || hasGround;
-                if (!legal) { failures.Add("没有合法燃烧来源"); return; }
+                if (!legal) { failures.Add("这里没有可供术式引燃的火源"); return; }
             }
         }
 
@@ -609,6 +646,9 @@ namespace OCC.Combat
                 case FireCondition.TargetBurningAndOnFireground: return target != null && target.HasStatus(StatusType.Burning) && battle.HasFireground(cell);
                 case FireCondition.TargetArmorBroken: return target != null && target.HasStatus(StatusType.ArmorBreak);
                 case FireCondition.TargetBurningOrArmorBroken: return target != null && (target.HasStatus(StatusType.Burning) || target.HasStatus(StatusType.ArmorBreak));
+                case FireCondition.TargetBreakStance: return target != null && target.HasStatus(StatusType.BreakStance);
+                case FireCondition.TargetBurningOrBreakStance: return target != null && (target.HasStatus(StatusType.Burning) || target.HasStatus(StatusType.BreakStance));
+                case FireCondition.SourceBreakStance: return source.HasStatus(StatusType.BreakStance);
                 case FireCondition.SourceBurning: return source.HasStatus(StatusType.Burning);
                 case FireCondition.SourceNotBurning: return !source.HasStatus(StatusType.Burning);
                 case FireCondition.SourceBound: return source.HasStatus(StatusType.Bound);
@@ -656,19 +696,26 @@ namespace OCC.Combat
                 {
                     if (!rule.AffectAllies && unit.IsHero == source.IsHero && unit.Id != source.Id) continue;
                     if (!ConditionMet(battle, source, unit, unit.Position, rule.Condition)) continue;
-                    bool both = unit.HasStatus(StatusType.Burning) && unit.HasStatus(StatusType.ArmorBreak);
-                    bool alternate = rule.AlternateAmount > 0 && (rule.Condition == FireCondition.TargetBurningOrArmorBroken ? both :
-                        rule.Condition == FireCondition.Always ? unit.HasStatus(StatusType.ArmorBreak) : unit.HasStatus(StatusType.Burning));
+                    bool broken = battle.Combat.Ruleset == CombatRuleset.Roguelite ? unit.HasStatus(StatusType.BreakStance) : unit.HasStatus(StatusType.ArmorBreak);
+                    bool both = unit.HasStatus(StatusType.Burning) && broken;
+                    bool alternate = rule.AlternateAmount > 0 && ((rule.Condition == FireCondition.TargetBurningOrArmorBroken || rule.Condition == FireCondition.TargetBurningOrBreakStance) ? both :
+                        rule.Condition == FireCondition.Always ? broken : unit.HasStatus(StatusType.Burning));
                     int requested = alternate ? rule.AlternateAmount : rule.Amount;
                     int applied = rule.Kind == FireRuleKind.WeaponDamage
-                        ? FireBattleState.ApplyRawWeaponDamage(source, unit, requested, battle.Combat.Map)
-                        : FireBattleState.ApplyRawFireDamage(unit, requested, battle.Combat.Map);
-                    Add(steps, spell, rule.Kind, unit.Id, unit.Position, requested, applied, rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
+                        ? FireBattleState.ApplyRawWeaponDamage(source, unit, requested, battle.Combat)
+                        : FireBattleState.ApplyRawFireDamage(unit, CombatDebugTuning.OutgoingDamageFor(source, requested), battle.Combat);
+                    Add(steps, spell, rule.Kind, unit.Id, unit.Position, CombatDebugTuning.OutgoingDamageFor(source, requested), applied, rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
                 }
             }
-            else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak)
+            else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak || rule.Kind == FireRuleKind.ApplyBreakStance)
             {
-                foreach (UnitState unit in unitArray) if (ConditionMet(battle, source, unit, unit.Position, rule.Condition)) { StatusType status = rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : StatusType.Burning; unit.ApplyStatus(status, rule.Duration, rule.Amount); Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, rule.Amount, status.ToString()); }
+                foreach (UnitState unit in unitArray) if (ConditionMet(battle, source, unit, unit.Position, rule.Condition))
+                {
+                    if (rule.Kind == FireRuleKind.ApplyBreakStance) battle.Combat.ApplyRogueliteBreakStance(unit.Id);
+                    else unit.ApplyStatus(rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : StatusType.Burning, rule.Duration, rule.Amount);
+                    StatusType status = rule.Kind == FireRuleKind.ApplyBreakStance ? StatusType.BreakStance : rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : StatusType.Burning;
+                    Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, rule.Amount, status.ToString());
+                }
             }
             else if (rule.Kind == FireRuleKind.SetBurningDuration)
             {
@@ -687,7 +734,12 @@ namespace OCC.Combat
             {
                 foreach (GridPosition cell in cellArray) { TileState tile = battle.Combat.Map.GetTile(cell); if (!MatchesObject(tile, rule.DestructibleMask)) continue; int before = tile.Durability; int amount = rule.Kind == FireRuleKind.DestroyLightCover ? before : (tile.Cover == CoverType.Heavy && rule.AlternateAmount > 0 ? rule.AlternateAmount : rule.Amount); tile.Durability = Math.Max(0, before - amount); Add(steps, spell, rule.Kind, null, cell, amount, before - tile.Durability, "durability"); }
             }
-            else if (rule.Kind == FireRuleKind.RestoreShield) foreach (UnitState unit in unitArray.DefaultIfEmpty(source).Where(unit => unit != null)) { if (!ConditionMet(battle, source, unit, unit.Position, rule.Condition)) continue; int before = unit.Shield; unit.GrantShield(rule.Amount); Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, unit.Shield - before, "shield"); }
+            else if (rule.Kind == FireRuleKind.RestoreShield) foreach (UnitState unit in unitArray.DefaultIfEmpty(source).Where(unit => unit != null)) { if (!ConditionMet(battle, source, unit, unit.Position, rule.Condition)) continue; int before = unit.Shield; if (battle.Combat.Ruleset == CombatRuleset.Roguelite) battle.Combat.TryGrantRogueliteShield(unit.Id, spell.Id, rule.Amount); else unit.GrantShield(rule.Amount); Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, unit.Shield - before, "shield"); }
+            else if (rule.Kind == FireRuleKind.ClearOneSelfStatus)
+            {
+                StatusType? selected = new[] { StatusType.BreakStance, StatusType.Bound, StatusType.Slow, StatusType.Burning }.Where(source.HasStatus).Select(value => (StatusType?)value).FirstOrDefault();
+                if (selected.HasValue) { source.ClearStatus(selected.Value); Add(steps, spell, rule.Kind, source.Id, source.Position, 1, 1, selected.Value.ToString()); }
+            }
             else if (rule.Kind == FireRuleKind.ClearStatus)
             {
                 foreach (UnitState unit in unitArray.DefaultIfEmpty(source).Where(unit => unit != null))

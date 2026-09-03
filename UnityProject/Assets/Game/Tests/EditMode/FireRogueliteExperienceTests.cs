@@ -33,7 +33,7 @@ namespace OCC.Combat.Tests
             CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(hero.Id, 5), CombatEffect.AbsorbShield(hero.Id, 1), CombatEffect.SpendMana(4));
             run.CaptureCombatInventory(combat);
 
-            string data = run.ToJson(); Assert.That(data, Does.StartWith("map9|"));
+            string data = run.ToJson(); Assert.That(data, Does.StartWith("map10|"));
             RogueliteMapRun restored = RogueliteMapRun.FromJson(data);
             UnitState next = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); restored.ApplyBuild(next);
             Assert.That((next.Health, next.Shield, next.Mana), Is.EqualTo((13, 1, 8)));
@@ -46,7 +46,7 @@ namespace OCC.Combat.Tests
             string[] map9 = new RogueliteMapRun(8403).ToJson().Split('|'); string[] map8 = map9.Take(31).ToArray(); map8[0] = "map8";
             RogueliteMapRun restored = RogueliteMapRun.FromJson(string.Join("|", map8));
             Assert.That(restored.HasCombatSnapshot, Is.False); Assert.That(restored.StarterId, Is.Null.Or.Empty);
-            Assert.That(restored.ToJson(), Does.StartWith("map9|"));
+            Assert.That(restored.ToJson(), Does.StartWith("map10|"));
         }
 
         [Test]
@@ -105,7 +105,14 @@ namespace OCC.Combat.Tests
             run.SelectNode("permit_archive"); run.ChooseCurrentNodeContent("survey");
             run.SelectNode("safety_room"); run.ChooseCurrentNodeContent("scan_routes");
             run.SelectNode("aether_refinery"); run.ChooseCurrentNodeContent("purify");
-            CompleteCombat(ref run, "transmission_tower"); CompleteCombat(ref run, "core_approach"); CompleteCombat(ref run, "core_finale");
+            CompleteCombat(ref run, "transmission_tower");
+            CompleteCombat(ref run, "core_approach");
+            CompleteRewardNode(ref run, "core_vault");
+            CompleteCombat(ref run, "observatory_path");
+            CompleteCombat(ref run, "wilds_camp");
+            run.SelectNode("observatory_path");
+            run.SelectNode("core_vault");
+            CompleteCombat(ref run, "core_finale");
             Assert.That(run.IsComplete, Is.True); Assert.That(run.StarterId, Is.EqualTo(starterId));
             Assert.That(run.ToJson(), Is.EqualTo(RoundTrip(run).ToJson()));
         }
@@ -113,6 +120,16 @@ namespace OCC.Combat.Tests
         private static void CompleteCombat(ref RogueliteMapRun run, string nodeId)
         {
             run.SelectNode(nodeId); run.CompleteCurrentCombat(); run = RoundTrip(run);
+            FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
+            if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
+            run = RoundTrip(run);
+        }
+
+        private static void CompleteRewardNode(ref RogueliteMapRun run, string nodeId)
+        {
+            run.SelectNode(nodeId);
+            run.ChooseCurrentNodeContent("vault_fire_cache");
+            run = RoundTrip(run);
             FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
             if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
             run = RoundTrip(run);

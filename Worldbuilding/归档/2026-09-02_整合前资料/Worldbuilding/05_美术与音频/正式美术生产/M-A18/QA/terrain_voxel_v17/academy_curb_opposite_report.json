@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_curb_opposite",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_alpha_bounds": [
+    0,
+    0,
+    1254,
+    1254
+  ],
+  "cropped_size": [
+    1254,
+    1254
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "fitted_size": [
+    32,
+    32
+  ],
+  "fitted_offset": [
+    0,
+    0
+  ],
+  "visible_colors": 7,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "b296b0b9d5105eaa445171e503f17221659eb94967f6949038c12854093482f8",
+  "output_sha256": "629a97386080cc087d736ab5c5afe148e04be9b46be6db936ad4e78316615123",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 0,
+  "anchor": "center",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

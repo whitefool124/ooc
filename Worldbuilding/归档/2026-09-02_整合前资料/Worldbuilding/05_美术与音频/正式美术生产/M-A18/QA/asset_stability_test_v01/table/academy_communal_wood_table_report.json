@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "name": "academy_communal_wood_table",
+  "source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\raw\\asset_stability_test_v01\\academy_communal_wood_table_source.png",
+  "sourceSha256": "8c3978db0fd397f0ee63d3a1f27a94d4fa4f6ba8e75b270d34998d334f375a1d",
+  "applicationContract": {
+    "logicalCells": [
+      1,
+      1
+    ],
+    "runtimeDrawRect": "full cell",
+    "physicalScale1920x1080": 4,
+    "physicalScale960x540": 2,
+    "maxContent": [
+      26,
+      20
+    ],
+    "baselineY": 28
+  },
+  "canvas": [
+    32,
+    32
+  ],
+  "bounds": [
+    3,
+    13,
+    29,
+    28
+  ],
+  "hardAlpha": true,
+  "colors": 8,
+  "transparentSafetyEdge": true,
+  "normalization": "chroma/alpha isolation + whole-silhouette nearest resize + palette limit; no structural drawing"
+}

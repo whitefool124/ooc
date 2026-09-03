@@ -1,0 +1,16 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "m_a46_tactical_attack_range_v2",
+  "role": "terrain_adjacency_overlay_32",
+  "status": "FAIL",
+  "metrics": {},
+  "errors": [
+    "source_sha256 does not match source file",
+    "delivery output_path is missing",
+    "required evidence missing: one_x",
+    "required evidence missing: four_x",
+    "required evidence missing: grayscale",
+    "required evidence missing: checker",
+    "required evidence missing: application_contact"
+  ]
+}

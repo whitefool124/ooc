@@ -1,0 +1,49 @@
+{
+  "schema": "occ-generated-multicell-normalization-v1",
+  "asset_id": "academy_curb_edge",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_alpha_bounds": [
+    0,
+    0,
+    1254,
+    412
+  ],
+  "cropped_size": [
+    1254,
+    412
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "fitted_size": [
+    32,
+    6
+  ],
+  "fitted_offset": [
+    0,
+    0
+  ],
+  "visible_colors": 4,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "source_sha256": "7c354b8a3a075b160bf8d80bd4e13c58b53fd2d4f5c03aed009961721bd50550",
+  "output_sha256": "4ce40789ef4d5a426bd4e4937ecd2e7fec6bd9d6bc1aa9435f059976ee8ec002",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "preserved_source_cyan_pixels": 0,
+  "anchor": "north",
+  "operations": [
+    "alpha_bounds_crop",
+    "box_fit",
+    "median_cut_no_dither",
+    "hard_alpha",
+    "source_cyan_mask_preservation",
+    "embed"
+  ]
+}

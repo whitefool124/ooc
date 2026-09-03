@@ -1,0 +1,62 @@
+{
+  "schema": "occ.ui.combat-semantics.qa.v0.2",
+  "status": "PASS",
+  "method": "AI concept reference followed by independent 32x32 pixel-grid redraw",
+  "assetCount": 3,
+  "records": [
+    {
+      "id": "action",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/action_point.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 12,
+      "hardAlpha": true,
+      "bounds": [
+        3,
+        3,
+        29,
+        29
+      ],
+      "coverage": 0.519,
+      "sha256": "f34cd9995173abfb5f1d3693ac0011d23ae6dd70151ac46b194c757246b7103a"
+    },
+    {
+      "id": "aether",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/mana.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 14,
+      "hardAlpha": true,
+      "bounds": [
+        5,
+        3,
+        27,
+        29
+      ],
+      "coverage": 0.507,
+      "sha256": "c347e72faadafcc4b3f246d3999cc0c68fa960dbe6b5cb65496290180985c66e"
+    },
+    {
+      "id": "notice",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/notice.png",
+      "size": [
+        32,
+        32
+      ],
+      "colors": 11,
+      "hardAlpha": true,
+      "bounds": [
+        3,
+        4,
+        30,
+        29
+      ],
+      "coverage": 0.538,
+      "sha256": "7876ec19ff22d03bccb5887523b477c9ebdd1185beaa59d23fc45bbabdb58b99"
+    }
+  ]
+}

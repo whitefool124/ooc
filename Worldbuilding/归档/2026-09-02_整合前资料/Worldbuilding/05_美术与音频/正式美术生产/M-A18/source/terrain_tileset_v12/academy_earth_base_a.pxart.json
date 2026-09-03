@@ -1,0 +1,10 @@
+{
+  "schema": "occ-hand-pixel-source-v1",
+  "asset_id": "academy_earth_base_a",
+  "width": 16,
+  "height": 16,
+  "delivery_size": [32, 32],
+  "palette": {"E": "#8A6B4E"},
+  "rows": [{"row": "E:16", "repeat": 16}],
+  "notes": "Explicitly authored quiet packed-earth pixel rows. Flat by design; terrain identity is carried by authored transition tiles, not noise."
+}

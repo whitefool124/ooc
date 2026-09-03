@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="1900" viewBox="0 0 3000 1900">
+  <title>OCC M-A17 学院城工程控制总平面 v07</title>
+  <desc>12288×6912 逻辑坐标工程控制图。中央图书馆位于城市中心，正交道路、分区、连续城防、港口与封存塔按稳定 ID 登记。</desc>
+  <defs>
+    <pattern id="minorGrid" width="45.333" height="45.333" patternUnits="userSpaceOnUse"><path d="M45.333 0H0V45.333" fill="none" stroke="#b9cbd7" stroke-width="1" opacity=".42"/></pattern>
+    <pattern id="majorGrid" width="181.333" height="181.333" patternUnits="userSpaceOnUse"><rect width="181.333" height="181.333" fill="url(#minorGrid)"/><path d="M181.333 0H0V181.333" fill="none" stroke="#7292a8" stroke-width="1.5" opacity=".65"/></pattern>
+    <style><![CDATA[
+      .bg{fill:#f7fbff}.mapbg{fill:#eef5f8}.water{fill:#dceff7}.belt{fill:#e8f2e5;stroke:#7f9c78;stroke-width:2}.wall{fill:none;stroke:#163f5a;stroke-width:14}.ditch{fill:none;stroke:#5d8297;stroke-width:3;stroke-dasharray:14 9}.zone{fill:#edf4f8;stroke:#7091a5;stroke-width:3}.zoneAlt{fill:#e4eff5;stroke:#7091a5;stroke-width:3}.core{fill:#d8ebf6;stroke:#195d83;stroke-width:5}.special{fill:#e9e4f5;stroke:#655083;stroke-width:4}.harbor{fill:#dcecf3;stroke:#467a96;stroke-width:4}.roadEdge{fill:none;stroke:#6d8b9e;stroke-width:28}.road{fill:none;stroke:#f7fbff;stroke-width:20}.minorRoad{fill:none;stroke:#f7fbff;stroke-width:11}.minorRoadEdge{fill:none;stroke:#91a8b7;stroke-width:15}.axis{fill:none;stroke:#1f6d98;stroke-width:3;stroke-dasharray:16 9}.boundary{fill:none;stroke:#346f90;stroke-width:2;stroke-dasharray:8 6}.ink{fill:#153349}.muted{fill:#557184}.title{font:700 34px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349}.sub{font:500 16px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#557184}.label{font:700 18px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349;text-anchor:middle}.small{font:500 13px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#405f73;text-anchor:middle}.tiny{font:500 11px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#557184}.id{font:700 12px Consolas,monospace;fill:#195d83}.dim{font:500 11px Consolas,monospace;fill:#375b71}.panelTitle{font:700 20px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#153349}.panelText{font:500 14px 'Microsoft YaHei','Noto Sans SC',sans-serif;fill:#37566a}.def{fill:#163f5a;stroke:#f7fbff;stroke-width:2}.rb{fill:none;stroke:#367fa4;stroke-width:2;stroke-dasharray:7 5}
+    ]]></style>
+  </defs>
+  <rect class="bg" width="3000" height="1900"/>
+  <text class="title" x="90" y="60">OCC M-A17 学院城工程控制总平面 v07</text>
+  <text class="sub" x="90" y="92">正式结构候选 ｜ 规划域 12288 × 6912（约 12.0 × 6.8 km）｜ 原点西北 ｜ +X 东 / +Y 南 ｜ 子模数 32 / 街坊模数 256</text>
+  <text class="sub" x="2910" y="60" text-anchor="end">NOT IMPLEMENTED IN UNITY</text>
+
+  <!-- map frame: scale 0.1770833 px per logical unit -->
+  <g id="map" transform="translate(180 180)">
+    <rect class="mapbg" width="2176" height="1224"/>
+    <rect width="2176" height="1224" fill="url(#majorGrid)"/>
+    <path class="water" d="M0 1088H2176V1224H0Z"/>
+    <path d="M0 1088H2176" fill="none" stroke="#4f87a1" stroke-width="4"/>
+
+    <!-- outer reservations -->
+    <rect class="belt" x="181" y="45" width="1723" height="136"/>
+    <text class="label" x="1042" y="102">Z-OB-N 北部供给带</text><text class="small" x="1042" y="128">农圃 / 蓄水 / 疏散草场 / 猎团警戒林带</text>
+    <rect class="belt" x="57" y="295" width="227" height="635"/>
+    <text class="label" transform="translate(170 612) rotate(-90)">Z-OB-W 西部牧地与车队候场</text>
+    <rect class="belt" x="113" y="1088" width="635" height="130"/>
+    <text class="label" x="430" y="1142">Z-OB-SW 材料与墓园缓冲</text><text class="small" x="430" y="1167">采石 / 木料 / 重载候场</text>
+
+    <!-- defensive layers -->
+    <rect class="ditch" x="370" y="165" width="1438" height="875"/>
+    <rect class="wall" x="397" y="193" width="1383" height="839"/>
+    <text class="id" x="402" y="185">D-WALL-01</text><text class="dim" x="1820" y="182" text-anchor="end">X 2240..10048 / Y 1088..5824</text>
+
+    <!-- zones -->
+    <rect class="zone" x="453" y="249" width="431" height="295"/><text class="id" x="466" y="270">Z-TA</text><text class="label" x="668" y="382">教学 · 档案区</text><text class="small" x="668" y="407">2432×1664 / H≤22m</text>
+    <rect class="zoneAlt" x="930" y="249" width="317" height="181"/><text class="id" x="943" y="270">Z-ACN</text><text class="label" x="1088" y="332">学院北庭</text><text class="small" x="1088" y="357">1792×1024 / H≤20m</text>
+    <rect class="zone" x="1292" y="249" width="431" height="295"/><text class="id" x="1305" y="270">Z-WK</text><text class="label" x="1508" y="382">工坊 · 试验区</text><text class="small" x="1508" y="407">2432×1664 / H≤24m</text>
+    <rect class="zoneAlt" x="453" y="680" width="431" height="295"/><text class="id" x="466" y="701">Z-RV</text><text class="label" x="668" y="812">居民 · 访客区</text><text class="small" x="668" y="837">2432×1664 / H≤20m</text>
+    <rect class="zoneAlt" x="930" y="793" width="317" height="181"/><text class="id" x="943" y="814">Z-DS</text><text class="label" x="1088" y="875">宿舍 · 城市服务</text><text class="small" x="1088" y="900">1792×1024 / H≤18m</text>
+    <rect class="zone" x="1292" y="680" width="431" height="295"/><text class="id" x="1305" y="701">Z-MM</text><text class="label" x="1508" y="812">市集 · 医务区</text><text class="small" x="1508" y="837">2432×1664 / H≤22m</text>
+
+    <!-- roads and axes -->
+    <path class="roadEdge" d="M397 612H884M1292 612H1780M1088 193V453M1088 771V1032"/><path class="road" d="M397 612H884M1292 612H1780M1088 193V453M1088 771V1032"/>
+    <path class="minorRoadEdge" d="M884 193V1032M1292 193V1032"/><path class="minorRoad" d="M884 193V1032M1292 193V1032"/>
+    <path class="axis" d="M375 612H884M1292 612H1802M1088 172V453M1088 771V1054"/>
+    <path class="minorRoadEdge" d="M884 453H1292V771H884Z"/><path class="minorRoad" d="M884 453H1292V771H884Z"/>
+
+    <!-- central core replacement boundary and buildings -->
+    <rect class="rb" x="907" y="476" width="363" height="272"/>
+    <text class="id" x="917" y="495">RB-Z-CC</text>
+    <rect class="core" x="952" y="555" width="147" height="113"/>
+    <circle class="core" cx="1156" cy="612" r="57"/>
+    <rect class="core" x="895" y="567" width="45" height="91"/>
+    <text class="label" x="1025" y="604">阅览主厅</text><text class="small" x="1025" y="626">832×640 / H26m / 3F</text>
+    <text class="label" x="1156" y="608">档案</text><text class="label" x="1156" y="628">圆厅</text><text class="small" x="1156" y="682">H34m / 5F</text>
+    <text class="small" x="907" y="675">西侧入口中庭</text>
+
+    <!-- gates and eight towers -->
+    <g class="def">
+      <rect x="385" y="586" width="24" height="52"/><rect x="1768" y="586" width="24" height="52"/><rect x="1062" y="181" width="52" height="24"/><rect x="1062" y="1020" width="52" height="24"/>
+      <rect x="385" y="181" width="24" height="24"/><rect x="713" y="181" width="24" height="24"/><rect x="1439" y="181" width="24" height="24"/><rect x="1768" y="181" width="24" height="24"/>
+      <rect x="385" y="1020" width="24" height="24"/><rect x="713" y="1020" width="24" height="24"/><rect x="1439" y="1020" width="24" height="24"/><rect x="1768" y="1020" width="24" height="24"/>
+    </g>
+    <text class="tiny" x="380" y="576" text-anchor="end">G-W</text><text class="tiny" x="1798" y="576">G-E</text><text class="tiny" x="1120" y="201">G-N</text><text class="tiny" x="1120" y="1038">G-S</text>
+
+    <!-- harbour and sealed tower -->
+    <rect class="harbor" x="1292" y="1066" width="657" height="130"/><text class="id" x="1305" y="1087">Z-HP</text><text class="label" x="1620" y="1124">港口 · 检验 · 仓栈区</text><text class="small" x="1620" y="1148">3712×736 / 三座独立栈桥</text>
+    <path class="roadEdge" d="M1088 1032V1054H1949"/><path class="road" d="M1088 1032V1054H1949"/>
+    <path class="harbor" d="M1519 1196V1224M1655 1196V1224M1791 1196V1224"/>
+    <rect class="rb" x="1859" y="408" width="249" height="453"/><rect class="special" x="1883" y="430" width="204" height="408"/>
+    <text class="id" x="1897" y="453">Z-ST / RB-Z-ST</text><text class="label" x="1985" y="512">封存塔隔离区</text><text class="small" x="1985" y="537">1408×2560 / 基台 +42m</text>
+    <rect class="special" x="1911" y="533" width="113" height="159"/><circle class="special" cx="2050" cy="612" r="45"/>
+    <text class="small" x="1968" y="718">附属院</text><text class="small" x="2050" y="680">封存塔 H38m / 5F</text>
+    <path class="roadEdge" d="M1780 612H1883"/><path class="road" d="M1780 612H1883"/><text class="tiny" x="1830" y="598">B-SEALED</text>
+
+    <!-- local aether conduits; never a city shield -->
+    <path d="M1213 612L1508 781M1439 385L1213 612M1428 1111H1734M1968 612H2050" fill="none" stroke="#2f9ab2" stroke-width="5" stroke-dasharray="8 5"/>
+    <text class="tiny" x="1370" y="675">AC-LIB-MED</text><text class="tiny" x="1325" y="468">AC-WKS-LIB</text>
+
+    <!-- axes and scale -->
+    <path d="M2110 145V55M2110 55l-12 24h24Z" fill="#153349"/><text class="label" x="2110" y="38">北</text>
+    <g transform="translate(30 1180)"><path d="M0 0H363" stroke="#153349" stroke-width="5"/><path d="M0 -8V8M181 -8V8M363 -8V8" stroke="#153349" stroke-width="4"/><text class="tiny" x="0" y="26">0</text><text class="tiny" x="168" y="26">1 km</text><text class="tiny" x="344" y="26">2 km</text></g>
+    <text class="dim" x="0" y="-15">0</text><text class="dim" x="1088" y="-15" text-anchor="middle">X=6144</text><text class="dim" x="2176" y="-15" text-anchor="end">X=12288</text>
+    <text class="dim" x="-16" y="8" text-anchor="end">Y=0</text><text class="dim" x="-16" y="616" text-anchor="end">3456</text><text class="dim" x="-16" y="1224" text-anchor="end">6912</text>
+  </g>
+
+  <!-- audit sidebar -->
+  <g transform="translate(2410 180)">
+    <text class="panelTitle" x="0" y="0">CONTROL REGISTER</text>
+    <text class="panelText" x="0" y="36">坐标原点：西北 (0,0)</text><text class="panelText" x="0" y="62">换算：1024 ≈ 1 km</text><text class="panelText" x="0" y="88">子模数：32；街坊模数：256</text>
+    <path d="M0 110H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="150">中心控制</text>
+    <text class="panelText" x="0" y="184">几何中心：6144,3456</text><text class="panelText" x="0" y="210">阅览主厅：832×640 / H26m / 3F</text><text class="panelText" x="0" y="236">档案圆厅：Ø640 / H34m / 5F</text><text class="panelText" x="0" y="262">核心替换边界：2048×1536</text><text class="panelText" x="0" y="288">图书馆投影净空：≥192</text>
+    <path d="M0 310H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="350">道路控制</text>
+    <text class="panelText" x="0" y="384">R-AX-EW-W/E、NS-N/S：W128</text><text class="panelText" x="0" y="410">R-LIB-RING：W96</text><text class="panelText" x="0" y="436">R-WARD-W / E：W64</text><text class="panelText" x="0" y="462">主轴在核心外终止并接环路</text><text class="panelText" x="0" y="488">道路不得穿越任何 RB-* 边界</text>
+    <path d="M0 510H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="550">防御控制</text>
+    <text class="panelText" x="0" y="584">连续墙体：7.625×4.625 km</text><text class="panelText" x="0" y="610">四门：G-W / N / E / S</text><text class="panelText" x="0" y="636">八塔：北墙 4 / 南墙 4</text><text class="panelText" x="0" y="662">墙外：干壕 + 160–384 清障带</text><text class="panelText" x="0" y="688">局部防护阵，不设全城护盾</text>
+    <path d="M0 710H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="750">动态层安全</text>
+    <text class="panelText" x="0" y="784">节点锚点安全半径：≥128</text><text class="panelText" x="0" y="810">建筑最高投影边界：RB 外扩 96</text><text class="panelText" x="0" y="836">图书馆 / 高塔：RB 外扩 192</text><text class="panelText" x="0" y="862">路线距投影边界：≥64</text><text class="panelText" x="0" y="888">节点 / 路线 / 状态 / 点击区独立</text>
+    <path d="M0 910H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="950">替换边界</text>
+    <text class="panelText" x="0" y="984">分区：RB-Z-*</text><text class="panelText" x="0" y="1010">建筑：RB-LIB / TA / WK / RV /</text><text class="panelText" x="0" y="1036">DS / MM / HP / ST / OB-*</text><text class="panelText" x="0" y="1062">完整尺寸见工程控制登记 v0.1</text>
+    <path d="M0 1084H500" stroke="#9bb1bf" stroke-width="2"/>
+    <text class="panelTitle" x="0" y="1124">冻结门槛</text>
+    <text class="panelText" x="0" y="1158">1. 产品确认城市结构</text><text class="panelText" x="0" y="1184">2. 再补布局测试数据</text><text class="panelText" x="0" y="1210">3. 再迁移硬表面 3D 与投影</text><text class="panelText" x="0" y="1236">4. 最后执行双分辨率运行验证</text>
+  </g>
+
+  <g transform="translate(90 1510)">
+    <text class="panelTitle" x="0" y="0">工程说明</text>
+    <text class="panelText" x="0" y="40">1. v07 取代 v06 作为可量取工程结构候选；v06 保留为简化结构审阅图，v05 及更早版本仅供废弃过程审计。</text>
+    <text class="panelText" x="0" y="70">2. 中央图书馆由阅览主厅与档案圆厅组成，是城市最大、最高且最清晰的公共地标；西侧入口中庭不占据城市中心。</text>
+    <text class="panelText" x="0" y="100">3. 城市底层固定；约 40 个节点、节点位置、路线、状态与点击区保持运行时动态，并通过同一 3D 相机投影贴合。</text>
+    <text class="panelText" x="0" y="130">4. 本图只冻结结构、尺寸、轴线、边界与净空，不表示任何拟实施建筑、道路、防御或导管已经迁移到 Unity。</text>
+    <text class="panelText" x="0" y="160">5. 硬表面方向：高分辨率蓝白简约、锐利正交轮廓；禁止 Point 放大、像素化、抖动、马赛克、体素和圆润玩具化。</text>
+    <text class="panelText" x="0" y="190">6. 正式模块清单、中心坐标、占地、标高、高度、朝向、轮廓类型与替换边界详见《学院城工程控制登记 v0.1》。</text>
+  </g>
+</svg>

@@ -1,0 +1,102 @@
+{
+  "schema": "occ-item-footprints-catalog-v1",
+  "count": 4,
+  "assets": [
+    {
+      "runtime_id": "medkit",
+      "stem": "medkit",
+      "name": "医疗包",
+      "subject": "学院现场医务箱，象牙白陶瓷壳、灰绿布扣带、药瓶槽与剪钳",
+      "cells": [
+        2,
+        1
+      ],
+      "asset_id": "item.footprint.medkit",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "source_path": "UnityProject/Artifacts/ItemFootprints4/medkit/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationItemFootprints/medkit.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/medkit.png"
+    },
+    {
+      "runtime_id": "shield_cell",
+      "stem": "shield_cell",
+      "name": "护盾单元",
+      "subject": "可更换护幕储能筒，深铁护架、乳白储能介质、灰绿绝缘套和旧金阀帽",
+      "cells": [
+        1,
+        2
+      ],
+      "asset_id": "item.footprint.shield_cell",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [
+        1,
+        2
+      ],
+      "delivery_size": [
+        32,
+        64
+      ],
+      "palette_max": 12,
+      "source_path": "UnityProject/Artifacts/ItemFootprints4/shield_cell/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationItemFootprints/shield_cell.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/shield_cell.png"
+    },
+    {
+      "runtime_id": "F-S01",
+      "stem": "fire_scroll",
+      "name": "火线卷轴",
+      "subject": "近代工程火术卷轴，耐热皮纸、陶红线路、橙色封蜡与铜压角",
+      "cells": [
+        2,
+        1
+      ],
+      "asset_id": "item.footprint.fire_scroll",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [
+        2,
+        1
+      ],
+      "delivery_size": [
+        64,
+        32
+      ],
+      "palette_max": 12,
+      "source_path": "UnityProject/Artifacts/ItemFootprints4/fire_scroll/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationItemFootprints/fire_scroll.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/fire_scroll.png"
+    },
+    {
+      "runtime_id": "aether_core",
+      "stem": "aether_core",
+      "name": "以太核心",
+      "subject": "任务回收用工业核心，深陶瓷六瓣护壳、琥珀金储能窗、锻铁搬运环",
+      "cells": [
+        2,
+        2
+      ],
+      "asset_id": "item.footprint.aether_core",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [
+        2,
+        2
+      ],
+      "delivery_size": [
+        64,
+        64
+      ],
+      "palette_max": 12,
+      "source_path": "UnityProject/Artifacts/ItemFootprints4/aether_core/source.png",
+      "staging_path": "UnityProject/Assets/Game/Resources/Art/ValidationItemFootprints/aether_core.png",
+      "final_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/aether_core.png"
+    }
+  ]
+}

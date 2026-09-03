@@ -1,0 +1,29 @@
+{
+  "schema": "occ-battlefield-layout-normalization-v1",
+  "asset_id": "academy_courtyard_layout_12x9",
+  "size": [
+    384,
+    288
+  ],
+  "logical_cells": [
+    12,
+    9
+  ],
+  "logical_source_size": [
+    192,
+    144
+  ],
+  "visible_colors": 12,
+  "alpha_values": [
+    255
+  ],
+  "sha256": "d427717b6e0358021ff7dcb4f8c36ca6d56a8bb46a2dfddd66cc0c4af816d494",
+  "normalization_only": true,
+  "script_added_art_structure": false,
+  "operations": [
+    "center_crop_4_3",
+    "box_downsample_192x144",
+    "median_cut_12_no_dither",
+    "nearest_2x"
+  ]
+}

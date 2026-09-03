@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000" height="2100" viewBox="0 0 3000 2100">
+  <defs>
+    <pattern id="g" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#d6e5ee"/></pattern>
+    <style>.p{fill:#f7fbfe}.grid{fill:url(#g)}.panel{fill:#eaf4f8;stroke:#5793b4;stroke-width:2}.land{fill:#e1edf3;stroke:#315f7a;stroke-width:2}.contour{fill:none;stroke:#7ca3b8;stroke-width:1.5}.major{fill:none;stroke:#4f7d95;stroke-width:2.5}.road{fill:none;stroke:#fff;stroke-width:22;stroke-linecap:round;stroke-linejoin:round}.street{fill:none;stroke:#fff;stroke-width:11;stroke-linecap:round}.center{fill:none;stroke:#3a7695;stroke-width:2;stroke-dasharray:9 7}.stream{fill:none;stroke:#1684a5;stroke-width:10}.bridge{fill:none;stroke:#173e5a;stroke-width:16}.b{fill:#fff;stroke:#174866;stroke-width:3}.roof{fill:#91c0d7;stroke:#174866;stroke-width:2}.yard{fill:#d6edf5;stroke:#4f8eac;stroke-width:2}.fire{fill:none;stroke:#2d9bb3;stroke-width:3;stroke-dasharray:7 5}.flood{fill:#cbeaf3;stroke:#3795b0;stroke-width:2;stroke-dasharray:8 6}.wall{fill:none;stroke:#173e5a;stroke-width:18}.ditch{fill:none;stroke:#68b0cd;stroke-width:13;stroke-dasharray:11 8}.title{font:700 38px 'Microsoft YaHei',sans-serif;fill:#113650}.h{font:700 24px 'Microsoft YaHei',sans-serif;fill:#153f5c}.t{font:17px 'Microsoft YaHei',sans-serif;fill:#315d75}.s{font:14px 'Microsoft YaHei',sans-serif;fill:#416b80}.id{font:700 14px Consolas,monospace;fill:#0d5a84}.e{font:700 13px Consolas,monospace;fill:#41697f}</style>
+  </defs>
+  <rect class="p" width="3000" height="2100"/><text class="title" x="60" y="58">OCC 学院城道路、水文与坡地街坊详图 · v11-D02</text><text class="t" x="60" y="94">道路随等高线和渡口生长；建筑随局部道路切线和台地定向。所有尺寸为米，高程以海平面 Z=0m。</text>
+
+  <g transform="translate(60 130)">
+    <rect class="panel" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="42">D02-A｜中央鞍部局部平面｜等高距 2m</text>
+    <path class="major" d="M80 170c240-80 420-55 590 35s340 80 620-5"/><text class="e" x="90" y="160">+40</text>
+    <path class="contour" d="M70 230c240-75 410-50 585 35s350 75 650-5"/><text class="e" x="80" y="220">+38</text>
+    <path class="major" d="M60 295c240-70 400-40 580 38s360 70 680-8"/><text class="e" x="70" y="285">+36</text>
+    <path class="contour" d="M60 365c220-60 385-35 560 35s370 65 700-5"/><text class="e" x="70" y="355">+34</text>
+    <path class="major" d="M70 440c210-55 370-30 540 32s385 55 700-8"/><text class="e" x="80" y="430">+32</text>
+    <path class="contour" d="M85 520c195-50 350-25 520 30s385 50 680-10"/><text class="e" x="95" y="510">+30</text>
+    <path class="road" d="M60 420c220-65 370-90 535-20s305 100 440 25 190-55 280-30"/><path class="center" d="M60 420c220-65 370-90 535-20s305 100 440 25 190-55 280-30"/>
+    <path class="road" d="M630 65c-55 120-90 210-30 325s20 190 80 300"/><path class="center" d="M630 65c-55 120-90 210-30 325s20 190 80 300"/>
+    <path class="b" d="M455 300q180-100 370 5l45 180-130 130-220-40-100-145z"/><path class="b" d="M475 375l125-55 125 55v120H475z"/><circle class="b" cx="770" cy="405" r="70"/><circle class="roof" cx="770" cy="405" r="42"/>
+    <path class="street" d="M420 315q-150 10-240 95M425 520q-120 70-220 105M870 300q155-40 310 45M870 550q150 15 280 85"/>
+    <text class="t" x="495" y="350">中央图书馆 +33..+35m</text><text class="s" x="90" y="710">道路在鞍部汇合但不穿过图书馆几何中心；西侧入口以三段缓坡接近。</text>
+  </g>
+
+  <g transform="translate(1560 130)">
+    <rect class="panel" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="42">D02-B｜顺等高线主路与爬坡支街</text>
+    <path class="land" d="M50 650c180-260 350-330 520-250s280 210 430 120 210-180 330-100v280H50z"/>
+    <path class="road" d="M70 560c210-160 370-175 525-85s280 130 420 45 220-110 300-60"/><path class="center" d="M70 560c210-160 370-175 525-85s280 130 420 45 220-110 300-60"/>
+    <path class="street" d="M360 485c-10-130 40-240 110-340M810 520c60-115 115-210 205-285"/>
+    <path class="center" d="M360 485c-10-130 40-240 110-340M810 520c60-115 115-210 205-285"/>
+    <rect class="b" x="150" y="330" width="120" height="120" transform="rotate(-20 210 390)"/><rect class="b" x="555" y="360" width="140" height="120" transform="rotate(12 625 420)"/><rect class="b" x="1030" y="330" width="150" height="120" transform="rotate(-16 1105 390)"/>
+    <text class="t" x="90" y="620">顺等高线主路：纵坡≤5%</text><text class="t" x="335" y="120">爬坡街 6–10%</text><text class="t" x="930" y="190">超过10%改梯道</text>
+    <text class="s" x="60" y="710">建筑只按局部街道切线旋转；同一区域允许±8°微差，不随机散乱，也不服从全城正交轴。</text>
+  </g>
+
+  <g transform="translate(60 930)">
+    <rect class="panel" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="42">D02-C｜西泉溪、石桥与住宅保护</text>
+    <path class="stream" d="M520 70c-70 150-60 260 15 360s25 190-40 280"/>
+    <path class="flood" d="M350 100c-40 150-30 270 60 360s20 170-55 250h320c70-130 100-230 15-335S620 190 700 100z"/>
+    <path class="road" d="M70 390c180-40 315-20 440 40s260 45 410-20 290-35 400 5"/><path class="center" d="M70 390c180-40 315-20 440 40s260 45 410-20 290-35 400 5"/>
+    <path class="bridge" d="M470 405l155 55"/>
+    <rect class="b" x="120" y="180" width="150" height="120" transform="rotate(-9 195 240)"/><rect class="b" x="820" y="170" width="150" height="120" transform="rotate(8 895 230)"/><rect class="b" x="1040" y="220" width="150" height="120" transform="rotate(12 1115 280)"/>
+    <circle class="fire" cx="520" cy="210" r="120"/><text class="t" x="380" y="95">上游泉眼保护带 R=120m</text><text class="t" x="500" y="520">BR-W01 双孔石拱 / 跨28m / 桥面10m</text>
+    <text class="s" x="60" y="710">住宅、灰坑和工坊不得进入泉眼保护带；溪流保持明渠，桥台避开主冲槽。</text>
+  </g>
+
+  <g transform="translate(1560 930)">
+    <rect class="panel" width="1380" height="760"/><rect class="grid" x="20" y="60" width="1340" height="680"/><text class="h" x="30" y="42">D02-D｜不规则坡地住宅街坊</text>
+    <path class="road" d="M80 190c240-80 450-30 580 90s310 145 640 30"/><path class="center" d="M80 190c240-80 450-30 580 90s310 145 640 30"/>
+    <path class="street" d="M280 145c-20 170 15 310 105 500M720 270c-60 130-50 250 10 390M1040 280c-40 105-15 210 80 330"/>
+    <g><rect class="b" x="120" y="270" width="90" height="165" transform="rotate(-18 165 350)"/><rect class="b" x="225" y="245" width="85" height="165" transform="rotate(-12 268 328)"/><rect class="b" x="330" y="260" width="92" height="165" transform="rotate(-4 376 342)"/><rect class="b" x="445" y="300" width="85" height="165" transform="rotate(8 487 382)"/><rect class="b" x="550" y="350" width="90" height="165" transform="rotate(14 595 432)"/></g>
+    <g><rect class="b" x="750" y="355" width="95" height="160" transform="rotate(10 798 435)"/><rect class="b" x="865" y="370" width="88" height="160" transform="rotate(5 909 450)"/><rect class="b" x="975" y="360" width="92" height="160" transform="rotate(-2 1021 440)"/><rect class="b" x="1085" y="335" width="90" height="160" transform="rotate(-10 1130 415)"/></g>
+    <path class="fire" d="M670 300v330"/><rect class="yard" x="340" y="500" width="260" height="120" transform="rotate(5 470 560)"/>
+    <text class="t" x="610" y="650">6–8m 防火缝</text><text class="t" x="350" y="570">共享后院／菜圃</text>
+    <text class="s" x="60" y="710">排屋每3–5栋形成一个折线组；院落和防火缝吸收道路曲率，禁止整排连续弯曲模型。</text>
+  </g>
+
+  <g transform="translate(60 1730)">
+    <rect class="panel" width="2880" height="300"/><text class="h" x="30" y="42">D02-E｜山脊城墙与谷口门</text>
+    <path class="land" d="M60 220c220-130 400-150 590-80s350 65 500-10 290-90 430-15 300 85 470 20 330-65 710 30v85H60z"/>
+    <path class="ditch" d="M90 180c220-120 390-125 560-60s330 55 470-15 280-80 420-10 295 75 455 15 315-55 700 25"/>
+    <path class="wall" d="M110 155c205-105 375-105 535-45s315 45 445-20 265-70 395-5 280 65 430 10 300-45 660 22"/>
+    <rect class="b" x="1230" y="58" width="80" height="130"/><rect class="b" x="1340" y="58" width="80" height="130"/><path class="road" d="M1130 150h400"/><text class="t" x="1170" y="35">北鞍门：天然低点 +52m</text>
+    <text class="s" x="80" y="270">墙线随脊肩变化；塔距按视线调整为260–420m。谷口设门，陡崖段减壕，软土段不建主墙。</text>
+  </g>
+  <text class="s" x="60" y="2075">关联总图：OCC_M-A17_学院城地形优先工程总平面_v11.svg｜状态：结构候选，未建模，未接入 Unity。</text>
+</svg>

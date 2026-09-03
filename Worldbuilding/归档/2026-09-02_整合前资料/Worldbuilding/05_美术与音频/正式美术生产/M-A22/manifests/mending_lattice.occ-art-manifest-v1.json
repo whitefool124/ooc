@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "artifact.footprint.mending_lattice",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single artifact footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/source.png",
+    "source_sha256": "6bfc3aa0a89df350968e2e2825d4eeda3bd4134addbe104183a47766e3bed330"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/mending_lattice.png",
+    "output_sha256": "7ad169a93166800185d67d25a69f1560dab78cde9a3e6c80d35b65609b9d26a2",
+    "native_output_path": null,
+    "logical_cells": [
+      3,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "3x2 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/1x.png",
+    "four_x": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/4x.png",
+    "grayscale": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/grayscale.png",
+    "checker": "UnityProject/Artifacts/ArtifactFootprints20/mending_lattice/checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtifactFootprints20/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct real-object silhouette, function-specific color, exact footprint, rotation-safe shadow-neutral presentation, and Unity Resources inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/mending_lattice.png",
+    "stable_guid": "66fb57065c1072518643ce07a69d2dfe",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

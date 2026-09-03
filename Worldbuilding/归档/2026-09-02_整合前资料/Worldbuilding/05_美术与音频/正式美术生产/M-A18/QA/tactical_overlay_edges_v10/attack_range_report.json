@@ -1,0 +1,33 @@
+{
+  "logical_size": [
+    32,
+    32
+  ],
+  "delivery_size": [
+    32,
+    32
+  ],
+  "nearest_scale": 1,
+  "alpha_values": [
+    0,
+    255
+  ],
+  "colour_count": 2,
+  "palette_name": "overlay_attack",
+  "palette": {
+    "x": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "1": [
+      144,
+      49,
+      43,
+      255
+    ]
+  },
+  "authored_source": "Worldbuilding\\05_美术与音频\\正式美术生产\\M-A18\\source\\tactical_overlay_edges_v10\\semantic_inset_outline.pxart",
+  "export_only": true
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "artifact.footprint.seismic_plumb",
+  "role": "multi_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single artifact footprint; no icon stretching or board slicing",
+    "source_path": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/source.png",
+    "source_sha256": "46d65f848fd3c0784c7bfbb8f022fe9ff3669efddb45a7fabca4f7e744d1808d"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalInventoryFootprints/seismic_plumb.png",
+    "output_sha256": "4e5e624557d8fdc4f83be25abad7d1b0cec8d39a4677282cd195c902b8805bac",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      3
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "1x3 inventory cells at 32 pixels per cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/1x.png",
+    "four_x": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/4x.png",
+    "grayscale": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/grayscale.png",
+    "checker": "UnityProject/Artifacts/ArtifactFootprints20/seismic_plumb/checker.png",
+    "application_contact": "UnityProject/Artifacts/ArtifactFootprints20/contacts/unity_inventory_contact_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-08-26",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Distinct real-object silhouette, function-specific color, exact footprint, rotation-safe shadow-neutral presentation, and Unity Resources inventory contact approved."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalInventoryFootprints/seismic_plumb.png",
+    "stable_guid": "a6eaf38f35e73ef0f4e7746f081c2493",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

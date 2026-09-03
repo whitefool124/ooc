@@ -1,0 +1,61 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_ground_macro_ruin_b_3x3",
+  "role": "multi_cell_ground_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Existing independent raw, re-normalized for lower frequency and tighter value hierarchy in academy polish-39",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3_source.png",
+    "source_sha256": "c7945e77897f8a6d73d2be9ad23244f36400aa507df15eeb3a6ab0da0c07189f"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3.png",
+    "output_sha256": "e398b04abafe4a0ae1c660aaf5a805cdcf282ad21391502103fd29f01ecdc093",
+    "native_output_path": null,
+    "logical_cells": [
+      3,
+      3
+    ],
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "reusable academy ground macro below units and tactical overlays",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/terrain_ground_macros_v19/academy_ground_macro_ruin_b_3x3_checker.png",
+    "application_contact": "UnityProject/Artifacts/Terrain39/NineMaps/terrain39_nine_maps_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Earth uses a quiet 16px-per-cell material field with three close values. Ruin retains native 32px-per-cell masonry outlines with four close values. Organic variants are stable per map rather than checkerboarded; nine-map and 1:1 battlefield review passed."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyGroundMacros32/academy_ground_macro_ruin_b_3x3.png",
+    "resource_path": "Art/FormalAcademyGroundMacros32/academy_ground_macro_ruin_b_3x3",
+    "guid": "e04363e0cbed1f2479caa01e21f40a07",
+    "stable_guid": "e04363e0cbed1f2479caa01e21f40a07",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_evidence": "UnityProject/Artifacts/Terrain39/NineMaps/elite_foundry_1920x1080.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

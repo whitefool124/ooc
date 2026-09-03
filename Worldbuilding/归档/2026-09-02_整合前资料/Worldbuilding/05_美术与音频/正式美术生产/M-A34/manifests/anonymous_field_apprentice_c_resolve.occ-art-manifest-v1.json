@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a34_anonymous_field_apprentice_c_resolve",
+  "role": "character_performance_c_192x288",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A34 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/raw/anonymous_field_apprentice_c_resolve/source.png",
+    "source_sha256": "3084172cfabcd0b21b22d8b81ef6b864e074c9aebcfcfcafae97818ed4042938"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/normalized/anonymous_field_apprentice_c_resolve.png",
+    "output_sha256": "5daa452183d53a59d56cbf54737f5f16630270cdb84f852db1ed7cbb1827203c",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "anonymous field-apprentice stock identity C layer resolve full-body performance",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/QA/anonymous_field_apprentice_c_resolve/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/QA/anonymous_field_apprentice_c_resolve/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/QA/anonymous_field_apprentice_c_resolve/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/QA/anonymous_field_apprentice_c_resolve/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A34/QA/contacts/m_a34_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

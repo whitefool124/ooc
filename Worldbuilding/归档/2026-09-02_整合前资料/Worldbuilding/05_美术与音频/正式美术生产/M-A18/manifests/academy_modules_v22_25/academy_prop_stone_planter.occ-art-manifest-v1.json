@@ -1,0 +1,62 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_prop_stone_planter",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single-asset generation for batch 45; no board slicing",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/source/academy_modules_v22_25/academy_prop_stone_planter_source.png",
+    "source_sha256": "85a27c53443a693987cacd725bccd3c24442d1212a9a9a8015560101a5655396"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/normalized/academy_modules_v22_25/academy_prop_stone_planter.png",
+    "output_sha256": "0d6a39fa7b74018a34ee017c1a4f0c7d10b1106e79045ebe54c9adb75cdef6ab",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "visual-only reusable academy map module; never changes logical cell state",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_stone_planter_1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_stone_planter_4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_stone_planter_grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_prop_stone_planter_checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous runtime review",
+    "date": "2026-08-25",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Passed target-size silhouette/material/perspective/style review and exact 12x9 Unity contact. Representative weak/strong/boss maps passed at 1920x1080 and 960x540; directional assets were neither rotated nor mirrored."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_stone_planter.png",
+    "resource_path": "Art/FormalAcademyStructures32/academy_prop_stone_planter",
+    "guid": "65dd62863fbd38749b3e151346aa089e",
+    "stable_guid": "65dd62863fbd38749b3e151346aa089e",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_evidence": "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/academy_modules_v22_25/academy_modules_72_unity_12x9_contact.png",
+    "representative_map_evidence": "UnityProject/Artifacts/ArtModules72/module72_three_maps_contact.png",
+    "resolutions": [
+      "1920x1080",
+      "960x540"
+    ],
+    "verification_date": "2026-08-25"
+  }
+}

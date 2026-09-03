@@ -1,0 +1,50 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.element.water",
+  "role": "equipment_icon_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single 32px element/resource icon; no board slicing",
+    "source_path": "UnityProject/Artifacts/ElementResources24/element/water/source.png",
+    "source_sha256": "80b060e65fcfcb9f3932c2cb696ee1d26edbca79829792cbfe7c57712f71a700"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalElementIcons32/water.png",
+    "output_sha256": "7089ec0005c7b3e8497d1d546d56dbd665285e6ece398f45129531ac67c00b6e",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 element or resource UI slot",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Artifacts/ElementResources24/element/water/1x.png",
+    "four_x": "UnityProject/Artifacts/ElementResources24/element/water/4x.png",
+    "grayscale": "UnityProject/Artifacts/ElementResources24/element/water/grayscale.png",
+    "checker": "UnityProject/Artifacts/ElementResources24/element/water/checker.png",
+    "application_contact": "UnityProject/Artifacts/ElementResources24/contacts/unity_element_resources_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex art-direction review",
+    "date": "2026-08-27",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "一道受压水束穿过弧形压力环"
+  },
+  "unity_import": {
+    "stable_guid": "77037059ed5ef9e4ebf0fc7c771e1c92",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "audit_report": "UnityProject/Artifacts/ElementResources24/import_audit.json"
+  }
+}
