@@ -69,7 +69,7 @@ namespace OCC.Combat.Presentation
             if (hudRoot.gameObject.activeSelf != visible) hudRoot.gameObject.SetActive(visible);
             if (!visible) return;
             CombatState state = bootstrap.CurrentState; UnitState hero = state.GetUnit("hero"); UnitState active = state.GetUnit(state.ActiveUnitId);
-            activeText.text = "行动：" + active.DisplayName + "  /  AP " + active.ActionPoints;
+            activeText.text = "当前行动：" + active.DisplayName + "  /  行动点 " + active.ActionPoints;
             weaponText.supportRichText = true;
             weaponText.text = "主手：" + hero.MainHand.DisplayName + "  状态：" + StatusText(hero);
             SetBar(healthBar, hero.Health / (float)hero.MaxHealth); SetBar(shieldBar, hero.Shield / (float)Math.Max(1, hero.MaxShield)); SetBar(manaBar, hero.Mana / (float)hero.MaxMana);

@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a41_brass_wire_coil",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A41 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/raw/brass_wire_coil/source.png",
+    "source_sha256": "025d0ce86451f841813810fc056e71806d69bb48694d6df05a6591a976c82e79"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/brass_wire_coil.png",
+    "output_sha256": "8c87e3b9d210a39951dacf62bf1312a9426b3c97b8dbef79dcf064f2279ce3f7",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/brass_wire_coil_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future common instrument and repair conductor material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/brass_wire_coil/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/brass_wire_coil/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/brass_wire_coil/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/brass_wire_coil/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/contacts/m_a41_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

@@ -65,7 +65,7 @@ namespace OCC.Combat
             if (legacyRun.Kind == RogueliteLaunchKind.TemplateSandbox)
                 return new CombatOutcomeSettlement(true, true);
 
-            string summary = "胜利 | " + legacyRun.CurrentMission.TemplateId + " | 种子 " + legacyRun.Package.Seed;
+            string summary = "胜利 · 战利品已经清点";
             legacyRun.Complete(summary);
             return new CombatOutcomeSettlement(true, true,
                 legacyRun.IsShortRun ? CombatOutcomePersistence.ShortRun : CombatOutcomePersistence.Story);

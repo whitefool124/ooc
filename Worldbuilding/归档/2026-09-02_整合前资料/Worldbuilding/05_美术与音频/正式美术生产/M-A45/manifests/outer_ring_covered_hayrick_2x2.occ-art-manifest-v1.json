@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a45_outer_ring_covered_hayrick_2x2",
+  "role": "multi_cell_prop_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A45 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/raw/outer_ring_covered_hayrick_2x2/source.png",
+    "source_sha256": "f8fba8ce33bcda4eef706196c9307ed8cba74f404734377b239887eb11d0daea"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/normalized/outer_ring_covered_hayrick_2x2.png",
+    "output_sha256": "ed7861523ac42cd31defe537de3dc8676344f488e05b01c6ae611e113309f497",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "REG-ORH-01 12x9 tactical map expansion anchor; covered 2x2 hay storage",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_covered_hayrick_2x2/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_covered_hayrick_2x2/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_covered_hayrick_2x2/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_covered_hayrick_2x2/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/contacts/m_a45_outer_ring_expansion_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

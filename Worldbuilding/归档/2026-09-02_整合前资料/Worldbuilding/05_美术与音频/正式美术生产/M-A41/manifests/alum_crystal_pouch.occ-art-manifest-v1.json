@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a41_alum_crystal_pouch",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A41 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/raw/alum_crystal_pouch/source.png",
+    "source_sha256": "415101261ce1c01d1de5e9981fc8bde2237ace46860f26323ff2cd1657582ed4"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/alum_crystal_pouch.png",
+    "output_sha256": "249d48b28dbe13bf7764695c250928726a96ba4ec8a0d834990bd5c11c9e7bdb",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/normalized/alum_crystal_pouch_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future common water-treatment mineral material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/alum_crystal_pouch/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/alum_crystal_pouch/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/alum_crystal_pouch/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/alum_crystal_pouch/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A41/QA/contacts/m_a41_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

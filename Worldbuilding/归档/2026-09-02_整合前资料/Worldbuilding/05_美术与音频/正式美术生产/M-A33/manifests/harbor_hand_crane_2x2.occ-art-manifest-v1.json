@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a33_harbor_hand_crane_2x2",
+  "role": "multi_cell_prop_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A33 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/raw/harbor_hand_crane_2x2/source.png",
+    "source_sha256": "ece0d921052e66cfea3eeb0b8ba6e8850520140d0ba179685a135350c2b83022"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/normalized/harbor_hand_crane_2x2.png",
+    "output_sha256": "ea92fd7584ca1cb8e8256a8ae748ac8ed7708d928ab2f1014df8f8503ddadfe9",
+    "native_output_path": null,
+    "logical_cells": [
+      2,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future academy-harbor tactical map; honest 2x2 manual cargo crane heavy obstacle",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_hand_crane_2x2/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_hand_crane_2x2/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_hand_crane_2x2/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/harbor_hand_crane_2x2/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A33/QA/contacts/m_a33_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

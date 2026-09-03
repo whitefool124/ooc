@@ -91,7 +91,7 @@ namespace OCC.Combat
         {
             new FormalArtEntry("intent.attack", "attack", "Art/FormalIntentIcons16/attack"),
             new FormalArtEntry("intent.cast", "cast", "Art/FormalIntentIcons16/cast"),
-            new FormalArtEntry("intent.move", "move", "Art/FormalIntentIcons16/move"),
+            new FormalArtEntry("intent.move", "move", "Art/FormalCommandIcons16/move"),
             new FormalArtEntry("intent.defend", "defend", "Art/FormalIntentIcons16/defend"),
             new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalIntentIcons16/interact_destroy")
         };

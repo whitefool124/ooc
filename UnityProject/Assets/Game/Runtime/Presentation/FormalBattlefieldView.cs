@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,6 +13,15 @@ namespace OCC.Combat.Presentation
     {
         private const float ReferenceWidth = 1920f;
         private const float ReferenceHeight = 1080f;
+        private const float DoubleClickWindowSeconds = .32f;
+        private const float ContextMenuWidth = 560f;
+        private const float ContextMenuHeaderHeight = 84f;
+        private const float ContextMenuRowHeight = 84f;
+        private const float ContextMenuButtonHeight = 76f;
+        private const float ContextMenuPadding = 12f;
+        private const int ContextMenuTitleFontSize = FormalUiTheme.BodyFontSize;
+        private const int ContextMenuActionFontSize = FormalUiTheme.BodyFontSize;
+        private const int ContextMenuDetailFontSize = FormalUiTheme.BodyFontSize;
         private readonly Dictionary<GridPosition, CellView> cells = new Dictionary<GridPosition, CellView>();
         private readonly BattlefieldViewportInputController input = new BattlefieldViewportInputController();
         private IBattlefieldViewHost host;
@@ -40,6 +50,18 @@ namespace OCC.Combat.Presentation
         private Texture2D moveIntentFrameTexture;
         private FormalHoverTooltip cellTooltip;
         private object cellTooltipOwner;
+        private GameObject contextMenuRoot;
+        private RectTransform contextMenuPanel;
+        private Text contextMenuTitle;
+        private Text contextMenuHint;
+        private readonly List<Button> contextMenuButtons = new List<Button>();
+        private readonly List<Text> contextMenuButtonLabels = new List<Text>();
+        private readonly List<Text> contextMenuButtonDetails = new List<Text>();
+        private Coroutine pendingPrimaryClick;
+        private GridPosition pendingPrimaryPosition;
+        private bool hasPendingPrimaryPosition;
+        private bool submitPendingPrimaryOnTimeout;
+        private int contextMenuOpenedFrame = -1;
         private int mapWidth;
         private int mapHeight;
 
@@ -63,8 +85,16 @@ namespace OCC.Combat.Presentation
             if (!visible)
             {
                 HideTooltip();
+                HideContextMenu();
+                CancelPendingPrimaryClick();
                 input.Reset();
                 return;
+            }
+
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                if (Keyboard.current?.escapeKey.wasPressedThisFrame == true) HideContextMenu();
+                else DismissContextMenuFromOutsideClick();
             }
 
             EnsureCells(state.Map.Width, state.Map.Height);
@@ -86,7 +116,7 @@ namespace OCC.Combat.Presentation
             root = canvas.gameObject;
             cellTooltip = root.AddComponent<FormalHoverTooltip>();
             cellTooltip.Initialize(canvas);
-            moveIntentFrameTexture = Resources.Load<Texture2D>("Art/FormalTacticalOverlays32/move_range");
+            moveIntentFrameTexture = Resources.Load<Texture2D>("Art/FormalTacticalOverlays32V2/move_range");
             GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
             viewportRect = viewport.AddComponent<RectTransform>();
             SetTopLeft(viewportRect, 0f, 0f, BattlefieldPresentationAdapter.BattlefieldWidth,
@@ -111,40 +141,40 @@ namespace OCC.Combat.Presentation
             home.transform.SetAsLastSibling();
 
             tooltipRoot = FormalUiKit.Panel("敌情速览卡", root.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(18f, -76f), new Vector2(404f, 142f), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .98f));
+                new Vector2(18f, -76f), new Vector2(456f, 208f), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
             tooltipRoot.GetComponent<Image>().raycastTarget = false;
             tooltipPortrait = TooltipRawIcon("敌人头像", tooltipRoot.transform, new Vector2(12f, -14f), 64f);
-            tooltipName = FormalUiKit.Label("敌人名称", string.Empty, tooltipRoot.transform, new Vector2(88f, -10f),
-                new Vector2(198f, 26f), 18, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
+            tooltipName = FormalUiKit.Label("敌人名称", string.Empty, tooltipRoot.transform, new Vector2(88f, -4f),
+                new Vector2(236f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(tooltipName);
-            Text hint = FormalUiKit.Label("锁定提示", "右键锁定", tooltipRoot.transform, new Vector2(300f, -12f),
-                new Vector2(90f, 22f), 12, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
+            Text hint = FormalUiKit.Label("锁定提示", "右键行动", tooltipRoot.transform, new Vector2(328f, -4f),
+                new Vector2(112f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
             FormalUiKit.PreventAutomaticWrapping(hint);
             tooltipHealth = TooltipMetric("生命", "Art/FormalResourceIcons32/health", tooltipRoot.transform,
-                new Vector2(88f, -42f), FormalUiTheme.Danger);
+                new Vector2(88f, -46f), FormalUiTheme.Danger);
             tooltipShield = TooltipMetric("护盾", "Art/FormalResourceIcons32/shield", tooltipRoot.transform,
-                new Vector2(176f, -42f), FormalUiTheme.Shield);
+                new Vector2(208f, -46f), FormalUiTheme.Shield);
             tooltipArmor = TooltipMetric("护甲", FormalArtRegistry.ItemPath("category_armor"), tooltipRoot.transform,
-                new Vector2(264f, -42f), FormalUiTheme.Muted);
-            tooltipWeaponIcon = TooltipSpriteIcon("武器", tooltipRoot.transform, new Vector2(88f, -76f), 24f);
-            tooltipWeapon = FormalUiKit.Label("武器读数", string.Empty, tooltipRoot.transform, new Vector2(118f, -76f),
-                new Vector2(144f, 24f), 13, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                new Vector2(328f, -46f), FormalUiTheme.Muted);
+            tooltipWeaponIcon = TooltipSpriteIcon("武器", tooltipRoot.transform, new Vector2(88f, -88f), 32f);
+            tooltipWeapon = FormalUiKit.Label("武器读数", string.Empty, tooltipRoot.transform, new Vector2(126f, -84f),
+                new Vector2(190f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(tooltipWeapon);
-            tooltipIntentIcon = TooltipRawIcon("意图", tooltipRoot.transform, new Vector2(270f, -76f), 24f);
-            tooltipIntent = FormalUiKit.Label("意图读数", string.Empty, tooltipRoot.transform, new Vector2(300f, -76f),
-                new Vector2(90f, 24f), 13, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            tooltipIntentIcon = TooltipRawIcon("意图", tooltipRoot.transform, new Vector2(286f, -88f), 32f);
+            tooltipIntent = FormalUiKit.Label("意图读数", string.Empty, tooltipRoot.transform, new Vector2(324f, -84f),
+                new Vector2(116f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(tooltipIntent);
             for (int i = 0; i < tooltipStatusRoots.Length; i++)
             {
                 GameObject status = FormalUiKit.Create("状态_" + i, tooltipRoot.transform);
                 RectTransform statusRect = status.AddComponent<RectTransform>();
-                SetTopLeft(statusRect, 88f + i * 34f, 110f, 28f, 24f);
+                SetTopLeft(statusRect, 88f + i * 44f, 140f, 40f, 40f);
                 tooltipStatusRoots[i] = status;
                 tooltipStatusIcons[i] = status.AddComponent<RawImage>();
                 tooltipStatusIcons[i].raycastTarget = false;
                 tooltipStatusValues[i] = Label("回合", statusRect);
-                tooltipStatusValues[i].fontSize = 10;
-                tooltipStatusValues[i].fontStyle = FontStyle.Bold;
+                tooltipStatusValues[i].fontSize = FormalUiTheme.BodyFontSize;
+                tooltipStatusValues[i].fontStyle = FontStyle.Normal;
                 tooltipStatusValues[i].alignment = TextAnchor.LowerRight;
             }
             tooltipRoot.SetActive(false);
@@ -233,7 +263,7 @@ namespace OCC.Combat.Presentation
             hitSurface.color = Color.clear;
             hitSurface.raycastTarget = true;
             BattlefieldCellPointer pointer = rootObject.AddComponent<BattlefieldCellPointer>();
-            pointer.Initialize(position, SubmitCell, ShowTooltip, HideTooltip);
+            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, ShowTooltip, HideTooltip);
 
             GameObject overlayObject = FormalUiKit.Create("格子信息_" + position.X + "_" + position.Y, overlayLayerRect);
             RectTransform overlayRect = overlayObject.AddComponent<RectTransform>();
@@ -260,6 +290,13 @@ namespace OCC.Combat.Presentation
                 Shield = Bar("护盾", overlayRect, FormalUiTheme.Shield),
                 IntentRoot = FormalUiKit.Create("敌人意图", overlayRect)
             };
+            float rangePhase = position.X * .47f + position.Y * .29f;
+            cell.MoveMotion = cell.Move.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.MoveMotion.Initialize(cell.Move, rangePhase);
+            cell.AttackMotion = cell.Attack.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.AttackMotion.Initialize(cell.Attack, rangePhase + .7f);
+            cell.SkillMotion = cell.Skill.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.SkillMotion.Initialize(cell.Skill, rangePhase + 1.4f);
             cell.IntentRect = cell.IntentRoot.AddComponent<RectTransform>();
             cell.IntentRect.anchorMin = cell.IntentRect.anchorMax = cell.IntentRect.pivot = new Vector2(0f, 1f);
             Image intentBackground = cell.IntentRoot.AddComponent<Image>();
@@ -268,8 +305,8 @@ namespace OCC.Combat.Presentation
             cell.IntentIcon = Layer("意图图标", cell.IntentRect);
             cell.IntentDamage = Label("意图伤害", cell.IntentRect);
             cell.IntentDamage.alignment = TextAnchor.MiddleCenter;
-            cell.IntentDamage.fontSize = 14;
-            cell.IntentDamage.fontStyle = FontStyle.Bold;
+            cell.IntentDamage.fontSize = FormalUiTheme.BodyFontSize;
+            cell.IntentDamage.fontStyle = FontStyle.Normal;
             cell.IntentDamage.color = new Color(1f, .87f, .72f);
             cell.StatusRoots = new GameObject[6];
             cell.StatusIcons = new RawImage[6];
@@ -283,8 +320,8 @@ namespace OCC.Combat.Presentation
                 cell.StatusIcons[i] = status.AddComponent<RawImage>();
                 cell.StatusIcons[i].raycastTarget = false;
                 cell.StatusValues[i] = Label("数值", statusRect);
-                cell.StatusValues[i].fontSize = 10;
-                cell.StatusValues[i].fontStyle = FontStyle.Bold;
+                cell.StatusValues[i].fontSize = FormalUiTheme.BodyFontSize;
+                cell.StatusValues[i].fontStyle = FontStyle.Normal;
                 cell.StatusValues[i].alignment = TextAnchor.LowerRight;
             }
             return cell;
@@ -333,9 +370,9 @@ namespace OCC.Combat.Presentation
             cell.TerrainBoundary.rectTransform.localEulerAngles = new Vector3(0f, 0f,
                 model.TerrainBoundaryRotationDegrees);
             Set(cell.Environment, model.EnvironmentTexture, Color.white);
-            Set(cell.Move, model.MoveOverlayTexture, new Color(1f, 1f, 1f, model.MoveOverlayAlpha));
-            Set(cell.Attack, model.AttackOverlayTexture, new Color(1f, 1f, 1f, model.AttackOverlayAlpha));
-            Set(cell.Skill, model.SkillOverlayTexture, Color.white);
+            cell.MoveMotion.Refresh(model.MoveOverlayTexture, model.MoveOverlayAlpha);
+            cell.AttackMotion.Refresh(model.AttackOverlayTexture, model.AttackOverlayAlpha);
+            cell.SkillMotion.Refresh(model.SkillOverlayTexture, 1f);
             Set(cell.IntentDestination, isIntentDestination ? moveIntentFrameTexture : null, Color.white);
             Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
             Set(cell.Object, model.ObjectTexture, Color.white);
@@ -349,7 +386,7 @@ namespace OCC.Combat.Presentation
             cell.ObjectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.ObjectLabel));
             cell.ObjectLabel.text = model.ObjectLabel;
             cell.ObjectLabel.color = model.ObjectLabelColor;
-            SetTopLeft(cell.ObjectLabel.rectTransform, 2f, 18f * cellSize / 128f, cellSize - 4f, 22f * cellSize / 128f);
+            SetTopLeft(cell.ObjectLabel.rectTransform, 2f, 12f * cellSize / 128f, cellSize - 4f, 40f);
 
             cell.Unit.gameObject.SetActive(model.UnitTexture != null);
             if (model.UnitTexture != null)
@@ -379,11 +416,31 @@ namespace OCC.Combat.Presentation
         {
             bar.Root.SetActive(vital != null);
             if (vital == null) return;
-            bar.Fill.color = fillColor;
+            if (bar.LastCurrent >= 0 && bar.LastCurrent != vital.Current)
+            {
+                bar.FlashUntil = Time.unscaledTime + .28f;
+                bar.MarkerUntil = Time.unscaledTime + .42f;
+                bar.MarkerRatio = vital.RemainingRatio;
+                bar.MarkerColor = vital.Current < bar.LastCurrent ? FormalUiTheme.Danger : FormalUiTheme.Safe;
+            }
+            bar.LastCurrent = vital.Current;
+            float flash = bar.FlashUntil > Time.unscaledTime
+                ? Mathf.PingPong((bar.FlashUntil - Time.unscaledTime) * 12f, 1f)
+                : 0f;
+            bar.Fill.color = Color.Lerp(fillColor, Color.white, flash * .42f);
             bar.Forecast.color = FormalUiTheme.WithAlpha(forecastColor, .82f);
+            float markerFlash = bar.MarkerUntil > Time.unscaledTime
+                ? Mathf.PingPong((bar.MarkerUntil - Time.unscaledTime) * 10f, 1f)
+                : 0f;
+            bar.Marker.rectTransform.anchorMin = new Vector2(Mathf.Clamp(bar.MarkerRatio, .02f, .98f), 0f);
+            bar.Marker.rectTransform.anchorMax = new Vector2(Mathf.Clamp(bar.MarkerRatio, .02f, .98f), 1f);
+            bar.Marker.color = FormalUiTheme.WithAlpha(bar.MarkerColor, markerFlash * .95f);
             Rect absolute = health ? CombatUnitHudLayout.UnitHealthBarRect(cell) : CombatUnitHudLayout.UnitShieldBarRect(cell);
             SetTopLeft(bar.Rect, absolute.x - cell.X, absolute.y - cell.Y, absolute.width, absolute.height);
-            bar.Fill.rectTransform.anchorMax = new Vector2(vital.RemainingRatio, 1f);
+            if (bar.DisplayedRatio < 0f) bar.DisplayedRatio = vital.RemainingRatio;
+            bar.DisplayedRatio = Mathf.MoveTowards(bar.DisplayedRatio, vital.RemainingRatio,
+                Time.unscaledDeltaTime / .18f);
+            bar.Fill.rectTransform.anchorMax = new Vector2(bar.DisplayedRatio, 1f);
             bar.Forecast.gameObject.SetActive(vital.ForecastLoss > 0);
             bar.Forecast.rectTransform.anchorMin = new Vector2(vital.RemainingRatio, 0f);
             bar.Forecast.rectTransform.anchorMax = new Vector2(vital.CurrentRatio, 1f);
@@ -416,10 +473,12 @@ namespace OCC.Combat.Presentation
             if (!active) return;
             Rect absolute = CombatUnitHudLayout.EnemyIntentBadgeRect(contract, intent.ExpectedDamage);
             SetTopLeft(cell.IntentRect, absolute.x - contract.X, absolute.y - contract.Y, absolute.width, absolute.height);
-            SetTopLeft(cell.IntentIcon.rectTransform, 2f, 2f, 16f, 16f);
+            Rect icon = CombatUnitHudLayout.EnemyIntentIconLocalRect();
+            SetTopLeft(cell.IntentIcon.rectTransform, icon.x, icon.y, icon.width, icon.height);
             cell.IntentIcon.texture = texture;
             cell.IntentIcon.color = Color.white;
-            SetTopLeft(cell.IntentDamage.rectTransform, 19f, 0f, absolute.width - 20f, absolute.height);
+            Rect damage = CombatUnitHudLayout.EnemyIntentDamageLocalRect(absolute.width);
+            SetTopLeft(cell.IntentDamage.rectTransform, damage.x, damage.y, damage.width, damage.height);
             cell.IntentDamage.text = intent.ExpectedDamage > 0 ? intent.ExpectedDamage.ToString() : string.Empty;
         }
 
@@ -467,9 +526,201 @@ namespace OCC.Combat.Presentation
             eventData.Use();
         }
 
-        private void SubmitCell(GridPosition position, bool inspection)
+        private void SubmitPrimaryCell(GridPosition position, int _)
         {
-            if (!host.IsInteractionModalOpen) host.SubmitBattlefieldCell(position, inspection);
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                HideContextMenu();
+                return;
+            }
+            if (host.IsInteractionModalOpen) return;
+
+            bool canQuickMove = host.CanQuickMoveTo(position);
+            if (IsConfirmedQuickMove(position, pendingPrimaryPosition, hasPendingPrimaryPosition, canQuickMove))
+            {
+                CancelPendingPrimaryClick();
+                host.SubmitBattlefieldQuickMove(position);
+                return;
+            }
+
+            if (!canQuickMove)
+            {
+                CancelPendingPrimaryClick();
+                host.SubmitBattlefieldCell(position, false);
+                return;
+            }
+
+            CancelPendingPrimaryClick();
+            pendingPrimaryPosition = position;
+            hasPendingPrimaryPosition = true;
+            submitPendingPrimaryOnTimeout = host.ShouldDeferPrimaryClickForQuickMove(position);
+            pendingPrimaryClick = StartCoroutine(SubmitPendingPrimaryClick());
+        }
+
+        public static bool IsConfirmedQuickMove(GridPosition position, GridPosition pendingPosition,
+            bool hasPendingPosition, bool canQuickMove) =>
+            hasPendingPosition && canQuickMove && position == pendingPosition;
+
+        private IEnumerator SubmitPendingPrimaryClick()
+        {
+            yield return new WaitForSecondsRealtime(DoubleClickWindowSeconds);
+            GridPosition position = pendingPrimaryPosition;
+            bool submit = submitPendingPrimaryOnTimeout;
+            pendingPrimaryClick = null;
+            hasPendingPrimaryPosition = false;
+            submitPendingPrimaryOnTimeout = false;
+            if (submit && host != null && !host.IsInteractionModalOpen && IsVisible)
+                host.SubmitBattlefieldCell(position, false);
+        }
+
+        private void CancelPendingPrimaryClick()
+        {
+            if (pendingPrimaryClick != null) StopCoroutine(pendingPrimaryClick);
+            pendingPrimaryClick = null;
+            hasPendingPrimaryPosition = false;
+            submitPendingPrimaryOnTimeout = false;
+        }
+
+        private void SubmitContextCell(GridPosition position)
+        {
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+                HideContextMenu();
+            if (host.IsInteractionModalOpen) return;
+            CancelPendingPrimaryClick();
+            host.SubmitBattlefieldCell(position, true);
+            ShowContextMenu(position);
+        }
+
+        private void ShowContextMenu(GridPosition position)
+        {
+            IReadOnlyList<BattlefieldContextAction> actions = host.ContextActionsAt(position);
+            if (actions == null || actions.Count == 0)
+            {
+                host.NotifyBattlefieldContextUnavailable(position);
+                return;
+            }
+
+            EnsureContextMenu();
+            float height = ContextMenuHeaderHeight + actions.Count * ContextMenuRowHeight + ContextMenuPadding;
+            Vector2 screen = Mouse.current == null ? Vector2.zero : Mouse.current.position.ReadValue();
+            Vector2 pointer = BattlefieldViewportInputController.ScreenToReferenceUi(screen,
+                Screen.width, Screen.height, ReferenceWidth, ReferenceHeight);
+            float x = Mathf.Clamp(pointer.x + 12f, 8f, ReferenceWidth - ContextMenuWidth - 8f);
+            float y = Mathf.Clamp(pointer.y + 12f, 64f, ReferenceHeight - height - 8f);
+            SetTopLeft(contextMenuPanel, x, y, ContextMenuWidth, height);
+            contextMenuTitle.text = "位置 " + position.X + "," + position.Y + " 的可执行行动";
+            contextMenuHint.text = "右键切换目标  ·  Esc 或左键空白处关闭";
+
+            while (contextMenuButtons.Count < actions.Count)
+            {
+                CreateContextMenuButton();
+            }
+
+            for (int i = 0; i < contextMenuButtons.Count; i++)
+            {
+                Button button = contextMenuButtons[i];
+                bool active = i < actions.Count;
+                button.gameObject.SetActive(active);
+                if (!active) continue;
+                BattlefieldContextAction action = actions[i];
+                RectTransform rect = button.GetComponent<RectTransform>();
+                SetTopLeft(rect, ContextMenuPadding,
+                    ContextMenuHeaderHeight + i * ContextMenuRowHeight,
+                    ContextMenuWidth - ContextMenuPadding * 2f, ContextMenuButtonHeight);
+                button.GetComponent<UiButtonFeedback>()?.RefreshLayoutPosition();
+                Text label = contextMenuButtonLabels[i];
+                label.text = action.Label;
+                contextMenuButtonDetails[i].text = action.Detail;
+                button.onClick.RemoveAllListeners();
+                string actionId = action.Id;
+                button.onClick.AddListener(() =>
+                {
+                    HideContextMenu();
+                    host.SubmitBattlefieldContextAction(position, actionId);
+                });
+            }
+
+            contextMenuRoot.SetActive(true);
+            contextMenuRoot.transform.SetAsLastSibling();
+            contextMenuOpenedFrame = Time.frameCount;
+            host.SetBattlefieldContextMenuOpen(true);
+        }
+
+        private void EnsureContextMenu()
+        {
+            if (contextMenuRoot != null) return;
+            contextMenuRoot = FormalUiKit.Create("战场右键菜单遮罩", root.transform);
+            RectTransform blockerRect = contextMenuRoot.AddComponent<RectTransform>();
+            Stretch(blockerRect);
+            Canvas contextCanvas = contextMenuRoot.AddComponent<Canvas>();
+            contextCanvas.overrideSorting = true;
+            contextCanvas.sortingOrder = UiLayoutContract.InteractionSortingOrder - 1;
+            contextMenuRoot.AddComponent<GraphicRaycaster>();
+            Image blocker = contextMenuRoot.AddComponent<Image>();
+            blocker.color = Color.clear;
+            blocker.raycastTarget = false;
+
+            GameObject panel = FormalUiKit.Panel("战场右键行动菜单", contextMenuRoot.transform,
+                new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, Vector2.zero,
+                FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
+            contextMenuPanel = panel.GetComponent<RectTransform>();
+            contextMenuTitle = FormalUiKit.Label("菜单标题", string.Empty, panel.transform,
+                new Vector2(16f, -4f), new Vector2(ContextMenuWidth - 32f, 40f),
+                ContextMenuTitleFontSize,
+                FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            contextMenuTitle.fontStyle = FontStyle.Normal;
+            FormalUiKit.PreventAutomaticWrapping(contextMenuTitle);
+            contextMenuHint = FormalUiKit.Label("菜单提示", string.Empty, panel.transform,
+                new Vector2(16f, -40f), new Vector2(ContextMenuWidth - 32f, 40f),
+                ContextMenuDetailFontSize,
+                FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(contextMenuHint);
+            contextMenuRoot.SetActive(false);
+        }
+
+        private void CreateContextMenuButton()
+        {
+            Button button = FormalUiKit.Button("位置行动_" + contextMenuButtons.Count, string.Empty,
+                contextMenuPanel, new Vector2(ContextMenuPadding, -ContextMenuHeaderHeight),
+                new Vector2(ContextMenuWidth - ContextMenuPadding * 2f, ContextMenuButtonHeight),
+                FormalUiTheme.Interactive, ContextMenuActionFontSize);
+            Text label = button.GetComponentInChildren<Text>();
+            SetTopLeft(label.rectTransform, 14f, 4f,
+                ContextMenuWidth - ContextMenuPadding * 2f - 28f, 40f);
+            label.alignment = TextAnchor.MiddleLeft;
+            label.fontSize = FormalUiTheme.ResponsiveFontSize(ContextMenuActionFontSize);
+            label.fontStyle = FontStyle.Normal;
+            label.color = FormalUiTheme.Text;
+            Text detail = FormalUiKit.Label("行动资源", string.Empty, button.transform,
+                new Vector2(14f, -32f),
+                new Vector2(ContextMenuWidth - ContextMenuPadding * 2f - 28f, 40f),
+                ContextMenuDetailFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(detail);
+            FormalUiKit.ConfigureButtonFeedback(button,
+                FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+                () => UiMotionProfile.FromIntensity(1f), null);
+            contextMenuButtons.Add(button);
+            contextMenuButtonLabels.Add(label);
+            contextMenuButtonDetails.Add(detail);
+        }
+
+        private void DismissContextMenuFromOutsideClick()
+        {
+            if (Time.frameCount == contextMenuOpenedFrame || contextMenuPanel == null) return;
+            Mouse mouse = Mouse.current;
+            if (mouse == null || (!mouse.leftButton.wasPressedThisFrame && !mouse.rightButton.wasPressedThisFrame)) return;
+            Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera : null;
+            if (!RectTransformUtility.RectangleContainsScreenPoint(contextMenuPanel,
+                    mouse.position.ReadValue(), eventCamera))
+                HideContextMenu();
+        }
+
+        internal void HideContextMenu()
+        {
+            if (contextMenuRoot == null || !contextMenuRoot.activeSelf) return;
+            contextMenuRoot.SetActive(false);
+            host?.SetBattlefieldContextMenuOpen(false);
         }
 
         private void ShowTooltip(GridPosition position)
@@ -569,7 +820,7 @@ namespace OCC.Combat.Presentation
 
         private static Text Label(string name, Transform parent)
         {
-            Text label = FormalUiKit.Label(name, string.Empty, parent, Vector2.zero, Vector2.zero, 12,
+            Text label = FormalUiKit.Label(name, string.Empty, parent, Vector2.zero, Vector2.zero, FormalUiTheme.BodyFontSize,
                 FormalUiTheme.Text, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
             return label;
@@ -598,11 +849,11 @@ namespace OCC.Combat.Presentation
 
         private static Text TooltipMetric(string name, string iconPath, Transform parent, Vector2 position, Color color)
         {
-            Image icon = TooltipSpriteIcon(name + "图标", parent, position, 22f);
+            Image icon = TooltipSpriteIcon(name + "图标", parent, position, 32f);
             icon.sprite = Resources.Load<Sprite>(iconPath);
             icon.color = color;
             Text value = FormalUiKit.Label(name + "数值", string.Empty, parent,
-                new Vector2(position.x + 26f, position.y), new Vector2(58f, 22f), 13, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                new Vector2(position.x + 36f, position.y - 4f), new Vector2(80f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(value);
             return value;
         }
@@ -613,20 +864,38 @@ namespace OCC.Combat.Presentation
             RectTransform rect = root.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
             Image background = root.AddComponent<Image>();
-            background.color = FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .94f);
+            FormalUiKit.ApplySkin(background, "bar_track", FormalUiTheme.ResourceTrack);
             background.raycastTarget = false;
             Image fill = ChildImage("当前", rect, color);
             Image forecast = ChildImage("预估损失", rect, FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .82f));
+            fill.rectTransform.offsetMin = new Vector2(2f, 2f);
+            fill.rectTransform.offsetMax = new Vector2(-2f, -2f);
+            forecast.rectTransform.offsetMin = new Vector2(2f, 2f);
+            forecast.rectTransform.offsetMax = new Vector2(-2f, -2f);
+            for (int index = 1; index <= 3; index++)
+            {
+                float fraction = index / 4f;
+                GameObject tick = FormalUiKit.FlatPanel(name + "比例刻度_" + index, rect,
+                    new Vector2(fraction, 0f), new Vector2(fraction, 1f), Vector2.zero, new Vector2(2f, -4f),
+                    FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .58f));
+                tick.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
+            }
+            Image marker = ChildImage("变化落点", rect, Color.clear);
+            marker.rectTransform.anchorMin = new Vector2(1f, 0f);
+            marker.rectTransform.anchorMax = new Vector2(1f, 1f);
+            marker.rectTransform.pivot = new Vector2(.5f, .5f);
+            marker.rectTransform.sizeDelta = new Vector2(6f, -4f);
             Text value = Label("数值", rect);
             value.color = CombatUnitHudLayout.VitalTextColor();
-            value.fontStyle = FontStyle.Bold;
+            value.fontStyle = FontStyle.Normal;
             value.alignment = TextAnchor.MiddleCenter;
             value.verticalOverflow = VerticalWrapMode.Overflow;
-            Outline outline = value.gameObject.AddComponent<Outline>();
-            outline.effectColor = FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .98f);
-            outline.effectDistance = new Vector2(1f, -1f);
             Stretch(value.rectTransform);
-            return new BarView { Root = root, Rect = rect, Fill = fill, Forecast = forecast, Value = value };
+            return new BarView
+            {
+                Root = root, Rect = rect, Fill = fill, Forecast = forecast, Marker = marker, Value = value,
+                LastCurrent = -1, DisplayedRatio = -1f, MarkerRatio = 1f, MarkerColor = FormalUiTheme.Safe
+            };
         }
 
         private static Image ChildImage(string name, Transform parent, Color color)
@@ -646,6 +915,16 @@ namespace OCC.Combat.Presentation
             if (texture == null) return;
             image.texture = texture;
             image.color = color;
+        }
+
+        private void OnDisable()
+        {
+            CancelPendingPrimaryClick();
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                contextMenuRoot.SetActive(false);
+                host?.SetBattlefieldContextMenuOpen(false);
+            }
         }
 
         private static void SetInset(RectTransform rect, float inset) =>
@@ -686,6 +965,9 @@ namespace OCC.Combat.Presentation
             public RawImage Move;
             public RawImage Attack;
             public RawImage Skill;
+            public CombatRangeOverlayMotion MoveMotion;
+            public CombatRangeOverlayMotion AttackMotion;
+            public CombatRangeOverlayMotion SkillMotion;
             public RawImage IntentDestination;
             public RawImage Selection;
             public RawImage Object;
@@ -709,7 +991,54 @@ namespace OCC.Combat.Presentation
             public RectTransform Rect;
             public Image Fill;
             public Image Forecast;
+            public Image Marker;
             public Text Value;
+            public int LastCurrent;
+            public float DisplayedRatio;
+            public float FlashUntil;
+            public float MarkerUntil;
+            public float MarkerRatio;
+            public Color MarkerColor;
+        }
+    }
+
+    internal sealed class CombatRangeOverlayMotion : MonoBehaviour
+    {
+        private RawImage image;
+        private Texture displayedTexture;
+        private float visibility;
+        private float phase;
+
+        public void Initialize(RawImage target, float pulsePhase)
+        {
+            image = target;
+            phase = pulsePhase;
+            visibility = 0f;
+            if (image != null) image.gameObject.SetActive(false);
+        }
+
+        public void Refresh(Texture target, float baseAlpha)
+        {
+            if (image == null) return;
+            if (target != null && displayedTexture != target)
+            {
+                displayedTexture = target;
+                image.texture = target;
+                visibility = 0f;
+            }
+
+            float targetVisibility = target != null ? 1f : 0f;
+            visibility = Mathf.MoveTowards(visibility, targetVisibility, Time.unscaledDeltaTime / .16f);
+            bool visible = displayedTexture != null && visibility > .001f;
+            image.gameObject.SetActive(visible);
+            if (!visible)
+            {
+                if (target == null) displayedTexture = null;
+                return;
+            }
+
+            float pulse = .91f + .09f * (.5f + .5f * Mathf.Sin(Time.unscaledTime * 4.2f + phase));
+            image.color = new Color(1f, 1f, 1f, Mathf.Clamp01(baseAlpha) * visibility * pulse);
         }
     }
 
@@ -728,32 +1057,36 @@ namespace OCC.Combat.Presentation
         IPointerEnterHandler, IPointerExitHandler
     {
         private GridPosition position;
-        private Action<GridPosition, bool> click;
+        private Action<GridPosition, int> primaryClick;
+        private Action<GridPosition> contextClick;
         private Action<GridPosition> enter;
         private Action exit;
 
-        public void Initialize(GridPosition value, Action<GridPosition, bool> onClick, Action<GridPosition> onEnter, Action onExit)
+        public void Initialize(GridPosition value, Action<GridPosition, int> onPrimaryClick,
+            Action<GridPosition> onContextClick, Action<GridPosition> onEnter, Action onExit)
         {
             position = value;
-            click = onClick;
+            primaryClick = onPrimaryClick;
+            contextClick = onContextClick;
             enter = onEnter;
             exit = onExit;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Left) click?.Invoke(position, false);
-            else if (eventData.button == PointerEventData.InputButton.Right) click?.Invoke(position, true);
+            if (eventData.button == PointerEventData.InputButton.Left)
+                primaryClick?.Invoke(position, Math.Max(1, eventData.clickCount));
         }
 
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!FormalBattlefieldView.ShouldInspectOnPointerDown(eventData.button)) return;
-            click?.Invoke(position, true);
+            contextClick?.Invoke(position);
             eventData.Use();
         }
 
         public void OnPointerEnter(PointerEventData eventData) => enter?.Invoke(position);
         public void OnPointerExit(PointerEventData eventData) => exit?.Invoke();
     }
+
 }

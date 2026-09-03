@@ -1,0 +1,168 @@
+{
+  "schema": "occ-m-a33-production-catalog-v1",
+  "batch": "M-A33",
+  "assets": [
+    {
+      "asset_id": "m_a33_harbor_inspection_floor_a",
+      "stem": "harbor_inspection_floor_a",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future academy-harbor tactical map; standalone inspection-paving cell A at integer 2x to 5x scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production floor tile, not a sheet. Primary request: one complete salt-worn harbor inspection paving block, coarse gray-brown limestone with a calm broad surface and one short shallow wear mark that does not touch any edge. View: exact orthographic top-down. Player read: a single low-technology port stone block, not an academy courtyard tile and not a steel plate. Pixel construction: deliberate native 32x32 logic enlarged cleanly for review, hard square clusters, at most six discrete flat colors, neutral weak upper-left light, no anti-aliasing and no gradients. Composition: fully opaque square, material and perimeter finish inside this tile, no structure waiting for neighboring cells. Exclude: cross-tile crack, grid inside the tile, button frame, railway, hazard stripe, moss carpet, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_inspection_floor_b",
+      "stem": "harbor_inspection_floor_b",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future academy-harbor tactical map; standalone inspection-paving cell B at integer 2x to 5x scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production floor tile, not a sheet. Primary request: one complete harbor inspection paving block from slightly warmer pale limestone, with a low-contrast salt-darkened center patch and two tiny connected abrasion clusters kept away from the border. View: exact orthographic top-down. Player read: one old port paving block maintained by hand. Pixel construction: native 32x32 logic enlarged cleanly for review, hard square clusters, at most six discrete colors, fixed weak upper-left light, fully opaque, no anti-aliasing and no gradients. Keep the same edge width and value hierarchy as a production variant family while giving this block its own internal wear. Exclude: nested bricks, crossing seam, wet gloss, diagonal track, steel, railway, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_inspection_floor_c",
+      "stem": "harbor_inspection_floor_c",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future academy-harbor tactical map; standalone inspection-paving cell C at integer 2x to 5x scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production floor tile, not a sheet. Primary request: one complete gray-brown harbor inspection stone block with a restrained older repair fill shaped as one compact irregular patch wholly inside the slab, using nearby stone tones rather than warning color. View: exact orthographic top-down. Player read: repaired salt-worn paving in a low-technology port. Pixel construction: native 32x32 logic enlarged cleanly for review, hard square clusters, at most six flat colors, fully opaque, fixed weak upper-left light, no anti-aliasing and no gradients. Exclude: second tile inside the tile, cross-border crack, metal hatch, rune, railway, hazard marking, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_inspection_floor_d",
+      "stem": "harbor_inspection_floor_d",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future academy-harbor tactical map; standalone inspection-paving cell D at integer 2x to 5x scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production floor tile, not a sheet. Primary request: one complete darker salt-damp harbor inspection paving block with a broad quiet value shift and one small chipped corner repaired flush with mortar, never creating a missing collision edge. View: exact orthographic top-down. Player read: damp but solid port stone. Pixel construction: native 32x32 logic enlarged cleanly for review, hard clusters, at most six discrete flat colors, fully opaque, fixed weak upper-left light, no anti-aliasing and no gradients. Exclude: puddle reflection, wave pattern, cross-tile channel, button border, metal plate, railway, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_mooring_bollard",
+      "stem": "harbor_mooring_bollard",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "future academy-harbor tactical map; one-cell low obstacle or non-cover port marker",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 tactical prop. Primary request: a short hand-forged harbor mooring bollard with a squat charcoal-iron post, two outward rope shoulders, a pale stone mounting collar and one small rust-brown wear band. View: near-top-down tactical three-quarter, visible top face, compressed front face, no vanishing point. Player read: one low port mooring post contained in a single cell, not a tall pillar. Pixel construction: hard near-black stair-step contour, at most ten discrete colors, two primary masses and one material cue, transparent background with two-pixel safety margin. Exclude: attached rope coil, ship, floor tile, cast shadow, modern steel marina cleat, electric light, cyan glow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_cargo_handcart_2x1",
+      "stem": "harbor_cargo_handcart_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x1 low obstacle handcart",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 2x1 tactical prop on a transparent 64x32 canvas. Primary request: a low empty harbor cargo handcart made from old timber slats, two dark iron-rimmed wheels, one pull handle and repaired leather binding; no cargo load. View: near-top-down tactical three-quarter, top bed visible, front faces compressed, no perspective convergence. Player read: manually pulled port cart occupying exactly two horizontal cells and remaining low enough not to imply full cover. Pixel construction: native 64x32 logic, hard clusters, near-black contour, at most twelve discrete colors, transparent background. Exclude: horse, crates, steam motor, railway trolley, cast shadow, floor, cyan light, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_tally_desk_2x1",
+      "stem": "harbor_tally_desk_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x1 waist-high inspection desk",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 2x1 tactical prop on a transparent 64x32 canvas. Primary request: a waist-high harbor tally desk for manual cargo inspection, with a thick old-wood top, short stone feet, one closed folding ledger board with no writing, and one restrained brass weight hook. View: near-top-down tactical three-quarter with top visible and front compressed. Player read: human-operated inspection furniture and waist-high light cover across two cells. Pixel construction: native 64x32 logic, hard clusters, near-black contour, at most twelve colors, genuinely transparent background. Exclude: readable paper, ink text, computer terminal, mechanical console, drawers full of objects, cast shadow, floor, cyan glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_cargo_rack_2x1",
+      "stem": "harbor_cargo_rack_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x1 tall cargo rack heavy cover",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 2x1 tactical prop on a transparent 64x32 canvas. Primary request: a compact tall harbor cargo rack with two heavy timber uprights, forged-iron cross braces and three empty horizontal storage rails, visibly repaired by hand. View: near-top-down tactical three-quarter, top surfaces visible, compressed front, no vanishing point. Player read: sturdy two-cell warehouse rack that can block sight; empty rack only, one coherent object. Pixel construction: native 64x32 logic, hard clusters, near-black stair-step contour, at most twelve colors, transparent background. Exclude: stacked crates, cloth canopy, modern pallet rack, wheels, electric labels, steam pipes, cast shadow, floor, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_hand_crane_2x2",
+      "stem": "harbor_hand_crane_2x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x2 manual cargo crane heavy obstacle",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production 2x2 tactical prop on a transparent 64x64 canvas. Primary request: the approved low-technology harbor hand crane language, now as a fresh production source: heavy old timber boom, forged-iron bands, rope pulley, wooden winding drum and clearly visible manual crank, with no suspended cargo. View: near-top-down tactical three-quarter, top surfaces visible, front compressed, no vanishing point. Player read: one coherent human-powered cargo crane with every support inside its 2x2 footprint. Pixel construction: native 64x64 logic, hard clusters, near-black contour, at most twelve colors; old wood, charcoal iron, limestone gray and tiny oxidized brass only. Background genuinely transparent. Exclude: electric motor, rail crane, steam pipes, sci-fi machine, floating crystal, hook load, crate, cast shadow, floor, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_harbor_inspection_gate_3x2",
+      "stem": "harbor_inspection_gate_3x2",
+      "role": "modular_structure_32",
+      "logical_cells": [3, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; 3x2 inspection gate with central passage and two blocked side supports",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC production 3x2 modular tactical structure on a transparent 96x64 canvas. Primary request: a low-technology academy harbor inspection gate with an unmistakably open central passage, two thick blocked pale-stone side supports, dark timber lintel, forged-iron braces and one small brass inspection fitting. View: near-top-down tactical three-quarter, visible top faces, compressed front, no perspective convergence. Player read: central walkable opening and two side blockers honestly match the 3x2 footprint. Pixel construction: native 96x64 logic, hard alpha, near-black stair-step contour, at most twelve colors. Exclude: front elevation pasted onto ground, castle portcullis, railway gate, sci-fi airlock, banners, cargo, electric lights, blue crystal, soft shadow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_semantic_talk",
+      "stem": "semantic_talk",
+      "role": "semantic_icon_16",
+      "logical_cells": null,
+      "palette_max": 4,
+      "application": "future campaign dialogue action; native 16px function symbol at integer 2x or 4x",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 16x16 semantic UI icon. Primary request: start a conversation, expressed by two simplified opposing human side profiles with one clean exchange gap between their mouths. Player read: talk to a person, not mail, log, phone or recording. Pixel construction: one centered functional silhouette, near-black outline, muted blue-gray accent and optional warm neutral fill, no more than four colors, hard alpha, no anti-aliasing, enlarged cleanly only for review. Background genuinely transparent. Exclude: full characters, material texture, speech text, letters, envelope, book, telephone, microphone, rune, circular button background, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_semantic_examine",
+      "stem": "semantic_examine",
+      "role": "semantic_icon_16",
+      "logical_cells": null,
+      "palette_max": 4,
+      "application": "future campaign investigation action; native 16px function symbol at integer 2x or 4x",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 16x16 semantic UI icon. Primary request: examine a clue, expressed by one simplified side-view human eye focused on one small square evidence mark below it. Player read: inspect closely, not visibility, attack targeting or a magic spell. Pixel construction: one centered functional symbol, near-black outline, muted gray-blue accent and optional warm neutral fill, no more than four colors, hard alpha, no anti-aliasing, no material rendering. Background genuinely transparent. Exclude: magnifying glass handle, complete face, book, detective badge, text, rune, glow, circular button background, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_semantic_handover",
+      "stem": "semantic_handover",
+      "role": "semantic_icon_16",
+      "logical_cells": null,
+      "palette_max": 4,
+      "application": "future campaign item handover action; native 16px function symbol at integer 2x or 4x",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 16x16 semantic UI icon. Primary request: hand over an item, expressed by two simplified opposing open hands with one small neutral square moving between them. Player read: give or transfer one object, not trade price, attack or reward chest. Pixel construction: one centered functional silhouette, near-black outline, muted ochre semantic accent and optional warm neutral fill, no more than four colors, hard alpha, no anti-aliasing, no material texture. Background genuinely transparent. Exclude: coins, arrows, handshake, complete people, text, number, button circle, glow, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_semantic_relationship",
+      "stem": "semantic_relationship",
+      "role": "semantic_icon_16",
+      "logical_cells": null,
+      "palette_max": 4,
+      "application": "future campaign relationship context; native 16px function symbol at integer 2x or 4x",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 16x16 semantic UI icon. Primary request: an ongoing interpersonal relationship, expressed by two simplified upright head silhouettes joined by one short neutral link at shoulder level. Player read: social connection or relationship, not romance, party membership or mind control. Pixel construction: one centered functional symbol, near-black outline, muted gray-green accent and optional warm neutral fill, no more than four colors, hard alpha, no anti-aliasing, no texture. Background genuinely transparent. Exclude: heart, chain, handshake, full people, aura, telepathy beam, text, number, circular button background, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_waxed_field_bandage",
+      "stem": "waxed_field_bandage",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common consumable or medical material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 24x24 material pickup. Primary request: one rolled field bandage made from gray-green woven cloth, with an ivory cut edge and one small amber wax seal holding the roll closed. Player read: consumable medical cloth material, not a holy healing item. Pixel construction: thick near-black stair-step outline, one connected highlight cluster, one shadow mass, visible roll structure, five to eight discrete colors, hard alpha, no anti-aliasing, transparent safety border. Background genuinely transparent. Exclude: red cross, modern wrapper, medicine bottle, holy glow, cyan crystal, text, logo, watermark, extra objects."
+    },
+    {
+      "asset_id": "m_a33_tarred_rope_coil",
+      "stem": "tarred_rope_coil",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common repair or harbor material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 24x24 material pickup. Primary request: one compact coil of tarred hemp rope, dark brown-gray fibers wound in three readable turns and held by one pale twine tie. Player read: durable repair rope material. Pixel construction: thick near-black stair-step outline, one connected highlight cluster, one shadow mass, one visible twisted-fiber cue, five to eight flat colors, hard alpha, no anti-aliasing, transparent safety border. Background genuinely transparent. Exclude: ship anchor, loose long rope, chain, glowing rune, multiple coils, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_salt_sample_sack",
+      "stem": "salt_sample_sack",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future trade, inspection or alchemical material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 24x24 material pickup. Primary request: one small tied linen sample sack of coarse harbor salt, squat cloth silhouette with a folded neck, dark cord and a few pale salt grains visible only at the partly open top. Player read: inspected salt sample or trade material, not a coin bag. Pixel construction: thick near-black stair-step outline, one connected highlight cluster, one shadow mass, woven cloth cue, five to eight colors, hard alpha, no anti-aliasing, transparent safety border. Exclude: currency symbol, printed label, complete large cargo sack, spilled pile, magic sparkle, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a33_repair_pitch_jar",
+      "stem": "repair_pitch_jar",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future common maintenance material; native 24px source centered unscaled in 32px delivery",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 24x24 material pickup. Primary request: one short earthenware jar of dark repair pitch, warm gray-brown ceramic body, black-brown sealed contents visible at the rim, a simple wooden plug and one coarse cloth wrap around the neck. Player read: sticky maintenance compound, not a potion. Pixel construction: thick near-black stair-step outline, one connected ceramic highlight cluster, one shadow mass, one glossy pitch cue kept to two hard pixels, five to eight discrete colors, hard alpha, no anti-aliasing, transparent safety border. Exclude: glass bottle, colored potion liquid, skull label, cyan glow, drips outside the jar, text, logo, watermark."
+    }
+  ]
+}

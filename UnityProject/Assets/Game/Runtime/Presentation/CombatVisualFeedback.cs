@@ -183,7 +183,7 @@ namespace OCC.Combat.Presentation
             EnsureCanvas();
             GameObject card = new GameObject("战斗结果反馈"); card.transform.SetParent(canvas.transform, false);
             RectTransform rect = card.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f); rect.sizeDelta = new Vector2(520, 100);
-            Text label = card.AddComponent<Text>(); label.font = FormalUiKit.Font; label.fontSize = 36; label.alignment = TextAnchor.MiddleCenter; label.text = victory ? "战斗胜利" : "战斗失败"; label.color = victory ? new Color(.48f, .92f, 1f, 0f) : new Color(.94f, .36f, .32f, 0f);
+            Text label = card.AddComponent<Text>(); label.font = FormalUiKit.Font; label.fontSize = FormalUiTheme.TitleFontSize; label.fontStyle = FontStyle.Normal; label.alignment = TextAnchor.MiddleCenter; label.text = victory ? "战斗胜利" : "战斗失败"; label.color = victory ? new Color(.48f, .92f, 1f, 0f) : new Color(.94f, .36f, .32f, 0f); label.resizeTextForBestFit = false;
             CanvasGroup group = card.AddComponent<CanvasGroup>(); group.alpha = 0f; rect.localScale = Vector3.one * .84f;
             if (!AnimationsEnabled)
             {
@@ -664,17 +664,20 @@ namespace OCC.Combat.Presentation
             GameObject textObject = new GameObject("伤害反馈"); textObject.transform.SetParent(FeedbackParent, false);
             RectTransform rect = textObject.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
             // The board occupies the left 75% of the 1920 reference canvas.
-            rect.anchoredPosition = FloatingFeedbackPosition(position); rect.sizeDelta = new Vector2(176, 28);
+            rect.anchoredPosition = FloatingFeedbackPosition(position); rect.sizeDelta = new Vector2(240, 48);
+            Image backing = textObject.AddComponent<Image>();
+            backing.color = FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .96f);
+            backing.raycastTarget = false;
             Sprite icon = SemanticIcon(iconKey);
             if (icon != null)
             {
                 GameObject iconObject = new GameObject("反馈图标_" + iconKey); iconObject.transform.SetParent(textObject.transform, false);
-                RectTransform iconRect = iconObject.AddComponent<RectTransform>(); iconRect.anchorMin = iconRect.anchorMax = new Vector2(0, .5f); iconRect.pivot = new Vector2(0, .5f); iconRect.anchoredPosition = new Vector2(4, 0); iconRect.sizeDelta = new Vector2(22, 22);
+                RectTransform iconRect = iconObject.AddComponent<RectTransform>(); iconRect.anchorMin = iconRect.anchorMax = new Vector2(0, .5f); iconRect.pivot = new Vector2(0, .5f); iconRect.anchoredPosition = new Vector2(4, 0); iconRect.sizeDelta = new Vector2(32, 32);
                 Image image = iconObject.AddComponent<Image>(); image.sprite = icon; image.color = color; image.preserveAspect = true; image.raycastTarget = false;
             }
             GameObject labelObject = new GameObject("反馈文字"); labelObject.transform.SetParent(textObject.transform, false);
-            RectTransform labelRect = labelObject.AddComponent<RectTransform>(); labelRect.anchorMin = Vector2.zero; labelRect.anchorMax = Vector2.one; labelRect.offsetMin = new Vector2(28, 0); labelRect.offsetMax = Vector2.zero;
-            Text text = labelObject.AddComponent<Text>(); text.font = FormalUiKit.Font; text.fontSize = 18; text.alignment = TextAnchor.MiddleLeft; text.text = message; text.color = color; text.raycastTarget = false;
+            RectTransform labelRect = labelObject.AddComponent<RectTransform>(); labelRect.anchorMin = Vector2.zero; labelRect.anchorMax = Vector2.one; labelRect.offsetMin = new Vector2(40, 0); labelRect.offsetMax = Vector2.zero;
+            Text text = labelObject.AddComponent<Text>(); text.font = FormalUiKit.Font; text.fontSize = FormalUiTheme.BodyFontSize; text.fontStyle = FontStyle.Normal; text.alignment = TextAnchor.MiddleLeft; text.text = message; text.color = FormalUiTheme.ReadableLabelColor(color); text.raycastTarget = false;
             CanvasGroup group = textObject.AddComponent<CanvasGroup>();
             if (!AnimationsEnabled)
             {
@@ -708,16 +711,13 @@ namespace OCC.Combat.Presentation
             RectTransform rect = root.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
             rect.anchoredPosition = DamagePopupPosition(feedback.Target, lane);
-            rect.sizeDelta = new Vector2(92f, 40f);
+            rect.sizeDelta = new Vector2(168f, 104f);
             Text label = root.AddComponent<Text>();
             label.font = FormalUiKit.Font;
-            label.fontSize = 28;
-            label.fontStyle = FontStyle.Bold;
+            label.fontSize = FormalUiTheme.FeedbackFontSize;
+            label.fontStyle = FontStyle.Normal;
             label.alignment = TextAnchor.MiddleCenter;
             label.raycastTarget = false;
-            Outline outline = root.AddComponent<Outline>();
-            outline.effectColor = new Color(.015f, .02f, .025f, .96f);
-            outline.effectDistance = new Vector2(1.5f, -1.5f);
             CanvasGroup group = root.AddComponent<CanvasGroup>();
             DamagePopupState popup = new DamagePopupState
             {

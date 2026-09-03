@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a32_t07_portable_water_filter",
+  "role": "equipment_icon_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A32 trial source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/raw/portable_water_filter/source.png",
+    "source_sha256": "b71682ef2e35c7a3c8ef1a4155b74b177a3d049207cfbbe142ad5f632e3e1d6c"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/normalized/portable_water_filter.png",
+    "output_sha256": "b40f25c801bf322e50e7a3886453fb6b0218c2674ab0cecba0732882e8eef49e",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future item/equipment content icon; native 32px inventory and reward slot",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/portable_water_filter/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/portable_water_filter/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/portable_water_filter/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/portable_water_filter/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A32/QA/contacts/m_a32_trial_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Awaiting product review; trial only; must not enter Unity."
+  },
+  "unity_import": null
+}

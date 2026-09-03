@@ -1,0 +1,78 @@
+{
+  "schema": "occ-m-a45-production-catalog-v1",
+  "batch": "M-A45",
+  "assets": [
+    {
+      "asset_id": "m_a45_outer_ring_turned_field_a",
+      "stem": "outer_ring_turned_field_a",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map expansion; standalone turned-field cell A",
+      "prompt": "One independent OCC production floor texture tile, exact orthographic top-down: an almost uniform complete square of muted gray-brown freshly turned field soil. Add only two short shallow broken earth marks, each narrow, irregular, under one quarter of the tile width and well separated inside the cell, plus three tiny dull clods. At least four fifths of the surface remains calm unmarked soil. Native 32x32 logic, fully opaque edge-to-edge, hard square pixel clusters, 3-6 muted flat colors, weak fixed upper-left light, very low contrast below units. Exclude repeated motif, wavy stripe, parallel row, crop, seed, worm, cross-tile furrow, grass border, edge stones, frame, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_turned_field_b",
+      "stem": "outer_ring_turned_field_b",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map expansion; standalone turned-field cell B",
+      "prompt": "One independent OCC production floor texture tile, exact orthographic top-down: a second almost uniform complete square of the same muted gray-brown turned field soil family. Add seven small scattered angular clods of two sizes with generous empty space between them and one tiny shallow scrape near the center; no clod group may dominate. At least four fifths remains calm soil and all four edges remain plain. Native 32x32 logic, fully opaque, hard square pixel clusters, 3-6 muted flat colors, weak fixed upper-left light, very low contrast. Exclude repeated motif, diagonal stripe, parallel row, crop, footprint, boulder, cross-tile line, grass border, button frame, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_wattle_field_gate_2x1",
+      "stem": "outer_ring_wattle_field_gate_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map expansion; closed 2x1 manual field gate",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 tactical prop: a closed low rural field gate matching the M-A43 woven wattle family, with two stout end posts, one broad woven branch panel, a simple dark iron loop latch and a slightly reinforced lower rail. It spans exactly two horizontal cells and remains waist-low. Fixed weak upper-left light, compressed three-quarter top-down tactical view, hard near-black stair-step contour, 7-12 muted wood and iron colors, at least 2px transparent border. Exclude open gate, tall palisade, lock, chain mechanism, wheel, wire, foliage, rune, sign, text, cast shadow, floor, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_farm_handcart_2x1",
+      "stem": "outer_ring_farm_handcart_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map expansion; empty 2x1 farm handcart",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 rural tactical prop: one empty single-wheel hardwood farm handcart laid horizontally across two cells, with a shallow plank tray, one broad iron-rimmed wheel near the left half and two separated handles extending into the right half; one dull iron repair band. Fixed weak upper-left light, compressed three-quarter top-down tactical view, honest low two-cell footprint, hard near-black contour, 7-12 muted wood and iron colors, 2px transparent border. Exclude cargo, produce, animal, treasure, modern wheelbarrow, motor, gears, cast shadow, floor, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_drainage_plank_crossing_2x1",
+      "stem": "outer_ring_drainage_plank_crossing_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 tactical map expansion; low 2x1 manual drainage crossing",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 rural tactical prop: a very low hand-made drainage crossing of two broad parallel weathered hardwood planks held by four short square pegs, spanning exactly two horizontal cells. The planks are slightly uneven but safely walkable; no ditch or ground is baked into the image. Fixed weak upper-left light, compressed near-top-down tactical view, hard near-black outline, 6-10 muted wood and iron colors, 2px transparent border. Exclude pier, tall bridge, rope bridge, water, grass, mud floor, railing, machinery, rune, cast shadow, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_field_boundary_stone",
+      "stem": "outer_ring_field_boundary_stone",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 9,
+      "application": "REG-ORH-01 tactical map expansion; one-cell unmarked field boundary stone",
+      "prompt": "One independent OCC native 32x32 transparent single-cell rural prop: a deliberately cut short rectangular gray limestone boundary block, upright with a narrow flat chipped top, two straight vertical tool-cut side planes and a broad squared base. The entire front is blank. Its man-made rectangular silhouette must dominate and it must not look like a rounded natural rock. Knee-high, fixed weak upper-left light, compressed three-quarter top-down tactical view, hard near-black outline, 5-9 muted stone colors, 2px transparent border. Exclude rounded boulder, moss, grass, soil clump, gravestone, grave, rune, letter, number, emblem, face, crystal, tall monolith, cast shadow, floor, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_sapling_guard",
+      "stem": "outer_ring_sapling_guard",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 tactical map expansion; one-cell protected young tree",
+      "prompt": "One independent OCC native 32x32 transparent single-cell rural prop: a low square wooden sapling guard built from four thick corner stakes and two broad crossed horizontal rails, forming a sturdy open box around one clearly visible central young trunk. A compact asymmetric cluster of six muted olive leaves rises just above the box. The box guard occupies the lower two thirds and the leafy trunk reads as a living plant, not a sign. Fixed weak upper-left light, compressed three-quarter top-down tactical view, hard near-black contour, 6-10 muted wood, cord, bark and leaf colors, 2px transparent border. Exclude triangular trident, symmetrical emblem, totem, candelabra, thin invisible stakes, mature tree, fruit, flower, harvest sparkle, metal cage, banner, rune, cast shadow, floor, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a45_outer_ring_covered_hayrick_2x2",
+      "stem": "outer_ring_covered_hayrick_2x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 2],
+      "palette_max": 12,
+      "application": "REG-ORH-01 12x9 tactical map expansion anchor; covered 2x2 hay storage",
+      "prompt": "One independent OCC native 64x64 transparent 2x2 rural tactical narrative anchor: a broad low compressed hayrick filling an honest 2x2 footprint, made of tightly layered dull straw with a patched gray-green waterproof canvas draped over the top third, held by two dark ropes and four pale stone corner weights. A little straw remains visible along the lower sides. Fixed weak upper-left light, compressed three-quarter top-down tactical view, hard near-black stair-step contour, 8-12 muted straw, canvas, rope and stone colors, at least 2px transparent border. Exclude barn, house, person, animal, pitchfork, fire, smoke, harvest sparkle, hidden door, writing, emblem, cast shadow, floor, logo, glow, black backdrop."
+    }
+  ]
+}

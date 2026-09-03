@@ -1,7 +1,25 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace OCC.Combat.Presentation
 {
+    public sealed class BattlefieldContextAction
+    {
+        public string Id { get; }
+        public string Label { get; }
+        public string Detail { get; }
+
+        public BattlefieldContextAction(string id, string label, string detail)
+        {
+            if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("An action id is required.", nameof(id));
+            if (string.IsNullOrWhiteSpace(label)) throw new ArgumentException("An action label is required.", nameof(label));
+            Id = id;
+            Label = label;
+            Detail = detail ?? string.Empty;
+        }
+    }
+
     public interface IUiPreferenceHost
     {
         RogueliteUiPreferences UiPreferences { get; }
@@ -44,6 +62,7 @@ namespace OCC.Combat.Presentation
         CombatActionPreview ActionPreview(string action);
         FireSpellDefinition FireSpellInSlot(int slot);
         void SelectHudAction(string action);
+        bool TrySelectSpellShortcut(int slot);
         void ActivateInventoryQuickbar(int slot);
         void EndHeroTurn();
         bool BeginKeyboardTargeting();
@@ -69,6 +88,7 @@ namespace OCC.Combat.Presentation
         bool IsInteractionModalOpen { get; }
         bool IsMapMenuOpen { get; }
         void SelectMapNode(string nodeId);
+        void StartMapNodeCombat(string nodeId);
         void ChooseMapNodeContent(string choiceId);
         void EquipMapReward(string rewardId);
         void EquipNextMapFireSpell(int slot);
@@ -169,6 +189,13 @@ namespace OCC.Combat.Presentation
         string CurrentLevelId { get; }
         BattlefieldCellPresentation PresentBattlefieldCell(GridPosition position);
         void SubmitBattlefieldCell(GridPosition position, bool inspection);
+        bool CanQuickMoveTo(GridPosition position);
+        bool ShouldDeferPrimaryClickForQuickMove(GridPosition position);
+        void SubmitBattlefieldQuickMove(GridPosition position);
+        IReadOnlyList<BattlefieldContextAction> ContextActionsAt(GridPosition position);
+        void SubmitBattlefieldContextAction(GridPosition position, string actionId);
+        void NotifyBattlefieldContextUnavailable(GridPosition position);
+        void SetBattlefieldContextMenuOpen(bool open);
         void FocusBattlefieldOnHero();
     }
 }

@@ -31,17 +31,19 @@ namespace OCC.Combat.Tests
                 FireRogueliteStarterCatalog.Universal, 302);
 
             Assert.That(result.Success, Is.False);
-            Assert.That(result.FailureMessage, Does.Contain("没有可继续"));
+            Assert.That(result.FailureMessage, Is.EqualTo("没有可以继续的存档。请开始新游戏。"));
             Assert.That(store.Values, Is.Empty);
         }
 
-        [Test]
-        public void ValidNewRun_CanRoundTripThroughContinue()
+        [TestCase(FireRogueliteStarterCatalog.Melee, "war_hammer")]
+        [TestCase(FireRogueliteStarterCatalog.Universal, null)]
+        [TestCase(FireRogueliteStarterCatalog.Ranged, "arcane_wand")]
+        public void ValidNewRun_CanRoundTripThroughContinue(string starterId, string expectedWeaponId)
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Ranged, 303);
+                starterId, 303);
 
             RogueliteMapStartResult loaded = coordinator.TryStart(true,
                 FireRogueliteStarterCatalog.Universal, 999);
@@ -49,7 +51,35 @@ namespace OCC.Combat.Tests
             Assert.That(created.Success, Is.True);
             Assert.That(loaded.Success, Is.True);
             Assert.That(loaded.Run.Seed, Is.EqualTo(303));
-            Assert.That(loaded.Run.StarterId, Is.EqualTo(FireRogueliteStarterCatalog.Ranged));
+            Assert.That(loaded.Run.StarterId, Is.EqualTo(starterId));
+            Assert.That(loaded.Run.EquippedWeaponId, Is.EqualTo(expectedWeaponId));
+        }
+
+        [Test]
+        public void MeleeVictorySettlement_SavesAndContinuesAtCompletedCombat()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapStartResult created = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Melee, 307);
+            Assert.That(created.Success, Is.True);
+            created.Run.SelectNode("rail_patrol");
+
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            CombatState combat = new CombatState(new GridMap(3, 2), new[] { hero, enemy },
+                new CombatObjective[] { new EliminationObjective() });
+            combat.ResolveDebugOutcome(true);
+
+            Assert.That(RogueliteCombatSettlement.TrySettleVictory(created.Run, combat), Is.True);
+            Assert.That(coordinator.Save(created.Run), Is.True);
+
+            RogueliteMapStartResult loaded = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 999);
+            Assert.That(loaded.Success, Is.True);
+            Assert.That(loaded.Run.CurrentNodeId, Is.EqualTo("rail_patrol"));
+            Assert.That(loaded.Run.CompletedNodes, Does.Contain("rail_patrol"));
+            Assert.That(loaded.Run.AwaitingReward, Is.True);
         }
 
         [Test]

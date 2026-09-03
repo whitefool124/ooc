@@ -113,7 +113,7 @@ namespace OCC.Combat.Presentation
             string hover = unit == null ? BuildTerrainHover(state, fireBattle, tile, position) : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
-                  (forecast == null ? string.Empty : "\n伤害预览：" + forecast.PlayerSummary);
+                  (forecast == null ? string.Empty : "\n预计伤害：" + forecast.PlayerSummary);
             Texture2D floor = assets.Academy(FloorKey(level, state.Map.Height, position.X, position.Y));
             Rect floorUv = FloorUv(position.X, position.Y);
             float floorRotation = FloorRotationDegrees(level, position.X, position.Y);
@@ -125,7 +125,7 @@ namespace OCC.Combat.Presentation
                 CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
             return new BattlefieldCellPresentation(position, floor, floorUv, floorRotation,
                 terrainBoundary, terrainBoundaryRotation, environment, move,
-                selection.Action == "移动" ? 1f : .45f, attack, selection.Action == "攻击" ? 1f : .65f,
+                selection.Action == "移动" ? .88f : .26f, attack, selection.Action == "攻击" ? .88f : .22f,
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover);
         }
@@ -135,7 +135,7 @@ namespace OCC.Combat.Presentation
         {
             if (state == null || tile == null) return string.Empty;
             if (state.Loot != null && state.Loot.Position == position)
-                return state.Loot.IsLooted ? "空战利品箱\n已经搜刮，不再产出物品。" : "战利品箱\n相邻时可搜刮；内容将在打开后结算。";
+                return state.Loot.IsLooted ? "空战利品箱\n里面已经没有东西了。" : "战利品箱\n走到旁边就能打开，看看里面有什么。";
             if (tile.IsObjective)
                 return tile.IsDestroyed ? "损毁导能柱\n目标物已失效。" : "导能柱\n任务目标 · 耐久 " + tile.Durability + "；可被互动或指定术式影响。";
             if (tile.Cover == CoverType.Light)
@@ -147,9 +147,9 @@ namespace OCC.Combat.Presentation
             if (fireBattle?.HasFireground(position) == true)
                 return "燃烧地面\n进入或停留可能触发火焰伤害；剩余时间由施术效果决定。";
             if (tile.SmokeExpiresAt > state.CurrentTime)
-                return "烟雾\n临时环境效果；会在时序 " + tile.SmokeExpiresAt + " 消散。";
+                return "烟雾\n临时环境效果；会在第 " + tile.SmokeExpiresAt + " 行动时消散。";
             if (tile.IsWater)
-                return "水面\n特殊地表；移动与术式交互以当前预览为准。";
+                return "水面\n有些移动和术式会受到水面的影响。";
             return string.Empty;
         }
 

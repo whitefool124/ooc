@@ -1,0 +1,53 @@
+<h3>4.1 节点类型</h3>
+<table>
+  <thead><tr><th><p>类型</p></th><th><p>内容</p></th><th><p>完成后</p></th></tr></thead>
+  <tbody>
+    <tr><td><p>普通战斗</p></td><td><p>标准敌群与任务目标</p></td><td><p>发放基础奖励</p></td></tr>
+    <tr><td><p>精英战斗</p></td><td><p>强敌与复合场地规则</p></td><td><p>发放精英奖励</p></td></tr>
+    <tr><td><p>Boss</p></td><td><p>固定首领与阶段规则</p></td><td><p>进入阶段结算</p></td></tr>
+    <tr><td><p>工坊</p></td><td><p>装备锻造、术式专精</p></td><td><p>消耗材料并保存结果</p></td></tr>
+    <tr><td><p>医务室</p></td><td><p>按最大生命比例恢复生命；购买随机餐食</p></td><td><p>扣除费用并恢复或获得餐食增益</p></td></tr>
+    <tr><td><p>商店</p></td><td><p>购买装备、法宝和材料</p></td><td><p>扣除费用并获得内容</p></td></tr>
+    <tr><td><p>事件</p></td><td><p>选择公开选项</p></td><td><p>修改资源、物品或路线</p></td></tr>
+  </tbody>
+</table>
+<p>不存在“服务”和“宝藏”节点。原服务按功能拆入工坊、医务室或商店；原宝藏内容拆入事件或商店。</p>
+<h3>4.2 下一套 Build 节点数量</h3>
+<table>
+  <thead><tr><th><p>内容</p></th><th><p>数量</p></th></tr></thead>
+  <tbody>
+    <tr><td><p>普通战斗</p></td><td><p>2</p></td></tr>
+    <tr><td><p>精英战斗</p></td><td><p>1</p></td></tr>
+    <tr><td><p>Boss</p></td><td><p>1</p></td></tr>
+    <tr><td><p>工坊</p></td><td><p>1</p></td></tr>
+    <tr><td><p>医务室</p></td><td><p>1</p></td></tr>
+    <tr><td><p>商店</p></td><td><p>1</p></td></tr>
+    <tr><td><p>事件</p></td><td><p>1</p></td></tr>
+  </tbody>
+</table>
+<p>开始节点不计入内容节点。下一套 Build 固定地图共有 9 个节点，一轮经过全部 9 个节点。</p>
+<h3>4.3 战前餐食</h3>
+<p>医务室同时提供恢复和战前餐食。每次进入医务室节点时，从餐食池中无重复抽取 3 种。玩家支付金币、材料或学院贡献，选择一种持续 3 场战斗的临时增益。</p>
+<table>
+  <thead><tr><th><p>餐食</p></th><th><p>费用</p></th><th><p>持续效果</p></th></tr></thead>
+  <tbody>
+    <tr><td><p>强攻炖肉</p></td><td><p>3 金币</p></td><td><p>武器直接伤害 +2</p></td></tr>
+    <tr><td><p>导能热饮</p></td><td><p>1 学院贡献</p></td><td><p><a href="https://jcnlgassfnsm.feishu.cn/docx/Y1KydFPjMocJjYxMmFEcTblcnLf#doxcnA9XrJJNmEP7gSZsoCursUb">个人魔力</a>上限 +2；进入战斗时恢复满</p></td></tr>
+    <tr><td><p>岩盐浓汤</p></td><td><p>1 份学院食材</p></td><td><p>每场战斗开始获得 6 护盾</p></td></tr>
+    <tr><td><p>疾行烤串</p></td><td><p>3 金币</p></td><td><p>每个自己回合第一次移动的<a href="https://jcnlgassfnsm.feishu.cn/docx/Y1KydFPjMocJjYxMmFEcTblcnLf#doxcnPG7pIeIZWtLBO8Rikv69mb">移动力</a> +1</p></td></tr>
+    <tr><td><p>节流茶</p></td><td><p>1 学院贡献</p></td><td><p>每场战斗第一次施放术式时魔力成本 -1，最低为 0</p></td></tr>
+    <tr><td><p>坚韧面包</p></td><td><p>1 份学院食材</p></td><td><p>最大生命 +4；每场战斗开始恢复 4 生命</p></td></tr>
+    <tr><td><p>猎团香汤</p></td><td><p>4 金币</p></td><td><p>每场战斗第一次武器命中额外造成 4 伤害</p></td></tr>
+    <tr><td><p>清醒粥</p></td><td><p>1 份学院食材</p></td><td><p>每场战斗第一次受到负面状态时，持续时间 -1 回合，最低为 1 回合</p></td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>餐食选项由单轮种子和医务室节点决定，生成后写入节点状态。</li>
+  <li>同一医务室节点重新打开或读档时不重新抽取。</li>
+  <li>恢复和购买餐食互不排斥，每个医务室节点各可执行一次。</li>
+  <li>同时只能存在一种餐食增益。</li>
+  <li>有餐食增益时不能购买新餐食。</li>
+  <li>每完成一场战斗，剩余场数减 1。未进入战斗不减少。</li>
+  <li>剩余场数为 0 时移除增益。</li>
+  <li>餐食不是装备、术式或法宝，不占槽位。</li>
+</ul>

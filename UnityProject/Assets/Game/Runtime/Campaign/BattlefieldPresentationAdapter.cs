@@ -114,7 +114,7 @@ namespace OCC.Combat
 
         public CombatActionPreview BuildPreview(CombatState state, string action, string selectedTargetId)
         {
-            if (state == null) return new CombatActionPreview(action, "等待战斗状态", "--", "--", 0, "战斗状态尚未就绪");
+            if (state == null) return new CombatActionPreview(action, "战场还在准备", "--", "--", 0, "请稍等片刻");
             UnitState hero = state.GetUnit("hero");
             string globalFailure = state.IsVictory || state.IsDefeat ? "战斗已经结束" : state.ActiveUnitId != "hero" ? "等待敌方行动结束" : hero.ActionPoints < CombatResolver.BasicActionPointCost ? "行动点不足" : string.Empty;
             string targetRule = TargetRule(action, hero);
@@ -130,21 +130,21 @@ namespace OCC.Combat
                 if (skill == null) failure = "未装备该技能";
                 else if (hero.Cooldown(skill) > 0) failure = skill.DisplayName + "冷却 " + hero.Cooldown(skill) + " 回合";
                 else if (hero.Mana < skill.ManaCost) failure = "以太不足：需要 " + skill.ManaCost;
-                else if (RequiresUnitTarget(skill) && string.IsNullOrEmpty(selectedTargetId)) failure = "请选择有效目标";
+                else if (RequiresUnitTarget(skill) && string.IsNullOrEmpty(selectedTargetId)) failure = "请选择一个能被这道术式影响的目标";
             }
             if (string.IsNullOrEmpty(failure) && action == "攻击" && string.IsNullOrEmpty(selectedTargetId)) failure = "请选择射程与视线内的敌人";
             if (string.IsNullOrEmpty(failure) && action == "攻击" && !string.IsNullOrEmpty(selectedTargetId))
             {
                 UnitState target = state.GetUnit(selectedTargetId);
-                if (target == null || !target.IsAlive || target.IsHero) failure = "锁定目标不可用";
+                if (target == null || !target.IsAlive || target.IsHero) failure = "这个目标不能攻击，请换一个敌人";
                 else if (Distance(hero.Position, target.Position) > hero.MainHand.Range) failure = "目标超出武器射程";
-                else if (!state.Map.HasLineOfSight(hero.Position, target.Position)) failure = "重掩体阻挡了射线";
+                else if (!state.Map.HasLineOfSight(hero.Position, target.Position)) failure = "重掩体挡住了视线";
             }
             if (string.IsNullOrEmpty(failure) && (action == "技能1" || action == "技能2") && !string.IsNullOrEmpty(selectedTargetId))
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
                 UnitState target = state.GetUnit(selectedTargetId);
-                if (skill != null && RequiresUnitTarget(skill) && (target == null || !IsSkillTargetInRange(state, skill, target.Position))) failure = "技能目标不符合范围、关系或视线规则";
+                if (skill != null && RequiresUnitTarget(skill) && (target == null || !IsSkillTargetInRange(state, skill, target.Position))) failure = "这个目标太远、被挡住，或不是这道术式能影响的对象";
             }
             if (string.IsNullOrEmpty(failure) && action == "搜刮")
             {
@@ -152,7 +152,7 @@ namespace OCC.Combat
                 else if (!state.Backpack.CanAdd(state.Loot.Item)) failure = "背包已满，需要先调整物品";
                 else if (Distance(hero.Position, state.Loot.Position) != 1) failure = "战利品不在相邻格";
             }
-            if (string.IsNullOrEmpty(failure) && validCells == 0 && action != "结束行动") failure = "当前没有有效目标格";
+            if (string.IsNullOrEmpty(failure) && validCells == 0 && action != "结束行动") failure = "现在没有可以选择的位置";
             string before = string.Empty, after = string.Empty, breakdown = string.Empty, statuses = string.Empty;
             int affected = 0;
             UnitState exactTarget = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
@@ -185,7 +185,7 @@ namespace OCC.Combat
             CombatActionPreview preview = BuildPreview(state, action, null);
             string global = state == null || state.IsVictory || state.IsDefeat || state.ActiveUnitId != "hero" || state.GetUnit("hero").ActionPoints < CombatResolver.BasicActionPointCost ? preview.FailureReason : string.Empty;
             if (!string.IsNullOrEmpty(global)) return global;
-            if (!state.Map.IsInside(position)) return "目标格超出地图范围";
+            if (!state.Map.IsInside(position)) return "那里已经超出战场边界";
             UnitState hero = state.GetUnit("hero");
             int distance = Distance(hero.Position, position);
             UnitState target = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
@@ -201,7 +201,7 @@ namespace OCC.Combat
             {
                 if (target == null || target.IsHero) return "当前格没有可攻击目标";
                 if (distance > hero.MainHand.Range) return "目标超出武器射程";
-                if (!state.Map.HasLineOfSight(hero.Position, position)) return "重掩体阻挡了射线";
+                if (!state.Map.HasLineOfSight(hero.Position, position)) return "重掩体挡住了视线";
             }
             else if (action == "技能1" || action == "技能2")
             {
@@ -252,19 +252,19 @@ namespace OCC.Combat
 
         private static string Cost(string action, UnitState hero)
         {
-            if (action == "结束行动") return "剩余 AP 全部放弃";
+            if (action == "结束行动") return "剩余行动点会清空";
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
-                return "1 AP" + (skill != null && skill.ManaCost > 0 ? " + " + skill.ManaCost + " 以太" : string.Empty);
+                return "1 行动点" + (skill != null && skill.ManaCost > 0 ? " + " + skill.ManaCost + " 以太" : string.Empty);
             }
-            return "1 AP";
+            return "1 行动点";
         }
 
         private static string ExpectedResult(CombatState state, string action, UnitState hero, string selectedTargetId)
         {
             UnitState target = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
-            if (action == "移动") return "移动并朝向目标格；无随机判定";
+            if (action == "移动") return "移动过去，并面向所选位置";
             if (action == "攻击") return target == null ? "命中后依次扣除护盾、护甲与格挡" : DamageSummary(CombatResolver.PreviewAttack(state, hero.Id, target.Id, false));
             if (action == "技能1" || action == "技能2")
             {
@@ -272,11 +272,11 @@ namespace OCC.Combat
                 if (skill == null) return "无效果";
                 string effects = string.Join("、", skill.Effects.Select(EffectLabel));
                 if (target != null && skill.Damage > 0) effects = DamageSummary(CombatResolver.PreviewSkillAttack(state, hero.Id, target.Id, skill)) + (string.IsNullOrEmpty(effects) ? string.Empty : "；" + effects);
-                return string.IsNullOrEmpty(effects) ? "效果将在确认后生效" : effects;
+                return string.IsNullOrEmpty(effects) ? "选好目标后施放" : effects;
             }
-            if (action == "搜刮") return state.Loot == null || state.Loot.IsLooted ? "无战利品" : "获得 " + state.Loot.Item.DisplayName + "；无随机判定";
+            if (action == "搜刮") return state.Loot == null || state.Loot.IsLooted ? "这里已经没有东西了" : "拿到 " + state.Loot.Item.DisplayName;
             if (action == "互动") return "调查或对物件造成 3 点耐久伤害";
-            return "推进至下一行动单位";
+            return "结束当前单位的回合，然后轮到下一个单位";
         }
 
         private static string DamageSummary(CombatResolver.AttackPreview preview) => "预计生命 -" + preview.FinalDamage + " / 护盾 -" + preview.ShieldAbsorption + " / 减伤 " + (preview.CoverReduction + preview.ArmorReduction + preview.BlockReduction);
@@ -299,7 +299,7 @@ namespace OCC.Combat
             if (skill.TargetRule == SkillTargetRule.Destructible) return "目标格没有可破坏物件";
             if (RequiresUnitTarget(skill) && target == null) return "当前格没有技能目标";
             if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.Map.HasLineOfSight(hero.Position, position)) return "重掩体阻挡了技能投递";
-            return "技能目标不符合规则";
+            return "这道术式不能作用在这里";
         }
 
         public bool IsSkillTargetInRange(CombatState state, SkillDefinition skill, GridPosition position)

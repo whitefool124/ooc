@@ -321,7 +321,8 @@ namespace OCC.Combat.Roguelite
         private RogueBackpackPlacement? FindFirstFit(string instanceId, string ignoredInstanceId = null)
         {
             Size(instanceId, false, out int width, out int height);
-            for (int y = 0; y < 10; y++) for (int x = 0; x < 6; x++)
+            for (int y = 0; y < RogueRuntimeConstants.BackpackHeight; y++)
+            for (int x = 0; x < RogueRuntimeConstants.BackpackWidth; x++)
             {
                 if (Fits(instanceId, x, y, false, width, height, ignoredInstanceId)) return new RogueBackpackPlacement(x, y, false);
                 if (width != height && Fits(instanceId, x, y, true, height, width, ignoredInstanceId)) return new RogueBackpackPlacement(x, y, true);
@@ -330,7 +331,7 @@ namespace OCC.Combat.Roguelite
         }
         private bool Fits(string instanceId, int x, int y, bool rotated, int width, int height, string ignoredInstanceId = null)
         {
-            if (x < 0 || y < 0 || x + width > 6 || y + height > 10) return false;
+            if (x < 0 || y < 0 || x + width > RogueRuntimeConstants.BackpackWidth || y + height > RogueRuntimeConstants.BackpackHeight) return false;
             foreach (KeyValuePair<string, RogueBackpackPlacement> pair in backpack)
             {
                 if (pair.Key == ignoredInstanceId) continue;

@@ -146,6 +146,7 @@ namespace OCC.Combat
 
         internal static int ApplyRawWeaponDamage(UnitState source, UnitState target, int amount, GridMap map)
         {
+            amount = CombatDebugTuning.OutgoingDamageFor(source, amount);
             int cover = map.GetTile(target.Position).DamageReduction;
             int incoming = Math.Max(0, amount - cover);
             int absorbed = target.AbsorbShield(incoming); incoming -= absorbed;
@@ -158,7 +159,7 @@ namespace OCC.Combat
         internal static int ApplyRawWeaponDamage(UnitState source, UnitState target, int amount, CombatState combat)
         {
             if (combat == null || combat.Ruleset != CombatRuleset.Roguelite) return ApplyRawWeaponDamage(source, target, amount, combat?.Map);
-            return ApplyRogueliteDamage(target, amount, DamageComponentKind.Physical, "fire_weapon_rule", combat);
+            return ApplyRogueliteDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount), DamageComponentKind.Physical, "fire_weapon_rule", combat);
         }
 
         private static int ApplyRogueliteDamage(UnitState target, int amount, DamageComponentKind kind, string sourceEffectId, CombatState combat)
@@ -278,7 +279,7 @@ namespace OCC.Combat
             if (source.Mana < spell.ManaCost) failures.Add("魔力不足");
             if (battle.Cooldown(sourceUnitId, spell.Id) > 0) failures.Add("冷却中");
             int selfLoss = spell.Rules.Where(rule => rule.Kind == FireRuleKind.LoseHealth).Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
-            if (selfLoss > 0 && source.Health <= selfLoss) failures.Add("生命不足以承担固定自伤");
+            if (selfLoss > 0 && source.Health <= selfLoss) failures.Add("你的生命太低，承受不了这次代价");
             if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ClearOneSelfStatus) &&
                 !new[] { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.BreakStance }.Any(source.HasStatus)) failures.Add("没有可清除的自身状态");
             if (!FireSpellCatalog.IsWeaponCompatible(spell, source.MainHand)) failures.Add("武器要求不符");
@@ -352,8 +353,9 @@ namespace OCC.Combat
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
                 if (effect.Stage > 0)
                 {
-                    FireBattleState.ApplyRawFireDamage(target, 8, battle.Combat);
-                    Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, 8, 8, "ally_followup");
+                    int requested = CombatDebugTuning.OutgoingDamageFor(source, 8);
+                    int applied = FireBattleState.ApplyRawFireDamage(target, requested, battle.Combat);
+                    Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, requested, applied, "ally_followup");
                 }
                 else
                 {
@@ -558,7 +560,7 @@ namespace OCC.Combat
                 bool legal = consumption == FireSourceConsumption.BurningOnly ? hasBurning :
                     consumption == FireSourceConsumption.GroundOnly ? hasGround :
                     consumption == FireSourceConsumption.BurningAndGround ? hasBurning && hasGround : hasBurning || hasGround;
-                if (!legal) { failures.Add("没有合法燃烧来源"); return; }
+                if (!legal) { failures.Add("这里没有可供术式引燃的火源"); return; }
             }
         }
 
@@ -701,8 +703,8 @@ namespace OCC.Combat
                     int requested = alternate ? rule.AlternateAmount : rule.Amount;
                     int applied = rule.Kind == FireRuleKind.WeaponDamage
                         ? FireBattleState.ApplyRawWeaponDamage(source, unit, requested, battle.Combat)
-                        : FireBattleState.ApplyRawFireDamage(unit, requested, battle.Combat);
-                    Add(steps, spell, rule.Kind, unit.Id, unit.Position, requested, applied, rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
+                        : FireBattleState.ApplyRawFireDamage(unit, CombatDebugTuning.OutgoingDamageFor(source, requested), battle.Combat);
+                    Add(steps, spell, rule.Kind, unit.Id, unit.Position, CombatDebugTuning.OutgoingDamageFor(source, requested), applied, rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
                 }
             }
             else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak || rule.Kind == FireRuleKind.ApplyBreakStance)

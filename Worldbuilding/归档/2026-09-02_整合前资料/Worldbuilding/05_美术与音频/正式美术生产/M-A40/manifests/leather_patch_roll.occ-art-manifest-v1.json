@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a40_leather_patch_roll",
+  "role": "material_pickup_24_to_ui32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A40 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/raw/leather_patch_roll/source.png",
+    "source_sha256": "824ad0db1ff2ab057a40c06db8dfdb82d3001fe6086c57b12b88c260e28f49d3"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/normalized/leather_patch_roll.png",
+    "output_sha256": "017c65f7292e7f09a2daee59baa2febaf22e747a38e7a6e3cbc598f701118357",
+    "native_output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/normalized/leather_patch_roll_native24.png",
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future common leather-repair material; native 24px source centered unscaled in 32px delivery",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/QA/leather_patch_roll/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/QA/leather_patch_roll/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/QA/leather_patch_roll/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/QA/leather_patch_roll/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A40/QA/contacts/m_a40_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

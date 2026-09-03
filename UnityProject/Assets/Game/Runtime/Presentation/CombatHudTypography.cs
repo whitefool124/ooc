@@ -5,11 +5,11 @@ namespace OCC.Combat.Presentation
 {
     public static class CombatHudTypography
     {
-        public const int ResourceValueFontSize = 16;
-        public const int TimelineNameFontSize = 15;
-        public const int TimelineDetailFontSize = 14;
-        public const int CommandLabelFontSize = 15;
-        public const int CostValueFontSize = 12;
+        public const int ResourceValueFontSize = FormalUiTheme.BodyFontSize;
+        public const int TimelineNameFontSize = FormalUiTheme.BodyFontSize;
+        public const int TimelineDetailFontSize = FormalUiTheme.BodyFontSize;
+        public const int CommandLabelFontSize = FormalUiTheme.BodyFontSize;
+        public const int CostValueFontSize = FormalUiTheme.BodyFontSize;
         public const int MaximumDecisionLineLength = 21;
 
         public static TextAnchor ResourceValueAlignment => TextAnchor.MiddleRight;

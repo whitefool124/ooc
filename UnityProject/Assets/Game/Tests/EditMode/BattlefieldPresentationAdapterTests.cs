@@ -177,7 +177,7 @@ namespace OCC.Combat.Tests
             CombatActionPreview preview = adapter.BuildPreview(state, "攻击", "enemy");
 
             Assert.That(preview.TargetRule, Does.Contain("可见敌人"));
-            Assert.That(preview.Cost, Is.EqualTo("1 AP"));
+            Assert.That(preview.Cost, Is.EqualTo("1 行动点"));
             Assert.That(preview.ExpectedResult, Does.Contain("预计生命"));
             Assert.That(preview.FailureReason, Is.Empty);
         }
@@ -232,7 +232,7 @@ namespace OCC.Combat.Tests
             UnitState sightHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
             CombatState sightState = new CombatState(coveredMap, new[] { sightHero, new UnitState("enemy", false, new GridPosition(3, 0), Facing.West) });
             CombatResolver.BeginTurn(sightState, "hero");
-            Assert.That(adapter.BuildPreview(sightState, "攻击", "enemy").FailureReason, Does.Contain("阻挡"));
+            Assert.That(adapter.BuildPreview(sightState, "攻击", "enemy").FailureReason, Does.Contain("挡住了视线"));
 
             UnitState waitingHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
             UnitState activeEnemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);

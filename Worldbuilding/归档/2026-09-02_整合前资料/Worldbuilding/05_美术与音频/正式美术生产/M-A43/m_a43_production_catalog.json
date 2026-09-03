@@ -1,0 +1,114 @@
+{
+  "schema": "occ-m-a43-production-catalog-v1",
+  "batch": "M-A43",
+  "assets": [
+    {
+      "asset_id": "m_a43_outer_ring_packed_trail_a",
+      "stem": "outer_ring_packed_trail_a",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map; standalone packed hunt-trail cell A at integer 2x to 5x scale",
+      "prompt": "One independent OCC production floor tile, exact orthographic top-down: one complete square of hand-compacted gray-brown hunt-trail earth, a broad quiet surface with one short shallow boot-wear cluster kept away from every edge. Read as a maintained rural path, not a road. Native 32x32 logic, fully opaque, hard square pixel clusters, 3-6 muted flat colors, fixed weak upper-left light, complete low-contrast physical perimeter inside this tile. Exclude cross-tile rut, long crack, inner brick grid, cobblestone, railroad, asphalt, button frame, grass carpet, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_packed_trail_b",
+      "stem": "outer_ring_packed_trail_b",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map; standalone packed hunt-trail cell B at integer 2x to 5x scale",
+      "prompt": "One independent OCC production floor tile, exact orthographic top-down: a second complete gray-brown hand-compacted hunt-trail earth block from the same family as variant A, with one restrained oval tamped patch and two connected dull pebbles wholly inside the surface. Native 32x32 logic, fully opaque, hard pixel clusters, 3-6 muted flat colors, the same edge width and fixed weak upper-left light as a family variant. Exclude cross-border cart track, diagonal lane, long crack, nested paving, grass border, railway, asphalt, button frame, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_field_verge",
+      "stem": "outer_ring_field_verge",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map; walkable field-verge cell at integer 2x to 5x scale",
+      "prompt": "One independent OCC production floor texture tile, exact orthographic top-down: a seamless-looking full square of quiet gray-brown compacted soil, with exactly three tiny separated tufts of muted dry straw-olive grass placed well inside the square. Every pixel along all four outer edges must be gray-brown soil; the texture must fill the entire canvas edge-to-edge with no surrounding margin or outline. Native 32x32 logic, fully opaque, hard square clusters, 3-6 low-saturation flat colors, weak fixed upper-left light, lower contrast than a tactical unit. Exclude white edge, pale outline, frame, margin, border, broad green island, moss, lush lawn, flowers, crop rows, edge-to-edge vegetation, random speckles, grid, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_drainage_mud",
+      "stem": "outer_ring_drainage_mud",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "REG-ORH-01 12x9 tactical map; walkable damp drainage-mud cell at integer 2x to 5x scale",
+      "prompt": "One independent OCC production floor texture tile, exact orthographic top-down: a uniform edge-to-edge square field of flat dark gray-brown worked clay mud. The whole tile is the same ground plane. Add only one small angular darker damp stain near the center-left and two tiny dull clay clods, all isolated and wholly inside the tile. Native 32x32 logic, fully opaque, hard pixel clusters, 3-6 muted flat colors, fixed weak upper-left light, restrained value range and calm unraised square edges. Exclude every trench, ditch, channel, stripe, border feature, pit, crater, mound, ring, hole, manhole, woven disc, rocks around edges, puddle reflection, water, footprints, rut, sewer grate, concrete, button frame, text, logo, watermark, gradient, anti-aliasing."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_wattle_fence_intact_2x1",
+      "stem": "outer_ring_wattle_fence_intact_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map; intact 2x1 destructible low-cover wattle fence",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 tactical prop: an intact low rural wattle fence spanning exactly two horizontal cells, three stout dark wooden stakes and four broad woven gray-brown branch bands, with two visible grounded feet in each cell. Waist-low light cover, fixed weak upper-left light, three-quarter top-down tactical view with compressed front and no vanishing point. Hard near-black stair-step contour, 7-12 muted flat colors, at least 2px transparent border. Exclude tall palisade, wire fence, hedge, leaves, gate, cast shadow, floor tile, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_wattle_fence_damaged_2x1",
+      "stem": "outer_ring_wattle_fence_damaged_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map; damaged 2x1 destructible low-cover wattle fence",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 tactical prop: the damaged state of a low rural wattle fence, same three-stake and woven-branch construction as the intact family, but the central stake is split, two branch bands sag and one short broken end points inward; enough upright mass remains to read as damaged low cover across both cells. Fixed weak upper-left light, three-quarter top-down tactical view. Hard near-black outline, 7-12 muted colors, 2px transparent border. Exclude complete fence, total debris, tall spikes, wire, foliage, cast shadow, floor, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_wattle_fence_debris_2x1",
+      "stem": "outer_ring_wattle_fence_debris_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map; debris state of 2x1 destructible wattle fence",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 tactical prop: the collapsed debris state of the same rural wattle fence family, two short snapped stake stubs and one broad low bundle of fallen woven branches lying across both cells, clearly no longer upright cover. Fixed weak upper-left light, near-top-down three-quarter view, honest two-cell horizontal spread. Hard near-black contour, 6-10 muted wood colors, at least 2px transparent border. Exclude intact panel, tall fence, fire, leaves, wire, cast shadow, floor, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_trail_marker_post",
+      "stem": "outer_ring_trail_marker_post",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 tactical map; one-cell non-cover manual trail marker",
+      "prompt": "One independent OCC native 32x32 transparent single-cell prop: one short weathered hardwood trail marker post on a rough stone foot, with two plain asymmetrical wooden direction boards and one dull iron binding; both boards are blank with no letters or symbols. Human-maintained rural patrol marker, not magical navigation. Fixed weak upper-left light, tactical three-quarter top-down view, honest compact one-cell base. Hard near-black outline, 6-10 muted colors, 2px transparent border. Exclude text, arrows painted as symbols, rune, sign cluster, lamp, banner, glow, cast shadow, floor, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_stone_culvert_2x1",
+      "stem": "outer_ring_stone_culvert_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map; two-cell low hand-laid drainage culvert",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 rural tactical prop: a very low hand-laid field-drain crossing spanning two horizontal cells, made of four broad flat gray limestone cap slabs resting on two short end cheeks; show one narrow dark horizontal drainage slit beneath the slabs, no arch and no visible water. Height must stay below a character's knee and the silhouette must be a long shallow slab, never a wall or bridge. Fixed weak upper-left light, compressed three-quarter top-down tactical view, no perspective convergence. Hard near-black contour, 7-12 muted stone and clay colors, 2px transparent border. Exclude tall masonry, rubble pile, collapsed wall, arch bridge, concrete pipe, sewer grate, tower, grass, baked ground, blue water, cast shadow, floor tile, text, logo, glow, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_livestock_trough_2x1",
+      "stem": "outer_ring_livestock_trough_2x1",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 1],
+      "palette_max": 12,
+      "application": "REG-ORH-01 tactical map; two-cell low livestock water trough, no active water effect",
+      "prompt": "One independent OCC native 64x32 transparent 2x1 rural tactical prop: one long low livestock drinking trough made from a hollowed weathered timber beam, held by two short pale stone feet, with a dark empty interior and one iron repair band. No visible water. Honest horizontal two-cell footprint, fixed weak upper-left light, three-quarter top-down view. Hard near-black stair-step outline, 7-12 muted wood, stone and iron colors, 2px transparent border. Exclude bathtub, boat, feeding animal, pump, blue liquid, modern metal tank, cast shadow, floor, text, logo, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_farm_bucket_rack",
+      "stem": "outer_ring_farm_bucket_rack",
+      "role": "single_cell_prop_32",
+      "logical_cells": [1, 1],
+      "palette_max": 10,
+      "application": "REG-ORH-01 tactical map; one-cell non-loot farm maintenance rack",
+      "prompt": "One independent OCC native 32x32 transparent single-cell rural prop: a compact A-frame hardwood maintenance rack holding one patched wooden bucket by its iron handle, with one broad lower crossbar and four grounded feet contained inside the cell. Read as ordinary farm equipment storage, not a loot container. Fixed weak upper-left light, three-quarter top-down tactical view. Hard near-black outline, 6-10 muted wood, iron and gray cloth colors, 2px transparent border. Exclude extra tools, treasure sparkle, open chest, modern pail, sign, text, logo, glow, cast shadow, floor, black backdrop."
+    },
+    {
+      "asset_id": "m_a43_outer_ring_hunter_waystation_2x2",
+      "stem": "outer_ring_hunter_waystation_2x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 2],
+      "palette_max": 12,
+      "application": "REG-ORH-01 12x9 tactical map narrative anchor; 2x2 hunter rest and record shelter",
+      "prompt": "One independent OCC native 64x64 transparent 2x2 tactical narrative anchor: a low open-sided hunter waystation shelter with four stout timber posts, a patched gray-green canvas lean-to roof, one simple bench, two empty gear hooks and one closed blank wooden record board; every support remains inside the exact 2x2 footprint. Fixed weak upper-left light, three-quarter top-down tactical view with roof top visible and front compressed. Read as a manually maintained patrol rest and record point, not a house or shrine. Hard near-black contour, 8-12 muted wood, cloth, stone and iron colors, at least 2px transparent border. Exclude people, weapons, animal trophies, readable writing, emblem, fire, glowing crystal, modern tent, military bunker, cast shadow, floor, logo, black backdrop."
+    }
+  ]
+}

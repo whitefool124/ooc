@@ -55,7 +55,12 @@ namespace OCC.Combat.Presentation
                 "relay_intact", "relay_damaged", "relay_rubble", "loot_crate_closed", "loot_crate_open", "loot_crate_empty" };
             foreach (string id in relayIds) relay[id] = RequiredTexture("Art/FormalRelayV01/" + id);
             foreach (string id in new[] { "selected", "move_range", "attack_range", "objective", "high_risk", "unreachable", "line_of_sight" })
-                overlays[id] = RequiredTexture("Art/FormalTacticalOverlays32/" + id);
+            {
+                string family = id == "move_range" || id == "attack_range"
+                    ? "Art/FormalTacticalOverlays32V2/"
+                    : "Art/FormalTacticalOverlays32/";
+                overlays[id] = RequiredTexture(family + id);
+            }
             foreach (FormalArtEntry entry in FormalArtRegistry.Intents)
                 intents[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
             statuses[StatusType.Burning] = RequiredTexture(FormalArtRegistry.StatusPath("burning"));
@@ -246,8 +251,10 @@ namespace OCC.Combat.Presentation
             label.text = text;
             label.alignment = TextAnchor.MiddleCenter;
             label.color = Color.white;
-            label.fontSize = fontSize;
+            label.fontSize = FormalUiTheme.ResponsiveFontSize(fontSize);
             label.font = FormalUiKit.Font;
+            label.fontStyle = FontStyle.Normal;
+            label.resizeTextForBestFit = false;
         }
 
         private static void AddEditorMarker(GameObject root, string name, Vector3 position, string formalAsset)

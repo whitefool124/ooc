@@ -78,7 +78,31 @@ namespace OCC.Combat.Tests
             Assert.That(rewards.Any(value => value.Id == "war_hammer" || value.Id == "arcane_wand" || value.Id == "medkit" || value.Id == "shield_cell"), Is.False);
             RogueliteReward equipment = rewards.Single(value => value.Kind == RogueliteRewardKind.Equipment); run.ClaimReward(equipment.Id);
             Assert.That(gateway.SaveMapRun(run), Is.True, gateway.LastError); Assert.That(gateway.TryLoadRogueRun(out RogueRunDto dto), Is.True, gateway.LastError);
-            Assert.That(dto.EquipmentInstances.Any(value => value.DefinitionId == equipment.Id), Is.True);
+            EquipmentInstanceDto saved = dto.EquipmentInstances.Single(value => value.InstanceId.StartsWith("eq-" + run.Seed + "-", StringComparison.Ordinal));
+            Assert.That(saved.BackpackX, Is.GreaterThanOrEqualTo(0)); Assert.That(saved.BackpackY, Is.GreaterThanOrEqualTo(0));
+            Assert.DoesNotThrow(() => RogueEquipmentRuntime.FromDto(dto));
+        }
+
+        [Test]
+        public void M6FullRogueBackpack_BlocksEquipmentRewardWithoutAppendingUnplacedDto()
+        {
+            RogueRunDto dto = RogueRunDto.CreateNew("full-reward", 621);
+            dto.CurrentNodeId = "rail_patrol"; dto.AwaitingReward = true; dto.CompletedNodeIds.Add("rail_patrol");
+            dto.EquipmentInstances.Clear();
+            for (int y = 0; y < RogueRuntimeConstants.BackpackHeight; y++)
+            for (int x = 0; x < RogueRuntimeConstants.BackpackWidth; x++)
+                dto.EquipmentInstances.Add(new EquipmentInstanceDto("fill-" + x + "-" + y, "ACA-EQ-AC01",
+                    OCC.Combat.Roguelite.EquipmentSlot.Accessory1, EquipmentRarity.Uncommon, 0)
+                { AcquiredOrder = dto.EquipmentInstances.Count, BackpackX = x, BackpackY = y, SourceType = "test" });
+            RogueliteMapRun run = RogueliteMapRun.FromRogue11(dto);
+            RogueliteReward reward = run.CurrentRewards.Single(value => value.Kind == RogueliteRewardKind.Equipment);
+            int before = dto.EquipmentInstances.Count;
+
+            UiOperationAvailability availability = RogueliteEconomyPresentation.ForReward(run, reward);
+
+            Assert.That(availability.CanExecute, Is.False); Assert.That(availability.Status, Is.EqualTo("行囊放不下"));
+            Assert.Throws<InvalidOperationException>(() => run.ClaimReward(reward.Id));
+            Assert.That(dto.EquipmentInstances.Count, Is.EqualTo(before));
         }
     }
 }

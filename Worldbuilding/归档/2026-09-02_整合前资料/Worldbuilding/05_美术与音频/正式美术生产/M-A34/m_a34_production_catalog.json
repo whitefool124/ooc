@@ -1,0 +1,141 @@
+{
+  "schema": "occ-m-a34-production-catalog-v1",
+  "batch": "M-A34",
+  "assets": [
+    {
+      "asset_id": "m_a34_water_channel_redirect_icon",
+      "stem": "water_channel_redirect_icon",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "non-fire spell visual grammar stock; native 32px slot without a formal skill ID",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 spell-grammar icon. Primary request: controlled water enters a simple carved wooden-and-ceramic guide notch and exits clearly toward one side, showing channel and redirect rather than explosion. Player read: water flow redirected through a practical casting medium. Hard near-black contour, large connected clusters, five to ten discrete colors, deep slate-blue and pale water-blue liquid with warm neutral wood and ceramic, no anti-aliasing, no gradient, transparent two-pixel safety margin. Exclude: ice crystal, lightning, ocean wave, generic glowing disc, active-aether cyan border, text rune, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_pressure_jet_icon",
+      "stem": "water_pressure_jet_icon",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "non-fire spell visual grammar stock; native 32px slot without a formal skill ID",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 spell-grammar icon. Primary request: a short ceramic pressure nozzle held by a dark wooden brace compresses one thick water mass into a straight narrow jet. Player read: water pressure and linear force produced by a maintainable casting medium, not a firearm. Hard near-black contour, two or three structural partitions, five to ten flat colors, deep slate-blue water with one pale core cluster, transparent two-pixel safety margin, no anti-aliasing or gradient. Exclude: ice lance, blue lightning, gun barrel, steam, active-aether cyan border, circular magic seal, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_cleansing_flush_icon",
+      "stem": "water_cleansing_flush_icon",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "non-fire spell visual grammar stock; native 32px slot without a formal skill ID",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 spell-grammar icon. Primary request: a controlled sheet of water passes across one stained ceramic filter plate and carries a small dark residue cluster away from it. Player read: flush, rinse and remove residue, not heal or freeze. Hard near-black contour, large connected forms, five to ten colors, slate-blue water, warm pale ceramic and a small charcoal residue, transparent two-pixel safety margin, no anti-aliasing or gradient. Exclude: holy sparkle, medical cross, soap foam, ice, lightning, active-aether cyan frame, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_01_cast_start",
+      "stem": "water_redirect_vfx_01_cast_start",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 1 of 6; compact cast start inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 1 CAST START. A compact dark slate-blue water crescent gathers around a tiny neutral ceramic guide point near the center, with only two pale water pixels showing pressure beginning. Player read: controlled water gathering, not impact. Hard alpha, square clusters, at most twelve colors, one-pixel transparent safety edge. Exclude: complete spell icon, hands, unit, floor grid, ice, lightning, circular magic rune, mist, soft transparency, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_02_stream_early",
+      "stem": "water_redirect_vfx_02_stream_early",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 2 of 6; early directional stream inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 2 EARLY STREAM. A short thick slate-blue water jet extends from left-center toward right-center, still attached to a compact darker source mass, with one restrained pale core cluster and no impact yet. Player read: water begins moving in a controlled direction. Hard alpha, square clusters, at most twelve colors, one-pixel transparent safety edge. Exclude: wave landscape, ice lance, lightning bolt, unit, floor grid, mist, foam noise, soft glow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_03_stream_full",
+      "stem": "water_redirect_vfx_03_stream_full",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 3 of 6; full directional stream inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 3 FULL STREAM. One cohesive slightly curved water jet spans most of the cell from left to right, with a dark outline mass, mid slate-blue body and a narrow pale pressure core; the head remains rounded liquid, not pointed. Player read: maximum controlled water flow before impact. Hard alpha, square clusters, at most twelve colors, one-pixel safety edge. Exclude: ice spear, lightning, ocean wave, spray cloud, unit, floor, damage number, soft transparency, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_04_impact_peak",
+      "stem": "water_redirect_vfx_04_impact_peak",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 4 of 6; compact peak impact inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 4 IMPACT PEAK. A controlled water jet strikes the center and splits into a low compact fan-shaped diversion with only four or five hard droplets; one small pale impact core is surrounded by a larger dark and mid-blue water mass. Player read: redirected water impact, not ice or lightning. Hard alpha, square clusters, at most twelve colors, one-pixel safety edge. Exclude: tall spikes, full-cell wave, noisy foam, mist, damage number, unit, floor grid, soft glow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_05_split_falloff",
+      "stem": "water_redirect_vfx_05_split_falloff",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 5 of 6; split falloff inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 5 SPLIT FALLOFF. The central impact has collapsed; two low opposing slate-blue water lobes slide away from the center with three small descending droplets and no bright core. Player read: energy falling off after a redirected hit. Hard alpha, square clusters, at most twelve colors, one-pixel transparent safety edge. Exclude: new explosion, ice shards, lightning forks, ocean wave, mist, unit, floor, soft transparency, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_water_redirect_vfx_06_dissipate",
+      "stem": "water_redirect_vfx_06_dissipate",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "water redirect VFX family frame 6 of 6; final dissipate inside one tactical cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 32x32 VFX frame, stage 6 DISSIPATE. Only three or four separated dark slate-blue droplets remain low around the former center, with one tiny mid-blue highlight and large transparent gaps. Player read: the water effect has ended and the cell is visually clear. Hard alpha, square clusters, at most twelve colors, one-pixel safety edge. Exclude: puddle floor decal, mist, foam cloud, ice, lightning, bright core, unit, damage number, soft transparency, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_harbor_archive_backdrop",
+      "stem": "harbor_archive_backdrop",
+      "role": "ui_backdrop_480x270",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "future harbor briefing or investigation page; 480x270 backdrop at integer 2x or 4x with central text-safe area",
+      "prompt": "Use case: ui-mockup. Asset type: one independent OCC 480x270 pixel UI backdrop only, not a full interface. A low-contrast academy harbor-inspection archive surface: warm paper and cloth file field as the largest area, narrow charcoal page spine at the far left, and restrained silhouettes of salt-worn inspection paving, warehouse timber, rope and one distant hand-cranked crane limited to the bottom and outer edges. Keep the central and right-middle area calm and nearly empty for real UI text. Deliberate low-resolution pixel art, hard clusters, fully opaque, at most 24 flat colors, no gradients or anti-aliasing. Exclude: title, pseudo-writing, buttons, icon slots, complete UI screenshot, railway, public electricity, factory skyline, bloom, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_anonymous_field_apprentice_a",
+      "stem": "anonymous_field_apprentice_a",
+      "role": "tactical_unit_64",
+      "logical_cells": [1, 1],
+      "palette_max": 24,
+      "application": "anonymous friendly field-apprentice stock identity; 64px tactical layer at integer scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC native 64x64 tactical-unit production source. The approved anonymous 14-to-16-year-old academy field apprentice: deep-brown short hair, warm-medium visible young face, limestone shirt, charcoal short coat, brown leather harness, muted indigo edging, blue-gray trousers, worn leather boots, wooden survey staff, folding field board and small brass measuring ring. Near-top-down three-quarter facing lower-right, full body. Body 44-48px, head 12-14px, center X32, boot baseline Y58, at most 24 colors, hard clusters, transparent safety edge. Exclude: canonical protagonist claim, firearm, medieval robe, mechanical armor, mask, LED, adult heroic body, floor, shadow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_anonymous_field_apprentice_b",
+      "stem": "anonymous_field_apprentice_b",
+      "role": "character_portrait_b_384x576",
+      "logical_cells": null,
+      "palette_max": 40,
+      "application": "anonymous field-apprentice stock identity B layer for future archive and dialogue layouts",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC B-layer pixel portrait production source. The same approved anonymous 14-to-16-year-old academy field apprentice: deep-brown short hair, warm-medium young face, limestone shirt, charcoal short coat, brown leather harness, muted indigo edging, blue-gray trousers, worn boots, wooden survey staff, folding field board and small brass measuring ring. Calm cautious three-quarter standing pose, full or upper three-quarter body. Native 384x576 pixel logic, hard edges, controlled 32-40 colors, transparent background. Exclude: canonical protagonist claim, firearm, graduation uniform, medieval robe, mechanical armor, mask, LED, adult heroic proportions, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_anonymous_field_apprentice_c_neutral",
+      "stem": "anonymous_field_apprentice_c_neutral",
+      "role": "character_performance_c_192x288",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "anonymous field-apprentice stock identity C layer neutral full-body performance",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC C-layer full-body pixel performance source. The same anonymous young field apprentice and locked clothing/equipment identity. Action NEUTRAL: balanced feet, survey staff resting lightly beside the body, folding field board held against the torso, relaxed brows, attentive eyes and closed neutral mouth. Full body visible; face about 28px high; native 192x288 pixel logic, hard edges, at most 24 colors, transparent background. Exclude: canonical protagonist, smile pose, spell blast, heroic stance, adult body, crop, soft shading, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_anonymous_field_apprentice_c_resolve",
+      "stem": "anonymous_field_apprentice_c_resolve",
+      "role": "character_performance_c_192x288",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "anonymous field-apprentice stock identity C layer resolve full-body performance",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC C-layer full-body pixel performance source. The same anonymous young field apprentice and locked clothing/equipment identity. Action RESOLVE: feet planted wider, torso leaning slightly forward, brows tightened, focused eyes, mouth set, one hand gripping the survey staff vertically and the other securing the field board. Determined but visibly young and restrained. Full body; face about 28px; native 192x288 logic, hard edges, at most 24 colors, transparent background. Exclude: victory pose, raised weapon, spell blast, adult heroic body, crop, gradients, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a34_anonymous_field_apprentice_c_strain",
+      "stem": "anonymous_field_apprentice_c_strain",
+      "role": "character_performance_c_192x288",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "anonymous field-apprentice stock identity C layer strain full-body performance",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC C-layer full-body pixel performance source. The same anonymous young field apprentice and locked clothing/equipment identity. Action STRAIN: knees slightly bent, shoulders drawn inward, one hand bracing on the survey staff, the field board held close, brows pinched, eyes narrowed and mouth tense; tired but still standing. Full body; face about 28px; native 192x288 logic, hard edges, at most 24 colors, transparent background. Exclude: injury gore, collapse, screaming, spell blast, adult body, crop, soft shading, text, logo, watermark."
+    }
+  ]
+}

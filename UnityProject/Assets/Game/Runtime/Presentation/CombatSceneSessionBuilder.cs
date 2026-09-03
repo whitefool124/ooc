@@ -129,11 +129,14 @@ namespace OCC.Combat.Presentation
             IReadOnlyList<GridPosition> routeAnchors = layout == null ? level.SpaceContract.RouteAnchors :
                 new[] { new GridPosition(Math.Max(0, heroSpawn.X - 2), heroSpawn.Y), new GridPosition(Math.Min(layout.Width - 1, heroSpawn.X + 2), heroSpawn.Y) };
             string objectiveSummary = string.IsNullOrEmpty(encounter.ObjectiveSummary) ? level.ObjectiveSummary : encounter.ObjectiveSummary;
+            int width = layout?.Width ?? level.Width;
+            int height = layout?.Height ?? level.Height;
+            IReadOnlyList<GridPosition> blockedPositions = layout?.BlockedPositions ?? level.BlockedPositions;
             return new FirstRegionLevelDefinition(level.Id, level.DisplayName, objectiveSummary, objectiveType,
                 level.Tier, heroSpawn, level.FloorTheme, encounter.IsElite, encounter.IsBoss,
                 level.PrerequisiteLevelIds, enemies, terrain,
                 new LevelSpaceContract(encounter.SpatialGrammar, routeAnchors,
-                    encounter.PublicRisk, encounter.SpawnRelationship), level.Width, level.Height, level.BlockedPositions);
+                    encounter.PublicRisk, encounter.SpawnRelationship), width, height, blockedPositions);
         }
 
         private static MissionPreparation PrepareMission(CombatState state, GridMap map,
@@ -168,7 +171,7 @@ namespace OCC.Combat.Presentation
             if (encounter == null) return fallback;
             string summary = string.Join("、", encounter.EnemyArchetypeIds
                 .Select(id => EnemyArchetypes.Get(id).DisplayName));
-            return (encounter.IsBoss ? "区域首领：" : encounter.IsElite ? "精英编成：" : "区域编成：") + summary;
+            return (encounter.IsBoss ? "终考对手：" : encounter.IsElite ? "高年级对手：" : "对手：") + summary;
         }
 
         private static void ConfigureCombatInventory(CombatState state, RogueliteMapRun mapRun,

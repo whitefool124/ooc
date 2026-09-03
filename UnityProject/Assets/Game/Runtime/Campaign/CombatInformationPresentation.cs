@@ -163,8 +163,8 @@ namespace OCC.Combat
                     iconId = "interact_destroy";
                     break;
                 default:
-                    action = command.Type.ToString();
-                    result = "按战斗规则结算";
+                    action = "行动";
+                    result = "行动时会显示结果";
                     iconId = "defend";
                     break;
             }
@@ -198,9 +198,9 @@ namespace OCC.Combat
             int remaining = state.Units.Values.Count(unit => !unit.IsHero && unit.IsAlive);
             int complete = state.Objectives.Count(objective => objective.IsComplete(state));
             string objective = "目标 " + complete + "/" + state.Objectives.Count + " 完成";
-            string consequence = victory ? "战利品与行动进度将在返回时结算。" : rogueliteMapCombat
-                ? "返回地图并从战斗前继续，或重新挑战本场战斗。"
-                : "离开将放弃本场进度，也可以重新挑战。";
+            string consequence = victory ? "回到地图后，就能带走本场收获。" : rogueliteMapCombat
+                ? "可以回到地图，或者从头再挑战一次。"
+                : "离开后这场战斗不会留下任何收获，也可以从头再挑战。";
             return new CombatOutcomePresentation(title, reason, heroState, remaining, objective, consequence, state.EventLog.Take(5).ToArray());
         }
 
@@ -323,7 +323,7 @@ namespace OCC.Combat
             if (phase == CombatFlowPhase.Victory) return "战斗胜利";
             if (phase == CombatFlowPhase.Defeat) return "战斗失败";
             if (phase == CombatFlowPhase.TacticalRestart) return "正在重新部署";
-            if (phase != CombatFlowPhase.Active) return "准备阶段";
+            if (phase != CombatFlowPhase.Active) return "战斗即将开始";
             UnitState active = state?.GetUnit(state.ActiveUnitId);
             return active?.IsHero == true ? "你的行动 · 选择指令" : "敌方行动";
         }
@@ -376,7 +376,7 @@ namespace OCC.Combat
                     default: return "产生战斗效果";
                 }
             }));
-            return string.IsNullOrEmpty(effects) ? "按技能规则结算" : effects;
+            return string.IsNullOrEmpty(effects) ? "选好目标后施放" : effects;
         }
 
         public static string BuildRogueliteHeroDetails(UnitState hero)

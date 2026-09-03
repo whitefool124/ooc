@@ -9,6 +9,8 @@ namespace OCC.Combat.Roguelite
         public const string SaveVersion = "rogue11";
         public const int SpellSlotCount = 8;
         public const int ItemQuickbarSize = 4;
+        public const int BackpackWidth = 6;
+        public const int BackpackHeight = 10;
         public const int MaximumPersonalMana = 12;
         public const int MaximumPercentageReduction = 50;
     }

@@ -43,16 +43,26 @@ namespace OCC.Combat.Presentation
         public static Color InventorySlotSurface => highContrast ? SurfaceRaised : Color.Lerp(SurfaceRaised, Panel, .22f);
         public static Color InventorySlotSelected => Color.Lerp(InventorySlotSurface, Cyan, .12f);
         public static Color InventorySlotLocked => Color.Lerp(Panel, Disabled, .36f);
-        public static readonly Color Health = new Color(.28f, .47f, .34f, 1f);
-        public static readonly Color Shield = new Color(.38f, .52f, .48f, 1f);
-        public static readonly Color Magic = new Color(.44f, .34f, .51f, 1f);
+        public static readonly Color Health = new Color(.68f, .25f, .19f, 1f);
+        public static readonly Color Shield = new Color(.27f, .56f, .38f, 1f);
+        public static readonly Color Magic = new Color(.18f, .48f, .51f, 1f);
+        public static Color ResourceTrack => highContrast
+            ? new Color(.72f, .70f, .65f, 1f)
+            : Color.Lerp(SurfaceRaised, Ink, .24f);
 
-        public const int CaptionFontSize = 17;
-        public const int BodyFontSize = 20;
-        public const int HeadingFontSize = 25;
-        public const int TitleFontSize = 36;
-        public const int ButtonFontSize = 20;
-        public const int ButtonDetailFontSize = 16;
+        public const int NativeFontGrid = 12;
+        public const int MinimumReadableFontSize = 24;
+        public const int MinimumCompactFontSize = 24;
+        public const int CaptionFontSize = 24;
+        public const int BodyFontSize = 24;
+        public const int HeadingFontSize = 24;
+        public const int TitleFontSize = 48;
+        public const int FeedbackFontSize = 72;
+        public const int ButtonFontSize = 24;
+        public const int ButtonDetailFontSize = 24;
+        public const int BodyTextSlotHeight = 40;
+        public const int TwoLineTextSlotHeight = 72;
+        public const int TitleTextSlotHeight = 72;
         public const int MinimumInteractiveHeight = 48;
         public const int SpaceSmall = 8;
         public const int SpaceMedium = 16;
@@ -60,6 +70,9 @@ namespace OCC.Combat.Presentation
         public const int IconSlotSize = 32;
         public const int IconTextInset = 36;
         public const int FrameThickness = 6;
+        public const int FrameTextSafetyMargin = 6;
+        public const int FramedContentInset = FrameThickness + FrameTextSafetyMargin;
+        public const int FullyFramedSingleLineHeight = BodyFontSize + FramedContentInset * 2;
         public const int FrameCornerSize = 12;
         public const int InnerHighlightThickness = 2;
         public const int PressedOffset = 4;
@@ -85,6 +98,26 @@ namespace OCC.Combat.Presentation
             return .2126f * r + .7152f * g + .0722f * b;
         }
 
+        public static float ContrastRatio(Color foreground, Color background)
+        {
+            float bright = Mathf.Max(RelativeLuminance(foreground), RelativeLuminance(background));
+            float dark = Mathf.Min(RelativeLuminance(foreground), RelativeLuminance(background));
+            return (bright + .05f) / (dark + .05f);
+        }
+
+        public static Color ReadableLabelColor(Color requested)
+        {
+            if (Approximately(requested, Cyan)) return highContrast ? Text : new Color(.105f, .34f, .37f, requested.a);
+            if (Approximately(requested, Amber)) return highContrast ? Text : new Color(.40f, .235f, .055f, requested.a);
+            if (Approximately(requested, Safe)) return highContrast ? Text : new Color(.19f, .335f, .225f, requested.a);
+            if (Approximately(requested, Danger)) return highContrast ? Text : new Color(.52f, .20f, .17f, requested.a);
+            return requested;
+        }
+
+        private static bool Approximately(Color left, Color right) =>
+            Mathf.Abs(left.r - right.r) < .002f && Mathf.Abs(left.g - right.g) < .002f &&
+            Mathf.Abs(left.b - right.b) < .002f;
+
         public static FormalUiButtonPalette ButtonPalette(FormalUiButtonTone tone)
         {
             Color accent = tone == FormalUiButtonTone.Primary ? Cyan :
@@ -97,18 +130,25 @@ namespace OCC.Combat.Presentation
 
         public static int PixelAlignedFontSize(int fontSize, bool compact)
         {
-            if (!compact) return fontSize;
-            int target = fontSize <= 18 ? Mathf.CeilToInt(fontSize * 1.25f) : fontSize;
-            return target % 2 == 0 ? target : target + 1;
+            int target = Mathf.Max(compact ? MinimumCompactFontSize : MinimumReadableFontSize, fontSize);
+            if (target <= 35) return BodyFontSize;
+            if (target <= 60) return TitleFontSize;
+            return FeedbackFontSize;
         }
 
         public static int ResponsiveFontSize(int fontSize)
         {
             int responsive = PixelAlignedFontSize(fontSize, Screen.height <= UiLayoutContract.CompactHeightThreshold);
-            responsive = Mathf.CeilToInt(responsive * 1.12f);
             if (!largeText) return responsive;
-            int accessible = Mathf.CeilToInt(responsive * 1.15f);
-            return accessible % 2 == 0 ? accessible : accessible + 1;
+            return responsive == BodyFontSize ? TitleFontSize : FeedbackFontSize;
+        }
+
+        public static int MinimumTextSlotHeight(int resolvedFontSize, int lineCount = 1)
+        {
+            if (lineCount > 1) return resolvedFontSize <= BodyFontSize ? TwoLineTextSlotHeight : resolvedFontSize + 32;
+            if (resolvedFontSize <= BodyFontSize) return BodyTextSlotHeight;
+            if (resolvedFontSize <= TitleFontSize) return TitleTextSlotHeight;
+            return resolvedFontSize + 32;
         }
     }
 
@@ -164,9 +204,9 @@ namespace OCC.Combat.Presentation
     {
         private static readonly FormalUiPageChecklistEntry[] entries =
         {
-            new FormalUiPageChecklistEntry("landing", "按钮_近战热压", false, true, true),
+            new FormalUiPageChecklistEntry("landing", "按钮_近战训练", false, true, true),
             new FormalUiPageChecklistEntry("map", "map.node.{current}", true, true, true),
-            new FormalUiPageChecklistEntry("briefing", "按钮_开始战斗", true, true, false),
+            new FormalUiPageChecklistEntry("briefing", "按钮_进入战斗", true, true, false),
             new FormalUiPageChecklistEntry("combat", "移动", true, true, false),
             new FormalUiPageChecklistEntry("shop-workshop", "按钮_返回", true, true, true),
             new FormalUiPageChecklistEntry("inventory-loot", "inventory.back", true, true, true),
@@ -181,9 +221,15 @@ namespace OCC.Combat.Presentation
     public static class FormalUiKit
     {
         private static Font font;
+        private static Font displayFont;
+        private static Font readingFont;
         private static readonly System.Collections.Generic.Dictionary<string, Sprite> skin = new System.Collections.Generic.Dictionary<string, Sprite>(StringComparer.Ordinal);
         public const string FontResourcePath = "Fonts/FusionPixel12ProportionalZhHans";
+        public const string DisplayFontResourcePath = "Fonts/FusionPixel12ProportionalZhHans";
+        public const string ReadingFontResourcePath = "Fonts/SimHei";
         public static Font Font => font != null ? font : font = Resources.Load<Font>(FontResourcePath);
+        public static Font DisplayFont => displayFont != null ? displayFont : displayFont = Resources.Load<Font>(DisplayFontResourcePath);
+        public static Font ReadingFont => readingFont != null ? readingFont : readingFont = Resources.Load<Font>(ReadingFontResourcePath);
 
         public static Sprite SkinSprite(string id)
         {
@@ -208,57 +254,42 @@ namespace OCC.Combat.Presentation
             image.type = Image.Type.Simple;
             image.color = id == "focus" ? Color.clear : tint;
             Transform existingFrame = image.transform.Find("像素框架");
-            if (id == "bar_fill")
-            {
-                if (existingFrame != null) existingFrame.gameObject.SetActive(false);
-                return;
-            }
+            if (existingFrame != null) existingFrame.gameObject.SetActive(false);
 
-            Color border = id == "focus" ? FormalUiTheme.Focus :
-                id == "danger" ? FormalUiTheme.Danger :
-                id == "reward" ? FormalUiTheme.Amber :
-                id.StartsWith("button", StringComparison.Ordinal) ? FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .82f) :
-                FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .92f);
-            Color highlight = id == "focus" ? FormalUiTheme.WithAlpha(FormalUiTheme.Focus, .48f) :
-                FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .72f);
-            ApplyPixelFrame(image.transform, border, highlight);
+            Image overlay = SkinOverlay(image, true);
+            Sprite sprite = SkinSprite(id);
+            overlay.sprite = sprite;
+            overlay.type = sprite.border.sqrMagnitude > 0f ? Image.Type.Sliced : Image.Type.Simple;
+            overlay.fillCenter = false;
+            overlay.preserveAspect = false;
+            overlay.color = Color.white;
+            overlay.raycastTarget = false;
         }
 
-        private static void ApplyPixelFrame(Transform owner, Color border, Color highlight)
+        public static Image SkinOverlay(Image image, bool createIfMissing = false)
         {
-            Transform frame = owner.Find("像素框架");
-            if (frame == null)
-            {
-                GameObject frameObject = Create("像素框架", owner);
-                RectTransform frameRect = frameObject.AddComponent<RectTransform>(); Stretch(frameRect);
-                frame = frameObject.transform;
-                AddFrameElement(frame, "上", new Vector2(0, 1), new Vector2(1, 1), new Vector2(.5f, 1), Vector2.zero, new Vector2(0, FormalUiTheme.FrameThickness));
-                AddFrameElement(frame, "下", new Vector2(0, 0), new Vector2(1, 0), new Vector2(.5f, 0), Vector2.zero, new Vector2(0, FormalUiTheme.FrameThickness));
-                AddFrameElement(frame, "左", new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, .5f), Vector2.zero, new Vector2(FormalUiTheme.FrameThickness, 0));
-                AddFrameElement(frame, "右", new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, .5f), Vector2.zero, new Vector2(FormalUiTheme.FrameThickness, 0));
-                AddFrameElement(frame, "左上", Vector2.up, Vector2.up, Vector2.up, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
-                AddFrameElement(frame, "右上", Vector2.one, Vector2.one, Vector2.one, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
-                AddFrameElement(frame, "左下", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
-                AddFrameElement(frame, "右下", Vector2.right, Vector2.right, Vector2.right, Vector2.zero, Vector2.one * FormalUiTheme.FrameCornerSize);
-                AddFrameElement(frame, "内高光_上", new Vector2(0, 1), new Vector2(1, 1), new Vector2(.5f, 1), new Vector2(0, -FormalUiTheme.FrameThickness), new Vector2(-FormalUiTheme.FrameCornerSize * 2, FormalUiTheme.InnerHighlightThickness));
-                AddFrameElement(frame, "内高光_左", new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, .5f), new Vector2(FormalUiTheme.FrameThickness, 0), new Vector2(FormalUiTheme.InnerHighlightThickness, -FormalUiTheme.FrameCornerSize * 2));
-            }
-
-            frame.gameObject.SetActive(true);
-            foreach (Image part in frame.GetComponentsInChildren<Image>(true))
-            {
-                part.color = part.name.StartsWith("内高光", StringComparison.Ordinal) ? highlight : border;
-                part.raycastTarget = false;
-            }
-            frame.SetAsFirstSibling();
+            if (image == null) return null;
+            Transform child = image.transform.Find("正式皮肤");
+            if (child != null) return child.GetComponent<Image>();
+            if (!createIfMissing) return null;
+            GameObject overlayObject = Create("正式皮肤", image.transform);
+            RectTransform rect = overlayObject.AddComponent<RectTransform>();
+            Stretch(rect);
+            return overlayObject.AddComponent<Image>();
         }
 
-        private static void AddFrameElement(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot, Vector2 position, Vector2 size)
+        public static bool IsStandardButtonSkin(Sprite sprite)
         {
-            GameObject element = Create(name, parent);
-            RectTransform rect = element.AddComponent<RectTransform>();
-            rect.anchorMin = anchorMin; rect.anchorMax = anchorMax; rect.pivot = pivot; rect.anchoredPosition = position; rect.sizeDelta = size;
-            Image image = element.AddComponent<Image>(); image.sprite = null; image.type = Image.Type.Simple; image.raycastTarget = false;
+            if (sprite == null) return false;
+            return sprite == SkinSprite("button_idle") || sprite == SkinSprite("button_hover") ||
+                sprite == SkinSprite("button_pressed") || sprite == SkinSprite("button_disabled") ||
+                sprite == SkinSprite("tab_active");
+        }
+
+        public static Sprite ButtonStateSprite(bool available, bool pressed, bool selected, bool hovered)
+        {
+            string id = !available ? "button_disabled" : pressed ? "button_pressed" : selected ? "tab_active" : hovered ? "button_hover" : "button_idle";
+            return SkinSprite(id);
         }
 
         private static string PanelSkin(string name)
@@ -299,6 +330,7 @@ namespace OCC.Combat.Presentation
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight);
             scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
+            scaler.referencePixelsPerUnit = 32f * OccPixelUiConfig.Data.logicalPixelScale;
             root.AddComponent<GraphicRaycaster>();
             RuntimeUiEventSystem.Ensure();
             return canvas;
@@ -317,6 +349,16 @@ namespace OCC.Combat.Presentation
             RectTransform rect = result.AddComponent<RectTransform>();
             rect.anchorMin = anchorMin; rect.anchorMax = anchorMax; rect.pivot = anchorMax; rect.anchoredPosition = position; rect.sizeDelta = size;
             Image image = result.AddComponent<Image>(); ApplySkin(image, PanelSkin(name), color);
+            return result;
+        }
+
+        public static GameObject FlatPanel(string name, Transform parent, Vector2 anchorMin, Vector2 anchorMax, Vector2 position, Vector2 size, Color color)
+        {
+            GameObject result = Create(name, parent);
+            RectTransform rect = result.AddComponent<RectTransform>();
+            rect.anchorMin = anchorMin; rect.anchorMax = anchorMax; rect.pivot = anchorMax; rect.anchoredPosition = position; rect.sizeDelta = size;
+            Image image = result.AddComponent<Image>();
+            image.sprite = null; image.type = Image.Type.Simple; image.color = color; image.raycastTarget = false;
             return result;
         }
 
@@ -366,9 +408,15 @@ namespace OCC.Combat.Presentation
         public static Text Label(string name, string value, Transform parent, Vector2 position, Vector2 size, int fontSize, Color color, TextAnchor alignment)
         {
             GameObject result = Create(name, parent);
-            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = size;
-            Text label = result.AddComponent<Text>(); label.font = Font; label.text = value; label.fontSize = FormalUiTheme.ResponsiveFontSize(fontSize); label.color = color; label.alignment = alignment;
+            RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1);
+            rect.anchoredPosition = new Vector2(Mathf.Round(position.x), Mathf.Round(position.y));
+            int resolvedFontSize = FormalUiTheme.ResponsiveFontSize(fontSize);
+            float resolvedHeight = size.y > 0f ? Mathf.Max(size.y, FormalUiTheme.MinimumTextSlotHeight(resolvedFontSize)) : size.y;
+            rect.sizeDelta = new Vector2(Mathf.Round(size.x), Mathf.Round(resolvedHeight));
+            Text label = result.AddComponent<Text>(); label.font = Font; label.text = value; label.fontSize = resolvedFontSize; label.color = FormalUiTheme.ReadableLabelColor(color); label.alignment = alignment;
+            label.fontStyle = FontStyle.Normal; label.alignByGeometry = true;
             label.horizontalOverflow = HorizontalWrapMode.Wrap; label.verticalOverflow = VerticalWrapMode.Truncate; label.raycastTarget = false;
+            label.resizeTextForBestFit = false; label.lineSpacing = 1f;
             return label;
         }
 
@@ -378,6 +426,7 @@ namespace OCC.Combat.Presentation
             label.horizontalOverflow = HorizontalWrapMode.Overflow;
             label.verticalOverflow = VerticalWrapMode.Truncate;
             label.alignByGeometry = true;
+            EnsureTextSlotHeight(label, 1);
             return label;
         }
 
@@ -397,10 +446,26 @@ namespace OCC.Combat.Presentation
             label.resizeTextForBestFit = false;
             label.lineSpacing = lineSpacing;
             label.alignByGeometry = true;
+            EnsureTextSlotHeight(label, 2);
             return label;
         }
 
-        public static Button Button(string name, string title, Transform parent, Vector2 position, Vector2 size, Color color, int fontSize = 16)
+        public static Text ConfigureReadingParagraph(Text label, float lineSpacing = 1.08f)
+        {
+            ConfigureParagraph(label, lineSpacing);
+            if (label != null && ReadingFont != null) label.font = ReadingFont;
+            return label;
+        }
+
+        private static void EnsureTextSlotHeight(Text label, int lineCount)
+        {
+            RectTransform rect = label.rectTransform;
+            if (rect.sizeDelta.y <= 0f) return;
+            float minimum = FormalUiTheme.MinimumTextSlotHeight(label.fontSize, lineCount);
+            if (rect.sizeDelta.y < minimum) rect.sizeDelta = new Vector2(rect.sizeDelta.x, minimum);
+        }
+
+        public static Button Button(string name, string title, Transform parent, Vector2 position, Vector2 size, Color color, int fontSize = FormalUiTheme.ButtonFontSize)
         {
             GameObject result = Panel(name, parent, new Vector2(0, 1), new Vector2(0, 1), position, size, color);
             string buttonSkin = name.Contains("结束行动") ? "button_end_turn" : OccPixelUiConfig.StateSkin("button", "normal");
@@ -444,18 +509,19 @@ namespace OCC.Combat.Presentation
         }
 
         public static Text SemanticChip(string semanticId, string value, Transform parent, Vector2 position, FormalHoverTooltip tooltip,
-            int iconSize = 22, int valueFontSize = 14, Color? valueColor = null)
+            int iconSize = 32, int valueFontSize = FormalUiTheme.BodyFontSize, Color? valueColor = null)
         {
             string word = semanticId == "action" ? "行动" : semanticId == "aether" ? "以太" : "注意";
             string explanation = semanticId == "action" ? "使用这项能力需要的行动点。" : semanticId == "aether"
                 ? "使用这项能力需要的以太。" : "这项效果有需要留意的限制或风险。";
             Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.SemanticPath(semanticId));
             if (sprite == null) throw new KeyNotFoundException("Missing formal semantic icon: " + semanticId);
+            iconSize = IntegerSpriteSize(sprite, iconSize);
 
             GameObject chip = Create("语义_" + semanticId, parent);
             RectTransform chipRect = chip.AddComponent<RectTransform>();
             chipRect.anchorMin = chipRect.anchorMax = new Vector2(0, 1); chipRect.pivot = new Vector2(0, 1);
-            chipRect.anchoredPosition = position; chipRect.sizeDelta = new Vector2(string.IsNullOrEmpty(value) ? iconSize : iconSize + 32, iconSize);
+            chipRect.anchoredPosition = position; chipRect.sizeDelta = new Vector2(string.IsNullOrEmpty(value) ? iconSize : iconSize + 24, iconSize);
 
             GameObject iconObject = Create("图标_" + word, chip.transform);
             RectTransform iconRect = iconObject.AddComponent<RectTransform>();
@@ -468,18 +534,26 @@ namespace OCC.Combat.Presentation
                 trigger.Configure(tooltip, () => new FormalTooltipContent(word, explanation, semanticId == "notice" ? FormalUiTheme.Amber : FormalUiTheme.Cyan));
             }
 
-            Text valueLabel = Label("数值", value ?? string.Empty, chip.transform, new Vector2(iconSize + 4, 0), new Vector2(28, iconSize),
+            Text valueLabel = Label("数值", value ?? string.Empty, chip.transform, new Vector2(iconSize + 2, 0), new Vector2(22, iconSize),
                 valueFontSize, valueColor ?? FormalUiTheme.Text, TextAnchor.MiddleLeft);
             valueLabel.raycastTarget = false;
             PreventAutomaticWrapping(valueLabel);
             return valueLabel;
         }
 
+        public static int IntegerSpriteSize(Sprite sprite, float requestedSize)
+        {
+            if (sprite == null) return Mathf.Max(1, Mathf.RoundToInt(requestedSize));
+            int native = Mathf.Max(1, Mathf.RoundToInt(Mathf.Max(sprite.rect.width, sprite.rect.height)));
+            int multiplier = Mathf.Max(1, Mathf.RoundToInt(requestedSize / native));
+            return native * multiplier;
+        }
+
         public static void Line(Transform parent, Vector2 position, Vector2 size, Color color, string name = "线")
         {
             GameObject result = Create(name, parent);
             RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = size;
-            Image image = result.AddComponent<Image>(); ApplySkin(image, "bar_fill", color); image.raycastTarget = false;
+            Image image = result.AddComponent<Image>(); image.sprite = null; image.type = Image.Type.Simple; image.color = color; image.raycastTarget = false;
         }
 
         public static void Stretch(RectTransform rect)

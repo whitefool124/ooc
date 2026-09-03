@@ -56,7 +56,7 @@ namespace OCC.Combat
     /// </summary>
     public sealed class CombatCommandExecutionService
     {
-        public const string ExplicitHeroEndTurnReason = "玩家回合只能通过明确的结束行动操作推进。";
+        public const string ExplicitHeroEndTurnReason = "请点击“结束回合”继续战斗。";
 
         public static bool CanSubmit(CombatCommand command, bool explicitHeroEndTurn) =>
             command.Type != CombatCommandType.EndTurn || command.UnitId != "hero" || explicitHeroEndTurn;

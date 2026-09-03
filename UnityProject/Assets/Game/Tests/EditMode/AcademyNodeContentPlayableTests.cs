@@ -29,8 +29,8 @@ namespace OCC.Combat.Tests
                 Assert.That(definition.DisplayName, Is.Not.Empty);
                 Assert.That(definition.Choices.Count, Is.EqualTo(2), definition.Id);
                 Assert.That(definition.Choices.Select(value => value.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(2), definition.Id);
-                Assert.That(definition.Choices.All(value => value.Preview.Contains("时序 +1") || value.RequiresCombat), Is.True, definition.Id);
-                Assert.That(definition.Choices.Where(value => value.RequiresCombat).All(value => value.Preview.Contains("失败")), Is.True, definition.Id);
+                Assert.That(definition.Choices.All(value => value.Preview.Contains("用时 1") || value.RequiresCombat), Is.True, definition.Id);
+                Assert.That(definition.Choices.Where(value => value.RequiresCombat).All(value => value.Preview.Contains("输")), Is.True, definition.Id);
             }
         }
 

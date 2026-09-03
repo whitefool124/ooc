@@ -132,11 +132,11 @@ namespace OCC.Combat
             {
                 case RogueliteMapNodeVisualState.Current: return "当前位置";
                 case RogueliteMapNodeVisualState.Available: return "可前往";
-                case RogueliteMapNodeVisualState.Cleared: return "已清理";
+                case RogueliteMapNodeVisualState.Cleared: return "已完成";
                 case RogueliteMapNodeVisualState.Visited: return "已访问";
-                case RogueliteMapNodeVisualState.Locked: return "权限不足";
-                case RogueliteMapNodeVisualState.Known: return "已知";
-                default: return "未知";
+                case RogueliteMapNodeVisualState.Locked: return "还不能去";
+                case RogueliteMapNodeVisualState.Known: return "已经发现";
+                default: return "还看不清";
             }
         }
 
@@ -179,38 +179,38 @@ namespace OCC.Combat
 
         public static string RestrictionText(RogueliteMapRun run, RogueliteMapNode node)
         {
-            if (run == null || node == null) return "节点不可用";
+            if (run == null || node == null) return "这里现在去不了";
             RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
-            if (state == RogueliteMapNodeVisualState.Unknown) return "尚未侦测";
-            if (node.Id == run.CurrentNodeId) return "当前地点";
-            if (run.CompletedNodes.Contains(node.Id)) return "已完成；回访安全";
-            if (RogueliteUiPreferences.CanTravelTo(run, node)) return "路径可用";
+            if (state == RogueliteMapNodeVisualState.Unknown) return "还看不清这里";
+            if (node.Id == run.CurrentNodeId) return "你就在这里";
+            if (run.CompletedNodes.Contains(node.Id)) return "已经处理妥当，可以再去看看";
+            if (RogueliteUiPreferences.CanTravelTo(run, node)) return "可以直接前往";
             if (run.IsAcademyFinaleGateLocked(node))
-                return "首领门槛：已探索 " + run.AcademyProgress + "/" + AcademyMapTuning.BossMinimumProgress +
-                    "，核心许可 " + run.CorePermits + "/" + AcademyMapTuning.CorePermitRequirement;
-            if (state == RogueliteMapNodeVisualState.Locked) return "需要核心许可 " + node.RequiredAccessCards + "（当前 " + run.ProgressPermits + "）";
-            return "当前不可直达";
+                return "还不能参加终考：再完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) +
+                    " 个地点，并拿到 " + Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 枚核心许可";
+            if (state == RogueliteMapNodeVisualState.Locked) return "核心许可不足：需要 " + node.RequiredAccessCards + "，当前 " + run.ProgressPermits;
+            return "这里离得太远，请先走到相邻地点";
         }
 
         public static string AcademyStatus(RogueliteMapRun run)
         {
-            if (run == null) return "学院时序不可用";
-            string phase = run.AcademyPhase == AcademyMapPhase.Consolidation ? "学期收束" :
-                run.AcademyPhase == AcademyMapPhase.TransitionReady ? "阶段转换就绪" : "正常学期";
-            string finale = run.CanChallengeAcademyFinale ? "首领可挑战" :
-                "首领缺口 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) + " 节点/" +
-                Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 许可";
-            return "时序 " + run.StageTime + "/" + AcademyMapTuning.TransitionProgress + " · " + phase +
+            if (run == null) return "现在还看不到学期日程";
+            string phase = run.AcademyPhase == AcademyMapPhase.Consolidation ? "学期将尽" :
+                run.AcademyPhase == AcademyMapPhase.TransitionReady ? "终考将至" : "日程还宽裕";
+            string finale = run.CanChallengeAcademyFinale ? "现在可以参加终考" :
+                "参加终考前，还要完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) + " 个地点并拿到 " +
+                Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 枚许可";
+            return "学期进度 " + run.StageTime + "/" + AcademyMapTuning.TransitionProgress + " · " + phase +
                 " · 核心许可 " + run.CorePermits + "/" + AcademyMapTuning.CorePermitRequirement + " · " + finale;
         }
 
         public static string ConnectionSummary(RogueliteMapRun run, RogueliteMapNode node)
         {
-            if (run == null || node == null || run.VisualStateFor(node.Id) == RogueliteMapNodeVisualState.Unknown) return "连接信息尚未公开";
+            if (run == null || node == null || run.VisualStateFor(node.Id) == RogueliteMapNodeVisualState.Unknown) return "附近的路还看不清";
             string[] known = node.NextIds.Select(RogueliteMapCatalog.Node)
                 .Where(next => run.VisualStateFor(next.Id) != RogueliteMapNodeVisualState.Unknown)
                 .Select(next => next.DisplayName).ToArray();
-            return known.Length == 0 ? "暂无已知连接" : "连接：" + string.Join(" / ", known);
+            return known.Length == 0 ? "附近还没有发现别的去处" : "从这里还能去：" + string.Join(" / ", known);
         }
     }
 
@@ -236,18 +236,18 @@ namespace OCC.Combat
             if (run.UsesRogue11)
             {
                 if (run.Gold < choice.GoldCost) return Blocked("金币不足", "需要 " + choice.GoldCost + " 金币；当前 " + run.Gold);
-                if (run.StageContribution < choice.ContributionCost) return Blocked("贡献不足", "需要 " + choice.ContributionCost + " 贡献；当前 " + run.StageContribution);
+                if (run.StageContribution < choice.ContributionCost) return Blocked("学院贡献不足", "需要 " + choice.ContributionCost + " 学院贡献；当前 " + run.StageContribution);
                 if (choice.HealthGain < 0 && run.CurrentHealth + choice.HealthGain <= 0) return Blocked("生命不足", "该选择会使生命归零");
-                if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已领取", "该节点唯一内容本局不可重复领取");
-                if (!CanAcceptRogueContent(run, choice.RewardId)) return Blocked("背包空间不足", "没有可容纳该装备或法宝的合法空位");
-                return new UiOperationAvailability(true, choice.GoldCost + choice.ContributionCost > 0 ? "可支付" : choice.RequiresCombat ? "可挑战" : "可确认", CostText(choice));
+                if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已经拿过", "这里没有第二件了");
+                if (!CanAcceptRogueContent(run, choice.RewardId)) return Blocked("行囊装不下", "先整理出一块能放下这件东西的位置");
+                return new UiOperationAvailability(true, choice.RequiresCombat ? "可以出发" : "可以选择", CostText(choice));
             }
             if (run.Parts < choice.PartsCost) return Blocked("零件不足", "需要 " + choice.PartsCost + " 零件；当前 " + run.Parts);
             if (run.Aether < choice.AetherCost) return Blocked("以太不足", "需要 " + choice.AetherCost + " 以太；当前 " + run.Aether);
-            if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已拥有", "该奖励已收入本局档案");
+            if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已经拿过", "这里没有第二件了");
             ItemDefinition item = string.IsNullOrEmpty(choice.RewardId) ? null : ItemCatalog.All.FirstOrDefault(candidate => candidate.Id == choice.RewardId);
             if (item != null && !CanAccept(run, item)) return Blocked("背包空间不足", "需要可容纳 " + item.Width + "×" + item.Height + " 的空位");
-            return new UiOperationAvailability(true, choice.PartsCost + choice.AetherCost > 0 ? "可购买" : "可确认", CostText(choice));
+            return new UiOperationAvailability(true, choice.PartsCost + choice.AetherCost > 0 ? "可以买下" : "可以选择", CostText(choice));
         }
 
         public static string NodeChoiceSummary(RogueliteMapRun run, RogueliteNodeContentChoice choice, UiOperationAvailability availability)
@@ -256,7 +256,7 @@ namespace OCC.Combat
             if (!availability.CanExecute) return availability.Reason;
             List<string> costs = new List<string>();
             if (choice.GoldCost > 0) costs.Add(choice.GoldCost + "金");
-            if (choice.ContributionCost > 0) costs.Add(choice.ContributionCost + "贡献");
+            if (choice.ContributionCost > 0) costs.Add(choice.ContributionCost + "学院贡献");
             if (choice.HealthGain < 0) costs.Add((-choice.HealthGain) + "生命");
             if (run == null || !run.UsesRogue11)
             {
@@ -266,32 +266,34 @@ namespace OCC.Combat
 
             List<string> outcomes = new List<string>();
             if (choice.GoldGain > 0) outcomes.Add("+" + choice.GoldGain + "金");
-            if (choice.ContributionGain > 0) outcomes.Add("+" + choice.ContributionGain + "贡献");
+            if (choice.ContributionGain > 0) outcomes.Add("+" + choice.ContributionGain + "学院贡献");
             if (choice.HealthGain > 0) outcomes.Add("+" + choice.HealthGain + "生命");
             if (choice.ManaGain > 0) outcomes.Add("+" + choice.ManaGain + "魔力");
             if (choice.GrantsCorePermit) outcomes.Add("核心许可");
             string rewardName = RewardDisplayName(choice.RewardId);
             if (!string.IsNullOrEmpty(rewardName)) outcomes.Add(rewardName);
             if (choice.RequiresCombat) outcomes.Insert(0, outcomes.Count == 0 ? "进入战斗" : "胜利");
-            if (outcomes.Count == 0) outcomes.Add("完成节点");
-            return (costs.Count == 0 ? "免费" : string.Join("+", costs)) + " → " + string.Join("+", outcomes);
+            if (outcomes.Count == 0) outcomes.Add("完成这里的事情");
+            return (costs.Count == 0 ? "不用花东西" : "花 " + string.Join(" + ", costs)) + "；" + string.Join(" + ", outcomes);
         }
 
         public static UiOperationAvailability ForReward(RogueliteMapRun run, RogueliteReward reward)
         {
-            if (run == null || reward == null || !run.AwaitingReward) return Blocked("已结算", "奖励当前不可领取");
+            if (run == null || reward == null || !run.AwaitingReward) return Blocked("现在不能拿", "这场战斗没有留下可带走的东西");
             if (reward.Kind == RogueliteRewardKind.Item && !CanAccept(run, reward.Item))
-                return Blocked("背包空间不足", "需要可容纳 " + reward.Item.Width + "×" + reward.Item.Height + " 的空位");
-            if (reward.Kind != RogueliteRewardKind.Item && run.ClaimedRewards.Contains(reward.Id)) return Blocked("已拥有", "本局不可重复领取");
-            if (FireSpellCatalog.All.Any(spell => spell.Id == reward.Id) && run.OwnedFireSpellIds.Contains(reward.Id)) return Blocked("已拥有", "个人术式不可重复领取");
-            return new UiOperationAvailability(true, "可领取", reward.Kind == RogueliteRewardKind.Item ? "领取后放入背包" : "领取后收入构筑库");
+                return Blocked("行囊放不下", "先整理出一块 " + reward.Item.Width + "×" + reward.Item.Height + " 的空位");
+            if (run.UsesRogue11 && reward.Kind == RogueliteRewardKind.Equipment && !CanAcceptRogueContent(run, reward.Id))
+                return Blocked("行囊放不下", "先整理出一块能放下这件装备的位置");
+            if (reward.Kind != RogueliteRewardKind.Item && run.ClaimedRewards.Contains(reward.Id)) return Blocked("已经拿过了", "这件奖励已经带走");
+            if (FireSpellCatalog.All.Any(spell => spell.Id == reward.Id) && run.OwnedFireSpellIds.Contains(reward.Id)) return Blocked("已经学会了", "术式册里已经有这道术式");
+            return new UiOperationAvailability(true, "可以带走", reward.Kind == RogueliteRewardKind.Item ? "会放进行囊" : "会收进术式册");
         }
 
         public static UiOperationAvailability ForEquipment(RogueliteMapRun run, RogueliteReward reward)
         {
-            if (run == null || reward == null || !run.ClaimedRewards.Contains(reward.Id)) return Blocked("未拥有", "需要先取得该构筑");
+            if (run == null || reward == null || !run.ClaimedRewards.Contains(reward.Id)) return Blocked("还没拿到", "先取得这件奖励");
             bool equipped = reward.Kind == RogueliteRewardKind.Weapon ? run.EquippedWeaponId == reward.Id : reward.Kind == RogueliteRewardKind.Spell && run.EquippedSpellId == reward.Id;
-            if (equipped) return Blocked("已装备", "当前已生效");
+            if (equipped) return Blocked("已经装备", "你现在正在使用它");
             if (reward.Kind == RogueliteRewardKind.Weapon && run.EquippedFireSpellIds.Where(id => !string.IsNullOrEmpty(id)).Select(FireSpellCatalog.Get)
                 .Any(spell => !FireSpellCatalog.IsWeaponCompatible(spell, reward.Weapon)))
                 return Blocked("术式不兼容", "先在工坊调整与该武器冲突的已装备术式");
@@ -303,9 +305,9 @@ namespace OCC.Combat
         {
             if (run == null || reward == null) return string.Empty;
             if (reward.Kind == RogueliteRewardKind.Weapon) return WeaponComparison(run.EquippedWeapon, reward.Weapon);
-            if (reward.Kind == RogueliteRewardKind.Item) return CanAccept(run, reward.Item) ? "背包：存在合法落位" : "背包：空间不足";
-            if (reward.Kind == RogueliteRewardKind.Equipment) return "学院装备：领取后进入 6×10 装备背包";
-            return "构筑：收入术式库，不自动装备";
+            if (reward.Kind == RogueliteRewardKind.Item) return CanAccept(run, reward.Item) ? "行囊里放得下" : "行囊已经装不下了";
+            if (reward.Kind == RogueliteRewardKind.Equipment) return "领取后放进行囊，可在战斗外装备";
+            return "领取后收进术式册，不会立刻换上";
         }
 
         private static string WeaponComparison(WeaponDefinition current, WeaponDefinition candidate)
@@ -317,9 +319,9 @@ namespace OCC.Combat
         private static string CostText(RogueliteNodeContentChoice choice)
         {
             if (choice.GoldCost > 0 || choice.ContributionCost > 0)
-                return "成本：" + choice.GoldCost + " 金币 / " + choice.ContributionCost + " 贡献";
-            if (choice.PartsCost == 0 && choice.AetherCost == 0) return "无资源成本";
-            return "成本：" + choice.PartsCost + " 零件 / " + choice.AetherCost + " 以太";
+                return "需要 " + choice.GoldCost + " 金币 / " + choice.ContributionCost + " 学院贡献";
+            if (choice.PartsCost == 0 && choice.AetherCost == 0) return "不用花东西";
+            return "需要 " + choice.PartsCost + " 零件 / " + choice.AetherCost + " 以太";
         }
 
         private static string RewardDisplayName(string rewardId)

@@ -59,10 +59,10 @@ namespace OCC.Combat.Tests
             RogueliteMapNode available = RogueliteMapCatalog.Node("rail_patrol");
             RogueliteMapNode unknown = RogueliteMapCatalog.Node("core_finale");
 
-            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, available), Is.EqualTo("路径可用"));
-            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, available), Does.Contain("连接："));
-            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, unknown), Is.EqualTo("尚未侦测"));
-            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, unknown), Is.EqualTo("连接信息尚未公开"));
+            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, available), Is.EqualTo("可以直接前往"));
+            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, available), Does.Contain("从这里还能去："));
+            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, unknown), Is.EqualTo("还看不清这里"));
+            Assert.That(RogueliteMapVisualPresentation.ConnectionSummary(run, unknown), Is.EqualTo("附近的路还看不清"));
         }
 
         [Test]
@@ -109,8 +109,8 @@ namespace OCC.Combat.Tests
             UiOperationAvailability availability = RogueliteEconomyPresentation.ForReward(run, itemReward);
 
             Assert.That(availability.CanExecute, Is.False);
-            Assert.That(availability.Status, Is.EqualTo("背包空间不足"));
-            Assert.That(RogueliteEconomyPresentation.RewardComparison(run, itemReward), Is.EqualTo("背包：空间不足"));
+            Assert.That(availability.Status, Is.EqualTo("行囊放不下"));
+            Assert.That(RogueliteEconomyPresentation.RewardComparison(run, itemReward), Is.EqualTo("行囊已经装不下了"));
         }
 
         [Test]

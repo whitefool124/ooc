@@ -17,9 +17,9 @@ namespace OCC.Combat.Tests
             Assert.That(text, Does.Contain(ItemCatalog.Get(item.DefinitionId).DisplayName));
             Assert.That(text, Does.Contain("重量"));
             Assert.That(text, Does.Contain("1/2"));
-            Assert.That(text, Does.Contain("已旋转"));
+            Assert.That(text, Does.Contain("横放"));
             Assert.That(text, Does.Contain("来源："));
-            Assert.That(text, Does.Contain("效果："));
+            Assert.That(text, Does.Contain("会怎样："));
             Assert.That(text, Does.Contain("左键拖拽"));
             Assert.That(text, Does.Contain("拖拽中右键旋转"));
         }
@@ -126,7 +126,7 @@ namespace OCC.Combat.Tests
         }
 
         [TestCase(false, 2, false, "需要移动到容器相邻格")]
-        [TestCase(true, 0, false, "行动点不足：需要 1 AP")]
+        [TestCase(true, 0, false, "行动点不足：需要 1，当前 0")]
         [TestCase(true, 2, true, "容器已清空")]
         public void LootSearchReason_ExplainsEveryBlockedState(bool adjacent, int actionPoints, bool complete, string expected)
         {

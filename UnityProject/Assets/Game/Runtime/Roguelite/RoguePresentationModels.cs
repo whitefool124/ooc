@@ -94,7 +94,7 @@ namespace OCC.Combat.Roguelite
             ExploredNodes = run.AcademyProgress; CorePermits = run.CorePermits;
             EarlyFinaleReady = ExploredNodes >= RequiredExploredNodes && CorePermits >= RequiredCorePermits;
             ForcedFinaleReady = StageTime >= TransitionTime;
-            PhaseLabel = ForcedFinaleReady ? "强制首领阶段" : StageTime >= WarningTime ? "首领阶段警告" : StageTime >= ConsolidationTime ? "学期收束" : "正常入学期";
+            PhaseLabel = ForcedFinaleReady ? "终考已经开始" : StageTime >= WarningTime ? "终考已经很近" : StageTime >= ConsolidationTime ? "学期将尽" : "日程还宽裕";
         }
     }
 
@@ -127,15 +127,15 @@ namespace OCC.Combat.Roguelite
             CrossesWarning = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionWarningProgress);
             CrossesTransition = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionProgress);
             RogueliteEncounterDefinition encounter = node.IsCombat ? RogueliteEncounterCatalog.For(run, node.Id) : null;
-            EncounterLabel = encounter == null ? string.Empty : encounter.Tier == RogueliteEncounterTier.Weak ? "弱遭遇" : encounter.Tier == RogueliteEncounterTier.Strong ? "强遭遇" : encounter.Tier == RogueliteEncounterTier.Elite ? "精英遭遇" : "固定首领";
+            EncounterLabel = encounter == null ? string.Empty : encounter.Tier == RogueliteEncounterTier.Weak ? "轻松" : encounter.Tier == RogueliteEncounterTier.Strong ? "棘手" : encounter.Tier == RogueliteEncounterTier.Elite ? "危险" : "终考";
             EnemySummary = encounter == null ? string.Empty : string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName));
-            SpatialRisk = encounter == null ? string.Empty : encounter.SpatialGrammar + "；" + encounter.SpawnRelationship;
-            RiskLabel = encounter?.PublicRisk ?? (node.Type == RogueliteMapNodeType.Finale ? "极高：阶段首领" : node.Type == RogueliteMapNodeType.Elite ? "高：精英战" :
-                node.Type == RogueliteMapNodeType.Combat ? "中：普通战" : node.Type == RogueliteMapNodeType.Event ? "可变：结果公开" : "安全 · 零时序");
-            RewardLabel = encounter?.RewardTier ?? (node.Type == RogueliteMapNodeType.Finale ? "首领独立奖励与阶段转入" : node.Type == RogueliteMapNodeType.Elite ? "精英独立奖励" :
-                node.Type == RogueliteMapNodeType.Combat ? "金币、阶段贡献与三选一" : node.GrantedAccessCards > 0 ? "核心许可与节点内容" : "节点公开内容");
-            FailureConsequence = node.IsCombat ? "存活失败：时间、战损与道具次数保留；基础金币/贡献减半；无三选一、许可或唯一物品；节点关闭。" :
-                node.Type == RogueliteMapNodeType.Event ? "事件确认后按公开结果结算；若进入追加战斗，失败规则与战斗节点相同。" : "无战斗失败；功能节点不推进时间。";
+            SpatialRisk = encounter == null ? string.Empty : encounter.SpawnRelationship;
+            RiskLabel = encounter?.PublicRisk ?? (node.Type == RogueliteMapNodeType.Finale ? "终考" : node.Type == RogueliteMapNodeType.Elite ? "危险" :
+                node.Type == RogueliteMapNodeType.Combat ? "棘手" : node.Type == RogueliteMapNodeType.Event ? "先听听看" : "可以放心前往");
+            RewardLabel = encounter?.RewardTier ?? (node.Type == RogueliteMapNodeType.Finale ? "终考奖励" : node.Type == RogueliteMapNodeType.Elite ? "稀有奖励" :
+                node.Type == RogueliteMapNodeType.Combat ? "金币、学院贡献和一件奖励" : node.GrantedAccessCards > 0 ? "核心许可" : "这里能找到的东西");
+            FailureConsequence = node.IsCombat ? "输了也会有人把你带回学院，但花掉的时间、生命和道具不会返还。你只能拿到一半金币与学院贡献，也不能挑选奖励。" :
+                node.Type == RogueliteMapNodeType.Event ? "做出选择后就不能反悔；如果要动手，输了也会损失时间、生命和用掉的道具。" : "这里没有战斗，也不会花时间。";
         }
 
         private static bool Crosses(int before, int after, int threshold) => before < threshold && after >= threshold;
@@ -190,7 +190,7 @@ namespace OCC.Combat.Roguelite
                 record.EventKind == ShieldEventKind.PreventedByBreakStance ? "破势阻止" :
                 record.EventKind == ShieldEventKind.Absorbed ? "吸收" :
                 record.EventKind == ShieldEventKind.ClearedAtTurnStart ? "回合开始清空" : "破势浪费";
-            return action + " " + record.Amount + " 护盾 · " + record.SourceId +
+            return action + " " + record.Amount + " 护盾" +
                 (record.TriggerTurn > 0 ? " · 第" + record.TriggerTurn + "回合" : string.Empty);
         }
     }

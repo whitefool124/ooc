@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a35_harbor_quay_edge_south",
+  "role": "terrain_adjacency_overlay_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A35 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/raw/harbor_quay_edge_south/source.png",
+    "source_sha256": "d440ffbfe54d03f8d2a5f8c29ec718250812cb0170d3b8b9c2ba357cecd02721"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/normalized/harbor_quay_edge_south.png",
+    "output_sha256": "b948262e3d9661c9e5179dadb0f564a08f5703a76a6e397797ed4d6b09389108",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future harbor floor overlay; south-facing stone quay edge, independently lit and never rotated",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/QA/harbor_quay_edge_south/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/QA/harbor_quay_edge_south/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/QA/harbor_quay_edge_south/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/QA/harbor_quay_edge_south/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A35/QA/contacts/m_a35_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

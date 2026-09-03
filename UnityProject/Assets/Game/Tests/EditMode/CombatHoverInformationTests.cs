@@ -80,7 +80,7 @@ namespace OCC.Combat.Tests
 
             CombatOutcomePresentation outcome = CombatInformationPresenter.BuildOutcome(state, true);
 
-            Assert.That(outcome.CompactDetailText, Does.Contain("从战斗前继续"));
+            Assert.That(outcome.CompactDetailText, Does.Contain("回到地图，或者从头再挑战一次"));
             Assert.That(outcome.CompactDetailText, Does.Not.Contain("事件0"));
             Assert.That(outcome.RecentEventsText, Does.Contain("事件0"));
         }
@@ -100,13 +100,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void InventoryLauncher_UsesRightHudFootprintWithoutOverlappingCombatCommands()
+        public void InventoryLauncher_UsesHeaderFootprintWithoutOverlappingFullWidthCommands()
         {
-            Rect commands = new Rect(16f, 900f, 1408f, 164f);
+            Rect commands = new Rect(16f, 864f, 1888f, 200f);
             Rect launcher = TarkovInventoryPanel.LauncherRect;
 
             Assert.That(launcher.xMin, Is.GreaterThanOrEqualTo(BattlefieldPresentationAdapter.BattlefieldWidth));
             Assert.That(launcher.xMax, Is.LessThanOrEqualTo(1920f));
+            Assert.That(launcher.yMin, Is.LessThan(80f));
             Assert.That(launcher.Overlaps(commands), Is.False);
         }
 
@@ -168,17 +169,17 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyIntentBadge_SitsEntirelyAboveTheHealthBar()
+        public void EnemyIntentBadge_IsRaisedIntoTheClearanceAboveTheUnitHead()
         {
             BattlefieldRect cell = new BattlefieldRect(100f, 120f, 76f, 76f);
             Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 8);
             float healthBarTop = CombatUnitHudLayout.UnitHealthBarRect(cell).yMin;
 
-            Assert.That(badge.yMin, Is.GreaterThanOrEqualTo(cell.Y),
-                "The badge must stay inside its cell so later sibling cells cannot paint over it.");
+            Assert.That(badge.yMin, Is.LessThan(cell.Y));
+            Assert.That(badge.yMax, Is.LessThanOrEqualTo(cell.Y + 18f));
             Assert.That(badge.yMax, Is.LessThan(healthBarTop));
-            Assert.That(badge.height, Is.EqualTo(20f));
-            Assert.That(badge.width, Is.EqualTo(43f));
+            Assert.That(badge.height, Is.EqualTo(40f));
+            Assert.That(badge.width, Is.EqualTo(68f));
         }
 
         [Test]
@@ -198,8 +199,8 @@ namespace OCC.Combat.Tests
             Assert.That(health.Overlaps(shield), Is.False);
             Assert.That(health.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
             Assert.That(shield.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
-            Assert.That(health.width, Is.EqualTo(108f));
-            Assert.That(firstStatus.width, Is.EqualTo(14f));
+            Assert.That(health.width, Is.EqualTo(120f));
+            Assert.That(firstStatus.width, Is.EqualTo(32f));
             Assert.That(firstStatus.xMin, Is.GreaterThanOrEqualTo(cell.X));
             Assert.That(sixthStatus.xMax, Is.LessThanOrEqualTo(cell.X + cell.Width));
         }
@@ -219,10 +220,10 @@ namespace OCC.Combat.Tests
             Assert.That(unit.height, Is.EqualTo(unit.width));
             Assert.That(unit.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
             Assert.That(unit.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
-            Assert.That(health.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
-            Assert.That(health.height / cellSize, Is.EqualTo(17f / 128f).Within(.0001f));
-            Assert.That(shield.width / cellSize, Is.EqualTo(108f / 128f).Within(.0001f));
-            Assert.That(shield.height / cellSize, Is.EqualTo(15f / 128f).Within(.0001f));
+            Assert.That(health.width / cellSize, Is.EqualTo(120f / 128f).Within(.0001f));
+            Assert.That(health.height / cellSize, Is.EqualTo(22f / 128f).Within(.0001f));
+            Assert.That(shield.width / cellSize, Is.EqualTo(120f / 128f).Within(.0001f));
+            Assert.That(shield.height / cellSize, Is.EqualTo(14f / 128f).Within(.0001f));
         }
 
         [Test]
@@ -231,13 +232,15 @@ namespace OCC.Combat.Tests
             var vital = new CombatUnitVitalPresentation(8, 12, 3, 5);
 
             Assert.That(CombatUnitHudLayout.VitalText(vital, 64f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.EqualTo("-3→5"));
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.EqualTo("8 -3 → 5/12"));
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.EqualTo("8 -3 → 5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.Empty);
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.Empty);
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.Empty);
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 256f), Is.EqualTo("8 -3 → 5/12"));
             Assert.That(CombatUnitHudLayout.VitalFontSize(64f, true), Is.Zero);
-            Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.EqualTo(9));
-            Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.EqualTo(14));
-            Assert.That(CombatUnitHudLayout.VitalFontSize(160f, false), Is.EqualTo(14));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.Zero);
+            Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.Zero);
+            Assert.That(CombatUnitHudLayout.VitalFontSize(160f, false), Is.Zero);
+            Assert.That(CombatUnitHudLayout.VitalFontSize(256f, false), Is.EqualTo(FormalUiTheme.BodyFontSize));
         }
 
         [Test]

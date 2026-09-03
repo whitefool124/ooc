@@ -134,7 +134,7 @@ namespace OCC.Combat.Roguelite
                 int distance = source.Position.ManhattanDistance(target.Position);
                 if (source.IsHero == target.IsHero || distance > spell.Range || (spell.Range > 1 && !Combat.Map.HasLineOfSight(source.Position, target.Position))) throw new InvalidOperationException("Spell target is not legal.");
                 DamageComponentKind kind = spell.DefinitionId == "BASE-FIRE-MELEE" ? DamageComponentKind.Physical : DamageComponentKind.Fire;
-                int raw = spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6;
+                int raw = CombatDebugTuning.OutgoingDamageFor(source, spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6);
                 DamageResolution damage = RogueDamageResolver.Resolve(new DamagePacket("basic-" + spell.DefinitionId, source.Id, target.Id, spell.DefinitionId,
                     new[] { new DamageComponent(kind, raw) }), target.Shield, target.Health);
                 effects.Add(CombatEffect.AbsorbShield(target.Id, damage.ShieldAbsorbed)); effects.Add(CombatEffect.DamageHealth(target.Id, damage.HealthDamage));

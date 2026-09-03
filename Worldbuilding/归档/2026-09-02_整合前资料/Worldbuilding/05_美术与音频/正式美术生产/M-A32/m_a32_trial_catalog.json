@@ -1,0 +1,114 @@
+{
+  "schema": "occ-m-a32-trial-catalog-v1",
+  "batch": "M-A32",
+  "assets": [
+    {
+      "asset_id": "m_a32_t01_harbor_inspection_floor",
+      "stem": "harbor_inspection_floor",
+      "role": "floor_tile_32",
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "application": "future academy-harbor tactical map; one complete 32px floor cell at 2x/4x runtime scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC floor-tile source, not a sheet. Primary request: a single square harbor cargo-inspection paving block for the low-technology academy city, made from coarse gray-brown salt-worn stone with restrained pale salt traces. View: exact orthographic top-down. Player read: one complete self-contained physical floor block; the material and perimeter must end inside this tile and never rely on neighbors. Style: deliberate native 32x32 pixel-art logic enlarged cleanly for review, hard square clusters, six discrete flat colors, no anti-aliasing, no gradients. Lighting: neutral, shadow-free. Composition: the tile fills the square edge to edge and is fully opaque. Avoid: academy courtyard copy, steel plate, railway, yellow-black hazard stripes, UI button border, high-contrast crack, diagonal noise, moss carpet, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t02_harbor_hand_crane_2x2",
+      "stem": "harbor_hand_crane_2x2",
+      "role": "multi_cell_prop_32",
+      "logical_cells": [2, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; honest 2x2 prop footprint on a 64x64 transparent canvas",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC multi-cell tactical prop source. Primary request: a compact hand-cranked harbor cargo crane for the low-technology academy city: heavy old timber boom, forged-iron bands, rope pulley, wooden drum and visible manual crank, repaired by craftsmen. View: near-top-down tactical three-quarter projection compatible with an orthographic grid; top surfaces visible, front face compressed, no vanishing point. Player read: one coherent 2x2-cell cargo-handling device with every contact point inside its footprint. Style: native 64x64 pixel-art logic, hard clusters, near-black stair-step contour, at most twelve discrete colors. Palette: old wood brown, charcoal iron, limestone gray, tiny oxidized brass accent; no cyan unless an actual active aether part exists, and here none is active. Background: genuinely transparent. Avoid: electric motor, rail crane, steam pipes, sci-fi machinery, floating crystal, cast shadow, floor tile, text, logo, watermark, multiple objects."
+    },
+    {
+      "asset_id": "m_a32_t03_harbor_inspection_gate_3x2",
+      "stem": "harbor_inspection_gate_3x2",
+      "role": "modular_structure_32",
+      "logical_cells": [3, 2],
+      "palette_max": 12,
+      "application": "future academy-harbor tactical map; 3x2 gate with a readable central passage and two blocked side supports",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC modular tactical structure source. Primary request: a 3x2-cell harbor inspection gate for the low-technology academy city, with a clearly open central passage and two thick blocked side supports built from pale stone, dark timber lintel, forged-iron braces and one restrained brass inspection fitting. View: near-top-down tactical three-quarter projection, visible top faces, compressed front face, no perspective convergence. Player read: central walkable opening is unmistakable; left and right supports honestly match blocked cells. Style: native 96x64 pixel-art logic, hard alpha, near-black stair-step contour, at most twelve discrete colors. Background: genuinely transparent. Avoid: front-elevation pasted onto the ground, railway gate, portcullis fantasy castle, sci-fi airlock, electric lights, blue crystal, steam-punk clutter, soft shadow, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t04_anonymous_field_apprentice_a",
+      "stem": "anonymous_field_apprentice_a",
+      "role": "tactical_unit_64",
+      "logical_cells": [1, 1],
+      "palette_max": 24,
+      "application": "future friendly tactical-unit direction sample; 64px canvas, default 2x runtime scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent 64x64 OCC tactical-unit source, not a sprite sheet. Subject: an anonymous 14-to-16-year-old academy field apprentice, young and lightly built, deep-brown short hair, visible warm-medium face, limestone shirt, charcoal short coat, brown leather harness, blue-gray trousers and worn leather boots; carries a wooden survey staff, folding field board and one small brass measuring ring. View: near-top-down three-quarter tactical view, facing lower-right, full body visible. Player read: young field apprentice and surveying/recording duty, not a soldier and not the canonical protagonist. Pixel contract: native logical 64x64 grid, hard clusters, no anti-aliasing, at most 24 colors; body 44-48 pixels tall, head 12-14 pixels, center X32, boot baseline Y58, transparent safety edge. Background: genuinely transparent; no floor or cast shadow. Avoid: firearm, medieval robe, graduation uniform, mechanical armor, goggles or face mask, LED nodes, floating runes, modern tactical nylon, adult heroic body, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t05_dialogue_semantic_icon",
+      "stem": "dialogue_semantic_icon",
+      "role": "semantic_icon_16",
+      "logical_cells": null,
+      "palette_max": 4,
+      "application": "future campaign dialogue action; native 16px UI symbol at 2x/4x scale",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 16x16 semantic UI icon source. Primary request: the single function 'start a conversation', shown by two simplified opposing human side-profile silhouettes with a small clear exchange gap between their mouths. Player read: talk to a person, not mail, log, phone or voice recording. Style: native 16x16 pixel grid enlarged cleanly for review; one centered silhouette, near-black outline, one muted blue-gray semantic accent and optional warm neutral fill, no more than four colors, hard alpha, no anti-aliasing. Background: genuinely transparent. Avoid: complete characters, material texture, speech text, letters, envelope, book, telephone, microphone, fantasy rune, circle button background, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t06_waxed_field_bandage",
+      "stem": "waxed_field_bandage",
+      "role": "material_pickup_24_to_ui32",
+      "logical_cells": null,
+      "palette_max": 8,
+      "application": "future consumable/material inventory slot; native 24px source embedded unscaled at offset 4,4 in 32px delivery",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC material-pickup icon source. Primary request: a single rolled field bandage made from gray-green woven cloth, with an ivory cut edge and one small amber wax seal holding the roll closed. Player read: consumable medical cloth material. Style: native 24x24 pixel grid enlarged cleanly for review, thick near-black stair-step outline, one connected highlight cluster, one shadow mass, visible cloth roll structure, five to eight discrete flat colors, hard alpha, no anti-aliasing. Composition: centered with transparent safety border. Background: genuinely transparent. Avoid: red cross, modern plastic wrapper, medicine bottle, holy glow, cyan crystal, text, logo, watermark, multiple objects."
+    },
+    {
+      "asset_id": "m_a32_t07_portable_water_filter",
+      "stem": "portable_water_filter",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "future item/equipment content icon; native 32px inventory and reward slot",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 32x32 item icon source. Primary request: a portable low-technology water-filter tool: short ivory ceramic cylinder, visible gray-green folded cloth filter, old brass clamp, dark wooden stopper and a small leather carry loop. Player read: maintainable water-treatment tool, not a battery or potion. Style: native 32x32 pixel grid enlarged cleanly for review, hard 1px near-black stair-step outline, two or three structural partitions, five to ten discrete colors, no anti-aliasing, no gradients. Background: genuinely transparent; centered with at least two transparent pixels on every side. Avoid: plastic bottle, electronics, screen, blue glowing core, sci-fi filter cartridge, fake gauge text, logo, watermark, extra objects."
+    },
+    {
+      "asset_id": "m_a32_t08_water_channel_spell",
+      "stem": "water_channel_spell",
+      "role": "equipment_icon_32",
+      "logical_cells": null,
+      "palette_max": 10,
+      "application": "future non-fire spell icon grammar study; native 32px slot, not a final content ID",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 32x32 spell icon source. Primary request: a water-element 'channel and redirect' spell study: one cohesive mass of water enters a simple carved wooden-and-ceramic guide notch and exits clearly toward one side, showing controlled direction rather than explosion. Player read: water flow redirected by a practical casting medium. Style: native 32x32 pixel grid enlarged cleanly for review, hard near-black contour, large connected clusters, five to ten discrete colors, no anti-aliasing, no gradients. Palette: deep slate-blue and pale water blue for water, warm neutral wood/ceramic; no active-aether cyan border. Background: genuinely transparent with two-pixel safety margin. Avoid: ice crystal, lightning bolt, ocean-wave landscape, complete wand, generic glowing disc, floating text rune, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t09_water_channel_impact_peak",
+      "stem": "water_channel_impact_peak",
+      "role": "vfx_frame_32",
+      "logical_cells": null,
+      "palette_max": 12,
+      "application": "future non-fire VFX rhythm study; peak impact frame within one 32px cell",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC 32x32 VFX peak-frame source, not a sheet. Primary request: the peak moment when a controlled water jet strikes a target and splits into a compact fan-shaped diversion with only a few hard-edged droplets; brightest compact impact point at center, darker water mass around it, rapid visual falloff. Player read: redirected water impact, contained inside one tactical cell. Style: native 32x32 pixel grid enlarged cleanly for review, hard alpha, square clusters, at most twelve discrete colors, no anti-aliasing, no gradient, no soft transparency. Background: genuinely transparent with one-pixel safety edge. Avoid: full-cell ocean wave, mist cloud, noisy foam, ice spikes, blue lightning, damage number, unit silhouette, floor grid, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t10_harbor_archive_backdrop",
+      "stem": "harbor_archive_backdrop",
+      "role": "ui_backdrop_480x270",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "future harbor briefing or investigation page; 480x270 at 2x/4x runtime scale with central text-safe area",
+      "prompt": "Use case: ui-mockup. Asset type: one independent OCC 480x270 pixel UI backdrop only, not a full interface. Primary request: a low-contrast academy harbor-inspection archive backdrop for the low-technology city. Scene: warm paper and cloth file surface as the largest area; narrow charcoal page spine on the far left; along the bottom and outer edges, restrained silhouettes of salt-worn stone inspection paving, timber warehouse edge, rope coil and distant hand-cranked cargo crane. Composition: 16:9, central and right-middle area kept calm and nearly empty for real UI text and cards; visual anchors stay on the left spine and lower edge. Style: deliberate low-resolution pixel art, hard clusters, fully opaque, at most 24 discrete colors, no gradients, no anti-aliasing. Palette: warm paper, limestone, old wood, charcoal iron, tiny oxidized brass. Avoid: title, text, buttons, icon slots, pseudo-writing, complete UI screenshot, dark blue terminal, railway, public electricity, factory skyline, bloom, watermark, logo."
+    },
+    {
+      "asset_id": "m_a32_t11_anonymous_field_apprentice_b",
+      "stem": "anonymous_field_apprentice_b",
+      "role": "character_portrait_b_384x576",
+      "logical_cells": null,
+      "palette_max": 40,
+      "application": "anonymous B-layer identity/material study for archive, dialogue and character-detail layouts; not canonical protagonist art",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC B-layer pixel character portrait source. Subject: the same anonymous 14-to-16-year-old academy field apprentice as the tactical sample: deep-brown short hair, warm-medium skin, visible young face, limestone shirt, charcoal short coat, brown leather harness, muted indigo cloth edging, blue-gray trousers, worn leather boots, wooden survey staff, folding field board and one small brass measuring ring. Pose: calm three-quarter standing portrait, full body or upper three-quarter body, practical and slightly cautious. Player read: low-technology academy student trained for field surveying, not a soldier and not the canonical protagonist. Style: native 384x576 pixel-art portrait logic, hard edges, controlled 32-to-40-color palette, readable cloth/leather/wood/iron, no gradients or soft focus. Background: genuinely transparent. Avoid: firearm, medieval robe, graduation uniform, mechanical armor, goggles or mask, LED nodes, floating runes, modern tactical gear, adult heroic proportions, text, logo, watermark."
+    },
+    {
+      "asset_id": "m_a32_t12_anonymous_field_apprentice_c_resolve",
+      "stem": "anonymous_field_apprentice_c_resolve",
+      "role": "character_performance_c_192x288",
+      "logical_cells": null,
+      "palette_max": 24,
+      "application": "anonymous C-layer full-body resolve-pose study; not canonical protagonist art",
+      "prompt": "Use case: stylized-concept. Asset type: one independent OCC C-layer full-body performance image source. Subject: the same anonymous 14-to-16-year-old academy field apprentice: deep-brown short hair, warm-medium skin, limestone shirt, charcoal short coat, brown leather harness, muted indigo cloth edging, blue-gray trousers, worn leather boots, wooden survey staff, folding field board and one small brass measuring ring. Action: restrained resolve pose, full body visible, feet planted, brows tightened, eyes focused, mouth set, one hand gripping the survey staff and the other securing the field board; determined but still visibly young. Style: native 192x288 pixel-art performance logic, face designed to remain readable at roughly 28 pixels high, hard edges, at most 24 colors, no gradients. Background: genuinely transparent. Avoid: firearm, spell blast, heroic victory pose, medieval robe, mechanical armor, face mask, floating symbols, adult body, close-up crop, text, logo, watermark."
+    }
+  ]
+}

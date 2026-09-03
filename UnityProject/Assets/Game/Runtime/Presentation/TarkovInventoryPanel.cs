@@ -47,7 +47,7 @@ namespace OCC.Combat.Presentation
             if (inventoryBackdrop == null) throw new KeyNotFoundException("Missing formal inventory backdrop");
         }
         public bool IsOpen => open;
-        public static Rect LauncherRect => new Rect(1472f, 936f, 416f, 64f);
+        public static Rect LauncherRect => new Rect(1472f, 16f, 160f, 48f);
 
         private void OnGUI()
         {
@@ -59,7 +59,7 @@ namespace OCC.Combat.Presentation
             GUI.depth = -1100; ConfigureFormalSkin(previousSkin);
             if (!open)
             {
-                if (ClickButton(LauncherRect, "背包 / 搜索 [B]")) open = true;
+                if (ClickButton(LauncherRect, "背包 [B]")) open = true;
                 DrawClickFeedback();
                 GUI.skin = previousSkin; GUI.matrix = previous; return;
             }
@@ -88,7 +88,7 @@ namespace OCC.Combat.Presentation
             if (current.keyCode == KeyCode.R && !string.IsNullOrEmpty(selectedId))
             {
                 if (rogue && !string.IsNullOrEmpty(rogueDragId))
-                { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = "旋转预览"; current.Use(); return; }
+                { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = rogueDragRotated ? "已经横过来了" : "已经竖回来了"; current.Use(); return; }
                 if (rogue)
                 {
                     bool rotated = bootstrap.RotateRogueBackpackItem(selectedId);
@@ -197,7 +197,7 @@ namespace OCC.Combat.Presentation
         {
             Event current = Event.current; if (current == null) return;
             if (current.type == EventType.MouseDown && current.button == 1 && !string.IsNullOrEmpty(rogueDragId))
-            { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = "旋转预览"; current.Use(); return; }
+                { rogueDragRotated = !rogueDragRotated; inventoryInteractionMessage = rogueDragRotated ? "已经横过来了" : "已经竖回来了"; current.Use(); return; }
             if (current.type == EventType.MouseDown && current.button == 0 && hovered != null && string.IsNullOrEmpty(rogueDragId))
             {
                 selectedId = hovered.InstanceId; rogueDragId = hovered.InstanceId; rogueDragRotated = hovered.Rotated;
@@ -238,7 +238,7 @@ namespace OCC.Combat.Presentation
             else
             {
                 TacticalItemDefinition definition = runtime.TacticalDefinitionFor(selectedId); name = definition.DisplayName; icon = FormalArtRegistry.ItemPath(tactical.DefinitionId);
-                type = "战术道具"; metrics = definition.Width + "×" + definition.Height + "   AP " + definition.ActionPointCost + "   " + tactical.ChargesCurrent + "/" + tactical.ChargesMaximum;
+                type = "战术道具"; metrics = definition.Width + "×" + definition.Height + "   行动点 " + definition.ActionPointCost + "   剩余 " + tactical.ChargesCurrent + "/" + tactical.ChargesMaximum;
                 effects = "可关联至下方 4 格战术栏";
             }
             DrawIcon(new Rect(rect.x + 24, rect.y + 62, 72, 72), icon); GUI.Label(new Rect(rect.x + 116, rect.y + 62, 560, 34), name);
@@ -333,7 +333,7 @@ namespace OCC.Combat.Presentation
                 if (dragged != null)
                 {
                     dragState.ToggleRotation(ItemCatalog.Get(dragged.DefinitionId));
-                    inventoryInteractionMessage = dragState.Rotated ? "拖拽预览：已旋转 · 松开左键放置" : "拖拽预览：标准朝向 · 松开左键放置";
+                    inventoryInteractionMessage = dragState.Rotated ? "横放 · 松开左键放下" : "竖放 · 松开左键放下";
                 }
                 current.Use();
                 return;
@@ -443,7 +443,9 @@ namespace OCC.Combat.Presentation
                     GUI.Label(new Rect(x, y + 92, 450, 26), "来源：" + artifact.Provenance);
                     DrawSemanticIcon(new Rect(x, y + 120, 24, 24), "action", "行动");
                     GUI.Label(new Rect(x + 30, y + 120, 52, 24), artifact.ActionPointCost.ToString());
-                    string perUseCost = artifact.PublicCost.Replace(artifact.ActionPointCost + " AP，", string.Empty).Replace("消耗 ", string.Empty);
+                    string perUseCost = artifact.PublicCost
+                        .Replace(artifact.ActionPointCost + " 行动点，", string.Empty)
+                        .Replace("消耗 ", string.Empty);
                     GUI.Label(new Rect(x + 82, y + 120, 300, 24), "每次 " + perUseCost + " · 剩余 " + selected.RemainingUses + "/" + artifact.MaximumUses);
                     GUI.Label(new Rect(x, y + 148, 450, 26), "目标：" + artifact.TargetSummary);
                     GUI.Label(new Rect(x, y + 176, 450, 36), artifact.EffectSummary);

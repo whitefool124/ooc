@@ -79,14 +79,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void M5ShieldLog_AlwaysNamesSourceAndEventKind()
+        public void M5ShieldLog_NamesEventKindWithoutExposingInternalSource()
         {
             string[] localizedKinds = { "获得", "破势阻止", "吸收", "回合开始清空", "破势浪费" };
             int index = 0;
             foreach (ShieldEventKind kind in Enum.GetValues(typeof(ShieldEventKind)))
             {
                 string line = RogueShieldLogPresentation.Format(new ShieldSourceRecord("source-1", 4, kind, 2));
-                Assert.That(line, Does.Contain("source-1")); Assert.That(line, Does.Contain(localizedKinds[index++]));
+                Assert.That(line, Does.Not.Contain("source-1")); Assert.That(line, Does.Contain(localizedKinds[index++]));
             }
         }
 

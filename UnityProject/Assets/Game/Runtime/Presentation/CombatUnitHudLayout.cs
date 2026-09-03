@@ -17,8 +17,18 @@ namespace OCC.Combat.Presentation
 
         public static Rect EnemyIntentBadgeRect(BattlefieldRect cell, int expectedDamage)
         {
-            float width = expectedDamage > 0 ? 43f : 20f;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 2f, width, 20f);
+            float width = expectedDamage > 0 ? 68f : 40f;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y - 22f, width, 40f);
+        }
+
+        public static Rect EnemyIntentIconLocalRect()
+        {
+            return new Rect(4f, 4f, 32f, 32f);
+        }
+
+        public static Rect EnemyIntentDamageLocalRect(float badgeWidth)
+        {
+            return new Rect(38f, 0f, Mathf.Max(0f, badgeWidth - 42f), 40f);
         }
 
         public static Rect UnitPresentationRect(BattlefieldRect cell)
@@ -42,20 +52,20 @@ namespace OCC.Combat.Presentation
         public static Rect UnitHealthBarRect(BattlefieldRect cell)
         {
             float scale = ElementScale(cell);
-            float width = 108f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 94f * scale, width, 17f * scale);
+            float width = 120f * scale;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 90f * scale, width, 22f * scale);
         }
 
         public static Rect UnitShieldBarRect(BattlefieldRect cell)
         {
             float scale = ElementScale(cell);
-            float width = 108f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 112f * scale, width, 15f * scale);
+            float width = 120f * scale;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 114f * scale, width, 14f * scale);
         }
 
         public static string VitalText(CombatUnitVitalPresentation vital, float cellSize)
         {
-            if (vital == null || cellSize < 90f) return string.Empty;
+            if (vital == null || cellSize < 256f) return string.Empty;
             if (cellSize < 112f)
                 return vital.ForecastLoss > 0 ? "-" + vital.ForecastLoss + "→" + vital.Remaining : vital.Current + "/" + vital.Maximum;
             return vital.CompactText;
@@ -63,10 +73,7 @@ namespace OCC.Combat.Presentation
 
         public static int VitalFontSize(float cellSize, bool health)
         {
-            if (cellSize < 90f) return 0;
-            if (cellSize < 112f) return 9;
-            if (cellSize < 144f) return health ? 14 : 12;
-            return health ? 16 : 14;
+            return cellSize < 256f ? 0 : FormalUiTheme.BodyFontSize;
         }
 
         public static Color VitalTextColor() => FormalUiTheme.OnInk;
@@ -82,9 +89,9 @@ namespace OCC.Combat.Presentation
             int column = Math.Min(1, Math.Max(0, index) / 3);
             int row = Math.Max(0, index) % 3;
             float scale = ElementScale(cell);
-            float size = 14f * scale;
+            float size = 32f * scale;
             float x = column == 0 ? cell.X : cell.XMax - size;
-            return new Rect(x, cell.Y + (20f + row * 16f) * scale, size, size);
+            return new Rect(x, cell.Y + (16f + row * 32f) * scale, size, size);
         }
 
         public static Rect StatusHoverCardRect(Vector2 pointer)

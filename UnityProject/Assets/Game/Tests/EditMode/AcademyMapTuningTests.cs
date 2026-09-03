@@ -24,7 +24,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.IsNodeAvailable("core_finale"), Is.False);
             Assert.That(run.VisualStateFor("core_finale"), Is.EqualTo(RogueliteMapNodeVisualState.Locked));
             Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")),
-                Is.EqualTo("首领门槛：已探索 8/12，核心许可 2/2"));
+                Is.EqualTo("还不能参加终考：再完成 4 个地点，并拿到 0 枚核心许可"));
 
             ProcessRoute(run, VerifiedRoute.Skip(8));
             run.SelectNode("core_vault");
@@ -32,7 +32,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.AcademyProgress, Is.EqualTo(AcademyMapTuning.BossMinimumProgress));
             Assert.That(run.CanChallengeAcademyFinale, Is.True);
             Assert.That(run.IsNodeAvailable("core_finale"), Is.True);
-            Assert.That(RogueliteMapVisualPresentation.AcademyStatus(run), Does.Contain("首领可挑战"));
+            Assert.That(RogueliteMapVisualPresentation.AcademyStatus(run), Does.Contain("现在可以参加终考"));
         }
 
         [Test]
@@ -50,7 +50,8 @@ namespace OCC.Combat.Tests
             Assert.That(run.AcademyProgress, Is.GreaterThanOrEqualTo(AcademyMapTuning.BossMinimumProgress));
             Assert.That(run.CorePermits, Is.EqualTo(1));
             Assert.That(run.IsNodeAvailable("core_finale"), Is.False);
-            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")), Does.EndWith("核心许可 1/2"));
+            Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")),
+                Is.EqualTo("还不能参加终考：再完成 0 个地点，并拿到 1 枚核心许可"));
         }
 
         [Test]

@@ -59,7 +59,7 @@ namespace OCC.Combat
         public const string Universal = "fire_universal";
         public const string Ranged = "fire_ranged";
         public static readonly IReadOnlyList<string> All = new[] { Melee, Universal, Ranged };
-        public static string DisplayName(string id) => id == Melee ? "近战热压" : id == Ranged ? "远程导能" : id == Universal ? "武器热载" : "旧版推进";
+        public static string DisplayName(string id) => id == Melee ? "近战训练" : id == Ranged ? "远程训练" : id == Universal ? "均衡训练" : "旧存档路线";
     }
     public enum RogueliteNodeContentEffect { Supplies, ScoutingBeacon, AccessCard, Reward, Aether, Recovery, Economy, Intelligence }
     public sealed class RogueliteNodeContentChoice
@@ -116,13 +116,13 @@ namespace OCC.Combat
                 case RogueliteMapNodeType.Rest:
                     return new[]
                     {
-                        new RogueliteNodeContentChoice("field_repair", "现场整备", "收益：+1 补给、恢复 6 生命/2 护盾/4 个人魔力；无敌情推进。", RogueliteNodeContentEffect.Recovery),
+                        new RogueliteNodeContentChoice("field_repair", "现场整备", "获得：1 补给，并恢复 6 生命、2 护盾和 4 个人魔力；不会触发额外战斗。", RogueliteNodeContentEffect.Recovery),
                         new RogueliteNodeContentChoice("scan_routes", "校准信标", "收益：+1 侦测信标；无额外战斗。", RogueliteNodeContentEffect.ScoutingBeacon)
                     };
                 case RogueliteMapNodeType.Workshop:
                     return new[]
                     {
-                        new RogueliteNodeContentChoice("wand_calibration", "以太聚焦校准", "收益：获得以太聚焦手杖；替换操作将在 R2-03 工坊系统开放。", RogueliteNodeContentEffect.Reward, "arcane_wand"),
+                        new RogueliteNodeContentChoice("wand_calibration", "以太聚焦校准", "获得：以太聚焦手杖，领取后放入背包。", RogueliteNodeContentEffect.Reward, "arcane_wand"),
                         new RogueliteNodeContentChoice("supply_strip", "拆解补给", "收益：+1 补给；无额外战斗。", RogueliteNodeContentEffect.Supplies)
                     };
                 case RogueliteMapNodeType.Shop:
@@ -172,42 +172,42 @@ namespace OCC.Combat
             new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "石路巡哨", "清除巡哨队。", 1, 2, 0, 0, "start", "switchyard", "relay_raid", "supply_checkpoint"),
             new RogueliteMapNode("depot_wreck", RogueliteMapNodeType.Combat, "废弃驿站", "清除驿站守敌。", 1, 1, 0, 0, "start", "switchyard"),
             new RogueliteMapNode("supply_checkpoint", RogueliteMapNodeType.Shop, "行商补给点", "补给与零件交易。", 1, 3, 0, 0, "start", "rail_patrol", "field_workshop"),
-            new RogueliteMapNode("switchyard", RogueliteMapNodeType.Event, "分岔石桥", "风险与收益预览事件。", 2, 1, 0, 0, "depot_wreck", "rail_patrol", "signal_hub", "relay_event"),
+            new RogueliteMapNode("switchyard", RogueliteMapNodeType.Event, "分岔石桥", "桥边贴着几份临时委托，也有人在等答复。", 2, 1, 0, 0, "depot_wreck", "rail_patrol", "signal_hub", "relay_event"),
             new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "野外导能柱", "破坏被敌军占用的导能柱。", 2, 2, 0, 0, "rail_patrol", "relay_event", "med_bay", "field_workshop"),
-            new RogueliteMapNode("field_workshop", RogueliteMapNodeType.Workshop, "随军工坊", "更换与维护构筑。", 2, 3, 0, 0, "supply_checkpoint", "relay_raid", "med_bay", "permit_archive"),
+            new RogueliteMapNode("field_workshop", RogueliteMapNodeType.Workshop, "随军工坊", "可以在这里修整装备，重新收拾行囊。", 2, 3, 0, 0, "supply_checkpoint", "relay_raid", "med_bay", "permit_archive"),
             new RogueliteMapNode("signal_hub", RogueliteMapNodeType.Combat, "传讯石庭", "清除石庭守军。", 3, 1, 0, 0, "switchyard", "relay_event", "elite_foundry"),
             new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "导能柱记录", "查阅现场记录。", 3, 2, 0, 0, "switchyard", "relay_raid", "signal_hub", "med_bay", "gatehouse"),
             new RogueliteMapNode("med_bay", RogueliteMapNodeType.Rest, "行军医帐", "恢复与休整。", 3, 3, 0, 0, "relay_raid", "field_workshop", "relay_event", "permit_archive", "sealed_market"),
-            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "刻阵工坊", "高风险精英战斗。", 4, 1, 0, 0, "signal_hub", "gatehouse", "transmission_tower"),
+            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "刻阵工坊", "教官带着维护队守在里面，准备考验来访者。", 4, 1, 0, 0, "signal_hub", "gatehouse", "transmission_tower"),
             new RogueliteMapNode("gatehouse", RogueliteMapNodeType.Combat, "石闸关口", "打开通往古塔的道路。", 4, 2, 0, 0, "relay_event", "elite_foundry", "sealed_market", "aether_refinery"),
-            new RogueliteMapNode("sealed_market", RogueliteMapNodeType.Shop, "封存商行", "双货币交易点。", 4, 3, 0, 0, "med_bay", "gatehouse", "permit_archive", "aether_refinery", "safety_room"),
-            new RogueliteMapNode("permit_archive", RogueliteMapNodeType.Event, "许可档案", "可预览的档案提取；完成后获得权限卡。", 4, 4, 0, 1, "field_workshop", "med_bay", "sealed_market", "safety_room"),
-            new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "传讯塔楼", "许可门后的战斗节点。", 5, 1, 1, 0, "elite_foundry", "aether_refinery", "core_approach"),
-            new RogueliteMapNode("aether_refinery", RogueliteMapNodeType.Event, "以太校准室", "可预览的高收益事件。", 5, 2, 0, 0, "gatehouse", "sealed_market", "transmission_tower", "safety_room", "core_vault"),
-            new RogueliteMapNode("safety_room", RogueliteMapNodeType.Event, "守夜值班记录", "公开选择补给、情报或追加战斗。", 5, 3, 0, 0, "sealed_market", "permit_archive", "aether_refinery", "core_vault"),
-            new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "塔前石庭", "古塔前庭精英守备。", 6, 1, 1, 0, "transmission_tower", "core_vault", "core_finale"),
-            new RogueliteMapNode("core_vault", RogueliteMapNodeType.Treasure, "学院封存库", "战利品节点。", 6, 2, 1, 0, "aether_refinery", "safety_room", "core_approach", "core_finale"),
+            new RogueliteMapNode("sealed_market", RogueliteMapNodeType.Shop, "封存商行", "商人既收金币，也愿意换取学院贡献。", 4, 3, 0, 0, "med_bay", "gatehouse", "permit_archive", "aether_refinery", "safety_room"),
+            new RogueliteMapNode("permit_archive", RogueliteMapNodeType.Event, "许可档案", "帮管理员处理积压记录，可以换到一枚核心许可。", 4, 4, 0, 1, "field_workshop", "med_bay", "sealed_market", "safety_room"),
+            new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "传讯塔楼", "只有持有核心许可的人才能进入塔楼。", 5, 1, 1, 0, "elite_foundry", "aether_refinery", "core_approach"),
+            new RogueliteMapNode("aether_refinery", RogueliteMapNodeType.Event, "以太校准室", "校准师愿意用报酬换取一双帮忙的手。", 5, 2, 0, 0, "gatehouse", "sealed_market", "transmission_tower", "safety_room", "core_vault"),
+            new RogueliteMapNode("safety_room", RogueliteMapNodeType.Event, "守夜值班记录", "值班生准备了补给和情报，也可能请你出手帮忙。", 5, 3, 0, 0, "sealed_market", "permit_archive", "aether_refinery", "core_vault"),
+            new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "塔前石庭", "高年级守卫把住了古塔前庭。", 6, 1, 1, 0, "transmission_tower", "core_vault", "core_finale"),
+            new RogueliteMapNode("core_vault", RogueliteMapNodeType.Treasure, "学院封存库", "管理员允许你从封存柜里带走一件东西。", 6, 2, 1, 0, "aether_refinery", "safety_room", "core_approach", "core_finale"),
             new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败封存塔的核心守卫。", 7, 1, 1, 0, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
-            new RogueliteMapNode("academy_gate", RogueliteMapNodeType.Event, "学院正门公告", "公开的入学期委托与路线情报。", 0, 0, 0, 0, "tutorial_hall", "dorm_drill"),
+            new RogueliteMapNode("academy_gate", RogueliteMapNodeType.Event, "学院正门公告", "公告板上贴着新生委托和几张手绘地图。", 0, 0, 0, 0, "tutorial_hall", "dorm_drill"),
             new RogueliteMapNode("tutorial_hall", RogueliteMapNodeType.Combat, "新生演练厅", "处理公开演练中的失控傀儡。", 0, 1, 0, 0, "academy_gate", "start", "dorm_watch"),
             new RogueliteMapNode("dorm_watch", RogueliteMapNodeType.Combat, "宿舍夜间巡查", "清理夜间异常并保护宿舍区。", 0, 3, 0, 0, "tutorial_hall", "market_lane"),
             new RogueliteMapNode("market_lane", RogueliteMapNodeType.Combat, "学院市集护送", "护送器材通过市集外廊。", 0, 4, 0, 0, "dorm_watch", "field_infirmary"),
             new RogueliteMapNode("dorm_drill", RogueliteMapNodeType.Combat, "宿舍外实战演练", "近距离考核走位与护盾。", 1, 0, 0, 0, "academy_gate", "lecture_annex", "depot_wreck"),
-            new RogueliteMapNode("field_infirmary", RogueliteMapNodeType.Event, "临时医务站", "公开选择补给、恢复或额外救援战。", 1, 4, 0, 0, "market_lane", "study_vault"),
+            new RogueliteMapNode("field_infirmary", RogueliteMapNodeType.Event, "临时医务站", "医护生能帮你疗伤，也需要人手完成一趟救援。", 1, 4, 0, 0, "market_lane", "study_vault"),
             new RogueliteMapNode("lecture_annex", RogueliteMapNodeType.Combat, "讲坛公开考核", "在远程威胁下完成学院考核。", 2, 0, 0, 0, "dorm_drill", "archive_wing", "switchyard"),
             new RogueliteMapNode("study_vault", RogueliteMapNodeType.Combat, "阅览室封存柜异常", "清理封存柜周边的异常防卫。", 2, 4, 0, 0, "field_infirmary", "sparring_ring"),
             new RogueliteMapNode("archive_wing", RogueliteMapNodeType.Combat, "档案翼巡查", "处理档案翼中的显影误报。", 3, 0, 0, 0, "lecture_annex", "workshop_yard", "signal_hub"),
-            new RogueliteMapNode("sparring_ring", RogueliteMapNodeType.Combat, "圆形实训场", "对抗训练阵列并获得构筑奖励。", 3, 4, 0, 0, "study_vault", "permit_archive", "supply_depot"),
+            new RogueliteMapNode("sparring_ring", RogueliteMapNodeType.Combat, "圆形实训场", "打赢训练阵列，就能从教员那里挑一件奖励。", 3, 4, 0, 0, "study_vault", "permit_archive", "supply_depot"),
             new RogueliteMapNode("workshop_yard", RogueliteMapNodeType.Combat, "工坊庭院回路过载", "处理失控校准回路。", 4, 0, 0, 0, "archive_wing", "clinic_hall", "elite_foundry"),
             new RogueliteMapNode("clinic_hall", RogueliteMapNodeType.Combat, "诊疗厅导能泄漏", "在泄漏环境中保护治疗设备。", 5, 0, 0, 0, "workshop_yard", "wilds_path", "transmission_tower"),
-            new RogueliteMapNode("supply_depot", RogueliteMapNodeType.Elite, "封存器材护送", "精英护送考核，取得高风险奖励。", 5, 4, 0, 0, "sparring_ring", "permit_archive", "wilds_camp"),
+            new RogueliteMapNode("supply_depot", RogueliteMapNodeType.Elite, "封存器材护送", "把封存器材安全送到另一边，教员会给出更好的奖励。", 5, 4, 0, 0, "sparring_ring", "permit_archive", "wilds_camp"),
             new RogueliteMapNode("wilds_path", RogueliteMapNodeType.Combat, "郊野实训旧道", "开阔地中的学院实训巡查。", 6, 0, 0, 0, "clinic_hall", "seal_bridge", "core_approach"),
             new RogueliteMapNode("observatory_path", RogueliteMapNodeType.Elite, "观测塔求援", "处理封存区外环的高阶异常。", 6, 3, 0, 0, "wilds_camp", "tower_foyer", "core_vault"),
-            new RogueliteMapNode("wilds_camp", RogueliteMapNodeType.Elite, "郊野导能柱考察", "高风险实训，提供核心许可来源。", 6, 4, 0, 1, "supply_depot", "observatory_path", "tower_records"),
+            new RogueliteMapNode("wilds_camp", RogueliteMapNodeType.Elite, "郊野导能柱考察", "完成这场艰难考察，可以拿到一枚核心许可。", 6, 4, 0, 1, "supply_depot", "observatory_path", "tower_records"),
             new RogueliteMapNode("seal_bridge", RogueliteMapNodeType.Combat, "封存区石桥", "清理通往高塔的学院警戒装置。", 7, 0, 0, 0, "wilds_path", "tower_foyer", "core_finale"),
-            new RogueliteMapNode("tower_foyer", RogueliteMapNodeType.Elite, "封存塔门厅核验", "精英守卫与维护链的最终考核。", 7, 2, 0, 1, "seal_bridge", "observatory_path", "tower_lift", "core_finale"),
-            new RogueliteMapNode("tower_records", RogueliteMapNodeType.Event, "高塔值守记录", "公开选择首领情报或追加挑战。", 7, 3, 0, 0, "wilds_camp", "tower_lift"),
-            new RogueliteMapNode("tower_lift", RogueliteMapNodeType.Treasure, "封存管理员匣", "稀有法宝与核心许可的公开取舍。", 7, 4, 0, 0, "tower_records", "tower_foyer")
+            new RogueliteMapNode("tower_foyer", RogueliteMapNodeType.Elite, "封存塔门厅核验", "终考前的最后一队守卫正在门厅等候。", 7, 2, 0, 1, "seal_bridge", "observatory_path", "tower_lift", "core_finale"),
+            new RogueliteMapNode("tower_records", RogueliteMapNodeType.Event, "高塔值守记录", "值守记录里藏着终考情报，也写着一项额外挑战。", 7, 3, 0, 0, "wilds_camp", "tower_lift"),
+            new RogueliteMapNode("tower_lift", RogueliteMapNodeType.Treasure, "封存管理员匣", "管理员让你在稀有法宝和核心许可之间选一个。", 7, 4, 0, 0, "tower_records", "tower_foyer")
         };
         private static readonly IReadOnlyList<RogueliteReward> CoreRewards = new[]
         {
@@ -726,9 +726,13 @@ namespace OCC.Combat
                 }
                 else if (reward.Equipment != null)
                 {
-                    string instanceId = "eq-" + Seed + "-" + rogueRunDto.DeterministicCounter++;
-                    rogueRunDto.EquipmentInstances.Add(new OCC.Combat.Roguelite.EquipmentInstanceDto(instanceId, reward.Id, reward.Equipment.Slot,
-                        reward.Equipment.AllowedRarities[0], 0) { AcquiredOrder = rogueRunDto.EquipmentInstances.Count, SourceType = reward.BuildPath });
+                    OCC.Combat.Roguelite.RogueEquipmentRuntime runtime = OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto);
+                    string instanceId = "eq-" + Seed + "-" + rogueRunDto.DeterministicCounter;
+                    OCC.Combat.Roguelite.RogueEquipmentInstance instance = runtime.CreateInstance(instanceId, reward.Id,
+                        reward.Equipment.AllowedRarities[0], runtime.AllInstances.Count + runtime.AllTacticalItems.Count, reward.BuildPath);
+                    if (!runtime.AddToBackpack(instance)) throw new InvalidOperationException("Backpack cannot accept equipment reward: " + reward.Id);
+                    rogueRunDto.DeterministicCounter++;
+                    runtime.WriteToDto(rogueRunDto);
                 }
                 claimedRewards.Add(rewardId); AwaitingReward = false; return;
             }
@@ -803,6 +807,7 @@ namespace OCC.Combat
             RogueliteMapRun run = new RogueliteMapRun(dto.Seed)
             {
                 CurrentNodeId = dto.CurrentNodeId, RegionBossId = "core_overseer", StarterId = dto.StarterId,
+                EquippedWeaponId = StarterWeaponId(dto.StarterId),
                 CurrentHealth = dto.CurrentHealth, CurrentShield = 0, CurrentMana = dto.CurrentMana,
                 AwaitingReward = dto.AwaitingReward, PendingContentChoiceId = dto.PendingContentChoiceId,
                 PendingContentCombatMissionId = dto.PendingContentCombatMissionId, HasCombatSnapshot = true
@@ -841,6 +846,12 @@ namespace OCC.Combat
                 run.rogueEquippedSpellIds[4 + index] = run.equippedFireSpells[index];
             }
             return run;
+        }
+        private static string StarterWeaponId(string starterId)
+        {
+            if (starterId == FireRogueliteStarterCatalog.Melee) return "war_hammer";
+            if (starterId == FireRogueliteStarterCatalog.Ranged) return "arcane_wand";
+            return null;
         }
         private static void Replace(List<string> target, IEnumerable<string> source)
         { target.Clear(); target.AddRange(source ?? Array.Empty<string>()); }

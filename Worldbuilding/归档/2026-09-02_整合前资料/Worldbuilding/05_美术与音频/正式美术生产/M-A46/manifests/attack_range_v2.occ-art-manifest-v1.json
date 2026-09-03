@@ -1,0 +1,64 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a46_tactical_attack_range_v2",
+  "role": "terrain_adjacency_overlay_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent single transparent tactical attack overlay source; no board slicing",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/raw/attack_range_v2/source.png",
+    "source_sha256": "b99c11c19cfdaf3ac24b8ce06d40330c6a5ad8ccd855fc2d3fd6cf70226c52c8"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalTacticalOverlays32V2/attack_range.png",
+    "output_sha256": "1f120f06425c1513bb46ffbf3397f4fd9b99ea8c36380fc07480037f055bd20e",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": [
+      {
+        "family": "red",
+        "min_opaque_pixels": 1
+      }
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "native 32x32 attack range overlay at integer 2x/3x/4x/5x",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/QA/attack_range_v2/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/QA/attack_range_v2/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/QA/attack_range_v2/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/QA/attack_range_v2/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A46/QA/contacts/ui_art_78_attack_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Product-owner delegated autonomous UI art review",
+    "date": "2026-09-02",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Heavier oxidized-red corner brackets and inward threat teeth remain distinct from movement in 1x, 4x and Play Mode. A mechanical 2px transparent inset prevents shared-vertex stacking; inactive range opacity is reduced so the selected attack mode remains dominant."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalTacticalOverlays32V2/attack_range.png",
+    "stable_guid": "fb1fa99e6339cfc4a8885339bf6e5e00",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

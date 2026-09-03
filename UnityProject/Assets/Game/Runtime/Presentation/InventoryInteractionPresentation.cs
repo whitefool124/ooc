@@ -94,9 +94,9 @@ namespace OCC.Combat.Presentation
             int height = placement.Rotated ? definition.Width : definition.Height;
             StringBuilder text = new StringBuilder();
             text.AppendLine(definition.DisplayName + " · " + CategoryName(definition.Category) + " · " + RarityName(definition.Rarity));
-            text.Append("占格：").Append(width).Append('×').Append(height).Append(placement.Rotated ? "（已旋转）" : "（标准朝向）")
+            text.Append("大小：").Append(width).Append('×').Append(height).Append(placement.Rotated ? "（横放）" : "（竖放）")
                 .Append("  重量：").Append(definition.Weight);
-            if (definition.MaximumUses > 0) text.Append("  次数：").Append(item.RemainingUses).Append('/').Append(definition.MaximumUses);
+            if (definition.MaximumUses > 0) text.Append("  还能用：").Append(item.RemainingUses).Append('/').Append(definition.MaximumUses);
             text.AppendLine();
             if (!string.IsNullOrEmpty(definition.Element)) text.AppendLine("元素：" + definition.Element);
             text.AppendLine("来源：" + (string.IsNullOrEmpty(definition.Provenance) ? "未知" : definition.Provenance));
@@ -104,11 +104,11 @@ namespace OCC.Combat.Presentation
                 text.AppendLine(definition.Description);
             else
             {
-                text.AppendLine("代价：" + artifact.PublicCost);
-                text.AppendLine("目标：" + artifact.TargetSummary);
-                text.AppendLine("效果：" + artifact.EffectSummary);
-                text.AppendLine("风险/反制：" + artifact.RiskSummary);
-                text.AppendLine("构筑用途：" + artifact.BuildUse);
+                text.AppendLine("怎么用：" + artifact.PublicCost);
+                text.AppendLine("能对谁用：" + artifact.TargetSummary);
+                text.AppendLine("会怎样：" + artifact.EffectSummary);
+                text.AppendLine("要小心：" + artifact.RiskSummary);
+                text.AppendLine("适合：" + artifact.BuildUse);
             }
             text.Append("左键拖拽移动 · 拖拽中右键旋转 · 松开左键放置");
             return text.ToString();
@@ -118,8 +118,8 @@ namespace OCC.Combat.Presentation
         {
             switch (error)
             {
-                case InventoryError.OutOfBounds: return "超出背包边界";
-                case InventoryError.Occupied: return "目标位置已被占用";
+                case InventoryError.OutOfBounds: return "这件东西放出行囊了";
+                case InventoryError.Occupied: return "那里已经放了别的东西";
                 case InventoryError.Overweight: return "超过负重限制";
                 case InventoryError.MissingInstance: return "物品不存在";
                 default: return error == InventoryError.None ? "可放置" : "当前位置不可放置";
@@ -147,15 +147,15 @@ namespace OCC.Combat.Presentation
             InventoryResult fit = inventory.FindFirstFit(item);
             return fit.Success
                 ? new UiOperationAvailability(true, "可拿取", "将自动放入背包 " + fit.X + "," + fit.Y + (fit.Rotated ? "（旋转）" : string.Empty))
-                : new UiOperationAvailability(false, "背包无合法空位", ErrorName(fit.Error));
+                : new UiOperationAvailability(false, "行囊放不下", ErrorName(fit.Error));
         }
 
         public static string LootSearchReason(bool adjacent, int actionPoints, bool complete)
         {
             if (complete) return "容器已清空";
             if (!adjacent) return "需要移动到容器相邻格";
-            if (actionPoints < 1) return "行动点不足：需要 1 AP";
-            return "可继续搜索：消耗 1 AP";
+            if (actionPoints < 1) return PlayerFacingCopy.ResourceShortage("行动点", 1, actionPoints);
+            return "继续搜索会消耗 1 行动点";
         }
 
         private static Vector2 PlacementCenter(InventoryContainerState inventory, InventoryPlacement placement)

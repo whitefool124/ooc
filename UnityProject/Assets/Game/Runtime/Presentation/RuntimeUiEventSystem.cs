@@ -15,7 +15,7 @@ namespace OCC.Combat.Presentation
             if (eventSystem == null)
             {
                 GameObject events = new GameObject("EventSystem");
-                Object.DontDestroyOnLoad(events);
+                if (Application.isPlaying) Object.DontDestroyOnLoad(events);
                 eventSystem = events.AddComponent<EventSystem>();
             }
 

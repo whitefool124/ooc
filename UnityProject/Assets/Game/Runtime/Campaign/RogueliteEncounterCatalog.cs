@@ -13,11 +13,20 @@ namespace OCC.Combat
         public GridPosition HeroSpawn { get; }
         public IReadOnlyList<GridPosition> EnemySpawns { get; }
         public IReadOnlyList<LevelTerrainPlacement> Terrain { get; }
+        public IReadOnlyList<GridPosition> BlockedPositions { get; }
         public string Signature { get; }
         public RogueliteEncounterLayout(string signature, GridPosition heroSpawn,
             IEnumerable<GridPosition> enemySpawns, IEnumerable<LevelTerrainPlacement> terrain,
-            int width = 12, int height = 9)
-        { Signature = signature; HeroSpawn = heroSpawn; EnemySpawns = enemySpawns.ToArray(); Terrain = terrain.ToArray(); Width = width; Height = height; }
+            int width = 12, int height = 9, IEnumerable<GridPosition> blockedPositions = null)
+        {
+            Signature = signature;
+            HeroSpawn = heroSpawn;
+            EnemySpawns = enemySpawns.ToArray();
+            Terrain = terrain.ToArray();
+            Width = width;
+            Height = height;
+            BlockedPositions = (blockedPositions ?? Array.Empty<GridPosition>()).Distinct().ToArray();
+        }
     }
 
     public sealed class RogueliteEncounterDefinition
@@ -33,7 +42,7 @@ namespace OCC.Combat
         public int MaximumOpeningThreatOverlap { get; }
         public RogueliteEncounterLayout Layout { get; }
         public string ObjectiveSummary => Tier == RogueliteEncounterTier.Weak
-            ? "完成公开学院对练或考核；学生认输、教职退出、役兽被制服后结算。" : string.Empty;
+            ? "让所有对手认输。教员会在有人重伤前叫停演练。" : string.Empty;
         public IReadOnlyList<string> EnemyArchetypeIds { get; }
         public bool IsElite => Tier == RogueliteEncounterTier.Elite;
         public bool IsBoss => Tier == RogueliteEncounterTier.Boss;
@@ -82,15 +91,15 @@ namespace OCC.Combat
         private static RogueliteEncounterDefinition Weak(string key, string map, string grammar,
             string relation, string risk, RogueliteEncounterLayout layout, params string[] enemies) =>
             new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Weak, grammar, relation,
-                risk, "弱池·基础奖励档", 1, layout, enemies);
+                "轻松", "基础奖励", 1, layout, enemies);
         private static RogueliteEncounterDefinition Strong(string key, string map, string grammar,
             string relation, string risk, params string[] enemies) =>
             new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Strong, grammar, relation,
-                risk, "强池·进阶奖励档（高于弱池）", 2, enemies);
+                "棘手", "更好的奖励", 2, enemies);
         private static RogueliteEncounterDefinition Elite(string key, string map, string grammar,
             string relation, params string[] enemies) =>
             new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Elite, grammar, relation,
-                "高：精英维护链与交叉威胁", "精英独立奖励档", 2, enemies);
+                "危险", "稀有奖励", 2, enemies);
 
         private static LevelTerrainPlacement L(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LightCover);
         private static LevelTerrainPlacement H(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.HeavyCover);
@@ -109,12 +118,12 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<RogueliteEncounterDefinition> Packages = new[]
         {
-            Weak("weak_flank_drill", "rail_patrol", "W1 半开放演练场", "盾术守中、侧锋偏翼；出生区左右均可撤回", "低：近战绕盾与侧翼选择", W1(), "raider", "shieldguard"),
-            Weak("weak_fire_drill", "relay_raid", "W4 双台校准场", "火矢远端、侧锋侧接；出生格不受双线覆盖", "低：远程火矢与接近压力", W4(), "pyromancer", "raider"),
-            Weak("weak_tracker_test", "depot_wreck", "W3 环形练习场", "寻迹兽与盾术分守环路两侧", "低：单一束缚源的贴身测试", W3(), "tether_hound", "shieldguard"),
-            Weak("weak_barrier_demo", "signal_hub", "W3 环形练习场·维护环", "护障助教与盾术分列设施两侧", "低：公开护障维护链", W3(), "barrier_mender", "shieldguard"),
-            Weak("weak_arbalist_calibration", "gatehouse", "W2 回廊折角", "重弩守折角远端、侧锋守下区", "低：可规避重弩线与侧锋接近", W2(), "rune_arbalist", "raider"),
-            Weak("weak_restraint_exam", "transmission_tower", "W2 回廊折角·约束线", "约束助教守远端、侧锋守第二出口", "低：单一远程束缚后就地反制", W2(), "stone_snare", "raider"),
+            Weak("weak_flank_drill", "rail_patrol", "半开放演练场", "盾术生守在中间，侧锋从一侧接近；身后有退路", "轻松", W1(), "raider", "shieldguard"),
+            Weak("weak_fire_drill", "relay_raid", "双台校准场", "火矢生留在远处，侧锋从旁接近；起步位置很安全", "轻松", W4(), "pyromancer", "raider"),
+            Weak("weak_tracker_test", "depot_wreck", "环形练习场", "寻迹兽与盾术生分守两侧", "轻松", W3(), "tether_hound", "shieldguard"),
+            Weak("weak_barrier_demo", "signal_hub", "环形练习场", "护障助教和盾术生隔着设施相互照应", "轻松", W3(), "barrier_mender", "shieldguard"),
+            Weak("weak_arbalist_calibration", "gatehouse", "回廊折角", "重弩守在远端，侧锋守着下方通道", "轻松", W2(), "rune_arbalist", "raider"),
+            Weak("weak_restraint_exam", "transmission_tower", "回廊折角", "约束助教守在远端，侧锋守着另一处出口", "轻松", W2(), "stone_snare", "raider"),
 
             Strong("strong_rail_patrol_a", "rail_patrol", "开阔交叉线", "盾术居中，火矢与侧锋分列两翼", "中高：主动进入的近远交叉", "shieldguard", "pyromancer", "raider"),
             Strong("strong_rail_patrol_b", "rail_patrol", "开阔交叉线·反向翼位", "盾术前压，两翼远近职责反置", "中高：两翼压力与中央暴露", "shieldguard", "pyromancer", "raider"),
@@ -138,7 +147,7 @@ namespace OCC.Combat
 
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
                 "中心核心／外围维护", "固定核心守卫居中；教官、助教与巡查员构成可拆维护链",
-                "极高：固定首领与公开维护链", "首领独立奖励档", 2,
+                "终考", "终考奖励", 2,
                 "core_overseer", "elite_vanguard", "barrier_mender", "lantern_revealer")
         };
 
@@ -161,12 +170,12 @@ namespace OCC.Combat
             if (package != null) return package.BindToNode(nodeId);
             if (!FirstRegionLevelCatalog.TryFor(nodeId, out FirstRegionLevelDefinition level))
                 return new RogueliteEncounterDefinition(nodeId, nodeId, RogueliteEncounterTier.Strong,
-                    "旧版场景语法", "旧版出生关系", "中：普通战", "基础奖励档", 2,
+                    "学院演练场", "对手已经在场地另一侧等候", "棘手", "基础奖励", 2,
                     "shieldguard", "pyromancer", "raider").BindToNode(nodeId);
             return new RogueliteEncounterDefinition("legacy_" + nodeId, level.Id,
                 level.IsBoss ? RogueliteEncounterTier.Boss : level.IsElite ? RogueliteEncounterTier.Elite : RogueliteEncounterTier.Strong,
-                "旧版关卡语法", "关卡固定出生", level.IsBoss ? "极高：阶段首领" : level.IsElite ? "高：精英战" : "中：普通战",
-                level.IsBoss ? "首领独立奖励档" : level.IsElite ? "精英独立奖励档" : "基础奖励档", 2,
+                "学院演练场", "对手已经在场地另一侧等候", level.IsBoss ? "终考" : level.IsElite ? "危险" : "棘手",
+                level.IsBoss ? "终考奖励" : level.IsElite ? "稀有奖励" : "基础奖励", 2,
                 level.ResolveEnemyArchetypeIds(regionBossId).ToArray()).BindToNode(nodeId);
         }
 
@@ -178,19 +187,19 @@ namespace OCC.Combat
                 string eventId = run.CurrentEventId;
                 if (eventId == "EV08" || eventId == "EV13" || eventId == "EV16")
                     return new RogueliteEncounterDefinition("event_maintenance_elite", "elite_foundry", RogueliteEncounterTier.Elite,
-                        "编织狭口·维护链核验", "两条宽路线分别通向教官与护障维护，失败档在确认前公开", "高：追加精英战",
-                        "事件精英奖励档", 3, "elite_vanguard", "barrier_mender", "sigil_mauler").BindToNode(nodeId);
+                        "狭窄的维护通道", "两条路分别通向教官和护障助教", "危险",
+                        "稀有奖励", 3, "elite_vanguard", "barrier_mender", "sigil_mauler").BindToNode(nodeId);
                 if (eventId == "EV03" || eventId == "EV06")
                     return new RogueliteEncounterDefinition("event_archive_rescue", "signal_hub", RogueliteEncounterTier.Strong,
-                        "三角维护网·档案救援", "可从护障、显影或盾线任一处切入，许可只在胜利后授予", "高：许可追加战",
-                        "事件许可奖励档", 2, "barrier_mender", "lantern_revealer", "shieldguard").BindToNode(nodeId);
+                        "三角维护场", "可以从护障、显影或盾线中的任意一处切入；赢了才能拿到许可", "危险",
+                        "核心许可", 2, "barrier_mender", "lantern_revealer", "shieldguard").BindToNode(nodeId);
                 if (eventId == "EV15")
                     return new RogueliteEncounterDefinition("event_relay_objective", "relay_raid", RogueliteEncounterTier.Strong,
-                        "偏心目标·现场校准", "快速路线穿过重弩线，安全路线先减员；破坏目标即完成", "高：破坏目标追加战",
-                        "事件高档法宝", 2, "raider", "rune_arbalist", "tether_hound").BindToNode(nodeId);
+                        "偏心校准场", "近路会暴露在重弩前；绕远一些可以先处理守卫。破坏目标就算完成", "危险",
+                        "稀有法宝", 2, "raider", "rune_arbalist", "tether_hound").BindToNode(nodeId);
                 return new RogueliteEncounterDefinition("event_field_drill", "rail_patrol", RogueliteEncounterTier.Weak,
-                    "半开放演练场·事件委托", "两名陪练分处斜前两翼，出生区无重叠威胁", "中：追加演练",
-                    "事件基础奖励档", 1, "shieldguard", "raider").BindToNode(nodeId);
+                    "半开放演练场", "两名陪练分守前方两侧，起步位置很安全", "轻松",
+                    "基础奖励", 1, "shieldguard", "raider").BindToNode(nodeId);
             }
             if (run != null) throw new InvalidOperationException("No registered encounter package for map node: " + nodeId);
             return For(nodeId);

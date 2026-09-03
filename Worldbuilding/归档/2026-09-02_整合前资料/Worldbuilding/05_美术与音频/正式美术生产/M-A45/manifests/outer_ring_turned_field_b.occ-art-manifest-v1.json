@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a45_outer_ring_turned_field_b",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A45 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/raw/outer_ring_turned_field_b/source.png",
+    "source_sha256": "7b27e5f5e92c751940e285aa62855de56e0a89e282ee275c9998722525e339bd"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/normalized/outer_ring_turned_field_b.png",
+    "output_sha256": "2c286f2249f38cf552196dccb1a7c8b910a64fa5149c568551ffcbd5d4d8ba5e",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "REG-ORH-01 12x9 tactical map expansion; standalone turned-field cell B",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_turned_field_b/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_turned_field_b/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_turned_field_b/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/outer_ring_turned_field_b/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A45/QA/contacts/m_a45_outer_ring_expansion_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

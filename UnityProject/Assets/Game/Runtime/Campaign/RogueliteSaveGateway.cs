@@ -119,7 +119,8 @@ namespace OCC.Combat
             string value;
             try { value = Rogue11Serializer.Serialize(run); }
             catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
-            bool saved = SaveVerified(MapRunKey, value, Rogue11Serializer.Deserialize, null, null);
+            bool saved = SaveVerified(MapRunKey, value, Rogue11Serializer.Deserialize,
+                dto => RogueliteMapRunValidator.Validate(RogueliteMapRun.FromRogue11(dto)), null);
             if (saved) activeRunDto = run; return saved;
         }
         public bool SaveUiPreferences(RogueliteUiPreferences preferences) => SaveVerified(UiPreferencesKey, preferences?.ToDataString(), RogueliteUiPreferences.FromDataString, null, null);

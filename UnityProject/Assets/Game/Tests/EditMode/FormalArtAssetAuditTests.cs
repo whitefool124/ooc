@@ -23,16 +23,16 @@ namespace OCC.Combat.Tests
             Assert.That(FormalUiKit.ResolveAnchor(id), Is.EqualTo(new Vector2(x, y)));
         }
 
-        [TestCase(14, 18)]
-        [TestCase(15, 20)]
+        [TestCase(14, 24)]
+        [TestCase(15, 24)]
         [TestCase(18, 24)]
-        [TestCase(21, 22)]
-        [TestCase(38, 38)]
-        public void CompactFontSizes_ProjectToWholePixelsAtHalfScale(int source, int expected)
+        [TestCase(21, 24)]
+        [TestCase(38, 48)]
+        public void CompactFontSizes_StayOnApprovedNativeGridTiers(int source, int expected)
         {
             int actual = FormalUiTheme.PixelAlignedFontSize(source, true);
             Assert.That(actual, Is.EqualTo(expected));
-            Assert.That(actual % 2, Is.Zero);
+            Assert.That(actual % FormalUiTheme.NativeFontGrid, Is.Zero);
         }
 
         [Test]
@@ -272,6 +272,8 @@ namespace OCC.Combat.Tests
                 Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
                 Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(16f), entry.AssetId);
             }
+            Assert.That(FormalArtRegistry.IntentPath("move"), Is.EqualTo(FormalArtRegistry.CommandPath("move")),
+                "movement intent must use the approved arrow instead of the ambiguous legacy footprint pixels");
         }
 
         [Test]
@@ -347,7 +349,7 @@ namespace OCC.Combat.Tests
             Assert.That(config.layouts.Select(entry => entry.id), Is.SupersetOf(requiredLayouts));
             Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.target"));
             Assert.That(OccPixelUiConfig.Layout("combat.rightConsole").width, Is.LessThanOrEqualTo(config.hudWidth));
-            Assert.That(OccPixelUiConfig.Layout("combat.commands").width, Is.LessThanOrEqualTo(config.battlefieldWidth));
+            Assert.That(OccPixelUiConfig.Layout("combat.commands").width, Is.EqualTo(1888));
             Assert.That(OccPixelUiConfig.StateSkin("button", "selected"), Is.EqualTo("tab_active"));
         }
 

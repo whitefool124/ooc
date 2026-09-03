@@ -21,8 +21,8 @@ namespace OCC.Combat
     /// </summary>
     public sealed class RogueliteMapSaveCoordinator
     {
-        public const string NewRunSaveFailure = "新推进未能写入存档；仍停留在入口，未启动未保存的行动";
-        public const string ActiveRunSaveFailure = "地图进度未能写入；当前状态仍保留在内存中，请勿退出并稍后重试";
+        public const string NewRunSaveFailure = "新游戏保存失败，因此没有开始。请检查存储空间后重试。";
+        public const string ActiveRunSaveFailure = "保存失败。请不要退出游戏，并在稍后再次操作以重试保存。";
 
         private readonly RogueliteSaveGateway gateway;
         public bool LastSaveSucceeded { get; private set; } = true;
@@ -78,11 +78,11 @@ namespace OCC.Combat
         {
             switch (status)
             {
-                case RogueliteSaveLoadStatus.Missing: return "没有可继续的地图存档；未创建或覆盖任何数据";
-                case RogueliteSaveLoadStatus.CorruptData: return "地图存档文本损坏；主槽与首份备份已保护，明确删槽前不可覆盖";
-                case RogueliteSaveLoadStatus.InvalidSemantics: return "地图存档状态不合法；主槽与首份备份已保护，明确删槽前不可覆盖";
-                case RogueliteSaveLoadStatus.StoreError: return "存档存储暂时不可用；未把故障当作无存档，也未启动新推进";
-                default: return "地图存档无法读取；未启动新推进";
+                case RogueliteSaveLoadStatus.Missing: return "没有可以继续的存档。请开始新游戏。";
+                case RogueliteSaveLoadStatus.CorruptData: return "这份记录已经损坏，无法继续。旧记录已经另外留存；请删除后开始新游戏。";
+                case RogueliteSaveLoadStatus.InvalidSemantics: return "这份记录无法继续使用。旧记录已经另外留存；请删除后开始新游戏。";
+                case RogueliteSaveLoadStatus.StoreError: return "暂时无法读取记录。它没有被改动，请稍后重试。";
+                default: return "这份记录暂时读不开。请稍后重试，或删除后开始新游戏。";
             }
         }
     }

@@ -35,17 +35,17 @@ namespace OCC.Combat.Presentation
                         visualEvent.Subject + " " + (visualEvent.Delta > 0 ? "+" : string.Empty) + visualEvent.Delta));
                     break;
                 case UiVisualEventKind.SafeRevisit:
-                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Information, "安全回访：不会重复触发战斗或节点收益"));
+                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Information, "这里已经处理妥当。再来看看不会再次战斗，也没有新的奖励。"));
                     break;
                 case UiVisualEventKind.CombatCommandRejected:
                     ShowFeedback(new UiActionFeedback(UiFeedbackKind.Rejected,
-                        string.IsNullOrWhiteSpace(visualEvent.Message) ? "当前指令不可执行" : visualEvent.Message));
+                        string.IsNullOrWhiteSpace(visualEvent.Message) ? "现在不能执行这个行动。请选择其他行动或目标。" : visualEvent.Message));
                     break;
                 case UiVisualEventKind.CombatCommandSubmitted:
-                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Information, "指令已提交：" + visualEvent.Subject));
+                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Information, visualEvent.Subject + "完成"));
                     break;
                 case UiVisualEventKind.RewardClaimed:
-                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Success, "奖励已领取并写入当前推进"));
+                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Success, "已经收好。道具放进了行囊，术式收进了术式册。"));
                     break;
             }
         }
@@ -58,7 +58,7 @@ namespace OCC.Combat.Presentation
                 string desiredLayout = CurrentToastLayout();
                 if (desiredLayout != toastLayoutId)
                 {
-                    DOTween.Kill(toastRoot);
+                    KillToastTweens(toastRoot);
                     Destroy(toastRoot);
                     toastRoot = null;
                     toastLayoutId = null;
@@ -101,7 +101,7 @@ namespace OCC.Combat.Presentation
             EnsureCanvas();
             if (toastRoot != null)
             {
-                DOTween.Kill(toastRoot);
+                KillToastTweens(toastRoot);
                 Destroy(toastRoot);
             }
             Color accent = feedback.Kind == UiFeedbackKind.Rejected ? FormalUiTheme.Danger :
@@ -120,10 +120,14 @@ namespace OCC.Combat.Presentation
             float iconX = -toastRoot.GetComponent<RectTransform>().sizeDelta.x * .5f + 36f;
             FormalUiEffects.SpawnLocalFeedback(toastRoot.transform, feedbackId, motion.Intensity, new Vector2(iconX, 0f));
             CanvasGroup group = toastRoot.AddComponent<CanvasGroup>();
+            group.interactable = false;
+            group.blocksRaycasts = false;
+            foreach (Graphic graphic in toastRoot.GetComponentsInChildren<Graphic>(true)) graphic.raycastTarget = false;
+            float holdDuration = FeedbackHoldDuration(feedback.Message);
             if (motion.IsImmediate)
             {
                 group.alpha = 1f;
-                DOVirtual.DelayedCall(1.35f, () =>
+                DOVirtual.DelayedCall(holdDuration, () =>
                 {
                     if (toastRoot != shownToast) return;
                     Destroy(shownToast);
@@ -139,7 +143,7 @@ namespace OCC.Combat.Presentation
             Sequence sequence = DOTween.Sequence().SetUpdate(true).SetTarget(shownToast);
             sequence.Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.QuickDuration));
             sequence.Join(DOTween.To(() => rect.anchoredPosition, value => rect.anchoredPosition = value, end, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
-            sequence.AppendInterval(1.35f);
+            sequence.AppendInterval(holdDuration);
             sequence.Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, motion.ToastDuration));
             sequence.OnComplete(() =>
             {
@@ -148,6 +152,20 @@ namespace OCC.Combat.Presentation
                 toastRoot = null;
                 toastLayoutId = null;
             });
+        }
+
+        private static float FeedbackHoldDuration(string message)
+        {
+            int visibleCharacters = string.IsNullOrWhiteSpace(message) ? 0 : message.Replace("\r", string.Empty).Replace("\n", string.Empty).Length;
+            return Mathf.Clamp(1.35f + Mathf.Max(0, visibleCharacters - 18) * .035f, 1.35f, 3.25f);
+        }
+
+        private static void KillToastTweens(GameObject root)
+        {
+            if (root == null) return;
+            DOTween.Kill(root);
+            foreach (Graphic graphic in root.GetComponentsInChildren<Graphic>(true)) graphic.DOKill();
+            foreach (RectTransform rect in root.GetComponentsInChildren<RectTransform>(true)) rect.DOKill();
         }
 
         private string CurrentToastLayout()
@@ -219,10 +237,10 @@ namespace OCC.Combat.Presentation
         {
             switch (kind)
             {
-                case UiConfirmationKind.ReplaceExistingRun: return "存档覆盖确认";
-                case UiConfirmationKind.TacticalRestart: return "战术重开确认";
-                case UiConfirmationKind.LeaveCombat: return "离开战斗确认";
-                default: return "高影响操作确认";
+                case UiConfirmationKind.ReplaceExistingRun: return "旧旅程会被替换";
+                case UiConfirmationKind.TacticalRestart: return "这场战斗会从头开始";
+                case UiConfirmationKind.LeaveCombat: return "这场战斗不会留下收获";
+                default: return "再确认一次";
             }
         }
 
@@ -258,7 +276,7 @@ namespace OCC.Combat.Presentation
         {
             if (bootstrap != null) bootstrap.UiVisualEvents.Published -= OnVisualEvent;
             CloseModal();
-            if (toastRoot != null) DOTween.Kill(toastRoot);
+            if (toastRoot != null) KillToastTweens(toastRoot);
         }
     }
 }

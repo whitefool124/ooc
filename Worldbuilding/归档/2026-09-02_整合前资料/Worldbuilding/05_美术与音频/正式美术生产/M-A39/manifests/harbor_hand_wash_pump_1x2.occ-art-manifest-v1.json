@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "m_a39_harbor_hand_wash_pump_1x2",
+  "role": "multi_cell_prop_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent M-A39 production source; non-Unity",
+    "source_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/raw/harbor_hand_wash_pump_1x2/source.png",
+    "source_sha256": "5d8e4025375a7d5c69e92013313f415d54b14ccea9b3c4023a6a646b3ff45da7"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/normalized/harbor_hand_wash_pump_1x2.png",
+    "output_sha256": "33235382d86fc1beebf5ba25912b9bf360a27e69c3463bade2177a3888ba6018",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      2
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "future academy-harbor tactical map; one-by-two manual wash pump and shallow drain basin",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_hand_wash_pump_1x2/1x.png",
+    "four_x": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_hand_wash_pump_1x2/4x.png",
+    "grayscale": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_hand_wash_pump_1x2/grayscale.png",
+    "checker": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/harbor_hand_wash_pump_1x2/checker.png",
+    "application_contact": "Worldbuilding/05_美术与音频/正式美术生产/M-A39/QA/contacts/m_a39_production_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Production source; product approved the M-A32 family direction, but this individual output still requires review and must not enter Unity."
+  },
+  "unity_import": null
+}

@@ -96,6 +96,52 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void EveryFormalEncounterPackage_BindsAndBuildsWithValidUniqueUnitSpawns()
+        {
+            foreach (RogueliteEncounterDefinition encounter in RogueliteEncounterCatalog.Packages)
+            {
+                FirstRegionLevelDefinition source = FirstRegionLevelCatalog.For(encounter.LevelId);
+                FirstRegionLevelDefinition bound = CombatSceneSessionBuilder.BindEncounterToLevel(source, encounter);
+                FirstRegionLevelBuild build = null;
+                Assert.DoesNotThrow(() => build = FirstRegionLevelBuilder.Build(bound, "core_overseer"), encounter.VariantKey);
+                Assert.That(build.State.Units.Values.All(unit => build.State.Map.IsInside(unit.Position)), Is.True, encounter.VariantKey);
+                Assert.That(build.State.Units.Values.All(unit => !build.State.Map.IsBlocked(unit.Position)), Is.True, encounter.VariantKey);
+                Assert.That(build.State.Units.Values.Select(unit => unit.Position).Distinct().Count(),
+                    Is.EqualTo(build.State.Units.Count), encounter.VariantKey);
+            }
+        }
+
+        [Test]
+        public void WeakW2Layout_DoesNotInheritGatehouseDaisBlockersAcrossLayoutBoundary()
+        {
+            RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.Package("weak_arbalist_calibration");
+            FirstRegionLevelDefinition source = FirstRegionLevelCatalog.For(encounter.LevelId);
+            Assert.That(source.BlockedPositions, Does.Contain(new GridPosition(4, 7)));
+
+            FirstRegionLevelDefinition bound = CombatSceneSessionBuilder.BindEncounterToLevel(source, encounter);
+            FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(bound);
+
+            Assert.That(bound.Width, Is.EqualTo(encounter.Layout.Width));
+            Assert.That(bound.Height, Is.EqualTo(encounter.Layout.Height));
+            Assert.That(bound.BlockedPositions, Is.EquivalentTo(encounter.Layout.BlockedPositions));
+            Assert.That(bound.HeroSpawn, Is.EqualTo(new GridPosition(4, 7)));
+            Assert.That(build.State.Map.IsBlocked(bound.HeroSpawn), Is.False);
+        }
+
+        [Test]
+        public void EncounterWithoutLayout_PreservesBaseMapDimensionsAndPermanentBlockers()
+        {
+            RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.Package("strong_gatehouse_a");
+            FirstRegionLevelDefinition source = FirstRegionLevelCatalog.For(encounter.LevelId);
+            FirstRegionLevelDefinition bound = CombatSceneSessionBuilder.BindEncounterToLevel(source, encounter);
+
+            Assert.That(encounter.Layout, Is.Null);
+            Assert.That(bound.Width, Is.EqualTo(source.Width));
+            Assert.That(bound.Height, Is.EqualTo(source.Height));
+            Assert.That(bound.BlockedPositions, Is.EquivalentTo(source.BlockedPositions));
+        }
+
+        [Test]
         public void NonLevelIdMapNode_UsesAssignedLevelAndBuildsWithoutMarkerFallback()
         {
             RogueliteMapRun run = new RogueliteMapRun(913);
@@ -125,10 +171,10 @@ namespace OCC.Combat.Tests
             RogueliteMapNode strongNode = RogueliteMapCatalog.Nodes.First(node => run.TryGetEncounter(node.Id, out RogueliteEncounterDefinition value) && value.Tier == RogueliteEncounterTier.Strong);
             RogueNodePreviewPresentation weak = new RogueNodePreviewPresentation(run, weakNode);
             RogueNodePreviewPresentation strong = new RogueNodePreviewPresentation(run, strongNode);
-            Assert.That(weak.EncounterLabel, Is.EqualTo("弱遭遇"));
-            Assert.That(strong.EncounterLabel, Is.EqualTo("强遭遇"));
+            Assert.That(weak.EncounterLabel, Is.EqualTo("轻松"));
+            Assert.That(strong.EncounterLabel, Is.EqualTo("棘手"));
             Assert.That(weak.EnemySummary, Is.Not.Empty); Assert.That(strong.SpatialRisk, Is.Not.Empty);
-            Assert.That(strong.RewardLabel, Does.Contain("高于弱池"));
+            Assert.That(strong.RewardLabel, Does.Contain("更好的奖励"));
             Assert.That(strong.RewardLabel, Is.Not.EqualTo(weak.RewardLabel));
         }
     }
