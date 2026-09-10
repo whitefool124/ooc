@@ -24,7 +24,7 @@ namespace OCC.Combat.Tests
         public void TrainingRange_AllArtifactsPreviewAndExecuteDeterministically()
         {
             ArtifactTrainingRangeProvider provider = new ArtifactTrainingRangeProvider();
-            Assert.That(provider.Abilities.Count, Is.EqualTo(20));
+            Assert.That(provider.Abilities.Count, Is.EqualTo(ArtifactCatalog.All.Count(value => ArtifactCatalog.IsCurrentlyUsable(value.Id))));
             foreach (TrainingRangeAbilityEntry ability in provider.Abilities)
             {
                 ITrainingRangeCase first = provider.Prepare(ability.Id), second = provider.Prepare(ability.Id);
@@ -74,8 +74,8 @@ namespace OCC.Combat.Tests
         {
             GridMap map = new GridMap(5, 3);
             map.SetTile(new GridPosition(2, 1), new TileState { Cover = CoverType.Heavy, Durability = 20 });
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 1), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 1));
             CombatState combat = new CombatState(map, new[] { hero, enemy });
             CombatResolver.BeginTurn(combat, hero.Id);
 
@@ -104,7 +104,7 @@ namespace OCC.Combat.Tests
         {
             ArtifactTrainingRangeCase trap = (ArtifactTrainingRangeCase)new ArtifactTrainingRangeProvider().Prepare("G-T10");
             trap.Execute(); UnitState enemy = trap.Combat.GetUnit("range_normal");
-            CombatEffectExecutor.Execute(trap.Combat, enemy.Id, CombatEffect.Move(trap.RecommendedCell, enemy.Facing));
+            CombatEffectExecutor.Execute(trap.Combat, enemy.Id, CombatEffect.Move(trap.RecommendedCell));
             Assert.That(trap.Battle.ResolveEnemyEntered("hero", enemy.Id).Steps, Is.Not.Empty);
             Assert.That(trap.Battle.ResolveEnemyEntered("hero", enemy.Id).Steps, Is.Empty);
         }

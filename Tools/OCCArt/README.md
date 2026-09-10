@@ -1,8 +1,8 @@
 # OCC Art Contract Tools
 
-`OCC_美术规范_v0.1.md` is the only normative art source. The JSON contract in
-this folder is its machine-readable mirror; it must never introduce a second
-art direction.
+`Worldbuilding/策划案/OCC_项目总策划案_v1.0.md` is the only active art-direction
+source. `Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv` is its structured
+companion, and the JSON contract in this folder is only a machine-readable mirror.
 
 Every new asset must copy `occ_art_manifest_template_v1.json`, choose one role,
 record repository-relative source/output/evidence paths and hashes, then run:

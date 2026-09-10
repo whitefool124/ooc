@@ -1,0 +1,58 @@
+[
+  {
+    "resolution": [
+      960,
+      540
+    ],
+    "mode": "overview",
+    "changed_pixels": 1075,
+    "difference_bbox": [
+      282,
+      240,
+      343,
+      273
+    ]
+  },
+  {
+    "resolution": [
+      960,
+      540
+    ],
+    "mode": "zoom",
+    "changed_pixels": 4300,
+    "difference_bbox": [
+      284,
+      120,
+      406,
+      186
+    ]
+  },
+  {
+    "resolution": [
+      1920,
+      1080
+    ],
+    "mode": "overview",
+    "changed_pixels": 4300,
+    "difference_bbox": [
+      564,
+      480,
+      686,
+      546
+    ]
+  },
+  {
+    "resolution": [
+      1920,
+      1080
+    ],
+    "mode": "zoom",
+    "changed_pixels": 17200,
+    "difference_bbox": [
+      568,
+      240,
+      812,
+      372
+    ]
+  }
+]

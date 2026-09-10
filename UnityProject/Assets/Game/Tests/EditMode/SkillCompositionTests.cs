@@ -61,9 +61,9 @@ namespace OCC.Combat.Tests
         public void AreaDelivery_ResolvesTargetsByStableUnitIdOrder()
         {
             GridMap map = new GridMap(6, 3);
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1), Facing.East);
-            UnitState enemyB = new UnitState("enemy_b", false, new GridPosition(2, 1), Facing.West);
-            UnitState enemyA = new UnitState("enemy_a", false, new GridPosition(3, 1), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState enemyB = new UnitState("enemy_b", false, new GridPosition(2, 1));
+            UnitState enemyA = new UnitState("enemy_a", false, new GridPosition(3, 1));
             CombatState state = new CombatState(map, new[] { hero, enemyB, enemyA });
             hero.Equip(hero.MainHand, hero.OffHand, RogueliteSkillCatalog.Get("hammer_pulse"), CombatCatalog.FireBolt);
             CombatResolver.BeginTurn(state, hero.Id);
@@ -79,7 +79,7 @@ namespace OCC.Combat.Tests
         {
             foreach (RogueliteSkillBuild build in RogueliteSkillCatalog.Builds)
             {
-                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
                 build.Apply(hero);
                 Assert.That(hero.SkillOne.Id, Is.EqualTo(build.PrimarySkillId), build.Id);
                 Assert.That(hero.SkillTwo.Id, Is.EqualTo(build.SecondarySkillId), build.Id);
@@ -93,9 +93,10 @@ namespace OCC.Combat.Tests
         {
             foreach (RogueliteSkillBuild build in RogueliteSkillCatalog.Builds)
             {
-                UnitState hero = new UnitState("hero", true, new GridPosition(0, 1), Facing.East);
-                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 1), Facing.East);
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
+                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 1));
                 CombatState state = new CombatState(new GridMap(4, 3), new[] { hero, enemy }, new CombatObjective[] { new EliminationObjective() });
+                state.ConfigureRuleset(CombatRuleset.Roguelite);
                 build.Apply(hero);
                 CombatResolver.BeginTurn(state, hero.Id);
 
@@ -145,8 +146,8 @@ namespace OCC.Combat.Tests
         {
             if (skill.TargetRule == SkillTargetRule.Self) return CombatCommand.UseSkill("hero", 0, null);
             if (skill.TargetRule == SkillTargetRule.AllyUnit) return CombatCommand.UseSkill("hero", 0, "ally");
-            if (skill.TargetRule == SkillTargetRule.GridCell) return CombatCommand.UseSkillAt("hero", 0, new GridPosition(0, 3), Facing.North);
-            if (skill.TargetRule == SkillTargetRule.Destructible) return CombatCommand.UseSkillAt("hero", 0, new GridPosition(1, 0), Facing.South);
+            if (skill.TargetRule == SkillTargetRule.GridCell) return CombatCommand.UseSkillAt("hero", 0, new GridPosition(0, 3), CardinalDirection.North);
+            if (skill.TargetRule == SkillTargetRule.Destructible) return CombatCommand.UseSkillAt("hero", 0, new GridPosition(1, 0), CardinalDirection.South);
             return CombatCommand.UseSkill("hero", 0, "enemy");
         }
 
@@ -156,10 +157,10 @@ namespace OCC.Combat.Tests
             map.SetTile(new GridPosition(1, 0), new TileState { Cover = CoverType.Light, Durability = 6 });
             return new CombatState(map, new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 1), Facing.East),
-                new UnitState("ally", true, new GridPosition(0, 2), Facing.East),
-                new UnitState("enemy", false, new GridPosition(1, 1), Facing.West),
-                new UnitState("enemy_area", false, new GridPosition(2, 1), Facing.West)
+                new UnitState("hero", true, new GridPosition(0, 1)),
+                new UnitState("ally", true, new GridPosition(0, 2)),
+                new UnitState("enemy", false, new GridPosition(1, 1)),
+                new UnitState("enemy_area", false, new GridPosition(2, 1))
             }, new CombatObjective[] { new EliminationObjective() });
         }
 

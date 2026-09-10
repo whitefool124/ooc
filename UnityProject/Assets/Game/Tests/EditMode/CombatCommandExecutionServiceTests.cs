@@ -10,7 +10,7 @@ namespace OCC.Combat.Tests
             CombatState state = State(out UnitState hero, out _);
             CombatResolver.BeginTurn(state, hero.Id);
             CombatCommandExecutionResult result = new CombatCommandExecutionService().Execute(state, null,
-                CombatCommand.Move(hero.Id, new GridPosition(1, 0), Facing.East));
+                CombatCommand.Move(hero.Id, new GridPosition(1, 0)));
 
             Assert.That(result.Accepted, Is.True);
             Assert.That(result.Execution, Is.Not.Null);
@@ -68,8 +68,8 @@ namespace OCC.Combat.Tests
 
         private static CombatState State(out UnitState hero, out UnitState enemy)
         {
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             return new CombatState(new GridMap(4, 2), new[] { hero, enemy });
         }
     }

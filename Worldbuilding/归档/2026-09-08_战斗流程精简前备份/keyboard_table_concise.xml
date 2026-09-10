@@ -1,0 +1,18 @@
+<table>
+  <thead><tr><th>按键</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td>Tab</td><td>切换焦点</td></tr>
+    <tr><td>数字键 1–8</td><td>主界面：选择术式</td></tr>
+    <tr><td>B</td><td>开关战斗背包；打开消耗 1 行动点</td></tr>
+    <tr><td>T</td><td>开关键盘选格</td></tr>
+    <tr><td>WASD／方向键</td><td>移动目标光标</td></tr>
+    <tr><td>Enter／空格</td><td>确认目标</td></tr>
+    <tr><td>Ctrl＋Enter</td><td>主角回合：结束回合</td></tr>
+    <tr><td>Home</td><td>镜头移回主角</td></tr>
+    <tr><td>Esc</td><td>取消操作或关闭顶层界面</td></tr>
+    <tr><td>R</td><td>背包：旋转物品</td></tr>
+    <tr><td>F</td><td>搜索容器或拿取物品</td></tr>
+    <tr><td>Ctrl＋F</td><td>背包：定位搜索框</td></tr>
+    <tr><td>数字键 1–4</td><td>背包：放入对应战术栏</td></tr>
+  </tbody>
+</table>

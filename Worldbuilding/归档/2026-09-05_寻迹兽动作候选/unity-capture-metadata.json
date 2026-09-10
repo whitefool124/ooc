@@ -1,0 +1,58 @@
+[
+  {
+    "name": "standing_overview_960",
+    "pose": "standing",
+    "width": 960,
+    "zoom": false,
+    "meta": "occluded=3|hiddenContourPixels=53|960|540|128|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "standing_zoom_1920",
+    "pose": "standing",
+    "width": 1920,
+    "zoom": true,
+    "meta": "occluded=3|hiddenContourPixels=53|1920|1080|256|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "sniff_overview_960",
+    "pose": "sniff",
+    "width": 960,
+    "zoom": false,
+    "meta": "occluded=3|hiddenContourPixels=56|960|540|128|tether_hound_compact_sniff_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "sniff_zoom_1920",
+    "pose": "sniff",
+    "width": 1920,
+    "zoom": true,
+    "meta": "occluded=3|hiddenContourPixels=56|1920|1080|256|tether_hound_compact_sniff_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "crouch_overview_960",
+    "pose": "crouch",
+    "width": 960,
+    "zoom": false,
+    "meta": "occluded=3|hiddenContourPixels=42|960|540|128|tether_hound_compact_crouch_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "crouch_zoom_1920",
+    "pose": "crouch",
+    "width": 1920,
+    "zoom": true,
+    "meta": "occluded=3|hiddenContourPixels=42|1920|1080|256|tether_hound_compact_crouch_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "contact_overview_960",
+    "pose": "contact",
+    "width": 960,
+    "zoom": false,
+    "meta": "occluded=3|hiddenContourPixels=53|960|540|128|tether_hound_compact_contact_v1_QA_PENDING|64x64|Point|Clamp"
+  },
+  {
+    "name": "contact_zoom_1920",
+    "pose": "contact",
+    "width": 1920,
+    "zoom": true,
+    "meta": "occluded=3|hiddenContourPixels=53|1920|1080|256|tether_hound_compact_contact_v1_QA_PENDING|64x64|Point|Clamp"
+  }
+]

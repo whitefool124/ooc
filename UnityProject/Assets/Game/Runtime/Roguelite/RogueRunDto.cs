@@ -64,7 +64,7 @@ namespace OCC.Combat.Roguelite
         public List<string> MasteredSpellIds { get; } = new List<string>();
         public string[] EquippedSpellIds { get; } = new string[RogueRuntimeConstants.SpellSlotCount];
         public List<EquipmentInstanceDto> EquipmentInstances { get; } = new List<EquipmentInstanceDto>();
-        public Dictionary<EquipmentSlot, string> EquipmentSlotInstanceIds { get; } = Enum.GetValues(typeof(EquipmentSlot)).Cast<EquipmentSlot>().ToDictionary(value => value, value => string.Empty);
+        public Dictionary<EquipmentSlot, string> EquipmentSlotInstanceIds { get; } = EquipmentSlotRules.ActiveSlots.ToDictionary(value => value, value => string.Empty);
         public List<TacticalItemInstanceDto> TacticalItemInstances { get; } = new List<TacticalItemInstanceDto>();
         public string[] ItemQuickbarInstanceIds { get; } = new string[RogueRuntimeConstants.ItemQuickbarSize];
         public int DeterministicCounter { get; set; }
@@ -73,6 +73,8 @@ namespace OCC.Combat.Roguelite
         public string MigrationReportId { get; set; } = string.Empty;
         public List<string> EncounterAssignments { get; } = new List<string>();
         public List<string> NodeContentAssignments { get; } = new List<string>();
+        public string RunProgramId { get; set; } = string.Empty;
+        public OCC.Combat.FirstRunExperienceState FirstRunExperience { get; set; }
 
         public static RogueRunDto CreateNew(string runId, int seed)
         {
@@ -91,10 +93,11 @@ namespace OCC.Combat.Roguelite
         public static string Serialize(RogueRunDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
+            OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
             ValidateShape(dto);
             string spells = JoinStrings(dto.MasteredSpellIds);
             string equipped = JoinStrings(dto.EquippedSpellIds);
-            string slots = string.Join(";", Enum.GetValues(typeof(EquipmentSlot)).Cast<EquipmentSlot>().Select(slot => slot + "," + B(dto.EquipmentSlotInstanceIds[slot])));
+            string slots = string.Join(";", EquipmentSlotRules.ActiveSlots.Select(slot => slot + "," + B(dto.EquipmentSlotInstanceIds[slot])));
             string equipment = string.Join(";", dto.EquipmentInstances.OrderBy(value => value.AcquiredOrder).ThenBy(value => value.InstanceId, StringComparer.Ordinal).Select(value =>
                 string.Join(",", B(value.InstanceId), B(value.DefinitionId), value.EquippedSlot, value.Rarity, value.PowerBand,
                     value.ReforgeCount, value.ResolvedWeight, value.ResolvedAetherLoad, B(value.SourceStage), B(value.SourceType), value.AcquiredOrder,
@@ -102,19 +105,21 @@ namespace OCC.Combat.Roguelite
             string tactical = string.Join(";", dto.TacticalItemInstances.OrderBy(value => value.InstanceId, StringComparer.Ordinal).Select(value =>
                 string.Join(",", B(value.InstanceId), B(value.DefinitionId), value.X, value.Y, value.Rotated ? 1 : 0,
                     value.ChargesCurrent, value.ChargesMaximum, B(value.SourceStage), B(value.SourceType))));
-            return string.Join("|", RogueRuntimeConstants.SaveVersion, B(dto.RunId), dto.Seed, B(dto.StageId), dto.StageTime,
+            string legacyFields = string.Join("|", RogueRuntimeConstants.SaveVersion, B(dto.RunId), dto.Seed, B(dto.StageId), dto.StageTime,
                 dto.Gold, dto.StageContribution, dto.CurrentHealth, dto.CurrentMana, B(spells), B(equipped), B(slots), B(equipment),
                 B(tactical), B(JoinStrings(dto.ItemQuickbarInstanceIds)), dto.DeterministicCounter, B(JoinStrings(dto.PendingRewardIds)),
                 B(JoinStrings(dto.ReselectionClaimIds)), B(dto.MigrationReportId), B(dto.CurrentNodeId), B(dto.RegionBossId), B(dto.StarterId),
                 B(JoinStrings(dto.VisitedNodeIds)), B(JoinStrings(dto.CompletedNodeIds)), B(JoinStrings(dto.ClaimedContentIds)),
                 dto.AwaitingReward ? 1 : 0, B(dto.PendingContentChoiceId), B(dto.PendingContentCombatMissionId),
                 B(JoinStrings(dto.EncounterAssignments)), B(JoinStrings(dto.NodeContentAssignments)));
+            if (string.IsNullOrEmpty(dto.RunProgramId) && dto.FirstRunExperience == null) return legacyFields;
+            return legacyFields + "|" + B(dto.RunProgramId) + "|" + B(OCC.Combat.FirstRunExperienceCodec.Serialize(dto.FirstRunExperience));
         }
 
         public static RogueRunDto Deserialize(string data)
         {
             string[] fields = (data ?? string.Empty).Split('|');
-            if ((fields.Length != 28 && fields.Length != 29 && fields.Length != 30) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
+            if ((fields.Length != 28 && fields.Length != 29 && fields.Length != 30 && fields.Length != 32) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
             RogueRunDto dto = new RogueRunDto
             {
                 RunId = U(fields[1]), Seed = I(fields[2]), StageId = U(fields[3]), StageTime = I(fields[4]), Gold = I(fields[5]),
@@ -134,7 +139,13 @@ namespace OCC.Combat.Roguelite
             dto.CompletedNodeIds.AddRange(SplitStrings(U(fields[23])));
             dto.ClaimedContentIds.AddRange(SplitStrings(U(fields[24])));
             if (fields.Length >= 29) dto.EncounterAssignments.AddRange(SplitStrings(U(fields[28])));
-            if (fields.Length == 30) dto.NodeContentAssignments.AddRange(SplitStrings(U(fields[29])));
+            if (fields.Length >= 30) dto.NodeContentAssignments.AddRange(SplitStrings(U(fields[29])));
+            if (fields.Length == 32)
+            {
+                dto.RunProgramId = U(fields[30]);
+                dto.FirstRunExperience = OCC.Combat.FirstRunExperienceCodec.Deserialize(U(fields[31]));
+            }
+            OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
             ValidateShape(dto);
             return dto;
         }
@@ -142,13 +153,17 @@ namespace OCC.Combat.Roguelite
         private static void ParseSlots(string raw, RogueRunDto dto)
         {
             string[] rows = Rows(raw);
-            if (rows.Length != dto.EquipmentSlotInstanceIds.Count) throw new InvalidOperationException("rogue11 equipment slot set is incomplete.");
+            if (rows.Length != 9 && rows.Length != 11) throw new InvalidOperationException("rogue11 equipment slot set is incomplete.");
             foreach (string row in rows)
             {
                 string[] fields = row.Split(',');
                 EquipmentSlot slot;
                 if (fields.Length != 2 || !Enum.TryParse(fields[0], out slot)) throw new InvalidOperationException("Invalid equipment slot row.");
-                dto.EquipmentSlotInstanceIds[slot] = U(fields[1]);
+                EquipmentSlot normalized = EquipmentSlotRules.NormalizeLegacy(slot);
+                string instanceId = U(fields[1]);
+                if (normalized == EquipmentSlot.None || string.IsNullOrEmpty(instanceId)) continue;
+                if (dto.EquipmentSlotInstanceIds.ContainsKey(normalized) && string.IsNullOrEmpty(dto.EquipmentSlotInstanceIds[normalized]))
+                    dto.EquipmentSlotInstanceIds[normalized] = instanceId;
             }
         }
 
@@ -159,7 +174,7 @@ namespace OCC.Combat.Roguelite
                 string[] f = row.Split(',');
                 EquipmentSlot slot; EquipmentRarity rarity;
                 if (f.Length != 16 || !Enum.TryParse(f[2], out slot) || !Enum.TryParse(f[3], out rarity)) throw new InvalidOperationException("Invalid equipment instance row.");
-                EquipmentInstanceDto value = new EquipmentInstanceDto(U(f[0]), U(f[1]), slot, rarity, I(f[4]))
+                EquipmentInstanceDto value = new EquipmentInstanceDto(U(f[0]), U(f[1]), EquipmentSlotRules.NormalizeLegacy(slot), rarity, I(f[4]))
                 { ReforgeCount = I(f[5]), ResolvedWeight = I(f[6]), ResolvedAetherLoad = I(f[7]), SourceStage = U(f[8]), SourceType = U(f[9]), AcquiredOrder = I(f[10]), BackpackX = I(f[13]), BackpackY = I(f[14]), BackpackRotated = I(f[15]) == 1 };
                 value.MutableAffixIds.AddRange(SplitTilde(U(f[11]))); value.UpgradeBranchIds.AddRange(SplitTilde(U(f[12]))); dto.EquipmentInstances.Add(value);
             }
@@ -179,8 +194,14 @@ namespace OCC.Combat.Roguelite
         {
             if (dto.SaveVersion != RogueRuntimeConstants.SaveVersion || string.IsNullOrWhiteSpace(dto.RunId)) throw new InvalidOperationException("Invalid rogue11 identity.");
             if (dto.EquippedSpellIds.Length != RogueRuntimeConstants.SpellSlotCount || dto.ItemQuickbarInstanceIds.Length != RogueRuntimeConstants.ItemQuickbarSize) throw new InvalidOperationException("Invalid rogue11 slot count.");
-            if (dto.EquipmentSlotInstanceIds.Count != Enum.GetValues(typeof(EquipmentSlot)).Length) throw new InvalidOperationException("Invalid rogue11 equipment slot set.");
-            if (dto.Gold < 0 || dto.StageContribution < 0 || dto.CurrentHealth <= 0 || dto.CurrentMana < 0) throw new InvalidOperationException("Invalid rogue11 resource state.");
+            if (dto.EquipmentSlotInstanceIds.Count != EquipmentSlotRules.ActiveSlots.Count || dto.EquipmentSlotInstanceIds.Keys.Any(value => !EquipmentSlotRules.IsActive(value)))
+                throw new InvalidOperationException("Invalid rogue11 equipment slot set.");
+            bool sealedDefeat = dto.FirstRunExperience != null && dto.FirstRunExperience.RunSealed &&
+                dto.FirstRunExperience.Outcome == OCC.Combat.FirstRunOutcome.EliteDefeat;
+            if (dto.Gold < 0 || dto.StageContribution < 0 || dto.CurrentHealth < 0 || (!sealedDefeat && dto.CurrentHealth == 0) || dto.CurrentMana < 0)
+                throw new InvalidOperationException("Invalid rogue11 resource state.");
+            if (dto.FirstRunExperience != null && !string.Equals(dto.RunProgramId, OCC.Combat.RogueliteRunProgram.FirstRunV1.ToString(), StringComparison.Ordinal))
+                throw new InvalidOperationException("First-run snapshot requires the first-run program id.");
         }
 
         private static string JoinStrings(IEnumerable<string> values) => string.Join(",", (values ?? Array.Empty<string>()).Select(B));

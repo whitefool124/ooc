@@ -17,7 +17,11 @@ namespace OCC.Combat
         Movement,
         DestructibleDamaged,
         DestructibleDestroyed,
-        UnitDefeated
+        UnitDefeated,
+        ShieldConsumed,
+        ShieldTransferredOut,
+        ShieldTransferredIn,
+        UtilityResolved
     }
 
     public readonly struct CombatFeedbackSemantic
@@ -48,24 +52,32 @@ namespace OCC.Combat
         public GridPosition Target { get; }
         public int Amount { get; }
         public int Duration { get; }
+        public string SourceUnitId { get; }
+        public string TargetUnitId { get; }
+        public string Message { get; }
 
         public CombatFeedbackEvent(CombatFeedbackKind kind, GridPosition target, int amount = 0, int duration = 0)
             : this(kind, target, target, amount, duration) { }
 
-        public CombatFeedbackEvent(CombatFeedbackKind kind, GridPosition source, GridPosition target, int amount = 0, int duration = 0)
+        public CombatFeedbackEvent(CombatFeedbackKind kind, GridPosition source, GridPosition target, int amount = 0, int duration = 0,
+            string sourceUnitId = null, string targetUnitId = null, string message = null)
         {
             Kind = kind;
             Source = source;
             Target = target;
             Amount = Math.Max(0, amount);
             Duration = Math.Max(0, duration);
+            SourceUnitId = sourceUnitId; TargetUnitId = targetUnitId; Message = message;
         }
 
         public string FloatingText
         {
             get
             {
+                if (!string.IsNullOrEmpty(Message)) return Message;
                 CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(Kind);
+                if (Kind == CombatFeedbackKind.ShieldConsumed || Kind == CombatFeedbackKind.ShieldTransferredOut) return semantic.ShortLabel + " -" + Amount;
+                if (Kind == CombatFeedbackKind.ShieldTransferredIn) return semantic.ShortLabel + " +" + Amount;
                 if (Kind == CombatFeedbackKind.Damage) return "-" + Amount + " " + semantic.ShortLabel;
                 if (Kind == CombatFeedbackKind.ShieldAbsorb) return semantic.ShortLabel + " -" + Amount;
                 if (Kind == CombatFeedbackKind.Healing || Kind == CombatFeedbackKind.ShieldRestore || Kind == CombatFeedbackKind.ManaRestore) return semantic.ShortLabel + " +" + Amount;
@@ -96,6 +108,10 @@ namespace OCC.Combat
                 case CombatFeedbackKind.DestructibleDamaged: return new CombatFeedbackSemantic(kind, "object_damaged", "物件受损", "物件耐久下降", "#E0A431", "interact");
                 case CombatFeedbackKind.DestructibleDestroyed: return new CombatFeedbackSemantic(kind, "object_destroyed", "物件摧毁", "物件已摧毁", "#FF7A2F", "attack");
                 case CombatFeedbackKind.UnitDefeated: return new CombatFeedbackSemantic(kind, "unit_defeated", "目标击破", "单位失去行动能力", "#FFD166", "attack");
+                case CombatFeedbackKind.ShieldConsumed: return new CombatFeedbackSemantic(kind, "shield_consumed", "消耗护盾", "护盾支付代价", "#92B7C0", "skill");
+                case CombatFeedbackKind.ShieldTransferredOut: return new CombatFeedbackSemantic(kind, "shield_transfer_out", "转出护盾", "护盾转给友军", "#82AAB8", "skill");
+                case CombatFeedbackKind.ShieldTransferredIn: return new CombatFeedbackSemantic(kind, "shield_transfer_in", "转入护盾", "收到友军护盾", "#92D1B9", "skill");
+                case CombatFeedbackKind.UtilityResolved: return new CombatFeedbackSemantic(kind, "utility_resolved", "效果生效", "辅助效果已结算", "#B4C9C1", "interact");
                 default: throw new ArgumentOutOfRangeException(nameof(kind), kind, "Unknown combat feedback kind.");
             }
         }

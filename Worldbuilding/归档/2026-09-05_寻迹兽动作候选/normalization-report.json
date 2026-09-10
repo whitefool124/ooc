@@ -1,0 +1,307 @@
+{
+  "scale": 0.052700922266139656,
+  "scale_policy": "same factor for all 1254px raw canvases; pose boxes are not independently fitted",
+  "canvas_anchor": [
+    32,
+    58
+  ],
+  "palette": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      3,
+      3,
+      3
+    ],
+    [
+      8,
+      5,
+      5
+    ],
+    [
+      19,
+      13,
+      12
+    ],
+    [
+      27,
+      18,
+      17
+    ],
+    [
+      29,
+      22,
+      22
+    ],
+    [
+      40,
+      22,
+      19
+    ],
+    [
+      44,
+      77,
+      77
+    ],
+    [
+      45,
+      25,
+      22
+    ],
+    [
+      48,
+      28,
+      25
+    ],
+    [
+      58,
+      30,
+      24
+    ],
+    [
+      66,
+      32,
+      24
+    ],
+    [
+      71,
+      41,
+      33
+    ],
+    [
+      72,
+      35,
+      27
+    ],
+    [
+      92,
+      44,
+      31
+    ],
+    [
+      100,
+      47,
+      33
+    ],
+    [
+      103,
+      49,
+      34
+    ],
+    [
+      104,
+      56,
+      41
+    ],
+    [
+      106,
+      50,
+      35
+    ],
+    [
+      126,
+      64,
+      42
+    ],
+    [
+      130,
+      73,
+      51
+    ],
+    [
+      141,
+      81,
+      56
+    ],
+    [
+      153,
+      120,
+      103
+    ],
+    [
+      189,
+      168,
+      135
+    ]
+  ],
+  "standing": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      12,
+      25,
+      52,
+      58
+    ],
+    "body_size": [
+      40,
+      33
+    ],
+    "center_x": 32.0,
+    "baseline_y": 58,
+    "opaque_pixels": 766,
+    "visible_colors": 23,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "width_in_logical_cells": 1.25
+  },
+  "poses": {
+    "sniff": {
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        14,
+        31,
+        51,
+        58
+      ],
+      "body_size": [
+        37,
+        27
+      ],
+      "center_x": 32.5,
+      "baseline_y": 58,
+      "opaque_pixels": 646,
+      "visible_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "width_in_logical_cells": 1.15625,
+      "source_bounds": [
+        270,
+        540,
+        969,
+        1044
+      ],
+      "resized_box": [
+        37,
+        27
+      ],
+      "offset": [
+        14,
+        31
+      ],
+      "opaque_area_ratio_to_standing": 0.8433420365535248
+    },
+    "crouch": {
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        12,
+        30,
+        51,
+        58
+      ],
+      "body_size": [
+        39,
+        28
+      ],
+      "center_x": 31.5,
+      "baseline_y": 58,
+      "opaque_pixels": 663,
+      "visible_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "width_in_logical_cells": 1.21875,
+      "source_bounds": [
+        251,
+        491,
+        995,
+        1029
+      ],
+      "resized_box": [
+        39,
+        28
+      ],
+      "offset": [
+        12,
+        30
+      ],
+      "opaque_area_ratio_to_standing": 0.8655352480417755
+    },
+    "contact": {
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        32,
+        55,
+        58
+      ],
+      "body_size": [
+        45,
+        26
+      ],
+      "center_x": 32.5,
+      "baseline_y": 58,
+      "opaque_pixels": 693,
+      "visible_colors": 24,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "width_in_logical_cells": 1.40625,
+      "source_bounds": [
+        209,
+        473,
+        1057,
+        964
+      ],
+      "resized_box": [
+        45,
+        26
+      ],
+      "offset": [
+        10,
+        32
+      ],
+      "opaque_area_ratio_to_standing": 0.9046997389033943
+    }
+  },
+  "sniff_preview": {
+    "order": [
+      "standing",
+      "sniff",
+      "standing"
+    ],
+    "durations_ms": [
+      420,
+      280,
+      420
+    ],
+    "scope": "pose timing review only, not final smooth animation or combat hit timing"
+  },
+  "bite_preview": {
+    "order": [
+      "standing",
+      "crouch",
+      "contact",
+      "crouch",
+      "standing"
+    ],
+    "durations_ms": [
+      300,
+      120,
+      100,
+      140,
+      300
+    ],
+    "scope": "pose timing review only, not final smooth animation or combat hit timing"
+  }
+}

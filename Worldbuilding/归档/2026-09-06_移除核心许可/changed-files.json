@@ -1,0 +1,23 @@
+[
+  "Artifacts/OpeningTenMinutes/OCC_开局十分钟体验工作稿_v0.1.md",
+  "Tools/RogueliteDecisionConsole/app/decision-data.ts",
+  "UnityProject/Assets/Game/Runtime/Campaign/AcademyNodeContentCatalog.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/FirstRunExperience.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/RogueliteEncounterCatalog.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapInteractionService.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRun.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRunValidator.cs",
+  "UnityProject/Assets/Game/Runtime/Campaign/UiPresentationModels.cs",
+  "UnityProject/Assets/Game/Runtime/Combat/FormalArtRegistry.cs",
+  "UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs",
+  "UnityProject/Assets/Game/Runtime/Presentation/FormalRogueliteUi.cs",
+  "UnityProject/Assets/Game/Runtime/Roguelite/RoguePresentationModels.cs",
+  "UnityProject/Assets/Game/Tests/EditMode/AcademyMapTuningTests.cs",
+  "UnityProject/Assets/Game/Tests/EditMode/AcademyNodeContentPlayableTests.cs",
+  "UnityProject/Assets/Game/Tests/EditMode/FireRogueliteExperienceTests.cs",
+  "UnityProject/Assets/Game/Tests/EditMode/RogueliteCompletionLineTests.cs",
+  "UnityProject/Assets/Game/Tests/EditMode/RogueliteDeveloperRunTests.cs",
+  "Worldbuilding/数据表/OCC_学院节点内容数据表_v1.0.csv",
+  "Worldbuilding/数据表/OCC_核心规则数值表_v1.0.csv",
+  "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md"
+]

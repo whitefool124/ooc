@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "first_b1_rain_court_water_tile_v2",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independently generated shallow-rainwater-on-one-academy-slab raw material, followed by target-size palette normalization only",
+    "source_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/raw/rain_court_water_source_v2.png",
+    "source_sha256": "78de50fab65e0fe9b5272c252eb40c6d22097bd0f491a7b956c9d1b92f6b034e"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/processed/rain_court_water_tile_v2_32.png",
+    "output_sha256": "a435a2d235d6f131cde3edfb49ef45ea99cb479e534a48d9137b92a4f8e16346",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one complete 32x32 orthographic battlefield floor cell; C7-G7 form a five-cell shallow-water channel over academy courtyard stone",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/evidence/rain_court_water_v2_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/evidence/rain_court_water_v2_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/evidence/rain_court_water_v2_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/evidence/rain_court_water_v2_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v2/evidence/rain_court_water_v2_application_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Machine-ready replacement candidate only. Agent target-size review confirms the prior framed-panel reading is removed: the stone remains visible below a broad borderless puddle with restrained broken reflections. Product approval is still required."
+  },
+  "unity_import": null
+}

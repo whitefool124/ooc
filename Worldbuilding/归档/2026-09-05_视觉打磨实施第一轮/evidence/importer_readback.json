@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"rain_court_water; GUID=1adf78f541ccd9c4685f219d5e6e5058; type=Sprite; filter=Point; wrap=Clamp; PPU=32; compression=Uncompressed; mipmaps=False\\nlamp_vine; GUID=161cf1ac42503eb43abf6432c2e0905c; type=Sprite; filter=Point; wrap=Clamp; PPU=32; compression=Uncompressed; mipmaps=False\\nplaying=False; dirty=False\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

@@ -17,10 +17,14 @@ namespace OCC.Combat
         public string StatusResults { get; }
         public int AffectedCellCount { get; }
         public bool FriendlyFireRisk { get; }
+        public string ActionValueTargetId { get; }
+        public int ActionValueDelay { get; }
+        public bool HasActionValuePreview => ActionValueDelay > 0 && !string.IsNullOrEmpty(ActionValueTargetId);
         public bool CanSubmit => string.IsNullOrEmpty(FailureReason);
 
         public CombatActionPreview(string action, string targetRule, string cost, string expectedResult, int validCellCount, string failureReason,
-            string targetBefore = "", string targetAfter = "", string damageBreakdown = "", string statusResults = "", int affectedCellCount = 0, bool friendlyFireRisk = false)
+            string targetBefore = "", string targetAfter = "", string damageBreakdown = "", string statusResults = "", int affectedCellCount = 0, bool friendlyFireRisk = false,
+            string actionValueTargetId = "", int actionValueDelay = 0)
         {
             Action = action ?? string.Empty;
             TargetRule = targetRule ?? string.Empty;
@@ -34,6 +38,8 @@ namespace OCC.Combat
             StatusResults = statusResults ?? string.Empty;
             AffectedCellCount = Math.Max(0, affectedCellCount);
             FriendlyFireRisk = friendlyFireRisk;
+            ActionValueTargetId = actionValueTargetId ?? string.Empty;
+            ActionValueDelay = Math.Max(0, actionValueDelay);
         }
     }
 
@@ -56,20 +62,22 @@ namespace OCC.Combat
 
     public sealed class BattlefieldPresentationAdapter
     {
+        private readonly CombatMovementRangeCache movementRange = new CombatMovementRangeCache();
         public const float CellSize = 128f;
+        public const float OverviewCellSize = 64f;
         public const float MinimumCellSize = 64f;
-        public const float MaximumCellSize = 160f;
-        public const float CellSizeStep = 32f;
+        public const float MaximumCellSize = 128f;
+        public const float CellSizeStep = 64f;
         public const float BattlefieldWidth = 1440f;
-        public const float BattlefieldHeight = 900f;
-        public const float BoardTop = 24f;
+        public const float BattlefieldHeight = 848f;
+        public const float BoardTop = 80f;
         public const int DefaultWidth = 12;
         public const int DefaultHeight = 9;
 
-        public BattlefieldRect ViewportRect => new BattlefieldRect(0f, BoardTop, BattlefieldWidth, BattlefieldHeight - BoardTop);
+        public BattlefieldRect ViewportRect => new BattlefieldRect(16f, BoardTop, BattlefieldWidth - 32f, BattlefieldHeight - BoardTop);
 
         public BattlefieldViewport CreateViewport(int width = DefaultWidth, int height = DefaultHeight)
-            => new BattlefieldViewport(ViewportRect, width, height, CellSize);
+            => new BattlefieldViewport(ViewportRect, width, height, OverviewCellSize);
 
         public BattlefieldRect BoardRect(int width = DefaultWidth, int height = DefaultHeight)
         {
@@ -182,6 +190,7 @@ namespace OCC.Combat
 
         public string InvalidReasonForCell(CombatState state, string action, GridPosition position)
         {
+            if (action == "移动") return CombatMovementQuery.PlayerTargetFailure(state, position, movementRange);
             CombatActionPreview preview = BuildPreview(state, action, null);
             string global = state == null || state.IsVictory || state.IsDefeat || state.ActiveUnitId != "hero" || state.GetUnit("hero").ActionPoints < CombatResolver.BasicActionPointCost ? preview.FailureReason : string.Empty;
             if (!string.IsNullOrEmpty(global)) return global;
@@ -189,15 +198,7 @@ namespace OCC.Combat
             UnitState hero = state.GetUnit("hero");
             int distance = Distance(hero.Position, position);
             UnitState target = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
-            if (action == "移动")
-            {
-                if (hero.HasStatus(StatusType.Bound)) return "束缚状态下无法移动";
-                if (distance == 0) return "主角已在该格";
-                if (distance > hero.MovementRangeThisTurn) return "目标格超出移动范围";
-                if (state.Map.IsBlocked(position)) return "目标格被阻挡";
-                if (state.IsOccupied(position, hero.Id)) return "目标格已被单位占据";
-            }
-            else if (action == "攻击")
+            if (action == "攻击")
             {
                 if (target == null || target.IsHero) return "当前格没有可攻击目标";
                 if (distance > hero.MainHand.Range) return "目标超出武器射程";
@@ -264,7 +265,7 @@ namespace OCC.Combat
         private static string ExpectedResult(CombatState state, string action, UnitState hero, string selectedTargetId)
         {
             UnitState target = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
-            if (action == "移动") return "移动过去，并面向所选位置";
+            if (action == "移动") return "移动到所选位置";
             if (action == "攻击") return target == null ? "命中后依次扣除护盾、护甲与格挡" : DamageSummary(CombatResolver.PreviewAttack(state, hero.Id, target.Id, false));
             if (action == "技能1" || action == "技能2")
             {
@@ -323,10 +324,7 @@ namespace OCC.Combat
 
         public bool IsInMoveRange(CombatState state, GridPosition position)
         {
-            if (state == null || state.ActiveUnitId != "hero") return false;
-            UnitState hero = state.GetUnit("hero");
-            int distance = Distance(hero.Position, position);
-            return distance > 0 && distance <= hero.MovementRangeThisTurn && state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position);
+            return string.IsNullOrEmpty(CombatMovementQuery.PlayerTargetFailure(state, position, movementRange));
         }
 
         public bool IsInAttackRange(CombatState state, GridPosition position)
@@ -339,7 +337,7 @@ namespace OCC.Combat
 
         public static int Distance(GridPosition from, GridPosition to) => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
         public static GridPosition StepToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? new GridPosition(from.X + Math.Sign(to.X - from.X), from.Y) : new GridPosition(from.X, from.Y + Math.Sign(to.Y - from.Y));
-        public static Facing FacingToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? (to.X >= from.X ? Facing.East : Facing.West) : (to.Y >= from.Y ? Facing.North : Facing.South);
+        public static CardinalDirection DirectionToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? (to.X >= from.X ? CardinalDirection.East : CardinalDirection.West) : (to.Y >= from.Y ? CardinalDirection.North : CardinalDirection.South);
     }
 
     /// <summary>Pure presentation state: it never changes gameplay grid coordinates.</summary>
@@ -392,6 +390,12 @@ namespace OCC.Combat
             return true;
         }
 
+        public void ResetOverview()
+        {
+            cellSize = BattlefieldPresentationAdapter.OverviewCellSize;
+            ClampToViewport();
+        }
+
         public void Focus(GridPosition position)
         {
             boardX = viewport.X + viewport.Width * .5f - (position.X + .5f) * cellSize;
@@ -401,10 +405,25 @@ namespace OCC.Combat
 
         public bool IsNearSafeEdge(GridPosition position, float safeInsetCells = 2f)
         {
+            if (BoardWidth <= viewport.Width && BoardHeight <= viewport.Height) return false;
             BattlefieldRect cell = CellRect(position);
             float inset = Math.Max(0f, safeInsetCells) * cellSize;
             return cell.X < viewport.X + inset || cell.XMax > viewport.XMax - inset ||
                    cell.Y < viewport.Y + inset || cell.YMax > viewport.YMax - inset;
+        }
+
+        public void FollowVisualPosition(float gridX, float gridY, float safeInsetCells = 1.5f)
+        {
+            if (BoardWidth <= viewport.Width && BoardHeight <= viewport.Height) return;
+            float x = boardX + (gridX + .5f) * cellSize;
+            float y = boardY + (mapHeight - gridY - .5f) * cellSize;
+            float insetX = Math.Min(viewport.Width * .25f, Math.Max(0f, safeInsetCells) * cellSize);
+            float insetY = Math.Min(viewport.Height * .25f, Math.Max(0f, safeInsetCells) * cellSize);
+            if (x < viewport.X + insetX) boardX += viewport.X + insetX - x;
+            else if (x > viewport.XMax - insetX) boardX -= x - (viewport.XMax - insetX);
+            if (y < viewport.Y + insetY) boardY += viewport.Y + insetY - y;
+            else if (y > viewport.YMax - insetY) boardY -= y - (viewport.YMax - insetY);
+            ClampToViewport();
         }
 
         public BattlefieldRect CellRect(GridPosition position)
@@ -416,8 +435,8 @@ namespace OCC.Combat
         private void ClampToViewport()
         {
             float overscroll = cellSize * EdgeOverscrollCells;
-            boardX = (float)Math.Round(ClampAxis(boardX, BoardWidth, viewport.X, viewport.Width, overscroll));
-            boardY = (float)Math.Round(ClampAxis(boardY, BoardHeight, viewport.Y, viewport.Height, overscroll));
+            boardX = 2f * (float)Math.Round(ClampAxis(boardX, BoardWidth, viewport.X, viewport.Width, overscroll) / 2f);
+            boardY = 2f * (float)Math.Round(ClampAxis(boardY, BoardHeight, viewport.Y, viewport.Height, overscroll) / 2f);
         }
 
         private static float ClampAxis(float contentStart, float contentSize, float viewportStart, float viewportSize,

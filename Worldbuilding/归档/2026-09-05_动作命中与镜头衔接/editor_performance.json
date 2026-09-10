@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Performance Snapshot\\r\\nMode: Edit Mode\\r\\nScene(s): CombatPrototype\\r\\nTarget Frame Rate: -1\\r\\nVSync Count: 0\\r\\nTime Scale: 1.00\\r\\nFrame Timing:\\r\\n- CPU Frame: 107.81 ms\\r\\n- GPU Frame: unavailable\\r\\n- Approx FPS: 9.3\\r\\n- Delta Time: 0.00 ms, Smooth Delta: 0.00 ms\\r\\nMemory:\\r\\n- Total Allocated: 784.70 MB\\r\\n- Total Reserved: 1.33 GB\\r\\n- Unused Reserved: 572.48 MB\\r\\n- Mono Used: 857.76 MB / Heap: 1.13 GB\\r\\n- GC Managed Estimate: 857.76 MB\\r\\nScene Counts:\\r\\n- GameObjects: 377 total, 377 active\\r\\n- Components: 880\\r\\n- Renderers: 226 (0 skinned)\\r\\n- Triangles: 0\\r\\n- Material Slots: 226\\r\\n- Canvases: 1, UI Graphics: 120\\r\\n- Colliders: 0, Rigidbodies: 0\\r\\n- Lights: 0, Particle Systems: 0, Animators: 0\\r\\n- Audio Sources: 0, Cameras: 1, Scripts: 34\\r\\n\"}"
+    }
+  ]
+}

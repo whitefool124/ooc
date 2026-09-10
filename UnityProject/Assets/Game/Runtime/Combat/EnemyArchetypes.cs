@@ -58,9 +58,7 @@ namespace OCC.Combat
             if (distance <= weapon.Range) return CombatCommand.Attack(enemy.Id, hero.Id);
             GridPosition step = new GridPosition(enemy.Position.X + Math.Sign(hero.Position.X - enemy.Position.X), enemy.Position.Y);
             if (step == enemy.Position) step = new GridPosition(enemy.Position.X, enemy.Position.Y + Math.Sign(hero.Position.Y - enemy.Position.Y));
-            Facing facing = hero.Position.X > enemy.Position.X ? Facing.East : hero.Position.X < enemy.Position.X ? Facing.West :
-                hero.Position.Y > enemy.Position.Y ? Facing.North : Facing.South;
-            return CombatCommand.Move(enemy.Id, step, facing);
+            return CombatCommand.Move(enemy.Id, step);
         }
 
         private static bool CanCast(UnitState source, SkillDefinition skill) => skill != null && source.Mana >= skill.ManaCost && source.IsSkillReady(skill);
@@ -131,10 +129,11 @@ namespace OCC.Combat
             new EnemyArchetype("purifier_overseer", "以太净化监工", 1, 6, 1, 9, CombatCatalog.Wand, true, 26, "elite"),
             new EnemyArchetype("sigil_mauler", "承压检验偶", 1, 0, 0, 8, CombatCatalog.Hammer, maxHealth: 14, artId: "sigil_mauler", primarySkill: EnemyAbilityCatalog.SunderingSigil, resolutionKind: EnemyResolutionKind.Construct),
             new EnemyArchetype("barrier_mender", "护障助教", 0, 4, 0, 7, CombatCatalog.Wand, maxHealth: 12, artId: "barrier_mender", primarySkill: EnemyAbilityCatalog.WardMend, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("tether_hound", "缚环寻迹兽", 0, 0, 0, 11, EnemyAbilityCatalog.TetherHoundBite, maxHealth: 10, artId: "tether_hound", primarySkill: EnemyAbilityCatalog.TetherPounce, resolutionKind: EnemyResolutionKind.Beast),
+            new EnemyArchetype("tether_hound", "缚环寻迹兽", 0, 0, 0, 10, EnemyAbilityCatalog.TetherHoundBite, maxHealth: 12, artId: "tether_hound", primarySkill: EnemyAbilityCatalog.TetherPounce, resolutionKind: EnemyResolutionKind.Beast),
             new EnemyArchetype("stone_snare", "约束助教", 0, 1, 0, 8, CombatCatalog.Wand, maxHealth: 11, artId: "stone_snare", primarySkill: EnemyAbilityCatalog.StoneSnare, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("lantern_revealer", "档案巡查员", 0, 2, 0, 9, CombatCatalog.Wand, maxHealth: 11, artId: "lantern_revealer", primarySkill: EnemyAbilityCatalog.RevealingLantern, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("rune_arbalist", "高年级陪练生·重弩", 1, 0, 0, 6, EnemyAbilityCatalog.HeavyCrossbow, maxHealth: 13, artId: "rune_arbalist", primarySkill: EnemyAbilityCatalog.WindlassBolt, resolutionKind: EnemyResolutionKind.Student)
+            new EnemyArchetype("rune_arbalist", "高年级陪练生·重弩", 1, 0, 0, 6, EnemyAbilityCatalog.HeavyCrossbow, maxHealth: 13, artId: "rune_arbalist", primarySkill: EnemyAbilityCatalog.WindlassBolt, resolutionKind: EnemyResolutionKind.Student),
+            new EnemyArchetype("breach_ram", "贯阵承压机·楔角", 0, 8, 0, 9, EnemyAbilityCatalog.BreachRam, true, 36, "sigil_mauler", resolutionKind: EnemyResolutionKind.Construct)
         };
 
         public static EnemyArchetype Get(string id)

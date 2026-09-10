@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"12.5\"><h3 id=\"doxcnvu3IX3UGCioBbk3KfnAXie\">12.5 当前实施状态</h3><p id=\"doxcnG8ALVOepYFmb1bUUECwphT\">VISUAL-INTEGRATION-01 已落实全场与右栏布局、单位像素倍率、真实路线移动、多段特效、命中时钟与显示快照、视觉镜头跟随、法宝逐单位反馈及底栏指令可读性。本轮测量并修复行动摘要实际字形越过模块底边的问题：显式两行、固定整数行距，双分辨率14组字形样本保持至少4参考px底部留白；82项相关EditMode检查通过。灯藤相邻格三单位的静态接触确认上半身、敌情徽记与藤叶视觉拥挤，尚未通过视觉验收。另发现战斗记录SimHei与第12.2节FusionPixel12要求冲突，已提交用户裁决，未静默接受例外。下一步继续单位身份和遮挡打磨，并在字体决定明确后同步战斗记录；实际输入、动画、运行时性能、人工审美与后续完整流程仍待完成。玩法内容规模不变；水面/灯藤v3仍QA_PENDING、批准0/2；主任务继续进行。证据见 Worldbuilding/归档/2026-09-05_右栏字形与邻格遮挡及历轮记录。本状态不表示完整游戏或视觉实机验收已完成。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 343
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.87",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.87, run: lark-cli update"
+    }
+  }
+}

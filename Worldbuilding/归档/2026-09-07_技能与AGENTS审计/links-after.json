@@ -1,0 +1,267 @@
+[
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "url"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "图片URL"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "url"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "url"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "图片URL"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "url"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-md.md",
+    "target": "@./images/photo.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-md.md",
+    "target": "@./images/product shot.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/card/components/markdown.md",
+    "target": "img_key"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/card/components/table.md",
+    "target": "img_key"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-chat-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-chat-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-message-enrichment.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-mget.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-search.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-im/references/lark-im-threads-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "global_lark",
+    "source": "C:/Users/FNHF/.agents/skills/lark-minutes/references/lark-minutes-summary.md",
+    "target": "url"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "url"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "图片URL"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-create.md",
+    "target": "url"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "url"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "图片URL"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/references/lark-calendar-update.md",
+    "target": "url"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-md.md",
+    "target": "@./images/photo.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-md.md",
+    "target": "@./images/product shot.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/card/components/markdown.md",
+    "target": "img_key"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/card/components/table.md",
+    "target": "img_key"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-chat-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-chat-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-message-enrichment.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-mget.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-reply.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-search.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-messages-send.md",
+    "target": "./a.png"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-im/references/lark-im-threads-messages-list.md",
+    "target": "img_xxx"
+  },
+  {
+    "group": "project_lark",
+    "source": "E:/数据库/OCC_Codex/.agents/skills/lark-minutes/references/lark-minutes-summary.md",
+    "target": "url"
+  },
+  {
+    "group": "plugin_cache",
+    "source": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/browser/26.901.51231/docs/screenshots.md",
+    "target": "IMAGE_LINK"
+  },
+  {
+    "group": "plugin_cache",
+    "source": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/chrome/26.901.51231/docs/screenshots.md",
+    "target": "IMAGE_LINK"
+  },
+  {
+    "group": "plugin_cache",
+    "source": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/chrome/latest/docs/screenshots.md",
+    "target": "IMAGE_LINK"
+  }
+]

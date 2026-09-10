@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "first_b1_lamp_vine_prop_v3",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independently generated grid-aligned hollow lamp-vine hedge; checker cleanup, target-size reduction and source-derived palette normalization only",
+    "source_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/raw/lamp_vine_source_v3.png",
+    "source_sha256": "bc46f33d7543b38790ca87633a80fa2948a71e29e8702a41304b214b38dc1371"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/processed/lamp_vine_prop_v3_32.png",
+    "output_sha256": "6cec688a1eeb5951112905a46659a660afaa3cb7c4453d6e695177657f3ea57e",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 10,
+    "required_color_families": [
+      { "family": "green", "min_opaque_pixels": 80 },
+      { "family": "yellow", "min_opaque_pixels": 4 }
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 enterable square-map prop over a courtyard floor cell; the unit stands in the central cavity; E1-F5 repeat with independent destruction",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/evidence/vine/1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/evidence/vine/4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/evidence/vine/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/evidence/vine/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/v3/evidence/rain_lantern_court_v3_unity_runtime.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "product_owner_user",
+    "date": "2026-09-04",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User provisionally approved the grid-aligned hollow-hedge v3 direction and explicitly requested Unity import on 2026-09-04."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalFirstBattle32/lamp_vine.png",
+    "stable_guid": "161cf1ac42503eb43abf6432c2e0905c",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

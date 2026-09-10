@@ -1,0 +1,56 @@
+[
+  {
+    "asset": "hero",
+    "canvas": [
+      64,
+      64
+    ],
+    "bbox": [
+      22,
+      12,
+      42,
+      58
+    ],
+    "visible_width": 20,
+    "visible_height": 46,
+    "opaque_pixels": 517,
+    "opaque_colors": 24,
+    "width_in_logical_cells": 0.625
+  },
+  {
+    "asset": "tether_hound",
+    "canvas": [
+      64,
+      64
+    ],
+    "bbox": [
+      2,
+      24,
+      63,
+      58
+    ],
+    "visible_width": 61,
+    "visible_height": 34,
+    "opaque_pixels": 1102,
+    "opaque_colors": 24,
+    "width_in_logical_cells": 1.906
+  },
+  {
+    "asset": "pyromancer",
+    "canvas": [
+      64,
+      64
+    ],
+    "bbox": [
+      16,
+      12,
+      48,
+      58
+    ],
+    "visible_width": 32,
+    "visible_height": 46,
+    "opaque_pixels": 619,
+    "opaque_colors": 24,
+    "width_in_logical_cells": 1.0
+  }
+]

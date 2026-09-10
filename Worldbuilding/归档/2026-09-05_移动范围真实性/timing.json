@@ -1,0 +1,1 @@
+{"content":[{"type":"text","text":"{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"108 cells; warm mean ms=0.662544; first/rebuild mean ms=5.537395; bound mean ms=0.027547; EditMode microbenchmark, not runtime frame/GC validation.\",\"compiler\":\"Roslyn\"}}"}]}

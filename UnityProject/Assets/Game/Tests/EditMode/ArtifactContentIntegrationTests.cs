@@ -53,13 +53,12 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void NormalEliteTreasureBossShopEventAndLoot_AreRealAndTogetherReachEveryArtifact()
+        public void ActiveRewardRoutes_ReachEveryCurrentlyUsableArtifactAndExcludeRetiredEntries()
         {
             var nodeSources = new Dictionary<RogueliteMapNodeType, ArtifactContentSource>
             {
                 { RogueliteMapNodeType.Combat, ArtifactContentSource.NormalReward },
                 { RogueliteMapNodeType.Elite, ArtifactContentSource.EliteReward },
-                { RogueliteMapNodeType.Treasure, ArtifactContentSource.Treasure },
                 { RogueliteMapNodeType.Finale, ArtifactContentSource.BossReward }
             };
             HashSet<string> reachable = new HashSet<string>(StringComparer.Ordinal);
@@ -75,7 +74,6 @@ namespace OCC.Combat.Tests
             }
 
             AddDirectChoiceArtifacts(RogueliteMapNodeType.Shop, ArtifactContentSource.Shop, reachable);
-            AddDirectChoiceArtifacts(RogueliteMapNodeType.Event, ArtifactContentSource.Event, reachable);
             for (int seed = 0; seed < 1000; seed++)
             {
                 ArtifactDefinition loot = ArtifactRewardPool.RollLoot(seed, "node-" + (seed % 37));
@@ -83,7 +81,9 @@ namespace OCC.Combat.Tests
                 reachable.Add(loot.Id);
             }
 
-            Assert.That(reachable, Is.SupersetOf(ArtifactCatalog.All.Select(artifact => artifact.Id)));
+            Assert.That(reachable, Is.SupersetOf(ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).Select(artifact => artifact.Id)));
+            Assert.That(reachable, Does.Not.Contain("G-T04"));
+            Assert.That(reachable, Does.Not.Contain("G-T18"));
         }
 
         [Test]
@@ -104,21 +104,13 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ShopEventAndLoot_AwardRealIndependentInventoryInstances()
+        public void ShopAndLoot_AwardRealIndependentInventoryInstances()
         {
             RogueliteMapRun shopRun = new RogueliteMapRun(1911);
             shopRun.SelectNode("supply_checkpoint");
             shopRun.ChooseCurrentNodeContent("buy_hazard_condenser");
             ItemInstance shopItem = shopRun.Inventory.Items.Single(item => item.DefinitionId == "G-T11");
             Assert.That((shopRun.Parts, shopRun.Aether), Is.EqualTo((1, 1)));
-
-            RogueliteMapRun eventRun = new RogueliteMapRun(1912, FireRogueliteStarterCatalog.Universal);
-            eventRun.SelectNode("rail_patrol");
-            eventRun.CompleteCurrentCombat();
-            eventRun.ClaimReward(eventRun.CurrentRewards.Single().Id);
-            eventRun.SelectNode("switchyard");
-            eventRun.ChooseCurrentNodeContent("recover_survey_lens");
-            ItemInstance eventItem = eventRun.Inventory.Items.Single(item => item.DefinitionId == "G-T04");
 
             ArtifactDefinition lootDefinition = ArtifactRewardPool.RollLoot(1913, "reachable-crate");
             LootSourceState loot = new LootSourceState("reachable-crate", new GridPosition(1, 0),
@@ -128,7 +120,7 @@ namespace OCC.Combat.Tests
             Assert.That(loot.Take("artifact-loot", lootInventory).Success, Is.True);
             ItemInstance lootItem = lootInventory.Get("artifact-loot");
 
-            Assert.That(new[] { shopItem.InstanceId, eventItem.InstanceId, lootItem.InstanceId }.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(3));
+            Assert.That(shopItem.InstanceId, Is.Not.EqualTo(lootItem.InstanceId));
             Assert.That(lootItem.DefinitionId, Is.EqualTo(lootDefinition.Id));
         }
 
@@ -229,7 +221,7 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapNode node = RogueliteMapCatalog.Nodes.First(candidate => candidate.Type == nodeType);
             RogueliteNodeContentChoice[] choices = RogueliteNodeContentCatalog.ChoicesFor(node)
-                .Where(choice => choice.Effect == RogueliteNodeContentEffect.Reward && ArtifactCatalog.All.Any(artifact => artifact.Id == choice.RewardId)).ToArray();
+                .Where(choice => choice.Effect == RogueliteNodeContentEffect.Reward && ArtifactCatalog.All.Any(artifact => artifact.Id == choice.RewardId) && ArtifactCatalog.IsCurrentlyUsable(choice.RewardId)).ToArray();
             Assert.That(choices, Is.Not.Empty, nodeType.ToString());
             foreach (RogueliteNodeContentChoice choice in choices)
             {

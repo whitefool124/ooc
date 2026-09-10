@@ -1,0 +1,32 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "tether_hound_compact_v1",
+  "role": "tactical_unit_64",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      1254,
+      1254
+    ],
+    "bounds": [
+      0,
+      0,
+      1254,
+      1254
+    ],
+    "hard_alpha": true,
+    "fully_opaque": true,
+    "visible_colors": 23089,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "delivery size (1254, 1254) != expected (64, 64)",
+    "visible colors 23089 exceed manifest maximum 24",
+    "transparent safety border (0, 0, 0, 0) is smaller than 1px",
+    "required evidence missing: one_x",
+    "required evidence missing: four_x",
+    "required evidence missing: grayscale",
+    "required evidence missing: checker",
+    "required evidence missing: application_contact"
+  ]
+}

@@ -1,0 +1,11 @@
+<table>
+  <thead><tr><th>输入</th><th>作用</th></tr></thead>
+  <tbody>
+    <tr><td>左键</td><td>选择并查看预览</td></tr>
+    <tr><td>双击可达格</td><td>移动</td></tr>
+    <tr><td>右键</td><td>打开可用操作</td></tr>
+    <tr><td>鼠标悬停</td><td>查看详情</td></tr>
+    <tr><td>滚轮</td><td>缩放战场</td></tr>
+    <tr><td>中键拖动／空格＋左键拖动</td><td>拖动画面</td></tr>
+  </tbody>
+</table>

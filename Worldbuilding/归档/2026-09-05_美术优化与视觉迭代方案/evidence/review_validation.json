@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "browser": "Headless Microsoft Edge via Playwright",
+  "viewportChecks": [
+    {
+      "width": 1440,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 960,
+      "horizontalOverflow": false
+    },
+    {
+      "width": 540,
+      "horizontalOverflow": false
+    }
+  ],
+  "checks": [
+    "historical screenshot loads",
+    "108 cells and frozen terrain coordinates",
+    "diagnosis hotspots",
+    "cell descriptions",
+    "layer toggles",
+    "phase selection",
+    "skip/quiet/play timeline"
+  ],
+  "pageErrors": [],
+  "limitation": "Review HTML only; not a Unity runtime or art approval test."
+}

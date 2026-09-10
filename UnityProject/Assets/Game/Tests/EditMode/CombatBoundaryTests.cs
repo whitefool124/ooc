@@ -11,7 +11,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void AvailabilityQuery_DelegatesPreviewToTheAuthoritativeRuleAdapter()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero });
             CombatResolver.BeginTurn(state, hero.Id);
             CombatActionPreview query = new CombatAvailabilityQuery().Preview(state, "移动", null);
@@ -23,8 +23,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyPlan_UsesTheSameCommandForPublicIntentAndExecutionUntilInvalidated()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(2, 0), Facing.West);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(2, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0));
             EnemyArchetypes.Get("pyromancer").Apply(enemy);
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             EnemyTurnPlanBook plans = new EnemyTurnPlanBook();

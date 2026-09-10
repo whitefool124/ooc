@@ -1,0 +1,6 @@
+<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48.000000" height="48.000000" fill="none" customFrame="#000000">
+	<rect id="target" width="48.000000" height="48.000000" x="0.000000" y="0.000000" />
+	<circle id="椭圆 2" cx="24" cy="24" r="20" stroke="rgb(46,123,130)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.000000" />
+	<circle id="椭圆 3" cx="24" cy="24" r="12" stroke="rgb(46,123,130)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.000000" />
+	<circle id="椭圆 4" cx="24" cy="24" r="4" stroke="rgb(46,123,130)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.000000" />
+</svg>

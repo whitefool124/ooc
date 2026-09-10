@@ -88,12 +88,13 @@ namespace OCC.Combat.Tests
         public void M1FormalRogueliteRuleset_IgnoresLegacyArmorBlockCoverAndPierce()
         {
             GridMap map = new GridMap(3, 1);
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West) { Armor = 99, Block = 99 };
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0)) { Armor = 99, Block = 99 };
             map.SetTile(enemy.Position, new TileState { Cover = CoverType.Light, Durability = 99 });
             CombatState state = new CombatState(map, new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
-            CombatResolver.BeginTurn(state, "hero");
+            CombatResolver.AdvanceToNextTurn(state);
+            Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
 
             CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, "hero", "enemy", false);
 
@@ -108,15 +109,17 @@ namespace OCC.Combat.Tests
         public void M1FormalCover_GrantsHighestConditionalShieldOnceAndNeverReducesDamage()
         {
             GridMap map = new GridMap(3, 2);
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0), Facing.North);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             map.SetTile(hero.Position, new TileState { Cover = CoverType.Light, Durability = 10 });
             map.SetTile(new GridPosition(1, 1), new TileState { Cover = CoverType.Heavy, Durability = 10 });
             CombatState state = new CombatState(map, new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
 
-            CombatResolver.BeginTurn(state, "hero");
-
+            CombatResolver.AdvanceToNextTurn(state);
+            Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
+            Assert.That(hero.Shield, Is.Zero);
+            CombatResolver.EndTurn(state, hero);
             Assert.That(hero.Shield, Is.EqualTo(4));
             Assert.That(state.TryGrantRogueliteShield("hero", "cover-heavy", 4), Is.False);
         }
@@ -125,8 +128,8 @@ namespace OCC.Combat.Tests
         public void M1FormalBreakStance_ClearsAndBlocksShieldUntilOwnersTurnEnds()
         {
             GridMap map = new GridMap(2, 1);
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(map, new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             state.ApplyRogueliteBreakStance("hero");
@@ -141,8 +144,8 @@ namespace OCC.Combat.Tests
         public void UiM3FormalShieldEvents_ReportGrantAbsorbWastePreventionAndTurnClear()
         {
             GridMap map = new GridMap(2, 1);
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(map, new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatResolver.BeginTurn(state, hero.Id);

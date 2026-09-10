@@ -28,14 +28,14 @@ namespace OCC.Combat.Tests
         public void Map9_RoundTripPersistsHealthShieldManaAndNextBattleDoesNotRefill()
         {
             RogueliteMapRun run = new RogueliteMapRun(8402, FireRogueliteStarterCatalog.Ranged);
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); run.ApplyBuild(hero);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0)); run.ApplyBuild(hero);
             CombatState combat = new CombatState(new GridMap(4, 4), new[] { hero });
             CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(hero.Id, 5), CombatEffect.AbsorbShield(hero.Id, 1), CombatEffect.SpendMana(4));
             run.CaptureCombatInventory(combat);
 
             string data = run.ToJson(); Assert.That(data, Does.StartWith("map10|"));
             RogueliteMapRun restored = RogueliteMapRun.FromJson(data);
-            UnitState next = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); restored.ApplyBuild(next);
+            UnitState next = new UnitState("hero", true, new GridPosition(0, 0)); restored.ApplyBuild(next);
             Assert.That((next.Health, next.Shield, next.Mana), Is.EqualTo((13, 1, 8)));
             Assert.That(restored.ToJson(), Is.EqualTo(data));
         }
@@ -62,7 +62,7 @@ namespace OCC.Combat.Tests
         public void RestRoomRestoresPublishedVitalsWithoutAutomaticFullRecovery()
         {
             RogueliteMapRun run = new RogueliteMapRun(8405, FireRogueliteStarterCatalog.Universal);
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East); run.ApplyBuild(hero);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0)); run.ApplyBuild(hero);
             CombatState combat = new CombatState(new GridMap(4, 4), new[] { hero });
             CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(hero.Id, 10), CombatEffect.AbsorbShield(hero.Id, 2), CombatEffect.SpendMana(8));
             run.CaptureCombatInventory(combat);
@@ -102,7 +102,7 @@ namespace OCC.Combat.Tests
             run.SelectNode("switchyard"); run.ChooseCurrentNodeContent("overload"); run.CompletePendingContentCombat(); run = RoundTrip(run);
             run.SelectNode("relay_event"); run.ChooseCurrentNodeContent("survey");
             run.SelectNode("med_bay"); run.ChooseCurrentNodeContent("field_repair");
-            run.SelectNode("permit_archive"); run.ChooseCurrentNodeContent("survey");
+            run.SelectNode("records_archive"); run.ChooseCurrentNodeContent("survey");
             run.SelectNode("safety_room"); run.ChooseCurrentNodeContent("scan_routes");
             run.SelectNode("aether_refinery"); run.ChooseCurrentNodeContent("purify");
             CompleteCombat(ref run, "transmission_tower");
@@ -120,6 +120,7 @@ namespace OCC.Combat.Tests
         private static void CompleteCombat(ref RogueliteMapRun run, string nodeId)
         {
             run.SelectNode(nodeId); run.CompleteCurrentCombat(); run = RoundTrip(run);
+            if (!run.AwaitingReward) return;
             FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
             if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
             run = RoundTrip(run);
@@ -130,6 +131,7 @@ namespace OCC.Combat.Tests
             run.SelectNode(nodeId);
             run.ChooseCurrentNodeContent("vault_fire_cache");
             run = RoundTrip(run);
+            if (!run.AwaitingReward) return;
             FireSpellDefinition spell = run.CurrentFireSpellChoices.FirstOrDefault();
             if (spell != null) run.ClaimFireSpell(spell.Id); else run.ClaimReward(run.CurrentRewards[0].Id);
             run = RoundTrip(run);

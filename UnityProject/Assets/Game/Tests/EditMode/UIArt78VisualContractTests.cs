@@ -36,10 +36,10 @@ namespace OCC.Combat.Tests
             Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell);
             Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
 
-            Assert.That(health.width, Is.EqualTo(120f));
-            Assert.That(health.height, Is.EqualTo(22f));
-            Assert.That(shield.width, Is.EqualTo(120f));
-            Assert.That(shield.height, Is.EqualTo(14f));
+            Assert.That(health.width, Is.EqualTo(112f));
+            Assert.That(health.height, Is.EqualTo(16f));
+            Assert.That(shield.width, Is.EqualTo(112f));
+            Assert.That(shield.height, Is.EqualTo(8f));
             Assert.That(health.Overlaps(shield), Is.False);
             Assert.That(FormalUiKit.SkinSprite("bar_track"), Is.Not.Null);
             Assert.That(FormalUiKit.SkinSprite("bar_segment_health"), Is.Not.Null);
@@ -74,6 +74,28 @@ namespace OCC.Combat.Tests
             }
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OverviewUnitTracks_RetainVisibleFillAtHalfResolution(bool health)
+        {
+            GameObject root = new GameObject("overview-vital", typeof(RectTransform));
+            try
+            {
+                object bar = typeof(FormalBattlefieldView).GetMethod("Bar", BindingFlags.Static | BindingFlags.NonPublic)
+                    .Invoke(null, new object[] { "资源", root.transform, FormalUiTheme.Health });
+                typeof(FormalBattlefieldView).GetMethod("RefreshVital", BindingFlags.Static | BindingFlags.NonPublic)
+                    .Invoke(null, new object[] { bar, new CombatUnitVitalPresentation(4, 4, 0, 4),
+                        new BattlefieldRect(0f, 0f, 64f, 64f), health, FormalUiTheme.Health, FormalUiTheme.Danger });
+                Canvas.ForceUpdateCanvases();
+                RectTransform track = root.transform.Find("资源").GetComponent<RectTransform>();
+                RectTransform fill = track.Find("当前").GetComponent<RectTransform>();
+                float visibleHeight = track.rect.height + fill.offsetMax.y - fill.offsetMin.y;
+                Assert.That(visibleHeight * .5f, Is.GreaterThanOrEqualTo(1f));
+                Assert.That(visibleHeight * .5f % 1f, Is.Zero);
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
         [Test]
         public void FusionPixelTypography_KeepsCompactAndInteractiveSizesSeparate()
         {
@@ -81,6 +103,48 @@ namespace OCC.Combat.Tests
             Assert.That(FormalUiTheme.MinimumCompactFontSize, Is.EqualTo(24));
             Assert.That(FormalUiTheme.ButtonFontSize, Is.EqualTo(24));
             Assert.That(FormalUiTheme.ButtonDetailFontSize, Is.EqualTo(24));
+        }
+
+        [Test]
+        public void ConsoleModules_StayAboveCommandDeckWithReadableFiveRowTimeline()
+        {
+            GameObject root = new GameObject("console-layout-test", typeof(RectTransform));
+            GameObject hudObject = new GameObject("console-hud-test", typeof(FormalCombatHud));
+            try
+            {
+                OccPixelUiLayoutEntry side = OccPixelUiConfig.Layout("combat.rightConsole");
+                OccPixelUiLayoutEntry commands = OccPixelUiConfig.Layout("combat.commands");
+                float commandsTop = UiLayoutContract.ReferenceHeight - commands.y - commands.height;
+                Assert.That(-side.y + side.height, Is.LessThanOrEqualTo(commandsTop - 16f));
+                MethodInfo create = typeof(FormalCombatHud).GetMethod("ConsoleModule", BindingFlags.Static | BindingFlags.NonPublic);
+                float previousBottom = 0f;
+                FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
+                foreach (string key in new[] { "selected", "hero", "timeline", "log" })
+                {
+                    GameObject module = (GameObject)create.Invoke(null, new object[] { key, root.transform, "combat." + key });
+                    RectTransform rect = module.GetComponent<RectTransform>();
+                    float top = -rect.anchoredPosition.y;
+                    Assert.That(top, Is.GreaterThan(previousBottom));
+                    Assert.That(top + rect.sizeDelta.y, Is.LessThanOrEqualTo(side.height - 16f));
+                    Assert.That(rect.anchoredPosition.x, Is.GreaterThanOrEqualTo(16f));
+                    Assert.That(rect.anchoredPosition.x + rect.sizeDelta.x, Is.LessThanOrEqualTo(side.width - 16f));
+                    Assert.That(FormalUiKit.SkinOverlay(module.GetComponent<Image>()), Is.Null);
+                    Assert.That(module.GetComponent<Image>().raycastTarget, Is.True, "module details must stay hoverable");
+                    previousBottom = top + rect.sizeDelta.y;
+                    if (key != "timeline") continue;
+                    typeof(FormalCombatHud).GetField("timelineModule", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(hud, module);
+                    MethodInfo addRow = typeof(FormalCombatHud).GetMethod("CreateTimelineSlot", BindingFlags.Instance | BindingFlags.NonPublic);
+                    for (int i = 0; i < 5; i++)
+                    {
+                        addRow.Invoke(hud, new object[] { i });
+                        RectTransform row = module.transform.Find("行动位" + (i + 1)).GetComponent<RectTransform>();
+                        Assert.That(-row.anchoredPosition.y + row.sizeDelta.y, Is.LessThanOrEqualTo(rect.sizeDelta.y - 8f));
+                        foreach (Text label in row.GetComponentsInChildren<Text>())
+                            Assert.That(label.fontSize, Is.GreaterThanOrEqualTo(24));
+                    }
+                }
+            }
+            finally { Object.DestroyImmediate(hudObject); Object.DestroyImmediate(root); }
         }
     }
 }

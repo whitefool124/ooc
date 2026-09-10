@@ -45,11 +45,14 @@ namespace OCC.Combat.Roguelite
             HashSet<string> owned = new HashSet<string>(ownedIds ?? Array.Empty<string>(), StringComparer.Ordinal);
             List<RogueAcademyRewardEntry> result = RogueRewardPool.RollSpells(catalog, seed, spellCount, source, spellRarity, owned)
                 .Select(value => new RogueAcademyRewardEntry(value.DefinitionId, "spell", source, value.EquivalenceGroupId)).ToList();
-            IEnumerable<EquipmentDefinition> equipment = catalog.Equipment.Where(value => value.AllowedRarities.Contains(equipmentRarity) && value.SourceTypes.Contains(source) && !owned.Contains(value.DefinitionId))
+            IEnumerable<EquipmentDefinition> equipment = catalog.Equipment.Where(value => IsNextBuildRewardSlot(value.Slot) && value.AllowedRarities.Contains(equipmentRarity) && value.SourceTypes.Contains(source) && !owned.Contains(value.DefinitionId))
                 .OrderBy(value => StableKey(seed, value.DefinitionId)).ThenBy(value => value.DefinitionId, StringComparer.Ordinal).Take(Math.Max(0, equipmentCount));
             result.AddRange(equipment.Select(value => new RogueAcademyRewardEntry(value.DefinitionId, "equipment", source, value.UniqueGroupId)));
             return result;
         }
+
+        private static bool IsNextBuildRewardSlot(EquipmentSlot slot) => EquipmentSlotRules.IsActive(slot) &&
+            slot != EquipmentSlot.Ring1 && slot != EquipmentSlot.Ring2 && slot != EquipmentSlot.Necklace;
 
         public void ApplyEnemyBaseline(CombatState combat, UnitState unit)
         {
@@ -65,6 +68,7 @@ namespace OCC.Combat.Roguelite
             if (id == "barrier_mender") return new RogueEnemyBaselineDefinition(id, 16, 4, "enemy-mender-barrier");
             if (id == "core_overseer") return new RogueEnemyBaselineDefinition(id, 36, 6, "boss-core-barrier");
             if (id == "purifier_overseer") return new RogueEnemyBaselineDefinition(id, 32, 6, "boss-purifier-barrier");
+            if (id == "breach_ram") return new RogueEnemyBaselineDefinition(id, 36, 8, "breach-ram-initial-pressure");
             return new RogueEnemyBaselineDefinition(id, elite ? 24 : id == "tether_hound" ? 12 : 16);
         }
 

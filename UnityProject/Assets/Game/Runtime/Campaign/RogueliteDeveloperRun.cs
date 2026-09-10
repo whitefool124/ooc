@@ -61,6 +61,8 @@ namespace OCC.Combat
         private static readonly RogueliteMissionDefinition[] missions =
         {
             new RogueliteMissionDefinition("dead_signal", "elimination_rail", CombatObjectiveType.Elimination, "解除阻断传讯的考核拦截", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生、刻阵教官"),
+            new RogueliteMissionDefinition(RainLanternCourtRuntime.LevelId, "elimination_rail", CombatObjectiveType.Elimination,
+                "完成雨后灯庭学院实地对抗课程", "主角生命归零按肉鸽战败", "缚环寻迹兽、高年级陪练生·火矢"),
             new RogueliteMissionDefinition("factory_breach", "destruction_factory", CombatObjectiveType.Destruction, "处置考核场内的导能柱", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生、刻阵教官"),
             new RogueliteMissionDefinition("rail_patrol", "elimination_rail", CombatObjectiveType.Elimination, "完成石路巡回对练", "主角失能则任务失败", "盾术陪练生、火矢陪练生、侧锋陪练生"),
             new RogueliteMissionDefinition("depot_wreck", "elimination_rail", CombatObjectiveType.Elimination, "解除驿站约束考核", "主角失能则任务失败", "缚环寻迹兽、承压检验偶、约束助教"),

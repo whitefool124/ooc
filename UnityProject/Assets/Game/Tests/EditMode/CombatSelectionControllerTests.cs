@@ -283,8 +283,8 @@ namespace OCC.Combat.Tests
 
         private static CombatState State(out UnitState hero, out UnitState enemy)
         {
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             return new CombatState(new GridMap(4, 2), new[] { hero, enemy });
         }
     }

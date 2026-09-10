@@ -1,0 +1,489 @@
+{
+  "schema": "occ-m-a26-validation-v1",
+  "status": "PASS",
+  "manifest_count": 24,
+  "pass_count": 24,
+  "fail_count": 0,
+  "results": [
+    {
+      "asset_id": "ui.element.dark",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          3,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.earth",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          29
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.fire",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          6,
+          2,
+          26,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.ice",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.light",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          4,
+          30,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.lightning",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.water",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          7,
+          30,
+          24
+        ],
+        "hard_alpha": true,
+        "visible_colors": 8,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.element.wind",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          6,
+          30,
+          26
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.action_point",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          9,
+          30,
+          22
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.aether_load",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          6,
+          2,
+          26,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.charges",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          4,
+          30,
+          27
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.contribution",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          27,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.core_permit",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          4,
+          30,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.explored",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.gold",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.health",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.mana",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          5,
+          30,
+          27
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.notice",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          7,
+          2,
+          25,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.operational_aether",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.parts",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          29
+        ],
+        "hard_alpha": true,
+        "visible_colors": 10,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.risk",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          3,
+          30,
+          28
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.shield",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          30,
+          29
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.stage_time",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          2,
+          2,
+          29,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    },
+    {
+      "asset_id": "ui.resource.weight",
+      "status": "PASS",
+      "errors": [],
+      "metrics": {
+        "size": [
+          32,
+          32
+        ],
+        "bounds": [
+          4,
+          2,
+          27,
+          30
+        ],
+        "hard_alpha": true,
+        "visible_colors": 9,
+        "accent_pixels": {}
+      }
+    }
+  ]
+}

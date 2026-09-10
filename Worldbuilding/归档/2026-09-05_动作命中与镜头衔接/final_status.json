@@ -1,0 +1,13 @@
+{
+  "main_task": "VISUAL-INTEGRATION-01",
+  "status": "in_progress",
+  "goal_turn_classification": "progress",
+  "branch": "codex/art-visual-iteration-20260905",
+  "feishu_revision": 335,
+  "editmode": { "passed": 775, "failed": 0, "skipped": 0 },
+  "new_test_cases": 11,
+  "v3_approved": 0,
+  "runtime_visual_review": "pending",
+  "section_12_9_complete": false,
+  "next": "fix artifact composite resource feedback using resolved per-unit changes, then runtime visual and flow review"
+}

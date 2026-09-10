@@ -119,13 +119,25 @@ namespace OCC.Combat.Presentation
             if (anchor == null || intensity <= 0f) return;
             OccPeripheralFeedbackEntry entry = FormalUiEffectsConfig.Feedback(id);
             Sprite[] frames = Frames(entry);
-            GameObject result = FormalUiKit.Create("像素反馈_" + id, anchor);
+            Transform feedbackParent = ActiveFeedbackParent(anchor);
+            if (feedbackParent == null) return;
+            bool reparented = feedbackParent != anchor;
+            Vector3 worldPosition = anchor.position;
+            GameObject result = FormalUiKit.Create("像素反馈_" + id, feedbackParent);
             RectTransform rect = result.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f); rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = offset ?? Vector2.zero; rect.sizeDelta = new Vector2(64f, 64f);
+            if (reparented) rect.position = worldPosition + (Vector3)(offset ?? Vector2.zero);
             Image image = result.AddComponent<Image>(); image.sprite = frames[0]; image.preserveAspect = true; image.raycastTarget = false;
             result.transform.SetAsLastSibling();
             PixelUiFrameAnimator animator = result.AddComponent<PixelUiFrameAnimator>();
             animator.Play(frames, entry.framesPerSecond / Mathf.Max(.35f, intensity));
+        }
+
+        private static Transform ActiveFeedbackParent(Transform anchor)
+        {
+            if (anchor != null && anchor.gameObject.activeInHierarchy) return anchor;
+            Canvas canvas = anchor == null ? null : anchor.GetComponentInParent<Canvas>(true);
+            return canvas != null && canvas.gameObject.activeInHierarchy ? canvas.transform : null;
         }
 
         private static Sprite[] Frames(OccPeripheralFeedbackEntry entry)
@@ -147,9 +159,9 @@ namespace OCC.Combat.Presentation
         public static string ChapterDivider(RogueliteMapNode node)
         {
             if (node == null) return "teaching_record";
-            if (node.Type == RogueliteMapNodeType.Elite || node.Type == RogueliteMapNodeType.Finale || node.Type == RogueliteMapNodeType.Treasure) return "sealed_dossier";
+            if (node.Type == RogueliteMapNodeType.Elite || node.Type == RogueliteMapNodeType.Finale || ContainsAny(node, "vault", "lift", "封存库", "管理员匣")) return "sealed_dossier";
             if (node.Type == RogueliteMapNodeType.Workshop || node.Type == RogueliteMapNodeType.Shop || ContainsAny(node, "workshop", "foundry", "refinery", "工坊", "校准")) return "workshop_record";
-            if (node.Type == RogueliteMapNodeType.Rest || ContainsAny(node, "clinic", "infirmary", "med_", "医务", "诊疗")) return "infirmary_record";
+            if (node.Type == RogueliteMapNodeType.Medical || ContainsAny(node, "clinic", "infirmary", "med_", "医务", "诊疗")) return "infirmary_record";
             if (node.Type == RogueliteMapNodeType.Event || ContainsAny(node, "wild", "field", "courtyard", "path", "郊野", "石庭")) return "field_survey";
             return "teaching_record";
         }

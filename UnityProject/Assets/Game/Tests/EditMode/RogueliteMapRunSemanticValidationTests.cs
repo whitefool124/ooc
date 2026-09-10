@@ -73,9 +73,9 @@ namespace OCC.Combat.Tests
             Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(40));
             Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Combat), Is.EqualTo(18));
             Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Elite), Is.EqualTo(6));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Event), Is.EqualTo(8));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Workshop || node.Type == RogueliteMapNodeType.Shop || node.Type == RogueliteMapNodeType.Rest), Is.EqualTo(4));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Treasure), Is.EqualTo(2));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Event), Is.EqualTo(10));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Workshop || node.Type == RogueliteMapNodeType.Shop || node.Type == RogueliteMapNodeType.Medical), Is.EqualTo(4));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Rest || node.Type == RogueliteMapNodeType.Treasure), Is.Zero);
         }
 
         [Test]

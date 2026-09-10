@@ -35,7 +35,9 @@ namespace OCC.Combat.Presentation
         public Rect UnitUv { get; }
         public Color UnitTint { get; }
         public Vector2 UnitOffset { get; }
+        public Vector2 UnitTravelOffset { get; }
         public Texture2D ObjectTexture { get; }
+        public int ObjectForegroundRows { get; }
         public string ObjectLabel { get; }
         public Color ObjectLabelColor { get; }
         public Texture2D LootTexture { get; }
@@ -55,7 +57,7 @@ namespace OCC.Combat.Presentation
             Color unitTint, Vector2 unitOffset, Texture2D objectTexture, string objectLabel, Color objectLabelColor,
             Texture2D lootTexture, UnitState unit, CombatUnitVitalsPresentation vitals,
             IReadOnlyList<BattlefieldStatusVisual> statuses, EnemyIntentPresentation intent, Texture2D intentTexture,
-            string hoverText)
+            string hoverText, Vector2 unitTravelOffset = default, int objectForegroundRows = 0)
         {
             Position = position;
             FloorTexture = floorTexture;
@@ -74,7 +76,9 @@ namespace OCC.Combat.Presentation
             UnitUv = unitUv;
             UnitTint = unitTint;
             UnitOffset = unitOffset;
+            UnitTravelOffset = unitTravelOffset;
             ObjectTexture = objectTexture;
+            ObjectForegroundRows = objectForegroundRows;
             ObjectLabel = objectLabel ?? string.Empty;
             ObjectLabelColor = objectLabelColor;
             LootTexture = lootTexture;

@@ -1,0 +1,6 @@
+<whiteboard type="mermaid" path="@./Worldbuilding/归档/2026-09-08_战斗图解去重前备份/command_relation.mmd"></whiteboard>
+<ul>
+  <li>预览失效或检查失败：不执行，不扣资源。</li>
+  <li>命令一次性写入；多段命中逐段结算。</li>
+  <li>效果按配置顺序处理，最后检查胜负并刷新界面、日志和存档。</li>
+</ul>

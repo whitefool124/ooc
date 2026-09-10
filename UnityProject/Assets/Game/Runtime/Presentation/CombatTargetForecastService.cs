@@ -39,9 +39,9 @@ namespace OCC.Combat.Presentation
                 if (fireSpell != null)
                 {
                     fireBattle = EnsureFireBattle(state, fireBattle);
-                    Facing facing = BattlefieldPresentationAdapter.FacingToward(
+                    CardinalDirection direction = BattlefieldPresentationAdapter.DirectionToward(
                         state.GetUnit("hero").Position, enemy.Position);
-                    FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, facing);
+                    FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, direction);
                     FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", fireSpell, target);
                     bool canDamage = fireSpell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage ||
                         rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.Push);

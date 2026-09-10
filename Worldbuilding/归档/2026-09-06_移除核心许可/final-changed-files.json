@@ -1,0 +1,218 @@
+[
+  {
+    "path": "Artifacts/OpeningTenMinutes/OCC_开局十分钟体验工作稿_v0.1.md",
+    "status": "modified",
+    "before_sha256": "76e3a37dbee9c20859888c0c708942fe284cd73e3aa278a748fa1b17dd47887f",
+    "after_sha256": "f4c485200cd9393b378f61618cb8f0bdce44b26a71ca5d9bccd1eea674481b84"
+  },
+  {
+    "path": "Tools/Art/generate_academy_map_v02_review.py",
+    "status": "modified",
+    "before_sha256": "122150217386817c66b035f707fb55596243e61dc77100f79c6d09396735207f",
+    "after_sha256": "2b49be85024eed3f8b08d254ee5b22a25dd2179d42313d698180f2699d5e6ad2"
+  },
+  {
+    "path": "Tools/Art/generate_rogue_ui_semantic_assets.py",
+    "status": "modified",
+    "before_sha256": "d909ee72a7d4b0cc388abbba40c1d3d43e520b8dd1d12d27a8e524753eec60f6",
+    "after_sha256": "0d934f345c83fc7ab143126583ead935aeacb76ae023d70b944a07137aa22d87"
+  },
+  {
+    "path": "Tools/OCCArt/prepare_element_resource_icons_24.py",
+    "status": "modified",
+    "before_sha256": "378357d49d29bc6231202665f40a24115eeba86e240f90a31d2c4ece8acb538a",
+    "after_sha256": "bf7332ecb2530ba112934a9c18a7a5d75461ea8d1608ede3a5dcba2d0d8612a2"
+  },
+  {
+    "path": "Tools/RogueliteDecisionConsole/app/decision-data.ts",
+    "status": "modified",
+    "before_sha256": "425979f33efa5842ca51c2bd95d9574c522c18b4b1ec607ca17b87f39ee5e4fe",
+    "after_sha256": "8229c94e2fcbfa1935368859087222648a435a8e3794726459bc44a3b38c8f6b"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/core_permit.png",
+    "status": "deleted",
+    "before_sha256": "089e4a9965adcf5b39acf60a17743e9a50ee3870a3c776f61218b2a617ceb1a3",
+    "after_sha256": null
+  },
+  {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons32/core_permit.png.meta",
+    "status": "deleted",
+    "before_sha256": "498aa788cb7713506283e1728fb7b7c5921ab3cc4909550e0c74ca145f9e6ed9",
+    "after_sha256": null
+  },
+  {
+    "path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/core_permit.png",
+    "status": "deleted",
+    "before_sha256": "089e4a9965adcf5b39acf60a17743e9a50ee3870a3c776f61218b2a617ceb1a3",
+    "after_sha256": null
+  },
+  {
+    "path": "UnityProject/Assets/Game/Resources/Art/ValidationElementResources32/resource/core_permit.png.meta",
+    "status": "deleted",
+    "before_sha256": "d2c1e64890c7826f076a6b3dcb863e85304957cb6be1288b0a28bef74372a3c2",
+    "after_sha256": null
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/AcademyNodeContentCatalog.cs",
+    "status": "modified",
+    "before_sha256": "3584293c6ef1e4d6603e0cfb92b705c13de1403efa0e8d8cc891f837bf6c001d",
+    "after_sha256": "f351299633f556aeeb6fc228957993e19d279a42895446fae96faffb1652422b"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/FirstRunExperience.cs",
+    "status": "modified",
+    "before_sha256": "e2b5d73b82764ea82a0e1c4710902300a4672482bc7023a3a6db044b7681cd02",
+    "after_sha256": "4c79ebf4e3f807d73da73c1aa4b3b47548a5ca7e58d37820a5c1dd6879593328"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/RogueliteEncounterCatalog.cs",
+    "status": "modified",
+    "before_sha256": "cc31e728c0dab26922139ec622e70a32776196a2793d4089e52f6a388345a48d",
+    "after_sha256": "7defc270265cc16246942725ccdecf2b72b417eba0ebb5eb98b8c7b65f0f2cf4"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapInteractionService.cs",
+    "status": "modified",
+    "before_sha256": "23e671e39cb174330031001405cb5358f5fa9fdf1684d023ca67e6d43f0dd50d",
+    "after_sha256": "a33e81491a6bc49c6d3c718bfc6a730a04fa018d0699fae5f0b50a59846a52f8"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRun.cs",
+    "status": "modified",
+    "before_sha256": "dc553b9a797896ab2b774d2cc346eb43efeed099ab5c8e038005ff102ae6d895",
+    "after_sha256": "40385facf2182d740a223a5c34cbcaf02f0ffd3eff9723fad44b36e1753e846d"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRunValidator.cs",
+    "status": "modified",
+    "before_sha256": "7bf09bd1bf8699cc8c1382d270e7c8a3ba45dcfd6fff68da22b883e19e4a2f20",
+    "after_sha256": "fe466ac75f78c8a268944bdc189becd76732d13bc663b39ce93fe27cfd69305d"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/UiPresentationModels.cs",
+    "status": "modified",
+    "before_sha256": "bd158e8352ed2fa03f2ceec55b472357a889de8fe12a2cd3b430b22a410395d2",
+    "after_sha256": "acdd065657f5a8c56fb7f07de0775560350ab3bb9221412af054760ee1998def"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Combat/FormalArtRegistry.cs",
+    "status": "modified",
+    "before_sha256": "00e14d9e81462808d70a5f44b18517d12d6491cc8ae776cdb86113cd124e8bb3",
+    "after_sha256": "c87096fcb9d9776bd49ccd3db8a7b7f291e94773df91ad0cc360502a393249cb"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs",
+    "status": "modified",
+    "before_sha256": "ac216c1c3d9abd6903dfa821d22f3d9612c8c0df22f937381d41e1c76dd2e9ed",
+    "after_sha256": "e4ba6db54c0e36f0c42ad5474606381e448f7dcb1bd2e0c6fc98c261560a5193"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Presentation/FormalRogueliteUi.cs",
+    "status": "modified",
+    "before_sha256": "378defcda0f77dc56f0e3b476612753fd8767f805f5eb408faad74c211f84a3c",
+    "after_sha256": "e66080ec3b06e9ceeda6b1533c244922cbf799c04bd56b5f62d1d460a05ec270"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Roguelite/RoguePresentationModels.cs",
+    "status": "modified",
+    "before_sha256": "99526c45f82425d4343d55b078582716692b8b5a81de7ec54f5181f9a65fb97a",
+    "after_sha256": "71b8b891b138b7ccc756f8f4cbc5f6482ccd37ff2345f45954d3f3ae8ab623d9"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Roguelite/RogueRunDto.cs",
+    "status": "modified",
+    "before_sha256": "00f88f020064c7744fd52abb668e07ec11d253975aed8289812a021026b62f6f",
+    "after_sha256": "f99cac4e5a885daf421dcb75f448510623c1a71d2dd4557dedd14f87be7e4ace"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/AcademyMapTuningTests.cs",
+    "status": "modified",
+    "before_sha256": "77f5261dff352e361f6c05fcefa0222b33bea1d3a6164d4c12b031df1e90e175",
+    "after_sha256": "b30d0b2c828696f6ffca37bd422e331a08efa8ffedf41c94f19064d7bd06149e"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/AcademyNodeContentPlayableTests.cs",
+    "status": "modified",
+    "before_sha256": "be9ad30a9db6078d89059211b1bb769338f0b7ef701ef11a377fc9ab61c92fd8",
+    "after_sha256": "a6d38c7648d045117ef6bb94b8b1a615ff062f35657b90cb598ae0245d242336"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/FireRogueliteExperienceTests.cs",
+    "status": "modified",
+    "before_sha256": "09efd532f6ad9ac08a18673c967eb12c1a12c280435ffebd65aa2fd36baabfcf",
+    "after_sha256": "eb3184e27b2f9438e9bba5b0f13a7b98ecb6046590909e60f8681d418c44abdf"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/FormalArtAssetAuditTests.cs",
+    "status": "modified",
+    "before_sha256": "fc222a7327a86ee61386ae7a408deda8dfee0c43e7a7ba320511e413b1d4f9fd",
+    "after_sha256": "6f0603bbef6f67b3b361547f6a508204202c979d14340f7139d33e857d0257ce"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/FormalArtRegistryTests.cs",
+    "status": "modified",
+    "before_sha256": "b264ce39c0f303000e716028e1a1634aa9552fc6bdd00fe48576cde1e5c8b048",
+    "after_sha256": "3362e771788afacd4172316cd6898b8a19940eb1457760f043d111162985385d"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/RogueliteCompletionLineTests.cs",
+    "status": "modified",
+    "before_sha256": "dabff976454bc6b8dc16413d68d73c1c7ea14d72980217a54b374659b324a38b",
+    "after_sha256": "037c34d654b5b609d482c43b2034a34e9f918526a35a7644a79acb3c1b939f05"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/RogueliteDeveloperRunTests.cs",
+    "status": "modified",
+    "before_sha256": "8c1c19f088c0351798a18fb11d777b18582ae9b64e8940b2ae91eeb13d194a4b",
+    "after_sha256": "8aeb68065ddc02923443fdd786c3ddbcc4239cda54c79b8bf4ac1224b92cf71a"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/RogueliteMapSaveCoordinatorTests.cs",
+    "status": "modified",
+    "before_sha256": "4c5bdbfae8b1bd5f21b91adf01f7576c069e369d93f5d1e347c5a386386c7624",
+    "after_sha256": "f06ea1cce49255d9d67d9203d56d8febb05959fa6a3c9b463fd914968087b663"
+  },
+  {
+    "path": "Worldbuilding/数据表/OCC_学院节点内容数据表_v1.0.csv",
+    "status": "modified",
+    "before_sha256": "87b2283e0c5930fbf81f01569b6c6ed9840cb8f6ca0eb4acd6d1e57e266ef1fc",
+    "after_sha256": "6ffc5ab0714347fd4e468070ddaa7a9323bae94644b0ef193a136e78a6698cdb"
+  },
+  {
+    "path": "Worldbuilding/数据表/OCC_核心规则数值表_v1.0.csv",
+    "status": "modified",
+    "before_sha256": "eb47020335208eb2f03ff87fd4a6fe5b04b19c8c89cb94198f5eabc3fad79bba",
+    "after_sha256": "fc9fd2c549467ff702ac7ad40d6b2f8b53b59e7d538e1a33388b94b442bb4c32"
+  },
+  {
+    "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+    "status": "modified",
+    "before_sha256": "c55ebcaf26d39ba2c267cd7a1fcb1bf690eb9f0883d8261782e385c4f1f64ea2",
+    "after_sha256": "ca37f3270736433dd4e7db44f539c2ea5fa9b4f487d211c15d5be8035218e63c"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/AcademyMapSaveMigration.cs",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "eb2f38539c7f53d9299331f7896a30e245f2bd57f9b410e6690ea6262cef71bd"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Runtime/Campaign/AcademyMapSaveMigration.cs.meta",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "c8ce75201def7fe1163026c6cacb6a68af5c2546a1ef99e47a68999063b806ff"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/AcademyMapProgressCleanupTests.cs",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "a0a7fa4e35ad5ff6a7445fd7f2c5c7cc90c13237b0ce5d81d978d7443adb8d47"
+  },
+  {
+    "path": "UnityProject/Assets/Game/Tests/EditMode/AcademyMapProgressCleanupTests.cs.meta",
+    "status": "added",
+    "before_sha256": null,
+    "after_sha256": "543890354b51bf0fc9a8116bc1582df42902e85f73c6497cd72724dfaa935676"
+  }
+]

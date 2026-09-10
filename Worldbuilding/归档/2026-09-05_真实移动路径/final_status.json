@@ -1,0 +1,16 @@
+{
+  "feishu_revision": 333,
+  "mirror_matches_readback": true,
+  "branch": "codex/art-visual-iteration-20260905",
+  "main_task": "VISUAL-INTEGRATION-01",
+  "status": "in_progress",
+  "editmode": {
+    "passed": 764,
+    "failed": 0,
+    "skipped": 0
+  },
+  "new_test_cases": 7,
+  "v3_approved": 0,
+  "runtime_visual_review": "pending",
+  "next": "movement/action/popup/camera timing and actual runtime review"
+}

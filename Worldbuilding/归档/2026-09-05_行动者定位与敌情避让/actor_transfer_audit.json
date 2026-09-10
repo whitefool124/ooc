@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"activeUnit=enemy_0 crowded=0\\nenemy_1 intentVisible=True intentPosition=(12.00, 84.00)\\nenemy_0 intentVisible=True intentPosition=(12.00, 84.00)\\nhero intentVisible=False intentPosition=(0.00, 0.00)\\nactiveMarker=(452.00, -172.00) markerVisible=True tint=RGBA(0.643, 0.286, 0.247, 1.000)\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

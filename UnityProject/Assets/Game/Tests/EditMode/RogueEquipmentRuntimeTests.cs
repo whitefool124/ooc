@@ -9,15 +9,15 @@ namespace OCC.Combat.Tests
     public sealed class RogueEquipmentRuntimeTests
     {
         [Test]
-        public void M3Loadout_HasElevenSlotsAndTwoHandedMainLocksOffhand()
+        public void M3Loadout_HasNineSlotsAndLegacyOffhandContentIsInactive()
         {
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(77);
             RogueEquipmentInstance spear = runtime.CreateInstance("spear", "ACA-EQ-MH02", EquipmentRarity.Uncommon, 0, "starter");
             RogueEquipmentInstance shield = runtime.CreateInstance("shield", "ACA-EQ-OH01", EquipmentRarity.Common, 1, "starter");
             runtime.AddToBackpack(spear); runtime.AddToBackpack(shield);
 
-            Assert.That(runtime.Equipped.Count, Is.EqualTo(11));
-            Assert.That(runtime.Equip("spear", RogueEquipmentSlot.MainHand), Is.True);
+            Assert.That(runtime.Equipped.Count, Is.EqualTo(9));
+            Assert.That(runtime.Equip("spear", RogueEquipmentSlot.Weapon), Is.True);
             Assert.That(runtime.Equip("shield", RogueEquipmentSlot.OffHand), Is.False);
             Assert.That(runtime.Backpack.ContainsKey("shield"), Is.True);
         }
@@ -70,11 +70,11 @@ namespace OCC.Combat.Tests
             Assert.That(runtime.Backpack[chest].Y, Is.EqualTo(6));
 
             Assert.That(runtime.Equip(chest, RogueEquipmentSlot.Chest), Is.True);
-            string shield = runtime.Equipped[RogueEquipmentSlot.OffHand];
+            string backpack = runtime.Equipped[RogueEquipmentSlot.Backpack];
             Assert.That(runtime.UnequipToBackpack(RogueEquipmentSlot.Chest, 0, 0, false), Is.True);
-            Assert.That(runtime.CanUnequipToBackpack(RogueEquipmentSlot.OffHand, 0, 0, false), Is.False);
-            Assert.That(runtime.UnequipToBackpack(RogueEquipmentSlot.OffHand, 0, 0, false), Is.False);
-            Assert.That(runtime.Equipped[RogueEquipmentSlot.OffHand], Is.EqualTo(shield));
+            Assert.That(runtime.CanUnequipToBackpack(RogueEquipmentSlot.Backpack, 0, 0, false), Is.False);
+            Assert.That(runtime.UnequipToBackpack(RogueEquipmentSlot.Backpack, 0, 0, false), Is.False);
+            Assert.That(runtime.Equipped[RogueEquipmentSlot.Backpack], Is.EqualTo(backpack));
         }
 
         [Test]
@@ -93,25 +93,10 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void M3ShieldAction_UsesOneApRarityValueAndLocksFacing()
-        {
-            RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(100);
-            CombatState combat = BuildCombat(out UnitState hero);
-            combat.AttachRogueEquipmentRuntime(runtime);
-            CombatResolver.BeginTurn(combat, "hero");
-            int ap = hero.ActionPoints;
-
-            Assert.That(runtime.UseEquippedShield(combat, "hero", Facing.North), Is.True);
-            Assert.That(hero.ActionPoints, Is.EqualTo(ap - 1));
-            Assert.That(hero.Shield, Is.EqualTo(6));
-            Assert.That(runtime.IsFacingLocked("hero"), Is.True);
-        }
-
-        [Test]
         public void M3Quickbar_IsFourTacticalSlotsAndRejectsEquipment()
         {
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(101);
-            RogueTacticalItemInstance item = runtime.CreateTacticalItem("tool", "G-T04", 0, "starter");
+            RogueTacticalItemInstance item = runtime.CreateTacticalItem("tool", "G-T01", 0, "starter");
             runtime.AddTacticalToBackpack(item);
             Assert.That(runtime.AssignQuickbar(0, "tool"), Is.True);
             Assert.That(runtime.AssignQuickbar(1, runtime.Equipped[RogueEquipmentSlot.Chest]), Is.False);
@@ -119,18 +104,20 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void M3ReforgeAndCalibration_AreSeededAndNeverCreateDurability()
+        public void M3Forging_IsDeterministicOneTimeAndHasNoRandomRerollOrDurability()
         {
             RogueEquipmentRuntime first = new RogueEquipmentRuntime(2026);
             RogueEquipmentRuntime second = new RogueEquipmentRuntime(2026);
-            RogueEquipmentInstance a = first.CreateInstance("rare", "ACA-EQ-HD02", EquipmentRarity.Rare, 0, "reward");
-            RogueEquipmentInstance b = second.CreateInstance("rare", "ACA-EQ-HD02", EquipmentRarity.Rare, 0, "reward");
+            RogueEquipmentInstance a = first.CreateInstance("rare", "ACA-EQ-CH01", EquipmentRarity.Rare, 0, "reward");
+            RogueEquipmentInstance b = second.CreateInstance("rare", "ACA-EQ-CH01", EquipmentRarity.Rare, 0, "reward");
             first.AddToBackpack(a); second.AddToBackpack(b);
             int goldA = 30, goldB = 30;
-            Assert.That(first.TryReforge("rare", ref goldA), Is.True);
-            Assert.That(second.TryReforge("rare", ref goldB), Is.True);
-            Assert.That(a.MutableAffixIds, Is.EqualTo(b.MutableAffixIds));
-            Assert.That(goldA, Is.EqualTo(24));
+            Assert.That(first.TryReforge("rare", ref goldA), Is.False);
+            Assert.That(second.TryReforge("rare", ref goldB), Is.False);
+            Assert.That(a.MutableAffixIds, Is.Empty);
+            Assert.That(goldA, Is.EqualTo(30));
+            Assert.That(first.Calibrate("rare", "node1", "turn_shield:+1"), Is.True);
+            Assert.That(first.Calibrate("rare", "node1", "first_move:+1"), Is.False);
             Assert.That(typeof(RogueEquipmentInstance).GetProperties().Select(value => value.Name), Has.None.Contains("Durability"));
         }
 
@@ -138,9 +125,9 @@ namespace OCC.Combat.Tests
         public void M7EquipmentAndTacticalCharges_RoundTripThroughRogue11WithoutShieldOrDurability()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("roundtrip", 303); RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(303);
-            RogueTacticalItemInstance item = runtime.CreateTacticalItem("tool", "G-T04", 2, "reward"); runtime.AddTacticalToBackpack(item); runtime.AssignQuickbar(0, item.InstanceId); item.Consume();
+            RogueTacticalItemInstance item = runtime.CreateTacticalItem("tool", "G-T01", 2, "reward"); runtime.AddTacticalToBackpack(item); runtime.AssignQuickbar(0, item.InstanceId); item.Consume();
             runtime.WriteToDto(dto); RogueRunDto restoredDto = Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(dto)); RogueEquipmentRuntime restored = RogueEquipmentRuntime.FromDto(restoredDto);
-            Assert.That(restored.Equipped.Count, Is.EqualTo(11)); Assert.That(restored.TacticalItem("tool").ChargesCurrent, Is.EqualTo(item.ChargesMaximum - 1));
+            Assert.That(restored.Equipped.Count, Is.EqualTo(9)); Assert.That(restored.TacticalItem("tool").ChargesCurrent, Is.EqualTo(item.ChargesMaximum - 1));
             Assert.That(restored.ItemQuickbarInstanceIds[0], Is.EqualTo("tool")); Assert.That(typeof(RogueEquipmentInstance).GetProperty("Durability"), Is.Null);
         }
 
@@ -208,10 +195,53 @@ namespace OCC.Combat.Tests
             Assert.That(restored.ItemQuickbarInstanceIds[0], Is.EqualTo(string.Empty));
         }
 
+        [Test]
+        public void FirstRunLightCourierCoat_AddsOneOnlyToTheFirstMoveEachTurn()
+        {
+            RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(408);
+            RogueEquipmentInstance coat = runtime.CreateInstance("first-run-coat", "ACA-EQ-CH04",
+                EquipmentRarity.Uncommon, 0, "first-event");
+            Assert.That(runtime.AddToBackpack(coat), Is.True);
+            Assert.That(runtime.Equip(coat.InstanceId, RogueEquipmentSlot.Chest), Is.True);
+            CombatState combat = BuildCombat(out UnitState hero);
+            combat.AttachRogueEquipmentRuntime(runtime);
+
+            CombatResolver.BeginTurn(combat, hero.Id);
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange + 1));
+            runtime.AfterMove(hero.Id);
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange));
+            CombatResolver.BeginTurn(combat, hero.Id);
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange + 1));
+        }
+
+        [Test]
+        public void FirstRunSeedbedCore_ReturnsTwoManaOnlyForFirstPaidPersonalSpellInBattle()
+        {
+            RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(409);
+            RogueEquipmentInstance core = runtime.CreateInstance("first-run-core", "ACA-EQ-CR04",
+                EquipmentRarity.Uncommon, 0, "battle-two-chest");
+            Assert.That(runtime.AddToBackpack(core), Is.True);
+            Assert.That(runtime.Equip(core.InstanceId, RogueEquipmentSlot.CastingUnit), Is.True);
+            CombatState combat = BuildCombat(out UnitState hero);
+            combat.AttachRogueEquipmentRuntime(runtime);
+
+            CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.SpendMana(3));
+            runtime.OnPersonalSpellPaid(combat, hero.Id, 3);
+            Assert.That(hero.Mana, Is.EqualTo(hero.MaxMana - 1));
+            CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.SpendMana(1));
+            runtime.OnPersonalSpellPaid(combat, hero.Id, 1);
+            Assert.That(hero.Mana, Is.EqualTo(hero.MaxMana - 2));
+
+            Assert.That(runtime.Unequip(RogueEquipmentSlot.CastingUnit), Is.True);
+            Assert.That(runtime.Equip(core.InstanceId, RogueEquipmentSlot.CastingUnit), Is.True);
+            runtime.OnPersonalSpellPaid(combat, hero.Id, 1);
+            Assert.That(hero.Mana, Is.EqualTo(hero.MaxMana - 2));
+        }
+
         private static CombatState BuildCombat(out UnitState hero)
         {
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, enemy });
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
             return combat;

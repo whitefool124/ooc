@@ -32,8 +32,8 @@ namespace OCC.Combat.Tests
         {
             CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
             assets.LoadRuntime();
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.All[0].Apply(enemy);
 
             Assert.That(assets.Unit(hero), Is.Not.Null);

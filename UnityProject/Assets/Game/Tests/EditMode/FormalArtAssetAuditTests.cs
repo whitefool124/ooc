@@ -45,7 +45,7 @@ namespace OCC.Combat.Tests
             string[] missing = active.Where(entry => Resources.Load<Sprite>(entry.ResourcePath) == null)
                 .Select(entry => entry.AssetId + " => " + entry.ResourcePath).ToArray();
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
-            Assert.That(active, Has.Length.EqualTo(297), "Formal player UI includes the registered eight-element and sixteen-resource icon domains.");
+            Assert.That(active, Has.Length.EqualTo(298), "Formal player UI includes the registered domains plus the explicitly shared CR04 placeholder entry.");
             Assert.That(blockedUnits.Count, Is.EqualTo(16), "Character/unit art is explicitly product-blocked, not silently omitted.");
         }
 
@@ -177,7 +177,7 @@ namespace OCC.Combat.Tests
         public void AcademyEquipment_HasIndependentContentAndExactFootprintArt()
         {
             EquipmentDefinition[] definitions = RogueContentCatalog.CreateAcademyV01().Equipment.ToArray();
-            Assert.That(definitions, Has.Length.EqualTo(32));
+            Assert.That(definitions, Has.Length.EqualTo(33));
             Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.RuntimeId),
                 Is.EquivalentTo(definitions.Select(definition => definition.DefinitionId)));
             foreach (EquipmentDefinition definition in definitions)
@@ -200,6 +200,8 @@ namespace OCC.Combat.Tests
             }
             Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.IconResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(32));
             Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.FootprintResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(32));
+            Assert.That(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR04"), Is.EqualTo(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR03")));
+            Assert.That(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR04"), Is.EqualTo(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR03")));
         }
 
         [Test]

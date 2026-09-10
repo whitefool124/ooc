@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"badgeRaycast=True clickedSource=(5, 2) actualEnemy=(5, 2) underlyingCell=(6, 3) heroPosition=(4, 2)\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

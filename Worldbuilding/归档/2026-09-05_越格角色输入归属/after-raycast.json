@@ -1,0 +1,1 @@
+{"content":[{"type":"text","text":"{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"resolution=960x540 cellSize=128 expected=(4, 2) bodyReceiver=(4, 2) bodyObject=单位 underlying=(4, 3) cornerReceiver=(3, 3) cornerIsBody=False clicked=(4, 2) hovered=(4, 2) inspected=(4, 2) heroPosition=(4, 2) heroAP=3\",\"compiler\":\"Roslyn\"}}"}]}

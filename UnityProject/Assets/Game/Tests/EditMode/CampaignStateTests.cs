@@ -89,11 +89,11 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void Progression_RepairsWithoutDisablingEquipmentAndValidatesSixTemplates()
+        public void Progression_HasNoEquipmentDurabilityAndValidatesSixTemplates()
         {
-            var equipment = new EquipmentState("rifle", 10); equipment.Wear(4); equipment.Repair();
             var services = new ServiceLedger(); services.Train(); services.ResetWorkshop(); services.AddUpgrade("ether_coil");
-            Assert.That(equipment.Durability, Is.EqualTo(10)); Assert.That(equipment.IsDisabled, Is.False); Assert.That(services.Upgrades, Does.Contain("ether_coil"));
+            Assert.That(typeof(ServiceLedger).Assembly.GetType("OCC.Combat.EquipmentState"), Is.Null);
+            Assert.That(services.Upgrades, Does.Contain("ether_coil"));
             TaskTemplateValidator.Validate(TaskTemplateCatalog.All);
         }
 
@@ -121,7 +121,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatFlow_TransitionsMenuBriefingCombatRestartAndReturn()
         {
-            var map = new GridMap(3, 3); var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            var map = new GridMap(3, 3); var hero = new UnitState("hero", true, new GridPosition(0, 0));
             var flow = new CombatFlowController(); flow.Configure(new MissionPreparation().Configure("relay", "destroy", "guard"), new CombatState(map, new[] { hero }));
             Assert.That(flow.Phase, Is.EqualTo(CombatFlowPhase.DeveloperMenu));
             flow.OpenBriefing(); flow.BeginCombat(); flow.TacticalRestart(); flow.ResumeAfterRestart(); flow.ReturnToDeveloperMenu();
@@ -133,7 +133,7 @@ namespace OCC.Combat.Tests
         public void CombatFlow_AllowsRestartAfterVictory()
         {
             var map = new GridMap(2, 2);
-            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
             var state = new CombatState(map, new[] { hero }); state.ConfigureObjectives(new CaptureObjective(new GridPosition(0, 0), "hero"));
             var flow = new CombatFlowController(); flow.Configure(new MissionPreparation().Configure("relay", "capture", "none"), state);
             flow.OpenBriefing(); flow.BeginCombat(); flow.RefreshOutcome();

@@ -1,0 +1,25 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "tether_hound_compact_sniff_v1",
+  "role": "tactical_unit_64",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      14,
+      31,
+      51,
+      58
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 24,
+    "accent_pixels": {
+      "cyan": 3
+    }
+  },
+  "errors": []
+}

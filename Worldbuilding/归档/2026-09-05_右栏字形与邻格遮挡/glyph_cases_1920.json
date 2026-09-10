@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"移动: lines=2 glyphX=16:316 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=双击空地：快捷移动|移动 · 可执行 · 选择 …\\n攻击: lines=2 glyphX=16:328 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=左键敌人：攻击|攻击 · 不可执行 · 请选…\\n技能1: lines=2 glyphX=16:316 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=左键合法目标：施放术式|技能1 · 可执行 · 相邻…\\n技能6: lines=2 glyphX=16:316 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=左键合法目标：施放术式|技能6 · 可执行 · 自身…\\n搜刮: lines=2 glyphX=16:328 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=左键战利品：搜刮|搜刮 · 不可执行 · 战利…\\n互动: lines=2 glyphX=16:328 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=左键相邻目标：互动|互动 · 可执行 · 选择相…\\n最长中文样本: lines=2 glyphX=16:376 glyphY=-90:-40 bottomMargin=6 font=FusionPixel12ProportionalZhHans text=界界界界界界界界界界界界界界界|界界界界界界界界界界界界界界界\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

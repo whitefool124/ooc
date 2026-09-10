@@ -16,12 +16,15 @@ namespace OCC.Combat
         public bool HeroMoved { get; }
         public string ActionResult { get; }
         public FireBattleState FireBattle { get; }
+        public IReadOnlyList<GridPosition> MovementPath { get; }
+        public IReadOnlyList<CombatMechanicTriggerContext> MechanicTriggerContexts { get; }
 
         private CombatCommandExecutionResult(bool accepted, string rejectionReason,
             CombatEffectExecution execution, IReadOnlyList<FireSpellExecution> movementFireExecutions,
             IReadOnlyList<FireSpellExecution> attackFireExecutions, SkillDefinition deliveredSkill,
             GridPosition deliverySource, GridPosition deliveryTarget, bool heroMoved,
-            string actionResult, FireBattleState fireBattle)
+            string actionResult, FireBattleState fireBattle, IReadOnlyList<GridPosition> movementPath,
+            IReadOnlyList<CombatMechanicTriggerContext> mechanicTriggerContexts)
         {
             Accepted = accepted;
             RejectionReason = rejectionReason;
@@ -34,20 +37,23 @@ namespace OCC.Combat
             HeroMoved = heroMoved;
             ActionResult = actionResult;
             FireBattle = fireBattle;
+            MovementPath = movementPath ?? Array.Empty<GridPosition>();
+            MechanicTriggerContexts = mechanicTriggerContexts ?? Array.Empty<CombatMechanicTriggerContext>();
         }
 
         public static CombatCommandExecutionResult Rejected(string reason, FireBattleState fireBattle) =>
             new CombatCommandExecutionResult(false, reason, null, null, null, null,
-                default, default, false, string.Empty, fireBattle);
+                default, default, false, string.Empty, fireBattle, null, null);
 
         public static CombatCommandExecutionResult Succeeded(CombatEffectExecution execution,
             IReadOnlyList<FireSpellExecution> movementFireExecutions,
             IReadOnlyList<FireSpellExecution> attackFireExecutions, SkillDefinition deliveredSkill,
             GridPosition deliverySource, GridPosition deliveryTarget, bool heroMoved,
-            string actionResult, FireBattleState fireBattle) =>
+            string actionResult, FireBattleState fireBattle, IReadOnlyList<GridPosition> movementPath = null,
+            IReadOnlyList<CombatMechanicTriggerContext> mechanicTriggerContexts = null) =>
             new CombatCommandExecutionResult(true, string.Empty, execution, movementFireExecutions,
                 attackFireExecutions, deliveredSkill, deliverySource, deliveryTarget, heroMoved,
-                actionResult, fireBattle);
+                actionResult, fireBattle, movementPath, mechanicTriggerContexts);
     }
 
     /// <summary>
@@ -76,6 +82,9 @@ namespace OCC.Combat
                     ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
                 GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
                 GridPosition movementSource = deliverySource;
+                IReadOnlyList<GridPosition> movementPath = command.Type == CombatCommandType.Move && commandUnit != null
+                    ? CombatMovementQuery.FindPath(state, commandUnit, command.Destination)
+                    : Array.Empty<GridPosition>();
                 UnitState commandTarget = string.IsNullOrWhiteSpace(command.TargetUnitId)
                     ? null : state.GetUnit(command.TargetUnitId);
                 GridPosition deliveryTarget = commandTarget?.Position ??
@@ -104,11 +113,14 @@ namespace OCC.Combat
                     combined.AddRange(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
                     movementTriggers = combined;
                 }
+                fireBattle?.ResolveMarkedDestructions();
 
+                IReadOnlyList<CombatMechanicTriggerContext> mechanicContexts = CombatMechanicTriggerContextFactory.ForCommand(
+                    command, commandUnit, movementSource, movementPath, execution);
                 return CombatCommandExecutionResult.Succeeded(execution, movementTriggers, attackTriggers,
                     deliveredSkill, deliverySource, deliveryTarget,
                     command.Type == CombatCommandType.Move && command.UnitId == "hero",
-                    CombatInformationPresenter.BuildActionResult(state, command, execution), fireBattle);
+                    CombatInformationPresenter.BuildActionResult(state, command, execution), fireBattle, movementPath, mechanicContexts);
             }
             catch (InvalidOperationException error)
             {

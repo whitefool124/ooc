@@ -29,6 +29,11 @@ namespace OCC.Combat.Tests
                 RewardClaims++; CurrentMapRun.ClaimReward(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
             }
 
+            public void RequestAbandonMapReward()
+            {
+                CurrentMapRun.AbandonCurrentReward(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+
             public void PublishUiVisual(UiVisualEvent visualEvent) { }
             public void ShowUiFeedback(UiActionFeedback feedback) { LastFeedback = feedback; }
         }
@@ -93,11 +98,46 @@ namespace OCC.Combat.Tests
             {
                 RogueliteSettlementPresentation presentation = root.AddComponent<RogueliteSettlementPresentation>(); presentation.Initialize(host);
                 string[] settlementLabelNames = { "效果", "注意内容" };
-                Text[] labels = Object.FindObjectsByType<Text>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                Text[] labels = Object.FindObjectsByType<Text>(FindObjectsInactive.Include)
                     .Where(text => text.transform.root.name == "肉鸽结算UI" && settlementLabelNames.Contains(text.name)).ToArray();
                 Assert.That(labels, Is.Not.Empty);
                 Assert.That(labels.All(text => text.horizontalOverflow == HorizontalWrapMode.Wrap), Is.True);
                 Assert.That(labels.All(text => text.verticalOverflow == VerticalWrapMode.Truncate), Is.True);
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void RewardCards_ShowFullDetailsAndKeepSharedContentTooltip()
+        {
+            RogueRunDto dto = RogueRunDto.CreateNew("settlement-layout", 621);
+            dto.CurrentNodeId = "rail_patrol"; dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
+            Host host = new Host { CurrentMapRun = RogueliteMapRun.FromRogue11(dto) };
+            GameObject root = new GameObject("settlement-layout-test");
+            try
+            {
+                RogueliteSettlementPresentation presentation = root.AddComponent<RogueliteSettlementPresentation>();
+                presentation.Initialize(host);
+                RectTransform[] cards = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Where(rect => rect.name == "reward.first" || rect.name.StartsWith("reward."))
+                    .Where(rect => rect.Find("完整效果") != null).ToArray();
+                Assert.That(cards, Is.Not.Empty);
+                foreach (RectTransform card in cards)
+                {
+                    Assert.That(card.sizeDelta, Is.EqualTo(new Vector2(410f, 360f)));
+                    Assert.That(FormalUiKit.SkinOverlay(card.GetComponent<Image>()), Is.Null);
+                    RectTransform detail = card.Find("完整效果").GetComponent<RectTransform>();
+                    RectTransform choice = card.Find("选择").GetComponent<RectTransform>();
+                    Assert.That(detail.GetComponent<Text>().text, Is.Not.Empty);
+                    Assert.That(card.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null);
+                    Assert.That(detail.anchoredPosition, Is.EqualTo(new Vector2(24f, -146f)));
+                    Assert.That(detail.sizeDelta.y, Is.EqualTo(92f));
+                    Assert.That(-choice.anchoredPosition.y, Is.GreaterThanOrEqualTo(-detail.anchoredPosition.y + detail.rect.height));
+                    Assert.That(choice.anchoredPosition.y - choice.rect.height, Is.GreaterThanOrEqualTo(-card.rect.height));
+                    Assert.That(card.Find("奖励细框_上").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(410f, 2f)));
+                    Assert.That(card.Find("奖励细框_下").GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-358f));
+                    Assert.That(card.Find("奖励细框_右").GetComponent<RectTransform>().anchoredPosition.x, Is.EqualTo(408f));
+                }
             }
             finally { Object.DestroyImmediate(root); DestroyCanvases(); }
         }
@@ -117,7 +157,7 @@ namespace OCC.Combat.Tests
 
         private static void DestroyCanvases()
         {
-            foreach (Canvas canvas in Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (Canvas canvas in Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include))
                 if (canvas.name == "肉鸽结算UI") Object.DestroyImmediate(canvas.gameObject);
         }
     }

@@ -74,7 +74,7 @@ namespace OCC.Combat.Presentation
             outcomeSettlement.Reset();
             ResetObservation();
             FireBattleState fireBattle = new FireBattleState(state);
-            CombatEffectExecution initialTurn = CombatResolver.BeginTurn(state, "hero");
+            CombatEffectExecution initialTurn = CombatResolver.AdvanceToNextTurn(state);
             return new CombatSessionActivation(state, fireBattle, initialTurn);
         }
     }

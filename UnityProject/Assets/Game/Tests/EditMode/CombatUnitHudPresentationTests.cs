@@ -17,9 +17,9 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void CompactDecisionSummary_FitsTwoPlayerFacingLinesWithoutForecastProse()
+        public void CompactDecisionSummary_FitsTwoPlayerVisibleLinesWithoutForecastProse()
         {
-            string source = "移动 · 可执行\n目标 · 选择 3 格内可通行空格 · 预计 移动并朝向目标格；无随机判定";
+            string source = "移动 · 可执行\n目标 · 选择 3 格内可通行空格 · 预计 移动到目标格；无随机判定";
 
             string result = CombatHudTypography.CompactDecisionSummary(source, null);
 
@@ -67,15 +67,15 @@ namespace OCC.Combat.Tests
 
             Assert.That(visible, Is.EqualTo(frame));
             Assert.That(visible.width, Is.EqualTo(visible.height));
-            Assert.That(visible.width, Is.EqualTo(128f));
+            Assert.That(visible.width, Is.EqualTo(256f));
             Assert.That(visible.center.x, Is.EqualTo(cell.X + cell.Width * .5f));
         }
 
-        [TestCase(64f, 64f)]
-        [TestCase(80f, 128f)]
-        [TestCase(96f, 128f)]
-        [TestCase(128f, 128f)]
-        [TestCase(160f, 192f)]
+        [TestCase(64f, 128f)]
+        [TestCase(80f, 192f)]
+        [TestCase(96f, 192f)]
+        [TestCase(128f, 256f)]
+        [TestCase(160f, 320f)]
         public void FormalUnitPresentation_UsesWholeNumberNative64ScaleAndBottomAnchor(float cellSize, float expected)
         {
             BattlefieldRect cell = new BattlefieldRect(20f, 40f, cellSize, cellSize);
@@ -91,8 +91,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void VitalsPresentation_ExposesCurrentLossRemainingAndLethalState()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             hero.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
@@ -113,7 +113,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void RogueliteShieldVital_IsUncappedAndNeverShowsLegacyMaximum()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             CombatState state = new CombatState(new GridMap(1, 1), new[] { hero });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             state.TryGrantRogueliteShield(hero.Id, "test", 9);
@@ -128,7 +128,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void StatusPresentation_UsesPlayerFacingEffectAndExactValues()
         {
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             enemy.ApplyStatus(StatusType.Burning, 3);
             enemy.ApplyStatus(StatusType.ArmorBreak, 2, 4);
 
@@ -146,7 +146,7 @@ namespace OCC.Combat.Tests
         [TestCase(StatusType.Revealed, "revealed", "显露")]
         public void StatusPresentation_CoversArtifactStatuses(StatusType status, string runtimeId, string name)
         {
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             enemy.ApplyStatus(status, 2);
 
             CombatStatusPresentation presentation = CombatStatusPresentation.From(enemy, status);

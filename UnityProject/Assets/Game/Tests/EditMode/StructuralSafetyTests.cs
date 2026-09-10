@@ -15,8 +15,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyTactics_UsesCapabilityRatherThanSceneInstanceId()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(3, 0), Facing.West);
-            UnitState caster = new UnitState("enemy_7", false, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(3, 0));
+            UnitState caster = new UnitState("enemy_7", false, new GridPosition(0, 0));
             caster.Equip(CombatCatalog.Rifle, null, CombatCatalog.FireBolt, null);
             caster.ConfigureMana(20);
 

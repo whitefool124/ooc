@@ -30,10 +30,10 @@ namespace OCC.Combat.Tests
             run.ChooseCurrentNodeContent("survey");
             run.SelectNode("med_bay");
             run.ChooseCurrentNodeContent("field_repair");
-            run.SelectNode("permit_archive");
+            run.SelectNode("records_archive");
             run.ChooseCurrentNodeContent("survey");
             run = RoundTrip(run);
-            Assert.That(run.AccessCards, Is.GreaterThanOrEqualTo(1));
+            Assert.That(run.CompletedNodes, Does.Contain("records_archive"));
 
             run.SelectNode("safety_room");
             run.ChooseCurrentNodeContent("scan_routes");
@@ -60,7 +60,7 @@ namespace OCC.Combat.Tests
             run.SelectNode("transmission_tower");
             Assert.That(RogueliteUiPreferences.StartsCombat(run, RogueliteMapCatalog.Node("transmission_tower")), Is.False);
 
-            UnitState nextBattleHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState nextBattleHero = new UnitState("hero", true, new GridPosition(0, 0));
             run.ApplyBuild(nextBattleHero);
             Assert.That(nextBattleHero.Statuses, Is.Empty);
             Assert.That(nextBattleHero.Cooldown(nextBattleHero.SkillOne), Is.Zero);
@@ -111,6 +111,7 @@ namespace OCC.Combat.Tests
 
         private static void SettleUniqueReward(RogueliteMapRun run)
         {
+            if (!run.AwaitingReward) return;
             FireSpellDefinition fireSpell = run.CurrentFireSpellChoices.FirstOrDefault();
             if (fireSpell != null)
             {
@@ -119,7 +120,7 @@ namespace OCC.Combat.Tests
                 return;
             }
             RogueliteReward reward = run.CurrentRewards.FirstOrDefault(item => !run.ClaimedRewards.Contains(item.Id));
-            Assert.That(reward, Is.Not.Null, "Every first-region combat must offer at least one unowned reward.");
+            Assert.That(reward, Is.Not.Null, "An active reward settlement must expose one claimable reward.");
             run.ClaimReward(reward.Id);
             Assert.Throws<InvalidOperationException>(() => run.ClaimReward(reward.Id));
         }
@@ -134,11 +135,12 @@ namespace OCC.Combat.Tests
 
         private static string DefeatSignature(RogueliteSkillBuild build, string bossId)
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(2, 1), Facing.West);
-            UnitState boss = new UnitState("boss", false, new GridPosition(1, 1), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(2, 1));
+            UnitState boss = new UnitState("boss", false, new GridPosition(1, 1));
             EnemyArchetypes.Get(bossId).Apply(boss);
             build.Apply(hero);
             CombatState state = new CombatState(new GridMap(4, 3), new[] { hero, boss }, new CombatObjective[] { new EliminationObjective() });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
 
             int turns = 0;
             while (boss.IsAlive && turns < 32)

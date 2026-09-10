@@ -11,10 +11,12 @@ namespace OCC.Combat.Tests
         {
             BattlefieldPresentationAdapter adapter = new BattlefieldPresentationAdapter();
             BattlefieldRect board = adapter.BoardRect();
-            Assert.That(board.Width, Is.EqualTo(1536f));
-            Assert.That(board.Height, Is.EqualTo(1152f));
-            Assert.That(board.X, Is.LessThanOrEqualTo(0f));
-            Assert.That(board.Y, Is.LessThanOrEqualTo(BattlefieldPresentationAdapter.BoardTop));
+            Assert.That(board.Width, Is.EqualTo(768f));
+            Assert.That(board.Height, Is.EqualTo(576f));
+            Assert.That(board.X, Is.GreaterThanOrEqualTo(adapter.ViewportRect.X));
+            Assert.That(board.Y, Is.GreaterThanOrEqualTo(BattlefieldPresentationAdapter.BoardTop));
+            Assert.That(board.XMax, Is.LessThanOrEqualTo(adapter.ViewportRect.XMax));
+            Assert.That(board.YMax, Is.LessThanOrEqualTo(adapter.ViewportRect.YMax));
             Assert.That(BattlefieldPresentationAdapter.CellSize % 32f, Is.Zero);
         }
 
@@ -22,12 +24,12 @@ namespace OCC.Combat.Tests
         public void Viewport_DefaultScaleAndFocus_UseOnlyApprovedIntegerSteps()
         {
             BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            Assert.That(viewport.CellSize, Is.EqualTo(64f));
+            Assert.That(viewport.ZoomAt(720f, 450f, -1), Is.False);
+            Assert.That(viewport.CellSize, Is.EqualTo(64f));
+            viewport.ZoomAt(720f, 450f, 1);
+            viewport.ZoomAt(720f, 450f, 1);
             Assert.That(viewport.CellSize, Is.EqualTo(128f));
-            viewport.ZoomAt(720f, 450f, -1);
-            Assert.That(viewport.CellSize, Is.EqualTo(96f));
-            viewport.ZoomAt(720f, 450f, 1);
-            viewport.ZoomAt(720f, 450f, 1);
-            Assert.That(viewport.CellSize, Is.EqualTo(160f));
             viewport.Focus(new GridPosition(6, 4));
             Assert.That(viewport.BoardRect.X, Is.InRange(-480f, 0f));
             Assert.That(viewport.BoardRect.Y, Is.InRange(-540f, BattlefieldPresentationAdapter.BoardTop));
@@ -42,8 +44,8 @@ namespace OCC.Combat.Tests
             float anchorY = before.Y + 48f;
             viewport.ZoomAt(anchorX, anchorY, 1);
             BattlefieldRect after = viewport.CellRect(new GridPosition(4, 4));
-            Assert.That(after.X + 40f, Is.EqualTo(anchorX).Within(.01f));
-            Assert.That(after.Y + 60f, Is.EqualTo(anchorY).Within(.01f));
+            Assert.That(after.X + 64f, Is.EqualTo(anchorX).Within(.01f));
+            Assert.That(after.Y + 96f, Is.EqualTo(anchorY).Within(.01f));
             viewport.Pan(10000f, 10000f);
             float overscroll = viewport.CellSize * BattlefieldViewport.EdgeOverscrollCells;
             Assert.That(viewport.BoardRect.X, Is.LessThanOrEqualTo(viewport.ViewportRect.X + overscroll));
@@ -71,6 +73,8 @@ namespace OCC.Combat.Tests
         public void Viewport_SafeEdgeFollow_DoesNotRecentreAComfortablyVisibleHero()
         {
             BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            Assert.That(viewport.IsNearSafeEdge(new GridPosition(0, 8)), Is.False);
+            viewport.ZoomAt(720f, 450f, 1);
             viewport.Focus(new GridPosition(6, 4));
             Assert.That(viewport.IsNearSafeEdge(new GridPosition(6, 4)), Is.False);
             Assert.That(viewport.IsNearSafeEdge(new GridPosition(0, 4)), Is.True);
@@ -80,6 +84,7 @@ namespace OCC.Combat.Tests
         public void Viewport_FocusOnOuterRow_LeavesUnitAndBoundaryBelowTopHud()
         {
             BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            viewport.ZoomAt(720f, 450f, 1);
             viewport.Focus(new GridPosition(5, 8));
 
             BattlefieldRect topCell = viewport.CellRect(new GridPosition(5, 8));
@@ -92,6 +97,7 @@ namespace OCC.Combat.Tests
         public void ViewportInput_SpaceLeftDragTracksLifecycleAndPans()
         {
             BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            viewport.ZoomAt(720f, 450f, 1);
             var input = new BattlefieldViewportInputController();
             input.HandleGuiEvent(new Event { type = EventType.KeyDown, keyCode = KeyCode.Space }, viewport, new GridPosition(6, 4));
             Assert.That(input.IsSpaceHeld, Is.True);
@@ -143,6 +149,34 @@ namespace OCC.Combat.Tests
             Assert.That(letterboxed, Is.EqualTo(new Vector2(960f, 540f)));
         }
 
+        [TestCase(1f)]
+        [TestCase(.5f)]
+        public void Overview_AllCellsUnitsAndIntentBadgesFitAndKeepNativePixels(float screenScale)
+        {
+            BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport();
+            BattlefieldRect safe = viewport.ViewportRect;
+            for (int y = 0; y < 9; y++) for (int x = 0; x < 12; x++)
+            {
+                BattlefieldRect cell = viewport.CellRect(new GridPosition(x, y));
+                Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
+                Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 5);
+                Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
+                Assert.That(unit.xMin, Is.GreaterThanOrEqualTo(safe.X));
+                Assert.That(unit.xMax, Is.LessThanOrEqualTo(safe.XMax));
+                Assert.That(badge.yMin, Is.GreaterThanOrEqualTo(safe.Y));
+                Assert.That(shield.yMax, Is.LessThanOrEqualTo(safe.YMax));
+                Assert.That(unit.width * screenScale / 64f % 1f, Is.Zero);
+                Assert.That(cell.Width * screenScale / 32f % 1f, Is.Zero);
+                Assert.That(unit.x * screenScale % 1f, Is.Zero);
+                Assert.That(unit.y * screenScale % 1f, Is.Zero);
+            }
+            viewport.ZoomAt(720f, 400f, 1);
+            viewport.Pan(17.3f, 27.4f);
+            viewport.ResetOverview();
+            Assert.That(viewport.BoardRect.XMax, Is.LessThanOrEqualTo(safe.XMax));
+            Assert.That(viewport.BoardRect.YMax, Is.LessThanOrEqualTo(safe.YMax));
+        }
+
         [Test]
         public void TryResolveCell_AccountsForInvertedVisualYAndCellGap()
         {
@@ -157,19 +191,19 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FacingAndDistance_AreDeterministic()
+        public void DirectionAndDistance_AreDeterministic()
         {
             GridPosition origin = new GridPosition(2, 2);
             Assert.That(BattlefieldPresentationAdapter.Distance(origin, new GridPosition(5, 3)), Is.EqualTo(4));
-            Assert.That(BattlefieldPresentationAdapter.FacingToward(origin, new GridPosition(5, 3)), Is.EqualTo(Facing.East));
+            Assert.That(BattlefieldPresentationAdapter.DirectionToward(origin, new GridPosition(5, 3)), Is.EqualTo(CardinalDirection.East));
             Assert.That(BattlefieldPresentationAdapter.StepToward(origin, new GridPosition(1, 5)), Is.EqualTo(new GridPosition(2, 3)));
         }
 
         [Test]
         public void AttackPreview_ReportsRuleCostAndDeterministicDamage()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 1), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 1));
             CombatState state = new CombatState(new GridMap(4, 3), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, "hero");
             BattlefieldPresentationAdapter adapter = new BattlefieldPresentationAdapter();
@@ -185,7 +219,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void EmptyInteractionAndWrongLootCell_HaveExplicitReasons()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
             CombatState state = new CombatState(new GridMap(4, 3), new[] { hero });
             state.SetLoot(new LootContainer(new GridPosition(2, 1), new InventoryItem("cell", "护盾电池")));
             CombatResolver.BeginTurn(state, "hero");
@@ -198,8 +232,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void LockedTargetOutsideWeaponRange_IsPreviewedAsBlocked()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(5, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(5, 0));
             CombatState state = new CombatState(new GridMap(6, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, "hero");
 
@@ -214,28 +248,28 @@ namespace OCC.Combat.Tests
         {
             BattlefieldPresentationAdapter adapter = new BattlefieldPresentationAdapter();
 
-            UnitState manaHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState manaHero = new UnitState("hero", true, new GridPosition(0, 0));
             SkillDefinition expensiveSkill = new SkillDefinition("expensive", "高耗能术式", DamageType.Fire, 3, 4, 7, 1);
             manaHero.Equip(manaHero.MainHand, manaHero.OffHand, expensiveSkill, manaHero.SkillTwo);
-            CombatState manaState = new CombatState(new GridMap(4, 2), new[] { manaHero, new UnitState("enemy", false, new GridPosition(2, 0), Facing.West) });
+            CombatState manaState = new CombatState(new GridMap(4, 2), new[] { manaHero, new UnitState("enemy", false, new GridPosition(2, 0)) });
             CombatResolver.BeginTurn(manaState, "hero");
             Assert.That(adapter.BuildPreview(manaState, "技能1", "enemy").FailureReason, Does.Contain("以太不足"));
 
-            UnitState cooldownHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            CombatState cooldownState = new CombatState(new GridMap(4, 2), new[] { cooldownHero, new UnitState("enemy", false, new GridPosition(2, 0), Facing.West) });
+            UnitState cooldownHero = new UnitState("hero", true, new GridPosition(0, 0));
+            CombatState cooldownState = new CombatState(new GridMap(4, 2), new[] { cooldownHero, new UnitState("enemy", false, new GridPosition(2, 0)) });
             CombatResolver.BeginTurn(cooldownState, "hero");
             CombatResolver.Resolve(cooldownState, CombatCommand.UseSkill("hero", 0, "enemy"));
             Assert.That(adapter.BuildPreview(cooldownState, "技能1", "enemy").FailureReason, Does.Contain("冷却"));
 
             GridMap coveredMap = new GridMap(5, 2);
             coveredMap.SetTile(new GridPosition(1, 0), new TileState { Cover = CoverType.Heavy, Durability = 5 });
-            UnitState sightHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            CombatState sightState = new CombatState(coveredMap, new[] { sightHero, new UnitState("enemy", false, new GridPosition(3, 0), Facing.West) });
+            UnitState sightHero = new UnitState("hero", true, new GridPosition(0, 0));
+            CombatState sightState = new CombatState(coveredMap, new[] { sightHero, new UnitState("enemy", false, new GridPosition(3, 0)) });
             CombatResolver.BeginTurn(sightState, "hero");
             Assert.That(adapter.BuildPreview(sightState, "攻击", "enemy").FailureReason, Does.Contain("挡住了视线"));
 
-            UnitState waitingHero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState activeEnemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            UnitState waitingHero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState activeEnemy = new UnitState("enemy", false, new GridPosition(2, 0));
             CombatState waitingState = new CombatState(new GridMap(4, 2), new[] { waitingHero, activeEnemy });
             CombatResolver.BeginTurn(waitingState, "enemy");
             Assert.That(adapter.BuildPreview(waitingState, "移动", null).FailureReason, Does.Contain("等待敌方行动"));

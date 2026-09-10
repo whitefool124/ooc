@@ -85,7 +85,7 @@ def build_atlas(module) -> Image.Image:
 
 NODE_PATTERN = re.compile(
     r'new RogueliteMapNode\("(?P<id>[^"]+)", RogueliteMapNodeType\.(?P<type>\w+),.*?, '
-    r'(?P<x>\d+), (?P<y>\d+), \d+, \d+(?P<next>.*?)\),?$'
+    r'(?P<x>\d+), (?P<y>\d+)(?P<next>.*?)\),?$'
 )
 
 
@@ -188,10 +188,10 @@ def compose_mockup(atlas: Image.Image, module, nodes: dict[str, dict]) -> Image.
 
     panel(draw, (24, 78, 1896, 170), fill=(8, 16, 19, 250))
     metrics = (("生命", "18 / 18", SAFE), ("魔力", "12 / 12", CYAN), ("金币", "11", AMBER),
-               ("贡献", "2", SAFE), ("时序", "1 / 28", CYAN), ("探索", "1 / 12", CYAN), ("许可", "0 / 2", AMBER))
-    chip_width = 250
+               ("贡献", "2", SAFE), ("时序", "1 / 28", CYAN), ("已完成", "1 / 12", CYAN))
+    chip_width = 294
     for index, (label, value, accent) in enumerate(metrics):
-        x = 38 + index * 264
+        x = 38 + index * 308
         draw.rectangle((x, 94, x + chip_width, 154), fill=RAISED, outline=(42, 56, 58, 255), width=1)
         draw.rectangle((x, 94, x + 4, 154), fill=accent)
         draw.text((x + 18, 102), label, font=font(16), fill=MUTED)

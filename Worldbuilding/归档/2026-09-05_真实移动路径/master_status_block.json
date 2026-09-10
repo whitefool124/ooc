@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"12.5\"><h3 id=\"doxcnvu3IX3UGCioBbk3KfnAXie\">12.5 当前实施状态</h3><p id=\"doxcn88rUDX0DT8YhQoJHkHweKd\">VISUAL-INTEGRATION-01 已落实全场与右栏布局、单位像素倍率、地形说明和当前范围、火术来源快照、结算与飘字可读性，以及按真实结果驱动的多段特效、分层播放和重开/停用清理；编译与EditMode门禁已通过。玩法内容规模不变，水面/灯藤v3当前人工批准仍为0/2、状态QA_PENDING。主任务继续保持进行中，下一步依据现有MovementPath改善真实移动路径表现，并完成双分辨率实机接触、交互、审美与性能复核；通过后才进入样板验收及其后内容。详细证据归档于 Worldbuilding/归档/ 下的2026-09-05_视觉打磨实施第一轮、2026-09-05_战斗演出真实性修复、2026-09-05_多段特效时序。本状态不表示完整游戏或视觉实机验收已完成。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 332
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.87",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.87, run: lark-cli update"
+    }
+  }
+}

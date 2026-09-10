@@ -34,7 +34,8 @@ namespace OCC.Combat
     {
         ReplaceExistingRun,
         TacticalRestart,
-        LeaveCombat
+        LeaveCombat,
+        AbandonReward
     }
 
     public enum UiFeedbackKind

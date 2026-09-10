@@ -1,0 +1,18 @@
+[
+  {
+    "name": "reviewed_zoom_960",
+    "meta": "obstacles=12|protectedOverlap=0|popups=4|960|540|256|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "reviewed_zoom_1920",
+    "meta": "obstacles=12|protectedOverlap=0|popups=4|1920|1080|256|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "reviewed_overview_960",
+    "meta": "obstacles=12|protectedOverlap=0|popups=4|960|540|128|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "reviewed_dense_960",
+    "meta": "obstacles=12|protectedOverlap=0|popups=7|960|540|256|tether_hound|64x64|Point|Clamp"
+  }
+]

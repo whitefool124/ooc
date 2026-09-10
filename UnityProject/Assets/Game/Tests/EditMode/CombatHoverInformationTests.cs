@@ -12,8 +12,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void CompactTargetSummary_KeepsDecisionDataButLeavesReferenceDetailsForTooltip()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
@@ -35,8 +35,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void TargetTooltip_ContainsExactPreviewEnemyDossierAndAuthoritativeIntent()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
@@ -71,8 +71,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void OutcomeSummary_KeepsConsequencesVisibleAndMovesRecentEventsToHoverText()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             state.AddLog("事件0");
             state.AddLog("事件1");
@@ -114,8 +114,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyInspectionTarget_OnlySelectsLivingEnemyCells()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
 
             Assert.That(CombatInformationPresenter.EnemyInspectionTargetAt(state, enemy.Position), Is.EqualTo(enemy.Id));
@@ -126,8 +126,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyGridHover_ContainsDossierAndAuthoritativeIntent()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
@@ -148,7 +148,7 @@ namespace OCC.Combat.Tests
             string[] forbidden = { "RestoreHealth", "RestoreShield", "RestoreMana", "ApplyStatus", "ClearStatus", "MoveSource", "DamageObject" };
             foreach (EnemyArchetype archetype in EnemyArchetypes.All)
             {
-                UnitState enemy = new UnitState("enemy_" + archetype.Id, false, new GridPosition(1, 0), Facing.West);
+                UnitState enemy = new UnitState("enemy_" + archetype.Id, false, new GridPosition(1, 0));
                 archetype.Apply(enemy);
                 string details = CombatInformationPresenter.BuildEnemyInformation(enemy).FullText;
                 Assert.That(details, Does.Contain("战法："), archetype.Id);
@@ -183,7 +183,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnlargedUnitAndVitalBars_StayInsideTheirCell()
+        public void EnlargedUnit_OverhangsWithoutChangingCellAndVitalsRemainBelowFeet()
         {
             BattlefieldRect cell = new BattlefieldRect(100f, 120f, 128f, 128f);
             Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
@@ -192,14 +192,14 @@ namespace OCC.Combat.Tests
             Rect firstStatus = CombatUnitHudLayout.UnitStatusIconRect(cell, 0);
             Rect sixthStatus = CombatUnitHudLayout.UnitStatusIconRect(cell, 5);
 
-            Assert.That(unit.xMin, Is.GreaterThanOrEqualTo(cell.X));
-            Assert.That(unit.yMin, Is.GreaterThanOrEqualTo(cell.Y));
-            Assert.That(unit.xMax, Is.LessThanOrEqualTo(cell.X + cell.Width));
+            Assert.That(unit.center.x, Is.EqualTo(cell.X + cell.Width / 2f));
+            Assert.That(unit.yMin, Is.LessThan(cell.Y));
+            Assert.That(unit.width, Is.EqualTo(cell.Width * 2f));
             Assert.That(unit.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
             Assert.That(health.Overlaps(shield), Is.False);
-            Assert.That(health.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
-            Assert.That(shield.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
-            Assert.That(health.width, Is.EqualTo(120f));
+            Assert.That(health.yMin, Is.GreaterThanOrEqualTo(unit.yMin + unit.height * 58f / 64f));
+            Assert.That(shield.yMin, Is.GreaterThan(health.yMax));
+            Assert.That(health.width, Is.EqualTo(112f));
             Assert.That(firstStatus.width, Is.EqualTo(32f));
             Assert.That(firstStatus.xMin, Is.GreaterThanOrEqualTo(cell.X));
             Assert.That(sixthStatus.xMax, Is.LessThanOrEqualTo(cell.X + cell.Width));
@@ -220,10 +220,10 @@ namespace OCC.Combat.Tests
             Assert.That(unit.height, Is.EqualTo(unit.width));
             Assert.That(unit.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
             Assert.That(unit.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
-            Assert.That(health.width / cellSize, Is.EqualTo(120f / 128f).Within(.0001f));
-            Assert.That(health.height / cellSize, Is.EqualTo(22f / 128f).Within(.0001f));
-            Assert.That(shield.width / cellSize, Is.EqualTo(120f / 128f).Within(.0001f));
-            Assert.That(shield.height / cellSize, Is.EqualTo(14f / 128f).Within(.0001f));
+            Assert.That(health.width / cellSize, Is.EqualTo(112f / 128f).Within(.0001f));
+            Assert.That(health.height / cellSize, Is.EqualTo(16f / 128f).Within(.0001f));
+            Assert.That(shield.width / cellSize, Is.EqualTo(112f / 128f).Within(.0001f));
+            Assert.That(shield.height / cellSize, Is.EqualTo(8f / 128f).Within(.0001f));
         }
 
         [Test]
@@ -262,8 +262,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void CompactEnemyIntent_UsesOneShortActionAndDamageReadout()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             EnemyIntentPresentation intent = new EnemyTurnPlanBook().GetPublicIntent(state, enemy, hero);
@@ -279,12 +279,12 @@ namespace OCC.Combat.Tests
         [Test]
         public void MoveIntentDestination_IsCollectedForBattlefieldHighlight()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             GridPosition destination = new GridPosition(1, 0);
             EnemyIntentPresentation move = CombatInformationPresenter.BuildEnemyIntent(state, enemy,
-                CombatCommand.Move(enemy.Id, destination, Facing.West));
+                CombatCommand.Move(enemy.Id, destination));
 
             HashSet<GridPosition> destinations = FormalBattlefieldView.CollectIntentDestinations(new[] { null, move });
 
@@ -313,11 +313,11 @@ namespace OCC.Combat.Tests
             Assert.That(uv, Is.EqualTo(new Rect(0f, 0f, 1f, 1f)));
             Assert.That(visible, Is.EqualTo(frame));
             Assert.That(visible.width / visible.height, Is.EqualTo(1f).Within(.0001f));
-            Assert.That(Mathf.Max(visible.width, visible.height), Is.EqualTo(128f).Within(.0001f));
+            Assert.That(Mathf.Max(visible.width, visible.height), Is.EqualTo(256f).Within(.0001f));
             Assert.That(visible.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
-            Assert.That(visible.yMin, Is.GreaterThanOrEqualTo(cell.Y));
-            Assert.That(visible.xMin, Is.EqualTo(cell.X).Within(.0001f));
-            Assert.That(visible.xMax, Is.EqualTo(cell.X + cell.Width).Within(.0001f));
+            Assert.That(visible.yMin, Is.EqualTo(cell.Y - cell.Height));
+            Assert.That(visible.xMin, Is.EqualTo(cell.X - cell.Width / 2f).Within(.0001f));
+            Assert.That(visible.xMax, Is.EqualTo(cell.X + cell.Width * 1.5f).Within(.0001f));
             Assert.That(visible.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
         }
 
@@ -358,7 +358,7 @@ namespace OCC.Combat.Tests
             Assert.That(CombatPrototypeBootstrap.CanSubmitTurnCommand(playerEnd, true), Is.True);
             Assert.That(CombatPrototypeBootstrap.CanSubmitTurnCommand(CombatCommand.EndTurn("enemy"), false), Is.True);
             Assert.That(CombatPrototypeBootstrap.CanSubmitTurnCommand(
-                CombatCommand.Move("hero", new GridPosition(1, 0), Facing.East), false), Is.True);
+                CombatCommand.Move("hero", new GridPosition(1, 0)), false), Is.True);
         }
 
         [TestCase(0, false)]
@@ -372,8 +372,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void HudDecisionSummary_KeepsTargetLegalityAndResultWhileCostLivesInIconChips()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             CombatActionPreview preview = new BattlefieldPresentationAdapter().BuildPreview(state, "攻击", enemy.Id);

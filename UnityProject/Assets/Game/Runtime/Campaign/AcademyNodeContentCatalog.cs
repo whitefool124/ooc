@@ -30,23 +30,22 @@ namespace OCC.Combat
         private static RogueliteNodeContentChoice C(string id, string name, string preview,
             RogueliteNodeContentEffect effect = RogueliteNodeContentEffect.Economy,
             string reward = null, bool combat = false, int goldCost = 0, int contributionCost = 0,
-            int goldGain = 0, int contributionGain = 0, int healthGain = 0, int manaGain = 0,
-            bool permit = false)
+            int goldGain = 0, int contributionGain = 0, int healthGain = 0, int manaGain = 0)
             => new RogueliteNodeContentChoice(id, name, preview, effect, reward, combat,
                 combat ? "relay_event" : null, goldCost: goldCost, contributionCost: contributionCost,
                 goldGain: goldGain, contributionGain: contributionGain, healthGain: healthGain,
-                manaGain: manaGain, grantsCorePermit: permit);
+                manaGain: manaGain);
 
         public static readonly IReadOnlyList<AcademyEventDefinition> Events = new[]
         {
             E("EV01", "新生实战委托", "中庭",
-                C("EV01_defence", "领取防御训练许可", "花 1 学院贡献，带走折盾匣；用时 1。回来时会恢复生命和魔力。", reward:"G-T01", contributionCost:1),
+                C("EV01_defence", "领取防御训练器材", "花 1 学院贡献，带走折盾匣；用时 1。回来时会恢复生命和魔力。", reward:"G-T01", contributionCost:1),
                 C("EV01_drill", "参加追加演练", "与两名陪练交手。赢了得 4 金币；输了只得 1 金币。", combat:true, goldGain:1)),
             E("EV02", "档案室异常索引", "教学",
                 C("EV02_index", "购买索引抄本", "花 1 学院贡献，换得 3 金币；用时 1。", contributionCost:1, goldGain:3),
                 C("EV02_leave", "登记后离开", "不花东西，得到 1 学院贡献；用时 1。", contributionGain:1)),
             E("EV03", "被封存的观察记录", "教学",
-                C("EV03_fight", "守住档案库", "打完一场演练。赢了得核心许可；输了没有许可。", combat:true, permit:true),
+                C("EV03_fight", "守住档案库", "完成档案库演练，胜利获得 3 金币与 2 学院贡献；输了且存活时只得一半。", combat:true),
                 C("EV03_archive", "封存记录", "不花东西，得到 1 学院贡献；用时 1。", contributionGain:1)),
             E("EV04", "器材登记窗口", "工坊",
                 C("EV04_medical", "领取复元编架", "花 2 学院贡献，带走复元编架；用时 1。", reward:"G-T06", contributionCost:2),
@@ -55,10 +54,10 @@ namespace OCC.Combat
                 C("EV05_shield", "购入折盾匣", "花 4 金币，带走折盾匣；用时 1。", reward:"G-T01", goldCost:4),
                 C("EV05_exchange", "帮忙处理退货", "不花东西，得到 1 学院贡献；用时 1。", contributionGain:1)),
             E("EV06", "观测塔求援信号", "郊野",
-                C("EV06_rescue", "前往救援", "赶去打完一场救援演练。赢了得核心许可；输了没有许可。", combat:true, permit:true),
+                C("EV06_rescue", "前往救援", "完成救援演练，胜利获得 3 金币与 2 学院贡献；输了且存活时只得一半。", combat:true),
                 C("EV06_survey", "购买测绘情报", "花 2 金币，得到 2 学院贡献；用时 1。", goldCost:2, contributionGain:2)),
             E("EV07", "路障与巡查告示", "郊野",
-                C("EV07_clear", "协助清障", "会受 2 点伤，完成后得到 3 金币和 1 学院贡献；用时 1。", goldGain:3, contributionGain:1, healthGain:-2),
+                C("EV07_clear", "协助清障", "会受到 2 点伤害，完成后得到 3 金币和 1 学院贡献；用时 1。", goldGain:3, contributionGain:1, healthGain:-2),
                 C("EV07_detour", "绕路测绘", "不花东西，得到 2 金币；用时 1。", goldGain:2)),
             E("EV08", "高塔值守记录", "封存",
                 C("EV08_read", "查阅维护记录", "花 1 学院贡献，得到 3 金币；用时 1。", contributionCost:1, goldGain:3),
@@ -86,7 +85,7 @@ namespace OCC.Combat
                 C("EV15_objective", "亲自校准导能柱", "破坏失控的导能柱就算完成。赢了得险地冷凝器；输了拿不到。", reward:"G-T11", combat:true)),
             E("EV16", "维护链替班", "封存",
                 C("EV16_support", "请人准备护具", "花 2 学院贡献，带走折盾匣；用时 1。", reward:"G-T01", contributionCost:2),
-                C("EV16_permit", "接受维护队考核", "打赢维护队就能拿到核心许可；输了没有许可。", combat:true, permit:true))
+                C("EV16_assessment", "接受维护队考核", "完成维护队考核，胜利获得 3 金币与 2 学院贡献；输了且存活时只得一半。", combat:true))
         };
 
         private static AcademyEventDefinition E(string id, string name, string region, params RogueliteNodeContentChoice[] choices)
@@ -98,7 +97,7 @@ namespace OCC.Combat
         {
             switch (node.Type)
             {
-                case RogueliteMapNodeType.Rest:
+                case RogueliteMapNodeType.Medical:
                     return new[]
                     {
                         new RogueliteNodeContentChoice("field_repair", "接受治疗", "花 1 学院贡献，恢复 6 生命和 4 个人魔力；不花时间。", RogueliteNodeContentEffect.Recovery,
@@ -119,7 +118,7 @@ namespace OCC.Combat
                         new RogueliteNodeContentChoice("signal_contract", "出售一份情报", "交出 1 学院贡献，得到 3 金币；不花时间。", RogueliteNodeContentEffect.Economy, contributionCost:1, goldGain:3),
                         new RogueliteNodeContentChoice("buy_hazard_condenser", "购入险地冷凝器", "花 5 金币，带走险地冷凝器；不花时间。", RogueliteNodeContentEffect.Reward, "G-T11", goldCost:5)
                     };
-                case RogueliteMapNodeType.Treasure:
+                case RogueliteMapNodeType.Event when node.Id == "core_vault" || node.Id == "tower_lift":
                     if (string.Equals(node.Id, "core_vault", StringComparison.Ordinal))
                         return new[]
                         {
@@ -128,8 +127,7 @@ namespace OCC.Combat
                         };
                     return new[]
                     {
-                        new RogueliteNodeContentChoice("vault_fire_cache", "拿走冒险封签", "带走冒险封签，就不能再拿核心许可；不花时间。", RogueliteNodeContentEffect.Reward, "G-T19"),
-                        new RogueliteNodeContentChoice("vault_core_permit", "拿走核心许可", "带走 1 枚核心许可，就不能再拿冒险封签；不花时间。", RogueliteNodeContentEffect.AccessCard, grantsCorePermit:true)
+                        new RogueliteNodeContentChoice("vault_fire_cache", "拿走冒险封签", "领取冒险封签，随后可以继续旅程。", RogueliteNodeContentEffect.Reward, "G-T19")
                     };
                 default: return Array.Empty<RogueliteNodeContentChoice>();
             }
@@ -137,15 +135,14 @@ namespace OCC.Combat
 
         public static IReadOnlyList<AcademyEventAssignment> GenerateAssignments(int seed)
         {
-            RogueliteMapNode[] nodes = RogueliteMapCatalog.Nodes.Where(value => value.Type == RogueliteMapNodeType.Event)
+            RogueliteMapNode[] nodes = RogueliteMapCatalog.Nodes.Where(value => value.Type == RogueliteMapNodeType.Event &&
+                    value.Id != "core_vault" && value.Id != "tower_lift")
                 .OrderBy(value => StableKey(seed, "node|" + value.Id)).ToArray();
             List<AcademyEventDefinition> remaining = Events.OrderBy(value => StableKey(seed, "event|" + value.Id)).ToList();
             List<AcademyEventAssignment> assignments = new List<AcademyEventAssignment>();
             foreach (RogueliteMapNode node in nodes)
             {
-                AcademyEventDefinition selected = remaining.FirstOrDefault(value =>
-                    node.GrantedAccessCards <= 0 || value.Choices.All(choice => !choice.GrantsCorePermit));
-                if (selected == null) throw new InvalidOperationException("Academy event assignment cannot avoid a duplicate permit source.");
+                AcademyEventDefinition selected = remaining.First();
                 assignments.Add(new AcademyEventAssignment(node.Id, selected.Id));
                 remaining.Remove(selected);
             }

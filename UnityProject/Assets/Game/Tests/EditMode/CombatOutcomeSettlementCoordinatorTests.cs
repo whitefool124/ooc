@@ -38,6 +38,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void Process_FirstRunEliteDefeatLeavesRunRestartableAndUnchanged()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(2216);
+            string before = run.ToJson();
+
+            CombatOutcomeSettlement result = new CombatOutcomeSettlementCoordinator().Process(
+                CombatFlowPhase.Defeat, Outcome(false), run, null);
+
+            Assert.That(result.Persistence, Is.EqualTo(CombatOutcomePersistence.None));
+            Assert.That(run.ToJson(), Is.EqualTo(before));
+            Assert.That(run.FirstRunExperience.RunSealed, Is.False);
+            Assert.That(run.FirstRunExperience.Outcome, Is.EqualTo(FirstRunOutcome.None));
+        }
+
+        [Test]
         public void Process_TemplateSandboxPlaysVictoryWithoutCompletingOrSavingStory()
         {
             RogueliteDeveloperRun run = new RogueliteDeveloperRun("elimination_rail", 2213);
@@ -84,8 +99,8 @@ namespace OCC.Combat.Tests
 
         private static CombatState Outcome(bool victory)
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState combat = new CombatState(new GridMap(3, 2), new[] { hero, enemy },
                 new CombatObjective[] { new EliminationObjective() });
             combat.ResolveDebugOutcome(victory);

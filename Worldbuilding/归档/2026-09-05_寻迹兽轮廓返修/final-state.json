@@ -1,0 +1,15 @@
+{
+  "formal_png_and_meta_hashes_unchanged": true,
+  "formal_hashes": {
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/hero.png": "38d50884e9ae6607b09502eb979d316e6198f52490a113d2220e1217fbe30855",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/hero.png.meta": "61edf7b420b69d5c46f4aefdf9fde874a560a82244fc65b78a7a2ddc96b37c40",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png": "8fe92744b4aecd2e5026ed577bec6975c02a6bd3e306ebb6aa7c597ec0873f73",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png.meta": "c98da4c4b20417d34e495fcaf6734f9c04166fe2ad331d031be7b78214ef33f2",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png": "a34fdb073872308d5f6600ab7356b1328d7e90188faf452125f3a30e1737234f",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png.meta": "bb0769079afa72619495d333ef84af5c29ada688400665473c6b578346e522e4"
+  },
+  "unity_readback": "E:/数据库/OCC_Codex/UnityProject/Assets|playing=False|compiling=False|scene=Assets/Scenes/CombatPrototype.unity|dirty=False|count=1|candidateTextures=0",
+  "asset_status": "QA_PENDING",
+  "direction_approved": true,
+  "application_approved": false
+}

@@ -34,7 +34,7 @@ namespace OCC.Combat.Tests
             EnemyTurnCoordinator enemyTurn = new EnemyTurnCoordinator();
             CombatOutcomeSettlementCoordinator outcome = new CombatOutcomeSettlementCoordinator();
             controller.Begin(flow, enemyTurn, outcome);
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 0), Facing.East));
+            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 0)));
 
             CombatSessionActivation restarted = controller.Restart(flow, enemyTurn, outcome);
 
@@ -62,8 +62,8 @@ namespace OCC.Combat.Tests
 
         private static CombatFlowController Flow(out CombatState state)
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             state = new CombatState(new GridMap(4, 2), new[] { hero, enemy },
                 new CombatObjective[] { new EliminationObjective() });
             CombatFlowController flow = new CombatFlowController();

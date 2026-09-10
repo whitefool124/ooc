@@ -1,0 +1,21 @@
+{
+  "status": "PROTOTYPE_ONLY",
+  "source": "Epic Toon FX v1.8 user-provided archive",
+  "sourceArchive": "C:/Users/FNHF/Downloads/Epic Toon FX.rar",
+  "sourceSha256": "DD8143F823AB68DFD36CD9891A2BC0E2B65FE637B8967070C020097799F31BB1",
+  "usage": "Runtime UI particle-system accent recipes; does not replace OCC formal VFX frames.",
+  "files": [
+    "EpicToonFxSource/circle.png",
+    "EpicToonFxSource/ring.png",
+    "EpicToonFxSource/fire_soft_blank.png",
+    "EpicToonFxSource/explosion_sharp_soft_3x3.png",
+    "EpicToonFxSource/cloud_magic.png",
+    "EpicToonFxSource/glow1.png",
+    "EpicToonFxSource/lightning_v2_3x3.png",
+    "EpicToonFxSource/lightray1.png",
+    "EpicToonFxSource/magic_runecircle.png",
+    "EpicToonFxSource/ring_shockwave.png",
+    "EpicToonFxSource/sparkle.png",
+    "EpicToonFxSource/triangle_curve.png"
+  ]
+}

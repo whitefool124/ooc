@@ -147,7 +147,7 @@ namespace OCC.Combat
                     break;
                 case CombatCommandType.Move:
                     action = "移动";
-                    result = "抵达 " + Cell(command.Destination) + "，朝向 " + FacingLabel(command.Facing);
+                    result = "抵达 " + Cell(command.Destination);
                     iconId = "move";
                     hasDestination = true;
                     destination = command.Destination;
@@ -329,10 +329,10 @@ namespace OCC.Combat
         }
 
         public static string CommandSignature(CombatCommand command) => string.Join("|", command.Type, command.UnitId ?? string.Empty,
-            command.TargetUnitId ?? string.Empty, command.Destination.X, command.Destination.Y, command.Facing, command.SlotIndex);
+            command.TargetUnitId ?? string.Empty, command.Destination.X, command.Destination.Y, command.AimDirection, command.SlotIndex);
 
         public static string DamageBreakdown(CombatResolver.AttackPreview preview) => "基础 " + preview.BaseDamage +
-            " + 朝向 " + preview.FacingModifier + " - 掩体 " + preview.CoverReduction + " - 护甲 " + preview.ArmorReduction +
+            " - 掩体 " + preview.CoverReduction + " - 护甲 " + preview.ArmorReduction +
             " - 格挡 " + preview.BlockReduction + " · 护盾吸收 " + preview.ShieldAbsorption + " · 生命伤害 " + preview.FinalDamage;
 
         public static string BuildActionResult(CombatState state, CombatCommand command, CombatEffectExecution execution)
@@ -441,7 +441,6 @@ namespace OCC.Combat
         }
 
         private static string Cell(GridPosition position) => "(" + position.X + "," + position.Y + ")";
-        private static string FacingLabel(Facing facing) => facing == Facing.North ? "北" : facing == Facing.South ? "南" : facing == Facing.East ? "东" : "西";
     }
 
     public static class RogueliteCombatSettlement

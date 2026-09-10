@@ -1,0 +1,18 @@
+{
+  "inventory": {
+    "system": 6,
+    "personal": 12,
+    "global_lark": 27,
+    "project_lark": 27,
+    "plugin_cache": 50,
+    "agents": 2
+  },
+  "changed_files": 304,
+  "changed_skill_entries": 62,
+  "validation_pass": 115,
+  "validation_fail": 7,
+  "unresolved_real_links": [],
+  "integrity_errors": [],
+  "agent_yaml_files": 61,
+  "agent_yaml_errors": []
+}

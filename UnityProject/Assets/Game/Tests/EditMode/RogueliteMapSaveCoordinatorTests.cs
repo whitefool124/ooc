@@ -35,10 +35,10 @@ namespace OCC.Combat.Tests
             Assert.That(store.Values, Is.Empty);
         }
 
-        [TestCase(FireRogueliteStarterCatalog.Melee, "war_hammer")]
-        [TestCase(FireRogueliteStarterCatalog.Universal, null)]
-        [TestCase(FireRogueliteStarterCatalog.Ranged, "arcane_wand")]
-        public void ValidNewRun_CanRoundTripThroughContinue(string starterId, string expectedWeaponId)
+        [TestCase(FireRogueliteStarterCatalog.Melee)]
+        [TestCase(FireRogueliteStarterCatalog.Universal)]
+        [TestCase(FireRogueliteStarterCatalog.Ranged)]
+        public void ValidNewRun_CanRoundTripThroughContinueAsFixedFirstRun(string starterId)
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
@@ -51,22 +51,24 @@ namespace OCC.Combat.Tests
             Assert.That(created.Success, Is.True);
             Assert.That(loaded.Success, Is.True);
             Assert.That(loaded.Run.Seed, Is.EqualTo(303));
-            Assert.That(loaded.Run.StarterId, Is.EqualTo(starterId));
-            Assert.That(loaded.Run.EquippedWeaponId, Is.EqualTo(expectedWeaponId));
+            Assert.That(loaded.Run.StarterId, Is.EqualTo(FireRogueliteStarterCatalog.Universal));
+            Assert.That(loaded.Run.IsFirstRunExperience, Is.True);
+            Assert.That(loaded.Run.CurrentNodeId, Is.EqualTo("O"));
         }
 
         [Test]
-        public void MeleeVictorySettlement_SavesAndContinuesAtCompletedCombat()
+        public void FirstBattleVictorySettlement_SavesAndContinuesAtCompletedCombat()
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
                 FireRogueliteStarterCatalog.Melee, 307);
             Assert.That(created.Success, Is.True);
-            created.Run.SelectNode("rail_patrol");
+            created.Run.AcknowledgeFirstRunOrigin();
+            created.Run.SelectNode("B1");
 
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState combat = new CombatState(new GridMap(3, 2), new[] { hero, enemy },
                 new CombatObjective[] { new EliminationObjective() });
             combat.ResolveDebugOutcome(true);
@@ -77,8 +79,8 @@ namespace OCC.Combat.Tests
             RogueliteMapStartResult loaded = coordinator.TryStart(true,
                 FireRogueliteStarterCatalog.Universal, 999);
             Assert.That(loaded.Success, Is.True);
-            Assert.That(loaded.Run.CurrentNodeId, Is.EqualTo("rail_patrol"));
-            Assert.That(loaded.Run.CompletedNodes, Does.Contain("rail_patrol"));
+            Assert.That(loaded.Run.CurrentNodeId, Is.EqualTo("B1"));
+            Assert.That(loaded.Run.CompletedNodes, Does.Contain("B1"));
             Assert.That(loaded.Run.AwaitingReward, Is.True);
         }
 
@@ -91,9 +93,10 @@ namespace OCC.Combat.Tests
                 FireRogueliteStarterCatalog.Ranged, 305);
             Assert.That(first.Success, Is.True);
 
-            first.Run.SelectNode("supply_checkpoint");
-            first.Run.ChooseCurrentNodeContent("buy_hazard_condenser");
-            Assert.That(first.Run.Gold, Is.EqualTo(3));
+            first.Run.AcknowledgeFirstRunOrigin();
+            first.Run.SelectNode("B1");
+            first.Run.CompleteCurrentCombat();
+            first.Run.ClaimReward(first.Run.CurrentFirstRunRewardIds[0]);
             Assert.That(coordinator.Save(first.Run), Is.True);
 
             RogueliteMapStartResult replacement = coordinator.TryStart(false,
@@ -101,12 +104,13 @@ namespace OCC.Combat.Tests
 
             Assert.That(replacement.Success, Is.True);
             Assert.That(replacement.Run.Seed, Is.EqualTo(306));
-            Assert.That(replacement.Run.CurrentNodeId, Is.EqualTo("start"));
+            Assert.That(replacement.Run.CurrentNodeId, Is.EqualTo("O"));
             Assert.That(replacement.Run.Gold, Is.EqualTo(8));
             Assert.That(replacement.Run.StageContribution, Is.Zero);
             Assert.That(replacement.Run.StageTime, Is.Zero);
             Assert.That(replacement.Run.AcademyProgress, Is.Zero);
-            Assert.That(replacement.Run.CorePermits, Is.Zero);
+            Assert.That(replacement.Run.FirstRunExperience.Origin.Acknowledged, Is.False);
+            Assert.That(replacement.Run.CompletedNodes, Is.Empty);
         }
 
         [Test]

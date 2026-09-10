@@ -1,0 +1,13 @@
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:106:            fields[19] = B("permit_archive");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:107:            fields[22] = List("start", "permit_archive");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:108:            fields[24] = List("permit:EV03", "permit:tower_lift");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:110:            fields[29] = List(assignments.Select(p => (p.Key == "records_archive" ? "permit_archive" : p.Key) + "=" + p.Value).ToArray());
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:140:            fields[3] = "permit_archive";
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:142:            fields[16] = fields[16].Replace("records_archive", "permit_archive");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:143:            fields[17] = fields[17].Replace("records_archive", "permit_archive");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:144:            fields[18] = "permit:EV03";
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:173:            dto.ClaimedContentIds.Add("permit:unknown");
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:175:            Assert.That(run.ClaimedRewards, Does.Contain("permit:unknown"));
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs:182:            string[] forbidden = { "核心许可", "权限卡", "许可档案" };
+.\UnityProject\Assets\Game\Runtime\Campaign\AcademyMapSaveMigration.cs:9:        public static string NodeId(string id) => id == "permit_archive" ? "records_archive" : id;
+.\UnityProject\Assets\Game\Runtime\Campaign\AcademyMapSaveMigration.cs:13:            AcademyNodeContentCatalog.Events.Select(value => "permit:" + value.Id).Concat(new[] { "permit:tower_lift" });

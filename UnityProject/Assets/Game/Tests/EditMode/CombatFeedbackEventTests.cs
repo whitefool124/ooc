@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Reflection;
 
 namespace OCC.Combat.Tests
 {
@@ -118,6 +120,92 @@ namespace OCC.Combat.Tests
 
             Assert.That(CombatStatusFeedback.HasRemoval(previous, decayed), Is.False);
             Assert.That(CombatStatusFeedback.HasRemoval(previous, removed), Is.True);
+        }
+
+        [TestCase(240f, 48f, 28f)]
+        [TestCase(168f, 104f, 52f)]
+        [TestCase(240f, 48f, 0f)]
+        [TestCase(168f, 104f, 0f)]
+        public void FeedbackText_StaysInsideViewportThroughoutItsRise(float width, float height, float rise)
+        {
+            BattlefieldRect viewport = new BattlefieldPresentationAdapter().ViewportRect;
+            foreach (float x in new[] { -2000f, 0f, 2000f })
+            foreach (float y in new[] { -2000f, 0f, 2000f })
+            {
+                Vector2 center = CombatVisualFeedback.ClampFeedbackCenter(new Vector2(x, y),
+                    new Vector2(width, height), viewport, rise);
+                float left = 960f + center.x - width * .5f;
+                float right = left + width;
+                float topAtEnd = 540f - center.y - height * .5f - rise;
+                float bottomAtStart = 540f - center.y + height * .5f;
+                Assert.That(left, Is.GreaterThanOrEqualTo(viewport.X + 8f));
+                Assert.That(right, Is.LessThanOrEqualTo(viewport.XMax - 8f));
+                Assert.That(topAtEnd, Is.GreaterThanOrEqualTo(viewport.Y + 8f));
+                Assert.That(bottomAtStart, Is.LessThanOrEqualTo(viewport.YMax - 8f));
+                foreach (float scale in new[] { 1f, .5f })
+                foreach (float edge in new[] { left, right, topAtEnd, bottomAtStart })
+                    Assert.That(edge * scale % 1f, Is.Zero, "feedback must meet physical pixels at both resolutions");
+            }
+        }
+
+        [TestCase(64f)]
+        [TestCase(128f)]
+        public void FeedbackPulse_UsesFourPixelAlignedEdgesInsideTheCurrentCell(float cellSize)
+        {
+            GameObject root = new GameObject("pulse-test", typeof(RectTransform));
+            try
+            {
+                RectTransform rect = root.GetComponent<RectTransform>();
+                typeof(CombatVisualFeedback).GetMethod("BuildPulseFrame", BindingFlags.Static | BindingFlags.NonPublic)
+                    .Invoke(null, new object[] { rect, cellSize, Color.white });
+                Assert.That(rect.localScale, Is.EqualTo(Vector3.one));
+                Assert.That(root.transform.childCount, Is.EqualTo(4));
+                foreach (RectTransform edge in root.transform)
+                {
+                    Vector2 min = edge.anchoredPosition - edge.sizeDelta * .5f;
+                    Vector2 max = edge.anchoredPosition + edge.sizeDelta * .5f;
+                    Assert.That(min.x, Is.GreaterThanOrEqualTo(-cellSize * .5f));
+                    Assert.That(min.y, Is.GreaterThanOrEqualTo(-cellSize * .5f));
+                    Assert.That(max.x, Is.LessThanOrEqualTo(cellSize * .5f));
+                    Assert.That(max.y, Is.LessThanOrEqualTo(cellSize * .5f));
+                    foreach (float position in new[] { min.x, min.y, max.x, max.y })
+                        Assert.That(position * .5f % 1f, Is.Zero);
+                }
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OutcomeFeedback_HasVisibleGlyphsDuringItsHoldWithoutScaling(bool victory)
+        {
+            GameObject root = new GameObject("outcome-feedback-test", typeof(Canvas), typeof(CombatVisualFeedback));
+            GameObject card = null;
+            System.Type tween = System.AppDomain.CurrentDomain.GetAssemblies()
+                .Select(assembly => assembly.GetType("DG.Tweening.DOTween")).FirstOrDefault(type => type != null);
+            try
+            {
+                CombatVisualFeedback feedback = root.GetComponent<CombatVisualFeedback>();
+                typeof(CombatVisualFeedback).GetField("canvas", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(feedback, root.GetComponent<Canvas>());
+                feedback.PlayOutcome(victory);
+                card = root.transform.Find("战斗结果反馈").gameObject;
+                Assert.That(tween, Is.Not.Null);
+                tween.GetMethod("Goto", new[] { typeof(object), typeof(float), typeof(bool) })
+                    .Invoke(null, new object[] { card, .3f, false });
+                Text label = card.GetComponent<Text>();
+                Assert.That(label.text, Is.EqualTo(victory ? "战斗胜利" : "战斗失败"));
+                Assert.That(label.color.a * card.GetComponent<CanvasGroup>().alpha, Is.GreaterThan(.9f));
+                Assert.That(card.transform.localScale, Is.EqualTo(Vector3.one));
+                Assert.That(label.resizeTextForBestFit, Is.False);
+                Assert.That(label.raycastTarget, Is.False);
+            }
+            finally
+            {
+                if (card != null && tween != null)
+                    tween.GetMethod("Kill", new[] { typeof(object), typeof(bool) }).Invoke(null, new object[] { card, false });
+                Object.DestroyImmediate(root);
+            }
         }
     }
 }

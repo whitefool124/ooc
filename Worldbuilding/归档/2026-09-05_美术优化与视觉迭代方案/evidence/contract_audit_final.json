@@ -1,0 +1,7 @@
+{
+  "schema": "occ-art-contract-audit-v1",
+  "status": "FAIL",
+  "errors": [
+    "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md missing required contract text: 2px 细框"
+  ]
+}

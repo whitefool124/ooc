@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"hero shield 2 -> 4; ally shield 6 -> 4; step=0:TransferShield:ally:(1, 0):4:Always\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

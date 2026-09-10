@@ -51,9 +51,10 @@ namespace OCC.Combat.Roguelite
         private readonly Dictionary<string, RogueEquipmentInstance> equipment = new Dictionary<string, RogueEquipmentInstance>(StringComparer.Ordinal);
         private readonly Dictionary<string, RogueTacticalItemInstance> tactical = new Dictionary<string, RogueTacticalItemInstance>(StringComparer.Ordinal);
         private readonly Dictionary<string, RogueBackpackPlacement> backpack = new Dictionary<string, RogueBackpackPlacement>(StringComparer.Ordinal);
-        private readonly Dictionary<EquipmentSlot, string> equipped = Enum.GetValues(typeof(EquipmentSlot)).Cast<EquipmentSlot>().ToDictionary(value => value, value => string.Empty);
+        private readonly Dictionary<EquipmentSlot, string> equipped = EquipmentSlotRules.ActiveSlots.ToDictionary(value => value, value => string.Empty);
         private readonly string[] quickbar = new string[RogueRuntimeConstants.ItemQuickbarSize];
-        private readonly HashSet<string> facingLockedUnits = new HashSet<string>(StringComparer.Ordinal);
+        private readonly HashSet<string> firstMoveAvailable = new HashSet<string>(StringComparer.Ordinal);
+        private readonly HashSet<string> firstPaidSpellReturned = new HashSet<string>(StringComparer.Ordinal);
 
         public IReadOnlyDictionary<EquipmentSlot, string> Equipped => equipped;
         public IReadOnlyDictionary<string, RogueBackpackPlacement> Backpack => backpack;
@@ -75,9 +76,9 @@ namespace OCC.Combat.Roguelite
         {
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(seed);
             RogueEquipmentInstance chest = runtime.CreateInstance("starter-chest", "ACA-EQ-CH01", EquipmentRarity.Common, 0, "starter");
-            RogueEquipmentInstance shield = runtime.CreateInstance("starter-shield", "ACA-EQ-OH01", EquipmentRarity.Common, 1, "starter");
-            runtime.AddToBackpack(chest); runtime.AddToBackpack(shield);
-            runtime.Equip(chest.InstanceId, EquipmentSlot.Chest); runtime.Equip(shield.InstanceId, EquipmentSlot.OffHand);
+            RogueEquipmentInstance backpack = runtime.CreateInstance("starter-backpack", "ACA-EQ-BP01", EquipmentRarity.Common, 1, "starter");
+            runtime.AddToBackpack(chest); runtime.AddToBackpack(backpack);
+            runtime.Equip(chest.InstanceId, EquipmentSlot.Chest); runtime.Equip(backpack.InstanceId, EquipmentSlot.Backpack);
             return runtime;
         }
 
@@ -109,7 +110,8 @@ namespace OCC.Combat.Roguelite
             dto.EquipmentInstances.Clear(); foreach (EquipmentSlot slot in equipped.Keys.ToArray()) dto.EquipmentSlotInstanceIds[slot] = equipped[slot];
             foreach (RogueEquipmentInstance instance in equipment.Values.OrderBy(value => value.AcquiredOrder))
             {
-                EquipmentSlot slot = equipped.FirstOrDefault(value => value.Value == instance.InstanceId).Key;
+                KeyValuePair<EquipmentSlot, string> equippedPair = equipped.FirstOrDefault(value => value.Value == instance.InstanceId);
+                EquipmentSlot slot = string.IsNullOrEmpty(equippedPair.Value) ? EquipmentSlot.None : equippedPair.Key;
                 EquipmentInstanceDto saved = new EquipmentInstanceDto(instance.InstanceId, instance.DefinitionId, slot, instance.Rarity, instance.PowerBand)
                 { ReforgeCount = instance.ReforgeCount, SourceStage = instance.SourceStage, SourceType = instance.SourceType, AcquiredOrder = instance.AcquiredOrder };
                 if (backpack.TryGetValue(instance.InstanceId, out RogueBackpackPlacement placement)) { saved.BackpackX = placement.X; saved.BackpackY = placement.Y; saved.BackpackRotated = placement.Rotated; }
@@ -143,6 +145,17 @@ namespace OCC.Combat.Roguelite
         public bool AddToBackpack(RogueEquipmentInstance instance) => instance != null && equipment.ContainsKey(instance.InstanceId) && AddFirstFit(instance.InstanceId);
         public bool AddTacticalToBackpack(RogueTacticalItemInstance instance) => instance != null && tactical.ContainsKey(instance.InstanceId) && AddFirstFit(instance.InstanceId);
 
+        public bool TryAddEquipmentFromLoot(string instanceId, string definitionId, string sourceType)
+        {
+            EquipmentDefinition definition = catalog.Equipment.FirstOrDefault(value => value.DefinitionId == definitionId);
+            if (definition == null || equipment.ContainsKey(instanceId) || tactical.ContainsKey(instanceId)) return false;
+            RogueEquipmentInstance instance = CreateInstance(instanceId, definitionId, definition.AllowedRarities[0],
+                equipment.Count + tactical.Count, sourceType);
+            if (AddToBackpack(instance)) return true;
+            equipment.Remove(instanceId);
+            return false;
+        }
+
         public bool MoveBackpack(string instanceId, int x, int y, bool rotated)
         {
             if (!CanMoveBackpack(instanceId, x, y, rotated)) return false;
@@ -164,12 +177,14 @@ namespace OCC.Combat.Roguelite
 
         public bool Equip(string instanceId, EquipmentSlot slot)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, false, out RogueEquipmentInstance instance)) return false;
             backpack.Remove(instanceId); equipped[slot] = instanceId; return true;
         }
 
         public bool CanEquipOrReplace(string instanceId, EquipmentSlot slot)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, true, out _)) return false;
             string previous = equipped[slot];
             return string.IsNullOrEmpty(previous) || FindFirstFit(previous, instanceId).HasValue;
@@ -177,6 +192,7 @@ namespace OCC.Combat.Roguelite
 
         public bool EquipOrReplace(string instanceId, EquipmentSlot slot)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, true, out _)) return false;
             string previous = equipped[slot];
             if (string.IsNullOrEmpty(previous)) return Equip(instanceId, slot);
@@ -194,15 +210,13 @@ namespace OCC.Combat.Roguelite
             if (!equipment.TryGetValue(instanceId, out instance) || !backpack.ContainsKey(instanceId) || !equipped.ContainsKey(slot)) return false;
             if (!allowOccupied && !string.IsNullOrEmpty(equipped[slot])) return false;
             EquipmentDefinition definition = Definition(instance);
-            bool accessory = definition.Slot == EquipmentSlot.Accessory1 && (slot == EquipmentSlot.Accessory1 || slot == EquipmentSlot.Accessory2);
-            if (definition.Slot != slot && !accessory) return false;
-            if (slot == EquipmentSlot.OffHand && IsTwoHandedMainEquipped()) return false;
-            if (slot == EquipmentSlot.MainHand && definition.Handedness == EquipmentHandedness.TwoHanded && !string.IsNullOrEmpty(equipped[EquipmentSlot.OffHand])) return false;
-            return true;
+            return EquipmentSlotRules.CanEquip(definition.Slot, slot);
         }
 
         public bool Unequip(EquipmentSlot slot)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
+            if (!equipped.ContainsKey(slot)) return false;
             string instanceId = equipped[slot];
             if (string.IsNullOrEmpty(instanceId)) return false;
             RogueBackpackPlacement? placement = FindFirstFit(instanceId);
@@ -212,6 +226,7 @@ namespace OCC.Combat.Roguelite
 
         public bool CanUnequipToBackpack(EquipmentSlot slot, int x, int y, bool rotated)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!equipped.TryGetValue(slot, out string instanceId) || string.IsNullOrEmpty(instanceId)) return false;
             Size(instanceId, rotated, out int width, out int height);
             return Fits(instanceId, x, y, rotated, width, height);
@@ -219,6 +234,7 @@ namespace OCC.Combat.Roguelite
 
         public bool UnequipToBackpack(EquipmentSlot slot, int x, int y, bool rotated)
         {
+            slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanUnequipToBackpack(slot, x, y, rotated)) return false;
             string instanceId = equipped[slot];
             backpack[instanceId] = new RogueBackpackPlacement(x, y, rotated);
@@ -228,8 +244,8 @@ namespace OCC.Combat.Roguelite
 
         public void OnTurnStart(CombatState combat, string unitId)
         {
-            facingLockedUnits.Remove(unitId);
-            foreach (EquipmentSlot slot in Enum.GetValues(typeof(EquipmentSlot)).Cast<EquipmentSlot>())
+            firstMoveAvailable.Add(unitId);
+            foreach (EquipmentSlot slot in EquipmentSlotRules.ActiveSlots)
             {
                 string instanceId = equipped[slot];
                 if (string.IsNullOrEmpty(instanceId)) continue;
@@ -244,22 +260,19 @@ namespace OCC.Combat.Roguelite
             }
         }
 
-        public bool UseEquippedShield(CombatState combat, string unitId, Facing facing)
-        {
-            string instanceId = equipped[EquipmentSlot.OffHand];
-            if (string.IsNullOrEmpty(instanceId)) return false;
-            RogueEquipmentInstance instance = equipment[instanceId];
-            if (instance.DefinitionId != "ACA-EQ-OH01" && instance.DefinitionId != "ACA-EQ-OH02") return false;
-            UnitState unit = combat.GetUnit(unitId);
-            if (unit == null || unit.ActionPoints < 1) return false;
-            CombatEffectExecutor.Execute(combat, unitId, CombatEffect.SpendActionPoints(1));
-            unit.TurnInPlace(facing);
-            int shield = instance.Rarity == EquipmentRarity.Legendary ? 8 : instance.Rarity == EquipmentRarity.Rare ? 6 : 4;
-            combat.TryGrantRogueliteShield(unitId, instance.InstanceId + ":raise", shield);
-            facingLockedUnits.Add(unitId); return true;
-        }
+        public int MovementBonus(string unitId) => unitId == "hero" && firstMoveAvailable.Contains(unitId) && HasEquippedEffect("first_move:+1") ? 1 : 0;
+        public void AfterMove(string unitId) => firstMoveAvailable.Remove(unitId);
 
-        public bool IsFacingLocked(string unitId) => facingLockedUnits.Contains(unitId);
+        public void OnPersonalSpellPaid(CombatState combat, string unitId, int manaPaid)
+        {
+            if (combat == null || unitId != "hero" || manaPaid < 1 || firstPaidSpellReturned.Contains(unitId) ||
+                !HasEquippedEffect("first_paid_personal_spell_mana:+2")) return;
+            UnitState unit = combat.GetUnit(unitId);
+            if (unit == null || !unit.IsAlive) return;
+            unit.RestoreMana(2);
+            firstPaidSpellReturned.Add(unitId);
+            combat.AddLog("苗床回流芯触发：本场首次付费个人术式返还 2 魔力。");
+        }
 
         public bool AssignQuickbar(int slot, string instanceId)
         {
@@ -272,33 +285,22 @@ namespace OCC.Combat.Roguelite
 
         public bool TryReforge(string instanceId, ref int gold)
         {
-            if (!equipment.TryGetValue(instanceId, out RogueEquipmentInstance instance) || (instance.Rarity != EquipmentRarity.Rare && instance.Rarity != EquipmentRarity.Legendary)) return false;
-            int cost = (instance.Rarity == EquipmentRarity.Rare ? 6 : 9) + instance.ReforgeCount * 2;
-            if (gold < cost) return false;
-            EquipmentDefinition definition = Definition(instance);
-            bool fixedShield = definition.TurnStartShield > 0 || definition.FixedEffectIds.Any(value => value.Contains("shield"));
-            AffixDefinition[] candidates = catalog.Affixes.Where(value => value.LegalSlots.Contains(definition.Slot) &&
-                (!value.ExactRarity.HasValue || value.ExactRarity.Value == instance.Rarity) && value.MinimumRarity <= instance.Rarity &&
-                (!fixedShield || value.MutualExclusionGroup != "equipment_round_shield")).OrderBy(value => StableKey(instance.InstanceId, instance.ReforgeCount, value.AffixId)).ToArray();
-            int count = instance.Rarity == EquipmentRarity.Rare ? 2 : 3;
-            string[] selected = candidates.GroupBy(value => value.MutualExclusionGroup, StringComparer.Ordinal).Select(group => group.First()).Take(count).Select(value => value.AffixId).ToArray();
-            if (selected.Length < count) return false;
-            gold -= cost; instance.MutableAffixIds.Clear(); instance.MutableAffixIds.AddRange(selected); instance.ReforgeCount++; return true;
+            // The master plan removed random reforge/reroll. Keep the method only so old callers and
+            // saves fail closed; deterministic material installation is represented by Calibrate.
+            return false;
         }
 
         public bool Calibrate(string instanceId, string nodeId, string branchId)
         {
-            if (!equipment.TryGetValue(instanceId, out RogueEquipmentInstance instance)) return false;
+            if (!equipment.TryGetValue(instanceId, out RogueEquipmentInstance instance) || instance.UpgradeBranchIds.Count > 0) return false;
             UpgradeNodeDefinition node = Definition(instance).UpgradeNodes.FirstOrDefault(value => value.NodeId == nodeId);
             if (node == null || (branchId != node.BranchAEffectId && branchId != node.BranchBEffectId)) return false;
-            instance.UpgradeBranchIds.RemoveAll(value => value.StartsWith(nodeId + ":", StringComparison.Ordinal));
             instance.UpgradeBranchIds.Add(nodeId + ":" + branchId); return true;
         }
 
         public RogueValidationResult Validate()
         {
             RogueValidationResult result = new RogueValidationResult();
-            if (IsTwoHandedMainEquipped() && !string.IsNullOrEmpty(equipped[EquipmentSlot.OffHand])) result.Add("Two-handed main hand conflicts with offhand.");
             foreach (RogueEquipmentInstance instance in equipment.Values)
             {
                 EquipmentDefinition definition = Definition(instance);
@@ -311,7 +313,9 @@ namespace OCC.Combat.Roguelite
         }
 
         private EquipmentDefinition Definition(RogueEquipmentInstance instance) => catalog.Equipment.Single(value => value.DefinitionId == instance.DefinitionId);
-        private bool IsTwoHandedMainEquipped() => !string.IsNullOrEmpty(equipped[EquipmentSlot.MainHand]) && Definition(equipment[equipped[EquipmentSlot.MainHand]]).Handedness == EquipmentHandedness.TwoHanded;
+        private bool HasEquippedEffect(string effectId) => equipped.Values.Where(value => !string.IsNullOrEmpty(value))
+            .Select(value => equipment[value]).SelectMany(value => Definition(value).FixedEffectIds)
+            .Any(value => string.Equals(value, effectId, StringComparison.Ordinal));
         private bool AddFirstFit(string instanceId)
         {
             if (backpack.ContainsKey(instanceId) || equipped.Values.Contains(instanceId)) return false;

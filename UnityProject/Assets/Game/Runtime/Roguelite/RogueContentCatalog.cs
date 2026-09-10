@@ -25,11 +25,13 @@ namespace OCC.Combat.Roguelite
 
         private static IEnumerable<SpellDefinition> CreateSpells()
         {
-            yield return Basic("BASE-FIRE-MELEE", "灼触", "melee_attack", 1, 1, 0, "adjacent_visible_enemy", 1, "damage:physical:8");
-            yield return Basic("BASE-FIRE-RANGED", "火花", "ranged_attack", 1, 2, 0, "visible_enemy", 4, "damage:fire:6");
+            yield return Basic("BASE-FIRE-MELEE", "灼触", "melee_attack", 1, 1, 0, "adjacent_hittable", 1, "damage:fire:8");
+            yield return Basic("BASE-FIRE-RANGED", "火花", "ranged_attack", 1, 2, 0, "visible_hittable", 4, "damage:fire:6");
             yield return Basic("BASE-AETHER-SHIELD", "以太护幕", "defense", 1, 2, 1, "self", 0, "grant_shield:6");
             yield return Basic("BASE-MANA-RECOVER", "回路调息", "resource", 1, 0, 1, "self", 0, "restore_mana:2:max12");
-
+            yield return Passive("PASSIVE-ELITE-01", "回火导流", "fire", "first_personal_fire_damage_restore_mana:1");
+            yield return Passive("PASSIVE-ELITE-02", "动势点火", "fire", "move_3_then_weapon_fire_damage:4");
+            yield return Passive("PASSIVE-ELITE-03", "缓冲覆层", "aether", "turn_start_shield_if_zero:3");
             foreach (FireSpellDefinition old in FireSpellCatalog.All)
             {
                 string role = old.Group == FireSpellGroup.Melee ? "melee" : old.Group == FireSpellGroup.Universal ? "universal" : "ranged";
@@ -48,8 +50,13 @@ namespace OCC.Combat.Roguelite
         }
 
         private static SpellDefinition Basic(string id, string name, string role, int ap, int mana, int cooldown, string targeting, int range, string rule)
-            => new SpellDefinition(id, name, "aether", role, SpellRarity.Basic, ap, mana, cooldown, targeting, range,
+            => new SpellDefinition(id, name, id.StartsWith("BASE-FIRE-", StringComparison.Ordinal) ? "fire" : "aether", role, SpellRarity.Basic, ap, mana, cooldown, targeting, range,
                 "required_when_targeted", new[] { rule }, Array.Empty<string>(), new[] { "starter" }, false, string.Empty, "academy-basics-v0.1", true);
+
+        private static SpellDefinition Passive(string id, string name, string element, string rule)
+            => new SpellDefinition(id, name, element, "passive", SpellRarity.Rare, 0, 0, 0, "self", 0,
+                "not_applicable", new[] { rule }, Array.Empty<string>(), new[] { "first-run-elite" }, false,
+                id, "first-run-v1");
 
         private static IEnumerable<string> Compatibility(FireSpellDefinition spell)
         {
@@ -79,16 +86,16 @@ namespace OCC.Combat.Roguelite
 
         private static IEnumerable<EquipmentDefinition> CreateEquipment()
         {
-            yield return E("ACA-EQ-MH01","学院练习剑",EquipmentSlot.MainHand,EquipmentHandedness.OneHanded,EquipmentRarity.Common,1,3,2,0,0,"attack:melee:8");
-            yield return E("ACA-EQ-MH02","钩刃长枪",EquipmentSlot.MainHand,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,1,3,3,0,0,"attack:front2:8");
-            yield return E("ACA-EQ-MH03","刻印战锤",EquipmentSlot.MainHand,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,2,3,4,0,0,"attack:heavy:16","object_damage:16");
-            yield return E("ACA-EQ-MH04","猎团短弓",EquipmentSlot.MainHand,EquipmentHandedness.TwoHanded,EquipmentRarity.Common,2,3,2,0,0,"attack:ranged4:6");
-            yield return E("ACA-EQ-MH05","绞盘重弩",EquipmentSlot.MainHand,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,2,3,4,0,0,"attack:ranged5:16","reload");
-            yield return E("ACA-EQ-MH06","灰炉导杖",EquipmentSlot.MainHand,EquipmentHandedness.OneHanded,EquipmentRarity.Rare,1,3,2,0,0,"attack:aether3:6","mana_on_burning_hit:1");
-            yield return E("ACA-EQ-OH01","学院圆盾",EquipmentSlot.OffHand,EquipmentHandedness.OffHand,EquipmentRarity.Common,2,2,2,0,0,"raise_shield:4");
-            yield return E("ACA-EQ-OH02","石闸长盾",EquipmentSlot.OffHand,EquipmentHandedness.OffHand,EquipmentRarity.Uncommon,2,3,4,0,0,"raise_shield:4");
-            yield return E("ACA-EQ-OH03","反握短刃",EquipmentSlot.OffHand,EquipmentHandedness.OffHand,EquipmentRarity.Uncommon,1,2,1,0,0,"attack:melee:6");
-            yield return E("ACA-EQ-OH04","导流副环",EquipmentSlot.OffHand,EquipmentHandedness.OffHand,EquipmentRarity.Rare,1,1,1,1,0,"u_spell_first_mana:-1");
+            yield return E("ACA-EQ-MH01","学院练习剑",EquipmentSlot.Weapon,EquipmentHandedness.OneHanded,EquipmentRarity.Common,1,3,2,0,0,"attack:melee:8");
+            yield return E("ACA-EQ-MH02","钩刃长枪",EquipmentSlot.Weapon,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,1,3,3,0,0,"attack:front2:8");
+            yield return E("ACA-EQ-MH03","刻印战锤",EquipmentSlot.Weapon,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,2,3,4,0,0,"attack:heavy:16","object_damage:16");
+            yield return E("ACA-EQ-MH04","猎团短弓",EquipmentSlot.Weapon,EquipmentHandedness.TwoHanded,EquipmentRarity.Common,2,3,2,0,0,"attack:ranged4:6");
+            yield return E("ACA-EQ-MH05","绞盘重弩",EquipmentSlot.Weapon,EquipmentHandedness.TwoHanded,EquipmentRarity.Uncommon,2,3,4,0,0,"attack:ranged5:16","reload");
+            yield return E("ACA-EQ-MH06","灰炉导杖",EquipmentSlot.Weapon,EquipmentHandedness.OneHanded,EquipmentRarity.Rare,1,3,2,0,0,"attack:aether3:6","mana_on_burning_hit:1");
+            yield return E("ACA-EQ-OH01","学院圆盾",EquipmentSlot.None,EquipmentHandedness.OffHand,EquipmentRarity.Common,2,2,2,0,0,"raise_shield:4");
+            yield return E("ACA-EQ-OH02","石闸长盾",EquipmentSlot.None,EquipmentHandedness.OffHand,EquipmentRarity.Uncommon,2,3,4,0,0,"raise_shield:4");
+            yield return E("ACA-EQ-OH03","反握短刃",EquipmentSlot.None,EquipmentHandedness.OffHand,EquipmentRarity.Uncommon,1,2,1,0,0,"attack:melee:6");
+            yield return E("ACA-EQ-OH04","导流副环",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Rare,1,1,1,1,0,"u_spell_first_mana:-1");
             yield return E("ACA-EQ-CH01","夹棉练习衣",EquipmentSlot.Chest,EquipmentHandedness.None,EquipmentRarity.Common,2,3,2,0,2,"turn_start_shield:2");
             yield return E("ACA-EQ-CH02","补强巡行衣",EquipmentSlot.Chest,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,3,3,0,4,"turn_start_shield:4");
             yield return E("ACA-EQ-CH03","塔卫承压带",EquipmentSlot.Chest,EquipmentHandedness.None,EquipmentRarity.Rare,2,3,4,0,6,"turn_start_shield:6");
@@ -96,21 +103,24 @@ namespace OCC.Combat.Roguelite
             yield return E("ACA-EQ-CH05","封存巡检袍",EquipmentSlot.Chest,EquipmentHandedness.None,EquipmentRarity.Rare,2,3,2,0,0,"first_task_interact_free");
             yield return E("ACA-EQ-HD01","测距护目镜",EquipmentSlot.Head,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,1,1,0,0,"weapon_range:+1");
             yield return E("ACA-EQ-HD02","低压回路护额",EquipmentSlot.Head,EquipmentHandedness.None,EquipmentRarity.Rare,2,1,1,1,0,"low_mana_shield:2");
-            yield return E("ACA-EQ-HN01","行进握带",EquipmentSlot.Hands,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,1,1,0,0,"move_attack_damage:+2");
-            yield return E("ACA-EQ-HN02","回授护臂",EquipmentSlot.Hands,EquipmentHandedness.None,EquipmentRarity.Rare,2,1,2,1,0,"defensive_spell_shield:2");
-            yield return E("ACA-EQ-LG01","石路行靴",EquipmentSlot.Legs,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,2,0,0,"first_move:+1");
-            yield return E("ACA-EQ-LG02","定锚胫甲",EquipmentSlot.Legs,EquipmentHandedness.None,EquipmentRarity.Rare,2,2,3,0,0,"forced_move:-1");
+            yield return E("ACA-EQ-HN01","行进握带",EquipmentSlot.None,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,1,1,0,0,"move_attack_damage:+2");
+            yield return E("ACA-EQ-HN02","回授护臂",EquipmentSlot.None,EquipmentHandedness.None,EquipmentRarity.Rare,2,1,2,1,0,"defensive_spell_shield:2");
+            yield return E("ACA-EQ-LG01","石路行靴",EquipmentSlot.Feet,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,2,0,0,"first_move:+1");
+            yield return E("ACA-EQ-LG02","定锚胫甲",EquipmentSlot.Feet,EquipmentHandedness.None,EquipmentRarity.Rare,2,2,3,0,0,"forced_move:-1");
             yield return E("ACA-EQ-BP01","勘验背架",EquipmentSlot.Backpack,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,3,2,0,0,"first_search_free");
             yield return E("ACA-EQ-BP02","快挂整备架",EquipmentSlot.Backpack,EquipmentHandedness.None,EquipmentRarity.Rare,2,3,2,0,0,"first_quickbar_swap_free");
-            yield return E("ACA-EQ-CR01","学院储能芯",EquipmentSlot.AetherCore,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,1,0,"max_mana:+2");
-            yield return E("ACA-EQ-CR02","余焰回收芯",EquipmentSlot.AetherCore,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,2,0,"burn_apply_mana:1");
-            yield return E("ACA-EQ-CR03","塔心并联芯",EquipmentSlot.AetherCore,EquipmentHandedness.None,EquipmentRarity.Legendary,2,2,2,3,0,"max_mana:+4");
-            yield return E("ACA-EQ-DG01","远投定距杖",EquipmentSlot.Conduit,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,3,1,2,0,"r_spell_range:+1","r_spell_mana:+1");
-            yield return E("ACA-EQ-DG02","接触耦合环",EquipmentSlot.Conduit,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,2,0,"m_spell_first_mana:-1");
-            yield return E("ACA-EQ-AC01","余烬珠",EquipmentSlot.Accessory1,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,0,0,"burning_direct_damage:+2");
-            yield return E("ACA-EQ-AC02","空槽魔力计",EquipmentSlot.Accessory1,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,0,0,"zero_mana_restore:1");
-            yield return E("ACA-EQ-AC03","贴身守誓牌",EquipmentSlot.Accessory1,EquipmentHandedness.None,EquipmentRarity.Rare,1,1,1,0,0,"adjacent_enemy_turn_shield:2");
-            yield return E("ACA-EQ-AC04","灰线行程扣",EquipmentSlot.Accessory1,EquipmentHandedness.None,EquipmentRarity.Rare,1,1,1,0,0,"first_fire_spell_free_facing");
+            yield return E("ACA-EQ-CR01","学院储能芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,1,0,"max_mana:+2");
+            yield return E("ACA-EQ-CR02","余焰回收芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,2,0,"burn_apply_mana:1");
+            yield return E("ACA-EQ-CR03","塔心并联芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Legendary,2,2,2,3,0,"max_mana:+4");
+            yield return E("ACA-EQ-CR04","苗床回流芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,1,0,"first_paid_personal_spell_mana:+2");
+            yield return E("ACA-EQ-DG01","远投定距杖",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,3,1,2,0,"r_spell_range:+1","r_spell_mana:+1");
+            yield return E("ACA-EQ-DG02","接触耦合环",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,2,0,"m_spell_first_mana:-1");
+            yield return E("ACA-EQ-AC01","余烬珠",EquipmentSlot.Ring1,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,0,0,"burning_direct_damage:+2");
+            yield return E("ACA-EQ-AC02","空槽魔力计",EquipmentSlot.Ring1,EquipmentHandedness.None,EquipmentRarity.Uncommon,1,1,1,0,0,"zero_mana_restore:1");
+            yield return E("ACA-EQ-AC03","贴身守誓牌",EquipmentSlot.Necklace,EquipmentHandedness.None,EquipmentRarity.Rare,1,1,1,0,0,"adjacent_enemy_turn_shield:2");
+            yield return new EquipmentDefinition("ACA-EQ-AC04", "灰线行程扣", EquipmentSlot.Necklace,
+                EquipmentHandedness.None, EquipmentRarity.Rare, 1, 1, 1, 0, 0,
+                Array.Empty<string>(), Array.Empty<string>(), sourceTypes: Array.Empty<string>());
         }
 
         private static EquipmentDefinition E(string id, string name, EquipmentSlot slot, EquipmentHandedness handedness,
@@ -135,22 +145,21 @@ namespace OCC.Combat.Roguelite
 
         private static IEnumerable<AffixDefinition> CreateAffixes()
         {
-            EquipmentSlot[] weapons = { EquipmentSlot.MainHand, EquipmentSlot.OffHand };
-            EquipmentSlot[] allButAccessory = Enum.GetValues(typeof(EquipmentSlot)).Cast<EquipmentSlot>().Where(value => value != EquipmentSlot.Accessory1 && value != EquipmentSlot.Accessory2).ToArray();
+            EquipmentSlot[] weapons = { EquipmentSlot.Weapon };
+            EquipmentSlot[] allButAccessory = EquipmentSlotRules.ActiveSlots.Where(value => value != EquipmentSlot.Ring1 && value != EquipmentSlot.Ring2 && value != EquipmentSlot.Necklace).ToArray();
             yield return A("AFF-WEAPON-EDGE","平衡刃口",weapons,"weapon_damage:+2","weapon_damage");
-            yield return A("AFF-WEAPON-REACH","延伸校尺",new[]{EquipmentSlot.MainHand},"weapon_range:+1","weapon_range");
-            yield return A("AFF-OBJECT-BREACH","解构锤面",new[]{EquipmentSlot.MainHand},"object_damage:+8","object_damage");
-            yield return A("AFF-FIRST-STEP","轻织",new[]{EquipmentSlot.Chest,EquipmentSlot.Legs},"first_move:+1","first_move");
-            yield return A("AFF-FORCED-ANCHOR","定锚扣",new[]{EquipmentSlot.Legs,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},"forced_move:-1","forced_move");
-            yield return A("AFF-MANA-RETURN","回流刻线",new[]{EquipmentSlot.AetherCore,EquipmentSlot.Conduit,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},"mana_return:1","mana_return");
-            yield return A("AFF-BURN-EDGE","余焰刻线",new[]{EquipmentSlot.MainHand,EquipmentSlot.Hands,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},"burn_damage:+2","burn_payoff");
-            yield return A("AFF-QUICK-SWAP","快挂",new[]{EquipmentSlot.Backpack,EquipmentSlot.Hands},"quick_swap_free","quick_swap");
+            yield return A("AFF-WEAPON-REACH","延伸校尺",new[]{EquipmentSlot.Weapon},"weapon_range:+1","weapon_range");
+            yield return A("AFF-OBJECT-BREACH","解构锤面",new[]{EquipmentSlot.Weapon},"object_damage:+8","object_damage");
+            yield return A("AFF-FIRST-STEP","轻织",new[]{EquipmentSlot.Chest,EquipmentSlot.Feet},"first_move:+1","first_move");
+            yield return A("AFF-FORCED-ANCHOR","定锚扣",new[]{EquipmentSlot.Feet,EquipmentSlot.Ring1,EquipmentSlot.Ring2,EquipmentSlot.Necklace},"forced_move:-1","forced_move");
+            yield return A("AFF-MANA-RETURN","回流刻线",new[]{EquipmentSlot.CastingUnit,EquipmentSlot.Ring1,EquipmentSlot.Ring2,EquipmentSlot.Necklace},"mana_return:1","mana_return");
+            yield return A("AFF-BURN-EDGE","余焰刻线",new[]{EquipmentSlot.Weapon,EquipmentSlot.Ring1,EquipmentSlot.Ring2},"burn_damage:+2","burn_payoff");
+            yield return A("AFF-QUICK-SWAP","快挂",new[]{EquipmentSlot.Backpack},"quick_swap_free","quick_swap");
             yield return A("AFF-SEARCH-MARK","勘验标尺",new[]{EquipmentSlot.Backpack,EquipmentSlot.Head},"search_free","search_action");
-            yield return A("AFF-FACING-RESET","司向刻痕",new[]{EquipmentSlot.Head,EquipmentSlot.Legs,EquipmentSlot.OffHand,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},"free_facing","free_facing");
-            yield return A("AFF-TASK-QUICK","巡检扣",new[]{EquipmentSlot.Chest,EquipmentSlot.Hands},"task_ap:-1","task_interaction");
+            yield return A("AFF-TASK-QUICK","巡检扣",new[]{EquipmentSlot.Chest,EquipmentSlot.Backpack},"task_ap:-1","task_interaction");
             yield return A("AFF-LIGHT-FRAME","轻量骨架",allButAccessory,"weight:-1","item_weight");
-            yield return new AffixDefinition("AFF-ROUND-SHIELD-P","紫色回合盾",new[]{EquipmentSlot.Head,EquipmentSlot.Hands,EquipmentSlot.Legs,EquipmentSlot.AetherCore,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},EquipmentRarity.Rare,"turn_start_shield:2","equipment_round_shield",EquipmentRarity.Rare);
-            yield return new AffixDefinition("AFF-ROUND-SHIELD-G","金色回合盾",new[]{EquipmentSlot.Head,EquipmentSlot.Hands,EquipmentSlot.Legs,EquipmentSlot.AetherCore,EquipmentSlot.Accessory1,EquipmentSlot.Accessory2},EquipmentRarity.Legendary,"turn_start_shield:4","equipment_round_shield",EquipmentRarity.Legendary);
+            yield return new AffixDefinition("AFF-ROUND-SHIELD-P","紫色回合盾",new[]{EquipmentSlot.Head,EquipmentSlot.Feet,EquipmentSlot.CastingUnit,EquipmentSlot.Ring1,EquipmentSlot.Ring2,EquipmentSlot.Necklace},EquipmentRarity.Rare,"turn_start_shield:2","equipment_round_shield",EquipmentRarity.Rare);
+            yield return new AffixDefinition("AFF-ROUND-SHIELD-G","金色回合盾",new[]{EquipmentSlot.Head,EquipmentSlot.Feet,EquipmentSlot.CastingUnit,EquipmentSlot.Ring1,EquipmentSlot.Ring2,EquipmentSlot.Necklace},EquipmentRarity.Legendary,"turn_start_shield:4","equipment_round_shield",EquipmentRarity.Legendary);
         }
 
         private static AffixDefinition A(string id, string name, IEnumerable<EquipmentSlot> slots, string effect, string group)
@@ -195,7 +204,7 @@ namespace OCC.Combat.Roguelite
             {
                 if (equipment.Width < 1 || equipment.Height < 1 || equipment.BaseWeight < 1) result.Add("Invalid equipment footprint: " + equipment.DefinitionId);
                 if (equipment.HasDurability || equipment.Armor != 0 || equipment.BlockChance != 0) result.Add("Removed equipment field: " + equipment.DefinitionId);
-                if (equipment.Handedness == EquipmentHandedness.TwoHanded && equipment.Slot != EquipmentSlot.MainHand) result.Add("Two-handed item must be main hand: " + equipment.DefinitionId);
+                if (equipment.Handedness == EquipmentHandedness.TwoHanded && equipment.Slot != EquipmentSlot.Weapon) result.Add("Two-handed item must use the weapon slot: " + equipment.DefinitionId);
                 if (equipment.TurnStartShield > 0 && equipment.FixedEffectIds.Any(value => value.StartsWith("turn_start_shield:")) == false) result.Add("Shield source must be explicit: " + equipment.DefinitionId);
             }
             foreach (AffixDefinition affix in catalog.Affixes)

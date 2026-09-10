@@ -47,7 +47,7 @@ namespace OCC.Combat.Tests
             GridPosition objectPosition = new GridPosition(2, 1);
             GridMap map = new GridMap(5, 3);
             map.SetTile(objectPosition, new TileState { IsObjective = true, Durability = 5 });
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
             CombatState state = new CombatState(map, new[] { hero });
             CombatResolver.BeginTurn(state, hero.Id);
             hero.ApplyStatus(StatusType.Burning, 2);
@@ -62,7 +62,7 @@ namespace OCC.Combat.Tests
                 CombatEffect.RestoreMana(hero.Id, 1),
                 CombatEffect.ClearStatus(hero.Id, StatusType.Burning),
                 CombatEffect.ApplyStatus(hero.Id, StatusType.Slow, 2),
-                CombatEffect.Move(new GridPosition(1, 1), Facing.East),
+                CombatEffect.Move(new GridPosition(1, 1)),
                 CombatEffect.DamageObject(objectPosition, 3),
                 CombatEffect.DelayInitiative(4));
 
@@ -124,8 +124,8 @@ namespace OCC.Combat.Tests
             new GridMap(6, 3),
             new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 1), Facing.East),
-                new UnitState("enemy", false, new GridPosition(3, 1), Facing.East)
+                new UnitState("hero", true, new GridPosition(0, 1)),
+                new UnitState("enemy", false, new GridPosition(3, 1))
             });
     }
 }

@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "first_b1_rain_court_water_tile",
+  "role": "floor_tile_32",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent rainwater courtyard tile raw material",
+    "source_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/raw/rain_court_water_source.png",
+    "source_sha256": "9931073871b029fe5eb82427c4414047ff67ff48ee968678311e010ba340826c"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/processed/rain_court_water_tile_32.png",
+    "output_sha256": "8ee8e59769415ad5cd5af0a4fcc85a164949848311ee2ee418980d5f6f06df23",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 battlefield floor cell; C7-G7 use the same rule family but require variant review before import",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/rain_court_water_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/rain_court_water_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/rain_court_water_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/rain_court_water_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/rain_court_water_contact.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "product_owner_user",
+    "date": "2026-09-04",
+    "silhouette": "FAIL",
+    "material": "FAIL",
+    "perspective": "PASS",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Rejected by the user on 2026-09-04. The dark framed perimeter reads as a brass or metal panel rather than shallow enterable rainwater. Retained only as a traceable failure reference."
+  },
+  "unity_import": null
+}

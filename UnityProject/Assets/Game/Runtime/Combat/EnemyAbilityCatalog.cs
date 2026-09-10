@@ -5,8 +5,9 @@ namespace OCC.Combat
 {
     public static class EnemyAbilityCatalog
     {
-        public static readonly WeaponDefinition TetherHoundBite = new WeaponDefinition("tether_hound_bite", "导能撕咬", DamageType.Physical, 4, 1);
+        public static readonly WeaponDefinition TetherHoundBite = new WeaponDefinition("tether_hound_bite", "导能撕咬", DamageType.Physical, 3, 1);
         public static readonly WeaponDefinition HeavyCrossbow = new WeaponDefinition("heavy_crossbow", "绞盘重弩", DamageType.Physical, 3, 4);
+        public static readonly WeaponDefinition BreachRam = new WeaponDefinition("breach_ram", "楔角撞击", DamageType.Physical, 4, 1);
         public static readonly SkillDefinition ShieldRam = new SkillDefinition(
             "enemy_shield_ram", "铭盾冲撞", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
             CombatFeedbackKind.Slow,

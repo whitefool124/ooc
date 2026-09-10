@@ -88,6 +88,33 @@ namespace OCC.Combat
 
     public static class RogueliteEncounterCatalog
     {
+        public static readonly RogueliteEncounterDefinition FirstBattleRainLanternCourt =
+            new RogueliteEncounterDefinition(RainLanternCourtRuntime.EncounterId, RainLanternCourtRuntime.LevelId,
+                RogueliteEncounterTier.Weak, "雨后石庭／积水横带／双列灯藤",
+                "主角从 B8 入场；缚环寻迹兽在 H7，高年级火矢生在 I2。灯藤搜索与烧藤顺序完全固定。",
+                "公开教学战", "奖励内容仍锁定", 1, "tether_hound", "pyromancer");
+
+        public static readonly RogueliteEncounterDefinition SecondBattleGreenhouseCollectionRoom =
+            new RogueliteEncounterDefinition("first_b2_greenhouse_collection_room", FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
+                RogueliteEncounterTier.Weak, "中央藤圈宝箱／南北双晶簇／南侧普通长路",
+                "主角从 B5 入场；侧锋在 J3，承压检验偶在 J7，分别贴近北、南晶簇接近。",
+                "晶簇爆裂会伤害正交邻格并生成五格碎晶", "第二组固定三选一", 1,
+                "raider", "sigil_mauler");
+
+        public static readonly RogueliteEncounterDefinition ThirdBattleRainPrismCourt =
+            new RogueliteEncounterDefinition("first_b3_rain_prism_court", FirstRegionLevelCatalog.RainPrismCourt.Id,
+                RogueliteEncounterTier.Weak, "冷却沟／封门晶簇／南侧干路",
+                "主角从 B5 入场；检验偶在 F5，火矢陪练生在 G2；器材匣位于 H5。",
+                "燃烧、浅水熄灭与封门晶簇", "第三组固定三选一", 1,
+                "sigil_mauler", "pyromancer");
+
+        public static readonly RogueliteEncounterDefinition FirstEliteThreeMaterialPressure =
+            new RogueliteEncounterDefinition("first_elite_three_material_pressure", FirstRegionLevelCatalog.ThreeMaterialPressure.Id,
+                RogueliteEncounterTier.Elite, "冷却沟／双灯藤带／中央稳压晶簇",
+                "主角从 B5 入场；楔角在 H5，首条冲压公开锁定 B5 并先撞击 G5 晶簇。",
+                "公开锁线、冲压碰撞与干地卸压", "首次固定精英奖励包", 1,
+                "breach_ram");
+
         private static RogueliteEncounterDefinition Weak(string key, string map, string grammar,
             string relation, string risk, RogueliteEncounterLayout layout, params string[] enemies) =>
             new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Weak, grammar, relation,
@@ -182,6 +209,14 @@ namespace OCC.Combat
         public static RogueliteEncounterDefinition For(RogueliteMapRun run, string nodeId)
         {
             if (run != null && run.TryGetEncounter(nodeId, out RogueliteEncounterDefinition encounter)) return encounter;
+            if (run?.IsFirstRunExperience == true && nodeId == "B1")
+                return FirstBattleRainLanternCourt.BindToNode(nodeId);
+            if (run?.IsFirstRunExperience == true && nodeId == "B2")
+                return SecondBattleGreenhouseCollectionRoom.BindToNode(nodeId);
+            if (run?.IsFirstRunExperience == true && nodeId == "B3")
+                return ThirdBattleRainPrismCourt.BindToNode(nodeId);
+            if (run?.IsFirstRunExperience == true && nodeId == "X")
+                return FirstEliteThreeMaterialPressure.BindToNode(nodeId);
             if (run != null && run.HasPendingContentCombat && nodeId == run.PendingContentCombatMissionId && nodeId == "relay_event")
             {
                 string eventId = run.CurrentEventId;
@@ -191,8 +226,8 @@ namespace OCC.Combat
                         "稀有奖励", 3, "elite_vanguard", "barrier_mender", "sigil_mauler").BindToNode(nodeId);
                 if (eventId == "EV03" || eventId == "EV06")
                     return new RogueliteEncounterDefinition("event_archive_rescue", "signal_hub", RogueliteEncounterTier.Strong,
-                        "三角维护场", "可以从护障、显影或盾线中的任意一处切入；赢了才能拿到许可", "危险",
-                        "核心许可", 2, "barrier_mender", "lantern_revealer", "shieldguard").BindToNode(nodeId);
+                        "三角维护场", "可以从护障、显影或盾线中的任意一处切入；胜利结算金币与学院贡献", "危险",
+                        "金币与学院贡献", 2, "barrier_mender", "lantern_revealer", "shieldguard").BindToNode(nodeId);
                 if (eventId == "EV15")
                     return new RogueliteEncounterDefinition("event_relay_objective", "relay_raid", RogueliteEncounterTier.Strong,
                         "偏心校准场", "近路会暴露在重弩前；绕远一些可以先处理守卫。破坏目标就算完成", "危险",

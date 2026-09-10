@@ -14,6 +14,7 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Texture2D> units = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D[]> enemyAnimations = new Dictionary<string, Texture2D[]>();
         private readonly Dictionary<string, Texture2D> academy = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D> environments = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> relay = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> overlays = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> intents = new Dictionary<string, Texture2D>();
@@ -24,6 +25,7 @@ namespace OCC.Combat.Presentation
         public int EnvironmentFrameCount => firegroundFrames.Length;
         public Texture2D LootClosed => Relay("loot_crate_closed");
         public Texture2D Academy(string id) => academy[id];
+        public Texture2D Environment(string id) => environments[id];
         public Texture2D Relay(string id) => relay[id];
         public Texture2D Overlay(string id) => overlays[id];
         public Texture2D Intent(string id) => !string.IsNullOrEmpty(id) && intents.TryGetValue(id, out Texture2D value) ? value : null;
@@ -50,6 +52,8 @@ namespace OCC.Combat.Presentation
         {
             LoadUnits();
             LoadAcademy();
+            foreach (FormalArtEntry entry in FormalArtRegistry.Environments)
+                environments[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
             string[] relayIds = { "floor_plain", "floor_industrial", "floor_warning", "floor_hazard", "rail_horizontal", "rail_vertical",
                 "light_cover_intact", "light_cover_damaged", "light_cover_rubble", "heavy_cover_intact", "heavy_cover_damaged", "heavy_cover_rubble",
                 "relay_intact", "relay_damaged", "relay_rubble", "loot_crate_closed", "loot_crate_open", "loot_crate_empty" };

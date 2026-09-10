@@ -79,10 +79,8 @@ namespace OCC.Combat.Roguelite
         public int ConsolidationTime => AcademyMapTuning.ConsolidationProgress;
         public int WarningTime => AcademyMapTuning.TransitionWarningProgress;
         public int TransitionTime => AcademyMapTuning.TransitionProgress;
-        public int ExploredNodes { get; }
-        public int RequiredExploredNodes => AcademyMapTuning.BossMinimumProgress;
-        public int CorePermits { get; }
-        public int RequiredCorePermits => AcademyMapTuning.CorePermitRequirement;
+        public int CompletedNodes { get; }
+        public int RequiredCompletedNodes { get; private set; } = AcademyMapTuning.BossMinimumProgress;
         public bool EarlyFinaleReady { get; }
         public bool ForcedFinaleReady { get; }
         public string PhaseLabel { get; }
@@ -91,8 +89,19 @@ namespace OCC.Combat.Roguelite
         {
             if (run == null || !run.UsesRogue11) throw new ArgumentException("rogue11 map run required", nameof(run));
             Health = run.CurrentHealth; Mana = run.CurrentMana; Gold = run.Gold; StageContribution = run.StageContribution; StageTime = run.StageTime;
-            ExploredNodes = run.AcademyProgress; CorePermits = run.CorePermits;
-            EarlyFinaleReady = ExploredNodes >= RequiredExploredNodes && CorePermits >= RequiredCorePermits;
+            CompletedNodes = run.IsFirstRunExperience ? run.CompletedNodes.Count : run.CompletedAcademyNodeCount;
+            if (run.IsFirstRunExperience)
+            {
+                CompletedNodes = run.CompletedNodes.Count;
+                RequiredCompletedNodes = 10;
+                EarlyFinaleReady = run.IsNodeAvailable("X");
+                ForcedFinaleReady = false;
+                PhaseLabel = run.FirstRunExperience.RunSealed ? "首次体验已结束" :
+                    run.FirstRunExperience.Lifecycle == FirstRunLifecycle.Complete ? "首次体验已完成" :
+                    run.FirstRunExperience.Shop.Opened ? "商店已开启" : "固定首次体验";
+                return;
+            }
+            EarlyFinaleReady = CompletedNodes >= RequiredCompletedNodes;
             ForcedFinaleReady = StageTime >= TransitionTime;
             PhaseLabel = ForcedFinaleReady ? "终考已经开始" : StageTime >= WarningTime ? "终考已经很近" : StageTime >= ConsolidationTime ? "学期将尽" : "日程还宽裕";
         }
@@ -109,7 +118,6 @@ namespace OCC.Combat.Roguelite
         public string SpatialRisk { get; }
         public int TimeCost { get; }
         public int ProjectedStageTime { get; }
-        public int ExpectedHealthRecovery { get; }
         public int ExpectedManaRecovery { get; }
         public bool IsZeroTime => TimeCost == 0;
         public bool CrossesConsolidation { get; }
@@ -120,8 +128,21 @@ namespace OCC.Combat.Roguelite
         {
             if (run == null || !run.UsesRogue11) throw new ArgumentException("rogue11 map run required", nameof(run));
             if (node == null) throw new ArgumentNullException(nameof(node));
+            if (run.IsFirstRunExperience)
+            {
+                NodeId = node.Id; TimeCost = 0; ProjectedStageTime = run.StageTime; ExpectedManaRecovery = 0;
+                FirstRunEncounterSnapshot slot = run.FirstRunExperience.EncounterForNode(node.Id);
+                bool formalFirstBattle = node.Id == "B1";
+                EncounterLabel = formalFirstBattle ? "首次固定战" : node.Type == RogueliteMapNodeType.Elite ? "精英战槽" : node.IsCombat ? "普通战槽" : string.Empty;
+                EnemySummary = formalFirstBattle ? "缚环寻迹兽、高年级陪练生·火矢" : slot == null ? string.Empty : slot.EnemyScriptId;
+                SpatialRisk = formalFirstBattle ? "积水提高主角移动消耗；灯藤阻挡视线，寻迹兽会嗅探搜索，火矢生会依次烧藤。" : slot == null ? string.Empty : string.Join(" + ", slot.MechanicSlotIds);
+                RiskLabel = formalFirstBattle ? "公开教学战" : node.IsCombat ? "内容待设计" : "系统节点";
+                RewardLabel = slot == null ? "固定首次体验服务" : slot.DropSlotId;
+                FailureConsequence = formalFirstBattle ? "主角生命归零按肉鸽战败；对手失去行动能力后由教员非致命叫停。" :
+                    node.Type == RogueliteMapNodeType.Elite ? "精英战失败会封存本次首次体验，且不会开放商店。" : "阶段 A 仅提供遭遇接口，正式敌人与数值尚未接入。";
+                return;
+            }
             NodeId = node.Id; TimeCost = AcademyMapTuning.TimeCost(node.Type); ProjectedStageTime = run.StageTime + TimeCost;
-            ExpectedHealthRecovery = Math.Min(18 - run.CurrentHealth, TimeCost * 4);
             ExpectedManaRecovery = Math.Min(RogueRuntimeConstants.MaximumPersonalMana - run.CurrentMana, TimeCost);
             CrossesConsolidation = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.ConsolidationProgress);
             CrossesWarning = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionWarningProgress);
@@ -133,7 +154,7 @@ namespace OCC.Combat.Roguelite
             RiskLabel = encounter?.PublicRisk ?? (node.Type == RogueliteMapNodeType.Finale ? "终考" : node.Type == RogueliteMapNodeType.Elite ? "危险" :
                 node.Type == RogueliteMapNodeType.Combat ? "棘手" : node.Type == RogueliteMapNodeType.Event ? "先听听看" : "可以放心前往");
             RewardLabel = encounter?.RewardTier ?? (node.Type == RogueliteMapNodeType.Finale ? "终考奖励" : node.Type == RogueliteMapNodeType.Elite ? "稀有奖励" :
-                node.Type == RogueliteMapNodeType.Combat ? "金币、学院贡献和一件奖励" : node.GrantedAccessCards > 0 ? "核心许可" : "这里能找到的东西");
+                node.Type == RogueliteMapNodeType.Combat ? "金币、学院贡献和一件奖励" : "这里能找到的东西");
             FailureConsequence = node.IsCombat ? "输了也会有人把你带回学院，但花掉的时间、生命和道具不会返还。你只能拿到一半金币与学院贡献，也不能挑选奖励。" :
                 node.Type == RogueliteMapNodeType.Event ? "做出选择后就不能反悔；如果要动手，输了也会损失时间、生命和用掉的道具。" : "这里没有战斗，也不会花时间。";
         }

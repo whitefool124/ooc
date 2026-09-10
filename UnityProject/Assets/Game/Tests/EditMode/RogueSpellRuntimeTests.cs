@@ -85,11 +85,114 @@ namespace OCC.Combat.Tests
             Assert.That(FireSpellCatalog.Get("F-P-R08").Rarity, Is.EqualTo(FireSpellRarity.Uncommon));
         }
 
+        [Test]
+        public void ElitePassives_OnlyAffectHeroAndCannotBeActivelyCast()
+        {
+            CombatState combat = BuildCombat(out UnitState hero, out UnitState enemy);
+            RogueSpellLoadout loadout = LockedLoadout("PASSIVE-ELITE-03");
+            RogueSpellCombatRuntime runtime = new RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+
+            CombatResolver.BeginTurn(combat, enemy.Id);
+            Assert.That(enemy.Shield, Is.Zero);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            Assert.That(hero.Shield, Is.EqualTo(3));
+            Assert.Throws<InvalidOperationException>(() =>
+                runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id)));
+        }
+
+        [Test]
+        public void TemperingFlow_TriggersOnceForBasicPersonalFireDamageEachHeroTurn()
+        {
+            CombatState combat = BuildCombat(out UnitState hero, out UnitState enemy);
+            hero.ConfigureMana(12, 12);
+            RogueSpellCombatRuntime runtime = new RogueSpellCombatRuntime(combat, LockedLoadout("PASSIVE-ELITE-01"));
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+
+            runtime.ExecuteSlot(1, CombatCommand.UseSkill(hero.Id, 1, enemy.Id));
+            Assert.That(hero.Mana, Is.EqualTo(11));
+            runtime.ExecuteSlot(1, CombatCommand.UseSkill(hero.Id, 1, enemy.Id));
+            Assert.That(hero.Mana, Is.EqualTo(9));
+        }
+
+        [Test]
+        public void MomentumIgnition_TriggersOnlyForHeroAndAtMostOncePerTurn()
+        {
+            CombatState combat = BuildCombat(out UnitState hero, out UnitState enemy);
+            RogueSpellCombatRuntime runtime = new RogueSpellCombatRuntime(combat, LockedLoadout("PASSIVE-ELITE-02"));
+            combat.AttachRogueSpellRuntime(runtime);
+            GridPosition[] threeCellPath =
+            {
+                new GridPosition(0, 0), new GridPosition(1, 0), new GridPosition(2, 0), new GridPosition(3, 0)
+            };
+
+            runtime.BeginOwnTurn(enemy.Id);
+            runtime.AfterMove(enemy.Id, threeCellPath);
+            int before = hero.Health;
+            runtime.AfterWeaponHit(enemy.Id, hero);
+            Assert.That(hero.Health, Is.EqualTo(before));
+
+            runtime.BeginOwnTurn(hero.Id);
+            runtime.AfterMove(hero.Id, threeCellPath);
+            before = enemy.Health;
+            runtime.AfterWeaponHit(hero.Id, enemy);
+            Assert.That(before - enemy.Health, Is.EqualTo(4));
+            runtime.AfterMove(hero.Id, threeCellPath);
+            runtime.AfterWeaponHit(hero.Id, enemy);
+            Assert.That(before - enemy.Health, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void AmplifySpecialization_UsesFrozenBasicAndFirstRunSpellValues()
+        {
+            CombatState basic = BuildCombat(out UnitState basicHero, out UnitState basicEnemy);
+            RogueSpellCombatRuntime basicRuntime = new RogueSpellCombatRuntime(basic, LockedLoadout(), "BASE-FIRE-RANGED");
+            basic.AttachRogueSpellRuntime(basicRuntime);
+            CombatResolver.BeginTurn(basic, basicHero.Id);
+            int before = basicEnemy.Health;
+            basicRuntime.ExecuteSlot(1, CombatCommand.UseSkill(basicHero.Id, 1, basicEnemy.Id));
+            Assert.That(before - basicEnemy.Health, Is.EqualTo(8));
+
+            CombatState leap = TrainingRangeScenarioFactory.CreateStandard();
+            leap.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState leapHero = leap.GetUnit("hero");
+            UnitState leapEnemy = leap.GetUnit("range_normal");
+            CombatEffectExecutor.Execute(leap, leapEnemy.Id, CombatEffect.Move(new GridPosition(5, 4)));
+            leapHero.Equip(CombatCatalog.Hammer, leapHero.OffHand, leapHero.SkillOne, leapHero.SkillTwo);
+            RogueSpellCombatRuntime leapRuntime = new RogueSpellCombatRuntime(leap, LockedLoadout("F-P-M03"), "F-P-M03");
+            leap.AttachRogueSpellRuntime(leapRuntime);
+            CombatResolver.BeginTurn(leap, leapHero.Id);
+            before = leapEnemy.Health;
+            leapRuntime.ExecuteSlot(4, CombatCommand.UseSkillAt(leapHero.Id, 4, new GridPosition(4, 4), CardinalDirection.East));
+            Assert.That(before - leapEnemy.Health, Is.EqualTo(10));
+
+            CombatState breach = TrainingRangeScenarioFactory.CreateStandard();
+            breach.ConfigureRuleset(CombatRuleset.Roguelite);
+            GridPosition objectCell = TrainingRangeScenarioFactory.ObjectTargetCell;
+            breach.Map.SetTile(objectCell, new TileState { Cover = CoverType.Light, Durability = 40 });
+            RogueSpellCombatRuntime breachRuntime = new RogueSpellCombatRuntime(breach, LockedLoadout("F-P-R19"), "F-P-R19");
+            breach.AttachRogueSpellRuntime(breachRuntime);
+            CombatResolver.BeginTurn(breach, "hero");
+            breachRuntime.ExecuteSlot(4, CombatCommand.UseSkillAt("hero", 4, objectCell, CardinalDirection.East));
+            Assert.That(breach.Map.GetTile(objectCell).Durability, Is.EqualTo(20));
+        }
+
+        private static RogueSpellLoadout LockedLoadout(string extraSpellId = "")
+        {
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                extraSpellId, string.Empty, string.Empty, string.Empty
+            };
+            return RogueSpellLoadout.Restore(ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+        }
+
         private static CombatState BuildCombat(out UnitState hero, out UnitState enemy)
         {
             GridMap map = new GridMap(5, 1);
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(map, new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             return state;

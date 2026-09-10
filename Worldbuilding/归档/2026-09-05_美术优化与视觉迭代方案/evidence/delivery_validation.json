@@ -1,0 +1,33 @@
+{
+  "branch": "codex/art-visual-iteration-20260905",
+  "master_revision": 322,
+  "local_matches_feishu": true,
+  "table_changes_only_expected_ids": {
+    "OCC_首次体验战斗规格数据表_v1.0.csv": [
+      "FIRST-B1-LAMP_VINE",
+      "FIRST-B1-WATER"
+    ],
+    "OCC_下一套Build内容表_v1.0.csv": [
+      "ART-PLAN-20260905",
+      "B1",
+      "ORIGIN-SPELL-01",
+      "ORIGIN-TALENT-01"
+    ],
+    "OCC_美术与界面规格表_v1.0.csv": [
+      "ART-PLAN-20260905",
+      "ART-REVIEW-FIRST-B1"
+    ]
+  },
+  "task_rows": 11,
+  "broken_plan_links": [],
+  "unity_tools_tracked_diff_unchanged": true,
+  "contract_audit": {
+    "schema": "occ-art-contract-audit-v1",
+    "status": "FAIL",
+    "errors": [
+      "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md missing required contract text: 2px 细框"
+    ]
+  },
+  "html_validation": "PASS; see review_validation.json",
+  "new_formal_assets": 0
+}

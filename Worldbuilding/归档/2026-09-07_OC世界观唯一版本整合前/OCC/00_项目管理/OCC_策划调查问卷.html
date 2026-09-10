@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>魔法战争人生战棋肉鸽 - 策划调查</title>
+  <style>
+    :root { --ink:#17231e; --muted:#627067; --paper:#f5f4ee; --panel:#ffffff; --line:#d7ddd4; --accent:#0d7a5f; --accent-soft:#dff3e9; --danger:#b54545; }
+    * { box-sizing:border-box; }
+    body { margin:0; color:var(--ink); background:var(--paper); font-family:"Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif; line-height:1.55; }
+    .shell { max-width:1220px; margin:auto; padding:28px 24px 56px; }
+    header { display:grid; grid-template-columns:1fr auto; gap:18px; align-items:end; padding:0 2px 24px; border-bottom:1px solid var(--line); }
+    h1 { margin:0; font-size:27px; letter-spacing:0; }
+    header p { margin:6px 0 0; color:var(--muted); }
+    .progress { min-width:190px; text-align:right; }
+    .progress strong { display:block; font-size:20px; }
+    .bar { height:8px; background:#dce4de; border-radius:4px; overflow:hidden; margin-top:8px; }
+    .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width .2s; }
+    .layout { display:grid; grid-template-columns:220px minmax(0, 1fr); gap:26px; margin-top:24px; }
+    nav { position:sticky; top:16px; align-self:start; }
+    nav a { display:block; padding:8px 10px; color:var(--muted); text-decoration:none; border-left:2px solid transparent; font-size:14px; }
+    nav a:hover { color:var(--accent); border-color:var(--accent); }
+    section { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:24px; margin-bottom:18px; }
+    h2 { margin:0 0 4px; font-size:20px; }
+    .section-note { margin:0 0 20px; color:var(--muted); font-size:14px; }
+    .question { padding:18px 0; border-top:1px solid #e8ece7; }
+    .question:first-of-type { border-top:0; padding-top:0; }
+    .question h3 { margin:0 0 10px; font-size:16px; font-weight:650; }
+    .tag { margin-left:7px; color:var(--accent); background:var(--accent-soft); border-radius:3px; padding:1px 6px; font-size:12px; font-weight:500; }
+    .options { display:grid; gap:8px; }
+    label.choice { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border:1px solid var(--line); border-radius:5px; cursor:pointer; transition:.15s; }
+    label.choice:hover { border-color:#87b7a6; background:#fbfdfb; }
+    input { margin:4px 0 0; accent-color:var(--accent); }
+    label.choice span { display:block; }
+    label.choice small { display:block; color:var(--muted); margin-top:2px; }
+    textarea, input[type="text"] { width:100%; border:1px solid var(--line); border-radius:5px; padding:10px; background:#fff; color:var(--ink); font:inherit; }
+    textarea { min-height:90px; resize:vertical; }
+    .hint { color:var(--muted); font-size:13px; margin:8px 0 0; }
+    .confirmed { border-left:3px solid var(--accent); background:#f3faf6; padding:11px 13px; margin:0 0 16px; font-size:14px; }
+    .actions { position:sticky; bottom:0; display:flex; flex-wrap:wrap; gap:10px; padding:16px 0 0; background:linear-gradient(transparent, var(--paper) 26%); }
+    button { border:1px solid var(--accent); color:#fff; background:var(--accent); border-radius:4px; padding:10px 15px; font:inherit; cursor:pointer; }
+    button.secondary { color:var(--ink); background:#fff; border-color:var(--line); }
+    button.danger { color:var(--danger); background:#fff; border-color:#e2baba; }
+    #saved { color:var(--muted); align-self:center; font-size:13px; }
+    @media (max-width:760px) { .shell { padding:20px 14px 42px; } header { grid-template-columns:1fr; } .progress { text-align:left; } .layout { grid-template-columns:1fr; } nav { position:static; display:flex; overflow:auto; border-bottom:1px solid var(--line); padding-bottom:8px; } nav a { white-space:nowrap; border-left:0; border-bottom:2px solid transparent; } section { padding:18px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div><h1>魔法战争人生战棋肉鸽</h1><p>基础结构调查问卷。已确认项已预填；空白项按你的偏好填写。</p></div>
+      <div class="progress"><strong id="count">0 / 0</strong><span>已回答必填项</span><div class="bar"><i id="bar"></i></div></div>
+    </header>
+    <div class="layout">
+      <nav>
+        <a href="#vision">游戏定位</a><a href="#run">单局与战区</a><a href="#combat">战棋底层</a><a href="#objectives">任务与地图</a><a href="#character">角色成长</a><a href="#gear">装备与背包</a><a href="#content">内容与敌人</a><a href="#meta">结算与局外</a><a href="#production">制作范围</a>
+      </nav>
+      <form id="survey">
+        <section id="vision">
+          <h2>游戏定位</h2><p class="section-note">定义体验边界，避免后续系统互相冲突。</p>
+          <div class="confirmed">已确认：单主角回合制战棋 RPG；每局记录一名角色在魔法战争中的一生；叙事服务于战斗、养成和运营。</div>
+          <div class="question required"><h3>1. 目标平台 <span class="tag">待定</span></h3><div class="options">
+            <label class="choice"><input type="radio" name="platform" value="pc"><span>PC 优先<small>鼠标操作、深度背包和长时间单局体验。</small></span></label>
+            <label class="choice"><input type="radio" name="platform" value="pc_controller"><span>PC + 手柄<small>从一开始考虑手柄交互与界面焦点。</small></span></label>
+            <label class="choice"><input type="radio" name="platform" value="multi"><span>多平台<small>需要更早控制 UI 和性能复杂度。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>2. 视觉形态 <span class="tag">待定</span></h3><div class="options">
+            <label class="choice"><input type="radio" name="art" value="pixel"><span>像素 2D<small>适合格子战棋和大量装备/敌人内容。</small></span></label>
+            <label class="choice"><input type="radio" name="art" value="painted"><span>手绘 2D<small>人物和魔法表现更强，资产成本更高。</small></span></label>
+            <label class="choice"><input type="radio" name="art" value="lowpoly"><span>低多边形 3D<small>适合可破坏掩体与镜头表现。</small></span></label>
+          </div></div>
+          <div class="question"><h3>3. 三个最重要的体验关键词</h3><input type="text" name="pillars" placeholder="例如：战术推演、搜刮运营、角色构筑"></div>
+        </section>
+
+        <section id="run">
+          <h2>单局与自由战区</h2><p class="section-note">已确认：约两小时一局，少年序章 + 四个自由探索战区；旅行、战斗、维修和休养推进时间。</p>
+          <div class="question required"><h3>4. 每个战区的硬期限以什么呈现？</h3><div class="options">
+            <label class="choice"><input type="radio" name="deadline" value="days"><span>天数/时段<small>每次行动消耗小时或天，直观易读。</small></span></label>
+            <label class="choice"><input type="radio" name="deadline" value="threat"><span>敌情进度条<small>行动推动敌军推进、封锁和关键战役。</small></span></label>
+            <label class="choice"><input type="radio" name="deadline" value="both"><span>两者都有<small>信息更丰富，但界面与数值更复杂。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>5. 主目标完成后，继续探索能持续多久？</h3><div class="options">
+            <label class="choice"><input type="radio" name="post_goal" value="one"><span>只允许额外 1 次地点行动</span></label>
+            <label class="choice"><input type="radio" name="post_goal" value="until_deadline"><span>直到硬期限<small>收益高，但敌情会持续恶化。</small></span></label>
+            <label class="choice"><input type="radio" name="post_goal" value="risk_meter"><span>独立贪图进度条<small>每次继续探索都会加大阶段关键战役难度。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>6. 战区地图是否显示全部地点？</h3><div class="options">
+            <label class="choice"><input type="radio" name="map_reveal" value="all"><span>全部显示<small>让玩家纯粹规划路线。</small></span></label>
+            <label class="choice"><input type="radio" name="map_reveal" value="partial"><span>只显示主要地点<small>秘密地点可由情报/事件发现。</small></span></label>
+            <label class="choice"><input type="radio" name="map_reveal" value="fog"><span>区域逐步发现<small>探索感强，但信息不确定更多。</small></span></label>
+          </div></div>
+          <div class="question"><h3>7. 每个阶段你最想出现的战区主题 <span class="tag">多选</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="biomes" value="industrial"><span>工业城市与铁路枢纽</span></label><label class="choice"><input type="checkbox" name="biomes" value="front"><span>战壕、废墟与前线阵地</span></label><label class="choice"><input type="checkbox" name="biomes" value="mine"><span>矿区、工厂与污染禁区</span></label><label class="choice"><input type="checkbox" name="biomes" value="border"><span>边境荒野与殖民地城镇</span></label><label class="choice"><input type="checkbox" name="biomes" value="ruin"><span>古代遗迹与以太设施</span></label>
+          </div></div>
+        </section>
+
+        <section id="combat">
+          <h2>战棋底层</h2><p class="section-note">已确认：二维全图可见；独立速度条；主角每回合 3 行动点；确定性命中与伤害；无通用反击、警戒或近战锁定。</p>
+          <div class="question required"><h3>8. 移动力的基础表现</h3><div class="options">
+            <label class="choice"><input type="radio" name="move_range" value="fixed"><span>所有角色固定移动力<small>差异只由技能、状态和装备临时提供。</small></span></label>
+            <label class="choice"><input type="radio" name="move_range" value="attribute"><span>受敏捷直接影响<small>构筑差异大，但需防止高敏永久压制。</small></span></label>
+            <label class="choice"><input type="radio" name="move_range" value="tier"><span>按轻/中/重装档位<small>装备负重决定，属性只做小修正。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>9. 防御的核心公式</h3><div class="options">
+            <label class="choice"><input type="radio" name="defense" value="armor"><span>护甲减伤为主<small>伤害类型与穿透决定对抗。</small></span></label>
+            <label class="choice"><input type="radio" name="defense" value="barrier"><span>生命 + 护盾为主<small>护盾是可恢复的主要防线。</small></span></label>
+            <label class="choice"><input type="radio" name="defense" value="mixed"><span>护甲、护盾、格挡并存<small>构筑更丰富，需严格简化界面。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>10. 伤害类型抗性是否要做成百分比？</h3><div class="options">
+            <label class="choice"><input type="radio" name="resist" value="flat"><span>固定减伤/固定弱点<small>完全可预测，适合确定性战棋。</small></span></label>
+            <label class="choice"><input type="radio" name="resist" value="percent"><span>百分比抗性<small>直观常见，但数值膨胀风险更高。</small></span></label>
+            <label class="choice"><input type="radio" name="resist" value="hybrid"><span>普通敌人固定，精英可有百分比<small>兼顾可读性与首领差异。</small></span></label>
+          </div></div>
+          <div class="question"><h3>11. 优先保留的通用状态 <span class="tag">多选</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="status" value="burn"><span>燃烧</span></label><label class="choice"><input type="checkbox" name="status" value="slow"><span>迟缓</span></label><label class="choice"><input type="checkbox" name="status" value="bind"><span>束缚</span></label><label class="choice"><input type="checkbox" name="status" value="blind"><span>致盲</span></label><label class="choice"><input type="checkbox" name="status" value="break"><span>破甲</span></label><label class="choice"><input type="checkbox" name="status" value="pollution"><span>污染</span></label>
+          </div></div>
+          <div class="question"><h3>12. 你最不想出现的战棋规则</h3><textarea name="combat_avoid" placeholder="例如：概率暴击、长时间动画、频繁召唤小怪、视野迷雾……"></textarea></div>
+        </section>
+
+        <section id="objectives">
+          <h2>任务与地图</h2><p class="section-note">已确认：固定任务模板，随机敌人/地形/奖励/附加条件；普通战斗 5–8 分钟；关键搜刮需现场进行。</p>
+          <div class="question required"><h3>13. 最应优先打磨的任务模板 <span class="tag">选 3 个</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="task_priority" value="eliminate"><span>歼灭</span></label><label class="choice"><input type="checkbox" name="task_priority" value="evacuate"><span>撤离</span></label><label class="choice"><input type="checkbox" name="task_priority" value="defend"><span>守点</span></label><label class="choice"><input type="checkbox" name="task_priority" value="destroy"><span>破坏</span></label><label class="choice"><input type="checkbox" name="task_priority" value="escort"><span>护送</span></label><label class="choice"><input type="checkbox" name="task_priority" value="rescue"><span>营救</span></label><label class="choice"><input type="checkbox" name="task_priority" value="capture"><span>夺取</span></label><label class="choice"><input type="checkbox" name="task_priority" value="hunt"><span>猎杀</span></label>
+          </div></div>
+          <div class="question required"><h3>14. 关键容器搜刮的动作成本</h3><div class="options">
+            <label class="choice"><input type="radio" name="loot_ap" value="one"><span>固定 1 行动点</span></label><label class="choice"><input type="radio" name="loot_ap" value="size"><span>按容器大小 1–2 行动点</span></label><label class="choice"><input type="radio" name="loot_ap" value="free"><span>靠近后免费，但仅限一次</span></label>
+          </div></div>
+          <div class="question required"><h3>15. 可破坏地形的比例</h3><div class="options">
+            <label class="choice"><input type="radio" name="destruction" value="light"><span>少量关键物件<small>读图最稳定。</small></span></label><label class="choice"><input type="radio" name="destruction" value="medium"><span>大部分轻掩体和特定墙体<small>推荐默认。</small></span></label><label class="choice"><input type="radio" name="destruction" value="heavy"><span>多数掩体、墙体和设施<small>自由度高，制作/性能成本高。</small></span></label>
+          </div></div>
+        </section>
+
+        <section id="character">
+          <h2>角色成长与职业</h2><p class="section-note">已确认：五属性、无传统等级上限、成长节点给少量自由属性点；技能通过资格 + 训练获得；战士/法师/牧师为主修标签。</p>
+          <div class="question required"><h3>16. 一个角色主修的锁定强度</h3><div class="options">
+            <label class="choice"><input type="radio" name="specialization" value="soft"><span>软鼓励<small>任何构筑均可学，专精只提高效率。</small></span></label><label class="choice"><input type="radio" name="specialization" value="medium"><span>核心装备和高阶技能要求主修资格<small>跨系可用基础内容。</small></span></label><label class="choice"><input type="radio" name="specialization" value="hard"><span>角色选择主修后锁定高阶路线<small>每局差异最强。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>17. 每场战斗的技能栏数量</h3><div class="options">
+            <label class="choice"><input type="radio" name="skill_slots" value="8"><span>8 个<small>配装取舍最强。</small></span></label><label class="choice"><input type="radio" name="skill_slots" value="10"><span>10 个<small>平衡。</small></span></label><label class="choice"><input type="radio" name="skill_slots" value="12"><span>12 个<small>更接近传统 JRPG。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>18. 少年序章的重玩体验</h3><div class="options">
+            <label class="choice"><input type="radio" name="prologue" value="always"><span>每局完整游玩<small>人生感最强。</small></span></label><label class="choice"><input type="radio" name="prologue" value="skip"><span>解锁后可跳过<small>保留首次体验和速开局。</small></span></label><label class="choice"><input type="radio" name="prologue" value="short"><span>总是保留，但压缩为 10 分钟<small>效率优先。</small></span></label>
+          </div></div>
+          <div class="question"><h3>19. 你最想优先试玩的主修 <span class="tag">多选</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="class_priority" value="tank"><span>重甲护卫</span></label><label class="choice"><input type="checkbox" name="class_priority" value="assault"><span>轻甲突击</span></label><label class="choice"><input type="checkbox" name="class_priority" value="burst"><span>元素爆发法师</span></label><label class="choice"><input type="checkbox" name="class_priority" value="control"><span>元素控制法师</span></label><label class="choice"><input type="checkbox" name="class_priority" value="heal"><span>治疗净化</span></label><label class="choice"><input type="checkbox" name="class_priority" value="barrier"><span>结界部署</span></label>
+          </div></div>
+        </section>
+
+        <section id="gear">
+          <h2>装备、背包与运营</h2><p class="section-note">已确认：深度装备栏；负重与以太负荷分离；格子背包；现场搜刮立即入包；普通装备常掉，关键装备可长期改装。</p>
+          <div class="question required"><h3>20. 背包格子应该是固定尺寸还是可成长？</h3><div class="options">
+            <label class="choice"><input type="radio" name="bag_growth" value="fixed"><span>固定尺寸<small>背包选择始终有压力。</small></span></label><label class="choice"><input type="radio" name="bag_growth" value="gear"><span>由背包/挂载装备改变<small>背包装备成为重要成长线。</small></span></label><label class="choice"><input type="radio" name="bag_growth" value="both"><span>装备成长 + 少量永久解锁<small>兼顾单局与局外进度。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>21. 消耗品快捷栏数量</h3><div class="options">
+            <label class="choice"><input type="radio" name="quick_slots" value="3"><span>3 格<small>极强取舍。</small></span></label><label class="choice"><input type="radio" name="quick_slots" value="5"><span>5 格<small>推荐标准。</small></span></label><label class="choice"><input type="radio" name="quick_slots" value="8"><span>8 格<small>物资玩法更完整。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>22. 工坊改装允许的重置程度</h3><div class="options">
+            <label class="choice"><input type="radio" name="respec" value="none"><span>不可重置<small>每次选择更有重量。</small></span></label><label class="choice"><input type="radio" name="respec" value="cost"><span>可付高成本重置<small>允许补救，但仍有运营代价。</small></span></label><label class="choice"><input type="radio" name="respec" value="free"><span>阶段间免费调整<small>鼓励针对任务配装。</small></span></label>
+          </div></div>
+          <div class="question"><h3>23. 希望出现的高风险物品 <span class="tag">多选</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="risky_items" value="stim"><span>短时强化剂</span></label><label class="choice"><input type="checkbox" name="risky_items" value="forbidden"><span>禁术媒介</span></label><label class="choice"><input type="checkbox" name="risky_items" value="implant"><span>一次性义体模块</span></label><label class="choice"><input type="checkbox" name="risky_items" value="contaminated"><span>污染武器/以太晶体</span></label>
+          </div></div>
+        </section>
+
+        <section id="content">
+          <h2>内容、敌人与首领</h2><p class="section-note">已确认：敌人分近战、射手、术式、支援、精英五类；全机制公开且确定性；普通战斗 3–6 敌人。</p>
+          <div class="question required"><h3>24. 首发版本的敌人内容规模</h3><div class="options">
+            <label class="choice"><input type="radio" name="enemy_scope" value="small"><span>18–24 个原型 + 3 个首领<small>优先打磨组合深度。</small></span></label><label class="choice"><input type="radio" name="enemy_scope" value="medium"><span>30–40 个原型 + 5 个首领<small>内容与开发量均衡。</small></span></label><label class="choice"><input type="radio" name="enemy_scope" value="large"><span>50+ 原型 + 8 个首领<small>重复变化最多，但制作周期大幅增加。</small></span></label>
+          </div></div>
+          <div class="question required"><h3>25. 敌人 AI 的呈现</h3><div class="options">
+            <label class="choice"><input type="radio" name="ai" value="intent"><span>显示下一行动意图<small>完全解题式，适合 SL。</small></span></label><label class="choice"><input type="radio" name="ai" value="role"><span>只显示行为规则<small>知道单位倾向，不知道精确行动。</small></span></label><label class="choice"><input type="radio" name="ai" value="mixed"><span>精英/首领显示意图，普通敌人只显示规则</span></label>
+          </div></div>
+          <div class="question"><h3>26. 首发必须有的终局原型 <span class="tag">多选</span></h3><div class="options">
+            <label class="choice"><input type="checkbox" name="bosses" value="train"><span>装甲列车指挥官</span></label><label class="choice"><input type="checkbox" name="cannon"><span>以太炮台总监</span></label><label class="choice"><input type="checkbox" name="pollution"><span>污染区执政官</span></label><label class="choice"><input type="checkbox" name="archmage"><span>战场术师长</span></label><label class="choice"><input type="checkbox" name="fortress"><span>叛军要塞主将</span></label>
+          </div></div>
+        </section>
+
+        <section id="meta">
+          <h2>结算与局外进度</h2><p class="section-note">已确认：结局生成完整人生档案；局外影响保持轻度，前代遗物、解锁池与永久资源的具体方式待定。</p>
+          <div class="question required"><h3>27. 新局开局最应该继承什么？</h3><div class="options">
+            <label class="choice"><input type="checkbox" name="inherit" value="pool"><span>出身、技能、装备解锁池</span></label><label class="choice"><input type="checkbox" name="inherit" value="currency"><span>少量永久开局资源</span></label><label class="choice"><input type="checkbox" name="inherit" value="relic"><span>前代遗物池或纪念物</span></label><label class="choice"><input type="checkbox" name="inherit" value="story"><span>传闻、编年史、NPC 引用</span></label>
+          </div></div>
+          <div class="question required"><h3>28. 遗物进入新局的方式</h3><div class="options">
+            <label class="choice"><input type="radio" name="relic_entry" value="random"><span>只进入随机掉落池</span></label><label class="choice"><input type="radio" name="relic_entry" value="choose"><span>每局自选一件起始纪念物</span></label><label class="choice"><input type="radio" name="relic_entry" value="bias"><span>指定一件提高出现概率</span></label>
+          </div></div>
+          <div class="question required"><h3>29. 局外强度增长的上限</h3><div class="options">
+            <label class="choice"><input type="radio" name="meta_power" value="none"><span>只解锁内容，不增加强度</span></label><label class="choice"><input type="radio" name="meta_power" value="minor"><span>少量便利/起始资源，不改变战斗上限</span></label><label class="choice"><input type="radio" name="meta_power" value="strong"><span>有明显永久成长，允许长期积累</span></label>
+          </div></div>
+        </section>
+
+        <section id="production">
+          <h2>制作范围与优先级</h2><p class="section-note">用于将完整策划压缩为能先做出来的首发版本。</p>
+          <div class="question required"><h3>30. 首个可玩的垂直切片应包含什么？</h3><div class="options">
+            <label class="choice"><input type="checkbox" name="slice" value="prologue"><span>少年序章</span></label><label class="choice"><input type="checkbox" name="slice" value="zone"><span>一个自由探索战区</span></label><label class="choice"><input type="checkbox" name="slice" value="classes"><span>战法牧各一条基础路线</span></label><label class="choice"><input type="checkbox" name="slice" value="backpack"><span>格子背包与搜刮</span></label><label class="choice"><input type="checkbox" name="slice" value="boss"><span>一个终局首领</span></label>
+          </div></div>
+          <div class="question required"><h3>31. 先做什么最能验证好玩？</h3><div class="options">
+            <label class="choice"><input type="radio" name="first_prototype" value="combat"><span>单张战棋地图 + 确定性行动条</span></label><label class="choice"><input type="radio" name="build"><span>装备、技能、背包构筑循环</span></label><label class="choice"><input type="radio" name="zone"><span>自由战区、时间推进与地点运营</span></label>
+          </div></div>
+          <div class="question"><h3>32. 其他必须保留或必须避免的设计</h3><textarea name="notes" placeholder="写任何未被上面覆盖的规则、参考游戏、体验边界或优先级。"></textarea></div>
+        </section>
+        <div class="actions"><button type="button" id="save">保存草稿</button><button type="button" class="secondary" id="export">导出 JSON</button><button type="button" class="secondary" id="copy">复制回答</button><button type="button" class="danger" id="clear">清空回答</button><span id="saved"></span></div>
+      </form>
+    </div>
+  </main>
+  <script>
+    const form = document.querySelector('#survey');
+    const storageKey = 'magic-war-tactics-survey-v1';
+    const required = [...document.querySelectorAll('.required')];
+    const saved = document.querySelector('#saved');
+    function values() {
+      const out = {};
+      new FormData(form).forEach((value, key) => { if (out[key]) out[key] = [].concat(out[key], value); else out[key] = value; });
+      return out;
+    }
+    function restore(data) {
+      Object.entries(data || {}).forEach(([key, value]) => {
+        const list = Array.isArray(value) ? value : [value];
+        list.forEach(v => { const field = form.querySelector(`[name="${CSS.escape(key)}"][value="${CSS.escape(v)}"]`); if (field) field.checked = true; });
+        const text = form.querySelector(`[name="${CSS.escape(key)}"]:not([type="radio"]):not([type="checkbox"])`);
+        if (text && typeof value === 'string') text.value = value;
+      });
+    }
+    function updateProgress() {
+      const done = required.filter(q => q.querySelector(':checked') || q.querySelector('textarea')?.value.trim() || q.querySelector('input[type="text"]')?.value.trim()).length;
+      document.querySelector('#count').textContent = `${done} / ${required.length}`;
+      document.querySelector('#bar').style.width = `${required.length ? done / required.length * 100 : 0}%`;
+    }
+    function persist(message) { localStorage.setItem(storageKey, JSON.stringify(values())); saved.textContent = message; updateProgress(); }
+    form.addEventListener('input', () => { persist('已自动保存'); });
+    document.querySelector('#save').addEventListener('click', () => persist('草稿已保存到此浏览器'));
+    document.querySelector('#export').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify({ title:'魔法战争人生战棋肉鸽策划调查', exportedAt:new Date().toISOString(), answers:values() }, null, 2)], { type:'application/json' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = '魔法战争人生战棋肉鸽_调查回答.json'; a.click(); URL.revokeObjectURL(a.href); saved.textContent = 'JSON 已导出';
+    });
+    document.querySelector('#copy').addEventListener('click', async () => {
+      const text = JSON.stringify(values(), null, 2); await navigator.clipboard.writeText(text); saved.textContent = '回答已复制';
+    });
+    document.querySelector('#clear').addEventListener('click', () => { if (confirm('清空本浏览器中保存的所有回答？')) { form.reset(); localStorage.removeItem(storageKey); updateProgress(); saved.textContent = '已清空'; } });
+    restore(JSON.parse(localStorage.getItem(storageKey) || '{}')); updateProgress();
+  </script>
+</body>
+</html>

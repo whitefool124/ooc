@@ -1,0 +1,992 @@
+[
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/imagegen/SKILL.md",
+    "sha256": "706d4d96e1d5c9e6023fe3ccabba1bb34b364024d344fd25b8515ec7d28fe3c4",
+    "chars": 19476,
+    "lines": 315,
+    "markdown_files": 6
+  },
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/openai-docs/SKILL.md",
+    "sha256": "4371fcc6652d78309ccf5e7710a4fd22314ad7f1f4928a6c172ddae80c87cc87",
+    "chars": 5480,
+    "lines": 38,
+    "markdown_files": 10
+  },
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/plugin-creator/SKILL.md",
+    "sha256": "9dba03c079abfbc680e8fca146069f054c1b0c5e9bcb5e5a9effcf86a95f67c6",
+    "chars": 11712,
+    "lines": 249,
+    "markdown_files": 3
+  },
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/review-agent/SKILL.md",
+    "sha256": "bb46315f6bc4b7051c05f807d19b1689b20418ac6c42590406d805c10fa2fd1a",
+    "chars": 2716,
+    "lines": 57,
+    "markdown_files": 1
+  },
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/skill-creator/SKILL.md",
+    "sha256": "cccd291077ec57c6f50ca6529f0f3fb93212da09473effb2fcec808e81b21288",
+    "chars": 15540,
+    "lines": 229,
+    "markdown_files": 2
+  },
+  {
+    "group": "system",
+    "path": "C:/Users/FNHF/.codex/skills/.system/skill-installer/SKILL.md",
+    "sha256": "2892d8b2fb11631132118f340aed80ae17e59d5a571fc2c4f4a4a7e73f139d52",
+    "chars": 3425,
+    "lines": 58,
+    "markdown_files": 1
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/funplay-unity-dev/SKILL.md",
+    "sha256": "45bf534cc3773eebfc89bf731c6013a4f62c28351d4839a9807c8590c92ec366",
+    "chars": 1231,
+    "lines": 27,
+    "markdown_files": 4
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/game-interface-planning/SKILL.md",
+    "sha256": "eeaa4fb62fdc5d2211f3f04101c411c6a70d4c13d8cb7fb87970b74617b3209d",
+    "chars": 2925,
+    "lines": 36,
+    "markdown_files": 4
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/gpt-image/SKILL.md",
+    "sha256": "194603891b352029a2414205d5c952cf0d66d3287562e3cf9f8c3236ebc1e206",
+    "chars": 6603,
+    "lines": 106,
+    "markdown_files": 35
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/local-image-generation-workbench/SKILL.md",
+    "sha256": "ff79623d72aa78758a411dff0b90653d71e1ebd8c6ebb6908df1984d777c020b",
+    "chars": 2166,
+    "lines": 57,
+    "markdown_files": 1
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/occ-art-direction/SKILL.md",
+    "sha256": "d6c310724946b762cbdc934ef777a28202becc310c0a3e7bff7b3cdc512fe732",
+    "chars": 2956,
+    "lines": 27,
+    "markdown_files": 3
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/occ-design-balance/SKILL.md",
+    "sha256": "3df7298a880e889ce8464b2804f37effbbaab2bbc43e1b49e1125b3c37721c81",
+    "chars": 2837,
+    "lines": 29,
+    "markdown_files": 2
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/occ-level-design/SKILL.md",
+    "sha256": "c5955c20b4b2b19b1105bae1069956d94cd967eba65221184a7235df392d67a3",
+    "chars": 8361,
+    "lines": 118,
+    "markdown_files": 2
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/pixel-animation-lite/SKILL.md",
+    "sha256": "7b48068d1845a2f7a31cca5a8cd65327e76658a449dcdb597cf6e82abd0a56ae",
+    "chars": 3279,
+    "lines": 90,
+    "markdown_files": 1
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/pixel-asset-pipeline/SKILL.md",
+    "sha256": "fa1a8f7f1f0618f1f6f7713119199856d1313732181d27420353672d712343b3",
+    "chars": 7429,
+    "lines": 167,
+    "markdown_files": 2
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/remotion/SKILL.md",
+    "sha256": "ff53dc64e9bf349c8deb89cbaa63e9979d3bf2518058c342163dabdfe75bb70b",
+    "chars": 5329,
+    "lines": 95,
+    "markdown_files": 39
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/rika-pixel-animation-workbench/SKILL.md",
+    "sha256": "efd0194d662753eea6f3001f1c1ec84ccca502ab81c5459af34941796829f89d",
+    "chars": 4341,
+    "lines": 75,
+    "markdown_files": 2
+  },
+  {
+    "group": "personal",
+    "path": "C:/Users/FNHF/.codex/skills/smbx-145-level-design/SKILL.md",
+    "sha256": "fcf57629d9f6388264cac8dd26d78bd76ea1feb5179310d0ec2004ec02820615",
+    "chars": 3614,
+    "lines": 62,
+    "markdown_files": 5
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-approval/SKILL.md",
+    "sha256": "8666a3f959d6be4a27a5e4678a98287a644eb923b59db923113014f4d0c8626f",
+    "chars": 4455,
+    "lines": 99,
+    "markdown_files": 17
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/SKILL.md",
+    "sha256": "55b2a48011c1537b043e5d6c7176e5aba34afce8b7e49042af29814f761a27bd",
+    "chars": 14474,
+    "lines": 159,
+    "markdown_files": 45
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-attendance/SKILL.md",
+    "sha256": "a0ea5f3fa176496dda31d912f7e55ad7cfed5243b30567d16e7f9dc96eebbe8b",
+    "chars": 1182,
+    "lines": 57,
+    "markdown_files": 1
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/SKILL.md",
+    "sha256": "9d956f655e81fb7072ba8ba556b093c62844fef972bf5bcb4213b0935cbbde2e",
+    "chars": 9498,
+    "lines": 164,
+    "markdown_files": 30
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-calendar/SKILL.md",
+    "sha256": "71a4374ba5a4f56035928a3ba8e499ce194d015c3a47229215af6733c960e2a7",
+    "chars": 7268,
+    "lines": 206,
+    "markdown_files": 11
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-contact/SKILL.md",
+    "sha256": "da1e85a02c8d86b3bce75ffa53b213cf7e551478ac0853f190a8bb88ac67c209",
+    "chars": 2386,
+    "lines": 71,
+    "markdown_files": 4
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/SKILL.md",
+    "sha256": "85c5b8928295749370b04ec3050651cbb3c526e93a15a69f071442acfe9d160b",
+    "chars": 2323,
+    "lines": 49,
+    "markdown_files": 44
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/SKILL.md",
+    "sha256": "67af743a72e8166d876eccaf8843865d08dc5d059de6ef7460b1380b06b62ccc",
+    "chars": 16026,
+    "lines": 216,
+    "markdown_files": 61
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-event/SKILL.md",
+    "sha256": "03ce27c284f33919febb7d6934f8312c7eec3c59f80b2dedd90b9e9a2e139f06",
+    "chars": 10948,
+    "lines": 159,
+    "markdown_files": 8
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-im/SKILL.md",
+    "sha256": "f1dc7d0568b68377712c44db8719f3b993959f9d6ad95bac5dda741bb09390da",
+    "chars": 19890,
+    "lines": 254,
+    "markdown_files": 59
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/SKILL.md",
+    "sha256": "1fcfedd2d2a191541f936b2128a15da5db2639738c965d9a3804661c493e5792",
+    "chars": 16285,
+    "lines": 290,
+    "markdown_files": 29
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/SKILL.md",
+    "sha256": "408760233f4227e53598b9314376ca123ff9d581414f978a3e8240ec03cf9a1c",
+    "chars": 3262,
+    "lines": 70,
+    "markdown_files": 6
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-minutes/SKILL.md",
+    "sha256": "1d9e225228086c771e2f62a47523e4ec552ffa11215f6b7e165220f793a1616e",
+    "chars": 8915,
+    "lines": 213,
+    "markdown_files": 10
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-note/SKILL.md",
+    "sha256": "af878cbf8bf8d609324032da36a4536ed32cbcb0a4bbcbd2beec7d902893bcb1",
+    "chars": 4405,
+    "lines": 98,
+    "markdown_files": 3
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/SKILL.md",
+    "sha256": "f1d4821002bf0bd282bc5c0977376bcdc367eda65ce8c38416713cf7cb61e378",
+    "chars": 9478,
+    "lines": 167,
+    "markdown_files": 19
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-openapi-explorer/SKILL.md",
+    "sha256": "49add333633bf9d094453051713c9434f6e15ad72fde6847ba67389cb3bf63e2",
+    "chars": 3087,
+    "lines": 153,
+    "markdown_files": 1
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-shared/SKILL.md",
+    "sha256": "520b0be51bb4801c12e97435f4e348708755f65b3237ec92c05e4cfeeee120a5",
+    "chars": 2759,
+    "lines": 48,
+    "markdown_files": 7
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-sheets/SKILL.md",
+    "sha256": "7f36fccf1e1b07071c11115ff8437bccf14c1b89a33c0ce394ac020f42074434",
+    "chars": 20902,
+    "lines": 235,
+    "markdown_files": 21
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-skill-maker/SKILL.md",
+    "sha256": "8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678",
+    "chars": 1758,
+    "lines": 85,
+    "markdown_files": 1
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-slides/SKILL.md",
+    "sha256": "c16dcdbd1a3334d23306a8b84bf11f7181dfadb4156439693d4b1224965bdf84",
+    "chars": 16536,
+    "lines": 315,
+    "markdown_files": 37
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-task/SKILL.md",
+    "sha256": "3f82c7da7bf93de5c373e8df4ef430312ddd13b1f2c80584a1419ab05472cd0c",
+    "chars": 8543,
+    "lines": 187,
+    "markdown_files": 18
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-vc/SKILL.md",
+    "sha256": "ea47a9ca54797c2fbb26d8220304ad8aadaa8a782714e6031c0bdf97a7d3f5f6",
+    "chars": 10962,
+    "lines": 215,
+    "markdown_files": 8
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-vc-agent/SKILL.md",
+    "sha256": "ea6dafdd0a74a438235ad3b5cde02af938bde7b61486b6d680020a6878c4d98a",
+    "chars": 14280,
+    "lines": 216,
+    "markdown_files": 3
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-whiteboard/SKILL.md",
+    "sha256": "53d6eb053aa70f3fa6617c241b1eae7cef2afe9a67438186cbc5d488a5c4ed15",
+    "chars": 2053,
+    "lines": 53,
+    "markdown_files": 17
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-wiki/SKILL.md",
+    "sha256": "8d4ca0be87a6d3f7eb43ed2f2f93db50734bd5d739c21414fba7ba3351dd4f86",
+    "chars": 8107,
+    "lines": 121,
+    "markdown_files": 3
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-workflow-meeting-summary/SKILL.md",
+    "sha256": "ad3db979a2e6d8932ab33058967e1dab82090f8d8d82b16c59ee2955eb967d61",
+    "chars": 3758,
+    "lines": 122,
+    "markdown_files": 1
+  },
+  {
+    "group": "global_lark",
+    "path": "C:/Users/FNHF/.agents/skills/lark-workflow-standup-report/SKILL.md",
+    "sha256": "a283de746e65f97d7d25c3b9e351c2e5c16702be81c0f004d5be718c50994690",
+    "chars": 3002,
+    "lines": 122,
+    "markdown_files": 1
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-approval/SKILL.md",
+    "sha256": "8666a3f959d6be4a27a5e4678a98287a644eb923b59db923113014f4d0c8626f",
+    "chars": 4455,
+    "lines": 99,
+    "markdown_files": 17
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/SKILL.md",
+    "sha256": "952b7699aa9d6bbb41ebc849efd002465760536da3224d7c6e329936572dddc7",
+    "chars": 14435,
+    "lines": 159,
+    "markdown_files": 45
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-attendance/SKILL.md",
+    "sha256": "a0ea5f3fa176496dda31d912f7e55ad7cfed5243b30567d16e7f9dc96eebbe8b",
+    "chars": 1182,
+    "lines": 57,
+    "markdown_files": 1
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/SKILL.md",
+    "sha256": "adeede4b38a1ad7f02ab6fc7d031390d8ef58d4cb382ed76943b50f52fe82cd6",
+    "chars": 20279,
+    "lines": 187,
+    "markdown_files": 32
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/SKILL.md",
+    "sha256": "71a4374ba5a4f56035928a3ba8e499ce194d015c3a47229215af6733c960e2a7",
+    "chars": 7268,
+    "lines": 206,
+    "markdown_files": 11
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-contact/SKILL.md",
+    "sha256": "da1e85a02c8d86b3bce75ffa53b213cf7e551478ac0853f190a8bb88ac67c209",
+    "chars": 2386,
+    "lines": 71,
+    "markdown_files": 4
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/SKILL.md",
+    "sha256": "1dafae8b024b4e08d309777bf0c33f920fb98d22a9f8726cf08487321955e9a4",
+    "chars": 2275,
+    "lines": 49,
+    "markdown_files": 44
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/SKILL.md",
+    "sha256": "ca86f9cbf8e27e1095425246a99747839c6e353716b0ff2c1635252794e3630a",
+    "chars": 15943,
+    "lines": 216,
+    "markdown_files": 61
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-event/SKILL.md",
+    "sha256": "03ce27c284f33919febb7d6934f8312c7eec3c59f80b2dedd90b9e9a2e139f06",
+    "chars": 10948,
+    "lines": 159,
+    "markdown_files": 8
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-im/SKILL.md",
+    "sha256": "f1dc7d0568b68377712c44db8719f3b993959f9d6ad95bac5dda741bb09390da",
+    "chars": 19890,
+    "lines": 254,
+    "markdown_files": 59
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/SKILL.md",
+    "sha256": "1fcfedd2d2a191541f936b2128a15da5db2639738c965d9a3804661c493e5792",
+    "chars": 16285,
+    "lines": 290,
+    "markdown_files": 29
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/SKILL.md",
+    "sha256": "408760233f4227e53598b9314376ca123ff9d581414f978a3e8240ec03cf9a1c",
+    "chars": 3262,
+    "lines": 70,
+    "markdown_files": 6
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-minutes/SKILL.md",
+    "sha256": "1d9e225228086c771e2f62a47523e4ec552ffa11215f6b7e165220f793a1616e",
+    "chars": 8915,
+    "lines": 213,
+    "markdown_files": 10
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-note/SKILL.md",
+    "sha256": "af878cbf8bf8d609324032da36a4536ed32cbcb0a4bbcbd2beec7d902893bcb1",
+    "chars": 4405,
+    "lines": 98,
+    "markdown_files": 3
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/SKILL.md",
+    "sha256": "f1d4821002bf0bd282bc5c0977376bcdc367eda65ce8c38416713cf7cb61e378",
+    "chars": 9478,
+    "lines": 167,
+    "markdown_files": 19
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-openapi-explorer/SKILL.md",
+    "sha256": "49add333633bf9d094453051713c9434f6e15ad72fde6847ba67389cb3bf63e2",
+    "chars": 3087,
+    "lines": 153,
+    "markdown_files": 1
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-shared/SKILL.md",
+    "sha256": "55807b9fe249ce71aade3f2372d8237a9a0356a0a6aa12997a1d812dde9ad901",
+    "chars": 8213,
+    "lines": 247,
+    "markdown_files": 2
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-sheets/SKILL.md",
+    "sha256": "7f36fccf1e1b07071c11115ff8437bccf14c1b89a33c0ce394ac020f42074434",
+    "chars": 20902,
+    "lines": 235,
+    "markdown_files": 21
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-skill-maker/SKILL.md",
+    "sha256": "8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678",
+    "chars": 1758,
+    "lines": 85,
+    "markdown_files": 1
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-slides/SKILL.md",
+    "sha256": "c16dcdbd1a3334d23306a8b84bf11f7181dfadb4156439693d4b1224965bdf84",
+    "chars": 16536,
+    "lines": 315,
+    "markdown_files": 37
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-task/SKILL.md",
+    "sha256": "3f82c7da7bf93de5c373e8df4ef430312ddd13b1f2c80584a1419ab05472cd0c",
+    "chars": 8543,
+    "lines": 187,
+    "markdown_files": 18
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-vc/SKILL.md",
+    "sha256": "ea47a9ca54797c2fbb26d8220304ad8aadaa8a782714e6031c0bdf97a7d3f5f6",
+    "chars": 10962,
+    "lines": 215,
+    "markdown_files": 8
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-vc-agent/SKILL.md",
+    "sha256": "ea6dafdd0a74a438235ad3b5cde02af938bde7b61486b6d680020a6878c4d98a",
+    "chars": 14280,
+    "lines": 216,
+    "markdown_files": 3
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-whiteboard/SKILL.md",
+    "sha256": "53d6eb053aa70f3fa6617c241b1eae7cef2afe9a67438186cbc5d488a5c4ed15",
+    "chars": 2053,
+    "lines": 53,
+    "markdown_files": 20
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-wiki/SKILL.md",
+    "sha256": "d49206e04243b7bc5e31453db1503c58bf299471e48df8fd7e0f58b011f40a78",
+    "chars": 8090,
+    "lines": 121,
+    "markdown_files": 2
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-workflow-meeting-summary/SKILL.md",
+    "sha256": "ad3db979a2e6d8932ab33058967e1dab82090f8d8d82b16c59ee2955eb967d61",
+    "chars": 3758,
+    "lines": 122,
+    "markdown_files": 1
+  },
+  {
+    "group": "project_lark",
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-workflow-standup-report/SKILL.md",
+    "sha256": "a283de746e65f97d7d25c3b9e351c2e5c16702be81c0f004d5be718c50994690",
+    "chars": 3002,
+    "lines": 122,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/computer-use/26.901.51231/skills/computer-use/SKILL.md",
+    "sha256": "8211e4b11a19a0dc4f0ace91096c74c5b36037ca4cb2c8988f0f535bb209e951",
+    "chars": 1497,
+    "lines": 29,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/sites/0.1.57/skills/sites-building/SKILL.md",
+    "sha256": "f036a18be47d3012ca8993c82eed2350cb8920ffacd4576c99849846952ea880",
+    "chars": 31070,
+    "lines": 233,
+    "markdown_files": 7
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/sites/0.1.57/skills/sites-hosting/SKILL.md",
+    "sha256": "3dfb59fa4f08dc5e5caca99c5e2bf7182851990b3f6197996eef87b7a55cbfd7",
+    "chars": 6719,
+    "lines": 51,
+    "markdown_files": 2
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/visualize/1.0.29/skills/visualize/SKILL.md",
+    "sha256": "25f8b5c2c882f26c65ded05d0485984fcbc07c13f0363abfc3b3a9704d997008",
+    "chars": 31417,
+    "lines": 514,
+    "markdown_files": 2
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/gmail/11c74d6b/skills/gmail/SKILL.md",
+    "sha256": "1ca417440b1204389f9f32246546599eafd2ee3a884f6b59249c5052ac254121",
+    "chars": 6959,
+    "lines": 80,
+    "markdown_files": 7
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/gmail/11c74d6b/skills/gmail-inbox-triage/SKILL.md",
+    "sha256": "7784395f9070fb266835560f3bd8c048e7d0ca99eaab17e69c2fd1f114b6a54d",
+    "chars": 2173,
+    "lines": 33,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar/SKILL.md",
+    "sha256": "e8626b2ddcad251176d96a64971670c1cf172c8067b36c56ccfdacc1bc307143",
+    "chars": 6907,
+    "lines": 66,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-daily-brief/SKILL.md",
+    "sha256": "683b87ca5024404fd82db7f0a12574a36708fe24afa046cf8d4466a5846cbcdd",
+    "chars": 3497,
+    "lines": 75,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-free-up-time/SKILL.md",
+    "sha256": "a4f42210c8e951d285d7e13c8a98988093e4d3740735941c8cae40f1ace58e13",
+    "chars": 2598,
+    "lines": 39,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-group-scheduler/SKILL.md",
+    "sha256": "70028029dd059cefef0b2c32e82a821e876c543f3fb4bf921db5a21b15fa485d",
+    "chars": 2622,
+    "lines": 38,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-meeting-prep/SKILL.md",
+    "sha256": "4bb79dc0240a565a6a0b08d0f689e2ef06ac1d74a238da6b1bcb9144de8bd26c",
+    "chars": 1621,
+    "lines": 28,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack/SKILL.md",
+    "sha256": "ea2ba119d90b56b6c4893616c3fa0fbe5cbeece3de0e3377ee73ad27c0d97197",
+    "chars": 6549,
+    "lines": 81,
+    "markdown_files": 2
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-channel-summarization/SKILL.md",
+    "sha256": "22c850678f86fa51c81777e4bb8113837ec6a72850cffee549747df386ddbff2",
+    "chars": 3491,
+    "lines": 68,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-daily-digest/SKILL.md",
+    "sha256": "48309fbbb5938296611b85281b43031cdd231325bca805fb715d1950cdbdef16",
+    "chars": 3475,
+    "lines": 66,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-notification-triage/SKILL.md",
+    "sha256": "6a4dff3c4c3e743de44edaeae40510d1faf4461651d226e68d16286cb7dbc9b9",
+    "chars": 4363,
+    "lines": 66,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-outgoing-message/SKILL.md",
+    "sha256": "ee4ba4e26bb5ba0db5c868ffef4c0a3e3d8f3033100a8baae2792c1ecbee9ca4",
+    "chars": 4528,
+    "lines": 66,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-reply-drafting/SKILL.md",
+    "sha256": "990f6f118d890521022edef5bcad954cc4b0e983ca14dccdb621e86144b92734",
+    "chars": 4731,
+    "lines": 78,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/deep-research-work/0.1.14/skills/deep-research/SKILL.md",
+    "sha256": "c7b924a736d715bf90941c5e75460b3387ec90b1fdb3a7c79d3e9bfb10427dc6",
+    "chars": 12344,
+    "lines": 183,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md",
+    "sha256": "cf5360fd8b197673bb237c52c603c97fa319c875c3dfa2cd8efff52d4422f513",
+    "chars": 1497,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md",
+    "sha256": "27721fc1d67d1b41949caa75ac8f94f81952ff124406878af6524047929e60d2",
+    "chars": 1475,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md",
+    "sha256": "563722f53854e606f8a9f87e37e72d7ef70a22d46d5836b8e4d6abfb1b79e9e0",
+    "chars": 1437,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md",
+    "sha256": "0b05effc47df0a14f8e0c3e3597e6722224747435546385d38a2cae279bd20b9",
+    "chars": 1456,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md",
+    "sha256": "c0b6b7a62a15597aaf2b1ec679e21da48f533b756127f0aef957cdfe9f3da738",
+    "chars": 1486,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md",
+    "sha256": "68abd08cfe5e073e3c446a3f675f44c5bf98f57434dba679e8acd8a763379a8b",
+    "chars": 1496,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md",
+    "sha256": "51fb9d21baf6119c4ccb1903638a6bac0e859210de63460fffa7025d52e997e0",
+    "chars": 1434,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md",
+    "sha256": "d58d019b89cb6f292ac3ab991d561489eef477ff53ce05fb024a0c936f5af26a",
+    "chars": 1498,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md",
+    "sha256": "880ef094d4d0c89a7bde5ce9bbe4086625c186651e9e6efc8ba8bdd7cc77f9d5",
+    "chars": 1470,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md",
+    "sha256": "33bb660791a0b9a21628a42c34934932220203b6aabd84e98cb1b45327d0384c",
+    "chars": 1500,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md",
+    "sha256": "6d63c5cd025ffe936e7bab5db3023672bbaec26af55c2bb8b057d38c202c9c32",
+    "chars": 1483,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md",
+    "sha256": "aa893ebd89e7c8d1db4261d01cc2b1add35d78d00785871ccaaa5fc8db783ec9",
+    "chars": 1463,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md",
+    "sha256": "d97d5be20189b7f53dd269b6e1c5f694eaf53e5a72f6559fcb1578911b7cda82",
+    "chars": 1484,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md",
+    "sha256": "15cfeeedf440021f16ed3f3ad8c7c1ef6d48898b9447741e223d2fb41cfc9800",
+    "chars": 1482,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md",
+    "sha256": "b7c8d0c05f75878b9bc21e56a57c41ec1aa29700aca0a24822be0f9f1bd53207",
+    "chars": 1478,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md",
+    "sha256": "7c68430c6cf57b55b457d4735dbd1a46b889bef135a32222902dd0848b6e1752",
+    "chars": 1487,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md",
+    "sha256": "51d7882ac94e8e57b323394825728c33925af878806e37277217c2dc12a912e5",
+    "chars": 1446,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md",
+    "sha256": "87f7b7ed1b0d8410f5e5971cd7f7db9a4165e2f37069e97e52dbfb469b75a57c",
+    "chars": 1445,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md",
+    "sha256": "26d7cafdcd1899a937b325c5d02ac57c162d45002153be33a934d35f81eb6110",
+    "chars": 1473,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md",
+    "sha256": "74f4a5cccec0107b861548b157e04c51d9b58ec13a990c86394b4c529b8ecf41",
+    "chars": 1552,
+    "lines": 22,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md",
+    "sha256": "653841cc21205269f08b0ce135891e1518dac616a766bcfb0b57d788d3f68b10",
+    "chars": 2983,
+    "lines": 58,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/documents/26.904.11930/skills/documents/SKILL.md",
+    "sha256": "9fcc13c3cc34746b134d4ecf4a3c96c9f464d59944fcc99862b2e69ac953f19e",
+    "chars": 42259,
+    "lines": 540,
+    "markdown_files": 37
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/pdf/26.904.11930/skills/pdf/SKILL.md",
+    "sha256": "9e429bfc5ada20ccf25a531484e3dcc5da59811d936a7cc5dfd23dbf2dfadd31",
+    "chars": 7269,
+    "lines": 150,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/SKILL.md",
+    "sha256": "b1a05947dd5a98d40c7e9beee2596a09a9ff475d2b1138e6e3a8d60b04ef1823",
+    "chars": 28804,
+    "lines": 232,
+    "markdown_files": 34
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/excel-live-control/SKILL.md",
+    "sha256": "3e87ae705ddf2f5110f7c2de11bc3827ddb26984bbc159d4858ebb69d8dee7fa",
+    "chars": 27883,
+    "lines": 294,
+    "markdown_files": 13
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/spreadsheets/SKILL.md",
+    "sha256": "b2477f39319682cf156c8faa36eac9f039aaea03a5f09ae72111c76910ae4e75",
+    "chars": 16421,
+    "lines": 218,
+    "markdown_files": 16
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/template-creator/26.904.11930/skills/template-creator/SKILL.md",
+    "sha256": "244bfef01d3e17c6013952ccf34621a90ddfee9c7828058245c3c46f51114944",
+    "chars": 19240,
+    "lines": 206,
+    "markdown_files": 1
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-code-to-design/SKILL.md",
+    "sha256": "f79e69ccb996b0f949ff611cf3ffa74db878d5ffd2cd59232317902e2c4a6f17",
+    "chars": 5503,
+    "lines": 75,
+    "markdown_files": 2
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-component-config/SKILL.md",
+    "sha256": "80a4f0191dd38614ced64a7befe73ca0b5c09ee414bb29cab7ef5c7c8bc31b08",
+    "chars": 17447,
+    "lines": 218,
+    "markdown_files": 4
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-design-editing/SKILL.md",
+    "sha256": "f8e74e45a00a738195ff5217aaecae12f21b450f29056fae194d1014fbe30048",
+    "chars": 17472,
+    "lines": 289,
+    "markdown_files": 3
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-design-to-code/SKILL.md",
+    "sha256": "be10c4c9891658f55d8ea2c9af4e1ca0e748ff6fc72ab92b84bb9f7f94418c16",
+    "chars": 9477,
+    "lines": 97,
+    "markdown_files": 4
+  },
+  {
+    "group": "plugin_cache",
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-read-dsl/SKILL.md",
+    "sha256": "3f9e2dac753122b42ea4c3cd298d9fa0735bc977aaa4d1fd5517d2c5a683b7f4",
+    "chars": 11217,
+    "lines": 141,
+    "markdown_files": 3
+  },
+  {
+    "group": "agents",
+    "path": "C:/Users/FNHF/.codex/AGENTS.md",
+    "sha256": "71412dd64f3f87e20a314af363aede6b4fe7fe1a5cce108271385b7350d0d766",
+    "chars": 1335,
+    "lines": 31
+  },
+  {
+    "group": "agents",
+    "path": "E:/数据库/OCC_Codex/AGENTS.md",
+    "sha256": "e2038bf2825bde6ec190735bcb9e2a9dddfb8e66d92778e75368510c4dde4c11",
+    "chars": 2176,
+    "lines": 41
+  }
+]

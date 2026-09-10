@@ -1,0 +1,246 @@
+[
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/imagegen/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/openai-docs/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/plugin-creator/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/review-agent/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/skill-creator/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/.system/skill-installer/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/funplay-unity-dev/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/game-interface-planning/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/gpt-image/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/local-image-generation-workbench/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/occ-art-direction/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/occ-design-balance/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/occ-level-design/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/pixel-animation-lite/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/pixel-asset-pipeline/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/remotion/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/rika-pixel-animation-workbench/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/smbx-145-level-design/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-bundled/visualize/1.0.29/skills/visualize/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/gmail/11c74d6b/skills/gmail/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/gmail/11c74d6b/skills/gmail-inbox-triage/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-daily-brief/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-free-up-time/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-group-scheduler/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/google-calendar/11c74d6b/skills/google-calendar-meeting-prep/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-channel-summarization/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-daily-digest/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-notification-triage/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-outgoing-message/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated/slack/11c74d6b/skills/slack-reply-drafting/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/deep-research-work/0.1.14/skills/deep-research/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/documents/26.904.11930/skills/documents/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/pdf/26.904.11930/skills/pdf/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/presentations/26.904.11930/skills/presentations/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/excel-live-control/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.904.11930/skills/spreadsheets/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/openai-primary-runtime/template-creator/26.904.11930/skills/template-creator/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/agents/openai.yaml",
+    "valid": true
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/plugins/cache/pixso/pixso/1.0.11/skills/pixso-component-config/agents/openai.yaml",
+    "valid": true
+  }
+]

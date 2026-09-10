@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -8,35 +10,192 @@ namespace OCC.Combat.Presentation
 {
     public readonly struct FormalTooltipContent
     {
+        public string Category { get; }
+        public string Status { get; }
         public string Title { get; }
+        public string Identity { get; }
+        public string MetricA { get; }
+        public string MetricB { get; }
+        public string MetricC { get; }
+        public string Effect { get; }
+        public string Summary { get; }
         public string Body { get; }
         public Color Accent { get; }
+        public string IconPath { get; }
 
         public FormalTooltipContent(string title, string body, Color accent)
+            : this(string.Empty, string.Empty, title, string.Empty, string.Empty, string.Empty, string.Empty,
+                string.Empty, string.Empty, body, accent, string.Empty) { }
+
+        public FormalTooltipContent(string category, string title, string body, Color accent)
+            : this(category, title, body, accent, string.Empty) { }
+
+        // Existing providers can keep emitting player-facing prose; categorized cards normalize it into
+        // UniversalContentCard fields instead of drawing one free-form paragraph.
+        public FormalTooltipContent(string category, string title, string body, Color accent, string iconPath)
+            : this(category, ParseStatus(body), title, ParseIdentity(category, body), ParseMetric(body, 0), ParseMetric(body, 1),
+                ParseMetric(body, 2), ParseEffect(body), ParseSummary(category, title, body), body, accent, iconPath) { }
+
+        public FormalTooltipContent(string category, string status, string title, string identity,
+            string metricA, string metricB, string metricC, string effect, string summary, Color accent, string iconPath = "")
+            : this(category, status, title, identity, metricA, metricB, metricC, effect, summary, effect, accent, iconPath) { }
+
+        private FormalTooltipContent(string category, string status, string title, string identity,
+            string metricA, string metricB, string metricC, string effect, string summary, string body, Color accent, string iconPath)
         {
+            Category = category ?? string.Empty;
+            Status = status ?? string.Empty;
             Title = title ?? string.Empty;
+            Identity = identity ?? string.Empty;
+            MetricA = metricA ?? string.Empty;
+            MetricB = metricB ?? string.Empty;
+            MetricC = metricC ?? string.Empty;
+            Effect = effect ?? string.Empty;
+            Summary = summary ?? string.Empty;
             Body = body ?? string.Empty;
             Accent = accent;
+            IconPath = iconPath ?? string.Empty;
+        }
+
+        private static string[] Lines(string body) => (body ?? string.Empty).Replace("\r", string.Empty)
+            .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(value => value.Trim()).ToArray();
+
+        private static string ParseStatus(string body)
+        {
+            string line = Lines(body).FirstOrDefault(value => StartsWithLabel(value, "当前") || StartsWithLabel(value, "领取"));
+            return string.IsNullOrEmpty(line) ? string.Empty : ValueAfterLabel(line);
+        }
+
+        private static string ParseIdentity(string category, string body)
+        {
+            string target = Lines(body).FirstOrDefault(value => StartsWithLabel(value, "目标") || StartsWithLabel(value, "来源"));
+            return string.IsNullOrEmpty(target) ? (category ?? string.Empty) : ValueAfterLabel(target);
+        }
+
+        private static string ParseMetric(string body, int index)
+        {
+            List<string> metrics = new List<string>();
+            foreach (string line in Lines(body))
+            {
+                if (StartsWithLabel(line, "消耗"))
+                {
+                    foreach (string part in ValueAfterLabel(line).Split('·'))
+                    {
+                        string value = part.Trim();
+                        if (value.Contains("行动点")) metrics.Add("行动 " + FirstNumber(value));
+                        else if (value.Contains("魔力")) metrics.Add("魔力 " + FirstNumber(value));
+                        else if (!string.IsNullOrEmpty(value)) metrics.Add(value);
+                    }
+                }
+                else if (StartsWithLabel(line, "循环")) metrics.Add("冷却 " + ValueAfterLabel(line));
+                else if (StartsWithLabel(line, "数据"))
+                {
+                    foreach (string part in ValueAfterLabel(line).Split('·'))
+                        if (!string.IsNullOrWhiteSpace(part)) metrics.Add(part.Trim());
+                }
+                else if (StartsWithLabel(line, "占格") || StartsWithLabel(line, "重量") || StartsWithLabel(line, "以太负荷"))
+                    metrics.Add(line.Replace('　', ' ').Replace("：", " "));
+            }
+            return index < metrics.Count ? metrics[index] : "—";
+        }
+
+        private static string ParseEffect(string body)
+        {
+            string[] lines = Lines(body);
+            int effect = Array.FindIndex(lines, value => value == "效果" || value == "附加效果");
+            if (effect >= 0)
+            {
+                List<string> result = new List<string>();
+                for (int i = effect + 1; i < lines.Length && !IsSection(lines[i]); i++)
+                    result.Add(lines[i].TrimStart('·', ' ', '　'));
+                if (result.Count > 0) return string.Join("；", result.Take(2));
+            }
+            string fallback = lines.FirstOrDefault(value => !IsMetricOrMeta(value));
+            return string.IsNullOrEmpty(fallback) ? "—" : fallback.TrimStart('·', ' ', '　');
+        }
+
+        private static string ParseSummary(string category, string title, string body)
+        {
+            string[] lines = Lines(body);
+            string introduction = lines.FirstOrDefault(value => StartsWithLabel(value, "简介"));
+            if (!string.IsNullOrEmpty(introduction)) return FirstSentence(ValueAfterLabel(introduction));
+
+            int effectIndex = Array.FindIndex(lines, value => value == "效果" || value == "附加效果");
+            IEnumerable<string> preEffect = effectIndex < 0 ? lines : lines.Take(effectIndex);
+            string plainText = preEffect.FirstOrDefault(value => !IsMetricOrMeta(value) && !IsSection(value));
+            if (!string.IsNullOrEmpty(plainText)) return FirstSentence(plainText.TrimStart('·', ' ', '　'));
+
+            string type = (category ?? string.Empty).Split('·')[0].Trim();
+            string effect = ParseEffect(body).Trim().TrimEnd('。', '！', '？');
+            if (string.IsNullOrWhiteSpace(title)) return string.Empty;
+            if (string.IsNullOrWhiteSpace(effect) || effect == "—")
+                return title + (string.IsNullOrWhiteSpace(type) ? "是一项可用内容。" : "是一项" + type + "。");
+            return title + (string.IsNullOrWhiteSpace(type) ? "的主要效果是" : "是一项" + type + "，主要效果是") +
+                effect.Replace("；", "，并") + "。";
+        }
+
+        private static string FirstSentence(string value)
+        {
+            string text = (value ?? string.Empty).Trim();
+            int end = text.IndexOfAny(new[] { '。', '！', '？' });
+            return end < 0 ? (string.IsNullOrEmpty(text) ? string.Empty : text + "。") : text.Substring(0, end + 1);
+        }
+
+        private static bool StartsWithLabel(string line, string label) => line == label ||
+            line.StartsWith(label + "　", StringComparison.Ordinal) || line.StartsWith(label + " ", StringComparison.Ordinal) ||
+            line.StartsWith(label + "：", StringComparison.Ordinal);
+
+        private static string ValueAfterLabel(string line)
+        {
+            int split = line.IndexOfAny(new[] { '　', ' ', '：' });
+            return split < 0 ? string.Empty : line.Substring(split + 1).Trim();
+        }
+
+        private static bool IsSection(string line) => new[] { "效果", "附加效果", "注意", "比较", "领取", "来源", "目标", "当前" }
+            .Any(label => StartsWithLabel(line, label));
+
+        private static bool IsMetricOrMeta(string line) => new[] { "消耗", "循环", "数据", "目标", "当前", "领取", "来源", "注意", "比较" }
+            .Any(label => StartsWithLabel(line, label)) || line == "效果" || line == "附加效果";
+
+        private static string FirstNumber(string value)
+        {
+            string result = new string((value ?? string.Empty).SkipWhile(character => !char.IsDigit(character) && character != '-')
+                .TakeWhile(character => char.IsDigit(character) || character == '-' || character == '.').ToArray());
+            return string.IsNullOrEmpty(result) ? "—" : result;
         }
     }
 
-    // One shared, raycast-transparent tooltip layer keeps dense reference text out of the combat HUD.
     public sealed class FormalHoverTooltip : MonoBehaviour
     {
         private const float MinimumWidth = 220f;
         private const float MaximumWidth = 480f;
-        private const float MinimumHeight = 100f;
+        private const float MinimumHeight = 120f;
         private const float MaximumHeight = 360f;
+        private const float ContentCardWidth = 336f;
+        private const float ContentCardHeight = 260f;
         private const float HorizontalPadding = 16f;
-        private const float TitleHeight = 34f;
-        private const float BodyTop = 50f;
-        private const float BottomPadding = 14f;
+        private const float TopPadding = 16f;
+        private const float TitleHeight = 40f;
+        private const float BodyTop = 64f;
+        private const float BottomPadding = 16f;
         private const float EdgeMargin = 24f;
         private Canvas canvas;
         private RectTransform layer;
         private RectTransform panel;
         private Text titleLabel;
         private Text bodyLabel;
+        private RectTransform titleRule;
+        private RectTransform cardRoot;
+        private Text categoryLabel;
+        private Text statusLabel;
+        private Image artworkFrame;
+        private Image contentIcon;
+        private Text cardTitle;
+        private Text identityLabel;
+        private readonly Text[] metricLabels = new Text[3];
+        private Text effectLabel;
+        private Text effectBody;
+        private Text summaryLabel;
         private object owner;
 
         public bool IsVisible => panel != null && panel.gameObject.activeSelf;
@@ -46,58 +205,152 @@ namespace OCC.Combat.Presentation
             if (panel != null) return;
             canvas = hostCanvas != null ? hostCanvas : throw new ArgumentNullException(nameof(hostCanvas));
 
-            GameObject layer = FormalUiKit.Create("悬浮信息层", canvas.transform);
-            this.layer = layer.AddComponent<RectTransform>();
-            this.layer.anchorMin = Vector2.zero;
-            this.layer.anchorMax = Vector2.one;
-            this.layer.offsetMin = Vector2.zero;
-            this.layer.offsetMax = Vector2.zero;
-            CanvasGroup group = layer.AddComponent<CanvasGroup>();
+            GameObject layerObject = FormalUiKit.Create("悬浮信息层", canvas.transform);
+            layer = layerObject.AddComponent<RectTransform>();
+            layer.anchorMin = Vector2.zero;
+            layer.anchorMax = Vector2.one;
+            layer.offsetMin = Vector2.zero;
+            layer.offsetMax = Vector2.zero;
+            CanvasGroup group = layerObject.AddComponent<CanvasGroup>();
             group.interactable = false;
             group.blocksRaycasts = false;
 
-            GameObject panelObject = FormalUiKit.AnchoredPanel("悬浮详情", layer.transform, new Vector2(.5f, .5f), new Vector2(0f, 1f),
+            GameObject panelObject = FormalUiKit.AnchoredPanel("悬浮详情", layer, new Vector2(.5f, .5f), new Vector2(0f, 1f),
                 Vector2.zero, new Vector2(MinimumWidth, MinimumHeight), FormalUiTheme.SurfaceRaised);
             panel = panelObject.GetComponent<RectTransform>();
             Image background = panelObject.GetComponent<Image>();
-            FormalUiKit.ApplySkin(background, "panel_elevated", FormalUiTheme.SurfaceRaised);
+            background.sprite = null;
+            background.type = Image.Type.Simple;
+            background.color = FormalUiTheme.SurfaceRaised;
             background.raycastTarget = false;
 
-            titleLabel = FormalUiKit.Label("悬浮标题", string.Empty, panel, new Vector2(HorizontalPadding, -10f), new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight),
-                20, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(titleLabel);
-            bodyLabel = FormalUiKit.Label("悬浮正文", string.Empty, panel, new Vector2(HorizontalPadding, -BodyTop), new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding),
-                16, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            titleLabel = FixedLabel("悬浮标题", string.Empty, panel, new Vector2(HorizontalPadding, -TopPadding),
+                new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight), 20, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            titleRule = FormalUiKit.FlatPanel("悬浮标题分隔", panel, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(HorizontalPadding, -58f), new Vector2(MinimumWidth - HorizontalPadding * 2f, 2f), FormalUiTheme.Rule).GetComponent<RectTransform>();
+            bodyLabel = FixedLabel("悬浮正文", string.Empty, panel, new Vector2(HorizontalPadding, -BodyTop),
+                new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding), 16,
+                FormalUiTheme.Text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(bodyLabel);
+
+            GameObject cardObject = FormalUiKit.Create("通用内容卡", panel);
+            cardRoot = cardObject.AddComponent<RectTransform>();
+            cardRoot.anchorMin = cardRoot.anchorMax = cardRoot.pivot = new Vector2(0f, 1f);
+            cardRoot.anchoredPosition = Vector2.zero;
+            cardRoot.sizeDelta = new Vector2(ContentCardWidth, ContentCardHeight);
+            categoryLabel = FixedLabel("内容类别", string.Empty, cardRoot, new Vector2(12f, -10f), new Vector2(190f, 24f), 14, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            statusLabel = FixedLabel("内容状态", string.Empty, cardRoot, new Vector2(202f, -10f), new Vector2(122f, 24f), 14, FormalUiTheme.Muted, TextAnchor.MiddleRight);
+
+            GameObject artworkObject = FormalUiKit.FlatPanel("图标画框", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(12f, -42f), new Vector2(56f, 56f), FormalUiTheme.Surface);
+            artworkFrame = artworkObject.GetComponent<Image>();
+            FormalUiKit.ThinFrame(artworkObject.transform, new Vector2(56f, 56f), FormalUiTheme.Cyan, "图标画框描边");
+            contentIcon = FormalUiKit.TopLeftIconSlot("内容图标", artworkObject.transform, null, new Vector2(4f, -4f));
+            contentIcon.rectTransform.sizeDelta = new Vector2(48f, 48f);
+
+            cardTitle = FixedLabel("内容标题", string.Empty, cardRoot, new Vector2(80f, -41f), new Vector2(244f, 34f), 26, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            identityLabel = FixedLabel("内容身份", string.Empty, cardRoot, new Vector2(80f, -74f), new Vector2(244f, 24f), 14, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            for (int i = 0; i < metricLabels.Length; i++)
+            {
+                GameObject metric = FormalUiKit.FlatPanel("内容指标格" + (i + 1), cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                    new Vector2(12f + i * 108f, -108f), new Vector2(96f, 34f), FormalUiTheme.SurfaceRaised);
+                FormalUiKit.ThinFrame(metric.transform, new Vector2(96f, 34f), FormalUiTheme.Ink, "内容指标描边");
+                metricLabels[i] = FixedLabel("内容指标" + (i + 1), string.Empty, metric.transform, new Vector2(8f, -6f),
+                    new Vector2(80f, 22f), 15, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            }
+            FormalUiKit.FlatPanel("内容分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(12f, -150f), new Vector2(312f, 2f), FormalUiTheme.Ink);
+            effectLabel = FixedLabel("效果标签", "效果", cardRoot, new Vector2(12f, -158f), new Vector2(48f, 22f), 14, FormalUiTheme.Amber, TextAnchor.UpperLeft);
+            effectBody = FixedLabel("效果内容", string.Empty, cardRoot, new Vector2(62f, -158f), new Vector2(262f, 48f), 16, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(effectBody);
+            effectBody.lineSpacing = 1f;
+            FormalUiKit.FlatPanel("页脚分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(12f, -212f), new Vector2(312f, 2f), FormalUiTheme.Ink);
+            summaryLabel = FixedLabel("内容简介", string.Empty, cardRoot, new Vector2(12f, -220f), new Vector2(312f, 28f), 14, FormalUiTheme.Muted, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(summaryLabel);
+            cardRoot.gameObject.SetActive(false);
             panelObject.SetActive(false);
         }
 
         public void Show(object source, FormalTooltipContent content, Vector2 screenPosition)
         {
-            if (panel == null || source == null || string.IsNullOrWhiteSpace(content.Body)) return;
+            if (panel == null || source == null || (string.IsNullOrWhiteSpace(content.Title) && string.IsNullOrWhiteSpace(content.Body))) return;
             owner = source;
-            titleLabel.text = content.Title;
-            titleLabel.color = content.Accent;
-            bodyLabel.text = content.Body;
-            bodyLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
-            titleLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight);
-            bodyLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding);
-            Canvas.ForceUpdateCanvases();
-            float width = Mathf.Clamp(Mathf.Ceil(Mathf.Max(titleLabel.preferredWidth, bodyLabel.preferredWidth)) + HorizontalPadding * 2f,
-                MinimumWidth, MaximumWidth);
-            float textWidth = width - HorizontalPadding * 2f;
-            titleLabel.rectTransform.sizeDelta = new Vector2(textWidth, TitleHeight);
-            bodyLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
-            bodyLabel.lineSpacing = 1.08f;
-            bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, MaximumHeight - BodyTop - BottomPadding);
-            Canvas.ForceUpdateCanvases();
-            float height = Mathf.Clamp(BodyTop + bodyLabel.preferredHeight + BottomPadding, MinimumHeight, MaximumHeight);
-            panel.sizeDelta = new Vector2(width, height);
-            bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, height - BodyTop - BottomPadding);
+            bool categorized = !string.IsNullOrWhiteSpace(content.Category);
+            cardRoot.gameObject.SetActive(categorized);
+            titleLabel.gameObject.SetActive(!categorized);
+            titleRule.gameObject.SetActive(!categorized);
+            bodyLabel.gameObject.SetActive(!categorized);
+
+            if (categorized)
+            {
+                panel.sizeDelta = new Vector2(ContentCardWidth, ContentCardHeight);
+                categoryLabel.text = content.Category;
+                categoryLabel.color = content.Accent;
+                statusLabel.text = content.Status;
+                artworkFrame.color = FormalUiTheme.Surface;
+                FormalUiKit.ThinFrame(artworkFrame.transform, new Vector2(56f, 56f), content.Accent, "图标画框描边");
+                contentIcon.sprite = Resources.Load<Sprite>(string.IsNullOrWhiteSpace(content.IconPath) ? FallbackIconPath(content.Category) : content.IconPath);
+                contentIcon.color = contentIcon.sprite == null ? Color.clear : Color.white;
+                cardTitle.text = content.Title;
+                identityLabel.text = content.Identity;
+                metricLabels[0].text = content.MetricA;
+                metricLabels[1].text = content.MetricB;
+                metricLabels[2].text = content.MetricC;
+                effectLabel.color = FormalUiTheme.Amber;
+                effectBody.text = content.Effect;
+                summaryLabel.text = content.Summary;
+            }
+            else
+            {
+                titleLabel.text = content.Title;
+                titleLabel.color = FormalUiTheme.ReadableLabelColor(content.Accent);
+                bodyLabel.text = content.Body;
+                bodyLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
+                titleLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight);
+                bodyLabel.rectTransform.sizeDelta = new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding);
+                Canvas.ForceUpdateCanvases();
+                float width = Mathf.Clamp(Mathf.Ceil(Mathf.Max(titleLabel.preferredWidth, bodyLabel.preferredWidth)) + HorizontalPadding * 2f,
+                    MinimumWidth, MaximumWidth);
+                float textWidth = width - HorizontalPadding * 2f;
+                titleLabel.rectTransform.sizeDelta = new Vector2(textWidth, TitleHeight);
+                titleRule.sizeDelta = new Vector2(textWidth, 2f);
+                bodyLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
+                bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, MaximumHeight - BodyTop - BottomPadding);
+                Canvas.ForceUpdateCanvases();
+                float height = Mathf.Clamp(BodyTop + bodyLabel.preferredHeight + BottomPadding, MinimumHeight, MaximumHeight);
+                panel.sizeDelta = new Vector2(width, height);
+                bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, height - BodyTop - BottomPadding);
+                FormalUiKit.KeepInsideParentFrame(titleLabel);
+                FormalUiKit.KeepInsideParentFrame(bodyLabel);
+            }
+
+            FormalUiKit.ThinFrame(panel, panel.sizeDelta, FormalUiTheme.Ink, "内容卡描边");
             layer.SetAsLastSibling();
             panel.SetAsLastSibling();
             panel.gameObject.SetActive(true);
             Move(source, screenPosition);
+        }
+
+        private static Text FixedLabel(string name, string value, Transform parent, Vector2 position, Vector2 size, int fontSize, Color color, TextAnchor alignment)
+        {
+            Text label = FormalUiKit.Label(name, value, parent, position, size, fontSize, color, alignment);
+            label.fontSize = fontSize;
+            label.rectTransform.anchoredPosition = position;
+            label.rectTransform.sizeDelta = size;
+            label.resizeTextForBestFit = false;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+            return label;
+        }
+
+        private static string FallbackIconPath(string category)
+        {
+            if (category.Contains("术式")) return FormalArtRegistry.CommandPath("skill");
+            if (category.Contains("装备")) return FormalArtRegistry.ItemPath("category_armor");
+            if (category.Contains("物品") || category.Contains("法宝") || category.Contains("道具")) return FormalArtRegistry.ItemPath("category_container");
+            if (category.Contains("状态") || category.Contains("意图") || category.Contains("地形")) return FormalArtRegistry.SemanticPath("notice");
+            return FormalArtRegistry.CommandPath("skill");
         }
 
         public void Move(object source, Vector2 screenPosition)

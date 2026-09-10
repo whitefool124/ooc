@@ -1,0 +1,2803 @@
+[
+  {
+    "path": "C:/Users/FNHF/.codex/AGENTS.md",
+    "before_sha256": "71412dd64f3f87e20a314af363aede6b4fe7fe1a5cce108271385b7350d0d766",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/AGENTS.md.bak",
+    "reasons": [
+      "压缩重复协作指令，保留跨轮授权、真实边界及模型升级约定；补充按证据维护技能"
+    ],
+    "after_sha256": "c2b648baee4cb47efa5606cee3c3f3d134f4be308720548a3a4add81a444ce9b"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/AGENTS.md",
+    "before_sha256": "e2038bf2825bde6ec190735bcb9e2a9dddfb8e66d92778e75368510c4dde4c11",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/AGENTS.md.bak",
+    "reasons": [
+      "明确任务记录可在回复完成、美术章节实际入口及Funplay通用规则的项目适用边界"
+    ],
+    "after_sha256": "0613d6df7cb49256764e14611a3723f99f905c12621571d7782c32fb5113e316"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/funplay-unity-dev/SKILL.md",
+    "before_sha256": "45bf534cc3773eebfc89bf731c6013a4f62c28351d4839a9807c8590c92ec366",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/funplay-unity-dev/SKILL.md.bak",
+    "reasons": [
+      "区分项目授权与通用保存流程，补充显式ID和插件模板适用边界",
+      "依据官方0.6.5源码补充新版TMP、技能托管区及跨项目连接语义"
+    ],
+    "after_sha256": "ae6f00f5e2788c251a6522dc861d7c604c7195516ca626853212e4445d46811b"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/funplay-unity-dev/references/compile-and-recovery.md",
+    "before_sha256": "cab21f274c7861925ae92a99d618077ad2469761c9ac33213c451a91468ae3db",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/funplay-unity-dev/references/compile-and-recovery.md.bak",
+    "reasons": [
+      "以本项目实际Funplay 0.6.4源码替代其它项目版本快照",
+      "按用户纠正保留升级目标，不以旧安装状态回退技能",
+      "记录已核实新版源码与未完成的运行验证边界"
+    ],
+    "after_sha256": "d8e8d297c125d87b8acc4cd4d61519b7c99a09a9869edf164c85a46abd318234"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/game-interface-planning/SKILL.md",
+    "before_sha256": "eeaa4fb62fdc5d2211f3f04101c411c6a70d4c13d8cb7fb87970b74617b3209d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/game-interface-planning/SKILL.md.bak",
+    "reasons": [
+      "移除每次设计都必须导出并同步文档的固定七步，按交付范围选择流程"
+    ],
+    "after_sha256": "f8e6661e55686179d6dc3900aa7c9d68f68a1e04b1786f4c3481b62c20a7fd9b"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/smbx-145-level-design/SKILL.md",
+    "before_sha256": "fcf57629d9f6388264cac8dd26d78bd76ea1feb5179310d0ec2004ec02820615",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/smbx-145-level-design/SKILL.md.bak",
+    "reasons": [
+      "将旧版格式保护与全套手册预读、无关笔记修复区分开"
+    ],
+    "after_sha256": "6f84529464004c935807fcfbdca9bc62f4a3fb50dd81cb8cf83284c88a336c62"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/remotion/rules/voiceover.md",
+    "before_sha256": "101e749639b7fe50c13192dceee2f0c6bd73ed0886f607e71db85996750826c2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/remotion/rules/voiceover.md.bak",
+    "reasons": [
+      "修复已核实的缺少扩展名参考链接"
+    ],
+    "after_sha256": "c3cd25530b2ac98813f88d197cb689b049dc324f9e5e0bdda68693d0066711ba"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-approval/SKILL.md",
+    "before_sha256": "8666a3f959d6be4a27a5e4678a98287a644eb923b59db923113014f4d0c8626f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-approval/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e45c5657ce881c2910e75c115df51f9f39b0a4d5766fe46c4b1a72f9281bd1ec"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/SKILL.md",
+    "before_sha256": "55b2a48011c1537b043e5d6c7176e5aba34afce8b7e49042af29814f761a27bd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-apps/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "授权跨轮有效，保留真实危险范围检查"
+    ],
+    "after_sha256": "2d2be3fabf2f0e90db51e63193920abc77bd548a26793cbb42744c32782be997"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-attendance/SKILL.md",
+    "before_sha256": "a0ea5f3fa176496dda31d912f7e55ad7cfed5243b30567d16e7f9dc96eebbe8b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-attendance/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8e9ba9994820fd9fa6c2df5aa7b8a2917d895687be4f47257161d99bf89da83d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/SKILL.md",
+    "before_sha256": "9d956f655e81fb7072ba8ba556b093c62844fef972bf5bcb4213b0935cbbde2e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "33e37386ebc6b09d839314e1a8b7e61cedf6fc10a1e1be367663643afe404612"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-calendar/SKILL.md",
+    "before_sha256": "71a4374ba5a4f56035928a3ba8e499ce194d015c3a47229215af6733c960e2a7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-calendar/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1211ef30c53d752c41b3f5b30fa89d884fa79e20698417bfde0519cf0c67687c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-contact/SKILL.md",
+    "before_sha256": "da1e85a02c8d86b3bce75ffa53b213cf7e551478ac0853f190a8bb88ac67c209",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-contact/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "45abfbd7ed9d5723503b5e719f4fe249de4322732fc899e51fa39778e1900713"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/SKILL.md",
+    "before_sha256": "67af743a72e8166d876eccaf8843865d08dc5d059de6ef7460b1380b06b62ccc",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "4570793185a4edc4830017f4fa94ce7e31dacbe1bed2eb742159b5a06b4cd827"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-event/SKILL.md",
+    "before_sha256": "03ce27c284f33919febb7d6934f8312c7eec3c59f80b2dedd90b9e9a2e139f06",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-event/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "18f5e0e1128029750bae3de0a9338806f7264a87ee3d04d42b2382db7291ebd3"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-im/SKILL.md",
+    "before_sha256": "f1dc7d0568b68377712c44db8719f3b993959f9d6ad95bac5dda741bb09390da",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-im/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a314c7d7f90cbe63f03a62f8fb7f28d2359fc8fc97ba1e883ea85355ae867cf7"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/SKILL.md",
+    "before_sha256": "1fcfedd2d2a191541f936b2128a15da5db2639738c965d9a3804661c493e5792",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "邮件保留明确发送授权，取消仅最近一轮有效和伪最高优先级"
+    ],
+    "after_sha256": "9354167b9649cf39f10fb48b68ed0a0d4cb744ac1b48311a0f7d1552dc1d67b2"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/SKILL.md",
+    "before_sha256": "408760233f4227e53598b9314376ca123ff9d581414f978a3e8240ec03cf9a1c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f89f0fc3eca06fdaea599221773d6d8af6ad7fdb3a1f314d87b5fc7db2bab9ee"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-minutes/SKILL.md",
+    "before_sha256": "1d9e225228086c771e2f62a47523e4ec552ffa11215f6b7e165220f793a1616e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-minutes/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "cfc0aa4d2f00d3a526a407b4377377f888b27125e973e79a1e391f48d75e8684"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-note/SKILL.md",
+    "before_sha256": "af878cbf8bf8d609324032da36a4536ed32cbcb0a4bbcbd2beec7d902893bcb1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-note/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "78129979ca86812067fce702f65384ba3fd045210a8f87762bd22db6a6c7d49a"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/SKILL.md",
+    "before_sha256": "f1d4821002bf0bd282bc5c0977376bcdc367eda65ce8c38416713cf7cb61e378",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "fb437f6c14fc7385a3622976e209f8406d8b037bae9a9b1fac3040d30c6e0000"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-openapi-explorer/SKILL.md",
+    "before_sha256": "49add333633bf9d094453051713c9434f6e15ad72fde6847ba67389cb3bf63e2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-openapi-explorer/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "复用已核实的官方页面，无需每次重走完整索引"
+    ],
+    "after_sha256": "77e138bdda73d1324c3653da4d17f472f5ee0fe3db61ebb682418ddb052af70c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-shared/SKILL.md",
+    "before_sha256": "520b0be51bb4801c12e97435f4e348708755f65b3237ec92c05e4cfeeee120a5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-shared/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "认证按实际缺失触发，二维码可选，跨轮具体授权有效"
+    ],
+    "after_sha256": "4330dcce1511ea6ecf59cfd3e1f27b71231ee6a6b50aaed37b2ed1a79d581ef3"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-sheets/SKILL.md",
+    "before_sha256": "7f36fccf1e1b07071c11115ff8437bccf14c1b89a33c0ce394ac020f42074434",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-sheets/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "表格按任务选公式与汇总方式，验证真实覆盖且避免重复审批"
+    ],
+    "after_sha256": "a44cfd579f464a3b978f7fece3e0a5d6c7fcff5a5b0d30c6f91a711f059fdc09"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-skill-maker/SKILL.md",
+    "before_sha256": "8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-skill-maker/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7022ed3a8ce286f2244bdcf09358b7f5e0183108f38aa2e4695aa3f1a94a705a"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-slides/SKILL.md",
+    "before_sha256": "c16dcdbd1a3334d23306a8b84bf11f7181dfadb4156439693d4b1224965bdf84",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-slides/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "删除强制二读、图片字数配额和固定审美，保留 XML 与读改写合同"
+    ],
+    "after_sha256": "cafaa405da00507ca3580f858345701b1f3605f424dcaa7fa68aafa392a6f9a6"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-task/SKILL.md",
+    "before_sha256": "3f82c7da7bf93de5c373e8df4ef430312ddd13b1f2c80584a1419ab05472cd0c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-task/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "032525d4696b072f35687359dd109d8237257015759bda3240ac4eee68dbb658"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-vc/SKILL.md",
+    "before_sha256": "ea47a9ca54797c2fbb26d8220304ad8aadaa8a782714e6031c0bdf97a7d3f5f6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-vc/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "e0e71ff8d8ca51bcbebd24336f323461c69224f920532a046dec547df2529654"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-vc-agent/SKILL.md",
+    "before_sha256": "ea6dafdd0a74a438235ad3b5cde02af938bde7b61486b6d680020a6878c4d98a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-vc-agent/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "33eaad246b4664db722bc1ffbc127f35920beeb28bdd87d46352a82c4a3aad8d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-whiteboard/SKILL.md",
+    "before_sha256": "53d6eb053aa70f3fa6617c241b1eae7cef2afe9a67438186cbc5d488a5c4ed15",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-whiteboard/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "只读导出不触发无关npx依赖启动"
+    ],
+    "after_sha256": "4ee29b0df7dc72e06c30f15b069799be54b4c203fd2568292daad7be0fb8d3f1"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-wiki/SKILL.md",
+    "before_sha256": "8d4ca0be87a6d3f7eb43ed2f2f93db50734bd5d739c21414fba7ba3351dd4f86",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-wiki/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "完整分页消歧，已指定目标与影响无需重新选ID"
+    ],
+    "after_sha256": "200c9ca31b9fea2060afac4d0a13c61c22591c880974aa6383bf088ca1505b31"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-workflow-meeting-summary/SKILL.md",
+    "before_sha256": "ad3db979a2e6d8932ab33058967e1dab82090f8d8d82b16c59ee2955eb967d61",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-workflow-meeting-summary/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "汇总复用既有认证并显式沿用身份",
+      "会议内容总结必须读取正文，不把元数据冒作证据",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "c1ad877a6703a6df66bde1cc324aff215cbf14e2d34fb364adfbba514a33e5e0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-workflow-standup-report/SKILL.md",
+    "before_sha256": "a283de746e65f97d7d25c3b9e351c2e5c16702be81c0f004d5be718c50994690",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-workflow-standup-report/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "汇总复用既有认证并显式沿用身份",
+      "待办完整分页，修复相邻比较遗漏重叠日程"
+    ],
+    "after_sha256": "e390a3875e41e4ac2666519f939fb31c8e8efc68252571420269335eac0e08b8"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-env-pull.md",
+    "before_sha256": "b0dab7726d5415ba46458f83013be910f96692e094328d98ee4dce136b623950",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-env-pull.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "cfa00593c0244267b6bc5c7491444452dc0b0028b8fa53cf29c5fb202c500bbf"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-env.md",
+    "before_sha256": "0a0ec0db601aeab1a8735386727d3eb661a8800e1a588962b8432a889d3a7021",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-env.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "769ec077e55d6b0a9a7d7d72f297877ba2231102ae2701bcfaa4651730dce842"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-observability.md",
+    "before_sha256": "43a81f61f0c0ac6b7912adab117f229a10a8debcaa81d6fd5bc068f34aa4c441",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-observability.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "db123020ae7c2c37ce49c2f09b05c536d9a1a008064fbfbd1038e2738de599c0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-dashboard.md",
+    "before_sha256": "d57ba917f88b2a98c8c1e046d90082a2128dab0004ff222fdb77e4579822c7f1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-dashboard.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "6def7c68ed5b88c3c0a832ec652c9d9d3bdb4d5d8c6c7113afaf359700176685"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-field-create.md",
+    "before_sha256": "02c73b38d96674d363883994c680e39ce89d711f989e36f87cbcf3aac0694696",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-field-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "60fd1938a0759d1d4af43340e0d9b41929ef4efac00f5ce1e392a95a44528c13"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-field-update.md",
+    "before_sha256": "77b301c6365b27f7bc17d0c6534cc2ed64accb3d2e6210ade77c73a45cd9388c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-field-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2f4c171882e115fb933d5873144b0e560e09825005883b4f072678ec04529795"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-questions-create.md",
+    "before_sha256": "cb1b616d49d24860beac5751375f6ece11ddb66d67595a4319e7c40377ec54c6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-questions-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5c70e7f310a6bf205ff891e55309515171c31e97cff346d1d899db47eeae6483"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-questions-update.md",
+    "before_sha256": "49685fbbba0c47d3012df767032654da091cff11a7907e6a8ceb28c951992924",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-questions-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "534eab6cd00b82996aadcaf2f47a2a8425121fbf1bb859590987f3cab2bd67ad"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-submit.md",
+    "before_sha256": "2c55f09a3ecca8a74953e356fa482ee8ffc72b902626c9546910b6ac89e13bd4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-form-submit.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f6a2c97cd16390dab455920edeaae6282ffc67b2c668e0edfbabf472f282c238"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-record-batch-create.md",
+    "before_sha256": "38c9041f916881b34b712882f9bbc50b8f4e9a08cd57769f01b3206456887065",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-record-batch-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9fe09b8be6f1fd076e609473e583cfa2008de6c18183f819e452dcf7bc4aeb44"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-record-batch-update.md",
+    "before_sha256": "cbdb77234d9142259095be534144e408a1f0d14a8cafd488a73fd29f8c42917e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-record-batch-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "26d69a3411a502f9f0fe873f742cd2c7b83e184e8e04b1b6ab3f9f3771f54f91"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-base/references/lark-base-view-set-filter.md",
+    "before_sha256": "7e4345f22265d081cdfa45fa516f733d053e1e727c15c6092d07bbd2c3e8e28f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-base/references/lark-base-view-set-filter.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "36ee51dac98496597f766c1a465148789b12f6b127c5ddb4ca464b7f193d183c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-download.md",
+    "before_sha256": "d81bd5fe0144c5884df4edfa21c78284fae6d73bb0f0dcaa403eaf723f5b81de",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b1832068c63c66cab80250bbe7ae2ed27d370a5d6349690f56a897e561cbbac7"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-insert.md",
+    "before_sha256": "62b82cabfc2b122b0ed8430de44c14c6e1c4e9016f4607826932e883aca122f7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-insert.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "488eaed36e8d5b2d9f65646f7bca334f31ab4262b12cd35c773979cb1034ef8d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-preview.md",
+    "before_sha256": "cf88a6ce613a0d90c6d4b01e16d1db337c639d246f71ffb0686005270ab145f3",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-media-preview.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f50ce35116e52e5ddd8639b6f38328719c4a268cb231476366d2b9dfafb7456c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-mindnote.md",
+    "before_sha256": "a239f58aa9d832623d79943a8f8268783da3c07bce1816060e2f01b0d1278e92",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-mindnote.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8e992ebdad0a52728eb16840000cc6f242f31c6d79748610a126aedf705cdf57"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-resource-cover.md",
+    "before_sha256": "646ee64a0fbb23e7dfba1b094427b5bdf1e8a087fc8d577b407a41f9b5dfde49",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-resource-cover.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "0bf9847a51fc930fe99ae0502ea82c6c2a1cef56adac8af95b59b92ddb16ded4"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-add-comment.md",
+    "before_sha256": "57d64f6ebc8eec7066619205b373dabd7bb383020f0a3b03550ac08170c71853",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-add-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d27193dd4ca97c94a40a310af6b76422b1c8182603c9955764dd5845fdf8f42e"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-add-reply.md",
+    "before_sha256": "51ab4b710b2c7ab0d1aeb018e112892c0067f8563eaba69946309eb34941fffa",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-add-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "414ab76869f3a9219723b12a8305be393acb5aeda5b48adf33131421f643d904"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-apply-permission.md",
+    "before_sha256": "fcb2d45e75151fb43d8c5eccc77e060c4e909f096eb8ca71626b9b9863926751",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-apply-permission.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "983b1e1d187c2a1324d3eb70f1ec84bc751a0339c66144804334e94b3004970c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-batch-query-comments.md",
+    "before_sha256": "cf925c31d729025483b36caf7478edba0545bc00456e9dd3555aa6abcd9f6bc4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-batch-query-comments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3459cddaf14dffb01fdb9dbdc8f4c8b20162cfb90cdb83bc07f29a11600be7c5"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-copy.md",
+    "before_sha256": "7a610b58a8d3a366c18805f0c70a47a67353b6594b455f450a83b06c31427e0b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-copy.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9056e76968e6616ac8339c08b0332dcbb378e7547361900b181483ce679c0eda"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-cover.md",
+    "before_sha256": "88c532215e7b5fdb0d342ca5a41ed94de98eed650c2b2ef3913c031e5035d95c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-cover.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "29d3099eaab09329abedd3d29f4fe871a8042c383ac7ee6824898345eda4f763"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-create-folder.md",
+    "before_sha256": "7267d0b1ae7ec6712e165f4d6100072b9ed6e6772f29edf14b42100cbb063284",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-create-folder.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9f2fe29dfdc29326a8796f00ef75157b1f2edd299b1ea42ebd424d88d4d4c8bc"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-create-shortcut.md",
+    "before_sha256": "f4f81ff5c1b8c22f49e1304ed07e17b811fce03c721811efa1bd64f189d29759",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-create-shortcut.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "57ed8af439baf81a8869875cbdfe6f56a797c492b432246f2af9b9634e757d09"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-delete-reply.md",
+    "before_sha256": "97e385497ab3deb3dc3e6556d8810f73201acd77fb06e1ede0ed1224e6c855db",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-delete-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7c6efeabad50e67c88d4b9ca1e1013333d3d3e32f25b53e6deb14e7e7e490c0c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-delete.md",
+    "before_sha256": "82d2cb4c670aae612459962f91a4e16391d71c93b003f0fd8229155b96fd0973",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "28b9fc44521e46bbebfc8e9ea7399f8771b44b25abb3020ffc90acd4c7a7096c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-download.md",
+    "before_sha256": "650078e46ac8e24f1a757aa389d6fc9d3ba39e726dc9f43d55d01b94bfef7116",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8c979cd289b3eae328d1b926f4a07cae3fe6b48481a09a72f97465655bca87bb"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-export-download.md",
+    "before_sha256": "414da95c78ce92ad6e0e5896cfccd905da3bf9c52f91b8d1e156466b95434314",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-export-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bda73fae09c1924cf24e9d858c5a3ed51834c177f19b221abfe55fb119238379"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-export.md",
+    "before_sha256": "1a7d780ffb524f8f87d011198450736d8b4b8ce5b42ef3fad5c1204ef2983435",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-export.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f52acf6563ae52006b7dd75ce5007d7ae465e0b3eaff703b5ef149fe858ed67b"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-import.md",
+    "before_sha256": "a6bf5f7b05f49e39ffb39330e08892b900b2a515462f6757fe3dfd5667d08b2b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-import.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "de0231bc3c75c8b212a44cc9e700e796f5a3e754f2ae1ae0e777964d261a892f"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-inspect.md",
+    "before_sha256": "550313b8cf4e65d930f4b482416e943aa9c7c5418696b7f5895f479b5869e423",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-inspect.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e95523c1c5f438106b0fe7cf18213433eb3a4a376f078a69895840c95c71911a"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-list-comments.md",
+    "before_sha256": "8e25281b31ec6814a1dc6cc3b94b07f78a30b84c9115aa92f6e2060e5f23b7f6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-list-comments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9afaff46390b3ff1eaa7bc1c82421022ee731c53fe8847033fe82f903b638bd7"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-list-replies.md",
+    "before_sha256": "fa83e4a782de5a6da3aaecf6ac1fff639e6ef8bb8ca5ccef2c537f1d75bfcb57",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-list-replies.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "57e5db67f0ff73ed7bb8e586c0bb5135dd6604c2d8abc8526c897a83270b0d63"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-move.md",
+    "before_sha256": "cc03d0d60e0c6c1757b7ac41f445ca7b1ceebdf57f0916d05ae53bc9d4ef688c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-move.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "624e6674b8021a2a49c06017cf49055a0e57e4b7f84b9e9c0deb13f5c6affe14"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-preview.md",
+    "before_sha256": "e9c4971b43746d67e63a67f74ebf5323c224a0a38fab6e9d768605324bd64bb5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-preview.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f13c05c247372c6aa10fc4387cfefde79500f44f31462af3a7228957c284cc7c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-pull.md",
+    "before_sha256": "fe9aa5027cfa2cbbc78199b3b73e407a99d187a42ef88a635008333f9ab32d5c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-pull.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "ded1ad5660e86a34f31106f41dd9a8c6470b63fcfae2d124547d676312a5e633"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-push.md",
+    "before_sha256": "79351557e246303eaa1e278576e07550571370d3db5df71f79fd1f0c7b1f0a10",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-push.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "de344baa54c3d2df548739b46f25ef8a71dd92a3c13eff76679dde3d18922e32"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-react-reply.md",
+    "before_sha256": "a2dec640a85958e666d557c273afef497ec9c6028e4c759ccd44423e0b61a3ff",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-react-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "981ad11b45d216dbf21c36281a2fb0f16295c3230ec941cabf093e1775dcb310"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-reactions.md",
+    "before_sha256": "a4b0213b77f504584d9ea00d4732eb51231c38be312d0ac1c4b6a0f7e84b6a9c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-reactions.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d34f2a2ed889cc9aab2d49a314029a28caf5fadc28a7e95ab3bf91c82f7c2c33"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-resolve-comment.md",
+    "before_sha256": "a48148ddb6d720ec60be59dee67968b263f80af878186a1e07c187c7c89fdd82",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-resolve-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d4d6b18dd8ce4ba282da42bd0e2b12ed210300f645aedbcc611aa226d16ef41f"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-restore-comment.md",
+    "before_sha256": "ebabc65787adb79df5843a93cf5105191574d246b6356a66915c2f33aea3db22",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-restore-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2a93bf4d2778cc4442c432fb0875470bf31720cb37ba00b10bea9b86e8e2b41f"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-search.md",
+    "before_sha256": "48c8a56709539a83cd966f46e1330a0cb9b4e9648fe44b1a5c65ac28b56a253a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-search.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "61cc56dae337cb1a06ee9e9e8e4e7bd00f880ea2ae9d7858c9a2de8a9123c23e"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-status.md",
+    "before_sha256": "5023fb603d2b8950b4014523a69b9c00999969a77dc80a230d20e21fb438e014",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-status.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1a09c93e93bc421620718a5a709e888dfcb574bfcffbda39915ce14f32b2bf69"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-task-result.md",
+    "before_sha256": "a5f988bdeaa8da962eff2b274d573b8e9958127366c6179029f9587b4d4a7e59",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-task-result.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "65d91fa34e01d91b6f82b3626b842061610b53ac592be4dd43c9b0ad28378e8d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-update-reply.md",
+    "before_sha256": "095e7e6a3c9299eb96ab43344bfcefe3f86c8bacb995e3264d354f486e29d217",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-update-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2a65661fb4c9a13a815b70b100d2e69b433830500f17b8b9fc2754c9b879d972"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-update-title.md",
+    "before_sha256": "bd5eb6cf49affafa3c6ba2d79b4c3e9a11878f67c73149de3c26d60e06510ca4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-update-title.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e9fd7eb9c26d796516c5d40536d51e69fe57956d35e324bc80c4eab97dbdd4c9"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-upload.md",
+    "before_sha256": "08ffb82153f92bafd5e0f9cc0246e50b6b3e45c6efa2c2db2cf622fce5624e56",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-upload.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d2a63cf1a092e7b6755dbe5faf16303777213b694f35e4c2a97ae20074014dc7"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-delete.md",
+    "before_sha256": "8e131111ba1dde1d711cbd025015f38147ba14dfeb48f2117246d0ad8975f5d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a1b85269e8face5d7a8fa32b1fd3c5aa2c00bf82faf779e78b69a70d9b927ce9"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-get.md",
+    "before_sha256": "bba7924a4981aa263bb90ffcc140b0685b7a2d07cc04eb08411b0c796f125a15",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-get.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "da462722110d8db60cb1d8a49562c657b22dfb400368e70fc2fee65f9afbc049"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-history.md",
+    "before_sha256": "da9a16413942835a70c15db36ec112b11634d6d91ac7272296a1c88d6275fe7b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-history.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bcf226c801629f57622a0b4cedfd3cdbc79ec44b43f4042ec7c5b01620e9abce"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-revert.md",
+    "before_sha256": "f1e083299e0c7f452f000b83833b15e212f71a1aefb66d95fe3282f786b1875a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-version-revert.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f3eaa6e08d2fa38e20b398873b22f15f3201d4ba03999f72c3c40be5ad54b83d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-event/references/lark-event-im.md",
+    "before_sha256": "b023f08657250ae2d1b513cbeb80d4776d786b270ffc459a1bd142eae156f3a6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-event/references/lark-event-im.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "上游源码引用不冒充本地文件"
+    ],
+    "after_sha256": "37480ccacaecc316dfd21d3245ffd842749d4526d7dab9a387ebe868bcc0f233"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-decline-receipt.md",
+    "before_sha256": "dc888a26f4eda3aa1483f6be81f02eac32d053b41bb6089b3b1badd327053665",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-decline-receipt.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "16dd508b448d652c7bbf9f2ae173f738462276d2d177f812bf34f511ac1f3a23"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-draft-create.md",
+    "before_sha256": "0cedec774763e9900415e9f2928f958df230db534c56bf142200fb0c0fa9cf31",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-draft-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "434b9da4bf0b23b1e5c035cd173e0ffd55566b0bc0ed7aba8d8f5c1a96ff78d0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-draft-edit.md",
+    "before_sha256": "0580927baacbaabba3a42d3c8bf8896c4f19d76c84b01b10e573823bc066993e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-draft-edit.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "3b727859f8b336dcddee0a4651fb2e0c1949cb8cb752219bbdfabf8304edb134"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-forward.md",
+    "before_sha256": "542cbb89003640545ebfc886b0ed13e4acce7b8f23485870ef976d50b8df793a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-forward.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "33a460e8a13c2e949116aee2df01456408132ae650801c1acfaf87ccafba8069"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-html.md",
+    "before_sha256": "869f5e71cfadb0d522188a4a2483432699502ce91e693d71e1d92891f314f457",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-html.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "225aa901d685be35847bab97c1e46015fd2f238a43d7054aafd3fef7c791137d"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-lint-html.md",
+    "before_sha256": "2c33c261ac7a155e0878dcb67e7d5f38a477e74fa267bd36859c3d3e781d2e67",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-lint-html.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d79dc7c5ccd5b033a57ea206ec97fda03d113468fe497a6b8ae7f687f2e7e5f0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-message.md",
+    "before_sha256": "6430f15801c4ac2a5a7f0de328b2514b53423e2b6382dab1cbdbd0e2a23f10d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-message.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a225b8e18f071ae513d83e57e8e669ce6d57263f869b6ccb80727ca1bbdee4b2"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-messages.md",
+    "before_sha256": "f06dbfc8598b50bcdf3092706808090d646eddf23159a77875c2fcfb59aeb379",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-messages.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "05f992e2b9a17a00df38744601daa0ea56103a8acfa952fe0694f139b973711a"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-recall.md",
+    "before_sha256": "9eec5a8ea4939812c507059eac31e3dc455b138e8d44570752b2c24245ae0fff",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-recall.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7cffcc145447c1f9aaf76b6250d05065c915c90dc3c7e7d5e3b04e4c155d9e7c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-recipient-search.md",
+    "before_sha256": "de6303c77670c473ca8edaa670db7b599a9a596ba97c72ce0c43e52dc045537a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-recipient-search.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "db13e9ab967bc619cc3f10f9c417e645de355014a636354fed5af71b0a9b13d8"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-reply-all.md",
+    "before_sha256": "7d2eedb49575d52dbcc767f60c9c982c0da080ffd4bb31b27939390948fc0d4f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-reply-all.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "5aa121b509c9afce4d643c81d8c6be646b0a6346e81463a4b4c2525add245ca4"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-reply.md",
+    "before_sha256": "b8d0003f54fb128c29759f9e1f2aca48d545a7eb9cba1bb8c374a602f6efcad1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "09b104c44a188ec753c17edc97cc7a31699f0de0509c3586e6b738308fd6464c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-as.md",
+    "before_sha256": "779b674e7ff7eba68a79b096d984cb359915848004368cb87620a02334dbbae7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-as.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d45259544074746a770e34c40e5e26405487585a601ac0890e3da46c63fa7f60"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-receipt.md",
+    "before_sha256": "19af1149866916a9d7403f92405cffa70d1cc4e3c364dd54c2d82c45f7736c56",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-receipt.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "254ab62013f2bf8b6717140b738d47408101f65f513030845d918c19dafe62b8"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-status.md",
+    "before_sha256": "53f97b373ee90c33dd4b53915af625eb8b4ded19d72340c686b47481e5fdd6a2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send-status.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1564767956c2f020459d1ba8c53183a4145950e74904a1f1c1a20c189f7857fb"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send.md",
+    "before_sha256": "6a7d870b1b60ea71b9288d0439625971980a8a0fc366dd874b9ee273d079cc28",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-send.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "e5a79e484dc5457d1df368969b776682c9fb826beade37da207bb517f2d65544"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-share-to-chat.md",
+    "before_sha256": "983a642f8305312ee81a98f45760ffe8ad720347bd8c4fbaa55beb38baa05a9e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-share-to-chat.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b074e6fed3c8768f3e37015429f7f10a09f8dca8172657c18e5957bb554652aa"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-signature.md",
+    "before_sha256": "fa759bf8b2ee70dcf3ab5403e6f31833d86eb1cf86812dd7c30dd909897416b2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-signature.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1dedc2297d2bef5b7f3aeeb7b422627e0be32e5c912e6d6ef57ca805dad242b0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template-create.md",
+    "before_sha256": "368c9bc14dd4e2cf81f9e0efbc112b695a2c6055fb601cd48b85fd16ef39c02d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "339816a6b8fe3efc7dadf6a291250690d999ddf1a16c861e86c71b3ef0c7c0f5"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template-update.md",
+    "before_sha256": "f819cc2504e4e8898a7fb1fbd4f63b6e0ea07dd3e1ddc14c1649049ba78abc40",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "4965a20760542d373666b1c1f9c9dce2f413f0b572bfc42bef3b4008e55d4222"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template.md",
+    "before_sha256": "5bff844e1fae3c6da27e17d4758784a434fc147e83c4512d8b77d506dd81d1a8",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-template.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "c4129a6f68d0c88e66ebde5b8e94f3086c3220dfd06319afe4114a46d7687dee"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-thread.md",
+    "before_sha256": "ef0f803f3dc95c4012e55c3da546a9835953e56cbfdbb5fc759a3d277cee4503",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-thread.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "cffea82d70e99cbd38932c0ba61ee494c823a503cd6d05c92d4a1089d3908e78"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-triage.md",
+    "before_sha256": "9b4a82d6051255d32170a14150c53937e762d48a08250cc2ec99e653b3350cfd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-triage.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "eb22739c09582b3aedc62ec70324c4eaf38568f88ca98ccdb971a1261c8cd97c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-watch.md",
+    "before_sha256": "4fdf8a8e7743890e3ee6aa305377cd70b13e9acbdefe20c2beeb992a03f9bd13",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-mail/references/lark-mail-watch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修复指向不存在参考文件的入口"
+    ],
+    "after_sha256": "094f922f3ab72dc11e72b9c09f9d3410b5520a1c253c3916638b836b338fe8b0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-create.md",
+    "before_sha256": "686df9384108e71ca6d5d9964f74d5d9ae89b7f9ae7bbb7472ad511c22ec9eee",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bcbfd4dfde462b2a1a2cf3e5326cfacee9dd4fdd48bcb5b6faf9b9be670f8d07"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-diff.md",
+    "before_sha256": "d0302666cd90a9bd1c6e211d5df0ac45d0298dbeafc09851004facce1466a321",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-diff.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8ba5e6f5966e50fd22e7cc9c5179d008c9dd4a933632b2d39f085258ce4244c4"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-fetch.md",
+    "before_sha256": "0c68f0d56ddd7272485f32f7cf9321171dbdd1be4c4f98e0304beb78038bf2d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-fetch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f76a7020c7435f3bcb04b1867be0e4c8eb0830e50f634d429d0bd8120947aa06"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-overwrite.md",
+    "before_sha256": "67265b9bc7ca2e97ed966f7bf693e349f10795e567e5e80870ba4b39b1d81bd0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-overwrite.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d10b8ad879bff1031738ef1572cc4c0e53ecf340bd8c44309da33879a0cffedd"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-patch.md",
+    "before_sha256": "f4da2faccc9e6b0e91823636a9269038aca51fc16692c2f2b49c3afde18f2522",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-markdown/references/lark-markdown-patch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "30dc92af50ca35c63b73c8fd363c43f0ecbc00b930c393f48c17571a5e3780c4"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-alignments.md",
+    "before_sha256": "5a0701e9eb747d91a877fc6c3986366922528a87777f034f45dcebe757116753",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-alignments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9b6ea2923b165b6c082ed9c31069f0457c9c867f2ceb12165aa3bd3c7e49c729"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-batch-create.md",
+    "before_sha256": "3c8662ab49c9af8c55ebae7e61a50074a9efeb5ba8d262057adb047ed6ac0e2e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-batch-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2be37f4037b946ca0faf23a8519a1f5cdc7323d582ddd128b33171cc385520a0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-create.md",
+    "before_sha256": "edcfd20fc1a616a97b61b33adf12f4e651523930ec95870f654a1d868e2b53d5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3a81ccca872f0a5d5f24bcf162f931819424b98369896fc884a82600ab5af087"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-cycle-detail.md",
+    "before_sha256": "69fef9becb64d635d088c734ad5957194017041fc0303d804d96d91f27e13079",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-cycle-detail.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7948d3c5ecf960af6a03e0e3013d197b25b0f503b893572824c10ba64ef27496"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-cycle-list.md",
+    "before_sha256": "2d44c3f76744f0d98a9fa1c69976c930ad12e688eafdcaf6f9ad29014c091526",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-cycle-list.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "84a5abb7a9a4ac786ad78e6a78e2b2726a67fbe9a71e4a367735a6895dadf93f"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-image-upload.md",
+    "before_sha256": "4a5324ab2cc5b4ca42d51ef8066ed9e3375c921cf243eb40bbb41d73bb7e7bdd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-image-upload.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e4d6aa5b2e74edd437b74626a32d9b532c3bff11ebad25a97937cad1b8cef1a6"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-indicator-update.md",
+    "before_sha256": "423d9e714b5b4dd6cba3f736f430e9a1c04b49ba13f55b56f71b1117bfef448c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-indicator-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "973d3e4e791cfc316583122e837ae4945253d56287836f5892f513eb41dbc537"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-indicators.md",
+    "before_sha256": "a30ed4fe25d926b7df74b13500770d9f6b802d815458900cc98d65fb600d9507",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-indicators.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5051c1ebb8db2b36641d6a998087592afd1c1fee4fcc9eaaa53f3114f295c335"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-patch.md",
+    "before_sha256": "c07f0484a1325e4981856648e0ee5119cbd512140cf5457859cea9d8ad23e734",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-patch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d6c825a50196a50d018932dd753fac473fd27d4e9f56438c6a94f6b36dcc1dce"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-create.md",
+    "before_sha256": "637765ccf34b23b46e06f5816e4a22e1912d831af3bec4a95262a92a4e8e1ca0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b7e3a2e6cab749553ce7a23bcf4da3936dc39ea8d30658fe62ae5ec39e3e8f40"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-delete.md",
+    "before_sha256": "c96a580dc99bdd5e675718cf799870d6d84b7aa9b7f6f5f51c88182f9965d7c6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "c34f91e9fe1292846fa0d6eae390b30e6e6a5ab2d7bbe10b6f9f1cca2da45871"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-get.md",
+    "before_sha256": "a070f250dce7ca7cfe4b69140f23c6ce879bde78b612d372c52c8274cfc2648f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-get.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "13b2161edc129a368ff1fab25fd86b6fd31c9cba3513e97b7b9bb2ff6671bf91"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-list.md",
+    "before_sha256": "973102b13dbc128517125666107529ea65996c37997b1b001eed2658726a6c92",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-list.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e4e9e63e1f50ef805df6f8a140c19d683b43a0cae209299640ccc0b22338d220"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-update.md",
+    "before_sha256": "dd09623ea1c8372499d9f8ebc96a8deebc36e7f5a810e15eff9e6486a21d8545",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-progress-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3e29e0893f8ef8e964aa0fc08e6021c9d49390408f4fb223ed696c09a5c2017f"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-reorder.md",
+    "before_sha256": "7ebabc5a4eb2f5b708f98d31a2e572276cc2d413b630757907dcc0c963b87906",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-reorder.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "4a2ef46aee84e28bdebfe93f2af0a1024bdb5b9697655859c7a9f8565a7edf10"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-weight.md",
+    "before_sha256": "b71f2e7b4c3f2b0d6654933909d5e11f1d4c980793205a7c635643465a9d6637",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-okr/references/lark-okr-weight.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b546e7a7e19f2c59b21a8074fad02a54c3e16d5a2d41bf583e1ad998f2e51864"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-whiteboard/references/lark-whiteboard-export.md",
+    "before_sha256": "fe4142d5c8a1240a742170d5ffb4cff7f2f7b3235bd259897bbe1cb11cbeba0d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-whiteboard/references/lark-whiteboard-export.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5134eff627846ab2d2bd01a2b01424a46ad1bd269284b8be10f3f03c223ee164"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-whiteboard/references/lark-whiteboard-update.md",
+    "before_sha256": "b051b9bc62e5de8c0a56f6b72d6477d266c21de9045d36e1805f3b61bc2f64eb",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-whiteboard/references/lark-whiteboard-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "91ec2807d918dd3686dc0c32ac30a6bec6792e298f375f738b09d263984ecbcd"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-wiki/references/lark-wiki-delete-space.md",
+    "before_sha256": "db47b8179e13fa4399b803012d1d642dba014bf78771e7fa6aba4acd00548c69",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-wiki/references/lark-wiki-delete-space.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "保留不可逆删除授权但移除反复确认"
+    ],
+    "after_sha256": "8c16e8b077281479aa85cc03709f7beba65420e2fe84700228991802e1b99619"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-approval/SKILL.md",
+    "before_sha256": "8666a3f959d6be4a27a5e4678a98287a644eb923b59db923113014f4d0c8626f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-approval/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e45c5657ce881c2910e75c115df51f9f39b0a4d5766fe46c4b1a72f9281bd1ec"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/SKILL.md",
+    "before_sha256": "952b7699aa9d6bbb41ebc849efd002465760536da3224d7c6e329936572dddc7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-apps/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "授权跨轮有效，保留真实危险范围检查"
+    ],
+    "after_sha256": "65397000574ada1c176d2a6693608f2a6e2f31c31d9b6491d5e9f30e06d18393"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-attendance/SKILL.md",
+    "before_sha256": "a0ea5f3fa176496dda31d912f7e55ad7cfed5243b30567d16e7f9dc96eebbe8b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-attendance/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8e9ba9994820fd9fa6c2df5aa7b8a2917d895687be4f47257161d99bf89da83d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/SKILL.md",
+    "before_sha256": "adeede4b38a1ad7f02ab6fc7d031390d8ef58d4cb382ed76943b50f52fe82cd6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "删除与身份延续规则冲突的ACL失败自动换bot"
+    ],
+    "after_sha256": "7e1d030ca7cdb523c69e9c67de4456eb8bead529cec2c185db375c0fe9a3097f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-calendar/SKILL.md",
+    "before_sha256": "71a4374ba5a4f56035928a3ba8e499ce194d015c3a47229215af6733c960e2a7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-calendar/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1211ef30c53d752c41b3f5b30fa89d884fa79e20698417bfde0519cf0c67687c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-contact/SKILL.md",
+    "before_sha256": "da1e85a02c8d86b3bce75ffa53b213cf7e551478ac0853f190a8bb88ac67c209",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-contact/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "45abfbd7ed9d5723503b5e719f4fe249de4322732fc899e51fa39778e1900713"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/SKILL.md",
+    "before_sha256": "ca86f9cbf8e27e1095425246a99747839c6e353716b0ff2c1635252794e3630a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8a93f0a7c4a46cf060c912b6baddb4b0078bbdd29b9d6eec344fd8612ee8a20e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-event/SKILL.md",
+    "before_sha256": "03ce27c284f33919febb7d6934f8312c7eec3c59f80b2dedd90b9e9a2e139f06",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-event/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "18f5e0e1128029750bae3de0a9338806f7264a87ee3d04d42b2382db7291ebd3"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-im/SKILL.md",
+    "before_sha256": "f1dc7d0568b68377712c44db8719f3b993959f9d6ad95bac5dda741bb09390da",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-im/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a314c7d7f90cbe63f03a62f8fb7f28d2359fc8fc97ba1e883ea85355ae867cf7"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/SKILL.md",
+    "before_sha256": "1fcfedd2d2a191541f936b2128a15da5db2639738c965d9a3804661c493e5792",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "邮件保留明确发送授权，取消仅最近一轮有效和伪最高优先级"
+    ],
+    "after_sha256": "9354167b9649cf39f10fb48b68ed0a0d4cb744ac1b48311a0f7d1552dc1d67b2"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/SKILL.md",
+    "before_sha256": "408760233f4227e53598b9314376ca123ff9d581414f978a3e8240ec03cf9a1c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f89f0fc3eca06fdaea599221773d6d8af6ad7fdb3a1f314d87b5fc7db2bab9ee"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-minutes/SKILL.md",
+    "before_sha256": "1d9e225228086c771e2f62a47523e4ec552ffa11215f6b7e165220f793a1616e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-minutes/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "cfc0aa4d2f00d3a526a407b4377377f888b27125e973e79a1e391f48d75e8684"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-note/SKILL.md",
+    "before_sha256": "af878cbf8bf8d609324032da36a4536ed32cbcb0a4bbcbd2beec7d902893bcb1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-note/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "78129979ca86812067fce702f65384ba3fd045210a8f87762bd22db6a6c7d49a"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/SKILL.md",
+    "before_sha256": "f1d4821002bf0bd282bc5c0977376bcdc367eda65ce8c38416713cf7cb61e378",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "fb437f6c14fc7385a3622976e209f8406d8b037bae9a9b1fac3040d30c6e0000"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-openapi-explorer/SKILL.md",
+    "before_sha256": "49add333633bf9d094453051713c9434f6e15ad72fde6847ba67389cb3bf63e2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-openapi-explorer/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "复用已核实的官方页面，无需每次重走完整索引"
+    ],
+    "after_sha256": "77e138bdda73d1324c3653da4d17f472f5ee0fe3db61ebb682418ddb052af70c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-shared/SKILL.md",
+    "before_sha256": "55807b9fe249ce71aade3f2372d8237a9a0356a0a6aa12997a1d812dde9ad901",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-shared/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "认证按实际缺失触发，二维码可选，跨轮具体授权有效"
+    ],
+    "after_sha256": "5cd8191653041d6bb3a476b26e4ed7286b14c22ed62f2722d0fc7fc3ba050a11"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-sheets/SKILL.md",
+    "before_sha256": "7f36fccf1e1b07071c11115ff8437bccf14c1b89a33c0ce394ac020f42074434",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-sheets/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "表格按任务选公式与汇总方式，验证真实覆盖且避免重复审批"
+    ],
+    "after_sha256": "a44cfd579f464a3b978f7fece3e0a5d6c7fcff5a5b0d30c6f91a711f059fdc09"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-skill-maker/SKILL.md",
+    "before_sha256": "8591158289a3cb003c7ac18001ce6b42837c780d2567492cea87bf98982b3678",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-skill-maker/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7022ed3a8ce286f2244bdcf09358b7f5e0183108f38aa2e4695aa3f1a94a705a"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-slides/SKILL.md",
+    "before_sha256": "c16dcdbd1a3334d23306a8b84bf11f7181dfadb4156439693d4b1224965bdf84",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-slides/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "删除强制二读、图片字数配额和固定审美，保留 XML 与读改写合同"
+    ],
+    "after_sha256": "cafaa405da00507ca3580f858345701b1f3605f424dcaa7fa68aafa392a6f9a6"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-task/SKILL.md",
+    "before_sha256": "3f82c7da7bf93de5c373e8df4ef430312ddd13b1f2c80584a1419ab05472cd0c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-task/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "032525d4696b072f35687359dd109d8237257015759bda3240ac4eee68dbb658"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-vc/SKILL.md",
+    "before_sha256": "ea47a9ca54797c2fbb26d8220304ad8aadaa8a782714e6031c0bdf97a7d3f5f6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-vc/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "e0e71ff8d8ca51bcbebd24336f323461c69224f920532a046dec547df2529654"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-vc-agent/SKILL.md",
+    "before_sha256": "ea6dafdd0a74a438235ad3b5cde02af938bde7b61486b6d680020a6878c4d98a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-vc-agent/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "33eaad246b4664db722bc1ffbc127f35920beeb28bdd87d46352a82c4a3aad8d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-whiteboard/SKILL.md",
+    "before_sha256": "53d6eb053aa70f3fa6617c241b1eae7cef2afe9a67438186cbc5d488a5c4ed15",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-whiteboard/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "只读导出不触发无关npx依赖启动"
+    ],
+    "after_sha256": "4ee29b0df7dc72e06c30f15b069799be54b4c203fd2568292daad7be0fb8d3f1"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-wiki/SKILL.md",
+    "before_sha256": "d49206e04243b7bc5e31453db1503c58bf299471e48df8fd7e0f58b011f40a78",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-wiki/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "完整分页消歧，已指定目标与影响无需重新选ID"
+    ],
+    "after_sha256": "3f60fa34871048550c9d44b14f522d924277749942eb83cfa3a1b8e2314c53e2"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-workflow-meeting-summary/SKILL.md",
+    "before_sha256": "ad3db979a2e6d8932ab33058967e1dab82090f8d8d82b16c59ee2955eb967d61",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-workflow-meeting-summary/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "汇总复用既有认证并显式沿用身份",
+      "会议内容总结必须读取正文，不把元数据冒作证据",
+      "产品边界明确时不预读整个跨域说明"
+    ],
+    "after_sha256": "c1ad877a6703a6df66bde1cc324aff215cbf14e2d34fb364adfbba514a33e5e0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-workflow-standup-report/SKILL.md",
+    "before_sha256": "a283de746e65f97d7d25c3b9e351c2e5c16702be81c0f004d5be718c50994690",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-workflow-standup-report/SKILL.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "汇总复用既有认证并显式沿用身份",
+      "待办完整分页，修复相邻比较遗漏重叠日程"
+    ],
+    "after_sha256": "e390a3875e41e4ac2666519f939fb31c8e8efc68252571420269335eac0e08b8"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-env-pull.md",
+    "before_sha256": "b0dab7726d5415ba46458f83013be910f96692e094328d98ee4dce136b623950",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-env-pull.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "cfa00593c0244267b6bc5c7491444452dc0b0028b8fa53cf29c5fb202c500bbf"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-env.md",
+    "before_sha256": "a9157f71dd070042e6c8e32c8fdcc697690b4ab04c6cf5774390cd53c7371e80",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-env.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "环境变量操作复用具体跨轮授权"
+    ],
+    "after_sha256": "1a67e7c3404c715ba97eec68f226081fd28f2dd19f5521ce490f5f19fc70faac"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-observability.md",
+    "before_sha256": "43a81f61f0c0ac6b7912adab117f229a10a8debcaa81d6fd5bc068f34aa4c441",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-observability.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "db123020ae7c2c37ce49c2f09b05c536d9a1a008064fbfbd1038e2738de599c0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-dashboard.md",
+    "before_sha256": "4b1a8ffd235176423a769771ebf50f879c8d1bdba90e9505b2449bc8c2aa6d77",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-dashboard.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "01c0b0289f2fed56a660ad821c428b7169ad7ee51c73d91767a16ca9addf05a8"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-field-create.md",
+    "before_sha256": "628140e059b0020e1d4f1dda056937cc5118abe7cf59fa3ba8859f5a3e715e7d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-field-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "20f333efe9935c5a555fd9dc9d58113890c2bf453da5363563d77be0e49ce160"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-field-update.md",
+    "before_sha256": "d9a63f990f03047acee461b56d9d11cdc682ddcb3be8a03233462f8ce45551ff",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-field-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5befdbbeef143b3f1ea8bf7bb5c627d298f1c098fc9a450fe45b8d984363699e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-questions-create.md",
+    "before_sha256": "cb1b616d49d24860beac5751375f6ece11ddb66d67595a4319e7c40377ec54c6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-questions-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5c70e7f310a6bf205ff891e55309515171c31e97cff346d1d899db47eeae6483"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-questions-update.md",
+    "before_sha256": "49685fbbba0c47d3012df767032654da091cff11a7907e6a8ceb28c951992924",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-questions-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "534eab6cd00b82996aadcaf2f47a2a8425121fbf1bb859590987f3cab2bd67ad"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-submit.md",
+    "before_sha256": "2c55f09a3ecca8a74953e356fa482ee8ffc72b902626c9546910b6ac89e13bd4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-form-submit.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f6a2c97cd16390dab455920edeaae6282ffc67b2c668e0edfbabf472f282c238"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-batch-create.md",
+    "before_sha256": "d65990ae7e9a1a96989dde4cefa2d15332217f9079a07f4f4593a9b424d322c5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-batch-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9a282f88514c3c4a411134610dd6c2bc3bab2f63a2ca6005414f5087678b731e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-batch-update.md",
+    "before_sha256": "022212ff64fd6293298830ec5442a6d47a0446adec9fd7d7385332bd527586f7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-batch-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "98019aa44ca6686c8c09752501cc5385c84e5c27933b767e5828b99a72d6d810"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-upsert.md",
+    "before_sha256": "b8af3dfd7d39a7bc4dbd7b2750694f8ae7e6060a93bd4da64fdba31fef452704",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-record-upsert.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8508868d580c5365e33115ade4bda79076b29b9be98faf3e9786ce80949e2b5f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-view-set-filter.md",
+    "before_sha256": "0b163a61c79deea1daac8dd4dd0e08b8d586920fe1240c7a706604f41c6c50f1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-base/references/lark-base-view-set-filter.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "0d1dbec7f2c9869d87a8fd2f836a0525070c790bd137c812e5fdd67e5dc509d5"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-download.md",
+    "before_sha256": "d81bd5fe0144c5884df4edfa21c78284fae6d73bb0f0dcaa403eaf723f5b81de",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b1832068c63c66cab80250bbe7ae2ed27d370a5d6349690f56a897e561cbbac7"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-insert.md",
+    "before_sha256": "62b82cabfc2b122b0ed8430de44c14c6e1c4e9016f4607826932e883aca122f7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-insert.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "488eaed36e8d5b2d9f65646f7bca334f31ab4262b12cd35c773979cb1034ef8d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-preview.md",
+    "before_sha256": "cf88a6ce613a0d90c6d4b01e16d1db337c639d246f71ffb0686005270ab145f3",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-media-preview.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f50ce35116e52e5ddd8639b6f38328719c4a268cb231476366d2b9dfafb7456c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-mindnote.md",
+    "before_sha256": "a239f58aa9d832623d79943a8f8268783da3c07bce1816060e2f01b0d1278e92",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-mindnote.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8e992ebdad0a52728eb16840000cc6f242f31c6d79748610a126aedf705cdf57"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-resource-cover.md",
+    "before_sha256": "646ee64a0fbb23e7dfba1b094427b5bdf1e8a087fc8d577b407a41f9b5dfde49",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-resource-cover.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "0bf9847a51fc930fe99ae0502ea82c6c2a1cef56adac8af95b59b92ddb16ded4"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-add-comment.md",
+    "before_sha256": "57d64f6ebc8eec7066619205b373dabd7bb383020f0a3b03550ac08170c71853",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-add-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d27193dd4ca97c94a40a310af6b76422b1c8182603c9955764dd5845fdf8f42e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-add-reply.md",
+    "before_sha256": "51ab4b710b2c7ab0d1aeb018e112892c0067f8563eaba69946309eb34941fffa",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-add-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "414ab76869f3a9219723b12a8305be393acb5aeda5b48adf33131421f643d904"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-apply-permission.md",
+    "before_sha256": "fcb2d45e75151fb43d8c5eccc77e060c4e909f096eb8ca71626b9b9863926751",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-apply-permission.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "983b1e1d187c2a1324d3eb70f1ec84bc751a0339c66144804334e94b3004970c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-batch-query-comments.md",
+    "before_sha256": "cf925c31d729025483b36caf7478edba0545bc00456e9dd3555aa6abcd9f6bc4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-batch-query-comments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3459cddaf14dffb01fdb9dbdc8f4c8b20162cfb90cdb83bc07f29a11600be7c5"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-copy.md",
+    "before_sha256": "7a610b58a8d3a366c18805f0c70a47a67353b6594b455f450a83b06c31427e0b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-copy.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9056e76968e6616ac8339c08b0332dcbb378e7547361900b181483ce679c0eda"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-cover.md",
+    "before_sha256": "88c532215e7b5fdb0d342ca5a41ed94de98eed650c2b2ef3913c031e5035d95c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-cover.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "29d3099eaab09329abedd3d29f4fe871a8042c383ac7ee6824898345eda4f763"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-create-folder.md",
+    "before_sha256": "7267d0b1ae7ec6712e165f4d6100072b9ed6e6772f29edf14b42100cbb063284",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-create-folder.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9f2fe29dfdc29326a8796f00ef75157b1f2edd299b1ea42ebd424d88d4d4c8bc"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-create-shortcut.md",
+    "before_sha256": "f4f81ff5c1b8c22f49e1304ed07e17b811fce03c721811efa1bd64f189d29759",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-create-shortcut.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "57ed8af439baf81a8869875cbdfe6f56a797c492b432246f2af9b9634e757d09"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-delete-reply.md",
+    "before_sha256": "97e385497ab3deb3dc3e6556d8810f73201acd77fb06e1ede0ed1224e6c855db",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-delete-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7c6efeabad50e67c88d4b9ca1e1013333d3d3e32f25b53e6deb14e7e7e490c0c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-delete.md",
+    "before_sha256": "d7f95c9b3e6866f46a8ce8c836a94af403a51aeedb4ac5b5e37798b1f5933d75",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "cdcff85c0e2419c584ce50d4233c458ccab199efc5b6f60d5821d51a2a6a899e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-download.md",
+    "before_sha256": "650078e46ac8e24f1a757aa389d6fc9d3ba39e726dc9f43d55d01b94bfef7116",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8c979cd289b3eae328d1b926f4a07cae3fe6b48481a09a72f97465655bca87bb"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-export-download.md",
+    "before_sha256": "414da95c78ce92ad6e0e5896cfccd905da3bf9c52f91b8d1e156466b95434314",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-export-download.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bda73fae09c1924cf24e9d858c5a3ed51834c177f19b221abfe55fb119238379"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-export.md",
+    "before_sha256": "1a7d780ffb524f8f87d011198450736d8b4b8ce5b42ef3fad5c1204ef2983435",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-export.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f52acf6563ae52006b7dd75ce5007d7ae465e0b3eaff703b5ef149fe858ed67b"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-import.md",
+    "before_sha256": "a6bf5f7b05f49e39ffb39330e08892b900b2a515462f6757fe3dfd5667d08b2b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-import.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "de0231bc3c75c8b212a44cc9e700e796f5a3e754f2ae1ae0e777964d261a892f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-inspect.md",
+    "before_sha256": "550313b8cf4e65d930f4b482416e943aa9c7c5418696b7f5895f479b5869e423",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-inspect.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e95523c1c5f438106b0fe7cf18213433eb3a4a376f078a69895840c95c71911a"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-list-comments.md",
+    "before_sha256": "8e25281b31ec6814a1dc6cc3b94b07f78a30b84c9115aa92f6e2060e5f23b7f6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-list-comments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9afaff46390b3ff1eaa7bc1c82421022ee731c53fe8847033fe82f903b638bd7"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-list-replies.md",
+    "before_sha256": "fa83e4a782de5a6da3aaecf6ac1fff639e6ef8bb8ca5ccef2c537f1d75bfcb57",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-list-replies.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "57e5db67f0ff73ed7bb8e586c0bb5135dd6604c2d8abc8526c897a83270b0d63"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-move.md",
+    "before_sha256": "cc03d0d60e0c6c1757b7ac41f445ca7b1ceebdf57f0916d05ae53bc9d4ef688c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-move.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "624e6674b8021a2a49c06017cf49055a0e57e4b7f84b9e9c0deb13f5c6affe14"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-preview.md",
+    "before_sha256": "e9c4971b43746d67e63a67f74ebf5323c224a0a38fab6e9d768605324bd64bb5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-preview.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f13c05c247372c6aa10fc4387cfefde79500f44f31462af3a7228957c284cc7c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-pull.md",
+    "before_sha256": "fe9aa5027cfa2cbbc78199b3b73e407a99d187a42ef88a635008333f9ab32d5c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-pull.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "ded1ad5660e86a34f31106f41dd9a8c6470b63fcfae2d124547d676312a5e633"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-push.md",
+    "before_sha256": "79351557e246303eaa1e278576e07550571370d3db5df71f79fd1f0c7b1f0a10",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-push.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "de344baa54c3d2df548739b46f25ef8a71dd92a3c13eff76679dde3d18922e32"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-react-reply.md",
+    "before_sha256": "a2dec640a85958e666d557c273afef497ec9c6028e4c759ccd44423e0b61a3ff",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-react-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "981ad11b45d216dbf21c36281a2fb0f16295c3230ec941cabf093e1775dcb310"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-reactions.md",
+    "before_sha256": "a4b0213b77f504584d9ea00d4732eb51231c38be312d0ac1c4b6a0f7e84b6a9c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-reactions.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d34f2a2ed889cc9aab2d49a314029a28caf5fadc28a7e95ab3bf91c82f7c2c33"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-resolve-comment.md",
+    "before_sha256": "a48148ddb6d720ec60be59dee67968b263f80af878186a1e07c187c7c89fdd82",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-resolve-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d4d6b18dd8ce4ba282da42bd0e2b12ed210300f645aedbcc611aa226d16ef41f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-restore-comment.md",
+    "before_sha256": "ebabc65787adb79df5843a93cf5105191574d246b6356a66915c2f33aea3db22",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-restore-comment.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2a93bf4d2778cc4442c432fb0875470bf31720cb37ba00b10bea9b86e8e2b41f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-search.md",
+    "before_sha256": "48c8a56709539a83cd966f46e1330a0cb9b4e9648fe44b1a5c65ac28b56a253a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-search.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "61cc56dae337cb1a06ee9e9e8e4e7bd00f880ea2ae9d7858c9a2de8a9123c23e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-status.md",
+    "before_sha256": "5023fb603d2b8950b4014523a69b9c00999969a77dc80a230d20e21fb438e014",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-status.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1a09c93e93bc421620718a5a709e888dfcb574bfcffbda39915ce14f32b2bf69"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-task-result.md",
+    "before_sha256": "a5f988bdeaa8da962eff2b274d573b8e9958127366c6179029f9587b4d4a7e59",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-task-result.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "65d91fa34e01d91b6f82b3626b842061610b53ac592be4dd43c9b0ad28378e8d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-update-reply.md",
+    "before_sha256": "095e7e6a3c9299eb96ab43344bfcefe3f86c8bacb995e3264d354f486e29d217",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-update-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2a65661fb4c9a13a815b70b100d2e69b433830500f17b8b9fc2754c9b879d972"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-update-title.md",
+    "before_sha256": "bd5eb6cf49affafa3c6ba2d79b4c3e9a11878f67c73149de3c26d60e06510ca4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-update-title.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e9fd7eb9c26d796516c5d40536d51e69fe57956d35e324bc80c4eab97dbdd4c9"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-upload.md",
+    "before_sha256": "08ffb82153f92bafd5e0f9cc0246e50b6b3e45c6efa2c2db2cf622fce5624e56",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-upload.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d2a63cf1a092e7b6755dbe5faf16303777213b694f35e4c2a97ae20074014dc7"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-delete.md",
+    "before_sha256": "8e131111ba1dde1d711cbd025015f38147ba14dfeb48f2117246d0ad8975f5d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a1b85269e8face5d7a8fa32b1fd3c5aa2c00bf82faf779e78b69a70d9b927ce9"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-get.md",
+    "before_sha256": "bba7924a4981aa263bb90ffcc140b0685b7a2d07cc04eb08411b0c796f125a15",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-get.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "da462722110d8db60cb1d8a49562c657b22dfb400368e70fc2fee65f9afbc049"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-history.md",
+    "before_sha256": "da9a16413942835a70c15db36ec112b11634d6d91ac7272296a1c88d6275fe7b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-history.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bcf226c801629f57622a0b4cedfd3cdbc79ec44b43f4042ec7c5b01620e9abce"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-revert.md",
+    "before_sha256": "f1e083299e0c7f452f000b83833b15e212f71a1aefb66d95fe3282f786b1875a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-version-revert.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f3eaa6e08d2fa38e20b398873b22f15f3201d4ba03999f72c3c40be5ad54b83d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-event/references/lark-event-im.md",
+    "before_sha256": "b023f08657250ae2d1b513cbeb80d4776d786b270ffc459a1bd142eae156f3a6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-event/references/lark-event-im.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "上游源码引用不冒充本地文件"
+    ],
+    "after_sha256": "37480ccacaecc316dfd21d3245ffd842749d4526d7dab9a387ebe868bcc0f233"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-decline-receipt.md",
+    "before_sha256": "dc888a26f4eda3aa1483f6be81f02eac32d053b41bb6089b3b1badd327053665",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-decline-receipt.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "16dd508b448d652c7bbf9f2ae173f738462276d2d177f812bf34f511ac1f3a23"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-draft-create.md",
+    "before_sha256": "0cedec774763e9900415e9f2928f958df230db534c56bf142200fb0c0fa9cf31",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-draft-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "434b9da4bf0b23b1e5c035cd173e0ffd55566b0bc0ed7aba8d8f5c1a96ff78d0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-draft-edit.md",
+    "before_sha256": "0580927baacbaabba3a42d3c8bf8896c4f19d76c84b01b10e573823bc066993e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-draft-edit.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "3b727859f8b336dcddee0a4651fb2e0c1949cb8cb752219bbdfabf8304edb134"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-forward.md",
+    "before_sha256": "542cbb89003640545ebfc886b0ed13e4acce7b8f23485870ef976d50b8df793a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-forward.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "33a460e8a13c2e949116aee2df01456408132ae650801c1acfaf87ccafba8069"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-html.md",
+    "before_sha256": "869f5e71cfadb0d522188a4a2483432699502ce91e693d71e1d92891f314f457",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-html.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "225aa901d685be35847bab97c1e46015fd2f238a43d7054aafd3fef7c791137d"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-lint-html.md",
+    "before_sha256": "2c33c261ac7a155e0878dcb67e7d5f38a477e74fa267bd36859c3d3e781d2e67",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-lint-html.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d79dc7c5ccd5b033a57ea206ec97fda03d113468fe497a6b8ae7f687f2e7e5f0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-message.md",
+    "before_sha256": "6430f15801c4ac2a5a7f0de328b2514b53423e2b6382dab1cbdbd0e2a23f10d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-message.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "a225b8e18f071ae513d83e57e8e669ce6d57263f869b6ccb80727ca1bbdee4b2"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-messages.md",
+    "before_sha256": "f06dbfc8598b50bcdf3092706808090d646eddf23159a77875c2fcfb59aeb379",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-messages.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "05f992e2b9a17a00df38744601daa0ea56103a8acfa952fe0694f139b973711a"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-recall.md",
+    "before_sha256": "9eec5a8ea4939812c507059eac31e3dc455b138e8d44570752b2c24245ae0fff",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-recall.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7cffcc145447c1f9aaf76b6250d05065c915c90dc3c7e7d5e3b04e4c155d9e7c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-recipient-search.md",
+    "before_sha256": "de6303c77670c473ca8edaa670db7b599a9a596ba97c72ce0c43e52dc045537a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-recipient-search.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "db13e9ab967bc619cc3f10f9c417e645de355014a636354fed5af71b0a9b13d8"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-reply-all.md",
+    "before_sha256": "7d2eedb49575d52dbcc767f60c9c982c0da080ffd4bb31b27939390948fc0d4f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-reply-all.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "5aa121b509c9afce4d643c81d8c6be646b0a6346e81463a4b4c2525add245ca4"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-reply.md",
+    "before_sha256": "b8d0003f54fb128c29759f9e1f2aca48d545a7eb9cba1bb8c374a602f6efcad1",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-reply.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "09b104c44a188ec753c17edc97cc7a31699f0de0509c3586e6b738308fd6464c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-as.md",
+    "before_sha256": "779b674e7ff7eba68a79b096d984cb359915848004368cb87620a02334dbbae7",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-as.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d45259544074746a770e34c40e5e26405487585a601ac0890e3da46c63fa7f60"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-receipt.md",
+    "before_sha256": "19af1149866916a9d7403f92405cffa70d1cc4e3c364dd54c2d82c45f7736c56",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-receipt.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "254ab62013f2bf8b6717140b738d47408101f65f513030845d918c19dafe62b8"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-status.md",
+    "before_sha256": "53f97b373ee90c33dd4b53915af625eb8b4ded19d72340c686b47481e5fdd6a2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send-status.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1564767956c2f020459d1ba8c53183a4145950e74904a1f1c1a20c189f7857fb"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send.md",
+    "before_sha256": "6a7d870b1b60ea71b9288d0439625971980a8a0fc366dd874b9ee273d079cc28",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-send.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修正邮件参考同目录链接"
+    ],
+    "after_sha256": "e5a79e484dc5457d1df368969b776682c9fb826beade37da207bb517f2d65544"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-share-to-chat.md",
+    "before_sha256": "983a642f8305312ee81a98f45760ffe8ad720347bd8c4fbaa55beb38baa05a9e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-share-to-chat.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b074e6fed3c8768f3e37015429f7f10a09f8dca8172657c18e5957bb554652aa"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-signature.md",
+    "before_sha256": "fa759bf8b2ee70dcf3ab5403e6f31833d86eb1cf86812dd7c30dd909897416b2",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-signature.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "1dedc2297d2bef5b7f3aeeb7b422627e0be32e5c912e6d6ef57ca805dad242b0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template-create.md",
+    "before_sha256": "368c9bc14dd4e2cf81f9e0efbc112b695a2c6055fb601cd48b85fd16ef39c02d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "339816a6b8fe3efc7dadf6a291250690d999ddf1a16c861e86c71b3ef0c7c0f5"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template-update.md",
+    "before_sha256": "f819cc2504e4e8898a7fb1fbd4f63b6e0ea07dd3e1ddc14c1649049ba78abc40",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "4965a20760542d373666b1c1f9c9dce2f413f0b572bfc42bef3b4008e55d4222"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template.md",
+    "before_sha256": "5bff844e1fae3c6da27e17d4758784a434fc147e83c4512d8b77d506dd81d1a8",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-template.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "c4129a6f68d0c88e66ebde5b8e94f3086c3220dfd06319afe4114a46d7687dee"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-thread.md",
+    "before_sha256": "ef0f803f3dc95c4012e55c3da546a9835953e56cbfdbb5fc759a3d277cee4503",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-thread.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "cffea82d70e99cbd38932c0ba61ee494c823a503cd6d05c92d4a1089d3908e78"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-triage.md",
+    "before_sha256": "9b4a82d6051255d32170a14150c53937e762d48a08250cc2ec99e653b3350cfd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-triage.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "eb22739c09582b3aedc62ec70324c4eaf38568f88ca98ccdb971a1261c8cd97c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-watch.md",
+    "before_sha256": "4fdf8a8e7743890e3ee6aa305377cd70b13e9acbdefe20c2beeb992a03f9bd13",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-mail/references/lark-mail-watch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "修复指向不存在参考文件的入口"
+    ],
+    "after_sha256": "094f922f3ab72dc11e72b9c09f9d3410b5520a1c253c3916638b836b338fe8b0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-create.md",
+    "before_sha256": "686df9384108e71ca6d5d9964f74d5d9ae89b7f9ae7bbb7472ad511c22ec9eee",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "bcbfd4dfde462b2a1a2cf3e5326cfacee9dd4fdd48bcb5b6faf9b9be670f8d07"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-diff.md",
+    "before_sha256": "d0302666cd90a9bd1c6e211d5df0ac45d0298dbeafc09851004facce1466a321",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-diff.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "8ba5e6f5966e50fd22e7cc9c5179d008c9dd4a933632b2d39f085258ce4244c4"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-fetch.md",
+    "before_sha256": "0c68f0d56ddd7272485f32f7cf9321171dbdd1be4c4f98e0304beb78038bf2d0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-fetch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "f76a7020c7435f3bcb04b1867be0e4c8eb0830e50f634d429d0bd8120947aa06"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-overwrite.md",
+    "before_sha256": "67265b9bc7ca2e97ed966f7bf693e349f10795e567e5e80870ba4b39b1d81bd0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-overwrite.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d10b8ad879bff1031738ef1572cc4c0e53ecf340bd8c44309da33879a0cffedd"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-patch.md",
+    "before_sha256": "f4da2faccc9e6b0e91823636a9269038aca51fc16692c2f2b49c3afde18f2522",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-markdown/references/lark-markdown-patch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "30dc92af50ca35c63b73c8fd363c43f0ecbc00b930c393f48c17571a5e3780c4"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-alignments.md",
+    "before_sha256": "5a0701e9eb747d91a877fc6c3986366922528a87777f034f45dcebe757116753",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-alignments.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "9b6ea2923b165b6c082ed9c31069f0457c9c867f2ceb12165aa3bd3c7e49c729"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-batch-create.md",
+    "before_sha256": "3c8662ab49c9af8c55ebae7e61a50074a9efeb5ba8d262057adb047ed6ac0e2e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-batch-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "2be37f4037b946ca0faf23a8519a1f5cdc7323d582ddd128b33171cc385520a0"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-create.md",
+    "before_sha256": "edcfd20fc1a616a97b61b33adf12f4e651523930ec95870f654a1d868e2b53d5",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3a81ccca872f0a5d5f24bcf162f931819424b98369896fc884a82600ab5af087"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-cycle-detail.md",
+    "before_sha256": "69fef9becb64d635d088c734ad5957194017041fc0303d804d96d91f27e13079",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-cycle-detail.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "7948d3c5ecf960af6a03e0e3013d197b25b0f503b893572824c10ba64ef27496"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-cycle-list.md",
+    "before_sha256": "2d44c3f76744f0d98a9fa1c69976c930ad12e688eafdcaf6f9ad29014c091526",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-cycle-list.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "84a5abb7a9a4ac786ad78e6a78e2b2726a67fbe9a71e4a367735a6895dadf93f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-image-upload.md",
+    "before_sha256": "4a5324ab2cc5b4ca42d51ef8066ed9e3375c921cf243eb40bbb41d73bb7e7bdd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-image-upload.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e4d6aa5b2e74edd437b74626a32d9b532c3bff11ebad25a97937cad1b8cef1a6"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-indicator-update.md",
+    "before_sha256": "423d9e714b5b4dd6cba3f736f430e9a1c04b49ba13f55b56f71b1117bfef448c",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-indicator-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "973d3e4e791cfc316583122e837ae4945253d56287836f5892f513eb41dbc537"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-indicators.md",
+    "before_sha256": "a30ed4fe25d926b7df74b13500770d9f6b802d815458900cc98d65fb600d9507",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-indicators.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5051c1ebb8db2b36641d6a998087592afd1c1fee4fcc9eaaa53f3114f295c335"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-patch.md",
+    "before_sha256": "c07f0484a1325e4981856648e0ee5119cbd512140cf5457859cea9d8ad23e734",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-patch.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "d6c825a50196a50d018932dd753fac473fd27d4e9f56438c6a94f6b36dcc1dce"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-create.md",
+    "before_sha256": "637765ccf34b23b46e06f5816e4a22e1912d831af3bec4a95262a92a4e8e1ca0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-create.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b7e3a2e6cab749553ce7a23bcf4da3936dc39ea8d30658fe62ae5ec39e3e8f40"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-delete.md",
+    "before_sha256": "c96a580dc99bdd5e675718cf799870d6d84b7aa9b7f6f5f51c88182f9965d7c6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-delete.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "c34f91e9fe1292846fa0d6eae390b30e6e6a5ab2d7bbe10b6f9f1cca2da45871"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-get.md",
+    "before_sha256": "a070f250dce7ca7cfe4b69140f23c6ce879bde78b612d372c52c8274cfc2648f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-get.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "13b2161edc129a368ff1fab25fd86b6fd31c9cba3513e97b7b9bb2ff6671bf91"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-list.md",
+    "before_sha256": "973102b13dbc128517125666107529ea65996c37997b1b001eed2658726a6c92",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-list.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "e4e9e63e1f50ef805df6f8a140c19d683b43a0cae209299640ccc0b22338d220"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-update.md",
+    "before_sha256": "dd09623ea1c8372499d9f8ebc96a8deebc36e7f5a810e15eff9e6486a21d8545",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-progress-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "3e29e0893f8ef8e964aa0fc08e6021c9d49390408f4fb223ed696c09a5c2017f"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-reorder.md",
+    "before_sha256": "7ebabc5a4eb2f5b708f98d31a2e572276cc2d413b630757907dcc0c963b87906",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-reorder.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "4a2ef46aee84e28bdebfe93f2af0a1024bdb5b9697655859c7a9f8565a7edf10"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-weight.md",
+    "before_sha256": "b71f2e7b4c3f2b0d6654933909d5e11f1d4c980793205a7c635643465a9d6637",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-okr/references/lark-okr-weight.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "b546e7a7e19f2c59b21a8074fad02a54c3e16d5a2d41bf583e1ad998f2e51864"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-whiteboard/references/lark-whiteboard-export.md",
+    "before_sha256": "fe4142d5c8a1240a742170d5ffb4cff7f2f7b3235bd259897bbe1cb11cbeba0d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-whiteboard/references/lark-whiteboard-export.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "5134eff627846ab2d2bd01a2b01424a46ad1bd269284b8be10f3f03c223ee164"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-whiteboard/references/lark-whiteboard-update.md",
+    "before_sha256": "b051b9bc62e5de8c0a56f6b72d6477d266c21de9045d36e1805f3b61bc2f64eb",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-whiteboard/references/lark-whiteboard-update.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值"
+    ],
+    "after_sha256": "91ec2807d918dd3686dc0c32ac30a6bec6792e298f375f738b09d263984ecbcd"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-wiki/references/lark-wiki-delete-space.md",
+    "before_sha256": "db47b8179e13fa4399b803012d1d642dba014bf78771e7fa6aba4acd00548c69",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-wiki/references/lark-wiki-delete-space.md.bak",
+    "reasons": [
+      "飞书入口按需加载认证规则；将版本移入兼容的 metadata 并保留原值",
+      "保留不可逆删除授权但移除反复确认"
+    ],
+    "after_sha256": "8c16e8b077281479aa85cc03709f7beba65420e2fe84700228991802e1b99619"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-shared/references/lark-shared-config-init.md",
+    "before_sha256": "d995546300e59284e223e9be856ff5674056900b86c9ad022c4e9b2bf0f24563",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-shared/references/lark-shared-config-init.md.bak",
+    "reasons": [
+      "认证按实际缺失触发，二维码可选，跨轮具体授权有效"
+    ],
+    "after_sha256": "e441bfed3332126f549657cc210d9c7c10c7a75a9d1376c509805be0924424cb"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-slides/references/planning-layer.md",
+    "before_sha256": "d53301e770f92c558d20bda6c87292332de16f66f105a62620e5894f26b8c4c9",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-slides/references/planning-layer.md.bak",
+    "reasons": [
+      "规划文件按复杂度选择，禁止生成仿真 Logo 替代真实品牌资产",
+      "同步规划层数据真实性规则，移除遗留自动造数回退"
+    ],
+    "after_sha256": "1332c3379bb97205281c990a41368d8b9edab418ec07dd95acfd83535575c44a"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-slides/references/asset-planning.md",
+    "before_sha256": "6e3a008c1f6270e60ecca2977b5f6ab18d78acd18346d91ae56fafc728b78468",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-slides/references/asset-planning.md.bak",
+    "reasons": [
+      "素材与数据来源真实，移除配额和自动仿造素材回退"
+    ],
+    "after_sha256": "f6f6c284aed878891817f5481db1d4dc1d5bb2911faeeed568989ab9e89323ba"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-slides/references/planning-layer.md",
+    "before_sha256": "d53301e770f92c558d20bda6c87292332de16f66f105a62620e5894f26b8c4c9",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-slides/references/planning-layer.md.bak",
+    "reasons": [
+      "规划文件按复杂度选择，禁止生成仿真 Logo 替代真实品牌资产",
+      "同步规划层数据真实性规则，移除遗留自动造数回退"
+    ],
+    "after_sha256": "1332c3379bb97205281c990a41368d8b9edab418ec07dd95acfd83535575c44a"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-slides/references/asset-planning.md",
+    "before_sha256": "6e3a008c1f6270e60ecca2977b5f6ab18d78acd18346d91ae56fafc728b78468",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-slides/references/asset-planning.md.bak",
+    "reasons": [
+      "素材与数据来源真实，移除配额和自动仿造素材回退"
+    ],
+    "after_sha256": "f6f6c284aed878891817f5481db1d4dc1d5bb2911faeeed568989ab9e89323ba"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/SKILL.md",
+    "before_sha256": "85c5b8928295749370b04ec3050651cbb3c526e93a15a69f071442acfe9d160b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/SKILL.md.bak",
+    "reasons": [
+      "简单文档允许直接创建，复杂流程渐进加载"
+    ],
+    "after_sha256": "de39d17e1f8ae20935456e38aec64c8bd3e1167e04f67427741e8a1df32ee289"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-create-workflow.md",
+    "before_sha256": "913a42d0b565e00dd46460d282569dcbaf09840a2b55d486b6ef4466e1e6050d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-doc/references/lark-doc-create-workflow.md.bak",
+    "reasons": [
+      "限定完整创建工作流的适用范围",
+      "失败时保留恢复证据，不无条件删除草稿目录"
+    ],
+    "after_sha256": "a2cbb4ecc2c4ee7a2af43de647f2142228ced2e3fcf4847d78861147a24a1b80"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/SKILL.md",
+    "before_sha256": "1dafae8b024b4e08d309777bf0c33f920fb98d22a9f8726cf08487321955e9a4",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/SKILL.md.bak",
+    "reasons": [
+      "简单文档允许直接创建，复杂流程渐进加载"
+    ],
+    "after_sha256": "52cdb63ef1502ab66c9b682cc6c3d5c36b1ec282224c1ce18404b0fe24bf1466"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-create-workflow.md",
+    "before_sha256": "913a42d0b565e00dd46460d282569dcbaf09840a2b55d486b6ef4466e1e6050d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-doc/references/lark-doc-create-workflow.md.bak",
+    "reasons": [
+      "限定完整创建工作流的适用范围",
+      "失败时保留恢复证据，不无条件删除草稿目录"
+    ],
+    "after_sha256": "a2cbb4ecc2c4ee7a2af43de647f2142228ced2e3fcf4847d78861147a24a1b80"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/pixel-asset-pipeline/SKILL.md",
+    "before_sha256": "fa1a8f7f1f0618f1f6f7713119199856d1313732181d27420353672d712343b3",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/pixel-asset-pipeline/SKILL.md.bak",
+    "reasons": [
+      "从历史64px固定流程改为项目合同驱动；披露逐帧缩放脚本实际限制"
+    ],
+    "after_sha256": "86a0c5fa07bdb87fbae560202e06f49a9410001661dc70ae1012ee829fb845ba"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/pixel-animation-lite/SKILL.md",
+    "before_sha256": "7b48068d1845a2f7a31cca5a8cd65327e76658a449dcdb597cf6e82abd0a56ae",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/pixel-animation-lite/SKILL.md.bak",
+    "reasons": [
+      "动画继承项目尺寸与同尺度合同，不误用逐帧拟合脚本"
+    ],
+    "after_sha256": "34c7c3b3d58374c2e34c05ab74d361b1620a21f2d91ac0bd5f1629633c747170"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/local-image-generation-workbench/SKILL.md",
+    "before_sha256": "ff79623d72aa78758a411dff0b90653d71e1ebd8c6ebb6908df1984d777c020b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/local-image-generation-workbench/SKILL.md.bak",
+    "reasons": [
+      "本地工作台仅显式选用且项目允许，原料交付不自动导入"
+    ],
+    "after_sha256": "94504f1934ca1271befc68520750f4674a06b613a3d6d39863ca7945a287c622"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/rika-pixel-animation-workbench/SKILL.md",
+    "before_sha256": "efd0194d662753eea6f3001f1c1ec84ccca502ab81c5459af34941796829f89d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/rika-pixel-animation-workbench/SKILL.md.bak",
+    "reasons": [
+      "缩窄Rika触发范围，固定工作台规格不覆盖项目合同"
+    ],
+    "after_sha256": "de6e38f73c9f9fbf887332d486e48c76889c728c2735d96e4fe4016899214fd3"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/occ-art-direction/SKILL.md",
+    "before_sha256": "d6c310724946b762cbdc934ef777a28202becc310c0a3e7bff7b3cdc512fe732",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/occ-art-direction/SKILL.md.bak",
+    "reasons": [
+      "按请求交付简报或实际生图，技能不扩大生图与导入授权"
+    ],
+    "after_sha256": "7a2e44eb2d2cae3241e9927cd8e4c370a3e5ffc0394cc7fa39a8835314081b35"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-formula-verify.md",
+    "before_sha256": "2c878b392c36aba0954bf0c758b4b64bf295e761e99c5af4cf1d9c5030339abb",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-formula-verify.md.bak",
+    "reasons": [
+      "公式验证按影响范围，禁止掩盖错误降级造成功"
+    ],
+    "after_sha256": "0f5b15b5cb63fa47563290ee1c04426d0da9fb20f6b551daa95446fdcffa92d3"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-pivot-table.md",
+    "before_sha256": "bf6fb7ddf4b23f8cd6b505d60cc3e4629b2be75b0d3d76599fab42782d6c94cd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-pivot-table.md.bak",
+    "reasons": [
+      "真实透视表约束只适用于所请求对象"
+    ],
+    "after_sha256": "5cc0a409dd1e0da186c6ffded35faf88dfac7c896c7b21298df9fcbd02fb612e"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-formula-verify.md",
+    "before_sha256": "2c878b392c36aba0954bf0c758b4b64bf295e761e99c5af4cf1d9c5030339abb",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-formula-verify.md.bak",
+    "reasons": [
+      "公式验证按影响范围，禁止掩盖错误降级造成功"
+    ],
+    "after_sha256": "0f5b15b5cb63fa47563290ee1c04426d0da9fb20f6b551daa95446fdcffa92d3"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-pivot-table.md",
+    "before_sha256": "bf6fb7ddf4b23f8cd6b505d60cc3e4629b2be75b0d3d76599fab42782d6c94cd",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-pivot-table.md.bak",
+    "reasons": [
+      "真实透视表约束只适用于所请求对象"
+    ],
+    "after_sha256": "5cc0a409dd1e0da186c6ffded35faf88dfac7c896c7b21298df9fcbd02fb612e"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-slides/references/visual-planning.md",
+    "before_sha256": "37fec44b5f9acba06073ac733076a0545bda27ce637bca590abc7ef5984d8acc",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-slides/references/visual-planning.md.bak",
+    "reasons": [
+      "视觉参考取消版式数量与高密度配额"
+    ],
+    "after_sha256": "d013902043c7d1d92f9ebfe1a93cd629df83686d53d770f788baa386adeb342c"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-write-cells.md",
+    "before_sha256": "fa4b37ec28835a3146e0ef1d4e1e5c9e7510c1a06cce27b79b0c10fd66374747",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-sheets/references/lark-sheets-write-cells.md.bak",
+    "reasons": [
+      "正则验证覆盖真实有效范围，不强凑100%命中"
+    ],
+    "after_sha256": "2b99df5d526f257fa19ffcf98d7445f7798cbba95b1c3e0e5d4a88d05a65e139"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize-discovery.md",
+    "before_sha256": "9630d49fe29be3a0a94bb91f5f4ce6997473e3398893cee65b996c6a430dcdb0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize-discovery.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "550ad2bdcfd925942e7ae3bc3ccd8654d3083d8461bf3df4ff175b56b0695288"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize.md",
+    "before_sha256": "e91f2130225d631f82658cf3474aae51ad0e43e46f2a9de5e2bf187478e8123b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "f9f7cbe9aa0b3d0d49afd57718e69afbdc5b6054f8a104f9f49bffe5637caf99"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-permission-governance.md",
+    "before_sha256": "c81802223811416676441204e309f6fc1ae2afd20431a5fc6ca8d730d5665f4f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-permission-governance.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "f559ef742e9ae714fb6be0edf2553252ce3e6239a9d5ad2f44c0134159b344fa"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-execute.md",
+    "before_sha256": "5234b3c628ea44dc30cc78c315195999fded79d0d0ec67d5832c47ce74ca7440",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-execute.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "c707c2d92e725e83f4654d50fc548839ef215fa66518f2a4a4e740193ed4dc64"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-resolve-verify.md",
+    "before_sha256": "d9c2f039f5d91bb22b85e09dc6c7dd9b66a11391895b41f8afc4ec33fea3b3e0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-resolve-verify.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "7bd87fe6b6fce691a2215378ba3c4fae17f00e69b478a16c7755f7c88d756f14"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-setup.md",
+    "before_sha256": "846856cc0e2eb2caa75551a6cfd0c0ad7282096cd4840f824e914c8ebf71e20b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-setup.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "b64d22b631f49140d5a0bcac6ce63fbba70c38fb3ccfea497194ffb0a003c670"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector.md",
+    "before_sha256": "3e55eca38e69f23cd3548c95a08c916a56e4927e5e2c82d4e9cb0d7e0242be2d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "bbf7eed82f4669f24cf95308863a835a51aab21033d14a85c78dc411066731ce"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-minutes/references/lark-minutes-speaker-replace.md",
+    "before_sha256": "1162fd40d4b72a0f51d34ff09930a1efa243a0287fdb3e4263c6f997d02d358a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-minutes/references/lark-minutes-speaker-replace.md.bak",
+    "reasons": [
+      "修复指向不存在参考文件的入口"
+    ],
+    "after_sha256": "cc6a5c8cbf4303261c57037b2ba94810c8c9b607f82ee9da9456f7fe861aa1a0"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-wiki/references/lark-wiki-member-add.md",
+    "before_sha256": "8bd78edd8099a33337b2d18745ec9d37f0fb793f6fe3e58ff99751951cb254c6",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-wiki/references/lark-wiki-member-add.md.bak",
+    "reasons": [
+      "修复指向不存在参考文件的入口"
+    ],
+    "after_sha256": "3f0f6d9be42b0f3a2bb2bbc27054e464724b2cfc11d3883527514a45dd0e2731"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-slides/references/visual-planning.md",
+    "before_sha256": "37fec44b5f9acba06073ac733076a0545bda27ce637bca590abc7ef5984d8acc",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-slides/references/visual-planning.md.bak",
+    "reasons": [
+      "视觉参考取消版式数量与高密度配额"
+    ],
+    "after_sha256": "d013902043c7d1d92f9ebfe1a93cd629df83686d53d770f788baa386adeb342c"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-write-cells.md",
+    "before_sha256": "fa4b37ec28835a3146e0ef1d4e1e5c9e7510c1a06cce27b79b0c10fd66374747",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-sheets/references/lark-sheets-write-cells.md.bak",
+    "reasons": [
+      "正则验证覆盖真实有效范围，不强凑100%命中"
+    ],
+    "after_sha256": "2b99df5d526f257fa19ffcf98d7445f7798cbba95b1c3e0e5d4a88d05a65e139"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize-discovery.md",
+    "before_sha256": "9630d49fe29be3a0a94bb91f5f4ce6997473e3398893cee65b996c6a430dcdb0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize-discovery.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "550ad2bdcfd925942e7ae3bc3ccd8654d3083d8461bf3df4ff175b56b0695288"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize.md",
+    "before_sha256": "e91f2130225d631f82658cf3474aae51ad0e43e46f2a9de5e2bf187478e8123b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-knowledge-organize.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "f9f7cbe9aa0b3d0d49afd57718e69afbdc5b6054f8a104f9f49bffe5637caf99"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-permission-governance.md",
+    "before_sha256": "c81802223811416676441204e309f6fc1ae2afd20431a5fc6ca8d730d5665f4f",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-permission-governance.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "f559ef742e9ae714fb6be0edf2553252ce3e6239a9d5ad2f44c0134159b344fa"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-execute.md",
+    "before_sha256": "5234b3c628ea44dc30cc78c315195999fded79d0d0ec67d5832c47ce74ca7440",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-execute.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "c707c2d92e725e83f4654d50fc548839ef215fa66518f2a4a4e740193ed4dc64"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-resolve-verify.md",
+    "before_sha256": "d9c2f039f5d91bb22b85e09dc6c7dd9b66a11391895b41f8afc4ec33fea3b3e0",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-resolve-verify.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "7bd87fe6b6fce691a2215378ba3c4fae17f00e69b478a16c7755f7c88d756f14"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-setup.md",
+    "before_sha256": "846856cc0e2eb2caa75551a6cfd0c0ad7282096cd4840f824e914c8ebf71e20b",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector-setup.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "b64d22b631f49140d5a0bcac6ce63fbba70c38fb3ccfea497194ffb0a003c670"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector.md",
+    "before_sha256": "3e55eca38e69f23cd3548c95a08c916a56e4927e5e2c82d4e9cb0d7e0242be2d",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-drive/references/lark-drive-workflow-topic-move-collector.md.bak",
+    "reasons": [
+      "缺失Wiki独立参考改为实际Wiki入口及当前help"
+    ],
+    "after_sha256": "bbf7eed82f4669f24cf95308863a835a51aab21033d14a85c78dc411066731ce"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-minutes/references/lark-minutes-speaker-replace.md",
+    "before_sha256": "1162fd40d4b72a0f51d34ff09930a1efa243a0287fdb3e4263c6f997d02d358a",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-minutes/references/lark-minutes-speaker-replace.md.bak",
+    "reasons": [
+      "修复指向不存在参考文件的入口"
+    ],
+    "after_sha256": "cc6a5c8cbf4303261c57037b2ba94810c8c9b607f82ee9da9456f7fe861aa1a0"
+  },
+  {
+    "path": "C:/Users/FNHF/.codex/skills/remotion/rules/text-animations.md",
+    "before_sha256": "06c71f3928e0cde4d047d4ee10f99a8d0cb9b10160924a89c866ebbd9436667e",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.codex/skills/remotion/rules/text-animations.md.bak",
+    "reasons": [
+      "缺失示例不再提供失效链接，保留示例名称"
+    ],
+    "after_sha256": "a07d041d19147849f82b80c97eb08946d75243150835f9b699e04d2b83e00034"
+  },
+  {
+    "path": "C:/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-role.md",
+    "before_sha256": "ef7be2370916ec24d20b0b218069102a8f6ea8ec166e431406b5924f864630ec",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/C/Users/FNHF/.agents/skills/lark-apps/references/lark-apps-role.md.bak",
+    "reasons": [
+      "移除引用中残留的同轮审批门槛"
+    ],
+    "after_sha256": "565c85d3d62fc19cbd8a4144ecdebc868c5191b97fc23b67463b6b1b79933428"
+  },
+  {
+    "path": "E:/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-role.md",
+    "before_sha256": "ef7be2370916ec24d20b0b218069102a8f6ea8ec166e431406b5924f864630ec",
+    "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/before/E/数据库/OCC_Codex/.agents/skills/lark-apps/references/lark-apps-role.md.bak",
+    "reasons": [
+      "移除引用中残留的同轮审批门槛"
+    ],
+    "after_sha256": "565c85d3d62fc19cbd8a4144ecdebc868c5191b97fc23b67463b6b1b79933428"
+  }
+]

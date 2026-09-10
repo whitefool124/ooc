@@ -19,7 +19,48 @@ namespace OCC.Combat.Roguelite
     public enum DamageTag { Melee, Ranged, Explosion, Ground, Object, Segment }
     public enum ReductionCategory { Stance, Reaction, EnvironmentException }
     public enum ShieldEventKind { Granted, PreventedByBreakStance, Absorbed, ClearedAtTurnStart, Wasted }
-    public enum EquipmentSlot { MainHand, OffHand, Head, Chest, Hands, Legs, Backpack, AetherCore, Conduit, Accessory1, Accessory2 }
+    public enum EquipmentSlot
+    {
+        None = -1,
+        Weapon, Head, Chest, Feet, Backpack, Ring1, Ring2, Necklace, CastingUnit,
+        // Serialized rogue11 compatibility names. These are migration inputs, never active runtime slots.
+        MainHand = 100, OffHand, Hands, Legs, AetherCore, Conduit, Accessory1, Accessory2
+    }
+
+    public static class EquipmentSlotRules
+    {
+        public static readonly IReadOnlyList<EquipmentSlot> ActiveSlots = new[]
+        {
+            EquipmentSlot.Weapon, EquipmentSlot.Head, EquipmentSlot.Chest, EquipmentSlot.Feet,
+            EquipmentSlot.Backpack, EquipmentSlot.Ring1, EquipmentSlot.Ring2,
+            EquipmentSlot.Necklace, EquipmentSlot.CastingUnit
+        };
+
+        public static EquipmentSlot NormalizeLegacy(EquipmentSlot slot)
+        {
+            switch (slot)
+            {
+                case EquipmentSlot.MainHand: return EquipmentSlot.Weapon;
+                case EquipmentSlot.Legs: return EquipmentSlot.Feet;
+                case EquipmentSlot.AetherCore:
+                case EquipmentSlot.Conduit: return EquipmentSlot.CastingUnit;
+                case EquipmentSlot.Accessory1: return EquipmentSlot.Ring1;
+                case EquipmentSlot.Accessory2: return EquipmentSlot.Ring2;
+                case EquipmentSlot.OffHand:
+                case EquipmentSlot.Hands: return EquipmentSlot.None;
+                default: return slot;
+            }
+        }
+
+        public static bool IsActive(EquipmentSlot slot) => ActiveSlots.Contains(NormalizeLegacy(slot));
+        public static bool CanEquip(EquipmentSlot definitionSlot, EquipmentSlot requestedSlot)
+        {
+            EquipmentSlot definition = NormalizeLegacy(definitionSlot);
+            EquipmentSlot requested = NormalizeLegacy(requestedSlot);
+            return definition != EquipmentSlot.None && (definition == requested ||
+                definition == EquipmentSlot.Ring1 && (requested == EquipmentSlot.Ring1 || requested == EquipmentSlot.Ring2));
+        }
+    }
     public enum EquipmentHandedness { None, OneHanded, TwoHanded, OffHand }
     public enum EquipmentRarity { Common, Uncommon, Rare, Legendary }
     public enum SpellRarity { Basic, Common, Uncommon, Rare }

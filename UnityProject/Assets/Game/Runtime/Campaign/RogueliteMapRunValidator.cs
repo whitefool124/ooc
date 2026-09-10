@@ -55,11 +55,12 @@ namespace OCC.Combat
             string[] parts = raw?.Split('|');
             if (parts == null || parts.Length != 36 || (parts[0] != "map10" && parts[0] != "map9")) return result;
 
-            ValidateIdList(parts[16], NodeIds, "nodes.visited", true, result);
-            ValidateIdList(parts[17], NodeIds, "nodes.completed", false, result);
-            ValidateIdList(parts[18], RewardIds, "rewards.claimed", false, result);
+            ValidateIdList(string.Join(",", parts[16].Split(',').Select(AcademyMapSaveMigration.NodeId)), NodeIds, "nodes.visited", true, result);
+            ValidateIdList(string.Join(",", parts[17].Split(',').Select(AcademyMapSaveMigration.NodeId)), NodeIds, "nodes.completed", false, result);
+            var historicalRewards = new HashSet<string>(RewardIds.Concat(AcademyMapSaveMigration.HistoricalProgressMarkers), StringComparer.Ordinal);
+            ValidateIdList(parts[18], historicalRewards, "rewards.claimed", false, result);
             ValidateIdList(parts[20], FireSpellIds, "build.owned_spells", false, result);
-            if (!NodeIds.Contains(parts[3])) result.Add("nodes.current_unknown");
+            if (!NodeIds.Contains(AcademyMapSaveMigration.NodeId(parts[3]))) result.Add("nodes.current_unknown");
             if (!EnemyArchetypes.All.Any(enemy => enemy.Id == parts[2])) result.Add("build.region_boss_unknown");
             if (!string.IsNullOrEmpty(parts[31]) && !StarterIds.Contains(parts[31])) result.Add("build.starter_unknown");
             ValidateNonNegative(parts, new[] { 5, 6, 7, 8, 9, 10 }, "resources", result);
@@ -91,13 +92,20 @@ namespace OCC.Combat
             RogueliteMapRunValidationResult result = new RogueliteMapRunValidationResult();
             if (run == null) { result.Add("run.null"); return result; }
 
+            if (run.IsFirstRunExperience)
+            {
+                ValidateFirstRun(run, result);
+                ValidateInventory(run, result);
+                return result;
+            }
+
             if (!NodeIds.Contains(run.CurrentNodeId)) result.Add("nodes.current_unknown");
             if (!run.VisitedNodes.Contains("start") || !run.VisitedNodes.Contains(run.CurrentNodeId)) result.Add("nodes.visited_inconsistent");
             if (run.VisitedNodes.Any(id => !NodeIds.Contains(id))) result.Add("nodes.visited_unknown");
             if (run.CompletedNodes.Any(id => !NodeIds.Contains(id))) result.Add("nodes.completed_unknown");
             if (run.CompletedNodes.Any(id => !run.VisitedNodes.Contains(id))) result.Add("nodes.completed_not_visited");
 
-            if (run.Level < 1 || run.Experience < 0 || run.AccessCards < 0 || run.Supplies < 0 || run.ScoutingBeacons < 0 || run.Parts < 0 || run.Aether < 0)
+            if (run.Level < 1 || run.Experience < 0 || run.Supplies < 0 || run.ScoutingBeacons < 0 || run.Parts < 0 || run.Aether < 0)
                 result.Add("resources.out_of_range");
             if (run.CurrentHealth < 0 || run.CurrentHealth > 18) result.Add("combat.health_out_of_range");
             if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
@@ -122,13 +130,80 @@ namespace OCC.Combat
             }
 
             if (run.ClaimedRewards.Count != run.ClaimedRewards.Distinct(StringComparer.Ordinal).Count() ||
-                run.ClaimedRewards.Any(id => !RewardIds.Contains(id) && !(id.StartsWith("permit:", StringComparison.Ordinal) && AcademyNodeContentCatalog.Events.Any(value => "permit:" + value.Id == id))))
+                run.ClaimedRewards.Any(id => !RewardIds.Contains(id)))
                 result.Add("rewards.claimed_invalid");
             if (!string.IsNullOrEmpty(run.EquippedWeaponId) && !run.ClaimedRewards.Contains(run.EquippedWeaponId)) result.Add("rewards.weapon_not_claimed");
             if (!string.IsNullOrEmpty(run.EquippedSpellId) && !run.ClaimedRewards.Contains(run.EquippedSpellId)) result.Add("rewards.spell_not_claimed");
             ValidatePendingState(run, result);
             ValidateInventory(run, result);
             return result;
+        }
+
+        private static void ValidateFirstRun(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            FirstRunExperienceState state = run.FirstRunExperience;
+            if (state == null) { result.Add("first_run.state_missing"); return; }
+            if (!string.Equals(state.ContentVersion, FirstRunExperienceCatalog.ContentVersion, StringComparison.Ordinal)) result.Add("first_run.version_unknown");
+
+            string[] expectedIds = { "O", "B1", "EV1", "EV2", "B2", "W", "EV3", "B3", "M", "X", "S" };
+            HashSet<string> ids = new HashSet<string>(state.Nodes.Select(value => value.Id), StringComparer.Ordinal);
+            if (state.Nodes.Count != expectedIds.Length || ids.Count != expectedIds.Length || expectedIds.Any(id => !ids.Contains(id))) result.Add("first_run.node_contract");
+            if (!ids.Contains(state.CurrentNodeId) || run.CurrentNodeId != state.CurrentNodeId) result.Add("first_run.current_node");
+            if (state.Nodes.Count(value => (value.Flags & FirstRunNodeFlags.Current) != 0) != 1 ||
+                state.Nodes.Any(value => ((value.Flags & FirstRunNodeFlags.Locked) != 0) == ((value.Flags & FirstRunNodeFlags.Reachable) != 0)))
+                result.Add("first_run.node_flags");
+            if (state.Nodes.Count(value => value.Type == FirstRunNodeType.Combat) != 3 ||
+                state.Nodes.Count(value => value.Type == FirstRunNodeType.Elite) != 1 ||
+                state.Nodes.Count(value => value.Type == FirstRunNodeType.Event) != 3 ||
+                state.Nodes.Any(value => value.Type.ToString() == "Boss")) result.Add("first_run.content_counts");
+
+            foreach (FirstRunNodeSnapshot node in state.Nodes)
+            {
+                if (node.NextIds.Any(next => !ids.Contains(next))) result.Add("first_run.edge_unknown");
+                if (node.NextIds.Any(next => !state.Node(next).NextIds.Contains(node.Id))) result.Add("first_run.edge_asymmetric");
+            }
+
+            if (state.RewardGroups.Count != 3 || state.RewardGroups.Any(group => group.CandidateIds.Count != 3 ||
+                group.CandidateIds.Distinct(StringComparer.Ordinal).Count() != 3 ||
+                (!string.IsNullOrEmpty(group.SelectedId) && !group.CandidateIds.Contains(group.SelectedId)) ||
+                group.Abandoned && !string.IsNullOrEmpty(group.SelectedId))) result.Add("first_run.reward_contract");
+            if (!string.IsNullOrEmpty(state.PendingRewardGroupId) && !state.RewardGroups.Any(value => value.Id == state.PendingRewardGroupId && string.IsNullOrEmpty(value.SelectedId)))
+                result.Add("first_run.pending_reward");
+            if (state.Events.Count != 3 || state.Events.Any(value => value.OptionIds.Count == 0 ||
+                (!string.IsNullOrEmpty(value.SelectedOptionId) && !value.OptionIds.Contains(value.SelectedOptionId)))) result.Add("first_run.event_contract");
+
+            string[][] pairs = { new[] { "MECHANIC-SLOT-A", "MECHANIC-SLOT-B" }, new[] { "MECHANIC-SLOT-B", "MECHANIC-SLOT-C" }, new[] { "MECHANIC-SLOT-A", "MECHANIC-SLOT-C" } };
+            string[] battles = { "B1", "B2", "B3" };
+            if (state.Encounters.Count != 4 || battles.Concat(new[] { "X" }).Any(id => state.EncounterForNode(id) == null)) result.Add("first_run.encounter_coverage");
+            for (int index = 0; index < battles.Length; index++)
+            {
+                FirstRunEncounterSnapshot encounter = state.EncounterForNode(battles[index]);
+                if (encounter == null) continue;
+                bool formalB1 = index == 0 && encounter.LevelSlotId == RainLanternCourtRuntime.LevelId &&
+                    encounter.MechanicSlotIds.SequenceEqual(new[] { "FIRST-B1-WATER", "FIRST-B1-LAMP_VINE", "FIRST-B1-ORIGIN" });
+                bool formalB2 = index == 1 && encounter.LevelSlotId == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id &&
+                    encounter.MechanicSlotIds.SequenceEqual(new[] { "FIRST-B2-LAMP_VINE", "FIRST-B2-AETHER_CRYSTAL", "FIRST-B2-CRYSTAL_SHARD" });
+                bool formalB3 = index == 2 && encounter.LevelSlotId == FirstRegionLevelCatalog.RainPrismCourt.Id &&
+                    encounter.MechanicSlotIds.SequenceEqual(new[] { "FIRST-B3-WATER", "FIRST-B3-SEALED-CRYSTAL", "FIRST-B3-BURNING" });
+                if ((!formalB1 && !formalB2 && !formalB3 && !pairs[index].SequenceEqual(encounter.MechanicSlotIds)) || encounter.IdealRouteIds.Count < 3)
+                    result.Add("first_run.mechanic_route_contract");
+                if (index > 0 && encounter.BuildFeedbackTags.Count == 0) result.Add("first_run.build_feedback_missing");
+            }
+            if (state.Encounters.Any(value => string.IsNullOrEmpty(value.LevelSlotId) || string.IsNullOrEmpty(value.EnemyScriptId) ||
+                string.IsNullOrEmpty(value.DropSlotId) || string.IsNullOrEmpty(value.DialogueSetId))) result.Add("first_run.content_slot_missing");
+            FirstRunEncounterSnapshot elite = state.EncounterForNode("X");
+            if (elite == null || elite.LevelSlotId != FirstRegionLevelCatalog.ThreeMaterialPressure.Id ||
+                !elite.MechanicSlotIds.SequenceEqual(new[] { "FIRST-X-WATER", "FIRST-X-LAMP-VINE", "FIRST-X-CRYSTAL", "FIRST-X-VENT" }))
+                result.Add("first_run.elite_contract");
+
+            if (state.Medical.MealCandidateIds.Count != 3 || state.Shop.Offers.Count != 3 ||
+                state.Shop.Offers.Any(value => value.Price < 0 || string.IsNullOrEmpty(value.DefinitionId))) result.Add("first_run.service_contract");
+            if (state.Shop.Opened && ((!state.EliteRewardClaimed && !state.EliteRewardAbandoned) || state.Outcome != FirstRunOutcome.EliteVictory)) result.Add("first_run.shop_gate");
+            if (state.RunSealed != (state.Outcome == FirstRunOutcome.EliteDefeat) || state.RunSealed && state.Shop.Opened) result.Add("first_run.terminal_state");
+            if (run.EncounterAssignments.Count != 0 || run.NodeContentAssignments.Count != 0) result.Add("first_run.legacy_assignments");
+            if (run.CurrentHealth < 0 || run.CurrentHealth > 18 || run.CurrentMana < 0 || run.CurrentMana > 12 || run.CurrentShield < 0 || run.CurrentShield > 6)
+                result.Add("combat.snapshot_out_of_range");
+            if (state.RunSealed ? run.CurrentHealth != 0 : run.CurrentHealth <= 0) result.Add("first_run.health_state");
         }
 
         private static void ValidatePendingState(RogueliteMapRun run, RogueliteMapRunValidationResult result)
@@ -163,7 +238,7 @@ namespace OCC.Combat
                 if (!placement.HasValue || !run.Inventory.CanPlace(item, placement.Value.X, placement.Value.Y, item.InstanceId, placement.Value.Rotated).Success) result.Add("inventory.placement_invalid");
             }
 
-            if (run.ItemQuickbar == null || run.ItemQuickbar.Length != 8) { result.Add("quickbar.slot_count"); return; }
+            if (run.ItemQuickbar == null || run.ItemQuickbar.Length != OCC.Combat.Roguelite.RogueRuntimeConstants.ItemQuickbarSize) { result.Add("quickbar.slot_count"); return; }
             string[] equipped = run.ItemQuickbar.Where(id => !string.IsNullOrEmpty(id)).ToArray();
             if (equipped.Distinct(StringComparer.Ordinal).Count() != equipped.Length) result.Add("quickbar.duplicate_reference");
             int special = 0;
@@ -214,7 +289,7 @@ namespace OCC.Combat
 
         private static void ValidateNodeContents(RogueliteMapRun run, RogueliteMapRunValidationResult result)
         {
-            RogueliteMapNode[] eventNodes = RogueliteMapCatalog.Nodes.Where(node => node.Type == RogueliteMapNodeType.Event).ToArray();
+            RogueliteMapNode[] eventNodes = RogueliteMapCatalog.Nodes.Where(node => node.Type == RogueliteMapNodeType.Event && node.Id != "core_vault" && node.Id != "tower_lift").ToArray();
             if (run.NodeContentAssignments.Count != eventNodes.Length || eventNodes.Any(node => !run.NodeContentAssignments.ContainsKey(node.Id)))
             { result.Add("content.event_coverage"); return; }
             if (run.NodeContentAssignments.Values.Distinct(StringComparer.Ordinal).Count() != run.NodeContentAssignments.Count)
@@ -255,7 +330,7 @@ namespace OCC.Combat
                 if (TryInt(parts[24], out int next) && (next < 0 || next <= maxOrder)) result.Add("inventory.sequence_invalid");
 
                 string[] slots = parts[23].Split(',');
-                if (slots.Length != 8) result.Add("quickbar.slot_count");
+                if (slots.Length != OCC.Combat.Roguelite.RogueRuntimeConstants.ItemQuickbarSize) result.Add("quickbar.slot_count");
                 string[] references = slots.Where(id => !string.IsNullOrEmpty(id)).ToArray();
                 if (references.Distinct(StringComparer.Ordinal).Count() != references.Length) result.Add("quickbar.duplicate_reference");
                 if (references.Any(id => !instanceIds.Contains(id))) result.Add("quickbar.missing_reference");

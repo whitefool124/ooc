@@ -9,22 +9,21 @@ namespace OCC.Combat.Tests
     {
         private static readonly string[] VerifiedRoute =
         {
-            "supply_checkpoint", "field_workshop", "permit_archive", "sparring_ring", "supply_depot", "wilds_camp",
+            "supply_checkpoint", "field_workshop", "records_archive", "sparring_ring", "supply_depot", "wilds_camp",
             "observatory_path", "core_vault", "safety_room", "sealed_market", "gatehouse", "aether_refinery"
         };
 
         [Test]
-        public void AcademyFinale_RequiresBothPublishedThresholdsAndExplainsTheGap()
+        public void AcademyFinale_RequiresCompletedNodesAndExplainsTheGap()
         {
             RogueliteMapRun run = new RogueliteMapRun(1400);
             ProcessRoute(run, VerifiedRoute.Take(8));
 
             Assert.That(run.AcademyProgress, Is.EqualTo(8));
-            Assert.That(run.CorePermits, Is.GreaterThanOrEqualTo(2));
             Assert.That(run.IsNodeAvailable("core_finale"), Is.False);
             Assert.That(run.VisualStateFor("core_finale"), Is.EqualTo(RogueliteMapNodeVisualState.Locked));
             Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")),
-                Is.EqualTo("还不能参加终考：再完成 4 个地点，并拿到 0 枚核心许可"));
+                Is.EqualTo("还不能参加终考：再完成 4 个地点"));
 
             ProcessRoute(run, VerifiedRoute.Skip(8));
             run.SelectNode("core_vault");
@@ -36,22 +35,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void AcademyFinale_RemainsLockedAtEnoughProgressWithOnlyOneCorePermit()
+        public void AcademyFinale_OpensAtEnoughCompletedProgressWithoutAnItemRequirement()
         {
             RogueliteMapRun run = new RogueliteMapRun(1401);
             ProcessRoute(run, new[]
             {
-                "supply_checkpoint", "field_workshop", "permit_archive", "med_bay", "relay_event", "switchyard",
+                "supply_checkpoint", "field_workshop", "records_archive", "med_bay", "relay_event", "switchyard",
                 "signal_hub", "elite_foundry", "transmission_tower", "aether_refinery", "gatehouse", "sealed_market"
             });
             run.SelectNode("aether_refinery");
             run.SelectNode("core_vault");
 
             Assert.That(run.AcademyProgress, Is.GreaterThanOrEqualTo(AcademyMapTuning.BossMinimumProgress));
-            Assert.That(run.CorePermits, Is.EqualTo(1));
-            Assert.That(run.IsNodeAvailable("core_finale"), Is.False);
+            Assert.That(run.IsNodeAvailable("core_finale"), Is.True);
             Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, RogueliteMapCatalog.Node("core_finale")),
-                Is.EqualTo("还不能参加终考：再完成 0 个地点，并拿到 1 枚核心许可"));
+                Is.EqualTo("可以直接前往"));
         }
 
         [Test]
@@ -59,8 +57,8 @@ namespace OCC.Combat.Tests
         {
             string[][] routes =
             {
-                new[] { "start", "supply_checkpoint", "field_workshop", "permit_archive", "sparring_ring", "supply_depot", "wilds_camp", "observatory_path", "core_vault", "safety_room", "sealed_market", "gatehouse", "aether_refinery", "core_vault", "core_finale" },
-                new[] { "start", "supply_checkpoint", "field_workshop", "permit_archive", "med_bay", "relay_event", "gatehouse", "sealed_market", "safety_room", "aether_refinery", "core_vault", "observatory_path", "tower_foyer", "core_finale" },
+                new[] { "start", "supply_checkpoint", "field_workshop", "records_archive", "sparring_ring", "supply_depot", "wilds_camp", "observatory_path", "core_vault", "safety_room", "sealed_market", "gatehouse", "aether_refinery", "core_vault", "core_finale" },
+                new[] { "start", "supply_checkpoint", "field_workshop", "records_archive", "med_bay", "relay_event", "gatehouse", "sealed_market", "safety_room", "aether_refinery", "core_vault", "observatory_path", "tower_foyer", "core_finale" },
                 new[] { "start", "tutorial_hall", "dorm_watch", "market_lane", "field_infirmary", "study_vault", "sparring_ring", "supply_depot", "wilds_camp", "observatory_path", "wilds_camp", "tower_records", "tower_lift", "tower_foyer", "core_finale" }
             };
 
@@ -68,7 +66,6 @@ namespace OCC.Combat.Tests
             {
                 AssertConnected(route);
                 Assert.That(route.Distinct(StringComparer.Ordinal).Count() - 1, Is.LessThanOrEqualTo(AcademyMapTuning.ExpectedBossProgress));
-                Assert.That(route.Take(route.Length - 1).Select(RogueliteMapCatalog.Node).Count(node => node.GrantedAccessCards > 0), Is.GreaterThanOrEqualTo(2));
                 Assert.That(route.Take(route.Length - 1).Distinct(StringComparer.Ordinal).Count() - 1, Is.GreaterThanOrEqualTo(AcademyMapTuning.BossMinimumProgress));
             }
         }
@@ -83,7 +80,6 @@ namespace OCC.Combat.Tests
                 run.SelectNode("core_vault");
 
                 Assert.That(run.AcademyProgress, Is.EqualTo(AcademyMapTuning.BossMinimumProgress), "seed " + seed);
-                Assert.That(run.CorePermits, Is.GreaterThanOrEqualTo(AcademyMapTuning.CorePermitRequirement), "seed " + seed);
                 Assert.That(run.IsNodeAvailable("core_finale"), Is.True, "seed " + seed);
                 Assert.That(RogueliteMapRun.FromJson(run.ToJson()).IsNodeAvailable("core_finale"), Is.True, "round trip seed " + seed);
             }

@@ -15,14 +15,31 @@ namespace OCC.Combat
     public sealed class EnemyTurnPlanBook
     {
         private readonly Dictionary<string, CombatCommand> commands = new Dictionary<string, CombatCommand>(StringComparer.Ordinal);
-        public EnemyIntentPresentation GetPublicIntent(CombatState state, UnitState enemy, UnitState hero) =>
-            state == null || enemy == null || hero == null ? null : CombatInformationPresenter.BuildEnemyIntent(state, enemy, GetOrCreate(state, enemy, hero));
+        public EnemyIntentPresentation GetPublicIntent(CombatState state, UnitState enemy, UnitState hero)
+        {
+            if (state == null || enemy == null || hero == null) return null;
+            CombatCommand command = GetOrCreate(state, enemy, hero);
+            if (state.RainLanternCourt != null) return state.RainLanternCourt.PresentIntent(state, enemy, command);
+            if (state.GreenhouseCollectionRoom != null) return state.GreenhouseCollectionRoom.PresentIntent(state, enemy, command);
+            if (state.ThreeMaterialPressure != null) return state.ThreeMaterialPressure.PresentIntent(state, enemy, command);
+            return CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+        }
         public CombatCommand GetExecutionCommand(CombatState state, UnitState enemy, UnitState hero) => GetOrCreate(state, enemy, hero);
         public void Invalidate() => commands.Clear();
         public bool HasPlanFor(string enemyId) => !string.IsNullOrEmpty(enemyId) && commands.ContainsKey(enemyId);
         private CombatCommand GetOrCreate(CombatState state, UnitState enemy, UnitState hero)
         {
-            if (!commands.TryGetValue(enemy.Id, out CombatCommand command)) { command = EnemyTactics.Choose(state, enemy, hero); commands.Add(enemy.Id, command); }
+            if (!commands.TryGetValue(enemy.Id, out CombatCommand command))
+            {
+                command = state.RainLanternCourt != null
+                    ? state.RainLanternCourt.ChooseEnemyCommand(state, enemy, hero)
+                    : state.GreenhouseCollectionRoom != null
+                        ? state.GreenhouseCollectionRoom.ChooseEnemyCommand(state, enemy, hero)
+                        : state.ThreeMaterialPressure != null
+                            ? state.ThreeMaterialPressure.ChooseEnemyCommand(state, enemy, hero)
+                        : EnemyTactics.Choose(state, enemy, hero);
+                commands.Add(enemy.Id, command);
+            }
             return command;
         }
     }

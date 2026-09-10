@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job finished.\",\"data\":{\"jobId\":\"d6f5e047-bc48-4465-b882-212e66e5aee9\",\"status\":\"finished\",\"mode\":\"EditMode\",\"startedAt\":\"2026-09-05 19:49:28\",\"lastActivityAt\":\"2026-09-05 19:49:35\",\"testsCompleted\":35,\"hasFilters\":true,\"finishedAt\":\"2026-09-05 19:49:35\",\"resultState\":\"Passed\",\"passCount\":35,\"failCount\":0,\"skipCount\":0,\"inconclusiveCount\":0,\"totalTests\":35,\"durationSeconds\":1.62,\"failures\":[]}}"
+    }
+  ]
+}

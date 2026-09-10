@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"decisionLabel text=左键：双击空地：快捷移动|移动 · 可执行 · 选择 … rect=(16.00, -40.00) size=(380.00, 72.00) parent=(x:0.00, y:-96.00, width:416.00, height:96.00) glyphY=-99:-40 lines=2 font=FusionPixel12ProportionalZhHans\\neventLabel text=▶ 阿斯特拉 开始行动（3 行动点）。 rect=(16.00, -40.00) size=(380.00, 72.00) parent=(x:0.00, y:-96.00, width:416.00, height:96.00) glyphY=-94:-40 lines=2 font=SimHei\\nmodeLabel text=当前模式 · 移动 rect=(16.00, -4.00) size=(224.00, 40.00) parent=(x:0.00, y:-96.00, width:416.00, height:96.00) glyphY=-36:-12 lines=1 font=FusionPixel12ProportionalZhHans\\nactiveLabel text=行动点 3 rect=(242.00, -4.00) size=(154.00, 40.00) parent=(x:0.00, y:-96.00, width:416.00, height:96.00) glyphY=-36:-12 lines=1 font=FusionPixel12ProportionalZhHans\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

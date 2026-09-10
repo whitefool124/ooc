@@ -35,16 +35,27 @@ namespace OCC.Combat
         public GridPosition Cell { get; }
         public int Applied { get; }
         public string Detail { get; }
-        public ArtifactStep(int sequence, ArtifactEffectKind kind, string targetId, GridPosition cell, int applied, string detail)
-        { Sequence = sequence; Kind = kind; TargetId = targetId; Cell = cell; Applied = applied; Detail = detail; }
+        public IReadOnlyList<CombatFeedbackEvent> Feedback { get; }
+        public bool HasResolvedFeedback { get; }
+        public ArtifactStep(int sequence, ArtifactEffectKind kind, string targetId, GridPosition cell, int applied, string detail,
+            IEnumerable<CombatFeedbackEvent> feedback = null)
+        {
+            Sequence = sequence; Kind = kind; TargetId = targetId; Cell = cell; Applied = applied; Detail = detail;
+            HasResolvedFeedback = feedback != null;
+            Feedback = Array.AsReadOnly((feedback ?? Array.Empty<CombatFeedbackEvent>()).ToArray());
+        }
         public override string ToString() => Sequence + ":" + Kind + ":" + (TargetId ?? "-") + ":" + Cell + ":" + Applied + ":" + Detail;
     }
 
     public sealed class ArtifactExecution
     {
         public IReadOnlyList<ArtifactStep> Steps { get; }
+        public string SourceUnitId { get; }
+        public GridPosition SourcePosition { get; }
+        public bool IsTriggered { get; }
         public string Signature => string.Join("|", Steps.Select(step => step.ToString()));
-        internal ArtifactExecution(IEnumerable<ArtifactStep> steps) { Steps = steps.ToArray(); }
+        internal ArtifactExecution(IEnumerable<ArtifactStep> steps, string sourceUnitId = null, GridPosition sourcePosition = default, bool isTriggered = false)
+        { Steps = steps.ToArray(); SourceUnitId = sourceUnitId; SourcePosition = sourcePosition; IsTriggered = isTriggered; }
     }
 
     public sealed class ArtifactBattleState
@@ -55,6 +66,9 @@ namespace OCC.Combat
         internal readonly Dictionary<string, ArtifactReaction> Reactions = new Dictionary<string, ArtifactReaction>(StringComparer.Ordinal);
         internal readonly Dictionary<GridPosition, int> Firegrounds = new Dictionary<GridPosition, int>();
         internal readonly Dictionary<GridPosition, int> Decoys = new Dictionary<GridPosition, int>();
+        private readonly List<ArtifactExecution> resolvedReactions = new List<ArtifactExecution>();
+        public IReadOnlyList<ArtifactExecution> TakeResolvedReactions()
+        { var results = resolvedReactions.ToArray(); resolvedReactions.Clear(); return results; }
         public CombatState Combat { get; }
         public ArtifactBattleState(CombatState combat)
         {
@@ -88,18 +102,24 @@ namespace OCC.Combat
             if (!Reactions.TryGetValue(ownerId, out ArtifactReaction reaction) || reaction.Trigger != ArtifactReactionTrigger.EnemyEnterMarkedCell) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             UnitState owner = Combat.GetUnit(ownerId), enemy = Combat.GetUnit(enemyId);
             if (owner == null || enemy == null || enemy.Position != reaction.MarkedCell || owner.IsHero == enemy.IsHero) return new ArtifactExecution(Array.Empty<ArtifactStep>());
+            var feedback = new ArtifactFeedbackCapture(owner, enemy); GridPosition source = owner.Position;
             Reactions.Remove(ownerId); int before = enemy.Health + enemy.Shield; Damage(enemy, reaction.Amount);
             GridPosition pushed = StepAway(owner.Position, enemy.Position, Combat, enemy.Id);
-            if (pushed != enemy.Position) enemy.MoveTo(pushed, enemy.Facing);
-            return new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, enemy.Id, enemy.Position, before - enemy.Health - enemy.Shield, "marked_cell_intercept_push") });
+            if (pushed != enemy.Position) enemy.MoveTo(pushed);
+            var execution = new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, enemy.Id, enemy.Position,
+                before - enemy.Health - enemy.Shield, "marked_cell_intercept_push", feedback.Finish(ArtifactEffectKind.ArmReaction)) }, owner.Id, source, true);
+            resolvedReactions.Add(execution); return execution;
         }
         public ArtifactExecution ResolveIncomingRangedHit(string ownerId, string attackerId, int incomingDamage)
         {
             if (!Reactions.TryGetValue(ownerId, out ArtifactReaction reaction) || reaction.Trigger != ArtifactReactionTrigger.IncomingRangedDamage) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             UnitState owner = Combat.GetUnit(ownerId), attacker = Combat.GetUnit(attackerId); if (owner == null || attacker == null) return new ArtifactExecution(Array.Empty<ArtifactStep>());
+            var feedback = new ArtifactFeedbackCapture(owner, owner, attacker); GridPosition source = owner.Position;
             Reactions.Remove(ownerId); int prevented = Math.Min(incomingDamage, reaction.Amount); owner.GrantShield(prevented); Damage(attacker, reaction.Duration);
             Combat.AddLog("棱返调节器抵消 " + prevented + " 远程伤害，并向攻击者返还 " + reaction.Duration + " 伤害。");
-            return new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, attacker.Id, attacker.Position, prevented, "ranged_reflect") });
+            var execution = new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, attacker.Id, attacker.Position,
+                prevented, "ranged_reflect", feedback.Finish(ArtifactEffectKind.ArmReaction)) }, owner.Id, source, true);
+            resolvedReactions.Add(execution); return execution;
         }
         internal static void Damage(UnitState unit, int amount) { int shield = unit.AbsorbShield(amount); unit.TakeDamage(Math.Max(0, amount - shield)); }
         internal static int Distance(GridPosition a, GridPosition b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
@@ -130,6 +150,7 @@ namespace OCC.Combat
         {
             if (battle == null || artifact == null) throw new ArgumentNullException();
             List<string> failures = new List<string>(); CombatState combat = battle.Combat; UnitState source = combat.GetUnit(sourceId);
+            if (!ArtifactCatalog.IsCurrentlyUsable(artifact.Id)) failures.Add("该法宝使用已停用，等待内容重写");
             if (source == null || !source.IsAlive) failures.Add("施术者不存在或已失去行动能力");
             else { if (source.ActionPoints < artifact.ActionPointCost) failures.Add("行动点不足"); if (source.Mana < artifact.ManaCost) failures.Add("个人魔力不足"); }
             if (remainingUses <= 0) failures.Add("法宝次数已耗尽");
@@ -169,6 +190,7 @@ namespace OCC.Combat
             ArtifactPreview preview = Preview(battle, sourceId, artifact, target, remainingUses); if (!preview.CanCommit) throw new InvalidOperationException(string.Join("；", preview.Failures));
             UnitState source = battle.Combat.GetUnit(sourceId), primary = string.IsNullOrEmpty(target.UnitId) ? battle.Combat.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == target.Cell) : battle.Combat.GetUnit(target.UnitId);
             UnitState secondary = string.IsNullOrEmpty(target.SecondaryUnitId) ? null : battle.Combat.GetUnit(target.SecondaryUnitId);
+            GridPosition sourcePosition = source.Position;
             source.SpendActionPoint(artifact.ActionPointCost); if (artifact.ManaCost > 0) source.SpendMana(artifact.ManaCost);
             List<ArtifactStep> steps = new List<ArtifactStep>(); int sequence = 0;
             foreach (ArtifactEffectDefinition effect in artifact.Effects)
@@ -176,9 +198,9 @@ namespace OCC.Combat
                 IEnumerable<UnitState> targets = Targets(battle.Combat, source, primary, secondary, preview.Cells, effect);
                 if (effect.Kind == ArtifactEffectKind.MoveSource || effect.Kind == ArtifactEffectKind.CreateLightCover || effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover || effect.Kind == ArtifactEffectKind.CreateFireground || effect.Kind == ArtifactEffectKind.ClearFireground || effect.Kind == ArtifactEffectKind.DeployDecoy)
                 { ApplyCellEffect(battle, source, artifact, target.Cell, preview.Cells, effect, steps, ref sequence); continue; }
-                foreach (UnitState unit in targets) ApplyUnitEffect(battle, source, unit, secondary, effect, target.Cell, steps, ref sequence);
+                foreach (UnitState unit in targets) ApplyUnitEffect(battle, source, unit, primary, secondary, effect, target.Cell, steps, ref sequence);
             }
-            battle.Combat.AddLog(artifact.DisplayName + "已经生效。"); battle.Combat.EvaluateOutcome(); return new ArtifactExecution(steps);
+            battle.Combat.AddLog(artifact.DisplayName + "已经生效。"); battle.Combat.EvaluateOutcome(); return new ArtifactExecution(steps, source.Id, sourcePosition);
         }
 
         private static void ValidateTarget(ArtifactBattleState battle, UnitState source, ArtifactDefinition artifact, ArtifactTarget target, UnitState primary, List<string> failures)
@@ -242,9 +264,11 @@ namespace OCC.Combat
             return primary == null ? Array.Empty<UnitState>() : new[] { primary };
         }
 
-        private static void ApplyUnitEffect(ArtifactBattleState battle, UnitState source, UnitState target, UnitState secondary, ArtifactEffectDefinition effect, GridPosition cell, List<ArtifactStep> steps, ref int sequence)
+        private static void ApplyUnitEffect(ArtifactBattleState battle, UnitState source, UnitState target, UnitState primary, UnitState secondary, ArtifactEffectDefinition effect, GridPosition cell, List<ArtifactStep> steps, ref int sequence)
         {
             bool heavy = target.EffectiveArmor >= 3; if (effect.Condition == ArtifactEffectCondition.TargetHeavy && !heavy || effect.Condition == ArtifactEffectCondition.TargetLightweight && heavy) return;
+            if (effect.Condition == ArtifactEffectCondition.TargetSurvives && primary?.IsAlive != true) return;
+            var capture = new ArtifactFeedbackCapture(source, source, target);
             int before = 0, after = 0;
             switch (effect.Kind)
             {
@@ -258,10 +282,10 @@ namespace OCC.Combat
                 case ArtifactEffectKind.ClearNegativeStatuses: before = NegativeStatuses.Count(target.HasStatus); foreach (StatusType status in NegativeStatuses) target.ClearStatus(status); after = 0; break;
                 case ArtifactEffectKind.ForceMoveTarget:
                     if (battle.TryPreventForcedMove(target.Id)) { before = after = 0; break; }
-                    GridPosition destination = StepToward(source.Position, target.Position, effect.Amount, battle.Combat, target.Id); if (destination != target.Position) { before = ArtifactBattleState.Distance(source.Position, target.Position); target.MoveTo(destination, target.Facing); after = ArtifactBattleState.Distance(source.Position, target.Position); } break;
+                    GridPosition destination = StepToward(source.Position, target.Position, effect.Amount, battle.Combat, target.Id); if (destination != target.Position) { before = ArtifactBattleState.Distance(source.Position, target.Position); target.MoveTo(destination); after = ArtifactBattleState.Distance(source.Position, target.Position); } break;
                 case ArtifactEffectKind.Reveal: before = target.StatusDuration(StatusType.Revealed); target.ApplyStatus(StatusType.Revealed, effect.Duration); after = target.StatusDuration(StatusType.Revealed); break;
                 case ArtifactEffectKind.GrantLightCoverBypass: before = 0; after = effect.Amount; break;
-                case ArtifactEffectKind.DelayInitiative: before = target.InitiativeTime; target.SetInitiativeTime(target.InitiativeTime + effect.Amount); after = target.InitiativeTime; break;
+                case ArtifactEffectKind.DelayInitiative: before = target.ActionValue; target.ChangeActionValue(-effect.Amount); after = target.ActionValue; break;
                 case ArtifactEffectKind.TransferShield:
                     UnitState partner = target; int total = source.Shield + partner.Shield; int sourceShare = total / 2; if ((total & 1) == 1 && source.Shield >= partner.Shield) sourceShare++;
                     int partnerShare = total - sourceShare; before = Math.Abs(source.Shield - partner.Shield); source.AbsorbShield(source.Shield); partner.AbsorbShield(partner.Shield); source.GrantShield(sourceShare); partner.GrantShield(partnerShare); after = Math.Abs(source.Shield - partner.Shield); break;
@@ -269,25 +293,59 @@ namespace OCC.Combat
                 case ArtifactEffectKind.ArmAnchor: battle.Anchored.Add(source.Id); source.LimitMovementRangeForTurn(1); after = 1; break;
                 case ArtifactEffectKind.GrantActionPoints: before = source.ActionPoints; source.GrantActionPoints(effect.Amount); after = source.ActionPoints; break;
                 case ArtifactEffectKind.ReserveResources: battle.ReservedAp[source.Id] = effect.Amount; battle.ReservedMana[source.Id] = effect.Duration; after = effect.Amount; break;
-                case ArtifactEffectKind.BacklashIfTargetSurvives: if (target.IsAlive) { before = source.Health + source.Shield; ArtifactBattleState.Damage(source, effect.Amount); after = source.Health + source.Shield; } break;
+                case ArtifactEffectKind.BacklashIfTargetSurvives: if (primary?.IsAlive == true) { before = source.Health; source.TakeDamage(effect.Amount); after = source.Health; } break;
                 default: return;
             }
-            steps.Add(new ArtifactStep(sequence++, effect.Kind, target.Id, target.Position, Math.Abs(after - before), effect.Condition.ToString()));
+            var feedback = capture.Finish(effect.Kind);
+            string utility = null;
+            if (after != before)
+            {
+                if (effect.Kind == ArtifactEffectKind.ArmReaction) utility = "反应已就绪";
+                else if (effect.Kind == ArtifactEffectKind.ArmAnchor) utility = "锚定已就绪";
+                else if (effect.Kind == ArtifactEffectKind.ReserveResources) utility = "资源已储备";
+                else if (effect.Kind == ArtifactEffectKind.GrantActionPoints) utility = "行动 +" + (after - before);
+                else if (effect.Kind == ArtifactEffectKind.DelayInitiative) utility = "行动延后 " + (before - after);
+            }
+            if (utility != null) feedback.Add(ArtifactFeedbackCapture.Utility(source, target, target.Position, utility));
+            steps.Add(new ArtifactStep(sequence++, effect.Kind, target.Id, target.Position, Math.Abs(after - before), effect.Condition.ToString(), feedback));
         }
 
         private static void ApplyCellEffect(ArtifactBattleState battle, UnitState source, ArtifactDefinition artifact, GridPosition cell, IReadOnlyList<GridPosition> selection, ArtifactEffectDefinition effect, List<ArtifactStep> steps, ref int sequence)
         {
-            if (effect.Kind == ArtifactEffectKind.MoveSource) { GridPosition before = source.Position; source.MoveTo(cell, source.Facing); steps.Add(new ArtifactStep(sequence++, effect.Kind, source.Id, cell, ArtifactBattleState.Distance(before, cell), "move")); return; }
+            if (effect.Kind == ArtifactEffectKind.MoveSource)
+            {
+                var capture = new ArtifactFeedbackCapture(source, source); GridPosition before = source.Position;
+                source.MoveTo(cell);
+                steps.Add(new ArtifactStep(sequence++, effect.Kind, source.Id, cell, ArtifactBattleState.Distance(before, cell), "move", capture.Finish(effect.Kind))); return;
+            }
             foreach (GridPosition position in effect.Scope == ArtifactEffectScope.Selection ? selection : new[] { cell })
             {
-                TileState tile = battle.Combat.Map.GetTile(position); int applied = 0;
+                TileState tile = battle.Combat.Map.GetTile(position); int applied = 0; int durabilityBefore = tile.Durability;
                 if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DamageObject) { tile.Durability = Math.Max(0, tile.Durability - effect.Amount); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DestroyLightCover && tile.Cover == CoverType.Light) { applied = tile.Durability; tile.Durability = 0; }
                 else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.Firegrounds[position] = effect.Duration; applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.ClearFireground) { applied = battle.Firegrounds.Remove(position) ? 1 : 0; }
                 else if (effect.Kind == ArtifactEffectKind.DeployDecoy) { battle.Decoys[position] = effect.Amount; applied = effect.Amount; }
-                steps.Add(new ArtifactStep(sequence++, effect.Kind, null, position, applied, artifact.VfxSemantic));
+                if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)
+                    battle.Combat.ResolveAetherCrystalDamage(position, durabilityBefore);
+                var feedback = new List<CombatFeedbackEvent>();
+                if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)
+                {
+                    int lost = Math.Max(0, durabilityBefore - battle.Combat.Map.GetTile(position).Durability);
+                    if (lost > 0) feedback.Add(new CombatFeedbackEvent(battle.Combat.Map.GetTile(position).IsDestroyed
+                        ? CombatFeedbackKind.DestructibleDestroyed : CombatFeedbackKind.DestructibleDamaged,
+                        source.Position, position, lost, sourceUnitId: source.Id));
+                }
+                else if (applied > 0)
+                {
+                    string message = effect.Kind == ArtifactEffectKind.CreateLightCover ? "掩体已建立" :
+                        effect.Kind == ArtifactEffectKind.CreateFireground ? "火场已生成" :
+                        effect.Kind == ArtifactEffectKind.ClearFireground ? "火场已清除" :
+                        effect.Kind == ArtifactEffectKind.DeployDecoy ? "诱导灯已部署" : null;
+                    if (message != null) feedback.Add(ArtifactFeedbackCapture.Utility(source, null, position, message));
+                }
+                steps.Add(new ArtifactStep(sequence++, effect.Kind, null, position, applied, artifact.VfxSemantic, feedback));
             }
         }
 

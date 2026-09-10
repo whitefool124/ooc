@@ -40,14 +40,13 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void CalibrateAether_ReportsTwoAetherSpent()
+        public void LegacyGlobalArmorCalibration_IsRetired()
         {
             RogueliteMapRun run = new RogueliteMapRun(403, FireRogueliteStarterCatalog.Universal);
 
-            RogueliteMapInteractionResult result = service.CalibrateAether(run);
-
-            Assert.That(result.ResourcesBefore.Aether - result.ResourcesAfter.Aether, Is.EqualTo(2));
-            Assert.That(run.IsAetherCalibrated, Is.True);
+            Assert.Throws<System.InvalidOperationException>(() => service.CalibrateAether(run));
+            Assert.That(run.Aether, Is.EqualTo(2));
+            Assert.That(run.IsAetherCalibrated, Is.False);
         }
 
         [Test]

@@ -240,6 +240,7 @@ namespace OCC.Combat.Presentation
                 case UiConfirmationKind.ReplaceExistingRun: return "旧旅程会被替换";
                 case UiConfirmationKind.TacticalRestart: return "这场战斗会从头开始";
                 case UiConfirmationKind.LeaveCombat: return "这场战斗不会留下收获";
+                case UiConfirmationKind.AbandonReward: return "本次奖励将不会获得";
                 default: return "再确认一次";
             }
         }

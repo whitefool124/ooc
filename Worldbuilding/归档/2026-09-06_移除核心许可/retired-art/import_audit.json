@@ -1,0 +1,33 @@
+{
+  "schema": "occ-element-resource-import-audit-v1",
+  "passed": 24,
+  "total": 24,
+  "unique_guids": 24,
+  "importer": "Sprite/Single, Point, Clamp, no mipmaps, PPU 32, Uncompressed",
+  "rows": [
+    {"domain":"element","stem":"fire","guid":"e50a784e28eb72a47ad9ca2538782d2a","pass":true},
+    {"domain":"element","stem":"water","guid":"77037059ed5ef9e4ebf0fc7c771e1c92","pass":true},
+    {"domain":"element","stem":"wind","guid":"41a31554d57d9b5458284d3e4da2dce7","pass":true},
+    {"domain":"element","stem":"earth","guid":"39aa995901e8e864cbc37890686cd981","pass":true},
+    {"domain":"element","stem":"lightning","guid":"3c05c02b18817cc4ab1dde3429166017","pass":true},
+    {"domain":"element","stem":"ice","guid":"d42e4fc4aecdd4243b2ac14b53407752","pass":true},
+    {"domain":"element","stem":"light","guid":"76a736ede21673b4993f85608ca6bf2e","pass":true},
+    {"domain":"element","stem":"dark","guid":"7aa16260bc6952046af236f9e898a125","pass":true},
+    {"domain":"resource","stem":"action_point","guid":"7c4fd854ceda40343b7f511b1429b2ab","pass":true},
+    {"domain":"resource","stem":"aether_load","guid":"f81d94b858be9694e8585faa59fb77b3","pass":true},
+    {"domain":"resource","stem":"charges","guid":"0061a9e8620ee1347913e15672b056a0","pass":true},
+    {"domain":"resource","stem":"contribution","guid":"34693751f8145f3439fda481ab5cc72e","pass":true},
+    {"domain":"resource","stem":"core_permit","guid":"46fe86477bbb6de42b1d1eae46b89356","pass":true},
+    {"domain":"resource","stem":"explored","guid":"6ca8a3b7fb5cb7d42862dcf85ddfc54a","pass":true},
+    {"domain":"resource","stem":"gold","guid":"c8def6a01e16bad4aa3789dae9f2f5cc","pass":true},
+    {"domain":"resource","stem":"health","guid":"e54d516998f16a346a9ac3ba128008ce","pass":true},
+    {"domain":"resource","stem":"mana","guid":"50930171355be854e8378d5f00b03021","pass":true},
+    {"domain":"resource","stem":"notice","guid":"1a01780b313d0dd4b9ad365553492393","pass":true},
+    {"domain":"resource","stem":"operational_aether","guid":"cd30c0070ae8aab439ee5b01487ac10d","pass":true},
+    {"domain":"resource","stem":"parts","guid":"13c1f0e1633d4fe4ca60069ad4ae29fa","pass":true},
+    {"domain":"resource","stem":"risk","guid":"6dbf9898300e32b4987f9b2c4e9346b1","pass":true},
+    {"domain":"resource","stem":"shield","guid":"f75efff5272dd40499dad41297864b90","pass":true},
+    {"domain":"resource","stem":"stage_time","guid":"34ef7209dfae88244859bd132800203c","pass":true},
+    {"domain":"resource","stem":"weight","guid":"a57c2cafcfa9d5a4db58d17ece6d62f5","pass":true}
+  ]
+}

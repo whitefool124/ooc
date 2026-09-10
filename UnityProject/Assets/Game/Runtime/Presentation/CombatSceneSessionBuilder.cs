@@ -69,7 +69,7 @@ namespace OCC.Combat.Presentation
                     bool hero = marker.name.Contains("主角");
                     if (!hero && encounter != null && enemyIndex >= encounter.EnemyArchetypeIds.Count) continue;
                     UnitState unit = new UnitState(hero ? "hero" : "enemy_" + enemyIndex, hero,
-                        ScenePosition(marker), hero ? Facing.East : Facing.West);
+                        ScenePosition(marker));
                     if (hero)
                     {
                         unit.DisplayName = "阿斯特拉";
@@ -100,8 +100,12 @@ namespace OCC.Combat.Presentation
                 foreach (UnitState enemy in state.Units.Values.Where(unit => !unit.IsHero)) academyContent.ApplyEnemyBaseline(state, enemy);
                 string[] mastered = new[] { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER" }
                     .Concat(mapRun.OwnedFireSpellIds).Distinct(StringComparer.Ordinal).ToArray();
+                if (mapRun.IsFirstRunExperience && encounterId == "B1")
+                    mastered = mastered.Concat(new[] { RainLanternCourtRuntime.OriginSpellId }).Distinct(StringComparer.Ordinal).ToArray();
                 RogueSpellLoadout loadout = RogueSpellLoadout.Restore(mastered, mapRun.RogueEquippedSpellIds, true);
-                state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout));
+                string specializedSpellId = mapRun.IsFirstRunExperience && mapRun.FirstRunExperience.Workshop.SpecializationCompleted
+                    ? mapRun.FirstRunExperience.Workshop.SpecializedTargetId : string.Empty;
+                state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout, specializedSpellId));
                 state.AttachRogueEquipmentRuntime(mapRun.RogueRunState == null ? RogueEquipmentRuntime.CreateStarter(mapRun.Seed) : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState));
             }
             if (mapRun == null || !mapRun.UsesRogue11) ConfigureCombatInventory(state, mapRun, developerRun);
@@ -119,8 +123,7 @@ namespace OCC.Combat.Presentation
             LevelEnemyPlacement[] enemies = encounter.EnemyArchetypeIds.Select((archetypeId, index) =>
             {
                 GridPosition spawn = spawnPositions[index];
-                Facing facing = encounter.Layout == null ? level.EnemyPlacements[index].Facing : Facing.West;
-                return new LevelEnemyPlacement(archetypeId, spawn.X, spawn.Y, facing);
+                return new LevelEnemyPlacement(archetypeId, spawn.X, spawn.Y);
             }).ToArray();
             RogueliteEncounterLayout layout = encounter.Layout;
             GridPosition heroSpawn = layout?.HeroSpawn ?? level.HeroSpawn;
@@ -143,17 +146,22 @@ namespace OCC.Combat.Presentation
             FirstRegionLevelDefinition currentLevel, RogueliteEncounterDefinition encounter,
             RogueliteMapRun mapRun, RogueliteDeveloperRun developerRun)
         {
-            RogueliteMissionDefinition mission = mapRun != null
-                ? RogueliteDeveloperCatalog.FindMission(encounter?.LevelId ?? (mapRun.HasPendingContentCombat
+            string missionId = mapRun != null
+                ? encounter?.LevelId ?? (mapRun.HasPendingContentCombat
                     ? mapRun.PendingContentCombatMissionId
-                    : mapRun.CurrentNodeId))
-                : developerRun.CurrentMission;
+                    : mapRun.CurrentNodeId)
+                : developerRun.CurrentMission.Id;
+            // Formal map levels already own their mission objective and enemy contract. Only
+            // marker-based fallbacks need an entry in the legacy developer mission directory.
+            RogueliteMissionDefinition mission = mapRun != null && currentLevel == null
+                ? RogueliteDeveloperCatalog.FindMission(missionId)
+                : mapRun == null ? developerRun.CurrentMission : null;
             string enemySummary = currentLevel == null
                 ? (mapRun != null ? DescribeEncounter(encounter, mission.EnemySummary) : mission.EnemySummary)
                 : DescribeEncounter(encounter, mapRun != null
                     ? currentLevel.EnemySummary(mapRun.RegionBossId)
                     : currentLevel.EnemySummary());
-            MissionPreparation preparation = new MissionPreparation().Configure(mission.Id,
+            MissionPreparation preparation = new MissionPreparation().Configure(missionId,
                 currentLevel?.ObjectiveSummary ?? mission.ObjectiveSummary, enemySummary);
             if (currentLevel == null)
             {
@@ -216,6 +224,12 @@ namespace OCC.Combat.Presentation
 
         private static void ConfigureLoot(CombatState state, RogueliteMapRun mapRun)
         {
+            if (state.LootSource != null)
+            {
+                state.SetLoot(null);
+                mapRun?.RestoreLootProgress(state.LootSource);
+                return;
+            }
             state.SetLoot(new LootContainer(new GridPosition(2, 0),
                 new InventoryItem("aether_core", "以太核心", 2, 1)));
             string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";

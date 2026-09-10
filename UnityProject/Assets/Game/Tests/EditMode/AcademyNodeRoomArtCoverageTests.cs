@@ -12,8 +12,9 @@ namespace OCC.Combat.Tests
         [Test]
         public void EveryAcademyNodeTypeHasAnIndependentFormalIdentityIcon()
         {
-            RogueliteMapNodeType[] types = RogueliteMapCatalog.Nodes.Select(value => value.Type).Distinct().ToArray();
-            Assert.That(types, Is.EquivalentTo(Enum.GetValues(typeof(RogueliteMapNodeType))));
+            RogueliteMapNodeType[] types = RogueliteMapCatalog.Nodes.Concat(FirstRunExperienceCatalog.MapNodes).Select(value => value.Type).Distinct().ToArray();
+            Assert.That(types, Is.EquivalentTo(new[] { RogueliteMapNodeType.Start, RogueliteMapNodeType.Combat, RogueliteMapNodeType.Elite,
+                RogueliteMapNodeType.Event, RogueliteMapNodeType.Workshop, RogueliteMapNodeType.Medical, RogueliteMapNodeType.Shop, RogueliteMapNodeType.Finale }));
             foreach (RogueliteMapNodeType type in types)
             {
                 string runtimeId = type.ToString().ToLowerInvariant();

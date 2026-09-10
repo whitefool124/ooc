@@ -7,7 +7,7 @@ namespace OCC.Combat.Presentation
     {
         public static Rect EnemyHoverCardRect(Vector2 pointer)
         {
-            const float width = 456f, height = 242f, margin = 16f, battlefieldRight = 1440f, commandsTop = 900f;
+            const float width = 456f, height = 242f, margin = 16f, battlefieldRight = 1440f, commandsTop = 864f;
             float x = pointer.x + 20f;
             if (x + width > battlefieldRight - margin) x = pointer.x - width - 20f;
             x = Mathf.Clamp(x, margin, battlefieldRight - margin - width);
@@ -18,7 +18,8 @@ namespace OCC.Combat.Presentation
         public static Rect EnemyIntentBadgeRect(BattlefieldRect cell, int expectedDamage)
         {
             float width = expectedDamage > 0 ? 68f : 40f;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y - 22f, width, 40f);
+            Rect unit = UnitPresentationRect(cell);
+            return new Rect(cell.X + (cell.Width - width) * .5f, unit.y + cell.Width * .3125f - 40f, width, 40f);
         }
 
         public static Rect EnemyIntentIconLocalRect()
@@ -33,10 +34,9 @@ namespace OCC.Combat.Presentation
 
         public static Rect UnitPresentationRect(BattlefieldRect cell)
         {
-            // Formal unit sprites own a 64x64 transparent safety canvas. Present that whole canvas
-            // at a whole-number texture scale. Intermediate camera zooms round upward and may
-            // overflow the logical cell; presentation overflow never changes the logical hit cell.
-            float size = Mathf.Max(64f, Mathf.Ceil(cell.Width / 64f) * 64f);
+            // One world pixel has one scale: 64px units use twice the canvas of 32px ground.
+            // Keep the whole texture and the foot anchor; visual overhang never changes occupancy.
+            float size = Mathf.Max(128f, Mathf.Ceil(cell.Width / 32f) * 64f);
             return new Rect(cell.X + (cell.Width - size) * .5f, cell.Y + cell.Height - size, size, size);
         }
 
@@ -52,15 +52,15 @@ namespace OCC.Combat.Presentation
         public static Rect UnitHealthBarRect(BattlefieldRect cell)
         {
             float scale = ElementScale(cell);
-            float width = 120f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 90f * scale, width, 22f * scale);
+            float width = 112f * scale;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.YMax - 8f * scale, width, 16f * scale);
         }
 
         public static Rect UnitShieldBarRect(BattlefieldRect cell)
         {
             float scale = ElementScale(cell);
-            float width = 120f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + 114f * scale, width, 14f * scale);
+            float width = 112f * scale;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.YMax + 12f * scale, width, 8f * scale);
         }
 
         public static string VitalText(CombatUnitVitalPresentation vital, float cellSize)
@@ -96,7 +96,7 @@ namespace OCC.Combat.Presentation
 
         public static Rect StatusHoverCardRect(Vector2 pointer)
         {
-            const float width = 310f, height = 86f, margin = 16f, battlefieldRight = 1440f, commandsTop = 900f;
+            const float width = 310f, height = 86f, margin = 16f, battlefieldRight = 1440f, commandsTop = 864f;
             float x = pointer.x + 18f;
             if (x + width > battlefieldRight - margin) x = pointer.x - width - 18f;
             x = Mathf.Clamp(x, margin, battlefieldRight - margin - width);

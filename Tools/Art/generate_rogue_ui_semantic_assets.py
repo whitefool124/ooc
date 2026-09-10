@@ -52,10 +52,6 @@ def resource_icon(name: str) -> Image.Image:
         draw.line((12, 7, 12, 22), fill=LIGHT); draw.line((20, 10, 20, 25), fill=LIGHT)
         draw.line((9, 20, 15, 15, 22, 18), fill=CYAN, width=2)
         for x, y in ((9, 20), (15, 15), (22, 18)): draw.rectangle((x - 1, y - 1, x + 1, y + 1), fill=WHITE)
-    elif name == "core_permit":
-        draw.polygon(((4, 8), (8, 8), (10, 5), (26, 5), (28, 8), (28, 24), (24, 27), (8, 27), (4, 23)), fill=INK)
-        draw.polygon(((7, 10), (11, 10), (12, 8), (24, 8), (25, 10), (25, 22), (22, 24), (9, 24), (7, 22)), fill=AMBER)
-        draw.rectangle((11, 12, 21, 14), fill=DEEP); draw.rectangle((11, 17, 18, 19), fill=DEEP); draw.rectangle((20, 17, 22, 19), fill=WHITE)
     elif name == "risk":
         draw.polygon(((16, 3), (30, 27), (2, 27)), fill=INK)
         draw.polygon(((16, 7), (26, 24), (6, 24)), fill=DANGER)
@@ -158,7 +154,7 @@ def state_icon(name: str) -> Image.Image:
 def save() -> list[dict]:
     RESOURCE_DIR.mkdir(parents=True, exist_ok=True); SLOT_DIR.mkdir(parents=True, exist_ok=True); STATE_DIR.mkdir(parents=True, exist_ok=True); QA_DIR.mkdir(parents=True, exist_ok=True)
     assets = {**{f"resource.{name}": (RESOURCE_DIR / f"{name}.png", resource_icon(name)) for name in (
-        "gold", "contribution", "stage_time", "explored", "core_permit", "risk", "weight", "aether_load", "charges")},
+        "gold", "contribution", "stage_time", "explored", "risk", "weight", "aether_load", "charges")},
         **{f"equipment_slot.{name}": (SLOT_DIR / f"{name}.png", slot_icon(name)) for name in (
             "main_hand", "off_hand", "head", "chest", "hands", "legs", "backpack", "aether_core", "conduit", "accessory_1", "accessory_2")},
         **{f"map_state.{name}": (STATE_DIR / f"{name}.png", state_icon(name)) for name in (

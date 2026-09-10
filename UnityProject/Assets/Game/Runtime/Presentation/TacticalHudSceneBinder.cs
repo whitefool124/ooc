@@ -73,7 +73,7 @@ namespace OCC.Combat.Presentation
             weaponText.supportRichText = true;
             weaponText.text = "主手：" + hero.MainHand.DisplayName + "  状态：" + StatusText(hero);
             SetBar(healthBar, hero.Health / (float)hero.MaxHealth); SetBar(shieldBar, hero.Shield / (float)Math.Max(1, hero.MaxShield)); SetBar(manaBar, hero.Mana / (float)hero.MaxMana);
-            UnitState[] units = state.Units.Values.OrderBy(unit => unit.InitiativeTime).Take(4).ToArray();
+            UnitState[] units = CombatActionTimeline.Order(state, state.Units.Values).Take(4).ToArray();
             for (int i = 0; i < initiativeRows.Length; i++)
             {
                 bool exists = i < units.Length; initiativeRows[i].gameObject.SetActive(exists); initiativeBars[i].transform.parent.gameObject.SetActive(exists);
@@ -81,7 +81,7 @@ namespace OCC.Combat.Presentation
                 bool activeUnit = units[i].Id == state.ActiveUnitId;
                 initiativeRows[i].text = (activeUnit ? "▶ " : "  ") + units[i].DisplayName + "  " + units[i].Health + " HP";
                 initiativeRows[i].color = activeUnit ? new Color(.35f, .85f, 1f) : new Color(.78f, .82f, .84f);
-                SetBar(initiativeBars[i], Mathf.Min(100, units[i].InitiativeTime) / 100f);
+                SetBar(initiativeBars[i], units[i].ActionValue / (float)CombatActionTimeline.MaximumValue);
             }
             eventText.text = state.EventLog.Count == 0 ? "等待指令" : state.EventLog[0];
             RefreshActionSelection();

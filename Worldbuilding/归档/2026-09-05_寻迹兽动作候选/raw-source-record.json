@@ -1,0 +1,32 @@
+[
+  {
+    "pose": "sniff",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "source_sha256": "17cd416c71bdc463c6df7a3b0198e0c53397ad8e80c23158d027300a55fc4336",
+    "status": "CONCEPT"
+  },
+  {
+    "pose": "crouch",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "source_sha256": "2322b3cf333549446a917507d3f451fb2f8dd00696cb1cb9b017760047a7cb57",
+    "status": "CONCEPT"
+  },
+  {
+    "pose": "contact",
+    "mode": "RGB",
+    "size": [
+      1254,
+      1254
+    ],
+    "source_sha256": "872d703789275e6d0e53289a00fcdd4e4fa5f83e74bcfab8a80ffc5633ea933e",
+    "status": "CONCEPT"
+  }
+]

@@ -9,7 +9,7 @@ namespace OCC.Combat.Tests
         public void Advance_OwnsCommandFromFocusThroughResolutionAndActorGap()
         {
             UnitState enemy = Enemy("enemy-a", 2);
-            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(1, 0), Facing.East);
+            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(1, 0));
             EnemyTurnCoordinator coordinator = new EnemyTurnCoordinator();
 
             EnemyTurnAdvance begin = coordinator.Advance(enemy, 10f, _ => command);
@@ -81,7 +81,7 @@ namespace OCC.Combat.Tests
 
         private static UnitState Enemy(string id, int actionPoints)
         {
-            UnitState enemy = new UnitState(id, false, new GridPosition(0, 0), Facing.East);
+            UnitState enemy = new UnitState(id, false, new GridPosition(0, 0));
             if (actionPoints > 0)
             {
                 CombatState state = new CombatState(new GridMap(2, 1), new[] { enemy });

@@ -204,7 +204,7 @@ namespace OCC.Combat.Presentation
     {
         private static readonly FormalUiPageChecklistEntry[] entries =
         {
-            new FormalUiPageChecklistEntry("landing", "按钮_近战训练", false, true, true),
+            new FormalUiPageChecklistEntry("landing", "按钮_开始新游戏", false, true, true),
             new FormalUiPageChecklistEntry("map", "map.node.{current}", true, true, true),
             new FormalUiPageChecklistEntry("briefing", "按钮_进入战斗", true, true, false),
             new FormalUiPageChecklistEntry("combat", "移动", true, true, false),
@@ -417,7 +417,47 @@ namespace OCC.Combat.Presentation
             label.fontStyle = FontStyle.Normal; label.alignByGeometry = true;
             label.horizontalOverflow = HorizontalWrapMode.Wrap; label.verticalOverflow = VerticalWrapMode.Truncate; label.raycastTarget = false;
             label.resizeTextForBestFit = false; label.lineSpacing = 1f;
+            return KeepInsideParentFrame(label);
+        }
+
+        public static Text KeepInsideParentFrame(Text label)
+        {
+            if (label == null || !(label.transform.parent is RectTransform parentRect)) return label;
+            Image parentImage = parentRect.GetComponent<Image>();
+            Image frame = SkinOverlay(parentImage);
+            if (frame == null || !frame.gameObject.activeSelf) return label;
+            Rect bounds = parentRect.rect;
+            if (bounds.width <= FormalUiTheme.FramedContentInset * 2f || bounds.height <= FormalUiTheme.FramedContentInset * 2f) return label;
+            RectTransform rect = label.rectTransform;
+            if (rect.anchorMin != new Vector2(0f, 1f) || rect.anchorMax != new Vector2(0f, 1f)) return label;
+            float left = Mathf.Max(FormalUiTheme.FramedContentInset, rect.anchoredPosition.x);
+            float top = Mathf.Max(FormalUiTheme.FramedContentInset, -rect.anchoredPosition.y);
+            float width = Mathf.Max(0f, Mathf.Min(rect.sizeDelta.x, bounds.width - left - FormalUiTheme.FramedContentInset));
+            float height = Mathf.Max(0f, Mathf.Min(rect.sizeDelta.y, bounds.height - top - FormalUiTheme.FramedContentInset));
+            rect.anchoredPosition = new Vector2(Mathf.Round(left), -Mathf.Round(top));
+            rect.sizeDelta = new Vector2(Mathf.Round(width), Mathf.Round(height));
             return label;
+        }
+
+        public static void ThinFrame(Transform parent, Vector2 size, Color color, string prefix = "细框")
+        {
+            ThinFrameEdge(parent, prefix + "_上", Vector2.zero, new Vector2(size.x, FormalUiTheme.InnerHighlightThickness), color);
+            ThinFrameEdge(parent, prefix + "_下", new Vector2(0f, -size.y + FormalUiTheme.InnerHighlightThickness), new Vector2(size.x, FormalUiTheme.InnerHighlightThickness), color);
+            ThinFrameEdge(parent, prefix + "_左", Vector2.zero, new Vector2(FormalUiTheme.InnerHighlightThickness, size.y), color);
+            ThinFrameEdge(parent, prefix + "_右", new Vector2(size.x - FormalUiTheme.InnerHighlightThickness, 0f), new Vector2(FormalUiTheme.InnerHighlightThickness, size.y), color);
+        }
+
+        private static void ThinFrameEdge(Transform parent, string name, Vector2 position, Vector2 size, Color color)
+        {
+            Transform existing = parent == null ? null : parent.Find(name);
+            Image edge = existing?.GetComponent<Image>();
+            if (edge == null)
+                edge = FlatPanel(name, parent, new Vector2(0f, 1f), new Vector2(0f, 1f), position, size, color).GetComponent<Image>();
+            edge.rectTransform.anchoredPosition = position;
+            edge.rectTransform.sizeDelta = size;
+            edge.color = color;
+            edge.raycastTarget = false;
+            edge.transform.SetAsLastSibling();
         }
 
         public static Text PreventAutomaticWrapping(Text label)
@@ -427,7 +467,7 @@ namespace OCC.Combat.Presentation
             label.verticalOverflow = VerticalWrapMode.Truncate;
             label.alignByGeometry = true;
             EnsureTextSlotHeight(label, 1);
-            return label;
+            return KeepInsideParentFrame(label);
         }
 
         public static Text ConfigureNumericLabel(Text label)
@@ -447,7 +487,7 @@ namespace OCC.Combat.Presentation
             label.lineSpacing = lineSpacing;
             label.alignByGeometry = true;
             EnsureTextSlotHeight(label, 2);
-            return label;
+            return KeepInsideParentFrame(label);
         }
 
         public static Text ConfigureReadingParagraph(Text label, float lineSpacing = 1.08f)

@@ -40,9 +40,9 @@ namespace OCC.Combat.Tests
             Assert.That(RogueliteMapCatalog.Nodes.Count, Is.EqualTo(40));
             Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Combat), Is.EqualTo(18));
             Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Elite), Is.EqualTo(6));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Event), Is.EqualTo(8));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Shop || value.Type == RogueliteMapNodeType.Workshop || value.Type == RogueliteMapNodeType.Rest), Is.EqualTo(4));
-            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Treasure), Is.EqualTo(2));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Event), Is.EqualTo(10));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Shop || value.Type == RogueliteMapNodeType.Workshop || value.Type == RogueliteMapNodeType.Medical), Is.EqualTo(4));
+            Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Rest || value.Type == RogueliteMapNodeType.Treasure), Is.Zero);
             Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Start), Is.EqualTo(1));
             Assert.That(RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Finale), Is.EqualTo(1));
         }
@@ -50,7 +50,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void FixedSeed_AssignsEveryEventSlotWithoutDuplicatesAndRoundTrips()
         {
-            int eventSlots = RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Event);
+            int eventSlots = RogueliteMapCatalog.Nodes.Count(value => value.Type == RogueliteMapNodeType.Event && value.Id != "core_vault" && value.Id != "tower_lift");
             for (int seed = 0; seed < 64; seed++)
             {
                 RogueliteMapRun run = new RogueliteMapRun(seed);
@@ -67,18 +67,6 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FixedPermitNode_NeverReceivesAnEventThatCanGrantASecondPermit()
-        {
-            for (int seed = 0; seed < 256; seed++)
-            {
-                AcademyEventAssignment assignment = AcademyNodeContentCatalog.GenerateAssignments(seed)
-                    .Single(value => value.NodeId == "permit_archive");
-                Assert.That(AcademyNodeContentCatalog.Event(assignment.EventId).Choices.Any(value => value.GrantsCorePermit), Is.False,
-                    "seed " + seed + " assigned two permits to one event node");
-            }
-        }
-
-        [Test]
         public void NodeChoiceSummary_ShowsIrreversibleCostAndOutcomeWithoutHover()
         {
             RogueliteMapRun run = CreateRogue11AtSwitchyard(240824);
@@ -91,7 +79,7 @@ namespace OCC.Combat.Tests
             RogueliteNodeContentChoice combat = AcademyNodeContentCatalog.Event("EV16").Choices.Single(value => value.RequiresCombat);
             string combatSummary = RogueliteEconomyPresentation.NodeChoiceSummary(run, combat, RogueliteEconomyPresentation.ForNodeChoice(run, combat));
             Assert.That(combatSummary, Does.Contain("胜利"));
-            Assert.That(combatSummary, Does.Contain("核心许可"));
+            Assert.That(combatSummary, Does.Contain("3金 + 2学院贡献"));
 
             RogueliteNodeContentChoice mixedVersion = AcademyNodeContentCatalog.FunctionChoices(RogueliteMapCatalog.Node("supply_checkpoint"))
                 .Single(value => value.Id == "medical_cache");
@@ -125,7 +113,7 @@ namespace OCC.Combat.Tests
         public void SurvivedEventCombatFailure_ClosesNodeAndGrantsOnlyHalfBaseCurrency()
         {
             RogueliteMapRun run = CreateRogue11AtSwitchyard(FindSeedForSwitchyard("EV03"));
-            int goldBefore = run.Gold, contributionBefore = run.StageContribution, permitsBefore = run.CorePermits;
+            int goldBefore = run.Gold, contributionBefore = run.StageContribution;
             run.ChooseCurrentNodeContent("EV03_fight");
             Assert.That(run.HasPendingContentCombat, Is.True);
 
@@ -135,27 +123,29 @@ namespace OCC.Combat.Tests
             Assert.That(run.HasPendingContentCombat, Is.False);
             Assert.That(run.Gold, Is.EqualTo(goldBefore + 1));
             Assert.That(run.StageContribution, Is.EqualTo(contributionBefore + 1));
-            Assert.That(run.CorePermits, Is.EqualTo(permitsBefore));
             Assert.That(run.AwaitingReward, Is.False);
             Assert.Throws<InvalidOperationException>(() => run.ChooseCurrentNodeContent("EV03_fight"));
         }
 
         [Test]
-        public void EventCombatVictory_AppliesUniqueRewardOrPermitOnlyAfterVictory()
+        public void EventCombatVictory_SettlesBaseCurrencyOnlyAfterVictory()
         {
             RogueliteMapRun run = CreateRogue11AtSwitchyard(FindSeedForSwitchyard("EV03"));
-            int permitsBefore = run.CorePermits;
+            int goldBefore = run.Gold, contributionBefore = run.StageContribution;
             run.ChooseCurrentNodeContent("EV03_fight");
-            Assert.That(run.CorePermits, Is.EqualTo(permitsBefore));
+            Assert.That(run.Gold, Is.EqualTo(goldBefore));
+            Assert.That(run.StageContribution, Is.EqualTo(contributionBefore));
 
             run.CompletePendingContentCombat();
 
-            Assert.That(run.CorePermits, Is.EqualTo(permitsBefore + 1));
-            Assert.That(run.ClaimedRewards.Count(id => id == "permit:EV03"), Is.EqualTo(1));
+            Assert.That(run.Gold, Is.EqualTo(goldBefore + 3));
+            Assert.That(run.StageContribution, Is.EqualTo(contributionBefore + 2));
+            Assert.That(run.HasPendingContentCombat, Is.False);
+            Assert.Throws<InvalidOperationException>(() => run.CompletePendingContentCombat());
         }
 
         [Test]
-        public void ServiceAndTreasureNodes_AreZeroTimeOneShotChoicesWithoutFreeBaseIncome()
+        public void ServiceAndFixedEventNodes_AreZeroTimeOneShotChoicesWithoutFreeBaseIncome()
         {
             Store store = new Store(); RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
             RogueliteMapRun run = new RogueliteMapRun(2408, FireRogueliteStarterCatalog.Universal);
@@ -180,9 +170,9 @@ namespace OCC.Combat.Tests
             run.SelectNode("med_bay");
             RogueliteNodeContentChoice restChoice = run.CurrentContentChoices.First(value => value.GoldCost <= run.Gold && value.ContributionCost <= run.StageContribution);
             run.ChooseCurrentNodeContent(restChoice.Id);
-            Assert.That(run.StageTime, Is.EqualTo(startTime), "Rest service must be zero-time.");
+            Assert.That(run.StageTime, Is.EqualTo(startTime), "Medical service must be zero-time.");
 
-            run.SelectNode("permit_archive");
+            run.SelectNode("records_archive");
             RogueliteNodeContentChoice eventChoice = run.CurrentContentChoices.First(value => value.GoldCost <= run.Gold && value.ContributionCost <= run.StageContribution && run.CurrentHealth + value.HealthGain > 0);
             run.ChooseCurrentNodeContent(eventChoice.Id);
             if (run.HasPendingContentCombat) run.CompletePendingContentCombat();
@@ -192,15 +182,13 @@ namespace OCC.Combat.Tests
             if (run.HasPendingContentCombat) run.CompletePendingContentCombat();
             int timeAfterEvents = run.StageTime;
             run.SelectNode("core_vault");
-            int permitsBefore = run.CorePermits;
             run.ChooseCurrentNodeContent("vault_fire_cache");
-            Assert.That(run.CorePermits, Is.EqualTo(permitsBefore), "The first treasure must not bypass the permit route.");
             Assert.That(run.ClaimedRewards, Does.Contain("G-T19"));
-            Assert.That(run.StageTime, Is.EqualTo(timeAfterEvents), "Treasure choice must be zero-time.");
+            Assert.That(run.StageTime, Is.EqualTo(timeAfterEvents + 1), "Reclassified fixed content follows the event-node time rule.");
             Assert.That(run.AwaitingReward, Is.False);
 
-            RogueliteMapNode towerTreasure = RogueliteMapCatalog.Node("tower_lift");
-            Assert.That(AcademyNodeContentCatalog.FunctionChoices(towerTreasure).Any(value => value.GrantsCorePermit), Is.True);
+            RogueliteMapNode towerEvent = RogueliteMapCatalog.Node("tower_lift");
+            Assert.That(AcademyNodeContentCatalog.FunctionChoices(towerEvent).Single().RewardId, Is.EqualTo("G-T19"));
         }
 
         private static RogueliteMapRun CreateRogue11AtSwitchyard(int seed)

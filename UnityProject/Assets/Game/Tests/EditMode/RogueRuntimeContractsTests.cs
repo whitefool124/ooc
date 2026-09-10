@@ -13,13 +13,14 @@ namespace OCC.Combat.Tests
         {
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
 
-            Assert.That(catalog.Spells.Count, Is.EqualTo(64));
+            Assert.That(catalog.Spells.Count, Is.EqualTo(67));
             Assert.That(catalog.Spells.Count(value => value.RewardEligible), Is.EqualTo(60));
             Assert.That(catalog.Spells.Count(value => value.IsBasic), Is.EqualTo(4));
-            Assert.That(catalog.Equipment.Count, Is.EqualTo(32));
-            Assert.That(catalog.Affixes.Count, Is.EqualTo(14));
+            Assert.That(catalog.Spells.Count(value => value.Role == "passive"), Is.EqualTo(3));
+            Assert.That(catalog.Equipment.Count, Is.EqualTo(33));
+            Assert.That(catalog.Affixes.Count, Is.EqualTo(13));
             Assert.That(catalog.TacticalItems.Count, Is.GreaterThanOrEqualTo(1));
-            Assert.That(Enum.GetValues(typeof(RogueEquipmentSlot)).Length, Is.EqualTo(11));
+            Assert.That(EquipmentSlotRules.ActiveSlots.Count, Is.EqualTo(9));
             Assert.That(RogueRuntimeConstants.SpellSlotCount, Is.EqualTo(8));
             Assert.That(RogueRuntimeConstants.ItemQuickbarSize, Is.EqualTo(4));
         }
@@ -80,7 +81,7 @@ namespace OCC.Combat.Tests
             Assert.That(restored.RunId, Is.EqualTo(dto.RunId));
             Assert.That(restored.EquippedSpellIds, Is.EqualTo(dto.EquippedSpellIds));
             Assert.That(restored.ItemQuickbarInstanceIds.Length, Is.EqualTo(4));
-            Assert.That(restored.EquipmentSlotInstanceIds.Count, Is.EqualTo(11));
+            Assert.That(restored.EquipmentSlotInstanceIds.Count, Is.EqualTo(9));
             Assert.That(restored.EquipmentInstances.Single().DefinitionId, Is.EqualTo("ACA-EQ-CH01"));
         }
     }

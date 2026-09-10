@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "tether_hound_compact_v1",
+  "role": "tactical_unit_64",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent compact hound candidate, original hound used as identity reference",
+    "source_path": "Artifacts/OCC_UnitSilhouetteReview_20260905/raw/tether_hound_compact_v1.png",
+    "source_sha256": "ec8f86af4986543426f528a340de240c8d8635fcfcf95244e96d0eb58b49f406"
+  },
+  "delivery": {
+    "output_path": "Artifacts/OCC_UnitSilhouetteReview_20260905/raw/tether_hound_compact_v1.png",
+    "output_sha256": "ec8f86af4986543426f528a340de240c8d8635fcfcf95244e96d0eb58b49f406",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "Target 64x64 source at 128x128 reference UI rectangle in default 64px-cell board; 256x256 at zoom; not imported",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": null,
+    "four_x": null,
+    "grayscale": null,
+    "checker": null,
+    "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Unprocessed concept raw only. Actual 1254x1254 RGB; 23089 colors; baked checkerboard; no alpha. Validated as an unprocessed delivery to expose failures, not a 64px candidate."
+  },
+  "unity_import": null
+}

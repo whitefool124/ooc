@@ -134,7 +134,7 @@ namespace OCC.Combat.Tests
         {
             CombatState state = new CombatState(new GridMap(4, 4), new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+                new UnitState("hero", true, new GridPosition(0, 0))
             });
             InventoryContainerState inventory = new InventoryContainerState();
             Assert.That(inventory.AddFirstFit(new ItemInstance("artifact", "F-T01", 0, 2)).Success, Is.True);
@@ -153,7 +153,7 @@ namespace OCC.Combat.Tests
         {
             var state = new CombatState(new GridMap(4, 4), new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+                new UnitState("hero", true, new GridPosition(0, 0))
             });
 
             CombatHudPresentationModel model = default;
@@ -166,9 +166,9 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatTurnTrack_OrdersLivingUnitsAndMarksTheCurrentActor()
         {
-            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            var earlyEnemy = new UnitState("enemy_early", false, new GridPosition(1, 0), Facing.West);
-            var lateEnemy = new UnitState("enemy_late", false, new GridPosition(2, 0), Facing.West);
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var earlyEnemy = new UnitState("enemy_early", false, new GridPosition(1, 0));
+            var lateEnemy = new UnitState("enemy_late", false, new GridPosition(2, 0));
             var state = new CombatState(new GridMap(4, 4), new[] { hero, earlyEnemy, lateEnemy });
             CombatResolver.BeginTurn(state, "hero");
 
@@ -185,12 +185,65 @@ namespace OCC.Combat.Tests
         public void CombatTurnTrack_RespectsVisibleSlotLimit()
         {
             UnitState[] units = Enumerable.Range(0, 7)
-                .Select(index => new UnitState("unit_" + index, index == 0, new GridPosition(index, 0), Facing.East))
+                .Select(index => new UnitState("unit_" + index, index == 0, new GridPosition(index, 0)))
                 .ToArray();
             var state = new CombatState(new GridMap(8, 2), units);
 
             Assert.That(CombatTurnTrackPresentation.Build(state, 5).Count, Is.EqualTo(5));
             Assert.That(CombatTurnTrackPresentation.Build(state, 0), Is.Empty);
+        }
+
+        [Test]
+        public void ActionTimeline_UsesZeroTo199GaugeAndEffectiveSpeed()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0)) { Speed = 12 };
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0)) { Speed = 8 };
+            var state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
+
+            CombatResolver.AdvanceToNextTurn(state);
+            Assert.That(state.ActiveUnitId, Is.EqualTo("hero"));
+            Assert.That(hero.ActionValue, Is.EqualTo(108));
+            Assert.That(enemy.ActionValue, Is.EqualTo(72));
+
+            CombatResolver.EndTurn(state, hero);
+            Assert.That(state.ActiveUnitId, Is.EqualTo("enemy"));
+            Assert.That(hero.ActionValue, Is.EqualTo(56));
+            Assert.That(enemy.ActionValue, Is.EqualTo(104));
+            Assert.That(state.Units.Values.All(unit => unit.ActionValue >= 0 && unit.ActionValue <= 199), Is.True);
+        }
+
+        [Test]
+        public void ActionTimeline_TiesUseSpeedThenBattleStartOrder()
+        {
+            var first = new UnitState("z_first", true, new GridPosition(0, 0)) { Speed = 10 };
+            var second = new UnitState("a_second", false, new GridPosition(1, 0)) { Speed = 10 };
+            var state = new CombatState(new GridMap(3, 2), new[] { first, second });
+
+            CombatResolver.AdvanceToNextTurn(state);
+
+            Assert.That(state.ActiveUnitId, Is.EqualTo("z_first"));
+            Assert.That(CombatTurnTrackPresentation.Build(state, 2).Select(entry => entry.UnitId),
+                Is.EqualTo(new[] { "z_first", "a_second" }));
+
+            CombatResolver.EndTurn(state, first);
+
+            Assert.That(state.ActiveUnitId, Is.EqualTo("a_second"),
+                "An equal-speed first actor must not win the same fixed-order tie forever.");
+        }
+
+        [Test]
+        public void ActionTimeline_DelayPreviewClampsAndDoesNotRevokeCurrentAction()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var state = new CombatState(new GridMap(2, 2), new[] { hero });
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            Assert.That(CombatActionTimeline.PreviewDelayedValue(hero, 24), Is.EqualTo(76));
+            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.DelayInitiative(24));
+
+            Assert.That(hero.ActionValue, Is.EqualTo(76));
+            Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
+            Assert.That(CombatActionTimeline.PreviewDelayedValue(hero, 500), Is.Zero);
         }
     }
 }

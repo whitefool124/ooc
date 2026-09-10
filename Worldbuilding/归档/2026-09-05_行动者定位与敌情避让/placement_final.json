@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"stateUnchanged=True lineImages=4\\ncrowded=0\\nhero intentVisible=False intentPosition=(0.00, 0.00)\\nenemy_1 intentVisible=True intentPosition=(74.00, 84.00)\\nenemy_0 intentVisible=True intentPosition=(-2.00, 84.00)\\nactiveMarker=(260.00, -428.00)\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

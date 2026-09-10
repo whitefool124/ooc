@@ -1,0 +1,18 @@
+{
+  "jobId": "597eb32d-d3d2-4114-9cf7-3436b408525e",
+  "status": "finished",
+  "mode": "EditMode",
+  "startedAt": "2026-09-06 00:36:17",
+  "lastActivityAt": "2026-09-06 00:36:24",
+  "testsCompleted": 28,
+  "hasFilters": true,
+  "finishedAt": "2026-09-06 00:36:24",
+  "resultState": "Passed",
+  "passCount": 28,
+  "failCount": 0,
+  "skipCount": 0,
+  "inconclusiveCount": 0,
+  "totalTests": 28,
+  "durationSeconds": 1.62,
+  "failures": []
+}

@@ -18,7 +18,8 @@ namespace OCC.Combat.Tests
             Assert.That(status.Health, Is.EqualTo(9)); Assert.That(status.Mana, Is.EqualTo(4)); Assert.That(status.Gold, Is.EqualTo(31));
             Assert.That(status.ConsolidationTime, Is.EqualTo(21)); Assert.That(status.WarningTime, Is.EqualTo(25)); Assert.That(status.TransitionTime, Is.EqualTo(28));
             Assert.That(elite.TimeCost, Is.EqualTo(3)); Assert.That(elite.ProjectedStageTime, Is.EqualTo(23));
-            Assert.That(elite.ExpectedHealthRecovery, Is.EqualTo(9)); Assert.That(elite.ExpectedManaRecovery, Is.EqualTo(3));
+            Assert.That(elite.ExpectedManaRecovery, Is.EqualTo(3));
+            Assert.That(typeof(RogueNodePreviewPresentation).GetProperty("ExpectedHealthRecovery"), Is.Null);
             Assert.That(elite.CrossesConsolidation, Is.True); Assert.That(elite.CrossesTransition, Is.False);
             Assert.That(typeof(RogueMapStatusPresentation).GetProperty("Shield"), Is.Null);
             Assert.That(typeof(RogueMapStatusPresentation).GetProperty("Level"), Is.Null);
@@ -26,12 +27,13 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void UiM0EncounterCosts_UsePublicTimeAndPerTimeRecovery()
+        public void UiM0EncounterCosts_AdvanceTimeWithoutAutomaticHealthRecovery()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("ui-time", 902); dto.CurrentHealth = 2; dto.CurrentMana = 1;
             RogueStageResolution result = RogueRunProgression.ResolveEncounter(dto, RogueEncounterOutcome.Success, 3);
             Assert.That(result.TimeCost, Is.EqualTo(3)); Assert.That(dto.StageTime, Is.EqualTo(3));
-            Assert.That(dto.CurrentHealth, Is.EqualTo(14)); Assert.That(dto.CurrentMana, Is.EqualTo(4));
+            Assert.That(dto.CurrentHealth, Is.EqualTo(2)); Assert.That(dto.CurrentMana, Is.EqualTo(4));
+            Assert.That(typeof(RogueStageResolution).GetProperty("HealthRecovered"), Is.Null);
             Assert.That(AcademyMapTuning.TimeCost(RogueliteMapNodeType.Combat), Is.EqualTo(2));
             Assert.That(AcademyMapTuning.TimeCost(RogueliteMapNodeType.Event), Is.EqualTo(1));
             Assert.That(AcademyMapTuning.TimeCost(RogueliteMapNodeType.Shop), Is.Zero);
@@ -104,8 +106,8 @@ namespace OCC.Combat.Tests
 
         private static CombatState BuildCombat(out UnitState hero)
         {
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(2, 1), new[] { hero, enemy }); state.ConfigureRuleset(CombatRuleset.Roguelite); return state;
         }
     }

@@ -5,7 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum FirstRegionFloorTheme { StoneRoad, Courtyard, Ruins, AetherMarked }
-    public enum LevelTerrainKind { LightCover, HeavyCover, AetherObjective }
+    public enum LevelTerrainKind { LightCover, HeavyCover, AetherObjective, Water, LampVine, AetherCrystal }
     public enum LevelOpeningProfile { Melee, Ranged, Generalist }
 
     public sealed class LevelTerrainPlacement
@@ -19,9 +19,8 @@ namespace OCC.Combat
     {
         public string ArchetypeId { get; }
         public GridPosition Position { get; }
-        public Facing Facing { get; }
-        public LevelEnemyPlacement(string archetypeId, int x, int y, Facing facing = Facing.West)
-        { ArchetypeId = archetypeId ?? throw new ArgumentNullException(nameof(archetypeId)); Position = new GridPosition(x, y); Facing = facing; }
+        public LevelEnemyPlacement(string archetypeId, int x, int y)
+        { ArchetypeId = archetypeId ?? throw new ArgumentNullException(nameof(archetypeId)); Position = new GridPosition(x, y); }
     }
 
     public sealed class LevelSpaceContract
@@ -99,9 +98,74 @@ namespace OCC.Combat
         private static LevelTerrainPlacement L(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LightCover);
         private static LevelTerrainPlacement H(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.HeavyCover);
         private static LevelTerrainPlacement O(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.AetherObjective);
+        private static LevelTerrainPlacement W(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.Water);
+        private static LevelTerrainPlacement V(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LampVine);
+        private static LevelTerrainPlacement C(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.AetherCrystal);
         private static LevelEnemyPlacement E(string id, int x, int y) => new LevelEnemyPlacement(id, x, y);
         private static LevelSpaceContract S(string grammar, GridPosition routeA, GridPosition routeB, string risk, string counterplay) =>
             new LevelSpaceContract(grammar, new[] { routeA, routeB }, risk, counterplay);
+
+        public static readonly FirstRegionLevelDefinition RainLanternCourt =
+            new FirstRegionLevelDefinition(RainLanternCourtRuntime.LevelId, "雨后灯庭", "让缚环寻迹兽失去行动能力，并让高年级火矢生认输。", CombatObjectiveType.Elimination, 1,
+                new GridPosition(1, 7), FirstRegionFloorTheme.Courtyard, false, false, Array.Empty<string>(),
+                new[] { E("tether_hound", 7, 6), E("pyromancer", 8, 1) },
+                new[]
+                {
+                    W(2, 6), W(3, 6), W(4, 6), W(5, 6), W(6, 6),
+                    V(4, 0), V(5, 0), V(4, 1), V(5, 1), V(4, 2), V(5, 2), V(4, 3), V(5, 3), V(4, 4), V(5, 4),
+                    L(2, 2), L(7, 3), L(2, 7),
+                    H(0, 0), H(1, 0), H(11, 0), H(0, 1), H(11, 1),
+                    H(0, 8), H(1, 8), H(2, 8), H(7, 8), H(8, 8), H(9, 8), H(10, 8), H(11, 8)
+                },
+                new LevelSpaceContract("雨后石庭／积水横带／双列灯藤",
+                    new[] { new GridPosition(1, 6), new GridPosition(2, 5), new GridPosition(7, 7) },
+                    "积水提高主角穿越成本；灯藤遮断远程视线，并会被火矢生依次烧开。",
+                    "可沿西侧稳进、借积水灭火，或利用灯藤让寻迹兽进入公开的嗅探搜索。"));
+
+        public static readonly FirstRegionLevelDefinition GreenhouseCollectionRoom =
+            new FirstRegionLevelDefinition("first_battle_greenhouse_collection_room", "温室藏品间",
+                "击倒承压检验偶与高年级陪练生·侧锋；中央备件箱可搜刮苗床回流芯。", CombatObjectiveType.Elimination, 2,
+                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, false, false, new[] { RainLanternCourtRuntime.LevelId },
+                new[] { E("raider", 9, 2), E("sigil_mauler", 9, 6) },
+                new[]
+                {
+                    V(4, 3), V(5, 3), V(6, 3), V(4, 4), V(6, 4), V(4, 5), V(5, 5), V(6, 5),
+                    C(8, 2), C(8, 6)
+                },
+                new LevelSpaceContract("中央藤圈宝箱／南北双晶簇／南侧普通长路",
+                    new[] { new GridPosition(3, 4), new GridPosition(5, 6), new GridPosition(7, 8) },
+                    "晶簇被摧毁时伤害正交邻格并生成五格碎晶；灯藤遮断攻击线。",
+                    "可跃进抢箱、等待敌人贴晶引爆，或不依赖奖励沿南侧长路推进。"));
+
+        public static readonly FirstRegionLevelDefinition RainPrismCourt =
+            new FirstRegionLevelDefinition("first_b3_rain_prism_court", "雨痕晶庭",
+                "击倒承压检验偶与高年级陪练生·火矢；可破坏封门晶簇搜刮学院储能芯。", CombatObjectiveType.Elimination, 3,
+                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, false, false, new[] { GreenhouseCollectionRoom.Id },
+                new[] { E("sigil_mauler", 5, 4), E("pyromancer", 6, 1) },
+                new[]
+                {
+                    W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7), W(4, 1), W(5, 1),
+                    C(6, 4), H(7, 3), H(7, 5), H(8, 4), L(1, 2), L(1, 6), L(8, 2), L(9, 6)
+                },
+                new LevelSpaceContract("冷却沟／封门晶簇／南侧干路",
+                    new[] { new GridPosition(4, 4), new GridPosition(3, 8), new GridPosition(5, 2) },
+                    "火矢施加燃烧；封门晶簇阻挡器材匣唯一入口。",
+                    "可破晶开匣、入水熄火反压，或从 D9 干路绕行。"));
+
+        public static readonly FirstRegionLevelDefinition ThreeMaterialPressure =
+            new FirstRegionLevelDefinition("first_elite_three_material_pressure", "三材承压场",
+                "击倒贯阵承压机·楔角。", CombatObjectiveType.Elimination, 4,
+                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, true, false, new[] { RainPrismCourt.Id },
+                new[] { E("breach_ram", 7, 4) },
+                new[]
+                {
+                    W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7),
+                    V(4, 2), V(5, 2), V(6, 2), V(4, 5), V(5, 5), V(6, 5), C(6, 4)
+                },
+                new LevelSpaceContract("冷却沟／双灯藤带／中央稳压晶簇",
+                    new[] { new GridPosition(3, 8), new GridPosition(2, 4), new GridPosition(8, 4) },
+                    "楔角公开锁定冲压线，并会撞击晶簇、单位或灯藤。",
+                    "可诱导撞晶、藏入灯藤、用浅水缩短冲压，或走 D9 干路等待卸压。"));
 
         public static readonly IReadOnlyList<FirstRegionLevelDefinition> All = new[]
         {
@@ -141,7 +205,7 @@ namespace OCC.Combat
                 new GridPosition(5, 8), FirstRegionFloorTheme.Ruins, true, false, new[] { "signal_hub" },
                 new[] { E("elite_vanguard", 5, 3), E("barrier_mender", 2, 0), E("sigil_mauler", 2, 5) },
                 new[] { L(8, 5), H(3, 1), H(6, 1), H(3, 2), H(6, 2), H(2, 4), H(3, 4), H(4, 4), H(7, 4), H(8, 4), H(9, 4), H(4, 6), H(7, 6), O(8, 0) },
-                S("编织狭口", new GridPosition(3, 7), new GridPosition(8, 7), "左路承受检验偶破势，右路更快接近目标但会被教官转向拦截。", "两路在教官下方短暂连通；目标破坏立即完成且单一敌人不能封死双路。")),
+                S("编织狭口", new GridPosition(3, 7), new GridPosition(8, 7), "左路承受检验偶破势，右路更快接近目标但会被教官横移拦截。", "两路在教官下方短暂连通；目标破坏立即完成且单一敌人不能封死双路。")),
             new FirstRegionLevelDefinition("core_approach", "塔前石庭", "清除古塔前庭守军", CombatObjectiveType.Elimination, 4,
                 new GridPosition(1, 7), FirstRegionFloorTheme.Courtyard, true, false, new[] { "transmission_tower", "elite_foundry" },
                 new[] { E("elite_vanguard", 5, 4), E("rune_arbalist", 10, 1), E("stone_snare", 9, 7) },
@@ -155,7 +219,7 @@ namespace OCC.Combat
         };
 
         private static readonly IReadOnlyDictionary<string, FirstRegionLevelDefinition> byId =
-            All.ToDictionary(level => level.Id, StringComparer.Ordinal);
+            All.Concat(new[] { RainLanternCourt, GreenhouseCollectionRoom, RainPrismCourt, ThreeMaterialPressure }).ToDictionary(level => level.Id, StringComparer.Ordinal);
 
         public static FirstRegionLevelDefinition For(string id) => byId.TryGetValue(id, out FirstRegionLevelDefinition level)
             ? level : throw new KeyNotFoundException("Unknown first-region level: " + id);
@@ -168,11 +232,13 @@ namespace OCC.Combat
         public static IReadOnlyList<string> Validate()
         {
             List<string> errors = new List<string>();
-            foreach (FirstRegionLevelDefinition level in All)
+            foreach (FirstRegionLevelDefinition level in All.Concat(new[] { RainLanternCourt, GreenhouseCollectionRoom, RainPrismCourt, ThreeMaterialPressure }))
             {
                 if (level.Width != 12 || level.Height != 9) errors.Add(level.Id + ": map must be 12x9");
                 if (!Inside(level, level.HeroSpawn)) errors.Add(level.Id + ": hero spawn outside map");
-                if (level.EnemyPlacements.Count < 3) errors.Add(level.Id + ": fewer than three enemies");
+                int minimumEnemies = level.Id == ThreeMaterialPressure.Id ? 1 :
+                    level.Id == RainLanternCourtRuntime.LevelId || level.Id == GreenhouseCollectionRoom.Id || level.Id == RainPrismCourt.Id ? 2 : 3;
+                if (level.EnemyPlacements.Count < minimumEnemies) errors.Add(level.Id + ": too few enemies");
                 if (string.IsNullOrWhiteSpace(level.SpaceContract.Grammar)) errors.Add(level.Id + ": missing space grammar");
                 if (level.SpaceContract.RouteAnchors.Count < 2 || level.SpaceContract.RouteAnchors.Distinct().Count() < 2)
                     errors.Add(level.Id + ": fewer than two route anchors");
@@ -239,29 +305,63 @@ namespace OCC.Combat
             {
                 switch (placement.Kind)
                 {
-                    case LevelTerrainKind.LightCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Light, Durability = 4 }); break;
-                    case LevelTerrainKind.HeavyCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, Durability = 7 }); break;
-                    case LevelTerrainKind.AetherObjective: map.SetTile(placement.Position, new TileState { IsObjective = true, IsDevice = true, Durability = 6 }); break;
+                    case LevelTerrainKind.LightCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Light, Durability = TileState.LightDurability }); break;
+                    case LevelTerrainKind.HeavyCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability }); break;
+                    case LevelTerrainKind.AetherObjective: map.SetTile(placement.Position, new TileState { IsObjective = true, IsDevice = true, Durability = TileState.StandardDurability }); break;
+                    case LevelTerrainKind.Water: map.SetTile(placement.Position, new TileState { IsWater = true }); break;
+                    case LevelTerrainKind.LampVine: map.SetTile(placement.Position, new TileState { IsLampVine = true, Durability = TileState.FragileDurability }); break;
+                    case LevelTerrainKind.AetherCrystal: map.SetTile(placement.Position, new TileState { IsDevice = true, IsAetherCrystal = true, Durability = TileState.StandardDurability }); break;
                 }
             }
 
             List<UnitState> units = new List<UnitState>();
-            UnitState hero = new UnitState("hero", true, level.HeroSpawn, Facing.East) { DisplayName = "阿斯特拉", Speed = 11 };
+            UnitState hero = new UnitState("hero", true, level.HeroSpawn) { DisplayName = "维克多·维恩", Speed = 11 };
             hero.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
             units.Add(hero);
             IReadOnlyList<string> resolvedIds = level.ResolveEnemyArchetypeIds(regionBossId);
             for (int index = 0; index < level.EnemyPlacements.Count; index++)
             {
                 LevelEnemyPlacement placement = level.EnemyPlacements[index];
-                UnitState enemy = new UnitState("enemy_" + index, false, placement.Position, placement.Facing);
+                UnitState enemy = new UnitState("enemy_" + index, false, placement.Position);
                 EnemyArchetypes.Get(resolvedIds[index]).Apply(enemy);
+                if (level.Id == RainLanternCourtRuntime.LevelId)
+                {
+                    if (enemy.EnemyArchetypeId == "tether_hound") enemy.ConfigureVitality(12);
+                    if (enemy.EnemyArchetypeId == "pyromancer") enemy.ConfigureVitality(16);
+                }
+                if (level.Id == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id)
+                {
+                    enemy.ConfigureVitality(16);
+                    enemy.Speed = enemy.EnemyArchetypeId == "raider" ? 11 : 8;
+                }
+                if (level.Id == FirstRegionLevelCatalog.RainPrismCourt.Id)
+                {
+                    enemy.ConfigureVitality(16);
+                    enemy.Speed = enemy.EnemyArchetypeId == "pyromancer" ? 9 : 8;
+                }
                 units.Add(enemy);
             }
 
             CombatObjective objective = level.ObjectiveType == CombatObjectiveType.Destruction
                 ? (CombatObjective)new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), level.Id + "_objective")
                 : new EliminationObjective(level.Id + "_objective");
-            return new FirstRegionLevelBuild(level, new CombatState(map, units, new[] { objective }));
+            CombatState state = new CombatState(map, units, new[] { objective });
+            if (level.Id == RainLanternCourtRuntime.LevelId) state.AttachRainLanternCourt(new RainLanternCourtRuntime());
+            if (level.Id == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id)
+            {
+                state.AttachGreenhouseCollectionRoom(new GreenhouseCollectionRoomRuntime());
+                state.SetLootSource(new LootSourceState("FIRST-B2-CENTRAL-CHEST", new GridPosition(5, 4),
+                    new[] { new ItemInstance("FIRST-B2-ACA-EQ-CR04", "ACA-EQ-CR04", 0) }));
+            }
+            if (level.Id == FirstRegionLevelCatalog.RainPrismCourt.Id)
+                state.SetLootSource(new LootSourceState("FIRST-B3-CHEST", new GridPosition(7, 4),
+                    new[] { new ItemInstance("FIRST-B3-ACA-EQ-CR01", "ACA-EQ-CR01", 0) }));
+            if (level.Id == FirstRegionLevelCatalog.ThreeMaterialPressure.Id)
+            {
+                state.Map.GetTile(new GridPosition(6, 4)).Durability = TileState.HeavyDurability;
+                state.AttachThreeMaterialPressure(new ThreeMaterialPressureRuntime());
+            }
+            return new FirstRegionLevelBuild(level, state);
         }
     }
 }

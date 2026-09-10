@@ -7,21 +7,16 @@ namespace OCC.Combat
 {
     public static class CombatDebugTuning
     {
-        public const int EnemyActionPointsPerTurn = 1;
+        public const int EnemyActionPointsPerTurn = 3;
 
         public static bool TemporaryEnemyAssistEnabled { get; set; }
 
-        public static int ActionPointsFor(UnitState unit, int configuredActionPoints)
-            => TemporaryEnemyAssistEnabled && unit != null && !unit.IsHero
-                ? EnemyActionPointsPerTurn
-                : configuredActionPoints;
+        public static int ActionPointsFor(UnitState unit, int configuredActionPoints) => configuredActionPoints;
 
         public static int OutgoingDamageFor(UnitState attacker, int configuredDamage)
         {
             int damage = Math.Max(0, configuredDamage);
-            return TemporaryEnemyAssistEnabled && attacker != null && !attacker.IsHero
-                ? damage / 2 + damage % 2
-                : damage;
+            return damage;
         }
     }
 
@@ -30,7 +25,6 @@ namespace OCC.Combat
         public readonly struct AttackPreview
         {
             public int BaseDamage { get; }
-            public int FacingModifier { get; }
             public int CoverReduction { get; }
             public int ShieldAbsorption { get; }
             public int ArmorReduction { get; }
@@ -38,8 +32,8 @@ namespace OCC.Combat
             public int FinalDamage { get; }
             public bool HasLineOfSight { get; }
 
-            public AttackPreview(int baseDamage, int facingModifier, int coverReduction, int shieldAbsorption, int armorReduction, int blockReduction, int finalDamage, bool hasLineOfSight)
-            { BaseDamage = baseDamage; FacingModifier = facingModifier; CoverReduction = coverReduction; ShieldAbsorption = shieldAbsorption; ArmorReduction = armorReduction; BlockReduction = blockReduction; FinalDamage = finalDamage; HasLineOfSight = hasLineOfSight; }
+            public AttackPreview(int baseDamage, int coverReduction, int shieldAbsorption, int armorReduction, int blockReduction, int finalDamage, bool hasLineOfSight)
+            { BaseDamage = baseDamage; CoverReduction = coverReduction; ShieldAbsorption = shieldAbsorption; ArmorReduction = armorReduction; BlockReduction = blockReduction; FinalDamage = finalDamage; HasLineOfSight = hasLineOfSight; }
         }
 
         public const int HeroActionPointsPerTurn = 3;
@@ -54,7 +48,7 @@ namespace OCC.Combat
             int armorPierce = isCast ? 0 : source.ArmorPierce;
             DamageType damageType = isCast ? CombatCatalog.FireBolt.DamageType : source.DamageType;
             DamageParts parts = CalculateDamage(state, attacker, defender, damage, damageType, armorPierce);
-            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.Map.HasLineOfSight(attacker.Position, defender.Position));
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.Map.HasLineOfSight(attacker.Position, defender.Position));
         }
 
         public static AttackPreview PreviewSkillAttack(CombatState state, string attackerId, string targetId, SkillDefinition skill)
@@ -64,64 +58,97 @@ namespace OCC.Combat
             UnitState defender = GetUnit(state, targetId);
             DamageParts parts = CalculateDamage(state, attacker, defender, skill.Damage, skill.DamageType, skill.ModifierValue(SkillModifierType.ArmorPierce));
             bool lineOfSight = skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.Map.HasLineOfSight(attacker.Position, defender.Position);
-            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage), parts.Facing, parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
         }
 
         public static CombatEffectExecution BeginTurn(CombatState state, string unitId)
         {
             UnitState unit = GetUnit(state, unitId);
+            unit.SetActionValue(Math.Max(CombatActionTimeline.ReadyThreshold, unit.ActionValue));
+            bool slowedAtTurnStart = unit.HasStatus(StatusType.Slow);
             state.SetActiveUnit(unitId);
             state.BeginRogueliteTurn(unit);
-            state.RogueSpells?.BeginOwnTurn(unitId);
             CombatEffectExecution execution = CombatStatusLifecycle.ResolveTurnStart(state, unit);
             LogStatusLifecycle(state, unit, execution);
             state.EvaluateOutcome();
             if (!unit.IsAlive) { if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
-            unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, unit.IsHero ? HeroActionPointsPerTurn : 2));
+            unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, HeroActionPointsPerTurn), slowedAtTurnStart);
+            state.RogueSpells?.BeginOwnTurn(unitId);
             state.AddLog($"{unit.DisplayName} \u5f00\u59cb\u884c\u52a8\uff08{unit.ActionPoints} \u884c\u52a8\u70b9\uff09\u3002");
             return execution;
         }
 
         public static CombatEffectExecution AdvanceToNextTurn(CombatState state)
         {
-            UnitState next = state.Units.Values.Where(unit => unit.IsAlive).OrderBy(unit => unit.InitiativeTime).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
+            UnitState[] living = state.Units.Values.Where(unit => unit.IsAlive).ToArray();
+            if (living.Length > 0 && living.All(unit => unit.ActionValue < CombatActionTimeline.ReadyThreshold))
+            {
+                int ticks = living.Min(unit => CombatActionTimeline.TicksUntilReady(unit.ActionValue, unit.EffectiveSpeed));
+                foreach (UnitState unit in living) unit.ChangeActionValue(ticks * unit.EffectiveSpeed);
+                state.SetCurrentTime(state.CurrentTime + ticks);
+            }
+            UnitState next = CombatActionTimeline.Order(state, living).FirstOrDefault();
             if (next == null) { state.EvaluateOutcome(); return CombatEffectExecution.Empty; }
-            state.SetCurrentTime(next.InitiativeTime);
             return BeginTurn(state, next.Id);
         }
 
         public static CombatEffectExecution Resolve(CombatState state, CombatCommand command)
         {
             UnitState unit = GetActiveUnit(state, command.UnitId);
+            CombatEffectExecution execution;
             switch (command.Type)
             {
-                case CombatCommandType.Move: return ResolveMove(state, unit, command);
-                case CombatCommandType.TurnInPlace:
-                    CombatEffectExecution turn = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
-                    unit.TurnInPlace(command.Facing);
-                    return turn;
-                case CombatCommandType.Attack: return ResolveWeaponAttack(state, unit, command.TargetUnitId, 0);
-                case CombatCommandType.Cast: return ResolveSkill(state, unit, CombatCatalog.FireBolt, command);
+                case CombatCommandType.Move: execution = ResolveMove(state, unit, command); break;
+                case CombatCommandType.Attack: execution = ResolveWeaponAttack(state, unit, command.TargetUnitId, 0); break;
+                case CombatCommandType.Cast: execution = ResolveSkill(state, unit, CombatCatalog.FireBolt, command); break;
                 case CombatCommandType.UseSkill:
-                    if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) return state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects;
-                    return ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
-                case CombatCommandType.UseQuickbar: return UseQuickbar(state, unit, command.SlotIndex);
-                case CombatCommandType.SearchLoot: return SearchLoot(state, unit);
-                case CombatCommandType.TakeLoot: return TakeLoot(state, unit, command.TargetUnitId);
-                case CombatCommandType.EquipInventoryQuickbar: return EquipInventoryQuickbar(state, unit, command.TargetUnitId, command.SlotIndex);
-                case CombatCommandType.UseInventoryItem: return UseInventoryItem(state, unit, command.TargetUnitId);
-                case CombatCommandType.Loot: return ResolveLoot(state, unit);
-                case CombatCommandType.Interact: return ResolveInteract(state, unit, command.Destination);
+                    execution = state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
+                        ? state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects
+                        : ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
+                    break;
+                case CombatCommandType.UseQuickbar: execution = UseQuickbar(state, unit, command.SlotIndex); break;
+                case CombatCommandType.SearchLoot: execution = SearchLoot(state, unit); break;
+                case CombatCommandType.TakeLoot: execution = TakeLoot(state, unit, command.TargetUnitId); break;
+                case CombatCommandType.EquipInventoryQuickbar: execution = EquipInventoryQuickbar(state, unit, command.TargetUnitId, command.SlotIndex); break;
+                case CombatCommandType.UseInventoryItem: execution = UseInventoryItem(state, unit, command.TargetUnitId); break;
+                case CombatCommandType.Loot: execution = ResolveLoot(state, unit); break;
+                case CombatCommandType.Interact: execution = ResolveInteract(state, unit, command.Destination); break;
                 case CombatCommandType.EndTurn: return EndTurn(state, unit);
+                case CombatCommandType.OpenInventory: execution = ResolveOpenInventory(state, unit); break;
+                case CombatCommandType.BreachCharge:
+                    execution = state.ThreeMaterialPressure?.ResolveCharge(state, unit, command.Destination)
+                        ?? throw new InvalidOperationException("当前战斗不支持贯场冲压。");
+                    break;
                 default: throw new ArgumentOutOfRangeException(nameof(command), command.Type, "Unsupported combat command.");
             }
+            ExhaustEnemyActionPoints(state, unit);
+            return execution;
+        }
+
+        private static void ExhaustEnemyActionPoints(CombatState state, UnitState unit)
+        {
+            if (unit.IsHero || unit.ActionPoints <= 0) return;
+            CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(unit.ActionPoints));
+        }
+
+        private static CombatEffectExecution ResolveOpenInventory(CombatState state, UnitState unit)
+        {
+            bool equippedBackpack = state.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null &&
+                state.RogueEquipment.Equipped.TryGetValue(Roguelite.EquipmentSlot.Backpack, out string backpackId) &&
+                !string.IsNullOrEmpty(backpackId);
+            bool free = state.InventoryOpenCount == 0 && equippedBackpack;
+            if (!free && unit.ActionPoints < BasicActionPointCost) throw new InvalidOperationException("Insufficient action points.");
+            state.RecordInventoryOpened();
+            return free ? CombatEffectExecution.Empty :
+                CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
         }
 
         public static CombatEffectExecution EndTurn(CombatState state, UnitState unit)
         {
             state.EndRogueliteTurn(unit);
-            unit.SetInitiativeTime(Math.Max(unit.InitiativeTime, state.CurrentTime) + Math.Max(1, 12 - unit.EffectiveSpeed));
+            unit.ChangeActionValue(-CombatActionTimeline.ReadyThreshold);
             unit.BeginTurn(0);
+            state.SetActiveUnit(null);
             state.AddLog($"{unit.DisplayName} \u7ed3\u675f\u884c\u52a8\u3002");
             state.EvaluateOutcome();
             return !state.IsVictory && !state.IsDefeat ? AdvanceToNextTurn(state) : CombatEffectExecution.Empty;
@@ -130,7 +157,7 @@ namespace OCC.Combat
         public static void WorkshopReset(UnitState hero)
         {
             if (hero == null || !hero.IsHero) throw new ArgumentException("\u53ea\u80fd\u4fee\u6539\u4e3b\u89d2\u914d\u7f6e\u3002", nameof(hero));
-            hero.Equip(CombatCatalog.Rifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+            hero.Equip(CombatCatalog.Rifle, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
         }
 
         public static CombatEffectExecution ResolveWeaponAttack(CombatState state, string attackerId, string targetId,
@@ -147,7 +174,12 @@ namespace OCC.Combat
             int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
                 ? weapon.Damage
                 : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
-            return ResolveDamageAction(state, attacker, targetId, weapon.DisplayName, weapon.DamageType, reducedBaseDamage, weapon.Range, weapon.ArmorPierce, weapon.InitiativeDelay, weapon.ManaCost, null, 0);
+            CombatEffectExecution execution = ResolveDamageAction(state, attacker, targetId, weapon.DisplayName,
+                weapon.DamageType, reducedBaseDamage, weapon.Range, weapon.ArmorPierce,
+                weapon.InitiativeDelay, weapon.ManaCost, null, 0);
+            state.RogueSpells?.AfterWeaponHit(attacker.Id, state.GetUnit(targetId));
+            ExhaustEnemyActionPoints(state, attacker);
+            return execution;
         }
 
         private static CombatEffectExecution ResolveSkill(CombatState state, UnitState attacker, SkillDefinition skill, CombatCommand command)
@@ -181,6 +213,7 @@ namespace OCC.Combat
             attacker.SetCooldown(skill);
             LogSkillExecution(state, attacker, skill, execution);
             state.EvaluateOutcome();
+            ExhaustEnemyActionPoints(state, attacker);
             return execution;
         }
 
@@ -247,7 +280,7 @@ namespace OCC.Combat
                         state.Ruleset == CombatRuleset.Roguelite && definition.Status == StatusType.ArmorBreak ? StatusType.BreakStance : definition.Status, definition.Duration));
                     break;
                 case SkillEffectType.ClearStatus: effects.Add(CombatEffect.ClearStatus(recipient.Id, definition.Status)); break;
-                case SkillEffectType.MoveSource: effects.Add(CombatEffect.Move(command.Destination, command.Facing)); break;
+                case SkillEffectType.MoveSource: effects.Add(CombatEffect.Move(command.Destination)); break;
                 case SkillEffectType.DamageObject: effects.Add(CombatEffect.DamageObject(command.Destination, definition.Amount)); break;
                 default: throw new ArgumentOutOfRangeException(nameof(definition), definition.Type, "Unsupported skill effect.");
             }
@@ -354,6 +387,16 @@ namespace OCC.Combat
             LootSourceState loot = state.LootSource;
             if (loot == null) throw new InvalidOperationException("此处没有可搜刮的战利品。");
             if (Manhattan(unit.Position, loot.Position) != 1) throw new InvalidOperationException("只能拿取相邻容器中的物品。");
+            ItemInstance revealed = loot.RevealedItems.FirstOrDefault(value => value.InstanceId == instanceId);
+            if (revealed != null && state.RogueEquipment != null &&
+                Roguelite.RogueContentCatalog.CreateAcademyV01().Equipment.Any(value => value.DefinitionId == revealed.DefinitionId))
+            {
+                if (!state.RogueEquipment.TryAddEquipmentFromLoot(revealed.InstanceId, revealed.DefinitionId, "combat-loot:" + loot.Id))
+                    throw new InvalidOperationException("背包空间不足，需要先整理。");
+                loot.ClaimRevealed(instanceId);
+                state.AddLog($"{unit.DisplayName}拿取了{ItemCatalog.Get(revealed.DefinitionId).DisplayName}；拿取物品不再消耗行动点。");
+                return CombatEffectExecution.Empty;
+            }
             InventoryResult result = loot.Take(instanceId, state.ItemInventory);
             if (!result.Success) throw new InvalidOperationException(result.Error == InventoryError.NoSpace ? "背包空间不足，需要先整理。" : "该物品尚未发现或不可拿取。");
             ItemInstance item = state.ItemInventory.Get(instanceId); state.AddLog($"{unit.DisplayName}拿取了{ItemCatalog.Get(item.DefinitionId).DisplayName}；拿取物品不再消耗行动点。");
@@ -380,13 +423,15 @@ namespace OCC.Combat
 
         private static CombatEffectExecution ResolveInteract(CombatState state, UnitState unit, GridPosition target)
         {
+            if (state.RainLanternCourt?.CanBurn(state, unit, target) == true)
+                return state.RainLanternCourt.Burn(state, unit, target);
             if (Manhattan(unit.Position, target) != 1) throw new InvalidOperationException("\u53ea\u80fd\u4e0e\u76f8\u90bb\u683c\u4ea4\u4e92\u3002");
             TileState tile = state.Map.GetTile(target);
             bool investigationTarget = state.Objectives.OfType<InvestigationObjective>().Any(objective => objective.Positions.Contains(target));
-            bool destructibleTarget = tile.IsObjective || tile.Cover != CoverType.None;
+            bool destructibleTarget = tile.Durability > 0 && (tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None);
             if (!destructibleTarget && !investigationTarget) throw new InvalidOperationException("\u8be5\u683c\u6ca1\u6709\u53ef\u4ea4\u4e92\u76ee\u6807\u3002");
             CombatEffectExecution execution = destructibleTarget
-                ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, 3))
+                ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, unit.MainHand?.Damage ?? 0))
                 : CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             state.MarkInvestigated(target);
             state.AddLog(destructibleTarget
@@ -398,13 +443,12 @@ namespace OCC.Combat
 
         private readonly struct DamageParts
         {
-            public int Facing { get; }
             public int Cover { get; }
             public int Shield { get; }
             public int Armor { get; }
             public int Block { get; }
             public int Final { get; }
-            public DamageParts(int facing, int cover, int shield, int armor, int block, int final) { Facing = facing; Cover = cover; Shield = shield; Armor = armor; Block = block; Final = final; }
+            public DamageParts(int cover, int shield, int armor, int block, int final) { Cover = cover; Shield = shield; Armor = armor; Block = block; Final = final; }
         }
 
         private static DamageParts CalculateDamage(CombatState state, UnitState attacker, UnitState defender, int baseDamage, DamageType damageType, int armorPierce)
@@ -417,15 +461,14 @@ namespace OCC.Combat
                 DamagePacket packet = new DamagePacket("preview", attacker.Id, defender.Id, "combat_action",
                     new[] { new DamageComponent(kind, Math.Max(0, baseDamage)) });
                 DamageResolution result = RogueDamageResolver.Resolve(packet, defender.Shield, defender.Health);
-                return new DamageParts(0, 0, result.ShieldAbsorbed, 0, 0, result.HealthDamage);
+                return new DamageParts(0, result.ShieldAbsorbed, 0, 0, result.HealthDamage);
             }
-            int facing = FacingBonus(attacker.Position, defender.Position, defender.Facing);
             int cover = damageType == DamageType.Fire ? 0 : state.Map.GetTile(defender.Position).DamageReduction;
-            int incoming = Math.Max(0, baseDamage + facing - cover);
+            int incoming = Math.Max(0, baseDamage - cover);
             int shield = Math.Min(defender.Shield, incoming); incoming -= shield;
             int armor = Math.Min(incoming, Math.Max(0, defender.EffectiveArmor - armorPierce)); incoming -= armor;
-            int block = damageType == DamageType.Physical && facing == 0 ? Math.Min(incoming, defender.Block) : 0; incoming -= block;
-            return new DamageParts(facing, cover, shield, armor, block, incoming);
+            int block = damageType == DamageType.Physical ? Math.Min(incoming, defender.Block) : 0; incoming -= block;
+            return new DamageParts(cover, shield, armor, block, incoming);
         }
 
         private static CombatEffectExecution ResolveMove(CombatState state, UnitState unit, CombatCommand command)
@@ -434,8 +477,18 @@ namespace OCC.Combat
             if (!state.Map.IsInside(command.Destination)) throw new InvalidOperationException("\u76ee\u6807\u683c\u8d85\u51fa\u5730\u56fe\u8303\u56f4\u3002");
             if (state.Map.IsBlocked(command.Destination)) throw new InvalidOperationException("\u76ee\u6807\u683c\u88ab\u963b\u6321\u3002");
             if (state.IsOccupied(command.Destination, unit.Id)) throw new InvalidOperationException("\u76ee\u6807\u683c\u5df2\u88ab\u5355\u4f4d\u5360\u636e\u3002");
-            if (Manhattan(command.Destination, unit.Position) > unit.MovementRangeThisTurn) throw new InvalidOperationException("\u76ee\u6807\u683c\u8d85\u51fa\u79fb\u52a8\u8303\u56f4\u3002");
-            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(command.Destination, command.Facing));
+            IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, unit, command.Destination);
+            if (path.Count == 0) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u884c\u79fb\u52a8\u8def\u5f84\u6216\u8d85\u51fa\u79fb\u52a8\u8303\u56f4\u3002");
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(command.Destination));
+            state.RainLanternCourt?.AfterMove(state, unit, path);
+            state.GreenhouseCollectionRoom?.AfterMove(state, unit, path);
+            state.RogueSpells?.AfterMove(unit.Id, path);
+            if (path.Skip(1).Any(position => state.Map.GetTile(position).IsWater) && unit.HasStatus(StatusType.Burning))
+            {
+                unit.ClearStatus(StatusType.Burning);
+                state.AddLog(unit.DisplayName + "进入浅水，燃烧已移除。");
+            }
+            state.RogueEquipment?.AfterMove(unit.Id);
             if (!unit.IsHero && state.ArtifactBattle != null)
             {
                 ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);
@@ -463,13 +516,6 @@ namespace OCC.Combat
         private static UnitState GetActiveUnit(CombatState state, string unitId)
         { UnitState unit = GetUnit(state, unitId); if (state.ActiveUnitId != unitId) throw new InvalidOperationException("\u53ea\u6709\u5f53\u524d\u884c\u52a8\u5355\u4f4d\u53ef\u4ee5\u6267\u884c\u52a8\u4f5c\u3002"); return unit; }
         private static int Manhattan(GridPosition a, GridPosition b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
-        private static int FacingBonus(GridPosition attacker, GridPosition defender, Facing defenderFacing)
-        {
-            int dx = attacker.X - defender.X; int dy = attacker.Y - defender.Y;
-            bool front = (defenderFacing == Facing.North && dy > 0) || (defenderFacing == Facing.South && dy < 0) || (defenderFacing == Facing.East && dx > 0) || (defenderFacing == Facing.West && dx < 0);
-            bool back = (defenderFacing == Facing.North && dy < 0) || (defenderFacing == Facing.South && dy > 0) || (defenderFacing == Facing.East && dx < 0) || (defenderFacing == Facing.West && dx > 0);
-            return back ? 2 : front ? 0 : 1;
-        }
         private static string StatusName(StatusType type) => type == StatusType.Burning ? "\u71c3\u70e7" : type == StatusType.Slow ? "\u7f13\u6162" : type == StatusType.Bound ? "\u675f\u7f1a" : "\u7834\u7532";
         private static string StatusPhaseName(CombatStatusLifecyclePhase phase) =>
             phase == CombatStatusLifecyclePhase.Refreshed ? "\u5237\u65b0\u81f3" :

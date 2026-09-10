@@ -41,9 +41,8 @@ namespace OCC.Combat
         public StatusType Status { get; }
         public int Duration { get; }
         public GridPosition Destination { get; }
-        public Facing Facing { get; }
 
-        private CombatEffect(CombatEffectKind kind, string targetUnitId, int amount, StatusType status, int duration, GridPosition destination, Facing facing)
+        private CombatEffect(CombatEffectKind kind, string targetUnitId, int amount, StatusType status, int duration, GridPosition destination)
         {
             Kind = kind;
             TargetUnitId = targetUnitId;
@@ -51,23 +50,22 @@ namespace OCC.Combat
             Status = status;
             Duration = duration;
             Destination = destination;
-            Facing = facing;
         }
 
-        public static CombatEffect SpendActionPoints(int amount) => new CombatEffect(CombatEffectKind.SpendActionPoints, null, amount, default, 0, default, default);
-        public static CombatEffect SpendMana(int amount) => new CombatEffect(CombatEffectKind.SpendMana, null, amount, default, 0, default, default);
-        public static CombatEffect AbsorbShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.AbsorbShield, targetUnitId, amount, default, 0, default, default);
-        public static CombatEffect DamageHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.DamageHealth, targetUnitId, amount, default, 0, default, default);
-        public static CombatEffect RestoreHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreHealth, targetUnitId, amount, default, 0, default, default);
-        public static CombatEffect RestoreShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreShield, targetUnitId, amount, default, 0, default, default);
-        public static CombatEffect RestoreMana(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreMana, targetUnitId, amount, default, 0, default, default);
-        public static CombatEffect ApplyStatus(string targetUnitId, StatusType status, int duration) => new CombatEffect(CombatEffectKind.ApplyStatus, targetUnitId, 0, status, duration, default, default);
-        public static CombatEffect ClearStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.ClearStatus, targetUnitId, 0, status, 0, default, default);
-        public static CombatEffect TriggerStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.TriggerStatus, targetUnitId, 0, status, 0, default, default);
-        public static CombatEffect ReduceStatusDuration(string targetUnitId, StatusType status, int amount = 1) => new CombatEffect(CombatEffectKind.ReduceStatusDuration, targetUnitId, amount, status, 0, default, default);
-        public static CombatEffect Move(GridPosition destination, Facing facing) => new CombatEffect(CombatEffectKind.Move, null, 0, default, 0, destination, facing);
-        public static CombatEffect DamageObject(GridPosition destination, int amount) => new CombatEffect(CombatEffectKind.DamageObject, null, amount, default, 0, destination, default);
-        public static CombatEffect DelayInitiative(int amount) => new CombatEffect(CombatEffectKind.DelayInitiative, null, amount, default, 0, default, default);
+        public static CombatEffect SpendActionPoints(int amount) => new CombatEffect(CombatEffectKind.SpendActionPoints, null, amount, default, 0, default);
+        public static CombatEffect SpendMana(int amount) => new CombatEffect(CombatEffectKind.SpendMana, null, amount, default, 0, default);
+        public static CombatEffect AbsorbShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.AbsorbShield, targetUnitId, amount, default, 0, default);
+        public static CombatEffect DamageHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.DamageHealth, targetUnitId, amount, default, 0, default);
+        public static CombatEffect RestoreHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreHealth, targetUnitId, amount, default, 0, default);
+        public static CombatEffect RestoreShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreShield, targetUnitId, amount, default, 0, default);
+        public static CombatEffect RestoreMana(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreMana, targetUnitId, amount, default, 0, default);
+        public static CombatEffect ApplyStatus(string targetUnitId, StatusType status, int duration) => new CombatEffect(CombatEffectKind.ApplyStatus, targetUnitId, 0, status, duration, default);
+        public static CombatEffect ClearStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.ClearStatus, targetUnitId, 0, status, 0, default);
+        public static CombatEffect TriggerStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.TriggerStatus, targetUnitId, 0, status, 0, default);
+        public static CombatEffect ReduceStatusDuration(string targetUnitId, StatusType status, int amount = 1) => new CombatEffect(CombatEffectKind.ReduceStatusDuration, targetUnitId, amount, status, 0, default);
+        public static CombatEffect Move(GridPosition destination) => new CombatEffect(CombatEffectKind.Move, null, 0, default, 0, destination);
+        public static CombatEffect DamageObject(GridPosition destination, int amount) => new CombatEffect(CombatEffectKind.DamageObject, null, amount, default, 0, destination);
+        public static CombatEffect DelayInitiative(int amount) => new CombatEffect(CombatEffectKind.DelayInitiative, null, amount, default, 0, default);
     }
 
     public readonly struct CombatEffectResult
@@ -265,7 +263,7 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.Move:
                     before = 0;
-                    source.MoveTo(effect.Destination, effect.Facing);
+                    source.MoveTo(effect.Destination);
                     after = 0;
                     applied = 0;
                     positionAfter = source.Position;
@@ -276,13 +274,14 @@ namespace OCC.Combat
                     tile.Durability = Math.Max(0, tile.Durability - effect.Amount);
                     after = tile.Durability;
                     applied = before - after;
+                    state.ResolveAetherCrystalDamage(effect.Destination, before);
                     positionBefore = effect.Destination;
                     positionAfter = effect.Destination;
                     break;
                 case CombatEffectKind.DelayInitiative:
-                    before = source.InitiativeTime;
-                    source.SetInitiativeTime(source.InitiativeTime + effect.Amount);
-                    after = source.InitiativeTime;
+                    before = source.ActionValue;
+                    source.ChangeActionValue(-effect.Amount);
+                    after = source.ActionValue;
                     applied = after - before;
                     break;
                 default:

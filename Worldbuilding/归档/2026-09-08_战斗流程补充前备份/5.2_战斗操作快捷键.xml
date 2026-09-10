@@ -1,0 +1,32 @@
+<h3>5.2.1 战斗鼠标操作</h3>
+<table>
+  <thead><tr><th><p>输入</p></th><th><p>操作</p></th></tr></thead>
+  <tbody>
+    <tr><td><p>左键</p></td><td><p>选择单位、格子或指令，并查看行动预览</p></td></tr>
+    <tr><td><p>双击可达格</p></td><td><p>确认快捷移动</p></td></tr>
+    <tr><td><p>右键</p></td><td><p>打开目标位置当前能做的事情</p></td></tr>
+    <tr><td><p>鼠标悬停</p></td><td><p>查看单位、术式、状态、敌人意图和地形说明</p></td></tr>
+    <tr><td><p>滚轮</p></td><td><p>缩放战场</p></td></tr>
+    <tr><td><p>中键拖动</p></td><td><p>拖动战场画面</p></td></tr>
+    <tr><td><p>空格＋左键拖动</p></td><td><p>拖动战场画面</p></td></tr>
+  </tbody>
+</table>
+<h3>5.2.2 战斗键盘快捷键</h3>
+<table>
+  <thead><tr><th><p>按键</p></th><th><p>什么时候用</p></th><th><p>操作</p></th></tr></thead>
+  <tbody>
+    <tr><td><p>Tab</p></td><td><p>任何战斗界面</p></td><td><p>把焦点移到下一个按钮或选项</p></td></tr>
+    <tr><td><p>数字键 1–8</p></td><td><p>战斗主界面</p></td><td><p>选择对应术式</p></td></tr>
+    <tr><td><p>B</p></td><td><p>战斗主界面</p></td><td><p>打开或关闭战斗背包；打开时按规则消耗 1 行动点</p></td></tr>
+    <tr><td><p>T</p></td><td><p>选择战场目标时</p></td><td><p>打开或关闭键盘选格模式</p></td></tr>
+    <tr><td><p>WASD／方向键</p></td><td><p>键盘选格模式</p></td><td><p>移动目标光标</p></td></tr>
+    <tr><td><p>Enter／空格</p></td><td><p>键盘选格模式</p></td><td><p>确认当前目标</p></td></tr>
+    <tr><td><p>Ctrl＋Enter</p></td><td><p>主角回合且没有待处理结算</p></td><td><p>结束回合并清空剩余行动点</p></td></tr>
+    <tr><td><p>Home</p></td><td><p>查看战场时</p></td><td><p>把镜头移回主角</p></td></tr>
+    <tr><td><p>Esc</p></td><td><p>任何战斗界面</p></td><td><p>取消当前操作，或关闭最上层可以关闭的界面</p></td></tr>
+    <tr><td><p>R</p></td><td><p>战斗背包中选中物品时</p></td><td><p>旋转物品</p></td></tr>
+    <tr><td><p>F</p></td><td><p>靠近可搜索物时</p></td><td><p>搜索容器；已有物品露出时拿取当前物品</p></td></tr>
+    <tr><td><p>Ctrl＋F</p></td><td><p>战斗背包</p></td><td><p>把输入焦点移到物品搜索框</p></td></tr>
+    <tr><td><p>数字键 1–4</p></td><td><p>战斗背包中选中战术道具时</p></td><td><p>放入对应战术栏位</p></td></tr>
+  </tbody>
+</table>

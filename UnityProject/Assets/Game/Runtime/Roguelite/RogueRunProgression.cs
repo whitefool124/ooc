@@ -10,30 +10,28 @@ namespace OCC.Combat.Roguelite
     {
         public bool RunSealed { get; }
         public bool TimeAdvanced { get; }
-        public int HealthRecovered { get; }
         public int ManaRecovered { get; }
         public int TimeCost { get; }
-        public RogueStageResolution(bool sealedRun, bool advanced, int health, int mana, int timeCost = 0)
-        { RunSealed = sealedRun; TimeAdvanced = advanced; HealthRecovered = health; ManaRecovered = mana; TimeCost = timeCost; }
+        public RogueStageResolution(bool sealedRun, bool advanced, int mana, int timeCost = 0)
+        { RunSealed = sealedRun; TimeAdvanced = advanced; ManaRecovered = mana; TimeCost = timeCost; }
     }
 
     public static class RogueRunProgression
     {
-        public static RogueStageResolution ResolveEncounter(RogueRunDto run, RogueEncounterOutcome outcome, int timeCost = 1, int healthRecoveryPerTime = 4, int manaRecoveryPerTime = 1)
+        public static RogueStageResolution ResolveEncounter(RogueRunDto run, RogueEncounterOutcome outcome, int timeCost = 1, int manaRecoveryPerTime = 1)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             if (outcome == RogueEncounterOutcome.Defeat || run.CurrentHealth <= 0)
             {
                 run.CurrentHealth = 0;
-                return new RogueStageResolution(true, false, 0, 0);
+                return new RogueStageResolution(true, false, 0);
             }
             timeCost = Math.Max(0, timeCost);
-            if (timeCost == 0) return new RogueStageResolution(false, false, 0, 0);
-            int healthBefore = run.CurrentHealth, manaBefore = run.CurrentMana;
+            if (timeCost == 0) return new RogueStageResolution(false, false, 0);
+            int manaBefore = run.CurrentMana;
             run.StageTime += timeCost;
-            run.CurrentHealth = Math.Min(18, run.CurrentHealth + Math.Max(0, healthRecoveryPerTime) * timeCost);
             run.CurrentMana = Math.Min(RogueRuntimeConstants.MaximumPersonalMana, run.CurrentMana + Math.Max(0, manaRecoveryPerTime) * timeCost);
-            return new RogueStageResolution(false, true, run.CurrentHealth - healthBefore, run.CurrentMana - manaBefore, timeCost);
+            return new RogueStageResolution(false, true, run.CurrentMana - manaBefore, timeCost);
         }
 
         public static void ResolveZeroTimeFunction(RogueRunDto run)
@@ -83,6 +81,7 @@ namespace OCC.Combat.Roguelite
                 "quickbar:compressed_8_to_4"
             };
             RogueRunDto dto = legacy.ExportRogue11(null, reportId);
+            dto.RunProgramId = RogueliteRunProgram.LegacyGrandfathered.ToString();
             dto.Gold = 8; dto.StageContribution = 0;
             if (!string.IsNullOrEmpty(legacy.EquippedWeaponId))
             {

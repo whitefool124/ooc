@@ -1,0 +1,22 @@
+{
+  "success": true,
+  "message": "Test job finished.",
+  "data": {
+    "jobId": "cfbef9d1-6697-425a-9745-c1bd465c8f19",
+    "status": "finished",
+    "mode": "EditMode",
+    "startedAt": "2026-09-05 22:42:27",
+    "lastActivityAt": "2026-09-05 22:43:05",
+    "testsCompleted": 826,
+    "hasFilters": false,
+    "totalTests": 826,
+    "finishedAt": "2026-09-05 22:43:05",
+    "resultState": "Passed",
+    "passCount": 826,
+    "failCount": 0,
+    "skipCount": 0,
+    "inconclusiveCount": 0,
+    "durationSeconds": 33.11,
+    "failures": []
+  }
+}

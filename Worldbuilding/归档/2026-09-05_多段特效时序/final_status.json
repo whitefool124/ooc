@@ -1,0 +1,15 @@
+{
+  "feishu_revision": 331,
+  "mirror_matches_fetched_content": true,
+  "main_task": "VISUAL-INTEGRATION-01",
+  "status": "in_progress",
+  "goal_turn_classification": "progress",
+  "editmode": {
+    "passed": 757,
+    "failed": 0,
+    "skipped": 0
+  },
+  "v3_approval_count": 0,
+  "runtime_visual_and_performance_review": "not_verified",
+  "next": "consume existing MovementPath and complete runtime review"
+}

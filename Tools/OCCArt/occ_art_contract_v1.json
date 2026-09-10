@@ -1,7 +1,7 @@
 {
   "schema": "occ-art-contract-v1",
   "version": 1,
-  "canonical_document": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+  "canonical_document": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
   "machine_mirror_only": true,
   "allowed_source_channels": [
     "codex_builtin_imagegen",
@@ -25,10 +25,51 @@
     "FORMAL_CANDIDATE": "machine and human review passed; Unity import incomplete",
     "FORMAL": "Unity import, stable GUID and runtime verification passed"
   },
+  "opening_brand_sequence": {
+    "order": [
+      "oc_aether_industry_mark",
+      "occ_life_archive_mark",
+      "first_device_settings",
+      "worldbuilding_video"
+    ],
+    "brand_mark_role": "ui_backdrop_480x270",
+    "palette_max": 6,
+    "reference_scale_1920x1080": 4,
+    "reference_scale_960x540": 2,
+    "skip_scope": "entire_opening_sequence"
+  },
+  "screen_layouts": {
+    "main_menu": {
+      "canvas": [1920, 1080],
+      "background_role": "ui_backdrop_480x270",
+      "background_scale": 4,
+      "primary_actions": "left_column",
+      "archive_status": "right_panel_with_life_stage_arc",
+      "screen_scope": "whole_game_aether_main_menu",
+      "life_stages": ["academy", "war", "turning_point"],
+      "current_available_stage": "academy",
+      "academy_only_visual_forbidden": true,
+      "focus_rule": "one_current_primary_focus"
+    },
+    "character_select": {
+      "canvas": [1920, 1080],
+      "portrait_role": "character_portrait_b_384x576",
+      "portrait_position": "right",
+      "intro_and_trait": "left",
+      "roster_slots_max": 6,
+      "current_complete_character": "维克多·维恩",
+      "unconfirmed_character_policy": "locked_placeholder_without_invented_identity_or_ability",
+      "save_rule": "selected_character_fixed_after_creation"
+    }
+  },
   "typography": {
     "combat_primary_font": "FusionPixel12ProportionalZhHans",
     "native_face_grid": 12,
-    "allowed_reference_font_sizes": [24, 48, 72],
+    "allowed_reference_font_sizes": [
+      24,
+      48,
+      72
+    ],
     "reference_font_size_min": 24,
     "compact_reference_font_size_min": 24,
     "key_readout_font_size_min": 24,
@@ -50,12 +91,27 @@
     "combat_spell_card_columns": 4,
     "combat_spell_card_rows": 2,
     "combat_spell_icon_display_size": 64,
-    "combat_spell_key_badge_reference": [24, 24],
-    "combat_spell_name_slot_reference": [122, 40],
-    "combat_spell_resource_block_reference": [60, 64],
-    "combat_spell_cost_chip_reference": [56, 32],
+    "combat_spell_key_badge_reference": [
+      24,
+      24
+    ],
+    "combat_spell_name_slot_reference": [
+      122,
+      40
+    ],
+    "combat_spell_resource_block_reference": [
+      60,
+      64
+    ],
+    "combat_spell_cost_chip_reference": [
+      56,
+      32
+    ],
     "combat_spell_resource_icon_display_size": 32,
-    "combat_spell_notice_chip_reference": [32, 28],
+    "combat_spell_notice_chip_reference": [
+      32,
+      28
+    ],
     "combat_spell_cost_value_background_forbidden": true,
     "combat_spell_standard_button_skin_forbidden": true,
     "combat_spell_thin_frame_reference": 2,
@@ -65,8 +121,14 @@
     "spell_cost_text_generation_height_min": 40,
     "combat_resource_track_height_min": 24,
     "combat_resource_fill_inset_reference": 4,
-    "battlefield_unit_health_track_reference": [120, 22],
-    "battlefield_unit_shield_track_reference": [120, 14],
+    "battlefield_unit_health_track_reference": [
+      112,
+      16
+    ],
+    "battlefield_unit_shield_track_reference": [
+      112,
+      8
+    ],
     "battlefield_unit_resource_fill_inset_reference": 2,
     "enemy_intent_badge_top_offset_reference": -22,
     "enemy_intent_icon_native_size": 16,
@@ -77,110 +139,206 @@
     "pixel_perfect_canvas_required": true,
     "integer_position_required": true,
     "best_fit_forbidden": true,
-    "dual_resolution_review": ["1920x1080", "960x540"]
+    "dual_resolution_review": [
+      "1920x1080",
+      "960x540"
+    ],
+    "bounded_combat_decision_summary": {
+      "rect": [
+        16,
+        40,
+        380,
+        52
+      ],
+      "font_px": 24,
+      "explicit_lines": 2,
+      "max_characters_per_line": 15,
+      "reference_line_advance_px": 26,
+      "automatic_wrap": false,
+      "details": "existing hover",
+      "measured_reference_bottom_margin": {
+        "1920x1080": 6,
+        "960x540": 4
+      },
+      "review": "14 static glyph cases pass; actual input and full visual approval pending"
+    },
+    "reading_font_review": {
+      "canonical": "FusionPixel12 normal Chinese text",
+      "observed": "SimHei in combat event log via ConfigureReadingParagraph",
+      "status": "conflict reported; awaiting user decision; not silently accepted as an exception"
+    }
   },
   "roles": {
     "semantic_icon_16": {
-      "delivery_size": [16, 16],
+      "delivery_size": [
+        16,
+        16
+      ],
       "logical_cells": null,
       "palette_max": 4,
       "transparent_border_min": 1,
       "unity_ppu": 16
     },
     "material_pickup_24_to_ui32": {
-      "native_size": [24, 24],
-      "delivery_size": [32, 32],
-      "native_embed_offset": [4, 4],
+      "native_size": [
+        24,
+        24
+      ],
+      "delivery_size": [
+        32,
+        32
+      ],
+      "native_embed_offset": [
+        4,
+        4
+      ],
       "logical_cells": null,
       "palette_max": 8,
       "transparent_border_min": 1,
       "unity_ppu": 32
     },
     "equipment_icon_32": {
-      "delivery_size": [32, 32],
+      "delivery_size": [
+        32,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 2,
       "unity_ppu": 32
     },
     "ui_backdrop_480x270": {
-      "delivery_size": [480, 270],
+      "delivery_size": [
+        480,
+        270
+      ],
       "logical_cells": null,
       "palette_max": 24,
       "transparent_border_min": 0,
       "unity_ppu": 32,
       "alpha_policy": "fully_opaque_hard_alpha",
-      "runtime_scales": [2, 4]
+      "runtime_scales": [
+        2,
+        4
+      ]
     },
     "ui_trim_square_32": {
-      "delivery_size": [32, 32],
+      "delivery_size": [
+        32,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4]
+      "runtime_scales": [
+        2,
+        4
+      ]
     },
     "ui_trim_vertical_32x64": {
-      "delivery_size": [32, 64],
+      "delivery_size": [
+        32,
+        64
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4]
+      "runtime_scales": [
+        2,
+        4
+      ]
     },
     "ui_trim_horizontal_64x32": {
-      "delivery_size": [64, 32],
+      "delivery_size": [
+        64,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4]
+      "runtime_scales": [
+        2,
+        4
+      ]
     },
     "ui_trim_corner_64": {
-      "delivery_size": [64, 64],
+      "delivery_size": [
+        64,
+        64
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4]
+      "runtime_scales": [
+        2,
+        4
+      ]
     },
     "ui_chapter_marker_32": {
-      "delivery_size": [32, 32],
+      "delivery_size": [
+        32,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 10,
       "transparent_border_min": 2,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4],
+      "runtime_scales": [
+        2,
+        4
+      ],
       "interaction_policy": "non_interactive_decoration_only"
     },
     "ui_chapter_divider_128x32": {
-      "delivery_size": [128, 32],
+      "delivery_size": [
+        128,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 12,
       "transparent_border_min": 2,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4],
+      "runtime_scales": [
+        2,
+        4
+      ],
       "rotation_policy": "forbidden"
     },
     "ui_empty_illustration_64": {
-      "delivery_size": [64, 64],
+      "delivery_size": [
+        64,
+        64
+      ],
       "logical_cells": null,
       "palette_max": 12,
       "transparent_border_min": 2,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "runtime_scales": [2, 4],
+      "runtime_scales": [
+        2,
+        4
+      ],
       "visibility_policy": "existing_empty_or_locked_state_only"
     },
     "floor_tile_32": {
-      "delivery_size": [32, 32],
-      "logical_cells": [1, 1],
+      "delivery_size": [
+        32,
+        32
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
       "palette_max": 6,
       "transparent_border_min": 0,
       "unity_ppu": 32,
@@ -192,7 +350,11 @@
       "surface_detail_policy": "sparse_low_contrast_non_connecting_marks_only",
       "surface_detail_edge_contact": "forbidden",
       "perimeter_bevel_policy": "restrained_physical_seam_not_ui_button",
-      "runtime_review_sequence": ["single_tile_1x_4x", "four_variant_unlabelled_contact", "large_area_12x9_runtime"]
+      "runtime_review_sequence": [
+        "single_tile_1x_4x",
+        "four_variant_unlabelled_contact",
+        "large_area_12x9_runtime"
+      ]
     },
     "multi_cell_ground_32": {
       "delivery_formula": "logical_cells_times_32",
@@ -203,8 +365,14 @@
       "production_status": "legacy_transition_only_not_new_floor_baseline"
     },
     "single_cell_prop_32": {
-      "delivery_size": [32, 32],
-      "logical_cells": [1, 1],
+      "delivery_size": [
+        32,
+        32
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
       "palette_max": 10,
       "transparent_border_min": 2,
       "unity_ppu": 32
@@ -217,8 +385,14 @@
       "unity_ppu": 32
     },
     "terrain_adjacency_overlay_32": {
-      "delivery_size": [32, 32],
-      "logical_cells": [1, 1],
+      "delivery_size": [
+        32,
+        32
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
       "palette_max": 10,
       "transparent_border_min": 0,
       "unity_ppu": 32,
@@ -233,19 +407,37 @@
       "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting"
     },
     "tactical_unit_64": {
-      "delivery_size": [64, 64],
-      "logical_cells": [1, 1],
+      "delivery_size": [
+        64,
+        64
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
       "palette_max": 24,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "center_x": 32,
       "baseline_y": 58,
-      "standard_height": [44, 48],
-      "elite_height": [48, 54],
-      "head_height": [12, 14]
+      "standard_height": [
+        44,
+        48
+      ],
+      "elite_height": [
+        48,
+        54
+      ],
+      "head_height": [
+        12,
+        14
+      ]
     },
     "character_portrait_b_384x576": {
-      "delivery_size": [384, 576],
+      "delivery_size": [
+        384,
+        576
+      ],
       "logical_cells": null,
       "palette_max": 40,
       "transparent_border_min": 2,
@@ -254,7 +446,10 @@
       "identity_card_required": true
     },
     "character_performance_c_192x288": {
-      "delivery_size": [192, 288],
+      "delivery_size": [
+        192,
+        288
+      ],
       "logical_cells": null,
       "palette_max": 24,
       "transparent_border_min": 2,
@@ -263,23 +458,43 @@
       "identity_card_required": true
     },
     "vfx_frame_32": {
-      "delivery_size": [32, 32],
+      "delivery_size": [
+        32,
+        32
+      ],
       "logical_cells": null,
       "palette_max": 12,
       "transparent_border_min": 1,
       "unity_ppu": 32,
       "alpha_policy": "transparent_hard_alpha",
-      "sequence_length": [4, 10]
+      "sequence_length": [
+        4,
+        10
+      ]
     }
   },
   "color_families": {
-    "blue": {"description": "natural sapphire or blue cloth; blue exceeds red by 20 and green by 5"},
-    "cyan": {"description": "active aether only; green and blue both exceed red by 16"},
-    "red": {"description": "threat or damage; red exceeds green and blue by 20"},
-    "ochre": {"description": "spice, leather or service material; red exceeds green by 8 and green exceeds blue by 5"},
-    "yellow": {"description": "interaction or loot; red and green exceed blue by 20"},
-    "green": {"description": "treatment or plant; green exceeds red and blue by 16"},
-    "purple": {"description": "pollution only; red and blue exceed green by 12"}
+    "blue": {
+      "description": "natural sapphire or blue cloth; blue exceeds red by 20 and green by 5"
+    },
+    "cyan": {
+      "description": "active aether only; green and blue both exceed red by 16"
+    },
+    "red": {
+      "description": "threat or damage; red exceeds green and blue by 20"
+    },
+    "ochre": {
+      "description": "spice, leather or service material; red exceeds green by 8 and green exceeds blue by 5"
+    },
+    "yellow": {
+      "description": "interaction or loot; red and green exceed blue by 20"
+    },
+    "green": {
+      "description": "treatment or plant; green exceeds red and blue by 16"
+    },
+    "purple": {
+      "description": "pollution only; red and blue exceed green by 12"
+    }
   },
   "required_evidence": [
     "one_x",
@@ -297,66 +512,368 @@
   ],
   "consistency_checks": [
     {
-      "path": "Worldbuilding/05_美术与音频/OCC_美术规范_v0.1.md",
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
       "required": [
-        "ACTIVE / SINGLE SOURCE OF TRUTH",
-        "关键材质色额门禁",
-        "(W×32)×(H×32)",
-        "FORMAL_CANDIDATE"
+        "# 附录 A 美术规范与视觉反馈",
+        "正交 2D 像素",
+        "## A.2 像素与布局",
+        "2px 细框"
       ]
     },
     {
-      "path": "Worldbuilding/05_美术与音频/OCC_像素资产_QA流程_v0.1.md",
+      "path": "Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv",
       "required": [
-        "规范从属",
-        "多格对象 `(W×32)×(H×32)`",
-        "关键材质消失必须失败",
-        "人工审美结论必须明确为 `PASS`"
-      ],
-      "forbidden": [
-        "图标/地块严格 `32×32`",
-        "每张图恰占一格"
+        "ART-PIPELINE",
+        "FORMAL_CANDIDATE",
+        "仅FORMAL可进入正式运行时",
+        "FusionPixel12ProportionalZhHans"
       ]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/OCC_单位像素美术规范_v0.1.md",
-      "required": [
-        "ACTIVE / SUBORDINATE",
-        "标准单位主体高度 `44–48px`",
-        "FORMAL_CANDIDATE"
-      ],
-      "forbidden": [
-        "standard visible body silhouette about 32–38",
-        "标准单位主体高度约 `32–38 px`"
-      ]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/OCC_角色三层视觉规范_v0.1.md",
-      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/OCC_UI学院档案视觉规范_v0.1.md",
-      "required": ["ACTIVE / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/OCC_人物双状态帧临时动画规范_v0.1.md",
-      "required": ["ACTIVE TEMPORARY / SUBORDINATE", "服从 `OCC_美术规范_v0.1.md` 唯一合同"]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/OCC_正式像素资产清单_v0.1.md",
-      "required": ["登记表，不是规范源"]
-    },
-    {
-      "path": "Worldbuilding/05_美术与音频/正式美术生产/ARTIFACT-PACK-20/artifact_imagegen_manifest_v1.json",
-      "required": ["HISTORICAL_PROVENANCE_ONLY", "\"executable\": false", "localhost fallback is forbidden"]
     },
     {
       "path": "AGENTS.md",
       "required": [
-        "是唯一美术规范源",
+        "是唯一活动美术规范源",
         "occ-art-manifest-v1",
         "禁止使用本地生图工作台"
       ]
     }
-  ]
+  ],
+  "battlefield_presentation": {
+    "reference_resolution": [
+      1920,
+      1080
+    ],
+    "viewport_reference": [
+      16,
+      80,
+      1408,
+      768
+    ],
+    "default_cell_reference": 64,
+    "zoom_cells_reference": [
+      64,
+      128
+    ],
+    "unit_canvas_to_cell_ratio": 2,
+    "position_quantum_reference": 2,
+    "simultaneous_feedback": {
+      "protected_content": "status cards avoid currently drawn body regions and information; damage numbers may briefly cover their affected unit body, but avoid other unit bodies, health/shield tracks, status icons, placed intent badges and other feedback; hidden view contributes none",
+      "same_target_status": "prefer the existing live status column, subject to complete trajectory and visible-unit avoidance",
+      "reservation": "status and damage share complete rising trajectories; eight reference pixel gap",
+      "search": "up to 81 occupied-edge combinations; add 81 wider candidates if crowded or preserving a status column; at most 162 total; minimize overlap, prefer the existing status column, then displacement",
+      "ownership": "displaced feedback uses non-interactive orthogonal leader to original cell; endpoint stays fixed while label rises",
+      "lifetime": "reserve until root is destroyed; clear on reset; preserve existing merge and timing rules",
+      "scope": "visual layout only; no formal asset promotion or gameplay changes"
+    },
+    "terrain_labels": "hover_including_occupied_cells",
+    "inactive_ranges": "hidden",
+    "vfx_frame_display": "native_integer_scale_from_current_cell",
+    "right_console_reference": [
+      1456,
+      80,
+      448,
+      768
+    ],
+    "console_modules_reference": {
+      "selected": [
+        16,
+        16,
+        416,
+        96
+      ],
+      "hero": [
+        16,
+        124,
+        416,
+        244
+      ],
+      "timeline": [
+        16,
+        380,
+        416,
+        264
+      ],
+      "log": [
+        16,
+        656,
+        416,
+        96
+      ]
+    }
+  },
+  "feedback_presentation": {
+    "source": "resolved_source_id_and_pre_resolution_position",
+    "delayed_trigger_recasts": false,
+    "outcome_text_scale": 1,
+    "outcome_glyph_alpha": 1,
+    "cell_pulse_scale": 1,
+    "cell_pulse_edge_reference": 2,
+    "floating_text_reference": [
+      240,
+      48
+    ],
+    "floating_text_rise_reference": 28,
+    "damage_text_reference": [
+      168,
+      104
+    ],
+    "damage_text_rise_reference": 52,
+    "viewport_margin_reference": 8,
+    "position_quantum_reference": 2,
+    "vfx_sequence": {
+      "input": "FireSpellExecution resolved steps",
+      "cast_seconds": 0.12,
+      "stage_seconds": 0.18,
+      "layers": [
+        "Ability",
+        "Reaction"
+      ],
+      "same_cell_policy": "sequential within ability; reaction cannot replace ability",
+      "new_ability_policy": "replace overlapping cell tracks",
+      "follow_viewport": true,
+      "cancel_on": [
+        "animation_disabled",
+        "battle_exit",
+        "battle_reset",
+        "component_disable",
+        "component_destroy"
+      ],
+      "zero_strength_status": "emitted status step plus positive rule duration is a real status application"
+    },
+    "movement": {
+      "input": "resolved MovementPath with source, destination and cardinal adjacency",
+      "seconds_per_cell": 0.08,
+      "minimum_seconds": 0.12,
+      "maximum_seconds": 0.35,
+      "continuous_commands": "preserve current sample and all remaining corners, then append new executed route",
+      "unverified_or_stale_path": "align to final resolved state; never invent a path",
+      "shared_travel": [
+        "unit",
+        "health",
+        "shield",
+        "statuses",
+        "intent",
+        "facing"
+      ],
+      "coordinate_quantum_at_64px_cell": 2,
+      "unit_sort": "current visual foot Y then X",
+      "facing": "three integer UI rectangles; four cardinal rotations; friendly cyan/enemy danger; segment then resolved facing",
+      "cancel_on": [
+        "animation_disabled",
+        "battle_exit",
+        "battle_reset",
+        "unit_dead",
+        "stale_destination",
+        "component_disable"
+      ],
+      "runtime_review": "pending; no gameplay mutation; no art asset promotion"
+    },
+    "action_contact": {
+      "input": "already resolved action; detached pre-action display snapshot",
+      "start": "after current source movement finishes",
+      "normal_contact_seconds": 0.16,
+      "skill_delivery_seconds": 0.18,
+      "fire_contact": "per-cell actual FireVfxSequence contact cue; weapon triggers start at weapon contact",
+      "result_hold_seconds": 0.42,
+      "shared_contact_clock": [
+        "unit health/shield/status/death",
+        "terrain",
+        "fireground",
+        "floating feedback"
+      ],
+      "live_values": [
+        "AP costs",
+        "mana costs",
+        "combat final state"
+      ],
+      "fence": [
+        "next battle input",
+        "next AI presentation",
+        "outcome overlay"
+      ],
+      "animation_disabled": "flush result feedback once, release snapshots and fence",
+      "reset": "cancel queued callbacks and detached snapshots",
+      "slow_frame": "dispatch scheduled timestamps rather than restarting expired effects",
+      "camera": "minimum pan at safe edge around current visual position; no overview movement",
+      "status": "ordinary attack/fire timing and artifact composite feedback code gates pass; runtime and aesthetic review pending"
+    },
+    "artifact_results": {
+      "input": "per-effect resolved feedback with source and affected unit IDs and captured positions",
+      "resources": "actual per-unit health/shield/mana differences; never aggregate ArtifactStep.Applied",
+      "shield_semantics": [
+        "absorb damage",
+        "consume as cost",
+        "transfer out",
+        "transfer in",
+        "restore"
+      ],
+      "status": "only actual additions, stronger refreshes and removals; no retired status resurrection",
+      "utility": "accurate placement, readiness and initiative text; no fake cleanse or slow",
+      "reactions": "captured triggered result queue drained once after command resolution",
+      "identity": "resolve captured unit ID before cell occupancy for delayed feedback",
+      "snapshot_fallback": "suppress duplicate resource feedback when explicit effect results exist",
+      "visuals": "reuse approved shield and interact icons; no impact VFX for cost, transfer or utility",
+      "review": "EditMode verified; live flow, timing and aesthetic review pending; no asset promotion"
+    }
+  },
+  "compact_command_presentation": {
+    "reference_font_px": 24,
+    "frame_px": 2,
+    "coordinate_quantum": 2,
+    "weapon_rows": {
+      "size": [
+        184,
+        54
+      ],
+      "positions": [
+        [
+          8,
+          -48
+        ],
+        [
+          8,
+          -106
+        ]
+      ],
+      "icon_px": 32
+    },
+    "interaction_rows": {
+      "size": [
+        136,
+        54
+      ],
+      "name_width": 56,
+      "cost_size": [
+        56,
+        32
+      ],
+      "detail": "hover"
+    },
+    "quickbar": {
+      "size": [
+        76,
+        54
+      ],
+      "icon_px": 32,
+      "empty": "slot number and 空",
+      "occupied": "icon, slot number, remaining charges in separate regions",
+      "full_details": "hover"
+    },
+    "review": "production UI static renders at 1920x1080 and 960x540; live input, motion, performance and human aesthetic approval remain pending"
+  },
+  "unit_annotation_presentation": {
+    "active_footprint": {
+      "reference_cell": 64,
+      "size": [
+        56,
+        12
+      ],
+      "line_px": 2,
+      "corner_px": 8,
+      "colors": "friendly cyan; enemy danger",
+      "anchor": "current visual foot; hidden outside viewport; one active actor"
+    },
+    "intent_placement": {
+      "coordinate_quantum": 2,
+      "maximum_candidates": 25,
+      "protected": [
+        "conservative unit bodies",
+        "health/shield",
+        "statuses",
+        "already placed badges"
+      ],
+      "selection": "minimum overlapping area, then shortest distance, then fixed candidate order",
+      "viewport": "4px inner margin; fully offscreen actors do not get edge badges",
+      "moved_badge": "short orthogonal association line; lazily created and reused",
+      "fallback": "keep existing information; report remaining overlap",
+      "input": "badge raycast, hover and click remain bound to the owning actor cell after displacement"
+    },
+    "review": "static default, crowded, zoom, offscreen and actor transfer checked; live motion, performance and human aesthetic review pending; no asset promotion"
+  },
+  "movement_range_presentation": {
+    "source": "CombatMovementQuery.FindPath shared with resolver and movement playback path capture",
+    "eligibility": [
+      "alive hero turn",
+      "battle active",
+      "sufficient AP",
+      "not bound",
+      "different unoccupied passable cell",
+      "actual weighted path within current budget"
+    ],
+    "budget": "current movement including slow and existing RainLanternCourt next-move origin bonus",
+    "cache": "exact snapshot of state identity, origin, budget, relevant blocked cells, terrain entry costs and live unit occupancy; recheck globals per query",
+    "consumers": [
+      "move overlay",
+      "valid cell count",
+      "move target failure reason"
+    ],
+    "review": "EditMode command equivalence and state changes; runtime GC/frame time and human visual review remain pending; v3 QA_PENDING 0/2"
+  },
+  "terrain_depth_presentation": {
+    "lamp_vine": {
+      "source_px": 32,
+      "back_rows": 22,
+      "front_rows": 10,
+      "asset_status": "existing QA_PENDING 0/2 review only",
+      "sampling": "partition original UV without changing texture/importer/color; integer display at 64/128 reference cells",
+      "depth": "fixed cell ground depth; after actors on same row, before nearer actors; no unit travel inherited",
+      "lifecycle": "presented tile controls visibility at existing hit time; hide on burn, reuse on restoration; raycast disabled"
+    },
+    "ground_attachments": "catalog marks explicitly; parent to owning cell after floor, before environment and objects; raised structures retain structure layer",
+    "review": "empty whole/split production renders identical; motion depth and burn/restore inspected; full dynamic/human review pending; no asset promotion"
+  },
+  "unit_pixel_input": {
+    "ownership": "opaque displayed body pixels resolve to owning gameplay cell; existing hover/left/right command handlers retained",
+    "transparency": "source alpha >=128 is hittable; transparent pixels pass to next rendered unit or grid",
+    "coordinates": "current RectTransform, UV including flip, event camera and parent viewport clipping",
+    "cache": "one bit per texel; one capture per distinct texture at binding; non-readable source uses temporary GPU readback without importer mutation; no readback in pointer events",
+    "lifecycle": "components created lazily on occupied cells; cache scoped to view; readback failure leaves grid input and logs once",
+    "invariants": [
+      "no auto attack-mode switch",
+      "existing drag/scroll hierarchy",
+      "existing command eligibility and double-click movement",
+      "art files GUID and importer unchanged"
+    ],
+    "review": "four production Canvas resolution/zoom cases plus overlap and transparency checked in EditMode; continuous Play input and runtime profiling remain pending"
+  },
+  "hound_compact_review": {
+    "scope": "VISUAL-INTEGRATION-01 candidate review only; not an adopted formal asset rule",
+    "asset_id": "tether_hound_compact_v1",
+    "manifest": "Artifacts/OCC_UnitSilhouetteReview_20260905/tether_hound_compact_v1.occ-art.json",
+    "canvas_px": [64, 64],
+    "measured_body_px": [40, 33],
+    "center_x": 32,
+    "baseline_y": 58,
+    "visible_colors": 23,
+    "source": "independent built-in raw; script background removal, palette limiting and alignment explicitly authorized by user",
+    "direction_review": "user approved direction on 2026-09-05; application approval not implied",
+    "status": "QA_PENDING",
+    "unity_evidence": "four resolution/zoom pairs in temporary scene with in-memory Point/Clamp texture; no Assets import, scene save or Play Mode",
+    "remaining": ["application aesthetic review", "matching animation silhouettes", "stable GUID and Importer review before FORMAL", "dynamic runtime verification"]
+  },
+  "hound_motion_review": {
+    "scope": "VISUAL-INTEGRATION-01 key pose candidates only; no formal asset promotion",
+    "status": "QA_PENDING",
+    "poses": ["sniff", "crouch", "contact"],
+    "manifest_directory": "Artifacts/OCC_HoundMotionReview_20260905",
+    "canvas_px": [64, 64],
+    "canvas_anchor_x": 32,
+    "baseline_y": 58,
+    "palette_max": 24,
+    "scale": "shared 40/759 source scale derived from standing; no individual bounding-box fit",
+    "measured_body_px": [[37, 27], [39, 28], [45, 26]],
+    "evidence": "three technical validators PASS; 1x/4x/grayscale/checker; eight temporary Unity contact captures; two labeled static-capture pose timing GIFs",
+    "remaining": ["volume and transition refinement", "human key-pose and application review", "continuous animation and runtime verification"],
+    "formal_assets_replaced": false
+  },
+  "occlusion_readability": {
+    "source": "only currently presented unit source Alpha boundaries covered by later drawn opaque units or terrain fronts",
+    "geometry": "one native world pixel UI quads on hidden boundary texels only; no filled silhouette or replacement raster",
+    "color": "friendly cyan; enemy sealed red; alpha 0.9",
+    "layer": "above units and terrain fronts, below information; inherits viewport RectMask2D",
+    "input": "contours never raycast; existing body Alpha ownership preserved; health and shield tracks bind hover/left/right to owner cell and retain viewport drag",
+    "cache": "source Alpha once per texture; boundary on mask/UV changes; hidden mesh data changes only when coverage changes",
+    "verified": "seven Canvas layouts, 42 track targets, source movement/flip/transparency/removal and terrain restoration; clipping and 826 EditMode tests",
+    "remaining": "crowded art composition, continuous real input, dynamic runtime performance and human aesthetic review"
+  }
 }

@@ -1,0 +1,12 @@
+ID,模式,优先级,阶段,目标,涉及文件或系统,依赖,交付,验收标准,完成后下一步,当前状态,估算有效工作日
+ART-PLAN-20260905,两者共用,P0,规划,交付证据化美术与视觉迭代方案,本目录方案与评审页及总案和数据表,用户请求,方案及执行清单和视觉评审页,来源分级且所有建议有验收和入口,ART-V0-01,本次交付,不计后续估算
+ART-V0-01,肉鸽,P0,V0,重新审核水面与灯藤v3,Tools/OCCArt及首战v3原料和manifest,用户确认以飞书rev320为准,两项当前复审记录及历史证据索引,五类机器证据加重新人工审美及必要Unity接触全部明确,ART-V1-01,下一项待开展,0.5–1.5加审核等待
+ART-V1-01,两者共用,P0,V1,保证初始全场可见且物理像素倍率正确,BattlefieldPresentationAdapter.cs及CombatUnitHudLayout.cs,ART-V0-01及样板实施范围确认,1920与960总览和缩放接触图,12×9完整可见且相邻单位和意图不互遮及素材整数倍率,ART-V1-02,提案,1–1.5
+ART-V1-02,两者共用,P0,V1,降低地面与范围及常驻标签争抢,CombatBattlefieldCellPresenter.cs及FormalBattlefieldView.cs,ART-V1-01,默认及选中及预览及非法和地形悬停状态,一个主要操作焦点且地形信息可达且不泄露搜索路线,ART-V2-01,提案,1–1.5
+ART-V2-01,肉鸽,P1,V2,统一首战材质与物块可通行读法,AcademyBattlefieldLayoutCatalog.cs及首战用到的资产,ART-V1-02,现有四地面变体与首战掩体审查及失败项独立候选,单格和大面积都清楚且不改变路径或增加机制,ART-V2-02,提案,1–2
+ART-V2-02,肉鸽,P1,V2,明确三个角色身份及藤内遮挡,CombatUnitHudLayout.cs及FormalBattlefieldView.cs和单位原料,ART-V2-01及Y58规范引用收口,3身份卡及相邻和藤内接触及动作帧清单,脚底朝向武器与头部可辨且新候选独立过门禁,ART-V3-01,提案,2–3
+ART-V3-01,两者共用,P0,V3,保证动作反馈源目标与结算顺序一致,CombatFeedbackPublisher.cs及CombatVisualFeedback.cs,ART-V2-02,按命令组织的反馈序列及真实结果映射,多段不互相覆盖且跳过和关闭动画不改变状态或重复反馈,ART-V3-02,提案,1–2
+ART-V3-02,肉鸽,P1,V3,完成首战关键动作与纯视觉焦痕,CombatVisualFeedback.cs及CombatBattlefieldCellPresenter.cs和B1特效帧,ART-V3-01,移动火矢导流灭火焚藤嗅探认输录屏,动作来源与目标明确且不新增伤害遮挡或内部搜索提示,ART-V4-01,提案,2–3
+ART-V4-01,两者共用,P1,V4,统一战斗与已冻结页面信息层次,FormalCombatHud.cs及FormalUiKit.cs和OccPixelUiV02.json,ART-V3-02,长名多状态费用不足及固定出身等页面接触图,75比25与底栏规格保留且文字安全区通过及旧流程不回流,ART-V5-01,提案,2–3
+ART-V5-01,肉鸽,P0,V5,完成首战视觉与战术收口,Funplay及现有EditMode和三路线日志及UIProfiler,ART-V4-01及用户明确授权PlayMode,双分辨率三档动画三路线与性能记录,规则快照一致且逐项门禁通过且Console无新增错误,ART-NEXT-B2,提案,1–2
+ART-NEXT-B2,肉鸽,P2,后续,将样板扩展到战斗2,总案及战斗2内容数据和相应资产,首战样板冻结且B2机制敌人地图奖励已冻结,战斗2独立任务与料单,不推测第三地块机制且新奖励能获得即时反馈,战斗3内容冻结,等待内容冻结,待另行估算

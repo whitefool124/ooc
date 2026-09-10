@@ -7,8 +7,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void WeaponForecast_UsesResolvedShieldAndHealthLossWithoutMutatingLiveState()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             int healthBefore = enemy.Health;
@@ -27,8 +27,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void WeaponForecast_MarksLethalResolvedDamage()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
@@ -49,14 +49,14 @@ namespace OCC.Combat.Tests
         [Test]
         public void FireSpellForecast_IncludesCurrentFiregroundContribution()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
             CombatState state = new CombatState(new GridMap(5, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             FireBattleState battle = new FireBattleState(state);
             battle.CreateOrRefreshFireground(enemy.Position, 8, 8, "test-ground");
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R17");
-            FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, Facing.East);
+            FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, CardinalDirection.East);
 
             CombatTargetDamageForecast forecast =
                 CombatTargetDamageForecaster.FireSpell(battle, hero.Id, spell, target, enemy.Id);
@@ -70,8 +70,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void DamageSkillForecast_UsesTheRealSkillResolver()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             SkillDefinition skill = hero.SkillOne;

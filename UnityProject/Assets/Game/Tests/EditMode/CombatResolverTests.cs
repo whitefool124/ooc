@@ -12,22 +12,50 @@ namespace OCC.Combat.Tests
             CombatResolver.BeginTurn(state, "hero");
 
             Assert.Throws<InvalidOperationException>(() =>
-                CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 0), Facing.East)));
+                CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 0))));
             Assert.That(state.GetUnit("hero").Position, Is.EqualTo(new GridPosition(0, 0)));
             Assert.That(state.GetUnit("hero").ActionPoints, Is.EqualTo(CombatResolver.HeroActionPointsPerTurn));
         }
 
         [Test]
-        public void HeroTurn_GrantsThreeActionPoints_AndMoveAllowsFreeFacing()
+        public void HeroTurn_GrantsThreeActionPoints_AndMoveCostsOne()
         {
             CombatState state = CreateHeroState();
             CombatResolver.BeginTurn(state, "hero");
 
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(0, 1), Facing.North));
+            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(0, 1)));
 
             UnitState hero = state.GetUnit("hero");
             Assert.That(hero.ActionPoints, Is.EqualTo(2));
-            Assert.That(hero.Facing, Is.EqualTo(Facing.North));
+        }
+
+        [Test]
+        public void EnemyMove_ConsumesTheWholeTurnWhileHeroActionsKeepTheirConfiguredCost()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            CombatState state = new CombatState(new GridMap(5, 2), new[] { hero, enemy });
+
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.Resolve(state, CombatCommand.Move(enemy.Id, new GridPosition(2, 0)));
+
+            Assert.That(enemy.ActionPoints, Is.Zero);
+            Assert.That(enemy.Position, Is.EqualTo(new GridPosition(2, 0)));
+        }
+
+        [Test]
+        public void TurnStart_UsesPublishedThreeActionPointsAndFiveOrThreeMovement()
+        {
+            CombatState state = CreateHeroState();
+            UnitState hero = state.GetUnit("hero");
+            CombatResolver.BeginTurn(state, hero.Id);
+            Assert.That(hero.ActionPoints, Is.EqualTo(3));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.BaseMovementRange));
+
+            hero.ApplyStatus(StatusType.Slow, 2);
+            CombatResolver.BeginTurn(state, hero.Id);
+            Assert.That(hero.ActionPoints, Is.EqualTo(3));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.SlowedMovementRange));
         }
 
         [Test]
@@ -42,7 +70,6 @@ namespace OCC.Combat.Tests
             UnitState firstHero = firstState.GetUnit("hero");
             UnitState secondHero = secondState.GetUnit("hero");
             Assert.That(firstHero.Position, Is.EqualTo(secondHero.Position));
-            Assert.That(firstHero.Facing, Is.EqualTo(secondHero.Facing));
             Assert.That(firstHero.ActionPoints, Is.EqualTo(secondHero.ActionPoints));
         }
 
@@ -53,8 +80,8 @@ namespace OCC.Combat.Tests
             map.SetTile(new GridPosition(2, 1), new TileState { Cover = CoverType.Heavy, Durability = 5 });
             CombatState state = new CombatState(map, new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 1), Facing.East),
-                new UnitState("enemy", false, new GridPosition(4, 1), Facing.West)
+                new UnitState("hero", true, new GridPosition(0, 1)),
+                new UnitState("enemy", false, new GridPosition(4, 1))
             });
 
             CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, "hero", "enemy", false);
@@ -87,7 +114,7 @@ namespace OCC.Combat.Tests
             enemy.ApplyStatus(StatusType.Bound, 2);
             CombatResolver.BeginTurn(state, "enemy");
 
-            Assert.Throws<InvalidOperationException>(() => CombatResolver.Resolve(state, CombatCommand.Move("enemy", new GridPosition(4, 1), Facing.East)));
+            Assert.Throws<InvalidOperationException>(() => CombatResolver.Resolve(state, CombatCommand.Move("enemy", new GridPosition(4, 1))));
         }
 
         [Test]
@@ -123,7 +150,7 @@ namespace OCC.Combat.Tests
         [TestCase("wand")]
         public void ThreeBuilds_EquipDistinctMainHandRoutes(string build)
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             WeaponDefinition weapon = build == "rifle" ? CombatCatalog.Rifle : build == "hammer" ? CombatCatalog.Hammer : CombatCatalog.Wand;
             hero.Equip(weapon, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
 
@@ -132,25 +159,26 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyArchetypes_ProvideTwelveBaseTypesAndThreeEliteOrBossVariants()
+        public void EnemyArchetypes_IncludeFixedFirstRunElite()
         {
-            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(15));
-            Assert.That(EnemyArchetypes.All, Has.Exactly(3).Matches<EnemyArchetype>(archetype => archetype.IsElite));
+            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(16));
+            Assert.That(EnemyArchetypes.All, Has.Exactly(4).Matches<EnemyArchetype>(archetype => archetype.IsElite));
             Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵教官"));
+            Assert.That(EnemyArchetypes.Get("breach_ram").MaxHealth, Is.EqualTo(36));
         }
 
         [Test]
-        public void TemporaryEnemyAssist_LimitsEnemyTurnAndHalvesOutgoingDamage()
+        public void DebugAssist_DoesNotChangePublishedEnemyActionPointsOrDamage()
         {
             CombatDebugTuning.TemporaryEnemyAssistEnabled = true;
             try
             {
-                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0))
                 {
                     Armor = 0,
                     Block = 0
                 };
-                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
                 enemy.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
                 CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
                 state.ConfigureRuleset(CombatRuleset.Roguelite);
@@ -161,12 +189,12 @@ namespace OCC.Combat.Tests
                 int healthBefore = hero.Health;
                 CombatResolver.Resolve(state, CombatCommand.Attack(enemy.Id, hero.Id));
 
-                Assert.That(enemy.ActionPoints, Is.Zero);
-                Assert.That(preview.BaseDamage, Is.EqualTo(3));
-                Assert.That(preview.FinalDamage, Is.EqualTo(3));
-                Assert.That(skillPreview.BaseDamage, Is.EqualTo(3), "奇数伤害减半后应向上取整");
-                Assert.That(skillPreview.FinalDamage, Is.EqualTo(3));
-                Assert.That(hero.Health, Is.EqualTo(healthBefore - 3));
+                Assert.That(enemy.ActionPoints, Is.Zero, "敌方一次动作应耗尽本回合全部行动点");
+                Assert.That(preview.BaseDamage, Is.EqualTo(6));
+                Assert.That(preview.FinalDamage, Is.EqualTo(6));
+                Assert.That(skillPreview.BaseDamage, Is.EqualTo(5));
+                Assert.That(skillPreview.FinalDamage, Is.EqualTo(5));
+                Assert.That(hero.Health, Is.EqualTo(healthBefore - 6));
             }
             finally
             {
@@ -175,9 +203,39 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void OpenInventory_IsAnAuthoritativeOneActionPointCombatCommand()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            CombatState state = new CombatState(new GridMap(3, 1), new[] { hero, enemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
+
+            Assert.That(hero.ActionPoints, Is.EqualTo(2));
+            Assert.That(state.InventoryOpenCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void EquippedBackpack_MakesOnlyFirstInventoryOpenFreeEachBattle()
+        {
+            CombatState state = CreateHeroState();
+            UnitState hero = state.GetUnit("hero");
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachRogueEquipmentRuntime(OCC.Combat.Roguelite.RogueEquipmentRuntime.CreateStarter(17));
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
+            Assert.That(hero.ActionPoints, Is.EqualTo(3));
+            CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
+            Assert.That(hero.ActionPoints, Is.EqualTo(2));
+        }
+
+        [Test]
         public void ThreeWorkshopBuilds_RequireDifferentRangeDelayAndResourceRoutes()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
 
             StageTwoBuilds.Apply(hero, 0);
             Assert.That(hero.MainHand.Range, Is.EqualTo(4));
@@ -213,13 +271,14 @@ namespace OCC.Combat.Tests
         {
             GridMap map = new GridMap(12, 9);
             map.SetTile(new GridPosition(10, 4), new TileState { IsObjective = true, Durability = 6 });
-            UnitState hero = new UnitState("hero", true, new GridPosition(9, 4), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(9, 4));
             StageTwoBuilds.Apply(hero, build);
             CombatState state = new CombatState(map, new[] { hero });
             CombatResolver.BeginTurn(state, "hero");
 
             CombatResolver.Resolve(state, CombatCommand.Interact("hero", new GridPosition(10, 4)));
-            CombatResolver.Resolve(state, CombatCommand.Interact("hero", new GridPosition(10, 4)));
+            if (state.Map.GetTile(new GridPosition(10, 4)).Durability > 0)
+                CombatResolver.Resolve(state, CombatCommand.Interact("hero", new GridPosition(10, 4)));
 
             Assert.That(state.IsVictory, Is.True);
         }
@@ -230,7 +289,7 @@ namespace OCC.Combat.Tests
             GridMap map = new GridMap(6, 4);
             GridPosition target = new GridPosition(2, 2);
             map.SetTile(target, new TileState { IsObjective = true, Durability = 3 });
-            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 2), Facing.East) });
+            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 2)) });
             CombatResolver.BeginTurn(state, "hero");
             CombatResolver.Resolve(state, CombatCommand.Interact("hero", target));
             Assert.That(state.IsVictory, Is.True);
@@ -240,7 +299,7 @@ namespace OCC.Combat.Tests
         public void Objectives_AreClonedAndCanBeInjectedPerMap()
         {
             GridMap map = new GridMap(4, 4);
-            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 1), Facing.East) }, new CombatObjective[] { new CaptureObjective(new GridPosition(1, 1)) });
+            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 1)) }, new CombatObjective[] { new CaptureObjective(new GridPosition(1, 1)) });
             Assert.That(state.IsVictory, Is.False);
             CombatResolver.BeginTurn(state, "hero");
             state.ConfigureObjectives(new CaptureObjective(new GridPosition(1, 1)));
@@ -255,7 +314,7 @@ namespace OCC.Combat.Tests
         {
             GridMap map = new GridMap(4, 4);
             GridPosition target = new GridPosition(1, 2);
-            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 1), Facing.North) }, new CombatObjective[] { new InvestigationObjective(new[] { target }) });
+            CombatState state = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(1, 1)) }, new CombatObjective[] { new InvestigationObjective(new[] { target }) });
             CombatState snapshot = state.Clone();
             CombatResolver.BeginTurn(state, "hero");
             CombatResolver.Resolve(state, CombatCommand.Interact("hero", target));
@@ -269,21 +328,20 @@ namespace OCC.Combat.Tests
         private static CombatState CreateHeroState(params GridPosition[] blockedPositions) =>
             new CombatState(
                 new GridMap(4, 4, blockedPositions),
-                new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+                new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
 
         private static CombatState CreateDuelState() => new CombatState(
             new GridMap(6, 3),
             new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 1), Facing.East),
-                new UnitState("enemy", false, new GridPosition(3, 1), Facing.West)
+                new UnitState("hero", true, new GridPosition(0, 1)),
+                new UnitState("enemy", false, new GridPosition(3, 1))
             });
 
         private static void ApplySequence(CombatState state)
         {
             CombatResolver.BeginTurn(state, "hero");
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(0, 1), Facing.North));
-            CombatResolver.Resolve(state, CombatCommand.TurnInPlace("hero", Facing.East));
+            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(0, 1)));
         }
     }
 }

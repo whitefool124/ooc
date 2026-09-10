@@ -1,0 +1,51 @@
+[
+  {
+    "name": "after_overview_960",
+    "width": 960,
+    "zoom": false,
+    "scenario": "crowded",
+    "meta": "occluded=3|hidden=59|maskCaptures=4|boundaryBuilds=3|geometryChanges=3|warm100Ms=51.703|vitalTargets=(4, 2)/Health,(4, 2)/Shield,(5, 2)/Health,(5, 2)/Shield,(4, 3)/Health,(4, 3)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|960|540|128|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "after_zoom_960",
+    "width": 960,
+    "zoom": true,
+    "scenario": "crowded",
+    "meta": "occluded=3|hidden=59|maskCaptures=4|boundaryBuilds=3|geometryChanges=3|warm100Ms=55.707|vitalTargets=(4, 2)/Health,(4, 2)/Shield,(5, 2)/Health,(5, 2)/Shield,(4, 3)/Health,(4, 3)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|960|540|256|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "after_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "scenario": "crowded",
+    "meta": "occluded=3|hidden=59|maskCaptures=4|boundaryBuilds=3|geometryChanges=3|warm100Ms=123.286|vitalTargets=(4, 2)/Health,(4, 2)/Shield,(5, 2)/Health,(5, 2)/Shield,(4, 3)/Health,(4, 3)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|1920|1080|128|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "after_zoom_1920",
+    "width": 1920,
+    "zoom": true,
+    "scenario": "crowded",
+    "meta": "occluded=3|hidden=59|maskCaptures=4|boundaryBuilds=3|geometryChanges=3|warm100Ms=65.052|vitalTargets=(4, 2)/Health,(4, 2)/Shield,(5, 2)/Health,(5, 2)/Shield,(4, 3)/Health,(4, 3)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|1920|1080|256|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "row_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "scenario": "row",
+    "meta": "occluded=2|hidden=29|maskCaptures=3|boundaryBuilds=2|geometryChanges=2|warm100Ms=41.815|vitalTargets=(3, 5)/Health,(3, 5)/Shield,(4, 5)/Health,(4, 5)/Shield,(5, 5)/Health,(5, 5)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|1920|1080|128|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "diagonal_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "scenario": "diagonal",
+    "meta": "occluded=1|hidden=9|maskCaptures=3|boundaryBuilds=1|geometryChanges=1|warm100Ms=42.512|vitalTargets=(3, 5)/Health,(3, 5)/Shield,(5, 5)/Health,(5, 5)/Shield,(4, 6)/Health,(4, 6)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|1920|1080|128|tether_hound|64x64|Point|Clamp"
+  },
+  {
+    "name": "clear_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "scenario": "clear",
+    "meta": "occluded=0|hidden=0|maskCaptures=3|boundaryBuilds=0|geometryChanges=0|warm100Ms=41.426|vitalTargets=(8, 1)/Health,(8, 1)/Shield,(7, 6)/Health,(7, 6)/Shield,(1, 7)/Health,(1, 7)/Shield|hoverLeftRight=PASS|drag=PASS|remove=PASS|raycastTransparent=PASS|1920|1080|128|tether_hound|64x64|Point|Clamp"
+  }
+]

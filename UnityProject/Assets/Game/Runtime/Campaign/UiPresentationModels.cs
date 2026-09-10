@@ -49,8 +49,12 @@ namespace OCC.Combat
         public string VitalityText { get; }
         public bool IsHero { get; }
         public bool IsActive { get; }
+        public int ActionValue { get; }
+        public int EffectiveSpeed { get; }
+        public int FixedOrder { get; }
+        public bool IsReady => ActionValue >= CombatActionTimeline.ReadyThreshold;
 
-        public CombatTurnTrackEntry(int order, UnitState unit, bool isActive)
+        public CombatTurnTrackEntry(int order, UnitState unit, bool isActive, int fixedOrder)
         {
             Order = order;
             UnitId = unit.Id;
@@ -58,6 +62,9 @@ namespace OCC.Combat
             VitalityText = unit.Health + " 生命";
             IsHero = unit.IsHero;
             IsActive = isActive;
+            ActionValue = unit.ActionValue;
+            EffectiveSpeed = unit.EffectiveSpeed;
+            FixedOrder = fixedOrder;
         }
     }
 
@@ -66,13 +73,9 @@ namespace OCC.Combat
         public static IReadOnlyList<CombatTurnTrackEntry> Build(CombatState state, int limit)
         {
             if (state == null || limit <= 0) return Array.Empty<CombatTurnTrackEntry>();
-            return state.Units.Values
-                .Where(unit => unit.IsAlive)
-                .OrderBy(unit => unit.Id == state.ActiveUnitId ? 0 : 1)
-                .ThenBy(unit => unit.InitiativeTime)
-                .ThenBy(unit => unit.Id, StringComparer.Ordinal)
+            return CombatActionTimeline.Order(state, state.Units.Values.Where(unit => unit.IsAlive))
                 .Take(limit)
-                .Select((unit, index) => new CombatTurnTrackEntry(index + 1, unit, unit.Id == state.ActiveUnitId))
+                .Select((unit, index) => new CombatTurnTrackEntry(index + 1, unit, unit.Id == state.ActiveUnitId, state.FixedTurnOrder(unit.Id)))
                 .ToArray();
         }
     }
@@ -87,7 +90,6 @@ namespace OCC.Combat
         public int Aether { get; }
         public int Supplies { get; }
         public int Scouting { get; }
-        public int AccessCards { get; }
         public bool AwaitingReward { get; }
 
         private RogueliteMapPresentationModel(RogueliteMapRun run)
@@ -100,7 +102,6 @@ namespace OCC.Combat
             Aether = run.Aether;
             Supplies = run.Supplies;
             Scouting = run.ScoutingBeacons;
-            AccessCards = run.AccessCards;
             AwaitingReward = run.AwaitingReward;
         }
 
@@ -108,7 +109,7 @@ namespace OCC.Combat
 
         public bool Equals(RogueliteMapPresentationModel other) => Seed == other.Seed && CurrentNodeId == other.CurrentNodeId && Level == other.Level &&
             Experience == other.Experience && Parts == other.Parts && Aether == other.Aether && Supplies == other.Supplies && Scouting == other.Scouting &&
-            AccessCards == other.AccessCards && AwaitingReward == other.AwaitingReward;
+            AwaitingReward == other.AwaitingReward;
         public override bool Equals(object obj) => obj is RogueliteMapPresentationModel other && Equals(other);
         public override int GetHashCode() => Seed;
     }
@@ -183,12 +184,13 @@ namespace OCC.Combat
             RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
             if (state == RogueliteMapNodeVisualState.Unknown) return "还看不清这里";
             if (node.Id == run.CurrentNodeId) return "你就在这里";
+            if (run.IsFirstRunExperience && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged)
+                return "先确认学生基础配置，即可进入第一战";
             if (run.CompletedNodes.Contains(node.Id)) return "已经处理妥当，可以再去看看";
             if (RogueliteUiPreferences.CanTravelTo(run, node)) return "可以直接前往";
             if (run.IsAcademyFinaleGateLocked(node))
-                return "还不能参加终考：再完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) +
-                    " 个地点，并拿到 " + Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 枚核心许可";
-            if (state == RogueliteMapNodeVisualState.Locked) return "核心许可不足：需要 " + node.RequiredAccessCards + "，当前 " + run.ProgressPermits;
+                return "还不能参加终考：再完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.CompletedAcademyNodeCount) +
+                    " 个地点";
             return "这里离得太远，请先走到相邻地点";
         }
 
@@ -198,16 +200,15 @@ namespace OCC.Combat
             string phase = run.AcademyPhase == AcademyMapPhase.Consolidation ? "学期将尽" :
                 run.AcademyPhase == AcademyMapPhase.TransitionReady ? "终考将至" : "日程还宽裕";
             string finale = run.CanChallengeAcademyFinale ? "现在可以参加终考" :
-                "参加终考前，还要完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.AcademyProgress) + " 个地点并拿到 " +
-                Math.Max(0, AcademyMapTuning.CorePermitRequirement - run.CorePermits) + " 枚许可";
+                "参加终考前，还要完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.CompletedAcademyNodeCount) + " 个地点";
             return "学期进度 " + run.StageTime + "/" + AcademyMapTuning.TransitionProgress + " · " + phase +
-                " · 核心许可 " + run.CorePermits + "/" + AcademyMapTuning.CorePermitRequirement + " · " + finale;
+                " · " + finale;
         }
 
         public static string ConnectionSummary(RogueliteMapRun run, RogueliteMapNode node)
         {
             if (run == null || node == null || run.VisualStateFor(node.Id) == RogueliteMapNodeVisualState.Unknown) return "附近的路还看不清";
-            string[] known = node.NextIds.Select(RogueliteMapCatalog.Node)
+            string[] known = node.NextIds.Select(run.MapNode)
                 .Where(next => run.VisualStateFor(next.Id) != RogueliteMapNodeVisualState.Unknown)
                 .Select(next => next.DisplayName).ToArray();
             return known.Length == 0 ? "附近还没有发现别的去处" : "从这里还能去：" + string.Join(" / ", known);
@@ -269,10 +270,13 @@ namespace OCC.Combat
             if (choice.ContributionGain > 0) outcomes.Add("+" + choice.ContributionGain + "学院贡献");
             if (choice.HealthGain > 0) outcomes.Add("+" + choice.HealthGain + "生命");
             if (choice.ManaGain > 0) outcomes.Add("+" + choice.ManaGain + "魔力");
-            if (choice.GrantsCorePermit) outcomes.Add("核心许可");
             string rewardName = RewardDisplayName(choice.RewardId);
             if (!string.IsNullOrEmpty(rewardName)) outcomes.Add(rewardName);
-            if (choice.RequiresCombat) outcomes.Insert(0, outcomes.Count == 0 ? "进入战斗" : "胜利");
+            if (choice.RequiresCombat)
+            {
+                if (run?.UsesRogue11 == true) outcomes.Add("3金 + 2学院贡献");
+                outcomes.Insert(0, outcomes.Count == 0 ? "进入战斗" : "胜利");
+            }
             if (outcomes.Count == 0) outcomes.Add("完成这里的事情");
             return (costs.Count == 0 ? "不用花东西" : "花 " + string.Join(" + ", costs)) + "；" + string.Join(" + ", outcomes);
         }
@@ -395,8 +399,8 @@ namespace OCC.Combat
             OutcomeVisible = outcomeVisible;
             EventHead = state.EventLog.Count == 0 ? string.Empty : state.EventLog[0];
             EventKey = string.Join("|", state.EventLog.Take(5));
-            TimelineKey = string.Join("|", state.Units.Values.Where(unit => unit.IsAlive).OrderBy(unit => unit.InitiativeTime)
-                .Select(unit => unit.Id + ":" + unit.Health + ":" + unit.Shield + ":" + unit.InitiativeTime));
+            TimelineKey = string.Join("|", CombatActionTimeline.Order(state, state.Units.Values.Where(unit => unit.IsAlive))
+                .Select(unit => unit.Id + ":" + unit.Health + ":" + unit.Shield + ":" + unit.ActionValue));
             HeroKey = hero == null ? string.Empty : string.Join("|", hero.MainHand?.Id ?? string.Empty, hero.Armor, hero.ActionPoints,
                 hero.SkillOne == null ? 0 : hero.Cooldown(hero.SkillOne), hero.SkillTwo == null ? 0 : hero.Cooldown(hero.SkillTwo),
                 string.Join(",", hero.Statuses.OrderBy(item => item.Key).Select(item => item.Key + ":" + item.Value)),

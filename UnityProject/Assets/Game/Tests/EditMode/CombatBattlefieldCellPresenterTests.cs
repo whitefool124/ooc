@@ -11,7 +11,7 @@ namespace OCC.Combat.Tests
         {
             CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
             assets.LoadRuntime();
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
             hero.DisplayName = "阿斯特拉";
             CombatState state = new CombatState(new GridMap(12, 9), new[] { hero });
             CombatSelectionController selection = new CombatSelectionController();
@@ -39,7 +39,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void TerrainHover_ExplainsCoverEffectDurabilityAndDestroyedState()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero });
             GridPosition lightPosition = new GridPosition(1, 0);
             GridPosition heavyPosition = new GridPosition(2, 0);
@@ -191,8 +191,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void WeaponForecast_ReturnsInitializedFireContextWithoutMutatingTarget()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             int health = enemy.Health;

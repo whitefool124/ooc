@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using OCC.Combat.Presentation;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Tests
 {
@@ -31,6 +33,20 @@ namespace OCC.Combat.Tests
             Assert.That(flow.DeveloperRun, Is.Null);
             Assert.That(flow.IsMapMenuOpen, Is.False);
             Assert.That(flow.IsRogueliteMenuOpen, Is.False);
+        }
+
+        [Test]
+        public void CompletedVictoryReward_RoutesBackToMapInsteadOfLanding()
+        {
+            RogueRunDto pending = RogueRunDto.CreateNew("post-reward-route", 43);
+            pending.CurrentNodeId = "rail_patrol";
+            pending.CompletedNodeIds.Add("rail_patrol");
+            pending.AwaitingReward = true;
+            RogueliteMapRun run = RogueliteMapRun.FromRogue11(pending);
+
+            Assert.That(CombatPrototypeBootstrap.ShouldReturnToMapAfterRewardClaim(run), Is.False);
+            run.ClaimReward(run.CurrentRewards[0].Id);
+            Assert.That(CombatPrototypeBootstrap.ShouldReturnToMapAfterRewardClaim(run), Is.True);
         }
     }
 }

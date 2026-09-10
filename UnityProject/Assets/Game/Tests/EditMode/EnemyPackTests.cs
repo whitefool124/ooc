@@ -33,7 +33,8 @@ namespace OCC.Combat.Tests
             Assert.That((mender.DisplayName, mender.MaxHealth, mender.Armor, mender.Shield, mender.Speed),
                 Is.EqualTo(("护障助教", 12, 0, 4, 7)));
             Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
-                Is.EqualTo(("缚环寻迹兽", 10, 0, 0, 11)));
+                Is.EqualTo(("缚环寻迹兽", 12, 0, 0, 10)));
+            Assert.That(hound.Weapon.Damage, Is.EqualTo(3));
 
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_sundering_sigil", 1, 1, 2)));
@@ -65,14 +66,14 @@ namespace OCC.Combat.Tests
                 EnemyArchetype archetype = EnemyArchetypes.Get(pair.Key);
                 Assert.That(archetype.DisplayName, Is.EqualTo(pair.Value.Name), pair.Key);
                 Assert.That(archetype.ResolutionKind, Is.EqualTo(pair.Value.Kind), pair.Key);
-                UnitState unit = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+                UnitState unit = new UnitState("enemy", false, new GridPosition(1, 0));
                 archetype.Apply(unit);
                 string log = EnemyResolutionSemantics.DefeatLog(unit);
                 Assert.That(log, Does.Contain(pair.Value.Resolution), pair.Key);
                 if (pair.Value.Kind != EnemyResolutionKind.Construct)
                     Assert.That(log, Does.Not.Contain("摧毁").And.Not.Contain("击杀").And.Not.Contain("死亡"), pair.Key);
 
-                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
                 CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, unit });
                 CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(unit.Id, 99));
                 Assert.That(combat.EventLog.Last(), Does.Contain(pair.Value.Resolution), pair.Key + " combat log");
@@ -86,7 +87,7 @@ namespace OCC.Combat.Tests
             Assert.DoesNotThrow(visuals.LoadRuntime);
             foreach (string id in PackIds)
             {
-                UnitState unit = new UnitState("enemy_" + id, false, new GridPosition(1, 0), Facing.West);
+                UnitState unit = new UnitState("enemy_" + id, false, new GridPosition(1, 0));
                 EnemyArchetypes.Get(id).Apply(unit);
                 Assert.That(visuals.Unit(unit), Is.Not.Null, id + " static");
                 for (int frame = 0; frame < 6; frame++) Assert.That(visuals.Unit(unit, frame), Is.Not.Null, id + " frame " + frame);
@@ -154,10 +155,10 @@ namespace OCC.Combat.Tests
         public void BarrierMender_SelectsLargestShieldGapWithStableIdTieBreakAndRestoresShield()
         {
             GridMap map = new GridMap(7, 3);
-            UnitState hero = new UnitState("hero", true, new GridPosition(6, 1), Facing.West);
-            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1), Facing.East);
-            UnitState allyA = new UnitState("ally_a", false, new GridPosition(1, 1), Facing.East);
-            UnitState allyB = new UnitState("ally_b", false, new GridPosition(2, 1), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
+            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
+            UnitState allyA = new UnitState("ally_a", false, new GridPosition(1, 1));
+            UnitState allyB = new UnitState("ally_b", false, new GridPosition(2, 1));
             EnemyArchetypes.Get("barrier_mender").Apply(mender);
             EnemyArchetypes.Get("warden").Apply(allyA);
             EnemyArchetypes.Get("warden").Apply(allyB);
@@ -239,8 +240,8 @@ namespace OCC.Combat.Tests
         private static CombatState CreateState(string archetypeId, GridPosition enemyPosition, out UnitState enemy, out UnitState hero)
         {
             GridMap map = new GridMap(6, 3);
-            hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            enemy = new UnitState("enemy", false, enemyPosition, Facing.West);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy", false, enemyPosition);
             EnemyArchetypes.Get(archetypeId).Apply(enemy);
             return new CombatState(map, new[] { hero, enemy });
         }

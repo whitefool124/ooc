@@ -1,0 +1,4 @@
+.\UnityProject\Artifacts\ElementResources24\validation_report.json
+.\UnityProject\Artifacts\ElementResources24\import_audit.json
+.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs
+.\UnityProject\Assets\Game\Runtime\Campaign\AcademyMapSaveMigration.cs

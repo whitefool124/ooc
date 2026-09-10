@@ -11,9 +11,10 @@ namespace OCC.Combat.Presentation
         public int WidthCells { get; }
         public int HeightCells { get; }
         public int QuarterTurns { get; }
+        public bool IsGroundAttachment { get; }
 
         public AcademyStructurePlacement(string assetId, int x, int topY, int widthCells, int heightCells,
-            int quarterTurns = 0)
+            int quarterTurns = 0, bool isGroundAttachment = false)
         {
             AssetId = assetId;
             X = x;
@@ -21,6 +22,7 @@ namespace OCC.Combat.Presentation
             WidthCells = widthCells;
             HeightCells = heightCells;
             QuarterTurns = ((quarterTurns % 4) + 4) % 4;
+            IsGroundAttachment = isGroundAttachment;
         }
     }
 
@@ -114,13 +116,13 @@ namespace OCC.Combat.Presentation
             return new[]
             {
                 new AcademyStructurePlacement(GroundAttachmentIds[seed % GroundAttachmentIds.Length],
-                    1 + offset, 3, 1, 1),
+                    1 + offset, 3, 1, 1, isGroundAttachment: true),
                 new AcademyStructurePlacement(GroundAttachmentIds[(seed + 5) % GroundAttachmentIds.Length],
-                    10 - offset, 3, 1, 1),
+                    10 - offset, 3, 1, 1, isGroundAttachment: true),
                 new AcademyStructurePlacement(GroundAttachmentIds[(seed + 10) % GroundAttachmentIds.Length],
-                    4 + offset, 1, 1, 1),
+                    4 + offset, 1, 1, 1, isGroundAttachment: true),
                 new AcademyStructurePlacement(GroundAttachmentIds[(seed + 15) % GroundAttachmentIds.Length],
-                    7 - offset, 7, 1, 1)
+                    7 - offset, 7, 1, 1, isGroundAttachment: true)
             };
         }
 

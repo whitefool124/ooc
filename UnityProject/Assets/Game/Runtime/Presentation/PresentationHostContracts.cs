@@ -87,6 +87,15 @@ namespace OCC.Combat.Presentation
         string SettingsSaveDetail { get; }
         bool IsInteractionModalOpen { get; }
         bool IsMapMenuOpen { get; }
+        bool HasFirstExperienceSave { get; }
+        void AcknowledgeFirstRunOrigin();
+        void CompleteFirstRunForge(string targetId);
+        void CompleteFirstRunSpecialization(string targetId);
+        void CompleteFirstRunHealthCheck();
+        void UseFirstRunHeal();
+        void ChooseFirstRunMeal(string mealId);
+        void PurchaseFirstRunOffer(string offerId);
+        void CompleteFirstRunExperience();
         void SelectMapNode(string nodeId);
         void StartMapNodeCombat(string nodeId);
         void ChooseMapNodeContent(string choiceId);
@@ -100,7 +109,10 @@ namespace OCC.Combat.Presentation
         bool UnequipRogueEquipment(OCC.Combat.Roguelite.EquipmentSlot slot);
         bool UnequipRogueEquipmentTo(OCC.Combat.Roguelite.EquipmentSlot slot, int x, int y, bool rotated);
         bool AssignRogueQuickbar(string instanceId, int slot);
+        bool AssignRogueSpell(string spellId, int slot);
         void NotifyMapNodeSelected(string nodeId);
+        void OpenFirstExperienceFrontEnd(bool continueSave);
+        void ReplayOpeningCg();
         void RequestReturnToLanding();
         void RequestStartMapRoguelite(bool continueSave);
         void RequestStartMapRoguelite(bool continueSave, string starterId);
@@ -128,6 +140,7 @@ namespace OCC.Combat.Presentation
         UiPresentationVersions UiPresentationVersions { get; }
         void ClaimMapFireSpell(string spellId);
         void ClaimMapReward(string rewardId);
+        void RequestAbandonMapReward();
         void PublishUiVisual(UiVisualEvent visualEvent);
     }
 
@@ -135,6 +148,7 @@ namespace OCC.Combat.Presentation
     {
         CombatState CurrentState { get; }
         bool IsDeveloperCombatActive { get; }
+        bool TryOpenCombatInventory();
         void ActivateInventoryQuickbar(int slot);
         void EquipInventoryQuickbar(string instanceId, int slot);
         void NotifyInventoryChanged();

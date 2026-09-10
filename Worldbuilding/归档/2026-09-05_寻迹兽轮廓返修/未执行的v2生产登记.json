@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "tether_hound_compact_v2",
+  "role": "tactical_unit_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent compact hound candidate, original hound used as identity reference",
+    "source_path": "Artifacts/OCC_UnitSilhouetteReview_20260905/raw/tether_hound_compact_v2.png",
+    "source_sha256": "PENDING_GENERATION"
+  },
+  "delivery": {
+    "output_path": null,
+    "output_sha256": null,
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "Target 64x64 source at 128x128 reference UI rectangle in default 64px-cell board; 256x256 at zoom; not imported",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": null,
+    "four_x": null,
+    "grayscale": null,
+    "checker": null,
+    "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Second built-in edit attempt: repair native dimensions, alpha and baseline; preserve compact v1 pose. Pending actual output and review."
+  },
+  "unity_import": null
+}

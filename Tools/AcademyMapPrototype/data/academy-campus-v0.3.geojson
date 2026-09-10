@@ -1,0 +1,6502 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "title": "OCC 学院全域地图 v0.3",
+    "coordinateSystem": "学院本地平面坐标：西北角为 (0,0)，x 向东、y 向南，单位 m。",
+    "source": "Tools/AcademyMapPrototype/src/data.js",
+    "generatedBy": "npm run export:geojson",
+    "scope": "地图精修中的矢量母版交换格式；不包含 Unity 战斗格图。"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-TEACH",
+        "name": "教学区",
+        "zone": "教学区",
+        "kind": "zone",
+        "description": "讲堂、图书馆、公开实操与课程事务。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              620,
+              0
+            ],
+            [
+              620,
+              390
+            ],
+            [
+              595,
+              428
+            ],
+            [
+              520,
+              452
+            ],
+            [
+              405,
+              430
+            ],
+            [
+              300,
+              456
+            ],
+            [
+              150,
+              438
+            ],
+            [
+              0,
+              462
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-CENTRE",
+        "name": "中庭区",
+        "zone": "中庭区",
+        "kind": "zone",
+        "description": "公共集合、食堂、社团、调度与中立审理。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              620,
+              0
+            ],
+            [
+              960,
+              0
+            ],
+            [
+              960,
+              425
+            ],
+            [
+              900,
+              455
+            ],
+            [
+              805,
+              440
+            ],
+            [
+              720,
+              465
+            ],
+            [
+              620,
+              420
+            ],
+            [
+              620,
+              0
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-WORK",
+        "name": "工坊区",
+        "zone": "工坊区",
+        "kind": "zone",
+        "description": "校准、器材制作、材料管理与受控试储。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              960,
+              0
+            ],
+            [
+              1460,
+              0
+            ],
+            [
+              1460,
+              500
+            ],
+            [
+              1390,
+              500
+            ],
+            [
+              1362,
+              458
+            ],
+            [
+              1250,
+              440
+            ],
+            [
+              1100,
+              458
+            ],
+            [
+              960,
+              430
+            ],
+            [
+              960,
+              0
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-LIVING",
+        "name": "生活区",
+        "zone": "生活区",
+        "kind": "zone",
+        "description": "宿舍、医务、洗衣、工读与学生自治。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              462
+            ],
+            [
+              150,
+              438
+            ],
+            [
+              300,
+              456
+            ],
+            [
+              405,
+              430
+            ],
+            [
+              520,
+              452
+            ],
+            [
+              590,
+              435
+            ],
+            [
+              620,
+              420
+            ],
+            [
+              700,
+              470
+            ],
+            [
+              684,
+              620
+            ],
+            [
+              665,
+              740
+            ],
+            [
+              690,
+              860
+            ],
+            [
+              700,
+              1000
+            ],
+            [
+              0,
+              1000
+            ],
+            [
+              0,
+              462
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-MARKET",
+        "name": "市集区",
+        "zone": "市集区",
+        "kind": "zone",
+        "description": "补给、兑换、访客客舍和转运。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              700,
+              470
+            ],
+            [
+              805,
+              440
+            ],
+            [
+              900,
+              455
+            ],
+            [
+              1000,
+              500
+            ],
+            [
+              1000,
+              1000
+            ],
+            [
+              700,
+              1000
+            ],
+            [
+              678,
+              900
+            ],
+            [
+              694,
+              820
+            ],
+            [
+              672,
+              740
+            ],
+            [
+              690,
+              620
+            ],
+            [
+              700,
+              470
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-SEALED",
+        "name": "封存区",
+        "zone": "封存区",
+        "kind": "zone",
+        "description": "受控档案、遗物、隔离与核心维护。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1000,
+              500
+            ],
+            [
+              1390,
+              500
+            ],
+            [
+              1400,
+              570
+            ],
+            [
+              1384,
+              700
+            ],
+            [
+              1400,
+              835
+            ],
+            [
+              1370,
+              1000
+            ],
+            [
+              1000,
+              1000
+            ],
+            [
+              1000,
+              500
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-OUTER-NE",
+        "name": "东侧服务外环",
+        "zone": "郊野／外环",
+        "kind": "zone",
+        "description": "服务门和东侧缓冲带。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1460,
+              0
+            ],
+            [
+              1600,
+              0
+            ],
+            [
+              1600,
+              500
+            ],
+            [
+              1460,
+              500
+            ],
+            [
+              1460,
+              0
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-OUTER-E",
+        "name": "东侧生态外环",
+        "zone": "郊野／外环",
+        "kind": "zone",
+        "description": "生态、护障和受控服务路线。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1390,
+              500
+            ],
+            [
+              1600,
+              500
+            ],
+            [
+              1600,
+              1000
+            ],
+            [
+              1370,
+              1000
+            ],
+            [
+              1400,
+              835
+            ],
+            [
+              1384,
+              700
+            ],
+            [
+              1400,
+              570
+            ],
+            [
+              1390,
+              500
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "Z-OUTER-S",
+        "name": "南部郊野外环",
+        "zone": "郊野／外环",
+        "kind": "zone",
+        "description": "旧校区、雨后灯庭、观测、生态和外环维护。",
+        "layer": "zones"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              1000
+            ],
+            [
+              700,
+              1000
+            ],
+            [
+              1000,
+              1000
+            ],
+            [
+              1370,
+              1000
+            ],
+            [
+              1600,
+              1000
+            ],
+            [
+              1600,
+              1400
+            ],
+            [
+              0,
+              1400
+            ],
+            [
+              0,
+              1000
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-WATER-01",
+        "name": "学院内河北段",
+        "zone": "教学区／生活区",
+        "kind": "water",
+        "description": "保留地势形成的缓流内河；不是工业排水渠，雨季水位会略有变化。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -20,
+              385
+            ],
+            [
+              95,
+              397
+            ],
+            [
+              200,
+              385
+            ],
+            [
+              310,
+              405
+            ],
+            [
+              385,
+              394
+            ],
+            [
+              475,
+              420
+            ],
+            [
+              510,
+              450
+            ],
+            [
+              484,
+              478
+            ],
+            [
+              390,
+              445
+            ],
+            [
+              300,
+              455
+            ],
+            [
+              205,
+              430
+            ],
+            [
+              95,
+              447
+            ],
+            [
+              -20,
+              435
+            ],
+            [
+              -20,
+              385
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-WATER-02",
+        "name": "中庭湖",
+        "zone": "中庭区／生活区",
+        "kind": "water",
+        "description": "学院日常可见的浅湖，承接内河并保留湖畔步道、桥梁与雨水花园。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              505,
+              450
+            ],
+            [
+              560,
+              426
+            ],
+            [
+              625,
+              438
+            ],
+            [
+              690,
+              480
+            ],
+            [
+              704,
+              545
+            ],
+            [
+              683,
+              604
+            ],
+            [
+              625,
+              642
+            ],
+            [
+              560,
+              650
+            ],
+            [
+              505,
+              620
+            ],
+            [
+              478,
+              560
+            ],
+            [
+              482,
+              495
+            ],
+            [
+              505,
+              450
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-WATER-03",
+        "name": "学院内河南段",
+        "zone": "生活区／市集区",
+        "kind": "water",
+        "description": "由中庭湖溢流向南的自然水道，生活区与市集区以小桥和岸边步道相连。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              642,
+              640
+            ],
+            [
+              678,
+              648
+            ],
+            [
+              700,
+              700
+            ],
+            [
+              688,
+              760
+            ],
+            [
+              710,
+              820
+            ],
+            [
+              698,
+              890
+            ],
+            [
+              720,
+              948
+            ],
+            [
+              710,
+              1010
+            ],
+            [
+              670,
+              1010
+            ],
+            [
+              660,
+              945
+            ],
+            [
+              674,
+              884
+            ],
+            [
+              650,
+              820
+            ],
+            [
+              664,
+              758
+            ],
+            [
+              640,
+              700
+            ],
+            [
+              642,
+              640
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-T01",
+        "name": "讲学前庭",
+        "zone": "教学区",
+        "kind": "courtyard",
+        "footprint": 9800,
+        "description": "西门、讲堂和共同讲学楼之间的公共前庭。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              55,
+              195
+            ],
+            [
+              195,
+              195
+            ],
+            [
+              195,
+              265
+            ],
+            [
+              55,
+              265
+            ],
+            [
+              55,
+              195
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-T02",
+        "name": "图书馆静读庭",
+        "zone": "教学区",
+        "kind": "green",
+        "footprint": 8250,
+        "description": "图书馆、研读翼和课程事务楼之间的低噪庭院。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              350,
+              205
+            ],
+            [
+              475,
+              205
+            ],
+            [
+              475,
+              271
+            ],
+            [
+              350,
+              271
+            ],
+            [
+              350,
+              205
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-T03",
+        "name": "实操集合坪",
+        "zone": "教学区",
+        "kind": "paved",
+        "footprint": 17850,
+        "description": "基础实操堂的集合、说明与设备交接外场。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              200,
+              360
+            ],
+            [
+              410,
+              360
+            ],
+            [
+              410,
+              445
+            ],
+            [
+              200,
+              445
+            ],
+            [
+              200,
+              360
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-C01",
+        "name": "食堂前坪",
+        "zone": "中庭区",
+        "kind": "paved",
+        "footprint": 10500,
+        "description": "高峰餐食、公告和小型公开活动的外场。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              655,
+              45
+            ],
+            [
+              805,
+              45
+            ],
+            [
+              805,
+              115
+            ],
+            [
+              655,
+              115
+            ],
+            [
+              655,
+              45
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-C02",
+        "name": "中庭集合坪",
+        "zone": "中庭区",
+        "kind": "courtyard",
+        "footprint": 31500,
+        "description": "树荫、公告、雨廊、桌椅和集合空间。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              635,
+              135
+            ],
+            [
+              935,
+              135
+            ],
+            [
+              935,
+              240
+            ],
+            [
+              635,
+              240
+            ],
+            [
+              635,
+              135
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-C03",
+        "name": "社团草坪",
+        "zone": "中庭区",
+        "kind": "green",
+        "footprint": 13000,
+        "description": "社团演示、休息和非正式练习。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              650,
+              300
+            ],
+            [
+              780,
+              300
+            ],
+            [
+              780,
+              400
+            ],
+            [
+              650,
+              400
+            ],
+            [
+              650,
+              300
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-W01",
+        "name": "校准装卸坪",
+        "zone": "工坊区",
+        "kind": "paved",
+        "footprint": 14040,
+        "description": "器材卸货、初检和公共校准排队区。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              980,
+              160
+            ],
+            [
+              1175,
+              160
+            ],
+            [
+              1175,
+              232
+            ],
+            [
+              980,
+              232
+            ],
+            [
+              980,
+              160
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-W02",
+        "name": "试储隔离带",
+        "zone": "工坊区",
+        "kind": "restricted",
+        "footprint": 27600,
+        "description": "试储与导能楼外围的非课堂安全缓冲。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1280,
+              55
+            ],
+            [
+              1400,
+              55
+            ],
+            [
+              1400,
+              285
+            ],
+            [
+              1280,
+              285
+            ],
+            [
+              1280,
+              55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-W03",
+        "name": "工坊作业院",
+        "zone": "工坊区",
+        "kind": "paved",
+        "footprint": 13500,
+        "description": "公开维修训练、工具交接和工读作业外场。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1040,
+              330
+            ],
+            [
+              1175,
+              330
+            ],
+            [
+              1175,
+              430
+            ],
+            [
+              1040,
+              430
+            ],
+            [
+              1040,
+              330
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-L01",
+        "name": "基础学部庭院",
+        "zone": "生活区",
+        "kind": "courtyard",
+        "footprint": 92400,
+        "description": "共同基础学部宿舍之间的洗衣、晾晒和晚间步行空间。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              40,
+              535
+            ],
+            [
+              320,
+              535
+            ],
+            [
+              320,
+              865
+            ],
+            [
+              40,
+              865
+            ],
+            [
+              40,
+              535
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-L02",
+        "name": "院系宿舍庭院",
+        "zone": "生活区",
+        "kind": "courtyard",
+        "footprint": 47850,
+        "description": "四个专业宿舍之间的共用庭院。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              170,
+              535
+            ],
+            [
+              315,
+              535
+            ],
+            [
+              315,
+              865
+            ],
+            [
+              170,
+              865
+            ],
+            [
+              170,
+              535
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-L03",
+        "name": "医务花园",
+        "zone": "生活区",
+        "kind": "green",
+        "footprint": 8050,
+        "description": "医务室外的等候、恢复和安静通行空间。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              440,
+              660
+            ],
+            [
+              555,
+              660
+            ],
+            [
+              555,
+              730
+            ],
+            [
+              440,
+              730
+            ],
+            [
+              440,
+              660
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-L04",
+        "name": "夜间灯廊",
+        "zone": "生活区",
+        "kind": "paved",
+        "footprint": 16875,
+        "description": "夜间公共屋与特殊班附属楼周边的照明步行区。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              345,
+              800
+            ],
+            [
+              570,
+              800
+            ],
+            [
+              570,
+              875
+            ],
+            [
+              345,
+              875
+            ],
+            [
+              345,
+              800
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-M01",
+        "name": "市集北坪",
+        "zone": "市集区",
+        "kind": "paved",
+        "footprint": 16250,
+        "description": "覆顶市集厅外的临时摊位与学生交易外场。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              720,
+              600
+            ],
+            [
+              970,
+              600
+            ],
+            [
+              970,
+              665
+            ],
+            [
+              720,
+              665
+            ],
+            [
+              720,
+              600
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-M02",
+        "name": "市集货运院",
+        "zone": "市集区",
+        "kind": "paved",
+        "footprint": 8000,
+        "description": "转运与车队屋的交接、等候和普通货物临停区。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              720,
+              720
+            ],
+            [
+              820,
+              720
+            ],
+            [
+              820,
+              800
+            ],
+            [
+              720,
+              800
+            ],
+            [
+              720,
+              720
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-M03",
+        "name": "客舍前院",
+        "zone": "市集区",
+        "kind": "courtyard",
+        "footprint": 10450,
+        "description": "访客登记、车队等候和公开会面外场。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              735,
+              810
+            ],
+            [
+              845,
+              810
+            ],
+            [
+              845,
+              905
+            ],
+            [
+              735,
+              905
+            ],
+            [
+              735,
+              810
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-S01",
+        "name": "封存外缓冲庭",
+        "zone": "封存区",
+        "kind": "restricted",
+        "footprint": 24050,
+        "description": "检查门厅、登记楼和观察厅之间的公开许可缓冲区。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1005,
+              615
+            ],
+            [
+              1375,
+              615
+            ],
+            [
+              1375,
+              680
+            ],
+            [
+              1005,
+              680
+            ],
+            [
+              1005,
+              615
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-S02",
+        "name": "封存内缓冲庭",
+        "zone": "封存区",
+        "kind": "restricted",
+        "footprint": 30000,
+        "description": "核心维护、值守和处置工坊之间的受控缓冲。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1090,
+              710
+            ],
+            [
+              1340,
+              710
+            ],
+            [
+              1340,
+              830
+            ],
+            [
+              1090,
+              830
+            ],
+            [
+              1090,
+              710
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O01",
+        "name": "旧校区石基",
+        "zone": "郊野／外环",
+        "kind": "terrain",
+        "footprint": 30450,
+        "description": "保留的旧校区外庭与石基。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              100,
+              1080
+            ],
+            [
+              310,
+              1080
+            ],
+            [
+              310,
+              1225
+            ],
+            [
+              100,
+              1225
+            ],
+            [
+              100,
+              1080
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O02",
+        "name": "雨后灯庭",
+        "zone": "郊野／外环",
+        "kind": "courtyard",
+        "footprint": 22750,
+        "description": "旧校区外庭、浅水排水沟和灯藤课程场地。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              430,
+              1055
+            ],
+            [
+              605,
+              1055
+            ],
+            [
+              605,
+              1185
+            ],
+            [
+              430,
+              1185
+            ],
+            [
+              430,
+              1055
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O03",
+        "name": "雨后灯庭浅水沟",
+        "zone": "郊野／外环",
+        "kind": "water",
+        "footprint": 1980,
+        "description": "降雨后保留的浅水排水沟，供环境课程观察。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              465,
+              1110
+            ],
+            [
+              575,
+              1110
+            ],
+            [
+              575,
+              1128
+            ],
+            [
+              465,
+              1128
+            ],
+            [
+              465,
+              1110
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O04",
+        "name": "生态与训练草地",
+        "zone": "郊野／外环",
+        "kind": "green",
+        "footprint": 48000,
+        "description": "受控魔法生物训练与环境课程。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1100,
+              1015
+            ],
+            [
+              1400,
+              1015
+            ],
+            [
+              1400,
+              1175
+            ],
+            [
+              1100,
+              1175
+            ],
+            [
+              1100,
+              1015
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O05",
+        "name": "温室种植地",
+        "zone": "郊野／外环",
+        "kind": "green",
+        "footprint": 18000,
+        "description": "环境温室周边的药材、灯藤样本和栽培区。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1020,
+              1200
+            ],
+            [
+              1170,
+              1200
+            ],
+            [
+              1170,
+              1320
+            ],
+            [
+              1020,
+              1320
+            ],
+            [
+              1020,
+              1200
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-O06",
+        "name": "自然缓冲水岸",
+        "zone": "郊野／外环",
+        "kind": "terrain",
+        "footprint": 87500,
+        "description": "外环水体、缓冲林和非任务状态下的日常慢行边界。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              75,
+              1220
+            ],
+            [
+              775,
+              1220
+            ],
+            [
+              775,
+              1345
+            ],
+            [
+              75,
+              1345
+            ],
+            [
+              75,
+              1220
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "WATER-01",
+        "name": "南部排水渠",
+        "zone": "郊野／外环",
+        "kind": "water",
+        "description": "通向雨后灯庭的浅水排水系统。",
+        "layer": "terrain"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              1160
+            ],
+            [
+              360,
+              1150
+            ],
+            [
+              620,
+              1168
+            ],
+            [
+              800,
+              1155
+            ],
+            [
+              800,
+              1188
+            ],
+            [
+              620,
+              1200
+            ],
+            [
+              360,
+              1185
+            ],
+            [
+              0,
+              1196
+            ],
+            [
+              0,
+              1160
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-01",
+        "name": "公共主步道",
+        "roadClass": "主步道",
+        "width": 16,
+        "description": "西门、中庭与工坊之间的主步行线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            20,
+            215
+          ],
+          [
+            300,
+            215
+          ],
+          [
+            640,
+            215
+          ],
+          [
+            960,
+            215
+          ],
+          [
+            1450,
+            215
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-02",
+        "name": "学生日常路",
+        "roadClass": "主步道",
+        "width": 14,
+        "description": "顺中庭湖西岸弯行，连接中庭、生活区和南市门方向的高频路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            720,
+            215
+          ],
+          [
+            714,
+            330
+          ],
+          [
+            676,
+            418
+          ],
+          [
+            620,
+            505
+          ],
+          [
+            574,
+            598
+          ],
+          [
+            500,
+            650
+          ],
+          [
+            350,
+            650
+          ],
+          [
+            100,
+            650
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-03",
+        "name": "维护环道",
+        "roadClass": "维护道",
+        "width": 12,
+        "description": "工坊、封存外围和东侧服务门的受控路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1090,
+            340
+          ],
+          [
+            1130,
+            500
+          ],
+          [
+            1200,
+            750
+          ],
+          [
+            1460,
+            750
+          ],
+          [
+            1530,
+            740
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-04",
+        "name": "外环巡检道",
+        "roadClass": "维护道",
+        "width": 10,
+        "description": "护障、排水、观测与郊野维护路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            100,
+            1000
+          ],
+          [
+            520,
+            1125
+          ],
+          [
+            1000,
+            1140
+          ],
+          [
+            1380,
+            1245
+          ],
+          [
+            1550,
+            1300
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-05",
+        "name": "市集南路",
+        "roadClass": "主步道",
+        "width": 14,
+        "description": "避开中庭湖来水与市集装卸院的曲折主线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            850,
+            500
+          ],
+          [
+            815,
+            580
+          ],
+          [
+            805,
+            680
+          ],
+          [
+            830,
+            760
+          ],
+          [
+            850,
+            960
+          ],
+          [
+            850,
+            1360
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-06",
+        "name": "教学环廊",
+        "roadClass": "支路",
+        "width": 8,
+        "description": "教学区的雨廊与课堂连接线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            80,
+            180
+          ],
+          [
+            200,
+            180
+          ],
+          [
+            350,
+            180
+          ],
+          [
+            500,
+            180
+          ],
+          [
+            590,
+            180
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-07",
+        "name": "宿舍庭院路",
+        "roadClass": "支路",
+        "width": 8,
+        "description": "生活区北侧庭院路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            45,
+            590
+          ],
+          [
+            300,
+            590
+          ],
+          [
+            600,
+            590
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "R-08",
+        "name": "封存缓冲路",
+        "roadClass": "支路",
+        "width": 8,
+        "description": "封存检查与缓冲庭院之间顺地形绕行的受控步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1010,
+            680
+          ],
+          [
+            1090,
+            655
+          ],
+          [
+            1180,
+            675
+          ],
+          [
+            1270,
+            650
+          ],
+          [
+            1350,
+            680
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-01",
+        "name": "图书馆桥",
+        "roadClass": "桥梁",
+        "width": 6,
+        "description": "跨学院内河北段的步行桥，连接静读庭与湖畔课程步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            450,
+            421
+          ],
+          [
+            525,
+            457
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-02",
+        "name": "中庭湖桥",
+        "roadClass": "桥梁",
+        "width": 7,
+        "description": "中庭与湖西学生生活线之间的主要步行桥。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            610,
+            455
+          ],
+          [
+            674,
+            510
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-03",
+        "name": "湖畔南桥",
+        "roadClass": "桥梁",
+        "width": 6,
+        "description": "将生活区南北步道接入中庭湖南岸。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            497,
+            620
+          ],
+          [
+            568,
+            650
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "B-04",
+        "name": "生活市集桥",
+        "roadClass": "桥梁",
+        "width": 6,
+        "description": "跨内河南段连接生活区与市集区的日常小桥。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            650,
+            760
+          ],
+          [
+            716,
+            760
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-P01",
+        "name": "教学前庭步道",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "连接教学区入口、讲堂、图书馆与课程事务楼的有顶步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            70,
+            180
+          ],
+          [
+            560,
+            180
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-P02",
+        "name": "讲堂东路",
+        "roadClass": "支路",
+        "width": 6,
+        "description": "连接两座讲堂与共同讲学楼。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            190,
+            50
+          ],
+          [
+            190,
+            390
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-P03",
+        "name": "图书馆前路",
+        "roadClass": "支路",
+        "width": 6,
+        "description": "图书馆、研读翼与讲学楼之间的安静步行线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            350,
+            130
+          ],
+          [
+            550,
+            130
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-P04",
+        "name": "实操堂侧路",
+        "roadClass": "支路",
+        "width": 6,
+        "description": "通往基础实操堂和教师事务楼的课程路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            300,
+            280
+          ],
+          [
+            560,
+            280
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-P05",
+        "name": "研究庭院路",
+        "roadClass": "支路",
+        "width": 5,
+        "description": "研究课堂、研读翼与课程事务之间的庭院步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            445,
+            215
+          ],
+          [
+            445,
+            385
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-P01",
+        "name": "中庭北廊",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "食堂、审理庭和中庭集合坪北缘的遮雨廊。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            645,
+            130
+          ],
+          [
+            935,
+            130
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-P02",
+        "name": "中庭南廊",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "学生公共屋、调度台和练习馆之间的公共步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            645,
+            250
+          ],
+          [
+            935,
+            250
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-P03",
+        "name": "社团侧路",
+        "roadClass": "支路",
+        "width": 6,
+        "description": "贯穿中庭的社团、食堂和调度事务通道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            760,
+            50
+          ],
+          [
+            760,
+            395
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-P01",
+        "name": "工坊北线",
+        "roadClass": "维护道",
+        "width": 8,
+        "description": "公共校准大厅、导具设计楼和试储安全围栏的服务线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            980,
+            165
+          ],
+          [
+            1400,
+            165
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-P02",
+        "name": "工坊南线",
+        "roadClass": "维护道",
+        "width": 8,
+        "description": "材料与机械工坊、清洗站和工具发放屋之间的工作线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            980,
+            330
+          ],
+          [
+            1400,
+            330
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-P03",
+        "name": "材料横路",
+        "roadClass": "维护道",
+        "width": 7,
+        "description": "材料库、机械工坊和工读屋之间的器材运输线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1175,
+            50
+          ],
+          [
+            1175,
+            415
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-P04",
+        "name": "试储缓冲路",
+        "roadClass": "受控路",
+        "width": 6,
+        "description": "通向试储与导能楼的受控缓冲线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1305,
+            65
+          ],
+          [
+            1305,
+            280
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P01",
+        "name": "生活北庭路",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "宿舍、餐厨楼与通往中庭方向的北侧生活路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            45,
+            525
+          ],
+          [
+            640,
+            525
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P02",
+        "name": "生活中庭路",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "宿舍、医务室、洗衣与工读屋的高频横向路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            45,
+            650
+          ],
+          [
+            640,
+            650
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P03",
+        "name": "生活南庭路",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "夜间公共屋、特殊班附属楼与南部外环的连接线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            45,
+            825
+          ],
+          [
+            640,
+            825
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P04",
+        "name": "基础学部路",
+        "roadClass": "支路",
+        "width": 5,
+        "description": "共同基础学部宿舍之间的庭院步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            145,
+            535
+          ],
+          [
+            145,
+            890
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P05",
+        "name": "院系宿舍路",
+        "roadClass": "支路",
+        "width": 5,
+        "description": "四个专业宿舍与公共设施之间的步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            275,
+            535
+          ],
+          [
+            275,
+            890
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-P06",
+        "name": "生活服务巷",
+        "roadClass": "支路",
+        "width": 5,
+        "description": "餐厨、医务、洗衣、工读与夜间公共屋的服务路径。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            425,
+            535
+          ],
+          [
+            425,
+            835
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-P01",
+        "name": "市集北街",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "覆顶市集厅、街铺和货币契约所的北侧步行街。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            720,
+            605
+          ],
+          [
+            980,
+            605
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-P02",
+        "name": "市集中街",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "常用品街铺、食材棚与货栈之间的主街。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            720,
+            695
+          ],
+          [
+            980,
+            695
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-P03",
+        "name": "市集南街",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "车队屋、巡查所、客舍和南市门的连接街。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            720,
+            790
+          ],
+          [
+            980,
+            790
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-P04",
+        "name": "市集东巷",
+        "roadClass": "支路",
+        "width": 5,
+        "description": "市集三条横街与南市门之间的纵向通路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            845,
+            530
+          ],
+          [
+            845,
+            930
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-P01",
+        "name": "封存外庭路",
+        "roadClass": "受控路",
+        "width": 7,
+        "description": "登记楼、档案库、遗物库和观察厅的外侧缓冲路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1010,
+            610
+          ],
+          [
+            1370,
+            610
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-P02",
+        "name": "封存内庭路",
+        "roadClass": "受控路",
+        "width": 7,
+        "description": "检查门厅、核心维护和安全值守之间的受控内线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1010,
+            720
+          ],
+          [
+            1370,
+            720
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-P03",
+        "name": "封存记录路",
+        "roadClass": "受控路",
+        "width": 5,
+        "description": "登记、观察和维护记录人员的内部步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1085,
+            520
+          ],
+          [
+            1085,
+            855
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-P04",
+        "name": "隔离缓冲路",
+        "roadClass": "受控路",
+        "width": 5,
+        "description": "遗物保管库、隔离塔与处置工坊之间的隔离路径。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1285,
+            520
+          ],
+          [
+            1285,
+            855
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-P01",
+        "name": "旧校区步道",
+        "roadClass": "支路",
+        "width": 6,
+        "description": "旧校区石基、雨后灯庭教学亭与排水观察点的课程步道。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            110,
+            1110
+          ],
+          [
+            610,
+            1110
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-P02",
+        "name": "生态管理线",
+        "roadClass": "维护道",
+        "width": 7,
+        "description": "维护站、魔法生物管理舍、温室和生态训练草地的管理路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1040,
+            1100
+          ],
+          [
+            1400,
+            1100
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-P03",
+        "name": "观测支路",
+        "roadClass": "维护道",
+        "width": 5,
+        "description": "生态训练区与观测站之间的受控巡检支路。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            1300,
+            1100
+          ],
+          [
+            1400,
+            1245
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-P04",
+        "name": "南部慢行路",
+        "roadClass": "支路",
+        "width": 7,
+        "description": "生活区、南市门和外环休整点的日常慢行路线。",
+        "layer": "roads"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            300,
+            1280
+          ],
+          [
+            850,
+            1280
+          ],
+          [
+            1200,
+            1300
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-01",
+        "name": "西门登记楼",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 1300,
+        "description": "入校、学籍核验与访客导引。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              20,
+              200
+            ],
+            [
+              70,
+              200
+            ],
+            [
+              70,
+              226
+            ],
+            [
+              20,
+              226
+            ],
+            [
+              20,
+              200
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-02",
+        "name": "共同讲学楼",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 6048,
+        "description": "共同底座课程与公开考核厅。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              220,
+              95
+            ],
+            [
+              332,
+              95
+            ],
+            [
+              332,
+              149
+            ],
+            [
+              220,
+              149
+            ],
+            [
+              220,
+              95
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-03",
+        "name": "东讲堂",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 3024,
+        "description": "小班教室、研讨室与跨院课程。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              100,
+              70
+            ],
+            [
+              172,
+              70
+            ],
+            [
+              172,
+              112
+            ],
+            [
+              100,
+              112
+            ],
+            [
+              100,
+              70
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-04",
+        "name": "西讲堂",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 3024,
+        "description": "补修、公开演示与小班课。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              100,
+              300
+            ],
+            [
+              172,
+              300
+            ],
+            [
+              172,
+              342
+            ],
+            [
+              100,
+              342
+            ],
+            [
+              100,
+              300
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-05",
+        "name": "学院图书馆",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 5400,
+        "description": "公共藏书、阅览与受控资料申请窗口。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              390,
+              55
+            ],
+            [
+              480,
+              55
+            ],
+            [
+              480,
+              115
+            ],
+            [
+              390,
+              115
+            ],
+            [
+              390,
+              55
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-06",
+        "name": "公共研读翼",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 1768,
+        "description": "小组研读、翻译与档案教学准备。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              430,
+              160
+            ],
+            [
+              482,
+              160
+            ],
+            [
+              482,
+              194
+            ],
+            [
+              430,
+              194
+            ],
+            [
+              430,
+              160
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-07",
+        "name": "基础实操堂",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 4200,
+        "description": "护幕、撤离、对抗与器材实操。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              330,
+              300
+            ],
+            [
+              414,
+              300
+            ],
+            [
+              414,
+              350
+            ],
+            [
+              330,
+              350
+            ],
+            [
+              330,
+              300
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-08",
+        "name": "教师与课程事务楼",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 2204,
+        "description": "课程排班、助教值班、导师办公与任务签发。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              490,
+              235
+            ],
+            [
+              548,
+              235
+            ],
+            [
+              548,
+              273
+            ],
+            [
+              490,
+              273
+            ],
+            [
+              490,
+              235
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "T-09",
+        "name": "研究课堂楼",
+        "zone": "教学区",
+        "kind": "building",
+        "footprint": 2356,
+        "description": "可复现实验教学与材料说明课。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              480,
+              325
+            ],
+            [
+              542,
+              325
+            ],
+            [
+              542,
+              363
+            ],
+            [
+              480,
+              363
+            ],
+            [
+              480,
+              325
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-01",
+        "name": "学生公共屋",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 2112,
+        "description": "公告、学生自治、社团预约和失物交接。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              670,
+              195
+            ],
+            [
+              736,
+              195
+            ],
+            [
+              736,
+              227
+            ],
+            [
+              670,
+              227
+            ],
+            [
+              670,
+              195
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-02",
+        "name": "公共食堂",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 3192,
+        "description": "跨院共用餐食与膳食配给窗口。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              700,
+              80
+            ],
+            [
+              784,
+              80
+            ],
+            [
+              784,
+              118
+            ],
+            [
+              700,
+              118
+            ],
+            [
+              700,
+              80
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-03",
+        "name": "社团与活动楼",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 1792,
+        "description": "社团、排练、辩论与临时展示。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              690,
+              315
+            ],
+            [
+              746,
+              315
+            ],
+            [
+              746,
+              347
+            ],
+            [
+              690,
+              347
+            ],
+            [
+              690,
+              315
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-04",
+        "name": "记录与调度事务楼",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 1288,
+        "description": "任务简报、路线许可、课程记录与申诉窗口。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              805,
+              185
+            ],
+            [
+              851,
+              185
+            ],
+            [
+              851,
+              213
+            ],
+            [
+              805,
+              213
+            ],
+            [
+              805,
+              185
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-05",
+        "name": "室内练习馆",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 3220,
+        "description": "雨天训练和公开安全演练。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              805,
+              280
+            ],
+            [
+              875,
+              280
+            ],
+            [
+              875,
+              326
+            ],
+            [
+              805,
+              326
+            ],
+            [
+              805,
+              280
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "C-06",
+        "name": "中立审理庭",
+        "zone": "中庭区",
+        "kind": "building",
+        "footprint": 2720,
+        "description": "学院内部审理、调停和公开听证。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              850,
+              70
+            ],
+            [
+              918,
+              70
+            ],
+            [
+              918,
+              110
+            ],
+            [
+              850,
+              110
+            ],
+            [
+              850,
+              70
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-01",
+        "name": "公共校准大厅",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 5800,
+        "description": "学生器材检查、校准、借用与归还。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              980,
+              80
+            ],
+            [
+              1080,
+              80
+            ],
+            [
+              1080,
+              138
+            ],
+            [
+              980,
+              138
+            ],
+            [
+              980,
+              80
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-02",
+        "name": "材料与机械工坊",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 4100,
+        "description": "常规制作、维修、工具训练与公开工读。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1090,
+              255
+            ],
+            [
+              1172,
+              255
+            ],
+            [
+              1172,
+              305
+            ],
+            [
+              1090,
+              305
+            ],
+            [
+              1090,
+              255
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-03",
+        "name": "导具设计楼",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 2688,
+        "description": "器物结构、术式适配与可复现实验。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1200,
+              70
+            ],
+            [
+              1264,
+              70
+            ],
+            [
+              1264,
+              112
+            ],
+            [
+              1200,
+              112
+            ],
+            [
+              1200,
+              70
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-04",
+        "name": "试储与导能楼",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 1944,
+        "description": "受控储能／释放试验，独立安全围栏。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1320,
+              120
+            ],
+            [
+              1374,
+              120
+            ],
+            [
+              1374,
+              156
+            ],
+            [
+              1320,
+              156
+            ],
+            [
+              1320,
+              120
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-05",
+        "name": "登记材料库",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 1768,
+        "description": "课程余料、工单材料和可追溯耗材。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1200,
+              185
+            ],
+            [
+              1252,
+              185
+            ],
+            [
+              1252,
+              219
+            ],
+            [
+              1200,
+              219
+            ],
+            [
+              1200,
+              185
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-06",
+        "name": "绝缘与耗材库",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 1408,
+        "description": "隔离材料、保护耗材与受控领取。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1325,
+              210
+            ],
+            [
+              1369,
+              210
+            ],
+            [
+              1369,
+              242
+            ],
+            [
+              1325,
+              242
+            ],
+            [
+              1325,
+              210
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-07",
+        "name": "工坊安全与清洗站",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 1120,
+        "description": "事故初处置、洗消、器材封签与安全登记。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              980,
+              350
+            ],
+            [
+              1020,
+              350
+            ],
+            [
+              1020,
+              378
+            ],
+            [
+              980,
+              378
+            ],
+            [
+              980,
+              350
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "W-08",
+        "name": "工读与工具发放屋",
+        "zone": "工坊区",
+        "kind": "building",
+        "footprint": 1740,
+        "description": "工读排班、工具交接和维护任务领取。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1090,
+              380
+            ],
+            [
+              1148,
+              380
+            ],
+            [
+              1148,
+              410
+            ],
+            [
+              1090,
+              410
+            ],
+            [
+              1090,
+              380
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-01",
+        "name": "南市门检查所",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 1120,
+        "description": "货运、访客和公开器材的入区检查。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              830,
+              940
+            ],
+            [
+              870,
+              940
+            ],
+            [
+              870,
+              968
+            ],
+            [
+              830,
+              968
+            ],
+            [
+              830,
+              940
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-02",
+        "name": "覆顶市集厅",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 3600,
+        "description": "常规器材、补给和学生交易摊位。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              735,
+              550
+            ],
+            [
+              825,
+              550
+            ],
+            [
+              825,
+              590
+            ],
+            [
+              735,
+              590
+            ],
+            [
+              735,
+              550
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-05",
+        "name": "货币与契约所",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 900,
+        "description": "货币兑换、担保和公开契约见证。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              890,
+              555
+            ],
+            [
+              926,
+              555
+            ],
+            [
+              926,
+              580
+            ],
+            [
+              890,
+              580
+            ],
+            [
+              890,
+              555
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-06",
+        "name": "转运与车队屋",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 2280,
+        "description": "货物交接、车队排班与公开委托递送。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              730,
+              730
+            ],
+            [
+              790,
+              730
+            ],
+            [
+              790,
+              768
+            ],
+            [
+              730,
+              768
+            ],
+            [
+              730,
+              730
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-07",
+        "name": "市集货栈",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 1904,
+        "description": "已登记普通货物的短期仓储。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              865,
+              700
+            ],
+            [
+              921,
+              700
+            ],
+            [
+              921,
+              734
+            ],
+            [
+              865,
+              734
+            ],
+            [
+              865,
+              700
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-08",
+        "name": "度量与巡查所",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 1064,
+        "description": "秤量、纠纷初处置和许可证检查。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              900,
+              800
+            ],
+            [
+              938,
+              800
+            ],
+            [
+              938,
+              828
+            ],
+            [
+              900,
+              828
+            ],
+            [
+              900,
+              800
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-09",
+        "name": "访客客舍",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 2720,
+        "description": "来访教师、商人、家属和公开客人住宿。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              760,
+              830
+            ],
+            [
+              828,
+              830
+            ],
+            [
+              828,
+              870
+            ],
+            [
+              760,
+              870
+            ],
+            [
+              760,
+              830
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-03",
+        "name": "生活区餐厨楼",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 2520,
+        "description": "宿舍日常供餐与夜间简餐。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              350,
+              550
+            ],
+            [
+              422,
+              550
+            ],
+            [
+              422,
+              585
+            ],
+            [
+              350,
+              585
+            ],
+            [
+              350,
+              550
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-04",
+        "name": "学院医务室",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 3960,
+        "description": "健康确认、治疗、护理、转诊与战前餐食协作。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              450,
+              600
+            ],
+            [
+              538,
+              600
+            ],
+            [
+              538,
+              645
+            ],
+            [
+              450,
+              645
+            ],
+            [
+              450,
+              600
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-05",
+        "name": "洗衣与浴室",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1984,
+        "description": "洗衣、热水、衣物修补和公共卫生。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              350,
+              660
+            ],
+            [
+              412,
+              660
+            ],
+            [
+              412,
+              692
+            ],
+            [
+              350,
+              692
+            ],
+            [
+              350,
+              660
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-06",
+        "name": "工读与学生服务屋",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1288,
+        "description": "工读排班、补助、住宿事务与失物交接。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              350,
+              735
+            ],
+            [
+              396,
+              735
+            ],
+            [
+              396,
+              763
+            ],
+            [
+              350,
+              763
+            ],
+            [
+              350,
+              735
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-07",
+        "name": "夜间公共屋",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1984,
+        "description": "自习、低噪社团和夜间学生活动。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              455,
+              755
+            ],
+            [
+              517,
+              755
+            ],
+            [
+              517,
+              787
+            ],
+            [
+              455,
+              787
+            ],
+            [
+              455,
+              755
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-08",
+        "name": "特殊班旧附属生活单元",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 2160,
+        "description": "连续导师照看、额外医疗和工读安排。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              535,
+              850
+            ],
+            [
+              607,
+              850
+            ],
+            [
+              607,
+              880
+            ],
+            [
+              535,
+              880
+            ],
+            [
+              535,
+              850
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-01",
+        "name": "封存检查门厅",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 1196,
+        "description": "入区检查、交接、许可核验与离区复核。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1010,
+              700
+            ],
+            [
+              1056,
+              700
+            ],
+            [
+              1056,
+              726
+            ],
+            [
+              1010,
+              726
+            ],
+            [
+              1010,
+              700
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-02",
+        "name": "封存登记楼",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 1560,
+        "description": "双重记录、授权申请和观察排班。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1075,
+              695
+            ],
+            [
+              1127,
+              695
+            ],
+            [
+              1127,
+              725
+            ],
+            [
+              1075,
+              725
+            ],
+            [
+              1075,
+              695
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-03",
+        "name": "受控档案库",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 4576,
+        "description": "风险档案、复制件和受限阅读室。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1120,
+              545
+            ],
+            [
+              1208,
+              545
+            ],
+            [
+              1208,
+              597
+            ],
+            [
+              1120,
+              597
+            ],
+            [
+              1120,
+              545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-04",
+        "name": "遗物保管库",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 2728,
+        "description": "已封签遗物、卷轴与法器。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1235,
+              545
+            ],
+            [
+              1297,
+              545
+            ],
+            [
+              1297,
+              589
+            ],
+            [
+              1235,
+              589
+            ],
+            [
+              1235,
+              545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-05",
+        "name": "观察与复核厅",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 2204,
+        "description": "受监督观察、比对、见证与复核。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1110,
+              630
+            ],
+            [
+              1168,
+              630
+            ],
+            [
+              1168,
+              668
+            ],
+            [
+              1110,
+              668
+            ],
+            [
+              1110,
+              630
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-06",
+        "name": "隔离塔",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 1600,
+        "description": "异常对象的短期隔离与硬性阻断。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1295,
+              635
+            ],
+            [
+              1335,
+              635
+            ],
+            [
+              1335,
+              675
+            ],
+            [
+              1295,
+              675
+            ],
+            [
+              1295,
+              635
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-07",
+        "name": "核心维护楼",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 2016,
+        "description": "封存核心的外围维护、记录接力和受控接口。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1150,
+              760
+            ],
+            [
+              1206,
+              760
+            ],
+            [
+              1206,
+              796
+            ],
+            [
+              1150,
+              796
+            ],
+            [
+              1150,
+              760
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-08",
+        "name": "安全值守屋",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 1144,
+        "description": "巡检轮班、撤离调度与警报确认。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1240,
+              755
+            ],
+            [
+              1284,
+              755
+            ],
+            [
+              1284,
+              781
+            ],
+            [
+              1240,
+              781
+            ],
+            [
+              1240,
+              755
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "S-09",
+        "name": "受控处置工坊",
+        "zone": "封存区",
+        "kind": "building",
+        "footprint": 1728,
+        "description": "封签、拆解前检查与安全封装。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1300,
+              805
+            ],
+            [
+              1354,
+              805
+            ],
+            [
+              1354,
+              837
+            ],
+            [
+              1300,
+              837
+            ],
+            [
+              1300,
+              805
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-01",
+        "name": "东侧服务门楼",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 1344,
+        "description": "服务车队、护障维护和受控外勤出入。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1510,
+              725
+            ],
+            [
+              1558,
+              725
+            ],
+            [
+              1558,
+              753
+            ],
+            [
+              1510,
+              753
+            ],
+            [
+              1510,
+              725
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-02",
+        "name": "雨后灯庭教学亭",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 504,
+        "description": "实地对抗课集合、器材交接与课程记录。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              515,
+              1120
+            ],
+            [
+              543,
+              1120
+            ],
+            [
+              543,
+              1138
+            ],
+            [
+              515,
+              1138
+            ],
+            [
+              515,
+              1120
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-03",
+        "name": "外环维护站",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 1620,
+        "description": "护障、排水、巡检工具和维修交接。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              950,
+              1120
+            ],
+            [
+              1004,
+              1120
+            ],
+            [
+              1004,
+              1150
+            ],
+            [
+              950,
+              1150
+            ],
+            [
+              950,
+              1120
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-04",
+        "name": "魔法生物管理舍",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 2108,
+        "description": "寻迹兽等受控生物的照护、训练与检疫。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1220,
+              1100
+            ],
+            [
+              1282,
+              1100
+            ],
+            [
+              1282,
+              1134
+            ],
+            [
+              1220,
+              1134
+            ],
+            [
+              1220,
+              1100
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-05",
+        "name": "环境温室",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 2016,
+        "description": "药材、灯藤样本和环境课程。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1060,
+              1220
+            ],
+            [
+              1132,
+              1220
+            ],
+            [
+              1132,
+              1248
+            ],
+            [
+              1060,
+              1248
+            ],
+            [
+              1060,
+              1220
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-06",
+        "name": "观测站",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 1140,
+        "description": "护障、天气、以太环境和郊野风险观测。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              1380,
+              1230
+            ],
+            [
+              1418,
+              1230
+            ],
+            [
+              1418,
+              1260
+            ],
+            [
+              1380,
+              1260
+            ],
+            [
+              1380,
+              1230
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "O-07",
+        "name": "外勤急救屋",
+        "zone": "郊野／外环",
+        "kind": "building",
+        "footprint": 704,
+        "description": "郊野课程与维护任务的初步救护。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              730,
+              1210
+            ],
+            [
+              762,
+              1210
+            ],
+            [
+              762,
+              1232
+            ],
+            [
+              730,
+              1232
+            ],
+            [
+              730,
+              1210
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-01A",
+        "name": "共同基础学部宿舍 1 号",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1968,
+        "description": "前两年普通学生按年级居住。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              55,
+              545
+            ],
+            [
+              137,
+              545
+            ],
+            [
+              137,
+              569
+            ],
+            [
+              55,
+              569
+            ],
+            [
+              55,
+              545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-01B",
+        "name": "共同基础学部宿舍 2 号",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1968,
+        "description": "前两年普通学生按年级居住。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              55,
+              623
+            ],
+            [
+              137,
+              623
+            ],
+            [
+              137,
+              647
+            ],
+            [
+              55,
+              647
+            ],
+            [
+              55,
+              623
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-01C",
+        "name": "共同基础学部宿舍 3 号",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1968,
+        "description": "前两年普通学生按年级居住。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              55,
+              701
+            ],
+            [
+              137,
+              701
+            ],
+            [
+              137,
+              725
+            ],
+            [
+              55,
+              725
+            ],
+            [
+              55,
+              701
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-01D",
+        "name": "共同基础学部宿舍 4 号",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1968,
+        "description": "前两年普通学生按年级居住。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              55,
+              779
+            ],
+            [
+              137,
+              779
+            ],
+            [
+              137,
+              803
+            ],
+            [
+              55,
+              803
+            ],
+            [
+              55,
+              779
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-02A",
+        "name": "守护与实地安全宿舍",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1976,
+        "description": "第三年起按主院系和年级安排。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              180,
+              545
+            ],
+            [
+              256,
+              545
+            ],
+            [
+              256,
+              571
+            ],
+            [
+              180,
+              571
+            ],
+            [
+              180,
+              545
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-02B",
+        "name": "援护与生命环境宿舍",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1976,
+        "description": "第三年起按主院系和年级安排。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              180,
+              623
+            ],
+            [
+              256,
+              623
+            ],
+            [
+              256,
+              649
+            ],
+            [
+              180,
+              649
+            ],
+            [
+              180,
+              623
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-02C",
+        "name": "魔导工学与研究宿舍",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1976,
+        "description": "第三年起按主院系和年级安排。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              180,
+              701
+            ],
+            [
+              256,
+              701
+            ],
+            [
+              256,
+              727
+            ],
+            [
+              180,
+              727
+            ],
+            [
+              180,
+              701
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "L-02D",
+        "name": "遗迹、档案与秩序宿舍",
+        "zone": "生活区",
+        "kind": "building",
+        "footprint": 1976,
+        "description": "第三年起按主院系和年级安排。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              180,
+              779
+            ],
+            [
+              256,
+              779
+            ],
+            [
+              256,
+              805
+            ],
+            [
+              180,
+              805
+            ],
+            [
+              180,
+              779
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-01",
+        "name": "常用品街铺 1",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              735,
+              620
+            ],
+            [
+              743,
+              620
+            ],
+            [
+              743,
+              630
+            ],
+            [
+              735,
+              630
+            ],
+            [
+              735,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-02",
+        "name": "常用品街铺 2",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              759,
+              620
+            ],
+            [
+              767,
+              620
+            ],
+            [
+              767,
+              630
+            ],
+            [
+              759,
+              630
+            ],
+            [
+              759,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-03",
+        "name": "常用品街铺 3",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              783,
+              620
+            ],
+            [
+              791,
+              620
+            ],
+            [
+              791,
+              630
+            ],
+            [
+              783,
+              630
+            ],
+            [
+              783,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-04",
+        "name": "常用品街铺 4",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              807,
+              620
+            ],
+            [
+              815,
+              620
+            ],
+            [
+              815,
+              630
+            ],
+            [
+              807,
+              630
+            ],
+            [
+              807,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-05",
+        "name": "常用品街铺 5",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              831,
+              620
+            ],
+            [
+              839,
+              620
+            ],
+            [
+              839,
+              630
+            ],
+            [
+              831,
+              630
+            ],
+            [
+              831,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-06",
+        "name": "常用品街铺 6",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              855,
+              620
+            ],
+            [
+              863,
+              620
+            ],
+            [
+              863,
+              630
+            ],
+            [
+              855,
+              630
+            ],
+            [
+              855,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-07",
+        "name": "常用品街铺 7",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              735,
+              648
+            ],
+            [
+              743,
+              648
+            ],
+            [
+              743,
+              658
+            ],
+            [
+              735,
+              658
+            ],
+            [
+              735,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-08",
+        "name": "常用品街铺 8",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              759,
+              648
+            ],
+            [
+              767,
+              648
+            ],
+            [
+              767,
+              658
+            ],
+            [
+              759,
+              658
+            ],
+            [
+              759,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-09",
+        "name": "常用品街铺 9",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              783,
+              648
+            ],
+            [
+              791,
+              648
+            ],
+            [
+              791,
+              658
+            ],
+            [
+              783,
+              658
+            ],
+            [
+              783,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-10",
+        "name": "常用品街铺 10",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              807,
+              648
+            ],
+            [
+              815,
+              648
+            ],
+            [
+              815,
+              658
+            ],
+            [
+              807,
+              658
+            ],
+            [
+              807,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-11",
+        "name": "常用品街铺 11",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              831,
+              648
+            ],
+            [
+              839,
+              648
+            ],
+            [
+              839,
+              658
+            ],
+            [
+              831,
+              658
+            ],
+            [
+              831,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-12",
+        "name": "常用品街铺 12",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              855,
+              648
+            ],
+            [
+              863,
+              648
+            ],
+            [
+              863,
+              658
+            ],
+            [
+              855,
+              658
+            ],
+            [
+              855,
+              648
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-13",
+        "name": "常用品街铺 13",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              735,
+              676
+            ],
+            [
+              743,
+              676
+            ],
+            [
+              743,
+              686
+            ],
+            [
+              735,
+              686
+            ],
+            [
+              735,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-14",
+        "name": "常用品街铺 14",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              759,
+              676
+            ],
+            [
+              767,
+              676
+            ],
+            [
+              767,
+              686
+            ],
+            [
+              759,
+              686
+            ],
+            [
+              759,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-15",
+        "name": "常用品街铺 15",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              783,
+              676
+            ],
+            [
+              791,
+              676
+            ],
+            [
+              791,
+              686
+            ],
+            [
+              783,
+              686
+            ],
+            [
+              783,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-16",
+        "name": "常用品街铺 16",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              807,
+              676
+            ],
+            [
+              815,
+              676
+            ],
+            [
+              815,
+              686
+            ],
+            [
+              807,
+              686
+            ],
+            [
+              807,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-17",
+        "name": "常用品街铺 17",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              831,
+              676
+            ],
+            [
+              839,
+              676
+            ],
+            [
+              839,
+              686
+            ],
+            [
+              831,
+              686
+            ],
+            [
+              831,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-03-18",
+        "name": "常用品街铺 18",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 80,
+        "description": "纸张、衣物、修补、工具与日用品的独立门面。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              855,
+              676
+            ],
+            [
+              863,
+              676
+            ],
+            [
+              863,
+              686
+            ],
+            [
+              855,
+              686
+            ],
+            [
+              855,
+              676
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-01",
+        "name": "食材与熟食棚 1",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              895,
+              620
+            ],
+            [
+              901,
+              620
+            ],
+            [
+              901,
+              628
+            ],
+            [
+              895,
+              628
+            ],
+            [
+              895,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-02",
+        "name": "食材与熟食棚 2",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              908,
+              620
+            ],
+            [
+              914,
+              620
+            ],
+            [
+              914,
+              628
+            ],
+            [
+              908,
+              628
+            ],
+            [
+              908,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-03",
+        "name": "食材与熟食棚 3",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              921,
+              620
+            ],
+            [
+              927,
+              620
+            ],
+            [
+              927,
+              628
+            ],
+            [
+              921,
+              628
+            ],
+            [
+              921,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-04",
+        "name": "食材与熟食棚 4",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              934,
+              620
+            ],
+            [
+              940,
+              620
+            ],
+            [
+              940,
+              628
+            ],
+            [
+              934,
+              628
+            ],
+            [
+              934,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-05",
+        "name": "食材与熟食棚 5",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              947,
+              620
+            ],
+            [
+              953,
+              620
+            ],
+            [
+              953,
+              628
+            ],
+            [
+              947,
+              628
+            ],
+            [
+              947,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-06",
+        "name": "食材与熟食棚 6",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              960,
+              620
+            ],
+            [
+              966,
+              620
+            ],
+            [
+              966,
+              628
+            ],
+            [
+              960,
+              628
+            ],
+            [
+              960,
+              620
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-07",
+        "name": "食材与熟食棚 7",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              895,
+              644
+            ],
+            [
+              901,
+              644
+            ],
+            [
+              901,
+              652
+            ],
+            [
+              895,
+              652
+            ],
+            [
+              895,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-08",
+        "name": "食材与熟食棚 8",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              908,
+              644
+            ],
+            [
+              914,
+              644
+            ],
+            [
+              914,
+              652
+            ],
+            [
+              908,
+              652
+            ],
+            [
+              908,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-09",
+        "name": "食材与熟食棚 9",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              921,
+              644
+            ],
+            [
+              927,
+              644
+            ],
+            [
+              927,
+              652
+            ],
+            [
+              921,
+              652
+            ],
+            [
+              921,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-10",
+        "name": "食材与熟食棚 10",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              934,
+              644
+            ],
+            [
+              940,
+              644
+            ],
+            [
+              940,
+              652
+            ],
+            [
+              934,
+              652
+            ],
+            [
+              934,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-11",
+        "name": "食材与熟食棚 11",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              947,
+              644
+            ],
+            [
+              953,
+              644
+            ],
+            [
+              953,
+              652
+            ],
+            [
+              947,
+              652
+            ],
+            [
+              947,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "M-04-12",
+        "name": "食材与熟食棚 12",
+        "zone": "市集区",
+        "kind": "building",
+        "footprint": 48,
+        "description": "学生食材、熟食与餐食供应。",
+        "layer": "buildings"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              960,
+              644
+            ],
+            [
+              966,
+              644
+            ],
+            [
+              966,
+              652
+            ],
+            [
+              960,
+              652
+            ],
+            [
+              960,
+              644
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-01",
+        "name": "西门",
+        "kind": "入口",
+        "description": "学生与日常访客的主要步行入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          15,
+          213
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-02",
+        "name": "南市门",
+        "kind": "入口",
+        "description": "补给、车队、市场访客与公开货运入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          850,
+          1360
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "G-03",
+        "name": "东侧服务门",
+        "kind": "入口",
+        "description": "器材、维护车队与受控服务入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1570,
+          740
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-01",
+        "name": "学院任务调度台",
+        "kind": "服务",
+        "description": "课程、维护和安全任务的公开调度入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          705,
+          230
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-02",
+        "name": "雨后灯庭",
+        "kind": "课程",
+        "description": "环境回路、遮挡判断与安全处置的实地对抗课程。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          515,
+          1120
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-03",
+        "name": "医务入口",
+        "kind": "服务",
+        "description": "健康确认、治疗、护理与餐食协作入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          450,
+          650
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-04",
+        "name": "工坊器材柜台",
+        "kind": "服务",
+        "description": "装备借还、公共校准与器材登记入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1010,
+          150
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-05",
+        "name": "封存许可窗口",
+        "kind": "受控服务",
+        "description": "受限资料、观察和维护任务的登记入口。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1100,
+          685
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-06",
+        "name": "市集信息牌",
+        "kind": "公共服务",
+        "description": "公开交易、货运和临时委托的告示点。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          835,
+          690
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "POI-07",
+        "name": "外环维护集合点",
+        "kind": "维护",
+        "description": "护障、排水和巡检任务的外勤集合点。",
+        "layer": "points"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          950,
+          1158
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "occ-academy-map-prototype",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "validate:geometry": "node scripts/validate-geometry.mjs",
+    "build": "npm run validate:geometry && vite build",
+    "preview": "vite preview",
+    "export:geojson": "npm run validate:geometry && node scripts/export-geojson.mjs",
+    "report:frontage": "node scripts/report-frontage.mjs"
+  },
+  "dependencies": {
+    "maplibre-gl": "^5.20.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.1"
+  }
+}

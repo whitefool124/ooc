@@ -21,7 +21,7 @@ namespace OCC.Combat.Tests
         public void M6FormalCatalog_HasFrozenCountsAndNoRemovedDefenseOrDurabilityFields()
         {
             RogueAcademyContentService service = new RogueAcademyContentService();
-            Assert.That(service.Equipment.Count, Is.EqualTo(32)); Assert.That(service.Affixes.Count, Is.EqualTo(14));
+            Assert.That(service.Equipment.Count, Is.EqualTo(33)); Assert.That(service.Affixes.Count, Is.EqualTo(13));
             Assert.That(service.Equipment.Count(value => value.UpgradeNodes.Count > 0), Is.EqualTo(8));
             Assert.That(service.AllEligibleSpellIds.Count, Is.EqualTo(60)); Assert.That(service.AllEligibleSpellIds.Distinct().Count(), Is.EqualTo(60));
             Assert.That(service.Equipment.All(value => !value.HasDurability && value.Armor == 0 && value.BlockChance == 0), Is.True);
@@ -36,6 +36,12 @@ namespace OCC.Combat.Tests
             var second = service.Roll(620, "combat", SpellRarity.Common, EquipmentRarity.Common, 3, 2);
             Assert.That(first.Select(value => value.DefinitionId), Is.EqualTo(second.Select(value => value.DefinitionId)));
             Assert.That(first.All(value => value.Kind == "spell" ? service.AllEligibleSpellIds.Contains(value.DefinitionId) : service.Equipment.Any(item => item.DefinitionId == value.DefinitionId)), Is.True);
+            Assert.That(first.Where(value => value.Kind == "equipment").Select(value => service.Equipment.Single(item => item.DefinitionId == value.DefinitionId).Slot),
+                Has.None.EqualTo(OCC.Combat.Roguelite.EquipmentSlot.Ring1));
+            Assert.That(first.Where(value => value.Kind == "equipment").Select(value => service.Equipment.Single(item => item.DefinitionId == value.DefinitionId).Slot),
+                Has.None.EqualTo(OCC.Combat.Roguelite.EquipmentSlot.Ring2));
+            Assert.That(first.Where(value => value.Kind == "equipment").Select(value => service.Equipment.Single(item => item.DefinitionId == value.DefinitionId).Slot),
+                Has.None.EqualTo(OCC.Combat.Roguelite.EquipmentSlot.Necklace));
             Assert.That(first.Select(value => value.EquivalenceGroupId).Where(value => !string.IsNullOrEmpty(value)).Distinct().Count(), Is.EqualTo(first.Count));
         }
 
@@ -45,8 +51,8 @@ namespace OCC.Combat.Tests
             RogueAcademyContentService service = new RogueAcademyContentService();
             foreach (EnemyArchetype archetype in EnemyArchetypes.All)
             {
-                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West); archetype.Apply(enemy);
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+                UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0)); archetype.Apply(enemy);
                 CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, enemy }); combat.ConfigureRuleset(CombatRuleset.Roguelite);
                 service.ApplyEnemyBaseline(combat, enemy);
                 RogueEnemyBaselineDefinition baseline = service.EnemyBaselines.Single(value => value.ArchetypeId == archetype.Id);
@@ -59,8 +65,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void M6LegacyArmorBreakEffects_MapToBreakStanceOnRoguelitePath()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, enemy }); combat.ConfigureRuleset(CombatRuleset.Roguelite);
             combat.TryGrantRogueliteShield("enemy", "test", 5);
             CombatEffectExecutor.Execute(combat, "hero", CombatEffect.ApplyStatus("enemy", StatusType.BreakStance, 1));

@@ -1,0 +1,53 @@
+{
+  "differences": [
+    {
+      "width": 960,
+      "mode": "overview",
+      "changed_pixels": 59,
+      "bbox": [
+        298,
+        260,
+        355,
+        306
+      ],
+      "outside_viewport_changed_pixels": 0
+    },
+    {
+      "width": 960,
+      "mode": "zoom",
+      "changed_pixels": 236,
+      "bbox": [
+        316,
+        160,
+        430,
+        252
+      ],
+      "outside_viewport_changed_pixels": 0
+    },
+    {
+      "width": 1920,
+      "mode": "overview",
+      "changed_pixels": 236,
+      "bbox": [
+        596,
+        520,
+        710,
+        612
+      ],
+      "outside_viewport_changed_pixels": 0
+    },
+    {
+      "width": 1920,
+      "mode": "zoom",
+      "changed_pixels": 944,
+      "bbox": [
+        632,
+        320,
+        860,
+        504
+      ],
+      "outside_viewport_changed_pixels": 0
+    }
+  ],
+  "formal_png_and_meta_hashes_unchanged": true
+}

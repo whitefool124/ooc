@@ -26,13 +26,14 @@ namespace OCC.Combat.Tests
         public void DefaultSession_RegistersAllCurrentSpellsThroughStableProvidersAndPages()
         {
             TrainingRangeSession session = new TrainingRangeSession();
-            Assert.That(session.Abilities.Count, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + ArtifactCatalog.All.Count));
+            ArtifactDefinition[] activeArtifacts = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).ToArray();
+            Assert.That(session.Abilities.Count, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + activeArtifacts.Length));
             Assert.That(session.PageCount, Is.EqualTo(11));
             Assert.That(session.Abilities.Take(60).Select(ability => ability.Id), Is.EqualTo(FireSpellCatalog.All.Select(spell => spell.Id)));
             Assert.That(session.Abilities.Skip(60).Take(RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
                 Is.EqualTo(RogueliteSkillCatalog.All.Select(skill => skill.Id)));
             Assert.That(session.Abilities.Skip(60 + RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
-                Is.EqualTo(ArtifactCatalog.All.Select(artifact => artifact.Id)));
+                Is.EqualTo(activeArtifacts.Select(artifact => artifact.Id)));
             Assert.That(session.Abilities, Has.All.Matches<TrainingRangeAbilityEntry>(ability =>
                 !string.IsNullOrWhiteSpace(ability.Family) && !string.IsNullOrWhiteSpace(ability.Targeting)));
             Assert.That(session.Abilities, Has.All.Matches<TrainingRangeAbilityEntry>(ability =>
@@ -47,7 +48,7 @@ namespace OCC.Combat.Tests
             TrainingRangeSession session = new TrainingRangeSession();
             TrainingRangeAuditReport audit = session.RunFullAudit();
             Assert.That(audit.IsSuccess, Is.True, string.Join(Environment.NewLine, audit.Failures));
-            Assert.That(audit.Passed, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + ArtifactCatalog.All.Count));
+            Assert.That(audit.Passed, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + ArtifactCatalog.All.Count(value => ArtifactCatalog.IsCurrentlyUsable(value.Id))));
             Assert.That(audit.IllegalPreviewPassed, Is.EqualTo(60));
         }
 

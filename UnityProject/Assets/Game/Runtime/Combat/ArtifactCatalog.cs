@@ -105,6 +105,8 @@ namespace OCC.Combat
 
     public static class ArtifactCatalog
     {
+        private static readonly HashSet<string> RetiredContentIds = new HashSet<string>(new[] { "G-T04", "G-T18" }, StringComparer.Ordinal);
+
         private static ArtifactEffectDefinition E(ArtifactEffectKind kind, int amount = 0, int duration = 0,
             ArtifactEffectScope scope = ArtifactEffectScope.Primary,
             ArtifactEffectCondition condition = ArtifactEffectCondition.Always,
@@ -139,7 +141,7 @@ namespace OCC.Combat
 
         public static readonly ArtifactDefinition DemolitionCanister = A("F-T01", "demolition_canister", "炎脉封装筒",
             ItemRarity.Rare, 2, 2, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Cross, "学院试制", "火",
-            "2 行动点，消耗 1 次", "4 格内空地；中心与正交相邻格", "16 火伤害，摧毁轻掩体并生成 8 伤害火场 6 刻度",
+            "2 行动点，消耗 1 次", "4 格内空地；中心与正交相邻格", "造成 16 点火焰伤害，摧毁轻掩体并生成每次造成 8 点伤害、持续 6 刻度的火场",
             "爆区不分敌我；重掩体能挡住爆炸", "炸开掩体、封住道路", "双手旋阀后投放", "火十字爆发与燃烧地格",
             RarePools, new[] { E(ArtifactEffectKind.Damage, 16, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
                 E(ArtifactEffectKind.DestroyLightCover, scope: ArtifactEffectScope.Selection),
@@ -183,7 +185,7 @@ namespace OCC.Combat
             AdvancedPools, new[] { E(ArtifactEffectKind.ForceMoveTarget, 2) });
         public static readonly ArtifactDefinition ReactionBell = A("G-T10", "reaction_bell", "截击铃", ItemRarity.Rare, 2, 2, 3,
             ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "边境猎团", "通用", "2 行动点，消耗 1 次；标记持续到你的下一回合", "3 格内可见空格",
-            "首个敌人进入标记格时受 12 伤并沿进入方向推 1 格", "敌人可以绕开标记，或让别的单位先踩上去", "守住路口、阻止接近", "悬铃并标定地格", "铜色截击波纹",
+            "首个敌人进入标记格时受到 12 点伤害并沿进入方向推 1 格", "敌人可以绕开标记，或让别的单位先踩上去", "守住路口、阻止接近", "悬铃并标定地格", "铜色截击波纹",
             RarePools, new[] { E(ArtifactEffectKind.ArmReaction, 12, 1, ArtifactEffectScope.Source, trigger: ArtifactReactionTrigger.EnemyEnterMarkedCell) }, 1, 2, 1);
         public static readonly ArtifactDefinition HazardCondenser = A("G-T11", "hazard_condenser", "险地冷凝器", ItemRarity.Common, 4, 1, 3,
             ArtifactTargetRule.AnyCell, ArtifactSelectionShape.Cross, "消防与勘验人员共制", "通用", "1 行动点，消耗 1 次", "3 格内目标格及正交邻格；至少含一格燃烧地格或烟尘",
@@ -232,5 +234,6 @@ namespace OCC.Combat
 
         public static ArtifactDefinition Get(string id) => All.FirstOrDefault(value => value.Id == id) ??
             throw new InvalidOperationException("Unknown artifact definition: " + id);
+        public static bool IsCurrentlyUsable(string id) => !string.IsNullOrEmpty(id) && !RetiredContentIds.Contains(id);
     }
 }

@@ -1,0 +1,66 @@
+[
+  {
+    "name": "unity_old_overview_960",
+    "width": 960,
+    "zoom": false,
+    "candidate": false,
+    "meta": "960|540|128|tether_hound|64x64|Point|Clamp",
+    "png_chars": 106168
+  },
+  {
+    "name": "unity_candidate_overview_960",
+    "width": 960,
+    "zoom": false,
+    "candidate": true,
+    "meta": "960|540|128|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp",
+    "png_chars": 104996
+  },
+  {
+    "name": "unity_old_zoom_960",
+    "width": 960,
+    "zoom": true,
+    "candidate": false,
+    "meta": "960|540|256|tether_hound|64x64|Point|Clamp",
+    "png_chars": 98860
+  },
+  {
+    "name": "unity_candidate_zoom_960",
+    "width": 960,
+    "zoom": true,
+    "candidate": true,
+    "meta": "960|540|256|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp",
+    "png_chars": 97308
+  },
+  {
+    "name": "unity_old_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "candidate": false,
+    "meta": "1920|1080|128|tether_hound|64x64|Point|Clamp",
+    "png_chars": 186960
+  },
+  {
+    "name": "unity_candidate_overview_1920",
+    "width": 1920,
+    "zoom": false,
+    "candidate": true,
+    "meta": "1920|1080|128|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp",
+    "png_chars": 185328
+  },
+  {
+    "name": "unity_old_zoom_1920",
+    "width": 1920,
+    "zoom": true,
+    "candidate": false,
+    "meta": "1920|1080|256|tether_hound|64x64|Point|Clamp",
+    "png_chars": 172372
+  },
+  {
+    "name": "unity_candidate_zoom_1920",
+    "width": 1920,
+    "zoom": true,
+    "candidate": true,
+    "meta": "1920|1080|256|tether_hound_compact_v1_QA_PENDING|64x64|Point|Clamp",
+    "png_chars": 170688
+  }
+]

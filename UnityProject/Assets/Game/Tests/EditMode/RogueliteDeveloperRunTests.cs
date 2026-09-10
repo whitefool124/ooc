@@ -47,15 +47,15 @@ namespace OCC.Combat.Tests
         public void DebugOutcome_ProducesBothObjectiveOutcomesWithoutChangingSnapshotData()
         {
             var map = new GridMap(2, 2);
-            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            var enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             var victory = new CombatState(map, new[] { hero, enemy }, new CombatObjective[] { new EliminationObjective() });
             victory.ResolveDebugOutcome(true); Assert.That(victory.IsVictory, Is.True);
-            var defeat = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East), new UnitState("enemy", false, new GridPosition(1, 0), Facing.West) });
+            var defeat = new CombatState(map, new[] { new UnitState("hero", true, new GridPosition(0, 0)), new UnitState("enemy", false, new GridPosition(1, 0)) });
             defeat.ResolveDebugOutcome(false); Assert.That(defeat.IsDefeat, Is.True);
 
             var objectiveMap = new GridMap(2, 2); objectiveMap.SetTile(new GridPosition(1, 1), new TileState { IsObjective = true, Durability = 6 });
-            var destruction = new CombatState(objectiveMap, new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) }, new CombatObjective[] { new DestructionObjective(new[] { new GridPosition(1, 1) }) });
+            var destruction = new CombatState(objectiveMap, new[] { new UnitState("hero", true, new GridPosition(0, 0)) }, new CombatObjective[] { new DestructionObjective(new[] { new GridPosition(1, 1) }) });
             destruction.ResolveDebugOutcome(true); Assert.That(destruction.IsVictory, Is.True);
         }
 
@@ -95,7 +95,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_VisitedRoomsCanBeRevisitedAndPermissionGateNeedsCard()
+        public void MapRun_VisitedRoomsCanBeRevisitedAndConnectedTowerCanBeEntered()
         {
             var run = new RogueliteMapRun(902);
             run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
@@ -104,15 +104,14 @@ namespace OCC.Combat.Tests
             Assert.Throws<InvalidOperationException>(() => run.SelectNode("relay_event"));
 
             run.SelectNode("switchyard"); run.CompleteCurrentNode(); run.SelectNode("relay_event"); run.CompleteCurrentNode();
-            run.SelectNode("med_bay"); run.CompleteCurrentNode(); run.SelectNode("permit_archive"); run.CompleteCurrentNode();
-            Assert.That(run.AccessCards, Is.EqualTo(1));
+            run.SelectNode("med_bay"); run.CompleteCurrentNode(); run.SelectNode("records_archive"); run.CompleteCurrentNode();
             run.SelectNode("safety_room"); run.SelectNode("aether_refinery"); run.SelectNode("transmission_tower");
             Assert.That(run.CurrentNodeId, Is.EqualTo("transmission_tower"));
-            Assert.That(RogueliteMapRun.FromJson(run.ToJson()).AccessCards, Is.EqualTo(1));
+            Assert.That(RogueliteMapRun.FromJson(run.ToJson()).CurrentNodeId, Is.EqualTo("transmission_tower"));
         }
 
         [Test]
-        public void MapRun_VisualStatesDescribeCurrentReachabilityAndPermissionGates()
+        public void MapRun_VisualStatesDescribeCurrentReachability()
         {
             var run = new RogueliteMapRun(903);
             Assert.That(run.VisualStateFor("start"), Is.EqualTo(RogueliteMapNodeVisualState.Current));
@@ -124,7 +123,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.VisualStateFor("start"), Is.EqualTo(RogueliteMapNodeVisualState.Available));
             run.SelectNode("switchyard"); run.ChooseCurrentNodeContent("survey");
             run.SelectNode("relay_event"); run.ChooseCurrentNodeContent("survey"); run.SelectNode("gatehouse"); run.SelectNode("elite_foundry");
-            Assert.That(run.VisualStateFor("transmission_tower"), Is.EqualTo(RogueliteMapNodeVisualState.Locked));
+            Assert.That(run.VisualStateFor("transmission_tower"), Is.EqualTo(RogueliteMapNodeVisualState.Available));
         }
 
         [Test]
@@ -149,7 +148,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_RiskyEventOnlyStartsDisclosedCombatThenGrantsCard()
+        public void MapRun_RiskyEventOnlyCompletesAfterDisclosedCombat()
         {
             var run = new RogueliteMapRun(516);
             run.SelectNode("rail_patrol"); run.CompleteCurrentCombat(); run.ClaimReward(run.CurrentRewards[0].Id);
@@ -159,9 +158,8 @@ namespace OCC.Combat.Tests
             Assert.That(riskyChoice.Preview, Does.Contain("额外战斗"));
             run.ChooseCurrentNodeContent("overload");
             Assert.That(run.HasPendingContentCombat, Is.True);
-            Assert.That(run.AccessCards, Is.EqualTo(0));
+            Assert.That(run.CompletedNodes, Does.Not.Contain("switchyard"));
             run.CompletePendingContentCombat();
-            Assert.That(run.AccessCards, Is.EqualTo(1));
             Assert.That(run.CompletedNodes, Does.Contain("switchyard"));
         }
 
@@ -177,7 +175,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void MapRun_ShopCostsAndWorkshopCalibrationPersist()
+        public void MapRun_ShopCostsAndWeaponChoicePersistWithoutLegacyArmorCalibration()
         {
             var run = new RogueliteMapRun(617);
             Assert.That(run.Parts, Is.EqualTo(4)); Assert.That(run.Aether, Is.EqualTo(2));
@@ -185,12 +183,12 @@ namespace OCC.Combat.Tests
             Assert.That(run.Parts, Is.EqualTo(2)); Assert.That(run.Supplies, Is.EqualTo(1));
             run.SelectNode("field_workshop"); run.ChooseCurrentNodeContent("wand_calibration");
             Assert.That(run.ClaimedRewards, Does.Contain("arcane_wand"));
-            run.EquipReward("arcane_wand"); run.CalibrateAether();
+            run.EquipReward("arcane_wand");
             var restored = RogueliteMapRun.FromJson(run.ToJson());
-            Assert.That(restored.EquippedWeaponId, Is.EqualTo("arcane_wand")); Assert.That(restored.IsAetherCalibrated, Is.True); Assert.That(restored.Aether, Is.EqualTo(0));
-            var hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East) { Armor = 1 };
+            Assert.That(restored.EquippedWeaponId, Is.EqualTo("arcane_wand")); Assert.That(restored.IsAetherCalibrated, Is.False); Assert.That(restored.Aether, Is.EqualTo(2));
+            var hero = new UnitState("hero", true, new GridPosition(0, 0)) { Armor = 1 };
             restored.ApplyBuild(hero);
-            Assert.That(hero.MainHand.Id, Is.EqualTo("arcane_wand")); Assert.That(hero.Armor, Is.EqualTo(2));
+            Assert.That(hero.MainHand.Id, Is.EqualTo("arcane_wand")); Assert.That(hero.Armor, Is.EqualTo(1));
         }
 
         [Test]
@@ -218,7 +216,7 @@ namespace OCC.Combat.Tests
         public void RegionBoss_HasDocumentedVitalityAndDefenses()
         {
             EnemyArchetype boss = EnemyArchetypes.Get("core_overseer");
-            var unit = new UnitState("boss", false, new GridPosition(1, 1), Facing.West);
+            var unit = new UnitState("boss", false, new GridPosition(1, 1));
             boss.Apply(unit);
             Assert.That(unit.DisplayName, Is.EqualTo("核心守备监工")); Assert.That(unit.MaxHealth, Is.EqualTo(30));
             Assert.That(unit.Health, Is.EqualTo(30)); Assert.That(unit.Shield, Is.EqualTo(4)); Assert.That(unit.Armor, Is.EqualTo(3));

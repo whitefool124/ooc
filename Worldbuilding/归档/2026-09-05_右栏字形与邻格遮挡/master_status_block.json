@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"12.5\"><h3 id=\"doxcnvu3IX3UGCioBbk3KfnAXie\">12.5 当前实施状态</h3><p id=\"doxcnLNusnmJGdplF0LW6aFRVXc\">VISUAL-INTEGRATION-01 已落实全场与右栏布局、单位像素倍率、地形说明和当前范围、真实路线移动与信息随行、多段特效分层、普通攻击和火术命中时钟、显示快照、视觉镜头跟随与法宝逐单位真实反馈；前轮784项全量EditMode检查通过。本轮用生产战场与HUD在临时未保存场景进行1920×1080、960×540静态接触，发现并修复底栏指令图标/名称/费用重叠及空快捷槽裁字，补齐空槽与占用槽两档画面，82项相关检查通过。当前静态证据只覆盖固定首战与底栏布局，未替代实际输入、动画、运行时性能或人工审美。下一步继续核对右栏摘要下边距、单位拥挤与材质重复感，并完成双分辨率实机交互、动作节奏和性能复核，再按既定内容顺序推进完整流程。主任务继续进行，玩法内容规模不变；水面/灯藤v3仍QA_PENDING、当前批准0/2。证据见 Worldbuilding/归档/ 下历轮视觉实施记录及2026-09-05_双分辨率静态接触。本状态不表示完整游戏或视觉实机验收已完成。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 341
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.87",
+      "latest": "1.0.93",
+      "message": "lark-cli 1.0.93 available, current 1.0.87, run: lark-cli update"
+    }
+  }
+}

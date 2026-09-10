@@ -10,7 +10,7 @@ namespace OCC.Combat.Tests
         {
             CombatState state = new CombatState(new GridMap(4, 4), new[]
             {
-                new UnitState("hero", true, new GridPosition(0, 0), Facing.East)
+                new UnitState("hero", true, new GridPosition(0, 0))
             });
 
             Assert.That(state.ItemInventory.Items, Is.Empty);
@@ -83,21 +83,22 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatState_RestrictsScrollAndArtifactQuickbarToFourInstances()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             for (int i = 0; i < 5; i++) state.ItemInventory.AddFirstFit(new ItemInstance("scroll-" + i, "F-S01", i));
             for (int i = 0; i < 4; i++) Assert.That(state.EquipItemQuickbar("scroll-" + i, i).Success, Is.True);
-            Assert.That(state.EquipItemQuickbar("scroll-4", 4).Error, Is.EqualTo(InventoryError.QuickbarFull));
+            Assert.That(state.EquipItemQuickbar("scroll-4", 4).Error, Is.EqualTo(InventoryError.OutOfBounds));
         }
 
         [Test]
         public void CombatState_SpecialQuickbarCapAllowsMovingAndReplacingAtTheLimit()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             for (int i = 0; i < 5; i++) state.ItemInventory.AddFirstFit(new ItemInstance("scroll-" + i, "F-S01", i));
             for (int i = 0; i < 4; i++) Assert.That(state.EquipItemQuickbar("scroll-" + i, i).Success, Is.True);
 
-            Assert.That(state.EquipItemQuickbar("scroll-0", 4).Success, Is.True);
+            Assert.That(state.EquipItemQuickbar("scroll-0", 3).Success, Is.True);
             Assert.That(state.ItemQuickbar[0], Is.Null);
+            Assert.That(state.EquipItemQuickbar("scroll-3", 0).Success, Is.True);
             Assert.That(state.EquipItemQuickbar("scroll-4", 1).Success, Is.True);
             Assert.That(state.ItemQuickbar[1], Is.EqualTo("scroll-4"));
             Assert.That(state.ItemQuickbar.Count(id => !string.IsNullOrEmpty(id)), Is.EqualTo(4));
@@ -108,33 +109,34 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapRun run = new RogueliteMapRun(406);
             ItemInstance[] scrolls = Enumerable.Range(0, 5).Select(_ => run.GrantItem("F-S01")).ToArray();
-            for (int i = 0; i < 4; i++) Assert.That(run.EquipInventoryItem(scrolls[i].InstanceId, i + 2).Success, Is.True);
+            for (int i = 0; i < 4; i++) Assert.That(run.EquipInventoryItem(scrolls[i].InstanceId, i).Success, Is.True);
 
-            Assert.That(run.EquipInventoryItem(scrolls[0].InstanceId, 6).Success, Is.True);
+            Assert.That(run.EquipInventoryItem(scrolls[0].InstanceId, 3).Success, Is.True);
+            Assert.That(run.EquipInventoryItem(scrolls[3].InstanceId, 0).Success, Is.True);
             Assert.That(run.EquipInventoryItem(scrolls[4].InstanceId, 3).Success, Is.True);
             Assert.That(run.ItemQuickbar.Count(id => !string.IsNullOrEmpty(id) && ItemCatalog.Get(run.Inventory.Get(id).DefinitionId).Category == ItemCategory.Scroll), Is.EqualTo(4));
         }
 
         [Test]
-        public void CombatState_AllEightInstanceQuickbarSlotsCanBeFilled()
+        public void CombatState_AllFourInstanceQuickbarSlotsCanBeFilled()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
-            for (int i = 0; i < 8; i++)
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
+            for (int i = 0; i < 4; i++)
             {
                 string id = "medkit-" + i;
                 Assert.That(state.ItemInventory.AddFirstFit(new ItemInstance(id, "medkit", i)).Success, Is.True);
                 Assert.That(state.EquipItemQuickbar(id, i).Success, Is.True);
             }
 
-            Assert.That(state.ItemQuickbar.Where(id => !string.IsNullOrEmpty(id)).Count(), Is.EqualTo(8));
-            Assert.That(state.ItemQuickbar.Distinct().Count(), Is.EqualTo(8));
+            Assert.That(state.ItemQuickbar.Where(id => !string.IsNullOrEmpty(id)).Count(), Is.EqualTo(4));
+            Assert.That(state.ItemQuickbar.Distinct().Count(), Is.EqualTo(4));
         }
 
         [Test]
         public void MapRunStarterConsumable_DoesNotRespawnInNextCombatAfterItIsConsumed()
         {
             RogueliteMapRun run = new RogueliteMapRun(405);
-            CombatState first = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState first = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             first.ConfigureItemInventory(run.Inventory, run.ItemQuickbar);
             CombatResolver.BeginTurn(first, "hero");
 
@@ -144,7 +146,7 @@ namespace OCC.Combat.Tests
             CombatResolver.Resolve(first, CombatCommand.UseQuickbar("hero", 0));
             run.CaptureCombatInventory(first);
 
-            CombatState next = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState next = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             next.ConfigureItemInventory(run.Inventory, run.ItemQuickbar);
 
             Assert.That(next.ItemInventory.Get(medkitId), Is.Null);
@@ -174,7 +176,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatSearch_CostsOneApPerRevealAndTakingCostsNone()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             state.SetLootSource(new LootSourceState("crate", new GridPosition(1, 0), new[] { new ItemInstance("loot-a", "F-S01", 0), new ItemInstance("loot-b", "F-T01", 1) }));
             CombatResolver.BeginTurn(state, "hero"); CombatResolver.Resolve(state, CombatCommand.SearchLoot("hero"));
             Assert.That(state.GetUnit("hero").ActionPoints, Is.EqualTo(2)); Assert.That(state.LootSource.RevealedItems.Count, Is.EqualTo(1));
@@ -185,10 +187,10 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatSearch_WithNoApDoesNotRevealHiddenItem()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             state.SetLootSource(new LootSourceState("crate", new GridPosition(1, 0), new[] { new ItemInstance("loot-a", "F-S01", 0) }));
             CombatResolver.BeginTurn(state, "hero");
-            CombatResolver.Resolve(state, CombatCommand.TurnInPlace("hero", Facing.East)); CombatResolver.Resolve(state, CombatCommand.TurnInPlace("hero", Facing.East)); CombatResolver.Resolve(state, CombatCommand.TurnInPlace("hero", Facing.East));
+            CombatEffectExecutor.Execute(state, "hero", CombatEffect.SpendActionPoints(3));
             Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state, CombatCommand.SearchLoot("hero")));
             Assert.That(state.LootSource.HiddenCount, Is.EqualTo(1));
         }
@@ -211,7 +213,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void Map7_PersistsContainerSearchAndTakenState()
         {
-            RogueliteMapRun run = new RogueliteMapRun(403); CombatState combat = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            RogueliteMapRun run = new RogueliteMapRun(403); CombatState combat = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             LootSourceState loot = new LootSourceState("node-crate", new GridPosition(1, 0), new[] { new ItemInstance("found", "medkit", 0), new ItemInstance("hidden", "F-S01", 1) }); combat.SetLootSource(loot);
             loot.RevealNext(); loot.Take("found", combat.ItemInventory); run.CaptureCombatInventory(combat);
             RogueliteMapRun restored = RogueliteMapRun.FromJson(run.ToJson()); LootSourceState same = new LootSourceState("node-crate", new GridPosition(1, 0), new[] { new ItemInstance("found", "medkit", 0), new ItemInstance("hidden", "F-S01", 1) }); restored.RestoreLootProgress(same);
@@ -230,7 +232,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void CombatQuickbarSwap_CostsOneApAndConsumptionIsPerInstance()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
             state.ItemInventory.AddFirstFit(new ItemInstance("artifact", "F-T01", 2)); CombatResolver.BeginTurn(state, "hero");
             CombatResolver.Resolve(state, CombatCommand.EquipInventoryQuickbar("hero", "artifact", 3));
             Assert.That(state.GetUnit("hero").ActionPoints, Is.EqualTo(2)); Assert.That(state.ItemQuickbar[3], Is.EqualTo("artifact"));
@@ -241,7 +243,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void InventoryConsumable_UsesRealEffectPathAndRemovesDepletedInstance()
         {
-            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East), new UnitState("enemy", false, new GridPosition(1, 0), Facing.West) }); UnitState hero = state.GetUnit("hero");
+            CombatState state = new CombatState(new GridMap(4, 4), new[] { new UnitState("hero", true, new GridPosition(0, 0)), new UnitState("enemy", false, new GridPosition(1, 0)) }); UnitState hero = state.GetUnit("hero");
             InventoryContainerState inventory = new InventoryContainerState(); inventory.AddFirstFit(new ItemInstance("combat-medkit", "medkit", 0)); state.ConfigureItemInventory(inventory, new[] { "combat-medkit" });
             CombatResolver.BeginTurn(state, "enemy"); CombatResolver.Resolve(state, CombatCommand.Attack("enemy", "hero")); CombatResolver.BeginTurn(state, "hero"); CombatResolver.Resolve(state, CombatCommand.UseInventoryItem("hero", "combat-medkit"));
             Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth)); Assert.That(hero.ActionPoints, Is.EqualTo(2)); Assert.That(state.ItemInventory.Get("combat-medkit"), Is.Null); Assert.That(state.ItemQuickbar[0], Is.Null);

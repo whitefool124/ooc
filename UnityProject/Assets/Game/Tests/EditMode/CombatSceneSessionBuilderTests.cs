@@ -29,6 +29,62 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FirstRunBattleTwo_BuildsItsFormalLevelAndKeepsRogueInventoryRuntime()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(1908);
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            run.CompleteCurrentCombat();
+            run.ClaimReward(run.CurrentFirstRunRewardIds[0]);
+            run.SelectNode("EV1");
+            run.ChooseCurrentNodeContent("FIRST-EV1-ACCEPT-DELIVERY");
+            run.SelectNode("EV2");
+            run.ChooseCurrentNodeContent("FIRST-EV2-GOLD");
+            run.SelectNode("B2");
+
+            CombatSceneSessionBuild build = new CombatSceneSessionBuilder().Build(
+                run, null, Array.Empty<CombatSceneMarker>());
+
+            Assert.That(build, Is.Not.Null);
+            Assert.That(build.Level.Id, Is.EqualTo("first_battle_greenhouse_collection_room"));
+            Assert.That(build.Preparation.MissionId, Is.EqualTo(build.Level.Id));
+            Assert.That(build.State.RogueEquipment, Is.Not.Null);
+            Assert.That(build.State.RogueEquipment.Backpack, Is.Not.Null);
+            Assert.That(build.State.RogueEquipment.ItemQuickbarInstanceIds.Length, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void FirstRunBattleThreeAndElite_BuildFormalSessionsThroughTheNormalFlow()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(1910);
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1"); run.CompleteCurrentCombat(); run.ClaimReward("F-P-M03");
+            run.SelectNode("EV1"); run.ChooseCurrentNodeContent("FIRST-EV1-ACCEPT-DELIVERY");
+            run.SelectNode("EV2"); run.ChooseCurrentNodeContent("FIRST-EV2-GOLD");
+            run.SelectNode("B2"); run.CompleteCurrentCombat(); run.ClaimReward("F-P-U04");
+            run.SelectNode("EV3"); run.ChooseCurrentNodeContent("FIRST-EV3-CONTRIBUTION");
+            run.SelectNode("W");
+            run.CompleteFirstRunForge(run.RogueRunState.EquipmentInstances[0].InstanceId);
+            run.CompleteFirstRunSpecialization("F-P-M03");
+            run.SelectNode("B3");
+
+            CombatSceneSessionBuild battleThree = new CombatSceneSessionBuilder().Build(
+                run, null, Array.Empty<CombatSceneMarker>());
+            Assert.That(battleThree.Level.Id, Is.EqualTo(FirstRegionLevelCatalog.RainPrismCourt.Id));
+            Assert.That(battleThree.State.RogueSpells, Is.Not.Null);
+            Assert.That(battleThree.State.Map.GetTile(new GridPosition(6, 4)).Durability, Is.EqualTo(16));
+
+            run.CompleteCurrentCombat(); run.ClaimReward("ACA-EQ-MH03");
+            run.SelectNode("M"); run.CompleteFirstRunHealthCheck();
+            run.SelectNode("X");
+            CombatSceneSessionBuild elite = new CombatSceneSessionBuilder().Build(
+                run, null, Array.Empty<CombatSceneMarker>());
+            Assert.That(elite.Level.Id, Is.EqualTo(FirstRegionLevelCatalog.ThreeMaterialPressure.Id));
+            Assert.That(elite.State.ThreeMaterialPressure, Is.Not.Null);
+            Assert.That(elite.State.GetUnit("enemy_0").EnemyArchetypeId, Is.EqualTo("breach_ram"));
+        }
+
+        [Test]
         public void ShortRunSecondCombat_AppliesAllPriorChoicesDuringBuild()
         {
             ShortRogueliteRun shortRun = new ShortRogueliteRun(502);

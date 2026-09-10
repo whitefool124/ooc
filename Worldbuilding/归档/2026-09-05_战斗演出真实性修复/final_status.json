@@ -1,0 +1,12 @@
+{
+  "feishu_revision": 329,
+  "mirror_matches_fetched_content": true,
+  "main_task": "VISUAL-INTEGRATION-01",
+  "status": "in_progress",
+  "goal_turn_classification": "progress",
+  "full_editmode_passed": 749,
+  "full_editmode_failed": 0,
+  "v3_approved": 0,
+  "runtime_evidence": "pending_authorization",
+  "next": "multi-stage VFX sequencing and runtime contact"
+}

@@ -8,8 +8,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyIntent_UsesAuthoritativeTacticsCommandAndExposesExactSignature()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(2, 0), Facing.West);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(2, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0));
             EnemyArchetypes.Get("pyromancer").Apply(enemy);
             CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
 
@@ -25,10 +25,10 @@ namespace OCC.Combat.Tests
         [Test]
         public void MoveIntent_ExposesTheAuthoritativeDestinationForHoverHighlight()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1), Facing.West);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 1), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 1));
             CombatState state = new CombatState(new GridMap(6, 3), new[] { hero, enemy });
-            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(2, 1), Facing.East);
+            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(2, 1));
 
             EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
 
@@ -41,8 +41,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void DamageIntent_RecalculatesAgainstTheCurrentDefenses()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0), Facing.West);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatCommand command = CombatCommand.Attack(enemy.Id, hero.Id);
 
@@ -59,7 +59,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyProfile_ContainsVitalsWeaponSkillsCooldownsAndStatuses()
         {
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0), Facing.East);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 0));
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             enemy.ApplyStatus(StatusType.Burning, 2);
 
@@ -75,8 +75,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void AttackPreview_ReportsBeforeAfterAndDamageBreakdown()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
 
@@ -94,8 +94,8 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapRun run = new RogueliteMapRun(90210);
             string before = run.ToJson();
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState combat = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             combat.ConfigureItemInventory(new InventoryContainerState(), Enumerable.Empty<string>());
             combat.ResolveDebugOutcome(false);
@@ -109,8 +109,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void DefeatOutcome_ExplainsReasonConsequencesAndRecentEvents()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             for (int i = 0; i < 7; i++) state.AddLog("事件" + i);
             state.ResolveDebugOutcome(false);
@@ -127,8 +127,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void ActionResult_UsesExecutionValuesForSingleStructuredRecord()
         {
-            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0), Facing.East);
-            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0), Facing.West);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);
             CombatCommand command = CombatCommand.Attack(hero.Id, enemy.Id);

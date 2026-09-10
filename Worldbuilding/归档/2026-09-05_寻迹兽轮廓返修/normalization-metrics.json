@@ -1,0 +1,101 @@
+{
+  "old": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      2,
+      24,
+      63,
+      58
+    ],
+    "body_size": [
+      61,
+      34
+    ],
+    "center_x": 32.5,
+    "baseline_y": 58,
+    "opaque_pixels": 1102,
+    "visible_colors": 24,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "width_in_logical_cells": 1.90625
+  },
+  "candidate": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      12,
+      25,
+      52,
+      58
+    ],
+    "body_size": [
+      40,
+      33
+    ],
+    "center_x": 32.0,
+    "baseline_y": 58,
+    "opaque_pixels": 766,
+    "visible_colors": 23,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "width_in_logical_cells": 1.25
+  },
+  "process": {
+    "source_bounds": [
+      228,
+      359,
+      987,
+      993
+    ],
+    "fit_scale": 0.052700922266139656,
+    "fitted_size": [
+      40,
+      33
+    ],
+    "cyan_pixels": 1,
+    "mask_rule": "min RGB >= 210 and channel range <= 35 becomes transparent",
+    "resampling": "nearest; aspect retained within integer rounding",
+    "palette": "opaque-only median cut without dithering; reserve up to 2 cyan colors"
+  },
+  "pairwise_alpha_overlap_native_pixels": {
+    "当前False": [
+      0,
+      1,
+      0
+    ],
+    "候选False": [
+      0,
+      1,
+      0
+    ],
+    "当前True": [
+      0,
+      1,
+      0
+    ],
+    "候选True": [
+      0,
+      1,
+      0
+    ]
+  },
+  "contact_evidence_scope": "offline reconstruction from production PNGs; no HUD, shadows, Unity importer or runtime verification",
+  "formal_hashes_unchanged": true,
+  "formal_hashes": {
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/hero.png": "38d50884e9ae6607b09502eb979d316e6198f52490a113d2220e1217fbe30855",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/hero.png.meta": "61edf7b420b69d5c46f4aefdf9fde874a560a82244fc65b78a7a2ddc96b37c40",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png": "8fe92744b4aecd2e5026ed577bec6975c02a6bd3e306ebb6aa7c597ec0873f73",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png.meta": "c98da4c4b20417d34e495fcaf6734f9c04166fe2ad331d031be7b78214ef33f2",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png": "a34fdb073872308d5f6600ab7356b1328d7e90188faf452125f3a30e1737234f",
+    "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png.meta": "bb0769079afa72619495d333ef84af5c29ada688400665473c6b578346e522e4"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "first_b1_lamp_vine_prop",
+  "role": "single_cell_prop_32",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent lamp-vine prop raw material on chroma key",
+    "source_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/raw/lamp_vine_source.png",
+    "source_sha256": "98921ea0121592107c2230e745e7cc8e513196973e8ecbcb6588028718dd8b4d"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/processed/lamp_vine_prop_32.png",
+    "output_sha256": "02d31513b3f782205cb12be6b61441b2d1751b5d4791d49047c6768f3a7be086",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 10,
+    "required_color_families": [
+      { "family": "green", "min_opaque_pixels": 8 },
+      { "family": "yellow", "min_opaque_pixels": 4 }
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 enterable battlefield prop cell; repeated over E1-F5 with per-cell destruction state",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/lamp_vine_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/lamp_vine_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/lamp_vine_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/lamp_vine_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-04_首次战斗雨后灯庭/美术候选/evidence/lamp_vine_contact.png"
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "reviewer": "product_owner_user",
+    "date": "2026-09-04",
+    "silhouette": "FAIL",
+    "material": "FAIL",
+    "perspective": "FAIL",
+    "style": "FAIL",
+    "application": "FAIL",
+    "notes": "Rejected by the user on 2026-09-04. The repeated circular wreath or emblem silhouette does not communicate an enterable sight-blocking vine mass. Retained only as a traceable failure reference."
+  },
+  "unity_import": null
+}

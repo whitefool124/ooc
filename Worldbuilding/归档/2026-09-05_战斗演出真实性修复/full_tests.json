@@ -1,0 +1,15 @@
+{
+  "source": "Funplay get_test_job",
+  "jobId": "f7691284-e46e-4262-8046-bdbb227923fe",
+  "status": "finished",
+  "mode": "EditMode",
+  "startedAt": "2026-09-05 16:53:32",
+  "finishedAt": "2026-09-05 16:54:00",
+  "resultState": "Passed",
+  "passCount": 749,
+  "failCount": 0,
+  "skipCount": 0,
+  "totalTests": 749,
+  "durationSeconds": 23.62,
+  "failures": []
+}

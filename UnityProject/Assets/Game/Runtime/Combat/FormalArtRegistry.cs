@@ -110,6 +110,8 @@ namespace OCC.Combat
         {
             new FormalArtEntry("environment.burning_ground", "burning_ground", "Art/FormalEnvironment32/burning_ground"),
             new FormalArtEntry("environment.water", "water", "Art/FormalEnvironment32/water"),
+            new FormalArtEntry("environment.rain_court_water", "rain_court_water", "Art/FormalFirstBattle32/rain_court_water"),
+            new FormalArtEntry("environment.lamp_vine", "lamp_vine", "Art/FormalFirstBattle32/lamp_vine"),
             new FormalArtEntry("environment.ice", "ice", "Art/FormalEnvironment32/ice"),
             new FormalArtEntry("environment.smoke", "smoke", "Art/FormalEnvironment32/smoke"),
             new FormalArtEntry("environment.bright_zone", "bright_zone", "Art/FormalEnvironment32/bright_zone"),
@@ -125,6 +127,7 @@ namespace OCC.Combat
             new FormalArtEntry("node_type.elite", "elite", "Art/FormalNodeIcons32/types/elite"),
             new FormalArtEntry("node_type.event", "event", "Art/FormalNodeIcons32/types/event"),
             new FormalArtEntry("node_type.workshop", "workshop", "Art/FormalNodeIcons32/types/workshop"),
+            new FormalArtEntry("node_type.medical", "medical", "Art/FormalNodeIcons32/types/rest"),
             new FormalArtEntry("node_type.shop", "shop", "Art/FormalNodeIcons32/types/shop"),
             new FormalArtEntry("node_type.rest", "rest", "Art/FormalNodeIcons32/types/rest"),
             new FormalArtEntry("node_type.treasure", "treasure", "Art/FormalNodeIcons32/types/treasure"),
@@ -170,7 +173,6 @@ namespace OCC.Combat
             new FormalArtEntry("resource.contribution", "contribution", "Art/FormalResourceIcons32/contribution"),
             new FormalArtEntry("resource.stage_time", "stage_time", "Art/FormalResourceIcons32/stage_time"),
             new FormalArtEntry("resource.explored", "explored", "Art/FormalResourceIcons32/explored"),
-            new FormalArtEntry("resource.core_permit", "core_permit", "Art/FormalResourceIcons32/core_permit"),
             new FormalArtEntry("resource.risk", "risk", "Art/FormalResourceIcons32/risk"),
             new FormalArtEntry("resource.weight", "weight", "Art/FormalResourceIcons32/weight"),
             new FormalArtEntry("resource.aether_load", "aether_load", "Art/FormalResourceIcons32/aether_load"),
@@ -184,17 +186,15 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> EquipmentSlots = new[]
         {
-            new FormalArtEntry("equipment_slot.main_hand", "MainHand", "Art/FormalEquipmentSlotIcons16/main_hand"),
-            new FormalArtEntry("equipment_slot.off_hand", "OffHand", "Art/FormalEquipmentSlotIcons16/off_hand"),
+            new FormalArtEntry("equipment_slot.weapon", "Weapon", "Art/FormalEquipmentSlotIcons16/main_hand"),
             new FormalArtEntry("equipment_slot.head", "Head", "Art/FormalEquipmentSlotIcons16/head"),
             new FormalArtEntry("equipment_slot.chest", "Chest", "Art/FormalEquipmentSlotIcons16/chest"),
-            new FormalArtEntry("equipment_slot.hands", "Hands", "Art/FormalEquipmentSlotIcons16/hands"),
-            new FormalArtEntry("equipment_slot.legs", "Legs", "Art/FormalEquipmentSlotIcons16/legs"),
+            new FormalArtEntry("equipment_slot.feet", "Feet", "Art/FormalEquipmentSlotIcons16/legs"),
             new FormalArtEntry("equipment_slot.backpack", "Backpack", "Art/FormalEquipmentSlotIcons16/backpack"),
-            new FormalArtEntry("equipment_slot.aether_core", "AetherCore", "Art/FormalEquipmentSlotIcons16/aether_core"),
-            new FormalArtEntry("equipment_slot.conduit", "Conduit", "Art/FormalEquipmentSlotIcons16/conduit"),
-            new FormalArtEntry("equipment_slot.accessory_1", "Accessory1", "Art/FormalEquipmentSlotIcons16/accessory_1"),
-            new FormalArtEntry("equipment_slot.accessory_2", "Accessory2", "Art/FormalEquipmentSlotIcons16/accessory_2")
+            new FormalArtEntry("equipment_slot.ring_1", "Ring1", "Art/FormalEquipmentSlotIcons16/accessory_1"),
+            new FormalArtEntry("equipment_slot.ring_2", "Ring2", "Art/FormalEquipmentSlotIcons16/accessory_2"),
+            new FormalArtEntry("equipment_slot.necklace", "Necklace", "Art/FormalEquipmentSlotIcons16/accessory_1"),
+            new FormalArtEntry("equipment_slot.casting_unit", "CastingUnit", "Art/FormalEquipmentSlotIcons16/aether_core")
         };
 
         public static readonly IReadOnlyList<FormalEquipmentArtEntry> EquipmentItems = new[]
@@ -225,6 +225,8 @@ namespace OCC.Combat
             new FormalEquipmentArtEntry("ACA-EQ-CR01", "aca_eq_cr01"),
             new FormalEquipmentArtEntry("ACA-EQ-CR02", "aca_eq_cr02"),
             new FormalEquipmentArtEntry("ACA-EQ-CR03", "aca_eq_cr03"),
+            // First-run CR04 has frozen gameplay but approved placeholder art; the item name/details remain explicit in UI.
+            new FormalEquipmentArtEntry("ACA-EQ-CR04", "aca_eq_cr03"),
             new FormalEquipmentArtEntry("ACA-EQ-DG01", "aca_eq_dg01"),
             new FormalEquipmentArtEntry("ACA-EQ-DG02", "aca_eq_dg02"),
             new FormalEquipmentArtEntry("ACA-EQ-AC01", "aca_eq_ac01"),

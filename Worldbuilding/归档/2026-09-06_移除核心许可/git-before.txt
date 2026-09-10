@@ -1,0 +1,209 @@
+ M .agents/skills/lark-approval/SKILL.md
+ M .agents/skills/lark-apps/SKILL.md
+ M .agents/skills/lark-apps/references/lark-apps-local-dev.md
+ M .agents/skills/lark-base/SKILL.md
+ M .agents/skills/lark-calendar/SKILL.md
+ M .agents/skills/lark-contact/SKILL.md
+ M .agents/skills/lark-doc/SKILL.md
+ M .agents/skills/lark-drive/SKILL.md
+ M .agents/skills/lark-event/SKILL.md
+ M .agents/skills/lark-im/SKILL.md
+ M .agents/skills/lark-mail/SKILL.md
+ M .agents/skills/lark-markdown/SKILL.md
+ M .agents/skills/lark-minutes/SKILL.md
+ M .agents/skills/lark-note/SKILL.md
+ M .agents/skills/lark-okr/SKILL.md
+ M .agents/skills/lark-openapi-explorer/SKILL.md
+ M .agents/skills/lark-shared/SKILL.md
+ M .agents/skills/lark-sheets/SKILL.md
+ M .agents/skills/lark-slides/SKILL.md
+ M .agents/skills/lark-task/SKILL.md
+ M .agents/skills/lark-vc-agent/SKILL.md
+ M .agents/skills/lark-vc/SKILL.md
+ M .agents/skills/lark-whiteboard/SKILL.md
+ M .agents/skills/lark-whiteboard/routes/dsl.md
+ M .agents/skills/lark-wiki/SKILL.md
+ M AGENTS.md
+ M Tools/OCCArt/README.md
+ M Tools/OCCArt/occ_art_contract_v1.json
+ M Tools/RogueliteDecisionConsole/app/decision-data.ts
+ M UnityProject/Assets/Game/Resources/Config/OccPixelUiV02.json
+ M UnityProject/Assets/Game/Runtime/Campaign/AcademyNodeContentCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/BattlefieldPresentationAdapter.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/CombatBoundaryQueries.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/CombatOutcomeSettlementCoordinator.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/FirstRegionLevelCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/ProgressionServices.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteDeveloperRun.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteEncounterCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapInteractionService.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRun.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRunValidator.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapSaveCoordinator.cs
+ M UnityProject/Assets/Game/Runtime/Campaign/UiPresentationModels.cs
+ M UnityProject/Assets/Game/Runtime/Combat/ArtifactCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Combat/ArtifactRuntime.cs
+ M UnityProject/Assets/Game/Runtime/Combat/CombatCommand.cs
+ M UnityProject/Assets/Game/Runtime/Combat/CombatCommandExecutionService.cs
+ M UnityProject/Assets/Game/Runtime/Combat/CombatFeedbackEvent.cs
+ M UnityProject/Assets/Game/Runtime/Combat/CombatResolver.cs
+ M UnityProject/Assets/Game/Runtime/Combat/CombatState.cs
+ M UnityProject/Assets/Game/Runtime/Combat/FireSpellCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Combat/FireSpellRuntime.cs
+ M UnityProject/Assets/Game/Runtime/Combat/FormalArtRegistry.cs
+ M UnityProject/Assets/Game/Runtime/Combat/TrainingRange.cs
+ M UnityProject/Assets/Game/Runtime/Grid/GridMap.cs
+ M UnityProject/Assets/Game/Runtime/Grid/TileState.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/AcademyBattlefieldLayoutCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatFeedbackPublisher.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatSceneSessionBuilder.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatUnitHudLayout.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalCombatHud.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalHoverTooltip.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalRogueliteUi.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalUiEffects.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/FormalUiKit.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/PresentationHostContracts.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/RogueliteSettlementPresentation.cs
+ M UnityProject/Assets/Game/Runtime/Presentation/TarkovInventoryPanel.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueAcademyContentService.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueContentCatalog.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueEquipmentRuntime.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RoguePresentationModels.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueRunDto.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueRunProgression.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueRuntimeContracts.cs
+ M UnityProject/Assets/Game/Runtime/Roguelite/RogueSpellRuntime.cs
+ M UnityProject/Assets/Game/Runtime/Units/UnitState.cs
+ M UnityProject/Assets/Game/Tests/EditMode/AcademyNodeContentPlayableTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/AcademyNodeRoomArtCoverageTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/ArtifactContentIntegrationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/ArtifactRuntimeTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/BattlefieldPresentationAdapterTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CampaignStateTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackEventTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackPublisherTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CombatHoverInformationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CombatResolverTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/CombatUnitHudPresentationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/FireRogueliteExperienceTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/FireSpellCatalogTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/FormalArtAssetAuditTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/FormalArtRegistryTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/FormalUiThemeTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/ItemInventorySystemTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueAcademyContentIntegrationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueDamageAndTurnLifecycleTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueEquipmentRuntimeTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RoguePresentationModelTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueProgressionAndMigrationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueRuntimeContractsTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteCompletionLineTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteDeveloperRunTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteFlowCoordinatorTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteMapInteractionServiceTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteMapRunSemanticValidationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteMapSaveCoordinatorTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/RogueliteSettlementPresentationTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/TrainingRangeTests.cs
+ M UnityProject/Assets/Game/Tests/EditMode/UIArt78VisualContractTests.cs
+ M "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\344\270\213\344\270\200\345\245\227Build\345\206\205\345\256\271\350\241\250_v1.0.csv"
+ M "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\345\255\246\351\231\242\350\212\202\347\202\271\345\206\205\345\256\271\346\225\260\346\215\256\350\241\250_v1.0.csv"
+ M "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\345\255\246\351\231\242\351\201\255\351\201\207\347\274\226\346\210\220\346\225\260\346\215\256\350\241\250_v1.0.csv"
+ M "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\346\240\270\345\277\203\350\247\204\345\210\231\346\225\260\345\200\274\350\241\250_v1.0.csv"
+ M "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\347\276\216\346\234\257\344\270\216\347\225\214\351\235\242\350\247\204\346\240\274\350\241\250_v1.0.csv"
+ M "Worldbuilding/\347\255\226\345\210\222\346\241\210/OCC_\351\241\271\347\233\256\346\200\273\347\255\226\345\210\222\346\241\210_v1.0.md"
+?? Artifacts/
+?? UnityProject/Assets/Game/Resources/Art/FormalFirstBattle32.meta
+?? UnityProject/Assets/Game/Resources/Art/FormalFirstBattle32/
+?? UnityProject/Assets/Game/Runtime/Campaign/FirstRunExperience.cs
+?? UnityProject/Assets/Game/Runtime/Campaign/FirstRunExperience.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/ArtifactFeedbackCapture.cs
+?? UnityProject/Assets/Game/Runtime/Combat/ArtifactFeedbackCapture.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/CombatMovementQuery.cs
+?? UnityProject/Assets/Game/Runtime/Combat/CombatMovementQuery.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/CombatSpecialTerrainContracts.cs
+?? UnityProject/Assets/Game/Runtime/Combat/CombatSpecialTerrainContracts.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/CombatUnitDisplaySnapshot.cs
+?? UnityProject/Assets/Game/Runtime/Combat/CombatUnitDisplaySnapshot.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/FirstRunCombatExtensionContracts.cs
+?? UnityProject/Assets/Game/Runtime/Combat/FirstRunCombatExtensionContracts.cs.meta
+?? UnityProject/Assets/Game/Runtime/Combat/RainLanternCourtRuntime.cs
+?? UnityProject/Assets/Game/Runtime/Combat/RainLanternCourtRuntime.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatActionPlayback.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatActionPlayback.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatIntentLayout.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatIntentLayout.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatMovementPlayback.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatMovementPlayback.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatObjectLayerLayout.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatObjectLayerLayout.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatTextureAlphaMask.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatTextureAlphaMask.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitContourGraphic.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitContourGraphic.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitOcclusion.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitOcclusion.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitPixelRaycast.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatUnitPixelRaycast.cs.meta
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatVfxPlayback.cs
+?? UnityProject/Assets/Game/Runtime/Presentation/CombatVfxPlayback.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/ArtifactFeedbackTruthTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/ArtifactFeedbackTruthTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatActionPlaybackTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatActionPlaybackTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackObstacleTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackObstacleTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackPlacementTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatFeedbackPlacementTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatIntentLayoutTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatIntentLayoutTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatMovementPlaybackTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatMovementPlaybackTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatMovementRangeTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatMovementRangeTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatObjectLayerLayoutTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatObjectLayerLayoutTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatUnitOcclusionTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatUnitOcclusionTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatUnitPixelRaycastTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatUnitPixelRaycastTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/CombatVfxPlaybackTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/CombatVfxPlaybackTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/FirstRunExperienceTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/FirstRunExperienceTests.cs.meta
+?? UnityProject/Assets/Game/Tests/EditMode/RainLanternCourtTests.cs
+?? UnityProject/Assets/Game/Tests/EditMode/RainLanternCourtTests.cs.meta
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-03_OCC_\346\255\243\345\274\217\347\211\210\345\274\200\345\261\200\346\246\202\345\277\265\345\212\250\347\224\273/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-03_\346\210\230\345\220\216\345\257\274\350\210\252\344\270\216\346\210\230\346\226\227HUD\345\205\274\345\256\271\344\277\256\345\244\215.md"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-03_\346\234\257\345\274\217\347\274\226\347\273\204\344\270\216\345\205\250\345\261\200\350\276\271\346\241\206\345\256\211\345\205\250\345\214\272\344\277\256\345\244\215.md"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-04_\346\200\273\346\241\210\344\270\216\346\270\270\346\210\217\346\234\254\344\275\223\344\272\214\346\254\241\344\270\200\350\207\264\346\200\247\345\244\215\346\237\245.md"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-04_\351\230\266\346\256\265A\351\246\226\346\254\241\345\233\272\345\256\232\344\275\223\351\252\214\345\256\236\347\216\260\344\270\216\351\252\214\350\257\201.md"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-04_\351\246\226\346\254\241\346\210\230\346\226\227\351\233\250\345\220\216\347\201\257\345\272\255/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\212\250\344\275\234\345\221\275\344\270\255\344\270\216\351\225\234\345\244\264\350\241\224\346\216\245/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\217\214\345\210\206\350\276\250\347\216\207\351\235\231\346\200\201\346\216\245\350\247\246/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\217\215\351\246\210\351\201\277\350\256\251/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\217\263\346\240\217\345\255\227\345\275\242\344\270\216\351\202\273\346\240\274\351\201\256\346\214\241/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\244\232\346\256\265\347\211\271\346\225\210\346\227\266\345\272\217/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\257\273\350\277\271\345\205\275\345\212\250\344\275\234\345\200\231\351\200\211/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\345\257\273\350\277\271\345\205\275\350\275\256\345\273\223\350\277\224\344\277\256/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\346\210\230\346\226\227\346\274\224\345\207\272\347\234\237\345\256\236\346\200\247\344\277\256\345\244\215/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\346\210\230\346\243\213\351\201\256\346\214\241\345\217\257\350\257\273\346\200\247/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\346\263\225\345\256\235\345\217\215\351\246\210\347\234\237\345\256\236\346\200\247/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\347\201\257\350\227\244\345\211\215\345\220\216\346\231\257\346\216\245\350\247\246/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\347\234\237\345\256\236\347\247\273\345\212\250\350\267\257\345\276\204/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\347\247\273\345\212\250\350\214\203\345\233\264\347\234\237\345\256\236\346\200\247/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\347\276\216\346\234\257\344\274\230\345\214\226\344\270\216\350\247\206\350\247\211\350\277\255\344\273\243\346\226\271\346\241\210/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\350\241\214\345\212\250\350\200\205\345\256\232\344\275\215\344\270\216\346\225\214\346\203\205\351\201\277\350\256\251/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\350\247\206\350\247\211\346\211\223\347\243\250\345\256\236\346\226\275\347\254\254\344\270\200\350\275\256/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-05_\350\266\212\346\240\274\350\247\222\350\211\262\350\276\223\345\205\245\345\275\222\345\261\236/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-06_\345\217\215\351\246\210\350\247\222\350\211\262\351\201\277\350\256\251/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-06_\347\234\237\345\256\236\350\277\220\350\241\214\351\252\214\346\224\266/"
+?? "Worldbuilding/\345\275\222\346\241\243/2026-09-06_\347\247\273\351\231\244\346\240\270\345\277\203\350\256\270\345\217\257/"
+?? "Worldbuilding/\346\225\260\346\215\256\350\241\250/OCC_\351\246\226\346\254\241\344\275\223\351\252\214\346\210\230\346\226\227\350\247\204\346\240\274\346\225\260\346\215\256\350\241\250_v1.0.csv"

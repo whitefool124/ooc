@@ -45,7 +45,7 @@ namespace OCC.Combat
             }
             else
             {
-                run = new RogueliteMapRun(seed, starterId);
+                run = RogueliteMapRun.CreateFirstRunV1(seed);
                 if (!gateway.SaveNewMapRun(run))
                 {
                     LastSaveSucceeded = false;

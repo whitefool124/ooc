@@ -4,18 +4,6 @@ using System.Linq;
 
 namespace OCC.Combat
 {
-    public sealed class EquipmentState
-    {
-        public string Id { get; }
-        public int Durability { get; private set; }
-        public int MaxDurability { get; }
-        public bool IsDisabled => false;
-        public EquipmentState(string id, int maxDurability = 100) { Id = id; MaxDurability = Math.Max(1, maxDurability); Durability = MaxDurability; }
-        public void Wear(int amount) { Durability = Math.Max(0, Durability - Math.Max(0, amount)); }
-        public void Repair() { Durability = MaxDurability; }
-        public EquipmentState Clone() { var clone = new EquipmentState(Id, MaxDurability); clone.Durability = Durability; return clone; }
-    }
-
     public sealed class ServiceLedger
     {
         private readonly HashSet<string> upgrades = new HashSet<string>(StringComparer.Ordinal);

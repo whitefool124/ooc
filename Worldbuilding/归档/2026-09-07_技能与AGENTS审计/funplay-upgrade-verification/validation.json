@@ -1,0 +1,42 @@
+{
+  "generated_skills": [
+    {
+      "path": "E:/数据库/OCC_Codex/UnityProject/.codex/skills/funplay-unity-mcp-workflow/SKILL.md",
+      "sha256": "084346aa1868d3c2f192c837fbc17ce7e5edb7dc48e7c16833f0bd5a3544f120",
+      "valid": true,
+      "message": "Skill is valid!"
+    },
+    {
+      "path": "E:/数据库/OCC_Codex/UnityProject/.codex/skills/funplay-unity-ui-composition/SKILL.md",
+      "sha256": "4a2a7ecbde1cb3855fce72b912e439fd16d6e1a6ddf73d5ca84b7852e9a7db78",
+      "valid": true,
+      "message": "Skill is valid!"
+    }
+  ],
+  "unresolved_links": [],
+  "git_diff_check": 0,
+  "git_output": "",
+  "followup_changes": [
+    {
+      "path": "E:/数据库/OCC_Codex/AGENTS.md",
+      "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/funplay-upgrade-verification/before/E/数据库/OCC_Codex/AGENTS.md.bak",
+      "before_sha256": "0613d6df7cb49256764e14611a3723f99f905c12621571d7782c32fb5113e316",
+      "after_sha256": "8f628a9877228b3b16fb960b5b7d2c2f788f1287da4d6baa103b15fb1548c30b",
+      "reason": "明确嵌套Unity工程新技能的读取入口"
+    },
+    {
+      "path": "E:/数据库/OCC_Codex/UnityProject/AGENTS.md",
+      "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/funplay-upgrade-verification/before/E/数据库/OCC_Codex/UnityProject/AGENTS.md.bak",
+      "before_sha256": "ab7dc6cdf6e3c02cba8a60b20a623b04b11d4ee971389d7d0f62b074bbc05ecd",
+      "after_sha256": "3f705ed3451283d26760a22b5696aa0705217e7c24ab64d281cdbbbb60a92da3",
+      "reason": "明确保存/播放授权、PC规格和现有架构，保留官方托管区"
+    },
+    {
+      "path": "C:/Users/FNHF/.codex/skills/funplay-unity-dev/references/compile-and-recovery.md",
+      "backup": "E:/数据库/OCC_Codex/Worldbuilding/归档/2026-09-07_技能与AGENTS审计/funplay-upgrade-verification/before/C/Users/FNHF/.codex/skills/funplay-unity-dev/references/compile-and-recovery.md.bak",
+      "before_sha256": "d8e8d297c125d87b8acc4cd4d61519b7c99a09a9869edf164c85a46abd318234",
+      "after_sha256": "c368811836edd5f1221b803b6a701f306bcf328726ea1aa4648a7ec0fee1cdff",
+      "reason": "用实际升级与同步验收替换待升级描述"
+    }
+  ]
+}

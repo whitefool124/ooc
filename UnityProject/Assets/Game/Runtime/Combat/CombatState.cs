@@ -9,6 +9,7 @@ namespace OCC.Combat
     public sealed class CombatState
     {
         private readonly Dictionary<string, UnitState> units;
+        private readonly Dictionary<string, int> fixedTurnOrder;
         private readonly HashSet<GridPosition> investigated = new HashSet<GridPosition>();
         private readonly Dictionary<string, int> rogueTurnSequences = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly Dictionary<string, int> rogueShieldSourceTurns = new Dictionary<string, int>(StringComparer.Ordinal);
@@ -27,18 +28,24 @@ namespace OCC.Combat
         public InventoryContainerState ItemInventory { get; private set; } = new InventoryContainerState();
         public LootContainer Loot { get; private set; }
         public LootSourceState LootSource { get; private set; }
-        public string[] ItemQuickbar { get; } = new string[8];
+        public string[] ItemQuickbar { get; } = new string[Roguelite.RogueRuntimeConstants.ItemQuickbarSize];
         public IReadOnlyList<CombatObjective> Objectives { get; private set; }
         internal ArtifactBattleState ArtifactBattle { get; private set; }
         public Roguelite.RogueSpellCombatRuntime RogueSpells { get; private set; }
         public Roguelite.RogueEquipmentRuntime RogueEquipment { get; private set; }
+        public RainLanternCourtRuntime RainLanternCourt { get; private set; }
+        public GreenhouseCollectionRoomRuntime GreenhouseCollectionRoom { get; private set; }
+        public ThreeMaterialPressureRuntime ThreeMaterialPressure { get; private set; }
         public IReadOnlyList<Roguelite.ShieldSourceRecord> RogueShieldEvents => rogueShieldEvents;
+        public int InventoryOpenCount { get; private set; }
 
         public CombatState(GridMap map, IEnumerable<UnitState> units, IEnumerable<CombatObjective> objectives = null)
         {
             Map = map ?? throw new ArgumentNullException(nameof(map));
-            this.units = (units ?? throw new ArgumentNullException(nameof(units)))
-                .ToDictionary(unit => unit.Id, StringComparer.Ordinal);
+            UnitState[] orderedUnits = (units ?? throw new ArgumentNullException(nameof(units))).ToArray();
+            this.units = orderedUnits.ToDictionary(unit => unit.Id, StringComparer.Ordinal);
+            fixedTurnOrder = orderedUnits.Select((unit, index) => new { unit.Id, Index = index })
+                .ToDictionary(value => value.Id, value => value.Index, StringComparer.Ordinal);
 
             if (this.units.Count == 0)
             {
@@ -86,22 +93,34 @@ namespace OCC.Combat
             if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
 
             RogueEquipment?.OnTurnStart(this, unit.Id);
+            RainLanternCourt?.BeginTurn(unit);
+            ThreeMaterialPressure?.BeginTurn(this, unit);
 
-            int coverShield = 0;
-            TileState standing = Map.GetTile(unit.Position);
-            if (standing.Cover == CoverType.Light && !standing.IsDestroyed) coverShield = 2;
-            GridPosition front = unit.Position + FacingOffset(unit.Facing);
-            if (Map.IsInside(front))
-            {
-                TileState frontTile = Map.GetTile(front);
-                if (frontTile.Cover == CoverType.Heavy && !frontTile.IsDestroyed) coverShield = Math.Max(coverShield, 4);
-            }
-            if (coverShield > 0) TryGrantRogueliteShield(unit.Id, coverShield == 4 ? "cover-heavy" : "cover-light", coverShield);
         }
         internal void EndRogueliteTurn(UnitState unit)
         {
-            if (Ruleset != CombatRuleset.Roguelite || unit == null || !rogueBreakStanceSeenThisTurn.Remove(unit.Id)) return;
-            unit.ClearStatus(StatusType.BreakStance);
+            if (Ruleset != CombatRuleset.Roguelite || unit == null) return;
+            GrantCoverShield(unit);
+            RogueSpells?.EndOwnTurn(unit.Id);
+            RainLanternCourt?.EndTurn(unit);
+            ThreeMaterialPressure?.EndTurn(unit);
+            if (rogueBreakStanceSeenThisTurn.Remove(unit.Id)) unit.ClearStatus(StatusType.BreakStance);
+        }
+        private void GrantCoverShield(UnitState unit)
+        {
+            int coverShield = 0;
+            TileState standing = Map.GetTile(unit.Position);
+            if (standing.Cover == CoverType.Light && !standing.IsDestroyed) coverShield = 2;
+            GridPosition[] adjacent =
+            {
+                unit.Position + new GridPosition(0, 1),
+                unit.Position + new GridPosition(1, 0),
+                unit.Position + new GridPosition(0, -1),
+                unit.Position + new GridPosition(-1, 0)
+            };
+            if (adjacent.Any(position => Map.IsInside(position) && Map.GetTile(position).Cover == CoverType.Heavy && !Map.GetTile(position).IsDestroyed))
+                coverShield = Math.Max(coverShield, 4);
+            if (coverShield > 0) TryGrantRogueliteShield(unit.Id, coverShield == 4 ? "cover-heavy" : "cover-light", coverShield);
         }
         public bool TryGrantRogueliteShield(string unitId, string sourceId, int amount)
         {
@@ -147,17 +166,13 @@ namespace OCC.Combat
             rogueShieldEvents.Insert(0, record);
             if (rogueShieldEvents.Count > 16) rogueShieldEvents.RemoveAt(rogueShieldEvents.Count - 1);
         }
-        private static GridPosition FacingOffset(Facing facing)
-        {
-            if (facing == Facing.North) return new GridPosition(0, 1);
-            if (facing == Facing.South) return new GridPosition(0, -1);
-            if (facing == Facing.West) return new GridPosition(-1, 0);
-            return new GridPosition(1, 0);
-        }
         internal void MarkInvestigated(GridPosition position) => investigated.Add(position);
 
         public UnitState GetUnit(string unitId) =>
             string.IsNullOrEmpty(unitId) ? null : units.TryGetValue(unitId, out UnitState unit) ? unit : null;
+
+        public int FixedTurnOrder(string unitId) =>
+            !string.IsNullOrEmpty(unitId) && fixedTurnOrder.TryGetValue(unitId, out int order) ? order : int.MaxValue;
 
         public bool IsOccupied(GridPosition position, string ignoredUnitId = null) =>
             units.Values.Any(unit => unit.Id != ignoredUnitId && unit.Position == position);
@@ -171,7 +186,52 @@ namespace OCC.Combat
         }
         public void AttachRogueEquipmentRuntime(Roguelite.RogueEquipmentRuntime runtime)
         { RogueEquipment = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachRainLanternCourt(RainLanternCourtRuntime runtime)
+        {
+            RainLanternCourt = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            RainLanternCourt.Attach(Map);
+        }
+        public void AttachGreenhouseCollectionRoom(GreenhouseCollectionRoomRuntime runtime)
+        { GreenhouseCollectionRoom = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachThreeMaterialPressure(ThreeMaterialPressureRuntime runtime)
+        { ThreeMaterialPressure = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        internal void RecordInventoryOpened() { InventoryOpenCount++; }
         public void SetLootSource(LootSourceState loot) => LootSource = loot;
+        public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore)
+        {
+            if (!Map.IsInside(position)) return false;
+            TileState crystal = Map.GetTile(position);
+            if (!crystal.IsAetherCrystal || durabilityBefore <= 0 || crystal.Durability > 0) return false;
+
+            crystal.IsAetherCrystal = false;
+            crystal.IsDevice = false;
+            GridPosition[] blast =
+            {
+                position,
+                position + new GridPosition(0, 1),
+                position + new GridPosition(1, 0),
+                position + new GridPosition(0, -1),
+                position + new GridPosition(-1, 0)
+            };
+            foreach (GridPosition cell in blast.Where(Map.IsInside))
+            {
+                TileState shard = Map.GetTile(cell).Clone();
+                shard.IsCrystalShard = true;
+                Map.SetTile(cell, shard);
+            }
+            foreach (UnitState unit in units.Values.Where(value => value.IsAlive && value.Position.ManhattanDistance(position) == 1))
+            {
+                Roguelite.DamagePacket packet = new Roguelite.DamagePacket("b2-crystal-burst", string.Empty, unit.Id,
+                    "b2-crystal-burst", new[] { new Roguelite.DamageComponent(Roguelite.DamageComponentKind.Aether, 8) });
+                Roguelite.DamageResolution damage = Roguelite.RogueDamageResolver.Resolve(packet, unit.Shield, unit.Health);
+                unit.AbsorbShield(damage.ShieldAbsorbed);
+                RecordRogueliteShieldAbsorption(unit.Id, "b2-crystal-burst", damage.ShieldAbsorbed);
+                unit.TakeDamage(damage.HealthDamage);
+            }
+            AddLog("蓄能晶簇爆裂，正交四格受到 8 点以太伤害并留下五格碎晶。");
+            EvaluateOutcome();
+            return true;
+        }
         public void ConfigureItemInventory(InventoryContainerState inventory, IEnumerable<string> quickbarIds)
         {
             ItemInventory = (inventory ?? throw new ArgumentNullException(nameof(inventory))).Clone(); Array.Clear(ItemQuickbar, 0, ItemQuickbar.Length);
@@ -221,14 +281,17 @@ namespace OCC.Combat
         }
         public CombatState Clone()
         {
-            CombatState clone = new CombatState(Map.Clone(), units.Values.Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
-            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset;
+            CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
+            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount;
             clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
             foreach (KeyValuePair<string, int> pair in rogueTurnSequences) clone.rogueTurnSequences[pair.Key] = pair.Value;
             foreach (KeyValuePair<string, int> pair in rogueShieldSourceTurns) clone.rogueShieldSourceTurns[pair.Key] = pair.Value;
             foreach (string unitId in rogueBreakStanceSeenThisTurn) clone.rogueBreakStanceSeenThisTurn.Add(unitId);
             clone.rogueShieldEvents.AddRange(rogueShieldEvents);
+            if (RainLanternCourt != null) clone.RainLanternCourt = RainLanternCourt.Clone(clone.Map);
+            if (GreenhouseCollectionRoom != null) clone.GreenhouseCollectionRoom = GreenhouseCollectionRoom.Clone();
+            if (ThreeMaterialPressure != null) clone.ThreeMaterialPressure = ThreeMaterialPressure.Clone();
             clone.EventLog.AddRange(EventLog); return clone;
         }
     }

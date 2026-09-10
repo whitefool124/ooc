@@ -62,7 +62,7 @@ namespace OCC.Combat.Tests
             hero.ApplyStatus(StatusType.Bound, 1);
 
             CombatEffectExecution lifecycle = CombatResolver.BeginTurn(state, hero.Id);
-            CombatEffectExecution movement = CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(1, 0), Facing.East));
+            CombatEffectExecution movement = CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(1, 0)));
 
             CombatEffectResult expiry = lifecycle.Results.Single(result => result.Kind == CombatEffectKind.ReduceStatusDuration);
             Assert.That(expiry.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Expired));
@@ -129,6 +129,6 @@ namespace OCC.Combat.Tests
 
         private static CombatState CreateHeroState() => new CombatState(
             new GridMap(4, 4),
-            new[] { new UnitState("hero", true, new GridPosition(0, 0), Facing.East) });
+            new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
     }
 }

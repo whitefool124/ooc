@@ -226,10 +226,10 @@ namespace OCC.Combat
                 case SkillTargetRule.AllyUnit:
                     cell = ally.Position; unitId = ally.Id; command = CombatCommand.UseSkill(hero.Id, 0, ally.Id); break;
                 case SkillTargetRule.GridCell:
-                    cell = new GridPosition(5, 5); unitId = null; command = CombatCommand.UseSkillAt(hero.Id, 0, cell, Facing.North); break;
+                    cell = new GridPosition(5, 5); unitId = null; command = CombatCommand.UseSkillAt(hero.Id, 0, cell, CardinalDirection.North); break;
                 case SkillTargetRule.Destructible:
                     cell = new GridPosition(5, 4); unitId = null; combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 24 });
-                    command = CombatCommand.UseSkillAt(hero.Id, 0, cell, Facing.East); break;
+                    command = CombatCommand.UseSkillAt(hero.Id, 0, cell, CardinalDirection.East); break;
                 default:
                     cell = enemy.Position; unitId = enemy.Id; command = CombatCommand.UseSkill(hero.Id, 0, enemy.Id); break;
             }
@@ -290,9 +290,9 @@ namespace OCC.Combat
             map.SetTile(DeviceCell, new TileState { IsDevice = true, Durability = 20 });
             map.SetTile(WaterCell, new TileState { IsWater = true });
             map.SetTile(ObjectiveCell, new TileState { IsObjective = true, Durability = 120 });
-            UnitState hero = new UnitState("hero", true, HeroCell, Facing.East) { DisplayName = "靶场施术者", Armor = 1, Speed = 11 };
+            UnitState hero = new UnitState("hero", true, HeroCell) { DisplayName = "靶场施术者", Armor = 1, Speed = 11 };
             hero.ConfigureVitality(99); hero.ConfigureMana(99);
-            UnitState ally = new UnitState("range_ally", true, AllyCell, Facing.East) { DisplayName = "友军校验员", Armor = 1 };
+            UnitState ally = new UnitState("range_ally", true, AllyCell) { DisplayName = "友军校验员", Armor = 1 };
             ally.ConfigureVitality(60);
             UnitState normal = Target("range_normal", "步枪靶兵", PrimaryEnemyCell, 0, 0);
             UnitState shield = Target("range_shield", "盾卫靶兵", new GridPosition(5, 2), 1, 16);
@@ -304,7 +304,7 @@ namespace OCC.Combat
 
         private static UnitState Target(string id, string name, GridPosition cell, int armor, int shield)
         {
-            UnitState unit = new UnitState(id, false, cell, Facing.West) { DisplayName = name, Armor = armor };
+            UnitState unit = new UnitState(id, false, cell) { DisplayName = name, Armor = armor };
             unit.ConfigureVitality(99); unit.GrantShield(shield); return unit;
         }
     }
@@ -348,22 +348,25 @@ namespace OCC.Combat
             switch (spell.TargetKind)
             {
                 case FireTargetKind.Self: cell = hero.Position; unitId = hero.Id; target = FireSpellTarget.Unit(hero.Id); break;
-                case FireTargetKind.AllyOrSelf: cell = ally.Position; unitId = ally.Id; target = FireSpellTarget.Unit(ally.Id, Facing.East); break;
+                case FireTargetKind.AllyOrSelf: cell = ally.Position; unitId = ally.Id; target = FireSpellTarget.Unit(ally.Id, CardinalDirection.East); break;
                 case FireTargetKind.EmptyCell:
                     if (spell.CombatAffinity == FireCombatAffinity.MeleeOnly)
                     {
-                        enemy.MoveTo(new GridPosition(5, 4), Facing.West); cell = new GridPosition(4, 4);
+                        enemy.MoveTo(new GridPosition(5, 4)); cell = new GridPosition(4, 4);
                     }
-                    else cell = spell.Range <= 1 ? new GridPosition(3, 3) : spell.Range == 2 ? new GridPosition(3, 2) : new GridPosition(5, 5);
-                    unitId = null; target = FireSpellTarget.At(cell, FacingToward(hero.Position, cell)); break;
+                    else cell = spell.Range <= 1 ? new GridPosition(3, 3) : new GridPosition(3, 4 - Math.Min(spell.Range, 3));
+                    unitId = null; target = FireSpellTarget.At(cell, DirectionToward(hero.Position, cell)); break;
                 case FireTargetKind.BurningCell:
                     cell = spell.Shape == FireSelectionShape.Path ? new GridPosition(3, 1) : new GridPosition(5, 5);
-                    unitId = null; target = FireSpellTarget.At(cell, FacingToward(hero.Position, cell)); break;
+                    unitId = null; target = FireSpellTarget.At(cell, DirectionToward(hero.Position, cell)); break;
                 case FireTargetKind.Destructible:
                     cell = spell.Range <= 2 ? new GridPosition(5, 4) : TrainingRangeScenarioFactory.ObjectTargetCell; unitId = null;
-                    combat.Map.SetTile(cell, ObjectTileFor(spell)); target = FireSpellTarget.At(cell, Facing.East); break;
+                    combat.Map.SetTile(cell, ObjectTileFor(spell)); target = FireSpellTarget.At(cell, CardinalDirection.East); break;
+                case FireTargetKind.Hittable:
+                    cell = spell.Range <= 2 ? new GridPosition(5, 4) : TrainingRangeScenarioFactory.ObjectTargetCell; unitId = null;
+                    combat.Map.SetTile(cell, ObjectTileFor(spell)); target = FireSpellTarget.At(cell, CardinalDirection.East); break;
                 default:
-                    cell = enemy.Position; unitId = enemy.Id; target = FireSpellTarget.Unit(enemy.Id, Facing.East); break;
+                    cell = enemy.Position; unitId = enemy.Id; target = FireSpellTarget.Unit(enemy.Id, CardinalDirection.East); break;
             }
 
             bool burning = spell.TargetKind == FireTargetKind.BurningUnit || spell.TargetKind == FireTargetKind.AdjacentBurningEnemy ||
@@ -403,11 +406,11 @@ namespace OCC.Combat
             return deviceOnly ? new TileState { IsDevice = true, Durability = 20 } : new TileState { Cover = CoverType.Light, Durability = 24 };
         }
 
-        private static Facing FacingToward(GridPosition source, GridPosition target)
+        private static CardinalDirection DirectionToward(GridPosition source, GridPosition target)
         {
             int dx = target.X - source.X, dy = target.Y - source.Y;
-            if (Math.Abs(dx) >= Math.Abs(dy)) return dx >= 0 ? Facing.East : Facing.West;
-            return dy >= 0 ? Facing.North : Facing.South;
+            if (Math.Abs(dx) >= Math.Abs(dy)) return dx >= 0 ? CardinalDirection.East : CardinalDirection.West;
+            return dy >= 0 ? CardinalDirection.North : CardinalDirection.South;
         }
 
         private static string GroupName(FireSpellGroup group) => group == FireSpellGroup.Melee ? "近战专用" :
@@ -423,7 +426,7 @@ namespace OCC.Combat
 
         public ArtifactTrainingRangeProvider()
         {
-            Abilities = ArtifactCatalog.All.Select(artifact => new TrainingRangeAbilityEntry(Id, artifact.Id, artifact.DisplayName,
+            Abilities = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).Select(artifact => new TrainingRangeAbilityEntry(Id, artifact.Id, artifact.DisplayName,
                 "法宝", artifact.Provenance, $"{artifact.ActionPointCost} AP / {artifact.MaximumUses} 次封装",
                 $"{artifact.TargetRule} · {artifact.Shape} · 范围 {artifact.Range}",
                 artifact.EffectSummary + " // 风险：" + artifact.RiskSummary,

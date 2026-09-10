@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 7,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"root\\\":\\\"E:\\\\\\\\数据库\\\\\\\\OCC_Codex\\\\\\\\UnityProject\\\",\\\"manifest\\\":\\\"{\\\\\\\"platforms\\\\\\\":[],\\\\\\\"optionalSkills\\\\\\\":[],\\\\\\\"skillVersions\\\\\\\":[{\\\\\\\"id\\\\\\\":\\\\\\\"unity-mcp-workflow\\\\\\\",\\\\\\\"version\\\\\\\":\\\\\\\"1.0.3\\\\\\\"},{\\\\\\\"id\\\\\\\":\\\\\\\"unity-ui-composition\\\\\\\",\\\\\\\"version\\\\\\\":\\\\\\\"1.0.3\\\\\\\"}]}\\\",\\\"conflicts\\\":[]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "38D50884E9AE6607B09502EB979D316E6198F52490A113D2220E1217FBE30855",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\hero.png"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "61EDF7B420B69D5C46F4AEFDF9FDE874A560A82244FC65B78A7A2DDC96B37C40",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\hero.png.meta"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "8FE92744B4AECD2E5026ED577BEC6975C02A6BD3E306EBB6AA7C597EC0873F73",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\tether_hound.png"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "C98DA4C4B20417D34E495FCAF6734F9C04166FE2AD331D031BE7B78214EF33F2",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\tether_hound.png.meta"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "A34FDB073872308D5F6600AB7356B1328D7E90188FAF452125F3A30E1737234F",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\pyromancer.png"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "BB0769079AFA72619495D333EF84AF5C29ADA688400665473C6B578346E522E4",
+    "Path": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\pyromancer.png.meta"
+  }
+]

@@ -9,27 +9,29 @@ namespace OCC.Combat
         public int Aether { get; }
         public int Supplies { get; }
         public int Scouting { get; }
-        public int AccessCards { get; }
         public bool UsesRogue11 { get; }
         public int Gold { get; }
         public int StageContribution { get; }
         public int StageTime { get; }
+        public int CurrentHealth { get; }
+        public int AcademyFood { get; }
 
-        public RogueliteMapResources(int parts, int aether, int supplies, int scouting, int accessCards, bool usesRogue11 = false, int gold = 0, int stageContribution = 0, int stageTime = 0)
+        public RogueliteMapResources(int parts, int aether, int supplies, int scouting, bool usesRogue11 = false, int gold = 0, int stageContribution = 0, int stageTime = 0, int currentHealth = 0, int academyFood = 0)
         {
             Parts = parts;
             Aether = aether;
             Supplies = supplies;
             Scouting = scouting;
-            AccessCards = accessCards;
             UsesRogue11 = usesRogue11; Gold = gold; StageContribution = stageContribution; StageTime = stageTime;
+            CurrentHealth = currentHealth; AcademyFood = academyFood;
         }
 
         public static RogueliteMapResources Capture(RogueliteMapRun run)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             return new RogueliteMapResources(run.Parts, run.Aether, run.Supplies,
-                run.ScoutingBeacons, run.AccessCards, run.UsesRogue11, run.Gold, run.StageContribution, run.StageTime);
+                run.ScoutingBeacons, run.UsesRogue11, run.Gold, run.StageContribution, run.StageTime,
+                run.CurrentHealth, run.FirstRunExperience?.AcademyFoodCount ?? 0);
         }
     }
 
@@ -64,7 +66,7 @@ namespace OCC.Combat
         {
             RequireRun(run);
             RogueliteMapResources before = RogueliteMapResources.Capture(run);
-            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
+            RogueliteMapNode node = run.MapNode(nodeId);
             bool resumesCurrentCombat = node.Id == run.CurrentNodeId &&
                 RogueliteUiPreferences.CanOpenCombatBriefing(run, node);
             bool startsCombat = resumesCurrentCombat || RogueliteUiPreferences.StartsCombat(run, node);
@@ -137,6 +139,69 @@ namespace OCC.Combat
             RogueliteMapResources before = RogueliteMapResources.Capture(run);
             run.CalibrateAether();
             return Result(run, "aether_calibration", run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult AcknowledgeFirstRunOrigin(RogueliteMapRun run)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.AcknowledgeFirstRunOrigin();
+            return Result(run, FirstRunExperienceCatalog.OriginNodeId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult CompleteFirstRunForge(RogueliteMapRun run, string targetId)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.CompleteFirstRunForge(targetId);
+            return Result(run, targetId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult CompleteFirstRunSpecialization(RogueliteMapRun run, string targetId)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.CompleteFirstRunSpecialization(targetId);
+            return Result(run, targetId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult CompleteFirstRunHealthCheck(RogueliteMapRun run)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.CompleteFirstRunHealthCheck();
+            return Result(run, "MEDICAL-CHECK", run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult UseFirstRunHeal(RogueliteMapRun run)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.UseFirstRunHeal();
+            return Result(run, "MEDICAL-HEAL", run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult ChooseFirstRunMeal(RogueliteMapRun run, string mealId)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.ChooseFirstRunMeal(mealId);
+            return Result(run, mealId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult PurchaseFirstRunOffer(RogueliteMapRun run, string offerId)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.PurchaseFirstRunOffer(offerId);
+            return Result(run, offerId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult CompleteFirstRunExperience(RogueliteMapRun run)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.CompleteFirstRunExperience();
+            return Result(run, FirstRunExperienceCatalog.ShopNodeId, run.CurrentNodeId, false, false, before);
+        }
+
+        public RogueliteMapInteractionResult AbandonReward(RogueliteMapRun run)
+        {
+            RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
+            run.AbandonCurrentReward();
+            return Result(run, "abandoned-reward", run.CurrentNodeId, false, false, before);
         }
 
         private static RogueliteMapInteractionResult Result(RogueliteMapRun run, string subjectId,
