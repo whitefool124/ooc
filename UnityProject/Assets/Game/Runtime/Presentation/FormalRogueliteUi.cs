@@ -1969,15 +1969,32 @@ namespace OCC.Combat.Presentation
 
         private void DetailIconMetric(Transform parent, string label, string value, string iconPath, Vector2 position, string tooltipBody, Color accent, float width = 180f, float height = 38f)
         {
+            // A compact metric used to rely on one overflowing line. At the map's compact scale that
+            // frequently left only the icon visible, so every metric now keeps its meaning in the card.
+            bool twoLines = height >= 52f;
+            const float labelHeight = 18f;
+            float contentTop = twoLines ? 8f : 6f;
+            float iconSize = FormalUiKit.IntegerSpriteSize(Resources.Load<Sprite>(iconPath), height >= 52f ? 32f : 24f);
+            float textLeft = iconSize + 18f;
+            float textWidth = width - textLeft - 10f;
             GameObject chip = FormalUiKit.FlatPanel("指标_" + label, parent, new Vector2(0, 1), new Vector2(0, 1), position, new Vector2(width, height),
                 Color.Lerp(FormalUiTheme.SurfaceRaised, accent, .06f));
             FormalUiKit.ThinFrame(chip.transform, new Vector2(width, height), FormalUiTheme.WithAlpha(accent, .82f), "指标细框");
             Sprite sprite = Resources.Load<Sprite>(iconPath);
-            float iconSize = FormalUiKit.IntegerSpriteSize(sprite, 32f);
-            Image icon = FormalUiKit.TopLeftIconSlot("图标", chip.transform, sprite, new Vector2(12, -(height - iconSize) * .5f));
+            Image icon = FormalUiKit.TopLeftIconSlot("图标", chip.transform, sprite, new Vector2(10, -(height - iconSize) * .5f));
             icon.rectTransform.sizeDelta = new Vector2(iconSize, iconSize);
-            Text metric = Label("值", label + " " + value, chip.transform, new Vector2(iconSize + 20, -12), new Vector2(width - iconSize - 32, height - 24), 18, accent, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(metric);
+            if (twoLines)
+            {
+                Text metricLabel = Label("标签", label, chip.transform, new Vector2(textLeft, -contentTop), new Vector2(textWidth, labelHeight), 14, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+                FormalUiKit.PreventAutomaticWrapping(metricLabel);
+                Text metricValue = Label("数值", value, chip.transform, new Vector2(textLeft, -contentTop - labelHeight), new Vector2(textWidth, height - contentTop - labelHeight - 4f), 18, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                FormalUiKit.PreventAutomaticWrapping(metricValue);
+            }
+            else
+            {
+                Text metricValue = Label("数值", label + "：" + value, chip.transform, new Vector2(textLeft, -contentTop), new Vector2(textWidth, height - contentTop - 4f), 16, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                FormalUiKit.PreventAutomaticWrapping(metricValue);
+            }
             BindHover(chip, label, tooltipBody, accent);
         }
 
