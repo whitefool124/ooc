@@ -1092,24 +1092,11 @@ namespace OCC.Combat.Presentation
             Label("名称", identified ? currentEvent?.DisplayName ?? node.DisplayName : "还看不清", parent, new Vector2(28, -62), new Vector2(390, 48), 30, text, TextAnchor.MiddleLeft);
             Label("摘要", identified ? node.Summary : "走近后才能看清", parent, new Vector2(28, -116), new Vector2(390, 36), 16, muted, TextAnchor.UpperLeft);
             bool cleared = run.CompletedNodes.Contains(node.Id);
-            string stateText = RogueliteMapVisualPresentation.RestrictionText(run, node);
-            Color stateColor = visual == RogueliteMapNodeVisualState.Locked ? danger : visual == RogueliteMapNodeVisualState.Unknown ? muted : cleared ? safe : cyan;
-            DetailIconMetric(parent, "状态", stateText, FormalArtRegistry.MapStatePath(visual.ToString()), new Vector2(28, -174), stateText, stateColor);
             if (!identified) return;
 
-            if (run.UsesRogue11)
-            {
-                RogueNodePreviewPresentation preview = new RogueNodePreviewPresentation(run, node);
-                string threshold = PlayerFacingCopy.AcademyTimeOutcome(preview.CrossesTransition, preview.CrossesWarning, preview.CrossesConsolidation);
-                string encounterRisk = string.IsNullOrEmpty(preview.EncounterLabel) ? preview.RiskLabel : preview.EncounterLabel + "\n" + preview.RiskLabel;
-                string encounterDetail = string.IsNullOrEmpty(preview.EnemySummary) ? preview.FailureConsequence : "敌方：" + preview.EnemySummary + "\n空间：" + preview.SpatialRisk + "\n" + preview.FailureConsequence;
-                DetailIconMetric(parent, "难度", encounterRisk, FormalArtRegistry.ResourceMetricPath("risk"), new Vector2(28, -218), encounterDetail, preview.CrossesTransition ? danger : amber);
-                DetailIconMetric(parent, "用时", preview.IsZeroTime ? "不花时间" : preview.TimeCost.ToString(), FormalArtRegistry.ResourceMetricPath("stage_time"), new Vector2(218, -218), "回来后，学期进度是 " + preview.ProjectedStageTime, cyan);
-                DetailIconMetric(parent, "生命结算", "战损继承", FormalArtRegistry.ResourceMetricPath("health"), new Vector2(28, -262), "节点结算不会自动恢复生命", FormalUiTheme.Health);
-                DetailIconMetric(parent, "回来时魔力", "+" + preview.ExpectedManaRecovery, FormalArtRegistry.ResourceMetricPath("mana"), new Vector2(218, -262), "回来时恢复 " + preview.ExpectedManaRecovery + " 个人魔力", FormalUiTheme.Magic);
-                Label("之后", threshold + "　" + preview.RewardLabel, parent, new Vector2(28, -306), new Vector2(390, 30), 15,
-                    preview.CrossesTransition ? danger : preview.CrossesWarning ? amber : text, TextAnchor.MiddleLeft);
-            }
+            int timeCost = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node).TimeCost : AcademyMapTuning.TimeCost(node.Type);
+            Label("节点耗时", timeCost == 0 ? "耗时：不花时间" : "耗时：" + timeCost, parent,
+                new Vector2(252, -164), new Vector2(164, 26), 16, cyan, TextAnchor.MiddleRight);
 
             if (current && !cleared && !node.IsCombat && node.Type != RogueliteMapNodeType.Start)
             {
