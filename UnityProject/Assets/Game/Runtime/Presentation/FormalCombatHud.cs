@@ -50,6 +50,8 @@ namespace OCC.Combat.Presentation
         private readonly Text[] timelineNames = new Text[5];
         private readonly Text[] timelineSpeeds = new Text[5];
         private readonly Text[] timelineDetails = new Text[5];
+        private readonly RawImage[] timelinePortraits = new RawImage[5];
+        private readonly Image[] timelineSpeedIcons = new Image[5];
         private readonly Image[] timelineNodes = new Image[5];
         private readonly Image[] timelineRows = new Image[5];
         private readonly Image[] timelineRetained = new Image[5];
@@ -438,6 +440,10 @@ namespace OCC.Combat.Presentation
             heroPassiveDetails.lineSpacing = .88f;
             heroStatusDetails.supportRichText = true;
             heroPassiveDetails.supportRichText = true;
+            heroStatusDetails.raycastTarget = true;
+            heroPassiveDetails.raycastTarget = true;
+            BindTooltip(heroStatusDetails.gameObject, BuildHeroStatusTooltip);
+            BindTooltip(heroPassiveDetails.gameObject, BuildHeroPassiveTooltip);
         }
 
         private void BuildTimelineBack()
@@ -493,8 +499,8 @@ namespace OCC.Combat.Presentation
 
         private void CreateTimelineSlot(int index)
         {
-            const float trackX = 116f;
-            const float trackWidth = 254f;
+            const float trackX = 154f;
+            const float trackWidth = 216f;
             float y = -96f - index * 56f;
             Transform timelineParent = timelineFront != null ? timelineFront.transform : timelineModule.transform;
             GameObject row = FormalUiKit.FlatPanel("行动位" + (index + 1), timelineParent,
@@ -506,11 +512,25 @@ namespace OCC.Combat.Presentation
             Line(row.transform, new Vector2(16, index == 0 ? -26 : -52), new Vector2(2, index == timelineRows.Length - 1 ? 26 : 52), FormalUiTheme.WithAlpha(line, .82f));
             GameObject node = Panel("行动节点" + (index + 1), row.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(10, 8), new Vector2(14, 14), muted);
             timelineNodes[index] = node.GetComponent<Image>();
-            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, -2), new Vector2(164, 26), CombatHudTypography.TimelineNameFontSize, muted, TextAnchor.MiddleLeft);
-            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(202, -2), new Vector2(150, 26), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
-            timelineSpeeds[index] = Label("行动速度" + (index + 1), row.transform, new Vector2(36, -27), new Vector2(80, 22),
+            GameObject portrait = FormalUiKit.Create("行动者头像" + (index + 1), row.transform);
+            timelinePortraits[index] = portrait.AddComponent<RawImage>();
+            timelinePortraits[index].raycastTarget = false;
+            RectTransform portraitRect = timelinePortraits[index].rectTransform;
+            portraitRect.anchorMin = portraitRect.anchorMax = portraitRect.pivot = new Vector2(0f, 1f);
+            portraitRect.anchoredPosition = new Vector2(32f, -6f);
+            portraitRect.sizeDelta = new Vector2(36f, 36f);
+            GameObject speedIcon = FormalUiKit.Create("行动速度图标" + (index + 1), row.transform);
+            timelineSpeedIcons[index] = speedIcon.AddComponent<Image>();
+            timelineSpeedIcons[index].sprite = Resources.Load<Sprite>(FormalArtRegistry.FeedbackPath("movement"));
+            timelineSpeedIcons[index].raycastTarget = false;
+            timelineSpeedIcons[index].preserveAspect = true;
+            RectTransform speedIconRect = timelineSpeedIcons[index].rectTransform;
+            speedIconRect.anchorMin = speedIconRect.anchorMax = speedIconRect.pivot = new Vector2(0f, 1f);
+            speedIconRect.anchoredPosition = new Vector2(80f, -8f);
+            speedIconRect.sizeDelta = new Vector2(20f, 20f);
+            timelineSpeeds[index] = Label("行动速度" + (index + 1), row.transform, new Vector2(104, -6), new Vector2(40, 24),
                 CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(timelineNames[index]);
+            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(154, -6), new Vector2(198, 24), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
             FormalUiKit.ConfigureNumericLabel(timelineSpeeds[index]);
             FormalUiKit.ConfigureNumericLabel(timelineDetails[index]);
             GameObject track = FormalUiKit.FlatPanel("单位行动值轨道", row.transform, new Vector2(0, 0), new Vector2(0, 0),
@@ -596,9 +616,10 @@ namespace OCC.Combat.Presentation
                 Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
                 timelineNodes[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
                 timelineRows[slot].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
-                timelineNames[slot].text = entry.Order + " " + CompactHud(entry.DisplayName, 9);
-                timelineNames[slot].color = entry.IsActive ? text : muted;
-                timelineSpeeds[slot].text = "行动速度 " + entry.EffectiveSpeed;
+                timelinePortraits[slot].texture = TimelinePortrait(state.GetUnit(entry.UnitId));
+                timelinePortraits[slot].color = entry.IsActive ? Color.white : FormalUiTheme.WithAlpha(Color.white, .72f);
+                timelineSpeedIcons[slot].color = entry.IsActive ? faction : muted;
+                timelineSpeeds[slot].text = entry.EffectiveSpeed.ToString();
                 timelineSpeeds[slot].color = entry.IsActive ? faction : muted;
                 timelineDetails[slot].color = entry.IsActive ? faction : muted;
                 timelineInteractions[slot].Configure(entry.UnitId, timelineRows[slot],
@@ -606,8 +627,8 @@ namespace OCC.Combat.Presentation
                     unitId => bootstrap.FocusBattlefieldOnUnit(unitId));
                 bool previewed = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview && timelinePreview.ActionValueTargetId == entry.UnitId;
                 int previewValue = previewed ? CombatActionTimeline.PreviewDelayedValue(state.GetUnit(entry.UnitId), timelinePreview.ActionValueDelay) : entry.ActionValue;
-                float currentWidth = 254f * entry.ActionValue / CombatActionTimeline.MaximumValue;
-                float previewWidth = 254f * previewValue / CombatActionTimeline.MaximumValue;
+                float currentWidth = 216f * entry.ActionValue / CombatActionTimeline.MaximumValue;
+                float previewWidth = 216f * previewValue / CombatActionTimeline.MaximumValue;
                 timelineRetained[slot].gameObject.SetActive(true);
                 timelineRemoved[slot].gameObject.SetActive(previewed);
                 timelineCurrentEndpoint[slot].gameObject.SetActive(previewed);
@@ -617,10 +638,10 @@ namespace OCC.Combat.Presentation
                 SetTimelineOrderArrow(slot, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
                 if (previewed)
                 {
-                    timelineRemoved[slot].rectTransform.anchoredPosition = new Vector2(116 + previewWidth, 7);
+                    timelineRemoved[slot].rectTransform.anchoredPosition = new Vector2(154 + previewWidth, 7);
                     timelineRemoved[slot].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 4);
-                    timelineCurrentEndpoint[slot].rectTransform.anchoredPosition = new Vector2(116 + currentWidth, 4);
-                    timelinePreviewEndpoint[slot].rectTransform.anchoredPosition = new Vector2(116 + previewWidth, 4);
+                    timelineCurrentEndpoint[slot].rectTransform.anchoredPosition = new Vector2(154 + currentWidth, 4);
+                    timelinePreviewEndpoint[slot].rectTransform.anchoredPosition = new Vector2(154 + previewWidth, 4);
                 }
             }
             for (int i = 0; i < quickbarLabels.Length; i++)
@@ -1168,26 +1189,51 @@ namespace OCC.Combat.Presentation
         {
             if (heroStatusDetails == null || heroPassiveDetails == null || state == null || hero == null) return;
             IReadOnlyList<CombatStatusBarEntry> entries = state.PassiveEffects.StatusBarEntriesFor(hero.Id);
-            string currentStatus = hero.Statuses.Count == 0
+            heroStatusDetails.text = hero.Statuses.Count == 0
                 ? "正常"
-                : string.Join(" ", hero.Statuses.Take(2).Select(pair =>
+                : string.Join("\n", hero.Statuses.Take(5).Select(pair =>
                 {
                     CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(pair.Key));
                     return semantic.ShortLabel + " " + pair.Value;
                 }));
-            CombatStatusBarEntry[] ongoing = entries.Where(value => value.Kind == CombatStatusBarEntryKind.OngoingEffect).ToArray();
-            if (ongoing.Length > 0) currentStatus += " +" + string.Join(" ", ongoing.Take(2).Select(value => value.DisplayName));
-            heroStatusDetails.text = (state.ActiveUnitId == hero.Id ? "行动中　" : "待命　") + hero.ActionPoints + " AP\n" +
-                "生命　" + hero.Health + "／" + hero.MaxHealth + "\n" +
-                "护盾　" + hero.Shield + (rogue ? string.Empty : "／" + hero.MaxShield) + "\n" +
-                "魔力　" + hero.Mana + "／" + hero.MaxMana + "\n" +
-                "状态　" + CompactHud(currentStatus, 12);
 
-            CombatStatusBarEntry[] passives = entries.Where(value => value.Kind == CombatStatusBarEntryKind.Passive).Take(3).ToArray();
+            CombatStatusBarEntry[] passives = entries.Where(value => value.Kind == CombatStatusBarEntryKind.Passive).Take(5).ToArray();
             heroPassiveDetails.text = passives.Length == 0
                 ? "当前没有被动效果"
-                : string.Join("\n", passives.Select(value =>
-                    CompactHud(value.DisplayName, 8) + "\n<color=#9B8C72>来源　" + PassiveSourceLabel(value) + "　" + CompactHud(value.TimingText, 6) + "</color>"));
+                : string.Join("\n", passives.Select(value => CompactHud(value.DisplayName, 12)));
+        }
+
+        private FormalTooltipContent BuildHeroStatusTooltip()
+        {
+            UnitState hero = bootstrap?.CurrentState?.GetUnit("hero");
+            if (hero == null) return new FormalTooltipContent("状态", "当前没有可查看的状态。", FormalUiTheme.Cyan);
+            string body = hero.Statuses.Count == 0 ? "当前没有异常状态。" : string.Join("\n", hero.Statuses.Select(pair =>
+            {
+                CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(pair.Key));
+                return semantic.ShortLabel + " " + pair.Value + "　" + semantic.HudLabel;
+            }));
+            return new FormalTooltipContent("玩家状态", "状态详情", body, FormalUiTheme.Cyan);
+        }
+
+        private FormalTooltipContent BuildHeroPassiveTooltip()
+        {
+            CombatState state = bootstrap?.CurrentState;
+            UnitState hero = state?.GetUnit("hero");
+            if (hero == null) return new FormalTooltipContent("被动", "当前没有可查看的被动。", FormalUiTheme.Amber);
+            CombatStatusBarEntry[] passives = state.PassiveEffects.StatusBarEntriesFor(hero.Id)
+                .Where(value => value.Kind == CombatStatusBarEntryKind.Passive).ToArray();
+            string body = passives.Length == 0 ? "当前没有被动效果。" : string.Join("\n", passives.Select(value =>
+                value.DisplayName + "\n来源　" + PassiveSourceLabel(value) + "　" + value.TimingText));
+            return new FormalTooltipContent("被动效果", "被动详情", body, FormalUiTheme.Amber);
+        }
+
+        private static Texture TimelinePortrait(UnitState unit)
+        {
+            if (unit == null) return null;
+            string artId = unit.IsHero ? "hero" : unit.EnemyArchetypeId;
+            if (string.IsNullOrEmpty(artId)) return null;
+            try { return Resources.Load<Texture2D>(FormalArtRegistry.UnitPath(artId)); }
+            catch (KeyNotFoundException) { return null; }
         }
 
         private static string PassiveSourceLabel(CombatStatusBarEntry entry)
@@ -1378,7 +1424,7 @@ namespace OCC.Combat.Presentation
 
         private void ApplyTimelineGlobal(CombatTurnTrackEntry? leading, float value)
         {
-            timelineGlobalValue.text = leading.HasValue ? "全局　值 " + Mathf.RoundToInt(value) : "等待";
+            timelineGlobalValue.text = leading.HasValue ? "全局　" + Mathf.RoundToInt(value) : "等待";
             timelineGlobalFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(value / CombatActionTimeline.MaximumValue), 1f);
         }
 
@@ -1480,7 +1526,7 @@ namespace OCC.Combat.Presentation
         private void ApplyTimelineDetail(int index, CombatTurnTrackEntry entry, float value)
         {
             string state = entry.IsActive ? "　行动中" : entry.IsReady ? "　待行动" : string.Empty;
-            timelineDetails[index].text = "值 " + Mathf.RoundToInt(value) + state;
+            timelineDetails[index].text = Mathf.RoundToInt(value) + state;
         }
 
         private void SetTimelineOrderArrow(int index, int direction)
