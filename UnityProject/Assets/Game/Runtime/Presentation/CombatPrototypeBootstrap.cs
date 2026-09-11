@@ -599,7 +599,7 @@ namespace OCC.Combat.Presentation
             var actions = new List<BattlefieldContextAction>();
             if (state == null || !state.Map.IsInside(position) || state.IsVictory || state.IsDefeat) return actions;
             UnitState hero = state.GetUnit("hero");
-            if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id) return actions;
+            if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id || IsCombatActionPlaying) return actions;
             UnitState clicked = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
 
             AddContextActionIfLegal(actions, position, "移动", "move", "移动到这里", "1 行动点");
@@ -612,6 +612,9 @@ namespace OCC.Combat.Presentation
                 if (!TryBuildContextSpellAction(slot, position, clicked, out BattlefieldContextAction action)) continue;
                 actions.Add(action);
             }
+            // This is intentionally target-independent: it belongs in every live right-click
+            // menu so future contextual actions can share one stable action list.
+            actions.Add(new BattlefieldContextAction("end-turn", "结束回合", "放弃剩余行动点"));
             return actions;
         }
         public void SubmitBattlefieldContextAction(GridPosition position, string actionId)
@@ -622,6 +625,7 @@ namespace OCC.Combat.Presentation
             if (actionId == "attack") { SelectHudAction("攻击"); HandleCellClick(position); return; }
             if (actionId == "loot") { SelectHudAction("搜刮"); HandleCellClick(position); return; }
             if (actionId == "interact") { SelectHudAction("互动"); HandleCellClick(position); return; }
+            if (actionId == "end-turn") { EndHeroTurn(); return; }
             if (actionId.StartsWith("spell:", StringComparison.Ordinal) &&
                 int.TryParse(actionId.Substring(6), out int slot) &&
                 string.IsNullOrEmpty(SpellShortcutFailureReason(slot)))
