@@ -356,8 +356,9 @@ namespace OCC.Combat.Tests
             Assert.That(config.logicalPixelScale, Is.GreaterThanOrEqualTo(4));
             string[] requiredLayouts = { "global.header", "landing.card", "map.status", "map.board", "map.detail", "briefing.card",
                 "settings.card", "archive.card", "modal.confirm", "modal.toast", "map.toast", "combat.toast", "settlement.card", "settlement.rewardCard", "combat.header", "combat.rightConsole",
-                "combat.hero", "combat.timeline", "combat.decisionToast", "combat.actionPointBadge", "combat.commands", "combat.outcome" };
+                "combat.hero", "combat.timeline", "combat.actionPointBadge", "combat.commands", "combat.outcome" };
             Assert.That(config.layouts.Select(entry => entry.id), Is.SupersetOf(requiredLayouts));
+            Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.decisionToast"));
             Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.target"));
             Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.log"));
             Assert.That(OccPixelUiConfig.Layout("combat.rightConsole").width, Is.LessThanOrEqualTo(config.hudWidth));

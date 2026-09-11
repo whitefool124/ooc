@@ -119,16 +119,17 @@ namespace OCC.Combat.Tests
                 MethodInfo create = typeof(FormalCombatHud).GetMethod("ConsoleModule", BindingFlags.Static | BindingFlags.NonPublic);
                 float previousBottom = 0f;
                 FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
-                foreach (string key in new[] { "hero", "timeline" })
+                foreach (string key in new[] { "timeline", "hero" })
                 {
                     GameObject module = (GameObject)create.Invoke(null, new object[] { key, root.transform, "combat." + key });
                     RectTransform rect = module.GetComponent<RectTransform>();
                     float top = -rect.anchoredPosition.y;
-                    Assert.That(top, Is.GreaterThan(previousBottom));
+                    Assert.That(top, Is.GreaterThanOrEqualTo(previousBottom + 12f));
                     Assert.That(top + rect.sizeDelta.y, Is.LessThanOrEqualTo(side.height - 16f));
                     Assert.That(rect.anchoredPosition.x, Is.GreaterThanOrEqualTo(16f));
                     Assert.That(rect.anchoredPosition.x + rect.sizeDelta.x, Is.LessThanOrEqualTo(side.width - 16f));
                     Assert.That(FormalUiKit.SkinOverlay(module.GetComponent<Image>()), Is.Null);
+                    Assert.That(module.GetComponent<Image>().color, Is.EqualTo(FormalUiTheme.SurfaceRaised));
                     Assert.That(module.GetComponent<Image>().raycastTarget, Is.True, "module details must stay hoverable");
                     previousBottom = top + rect.sizeDelta.y;
                     if (key != "timeline") continue;

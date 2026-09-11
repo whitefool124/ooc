@@ -70,7 +70,6 @@
     { "id": "combat.rightConsole", "anchor": "top-right", "x": -16, "y": -80, "width": 448, "height": 768 },
     { "id": "combat.hero", "anchor": "top-left", "x": 16, "y": -508, "width": 416, "height": 244 },
     { "id": "combat.timeline", "anchor": "top-left", "x": 16, "y": -16, "width": 416, "height": 480 },
-    { "id": "combat.decisionToast", "anchor": "top-left", "x": 56, "y": -768, "width": 620, "height": 58 },
     { "id": "combat.actionPointBadge", "anchor": "top-left", "x": 32, "y": -756, "width": 96, "height": 96 },
     { "id": "combat.commands", "anchor": "bottom-left", "x": 16, "y": 16, "width": 1888, "height": 200 },
     { "id": "combat.outcome", "anchor": "center", "x": 0, "y": 0, "width": 720, "height": 330 }

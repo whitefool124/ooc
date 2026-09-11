@@ -24,9 +24,8 @@ namespace OCC.Combat.Presentation
         private Canvas canvas;
         private GameObject root;
         private FormalHoverTooltip tooltip;
-        private Text decisionLabel;
         private Text actionPointBadgeValue;
-        private Text phaseLabel;
+        private Text headerResourceLabel;
         private GameObject turnBanner;
         private CanvasGroup turnBannerGroup;
         private Text turnBannerLabel;
@@ -161,8 +160,8 @@ namespace OCC.Combat.Presentation
 
             GameObject top = FormalUiKit.LayoutPanel("战斗抬头", root.transform, "combat.header", FormalUiTheme.SurfaceRaised);
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
-            phaseLabel = Label("正在准备", top.transform, new Vector2(12, -8), new Vector2(1292, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(phaseLabel);
+            headerResourceLabel = Label("战斗资源", top.transform, new Vector2(16, -8), new Vector2(1400, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(headerResourceLabel);
 
             turnBanner = Panel("轮次公告", root.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(728, -76), new Vector2(464, 52), new Color(.015f, .018f, .018f, .94f));
@@ -174,7 +173,12 @@ namespace OCC.Combat.Presentation
             FormalUiKit.PreventAutomaticWrapping(turnBannerLabel);
             turnBannerGroup.alpha = 0f;
 
-            GameObject side = FormalUiKit.LayoutPanel("战斗信息", root.transform, "combat.rightConsole", panel);
+            GameObject side = FormalUiKit.LayoutPanel("战斗信息", root.transform, "combat.rightConsole", Color.clear);
+            Image sideSurface = side.GetComponent<Image>();
+            sideSurface.color = Color.clear;
+            sideSurface.raycastTarget = false;
+            Image sideSkin = FormalUiKit.SkinOverlay(sideSurface);
+            if (sideSkin != null) sideSkin.gameObject.SetActive(false);
             heroModule = ConsoleModule("英雄概况", side.transform, "combat.hero");
             heroFront = CardFace("英雄概况正面", heroModule.transform);
             heroBack = CardFace("英雄概况背面", heroModule.transform);
@@ -228,18 +232,6 @@ namespace OCC.Combat.Presentation
             heroBack.SetActive(false);
             timelineBack.SetActive(false);
 
-            GameObject decisionToast = FormalUiKit.LayoutPanel("战场决策提示条", root.transform, "combat.decisionToast", ink);
-            ConfigureOutlinedPanel(decisionToast, ink, FormalUiTheme.Cyan);
-            FormalUiKit.FlatPanel("决策提示标记", decisionToast.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(16, -12), new Vector2(8, 34), FormalUiTheme.Cyan);
-            decisionLabel = Label("行动决策", decisionToast.transform, new Vector2(80, -12), new Vector2(524, 34),
-                FormalUiTheme.BodyFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(decisionLabel);
-            // The AP badge overlaps this toast. Keep the live hint clear of the badge while
-            // preserving Pixso's single-line toast treatment.
-            ConfigureDecisionToastLine(decisionLabel, new Vector2(80, -12));
-            BindTooltip(decisionToast, BuildDecisionTooltip);
-
             GameObject apBadge = FormalUiKit.LayoutPanel("行动点徽章", root.transform, "combat.actionPointBadge", Color.clear);
             GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(48, -48), new Vector2(64, 64), FormalUiTheme.Cyan);
@@ -276,16 +268,16 @@ namespace OCC.Combat.Presentation
             endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1676, -30), new Vector2(204, 140), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
             BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束回合", "剩余行动点会清空，然后轮到敌方。", line));
-            Button inventoryButton = Button(top.transform, "打开背包", new Vector2(1316, -4), new Vector2(160, 48), "背包",
+            Button inventoryButton = Button(top.transform, "打开背包", new Vector2(1484, -4), new Vector2(120, 48), "背包",
                 FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(inventoryButton);
             inventoryButton.onClick.AddListener(() => bootstrap.OpenCombatInventoryPanel());
             BindTooltip(inventoryButton.gameObject, () => new FormalTooltipContent("战斗背包", "消耗本回合的背包开启次数，整理装备或取用战术物品。", FormalUiTheme.Cyan));
-            restartButton = Button(top.transform, "战术重开", new Vector2(1488, -4), new Vector2(180, 48), "重开", FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
+            restartButton = Button(top.transform, "战术重开", new Vector2(1612, -4), new Vector2(120, 48), "重开", FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
             ConfigureCompactFrame(restartButton);
             restartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
             BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("重新开始", "这场战斗会从头开始，用掉的道具也会恢复。", FormalUiTheme.Amber));
-            leaveButton = Button(top.transform, "离开战斗", new Vector2(1680, -4), new Vector2(180, 48), "离开", FormalUiTheme.Danger, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Dangerous);
+            leaveButton = Button(top.transform, "离开战斗", new Vector2(1740, -4), new Vector2(120, 48), "离开", FormalUiTheme.Danger, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Dangerous);
             ConfigureCompactFrame(leaveButton);
             leaveButton.transform.Find("文字").GetComponent<Text>().color = FormalUiTheme.OnInk;
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
@@ -397,8 +389,8 @@ namespace OCC.Combat.Presentation
                 Vector2.zero, Vector2.zero, panel);
             RectTransform rect = module.GetComponent<RectTransform>();
             FormalUiKit.ApplyLayout(rect, layoutId);
+            ConfigureOutlinedPanel(module, FormalUiTheme.SurfaceRaised, FormalUiTheme.Rule);
             module.GetComponent<Image>().raycastTarget = true;
-            FormalUiKit.ThinFrame(module.transform, rect.sizeDelta, FormalUiTheme.WithAlpha(line, .55f));
             return module;
         }
 
@@ -471,15 +463,6 @@ namespace OCC.Combat.Presentation
             historyScroll.content = contentRect;
         }
 
-        private static void ConfigureDecisionToastLine(Text label, Vector2 position)
-        {
-            label.rectTransform.anchoredPosition = position;
-            label.rectTransform.sizeDelta = new Vector2(524, 34);
-            label.horizontalOverflow = HorizontalWrapMode.Overflow;
-            label.verticalOverflow = VerticalWrapMode.Overflow;
-            label.resizeTextForBestFit = false;
-        }
-
         private static void SetBadgeTextRect(Text label, Vector2 position, Vector2 size)
         {
             label.rectTransform.anchoredPosition = position;
@@ -534,18 +517,11 @@ namespace OCC.Combat.Presentation
             RefreshTurnBanner(state);
             UnitState hero = state.GetUnit("hero");
             hero = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(hero) ?? hero;
-            string clickInstruction = PrimaryClickInstruction(bootstrap.SelectedAction);
-            phaseLabel.text = bootstrap.IsKeyboardTargeting
-                ? "选择目标：方向键或 WASD 移动，Enter 确认，Esc 取消"
-                : bootstrap.CurrentPhaseText + "　" + clickInstruction + "　右键查看更多";
-            if ((bootstrap as ICombatActionPresentationHost)?.IsCombatActionPlaying == true) phaseLabel.text = "正在行动…";
-            UnitState selectedTarget = string.IsNullOrEmpty(bootstrap.SelectedTargetId) ? null : state.GetUnit(bootstrap.SelectedTargetId);
-            CombatActionPreview decision = bootstrap.CurrentActionPreview;
-            string decisionSummary = CombatHudTypography.CompactDecisionSummary(
-                CombatInformationPresenter.BuildHudDecisionSummary(decision, selectedTarget, bootstrap.IsKeyboardTargeting),
-                state.Ruleset == CombatRuleset.Roguelite ? decision?.DamageBreakdown : null);
-            decisionLabel.text = CompactHud(decisionSummary.Replace("\n", "　"), 18);
-            decisionLabel.color = decision != null && !decision.CanSubmit ? FormalUiTheme.Danger : bootstrap.IsKeyboardTargeting ? FormalUiTheme.Cyan : FormalUiTheme.OnInk;
+            RogueliteMapRun run = bootstrap.CurrentMapRun;
+            headerResourceLabel.text = "生命 " + hero.Health + "／" + hero.MaxHealth
+                + "　|　金币 " + (run?.Gold ?? 0)
+                + "　|　学院贡献 " + (run?.StageContribution ?? 0)
+                + "　|　学期时间 " + (run?.StageTime ?? 0);
             weaponLabel.text = hero.MainHand.DisplayName;
             weaponIcon.sprite = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(hero.MainHand.Id));
             if (weaponIcon.sprite == null) throw new KeyNotFoundException("Missing formal item icon: " + hero.MainHand.Id);
@@ -1032,15 +1008,6 @@ namespace OCC.Combat.Presentation
             return new FormalTooltipContent(category, title, body, line, iconPath);
         }
 
-        private FormalTooltipContent BuildDecisionTooltip()
-        {
-            CombatState state = bootstrap?.CurrentState;
-            UnitState target = state == null || string.IsNullOrEmpty(bootstrap.SelectedTargetId) ? null : state.GetUnit(bootstrap.SelectedTargetId);
-            EnemyIntentPresentation intent = target == null || target.IsHero ? null : bootstrap.EnemyIntent(target);
-            return new FormalTooltipContent("这一招会怎样", CombatInformationPresenter.BuildTargetDetails(bootstrap?.CurrentActionPreview, target, intent,
-                bootstrap?.CurrentState?.Ruleset == CombatRuleset.Roguelite), line);
-        }
-
         private bool HandleSpellShortcutInput()
         {
             Keyboard keyboard = Keyboard.current;
@@ -1394,7 +1361,7 @@ namespace OCC.Combat.Presentation
 
         private void ApplyTimelineGlobal(CombatTurnTrackEntry? leading, float value)
         {
-            timelineGlobalValue.text = leading.HasValue ? CompactHud(leading.Value.DisplayName, 8) + "　值 " + Mathf.RoundToInt(value) : "等待";
+            timelineGlobalValue.text = leading.HasValue ? "全局　值 " + Mathf.RoundToInt(value) : "等待";
             timelineGlobalFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(value / CombatActionTimeline.MaximumValue), 1f);
         }
 
