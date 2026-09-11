@@ -958,7 +958,7 @@ namespace OCC.Combat.Presentation
             }, focusKey);
             if (identified)
             {
-                AddCompactNodeIcon(buttonObject.transform, node.Type, dimmed ? .56f : 1f);
+                AddCompactNodeIcon(buttonObject.transform, node.Type, dimmed ? .38f : 1f);
                 BindHover(buttonObject, RogueliteMapVisualPresentation.StateLabel(state) + " · " + node.DisplayName,
                     TypeLabel(node.Type) + time + "\n" + MapStateTooltip(state) + "\n" + node.Summary, accent);
             }
@@ -1028,6 +1028,7 @@ namespace OCC.Combat.Presentation
 
         private static void AddMapNodeStateBadge(Transform parent, RogueliteMapNodeType type, RogueliteMapNodeVisualState state, Color accent)
         {
+            if (state == RogueliteMapNodeVisualState.Locked) return;
             float nodeSize = MapNodeDisplaySize(type);
             bool unknown = state == RogueliteMapNodeVisualState.Unknown;
             float badgeSize = unknown ? 44f : 32f;
@@ -2618,7 +2619,7 @@ namespace OCC.Combat.Presentation
         {
             float size = MapNodeDisplaySize(type);
             GameObject result = Panel(focusKey, parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position, new Vector2(size, size), Color.white);
-            float opacity = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown ? .56f : 1f;
+            float opacity = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown ? .38f : 1f;
             Image image = result.GetComponent<Image>(); image.sprite = Resources.Load<Sprite>(FormalArtRegistry.LargeMapNodeMarkerPath(state.ToString())); image.type = Image.Type.Simple; image.color = FormalUiTheme.WithAlpha(Color.white, opacity);
             Button button = result.AddComponent<Button>(); button.targetGraphic = image; button.transition = Selectable.Transition.ColorTint;
             ColorBlock colors = button.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1f, 1f, 1f, .88f); colors.pressedColor = FormalUiTheme.WithAlpha(accent, .82f); colors.selectedColor = Color.white; colors.fadeDuration = .06f; button.colors = colors;

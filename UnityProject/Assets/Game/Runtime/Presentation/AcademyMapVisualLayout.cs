@@ -32,11 +32,11 @@ namespace OCC.Combat.Presentation
 
         private static readonly Vector2[,] positions =
         {
-            { new Vector2(96, 112), new Vector2(288, 112), new Vector2(480, 112), new Vector2(672, 112), new Vector2(864, 112), new Vector2(1056, 112), new Vector2(1248, 112), new Vector2(1440, 112) },
-            { new Vector2(96, 272), new Vector2(288, 272), new Vector2(480, 272), new Vector2(672, 272), new Vector2(864, 272), new Vector2(1056, 272), new Vector2(1248, 272), new Vector2(1440, 272) },
-            { new Vector2(96, 432), new Vector2(288, 432), new Vector2(480, 432), new Vector2(672, 432), new Vector2(864, 432), new Vector2(1056, 432), new Vector2(1248, 432), new Vector2(1440, 432) },
-            { new Vector2(96, 592), new Vector2(288, 592), new Vector2(480, 592), new Vector2(672, 592), new Vector2(864, 592), new Vector2(1056, 592), new Vector2(1248, 592), new Vector2(1440, 592) },
-            { new Vector2(96, 752), new Vector2(288, 752), new Vector2(480, 752), new Vector2(672, 752), new Vector2(864, 752), new Vector2(1056, 752), new Vector2(1248, 752), new Vector2(1440, 752) }
+            { new Vector2(82, 88), new Vector2(278, 88), new Vector2(474, 88), new Vector2(670, 88), new Vector2(866, 88), new Vector2(1062, 88), new Vector2(1258, 88), new Vector2(1454, 88) },
+            { new Vector2(82, 260), new Vector2(278, 260), new Vector2(474, 260), new Vector2(670, 260), new Vector2(866, 260), new Vector2(1062, 260), new Vector2(1258, 260), new Vector2(1454, 260) },
+            { new Vector2(82, 432), new Vector2(278, 432), new Vector2(474, 432), new Vector2(670, 432), new Vector2(866, 432), new Vector2(1062, 432), new Vector2(1258, 432), new Vector2(1454, 432) },
+            { new Vector2(82, 604), new Vector2(278, 604), new Vector2(474, 604), new Vector2(670, 604), new Vector2(866, 604), new Vector2(1062, 604), new Vector2(1258, 604), new Vector2(1454, 604) },
+            { new Vector2(82, 776), new Vector2(278, 776), new Vector2(474, 776), new Vector2(670, 776), new Vector2(866, 776), new Vector2(1062, 776), new Vector2(1258, 776), new Vector2(1454, 776) }
         };
 
         private static readonly IReadOnlyList<AcademyMapVisualAnchor> anchors = BuildAnchors();
