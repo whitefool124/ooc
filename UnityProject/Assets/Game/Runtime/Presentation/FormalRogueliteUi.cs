@@ -933,21 +933,8 @@ namespace OCC.Combat.Presentation
                 RogueliteMapNodeVisualState fromState = run.VisualStateFor(from.Id);
                 RogueliteMapNodeVisualState toState = run.VisualStateFor(to.Id);
                 RogueliteMapRouteVisualState route = RogueliteMapVisualPresentation.RouteState(fromState, toState);
-                bool available = route == RogueliteMapRouteVisualState.Available;
-                Color color = available ? FormalUiTheme.WithAlpha(cyan, .94f) :
-                    route == RogueliteMapRouteVisualState.Locked ? FormalUiTheme.WithAlpha(danger, .26f) :
-                    route == RogueliteMapRouteVisualState.Safe ? FormalUiTheme.WithAlpha(safe, .30f) :
-                    FormalUiTheme.WithAlpha(muted, .20f);
-                if (available)
-                {
-                    MapRouteLine(parent, a, b, 10f, FormalUiTheme.WithAlpha(ink, .76f));
-                    MapRouteLine(parent, a, b, 5f, color);
-                }
-                else
-                {
-                    MapDashedRouteLine(parent, a, b, 7f, FormalUiTheme.WithAlpha(ink, .58f));
-                    MapDashedRouteLine(parent, a, b, 3f, color);
-                }
+                Vector2[] path = OrthogonalRoute(a, b);
+                DrawRoutePath(parent, path, route);
             }
         }
 
@@ -2503,6 +2490,59 @@ namespace OCC.Combat.Presentation
             GameObject joint = Create("路线转接件", parent); RectTransform rect = joint.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(16, 16);
             Image image = joint.AddComponent<Image>(); image.sprite = Resources.Load<Sprite>(FormalArtRegistry.MapDecorPath("route_joint")); image.color = tint; image.raycastTarget = false;
+        }
+
+        private static Vector2[] OrthogonalRoute(Vector2 from, Vector2 to)
+        {
+            if (Mathf.Approximately(from.x, to.x) || Mathf.Approximately(from.y, to.y))
+                return new[] { from, to };
+
+            // A central channel keeps diagonal graph links off neighbouring node anchors.
+            float elbowX = (from.x + to.x) * .5f;
+            return new[]
+            {
+                from,
+                new Vector2(elbowX, from.y),
+                new Vector2(elbowX, to.y),
+                to
+            };
+        }
+
+        private static void DrawRoutePath(Transform parent, IReadOnlyList<Vector2> path, RogueliteMapRouteVisualState route)
+        {
+            bool solid = route == RogueliteMapRouteVisualState.Available || route == RogueliteMapRouteVisualState.Safe;
+            float outlineThickness = route == RogueliteMapRouteVisualState.Available ? 12f :
+                route == RogueliteMapRouteVisualState.Safe ? 10f :
+                route == RogueliteMapRouteVisualState.Locked ? 10f :
+                route == RogueliteMapRouteVisualState.Known ? 9f : 7f;
+            float fillThickness = route == RogueliteMapRouteVisualState.Available ? 5f :
+                route == RogueliteMapRouteVisualState.Safe ? 4f :
+                route == RogueliteMapRouteVisualState.Locked ? 4f :
+                route == RogueliteMapRouteVisualState.Known ? 3.5f : 2.5f;
+            Color fill = route == RogueliteMapRouteVisualState.Available ? FormalUiTheme.WithAlpha(cyan, .96f) :
+                route == RogueliteMapRouteVisualState.Safe ? FormalUiTheme.WithAlpha(safe, .78f) :
+                route == RogueliteMapRouteVisualState.Locked ? FormalUiTheme.WithAlpha(danger, .72f) :
+                route == RogueliteMapRouteVisualState.Known ? FormalUiTheme.WithAlpha(text, .56f) :
+                FormalUiTheme.WithAlpha(muted, .44f);
+            Color outline = FormalUiTheme.WithAlpha(ink, route == RogueliteMapRouteVisualState.Available ? .90f :
+                route == RogueliteMapRouteVisualState.Safe ? .78f : route == RogueliteMapRouteVisualState.Locked ? .80f : .66f);
+
+            for (int index = 1; index < path.Count; index++)
+            {
+                if (solid)
+                {
+                    MapRouteLine(parent, path[index - 1], path[index], outlineThickness, outline);
+                    MapRouteLine(parent, path[index - 1], path[index], fillThickness, fill);
+                }
+                else
+                {
+                    MapDashedRouteLine(parent, path[index - 1], path[index], outlineThickness, outline);
+                    MapDashedRouteLine(parent, path[index - 1], path[index], fillThickness, fill);
+                }
+            }
+
+            for (int index = 1; index < path.Count - 1; index++)
+                AddRouteJoint(parent, path[index], fill);
         }
 
         private void AddRegionIdentity(Transform parent, string regionId)

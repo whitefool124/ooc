@@ -21,7 +21,7 @@ namespace OCC.Combat.Presentation
         }
     }
 
-    // Fixed geographic anchor layer for the academy atlas. Runtime node type,
+    // Fixed orthogonal anchor layer for the academy atlas. Runtime node type,
     // content and state remain dynamic and are never baked into this layout.
     public static class AcademyMapVisualLayout
     {
@@ -32,11 +32,11 @@ namespace OCC.Combat.Presentation
 
         private static readonly Vector2[,] positions =
         {
-            { new Vector2(240, 144), new Vector2(403, 130), new Vector2(566, 168), new Vector2(739, 139), new Vector2(912, 158), new Vector2(1066, 120), new Vector2(1229, 168), new Vector2(1392, 154) },
-            { new Vector2(211, 288), new Vector2(384, 269), new Vector2(552, 312), new Vector2(680, 260), new Vector2(893, 270), new Vector2(1056, 264), new Vector2(1229, 307), new Vector2(1392, 288) },
-            { new Vector2(250, 437), new Vector2(413, 413), new Vector2(530, 480), new Vector2(768, 680), new Vector2(970, 510), new Vector2(1085, 403), new Vector2(1258, 446), new Vector2(1402, 422) },
-            { new Vector2(221, 595), new Vector2(394, 571), new Vector2(562, 619), new Vector2(728, 574), new Vector2(902, 600), new Vector2(1075, 562), new Vector2(1243, 610), new Vector2(1392, 581) },
-            { new Vector2(250, 739), new Vector2(427, 720), new Vector2(595, 763), new Vector2(780, 800), new Vector2(941, 749), new Vector2(1104, 710), new Vector2(1267, 754), new Vector2(1411, 725) }
+            { new Vector2(152, 144), new Vector2(328, 144), new Vector2(504, 144), new Vector2(680, 144), new Vector2(856, 144), new Vector2(1032, 144), new Vector2(1208, 144), new Vector2(1384, 144) },
+            { new Vector2(152, 288), new Vector2(328, 288), new Vector2(504, 288), new Vector2(680, 288), new Vector2(856, 288), new Vector2(1032, 288), new Vector2(1208, 288), new Vector2(1384, 288) },
+            { new Vector2(152, 432), new Vector2(328, 432), new Vector2(504, 432), new Vector2(680, 432), new Vector2(856, 432), new Vector2(1032, 432), new Vector2(1208, 432), new Vector2(1384, 432) },
+            { new Vector2(152, 576), new Vector2(328, 576), new Vector2(504, 576), new Vector2(680, 576), new Vector2(856, 576), new Vector2(1032, 576), new Vector2(1208, 576), new Vector2(1384, 576) },
+            { new Vector2(152, 720), new Vector2(328, 720), new Vector2(504, 720), new Vector2(680, 720), new Vector2(856, 720), new Vector2(1032, 720), new Vector2(1208, 720), new Vector2(1384, 720) }
         };
 
         private static readonly IReadOnlyList<AcademyMapVisualAnchor> anchors = BuildAnchors();
