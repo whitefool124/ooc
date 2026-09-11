@@ -86,6 +86,7 @@ namespace OCC.Combat.Presentation
         public float PendingVolume { get => pendingVolume; set { pendingVolume = Mathf.Clamp01(value); AudioListener.volume = pendingVolume; } }
         public bool PendingFullscreen { get => pendingFullscreen; set => pendingFullscreen = value; }
         public string HandoffError => handoffError;
+        public float AnimationIntensity => combatBootstrap == null ? 1f : combatBootstrap.UiPreferences.AnimationIntensity;
 
         public void Bind(CombatPrototypeBootstrap bootstrap) => combatBootstrap = bootstrap;
 

@@ -230,8 +230,11 @@ namespace OCC.Combat.Presentation
 
         private Button AddButton(string name, string title, Transform parent, Vector2 position, Vector2 size, Action action, Color? tone = null)
         {
-            Button button = FormalUiKit.Button("按钮_" + name, title, parent, position, size, tone ?? FormalUiTheme.Interactive);
+            Color surface = tone ?? FormalUiTheme.Interactive;
+            Button button = FormalUiKit.Button("按钮_" + name, title, parent, position, size, surface);
             button.onClick.AddListener(() => action?.Invoke());
+            FormalUiKit.ConfigureButtonFeedback(button, FormalUiButtonPalette.ForAccent(surface, FormalUiTheme.Cyan),
+                () => UiMotionProfile.FromIntensity(flow == null ? 1f : flow.AnimationIntensity), null);
             buttons.Add(button);
             return button;
         }

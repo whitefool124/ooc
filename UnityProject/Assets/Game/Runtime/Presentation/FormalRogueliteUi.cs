@@ -1317,6 +1317,8 @@ namespace OCC.Combat.Presentation
                     Image transparentTarget = slot.GetComponent<Image>();
                     Button emptyButton = slot.AddComponent<Button>(); emptyButton.targetGraphic = transparentTarget;
                     emptyButton.onClick.AddListener(() => TryEquipSelected(runtime, slotType));
+                    FormalUiKit.ConfigureButtonFeedback(emptyButton, FormalUiButtonPalette.ForAccent(Color.clear, cyan),
+                        () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);
                     Label("槽位名称", EquipmentSlotLabel(slotType), slot.transform, new Vector2(8, -18), new Vector2(180, 28),
                         16, muted, TextAnchor.MiddleLeft);
                     Line(slot.transform, new Vector2(8, -54), new Vector2(180, 2), FormalUiTheme.WithAlpha(muted, .28f));

@@ -53,6 +53,7 @@ namespace OCC.Combat.Presentation
         private RogueliteSettlementPresentation settlementPresentation => presentation?.Settlement;
         private FormalUiInteractionLayer interactionLayer => presentation?.Interaction;
         private FormalStartupPresentation startupPresentation => presentation?.Startup;
+        private CombatFlowTransitionPresentation flowTransition => presentation?.FlowTransition;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         private DeveloperConsolePanel developerConsole => presentation?.DeveloperConsole;
 #endif
@@ -200,8 +201,13 @@ namespace OCC.Combat.Presentation
         public void OpenDeveloperBriefing() { developerFlow.OpenBriefing(); MarkPresentation(UiPresentationArea.Flow); }
         public void StartDeveloperCombat()
         {
-            ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement));
-            MarkPresentation(UiPresentationArea.Flow);
+            void ActivateCombat()
+            {
+                ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement));
+                MarkPresentation(UiPresentationArea.Flow);
+            }
+            if (flowTransition == null) ActivateCombat();
+            else flowTransition.Play(ActivateCombat);
         }
         public void TacticalRestartDeveloperCombat()
         {
