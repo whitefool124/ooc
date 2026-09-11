@@ -309,15 +309,29 @@ namespace OCC.Combat.Presentation
             if ((bootstrap?.UiPreferences.AnimationIntensity ?? 1f) > .01f)
                 PulseCell(enemy.Position, new Color(.98f, .42f, .28f), .62f);
 
+            ShowTurnBanner("敌方行动　" + enemy.DisplayName, intent?.CompactText ?? "正在行动", FormalUiTheme.Danger, visibleSeconds);
+        }
+
+        public void BeginHeroAction(UnitState hero, int turnSequence)
+        {
+            if (hero == null) return;
+            CancelEnemyAction();
+            ShowTurnBanner("你的行动　第 " + turnSequence + " 回合", hero.ActionPoints + " 行动点　" + hero.Mana + " 个人魔力", FormalUiTheme.Cyan, .92f);
+        }
+
+        // Both factions use this one banner lifecycle. The enemy-only method above merely adds
+        // intent focus before it enters the shared visual path.
+        private void ShowTurnBanner(string title, string detail, Color accent, float visibleSeconds)
+        {
             EnsureCanvas();
-            enemyActionBanner = FormalUiKit.AnchoredPanel("敌方行动提示", canvas.transform,
+            enemyActionBanner = FormalUiKit.AnchoredPanel("回合行动提示", canvas.transform,
                 new Vector2(.375f, 1f), new Vector2(.5f, 1f), new Vector2(0f, -42f),
                 new Vector2(560f, 78f), new Color(.12f, .025f, .022f, .98f));
             Image panel = enemyActionBanner.GetComponent<Image>();
             if (panel != null) panel.raycastTarget = false;
-            FormalUiKit.Label("敌方行动标题", "敌方行动　" + enemy.DisplayName, enemyActionBanner.transform,
-                new Vector2(20f, -10f), new Vector2(520f, 28f), 22, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
-            FormalUiKit.Label("敌方行动内容", intent?.CompactText ?? "正在行动", enemyActionBanner.transform,
+            FormalUiKit.Label("行动提示标题", title, enemyActionBanner.transform,
+                new Vector2(20f, -10f), new Vector2(520f, 28f), 22, accent, TextAnchor.MiddleLeft);
+            FormalUiKit.Label("行动提示内容", detail, enemyActionBanner.transform,
                 new Vector2(20f, -40f), new Vector2(520f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);
 
             RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
@@ -1134,16 +1148,27 @@ namespace OCC.Combat.Presentation
         private void EnsureCanvas()
         {
             if (canvas != null) return;
-            GameObject root = new GameObject("运行时战斗反馈"); DontDestroyOnLoad(root);
-            canvas = root.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 60; canvas.pixelPerfect = true;
-            CanvasScaler scaler = root.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight); scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
-            GameObject clip = new GameObject("战术视口反馈裁切"); clip.transform.SetParent(canvas.transform, false);
-            battlefieldClip = clip.AddComponent<RectTransform>();
+            canvas = PresentationSceneAnchors.TryAcquireCanvas("运行时战斗反馈");
+            if (canvas == null)
+            {
+                GameObject root = new GameObject("运行时战斗反馈"); DontDestroyOnLoad(root);
+                canvas = root.AddComponent<Canvas>();
+                root.AddComponent<CanvasScaler>();
+            }
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 60; canvas.pixelPerfect = true;
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight); scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
+            Transform existingClip = canvas.transform.Find("战术视口反馈裁切");
+            GameObject clip = existingClip == null ? new GameObject("战术视口反馈裁切") : existingClip.gameObject;
+            if (existingClip == null) clip.transform.SetParent(canvas.transform, false);
+            battlefieldClip = clip.GetComponent<RectTransform>();
+            if (battlefieldClip == null) battlefieldClip = clip.AddComponent<RectTransform>();
             battlefieldClip.anchorMin = battlefieldClip.anchorMax = new Vector2(.5f, .5f);
             BattlefieldRect view = bootstrap?.CurrentBattlefieldViewport ?? new BattlefieldPresentationAdapter().ViewportRect;
             battlefieldClip.anchoredPosition = new Vector2(view.X + view.Width * .5f - 960f, 540f - view.Y - view.Height * .5f);
             battlefieldClip.sizeDelta = new Vector2(view.Width, view.Height);
-            clip.AddComponent<RectMask2D>();
+            if (clip.GetComponent<RectMask2D>() == null) clip.AddComponent<RectMask2D>();
         }
     }
 }

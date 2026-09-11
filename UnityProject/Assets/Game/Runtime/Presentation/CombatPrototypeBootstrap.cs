@@ -69,6 +69,7 @@ namespace OCC.Combat.Presentation
         private bool lastSettingsSaveSucceeded = true;
         private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
         private readonly UiPresentationVersions uiPresentationVersions = new UiPresentationVersions();
+        private int displayedHeroTurnSequence = -1;
 
         private void OnEnable()
         {
@@ -214,7 +215,9 @@ namespace OCC.Combat.Presentation
             FocusHeroInBattlefield();
             visualFeedback?.CancelEnemyAction();
             visualFeedback?.ResetBattleFeedback();
+            displayedHeroTurnSequence = -1;
             PublishCombatEffects(activation.InitialTurnEffects);
+            PresentHeroTurnBannerIfNeeded();
             RefreshSceneHud();
             MarkPresentation(UiPresentationArea.Combat);
         }
@@ -1240,7 +1243,18 @@ namespace OCC.Combat.Presentation
                 !string.IsNullOrEmpty(state.ActiveUnitId) && state.ActiveUnitId != "hero") { RunEnemyTurn(); RefreshCombatOutcomeAfterPresentation(); }
             else if (state.ActiveUnitId == "hero" && enemyTurn.IsRunning) ResetEnemyTurnSequence();
             RefreshCombatOutcomeAfterPresentation(); HandleRogueliteOutcome();
+            PresentHeroTurnBannerIfNeeded();
             if (developerFlow.Phase != phaseBeforeUpdate) { MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat); }
+        }
+
+        private void PresentHeroTurnBannerIfNeeded()
+        {
+            if (developerFlow?.Phase != CombatFlowPhase.Active || state == null || state.ActiveUnitId != "hero" ||
+                state.TurnSequence <= 0 || state.TurnSequence == displayedHeroTurnSequence) return;
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null) return;
+            displayedHeroTurnSequence = state.TurnSequence;
+            visualFeedback?.BeginHeroAction(hero, state.TurnSequence);
         }
         private void HandleRogueliteOutcome()
         {
