@@ -826,9 +826,6 @@ namespace OCC.Combat.Presentation
             // The board occupies the left 75% of the 1920 reference canvas.
             rect.sizeDelta = FloatingTextSize;
             FeedbackPlacement placement = PlaceFeedback(rect, position, FloatingFeedbackPosition(position), FloatingTextRise);
-            Image backing = textObject.AddComponent<Image>();
-            backing.color = FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .96f);
-            backing.raycastTarget = false;
             Sprite icon = SemanticIcon(iconKey);
             if (icon != null)
             {
