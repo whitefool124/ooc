@@ -41,9 +41,6 @@ namespace OCC.Combat.Presentation
                     ShowFeedback(new UiActionFeedback(UiFeedbackKind.Rejected,
                         string.IsNullOrWhiteSpace(visualEvent.Message) ? "现在不能执行这个行动。请选择其他行动或目标。" : visualEvent.Message));
                     break;
-                case UiVisualEventKind.CombatCommandSubmitted:
-                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Information, visualEvent.Subject + "完成"));
-                    break;
                 case UiVisualEventKind.RewardClaimed:
                     ShowFeedback(new UiActionFeedback(UiFeedbackKind.Success, "已经收好。道具放进了行囊，术式收进了术式册。"));
                     break;

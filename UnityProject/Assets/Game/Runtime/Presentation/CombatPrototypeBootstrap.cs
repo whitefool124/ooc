@@ -1472,7 +1472,6 @@ namespace OCC.Combat.Presentation
             else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
             state.AddLog(artifact.DisplayName + "已经生效。");
             selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
-            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, artifact.Id));
             visualFeedback?.NotifyArtifact(artifact, source, preview.Cells, execution);
             presentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
         }
@@ -1508,7 +1507,6 @@ namespace OCC.Combat.Presentation
             if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
             state.AddLog(spell.DisplayName + "已经生效。");
             selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
-            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, spell.Id));
             visualFeedback?.NotifyFireSpell(execution);
             presentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
         }
@@ -1549,7 +1547,6 @@ namespace OCC.Combat.Presentation
             selection.ClearTarget();
             enemyPlans.Invalidate();
             MarkPresentation(UiPresentationArea.Combat);
-            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandSubmitted, command.Type.ToString()));
             feedbackPublisher.PublishCombatEffects(state, visualFeedback, result.Execution, result.MovementPath);
             PublishFireExecutions(result.AttackFireExecutions);
             visualFeedback?.NotifySkillDelivery(result.DeliveredSkill, result.DeliverySource, result.DeliveryTarget);
