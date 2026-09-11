@@ -57,6 +57,7 @@ namespace OCC.Combat.Presentation
         private readonly Image[] timelineCurrentEndpoint = new Image[5];
         private readonly Image[] timelinePreviewEndpoint = new Image[5];
         private readonly Image[] timelineOrderArrows = new Image[5];
+        private readonly TimelineRowInteraction[] timelineInteractions = new TimelineRowInteraction[5];
         // Values belong to a unit, rather than to a visual row. The order can change when a
         // turn is earned, so retaining them by row would make the most important transitions
         // jump as the entries swap places.
@@ -273,14 +274,12 @@ namespace OCC.Combat.Presentation
             GameObject bottom = FormalUiKit.LayoutPanel("战术指令", root.transform, "combat.commands", ink);
             GameObject spellGroup = Panel("术式组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(8, -2), new Vector2(1292, 196), panel);
             GameObject itemGroup = Panel("战术栏", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1308, -14), new Vector2(360, 172), panel);
-            Label("个人术式　数字键 1–8 快捷选择", spellGroup.transform, new Vector2(8, -2), new Vector2(1276, 32), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            Label("战术栏", itemGroup.transform, new Vector2(8, -4), new Vector2(344, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++)
             {
                 string action = "技能" + (slot + 1); int captured = slot;
                 Button button = Button(spellGroup.transform, action,
-                    new Vector2((slot % 4) * 320, -36 - (slot / 4) * 80),
-                    new Vector2(316, 76), "空槽", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize);
+                    new Vector2(16 + (slot % 4) * 316, -18 - (slot / 4) * 82),
+                    new Vector2(308, 74), "空槽", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize);
                 Image spellIcon = FormalUiKit.IconSlot("正式图标", button.transform, actionIcons[slot == 1 ? "skill_two" : "skill"], new Vector2(4, 0));
                 ConfigureSpellSlotLayout(button, spellIcon, slot);
                 button.onClick.AddListener(() => bootstrap.SelectHudAction(action)); actionButtons.Add(action, button);
@@ -306,12 +305,12 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
-                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(8 + (i % 2) * 176, -44 - (i / 2) * 62), new Vector2(168, 54), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(16 + (i % 2) * 164, -24 - (i / 2) * 62), new Vector2(156, 54), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
                 quickbarLabels[i] = quick.GetComponentInChildren<Text>();
                 ConfigureCompactFrame(quick);
                 quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(4, 0));
                 quickbarKeys[i] = FormalUiKit.Label("槽位", (i + 1).ToString(), quick.transform,
-                    new Vector2(142, -2), new Vector2(18, 24), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleCenter);
+                    new Vector2(130, -2), new Vector2(18, 24), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleCenter);
                 quick.onClick.AddListener(() => bootstrap.ActivateInventoryQuickbar(slot));
                 BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }
@@ -432,9 +431,9 @@ namespace OCC.Combat.Presentation
             Label("状态与被动", heroBack.transform, new Vector2(16, -4), new Vector2(192, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             Label("玩家状态", heroBack.transform, new Vector2(16, -42), new Vector2(176, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
             Label("被动效果", heroBack.transform, new Vector2(224, -42), new Vector2(176, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            Line(heroBack.transform, new Vector2(208, -46), new Vector2(2, 182), FormalUiTheme.WithAlpha(line, .72f));
-            heroStatusDetails = Label("玩家状态内容", heroBack.transform, new Vector2(16, -76), new Vector2(176, 152), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
-            heroPassiveDetails = Label("被动效果内容", heroBack.transform, new Vector2(224, -76), new Vector2(176, 152), 20, text, TextAnchor.UpperLeft);
+            Line(heroBack.transform, new Vector2(208, -46), new Vector2(2, 272), FormalUiTheme.WithAlpha(line, .72f));
+            heroStatusDetails = Label("玩家状态内容", heroBack.transform, new Vector2(16, -76), new Vector2(176, 242), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
+            heroPassiveDetails = Label("被动效果内容", heroBack.transform, new Vector2(224, -76), new Vector2(176, 242), 20, text, TextAnchor.UpperLeft);
             heroStatusDetails.lineSpacing = .88f;
             heroPassiveDetails.lineSpacing = .88f;
             heroStatusDetails.supportRichText = true;
@@ -448,7 +447,7 @@ namespace OCC.Combat.Presentation
             RectTransform scrollRect = scrollObject.AddComponent<RectTransform>();
             scrollRect.anchorMin = scrollRect.anchorMax = scrollRect.pivot = new Vector2(0f, 1f);
             scrollRect.anchoredPosition = new Vector2(16f, -52f);
-            scrollRect.sizeDelta = new Vector2(384f, 412f);
+            scrollRect.sizeDelta = new Vector2(384f, 322f);
             Image scrollSurface = scrollObject.AddComponent<Image>();
             scrollSurface.color = Color.clear;
             scrollSurface.raycastTarget = true;
@@ -472,8 +471,8 @@ namespace OCC.Combat.Presentation
             contentRect.anchorMax = new Vector2(1f, 1f);
             contentRect.pivot = new Vector2(.5f, 1f);
             contentRect.anchoredPosition = Vector2.zero;
-            contentRect.sizeDelta = new Vector2(0f, 412f);
-            historyText = Label("战斗记录", content.transform, new Vector2(0f, 0f), new Vector2(376f, 412f), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
+            contentRect.sizeDelta = new Vector2(0f, 322f);
+            historyText = Label("战斗记录", content.transform, new Vector2(0f, 0f), new Vector2(376f, 322f), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
             historyText.rectTransform.anchorMin = historyText.rectTransform.anchorMax = historyText.rectTransform.pivot = new Vector2(0f, 1f);
             historyText.rectTransform.anchoredPosition = Vector2.zero;
             historyText.horizontalOverflow = HorizontalWrapMode.Wrap;
@@ -494,41 +493,45 @@ namespace OCC.Combat.Presentation
 
         private void CreateTimelineSlot(int index)
         {
-            const float trackX = 114f;
-            const float trackWidth = 260f;
-            float y = -104f - index * 66f;
+            const float trackX = 116f;
+            const float trackWidth = 254f;
+            float y = -96f - index * 56f;
             Transform timelineParent = timelineFront != null ? timelineFront.transform : timelineModule.transform;
             GameObject row = FormalUiKit.FlatPanel("行动位" + (index + 1), timelineParent,
-                new Vector2(0, 1), new Vector2(0, 1), new Vector2(14, y), new Vector2(388, 60),
+                new Vector2(0, 1), new Vector2(0, 1), new Vector2(14, y), new Vector2(388, 52),
                 FormalUiTheme.WithAlpha(FormalUiTheme.Surface, index % 2 == 0 ? .86f : .70f));
             timelineRows[index] = row.GetComponent<Image>();
+            timelineRows[index].raycastTarget = true;
+            timelineInteractions[index] = row.AddComponent<TimelineRowInteraction>();
+            Line(row.transform, new Vector2(16, index == 0 ? -26 : -52), new Vector2(2, index == timelineRows.Length - 1 ? 26 : 52), FormalUiTheme.WithAlpha(line, .82f));
             GameObject node = Panel("行动节点" + (index + 1), row.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(10, 8), new Vector2(14, 14), muted);
             timelineNodes[index] = node.GetComponent<Image>();
-            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, -2), new Vector2(174, 30), CombatHudTypography.TimelineNameFontSize, muted, TextAnchor.MiddleLeft);
-            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(212, -2), new Vector2(140, 30), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
-            timelineSpeeds[index] = Label("行动速度" + (index + 1), row.transform, new Vector2(36, -30), new Vector2(74, 26),
+            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, -2), new Vector2(164, 26), CombatHudTypography.TimelineNameFontSize, muted, TextAnchor.MiddleLeft);
+            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(202, -2), new Vector2(150, 26), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
+            timelineSpeeds[index] = Label("行动速度" + (index + 1), row.transform, new Vector2(36, -27), new Vector2(80, 22),
                 CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(timelineNames[index]);
             FormalUiKit.ConfigureNumericLabel(timelineSpeeds[index]);
             FormalUiKit.ConfigureNumericLabel(timelineDetails[index]);
             GameObject track = FormalUiKit.FlatPanel("单位行动值轨道", row.transform, new Vector2(0, 0), new Vector2(0, 0),
-                new Vector2(trackX, 8), new Vector2(trackWidth, 8), FormalUiTheme.ResourceTrack);
-            GameObject retained = FormalUiKit.FlatPanel("保留行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 10), new Vector2(0, 4), FormalUiTheme.Amber);
+                new Vector2(trackX, 5), new Vector2(trackWidth, 8), FormalUiTheme.ResourceTrack);
+            GameObject retained = FormalUiKit.FlatPanel("保留行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(0, 4), FormalUiTheme.Amber);
             timelineRetained[index] = retained.GetComponent<Image>();
-            GameObject removed = FormalUiKit.FlatPanel("扣除行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 10), new Vector2(0, 4), FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .52f));
+            GameObject removed = FormalUiKit.FlatPanel("扣除行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(0, 4), FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .52f));
             timelineRemoved[index] = removed.GetComponent<Image>();
-            timelineCurrentEndpoint[index] = FormalUiKit.FlatPanel("当前端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(2, 10), FormalUiTheme.Text).GetComponent<Image>();
-            timelinePreviewEndpoint[index] = FormalUiKit.FlatPanel("预览端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(2, 10), FormalUiTheme.Amber).GetComponent<Image>();
+            timelineCurrentEndpoint[index] = FormalUiKit.FlatPanel("当前端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 4), new Vector2(2, 10), FormalUiTheme.Text).GetComponent<Image>();
+            timelinePreviewEndpoint[index] = FormalUiKit.FlatPanel("预览端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 4), new Vector2(2, 10), FormalUiTheme.Amber).GetComponent<Image>();
             GameObject arrow = FormalUiKit.Create("预测顺序箭头" + (index + 1), row.transform);
             RectTransform arrowRect = arrow.AddComponent<RectTransform>();
             arrowRect.anchorMin = arrowRect.anchorMax = arrowRect.pivot = new Vector2(0f, 1f);
-            arrowRect.anchoredPosition = new Vector2(360f, -8f);
+            arrowRect.anchoredPosition = new Vector2(360f, -6f);
             arrowRect.sizeDelta = new Vector2(16f, 16f);
             timelineOrderArrows[index] = arrow.AddComponent<Image>();
             timelineOrderArrows[index].raycastTarget = false;
             timelineOrderArrows[index].preserveAspect = true;
             timelineOrderArrows[index].gameObject.SetActive(false);
-            Line(row.transform, new Vector2(36, -58), new Vector2(338, 2), FormalUiTheme.WithAlpha(line, .34f));
+            foreach (Graphic graphic in row.GetComponentsInChildren<Graphic>())
+                if (graphic != timelineRows[index]) graphic.raycastTarget = false;
         }
 
         private void Refresh()
@@ -593,15 +596,18 @@ namespace OCC.Combat.Presentation
                 Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
                 timelineNodes[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
                 timelineRows[slot].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
-                timelineNames[slot].text = entry.Order + " " + CompactHud(entry.DisplayName, 7);
+                timelineNames[slot].text = entry.Order + " " + CompactHud(entry.DisplayName, 9);
                 timelineNames[slot].color = entry.IsActive ? text : muted;
-                timelineSpeeds[slot].text = "速 " + entry.EffectiveSpeed;
+                timelineSpeeds[slot].text = "行动速度 " + entry.EffectiveSpeed;
                 timelineSpeeds[slot].color = entry.IsActive ? faction : muted;
                 timelineDetails[slot].color = entry.IsActive ? faction : muted;
+                timelineInteractions[slot].Configure(entry.UnitId, timelineRows[slot],
+                    unitId => bootstrap.SetTimelineHoveredUnit(unitId),
+                    unitId => bootstrap.FocusBattlefieldOnUnit(unitId));
                 bool previewed = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview && timelinePreview.ActionValueTargetId == entry.UnitId;
                 int previewValue = previewed ? CombatActionTimeline.PreviewDelayedValue(state.GetUnit(entry.UnitId), timelinePreview.ActionValueDelay) : entry.ActionValue;
-                float currentWidth = 260f * entry.ActionValue / CombatActionTimeline.MaximumValue;
-                float previewWidth = 260f * previewValue / CombatActionTimeline.MaximumValue;
+                float currentWidth = 254f * entry.ActionValue / CombatActionTimeline.MaximumValue;
+                float previewWidth = 254f * previewValue / CombatActionTimeline.MaximumValue;
                 timelineRetained[slot].gameObject.SetActive(true);
                 timelineRemoved[slot].gameObject.SetActive(previewed);
                 timelineCurrentEndpoint[slot].gameObject.SetActive(previewed);
@@ -611,10 +617,10 @@ namespace OCC.Combat.Presentation
                 SetTimelineOrderArrow(slot, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
                 if (previewed)
                 {
-                    timelineRemoved[slot].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 10);
+                    timelineRemoved[slot].rectTransform.anchoredPosition = new Vector2(116 + previewWidth, 7);
                     timelineRemoved[slot].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 4);
-                    timelineCurrentEndpoint[slot].rectTransform.anchoredPosition = new Vector2(114 + currentWidth, 7);
-                    timelinePreviewEndpoint[slot].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 7);
+                    timelineCurrentEndpoint[slot].rectTransform.anchoredPosition = new Vector2(116 + currentWidth, 4);
+                    timelinePreviewEndpoint[slot].rectTransform.anchoredPosition = new Vector2(116 + previewWidth, 4);
                 }
             }
             for (int i = 0; i < quickbarLabels.Length; i++)
@@ -1436,7 +1442,7 @@ namespace OCC.Combat.Presentation
         private void PositionTimelineRow(int slot, int order, bool animate)
         {
             RectTransform rect = timelineRows[slot].rectTransform;
-            Vector2 target = new Vector2(14f, -104f - order * 66f);
+            Vector2 target = new Vector2(14f, -96f - order * 56f);
             rect.DOKill();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
             if (!animate || motion.IsImmediate)
@@ -1482,7 +1488,7 @@ namespace OCC.Combat.Presentation
             Image arrow = timelineOrderArrows[index];
             if (arrow == null) return;
             arrow.rectTransform.DOKill();
-            arrow.rectTransform.anchoredPosition = new Vector2(360f, -8f);
+            arrow.rectTransform.anchoredPosition = new Vector2(360f, -6f);
             if (direction == 0)
             {
                 arrow.gameObject.SetActive(false);
@@ -1497,7 +1503,7 @@ namespace OCC.Combat.Presentation
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
             if (!motion.IsImmediate)
                 DOTween.To(() => arrow.rectTransform.anchoredPosition.y, value =>
-                    arrow.rectTransform.anchoredPosition = new Vector2(360f, value), -8f + direction * 4f,
+                    arrow.rectTransform.anchoredPosition = new Vector2(360f, value), -6f + direction * 4f,
                     Mathf.Max(.24f, motion.StandardDuration * 1.5f)).SetEase(Ease.InOutSine)
                     .SetLoops(-1, LoopType.Yoyo).SetUpdate(true).SetTarget(arrow.rectTransform);
         }
@@ -1656,6 +1662,42 @@ namespace OCC.Combat.Presentation
                 if (timelineRetained[i] != null) timelineRetained[i].rectTransform.DOKill();
                 if (timelineOrderArrows[i] != null) timelineOrderArrows[i].rectTransform.DOKill();
             }
+        }
+    }
+
+    // Kept as a component so every row owns its own pointer lifecycle while the HUD rebinds data.
+    internal sealed class TimelineRowInteraction : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+    {
+        private string unitId;
+        private Image surface;
+        private Color restingColor;
+        private Action<string> hovered;
+        private Action<string> clicked;
+
+        public void Configure(string value, Image rowSurface, Action<string> hover, Action<string> click)
+        {
+            unitId = value;
+            surface = rowSurface;
+            restingColor = surface == null ? Color.clear : surface.color;
+            hovered = hover;
+            clicked = click;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (surface != null) surface.color = Color.Lerp(restingColor, FormalUiTheme.Cyan, .22f);
+            hovered?.Invoke(unitId);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            if (surface != null) surface.color = restingColor;
+            hovered?.Invoke(null);
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left) clicked?.Invoke(unitId);
         }
     }
 }

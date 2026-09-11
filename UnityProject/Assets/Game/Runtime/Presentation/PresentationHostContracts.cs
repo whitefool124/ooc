@@ -75,6 +75,8 @@ namespace OCC.Combat.Presentation
         void RequestLeaveCombat();
         void RequestTacticalRestart();
         void ReturnToDeveloperMenu();
+        void FocusBattlefieldOnUnit(string unitId);
+        void SetTimelineHoveredUnit(string unitId);
     }
 
     public interface IRogueliteUiHost : IUiPreferenceHost, IUiFeedbackHost

@@ -565,6 +565,13 @@ namespace OCC.Combat.Presentation
             developerFlow.Phase != CombatFlowPhase.DeveloperMenu && developerFlow.Phase != CombatFlowPhase.Briefing &&
             (mapRun == null || !mapRun.AwaitingReward);
         public void FocusBattlefieldOnHero() => FocusHeroInBattlefield();
+        public void FocusBattlefieldOnUnit(string unitId)
+        {
+            UnitState unit = state?.GetUnit(unitId);
+            if (unit == null || battlefieldViewport == null) return;
+            battlefieldViewport.Focus(unit.Position);
+        }
+        public void SetTimelineHoveredUnit(string unitId) => battlefieldView?.SetTimelineHoveredUnit(unitId);
         public void SubmitBattlefieldCell(GridPosition position, bool inspection)
         {
             if (state == null || !state.Map.IsInside(position)) return;

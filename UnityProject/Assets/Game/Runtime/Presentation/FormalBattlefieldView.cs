@@ -39,6 +39,8 @@ namespace OCC.Combat.Presentation
         private string activeTurnMarkerUnitId;
         private Vector2 activeTurnMarkerTarget;
         private bool hasActiveTurnMarkerTarget;
+        private RectTransform timelineHoverMarker;
+        private string timelineHoveredUnitId;
         public int CrowdedIntentCount { get; private set; }
         public int OccludedUnitCount { get; private set; }
         public int OcclusionPixelCount { get; private set; }
@@ -108,6 +110,11 @@ namespace OCC.Combat.Presentation
         }
 
         public void QueueCombatEntry() => combatEntryQueued = true;
+        public void SetTimelineHoveredUnit(string unitId)
+        {
+            if (timelineHoveredUnitId == unitId) return;
+            timelineHoveredUnitId = unitId;
+        }
 
         private void Update()
         {
@@ -604,6 +611,7 @@ namespace OCC.Combat.Presentation
                 RefreshIntentLink(cell, desired, placement.Bounds);
             }
             RefreshActiveTurnMarker(safe);
+            RefreshTimelineHoverMarker(safe);
         }
 
         private static Rect BoardChildRect(CellView cell, RectTransform child) => new Rect(
@@ -703,6 +711,43 @@ namespace OCC.Combat.Presentation
             AddMarkerPart("指针青_0", new Rect(30, 1, 12, 2), signal);
             AddMarkerPart("指针青_1", new Rect(32, 5, 8, 2), signal);
             AddMarkerPart("指针青_2", new Rect(34, 9, 4, 2), signal);
+        }
+
+        private void RefreshTimelineHoverMarker(Rect visibleArea)
+        {
+            if (timelineHoverMarker == null)
+            {
+                timelineHoverMarker = FormalUiKit.Create("行动条悬浮定位框", boardRect).AddComponent<RectTransform>();
+                timelineHoverMarker.anchorMin = timelineHoverMarker.anchorMax = timelineHoverMarker.pivot = new Vector2(0f, 1f);
+                AddTimelineHoverEdge("上", new Rect(4, 12, 64, 3));
+                AddTimelineHoverEdge("下", new Rect(4, 83, 64, 3));
+                AddTimelineHoverEdge("左", new Rect(4, 12, 3, 74));
+                AddTimelineHoverEdge("右", new Rect(65, 12, 3, 74));
+            }
+
+            CellView target = string.IsNullOrEmpty(timelineHoveredUnitId) ? null :
+                visibleUnits.FirstOrDefault(cell => cell.PresentedUnitId == timelineHoveredUnitId);
+            if (target == null)
+            {
+                timelineHoverMarker.gameObject.SetActive(false);
+                return;
+            }
+
+            float scale = host.BattlefieldViewport.CellSize / 64f;
+            Rect frame = CombatIntentLayout.ActiveTurnMarker(target.VisualFoot, host.BattlefieldViewport.CellSize);
+            timelineHoverMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
+            timelineHoverMarker.localScale = new Vector3(scale, scale, 1f);
+            timelineHoverMarker.sizeDelta = new Vector2(72f, 86f);
+            if (unitLayerRect != null) timelineHoverMarker.SetSiblingIndex(unitLayerRect.GetSiblingIndex());
+            timelineHoverMarker.anchoredPosition = new Vector2(frame.x, -frame.y);
+        }
+
+        private void AddTimelineHoverEdge(string name, Rect bounds)
+        {
+            Image image = FormalUiKit.Create("行动条定位框_" + name, timelineHoverMarker).AddComponent<Image>();
+            image.color = FormalUiTheme.Amber;
+            image.raycastTarget = false;
+            SetTopLeft(image.rectTransform, bounds.x, bounds.y, bounds.width, bounds.height);
         }
 
         private void AddCorner(float x, float y, bool right, bool bottom, Color black, Color signal)
@@ -1246,6 +1291,7 @@ namespace OCC.Combat.Presentation
         private void OnDestroy()
         {
             if (activeTurnMarker != null) activeTurnMarker.DOKill();
+            if (timelineHoverMarker != null) timelineHoverMarker.DOKill();
         }
 
         private static void SetInset(RectTransform rect, float inset) =>
