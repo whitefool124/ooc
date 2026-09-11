@@ -275,7 +275,7 @@ namespace OCC.Combat.Tests
             GameObject hudObject = new GameObject("spell-slot-hud", typeof(FormalCombatHud));
             try
             {
-                Button button = FormalUiKit.Button("技能1", "火花", root.transform, Vector2.zero, new Vector2(268f, 76f),
+                Button button = FormalUiKit.Button("技能1", "火花", root.transform, Vector2.zero, new Vector2(316f, 76f),
                     FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize);
                 Image icon = FormalUiKit.IconSlot("正式图标", button.transform, null, Vector2.zero);
                 typeof(FormalCombatHud).GetMethod("ConfigureSpellSlotLayout", BindingFlags.Static | BindingFlags.NonPublic)
@@ -306,27 +306,27 @@ namespace OCC.Combat.Tests
                 Assert.That(name.text, Is.EqualTo("火花"));
                 Assert.That(name.alignment, Is.EqualTo(TextAnchor.MiddleCenter));
                 Assert.That(name.rectTransform.anchoredPosition, Is.EqualTo(new Vector2(74f, -6f)));
-                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(122f, 64f)));
+                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(170f, 64f)));
                 Assert.That(name.horizontalOverflow, Is.EqualTo(HorizontalWrapMode.Wrap));
                 Assert.That(name.verticalOverflow, Is.EqualTo(VerticalWrapMode.Truncate));
-                Assert.That(resourceBlock.anchoredPosition, Is.EqualTo(new Vector2(202f, -6f)));
+                Assert.That(resourceBlock.anchoredPosition, Is.EqualTo(new Vector2(250f, -6f)));
                 Assert.That(resourceBlock.sizeDelta, Is.EqualTo(new Vector2(60f, 64f)));
                 Assert.That(standardSkin, Is.Not.Null);
                 Assert.That(standardSkin.gameObject.activeSelf, Is.False);
                 Assert.That(button.GetComponent<Image>().sprite, Is.Null);
                 Assert.That(button.GetComponent<Image>().type, Is.EqualTo(Image.Type.Simple));
                 Assert.That(frameTop.anchoredPosition, Is.EqualTo(Vector2.zero));
-                Assert.That(frameTop.sizeDelta, Is.EqualTo(new Vector2(268f, 2f)));
+                Assert.That(frameTop.sizeDelta, Is.EqualTo(new Vector2(316f, 2f)));
                 Assert.That(frameBottom.anchoredPosition, Is.EqualTo(new Vector2(0f, -74f)));
-                Assert.That(frameBottom.sizeDelta, Is.EqualTo(new Vector2(268f, 2f)));
+                Assert.That(frameBottom.sizeDelta, Is.EqualTo(new Vector2(316f, 2f)));
                 Assert.That(frameLeft.sizeDelta, Is.EqualTo(new Vector2(2f, 76f)));
-                Assert.That(frameRight.anchoredPosition, Is.EqualTo(new Vector2(266f, 0f)));
+                Assert.That(frameRight.anchoredPosition, Is.EqualTo(new Vector2(314f, 0f)));
                 Assert.That(frameRight.sizeDelta, Is.EqualTo(new Vector2(2f, 76f)));
                 Assert.That(frameTop.GetComponent<Image>().color, Is.EqualTo(FormalUiTheme.Rule));
                 Assert.That(resourceBlock.GetComponent<Image>().color.a, Is.EqualTo(1f));
                 Assert.That(resourceBlock.GetComponent<Image>().color.b, Is.GreaterThan(resourceBlock.GetComponent<Image>().color.r));
-                Assert.That(actionCost.anchoredPosition, Is.EqualTo(new Vector2(204f, -6f)));
-                Assert.That(aetherCost.anchoredPosition, Is.EqualTo(new Vector2(204f, -38f)));
+                Assert.That(actionCost.anchoredPosition, Is.EqualTo(new Vector2(252f, -6f)));
+                Assert.That(aetherCost.anchoredPosition, Is.EqualTo(new Vector2(252f, -38f)));
                 Assert.That(actionCost.sizeDelta, Is.EqualTo(new Vector2(56f, 32f)));
                 Assert.That(aetherCost.sizeDelta, Is.EqualTo(new Vector2(56f, 32f)));
                 Assert.That(actionIcon.rectTransform.sizeDelta, Is.EqualTo(new Vector2(32f, 32f)));
@@ -348,14 +348,14 @@ namespace OCC.Combat.Tests
                 typeof(FormalCombatHud).GetMethod("SetNoticeChip", BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.Invoke(hud, new object[] { button, true, 2 });
                 RectTransform notice = button.transform.Find("语义_notice").GetComponent<RectTransform>();
-                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(84f, 64f)));
-                Assert.That(notice.anchoredPosition, Is.EqualTo(new Vector2(164f, -24f)));
+                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(132f, 64f)));
+                Assert.That(notice.anchoredPosition, Is.EqualTo(new Vector2(212f, -24f)));
                 Assert.That(notice.sizeDelta, Is.EqualTo(new Vector2(32f, 28f)));
                 Assert.That(name.rectTransform.anchoredPosition.x + name.rectTransform.rect.width, Is.LessThan(notice.anchoredPosition.x));
                 Assert.That(notice.anchoredPosition.x + notice.rect.width, Is.LessThan(resourceBlock.anchoredPosition.x));
                 typeof(FormalCombatHud).GetMethod("SetNoticeChip", BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.Invoke(hud, new object[] { button, false, -1 });
-                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(122f, 64f)));
+                Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(170f, 64f)));
                 Assert.That(notice.gameObject.activeSelf, Is.False);
                 typeof(FormalCombatHud).GetMethod("ApplySpellAvailabilityVisual", BindingFlags.Static | BindingFlags.NonPublic)
                     ?.Invoke(null, new object[] { button, false, "术式槽为空", false });

@@ -556,7 +556,14 @@ namespace OCC.Combat.Presentation
         {
             if (state == null || !state.Map.IsInside(position)) return;
             if (inspection) HandleInspectionClick(position);
+            else if (IsHeroPosition(position)) SelectHudAction("移动");
             else HandleCellClick(position);
+        }
+
+        private bool IsHeroPosition(GridPosition position)
+        {
+            UnitState hero = state?.GetUnit("hero");
+            return hero != null && hero.IsAlive && hero.Position == position;
         }
         public bool CanQuickMoveTo(GridPosition position) => !IsCombatActionPlaying && state != null &&
             string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, "移动", position));
