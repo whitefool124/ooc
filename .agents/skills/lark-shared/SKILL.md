@@ -1,7 +1,8 @@
 ---
 name: lark-shared
-version: 1.0.0
 description: "Use for lark-cli setup/auth tasks: auth login/status/logout, user vs bot identity, business-domain permissions (--domain, including all/docs/drive), missing scopes, revoking authorization, or handling _notice JSON."
+metadata:
+  version: 1.0.0
 ---
 
 # lark-cli 共享规则
@@ -10,11 +11,11 @@ description: "Use for lark-cli setup/auth tasks: auth login/status/logout, user 
 
 ## 配置初始化
 
-首次使用需运行 `lark-cli config init` 完成应用配置。
+仅在尚未配置或用户要求重新配置时运行 `lark-cli config init`；已有配置直接复用。
 
 当你帮用户初始化配置时，使用background方式使用下面的命令发起配置应用流程，启动后读取输出，从中提取授权链接并发给用户。
 
-**URL 转发规则**：当命令输出 `verification_url`、`verification_uri_complete`、`console_url` 等 URL 字段时：**必须生成二维码**：你必须调用 `lark-cli auth qrcode` 将 URL 转为二维码并展示给用户，这是必须步骤，不要跳过。优先生成 PNG 二维码（--output）；仅当用户明确要求时才使用 ASCII（--ascii）。**URL 输出规则**：将 URL 视为不可修改的 opaque string，不要做任何修改（包括 URL 编码/解码、添加空格或标点、重新拼接 query），二维码和链接请一起展示给用户。
+**授权链接**：原样展示 CLI 返回的 URL，不编解码或重拼 query。用户要求二维码或移动端扫码更方便时，使用 `lark-cli auth qrcode` 生成 PNG 并同时展示链接；二维码不是每次授权的必经步骤。
 
 ```bash
 # 发起配置（该命令会阻塞直到用户打开链接并完成操作或过期）
@@ -122,45 +123,17 @@ lark-cli auth login --scope "<missing_scope>" --no-wait --json  # 按具体 scop
 
 **规则**：auth login 必须指定范围（`--domain` 或 `--scope`）。多次 login 的 scope 会累积（增量授权）。
 
-#### Agent 代理发起认证（推荐）
+#### Agent 代理发起认证
 
-当你作为 AI agent 需要帮用户完成认证时，优先使用 split-flow，避免在同一轮对话中阻塞等待用户授权：
-
-```bash
-# 发起授权（立即返回 device_code 和 verification_url）
-lark-cli auth login --scope "calendar:calendar:readonly" --no-wait --json
-```
-
-拿到 `verification_url` 后，将它原样作为本轮最终消息发给用户，并结束本轮/交还控制权。不要在同一轮中展示 URL 后立刻执行 `--device-code` 阻塞轮询；在不透传中间输出的 agent harness 里，这会导致用户永远看不到 URL。
-
-用户回复已完成授权后，再在后续步骤执行：
+仅在任务需要且当前认证/权限确实缺失时发起授权，使用所需的最小 `--scope` 或 `--domain`：
 
 ```bash
-lark-cli auth login --device-code <device_code>
+lark-cli auth login --scope "<required_scope>" --no-wait --json
 ```
 
-**Split-Flow 完整步骤**：
+立即向用户展示返回的 `verification_url`；`device_code` 仅用于当前认证流程，不写入报告或长期保存。若客户端只能在最终回复展示链接，先交还控制权；能展示中间结果时可继续独立工作，不因授权流程强制结束整项任务。
 
-**第一步：发起授权（当前轮）**
-
-1. 执行 `lark-cli auth login --scope "xxx" --no-wait --json`（必须加 `--no-wait --json`）
-2. 从 JSON 输出中提取 `verification_url` 和 `device_code`
-3. 生成二维码：`lark-cli auth qrcode <verification_url> --output "xxx"`
-4. 将 URL 和二维码展示给用户（先 URL，后二维码）
-5. **结束本轮对话前，必须明确告知用户**："请完成授权后，回来告诉我已授权完成，我会帮你完成后续步骤"
-
-**第二步：完成授权（后续轮）**
-
-1. 等待用户回复"已完成授权"
-2. **由你（AI agent）亲自执行**：`lark-cli auth login --device-code <device_code>`
-3. 此命令会轮询授权状态并完成登录
-4. 如果返回授权成功，流程结束
-
-**关键规则**：
-
-- **你必须亲自执行 `--device-code` 命令**，不要指示用户自行执行
-- **不要在同一轮中展示 URL 后立刻执行 `--device-code`**，这会导致用户看不到 URL
-- **禁止缓存 `verification_url` 或 `device_code`**：每次需要重新发起授权时，必须沿用所需的 `--scope`、`--domain` 或 `--recommend` 选择以及任何 `--exclude` 值，并附加 `--no-wait --json` 生成新的链接。不要复用已过期的授权链接或 device code
+用户完成授权后，由 agent 执行 `lark-cli auth login --device-code <device_code>` 并核对成功结果。不要在用户尚未看到链接时阻塞轮询。链接或 code 过期后，保留原 scope/domain/exclude 选择重新发起；不复用过期凭据。
 
 ## 更新检查
 
@@ -203,7 +176,7 @@ lark-cli update
 ## 安全规则
 
 - **禁止输出密钥**（appSecret、accessToken）到终端明文。
-- **写入/删除操作前必须确认用户意图**。
+- **写入/删除前核对完整会话中的具体授权**。明确请求覆盖动作、目标和范围时继续，不重复确认；身份、目标或影响发生实质变化时再询问。
 - 用 `--dry-run` 预览危险请求。
 - **文件路径只接受相对路径**：`--file`、`--output`、`--output-dir`、`@file` 等路径参数只接受 cwd 下的相对路径，传绝对路径会报 `unsafe file path`。数据输入（`@file`、大 JSON）优先用 stdin 传入，避免路径和转义问题。
 
@@ -229,8 +202,8 @@ lark-cli 对高风险写操作（`risk: "high-risk-write"`）有强制确认门�
 **遇到这种情况，不要当普通错误放弃。** 按以下流程处理：
 
 1. **识别**：看到子进程 exit code = `10` 且 stderr JSON 里 `error.type == "confirmation"`、`error.subtype == "confirmation_required"`
-2. **向用户确认**：把 `error.action`、`error.risk` 和关键参数展示给用户，明确告知"这是高风险操作"，等待用户显式同意
-3. **用户同意** → 在你**原始 argv 的末尾追加 `--yes`** 后重试
+2. **核对授权**：检查完整会话中对动作、目标、范围与影响的具体同意。已有授权且未实质变化时继续；缺少授权时，先完成只读准备并展示具体影响，再询问。exit 10 本身不构成授权。
+3. **已有有效授权或取得新同意** → 在你**原始 argv 的末尾追加 `--yes`** 后重试
 4. **用户拒绝** → 终止流程，不要擅自改写参数或跳过门禁
 
 **绝对不允许**：

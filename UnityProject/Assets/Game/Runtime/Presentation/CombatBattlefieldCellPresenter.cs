@@ -147,13 +147,17 @@ namespace OCC.Combat.Presentation
             bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
                 unit != null && unit.Id == selection.TargetId;
             Texture2D selectionOverlay = selected ? assets.Overlay("selected") : null;
-            string hover = unit == null ? BuildTerrainHover(state, fireBattle, tile, position) : unit.IsHero
+            string surfaceHover = BuildSurfaceHover(level, position);
+            string terrainEffectHover = BuildTerrainEffectHover(state, fireBattle, tile, position);
+            string objectHover = BuildObjectHover(state, tile, position);
+            string terrainHover = JoinHoverSections(surfaceHover, terrainEffectHover, objectHover);
+            string hover = unit == null ? terrainHover : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
                   FixedEncounterEnemyRuleText(state, unit) +
                   (forecast == null ? string.Empty : "\n预计伤害：" + forecast.PlayerSummary);
             if (unit != null)
-                hover = AppendTerrainHover(hover, BuildTerrainHover(state, fireBattle, tile, position));
+                hover = AppendTerrainHover(hover, terrainHover);
             Texture2D floor = assets.Academy(FloorKey(level, state.Map.Height, position.X, position.Y));
             Rect floorUv = FloorUv(position.X, position.Y);
             float floorRotation = FloorRotationDegrees(level, position.X, position.Y);
@@ -168,45 +172,70 @@ namespace OCC.Combat.Presentation
                 .64f, attack, .72f,
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover, travelOffset,
-                tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0);
+                tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
+                surfaceHover, terrainEffectHover, objectHover);
         }
 
         public static string AppendTerrainHover(string unitHover, string terrainHover) =>
-            string.IsNullOrWhiteSpace(terrainHover) ? unitHover : unitHover + "\n\n脚下地形 · " + terrainHover;
+            string.IsNullOrWhiteSpace(terrainHover) ? unitHover : unitHover + "\n\n脚下地形\n" + terrainHover;
 
-        public static string BuildTerrainHover(CombatState state, FireBattleState fireBattle, TileState tile,
+        public static string BuildSurfaceHover(FirstRegionLevelDefinition level, GridPosition position)
+        {
+            string floor = FloorKey(level, level?.Height ?? 0, position.X, position.Y);
+            if (floor.Contains("_earth_")) return "夯土地坪，可正常通行。";
+            if (floor.Contains("_road_")) return "学院道路，可正常通行。";
+            if (floor.Contains("_ruin_")) return "受损地坪，可正常通行。";
+            return "学院地坪，可正常通行。";
+        }
+
+        public static string BuildTerrainEffectHover(CombatState state, FireBattleState fireBattle, TileState tile,
             GridPosition position)
         {
             if (state == null || tile == null) return string.Empty;
-            if (tile.IsLampVine)
-                return "灯藤\n可进入；进入消耗 2 移动距离并阻挡双方视线。藤内只能攻击相邻目标；可作用物块的火焰会烧去一格。";
-            if (tile.IsAetherCrystal)
-                return "蓄能晶簇（占位表现）\n不可进入、不阻挡攻击线；耐久 " + tile.Durability + "。摧毁后对正交四格造成 8 点以太伤害，并生成五格碎晶。";
-            if (tile.IsCrystalShard)
-                return "碎晶（占位表现）\n可进入；进入消耗 2 移动距离，不阻挡攻击线且不持续造成伤害。";
-            if (tile.IsScorched)
-                return "灯藤焦痕\n纯视觉痕迹；原地表已露出，不造成伤害、遮挡或状态。";
+            var effects = new List<string>();
             if (tile.IsWater)
-                return "浅水\n主角进入消耗 2 移动距离，寻迹兽进入消耗 1；进入时立即移除燃烧。";
-            if (state.Loot != null && state.Loot.Position == position)
-                return state.Loot.IsLooted ? "空战利品箱\n里面已经没有东西了。" : "战利品箱\n走到旁边就能打开，看看里面有什么。";
-            if (state.LootSource != null && state.LootSource.Position == position)
-                return state.LootSource.State == LootSearchState.Emptied ? "空检修备件箱\n苗床回流芯已经取走。" :
-                    "中央检修备件箱\n站在正交邻格搜刮消耗 1 AP；固定藏有苗床回流芯。";
-            if (tile.IsObjective)
-                return tile.IsDestroyed ? "损毁导能柱\n目标物已失效。" : "导能柱\n任务目标 · 耐久 " + tile.Durability + "；可被互动或指定术式影响。";
-            if (tile.Cover == CoverType.Light)
-                return tile.IsDestroyed ? "轻掩体残骸\n已失去防护效果，可正常通行。" : "轻掩体\n耐久 " + tile.Durability + "；肉鸽战斗中站立其上，于自身回合结束获得 2 护盾。";
-            if (tile.Cover == CoverType.Heavy)
-                return tile.IsDestroyed ? "重掩体残骸\n已失去阻挡和防护效果。" : "重掩体\n耐久 " + tile.Durability + "；阻挡移动与视线，肉鸽战斗中与其正交相邻时于自身回合结束获得 4 护盾。";
-            if (tile.IsDevice)
-                return tile.IsDestroyed ? "损毁设备\n设备已经失效。" : "战场设备\n耐久 " + tile.Durability + "；可被互动、破坏或指定术式影响。";
+                effects.Add("浅水使主角进入消耗 2 移动距离、寻迹兽消耗 1，并在进入时移除燃烧");
             if (fireBattle?.HasFireground(position) == true)
-                return "燃烧地面\n进入或停留可能触发火焰伤害；剩余时间由施术效果决定。";
+                effects.Add("燃烧地面会在进入或停留时触发火焰伤害");
             if (tile.SmokeExpiresAt > state.CurrentTime)
-                return "烟雾\n临时环境效果；会在第 " + tile.SmokeExpiresAt + " 行动时消散。";
-            return string.Empty;
+                effects.Add("烟雾会在第 " + tile.SmokeExpiresAt + " 行动时消散");
+            if (tile.IsScorched)
+                effects.Add("灯藤焦痕仅作视觉记录，不造成伤害、遮挡或状态");
+            return effects.Count == 0 ? string.Empty : string.Join("；", effects) + "。";
         }
+
+        public static string BuildObjectHover(CombatState state, TileState tile, GridPosition position)
+        {
+            if (state == null || tile == null) return string.Empty;
+            var objects = new List<string>();
+            if (tile.IsLampVine)
+                objects.Add("灯藤可进入，进入消耗 2 移动距离并阻挡双方视线，藤内只能攻击相邻目标，可作用物块的火焰会烧去一格");
+            else if (tile.IsAetherCrystal)
+                objects.Add("蓄能晶簇不可进入且不阻挡攻击线，耐久 " + tile.Durability + "，摧毁后对正交四格造成 8 点以太伤害并生成五格碎晶");
+            else if (tile.IsCrystalShard)
+                objects.Add("碎晶可进入，进入消耗 2 移动距离，不阻挡攻击线且不持续造成伤害");
+            else if (tile.IsObjective)
+                objects.Add(tile.IsDestroyed ? "损毁导能柱已经失效" :
+                    "导能柱耐久 " + tile.Durability + "，可被互动或指定术式影响");
+            else if (tile.Cover == CoverType.Light)
+                objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果，可正常通行" :
+                    "轻掩体耐久 " + tile.Durability + "，肉鸽战斗中站立其上会在自身回合结束获得 2 护盾");
+            else if (tile.Cover == CoverType.Heavy)
+                objects.Add(tile.IsDestroyed ? "重掩体残骸已失去阻挡和防护效果" :
+                    "重掩体耐久 " + tile.Durability + "，会阻挡移动与视线，肉鸽战斗中与其正交相邻会在自身回合结束获得 4 护盾");
+            else if (tile.IsDevice)
+                objects.Add(tile.IsDestroyed ? "损毁设备已经失效" :
+                    "战场设备耐久 " + tile.Durability + "，可被互动、破坏或指定术式影响");
+            if (state.Loot != null && state.Loot.Position == position)
+                objects.Add(state.Loot.IsLooted ? "战利品箱已经清空" : "战利品箱可在相邻位置打开");
+            else if (state.LootSource != null && state.LootSource.Position == position)
+                objects.Add(state.LootSource.State == LootSearchState.Emptied ? "检修备件箱已经清空" :
+                    "中央检修备件箱可在正交邻格消耗 1 AP 搜刮，固定藏有苗床回流芯");
+            return objects.Count == 0 ? string.Empty : string.Join("；", objects) + "。";
+        }
+
+        private static string JoinHoverSections(params string[] sections) =>
+            string.Join("\n", sections.Where(value => !string.IsNullOrWhiteSpace(value)));
 
         public static string FloorKey(FirstRegionLevelDefinition level, int mapHeight, int x, int y)
         {

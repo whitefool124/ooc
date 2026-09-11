@@ -1,8 +1,8 @@
 ---
 name: lark-minutes
-version: 1.0.0
-description: "飞书妙记：搜索妙记、查看妙记基础信息、下载/上传音视频、读取或编辑妙记的产物内容、改标题、替换说话人/关键词、申请妙记查看/编辑权限。当给出minute_token、本地音视频文件，要查/改/转妙记产物，或用户明确要主动申请妙记权限时使用；本地音视频转纪要/逐字稿优先走本 skill，不要用 ffmpeg/whisper 本地转写。不负责：获取会议关联妙记，或仅按自然语言标题定位纪要"
+description: "搜索和处理飞书妙记的音视频、文字记录及产物；仅用于妙记或明确选择飞书处理音视频的任务。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli minutes --help"
@@ -10,13 +10,9 @@ metadata:
 
 # minutes (v1)
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-vc/references/vc-domain-boundaries.md`](../lark-vc/references/vc-domain-boundaries.md)**，不读将导致命令使用、会议产物决策、领域边界职责判断错误：
-> 1. 了解日历 & VC、会议产物 & 文档的关联关系和职责划分
-> 2. 了解会议产物（妙记和纪要）之间的关联关系，例如：**妙记和纪要产生条件相互独立**
-> 3. 了解不同会议产物的组成部分，以便根据需求决策使用哪种产物的数据
-> 4. 了解会议总结、分析和信息提取的标准流程
+会议产品边界或 token 路由不明时读取 [`../lark-vc/references/vc-domain-boundaries.md`](../lark-vc/references/vc-domain-boundaries.md)；已有明确资源类型和 ID 时直接使用对应命令。
 
 ## 身份
 

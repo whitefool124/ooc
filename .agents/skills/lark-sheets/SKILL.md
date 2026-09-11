@@ -1,8 +1,8 @@
 ---
 name: lark-sheets
-version: 3.1.2
-description: "飞书电子表格：创建和操作电子表格。支持创建表格、管理工作表与行列结构（增删/合并/调整尺寸/隐藏/冻结）、读写单元格（值/公式/样式/批注/单元格图片）、查找替换、多操作批量更新，以及图表、透视表、条件格式、筛选器、迷你图、浮动图片等对象的创建与维护。当用户需要创建电子表格、管理工作表、批量读写或编辑数据、统计汇总与可视化、表格美化、公式计算（含 Excel 公式迁移）、金融/财务建模（DCF、三张表、预算、Sensitivity 等）等任务时使用。若用户是想按名称或关键词搜索云空间（云盘/云存储）里的表格文件，请改用 lark-drive 的 drive +search 先定位资源。当用户给出 doubao.com 的 /sheets/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。"
+description: "读写和管理飞书电子表格的单元格、结构、公式、样式及图表；本地表格或 Base 不触发。"
 metadata:
+  version: 3.1.2
   requires:
     bins: ["lark-cli"]
     siblings: ["lark-shared"]
@@ -11,7 +11,7 @@ metadata:
 
 # sheets
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理。**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ## 术语约定
 
@@ -30,15 +30,15 @@ metadata:
 
 下列准则横切所有任务，**动手前先过一遍**——被索引直接路由进某个工具参考也一律生效；展开与边界见括注的 reference。
 
-1. **最小改动**：除任务要改的单元格 / 列外，原表其它单元格、行列结构、Sheet 名、合并区、格式 1:1 保持；中间结果放原数据右侧或新建空白 Sheet，**禁止删 / 改名 / 隐藏 / 移动已存在 Sheet**；改写类任务精确圈定行列，不该转的原值 1:1 保留。
+1. **最小改动**：除任务要改的单元格 / 列外，原表其它单元格、行列结构、Sheet 名、合并区、格式 1:1 保持；中间结果放原数据右侧或新建空白 Sheet，**仅在用户请求的范围内删 / 改名 / 隐藏 / 移动已有 Sheet**；改写类任务精确圈定行列，不该转的原值 1:1 保留。
 2. **真实写回 + 回读校验**：交付必须是对在线表格的真实写入，写完用 `+csv-get` / `+cells-get` / `+<对象>-list` 回读确认实际生效——**写操作返回 `ok` 只代表请求被接受、不代表结果符合预期**；写公式后查错误码、筛选 / 排序后核对前几行、删除 / 清空后确认已空。禁止只在文本里声称"已完成"。
 3. **读全再写**：批量填充 / 补齐 / 修正类任务先确认真实数据末行再写，只探前 N 行会漏写表尾（确定末行流程见 `lark-sheets-read-data`）。
-4. **公式优先于硬编码**：能用公式表达的计算（总计 / 占比 / 提取 / 查找）一律写公式而非静态值——**凡可由表内其它单元格推导的派生值默认用公式，即使用户没说"联动"**；写公式前先读 `lark-sheets-formula-translation`，**公式落表后收尾必跑 `+formula-verify` 直到 `status='success'`**。
+4. **公式优先于硬编码**：需要随源数据更新的计算（总计 / 占比 / 提取 / 查找）使用公式；用户明确要求冻结值、快照或静态导出时保留该意图——默认派生列可使用公式，不能覆盖用户指定的静态交付；写公式前先读 `lark-sheets-formula-translation`，**公式落表后收尾必跑 `+formula-verify` 直到 `status='success'`**。
 5. **续写 / 扩展继承样式**：续写、补齐、复制区块、新增行列时禁止只读值只写值，必须连带 `cell_styles` + `border_styles` + 合并 + 行高一起继承（清单见 `lark-sheets-write-cells`，四边框最易漏）。
 6. **多步写入分流**：美化收尾（样式 / 合并 / 行高列宽 / 冻结的任意组合）→ 一次 `+styles-put` 声明式规格交付（见 `lark-sheets-styles-put`）；**同一个写操作**打多个区域 → 用该命令自身的复数形态（`--ranges` / map 入参）；只有**跨类型、有顺序依赖的操作链**（如插列 → 写表头 → 回填数据）才用 `+batch-update`（high-risk-write：按下方审批协议先获用户同意再带 `--yes`；fail-fast 不回滚，语义见 `lark-sheets-batch-update`）。
-7. **分组汇总用透视表**："按 X 统计 Y / 分组汇总 / 各类数量金额"用 `+pivot-{create|update|delete}`，禁止用 SUMIF / 本地脚本拼一张假透视表。
-8. **拆成可验证 checklist**：落地前把指令拆成所有"独立可验证子要点"，逐点 `assert` 全过才交付（多维排序每维一点、多目标每目标一点、范围类核起 / 末 / 边界）；只做第一个要点属违规。
-9. **全量处理前置断言条数**：翻译 / 打标 / 批量公式落地等逐条任务，先把预期条数硬编码再 `assert actual == expected`，禁止输出"已完成前 N 条，剩余继续"的半成品。
+7. **匹配汇总对象**：用户要求透视表时用 `+pivot-{create|update|delete}` 并回读对象；普通分组分析可选择公式、透视表或只读计算，不能将普通汇总表冒称为透视表。
+8. **按目标验证**：覆盖用户的各项要求及真实范围边界；简单改动回读即可，复杂批处理可使用断言。
+9. **覆盖完整范围**：批量任务从实际数据确定应处理条数并与结果核对；完成全部授权范围。未完成或数据受限时如实说明，不能硬编码假设条数充当验证。
 10. **缺失值不编造**：补齐 / 扩展 / 按原表格式续填时，查不到或无法确定的值一律留空 + 备注注明（"暂未发布 / 未知 / 待核实"），禁止用推算值 / 估算值 / 凭空数据充数；原表若已示范缺失值写法（空值 + 备注），照抄该约定。宁可留空标注，不填不可靠的数。
 
 > 端到端工作流：了解结构（`scripts/lark_inspect_workbook.py` / `+workbook-info`）→ 读数据 → 理解语义 → 原生工具优先 → 写入 → 回读验证；实操展开见下方「执行要点」。
@@ -66,8 +66,8 @@ metadata:
 | 导入本地 xlsx/xls/csv 文件为飞书电子表格 | `+workbook-import --file ./x.xlsx`（仅要导成多维表格 bitable 时才用 `drive +import --type bitable`） | `lark-sheets-workbook` | `drive +import`（绕路）、本地读 .xlsx 再 `+workbook-create` 重灌（多此一举）、想并入**已有工作簿**却用它（import 只会另起新表，加子表走 `+sheet-copy` / `+sheet-create`） |
 | 参考某个**已有在线表**、把多份数据各作为一张子表**追加**进去 | 先 `+workbook-info` → `+sheet-copy` 复制模板子表（公式 / 合并 / 底色 / 列宽全继承）再 `+cells-*` 只改数据；无模板可继承时 `+sheet-create` + `+table-put --sheets/--styles` | `lark-sheets-workbook` | `+workbook-import` / `+workbook-create` 另起独立新表（这两条只产新表、不接受已有表定位） |
 | **已有**表美化收尾（样式 / 边框 / 合并 / 行高列宽 / 冻结的任意组合，单表或多表） | `+styles-put --styles '{"styles":[{"name":…,"cell_styles":[…],"cell_merges":[…],"row_sizes":[…],"col_sizes":[…],"freeze":{…}}]}'`（一份规格一次交付，词汇同 `+table-put --styles`） | `lark-sheets-styles-put` | 拼 `+batch-update` 的 `--operations` 子操作数组做美化、逐区域多次 `+cells-set-style` |
-| 清除内容 / 格式 | `+cells-clear`（high-risk-write 需用户确认后带 `--yes`；范围维度用 `--scope`，取值 content / formats / all） | `lark-sheets-range-operations` | `--type` |
-| 批量清除多区域 | `+cells-batch-clear`（high-risk-write 需用户确认后带 `--yes`；`--scope`） | `lark-sheets-batch-update` | `--target` |
+| 清除内容 / 格式 | `+cells-clear`（high-risk-write 核对已有具体授权后带 `--yes`；范围维度用 `--scope`，取值 content / formats / all） | `lark-sheets-range-operations` | `--type` |
+| 批量清除多区域 | `+cells-batch-clear`（high-risk-write 核对已有具体授权后带 `--yes`；`--scope`） | `lark-sheets-batch-update` | `--target` |
 | 调整列宽 / 行高 | `+cols-resize` / `+rows-resize`（行、列是两个独立命令；连同样式一起调时并入 `+styles-put` 的 `row_sizes` / `col_sizes`） | `lark-sheets-range-operations` | `--dimension`（无此 flag） |
 | 分组汇总 / 透视 | `+pivot-create`（默认不传落点 flag → 自动新建子表，零覆盖） | `lark-sheets-pivot-table` | 用 SUMIF / 本地脚本拼一张假透视表 |
 | 画图表 / 可视化（柱 / 折线 / 饼 / 条 / 散点 / 组合…） | `+chart-create`（先 `+chart-create --print-example <column\|bar\|line\|pie\|combo…>` 本地拿最小可用 `--properties` 模板，改 refs / index 即可用） | `lark-sheets-chart` | matplotlib / 本地画图再贴图（原生图表可交互、随数据更新） |
@@ -115,14 +115,14 @@ lark-cli sheets +sheet-copy --url <U> --sheet-name 源表名 --title 副本名  
 
 | 用户需求 | 用原生 | 禁止的替代 |
 |---|---|---|
-| 按 X 统计 Y、分组汇总 | `+pivot-{create\|update\|delete}` | pandas groupby → 写值 |
-| 求和 / 计数 / 平均 / 占比 | 公式 | Python 算 → 写静态值 |
+| 交付原生透视表 | `+pivot-{create\|update\|delete}` | 普通汇总表冒称透视表 |
+| 需要持续联动的计算 | 公式 | 静态值冒称可联动公式 |
 | 图表 / 可视化 | `+chart-*` | matplotlib |
 | 条件高亮 / 色阶 | `+cond-format-*` | 逐格设样式 |
 | 筛选 | `+filter-*` | pandas filter → 覆盖写入 |
 | 文本提取 / 转换 / 查找 | 公式（REGEXEXTRACT / TEXT / VLOOKUP 等） | Python → 写静态值 |
 
-只有多步清洗、统计建模、公式试错 3 次仍失败时才用代码。
+需要统计建模、多步清洗或只读分析时可用代码；在线写回按用户要求保留公式、原生对象或静态值语义，不以失败次数决定降级。
 
 ### 用脚本配合 CLI 时
 
@@ -135,7 +135,7 @@ lark-cli sheets +sheet-copy --url <U> --sheet-name 源表名 --title 副本名  
 ### 易漏陷阱
 
 - **`+dim-insert` 不继承行高**：只继承值 / 公式 / 边框；插行填长文本前读相邻行 `row_height`，用 `+batch-update` 合 `+rows-resize` 补齐。
-- **公式容错**：日期 / 查找 / 转换公式用 `IFERROR` 包裹；写完查首末各 5 行错误码，再跑 `+formula-verify` 到 `status='success'`；同一方案试错上限 3 次。
+- **公式验证**：对受影响范围运行 `+formula-verify`；IFERROR 仅表达明确的业务缺失/容错语义，不用于掩盖计算错误。
 - **循环引用**：聚合公式引用范围不能含目标 cell 自身或其传递依赖。
 - **隐藏行列**：`+csv-get` 默认含隐藏行列；`--skip-hidden=true` 只看可见，真实行号会跳空——禁止按返回数组下标推导行号，用 `annotated_csv` 的 `[row=N]` 或 `row_indices`。
 - **跨 sheet 对象**：图表 / 条件格式 / 透视表 / 浮动图片可能分布在多个子表，先 `+workbook-info` 掌握全局。
@@ -143,7 +143,7 @@ lark-cli sheets +sheet-copy --url <U> --sheet-name 源表名 --title 副本名  
 
 ## References
 
-reference 分两组：先读**通用方法与规范**（横切所有任务的样式 / 公式规则），再按操作对象进入**工具参考**查具体 shortcut。编辑类任务务必先过通用方法与规范，连同上方「飞书表格编辑准则」对所有工具参考一律生效。
+按操作对象读取工具参考。涉及样式时读取样式规范，写公式时读取公式规则；小修不预读全部通用规范。
 
 ### 通用方法与规范（先读，横切所有任务，不含具体 shortcut）
 
@@ -200,13 +200,13 @@ lark-cli sheets +csv-get --url "https://.../sheets/shtXXX" --sheet-name "<真实
 | Flag | Type | 必填 | 说明 |
 | --- | --- | --- | --- |
 | `--dry-run` | bool | 否 | 零副作用：仅打印请求路径与参数模板，不发起调用；多步操作会输出每个子操作的请求模板 |
-| `--yes` | bool | 是（仅 `high-risk-write`） | 二次确认；不带时退出码 10。详见 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md) 高风险审批协议 |
+| `--yes` | bool | 是（仅 `high-risk-write`） | CLI 确认标记；核对完整会话中的具体授权，不带时退出码 10。详见 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md) 高风险审批协议 |
 | `--print-schema` | bool | 否 | 本地打印复合 JSON flag 的 JSON Schema 并退出，不发起调用、不需要其它 required flag。搭配 `--flag-name` 指定查哪个 flag；省略时列出该 shortcut 可查询的 flag。仅对含复合 JSON flag 的 shortcut 有效。 |
 | `--flag-name` | string | 否 | 配合 `--print-schema`：flag 名不带 `--` 前缀（`cells` / `properties`）。**支持点分路径切片**：`--flag-name properties.snapshot.plotArea.axes` 只打印该子树，大 schema（chart 的 properties 约 1700 行）按需取，别整篇翻页。 |
 
 > ⚠️ **high-risk-write 命令清单（exit 10 强确认门禁）**：`+batch-update`、`+cells-clear`、`+cells-batch-clear`、`+sheet-delete`、`+dim-delete`、`+dropdown-delete`，以及各对象删除 `+chart-delete` / `+pivot-delete` / `+cond-format-delete` / `+filter-delete` / `+filter-view-delete` / `+sparkline-delete` / `+float-image-delete`。
 >
-> **审批协议**：先 `--dry-run` 预览、向用户展示将执行的操作与影响范围，**获得用户明确同意后**再在原命令追加 `--yes` 执行。未经用户同意不得带 `--yes`，也不得在 exit 10 后静默补 `--yes` 重试——那等于禁用门禁。完整协议见 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)。
+> **审批协议**：先 `--dry-run` 预览、向用户展示将执行的操作与影响范围，**已有具体授权或获得新同意后**再在原命令追加 `--yes` 执行。未经用户同意不得带 `--yes`，也不得在 exit 10 后静默补 `--yes` 重试——那等于禁用门禁。完整协议见 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)。
 
 **Agent 使用提示**：写复合 JSON flag 前对结构不确定时，先 `--print-schema --flag-name <name>`（深层字段用点分路径切片）再构造 payload；图表直接 `+chart-create --print-example <type>` 拿最小可用模板改参。reference 的 `## Schemas` 段只给一层结构。
 

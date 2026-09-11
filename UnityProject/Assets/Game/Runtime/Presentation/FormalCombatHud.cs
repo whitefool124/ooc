@@ -24,20 +24,36 @@ namespace OCC.Combat.Presentation
         private Canvas canvas;
         private GameObject root;
         private FormalHoverTooltip tooltip;
-        private Text modeLabel;
-        private Image modePanelImage;
-        private Text activeLabel;
         private Text decisionLabel;
+        private Text actionPointBadgeValue;
         private Text phaseLabel;
+        private GameObject turnBanner;
+        private CanvasGroup turnBannerGroup;
+        private Text turnBannerLabel;
+        private int displayedTurnSequence = -1;
         private Text weaponLabel;
         private Text statusLabel;
-        private Text actionPointLabel;
-        private readonly Image[] actionPointPips = new Image[3];
-        private readonly CanvasGroup[] actionPointPipGroups = new CanvasGroup[3];
-        private Text eventLabel;
+        private GameObject heroModule;
+        private GameObject heroFront;
+        private GameObject heroBack;
+        private Text heroStatusDetails;
+        private Text heroPassiveDetails;
+        private Button heroFlipButton;
+        private bool heroShowingBack;
+        private bool heroFlipAnimating;
         private GameObject timelineModule;
-        private GameObject logModule;
+        private GameObject timelineFront;
+        private GameObject timelineBack;
+        private Text historyText;
+        private ScrollRect historyScroll;
+        private Button timelineFlipButton;
+        private bool timelineShowingBack;
+        private bool timelineFlipAnimating;
+        private string displayedHistoryText;
+        private Text timelineGlobalValue;
+        private Image timelineGlobalFill;
         private readonly Text[] timelineNames = new Text[5];
+        private readonly Text[] timelineSpeeds = new Text[5];
         private readonly Text[] timelineDetails = new Text[5];
         private readonly Image[] timelineNodes = new Image[5];
         private readonly Image[] timelineRows = new Image[5];
@@ -45,6 +61,12 @@ namespace OCC.Combat.Presentation
         private readonly Image[] timelineRemoved = new Image[5];
         private readonly Image[] timelineCurrentEndpoint = new Image[5];
         private readonly Image[] timelinePreviewEndpoint = new Image[5];
+        private readonly Image[] timelineOrderArrows = new Image[5];
+        private readonly string[] timelineUnitIds = new string[5];
+        private readonly float[] displayedTimelineValues = { -1f, -1f, -1f, -1f, -1f };
+        private readonly float[] displayedTimelineWidths = { -1f, -1f, -1f, -1f, -1f };
+        private float displayedTimelineGlobal = -1f;
+        private string timelineGlobalUnitId;
         private Image healthFill;
         private Image shieldFill;
         private Image manaFill;
@@ -67,7 +89,6 @@ namespace OCC.Combat.Presentation
         private float displayedHealth = -1f;
         private float displayedShield = -1f;
         private float displayedMana = -1f;
-        private int displayedActionPoints = -1;
         private bool wasVisible;
         private bool outcomeWasVisible;
         private bool hasPresentedModel;
@@ -96,7 +117,13 @@ namespace OCC.Combat.Presentation
             if (root == null || bootstrap == null) return;
             bool visible = bootstrap.IsDeveloperCombatActive || bootstrap.IsCombatOutcomeVisible;
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
-            if (!visible || bootstrap.CurrentState == null) { wasVisible = false; hasPresentedModel = false; return; }
+            if (!visible || bootstrap.CurrentState == null)
+            {
+                if (wasVisible) ResetCardFlips();
+                wasVisible = false;
+                hasPresentedModel = false;
+                return;
+            }
             if (!wasVisible)
             {
                 wasVisible = true;
@@ -104,9 +131,10 @@ namespace OCC.Combat.Presentation
                 if (!bootstrap.IsCombatOutcomeVisible) actionButtons.TryGetValue("移动", out defaultButton);
                 if (defaultButton != null) RuntimeUiEventSystem.Select(defaultButton.gameObject);
             }
-            bool handledShortcut = bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleSpellShortcutInput();
-            bool handledTargetInput = !handledShortcut && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleTargetNavigationInput();
-            if (!handledShortcut && !handledTargetInput && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && RuntimeUiEventSystem.CancelPressedThisFrame()) bootstrap.CancelCombatSelectionOrRequestLeave();
+            bool handledCardFlip = bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleCardFlipShortcut();
+            bool handledShortcut = !handledCardFlip && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleSpellShortcutInput();
+            bool handledTargetInput = !handledCardFlip && !handledShortcut && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleTargetNavigationInput();
+            if (!handledCardFlip && !handledShortcut && !handledTargetInput && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && RuntimeUiEventSystem.CancelPressedThisFrame()) bootstrap.CancelCombatSelectionOrRequestLeave();
             int actionVersion = (bootstrap as ICombatActionPresentationHost)?.CombatActionPresentationVersion ?? 0;
             bool actionChanged = actionVersion != displayedActionVersion;
             if (actionChanged) refreshDirty = true;
@@ -132,74 +160,110 @@ namespace OCC.Combat.Presentation
             tooltip.Initialize(canvas);
 
             GameObject top = FormalUiKit.LayoutPanel("战斗抬头", root.transform, "combat.header", FormalUiTheme.SurfaceRaised);
-            Label("战场", top.transform, new Vector2(20, -8), new Vector2(420, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            phaseLabel = Label("正在准备", top.transform, new Vector2(440, -8), new Vector2(980, 40), FormalUiTheme.BodyFontSize, line, TextAnchor.MiddleLeft);
+            ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
+            phaseLabel = Label("正在准备", top.transform, new Vector2(12, -8), new Vector2(1292, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(phaseLabel);
-            Line(top.transform, new Vector2(18, -53), new Vector2(1836, 2), line);
+
+            turnBanner = Panel("轮次公告", root.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(728, -76), new Vector2(464, 52), new Color(.015f, .018f, .018f, .94f));
+            turnBannerGroup = turnBanner.AddComponent<CanvasGroup>();
+            turnBannerGroup.blocksRaycasts = false;
+            turnBannerGroup.interactable = false;
+            turnBannerLabel = Label("轮次公告文字", turnBanner.transform, new Vector2(16, -6), new Vector2(432, 40),
+                FormalUiTheme.BodyFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
+            FormalUiKit.PreventAutomaticWrapping(turnBannerLabel);
+            turnBannerGroup.alpha = 0f;
 
             GameObject side = FormalUiKit.LayoutPanel("战斗信息", root.transform, "combat.rightConsole", panel);
-            GameObject selectedModule = ConsoleModule("本轮行动", side.transform, "combat.selected");
-            modePanelImage = selectedModule.GetComponent<Image>();
-            modeLabel = Label("当前模式 · 移动", selectedModule.transform, new Vector2(16, -4), new Vector2(224, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
-            activeLabel = Label("等待行动", selectedModule.transform, new Vector2(242, -4), new Vector2(154, 32), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleRight);
-            FormalUiKit.PreventAutomaticWrapping(modeLabel);
-            FormalUiKit.PreventAutomaticWrapping(activeLabel);
-            decisionLabel = Label("行动决策", selectedModule.transform, new Vector2(16, -40), new Vector2(380, 52), FormalUiTheme.BodyFontSize, muted, TextAnchor.UpperLeft);
-            // This bounded two-line summary owns its line breaks. Generic paragraphs expand to
-            // 72px and cross the 96px module; Unity truncation also drops the second line at 52px.
-            // FusionPixel12 at 24px has a 32px line advance; 26px keeps a 2px inter-line gap.
-            decisionLabel.lineSpacing = 26f / 32f;
-            decisionLabel.alignByGeometry = true;
-            decisionLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
-            decisionLabel.verticalOverflow = VerticalWrapMode.Overflow;
-            BindTooltip(selectedModule, BuildDecisionTooltip);
-
-            GameObject heroModule = ConsoleModule("英雄概况", side.transform, "combat.hero");
-            Label("英雄", heroModule.transform, new Vector2(16, -4), new Vector2(72, 32), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            weaponLabel = Label("主手装备", heroModule.transform, new Vector2(96, -4), new Vector2(248, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
+            heroModule = ConsoleModule("英雄概况", side.transform, "combat.hero");
+            heroFront = CardFace("英雄概况正面", heroModule.transform);
+            heroBack = CardFace("英雄概况背面", heroModule.transform);
+            Label("英雄", heroFront.transform, new Vector2(16, -4), new Vector2(72, 32), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            weaponLabel = Label("主手装备", heroFront.transform, new Vector2(96, -4), new Vector2(182, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(weaponLabel);
-            weaponIcon = FormalUiKit.IconSlot("主手装备图标", heroModule.transform, null, Vector2.zero);
+            weaponIcon = FormalUiKit.IconSlot("主手装备图标", heroFront.transform, null, Vector2.zero);
             weaponIcon.rectTransform.anchorMin = weaponIcon.rectTransform.anchorMax = new Vector2(0, 1);
-            weaponIcon.rectTransform.pivot = new Vector2(0, 1); weaponIcon.rectTransform.anchoredPosition = new Vector2(364, -4);
-            statusLabel = Label("状态", heroModule.transform, new Vector2(16, -40), new Vector2(226, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
-            actionPointLabel = Label("行动点", heroModule.transform, new Vector2(244, -40), new Vector2(90, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
-            for (int i = 0; i < actionPointPips.Length; i++)
-            {
-                GameObject pipTrack = Panel("行动点轨道_" + i, heroModule.transform, new Vector2(0, 1), new Vector2(0, 1),
-                    ActionPointPipPosition(i), new Vector2(20, 20), FormalUiTheme.Ink);
-                FormalUiKit.ApplySkin(pipTrack.GetComponent<Image>(), "bar_track", FormalUiTheme.Ink);
-                GameObject pipFill = Panel("行动点填充_" + i, pipTrack.transform, Vector2.zero, Vector2.one,
-                    Vector2.zero, Vector2.zero, FormalUiTheme.Cyan);
-                actionPointPips[i] = pipFill.GetComponent<Image>();
-                FormalUiKit.ApplySkin(actionPointPips[i], "bar_fill", FormalUiTheme.Cyan);
-                actionPointPipGroups[i] = pipFill.AddComponent<CanvasGroup>();
-                actionPointPipGroups[i].alpha = .16f;
-            }
+            weaponIcon.rectTransform.pivot = new Vector2(0, 1); weaponIcon.rectTransform.anchoredPosition = new Vector2(286, -4);
+            statusLabel = Label("状态", heroFront.transform, new Vector2(16, -40), new Vector2(384, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
             statusLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
             statusLabel.verticalOverflow = VerticalWrapMode.Truncate;
-            FormalUiKit.ConfigureNumericLabel(actionPointLabel);
-            healthFill = ResourceBar(heroModule.transform, "生命", new Vector2(16, -76), FormalUiTheme.Health, out healthValue);
-            shieldFill = ResourceBar(heroModule.transform, "护盾", new Vector2(16, -128), FormalUiTheme.Shield, out shieldValue);
-            manaFill = ResourceBar(heroModule.transform, "个人魔力", new Vector2(16, -180), FormalUiTheme.Magic, out manaValue);
+            healthFill = ResourceBar(heroFront.transform, "生命", new Vector2(16, -76), FormalUiTheme.Health, out healthValue);
+            shieldFill = ResourceBar(heroFront.transform, "护盾", new Vector2(16, -128), FormalUiTheme.Shield, out shieldValue);
+            manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(16, -180), FormalUiTheme.Magic, out manaValue);
+            BuildHeroBack();
+            heroFlipButton = Button(heroModule.transform, "英雄概况翻面", new Vector2(296, -3), new Vector2(104, 36), "状态", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(heroFlipButton);
+            heroFlipButton.onClick.AddListener(ToggleHeroCard);
+            Label("英雄翻面提示", heroBack.transform, new Vector2(192, -4), new Vector2(96, 32), 18, muted, TextAnchor.MiddleRight).text = "Tab 双翻";
             BindTooltip(heroModule, BuildHeroTooltip);
 
             timelineModule = ConsoleModule("行动序列模块", side.transform, "combat.timeline");
-            Label("接下来", timelineModule.transform, new Vector2(16, -4), new Vector2(240, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            timelineFront = CardFace("行动值正面", timelineModule.transform);
+            timelineBack = CardFace("行动历史背面", timelineModule.transform);
+            Label("行动值", timelineFront.transform, new Vector2(16, -4), new Vector2(136, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            timelineGlobalValue = Label("全局行动值", timelineFront.transform, new Vector2(156, -4), new Vector2(150, 40),
+                CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
+            FormalUiKit.ConfigureNumericLabel(timelineGlobalValue);
+            Label("行动值零点", timelineFront.transform, new Vector2(16, -40), new Vector2(72, 28),
+                CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleLeft).text = "0";
+            Label("行动值阈值", timelineFront.transform, new Vector2(160, -40), new Vector2(96, 28),
+                CombatHudTypography.TimelineDetailFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleCenter).text = "100";
+            Label("行动值上界", timelineFront.transform, new Vector2(328, -40), new Vector2(72, 28),
+                CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight).text = "199";
+            GameObject globalTrack = Panel("全局行动值轨道", timelineFront.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(16, -70), new Vector2(384, 20), FormalUiTheme.ResourceTrack);
+            FormalUiKit.ApplySkin(globalTrack.GetComponent<Image>(), "bar_track", FormalUiTheme.ResourceTrack);
+            GameObject globalFill = FormalUiKit.FlatPanel("全局行动值填充", globalTrack.transform,
+                new Vector2(0, 0), new Vector2(1, 1), Vector2.zero, Vector2.zero, FormalUiTheme.Cyan);
+            globalFill.GetComponent<RectTransform>().offsetMin = new Vector2(4, 4);
+            globalFill.GetComponent<RectTransform>().offsetMax = new Vector2(-4, -4);
+            timelineGlobalFill = globalFill.GetComponent<Image>();
+            Line(globalTrack.transform, new Vector2(193, -2), new Vector2(2, 16), FormalUiTheme.WithAlpha(text, .72f));
             for (int i = 0; i < timelineNames.Length; i++) CreateTimelineSlot(i);
+            BuildTimelineBack();
+            timelineFlipButton = Button(timelineModule.transform, "行动值翻面", new Vector2(296, -3), new Vector2(104, 36), "记录", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(timelineFlipButton);
+            timelineFlipButton.onClick.AddListener(ToggleTimelineCard);
+            Label("行动值翻面提示", timelineBack.transform, new Vector2(184, -4), new Vector2(104, 32), 18, muted, TextAnchor.MiddleRight).text = "最新在前";
+            heroBack.SetActive(false);
+            timelineBack.SetActive(false);
 
-            logModule = ConsoleModule("现场记录模块", side.transform, "combat.log");
-            Label("刚刚发生", logModule.transform, new Vector2(16, -4), new Vector2(380, 32), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            eventLabel = Label("记录", logModule.transform, new Vector2(16, -40), new Vector2(380, 48), FormalUiTheme.BodyFontSize, muted, TextAnchor.UpperLeft);
-            FormalUiKit.ConfigureReadingParagraph(eventLabel);
-            BindTooltip(logModule, BuildLogTooltip);
+            GameObject decisionToast = FormalUiKit.LayoutPanel("战场决策提示条", root.transform, "combat.decisionToast", ink);
+            ConfigureOutlinedPanel(decisionToast, ink, FormalUiTheme.Cyan);
+            FormalUiKit.FlatPanel("决策提示标记", decisionToast.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(16, -12), new Vector2(8, 34), FormalUiTheme.Cyan);
+            decisionLabel = Label("行动决策", decisionToast.transform, new Vector2(80, -12), new Vector2(524, 34),
+                FormalUiTheme.BodyFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(decisionLabel);
+            // The AP badge overlaps this toast. Keep the live hint clear of the badge while
+            // preserving Pixso's single-line toast treatment.
+            ConfigureDecisionToastLine(decisionLabel, new Vector2(80, -12));
+            BindTooltip(decisionToast, BuildDecisionTooltip);
+
+            GameObject apBadge = FormalUiKit.LayoutPanel("行动点徽章", root.transform, "combat.actionPointBadge", Color.clear);
+            GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -48), new Vector2(64, 64), FormalUiTheme.Cyan);
+            outerDiamond.transform.localRotation = Quaternion.Euler(0, 0, -45);
+            GameObject innerDiamond = Panel("行动点内菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -48), new Vector2(48, 48), FormalUiTheme.Ink);
+            innerDiamond.transform.localRotation = Quaternion.Euler(0, 0, -45);
+            Text apTitle = Label("行动点标题", apBadge.transform, new Vector2(0, -12), new Vector2(96, 28),
+                CombatHudTypography.TimelineDetailFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
+            apTitle.text = "AP";
+            SetBadgeTextRect(apTitle, new Vector2(0, -10), new Vector2(96, 28));
+            actionPointBadgeValue = Label("行动点数值", apBadge.transform, new Vector2(0, -40), new Vector2(96, 36),
+                FormalUiTheme.BodyFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
+            FormalUiKit.ConfigureNumericLabel(actionPointBadgeValue);
+            SetBadgeTextRect(actionPointBadgeValue, new Vector2(0, -42), new Vector2(96, 36));
+            BindTooltip(apBadge, () => new FormalTooltipContent("行动点", "大号数字是当前值。\n本回合基础上限为 " + CombatResolver.HeroActionPointsPerTurn + "；额外行动点可以超过基础上限。", FormalUiTheme.Cyan));
 
             GameObject bottom = FormalUiKit.LayoutPanel("战术指令", root.transform, "combat.commands", ink);
             GameObject weaponGroup = Panel("武器组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(8, -14), new Vector2(200, 172), panel);
             GameObject spellGroup = Panel("术式组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(216, -2), new Vector2(1100, 196), panel);
             GameObject interactionGroup = Panel("交互组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1324, -14), new Vector2(152, 172), panel);
             GameObject itemGroup = Panel("物品组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1484, -14), new Vector2(176, 172), panel);
-            Label("移动 / 武器", weaponGroup.transform, new Vector2(8, -4), new Vector2(184, 40), FormalUiTheme.BodyFontSize, line, TextAnchor.MiddleLeft);
-            Label("个人术式 · 数字键 1–8 快捷选择", spellGroup.transform, new Vector2(8, -4), new Vector2(1084, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            Label("移动与武器", weaponGroup.transform, new Vector2(8, -4), new Vector2(184, 40), FormalUiTheme.BodyFontSize, line, TextAnchor.MiddleLeft);
+            Label("个人术式　数字键 1–8 快捷选择", spellGroup.transform, new Vector2(8, -4), new Vector2(1084, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             Label("交互", interactionGroup.transform, new Vector2(8, -4), new Vector2(136, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             Label("战术栏", itemGroup.transform, new Vector2(8, -4), new Vector2(160, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             string[] primaryActions = { "移动", "攻击" };
@@ -237,10 +301,18 @@ namespace OCC.Combat.Presentation
             endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1668, -24), new Vector2(204, 140), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
             BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束回合", "剩余行动点会清空，然后轮到敌方。", line));
-            restartButton = Button(top.transform, "战术重开", new Vector2(1650, -4), new Vector2(86, 48), "重开", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
+            Button inventoryButton = Button(top.transform, "打开背包", new Vector2(1316, -4), new Vector2(160, 48), "背包",
+                FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(inventoryButton);
+            inventoryButton.onClick.AddListener(() => bootstrap.OpenCombatInventoryPanel());
+            BindTooltip(inventoryButton.gameObject, () => new FormalTooltipContent("战斗背包", "消耗本回合的背包开启次数，整理装备或取用战术物品。", FormalUiTheme.Cyan));
+            restartButton = Button(top.transform, "战术重开", new Vector2(1488, -4), new Vector2(180, 48), "重开", FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
+            ConfigureCompactFrame(restartButton);
             restartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
             BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("重新开始", "这场战斗会从头开始，用掉的道具也会恢复。", FormalUiTheme.Amber));
-            leaveButton = Button(top.transform, "离开战斗", new Vector2(1744, -4), new Vector2(86, 48), "离开", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Dangerous);
+            leaveButton = Button(top.transform, "离开战斗", new Vector2(1680, -4), new Vector2(180, 48), "离开", FormalUiTheme.Danger, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Dangerous);
+            ConfigureCompactFrame(leaveButton);
+            leaveButton.transform.Find("文字").GetComponent<Text>().color = FormalUiTheme.OnInk;
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
             BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("离开战斗", "回到地图。这场战斗的收获和损失都不会保留。", FormalUiTheme.Danger));
             for (int i = 0; i < quickbarLabels.Length; i++)
@@ -297,6 +369,17 @@ namespace OCC.Combat.Presentation
             FormalUiKit.ThinFrame(button.transform, button.GetComponent<RectTransform>().sizeDelta, FormalUiTheme.Rule);
         }
 
+        private static void ConfigureOutlinedPanel(GameObject target, Color background, Color stroke)
+        {
+            Image surface = target.GetComponent<Image>();
+            surface.sprite = null;
+            surface.type = Image.Type.Simple;
+            surface.color = background;
+            Image skin = FormalUiKit.SkinOverlay(surface);
+            if (skin != null) skin.gameObject.SetActive(false);
+            FormalUiKit.ThinFrame(target.transform, target.GetComponent<RectTransform>().sizeDelta, stroke);
+        }
+
         private static void ConfigureCommandRow(Button button, bool hasIcon)
         {
             ConfigureCompactFrame(button);
@@ -333,8 +416,6 @@ namespace OCC.Combat.Presentation
             label.alignment = TextAnchor.MiddleCenter;
         }
 
-        private static Vector2 ActionPointPipPosition(int index) => new Vector2(338 + index * 22, -46);
-
         private static GameObject ConsoleModule(string name, Transform parent, string layoutId)
         {
             GameObject module = FormalUiKit.FlatPanel(name, parent, Vector2.zero, Vector2.zero,
@@ -346,55 +427,150 @@ namespace OCC.Combat.Presentation
             return module;
         }
 
+        private static GameObject CardFace(string name, Transform parent)
+        {
+            GameObject face = FormalUiKit.Create(name, parent);
+            RectTransform rect = face.AddComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.pivot = new Vector2(.5f, .5f);
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            return face;
+        }
+
+        private void BuildHeroBack()
+        {
+            Label("状态与被动", heroBack.transform, new Vector2(16, -4), new Vector2(192, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            Label("玩家状态", heroBack.transform, new Vector2(16, -42), new Vector2(176, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            Label("被动效果", heroBack.transform, new Vector2(224, -42), new Vector2(176, 32), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            Line(heroBack.transform, new Vector2(208, -46), new Vector2(2, 182), FormalUiTheme.WithAlpha(line, .72f));
+            heroStatusDetails = Label("玩家状态内容", heroBack.transform, new Vector2(16, -76), new Vector2(176, 152), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
+            heroPassiveDetails = Label("被动效果内容", heroBack.transform, new Vector2(224, -76), new Vector2(176, 152), 20, text, TextAnchor.UpperLeft);
+            heroStatusDetails.lineSpacing = .88f;
+            heroPassiveDetails.lineSpacing = .88f;
+            heroStatusDetails.supportRichText = true;
+            heroPassiveDetails.supportRichText = true;
+        }
+
+        private void BuildTimelineBack()
+        {
+            Label("行动历史", timelineBack.transform, new Vector2(16, -4), new Vector2(190, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+            GameObject scrollObject = FormalUiKit.Create("战斗历史滚动区", timelineBack.transform);
+            RectTransform scrollRect = scrollObject.AddComponent<RectTransform>();
+            scrollRect.anchorMin = scrollRect.anchorMax = scrollRect.pivot = new Vector2(0f, 1f);
+            scrollRect.anchoredPosition = new Vector2(16f, -52f);
+            scrollRect.sizeDelta = new Vector2(384f, 412f);
+            Image scrollSurface = scrollObject.AddComponent<Image>();
+            scrollSurface.color = Color.clear;
+            scrollSurface.raycastTarget = true;
+            historyScroll = scrollObject.AddComponent<ScrollRect>();
+            historyScroll.horizontal = false;
+            historyScroll.vertical = true;
+            historyScroll.movementType = ScrollRect.MovementType.Clamped;
+            historyScroll.scrollSensitivity = 28f;
+
+            GameObject viewport = FormalUiKit.Create("视口", scrollObject.transform);
+            RectTransform viewportRect = viewport.AddComponent<RectTransform>();
+            viewportRect.anchorMin = Vector2.zero;
+            viewportRect.anchorMax = Vector2.one;
+            viewportRect.offsetMin = Vector2.zero;
+            viewportRect.offsetMax = Vector2.zero;
+            viewport.AddComponent<RectMask2D>();
+
+            GameObject content = FormalUiKit.Create("记录内容", viewport.transform);
+            RectTransform contentRect = content.AddComponent<RectTransform>();
+            contentRect.anchorMin = new Vector2(0f, 1f);
+            contentRect.anchorMax = new Vector2(1f, 1f);
+            contentRect.pivot = new Vector2(.5f, 1f);
+            contentRect.anchoredPosition = Vector2.zero;
+            contentRect.sizeDelta = new Vector2(0f, 412f);
+            historyText = Label("战斗记录", content.transform, new Vector2(0f, 0f), new Vector2(376f, 412f), FormalUiTheme.BodyFontSize, text, TextAnchor.UpperLeft);
+            historyText.rectTransform.anchorMin = historyText.rectTransform.anchorMax = historyText.rectTransform.pivot = new Vector2(0f, 1f);
+            historyText.rectTransform.anchoredPosition = Vector2.zero;
+            historyText.horizontalOverflow = HorizontalWrapMode.Wrap;
+            historyText.verticalOverflow = VerticalWrapMode.Overflow;
+            historyText.supportRichText = true;
+            historyText.lineSpacing = .92f;
+            historyScroll.viewport = viewportRect;
+            historyScroll.content = contentRect;
+        }
+
+        private static void ConfigureDecisionToastLine(Text label, Vector2 position)
+        {
+            label.rectTransform.anchoredPosition = position;
+            label.rectTransform.sizeDelta = new Vector2(524, 34);
+            label.horizontalOverflow = HorizontalWrapMode.Overflow;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+            label.resizeTextForBestFit = false;
+        }
+
+        private static void SetBadgeTextRect(Text label, Vector2 position, Vector2 size)
+        {
+            label.rectTransform.anchoredPosition = position;
+            label.rectTransform.sizeDelta = size;
+            label.horizontalOverflow = HorizontalWrapMode.Overflow;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+
         private void CreateTimelineSlot(int index)
         {
-            float y = -48f - index * 42f;
-            GameObject row = FormalUiKit.FlatPanel("行动位" + (index + 1), timelineModule.transform,
-                new Vector2(0, 1), new Vector2(0, 1), new Vector2(14, y), new Vector2(388, 40),
+            const float trackX = 114f;
+            const float trackWidth = 260f;
+            float y = -104f - index * 66f;
+            Transform timelineParent = timelineFront != null ? timelineFront.transform : timelineModule.transform;
+            GameObject row = FormalUiKit.FlatPanel("行动位" + (index + 1), timelineParent,
+                new Vector2(0, 1), new Vector2(0, 1), new Vector2(14, y), new Vector2(388, 60),
                 FormalUiTheme.WithAlpha(FormalUiTheme.Surface, index % 2 == 0 ? .86f : .70f));
             timelineRows[index] = row.GetComponent<Image>();
-            GameObject node = Panel("行动节点" + (index + 1), row.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(10, 0), new Vector2(14, 14), muted);
+            GameObject node = Panel("行动节点" + (index + 1), row.transform, new Vector2(0, .5f), new Vector2(0, .5f), new Vector2(10, 8), new Vector2(14, 14), muted);
             timelineNodes[index] = node.GetComponent<Image>();
-            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, 0), new Vector2(216, 40), CombatHudTypography.TimelineNameFontSize, muted, TextAnchor.MiddleLeft);
-            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(260, 0), new Vector2(114, 40), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
+            timelineNames[index] = Label("行动者" + (index + 1), row.transform, new Vector2(36, -2), new Vector2(174, 30), CombatHudTypography.TimelineNameFontSize, muted, TextAnchor.MiddleLeft);
+            timelineDetails[index] = Label("行动摘要" + (index + 1), row.transform, new Vector2(212, -2), new Vector2(140, 30), CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleRight);
+            timelineSpeeds[index] = Label("行动速度" + (index + 1), row.transform, new Vector2(36, -30), new Vector2(74, 26),
+                CombatHudTypography.TimelineDetailFontSize, muted, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(timelineNames[index]);
+            FormalUiKit.ConfigureNumericLabel(timelineSpeeds[index]);
             FormalUiKit.ConfigureNumericLabel(timelineDetails[index]);
-            GameObject retained = FormalUiKit.FlatPanel("保留行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(36, 4), new Vector2(0, 5), FormalUiTheme.Amber);
+            GameObject track = FormalUiKit.FlatPanel("单位行动值轨道", row.transform, new Vector2(0, 0), new Vector2(0, 0),
+                new Vector2(trackX, 8), new Vector2(trackWidth, 8), FormalUiTheme.ResourceTrack);
+            GameObject retained = FormalUiKit.FlatPanel("保留行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 10), new Vector2(0, 4), FormalUiTheme.Amber);
             timelineRetained[index] = retained.GetComponent<Image>();
-            GameObject removed = FormalUiKit.FlatPanel("扣除行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(36, 4), new Vector2(0, 5), FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .52f));
+            GameObject removed = FormalUiKit.FlatPanel("扣除行动值", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 10), new Vector2(0, 4), FormalUiTheme.WithAlpha(FormalUiTheme.Danger, .52f));
             timelineRemoved[index] = removed.GetComponent<Image>();
-            timelineCurrentEndpoint[index] = FormalUiKit.FlatPanel("当前端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(36, 3), new Vector2(2, 9), FormalUiTheme.Text).GetComponent<Image>();
-            timelinePreviewEndpoint[index] = FormalUiKit.FlatPanel("预览端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(36, 3), new Vector2(2, 9), FormalUiTheme.Amber).GetComponent<Image>();
-            Line(row.transform, new Vector2(36, -38), new Vector2(338, 2), FormalUiTheme.WithAlpha(line, .34f));
+            timelineCurrentEndpoint[index] = FormalUiKit.FlatPanel("当前端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(2, 10), FormalUiTheme.Text).GetComponent<Image>();
+            timelinePreviewEndpoint[index] = FormalUiKit.FlatPanel("预览端点", row.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(trackX, 7), new Vector2(2, 10), FormalUiTheme.Amber).GetComponent<Image>();
+            GameObject arrow = FormalUiKit.Create("预测顺序箭头" + (index + 1), row.transform);
+            RectTransform arrowRect = arrow.AddComponent<RectTransform>();
+            arrowRect.anchorMin = arrowRect.anchorMax = arrowRect.pivot = new Vector2(0f, 1f);
+            arrowRect.anchoredPosition = new Vector2(360f, -8f);
+            arrowRect.sizeDelta = new Vector2(16f, 16f);
+            timelineOrderArrows[index] = arrow.AddComponent<Image>();
+            timelineOrderArrows[index].raycastTarget = false;
+            timelineOrderArrows[index].preserveAspect = true;
+            timelineOrderArrows[index].gameObject.SetActive(false);
+            Line(row.transform, new Vector2(36, -58), new Vector2(338, 2), FormalUiTheme.WithAlpha(line, .34f));
         }
 
         private void Refresh()
         {
             RefreshCount++;
             CombatState state = bootstrap.CurrentState;
+            RefreshTurnBanner(state);
             UnitState hero = state.GetUnit("hero");
             hero = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(hero) ?? hero;
-            UnitState active = state.GetUnit(state.ActiveUnitId);
-            string modeName = SelectedModeDisplayName(state, hero);
             string clickInstruction = PrimaryClickInstruction(bootstrap.SelectedAction);
             phaseLabel.text = bootstrap.IsKeyboardTargeting
                 ? "选择目标：方向键或 WASD 移动，Enter 确认，Esc 取消"
-                : bootstrap.CurrentPhaseText + "  ·  " + clickInstruction + " / 右键更多";
+                : bootstrap.CurrentPhaseText + "　" + clickInstruction + "　右键查看更多";
             if ((bootstrap as ICombatActionPresentationHost)?.IsCombatActionPlaying == true) phaseLabel.text = "正在行动…";
-            modeLabel.text = "当前模式 · " + modeName;
-            modeLabel.color = state.ActiveUnitId == "hero" ? FormalUiTheme.Cyan : FormalUiTheme.Muted;
-            if (modePanelImage != null)
-                modePanelImage.color = state.ActiveUnitId == "hero"
-                    ? Color.Lerp(panel, FormalUiTheme.Cyan, .14f)
-                    : Color.Lerp(panel, FormalUiTheme.Danger, .08f);
-            activeLabel.text = active == null ? "等待" : "行动点 " + active.ActionPoints;
             UnitState selectedTarget = string.IsNullOrEmpty(bootstrap.SelectedTargetId) ? null : state.GetUnit(bootstrap.SelectedTargetId);
             CombatActionPreview decision = bootstrap.CurrentActionPreview;
             string decisionSummary = CombatHudTypography.CompactDecisionSummary(
                 CombatInformationPresenter.BuildHudDecisionSummary(decision, selectedTarget, bootstrap.IsKeyboardTargeting),
                 state.Ruleset == CombatRuleset.Roguelite ? decision?.DamageBreakdown : null);
-            decisionLabel.text = CompactHud(clickInstruction, 15) + "\n" + CompactHud(decisionSummary.Replace("\n", " · "), 15);
-            decisionLabel.color = decision != null && !decision.CanSubmit ? FormalUiTheme.Danger : bootstrap.IsKeyboardTargeting ? FormalUiTheme.Cyan : muted;
+            decisionLabel.text = CompactHud(decisionSummary.Replace("\n", "　"), 18);
+            decisionLabel.color = decision != null && !decision.CanSubmit ? FormalUiTheme.Danger : bootstrap.IsKeyboardTargeting ? FormalUiTheme.Cyan : FormalUiTheme.OnInk;
             weaponLabel.text = hero.MainHand.DisplayName;
             weaponIcon.sprite = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(hero.MainHand.Id));
             if (weaponIcon.sprite == null) throw new KeyNotFoundException("Missing formal item icon: " + hero.MainHand.Id);
@@ -411,17 +587,23 @@ namespace OCC.Combat.Presentation
                 if (fireTwo != null) RefreshFireSpellButton("技能2", fireTwo, hero); else RefreshSkillButton("技能2", hero.SkillTwo, hero);
                 for (int slot = 2; slot < RogueRuntimeConstants.SpellSlotCount; slot++) RefreshEmptySpellButton("技能" + (slot + 1));
             }
-            statusLabel.text = "状态 · " + StatusText(hero);
-            actionPointLabel.text = "行动 " + hero.ActionPoints + "/3";
-            RefreshActionPointPips(hero.ActionPoints);
+            statusLabel.text = "状态　" + StatusText(state, hero);
+            actionPointBadgeValue.text = ActionPointText(hero.ActionPoints);
             healthValue.text = RatioText(hero.Health, hero.MaxHealth);
-            shieldValue.text = rogue ? hero.Shield + " · 无上限" : RatioText(hero.Shield, hero.MaxShield);
+            shieldValue.text = rogue ? hero.Shield + "　无上限" : RatioText(hero.Shield, hero.MaxShield);
             manaValue.text = RatioText(hero.Mana, hero.MaxMana);
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, rogue ? (hero.Shield > 0 ? 1f : 0f) : hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
+            RefreshHeroBack(state, hero, rogue);
+            RefreshHistory(state);
             IReadOnlyList<CombatTurnTrackEntry> track = CombatTurnTrackPresentation.Build(state, timelineNames.Length);
             CombatActionPreview timelinePreview = bootstrap.CurrentActionPreview;
+            IReadOnlyDictionary<string, int> orderChanges = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview
+                ? CombatTurnTrackPresentation.PreviewOrderChanges(state, timelinePreview.ActionValueTargetId, timelinePreview.ActionValueDelay)
+                : new Dictionary<string, int>();
+            CombatTurnTrackEntry? leading = track.Count > 0 ? track[0] : (CombatTurnTrackEntry?)null;
+            SetTimelineGlobal(leading);
             for (int i = 0; i < timelineNames.Length; i++)
             {
                 bool visible = i < track.Count;
@@ -433,28 +615,28 @@ namespace OCC.Combat.Presentation
                 timelineRows[i].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
                 timelineNames[i].text = entry.Order + " " + CompactHud(entry.DisplayName, 7);
                 timelineNames[i].color = entry.IsActive ? text : muted;
-                timelineDetails[i].text = entry.IsActive ? entry.ActionValue + " · 行动中" : entry.ActionValue + (entry.IsReady ? " · 待行动" : string.Empty);
+                timelineSpeeds[i].text = "速 " + entry.EffectiveSpeed;
+                timelineSpeeds[i].color = entry.IsActive ? faction : muted;
                 timelineDetails[i].color = entry.IsActive ? faction : muted;
                 bool previewed = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview && timelinePreview.ActionValueTargetId == entry.UnitId;
                 int previewValue = previewed ? CombatActionTimeline.PreviewDelayedValue(state.GetUnit(entry.UnitId), timelinePreview.ActionValueDelay) : entry.ActionValue;
-                float currentWidth = 338f * entry.ActionValue / CombatActionTimeline.MaximumValue;
-                float previewWidth = 338f * previewValue / CombatActionTimeline.MaximumValue;
-                timelineRetained[i].gameObject.SetActive(previewed);
+                float currentWidth = 260f * entry.ActionValue / CombatActionTimeline.MaximumValue;
+                float previewWidth = 260f * previewValue / CombatActionTimeline.MaximumValue;
+                timelineRetained[i].gameObject.SetActive(true);
                 timelineRemoved[i].gameObject.SetActive(previewed);
                 timelineCurrentEndpoint[i].gameObject.SetActive(previewed);
                 timelinePreviewEndpoint[i].gameObject.SetActive(previewed);
+                timelineRetained[i].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .62f);
+                SetTimelineRowValue(i, entry, previewed ? previewWidth : currentWidth);
+                SetTimelineOrderArrow(i, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
                 if (previewed)
                 {
-                    timelineRetained[i].rectTransform.sizeDelta = new Vector2(previewWidth, 5);
-                    timelineRemoved[i].rectTransform.anchoredPosition = new Vector2(36 + previewWidth, 4);
-                    timelineRemoved[i].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 5);
-                    timelineCurrentEndpoint[i].rectTransform.anchoredPosition = new Vector2(36 + currentWidth, 3);
-                    timelinePreviewEndpoint[i].rectTransform.anchoredPosition = new Vector2(36 + previewWidth, 3);
-                    timelineDetails[i].text = entry.ActionValue + " › " + previewValue;
+                    timelineRemoved[i].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 10);
+                    timelineRemoved[i].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 4);
+                    timelineCurrentEndpoint[i].rectTransform.anchoredPosition = new Vector2(114 + currentWidth, 7);
+                    timelinePreviewEndpoint[i].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 7);
                 }
             }
-            eventLabel.text = state.EventLog.Count == 0 ? "—" :
-                "▶ " + CompactHud(CombatHudTypography.PlayerEventLine(state.EventLog[0]), 28);
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 if (rogue && state.RogueEquipment != null)
@@ -852,9 +1034,9 @@ namespace OCC.Combat.Presentation
                 if (rogueSpell == null && !string.IsNullOrWhiteSpace(label)) title = label.Split('\n')[0];
             }
             string body = rogueSpell == null ? CombatInformationPresenter.BuildActionDetails(preview) :
-                (preview == null ? string.Empty : preview.CanSubmit ? "当前　可用\n" : "当前　不可用 · " + preview.FailureReason + "\n") +
+                (preview == null ? string.Empty : preview.CanSubmit ? "当前　可用\n" : "当前　不可用\n" + preview.FailureReason + "\n") +
                 FormalRogueliteUi.SpellTooltipBody(rogueSpell);
-            string category = rogueSpell != null ? "个人术式" : SkillSlot(action) >= 0 ? "术式／法宝" : "战斗指令";
+            string category = rogueSpell != null ? "个人术式" : SkillSlot(action) >= 0 ? "术式与法宝" : "战斗指令";
             string iconPath = rogueSpell == null ? string.Empty : FormalRogueliteUi.RogueSpellIconPath(rogueSpell.DefinitionId);
             if (rogueSpell == null && rogueSlot >= 0)
             {
@@ -891,23 +1073,162 @@ namespace OCC.Combat.Presentation
             return true;
         }
 
-        private string SelectedModeDisplayName(CombatState state, UnitState hero)
+        private bool HandleCardFlipShortcut()
         {
-            int slot = SkillSlot(bootstrap.SelectedAction);
-            if (slot < 0) return bootstrap.SelectedAction;
-            if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+            if (Keyboard.current?.tabKey.wasPressedThisFrame != true) return false;
+            ToggleBothCards();
+            return true;
+        }
+
+        private void ToggleBothCards()
+        {
+            if (heroFlipAnimating || timelineFlipAnimating) return;
+            ToggleHeroCard();
+            ToggleTimelineCard();
+        }
+
+        private void ToggleHeroCard()
+        {
+            if (heroFlipAnimating) return;
+            bool showBack = !heroShowingBack;
+            StartCardFlip(heroFront, heroBack, heroFlipButton, showBack, "概况", "状态",
+                value => heroShowingBack = value, value => heroFlipAnimating = value);
+        }
+
+        private void ToggleTimelineCard()
+        {
+            if (timelineFlipAnimating) return;
+            bool showBack = !timelineShowingBack;
+            StartCardFlip(timelineFront, timelineBack, timelineFlipButton, showBack, "行动值", "记录",
+                value => timelineShowingBack = value, value => timelineFlipAnimating = value);
+        }
+
+        private void StartCardFlip(GameObject front, GameObject back, Button button, bool showBack,
+            string backButtonLabel, string frontButtonLabel, Action<bool> setShowingBack, Action<bool> setAnimating)
+        {
+            if (front == null || back == null || button == null) return;
+            GameObject outgoing = showBack ? front : back;
+            GameObject incoming = showBack ? back : front;
+            RectTransform outgoingRect = outgoing.GetComponent<RectTransform>();
+            RectTransform incomingRect = incoming.GetComponent<RectTransform>();
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            setAnimating(true);
+            button.interactable = false;
+            outgoing.SetActive(true);
+            outgoingRect.localScale = Vector3.one;
+
+            Action swap = () =>
             {
-                SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(slot);
-                return rogue == null ? "术式 " + (slot + 1) + "（空）" :
-                    "术式 " + (slot + 1) + " · " + rogue.DisplayName;
+                outgoing.SetActive(false);
+                incoming.SetActive(true);
+                incomingRect.localScale = new Vector3(0f, 1f, 1f);
+                setShowingBack(showBack);
+                Text buttonLabel = button.GetComponentInChildren<Text>();
+                if (buttonLabel != null) buttonLabel.text = showBack ? backButtonLabel : frontButtonLabel;
+            };
+            Action finish = () =>
+            {
+                incomingRect.localScale = Vector3.one;
+                button.interactable = true;
+                setAnimating(false);
+            };
+
+            if (motion.IsImmediate)
+            {
+                swap();
+                finish();
+                return;
             }
-            ArtifactDefinition artifact = slot == 0 ? (bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact) : null;
-            if (artifact != null) return "道具 · " + artifact.DisplayName;
-            FireSpellDefinition fire = bootstrap.FireSpellInSlot(slot);
-            if (fire != null) return "术式 " + (slot + 1) + " · " + fire.DisplayName;
-            SkillDefinition skill = slot == 0 ? hero?.SkillOne : slot == 1 ? hero?.SkillTwo : null;
-            return skill == null ? "术式 " + (slot + 1) + "（空）" :
-                "术式 " + (slot + 1) + " · " + skill.DisplayName;
+
+            float halfDuration = Mathf.Max(.06f, motion.QuickDuration);
+            DOTween.Sequence().SetUpdate(true).SetTarget(this)
+                .Append(outgoingRect.DOScaleX(0f, halfDuration).SetEase(Ease.InCubic))
+                .AppendCallback(() => swap())
+                .Append(incomingRect.DOScaleX(1f, halfDuration).SetEase(Ease.OutCubic))
+                .OnComplete(() => finish());
+        }
+
+        private void ResetCardFlips()
+        {
+            DOTween.Kill(this);
+            ResetCardFace(heroFront, heroBack, heroFlipButton, "状态");
+            ResetCardFace(timelineFront, timelineBack, timelineFlipButton, "记录");
+            heroShowingBack = false;
+            timelineShowingBack = false;
+            heroFlipAnimating = false;
+            timelineFlipAnimating = false;
+        }
+
+        private static void ResetCardFace(GameObject front, GameObject back, Button button, string buttonLabel)
+        {
+            if (front != null)
+            {
+                front.transform.localScale = Vector3.one;
+                front.SetActive(true);
+            }
+            if (back != null)
+            {
+                back.transform.localScale = Vector3.one;
+                back.SetActive(false);
+            }
+            if (button == null) return;
+            button.interactable = true;
+            Text label = button.GetComponentInChildren<Text>();
+            if (label != null) label.text = buttonLabel;
+        }
+
+        private void RefreshHeroBack(CombatState state, UnitState hero, bool rogue)
+        {
+            if (heroStatusDetails == null || heroPassiveDetails == null || state == null || hero == null) return;
+            IReadOnlyList<CombatStatusBarEntry> entries = state.PassiveEffects.StatusBarEntriesFor(hero.Id);
+            string currentStatus = hero.Statuses.Count == 0
+                ? "正常"
+                : string.Join(" ", hero.Statuses.Take(2).Select(pair =>
+                {
+                    CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(pair.Key));
+                    return semantic.ShortLabel + " " + pair.Value;
+                }));
+            CombatStatusBarEntry[] ongoing = entries.Where(value => value.Kind == CombatStatusBarEntryKind.OngoingEffect).ToArray();
+            if (ongoing.Length > 0) currentStatus += " +" + string.Join(" ", ongoing.Take(2).Select(value => value.DisplayName));
+            heroStatusDetails.text = (state.ActiveUnitId == hero.Id ? "行动中　" : "待命　") + hero.ActionPoints + " AP\n" +
+                "生命　" + hero.Health + "／" + hero.MaxHealth + "\n" +
+                "护盾　" + hero.Shield + (rogue ? string.Empty : "／" + hero.MaxShield) + "\n" +
+                "魔力　" + hero.Mana + "／" + hero.MaxMana + "\n" +
+                "状态　" + CompactHud(currentStatus, 12);
+
+            CombatStatusBarEntry[] passives = entries.Where(value => value.Kind == CombatStatusBarEntryKind.Passive).Take(3).ToArray();
+            heroPassiveDetails.text = passives.Length == 0
+                ? "当前没有被动效果"
+                : string.Join("\n", passives.Select(value =>
+                    CompactHud(value.DisplayName, 8) + "\n<color=#9B8C72>来源　" + PassiveSourceLabel(value) + "　" + CompactHud(value.TimingText, 6) + "</color>"));
+        }
+
+        private static string PassiveSourceLabel(CombatStatusBarEntry entry)
+        {
+            string runtimeId = entry?.RuntimeId ?? string.Empty;
+            if (runtimeId.StartsWith("origin:", StringComparison.Ordinal)) return "出身";
+            if (runtimeId.StartsWith("equipment:", StringComparison.Ordinal)) return "装备";
+            if (runtimeId.StartsWith("spell:", StringComparison.Ordinal)) return "术式";
+            if (runtimeId.StartsWith("artifact:", StringComparison.Ordinal)) return "法宝";
+            return "战斗效果";
+        }
+
+        private void RefreshHistory(CombatState state)
+        {
+            if (historyText == null || historyScroll == null || state == null) return;
+            string next = state.EventLog.Count == 0
+                ? "暂无战斗记录"
+                : string.Join("\n", state.EventLog.Select((value, index) =>
+                    (index == 0 ? "<color=#60D8E8>最新　" : (index + 1).ToString("00") + "　") +
+                    CombatHudTypography.PlayerEventLine(value) + (index == 0 ? "</color>" : string.Empty)));
+            if (next == displayedHistoryText) return;
+            displayedHistoryText = next;
+            historyText.text = next;
+            Canvas.ForceUpdateCanvases();
+            float height = Mathf.Max(historyScroll.viewport.rect.height, historyText.preferredHeight + 8f);
+            historyScroll.content.sizeDelta = new Vector2(0f, height);
+            historyText.rectTransform.sizeDelta = new Vector2(376f, height);
+            historyScroll.verticalNormalizedPosition = 1f;
         }
 
         public static string PrimaryClickInstruction(string action)
@@ -969,18 +1290,10 @@ namespace OCC.Combat.Presentation
             CombatState state = bootstrap?.CurrentState;
             UnitState hero = state?.GetUnit("hero");
             bool rogue = state?.Ruleset == CombatRuleset.Roguelite;
-            string details = rogue ? CombatInformationPresenter.BuildRogueliteHeroDetails(hero) : CombatInformationPresenter.BuildHeroDetails(hero);
+            string details = rogue ? CombatInformationPresenter.BuildRogueliteHeroDetails(state, hero) : CombatInformationPresenter.BuildHeroDetails(hero);
             if (rogue && state.RogueShieldEvents.Count > 0)
                 details += "\n最近护盾\n" + string.Join("\n", state.RogueShieldEvents.Take(2).Select(RogueShieldLogPresentation.Format));
             return new FormalTooltipContent("人物状态", "你的情况", details, FormalUiTheme.Safe);
-        }
-
-        private FormalTooltipContent BuildLogTooltip()
-        {
-            CombatState state = bootstrap?.CurrentState;
-            string body = state == null || state.EventLog.Count == 0 ? "暂无记录" :
-                string.Join("\n", state.EventLog.Take(5).Select(CombatHudTypography.PlayerEventLine));
-            return new FormalTooltipContent("刚刚发生", body, FormalUiTheme.Amber);
         }
 
         private FormalTooltipContent BuildQuickbarTooltip(int slot)
@@ -1011,7 +1324,7 @@ namespace OCC.Combat.Presentation
         {
             int safeMaximum = Math.Max(1, maximum);
             int percent = Mathf.RoundToInt(Mathf.Clamp01(current / (float)safeMaximum) * 100f);
-            return current + " / " + maximum + " · " + percent + "%";
+            return current + "　上限 " + maximum + "　" + percent + "%";
         }
 
         private void BindTooltip(GameObject target, Func<FormalTooltipContent> provider)
@@ -1054,6 +1367,117 @@ namespace OCC.Combat.Presentation
             return fillImage;
         }
 
+        private void RefreshTurnBanner(CombatState state)
+        {
+            if (turnBannerGroup == null || state == null || state.TurnSequence <= 0 || state.TurnSequence == displayedTurnSequence) return;
+            displayedTurnSequence = state.TurnSequence;
+            UnitState actor = state.GetUnit(state.ActiveUnitId);
+            turnBannerLabel.text = "第 " + state.TurnSequence + " 回合 · " + (actor?.DisplayName ?? "未知单位") + "的轮次";
+            turnBanner.transform.SetAsLastSibling();
+            turnBannerGroup.DOKill();
+            turnBannerGroup.alpha = 1f;
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            DOTween.Sequence().SetUpdate(true).SetTarget(turnBannerGroup)
+                .AppendInterval(.72f)
+                .Append(DOTween.To(() => turnBannerGroup.alpha, value => turnBannerGroup.alpha = value, 0f,
+                    Mathf.Max(.08f, motion.QuickDuration)).SetEase(FormalUiMotionTokens.FeedbackEase));
+        }
+
+        private void SetTimelineGlobal(CombatTurnTrackEntry? leading)
+        {
+            string unitId = leading.HasValue ? leading.Value.UnitId : string.Empty;
+            float target = leading.HasValue ? leading.Value.ActionValue : 0f;
+            bool direct = displayedTimelineGlobal < 0f || timelineGlobalUnitId != unitId;
+            timelineGlobalFill.rectTransform.DOKill();
+            timelineGlobalValue.DOKill();
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            if (direct || motion.IsImmediate)
+            {
+                displayedTimelineGlobal = target;
+                ApplyTimelineGlobal(leading, displayedTimelineGlobal);
+            }
+            else
+            {
+                DOTween.To(() => displayedTimelineGlobal, value =>
+                {
+                    displayedTimelineGlobal = value;
+                    ApplyTimelineGlobal(leading, value);
+                }, target, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineGlobalFill.rectTransform);
+            }
+            timelineGlobalUnitId = unitId;
+        }
+
+        private void ApplyTimelineGlobal(CombatTurnTrackEntry? leading, float value)
+        {
+            timelineGlobalValue.text = leading.HasValue ? CompactHud(leading.Value.DisplayName, 8) + "　值 " + Mathf.RoundToInt(value) : "等待";
+            timelineGlobalFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(value / CombatActionTimeline.MaximumValue), 1f);
+        }
+
+        private void SetTimelineRowValue(int index, CombatTurnTrackEntry entry, float targetWidth)
+        {
+            bool direct = displayedTimelineValues[index] < 0f || timelineUnitIds[index] != entry.UnitId;
+            timelineDetails[index].DOKill();
+            timelineRetained[index].rectTransform.DOKill();
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            if (direct || motion.IsImmediate)
+            {
+                displayedTimelineValues[index] = entry.ActionValue;
+                displayedTimelineWidths[index] = targetWidth;
+                ApplyTimelineRow(index, entry, entry.ActionValue, targetWidth);
+            }
+            else
+            {
+                DOTween.To(() => displayedTimelineValues[index], value =>
+                {
+                    displayedTimelineValues[index] = value;
+                    ApplyTimelineDetail(index, entry, value);
+                }, entry.ActionValue, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineDetails[index]);
+                DOTween.To(() => displayedTimelineWidths[index], value =>
+                {
+                    displayedTimelineWidths[index] = value;
+                    timelineRetained[index].rectTransform.sizeDelta = new Vector2(value, 4f);
+                }, targetWidth, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineRetained[index].rectTransform);
+            }
+            timelineUnitIds[index] = entry.UnitId;
+        }
+
+        private void ApplyTimelineRow(int index, CombatTurnTrackEntry entry, float value, float width)
+        {
+            ApplyTimelineDetail(index, entry, value);
+            timelineRetained[index].rectTransform.sizeDelta = new Vector2(width, 4f);
+        }
+
+        private void ApplyTimelineDetail(int index, CombatTurnTrackEntry entry, float value)
+        {
+            string state = entry.IsActive ? "　行动中" : entry.IsReady ? "　待行动" : string.Empty;
+            timelineDetails[index].text = "值 " + Mathf.RoundToInt(value) + state;
+        }
+
+        private void SetTimelineOrderArrow(int index, int direction)
+        {
+            Image arrow = timelineOrderArrows[index];
+            if (arrow == null) return;
+            arrow.rectTransform.DOKill();
+            arrow.rectTransform.anchoredPosition = new Vector2(360f, -8f);
+            if (direction == 0)
+            {
+                arrow.gameObject.SetActive(false);
+                return;
+            }
+            arrow.sprite = Resources.Load<Sprite>(direction > 0
+                ? "Art/FormalSemanticIcons16/turn_order_up"
+                : "Art/FormalSemanticIcons16/turn_order_down");
+            arrow.color = Color.white;
+            arrow.gameObject.SetActive(arrow.sprite != null);
+            if (arrow.sprite == null) return;
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            if (!motion.IsImmediate)
+                DOTween.To(() => arrow.rectTransform.anchoredPosition.y, value =>
+                    arrow.rectTransform.anchoredPosition = new Vector2(360f, value), -8f + direction * 4f,
+                    Mathf.Max(.24f, motion.StandardDuration * 1.5f)).SetEase(Ease.InOutSine)
+                    .SetLoops(-1, LoopType.Yoyo).SetUpdate(true).SetTarget(arrow.rectTransform);
+        }
+
         private void SetBar(Image fill, float value, ref float displayed)
         {
             value = Mathf.Clamp01(value);
@@ -1081,30 +1505,7 @@ namespace OCC.Combat.Presentation
             displayed = value;
         }
 
-        private void RefreshActionPointPips(int current)
-        {
-            current = Mathf.Clamp(current, 0, actionPointPips.Length);
-            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity);
-            for (int i = 0; i < actionPointPipGroups.Length; i++)
-            {
-                CanvasGroup group = actionPointPipGroups[i];
-                if (group == null) continue;
-                float target = i < current ? 1f : .16f;
-                group.DOKill();
-                bool changedPip = displayedActionPoints >= 0 &&
-                    ((i < current) != (i < displayedActionPoints));
-                if (motion.IsImmediate || !changedPip)
-                {
-                    group.alpha = target;
-                    continue;
-                }
-
-                group.alpha = current > displayedActionPoints ? .16f : 1f;
-                DOTween.To(() => group.alpha, value => group.alpha = value, target, motion.QuickDuration)
-                    .SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true).SetTarget(group);
-            }
-            displayedActionPoints = current;
-        }
+        private static string ActionPointText(int current) => current.ToString();
 
         private void RefreshAvailability(CombatState state, UnitState hero)
         {
@@ -1121,11 +1522,11 @@ namespace OCC.Combat.Presentation
                 FireSpellDefinition fire = fireSlot < 0 ? null : bootstrap.FireSpellInSlot(fireSlot);
                 ArtifactDefinition artifact = fireSlot == 0 ? (bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact) : null;
                 if (available && artifact != null && hero.ActionPoints < artifact.ActionPointCost) { available = false; reason = "行动点不足：需要 " + artifact.ActionPointCost; }
-                if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "术式冷却中 · " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) + " 回合"; }
+                if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "术式冷却中，还需 " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) + " 回合"; }
                 if (available && fire != null && hero.Mana < fire.ManaCost) { available = false; reason = "能量不足：需要 " + fire.ManaCost; }
                 if (available && fire != null && hero.ActionPoints < fire.ActionPointCost) { available = false; reason = "行动点不足：需要 " + fire.ActionPointCost; }
                 if (fire != null || artifact != null) skill = null;
-                if (available && skill != null && hero.Cooldown(skill) > 0) { available = false; reason = "技能冷却中 · " + hero.Cooldown(skill) + " 回合"; }
+                if (available && skill != null && hero.Cooldown(skill) > 0) { available = false; reason = "技能冷却中，还需 " + hero.Cooldown(skill) + " 回合"; }
                 if (available && skill != null && hero.Mana < skill.ManaCost) { available = false; reason = "以太不足：需要 " + skill.ManaCost; }
                 if (available && parsedSlot >= 0 && state.Ruleset == CombatRuleset.Roguelite && rogueSpell == null) { available = false; reason = "术式槽为空"; }
                 if (available && rogueSpell != null && state.RogueSpells.CooldownRemaining(rogueSpell.DefinitionId) > 0) { available = false; reason = "术式冷却中"; }
@@ -1172,13 +1573,25 @@ namespace OCC.Combat.Presentation
             return value.Length <= maximumLength ? value : value.Substring(0, maximumLength - 1) + "…";
         }
 
-        private static string StatusText(UnitState unit)
+        private static string StatusText(CombatState state, UnitState unit)
         {
-            if (unit.Statuses.Count == 0) return "正常";
-            KeyValuePair<StatusType, int> first = unit.Statuses.First();
-            CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(first.Key));
-            string remaining = unit.Statuses.Count > 1 ? "  +" + (unit.Statuses.Count - 1) : string.Empty;
-            return "<color=" + semantic.ColorHex + ">" + semantic.ShortLabel + " " + first.Value + "</color>" + remaining;
+            IReadOnlyList<CombatStatusBarEntry> entries = state?.PassiveEffects.StatusBarEntriesFor(unit.Id) ?? Array.Empty<CombatStatusBarEntry>();
+            CombatStatusBarEntry[] ongoing = entries.Where(value => value.Kind == CombatStatusBarEntryKind.OngoingEffect).ToArray();
+            if (unit.Statuses.Count > 0)
+            {
+                KeyValuePair<StatusType, int> first = unit.Statuses.First();
+                CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(first.Key));
+                int extra = unit.Statuses.Count - 1 + ongoing.Length;
+                string remaining = extra > 0 ? "  +" + extra : string.Empty;
+                return "<color=" + semantic.ColorHex + ">" + semantic.ShortLabel + " " + first.Value + "</color>" + remaining;
+            }
+            if (ongoing.Length > 0)
+            {
+                string remaining = ongoing.Length > 1 ? "  +" + (ongoing.Length - 1) : string.Empty;
+                return "<color=#60D8E8>" + ongoing[0].DisplayName + "　待命</color>" + remaining;
+            }
+            int passiveCount = entries.Count(value => value.Kind == CombatStatusBarEntryKind.Passive);
+            return passiveCount > 0 ? "被动 " + passiveCount : "正常";
         }
 
         private static GameObject Panel(string name, Transform parent, Vector2 anchorMin, Vector2 anchorMax, Vector2 position, Vector2 size, Color color)
@@ -1210,7 +1623,16 @@ namespace OCC.Combat.Presentation
         private void OnDestroy()
         {
             if (bootstrap != null) bootstrap.UiPresentationVersions.Changed -= OnPresentationChanged;
+            DOTween.Kill(this);
             if (root != null) root.transform.DOKill();
+            if (turnBannerGroup != null) turnBannerGroup.DOKill();
+            if (timelineGlobalFill != null) timelineGlobalFill.rectTransform.DOKill();
+            for (int i = 0; i < timelineNames.Length; i++)
+            {
+                timelineDetails[i]?.DOKill();
+                if (timelineRetained[i] != null) timelineRetained[i].rectTransform.DOKill();
+                if (timelineOrderArrows[i] != null) timelineOrderArrows[i].rectTransform.DOKill();
+            }
         }
     }
 }

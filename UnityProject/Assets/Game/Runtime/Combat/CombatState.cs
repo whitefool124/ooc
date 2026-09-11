@@ -19,6 +19,7 @@ namespace OCC.Combat
         public GridMap Map { get; }
         public string ActiveUnitId { get; private set; }
         public int CurrentTime { get; private set; }
+        public int TurnSequence { get; private set; }
         public bool IsVictory { get; private set; }
         public bool IsDefeat { get; private set; }
         public CombatRuleset Ruleset { get; private set; } = CombatRuleset.LegacyStory;
@@ -33,6 +34,7 @@ namespace OCC.Combat
         internal ArtifactBattleState ArtifactBattle { get; private set; }
         public Roguelite.RogueSpellCombatRuntime RogueSpells { get; private set; }
         public Roguelite.RogueEquipmentRuntime RogueEquipment { get; private set; }
+        public CombatPassiveRuntime PassiveEffects { get; private set; } = new CombatPassiveRuntime();
         public RainLanternCourtRuntime RainLanternCourt { get; private set; }
         public GreenhouseCollectionRoomRuntime GreenhouseCollectionRoom { get; private set; }
         public ThreeMaterialPressureRuntime ThreeMaterialPressure { get; private set; }
@@ -104,6 +106,7 @@ namespace OCC.Combat
             RogueSpells?.EndOwnTurn(unit.Id);
             RainLanternCourt?.EndTurn(unit);
             ThreeMaterialPressure?.EndTurn(unit);
+            PassiveEffects.ExpireOwnTurnEnd(unit.Id);
             if (rogueBreakStanceSeenThisTurn.Remove(unit.Id)) unit.ClearStatus(StatusType.BreakStance);
         }
         private void GrantCoverShield(UnitState unit)
@@ -185,11 +188,20 @@ namespace OCC.Combat
             RogueSpells = runtime;
         }
         public void AttachRogueEquipmentRuntime(Roguelite.RogueEquipmentRuntime runtime)
-        { RogueEquipment = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        {
+            RogueEquipment = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            RogueEquipment.AttachToCombat(this);
+        }
         public void AttachRainLanternCourt(RainLanternCourtRuntime runtime)
         {
             RainLanternCourt = runtime ?? throw new ArgumentNullException(nameof(runtime));
             RainLanternCourt.Attach(Map);
+            PassiveEffects.RegisterPassive("hero", new CombatPassiveDefinition("origin:ORIGIN-TALENT-01",
+                "就地接线", CombatPassiveSourceKind.OriginTalent, "ORIGIN-TALENT-01",
+                CombatPassiveTrigger.AfterActiveMove,
+                "每场战斗第一次移动结束时，若终点正交邻接掩体，获得 2 护盾并恢复 1 点个人魔力。", 30,
+                "first_move_ends_adjacent_cover", "grant_shield:2|restore_mana:1", 1,
+                CombatPassiveLimitScope.Battle));
         }
         public void AttachGreenhouseCollectionRoom(GreenhouseCollectionRoomRuntime runtime)
         { GreenhouseCollectionRoom = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
@@ -258,6 +270,7 @@ namespace OCC.Combat
         }
 
         internal void SetActiveUnit(string unitId) => ActiveUnitId = unitId;
+        internal void RecordTurnStart() => TurnSequence++;
         internal void SetCurrentTime(int time) => CurrentTime = time;
         public void AddLog(string message) { EventLog.Insert(0, message); if (EventLog.Count > 8) EventLog.RemoveAt(8); }
         internal void EvaluateOutcome()
@@ -282,13 +295,14 @@ namespace OCC.Combat
         public CombatState Clone()
         {
             CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
-            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount;
+            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.TurnSequence = TurnSequence; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount;
             clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
             foreach (KeyValuePair<string, int> pair in rogueTurnSequences) clone.rogueTurnSequences[pair.Key] = pair.Value;
             foreach (KeyValuePair<string, int> pair in rogueShieldSourceTurns) clone.rogueShieldSourceTurns[pair.Key] = pair.Value;
             foreach (string unitId in rogueBreakStanceSeenThisTurn) clone.rogueBreakStanceSeenThisTurn.Add(unitId);
             clone.rogueShieldEvents.AddRange(rogueShieldEvents);
+            clone.PassiveEffects = PassiveEffects.Clone();
             if (RainLanternCourt != null) clone.RainLanternCourt = RainLanternCourt.Clone(clone.Map);
             if (GreenhouseCollectionRoom != null) clone.GreenhouseCollectionRoom = GreenhouseCollectionRoom.Clone();
             if (ThreeMaterialPressure != null) clone.ThreeMaterialPressure = ThreeMaterialPressure.Clone();

@@ -67,7 +67,7 @@ namespace OCC.Combat.Presentation
         {
             if (vital == null || cellSize < 256f) return string.Empty;
             if (cellSize < 112f)
-                return vital.ForecastLoss > 0 ? "-" + vital.ForecastLoss + "→" + vital.Remaining : vital.Current + "/" + vital.Maximum;
+                return vital.ForecastLoss > 0 ? "-" + vital.ForecastLoss + "→" + vital.Remaining : "当前 " + vital.Current + "　上限 " + vital.Maximum;
             return vital.CompactText;
         }
 

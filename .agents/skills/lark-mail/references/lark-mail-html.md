@@ -1,6 +1,6 @@
 # 邮件 HTML 写法指南
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解通用安全规则。本文档定义 lark-cli mail 写信场景下的 HTML / CSS / URL 写法、LarkSuite mail-editor 原生格式、可复制片段、3 套场景模板。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 **CRITICAL 邮件是重要的对外交流渠道，请你保证书写语言凝练扼要**
 **CRITICAL 电子邮件的 HTML 不是 Web 开发的 HTML，请你务必遵守本文档中提及的常用邮件格式书写规范**

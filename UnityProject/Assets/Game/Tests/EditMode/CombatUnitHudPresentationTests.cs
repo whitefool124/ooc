@@ -19,13 +19,13 @@ namespace OCC.Combat.Tests
         [Test]
         public void CompactDecisionSummary_FitsTwoPlayerVisibleLinesWithoutForecastProse()
         {
-            string source = "移动 · 可执行\n目标 · 选择 3 格内可通行空格 · 预计 移动到目标格；无随机判定";
+            string source = "移动　可执行\n目标　选择 3 格内可通行空格　预计　移动到目标格；无随机判定";
 
             string result = CombatHudTypography.CompactDecisionSummary(source, null);
 
             string[] lines = result.Split('\n');
             Assert.That(lines, Has.Length.EqualTo(2));
-            Assert.That(lines[0], Is.EqualTo("移动 · 可执行"));
+            Assert.That(lines[0], Is.EqualTo("移动　可执行"));
             Assert.That(lines[1], Is.EqualTo("选择 3 格内可通行空格"));
             Assert.That(result, Does.Not.Contain("预计"));
         }
@@ -103,8 +103,8 @@ namespace OCC.Combat.Tests
 
             CombatUnitVitalsPresentation presentation = CombatUnitVitalsPresentation.From(enemy, forecast);
 
-            Assert.That(presentation.Shield.CompactText, Is.EqualTo("2 -2 → 0/6"));
-            Assert.That(presentation.Health.CompactText, Is.EqualTo("1 -1 → 0/12"));
+            Assert.That(presentation.Shield.CompactText, Is.EqualTo("2 -2 → 0　上限 6"));
+            Assert.That(presentation.Health.CompactText, Is.EqualTo("1 -1 → 0　上限 12"));
             Assert.That(presentation.Health.CurrentRatio, Is.EqualTo(1f / 12f));
             Assert.That(presentation.Health.RemainingRatio, Is.Zero);
             Assert.That(presentation.WillDefeat, Is.True);

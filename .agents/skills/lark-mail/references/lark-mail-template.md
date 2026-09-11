@@ -1,6 +1,6 @@
 # mail templates
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 邮件模板指飞书 OAPI 的个人邮件模板系统（用户邮箱里的"我的模板"），可在飞书客户端管理。它不同于仓库 [`../assets/templates/`](../assets/templates/) 下的静态 HTML 模板库；静态 HTML 模板只是在写单封邮件时可复制参考的本地素材。
 

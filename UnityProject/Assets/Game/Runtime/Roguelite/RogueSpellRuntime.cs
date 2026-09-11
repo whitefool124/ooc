@@ -64,7 +64,6 @@ namespace OCC.Combat.Roguelite
         private readonly Dictionary<string, int> ownTurnSequences = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly Dictionary<string, int> availableAtTurn = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly HashSet<string> temperingTriggeredThisTurn = new HashSet<string>(StringComparer.Ordinal);
-        private readonly HashSet<string> momentumReady = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> momentumTriggeredThisTurn = new HashSet<string>(StringComparer.Ordinal);
         private readonly RogueContentCatalog catalog;
         private readonly string specializedSpellId;
@@ -80,13 +79,13 @@ namespace OCC.Combat.Roguelite
             if (!Loadout.IsCombatLocked) throw new InvalidOperationException("Combat requires a locked spell snapshot.");
             catalog = RogueContentCatalog.CreateAcademyV01(); FireBattle = new FireBattleState(combat);
             this.specializedSpellId = specializedSpellId ?? string.Empty;
+            RegisterPassiveDefinitions();
         }
 
         public void BeginOwnTurn(string unitId)
         {
             ownTurnSequences[unitId] = ownTurnSequences.TryGetValue(unitId, out int value) ? value + 1 : 1;
             temperingTriggeredThisTurn.Remove(unitId);
-            momentumReady.Remove(unitId);
             momentumTriggeredThisTurn.Remove(unitId);
             FireBattle.BeginUnitTurn(unitId);
             UnitState unit = Combat.GetUnit(unitId);
@@ -94,28 +93,59 @@ namespace OCC.Combat.Roguelite
                 Combat.TryGrantRogueliteShield(unitId, "PASSIVE-ELITE-03", 3 - unit.Shield);
         }
 
-        public void EndOwnTurn(string unitId) => momentumReady.Remove(unitId);
+        public void EndOwnTurn(string unitId) { }
 
         public void AfterMove(string unitId, IReadOnlyList<GridPosition> path)
         {
             UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && unit.IsHero && HasEquipped("PASSIVE-ELITE-02") &&
                 !momentumTriggeredThisTurn.Contains(unitId) && path != null && path.Count >= 4)
-                momentumReady.Add(unitId);
+                Combat.PassiveEffects.ArmNextWeaponDamage("PASSIVE-ELITE-02:ready", unitId, "动势点火",
+                    "下次武器命中额外造成 4 点火焰伤害；本回合结束时失效。",
+                    CombatPassiveSourceKind.PassiveSpell, "PASSIVE-ELITE-02", 4, DamageType.Fire);
         }
 
         public void AfterWeaponHit(string unitId, UnitState target)
         {
             UnitState source = Combat.GetUnit(unitId);
-            if (source == null || !source.IsHero || target == null || !momentumReady.Remove(unitId)) return;
+            if (source == null || !source.IsHero || target == null) return;
+            IReadOnlyList<CombatDamageBonus> bonuses = Combat.PassiveEffects.ConsumeNextWeaponDamage(unitId);
+            if (bonuses.Count == 0) return;
             momentumTriggeredThisTurn.Add(unitId);
-            if (!target.IsAlive) return;
-            FireBattleState.ApplyRawFireDamage(target, 4, Combat);
-            Combat.AddLog("动势点火追加 4 点火焰伤害。");
+            foreach (CombatDamageBonus bonus in bonuses)
+            {
+                if (!target.IsAlive) break;
+                FireBattleState.ApplyRawDamage(source, target, bonus.Amount, bonus.DamageType,
+                    bonus.SourceContentId, Combat);
+                Combat.AddLog(bonus.DisplayName + "追加 " + bonus.Amount + " 点" +
+                    (bonus.DamageType == DamageType.Fire ? "火焰" : bonus.DamageType == DamageType.Arcane ? "以太" : "物理") + "伤害。");
+            }
             Combat.EvaluateOutcome();
         }
 
         private bool HasEquipped(string spellId) => Loadout.EquippedSpellIds.Contains(spellId);
+
+        private void RegisterPassiveDefinitions()
+        {
+            if (HasEquipped("PASSIVE-ELITE-01"))
+                Combat.PassiveEffects.RegisterPassive("hero", new CombatPassiveDefinition("spell:PASSIVE-ELITE-01",
+                    "回火导流", CombatPassiveSourceKind.PassiveSpell, "PASSIVE-ELITE-01",
+                    CombatPassiveTrigger.AfterPersonalSpellDamage,
+                    "每个自己回合第一次由个人术式造成火焰伤害后，恢复 1 点个人魔力。", 20,
+                    "personal_fire_damage_applied", "restore_mana:1", 1, CombatPassiveLimitScope.OwnTurn));
+            if (HasEquipped("PASSIVE-ELITE-02"))
+                Combat.PassiveEffects.RegisterPassive("hero", new CombatPassiveDefinition("spell:PASSIVE-ELITE-02",
+                    "动势点火", CombatPassiveSourceKind.PassiveSpell, "PASSIVE-ELITE-02",
+                    CombatPassiveTrigger.AfterActiveMove,
+                    "主动移动至少 3 格后，本回合下一次武器命中额外造成 4 点火焰伤害。", 20,
+                    "active_move_steps>=3", "arm_next_weapon_fire_damage:4", 1, CombatPassiveLimitScope.OwnTurn));
+            if (HasEquipped("PASSIVE-ELITE-03"))
+                Combat.PassiveEffects.RegisterPassive("hero", new CombatPassiveDefinition("spell:PASSIVE-ELITE-03",
+                    "缓冲覆层", CombatPassiveSourceKind.PassiveSpell, "PASSIVE-ELITE-03",
+                    CombatPassiveTrigger.OwnTurnStart,
+                    "自己回合开始清除旧护盾后，若护盾低于 3，补至 3。", 20,
+                    "shield_below:3_after_clear", "grant_shield_to:3", 1, CombatPassiveLimitScope.OwnTurn));
+        }
 
         public bool IsReady(string spellId, string unitId = "hero")
         {

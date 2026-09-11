@@ -93,10 +93,11 @@ namespace OCC.Combat.Presentation
             int width = placement.Rotated ? definition.Height : definition.Width;
             int height = placement.Rotated ? definition.Width : definition.Height;
             StringBuilder text = new StringBuilder();
-            text.AppendLine(definition.DisplayName + " · " + CategoryName(definition.Category) + " · " + RarityName(definition.Rarity));
+            text.AppendLine(definition.DisplayName);
+            text.AppendLine(CategoryName(definition.Category) + "　" + RarityName(definition.Rarity));
             text.Append("大小：").Append(width).Append('×').Append(height).Append(placement.Rotated ? "（横放）" : "（竖放）")
                 .Append("  重量：").Append(definition.Weight);
-            if (definition.MaximumUses > 0) text.Append("  还能用：").Append(item.RemainingUses).Append('/').Append(definition.MaximumUses);
+            if (definition.MaximumUses > 0) text.Append("  次数：剩余 ").Append(item.RemainingUses).Append("　总计 ").Append(definition.MaximumUses);
             text.AppendLine();
             if (!string.IsNullOrEmpty(definition.Element)) text.AppendLine("元素：" + definition.Element);
             text.AppendLine("来源：" + (string.IsNullOrEmpty(definition.Provenance) ? "未知" : definition.Provenance));
@@ -110,7 +111,7 @@ namespace OCC.Combat.Presentation
                 text.AppendLine("要小心：" + artifact.RiskSummary);
                 text.AppendLine("适合：" + artifact.BuildUse);
             }
-            text.Append("左键拖拽移动 · 拖拽中右键旋转 · 松开左键放置");
+            text.Append("左键拖拽移动\n拖拽中右键旋转　松开左键放置");
             return text.ToString();
         }
 

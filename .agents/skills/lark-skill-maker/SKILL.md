@@ -1,8 +1,8 @@
 ---
 name: lark-skill-maker
-version: 1.0.0
 description: "创建 lark-cli 的自定义 Skill。当用户需要把飞书 API 操作封装成可复用的 Skill（包装原子 API 或编排多步流程）时使用。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
 ---
@@ -57,7 +57,7 @@ metadata:
 
 # <标题>
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ## 命令
 

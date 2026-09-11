@@ -55,6 +55,7 @@ namespace OCC.Combat.Roguelite
         private readonly string[] quickbar = new string[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly HashSet<string> firstMoveAvailable = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> firstPaidSpellReturned = new HashSet<string>(StringComparer.Ordinal);
+        private CombatState attachedCombat;
 
         public IReadOnlyDictionary<EquipmentSlot, string> Equipped => equipped;
         public IReadOnlyDictionary<string, RogueBackpackPlacement> Backpack => backpack;
@@ -179,7 +180,7 @@ namespace OCC.Combat.Roguelite
         {
             slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, false, out RogueEquipmentInstance instance)) return false;
-            backpack.Remove(instanceId); equipped[slot] = instanceId; return true;
+            backpack.Remove(instanceId); equipped[slot] = instanceId; NotifyLoadoutChanged(); return true;
         }
 
         public bool CanEquipOrReplace(string instanceId, EquipmentSlot slot)
@@ -201,6 +202,7 @@ namespace OCC.Combat.Roguelite
             backpack.Remove(instanceId);
             backpack[previous] = previousPlacement.Value;
             equipped[slot] = instanceId;
+            NotifyLoadoutChanged();
             return true;
         }
 
@@ -221,7 +223,7 @@ namespace OCC.Combat.Roguelite
             if (string.IsNullOrEmpty(instanceId)) return false;
             RogueBackpackPlacement? placement = FindFirstFit(instanceId);
             if (!placement.HasValue) return false;
-            backpack[instanceId] = placement.Value; equipped[slot] = string.Empty; return true;
+            backpack[instanceId] = placement.Value; equipped[slot] = string.Empty; NotifyLoadoutChanged(); return true;
         }
 
         public bool CanUnequipToBackpack(EquipmentSlot slot, int x, int y, bool rotated)
@@ -239,7 +241,108 @@ namespace OCC.Combat.Roguelite
             string instanceId = equipped[slot];
             backpack[instanceId] = new RogueBackpackPlacement(x, y, rotated);
             equipped[slot] = string.Empty;
+            NotifyLoadoutChanged();
             return true;
+        }
+
+        internal void AttachToCombat(CombatState combat)
+        {
+            attachedCombat = combat ?? throw new ArgumentNullException(nameof(combat));
+            RefreshEquipmentPassives();
+        }
+
+        private void NotifyLoadoutChanged()
+        {
+            if (attachedCombat != null) RefreshEquipmentPassives();
+        }
+
+        private void RefreshEquipmentPassives()
+        {
+            attachedCombat.PassiveEffects.RemovePassivesFromSource("hero", CombatPassiveSourceKind.Equipment);
+            foreach (EquipmentSlot slot in EquipmentSlotRules.ActiveSlots)
+            {
+                string instanceId = equipped[slot];
+                if (string.IsNullOrEmpty(instanceId)) continue;
+                RogueEquipmentInstance instance = equipment[instanceId];
+                EquipmentDefinition definition = Definition(instance);
+                List<string> effectIds = definition.FixedEffectIds.ToList();
+                effectIds.AddRange(instance.MutableAffixIds.Select(affixId =>
+                    catalog.Affixes.Single(value => value.AffixId == affixId).EffectId));
+                effectIds.AddRange(instance.UpgradeBranchIds.Select(UpgradeEffectId));
+                foreach (string effectId in effectIds.Where(value => !string.IsNullOrWhiteSpace(value)).Distinct(StringComparer.Ordinal))
+                {
+                    attachedCombat.PassiveEffects.RegisterPassive("hero", new CombatPassiveDefinition(
+                        "equipment:" + instance.InstanceId + ":" + effectId,
+                        definition.DisplayName,
+                        CombatPassiveSourceKind.Equipment,
+                        instance.InstanceId,
+                        EquipmentTrigger(effectId),
+                        EquipmentEffectDetail(effectId), 10,
+                        EquipmentCondition(effectId), effectId, EquipmentActivationLimit(effectId),
+                        EquipmentLimitScope(effectId)));
+                }
+            }
+        }
+
+        private static string UpgradeEffectId(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return string.Empty;
+            int separator = value.IndexOf(':');
+            return separator < 0 ? value : value.Substring(separator + 1);
+        }
+
+        private static CombatPassiveTrigger EquipmentTrigger(string effectId)
+        {
+            if (effectId.StartsWith("turn_start_", StringComparison.Ordinal) || effectId.StartsWith("low_mana_", StringComparison.Ordinal))
+                return CombatPassiveTrigger.OwnTurnStart;
+            if (effectId.StartsWith("first_move", StringComparison.Ordinal) || effectId.StartsWith("move_", StringComparison.Ordinal))
+                return CombatPassiveTrigger.AfterActiveMove;
+            if (effectId.StartsWith("first_paid_personal_spell", StringComparison.Ordinal)) return CombatPassiveTrigger.AfterPersonalSpellCostPaid;
+            if (effectId.StartsWith("first_search", StringComparison.Ordinal) || effectId.StartsWith("first_task", StringComparison.Ordinal) ||
+                effectId.StartsWith("first_quickbar", StringComparison.Ordinal)) return CombatPassiveTrigger.RelevantAction;
+            if (effectId.Contains("spell")) return CombatPassiveTrigger.AfterPersonalSpellDamage;
+            if (effectId.Contains("weapon") || effectId.Contains("attack")) return CombatPassiveTrigger.AfterWeaponHit;
+            if (effectId.Contains("status")) return CombatPassiveTrigger.StatusApplied;
+            return CombatPassiveTrigger.AttributeQuery;
+        }
+
+        private static string EquipmentCondition(string effectId)
+        {
+            if (effectId == "first_move:+1") return "first_move_each_own_turn";
+            if (effectId.StartsWith("first_", StringComparison.Ordinal)) return effectId.Split(':')[0];
+            if (effectId.StartsWith("low_mana_", StringComparison.Ordinal)) return "low_personal_mana";
+            return "equipped";
+        }
+
+        private static int EquipmentActivationLimit(string effectId) =>
+            effectId.StartsWith("first_", StringComparison.Ordinal) ? 1 : 0;
+
+        private static CombatPassiveLimitScope EquipmentLimitScope(string effectId)
+        {
+            if (effectId == "first_move:+1") return CombatPassiveLimitScope.OwnTurn;
+            return effectId.StartsWith("first_", StringComparison.Ordinal)
+                ? CombatPassiveLimitScope.Battle
+                : CombatPassiveLimitScope.None;
+        }
+
+        private static string EquipmentEffectDetail(string effectId)
+        {
+            string[] parts = effectId.Split(':');
+            string amount = parts.Length > 1 ? parts[parts.Length - 1].TrimStart('+') : string.Empty;
+            if (effectId.StartsWith("turn_start_shield:", StringComparison.Ordinal)) return "自己回合开始时获得 " + amount + " 护盾。";
+            if (effectId == "first_move:+1") return "每个自己回合第一次移动的最大步数 +1。";
+            if (effectId == "first_search_free") return "每场战斗第一次搜索不消耗行动点。";
+            if (effectId == "first_task_interact_free") return "每场战斗第一次任务互动不消耗行动点。";
+            if (effectId == "first_quickbar_swap_free") return "每场战斗第一次调整战术栏不消耗行动点。";
+            if (effectId.StartsWith("weapon_range:", StringComparison.Ordinal)) return "武器射程 +" + amount + "。";
+            if (effectId.StartsWith("weapon_damage:", StringComparison.Ordinal)) return "武器伤害 +" + amount + "。";
+            if (effectId.StartsWith("max_mana:", StringComparison.Ordinal)) return "个人魔力上限 +" + amount + "。";
+            if (effectId.StartsWith("first_paid_personal_spell_mana:", StringComparison.Ordinal))
+                return "每场战斗第一次支付个人术式魔力后，返还 " + amount + " 点个人魔力。";
+            if (effectId.StartsWith("low_mana_shield:", StringComparison.Ordinal))
+                return "低个人魔力条件满足时获得 " + amount + " 护盾。";
+            if (effectId.StartsWith("forced_move:-", StringComparison.Ordinal)) return "受到的强制位移距离减少 " + amount.TrimStart('-') + " 格。";
+            return "装备效果持续生效；完整规则见装备详情。";
         }
 
         public void OnTurnStart(CombatState combat, string unitId)
@@ -295,7 +398,7 @@ namespace OCC.Combat.Roguelite
             if (!equipment.TryGetValue(instanceId, out RogueEquipmentInstance instance) || instance.UpgradeBranchIds.Count > 0) return false;
             UpgradeNodeDefinition node = Definition(instance).UpgradeNodes.FirstOrDefault(value => value.NodeId == nodeId);
             if (node == null || (branchId != node.BranchAEffectId && branchId != node.BranchBEffectId)) return false;
-            instance.UpgradeBranchIds.Add(nodeId + ":" + branchId); return true;
+            instance.UpgradeBranchIds.Add(nodeId + ":" + branchId); NotifyLoadoutChanged(); return true;
         }
 
         public RogueValidationResult Validate()

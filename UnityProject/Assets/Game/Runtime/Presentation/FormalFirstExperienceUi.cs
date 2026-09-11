@@ -79,7 +79,7 @@ namespace OCC.Combat.Presentation
         private void BuildBranding()
         {
             GameObject panel = CenterPanel(new Vector2(980, 420));
-            Label("印记", flow.DebugOpeningBrandMarkIndex == 0 ? "O·C 以太工业联合印记" : "OCC 生命档案局", panel.transform,
+            Label("印记", flow.DebugOpeningBrandMarkIndex == 0 ? "OC 以太工业联合印记" : "OCC 生命档案局", panel.transform,
                 new Vector2(50, -86), new Vector2(880, 86), 48, FormalUiTheme.Text, TextAnchor.MiddleCenter);
             Label("副标", "档案协议正在装订", panel.transform, new Vector2(50, -208), new Vector2(880, 52), 24, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
             AddButton("跳过品牌", "跳过品牌", panel.transform, new Vector2(650, -318), new Vector2(280, 64), flow.FinishBranding);
@@ -99,7 +99,7 @@ namespace OCC.Combat.Presentation
         private void BuildOpening()
         {
             GameObject header = FormalUiKit.AnchoredPanel("开场抬头", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(36, -32), new Vector2(920, 96), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .92f));
-            Label("标题", "以太历 413 年 · 学院北门", header.transform, new Vector2(28, -18), new Vector2(830, 52), 24, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
+            Label("标题", "以太历 413 年　学院北门", header.transform, new Vector2(28, -18), new Vector2(830, 52), 24, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
             AddButton("跳过动画", "跳过动画", page.transform, new Vector2(1580, -42), new Vector2(280, 70), flow.FinishWorldOpening);
         }
 
@@ -107,7 +107,7 @@ namespace OCC.Combat.Presentation
         {
             GameObject left = FormalUiKit.Panel("以太主界面主栏", page.transform, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(1220, 1080), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .96f));
             RectTransform leftRect = left.GetComponent<RectTransform>(); leftRect.anchorMin = new Vector2(0, 0); leftRect.anchorMax = new Vector2(0, 1); leftRect.pivot = new Vector2(0, 1); leftRect.anchoredPosition = Vector2.zero;
-            Label("卷宗", "以太 · 人生档案", left.transform, new Vector2(84, -92), new Vector2(1020, 80), 48, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
+            Label("卷宗", "以太人生档案", left.transform, new Vector2(84, -92), new Vector2(1020, 80), 48, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
             Label("说明", "从学院出发，记录战争与人生转折。当前开放：学院阶段。", left.transform, new Vector2(84, -202), new Vector2(1020, 54), 24, FormalUiTheme.WithAlpha(FormalUiTheme.OnInk, .72f), TextAnchor.MiddleLeft);
             AddButton("开始新游戏", "新建档案", left.transform, new Vector2(84, -330), new Vector2(520, 90), flow.StartNewRun, FormalUiTheme.Cyan);
             Button resume = AddButton("继续游戏", "继续档案", left.transform, new Vector2(632, -330), new Vector2(500, 90), flow.ContinueRun);
@@ -154,10 +154,10 @@ namespace OCC.Combat.Presentation
 
             GameObject profile = FormalUiKit.AnchoredPanel("角色档案", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(80, -230), new Vector2(1050, 500), FormalUiTheme.SurfaceRaised);
             Label("姓名", "维克多·维恩", profile.transform, new Vector2(38, -28), new Vector2(960, 68), 48, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            Label("身份", "雾桥村出身 · 学院工读学生 · 火系／公共修缮与实地安全", profile.transform, new Vector2(40, -104), new Vector2(960, 42), 24, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            Label("身份", "雾桥村出身　学院工读学生\n火系　公共修缮与实地安全", profile.transform, new Vector2(40, -104), new Vector2(960, 68), 24, FormalUiTheme.Amber, TextAnchor.UpperLeft);
             Label("简介", "通过公开考核与工读进入学院的普通学生。习惯先登记风险，再处理最坏的泄漏点；擅长把火用成可控、可复核的工程力量。", profile.transform, new Vector2(40, -166), new Vector2(940, 116), 24, FormalUiTheme.Text, TextAnchor.UpperLeft);
             Label("特性标题", "核心特性", profile.transform, new Vector2(40, -310), new Vector2(240, 38), 24, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            Label("特性", "稳定施术  ·  风险复核  ·  地形与器材协同  ·  余温复写", profile.transform, new Vector2(40, -354), new Vector2(940, 48), 24, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            Label("特性", "稳定施术　风险复核\n地形与器材协同　余温复写", profile.transform, new Vector2(40, -354), new Vector2(940, 64), 24, FormalUiTheme.Cyan, TextAnchor.UpperLeft);
             Label("限制", "限制：长时间施术会导致手腕痉挛、脱水与注意力下降。", profile.transform, new Vector2(40, -414), new Vector2(940, 42), 24, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
 
             GameObject portrait = FormalUiKit.AnchoredPanel("角色立绘", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1160, -230), new Vector2(680, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .96f));
@@ -191,7 +191,7 @@ namespace OCC.Combat.Presentation
 
         private void BuildAcademyIntro()
         {
-            Header("学院阶段 · 入学实操", "每份档案首次进入时展示一次。");
+            Header("学院阶段　入学实操", "每份档案首次进入时展示一次。");
             GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(112, -254), new Vector2(1020, 610), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .95f));
             Label("目标", "完成学院实地调查", module.transform, new Vector2(52, -52), new Vector2(900, 72), 48, FormalUiTheme.OnInk, TextAnchor.MiddleLeft);
             Label("路径", "三场普通战  →  三个事件  →  工坊加工  →  健康确认  →  精英挑战", module.transform, new Vector2(52, -162), new Vector2(900, 126), 24, FormalUiTheme.WithAlpha(FormalUiTheme.OnInk, .82f), TextAnchor.UpperLeft);

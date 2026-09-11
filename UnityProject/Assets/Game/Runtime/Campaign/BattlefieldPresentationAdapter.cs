@@ -167,19 +167,19 @@ namespace OCC.Combat
             if (exactTarget != null && action == "攻击")
             {
                 CombatResolver.AttackPreview damage = CombatResolver.PreviewAttack(state, hero.Id, exactTarget.Id, false);
-                before = "生命 " + exactTarget.Health + " · 护盾 " + exactTarget.Shield;
-                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " · 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                before = "生命 " + exactTarget.Health + "　护盾 " + exactTarget.Shield;
+                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + "　护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
                 breakdown = CombatInformationPresenter.DamageBreakdown(damage);
                 affected = 1;
             }
             else if (exactTarget != null && (action == "技能1" || action == "技能2"))
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
-                before = "生命 " + exactTarget.Health + " · 护盾 " + exactTarget.Shield;
+                before = "生命 " + exactTarget.Health + "　护盾 " + exactTarget.Shield;
                 if (skill != null && skill.Damage > 0)
                 {
                     CombatResolver.AttackPreview damage = CombatResolver.PreviewSkillAttack(state, hero.Id, exactTarget.Id, skill);
-                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + " · 护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + "　护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
                     breakdown = CombatInformationPresenter.DamageBreakdown(damage);
                 }
                 statuses = skill == null ? string.Empty : string.Join("、", skill.Effects.Where(effect => effect.Type == SkillEffectType.ApplyStatus).Select(EffectLabel));
@@ -244,10 +244,10 @@ namespace OCC.Combat
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
-                return skill == null ? "未装备" : SkillTargetRuleLabel(skill) + " / " + skill.Range + " 格";
+                return skill == null ? "未装备" : SkillTargetRuleLabel(skill) + "　射程 " + skill.Range + " 格";
             }
             if (action == "搜刮") return "选择相邻战利品格";
-            if (action == "互动") return "选择相邻目标/调查格";
+            if (action == "互动") return "选择相邻目标或调查格";
             return "立即结束当前单位行动";
         }
 
@@ -280,7 +280,7 @@ namespace OCC.Combat
             return "结束当前单位的回合，然后轮到下一个单位";
         }
 
-        private static string DamageSummary(CombatResolver.AttackPreview preview) => "预计生命 -" + preview.FinalDamage + " / 护盾 -" + preview.ShieldAbsorption + " / 减伤 " + (preview.CoverReduction + preview.ArmorReduction + preview.BlockReduction);
+        private static string DamageSummary(CombatResolver.AttackPreview preview) => "预计生命 -" + preview.FinalDamage + "　护盾 -" + preview.ShieldAbsorption + "　减伤 " + (preview.CoverReduction + preview.ArmorReduction + preview.BlockReduction);
         private static string EffectLabel(SkillEffectDefinition effect) => effect.Type == SkillEffectType.Damage ? effect.Amount + " 基础伤害" : effect.Type == SkillEffectType.RestoreHealth ? "生命 +" + effect.Amount : effect.Type == SkillEffectType.RestoreShield ? "护盾 +" + effect.Amount : effect.Type == SkillEffectType.RestoreMana ? "以太 +" + effect.Amount : effect.Type == SkillEffectType.ApplyStatus ? "施加 " + effect.Status + " " + effect.Duration : effect.Type == SkillEffectType.ClearStatus ? "清除 " + effect.Status : effect.Type == SkillEffectType.DamageObject ? "物件耐久 -" + effect.Amount : "位移";
         private static string SkillTargetRuleLabel(SkillDefinition skill) => skill.TargetRule == SkillTargetRule.Self ? "自身" : skill.TargetRule == SkillTargetRule.EnemyUnit ? "敌方单位" : skill.TargetRule == SkillTargetRule.AllyUnit ? "友方单位" : skill.TargetRule == SkillTargetRule.AnyUnit ? "任意单位" : skill.TargetRule == SkillTargetRule.Destructible ? "可破坏物" : "空地格";
         private static bool RequiresUnitTarget(SkillDefinition skill) => skill.TargetRule == SkillTargetRule.EnemyUnit || skill.TargetRule == SkillTargetRule.AllyUnit || skill.TargetRule == SkillTargetRule.AnyUnit;

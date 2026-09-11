@@ -53,7 +53,9 @@ namespace OCC.Combat.Presentation
         private RogueliteSettlementPresentation settlementPresentation => presentation?.Settlement;
         private FormalUiInteractionLayer interactionLayer => presentation?.Interaction;
         private FormalStartupPresentation startupPresentation => presentation?.Startup;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         private DeveloperConsolePanel developerConsole => presentation?.DeveloperConsole;
+#endif
         private TarkovInventoryPanel inventoryPanel => presentation?.Inventory;
         private FireBattleState fireBattle;
         private ArtifactBattleState artifactBattle;
@@ -651,7 +653,7 @@ namespace OCC.Combat.Presentation
                     if (rogue.LineOfSightRule != "not_required" && !state.Map.HasLineOfSight(hero.Position, position)) return false;
                 }
                 name = rogue.DisplayName;
-                cost = rogue.ActionPointCost + " 行动点 / " + rogue.ManaCost + " 个人魔力";
+                cost = rogue.ActionPointCost + " 行动点　" + rogue.ManaCost + " 个人魔力";
             }
             else
             {
@@ -672,7 +674,7 @@ namespace OCC.Combat.Presentation
                         if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
                         if (!BuildFireSpellPreviewAt(fire, position).CanCommit) return false;
                         name = fire.DisplayName;
-                        cost = fire.ActionPointCost + " 行动点 / " + fire.ManaCost + " 以太";
+                        cost = fire.ActionPointCost + " 行动点　" + fire.ManaCost + " 以太";
                     }
                     else
                     {
@@ -680,7 +682,7 @@ namespace OCC.Combat.Presentation
                                 "技能" + (slot + 1), position))) return false;
                         SkillDefinition skill = slot == 0 ? hero.SkillOne : hero.SkillTwo;
                         name = skill.DisplayName;
-                        cost = "1 行动点 / " + skill.ManaCost + " 以太";
+                        cost = "1 行动点　" + skill.ManaCost + " 以太";
                     }
                 }
             }
@@ -934,7 +936,7 @@ namespace OCC.Combat.Presentation
         {
             if (!DeveloperBuildGate.IsEnabled || trainingRangeSession == null) return null;
             TrainingRangePreviewReport report = trainingRangeSession.PreviewCurrent();
-            state.AddLog(trainingRangeSession.CurrentAbility.Id + " // " + report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;
+            state.AddLog(trainingRangeSession.CurrentAbility.Id + "　" + report.Summary); MarkPresentation(UiPresentationArea.Combat); return report;
         }
         public TrainingRangeExecutionReport ExecuteTrainingRangeCurrent()
         {
@@ -945,7 +947,7 @@ namespace OCC.Combat.Presentation
             TrainingRangePreviewReport preview = trainingRangeSession.PreviewCurrent();
             using var presentation = visualFeedback?.BeginResolvedAction("hero", fireBattle);
             TrainingRangeExecutionReport report = trainingRangeSession.ExecuteCurrent();
-            state.AddLog(trainingRangeSession.CurrentAbility.Id + " // " + report.Summary);
+            state.AddLog(trainingRangeSession.CurrentAbility.Id + "　" + report.Summary);
             if (report.NativeResult is FireSpellExecution fireExecution)
                 visualFeedback?.NotifyFireSpell(fireExecution);
             else if (report.NativeResult is ArtifactExecution artifactExecution)
@@ -1147,6 +1149,10 @@ namespace OCC.Combat.Presentation
             armedInventoryItemId = item.InstanceId; selection.SelectAction("技能1"); state.AddLog("已拿出" + ItemCatalog.Get(item.DefinitionId).DisplayName + "；请选择一个亮起的格子。"); MarkPresentation(UiPresentationArea.Combat);
         }
         public void NotifyInventoryChanged() { PersistCombatInventory(); MarkPresentation(UiPresentationArea.Combat); }
+        public void OpenCombatInventoryPanel()
+        {
+            if (inventoryPanel != null) inventoryPanel.RequestOpen();
+        }
         public bool TryOpenCombatInventory()
         {
             UnitState hero = state?.GetUnit("hero");
@@ -1543,7 +1549,7 @@ namespace OCC.Combat.Presentation
         public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
             CombatCommandExecutionService.CanSubmit(command, explicitHeroEndTurn);
 
-        private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; UnitState hero = state?.GetUnit("hero"); string rule = selection.Action == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：" + (hero?.MovementRangeThisTurn ?? UnitState.BaseMovementRange) + " \u683c" : selection.Action == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selection.Action == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selection.Action == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "  |  \u9ad8\u4eae " + count + " \u683c"; }
+        private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; UnitState hero = state?.GetUnit("hero"); string rule = selection.Action == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：" + (hero?.MovementRangeThisTurn ?? UnitState.BaseMovementRange) + " \u683c" : selection.Action == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selection.Action == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selection.Action == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "　\u9ad8\u4eae " + count + " \u683c"; }
         private bool IsInSelectedRange(GridPosition p)
         {
             int slot = RogueSkillSlot(selection.Action);

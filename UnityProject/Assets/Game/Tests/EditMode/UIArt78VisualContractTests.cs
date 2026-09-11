@@ -106,7 +106,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ConsoleModules_StayAboveCommandDeckWithReadableFiveRowTimeline()
+        public void TwoConsoleModules_StayAboveCommandDeckWithReadableFiveRowTimeline()
         {
             GameObject root = new GameObject("console-layout-test", typeof(RectTransform));
             GameObject hudObject = new GameObject("console-hud-test", typeof(FormalCombatHud));
@@ -119,7 +119,7 @@ namespace OCC.Combat.Tests
                 MethodInfo create = typeof(FormalCombatHud).GetMethod("ConsoleModule", BindingFlags.Static | BindingFlags.NonPublic);
                 float previousBottom = 0f;
                 FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
-                foreach (string key in new[] { "selected", "hero", "timeline", "log" })
+                foreach (string key in new[] { "hero", "timeline" })
                 {
                     GameObject module = (GameObject)create.Invoke(null, new object[] { key, root.transform, "combat." + key });
                     RectTransform rect = module.GetComponent<RectTransform>();

@@ -225,7 +225,7 @@ Never request permission automatically, never batch permission requests, and nev
 - [lark-drive-task-result](lark-drive-task-result.md)
 - [lark-drive-delete](lark-drive-delete.md)
 - [lark-wiki](../../lark-wiki/SKILL.md)
-- [lark-wiki-node-delete](../../lark-wiki/references/lark-wiki-node-delete.md)
+- [lark-wiki-node-delete](../../lark-wiki/SKILL.md)
 - [lark-doc](../../lark-doc/SKILL.md)
 - [lark-doc-fetch](../../lark-doc/references/lark-doc-fetch.md)
 - [lark-sheets](../../lark-sheets/SKILL.md)

@@ -46,8 +46,8 @@ namespace OCC.Combat.Presentation
         };
         private static readonly string[] RouteLabels =
         {
-            "地图", "战1预览", "战斗1", "战果1", "奖励1", "事件1/2", "战2预览", "战斗2",
-            "战果2", "奖励2", "事件3/工坊", "战3预览", "战斗3", "战果3", "奖励3", "医务室",
+            "地图", "战1预览", "战斗1", "战果1", "奖励1", "事件1与2", "战2预览", "战斗2",
+            "战果2", "奖励2", "事件3与工坊", "战3预览", "战斗3", "战果3", "奖励3", "医务室",
             "精英预览", "精英战", "精英战果", "精英奖励", "商店", "完成", "单轮创建"
         };
 
@@ -289,14 +289,14 @@ namespace OCC.Combat.Presentation
 
         private void DrawLanding()
         {
-            Background("OCC · 以太主界面");
+            Background("OCC　以太主界面");
             GUI.Label(new Rect(170, 245, 1100, 100), "固定短图使用三个独立存档位；覆盖前会再次确认。", bodyStyle);
             Button(new Rect(170, 405, 620, 95), "新游戏", () => BeginSaveSelection(false));
             GUI.enabled = HasAnySaveRecord();
             Button(new Rect(170, 525, 620, 95), "继续游戏", () => BeginSaveSelection(true));
             GUI.enabled = true;
             Button(new Rect(170, 645, 620, 95), "设置", OpenSettingsFromLanding);
-            Button(new Rect(870, 645, 620, 95), "重看开场 CG · 45 秒", ReplayWorldOpening);
+            Button(new Rect(870, 645, 620, 95), "重看开场 CG　45 秒", ReplayWorldOpening);
             GUI.Label(new Rect(170, 805, 1120, 90), "双品牌印记与开场 CG 可跳过；重看不会修改任何存档。", smallStyle);
         }
 
@@ -340,7 +340,7 @@ namespace OCC.Combat.Presentation
 
         private void DrawAcademyIntro()
         {
-            Background("学院阶段 · 入学实操");
+            Background("学院阶段　入学实操");
             GUI.Label(new Rect(170, 280, 1250, 220), "完成三场普通战、三个事件、工坊加工和健康确认后，才能进入不可逆的精英挑战。\n\n本段可跳过；首次地图仅开放战斗1。", bodyStyle);
             Button(new Rect(1290, 820, 480, 100), "进入首次地图", () => EnterAcademyMap(false));
         }
@@ -359,7 +359,7 @@ namespace OCC.Combat.Presentation
         private void DrawFlowShell()
         {
             GUI.DrawTexture(new Rect(0, 0, DesignWidth, DesignHeight), panel);
-            GUI.Label(new Rect(48, 28, 1320, 55), "首次体验路线 · 存档位 " + (selectedSlot + 1), titleStyle);
+            GUI.Label(new Rect(48, 28, 1320, 55), "首次体验路线　存档位 " + (selectedSlot + 1), titleStyle);
             DrawRoute();
             GUI.DrawTexture(new Rect(1440, 0, 480, 1080), card);
             DrawCurrentPanel();
@@ -373,7 +373,7 @@ namespace OCC.Combat.Presentation
                 int col = i % 3, row = i / 3;
                 Rect r = new Rect(48 + col * 448, 112 + row * 112, 400, 76);
                 if (i < current) GUI.DrawTexture(r, done); else if (i == current) GUI.DrawTexture(r, accent);
-                GUI.Box(r, (i < current ? "✓ " : i == current ? "▶ " : "· ") + RouteLabels[i], cardStyle);
+                GUI.Box(r, (i < current ? "✓ " : i == current ? "▶ " : "  ") + RouteLabels[i], cardStyle);
             }
         }
 
@@ -411,8 +411,8 @@ namespace OCC.Combat.Presentation
 
         private void Battle(string label, int required, FlowStage result)
         {
-            Heading(label + " · 占位战斗");
-            Body("执行移动、攻击或施术累计行动。\n\n行动：" + data.battleActions + " / " + required);
+            Heading(label + "　占位战斗");
+            Body("执行移动、攻击或施术累计行动。\n\n行动已完成 " + data.battleActions + "　要求 " + required);
             Small(330, "移动", AddBattleAction); Small(430, "攻击", AddBattleAction); Small(530, "施术", AddBattleAction);
             GUI.enabled = data.battleActions >= required;
             Primary("完成战斗", () => CompleteBattle(result));
@@ -421,16 +421,16 @@ namespace OCC.Combat.Presentation
 
         private void Reward(string label, int group, FlowStage next)
         {
-            Heading(label + " · 三选一");
+            Heading(label + "　三选一");
             Body("候选固定，返回或继续游戏不会刷新。");
-            Small(330, "候选 A · 稳定", () => ChooseReward(group, "A", next));
-            Small(440, "候选 B · 输出", () => ChooseReward(group, "B", next));
-            Small(550, "候选 C · 机动", () => ChooseReward(group, "C", next));
+            Small(330, "候选 A　稳定", () => ChooseReward(group, "A", next));
+            Small(440, "候选 B　输出", () => ChooseReward(group, "B", next));
+            Small(550, "候选 C　机动", () => ChooseReward(group, "C", next));
         }
 
         private void Events12()
         {
-            Heading("事件1 / 事件2");
+            Heading("事件1 与事件2");
             Body("两项都必须完成，先后不限。\n\n事件1：" + Mark(data.event1Done) + "\n事件2：" + Mark(data.event2Done));
             GUI.enabled = !data.event1Done; Small(360, "完成事件1", () => { data.event1Done = true; Save(); });
             GUI.enabled = !data.event2Done; Small(470, "完成事件2", () => { data.event2Done = true; Save(); });
@@ -440,7 +440,7 @@ namespace OCC.Combat.Presentation
 
         private void Event3Workshop()
         {
-            Heading("事件3 / 工坊");
+            Heading("事件3 与工坊");
             Body("事件3开放战斗3；锻造与专精可在战斗3前后完成，但都是精英门槛。\n\n事件3：" + Mark(data.event3Done) + "\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized));
             GUI.enabled = !data.event3Done; Small(350, "完成事件3", () => { data.event3Done = true; Save(); });
             GUI.enabled = !data.forged; Small(450, "确认一次锻造", () => { data.forged = true; Save(); });
@@ -452,7 +452,7 @@ namespace OCC.Combat.Presentation
 
         private void Medical()
         {
-            Heading("医务室 / 精英门槛");
+            Heading("医务室与精英门槛");
             Body("锻造、专精、健康确认全部完成后才能查看精英。\n\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized) + "\n健康：" + Mark(data.healthChecked));
             GUI.enabled = !data.healthChecked; Small(405, "完成免费健康确认", () => { data.healthChecked = true; Save(); });
             GUI.enabled = !data.healed; Small(500, "可选：治疗", () => { data.healed = true; Save(); });
@@ -473,10 +473,10 @@ namespace OCC.Combat.Presentation
 
         private void Shop()
         {
-            Heading("商店 · 已首次打开");
+            Heading("商店　已首次打开");
             Body("首次打开已满足强制条件；购买可选。\n\n余额：" + data.coins + "\n购买：" + Mark(data.shopPurchase));
             GUI.enabled = !data.shopPurchase && data.coins >= 3;
-            Small(400, "购买占位商品 · 3", () => { data.coins -= 3; data.shopPurchase = true; Save(); });
+            Small(400, "购买占位商品　价格 3", () => { data.coins -= 3; data.shopPurchase = true; Save(); });
             GUI.enabled = true;
             Primary("离开商店", CompleteFixedExperience);
         }

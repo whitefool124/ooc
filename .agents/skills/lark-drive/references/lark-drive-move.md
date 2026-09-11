@@ -1,7 +1,7 @@
 
 # drive +move
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 将文件或文件夹移动到用户云空间（云盘/云存储）的其他位置。
 
@@ -118,5 +118,5 @@ lark-cli drive +task_result \
 ## 参考
 
 - [lark-drive](../SKILL.md) -- 云空间（云盘/云存储）全部命令
-- [wiki +move-to-drive](../../lark-wiki/references/lark-wiki-move-to-drive.md) -- 将 Wiki 节点移出知识库并放入 Drive
+- [wiki +move-to-drive](../../lark-wiki/SKILL.md) -- 将 Wiki 节点移出知识库并放入 Drive
 - [lark-shared](../../lark-shared/SKILL.md) -- 认证和全局参数

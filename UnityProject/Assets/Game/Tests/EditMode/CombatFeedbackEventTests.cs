@@ -33,10 +33,10 @@ namespace OCC.Combat.Tests
             Assert.That(RogueliteSkillCatalog.All.All(skill => approvedIcons.Contains(CombatFeedbackCatalog.For(skill.PresentationKind).IconKey)), Is.True);
         }
 
-        [TestCase(StatusType.Burning, CombatFeedbackKind.Burning, "燃烧 2 · 持续燃烧")]
-        [TestCase(StatusType.Bound, CombatFeedbackKind.Bound, "束缚 2 · 无法移动")]
-        [TestCase(StatusType.Slow, CombatFeedbackKind.Slow, "迟缓 2 · 速度降低")]
-        [TestCase(StatusType.ArmorBreak, CombatFeedbackKind.ArmorBreak, "破甲 2 · 护甲削弱")]
+        [TestCase(StatusType.Burning, CombatFeedbackKind.Burning, "燃烧 2　持续燃烧")]
+        [TestCase(StatusType.Bound, CombatFeedbackKind.Bound, "束缚 2　无法移动")]
+        [TestCase(StatusType.Slow, CombatFeedbackKind.Slow, "迟缓 2　速度降低")]
+        [TestCase(StatusType.ArmorBreak, CombatFeedbackKind.ArmorBreak, "破甲 2　护甲削弱")]
         public void Statuses_MapToOneSemantic(StatusType status, CombatFeedbackKind expectedKind, string expectedHudText)
         {
             Assert.That(CombatFeedbackCatalog.ForStatus(status), Is.EqualTo(expectedKind));

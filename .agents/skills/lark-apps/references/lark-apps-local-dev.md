@@ -66,7 +66,7 @@ lark-cli apps +release-get --as user --app-id app_xxx --release-id <上一步返
 
 #### 首次开发（无 app，无代码）
 
-`+create(html)` → `+init` → 加载 [`creative-design`](../creative-design/SKILL.md) skill 在 repo 根目录产出文件 → `git add .` + `git commit` → `git push origin sprint/default` → `+release-create` → `+release-get`。
+`+create(html)` → `+init` → 按初始化后应用仓库中实际存在的设计技能/文档，在 repo 根目录产出文件（先定位真实路径，不假定此分发包带有 creative-design） → `git add .` + `git commit` → `git push origin sprint/default` → `+release-create` → `+release-get`。
 
 ```bash
 lark-cli apps +create --name "活动页" --app-type html --as user
@@ -121,7 +121,7 @@ lark-cli apps +release-create --app-id app_xxx
 - 代码读写走原生 `git`；CLI 负责凭证、初始化、发布和数据库调试。不存在 `apps +pull` / `apps +push` / `apps code +read` 这类代码读写 shortcut，不要臆造。
 - 工作环境没有 `git` 时，先引导安装 Git（macOS 可用 `xcode-select --install` 或 `brew install git`；Linux 按发行版包管理器安装），安装后重试原 `+init` / git 命令；不要因此改走其他发布链路。
 - `+init` 会编排 `+git-credential-init`、`git clone`、切到 `sprint/default`、运行脚手架，并在有变更时提交/推送。
-- `+init --dir` 选目录：用户已预授权或表达"不要询问"（见 SKILL.md「预授权判定」）→ 按应用名派生 `./<app-name>` 直接传 `--dir`、不停问；否则先问用户用哪个目录再传。目标已存在/非空时回问换目录。
+- `+init --dir` 选目录：沿用用户指定或已有项目目录；新建时按应用名派生不冲突的子目录。创建目录属于本地开发准备，无需单独询问；目标存在且非空时先判断是否为目标应用，不覆盖无关文件。
 - `sprint/default` 是工作分支；`main` 是发布态快照，由 `+release-create` 成功后服务端 fast-forward 推进；服务端护栏禁直推 `main`、拒 force-push、要求 `sprint/default` fast-forward。
 - 已拉到本地后，pull/push/diff/log 都用原生 git；云端 `sprint/default` 比本地新时，先 `git pull --rebase origin sprint/default`，解决冲突后再 push 和 publish。
 - `git clone` / `git pull` / `git push` 如果报认证失败、401/403、credential helper 缺失或 token 过期，优先重新执行 `lark-cli apps +git-credential-init --app-id <app_id> --as user` 更新本地 Git 凭证，然后重试原 git 命令；刷新凭证也失败时，停止并向用户报告错误，不要换路；不要手动复制 token、不要把 token 拼进 remote URL。

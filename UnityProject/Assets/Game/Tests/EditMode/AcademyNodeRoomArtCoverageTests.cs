@@ -20,6 +20,8 @@ namespace OCC.Combat.Tests
                 string runtimeId = type.ToString().ToLowerInvariant();
                 Assert.That(FormalArtRegistry.NodeTypes.Any(value => value.RuntimeId == runtimeId), Is.True, runtimeId);
                 Assert.That(Resources.Load<Sprite>(FormalArtRegistry.NodeTypePath(runtimeId)), Is.Not.Null, runtimeId);
+                Assert.That(FormalArtRegistry.MapNodeTypeIcons.Any(value => value.RuntimeId == runtimeId), Is.True, runtimeId);
+                Assert.That(Resources.Load<Sprite>(FormalArtRegistry.MapNodeTypeIconPath(runtimeId)), Is.Not.Null, runtimeId);
             }
         }
 

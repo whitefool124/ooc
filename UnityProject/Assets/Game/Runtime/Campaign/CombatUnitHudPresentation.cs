@@ -17,8 +17,8 @@ namespace OCC.Combat
         {
             get
             {
-                if (ForecastLoss <= 0) return Uncapped ? Current.ToString() : Current + "/" + Maximum;
-                return Current + " -" + ForecastLoss + " → " + Remaining + (Uncapped ? string.Empty : "/" + Maximum);
+                if (ForecastLoss <= 0) return Uncapped ? Current.ToString() : "当前 " + Current + "　上限 " + Maximum;
+                return Current + " -" + ForecastLoss + " → " + Remaining + (Uncapped ? string.Empty : "　上限 " + Maximum);
             }
         }
 

@@ -268,6 +268,29 @@ namespace OCC.Combat
             new FormalArtEntry("map_node_marker.unknown", "Unknown", "Art/FormalMapNodeMarkers32/unknown")
         };
 
+        public static readonly IReadOnlyList<FormalArtEntry> MapNodeTypeIcons = new[]
+        {
+            new FormalArtEntry("map_node_type.start", "start", "Art/FormalMapNodeTypeIcons48/start"),
+            new FormalArtEntry("map_node_type.combat", "combat", "Art/FormalMapNodeTypeIcons48/combat"),
+            new FormalArtEntry("map_node_type.elite", "elite", "Art/FormalMapNodeTypeIcons48/elite"),
+            new FormalArtEntry("map_node_type.finale", "finale", "Art/FormalMapNodeTypeIcons48/finale"),
+            new FormalArtEntry("map_node_type.workshop", "workshop", "Art/FormalMapNodeTypeIcons48/workshop"),
+            new FormalArtEntry("map_node_type.medical", "medical", "Art/FormalMapNodeTypeIcons48/medical"),
+            new FormalArtEntry("map_node_type.shop", "shop", "Art/FormalMapNodeTypeIcons48/shop"),
+            new FormalArtEntry("map_node_type.event", "event", "Art/FormalMapNodeTypeIcons48/event")
+        };
+
+        public static readonly IReadOnlyList<FormalArtEntry> LargeMapNodeMarkers = new[]
+        {
+            new FormalArtEntry("map_node_marker_large.current", "Current", "Art/FormalMapNodeMarkers48/current"),
+            new FormalArtEntry("map_node_marker_large.available", "Available", "Art/FormalMapNodeMarkers48/available"),
+            new FormalArtEntry("map_node_marker_large.cleared", "Cleared", "Art/FormalMapNodeMarkers48/cleared"),
+            new FormalArtEntry("map_node_marker_large.visited", "Visited", "Art/FormalMapNodeMarkers48/visited"),
+            new FormalArtEntry("map_node_marker_large.locked", "Locked", "Art/FormalMapNodeMarkers48/locked"),
+            new FormalArtEntry("map_node_marker_large.known", "Known", "Art/FormalMapNodeMarkers48/known"),
+            new FormalArtEntry("map_node_marker_large.unknown", "Unknown", "Art/FormalMapNodeMarkers48/unknown")
+        };
+
         public static readonly IReadOnlyList<FormalArtEntry> MapRegions = new[]
         {
             new FormalArtEntry("map_region.courtyard_dormitory", "courtyard_dormitory", "Art/FormalMapRegionIcons32/courtyard_dormitory"),
@@ -406,8 +429,8 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> All = Units
             .Concat(Commands).Concat(Feedback).Concat(Intents).Concat(Statuses).Concat(Environments)
-            .Concat(NodeTypes).Concat(Navigation).Concat(Semantics).Concat(Elements).Concat(ResourceMetrics).Concat(EquipmentSlots).Concat(MapStates)
-            .Concat(MapNodeFrames).Concat(MapNodeMarkers).Concat(MapRegions).Concat(MapDecor)
+            .Concat(NodeTypes).Concat(MapNodeTypeIcons).Concat(Navigation).Concat(Semantics).Concat(Elements).Concat(ResourceMetrics).Concat(EquipmentSlots).Concat(MapStates)
+            .Concat(MapNodeFrames).Concat(MapNodeMarkers).Concat(LargeMapNodeMarkers).Concat(MapRegions).Concat(MapDecor)
             .Concat(EquipmentItems.Select(entry => entry.Icon))
             .Concat(RuntimeSkills).Concat(FireSpells).Concat(Items).Concat(Vfx).ToArray();
 
@@ -425,6 +448,7 @@ namespace OCC.Combat
         public static string StatusPath(string runtimeId) => Required(Statuses, runtimeId).ResourcePath;
         public static string EnvironmentPath(string runtimeId) => Required(Environments, runtimeId).ResourcePath;
         public static string NodeTypePath(string runtimeId) => Required(NodeTypes, runtimeId).ResourcePath;
+        public static string MapNodeTypeIconPath(string runtimeId) => Required(MapNodeTypeIcons, runtimeId).ResourcePath;
         public static string NavigationPath(string runtimeId) => Required(Navigation, runtimeId).ResourcePath;
         public static string SemanticPath(string runtimeId) => Required(Semantics, runtimeId).ResourcePath;
         public static string ElementPath(string runtimeId) => Required(Elements, runtimeId).ResourcePath;
@@ -435,6 +459,7 @@ namespace OCC.Combat
         public static string MapStatePath(string runtimeId) => Required(MapStates, runtimeId).ResourcePath;
         public static string MapNodeFramePath(string runtimeId) => Required(MapNodeFrames, runtimeId).ResourcePath;
         public static string MapNodeMarkerPath(string runtimeId) => Required(MapNodeMarkers, runtimeId).ResourcePath;
+        public static string LargeMapNodeMarkerPath(string runtimeId) => Required(LargeMapNodeMarkers, runtimeId).ResourcePath;
         public static string MapRegionPath(string runtimeId) => Required(MapRegions, runtimeId).ResourcePath;
         public static string MapDecorPath(string runtimeId) => Required(MapDecor, runtimeId).ResourcePath;
         public static string RuntimeSkillPath(string runtimeId) => Required(RuntimeSkills, runtimeId).ResourcePath;

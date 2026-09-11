@@ -376,7 +376,7 @@ namespace OCC.Combat
             FireTargetKind.EmptyCell, FireSelectionShape.Line, 4, true, true, new[]
             {
                 new FireSpellRule(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, affectAllies: true),
-                new FireSpellRule(FireRuleKind.CreateFireground, 8, 4, FireRuleScope.Selection, affectAllies: true)
+                new FireSpellRule(FireRuleKind.CreateFireground, 8, 2, FireRuleScope.Selection, affectAllies: true)
             }, "fire_projectile", "fire_cross_blast", "fire_burning_ground");
         public static FireSpellDefinition For(string definitionId)
         {

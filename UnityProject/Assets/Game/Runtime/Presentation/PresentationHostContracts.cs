@@ -63,6 +63,8 @@ namespace OCC.Combat.Presentation
         FireSpellDefinition FireSpellInSlot(int slot);
         void SelectHudAction(string action);
         bool TrySelectSpellShortcut(int slot);
+        void OpenCombatInventoryPanel();
+        bool TryOpenCombatInventory();
         void ActivateInventoryQuickbar(int slot);
         void EndHeroTurn();
         bool BeginKeyboardTargeting();

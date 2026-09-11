@@ -1,6 +1,6 @@
 ---
 name: lark-doc
-description: "飞书云文档（Docx / Wiki）内容操作：读取、创建、编辑文档，插入或下载图片附件，以及操作思维笔记。用户提供文档 URL/token（包括 doubao.com 的 /docx/、/wiki/）时使用；按 URL 路径/token 而非域名路由。文档内嵌资源按读取参考中的统一规则分流。文档评论走 lark-drive；表格或 Base 内部数据操作不在本 skill。"
+description: "读取、创建或编辑飞书 Docx/Wiki 正文及嵌入素材；按 /docx/、/wiki/ 路径识别，文件管理使用 lark-drive。"
 metadata:
   requires:
     bins: ["lark-cli"]
@@ -21,7 +21,7 @@ metadata:
 ### 文档内容
 
 - **读取 / 摘要 — [`+fetch`](references/lark-doc-fetch.md)**：先读参考再获取文档。
-- **从零创作 — [`创建工作流`](references/lark-doc-create-workflow.md)**：先完整执行创建工作流，**简单任务不是跳过的理由**；
+- **从零创作 — [`创建工作流`](references/lark-doc-create-workflow.md)**：复杂文档按创建工作流组织；简单文档可直接使用 [`+create`](references/lark-doc-create.md) 的受支持格式，保留内容核验与写后回读；
 - **导入 / 空文档 — [`+create`](references/lark-doc-create.md)**：仅创建空文档或原样导入用户提供的完整内容时，跳过创建工作流。
 - **编辑 / block 直达链接 — [`+update`](references/lark-doc-update.md)**：语义改写、润色、重组、补写或排版均按 update 参考完成。
 

@@ -54,6 +54,14 @@ class OccArtContractTests(unittest.TestCase):
         errors, _ = VALIDATOR.validate_manifest(manifest, CONTRACT, ROOT)
         self.assertTrue(any("delivery size" in error for error in errors), errors)
 
+    def test_new_battlefield_roles_use_64px_delivery(self):
+        roles = CONTRACT["roles"]
+        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_floor_tile_64"], [1, 1]), (64, 64))
+        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_single_cell_prop_64"], [1, 1]), (64, 64))
+        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_multi_cell_prop_64"], [2, 3]), (128, 192))
+        self.assertEqual(roles["battlefield_single_cell_prop_64"]["primary_readable_bounds_max"], [48, 48])
+        self.assertEqual(roles["battlefield_single_cell_prop_64"]["low_resolution_companion"]["delivery_size"], [32, 32])
+
     def test_forbidden_generation_route_is_rejected(self):
         manifest = VALIDATOR.read_json(V02 / "wooden_sapphire_staff.occ-art.json")
         manifest = copy.deepcopy(manifest)

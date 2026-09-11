@@ -188,6 +188,46 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FiregroundDurations_UseTwoThreeAndFourPublicTurns()
+        {
+            var expected = new Dictionary<string, int>
+            {
+                { "F-P-M03", 2 }, { "F-P-U17", 2 }, { "F-P-R11", 3 },
+                { "F-P-R12", 2 }, { "F-P-R13", 4 }, { "F-P-R14", 4 },
+                { "F-P-R15", 3 }, { "F-P-R20", 3 }
+            };
+
+            foreach (var pair in expected)
+            {
+                FireSpellRule rule = FireSpellCatalog.Get(pair.Key).Rules.Single(value => value.Kind == FireRuleKind.CreateFireground);
+                Assert.That(rule.Duration, Is.EqualTo(pair.Value), pair.Key);
+            }
+            Assert.That(ItemAbilityCatalog.FirelineScroll.Rules.Single(value => value.Kind == FireRuleKind.CreateFireground).Duration,
+                Is.EqualTo(2), "F-S01");
+        }
+
+        [Test]
+        public void Fireground_TicksBeforeTurnStartDamageAndExpiresBeforeTheFinalWindow()
+        {
+            GridPosition burningCell = new GridPosition(1, 1);
+            UnitState first = new UnitState("first", true, burningCell);
+            UnitState second = new UnitState("second", false, new GridPosition(2, 1));
+            CombatState combat = new CombatState(new GridMap(4, 4), new[] { first, second }, Array.Empty<CombatObjective>());
+            FireBattleState battle = new FireBattleState(combat);
+            battle.CreateOrRefreshFireground(burningCell, 8, 2, "test-fireground");
+            int before = first.Health + first.Shield;
+
+            battle.BeginUnitTurn(first.Id);
+
+            Assert.That(before - first.Health - first.Shield, Is.GreaterThan(0));
+            Assert.That(battle.Firegrounds[burningCell].RemainingTurns, Is.EqualTo(1));
+
+            battle.BeginUnitTurn(second.Id);
+
+            Assert.That(battle.HasFireground(burningCell), Is.False);
+        }
+
+        [Test]
         public void MeltBarrierCalibration_MarksDamagesAndPaysDestructionReward()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -224,6 +264,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(hero.Position, Is.EqualTo(new GridPosition(3, 1)));
             Assert.That(battle.HasReservedNextTurnAction(hero.Id), Is.True);
+            Assert.That(combat.PassiveEffects.StatusBarEntriesFor(hero.Id).Single(value => value.DisplayName == "脱线疾行").TimingText,
+                Is.EqualTo("下次自己回合开始"));
             CombatResolver.BeginTurn(combat, hero.Id); battle.BeginUnitTurn(hero.Id);
             Assert.That(hero.ActionPoints, Is.EqualTo(4));
             Assert.That(battle.HasReservedNextTurnAction(hero.Id), Is.False);

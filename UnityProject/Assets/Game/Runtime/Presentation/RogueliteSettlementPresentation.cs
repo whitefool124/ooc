@@ -104,14 +104,14 @@ namespace OCC.Combat.Presentation
             bool firstEliteReward = run.IsFirstRunExperience && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !run.FirstRunExperience.EliteRewardClaimed;
             AddLabel(card.transform, "标题", "战斗胜利", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "副标题", firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            AddLabel(card.transform, "等级", "等级 " + run.Level + " · 经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            AddLabel(card.transform, "等级", "等级 " + run.Level + "　经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             FormalUiKit.Line(card.transform, new Vector2(56, -204), new Vector2(1260, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Muted, .72f), "分隔");
 
             List<RogueliteReward> choices = run.CurrentFireSpellChoices.Select(AsReward).ToList();
             choices.AddRange(run.CurrentRewards.Take(3 - choices.Count));
             for (int i = 0; i < choices.Count; i++) AddRewardCard(card.transform, choices[i], i, run);
             if (firstEliteReward)
-                AddLabel(card.transform, "固定获得", "固定获得　低压回路护额 ×1　·　定锚支架 ×1（4次）　·　金币 6", new Vector2(56, -566), new Vector2(1260, 34), 18, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+                AddLabel(card.transform, "固定获得", "固定获得　低压回路护额 ×1　定锚支架 ×1（4次）　金币 6", new Vector2(56, -566), new Vector2(1260, 34), 18, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             if (choices.Count == 0)
             {
                 FormalUiEffects.AddEmptyIllustration(card.transform, "empty_reward_crate", new Vector2(710, -384), 128f);
@@ -206,9 +206,9 @@ namespace OCC.Combat.Presentation
             Image rewardIcon = iconObject.AddComponent<Image>(); rewardIcon.sprite = rewardSprite; rewardIcon.preserveAspect = true; rewardIcon.raycastTarget = false;
             AddLabel(card.transform, "类型", weapon ? "武器" : equipmentReward ? "装备" : itemReward ? (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "卷轴") : "个人术式", new Vector2(84, -16), new Vector2(226, 40), 19, accent, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(24, -60), new Vector2(286, 40), 29, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            string stat = equipmentReward ? EquipmentSlotLabel(reward.Equipment.Slot) + " · " + HandednessLabel(reward.Equipment.Handedness) + " · 重量 " + reward.Equipment.BaseWeight + " · 以太负荷 " + reward.Equipment.BaseAetherLoad : itemReward ? reward.Item.Width + "×" + reward.Item.Height + " · " + reward.Item.MaximumUses + " 次 · 重量 " + reward.Item.Weight : weapon
+            string stat = equipmentReward ? EquipmentSlotLabel(reward.Equipment.Slot) + "　" + HandednessLabel(reward.Equipment.Handedness) + "　重量 " + reward.Equipment.BaseWeight + "　以太负荷 " + reward.Equipment.BaseAetherLoad : itemReward ? reward.Item.Width + "×" + reward.Item.Height + "　" + reward.Item.MaximumUses + " 次　重量 " + reward.Item.Weight : weapon
                 ? "伤害 " + reward.Weapon.Damage + "   射程 " + reward.Weapon.Range + "   穿甲 " + reward.Weapon.ArmorPierce
-                : reward.RogueSpell != null ? reward.RogueSpell.ActionPointCost + " 行动点 · " + reward.RogueSpell.ManaCost + " 个人魔力 · 射程 " + reward.RogueSpell.Range : "伤害 " + reward.Spell.Damage + " · 射程 " + reward.Spell.Range;
+                : reward.RogueSpell != null ? reward.RogueSpell.ActionPointCost + " 行动点　" + reward.RogueSpell.ManaCost + " 个人魔力　射程 " + reward.RogueSpell.Range : "伤害 " + reward.Spell.Damage + "　射程 " + reward.Spell.Range;
             float statX = 24f;
             if (!weapon && !equipmentReward)
             {
@@ -222,18 +222,18 @@ namespace OCC.Combat.Presentation
                     statX = 144f;
                 }
             }
-            if (fireSpell != null) stat = "射程 " + fireSpell.Range + " · " + ShapeLabel(fireSpell.Shape);
+            if (fireSpell != null) stat = "射程 " + fireSpell.Range + "　" + ShapeLabel(fireSpell.Shape);
             if (artifact != null)
             {
                 string perUseCost = artifact.PublicCost
                     .Replace(artifact.ActionPointCost + " 行动点，", string.Empty)
                     .Replace("消耗 ", string.Empty);
-                stat = "每次 " + perUseCost + " · 共 " + artifact.MaximumUses + " 次 · " + artifact.Width + "×" + artifact.Height;
+                stat = "每次 " + perUseCost + "　共 " + artifact.MaximumUses + " 次　" + artifact.Width + "×" + artifact.Height;
             }
             AddLabel(card.transform, "数值", stat, new Vector2(statX, -104), new Vector2(384 - statX, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
             string effect = weapon ? "带回工坊后可以换成主手武器\n" + RogueliteEconomyPresentation.RewardComparison(run, reward) : equipmentReward ? "放进行囊；可在战斗外装备" : itemReward ? "放进行囊" : "收进术式册；可在战斗外装入术式栏";
             if (fireSpell != null) effect = FireSpellPlayerSummary(fireSpell);
-            if (artifact != null) effect = artifact.EffectSummary + "\n来源：" + artifact.Provenance + " · 目标：" + artifact.TargetSummary;
+            if (artifact != null) effect = artifact.EffectSummary + "\n来源：" + artifact.Provenance + "\n目标：" + artifact.TargetSummary;
             AddLabel(card.transform, "完整效果", effect, new Vector2(24, -146), new Vector2(360, 92), 15, FormalUiTheme.Text, TextAnchor.UpperLeft);
             string notice = artifact == null ? null : artifact.RiskSummary;
             if (fireSpell != null && fireSpell.WeaponRequirement != FireWeaponRequirement.None)
@@ -244,7 +244,7 @@ namespace OCC.Combat.Presentation
                 AddLabel(card.transform, "注意内容", notice, new Vector2(54, -250), new Vector2(330, 40), 13, FormalUiTheme.Amber, TextAnchor.UpperLeft);
             }
             string availabilityText = string.IsNullOrWhiteSpace(availability.Reason) || availability.Reason == availability.Status
-                ? availability.Status : availability.Status + " · " + availability.Reason;
+                ? availability.Status : availability.Status + "，" + availability.Reason;
             AddLabel(card.transform, "选择", availabilityText, new Vector2(24, -306), new Vector2(360, 40), artifact != null ? 15 : 17, availability.CanExecute ? accent : FormalUiTheme.Muted, TextAnchor.MiddleCenter);
             string tooltipBody = "数据　" + stat + "\n效果\n" + effect;
             if (!string.IsNullOrWhiteSpace(notice)) tooltipBody += "\n注意　" + notice;
@@ -295,7 +295,7 @@ namespace OCC.Combat.Presentation
                 spell.TargetKind == FireTargetKind.AdjacentEnemy ? "一名相邻敌人" :
                 spell.TargetKind == FireTargetKind.AdjacentBurningEnemy ? "一名相邻的燃烧敌人" :
                 "一名燃烧或已破甲的敌人";
-            return target + " · " + spell.Range + " 格 · " + ShapeLabel(spell.Shape);
+            return target + "　射程 " + spell.Range + " 格　" + ShapeLabel(spell.Shape);
         }
 
         public static string RogueSpellTargetSummary(OCC.Combat.Roguelite.SpellDefinition spell)
@@ -366,8 +366,8 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.ExtendBurning: effect = "延长燃烧 " + rule.Duration + " 回合"; break;
                 case FireRuleKind.ApplyArmorBreak: effect = "施加破甲 " + rule.Duration + " 回合"; break;
                 case FireRuleKind.ApplyBreakStance: effect = "清除目标护盾并施加破势至其下一次自己回合结束"; break;
-                case FireRuleKind.CreateFireground: effect = "生成持续 " + rule.Duration + " 刻度的火场"; break;
-                case FireRuleKind.ExtendFireground: effect = "延长火场 " + rule.Duration + " 刻度"; break;
+                case FireRuleKind.CreateFireground: effect = "生成持续 " + rule.Duration + " 回合的火场"; break;
+                case FireRuleKind.ExtendFireground: effect = "延长火场 " + rule.Duration + " 回合"; break;
                 case FireRuleKind.RestoreShield: effect = "恢复 " + rule.Amount + " 点护盾"; break;
                 case FireRuleKind.RestoreMana: effect = "恢复 " + rule.Amount + " 点以太"; break;
                 case FireRuleKind.RestoreMovement: effect = "恢复 " + rule.Amount + " 步"; break;

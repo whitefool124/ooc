@@ -9,7 +9,7 @@
 - `asset_need` is metadata only. It can guide page design.
 - Every planned asset must include a fallback visual plan. The fallback can use native charts, tables, placeholder regions, or XML shapes, text, and arrows as appropriate.
 - Asset needs must serve the page's `key_message` and `visual_focus`. Do not add decorative assets that do not clarify the page.
-- Prefer a few high-value asset plans over one asset on every page. For a 6-page technical or business deck, plan assets on at least 3 pages when the content allows.
+- Prefer a few high-value asset plans over one asset on every page. There is no minimum asset count; text-led pages are valid.
 - If a real local asset already exists or the user provides one, it can be used through the normal media-upload workflow. Still keep `fallback_if_missing` in the plan.
 - Do not leave blank image boxes in final XML. If the asset is missing, render the fallback visual.
 
@@ -62,7 +62,7 @@ Match asset type to slide role:
 - `big-number` layout often works with `chart` or `infographic`, but only if it supports the metric.
 - `image-left-text-right` and `image-right-text-left` can use `screenshot`, `paper_figure`, `logo`, or `infographic`; if missing, use a large placeholder diagram or stylized panel.
 
-`suggested_query` is only a future lookup hint. Write it as a short phrase a human or later workflow could search, but do not execute the search unless the user separately requests real assets.
+`suggested_query` is only a future lookup hint. Write it as a short phrase a human or later workflow could search, and use available search when real assets would help fulfill the authorized task; no separate approval is needed for ordinary read-only research.
 
 For `asset_type: "chart"`:
 
@@ -71,7 +71,7 @@ For `asset_type: "chart"`:
 - Choose the data source explicitly:
   - `user_provided`: when the user provides concrete values, tables, CSV, or metric lists, use those values and do not replace them with mock data.
   - `mock_placeholder`: when the user asks for a placeholder, template, example, or chart position to replace later, use mock data in a native `<chart>`.
-  - `mock_required_by_intent`: when the user does not provide concrete values but asks for data expression, charts, trends, comparisons, or distributions, use mock data in a native `<chart>`.
+  - `data_missing`: when an analytical request lacks concrete values, retrieve authorized source data or ask for the missing input; do not invent values merely to fill a chart.
 - Mock data must be labeled as `模拟数据，仅占位，待替换真实数据` or equivalent. Do not present mock values as facts.
 - Manual drawing fallbacks are allowed only for unsupported chart types such as scatter, funnel, waterfall-like custom visuals, or decorative non-data visuals.
 
@@ -130,8 +130,8 @@ Business comparison page:
 When generating XML:
 
 1. If an asset exists and the workflow supports it, place it in the planned visual region.
-2. If no asset exists, immediately render `fallback_if_missing` with the planned generated close-enough image. Supported standard data visuals still use native `<chart>`; other fallbacks may use the image generation tool to create an approximate image.
+2. If no asset exists, use a truthful fallback: text identity for a missing logo, a clearly labeled original schematic for an explanation, or report the missing evidence. Never generate a substitute screenshot, paper figure, logo or measurement and present it as real. Image generation is suitable for requested illustrations.
 3. Size the fallback to satisfy `visual_focus`; it should be a real page element, not a tiny decoration.
 4. Keep text-density limits. Do not compensate for missing assets by adding long bullet text.
 5. After creation, fetch the presentation and verify asset pages are not blank and that each planned fallback is visible when no real asset was used.
-6. If the image generation tool is unavailable or fails, degrade to an XML-native fallback instead of leaving a blank: native `<chart>` for data, otherwise a simple in-card shape/text placeholder sized to fill `visual_focus`.
+6. If image generation fails, use a meaningful native visual or concise text where it fulfills the request; report any required visual that remains unavailable. Data charts still require real data unless this is explicitly a placeholder/template.

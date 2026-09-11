@@ -75,14 +75,16 @@ def color_family(pixel: tuple[int, int, int], family: str) -> bool:
 def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int]:
     if "delivery_size" in role:
         return tuple(role["delivery_size"])
-    if role.get("delivery_formula") == "logical_cells_times_32":
+    formula = role.get("delivery_formula")
+    if formula in {"logical_cells_times_32", "logical_cells_times_64"}:
         if (
             not isinstance(logical_cells, list)
             or len(logical_cells) != 2
             or not all(isinstance(value, int) and value > 0 for value in logical_cells)
         ):
             raise ValueError("multi-cell role requires two positive integer logical_cells")
-        return logical_cells[0] * 32, logical_cells[1] * 32
+        cell_pixels = 64 if formula == "logical_cells_times_64" else 32
+        return logical_cells[0] * cell_pixels, logical_cells[1] * cell_pixels
     raise ValueError("role has no delivery size rule")
 
 
@@ -226,6 +228,28 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
             delivery.get("required_color_families", []),
         )
         errors.extend(image_errors)
+
+    companion_contract = role.get("low_resolution_companion")
+    if companion_contract and status not in {"CONCEPT", "PROTOTYPE"}:
+        companion = delivery.get("low_resolution_companion")
+        if not isinstance(companion, dict):
+            errors.append("delivery.low_resolution_companion is required for this battlefield role")
+        else:
+            companion_path = repo_path(root, companion.get("output_path"))
+            if companion_path is None or not companion_path.is_file():
+                errors.append("low-resolution companion output_path is missing")
+            else:
+                if companion.get("output_sha256", "").lower() != sha256(companion_path):
+                    errors.append("low-resolution companion output_sha256 does not match delivery file")
+                companion_errors, companion_metrics = validate_image(
+                    companion_path,
+                    companion_contract,
+                    logical_cells,
+                    int(companion.get("palette_max", companion_contract["palette_max"])),
+                    companion.get("required_color_families", []),
+                )
+                errors.extend(f"low-resolution companion: {error}" for error in companion_errors)
+                metrics["low_resolution_companion"] = companion_metrics
 
     if "native_size" in role:
         native_path = repo_path(root, delivery.get("native_output_path"))

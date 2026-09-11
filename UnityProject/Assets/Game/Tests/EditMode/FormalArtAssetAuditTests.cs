@@ -225,7 +225,7 @@ namespace OCC.Combat.Tests
         public void AcademyMapArt_HasExactIndependentPixelAssets()
         {
             FormalArtEntry board = FormalArtRegistry.Required(FormalArtRegistry.MapDecor, "academy_network");
-            AssertSpriteContract(board, new Vector2(670, 393));
+            AssertSpriteContract(board, new Vector2(480, 270));
             AssertSpriteContract(FormalArtRegistry.Required(FormalArtRegistry.MapDecor, "route_joint"), new Vector2(8, 8));
             foreach (FormalArtEntry entry in FormalArtRegistry.MapNodeFrames) AssertSpriteContract(entry, new Vector2(77, 39));
             foreach (FormalArtEntry entry in FormalArtRegistry.MapRegions) AssertSpriteContract(entry, new Vector2(32, 32));
@@ -236,6 +236,15 @@ namespace OCC.Combat.Tests
         {
             AssertSpriteContract(FormalArtRegistry.Required(FormalArtRegistry.MapDecor, "academy_coastal"), new Vector2(1600, 900));
             foreach (FormalArtEntry entry in FormalArtRegistry.MapNodeMarkers) AssertSpriteContract(entry, new Vector2(32, 32));
+            foreach (FormalArtEntry entry in FormalArtRegistry.LargeMapNodeMarkers) AssertSpriteContract(entry, new Vector2(48, 48));
+        }
+
+        [Test]
+        public void AcademyMapTypeIcons_AreNative48PixelSprites()
+        {
+            Assert.That(FormalArtRegistry.MapNodeTypeIcons, Has.Count.EqualTo(8));
+            foreach (FormalArtEntry entry in FormalArtRegistry.MapNodeTypeIcons)
+                AssertSpriteContract(entry, new Vector2(48, 48));
         }
 
         [Test]
@@ -246,7 +255,7 @@ namespace OCC.Combat.Tests
             Assert.That(ids.Distinct(StringComparer.Ordinal), Is.EquivalentTo(FormalArtRegistry.MapRegions.Select(entry => entry.RuntimeId)));
         }
 
-        private static void AssertSpriteContract(FormalArtEntry entry, Vector2 expectedSize)
+        private static void AssertSpriteContract(FormalArtEntry entry, Vector2 expectedSize, float expectedPixelsPerUnit = 32f)
         {
             Sprite sprite = Resources.Load<Sprite>(entry.ResourcePath);
             Assert.That(sprite, Is.Not.Null, entry.AssetId);
@@ -256,7 +265,7 @@ namespace OCC.Combat.Tests
             Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), entry.AssetId);
             Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), entry.AssetId);
             Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
-            Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f), entry.AssetId);
+            Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(expectedPixelsPerUnit), entry.AssetId);
         }
 
         [Test]
@@ -347,9 +356,10 @@ namespace OCC.Combat.Tests
             Assert.That(config.logicalPixelScale, Is.GreaterThanOrEqualTo(4));
             string[] requiredLayouts = { "global.header", "landing.card", "map.status", "map.board", "map.detail", "briefing.card",
                 "settings.card", "archive.card", "modal.confirm", "modal.toast", "map.toast", "combat.toast", "settlement.card", "settlement.rewardCard", "combat.header", "combat.rightConsole",
-                "combat.selected", "combat.hero", "combat.timeline", "combat.log", "combat.commands", "combat.outcome" };
+                "combat.hero", "combat.timeline", "combat.decisionToast", "combat.actionPointBadge", "combat.commands", "combat.outcome" };
             Assert.That(config.layouts.Select(entry => entry.id), Is.SupersetOf(requiredLayouts));
             Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.target"));
+            Assert.That(config.layouts.Select(entry => entry.id), Does.Not.Contain("combat.log"));
             Assert.That(OccPixelUiConfig.Layout("combat.rightConsole").width, Is.LessThanOrEqualTo(config.hudWidth));
             Assert.That(OccPixelUiConfig.Layout("combat.commands").width, Is.EqualTo(1888));
             Assert.That(OccPixelUiConfig.StateSkin("button", "selected"), Is.EqualTo("tab_active"));

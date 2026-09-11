@@ -117,7 +117,7 @@ namespace OCC.Combat
                     H(0, 0), H(1, 0), H(11, 0), H(0, 1), H(11, 1),
                     H(0, 8), H(1, 8), H(2, 8), H(7, 8), H(8, 8), H(9, 8), H(10, 8), H(11, 8)
                 },
-                new LevelSpaceContract("雨后石庭／积水横带／双列灯藤",
+                new LevelSpaceContract("雨后石庭、积水横带、双列灯藤",
                     new[] { new GridPosition(1, 6), new GridPosition(2, 5), new GridPosition(7, 7) },
                     "积水提高主角穿越成本；灯藤遮断远程视线，并会被火矢生依次烧开。",
                     "可沿西侧稳进、借积水灭火，或利用灯藤让寻迹兽进入公开的嗅探搜索。"));
@@ -132,7 +132,7 @@ namespace OCC.Combat
                     V(4, 3), V(5, 3), V(6, 3), V(4, 4), V(6, 4), V(4, 5), V(5, 5), V(6, 5),
                     C(8, 2), C(8, 6)
                 },
-                new LevelSpaceContract("中央藤圈宝箱／南北双晶簇／南侧普通长路",
+                new LevelSpaceContract("中央藤圈宝箱、南北双晶簇、南侧普通长路",
                     new[] { new GridPosition(3, 4), new GridPosition(5, 6), new GridPosition(7, 8) },
                     "晶簇被摧毁时伤害正交邻格并生成五格碎晶；灯藤遮断攻击线。",
                     "可跃进抢箱、等待敌人贴晶引爆，或不依赖奖励沿南侧长路推进。"));
@@ -147,7 +147,7 @@ namespace OCC.Combat
                     W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7), W(4, 1), W(5, 1),
                     C(6, 4), H(7, 3), H(7, 5), H(8, 4), L(1, 2), L(1, 6), L(8, 2), L(9, 6)
                 },
-                new LevelSpaceContract("冷却沟／封门晶簇／南侧干路",
+                new LevelSpaceContract("冷却沟、封门晶簇、南侧干路",
                     new[] { new GridPosition(4, 4), new GridPosition(3, 8), new GridPosition(5, 2) },
                     "火矢施加燃烧；封门晶簇阻挡器材匣唯一入口。",
                     "可破晶开匣、入水熄火反压，或从 D9 干路绕行。"));
@@ -162,7 +162,7 @@ namespace OCC.Combat
                     W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7),
                     V(4, 2), V(5, 2), V(6, 2), V(4, 5), V(5, 5), V(6, 5), C(6, 4)
                 },
-                new LevelSpaceContract("冷却沟／双灯藤带／中央稳压晶簇",
+                new LevelSpaceContract("冷却沟、双灯藤带、中央稳压晶簇",
                     new[] { new GridPosition(3, 8), new GridPosition(2, 4), new GridPosition(8, 4) },
                     "楔角公开锁定冲压线，并会撞击晶簇、单位或灯藤。",
                     "可诱导撞晶、藏入灯藤、用浅水缩短冲压，或走 D9 干路等待卸压。"));

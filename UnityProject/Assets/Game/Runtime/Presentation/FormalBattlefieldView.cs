@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -14,6 +15,7 @@ namespace OCC.Combat.Presentation
         private const float ReferenceWidth = 1920f;
         private const float ReferenceHeight = 1080f;
         private const float DoubleClickWindowSeconds = .32f;
+        public const float CellHoverRevealDelaySeconds = 2f;
         private const float ContextMenuWidth = 560f;
         private const float ContextMenuHeaderHeight = 84f;
         private const float ContextMenuRowHeight = 112f;
@@ -32,8 +34,9 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Rect> annotationBodies = new Dictionary<string, Rect>();
         private readonly List<Rect> placedIntents = new List<Rect>();
         private readonly List<CellView> intentUnits = new List<CellView>();
-        private RectTransform activeFootprint;
-        private readonly Image[] footprintParts = new Image[6];
+        private RectTransform activeTurnMarker;
+        private readonly List<Image> activeTurnMarkerParts = new List<Image>();
+        private string activeTurnMarkerUnitId;
         public int CrowdedIntentCount { get; private set; }
         public int OccludedUnitCount { get; private set; }
         public int OcclusionPixelCount { get; private set; }
@@ -48,22 +51,13 @@ namespace OCC.Combat.Presentation
         private RectTransform overlayLayerRect;
         private readonly List<RawImage> structures = new List<RawImage>();
         private string structureLevelId;
-        private GameObject tooltipRoot;
-        private RawImage tooltipPortrait;
-        private Text tooltipName;
-        private Text tooltipHealth;
-        private Text tooltipShield;
-        private Text tooltipArmor;
-        private Image tooltipWeaponIcon;
-        private Text tooltipWeapon;
-        private RawImage tooltipIntentIcon;
-        private Text tooltipIntent;
-        private readonly GameObject[] tooltipStatusRoots = new GameObject[6];
-        private readonly RawImage[] tooltipStatusIcons = new RawImage[6];
-        private readonly Text[] tooltipStatusValues = new Text[6];
+        private BattlefieldHoverCardView hoverCard;
+        private GridPosition hoverPosition;
+        private bool hasHoverPosition;
+        private bool hoverPointerInside;
+        private bool hoverRevealed;
+        private float hoverStartedAt;
         private Texture2D moveIntentFrameTexture;
-        private FormalHoverTooltip cellTooltip;
-        private object cellTooltipOwner;
         private GameObject contextMenuRoot;
         private RectTransform contextMenuPanel;
         private Text contextMenuTitle;
@@ -144,6 +138,7 @@ namespace OCC.Combat.Presentation
                 RefreshCell(pair.Value, host.PresentBattlefieldCell(pair.Key), host.BattlefieldViewport,
                     intentDestinations.Contains(pair.Key));
             RefreshUnitOrder();
+            UpdateHoverReveal();
         }
 
         private void EnsureUi()
@@ -151,8 +146,6 @@ namespace OCC.Combat.Presentation
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式UGUI战场", UiLayoutContract.BattlefieldSortingOrder);
             root = canvas.gameObject;
-            cellTooltip = root.AddComponent<FormalHoverTooltip>();
-            cellTooltip.Initialize(canvas);
             moveIntentFrameTexture = Resources.Load<Texture2D>("Art/FormalTacticalOverlays32V2/move_range");
             GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
             viewportRect = viewport.AddComponent<RectTransform>();
@@ -177,44 +170,13 @@ namespace OCC.Combat.Presentation
                 () => UiMotionProfile.FromIntensity(1f), null);
             home.transform.SetAsLastSibling();
 
-            tooltipRoot = FormalUiKit.Panel("敌情速览卡", root.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(18f, -76f), new Vector2(456f, 208f), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
-            tooltipRoot.GetComponent<Image>().raycastTarget = false;
-            tooltipPortrait = TooltipRawIcon("敌人头像", tooltipRoot.transform, new Vector2(12f, -14f), 64f);
-            tooltipName = FormalUiKit.Label("敌人名称", string.Empty, tooltipRoot.transform, new Vector2(88f, -4f),
-                new Vector2(236f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(tooltipName);
-            Text hint = FormalUiKit.Label("锁定提示", "右键行动", tooltipRoot.transform, new Vector2(328f, -4f),
-                new Vector2(112f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
-            FormalUiKit.PreventAutomaticWrapping(hint);
-            tooltipHealth = TooltipMetric("生命", "Art/FormalResourceIcons32/health", tooltipRoot.transform,
-                new Vector2(88f, -46f), FormalUiTheme.Danger);
-            tooltipShield = TooltipMetric("护盾", "Art/FormalResourceIcons32/shield", tooltipRoot.transform,
-                new Vector2(208f, -46f), FormalUiTheme.Shield);
-            tooltipArmor = TooltipMetric("护甲", FormalArtRegistry.ItemPath("category_armor"), tooltipRoot.transform,
-                new Vector2(328f, -46f), FormalUiTheme.Muted);
-            tooltipWeaponIcon = TooltipSpriteIcon("武器", tooltipRoot.transform, new Vector2(88f, -88f), 32f);
-            tooltipWeapon = FormalUiKit.Label("武器读数", string.Empty, tooltipRoot.transform, new Vector2(126f, -84f),
-                new Vector2(190f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(tooltipWeapon);
-            tooltipIntentIcon = TooltipRawIcon("意图", tooltipRoot.transform, new Vector2(286f, -88f), 32f);
-            tooltipIntent = FormalUiKit.Label("意图读数", string.Empty, tooltipRoot.transform, new Vector2(324f, -84f),
-                new Vector2(116f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(tooltipIntent);
-            for (int i = 0; i < tooltipStatusRoots.Length; i++)
-            {
-                GameObject status = FormalUiKit.Create("状态_" + i, tooltipRoot.transform);
-                RectTransform statusRect = status.AddComponent<RectTransform>();
-                SetTopLeft(statusRect, 88f + i * 44f, 140f, 40f, 40f);
-                tooltipStatusRoots[i] = status;
-                tooltipStatusIcons[i] = status.AddComponent<RawImage>();
-                tooltipStatusIcons[i].raycastTarget = false;
-                tooltipStatusValues[i] = Label("回合", statusRect);
-                tooltipStatusValues[i].fontSize = FormalUiTheme.BodyFontSize;
-                tooltipStatusValues[i].fontStyle = FontStyle.Normal;
-                tooltipStatusValues[i].alignment = TextAnchor.LowerRight;
-            }
-            tooltipRoot.SetActive(false);
+            BattlefieldHoverCardView prefab = Resources.Load<BattlefieldHoverCardView>(BattlefieldHoverCardView.ResourcePath);
+            if (prefab == null)
+                throw new InvalidOperationException("Missing battlefield hover card prefab at Resources/" +
+                    BattlefieldHoverCardView.ResourcePath + ".prefab");
+            hoverCard = Instantiate(prefab, root.transform, false);
+            hoverCard.name = "地块悬浮信息组合窗";
+            hoverCard.Hide();
         }
 
         private void EnsureCells(int width, int height)
@@ -304,7 +266,7 @@ namespace OCC.Combat.Presentation
             hitSurface.color = Color.clear;
             hitSurface.raycastTarget = true;
             BattlefieldCellPointer pointer = rootObject.AddComponent<BattlefieldCellPointer>();
-            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, ShowTooltip, HideTooltip);
+            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
 
             GameObject overlayObject = FormalUiKit.Create("格子信息_" + position.X + "_" + position.Y, overlayLayerRect);
             RectTransform overlayRect = overlayObject.AddComponent<RectTransform>();
@@ -345,7 +307,7 @@ namespace OCC.Combat.Presentation
             intentBackground.raycastTarget = true;
             // A displaced badge keeps the actor's cell interaction, not the empty cell beneath it.
             BattlefieldCellPointer intentPointer = cell.IntentRoot.AddComponent<BattlefieldCellPointer>();
-            intentPointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, ShowTooltip, HideTooltip);
+            intentPointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
             cell.IntentIcon = Layer("意图图标", cell.IntentRect);
             cell.IntentDamage = Label("意图伤害", cell.IntentRect);
             cell.IntentDamage.alignment = TextAnchor.MiddleCenter;
@@ -460,7 +422,7 @@ namespace OCC.Combat.Presentation
                 {
                     cell.UnitPixelRaycast = cell.Unit.gameObject.AddComponent<CombatUnitPixelRaycast>();
                     var unitPointer = cell.Unit.gameObject.AddComponent<BattlefieldCellPointer>();
-                    unitPointer.Initialize(model.Position, SubmitPrimaryCell, SubmitContextCell, ShowTooltip, HideTooltip);
+                    unitPointer.Initialize(model.Position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
                 }
                 if (cell.HitTexture != model.UnitTexture)
                 {
@@ -508,7 +470,7 @@ namespace OCC.Combat.Presentation
         {
             bar.Root.GetComponent<Image>().raycastTarget = true;
             var pointer = bar.Root.AddComponent<BattlefieldCellPointer>();
-            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, ShowTooltip, HideTooltip);
+            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
         }
 
         private static Rect BoardImageRect(RawImage image)
@@ -632,7 +594,7 @@ namespace OCC.Combat.Presentation
                 SetBoardChildRect(cell, cell.IntentRect, placement.Bounds);
                 RefreshIntentLink(cell, desired, placement.Bounds);
             }
-            RefreshActiveFootprint(safe);
+            RefreshActiveTurnMarker(safe);
         }
 
         private static Rect BoardChildRect(CellView cell, RectTransform child) => new Rect(
@@ -675,32 +637,71 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void RefreshActiveFootprint(Rect visibleArea)
+        private void RefreshActiveTurnMarker(Rect visibleArea)
         {
-            if (activeFootprint == null)
+            if (activeTurnMarker == null)
             {
-                activeFootprint = FormalUiKit.Create("当前行动者足底角标", overlayLayerRect).AddComponent<RectTransform>();
-                for (int i = 0; i < footprintParts.Length; i++)
-                {
-                    footprintParts[i] = FormalUiKit.Create("定位角_" + i, activeFootprint).AddComponent<Image>();
-                    footprintParts[i].raycastTarget = false;
-                }
+                activeTurnMarker = FormalUiKit.Create("当前行动者黑底白框", boardRect).AddComponent<RectTransform>();
+                BuildActiveTurnMarker();
             }
             CellView actor = visibleUnits.FirstOrDefault(cell => cell.PresentedUnitId == host.CurrentState?.ActiveUnitId);
-            activeFootprint.gameObject.SetActive(actor != null);
+            activeTurnMarker.gameObject.SetActive(actor != null);
             if (actor == null) return;
             float scale = host.BattlefieldViewport.CellSize / 64f;
-            Rect frame = CombatIntentLayout.ActiveFootprint(actor.VisualFoot, host.BattlefieldViewport.CellSize);
-            activeFootprint.gameObject.SetActive(frame.Overlaps(visibleArea));
-            SetTopLeft(activeFootprint, frame.x, frame.y, frame.width, frame.height);
-            Color tint = host.CurrentState.GetUnit(actor.PresentedUnitId)?.IsHero == true ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
-            for (int i = 0; i < 6; i++)
-            {
-                Rect part = i < 2 ? new Rect(i == 0 ? 0 : 54, 0, 2, 12) :
-                    new Rect(i % 2 == 0 ? 0 : 48, i < 4 ? 0 : 10, 8, 2);
-                SetTopLeft(footprintParts[i].rectTransform, part.x * scale, part.y * scale, part.width * scale, part.height * scale);
-                footprintParts[i].color = tint;
-            }
+            Rect frame = CombatIntentLayout.ActiveTurnMarker(actor.VisualFoot, host.BattlefieldViewport.CellSize);
+            activeTurnMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
+            activeTurnMarker.localScale = new Vector3(scale, scale, 1f);
+            activeTurnMarker.sizeDelta = new Vector2(72f, 86f);
+            if (unitLayerRect != null) activeTurnMarker.SetSiblingIndex(unitLayerRect.GetSiblingIndex());
+            Vector2 target = new Vector2(frame.x, -frame.y);
+            bool actorChanged = !string.IsNullOrEmpty(activeTurnMarkerUnitId) && activeTurnMarkerUnitId != actor.PresentedUnitId;
+            activeTurnMarker.DOKill();
+            if (actorChanged && activeTurnMarker.gameObject.activeInHierarchy)
+                DOTween.To(() => activeTurnMarker.anchoredPosition,
+                    value => activeTurnMarker.anchoredPosition = value, target, .32f)
+                    .SetEase(Ease.InOutCubic).SetUpdate(true).SetTarget(activeTurnMarker);
+            else
+                activeTurnMarker.anchoredPosition = target;
+            activeTurnMarkerUnitId = actor.PresentedUnitId;
+        }
+
+        private void BuildActiveTurnMarker()
+        {
+            activeTurnMarker.anchorMin = activeTurnMarker.anchorMax = activeTurnMarker.pivot = new Vector2(0f, 1f);
+            Color black = new Color(.015f, .018f, .018f, .94f);
+            Color white = FormalUiTheme.OnInk;
+            AddCorner(0, 14, false, false, black, white);
+            AddCorner(72, 14, true, false, black, white);
+            AddCorner(0, 86, false, true, black, white);
+            AddCorner(72, 86, true, true, black, white);
+            AddMarkerPart("指针黑_0", new Rect(28, 0, 16, 4), black);
+            AddMarkerPart("指针黑_1", new Rect(30, 4, 12, 4), black);
+            AddMarkerPart("指针黑_2", new Rect(32, 8, 8, 4), black);
+            AddMarkerPart("指针黑_3", new Rect(34, 12, 4, 2), black);
+            AddMarkerPart("指针白_0", new Rect(30, 1, 12, 2), white);
+            AddMarkerPart("指针白_1", new Rect(32, 5, 8, 2), white);
+            AddMarkerPart("指针白_2", new Rect(34, 9, 4, 2), white);
+        }
+
+        private void AddCorner(float x, float y, bool right, bool bottom, Color black, Color white)
+        {
+            float horizontalX = right ? x - 20 : x;
+            float verticalX = right ? x - 6 : x;
+            float horizontalY = bottom ? y - 6 : y;
+            float verticalY = bottom ? y - 20 : y;
+            AddMarkerPart("角框黑横", new Rect(horizontalX, horizontalY, 20, 6), black);
+            AddMarkerPart("角框黑竖", new Rect(verticalX, verticalY, 6, 20), black);
+            AddMarkerPart("角框白横", new Rect(horizontalX + (right ? 0 : 2), horizontalY + 2, 18, 2), white);
+            AddMarkerPart("角框白竖", new Rect(verticalX + 2, verticalY + (bottom ? 0 : 2), 2, 18), white);
+        }
+
+        private void AddMarkerPart(string name, Rect bounds, Color color)
+        {
+            Image image = FormalUiKit.Create(name + "_" + activeTurnMarkerParts.Count, activeTurnMarker).AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
+            SetTopLeft(image.rectTransform, bounds.x, bounds.y, bounds.width, bounds.height);
+            activeTurnMarkerParts.Add(image);
         }
 
         private static int CompareVisualFoot(CellView a, CellView b)
@@ -817,6 +818,7 @@ namespace OCC.Combat.Presentation
                            (eventData.button == PointerEventData.InputButton.Left && Keyboard.current?.spaceKey.isPressed == true);
             if (!allowed || host.IsInteractionModalOpen || host.BattlefieldViewport == null) return;
             float scale = canvas != null && canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
+            HideTooltip();
             host.BattlefieldViewport.Pan(eventData.delta.x / scale, -eventData.delta.y / scale);
             eventData.Use();
         }
@@ -828,6 +830,7 @@ namespace OCC.Combat.Presentation
                     eventData.pressEventCamera, out Vector2 local)) return;
             BattlefieldRect bounds = host.BattlefieldViewport.ViewportRect;
             int direction = eventData.scrollDelta.y > 0f ? 1 : -1;
+            HideTooltip();
             host.BattlefieldViewport.ZoomAt(bounds.X + local.x, bounds.Y - local.y, direction);
             eventData.Use();
         }
@@ -899,6 +902,7 @@ namespace OCC.Combat.Presentation
 
         private void ShowContextMenu(GridPosition position)
         {
+            HideTooltip();
             IReadOnlyList<BattlefieldContextAction> actions = host.ContextActionsAt(position);
             if (actions == null || actions.Count == 0)
             {
@@ -915,7 +919,7 @@ namespace OCC.Combat.Presentation
             float y = Mathf.Clamp(pointer.y + 12f, 64f, ReferenceHeight - height - 8f);
             SetTopLeft(contextMenuPanel, x, y, ContextMenuWidth, height);
             contextMenuTitle.text = "位置 " + position.X + "," + position.Y + " 的可执行行动";
-            contextMenuHint.text = "右键切换目标  ·  Esc 或左键空白处关闭";
+            contextMenuHint.text = "右键切换目标　Esc 或左键空白处关闭";
 
             while (contextMenuButtons.Count < actions.Count)
             {
@@ -1029,62 +1033,63 @@ namespace OCC.Combat.Presentation
             host?.SetBattlefieldContextMenuOpen(false);
         }
 
-        private void ShowTooltip(GridPosition position)
+        private void BeginCellHover(GridPosition position)
         {
-            if (!cells.TryGetValue(position, out CellView cell)) return;
-            BattlefieldCellPresentation model = host.PresentBattlefieldCell(position);
-            if (model == null) { HideTooltip(); return; }
-            TileState hoveredTile = host.CurrentState.Map.GetTile(position);
-            if (model.Unit == null || model.Unit.IsHero || hoveredTile.IsWater || hoveredTile.IsLampVine || hoveredTile.IsScorched ||
-                hoveredTile.IsAetherCrystal || hoveredTile.IsCrystalShard)
+            if (hasHoverPosition && hoverPosition == position)
             {
-                if (string.IsNullOrWhiteSpace(model.HoverText)) { HideTooltip(); return; }
-                HideTooltip();
-                string[] lines = model.HoverText.Split(new[] { '\n' }, 2);
-                string title = lines[0];
-                string body = lines.Length > 1 ? lines[1] : lines[0];
-                cellTooltipOwner = cell.Root;
-                Vector2 pointer = Mouse.current == null ? Vector2.zero : Mouse.current.position.ReadValue();
-                cellTooltip.Show(cellTooltipOwner, new FormalTooltipContent(title, body, FormalUiTheme.Amber), pointer);
+                hoverPointerInside = true;
                 return;
             }
-            if (cellTooltipOwner != null) cellTooltip.Hide(cellTooltipOwner);
-            cellTooltipOwner = null;
-            UnitState enemy = model.Unit;
-            tooltipPortrait.texture = model.UnitTexture;
-            tooltipPortrait.uvRect = model.UnitUv;
-            tooltipName.text = enemy.DisplayName;
-            tooltipHealth.text = enemy.Health + "/" + enemy.MaxHealth;
-            bool rogue = host.CurrentState.Ruleset == CombatRuleset.Roguelite;
-            tooltipShield.text = rogue ? enemy.Shield + "（无上限）" : enemy.Shield + "/" + enemy.MaxShield;
-            tooltipArmor.transform.parent.gameObject.SetActive(!rogue);
-            if (!rogue) tooltipArmor.text = enemy.EffectiveArmor.ToString();
-            tooltipWeaponIcon.sprite = Resources.Load<Sprite>(WeaponIconPath(enemy));
-            tooltipWeapon.text = enemy.MainHand == null ? "无武器" :
-                enemy.MainHand.DisplayName + "  " + enemy.MainHand.Damage + "/R" + enemy.MainHand.Range;
-            bool hasIntent = model.Intent != null && model.IntentTexture != null;
-            tooltipIntentIcon.gameObject.SetActive(hasIntent);
-            tooltipIntent.gameObject.SetActive(hasIntent);
-            if (hasIntent)
-            {
-                tooltipIntentIcon.texture = model.IntentTexture;
-                tooltipIntent.text = CompactIntent(model.Intent);
-            }
-            for (int i = 0; i < tooltipStatusRoots.Length; i++)
-            {
-                bool active = i < model.Statuses.Count;
-                tooltipStatusRoots[i].SetActive(active);
-                if (!active) continue;
-                tooltipStatusIcons[i].texture = model.Statuses[i].Texture;
-                tooltipStatusValues[i].text = model.Statuses[i].Presentation.ValueText;
-                Stretch(tooltipStatusValues[i].rectTransform);
-            }
-            tooltipRoot.SetActive(true);
-            tooltipRoot.transform.SetAsLastSibling();
-            float x = Mathf.Min(1018f, cell.Rect.anchoredPosition.x + host.BattlefieldViewport.BoardRect.X + host.BattlefieldViewport.CellSize + 18f);
-            float y = Mathf.Min(714f, -cell.Rect.anchoredPosition.y + host.BattlefieldViewport.BoardRect.Y + 18f);
-            ((RectTransform)tooltipRoot.transform).anchoredPosition = new Vector2(x, -Mathf.Max(64f, y));
+
+            HideTooltip();
+            hoverPosition = position;
+            hasHoverPosition = true;
+            hoverPointerInside = true;
+            hoverStartedAt = Time.unscaledTime;
         }
+
+        private void EndCellHover()
+        {
+            if (!hasHoverPosition) return;
+            hoverPointerInside = false;
+            StartCoroutine(ClearHoverAfterPointerTransition(hoverPosition));
+        }
+
+        private IEnumerator ClearHoverAfterPointerTransition(GridPosition position)
+        {
+            yield return null;
+            if (hasHoverPosition && hoverPosition == position && !hoverPointerInside) HideTooltip();
+        }
+
+        private void UpdateHoverReveal()
+        {
+            if (host.IsInteractionModalOpen || contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                HideTooltip();
+                return;
+            }
+            if (!ShouldRevealCellHover(Time.unscaledTime - hoverStartedAt, hasHoverPosition,
+                    hoverPointerInside, hoverRevealed)) return;
+            if (!cells.TryGetValue(hoverPosition, out CellView cell)) { HideTooltip(); return; }
+            BattlefieldCellPresentation model = host.PresentBattlefieldCell(hoverPosition);
+            CombatState state = host.CurrentState;
+            if (model == null || state == null || hoverCard == null) { HideTooltip(); return; }
+
+            hoverCard.Bind(model, state);
+            Vector2 size = hoverCard.CurrentSize;
+            BattlefieldRect board = host.BattlefieldViewport.BoardRect;
+            float cellSize = host.BattlefieldViewport.CellSize;
+            float x = cell.Rect.anchoredPosition.x + board.X + cellSize + 18f;
+            float y = -cell.Rect.anchoredPosition.y + board.Y + 18f;
+            x = Mathf.Clamp(x, 12f, BattlefieldPresentationAdapter.BattlefieldWidth - size.x - 12f);
+            y = Mathf.Clamp(y, 64f, BattlefieldPresentationAdapter.BattlefieldHeight - size.y - 12f);
+            hoverCard.SetTopLeft(new Vector2(x, -y));
+            hoverRevealed = true;
+        }
+
+        public static bool ShouldRevealCellHover(float elapsedSeconds, bool hasPosition,
+            bool pointerInside, bool alreadyRevealed) =>
+            hasPosition && pointerInside && !alreadyRevealed && elapsedSeconds >= CellHoverRevealDelaySeconds;
 
         public static string CompactIntent(EnemyIntentPresentation intent)
         {
@@ -1101,19 +1106,12 @@ namespace OCC.Combat.Presentation
             return destinations;
         }
 
-        private static string WeaponIconPath(UnitState unit)
-        {
-            string weaponId = unit?.MainHand?.Id;
-            FormalArtEntry entry = FormalArtRegistry.Items.FirstOrDefault(candidate =>
-                string.Equals(candidate.RuntimeId, weaponId, StringComparison.OrdinalIgnoreCase));
-            return entry?.ResourcePath ?? FormalArtRegistry.ItemPath("category_weapon");
-        }
-
         private void HideTooltip()
         {
-            if (tooltipRoot != null) tooltipRoot.SetActive(false);
-            if (cellTooltipOwner != null) cellTooltip?.Hide(cellTooltipOwner);
-            cellTooltipOwner = null;
+            hoverCard?.Hide();
+            hasHoverPosition = false;
+            hoverPointerInside = false;
+            hoverRevealed = false;
         }
 
         private static RawImage Layer(string name, Transform parent)
@@ -1132,38 +1130,6 @@ namespace OCC.Combat.Presentation
                 FormalUiTheme.Text, TextAnchor.MiddleCenter);
             label.raycastTarget = false;
             return label;
-        }
-
-        private static RawImage TooltipRawIcon(string name, Transform parent, Vector2 position, float size)
-        {
-            GameObject root = FormalUiKit.Create(name, parent);
-            RectTransform rect = root.AddComponent<RectTransform>();
-            SetTopLeft(rect, position.x, -position.y, size, size);
-            RawImage icon = root.AddComponent<RawImage>();
-            icon.raycastTarget = false;
-            return icon;
-        }
-
-        private static Image TooltipSpriteIcon(string name, Transform parent, Vector2 position, float size)
-        {
-            GameObject root = FormalUiKit.Create(name, parent);
-            RectTransform rect = root.AddComponent<RectTransform>();
-            SetTopLeft(rect, position.x, -position.y, size, size);
-            Image icon = root.AddComponent<Image>();
-            icon.preserveAspect = true;
-            icon.raycastTarget = false;
-            return icon;
-        }
-
-        private static Text TooltipMetric(string name, string iconPath, Transform parent, Vector2 position, Color color)
-        {
-            Image icon = TooltipSpriteIcon(name + "图标", parent, position, 32f);
-            icon.sprite = Resources.Load<Sprite>(iconPath);
-            icon.color = color;
-            Text value = FormalUiKit.Label(name + "数值", string.Empty, parent,
-                new Vector2(position.x + 36f, position.y - 4f), new Vector2(80f, 40f), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            FormalUiKit.PreventAutomaticWrapping(value);
-            return value;
         }
 
         private static BarView Bar(string name, Transform parent, Color color)
@@ -1233,6 +1199,11 @@ namespace OCC.Combat.Presentation
                 contextMenuRoot.SetActive(false);
                 host?.SetBattlefieldContextMenuOpen(false);
             }
+        }
+
+        private void OnDestroy()
+        {
+            if (activeTurnMarker != null) activeTurnMarker.DOKill();
         }
 
         private static void SetInset(RectTransform rect, float inset) =>

@@ -1,20 +1,17 @@
 ---
 name: lark-whiteboard
-version: 1.0.0
-description: >
-  飞书画板：查询和编辑飞书云文档中的画板。支持导出画板为预览图片、导出原始节点结构、使用多种格式更新画板内容。
-  当用户需要查看画板内容、导出画板图片、编辑画板时使用此 skill。不负责：飞书云文档内容编辑（lark-doc）、文档内嵌电子表格/Base（lark-sheets / lark-base）。
+description: "读取、导出或编辑飞书云文档画板；正文使用 lark-doc，表格/Base 使用相应数据技能。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli whiteboard --help"
 ---
 
 > [!IMPORTANT]
-> - 运行 `lark-cli --version`，确认可用，无需询问用户。
-> - 运行 `npx -y @larksuite/whiteboard-cli@^0.2.13 -v`，确认可用，无需询问用户。
+> 复用已核实的 CLI 环境；版本或兼容性不明时查询。仅所选编辑/DSL流程依赖 whiteboard-cli 时检查该工具，普通读取和导出不预先运行 npx。
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ---
 

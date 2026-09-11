@@ -34,8 +34,8 @@ namespace OCC.Combat
         public bool FriendlyFireRisk { get; }
         public object NativeResult { get; }
         public string Summary => CanCommit
-            ? $"合法 // {Cells.Count} 格 / {Targets.Count} 单位" + (FriendlyFireRisk ? " / 友军风险" : string.Empty)
-            : "不可提交 // " + string.Join("；", Failures);
+            ? $"合法　{Cells.Count} 格　{Targets.Count} 单位" + (FriendlyFireRisk ? "　友军风险" : string.Empty)
+            : "不可提交　" + string.Join("；", Failures);
 
         public TrainingRangePreviewReport(bool canCommit, IEnumerable<string> failures, IEnumerable<GridPosition> cells,
             IEnumerable<string> targets, bool friendlyFireRisk, object nativeResult)
@@ -53,7 +53,7 @@ namespace OCC.Combat
     {
         public IReadOnlyList<string> Steps { get; }
         public object NativeResult { get; }
-        public string Summary => $"已执行 // {Steps.Count} 项确定性结果";
+        public string Summary => $"已执行　{Steps.Count} 项确定性结果";
         public TrainingRangeExecutionReport(IEnumerable<string> steps, object nativeResult)
         { Steps = (steps ?? Array.Empty<string>()).ToArray(); NativeResult = nativeResult; }
         public string Signature() => string.Join("|", Steps);
@@ -83,7 +83,7 @@ namespace OCC.Combat
         public IReadOnlyList<string> Failures { get; }
         public bool IsSuccess => Total > 0 && Passed == Total && Failures.Count == 0;
         public int IllegalPreviewPassed { get; }
-        public string Summary => $"全量巡检 {Passed}/{Total}" + (IsSuccess ? " // 确定性一致" : $" // 失败 {Failures.Count}");
+        public string Summary => $"全量巡检 已通过 {Passed}　总计 {Total}" + (IsSuccess ? "　确定性一致" : $"　失败 {Failures.Count}");
         public TrainingRangeAuditReport(int total, int passed, IEnumerable<string> failures, int illegalPreviewPassed = 0)
         { Total = total; Passed = passed; Failures = (failures ?? Array.Empty<string>()).ToArray(); IllegalPreviewPassed = illegalPreviewPassed; }
     }
@@ -189,7 +189,7 @@ namespace OCC.Combat
                     }
                     passed++;
                 }
-                catch (Exception error) { failures.Add(ability.Id + " // " + error.Message); }
+                catch (Exception error) { failures.Add(ability.Id + "　" + error.Message); }
             }
             LastAudit = new TrainingRangeAuditReport(Abilities.Count, passed, failures, illegalPassed); return LastAudit;
         }
@@ -203,8 +203,8 @@ namespace OCC.Combat
         public SkillTrainingRangeProvider()
         {
             Abilities = RogueliteSkillCatalog.All.Select(skill => new TrainingRangeAbilityEntry(Id, skill.Id, skill.DisplayName,
-                "通用战斗技能", "技能池", $"1 AP + {skill.ManaCost} 以太 / CD {skill.Cooldown}",
-                $"{skill.TargetRule} · {skill.Delivery} · 范围 {skill.Range}",
+                "通用战斗技能", "技能池", $"1 AP + {skill.ManaCost} 以太　CD {skill.Cooldown}",
+                $"{skill.TargetRule}　{skill.Delivery}　范围 {skill.Range}",
                 string.Join(" → ", skill.Effects.Select(effect => effect.Type + (effect.Amount > 0 ? " " + effect.Amount : string.Empty))),
                 FormalArtRegistry.RuntimeSkillPath(skill.Id), skill)).ToArray();
         }
@@ -269,7 +269,7 @@ namespace OCC.Combat
         public TrainingRangeExecutionReport Execute() => ToReport(CombatResolver.Resolve(Combat, command));
 
         public static TrainingRangeExecutionReport ToReport(CombatEffectExecution execution) => new TrainingRangeExecutionReport(
-            execution.Results.Select(result => $"{result.Sequence:00} {result.Kind} // {(string.IsNullOrEmpty(result.TargetUnitId) ? result.PositionAfter.ToString() : result.TargetUnitId)} // {result.AppliedAmount} // {result.ValueBefore}>{result.ValueAfter}"), execution);
+            execution.Results.Select(result => $"{result.Sequence:00} {result.Kind}　{(string.IsNullOrEmpty(result.TargetUnitId) ? result.PositionAfter.ToString() : result.TargetUnitId)}　{result.AppliedAmount}　{result.ValueBefore}>{result.ValueAfter}"), execution);
     }
 
     public static class TrainingRangeScenarioFactory
@@ -317,9 +317,9 @@ namespace OCC.Combat
         public FireSpellTrainingRangeProvider()
         {
             Abilities = FireSpellCatalog.All.Select(spell => new TrainingRangeAbilityEntry(Id, spell.Id, spell.DisplayName,
-                "个人术式", GroupName(spell.Group), $"{spell.ActionPointCost} AP + {spell.ManaCost} 以太 / CD {spell.Cooldown}",
-                $"{spell.CombatAffinity} · {spell.DeliveryMode} · {spell.WeaponRequirement} · {spell.TargetKind}/{spell.Shape} · 范围 {spell.Range}",
-                $"{spell.TriggerWindow} · {spell.ConsumptionRule} // " + string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty))),
+                "个人术式", GroupName(spell.Group), $"{spell.ActionPointCost} AP + {spell.ManaCost} 以太　CD {spell.Cooldown}",
+                $"{spell.CombatAffinity}　{spell.DeliveryMode}　{spell.WeaponRequirement}\n目标 {spell.TargetKind}　形状 {spell.Shape}　范围 {spell.Range}",
+                $"{spell.TriggerWindow}　{spell.ConsumptionRule}\n" + string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty))),
                 spell.IconPath, spell)).ToArray();
         }
 
@@ -427,9 +427,9 @@ namespace OCC.Combat
         public ArtifactTrainingRangeProvider()
         {
             Abilities = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).Select(artifact => new TrainingRangeAbilityEntry(Id, artifact.Id, artifact.DisplayName,
-                "法宝", artifact.Provenance, $"{artifact.ActionPointCost} AP / {artifact.MaximumUses} 次封装",
-                $"{artifact.TargetRule} · {artifact.Shape} · 范围 {artifact.Range}",
-                artifact.EffectSummary + " // 风险：" + artifact.RiskSummary,
+                "法宝", artifact.Provenance, $"{artifact.ActionPointCost} AP　{artifact.MaximumUses} 次封装",
+                $"{artifact.TargetRule}　{artifact.Shape}　范围 {artifact.Range}",
+                artifact.EffectSummary + "\n风险：" + artifact.RiskSummary,
                 artifact.IconPath, artifact)).ToArray();
         }
 
@@ -528,6 +528,6 @@ namespace OCC.Combat
             preview.Failures, preview.Cells, preview.UnitIds, preview.FriendlyFireRisk, preview);
 
         public static TrainingRangeExecutionReport ToReport(FireSpellExecution execution) => new TrainingRangeExecutionReport(
-            execution.Steps.Select(step => $"{step.Sequence:00} {step.Kind} // {(string.IsNullOrEmpty(step.TargetId) ? step.Cell.ToString() : step.TargetId)} // {step.Applied} // {step.Detail}"), execution);
+            execution.Steps.Select(step => $"{step.Sequence:00} {step.Kind}　{(string.IsNullOrEmpty(step.TargetId) ? step.Cell.ToString() : step.TargetId)}　{step.Applied}　{step.Detail}"), execution);
     }
 }

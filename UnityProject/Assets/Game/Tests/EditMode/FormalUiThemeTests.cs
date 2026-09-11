@@ -113,7 +113,7 @@ namespace OCC.Combat.Tests
             try
             {
                 GameObject timeline = FormalUiKit.Panel("行动序列模块", canvasRoot.transform,
-                    new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(416f, 270f), FormalUiTheme.Panel);
+                    new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(416f, 480f), FormalUiTheme.Panel);
                 FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
                 typeof(FormalCombatHud).GetField("timelineModule", BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.SetValue(hud, timeline);
@@ -127,12 +127,12 @@ namespace OCC.Combat.Tests
                 for (int index = 0; index < rows.Length; index++)
                 {
                     RectTransform row = rows[index];
-                    Assert.That(row.sizeDelta, Is.EqualTo(new Vector2(388f, 40f)));
-                    Assert.That(row.anchoredPosition.y, Is.EqualTo(-48f - index * 42f));
+                    Assert.That(row.sizeDelta, Is.EqualTo(new Vector2(388f, 60f)));
+                    Assert.That(row.anchoredPosition.y, Is.EqualTo(-104f - index * 66f));
                     Assert.That(row.Find("正式皮肤"), Is.Null,
-                        "a 40px timeline row cannot spend 12px on a repeated heavy frame");
+                        "a compact action-value row cannot spend 12px on a repeated heavy frame");
                     RectTransform divider = row.Find("细分隔").GetComponent<RectTransform>();
-                    Assert.That(divider.anchoredPosition.y, Is.EqualTo(-38f));
+                    Assert.That(divider.anchoredPosition.y, Is.EqualTo(-58f));
                     Assert.That(divider.sizeDelta.y, Is.EqualTo(2f));
                     foreach (Text label in row.GetComponentsInChildren<Text>())
                     {
@@ -151,18 +151,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ActionPointPips_StayInsideHeroFrameSafeArea()
+        public void ActionPointBadge_ShowsBonusActionPointsWithoutClampingToThreePips()
         {
             GameObject hudObject = new GameObject("action-point-safe-area-hud", typeof(FormalCombatHud));
             try
             {
-                FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
-                MethodInfo positionMethod = typeof(FormalCombatHud).GetMethod("ActionPointPipPosition", BindingFlags.Static | BindingFlags.NonPublic);
-                Vector2[] positions = Enumerable.Range(0, 3)
-                    .Select(index => (Vector2)positionMethod.Invoke(hud, new object[] { index })).ToArray();
-                float safeRightEdge = 416f - FormalUiTheme.FramedContentInset;
-                float rightmostEdge = positions.Max(position => position.x + 20f);
-                Assert.That(rightmostEdge, Is.LessThanOrEqualTo(safeRightEdge));
+                MethodInfo textMethod = typeof(FormalCombatHud).GetMethod("ActionPointText", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(textMethod, Is.Not.Null);
+                Assert.That(textMethod.Invoke(null, new object[] { 4 }), Is.EqualTo("4"));
             }
             finally
             {
@@ -253,7 +249,7 @@ namespace OCC.Combat.Tests
                 Text action = row.GetComponentInChildren<Text>();
                 Text detail = row.Find("行动资源").GetComponent<Text>();
                 action.text = "攻击 高年级陪练生";
-                detail.text = "1 行动点 · 11 个人魔力";
+                detail.text = "1 行动点　11 个人魔力";
                 action.cachedTextGenerator.Populate(action.text, action.GetGenerationSettings(action.rectTransform.rect.size));
                 detail.cachedTextGenerator.Populate(detail.text, detail.GetGenerationSettings(detail.rectTransform.rect.size));
                 float actionTop = -(action.rectTransform.anchoredPosition.y + action.cachedTextGenerator.verts.Max(vertex => vertex.position.y));
@@ -383,9 +379,10 @@ namespace OCC.Combat.Tests
             hero.ApplyStatus(StatusType.Slow, 1);
             hero.ApplyStatus(StatusType.Bound, 1);
             hero.ApplyStatus(StatusType.ArmorBreak, 3);
+            CombatState state = new CombatState(new GridMap(2, 2), new[] { hero });
             MethodInfo method = typeof(FormalCombatHud).GetMethod("StatusText", BindingFlags.Static | BindingFlags.NonPublic);
 
-            string summary = (string)method.Invoke(null, new object[] { hero });
+            string summary = (string)method.Invoke(null, new object[] { state, hero });
 
             Assert.That(summary, Does.Contain("+3"));
             Assert.That(summary.Split(new[] { "<color=" }, System.StringSplitOptions.None).Length - 1, Is.EqualTo(1));
@@ -421,7 +418,7 @@ namespace OCC.Combat.Tests
                 Assert.That(marker, Is.Not.Null);
                 Assert.That(marker.GetComponent<RectTransform>().sizeDelta.x, Is.EqualTo(8f));
                 Assert.That((string)typeof(FormalCombatHud).GetMethod("RatioText", BindingFlags.Static | BindingFlags.NonPublic)
-                    ?.Invoke(null, new object[] { 9, 18 }), Is.EqualTo("9 / 18 · 50%"));
+                    ?.Invoke(null, new object[] { 9, 18 }), Is.EqualTo("9　上限 18　50%"));
 
                 MethodInfo setBar = typeof(FormalCombatHud).GetMethod("SetBar", BindingFlags.Instance | BindingFlags.NonPublic);
                 object[] first = { fill, .75f, -1f };
@@ -993,7 +990,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void SharedContentTooltip_MatchesPixsoUniversalContentCardGeometry()
+        public void SharedContentTooltip_UsesPixelAlignedTypeAndKeepsEverySectionInsideTheFrame()
         {
             GameObject canvasObject = new GameObject("content-tooltip-canvas", typeof(RectTransform), typeof(Canvas));
             try
@@ -1001,7 +998,7 @@ namespace OCC.Combat.Tests
                 canvasObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1920f, 1080f);
                 FormalHoverTooltip tooltip = canvasObject.AddComponent<FormalHoverTooltip>();
                 tooltip.Initialize(canvasObject.GetComponent<Canvas>());
-                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "灼触", "火系 · 相邻可见敌人",
+                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "灼触", "火系　相邻可见敌人",
                     "行动 1", "魔力 0", "冷却 无", "造成 8 点物理伤害", "用于近距离打击相邻目标的基础火术。",
                     FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill")), new Vector2(400f, 400f));
 
@@ -1025,22 +1022,27 @@ namespace OCC.Combat.Tests
                 Assert.That(category.text, Is.EqualTo("个人术式"));
                 Assert.That(category.color, Is.EqualTo(FormalUiTheme.Cyan));
                 Assert.That(status.text, Is.EqualTo("可用"));
-                Assert.That(panel.sizeDelta, Is.EqualTo(new Vector2(336f, 260f)));
-                Assert.That(artwork.anchoredPosition, Is.EqualTo(new Vector2(12f, -42f)));
-                Assert.That(artwork.sizeDelta, Is.EqualTo(new Vector2(56f, 56f)));
-                Assert.That(title.rectTransform.anchoredPosition, Is.EqualTo(new Vector2(80f, -41f)));
-                Assert.That(title.rectTransform.sizeDelta, Is.EqualTo(new Vector2(244f, 34f)));
-                Assert.That(title.fontSize, Is.EqualTo(26));
-                Assert.That(identity.rectTransform.anchoredPosition, Is.EqualTo(new Vector2(80f, -74f)));
-                Assert.That(metricA.anchoredPosition, Is.EqualTo(new Vector2(12f, -108f)));
-                Assert.That(metricB.anchoredPosition, Is.EqualTo(new Vector2(120f, -108f)));
-                Assert.That(metricC.anchoredPosition, Is.EqualTo(new Vector2(228f, -108f)));
-                Assert.That(metricA.sizeDelta, Is.EqualTo(new Vector2(96f, 34f)));
-                Assert.That(divider.anchoredPosition, Is.EqualTo(new Vector2(12f, -150f)));
-                Assert.That(divider.sizeDelta, Is.EqualTo(new Vector2(312f, 2f)));
-                Assert.That(footerDivider.anchoredPosition, Is.EqualTo(new Vector2(12f, -212f)));
+                Assert.That(panel.sizeDelta.x, Is.EqualTo(432f));
+                Assert.That(panel.sizeDelta.y, Is.InRange(388f, 520f));
+                Assert.That(artwork.sizeDelta, Is.EqualTo(new Vector2(72f, 72f)));
+                Assert.That(title.fontSize, Is.EqualTo(FormalUiTheme.BodyFontSize));
+                Assert.That(title.fontSize % FormalUiTheme.NativeFontGrid, Is.Zero);
+                foreach (Text label in card.GetComponentsInChildren<Text>(true))
+                {
+                    Assert.That(label.fontSize % FormalUiTheme.NativeFontGrid, Is.Zero, label.name);
+                    Assert.That(label.fontStyle, Is.EqualTo(FontStyle.Bold), label.name);
+                }
+                Assert.That(metricA.anchoredPosition, Is.EqualTo(new Vector2(16f, -148f)));
+                Assert.That(metricB.anchoredPosition, Is.EqualTo(new Vector2(150f, -148f)));
+                Assert.That(metricC.anchoredPosition, Is.EqualTo(new Vector2(284f, -148f)));
+                Assert.That(metricA.sizeDelta, Is.EqualTo(new Vector2(124f, 48f)));
+                Assert.That(divider.anchoredPosition, Is.EqualTo(new Vector2(16f, -208f)));
+                Assert.That(divider.sizeDelta, Is.EqualTo(new Vector2(400f, 2f)));
+                Assert.That(-footerDivider.anchoredPosition.y, Is.GreaterThanOrEqualTo(304f));
                 Assert.That(effect.text, Is.EqualTo("造成 8 点物理伤害"));
                 Assert.That(summary.text, Is.EqualTo("用于近距离打击相邻目标的基础火术。"));
+                float summaryBottom = -summary.rectTransform.anchoredPosition.y + summary.rectTransform.sizeDelta.y;
+                Assert.That(summaryBottom, Is.LessThanOrEqualTo(panel.rect.height - 16f));
                 Assert.That(icon.sprite, Is.Not.Null);
                 Assert.That(panel.Find("悬浮标题").gameObject.activeSelf, Is.False);
                 Assert.That(panel.Find("悬浮正文").gameObject.activeSelf, Is.False);
@@ -1054,7 +1056,7 @@ namespace OCC.Combat.Tests
         public void CategorizedTooltip_ParsesLegacySpellBodyIntoThreeMetricsAndEffect()
         {
             FormalTooltipContent content = new FormalTooltipContent("个人术式", "灼触",
-                "当前　可用\n消耗　1 行动点 · 0 个人魔力\n循环　无冷却\n目标　相邻可见敌人\n效果\n· 造成 8 点物理伤害",
+                "当前　可用\n消耗　1 行动点　0 个人魔力\n循环　无冷却\n目标　相邻可见敌人\n效果\n造成 8 点物理伤害",
                 FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
 
             Assert.That(content.Status, Is.EqualTo("可用"));
@@ -1067,6 +1069,38 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void SharedContentTooltip_LongEffectAndSummaryRemainInsideTheCard()
+        {
+            GameObject canvasObject = new GameObject("long-content-tooltip-canvas", typeof(RectTransform), typeof(Canvas));
+            try
+            {
+                canvasObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1920f, 1080f);
+                FormalHoverTooltip tooltip = canvasObject.AddComponent<FormalHoverTooltip>();
+                tooltip.Initialize(canvasObject.GetComponent<Canvas>());
+                tooltip.Show(new object(), new FormalTooltipContent("学院装备", "可用", "长效以太调节器", "装备 · 战斗内持续生效",
+                    "占格 2×2", "重量 3", "负荷 4", "进入战斗后提升护盾回复，并在受到攻击时记录来源；下一回合开始时按记录次数恢复个人魔力。",
+                    "为长时间学院实战设计的调节装置，适合需要连续承受攻击并维持术式循环的配置。",
+                    FormalUiTheme.Amber), new Vector2(400f, 400f));
+
+                RectTransform panel = canvasObject.GetComponentsInChildren<RectTransform>(true).Single(item => item.gameObject.name == "悬浮详情");
+                RectTransform card = panel.Find("通用内容卡").GetComponent<RectTransform>();
+                Text effect = card.Find("效果内容").GetComponent<Text>();
+                RectTransform footer = card.Find("页脚分隔线").GetComponent<RectTransform>();
+                Text summary = card.Find("内容简介").GetComponent<Text>();
+                float effectBottom = -effect.rectTransform.anchoredPosition.y + effect.rectTransform.sizeDelta.y;
+                float footerTop = -footer.anchoredPosition.y;
+                float summaryBottom = -summary.rectTransform.anchoredPosition.y + summary.rectTransform.sizeDelta.y;
+
+                Assert.That(panel.sizeDelta.y, Is.InRange(388f, 520f));
+                Assert.That(effectBottom, Is.LessThan(footerTop));
+                Assert.That(summaryBottom, Is.LessThanOrEqualTo(panel.rect.height - 16f));
+                Assert.That(effect.verticalOverflow, Is.EqualTo(VerticalWrapMode.Truncate));
+                Assert.That(summary.verticalOverflow, Is.EqualTo(VerticalWrapMode.Truncate));
+            }
+            finally { Object.DestroyImmediate(canvasObject); }
+        }
+
+        [Test]
         public void SharedTooltip_SeparatesTitleFromBodyAndKeepsBothInsideTheFrame()
         {
             GameObject canvasObject = new GameObject("tooltip-layout-canvas", typeof(RectTransform), typeof(Canvas));
@@ -1075,7 +1109,7 @@ namespace OCC.Combat.Tests
                 canvasObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1920f, 1080f);
                 FormalHoverTooltip tooltip = canvasObject.AddComponent<FormalHoverTooltip>();
                 tooltip.Initialize(canvasObject.GetComponent<Canvas>());
-                tooltip.Show(new object(), new FormalTooltipContent("灼触", "消耗　1 行动点 · 0 个人魔力\n循环　无冷却\n目标　相邻可见敌人\n效果\n· 造成 8 点物理伤害", FormalUiTheme.Amber), new Vector2(400f, 400f));
+                tooltip.Show(new object(), new FormalTooltipContent("灼触", "消耗　1 行动点　0 个人魔力\n循环　无冷却\n目标　相邻可见敌人\n效果\n造成 8 点物理伤害", FormalUiTheme.Amber), new Vector2(400f, 400f));
 
                 RectTransform panel = canvasObject.GetComponentsInChildren<RectTransform>(true).Single(item => item.gameObject.name == "悬浮详情");
                 RectTransform title = panel.Find("悬浮标题").GetComponent<RectTransform>();
@@ -1118,7 +1152,7 @@ namespace OCC.Combat.Tests
             {
                 Text standard = FormalUiKit.Label("standard", "两行说明", root.transform, Vector2.zero, new Vector2(160, 32), 16,
                     FormalUiTheme.Text, TextAnchor.UpperLeft);
-                Text numeric = FormalUiKit.Label("numeric", "18 / 18", root.transform, Vector2.zero, new Vector2(100, 24), 16,
+                Text numeric = FormalUiKit.Label("numeric", "当前 18", root.transform, Vector2.zero, new Vector2(100, 24), 16,
                     FormalUiTheme.Text, TextAnchor.MiddleRight);
                 Text paragraph = FormalUiKit.Label("paragraph", "第一行说明，第二行说明。", root.transform, Vector2.zero, new Vector2(160, 64), 16,
                     FormalUiTheme.Text, TextAnchor.UpperLeft);
@@ -1195,8 +1229,8 @@ namespace OCC.Combat.Tests
             string detail = (string)method.Invoke(null, new object[] { runtime.DefinitionFor(equipment.InstanceId), equipment });
 
             Assert.That(detail, Does.Contain("回合开始获得 2 普通盾"));
-            Assert.That(detail, Does.Contain("附加 · 紫色回合盾"));
-            Assert.That(detail, Does.Contain("校准 · 获得护盾 +1"));
+            Assert.That(detail, Does.Contain("附加　紫色回合盾"));
+            Assert.That(detail, Does.Contain("校准　获得护盾 +1"));
             Assert.That(detail, Does.Not.Contain("AFF-"));
             Assert.That(detail, Does.Not.Contain("node1"));
             Assert.That(detail, Does.Not.Contain("turn_start_shield"));

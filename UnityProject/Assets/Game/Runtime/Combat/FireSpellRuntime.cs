@@ -28,14 +28,16 @@ namespace OCC.Combat
     public sealed class FiregroundState
     {
         public int Damage { get; private set; }
-        public int CreatedAt { get; private set; }
-        public int ExpiresAt { get; private set; }
+        public int RemainingTurns { get; private set; }
         public string SourceSpellId { get; private set; }
-        public FiregroundState(int damage, int createdAt, int expiresAt, string sourceSpellId)
-        { Damage = damage; CreatedAt = createdAt; ExpiresAt = expiresAt; SourceSpellId = sourceSpellId; }
-        public void Refresh(int damage, int expiresAt, string sourceSpellId)
-        { Damage = Math.Max(Damage, damage); ExpiresAt = Math.Max(ExpiresAt, expiresAt); SourceSpellId = sourceSpellId; }
-        public FiregroundState Clone() => new FiregroundState(Damage, CreatedAt, ExpiresAt, SourceSpellId);
+        public FiregroundState(int damage, int remainingTurns, string sourceSpellId)
+        { Damage = damage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; }
+        public void Refresh(int damage, int remainingTurns, string sourceSpellId)
+        { Damage = damage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; }
+        public void Extend(int minimumDamage, int additionalTurns, string sourceSpellId)
+        { Damage = Math.Max(Damage, minimumDamage); RemainingTurns += additionalTurns; SourceSpellId = sourceSpellId; }
+        public void Tick() => RemainingTurns = Math.Max(0, RemainingTurns - 1);
+        public FiregroundState Clone() => new FiregroundState(Damage, RemainingTurns, SourceSpellId);
     }
 
     public sealed class MeltBarrierMarkState
@@ -60,13 +62,13 @@ namespace OCC.Combat
         private readonly List<FirePendingEffect> pendingEffects = new List<FirePendingEffect>();
         private readonly Dictionary<string, int> weaponMaintenance = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly Dictionary<string, MeltBarrierMarkState> meltBarrierMarks = new Dictionary<string, MeltBarrierMarkState>(StringComparer.Ordinal);
-        private readonly HashSet<string> reservedNextTurnAction = new HashSet<string>(StringComparer.Ordinal);
         public CombatState Combat { get; }
         public IReadOnlyDictionary<GridPosition, FiregroundState> Firegrounds => firegrounds;
         public IReadOnlyCollection<GridPosition> OverloadedDevices => overloadedDevices;
         public IReadOnlyList<FirePendingEffect> PendingEffects => pendingEffects;
         public IReadOnlyCollection<MeltBarrierMarkState> MeltBarrierMarks => meltBarrierMarks.Values;
-        public bool HasReservedNextTurnAction(string unitId) => reservedNextTurnAction.Contains(unitId);
+        public bool HasReservedNextTurnAction(string unitId) =>
+            Combat.PassiveEffects.HasOngoingEffect(unitId, "fire:F-P-U01:next-turn-action");
         public bool IsDeviceOverloaded(GridPosition position) => overloadedDevices.Contains(position);
         public FireBattleState(CombatState combat) => Combat = combat ?? throw new ArgumentNullException(nameof(combat));
         private static string CooldownKey(string unitId, string spellId) => unitId + "|" + spellId;
@@ -78,7 +80,12 @@ namespace OCC.Combat
             string prefix = unitId + "|";
             foreach (string key in cooldowns.Keys.Where(key => key.StartsWith(prefix, StringComparison.Ordinal)).ToArray())
             { int next = cooldowns[key] - 1; if (next <= 0) cooldowns.Remove(key); else cooldowns[key] = next; }
-            RemoveExpired(Combat.CurrentTime);
+            foreach (GridPosition position in firegrounds.Keys.ToArray())
+            {
+                firegrounds[position].Tick();
+                if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
+            }
+            RemoveExpiredEnvironment(Combat.CurrentTime);
             UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && firegrounds.TryGetValue(unit.Position, out FiregroundState ground))
             {
@@ -91,11 +98,6 @@ namespace OCC.Combat
             {
                 meltBarrierMarks[key].Tick();
                 if (meltBarrierMarks[key].RemainingSourceTurns <= 0) meltBarrierMarks.Remove(key);
-            }
-            if (unit != null && reservedNextTurnAction.Remove(unitId))
-            {
-                unit.GrantBonusActionPoints(1);
-                Combat.AddLog(unit.DisplayName + "因脱线疾行获得 1 点额外行动力。");
             }
         }
         public bool HasFireground(GridPosition position) => firegrounds.ContainsKey(position);
@@ -116,17 +118,15 @@ namespace OCC.Combat
                 tile.IsWater = false; tile.SmokeExpiresAt = Math.Max(tile.SmokeExpiresAt, Combat.CurrentTime + duration);
                 firegrounds.Remove(position); return;
             }
-            int expiry = Combat.CurrentTime + duration;
-            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(damage, expiry, sourceSpellId);
-            else firegrounds[position] = new FiregroundState(damage, Combat.CurrentTime, expiry, sourceSpellId);
+            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(damage, duration, sourceSpellId);
+            else firegrounds[position] = new FiregroundState(damage, duration, sourceSpellId);
         }
         public void ExtendFireground(GridPosition position, int minimumDamage, int duration, string sourceSpellId)
         {
-            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(minimumDamage, current.ExpiresAt + duration, sourceSpellId);
+            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Extend(minimumDamage, duration, sourceSpellId);
         }
-        public void RemoveExpired(int time)
+        private void RemoveExpiredEnvironment(int time)
         {
-            foreach (GridPosition position in firegrounds.Where(pair => pair.Value.ExpiresAt <= time).Select(pair => pair.Key).ToArray()) firegrounds.Remove(position);
             foreach (GridPosition position in Combat.Map.PositionsWith(tile => tile.SmokeExpiresAt > 0 && tile.SmokeExpiresAt <= time).ToArray()) Combat.Map.GetTile(position).SmokeExpiresAt = 0;
         }
         internal void Overload(GridPosition position) => overloadedDevices.Add(position);
@@ -147,7 +147,9 @@ namespace OCC.Combat
             string key = target == null ? "cell:" + cell.X + "," + cell.Y : "unit:" + target.Id;
             meltBarrierMarks[key] = new MeltBarrierMarkState(sourceUnitId, target?.Id, cell, duration);
         }
-        internal void ReserveActionNextTurn(string unitId) => reservedNextTurnAction.Add(unitId);
+        internal void ReserveActionNextTurn(string unitId) => Combat.PassiveEffects.ScheduleNextTurn(
+            "fire:F-P-U01:next-turn-action", unitId, "脱线疾行", "下次自己回合获得 1 点额外行动力。",
+            CombatPassiveSourceKind.ActiveSpell, "F-P-U01", CombatOngoingEffectKind.NextTurnActionPoints, 1);
         public bool IsThreatenedByEnemy(UnitState source, GridPosition cell)
         {
             if (source == null) return false;
@@ -190,7 +192,6 @@ namespace OCC.Combat
             foreach (FirePendingEffect effect in pendingEffects) clone.pendingEffects.Add(effect.Clone());
             foreach (var pair in weaponMaintenance) clone.weaponMaintenance[pair.Key] = pair.Value;
             foreach (var pair in meltBarrierMarks) clone.meltBarrierMarks[pair.Key] = pair.Value.Clone();
-            foreach (string unitId in reservedNextTurnAction) clone.reservedNextTurnAction.Add(unitId);
             return clone;
         }
         internal static int ApplyRawFireDamage(UnitState target, int amount, GridMap map = null)
@@ -226,6 +227,20 @@ namespace OCC.Combat
         {
             if (combat == null || combat.Ruleset != CombatRuleset.Roguelite) return ApplyRawWeaponDamage(source, target, amount, combat?.Map);
             return ApplyRogueliteDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount), DamageComponentKind.Physical, "fire_weapon_rule", combat);
+        }
+
+        internal static int ApplyRawDamage(UnitState source, UnitState target, int amount, DamageType damageType,
+            string sourceEffectId, CombatState combat)
+        {
+            if (damageType == DamageType.Fire)
+                return combat == null || combat.Ruleset != CombatRuleset.Roguelite
+                    ? ApplyRawFireDamage(target, amount, combat?.Map)
+                    : ApplyRogueliteDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount),
+                        DamageComponentKind.Fire, sourceEffectId, combat);
+            if (combat == null || combat.Ruleset != CombatRuleset.Roguelite)
+                return ApplyRawWeaponDamage(source, target, amount, combat?.Map);
+            DamageComponentKind kind = damageType == DamageType.Arcane ? DamageComponentKind.Aether : DamageComponentKind.Physical;
+            return ApplyRogueliteDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount), kind, sourceEffectId, combat);
         }
 
         private static int ApplyRogueliteDamage(UnitState target, int amount, DamageComponentKind kind, string sourceEffectId, CombatState combat)

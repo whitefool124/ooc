@@ -136,16 +136,16 @@ namespace OCC.Combat
                 new FireSpellRule(FireRuleKind.Damage, 16, scope: FireRuleScope.Selection, affectAllies: true),
                 new FireSpellRule(FireRuleKind.DestroyLightCover, scope: FireRuleScope.Selection,
                     destructibleMask: FireDestructibleMask.LightCover),
-                new FireSpellRule(FireRuleKind.CreateFireground, 8, 6, FireRuleScope.Selection, affectAllies: true)
+                new FireSpellRule(FireRuleKind.CreateFireground, 8, 3, FireRuleScope.Selection, affectAllies: true)
             }, "artifact_prime", "fire_cross_blast", "fire_burning_ground");
 
         public static readonly ArtifactDefinition DemolitionCanister = A("F-T01", "demolition_canister", "炎脉封装筒",
             ItemRarity.Rare, 2, 2, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Cross, "学院试制", "火",
-            "2 行动点，消耗 1 次", "4 格内空地；中心与正交相邻格", "造成 16 点火焰伤害，摧毁轻掩体并生成每次造成 8 点伤害、持续 6 刻度的火场",
+            "2 行动点，消耗 1 次", "4 格内空地；中心与正交相邻格", "造成 16 点火焰伤害，摧毁轻掩体并生成每次造成 8 点伤害、持续 3 回合的火场",
             "爆区不分敌我；重掩体能挡住爆炸", "炸开掩体、封住道路", "双手旋阀后投放", "火十字爆发与燃烧地格",
             RarePools, new[] { E(ArtifactEffectKind.Damage, 16, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
                 E(ArtifactEffectKind.DestroyLightCover, scope: ArtifactEffectScope.Selection),
-                E(ArtifactEffectKind.CreateFireground, 8, 6, ArtifactEffectScope.Selection) }, 2, 1, 2, spell: DemolitionCompatibilitySpell);
+                E(ArtifactEffectKind.CreateFireground, 8, 3, ArtifactEffectScope.Selection) }, 2, 1, 2, spell: DemolitionCompatibilitySpell);
 
         public static readonly ArtifactDefinition AegisFold = A("G-T01", "aegis_fold", "折盾匣", ItemRarity.Uncommon, 3, 1, 3,
             ArtifactTargetRule.AllyOrSelf, ArtifactSelectionShape.Single, "持证护具工坊", "通用", "1 行动点，消耗 1 次",
@@ -176,7 +176,7 @@ namespace OCC.Combat
             "生成 24 耐久轻掩体", "双方都能利用或摧毁；不能放在任务地点或已有物件上", "临时造出一处掩体", "压下模具并抬起", "土石压模成形",
             AdvancedPools, new[] { E(ArtifactEffectKind.CreateLightCover, 24) }, 3, 2, 4);
         public static readonly ArtifactDefinition BreachWedge = A("G-T08", "breach_wedge", "解构楔", ItemRarity.Common, 4, 1, 1,
-            ArtifactTargetRule.Destructible, ArtifactSelectionShape.Single, "采石行会", "通用", "1 行动点，消耗 1 次", "相邻轻/重掩体或装置",
+            ArtifactTargetRule.Destructible, ArtifactSelectionShape.Single, "采石行会", "通用", "1 行动点，消耗 1 次", "相邻轻型、重型掩体或装置",
             "目标物件失去 24 耐久；不波及单位", "必须贴身，重掩体与核心装置通常需多次处理", "破障与设备处置", "嵌楔后敲击", "几何裂解纹",
             CommonPools, new[] { E(ArtifactEffectKind.DamageObject, 24) }, 1, 2, 2);
         public static readonly ArtifactDefinition RelayCompass = A("G-T09", "relay_compass", "导位罗盘", ItemRarity.Uncommon, 3, 1, 4,

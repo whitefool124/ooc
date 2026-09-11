@@ -209,7 +209,7 @@ namespace OCC.Combat.Tests
             MonoScript inventory = AssetDatabase.LoadAssetAtPath<MonoScript>(paths[0]);
             Assert.That(inventory.text, Does.Not.Contain("\" // \" + definition.Id"), "Formal inventory must not expose stable development ids.");
             Assert.That(inventory.text, Does.Contain("CategoryName(definition.Category)"), "Non-artifact categories must also use player-facing labels.");
-            Assert.That(inventory.text, Does.Contain("\"法宝 · \" + RarityName(definition.Rarity)"),
+            Assert.That(inventory.text, Does.Contain("\"法宝　\" + RarityName(definition.Rarity)"),
                 "Artifact details must localize category and rarity instead of exposing enum names.");
             MonoScript archive = AssetDatabase.LoadAssetAtPath<MonoScript>(paths[2]);
             Assert.That(archive.text, Does.Contain("run.Inventory.Items.Where"), "Archive must enumerate artifacts actually owned by this run.");

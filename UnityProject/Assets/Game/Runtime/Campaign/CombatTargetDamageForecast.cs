@@ -18,12 +18,12 @@ namespace OCC.Combat
         {
             get
             {
-                if (TotalDamage <= 0) return "不会造成伤害 · 生命剩余 " + RemainingHealth;
+                if (TotalDamage <= 0) return "不会造成伤害\n生命剩余 " + RemainingHealth;
                 string result = WillDefeat
-                    ? DefeatSummary + " · 生命归零"
+                    ? DefeatSummary + "\n生命归零"
                     : "生命 -" + HealthLoss + "（剩 " + RemainingHealth + "）";
-                if (ShieldLoss > 0) result += " · 护盾 -" + ShieldLoss;
-                if (EnvironmentDamage > 0) result += " · 含环境伤害 " + EnvironmentDamage;
+                if (ShieldLoss > 0) result += "\n护盾 -" + ShieldLoss;
+                if (EnvironmentDamage > 0) result += "\n含环境伤害 " + EnvironmentDamage;
                 return result;
             }
         }

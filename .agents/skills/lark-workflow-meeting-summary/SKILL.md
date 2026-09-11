@@ -1,21 +1,17 @@
 ---
 name: lark-workflow-meeting-summary
-version: 1.0.0
 description: "会议纪要整理工作流：汇总指定时间范围内的会议纪要并生成结构化报告。当用户需要整理会议纪要、生成会议周报、回顾一段时间内的会议内容时使用。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
 ---
 
 # 会议纪要汇总工作流
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**。然后阅读 [`../lark-vc/SKILL.md`](../lark-vc/SKILL.md)，了解会议纪要相关操作。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-vc/references/vc-domain-boundaries.md`](../lark-vc/references/vc-domain-boundaries.md)**，不读将导致命令使用、会议产物决策、领域边界职责判断错误：
-> 1. 了解日历 & VC、会议产物 & 文档的关联关系和职责划分
-> 2. 了解会议产物（妙记和纪要）之间的关联关系，例如：**妙记和纪要产生条件相互独立**
-> 3. 了解不同会议产物的组成部分，以便根据需求决策使用哪种产物的数据
-> 4. 了解会议总结、分析和信息提取的标准流程
+会议产品边界或 token 路由不明时读取 [`../lark-vc/references/vc-domain-boundaries.md`](../lark-vc/references/vc-domain-boundaries.md)；已有明确资源类型和 ID 时直接使用对应命令。
 
 ## 适用场景
 
@@ -24,7 +20,7 @@ metadata:
 
 ## 前置条件
 
-仅支持 **user 身份**。执行前确保已授权：
+仅支持 **user 身份**，所有命令显式传 `--as user` 并沿用身份。仅当前认证或所需 scope 缺失时执行以下授权命令：
 
 ```bash
 lark-cli auth login --domain vc        # 基础（查询+纪要）
@@ -44,6 +40,9 @@ lark-cli auth login --domain vc,drive   # 含读取纪要文档正文、生成�
                    │
                    ▼
                drive metas batch_query 纪要元数据
+                   │
+                   ▼
+               docs +fetch / note +transcript 读取实际内容
                    │
                    ▼
                结构化报告
@@ -97,7 +96,10 @@ lark-cli schema drive.metas.batch_query
 lark-cli drive metas batch_query --data '{"request_docs": [{"doc_type": "docx", "doc_token": "<doc_token>"}], "with_url": true}'
 ```
 
-### Step 4: 整理纪要报告
+### Step 4: 读取正文并整理纪要报告
+
+内容总结必须先读取实际纪要正文：note_doc_token 经 `docs +fetch` 获取；normal 逐字稿读取 verbatim_doc_token，unified 逐字稿用 `note +transcript`。按需读取 lark-doc/lark-note 参考并始终沿用 user 身份。链接和元数据只能支持会议清单，不能据此编造结论、决定或待办。正文不可见时标明未读取，只报告已知信息。
+
 
 根据时间跨度选择输出格式：
 
@@ -108,15 +110,11 @@ lark-cli drive metas batch_query --data '{"request_docs": [{"doc_type": "docx", 
 
 阅读 [`../lark-doc/SKILL.md`](../lark-doc/SKILL.md) 学习云文档技能。
 
-```bash
-lark-cli docs +create --doc-format markdown --content $'<title>会议纪要汇总 (<start> - <end>)</title>\n<内容>'
-# 或追加到已有文档
-lark-cli docs +update --doc "<url_or_token>" --command append --doc-format markdown --content $'<内容>'
-```
+使用当前 docs 创建/更新参考中的参数与格式。不要把 XML 标题标签混进 Markdown，也不要为修改已有报告另建副本。
 
 ## 参考
 
-- [lark-shared](../lark-shared/SKILL.md) — 认证、权限（必读）
+- [lark-shared](../lark-shared/SKILL.md) — 认证、权限问题时读取
 - [lark-vc](../lark-vc/SKILL.md) — `+search`、`+detail` 详细用法
 - [lark-note](../lark-note/SKILL.md) — `note +detail`、`note +transcript`（unified 纪要逐字稿）
 - [lark-doc](../lark-doc/SKILL.md) — `+fetch`、`+create`、`+update` 详细用法

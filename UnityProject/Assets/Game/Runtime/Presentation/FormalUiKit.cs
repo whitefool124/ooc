@@ -226,7 +226,7 @@ namespace OCC.Combat.Presentation
         private static readonly System.Collections.Generic.Dictionary<string, Sprite> skin = new System.Collections.Generic.Dictionary<string, Sprite>(StringComparer.Ordinal);
         public const string FontResourcePath = "Fonts/FusionPixel12ProportionalZhHans";
         public const string DisplayFontResourcePath = "Fonts/FusionPixel12ProportionalZhHans";
-        public const string ReadingFontResourcePath = "Fonts/SimHei";
+        public const string ReadingFontResourcePath = "Fonts/FusionPixel12ProportionalZhHans";
         public static Font Font => font != null ? font : font = Resources.Load<Font>(FontResourcePath);
         public static Font DisplayFont => displayFont != null ? displayFont : displayFont = Resources.Load<Font>(DisplayFontResourcePath);
         public static Font ReadingFont => readingFont != null ? readingFont : readingFont = Resources.Load<Font>(ReadingFontResourcePath);

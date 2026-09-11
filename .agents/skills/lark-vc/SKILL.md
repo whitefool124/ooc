@@ -1,8 +1,8 @@
 ---
 name: lark-vc
-version: 1.0.0
-description: "飞书视频会议：查询进行中的会议列表（含会议 ID）、读取会中实时内容（发言、聊天、共享等）、发送会中消息，以及搜索历史会议、查询会议纪要（总结/待办/章节/逐字稿）和参会人快照。Agent 真实入会/离会走 lark-vc-agent；查询未来日程走 lark-calendar。"
+description: "查询飞书进行中或历史会议、会中事件及纪要产物；真实入会或离会使用 lark-vc-agent。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli vc --help"
@@ -10,13 +10,9 @@ metadata:
 
 # vc (v1)
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`references/vc-domain-boundaries.md`](references/vc-domain-boundaries.md)**，不读将导致命令使用、会议产物决策、领域边界职责判断错误：
-> 1. 了解日历 & VC、会议产物 & 文档的关联关系和职责划分
-> 2. 了解会议产物（妙记和纪要）之间的关联关系，例如：**妙记和纪要产生条件相互独立**
-> 3. 了解不同会议产物的组成部分，以便根据需求决策使用哪种产物的数据
-> 4. 了解会议总结、分析和信息提取的标准流程
+会议产品边界或 token 路由不明时读取 [`references/vc-domain-boundaries.md`](references/vc-domain-boundaries.md)；已有明确资源类型和 ID 时直接使用对应命令。
 
 ## 身份
 

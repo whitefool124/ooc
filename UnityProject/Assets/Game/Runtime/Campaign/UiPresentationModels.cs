@@ -78,6 +78,43 @@ namespace OCC.Combat
                 .Select((unit, index) => new CombatTurnTrackEntry(index + 1, unit, unit.Id == state.ActiveUnitId, state.FixedTurnOrder(unit.Id)))
                 .ToArray();
         }
+
+        // Compares the first post-turn queue with the queue after the hovered action's delay.
+        // -1 means the unit falls, +1 means it rises, and omitted/zero means no rank change.
+        public static IReadOnlyDictionary<string, int> PreviewOrderChanges(CombatState state, string delayedUnitId, int delay)
+        {
+            if (state == null || string.IsNullOrEmpty(delayedUnitId) || delay <= 0 || state.GetUnit(delayedUnitId) == null)
+                return new Dictionary<string, int>();
+            UnitState[] living = state.Units.Values.Where(unit => unit.IsAlive).ToArray();
+            Dictionary<string, int> baseline = OrderAfterCurrentTurn(state, living, null, 0)
+                .Select((unit, index) => new { unit.Id, Index = index })
+                .ToDictionary(value => value.Id, value => value.Index, StringComparer.Ordinal);
+            UnitState[] projected = OrderAfterCurrentTurn(state, living, delayedUnitId, delay).ToArray();
+            var changes = new Dictionary<string, int>(StringComparer.Ordinal);
+            for (int index = 0; index < projected.Length; index++)
+            {
+                int before = baseline[projected[index].Id];
+                if (index < before) changes[projected[index].Id] = 1;
+                else if (index > before) changes[projected[index].Id] = -1;
+            }
+            return changes;
+        }
+
+        private static IOrderedEnumerable<UnitState> OrderAfterCurrentTurn(CombatState state, IEnumerable<UnitState> units,
+            string delayedUnitId, int delay)
+        {
+            return units.OrderByDescending(unit => ProjectedValue(state, unit, delayedUnitId, delay))
+                .ThenByDescending(unit => unit.EffectiveSpeed)
+                .ThenBy(unit => state.FixedTurnOrder(unit.Id));
+        }
+
+        private static int ProjectedValue(CombatState state, UnitState unit, string delayedUnitId, int delay)
+        {
+            int value = unit.ActionValue;
+            if (unit.Id == delayedUnitId) value -= Math.Max(0, delay);
+            if (unit.Id == state.ActiveUnitId) value -= CombatActionTimeline.ReadyThreshold;
+            return CombatActionTimeline.Clamp(value);
+        }
     }
 
     public readonly struct RogueliteMapPresentationModel : IEquatable<RogueliteMapPresentationModel>
@@ -201,8 +238,8 @@ namespace OCC.Combat
                 run.AcademyPhase == AcademyMapPhase.TransitionReady ? "终考将至" : "日程还宽裕";
             string finale = run.CanChallengeAcademyFinale ? "现在可以参加终考" :
                 "参加终考前，还要完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.CompletedAcademyNodeCount) + " 个地点";
-            return "学期进度 " + run.StageTime + "/" + AcademyMapTuning.TransitionProgress + " · " + phase +
-                " · " + finale;
+            return "学期进度 当前 " + run.StageTime + "　节点 " + AcademyMapTuning.TransitionProgress + "\n" + phase +
+                "\n" + finale;
         }
 
         public static string ConnectionSummary(RogueliteMapRun run, RogueliteMapNode node)
@@ -211,7 +248,7 @@ namespace OCC.Combat
             string[] known = node.NextIds.Select(run.MapNode)
                 .Where(next => run.VisualStateFor(next.Id) != RogueliteMapNodeVisualState.Unknown)
                 .Select(next => next.DisplayName).ToArray();
-            return known.Length == 0 ? "附近还没有发现别的去处" : "从这里还能去：" + string.Join(" / ", known);
+            return known.Length == 0 ? "附近还没有发现别的去处" : "从这里还能去：\n" + string.Join("\n", known);
         }
     }
 
@@ -317,15 +354,15 @@ namespace OCC.Combat
         private static string WeaponComparison(WeaponDefinition current, WeaponDefinition candidate)
         {
             if (current == null || candidate == null) return string.Empty;
-            return "对比当前：伤害 " + Signed(candidate.Damage - current.Damage) + " / 射程 " + Signed(candidate.Range - current.Range) + " / 穿甲 " + Signed(candidate.ArmorPierce - current.ArmorPierce);
+            return "对比当前：伤害 " + Signed(candidate.Damage - current.Damage) + "　射程 " + Signed(candidate.Range - current.Range) + "　穿甲 " + Signed(candidate.ArmorPierce - current.ArmorPierce);
         }
 
         private static string CostText(RogueliteNodeContentChoice choice)
         {
             if (choice.GoldCost > 0 || choice.ContributionCost > 0)
-                return "需要 " + choice.GoldCost + " 金币 / " + choice.ContributionCost + " 学院贡献";
+                return "需要 " + choice.GoldCost + " 金币和 " + choice.ContributionCost + " 学院贡献";
             if (choice.PartsCost == 0 && choice.AetherCost == 0) return "不用花东西";
-            return "需要 " + choice.PartsCost + " 零件 / " + choice.AetherCost + " 以太";
+            return "需要 " + choice.PartsCost + " 零件和 " + choice.AetherCost + " 以太";
         }
 
         private static string RewardDisplayName(string rewardId)

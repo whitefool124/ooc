@@ -1,6 +1,6 @@
 # apps env
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)（认证 / 全局参数 / 安全）。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 管理妙搭应用环境变量。查看用 `+env-list`，设置用 `+env-set`，删除用 `+env-delete`。没有单变量 get 命令；要确认某个 key 是否存在，使用 list 后用 `--jq` 过滤。
 
@@ -20,7 +20,7 @@ lark-cli apps +env-list --app-id <app_id> --include-values --jq '.data.items[] |
 
 ## 设置
 
-dev 环境设置不需要 `--yes`。设置 online 环境需要人类确认并显式传 `--yes`；如果用户在同一轮已经明确说“确认/直接执行”，视为已确认，直接带 `--yes`，不要再次追问。`--dry-run` 可用于预览请求且不需要 `--yes`。变量值支持直接传 `<value>`，也支持 `@file` 或 stdin 输入。
+dev 环境设置不需要 `--yes`。设置 online 环境需要人类确认并显式传 `--yes`；如果完整会话中已有对具体 app/env/key 及影响的有效授权，视为已确认，直接带 `--yes`，不要再次追问。`--dry-run` 可用于预览请求且不需要 `--yes`。变量值支持直接传 `<value>`，也支持 `@file` 或 stdin 输入。
 
 回复中只说明 app/env/key 和执行结果；不要回显真实 value。需要举例时使用 `<value>`、`@file` 或 stdin。
 

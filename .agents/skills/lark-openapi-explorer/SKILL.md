@@ -1,15 +1,15 @@
 ---
 name: lark-openapi-explorer
-version: 1.0.0
-description: "飞书/Lark 原生 OpenAPI 探索：从官方文档库中挖掘未经 CLI 封装的原生 OpenAPI 接口。当用户的需求无法被现有 lark-* skill 或 lark-cli 已注册命令满足，需要查找并调用原生飞书 OpenAPI 时使用。"
+description: "现有 lark-cli 命令不能满足任务时，查找官方飞书 OpenAPI 并核实调用方法。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
 ---
 
 # OpenAPI Explorer
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md) 了解认证、身份切换和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 当用户的需求**无法被现有 skill 或 CLI 已注册 API 覆盖**时，使用本技能从飞书官方 markdown 文档库中逐层挖掘原生 OpenAPI 接口，然后通过 `lark-cli api` 裸调完成任务。
 
@@ -34,7 +34,7 @@ llms.txt                          ← 顶层索引，列出所有模块文档链
 
 ## 挖掘流程
 
-严格按以下步骤逐层检索，**不要跳步或猜测 API**：
+按需检索官方资料，**不要猜测 API**。已持有准确官方 API 页面或当前已核实 schema 时可直接使用；不知道入口时再从索引逐层定位：
 
 ### Step 1：确认现有能力不足
 

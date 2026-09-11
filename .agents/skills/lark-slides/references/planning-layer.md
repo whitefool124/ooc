@@ -1,10 +1,10 @@
 # Planning Layer
 
-新建演示文稿或大幅改写页面时，必须先写 `.lark-slides/plan/<deck-or-task-id>/slide_plan.json`，再生成 XML。这个文件是 deck 的设计中间层，用来把叙事、页面角色、布局、视觉重点和文字密度固定下来，避免从用户提示直接跳到 XML。
+复杂新建、多页重排或需要后续复用计划时，建议先写 `.lark-slides/plan/<deck-or-task-id>/slide_plan.json`，再生成 XML。这个文件是 deck 的设计中间层，用来把叙事、页面角色、布局、视觉重点和文字密度固定下来，避免从用户提示直接跳到 XML。
 
-小型已有页编辑可豁免，例如只替换一个标题、改一个数字、插入一个块、上传并插入一张图。只要任务会重排多页、生成新 deck、替换整页结构，仍然需要规划层。
+小型已有页编辑可豁免，例如只替换一个标题、改一个数字、插入一个块、上传并插入一张图。是否保存规划层取决于复杂度；简单新建也可直接组织内容并生成 XML。
 
-## Required Flow
+## 使用规划文件时的流程
 
 1. 理解用户需求，必要时澄清主题、受众、页数、风格。
 2. 选择唯一 plan 目录：`.lark-slides/plan/<deck-or-task-id>/`。
@@ -88,7 +88,7 @@ Exception:
         "asset_type": "logo",
         "purpose": "Signal product or team identity on the opening page.",
         "suggested_query": "product logo",
-        "fallback_if_missing": "Create a close-enough image with the image generation tool instead of a real logo."
+        "fallback_if_missing": "Use the brand name as plain text; do not generate an imitation logo."
       },
       "text_density": "low",
       "speaker_intent": "Frame the decision and establish the deck's point of view."
@@ -144,9 +144,9 @@ When `chart_contract.required == true`, XML generation must produce a `<chart>` 
 
 - `user_provided`: the user supplied concrete values, tables, CSV, or metric lists; use them and do not replace them with mock data.
 - `mock_placeholder`: the user asked for a placeholder, template, example, or later-replaceable chart position; use mock data in native `<chart>`.
-- `mock_required_by_intent`: the user did not provide concrete values but asked for data expression, charts, trends, comparisons, or distributions; use mock data in native `<chart>`.
+- `data_missing`: an analytical request has no concrete values; retrieve authorized real data or ask for it. Do not create mock data merely because a chart is requested.
 
-`data_series_required` means the generated XML must include `<chartData>`. It does not require user-provided real-world values. When real values are unavailable but chart expression is part of the user's intent, write mock or placeholder values into native `<chart>` and label them clearly instead of switching to manual drawing primitives or metric blocks.
+`data_series_required` means the generated XML must include `<chartData>`. Use actual source values for analytical work. Mock values are allowed only for an explicitly requested example, placeholder or template, and must be labeled clearly.
 
 ## Layout Vocabulary
 
@@ -210,8 +210,8 @@ Use an object for one planned asset, an array for multiple real needs, or `asset
 
 - `asset_type`: one of `paper_figure`, `architecture_diagram`, `icon`, `logo`, `chart`, `infographic`, `screenshot`, `flow_diagram`, or `none`.
 - `purpose`: why this asset helps the page's key message.
-- `suggested_query`: short future lookup hint only; do not execute it unless separately requested.
-- `fallback_if_missing`: a plan to create a close-enough image with the image generation tool, or a native `<chart>` for data.
+- `suggested_query`: a focused query for authorized read-only asset research when it helps the requested deck.
+- `fallback_if_missing`: a truthful alternative such as brand text, a labeled original schematic, or a statement that evidence is unavailable. Native charts require real data unless the user requested a placeholder.
 - `chart_contract`: when `asset_type` is `chart` and the visual is a supported standard data chart, set this optional slide-level field so generation is locked to native `<chart>`.
 
 For detailed rules and examples, read `asset-planning.md`.
@@ -219,8 +219,8 @@ For detailed rules and examples, read `asset-planning.md`.
 Good examples:
 
 - `{"asset_type":"architecture_diagram","purpose":"Explain component relationships.","suggested_query":"service architecture diagram","fallback_if_missing":"Render the component diagram with <shape> + <line>."}`
-- `{"asset_type":"logo","purpose":"Identify the customer context.","suggested_query":"customer logo","fallback_if_missing":"Create a close-enough image with the image generation tool instead of a real logo."}`
-- `{"asset_type":"chart","purpose":"Show adoption trend.","suggested_query":"monthly adoption trend chart","fallback_if_missing":"Render a native `<chart>` using the provided series when available; otherwise render a native `<chart>` with mock placeholder values and label it as 模拟数据，仅占位，待替换真实数据."}`
+- `{"asset_type":"logo","purpose":"Identify the customer context.","suggested_query":"customer logo","fallback_if_missing":"Use the brand name as plain text; do not generate an imitation logo."}`
+- `{"asset_type":"chart","purpose":"Show adoption trend.","suggested_query":"monthly adoption trend chart","fallback_if_missing":"Render a native `<chart>` using the provided series when available; if real data is missing, request or retrieve it; use labeled mock values only for a requested template."}`
 
 ## XML Generation Contract
 
@@ -237,7 +237,7 @@ After creating the PPT, fetch the presentation and verify:
 
 - Page count matches the plan.
 - Every page has the planned title and key message represented.
-- At least several pages have visibly different XML layout structures.
+- Layout variation reflects the content relationships and user template, without a numeric diversity quota.
 - Planned `visual_focus` appears as a dominant visual region or object.
 - Asset planning is proportional to the deck topic and length: technical, research, product, and analytical decks should include meaningful planned visuals where they clarify the story, and each planned asset has a visible fallback if no real asset was used.
 - `text_density` is reflected in the amount of visible text.

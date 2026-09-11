@@ -77,6 +77,11 @@ namespace OCC.Combat
         }
         public void BeginUnitTurn(string unitId)
         {
+            foreach (GridPosition position in Firegrounds.Keys.ToArray())
+            {
+                int remaining = Firegrounds[position] - 1;
+                if (remaining <= 0) Firegrounds.Remove(position); else Firegrounds[position] = remaining;
+            }
             UnitState unit = Combat.GetUnit(unitId); if (unit == null) return;
             if (ReservedAp.TryGetValue(unitId, out int ap)) { unit.GrantActionPoints(ap); ReservedAp.Remove(unitId); }
             if (ReservedMana.TryGetValue(unitId, out int mana)) { unit.RestoreMana(mana); ReservedMana.Remove(unitId); }

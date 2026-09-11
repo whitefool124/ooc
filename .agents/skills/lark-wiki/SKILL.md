@@ -1,8 +1,8 @@
 ---
 name: lark-wiki
-version: 1.0.3
-description: "飞书知识库：管理知识空间、空间成员和文档节点。创建和查询知识空间、查看和管理空间成员、管理节点层级结构、在知识库中组织文档和快捷方式。当用户需要在知识库中查找或创建文档、浏览知识空间结构、查看或管理空间成员、移动或复制节点时使用。当用户给出 doubao.com 的 /wiki/ URL/token 时，也应直接使用本 skill，不要因为域名不是飞书而回退到 WebFetch；路由依据是 URL 路径模式和 token，而不是域名。不负责：上传文件到知识库节点下（走 lark-drive）、编辑文档/表格/Base 内容（走 lark-doc / lark-sheets / lark-base）。"
+description: "管理飞书知识空间、节点层级与成员；正文编辑使用 lark-doc，云盘文件操作使用 lark-drive。"
 metadata:
+  version: 1.0.3
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli wiki --help"
@@ -10,7 +10,7 @@ metadata:
 
 # wiki (v2)
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 > **成员管理硬限制：**
 > - 如果目标是“部门”，先判断身份，再决定是否继续。
@@ -30,8 +30,8 @@ metadata:
 - 用户给的是知识库 URL（`.../wiki/<token>`），且后续要查成员/加成员/删成员：先确定下游成员操作的身份（默认 `user`；用户明确要求应用 / bot 视角时用 `bot`），再调用 `lark-cli wiki +node-get --node-token '<wiki_url>' --as user --format json`，从 `data.space_id` 获取空间 ID；下游使用 bot 时将示例中的身份改为 `--as bot`。节点解析与后续成员操作必须使用相同身份。
 - 用户要**删除**知识空间（`wiki +delete-space`）但只给了名称或 URL：**不能**把名称 / URL 原样传给 `--space-id`，必须先解析出真实 `space_id`。解析方式：
   - URL（`.../wiki/<token>`）：先确定后续 `wiki +delete-space` 的身份（默认 `user`；明确要求 bot 视角时用 `bot`），再调用 `lark-cli wiki +node-get --node-token '<wiki_url>' --as user --format json`，读取 `data.space_id`；下游使用 bot 时将示例中的身份改为 `--as bot`。解析和删除必须使用相同身份。
-  - 只知名称：`lark-cli wiki spaces list --format json`，边翻页边收集 items 并按 `name` 精确匹配；**一旦任一页累计到至少 1 条精确匹配就停止翻页**。只有当翻完所有页（`has_more=false`）仍无精确匹配时，才对已收集的全量 items 做宽松匹配（`name` trim 空格、大小写不敏感、子串包含）。
-  - **关键安全约束**：无论精确还是模糊，**无论命中 1 条还是多条，发起删除前都必须把候选（`name` + `space_id` + `description` + `space_type`）列给用户，由用户明确选定一个 `space_id` 再执行**。不要因为"只命中一条"就自动执行删除。
+  - 只知名称：`lark-cli wiki spaces list --format json`，边翻页边收集 items 并按 `name` 精确匹配；**继续分页至覆盖当前可见范围，防止遗漏后续同名空间**。只有当翻完所有页（`has_more=false`）仍无精确匹配时，才对已收集的全量 items 做宽松匹配（`name` trim 空格、大小写不敏感、子串包含）。
+  - **关键安全约束**：无论精确还是模糊，核对候选（`name` + `space_id` + `description` + `space_type`）、下属节点影响与完整会话中的删除授权。目标已唯一明确且影响已被授权时执行；存在同名歧义、模糊匹配或未授权影响时才展示候选询问。
   - 命中 0 条：停下来问用户是名称拼错了还是调用方无权限；**不要**自行改名字重试。
   - 用户明确选定后再执行 `lark-cli wiki +delete-space --space-id <ID> --yes`（高风险写操作，必须显式 `--yes`）。
   - 反例：不要把 wiki URL / 名称直接当 `--space-id`（如 `--space-id "https://.../wiki/<wiki_token>"`）；务必先用 `wiki +node-get` 解析出 `data.space_id` 再传。
@@ -47,25 +47,27 @@ metadata:
 
 ## Shortcuts（推荐优先使用）
 
+本安装包未提供部分 shortcut reference。对表中此类命令，在首次实际使用时读取 `lark-cli wiki +<命令> --help`；若使用原生 API，再读取对应 `lark-cli schema`。不要猜参数或把缺失链接当作已读文档。
+
 Shortcut 是对常用操作的高级封装（`lark-cli wiki +<verb> [flags]`）。有 Shortcut 的操作优先使用。
 
 获取或解析 Wiki 节点统一优先使用 `wiki +node-get`，包括只为获取 `space_id`、`node_token`、`obj_token` 或 `obj_type` 的中间步骤。只有当前 CLI 不提供该 shortcut，或任务明确需要 shortcut 未输出的原始响应字段时，才回退到 `wiki spaces get_node`；回退前先运行 `lark-cli schema wiki.spaces.get_node`。
 
 | Shortcut | 说明 |
 |----------|------|
-| [`+move`](references/lark-wiki-move.md) | Move a wiki node, or move a Drive document into Wiki |
-| [`+move-to-drive`](references/lark-wiki-move-to-drive.md) | Move a wiki node to a Drive folder and poll the async task |
-| [`+node-create`](references/lark-wiki-node-create.md) | Create a wiki node with automatic space resolution |
+| `+move`（用当前 CLI `--help` 核对） | Move a wiki node, or move a Drive document into Wiki |
+| `+move-to-drive`（用当前 CLI `--help` 核对） | Move a wiki node to a Drive folder and poll the async task |
+| `+node-create`（用当前 CLI `--help` 核对） | Create a wiki node with automatic space resolution |
 | [`+delete-space`](references/lark-wiki-delete-space.md) | Delete a wiki space, polling the async delete task when needed |
-| [`+space-list`](references/lark-wiki-space-list.md) | List all wiki spaces accessible to the caller |
-| [`+space-create`](references/lark-wiki-space-create.md) | Create a wiki space (user identity only) |
-| [`+node-list`](references/lark-wiki-node-list.md) | List wiki nodes in a space or under a parent node (supports pagination) |
-| [`+node-copy`](references/lark-wiki-node-copy.md) | Copy a wiki node to a target space or parent node |
-| [`+node-get`](references/lark-wiki-node-get.md) | Get a wiki node's details by node_token / obj_token / Lark URL |
-| [`+node-delete`](references/lark-wiki-node-delete.md) | Delete a wiki node, polling the async delete task when needed |
-| [`+member-add`](references/lark-wiki-member-add.md) | Add a member to a wiki space |
-| [`+member-remove`](references/lark-wiki-member-remove.md) | Remove a member from a wiki space |
-| [`+member-list`](references/lark-wiki-member-list.md) | List members of a wiki space (supports pagination) |
+| `+space-list`（用当前 CLI `--help` 核对） | List all wiki spaces accessible to the caller |
+| `+space-create`（用当前 CLI `--help` 核对） | Create a wiki space (user identity only) |
+| `+node-list`（用当前 CLI `--help` 核对） | List wiki nodes in a space or under a parent node (supports pagination) |
+| `+node-copy`（用当前 CLI `--help` 核对） | Copy a wiki node to a target space or parent node |
+| `+node-get`（用当前 CLI `--help` 核对） | Get a wiki node's details by node_token / obj_token / Lark URL |
+| `+node-delete`（用当前 CLI `--help` 核对） | Delete a wiki node, polling the async delete task when needed |
+| `+member-add`（用当前 CLI `--help` 核对） | Add a member to a wiki space |
+| `+member-remove`（用当前 CLI `--help` 核对） | Remove a member from a wiki space |
+| `+member-list`（用当前 CLI `--help` 核对） | List members of a wiki space (supports pagination) |
 
 ## 成员添加流程
 

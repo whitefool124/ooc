@@ -285,7 +285,7 @@ namespace OCC.Combat
             }
             catch (Exception backupException)
             {
-                LastError += " | protection failed: " + backupException.GetType().Name + " - " + backupException.Message;
+                LastError += "；protection failed: " + backupException.GetType().Name + " - " + backupException.Message;
             }
         }
 
@@ -299,7 +299,7 @@ namespace OCC.Combat
             }
             catch (Exception restoreException)
             {
-                LastError += " | rollback failed: " + restoreException.GetType().Name + " - " + restoreException.Message;
+                LastError += "；rollback failed: " + restoreException.GetType().Name + " - " + restoreException.Message;
             }
         }
 

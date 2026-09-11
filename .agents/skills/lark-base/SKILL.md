@@ -1,8 +1,8 @@
 ---
 name: lark-base
-version: 1.2.6
-description: "飞书多维表格（Base）操作：建表、字段、记录、视图、统计、公式/lookup、表单、仪表盘、应用模式（BaseApp/AppMode 页面与组件）、Workspace 目录、workflow、角色权限；遇到 Base/多维表格/bitable、BaseApp/AppMode，或应用模式的 /app/ 链接（可能同时包含 /base/workspace/<workspace_token>）时使用。BaseApp 不走 lark-apps；文件导入/导出转 lark-drive，认证/授权转 lark-shared。"
+description: "操作飞书 Base/多维表格及 BaseApp：数据、视图、页面、工作流与权限；识别 /base/、/app/ 资源。"
 metadata:
+  version: 1.2.6
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli base --help"
@@ -104,12 +104,12 @@ metadata:
 - `formula` 适合常规计算、条件判断、文本/日期处理和长期派生指标；`lookup` 适合明确的跨表查找、筛选后取值或聚合引用。
 - 写入、公式、lookup、workflow、dashboard 前，先读取真实结构：表、字段、视图、关联表和 dashboard block 名称都以命令返回为准。
 
-## 身份与权限降级
+## 身份与权限恢复
 
 - 默认显式使用 `--as user` 操作用户资源；只有用户明确要求应用身份时，才直接用 `--as bot`。
 - `+table-copy --wait` 提交成功后会在 stderr 打印完整 `task_id`；若进程被 Ctrl-C 终止，可用该 ID 和原身份执行 `+table-copy-status` 续查，不要重新提交复制。
 - user 身份报 scope/授权不足，或错误中包含 `missing_scopes` / `hint`，先转 `lark-shared` 做用户授权恢复，不要直接降级 bot。
-- user 身份报资源级无访问且无授权恢复提示时，才可用 `--as bot` 重试一次；bot 仍失败就停止重试并按权限错误处理。
+- user 身份报资源级无访问时，保持原身份并说明需要资源所有者授权；不自动切换 bot 重试。
 - `91403` 或明确不可访问错误不要循环换身份重试。
 - `+base-create` / `+base-copy` 若用 bot 身份执行，关注返回中的 `permission_grant`，并把用户是否可打开新 Base 告知用户。
 

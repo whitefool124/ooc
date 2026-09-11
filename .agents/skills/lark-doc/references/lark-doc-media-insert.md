@@ -1,7 +1,7 @@
 
 # docs +media-insert（文档末尾插入图片/文件）
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 把"创建空 block → 上传文件 → 设置 token"三步合并成一个命令，在**文档末尾**插入本地图片或文件。
 

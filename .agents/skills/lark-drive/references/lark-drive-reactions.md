@@ -1,6 +1,6 @@
 # drive reactions
 
-> **前置条件：** 先阅读 [`../SKILL.md`](../SKILL.md) 了解 Drive 评论入口，再阅读 [`lark-drive-list-comments.md`](lark-drive-list-comments.md) 了解评论卡片模型、评论数/回复数统计口径、`file_token` / `file_type` 规则；同时阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 处理文档评论 / 回复上的 reaction（点赞、表情、各表情数量、谁点了什么、添加/删除表情）。这个场景不常见，但规则比较集中：查询时只有在用户明确需要 reaction 信息时才在 `drive +list-comments` / `+batch-query-comments` / `+list-replies` 上带 `--need-reaction`；写入优先使用 `drive +react-reply`（命令参数细节见 [`lark-drive-react-reply.md`](lark-drive-react-reply.md)），操作对象始终是 `reply_id`。本文是跨切面专题，集中放 reaction 的查询规则、语义联想和完整枚举。
 

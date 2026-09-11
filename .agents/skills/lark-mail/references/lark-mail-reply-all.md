@@ -1,6 +1,6 @@
 # mail +reply-all
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 回复全部会自动处理：
 - 自动聚合原邮件发件人、原 To、原 Cc
@@ -13,7 +13,7 @@
 
 ## CRITICAL — 发送工作流（必须遵循）
 
-**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](references/lark-mail-html.md)，其中包含邮件书写规范**
+**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](lark-mail-html.md)，其中包含邮件书写规范**
 
 此命令默认**只保存草稿**，不会发送邮件。回复全部会发送给**所有**原始收件人，需要发送时有两种合规方式：
 

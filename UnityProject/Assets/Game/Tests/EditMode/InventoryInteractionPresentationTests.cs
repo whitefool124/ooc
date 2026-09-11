@@ -16,7 +16,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(text, Does.Contain(ItemCatalog.Get(item.DefinitionId).DisplayName));
             Assert.That(text, Does.Contain("重量"));
-            Assert.That(text, Does.Contain("1/2"));
+            Assert.That(text, Does.Contain("剩余 1　总计 2"));
             Assert.That(text, Does.Contain("横放"));
             Assert.That(text, Does.Contain("来源："));
             Assert.That(text, Does.Contain("会怎样："));

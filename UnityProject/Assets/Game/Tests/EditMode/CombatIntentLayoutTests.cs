@@ -66,15 +66,15 @@ namespace OCC.Combat.Tests
 
         [TestCase(64f)]
         [TestCase(128f)]
-        public void ActiveFootprint_FollowsVisualTravelAtBothWorldPixelScales(float size)
+        public void ActiveTurnMarker_FollowsVisualTravelAndFramesTheCellWithoutOccludingIt(float size)
         {
             Vector2 foot = new Vector2(200, 240), travel = new Vector2(14, -20);
-            Rect start = CombatIntentLayout.ActiveFootprint(foot, size);
-            Rect moved = CombatIntentLayout.ActiveFootprint(foot + travel, size);
+            Rect start = CombatIntentLayout.ActiveTurnMarker(foot, size);
+            Rect moved = CombatIntentLayout.ActiveTurnMarker(foot + travel, size);
             Assert.That(moved.position - start.position, Is.EqualTo(travel));
             Assert.That(moved.size, Is.EqualTo(start.size));
-            Assert.That(start.yMax, Is.LessThan(foot.y));
-            Assert.That(start.width, Is.LessThan(size));
+            Assert.That(start.yMax, Is.EqualTo(foot.y + size / 16f));
+            Assert.That(start.width, Is.GreaterThan(size));
         }
     }
 }

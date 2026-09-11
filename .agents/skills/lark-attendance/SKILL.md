@@ -1,8 +1,8 @@
 ---
 name: lark-attendance
-version: 1.0.0
 description: "飞书考勤打卡：查询自己的考勤打卡记录"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli attendance --help"
@@ -10,7 +10,7 @@ metadata:
 
 # attendance (v1)
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ## 默认参数自动填充规则
 

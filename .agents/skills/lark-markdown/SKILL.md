@@ -1,8 +1,8 @@
 ---
 name: lark-markdown
-version: 1.2.2
-description: "飞书 Markdown：查看、创建、上传、编辑和比较 Markdown 文件。当用户需要创建或编辑 Markdown 文件、读取、修改、局部 patch 或比较差异时使用。不负责将 Markdown 导入为飞书在线文档，也不负责文件搜索、权限、评论、移动、删除等云空间管理操作。"
+description: "读取、创建或修改飞书云空间中的 Markdown 文件；不用于普通本地 Markdown 编辑或导入为 Docx。"
 metadata:
+  version: 1.2.2
   requires:
     bins: ["lark-cli"]
   cliHelp: "lark-cli markdown --help"
@@ -10,7 +10,7 @@ metadata:
 
 # markdown (v1)
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ## 快速决策
 

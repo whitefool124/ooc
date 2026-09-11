@@ -34,7 +34,7 @@ namespace OCC.Combat
             int spent = PathCost(state, path);
             return new EnemyIntentPresentation("first-x:charge:" + Cell(command.Destination) + ":" + string.Join("-", path),
                 "贯场冲压", "锁定 " + Cell(command.Destination),
-                "路线 " + string.Join("→", path.Select(Cell)) + "；预算 " + spent + "/5；" + collision +
+                "路线 " + string.Join("→", path.Select(Cell)) + "；预算已用 " + spent + "，上限 5；" + collision +
                 (state.Map.GetTile(end).IsWater ? "；浅水冷却，不进入卸压" : "；干地结束，清盾并进入卸压"),
                 "move", true, end, 8);
         }

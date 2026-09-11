@@ -135,9 +135,12 @@ namespace OCC.Combat.Tests
 
             runtime.BeginOwnTurn(hero.Id);
             runtime.AfterMove(hero.Id, threeCellPath);
+            Assert.That(combat.PassiveEffects.StatusBarEntriesFor(hero.Id),
+                Has.Some.Matches<CombatStatusBarEntry>(value => value.DisplayName == "动势点火" && value.TimingText == "下次武器命中"));
             before = enemy.Health;
             runtime.AfterWeaponHit(hero.Id, enemy);
             Assert.That(before - enemy.Health, Is.EqualTo(4));
+            Assert.That(combat.PassiveEffects.OngoingEffectsFor(hero.Id), Is.Empty);
             runtime.AfterMove(hero.Id, threeCellPath);
             runtime.AfterWeaponHit(hero.Id, enemy);
             Assert.That(before - enemy.Health, Is.EqualTo(4));

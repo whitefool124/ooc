@@ -1,6 +1,6 @@
 ## `drive +cover`
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、权限处理和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 列出或下载 Drive 文件的稳定封面预设。这个 shortcut 只暴露 `spec`，不暴露底层 `cover_option` 细节。
 

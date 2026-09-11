@@ -1,0 +1,56 @@
+# 学院城邦地图 v0.20 归档快照
+
+归档日期：2026-09-10
+
+## 状态
+
+这是学院城邦地图完成 v0.20“道路名称与全量门牌”后的只读快照。活动版本仍保留在：
+
+- `Worldbuilding/OC世界观/04_教育与组织/学院全域地图_建筑与占地草案_v0.1.md`
+- `Tools/AcademyMapPrototype/`
+
+本目录只用于追溯，不得覆盖后续活动设定或实现。
+
+## 快照范围
+
+- `设定/`：v0.20 学院城邦总图规划规范。
+- `原型/src/`：地图几何与浏览器表现源文件。
+- `原型/scripts/`：几何校验、GeoJSON 导出和临街报告脚本。
+- `原型/data/academy-campus-v0.20.geojson`：723 个要素的交换快照。
+- `原型/GEOMETRY_CONTRACT.md`：v0.20 生效的几何制作合同。
+- `原型/package*.json`、`index.html`、`README.md`：重建运行环境所需的项目元数据与说明。
+- `概念图原料/`：依据 v0.20 地图生成的全城鸟瞰概念图及其提示词记录。
+
+未归档 `node_modules/`、`dist/`、开发服务器状态和 v0.2—v0.19 历史导出文件；它们不是重建 v0.20 的必要源。
+
+## v0.20 基线摘要
+
+- 地图尺度：3,200 m × 2,800 m，896 ha。
+- 建筑：600 栋，其中18栋地标、24栋具名日常设施、558栋普通建筑。
+- 路网：58条普通道路／步道，2条巨蚓通勤线路，共68个线段对象。
+- 地表：16个地表对象。
+- 建筑覆盖率：约15.28%。
+- 地址：600个唯一完整门牌；道路两侧按奇数／偶数排序。
+- 空间骨架：西岸学院、东岸城市公共核心、连续中央河湖、普通主桥与独立巨蚓桥。
+
+## SHA-256
+
+```text
+E00D077B2BBE43CBD763A3A851CA55458FCA24B1A7BED21355054642E0B5DAE6  概念图原料/学院城邦_全城鸟瞰概念_v1.png
+D1126B876D2560691F387E8ECBE838382126614F58335E9A4F87C8E0AF35905E  概念图原料/README.md
+F54698562746F783ACCAD6179EEEAE1C415B0B55CCA7743EFC7ACFDD229ED246  设定/学院全域地图_建筑与占地草案_v0.1.md
+7220DC1942DF5E8A8F7E2080B04B948A983D4DD566344AFFB2D50A10366D3BB9  原型/data/academy-campus-v0.20.geojson
+6C6CD6796CCAA63C7130310DBC68031D8F3CFAB830188EB6C900E97F654AF9F6  原型/GEOMETRY_CONTRACT.md
+405BE709E5724FA4A3FDD2CE03580D04A50C6DAD2A05F9BCB9939159A805CD3A  原型/index.html
+4F408CBB90426F36B941A98E077C477BF998F24A72E97943D6CEAA03C239E5DD  原型/package-lock.json
+89E56EF38DD138DA90730331F5400FC6C179FAA2B41DB3B1290CA895FEFF6C40  原型/package.json
+8D477BFE74E83AA1B23B817183F8798141D76446947C5A1FCD4E35A704DC23AC  原型/README.md
+5ADA01EB6F8328E02DA9B2636A2AC3566B9FFAB6C830AE781822ADD9D2CB6B52  原型/scripts/export-geojson.mjs
+488B536DB6AB3C2D4CDD38DF8FC34AACF2AAA22C16EBDDAE121511C587570D1B  原型/scripts/report-frontage.mjs
+BDEEC078F66303D9EAAB7EF8F8D08009B69E70119F2D00CC76696CB8C4641F0C  原型/scripts/validate-geometry.mjs
+0AE383369D7DD0904C70EB0D66C981B289B4A703FAD1EF997E04C09A5716F1F1  原型/src/data.js
+429ACA12AAA3171FEA9A5E41D84C23F6B495BA209D052C29315450C9F0F5712F  原型/src/main.js
+894935770E222034C056B8C8BC5321DEE41664ED8DDC40D7217226E514CD48BA  原型/src/style.css
+```
+
+归档根 README 不列入自身校验值；其余15个文件均可按上表复核。

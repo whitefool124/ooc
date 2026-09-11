@@ -11,7 +11,7 @@ namespace OCC.Combat.Tests
         public void AcademyTimeCopy_StatesCostAndResultWithoutInternalTerms()
         {
             Assert.That(PlayerFacingCopy.AcademyTimeCost(0, 8), Is.EqualTo("不花时间"));
-            Assert.That(PlayerFacingCopy.AcademyTimeCost(2, 10), Is.EqualTo("用时 2 · 归来后 10"));
+            Assert.That(PlayerFacingCopy.AcademyTimeCost(2, 10), Is.EqualTo("用时 2　归来后 10"));
             Assert.That(PlayerFacingCopy.AcademyTimeOutcome(true, false, false), Is.EqualTo("回来后就是终考"));
             Assert.That(PlayerFacingCopy.AcademyTimeOutcome(false, true, false), Is.EqualTo("终考已经很近"));
 
@@ -19,6 +19,13 @@ namespace OCC.Combat.Tests
             Assert.That(combined, Does.Not.Contain("时序"));
             Assert.That(combined, Does.Not.Contain("阈值"));
             Assert.That(combined, Does.Not.Contain("推进"));
+        }
+
+        [Test]
+        public void ResourceRatios_UseNamedFieldsInsteadOfSeparatorGlyphs()
+        {
+            Assert.That(PlayerFacingCopy.CurrentAndMaximum(9, 18), Is.EqualTo("当前9　上限18"));
+            Assert.That(PlayerFacingCopy.RemainingAndTotal(2, 4, " 次"), Is.EqualTo("剩余2　总计4 次"));
         }
 
         [Test]
@@ -87,7 +94,7 @@ namespace OCC.Combat.Tests
             string visible = RogueShieldLogPresentation.Format(record);
 
             Assert.That(visible, Does.Not.Contain("AFF-SECRET"));
-            Assert.That(visible, Is.EqualTo("获得 3 护盾 · 第2回合"));
+            Assert.That(visible, Is.EqualTo("获得 3 护盾　第2回合"));
         }
     }
 }

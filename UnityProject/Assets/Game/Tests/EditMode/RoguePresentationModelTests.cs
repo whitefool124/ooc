@@ -68,6 +68,17 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void Loadout11A_TransposesRuntimeGridWithoutChangingSaveCoordinates()
+        {
+            Assert.That((RogueLoadoutScreenGridPresentation.Columns, RogueLoadoutScreenGridPresentation.Rows), Is.EqualTo((10, 6)));
+            RogueLoadoutGridPoint screen = RogueLoadoutScreenGridPresentation.FromRuntime(2, 7);
+            Assert.That(screen, Is.EqualTo(new RogueLoadoutGridPoint(7, 2)));
+            Assert.That(RogueLoadoutScreenGridPresentation.ToRuntime(screen.X, screen.Y), Is.EqualTo(new RogueLoadoutGridPoint(2, 7)));
+            Assert.That(RogueLoadoutScreenGridPresentation.FootprintFromRuntime(new RogueLoadoutGridPoint(1, 3)),
+                Is.EqualTo(new RogueLoadoutGridPoint(3, 1)));
+        }
+
+        [Test]
         public void M5DamagePreview_UsesResolutionSequentiallyForEverySegment()
         {
             DamagePacket[] packets =

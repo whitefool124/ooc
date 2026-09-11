@@ -51,7 +51,7 @@ namespace OCC.Combat.Tests
             Assert.That(details, Does.Contain("敌人打算"));
             Assert.That(details, Does.Not.Contain("权威"));
             Assert.That(details, Does.Contain(intent.DetailedText));
-            Assert.That(CombatInformationPresenter.BuildActionDetails(preview), Does.Contain("消耗 · "));
+            Assert.That(CombatInformationPresenter.BuildActionDetails(preview), Does.Contain("消耗　"));
             Assert.That(CombatInformationPresenter.BuildActionDetails(preview).Split('\n').Count(line => !string.IsNullOrWhiteSpace(line)), Is.LessThanOrEqualTo(7));
         }
 
@@ -235,7 +235,7 @@ namespace OCC.Combat.Tests
             Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.Empty);
             Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.Empty);
             Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 256f), Is.EqualTo("8 -3 → 5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 256f), Is.EqualTo("8 -3 → 5　上限 12"));
             Assert.That(CombatUnitHudLayout.VitalFontSize(64f, true), Is.Zero);
             Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.Zero);
             Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.Zero);
@@ -257,6 +257,51 @@ namespace OCC.Combat.Tests
             Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Right), Is.True);
             Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Left), Is.False);
             Assert.That(FormalBattlefieldView.ShouldInspectOnPointerDown(PointerEventData.InputButton.Middle), Is.False);
+        }
+
+        [Test]
+        public void BattlefieldHover_RevealsAfterTwoSecondsAndUsesIndependentOrderedWindows()
+        {
+            Assert.That(FormalBattlefieldView.CellHoverRevealDelaySeconds, Is.EqualTo(2f));
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(1.999f, true, true, false), Is.False);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(2f, true, true, false), Is.True);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(3f, true, false, false), Is.False);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(3f, true, true, true), Is.False);
+            GameObject prefab = Resources.Load<GameObject>(BattlefieldHoverCardView.ResourcePath);
+
+            Assert.That(prefab, Is.Not.Null);
+            BattlefieldHoverCardView view = prefab.GetComponent<BattlefieldHoverCardView>();
+            Assert.That(view, Is.Not.Null);
+            Assert.That(view.HasRequiredBindings, Is.True);
+            Assert.That(prefab.transform.GetChild(0).name, Is.EqualTo("单位悬浮窗"));
+            Assert.That(prefab.transform.childCount, Is.EqualTo(10));
+            Assert.That(prefab.transform.GetChild(1).name, Is.EqualTo("状态悬浮窗 1"));
+            Assert.That(prefab.transform.GetChild(6).name, Is.EqualTo("状态悬浮窗 6"));
+            Assert.That(prefab.transform.GetChild(7).name, Is.EqualTo("地表瓦片悬浮窗"));
+            Assert.That(prefab.transform.GetChild(8).name, Is.EqualTo("地形效果悬浮窗"));
+            Assert.That(prefab.transform.GetChild(9).name, Is.EqualTo("物块悬浮窗"));
+
+            RectTransform unit = (RectTransform)prefab.transform.GetChild(0);
+            Assert.That(unit.anchoredPosition, Is.EqualTo(Vector2.zero));
+        }
+
+        [Test]
+        public void BattlefieldHover_TerrainCategoriesUseOneSentenceAndOmitMissingKinds()
+        {
+            CombatState state = new CombatState(new GridMap(2, 2), new[]
+                { new UnitState("hero", true, new GridPosition(0, 0)) });
+            GridPosition position = new GridPosition(1, 0);
+            TileState tile = state.Map.GetTile(position);
+            Assert.That(CombatBattlefieldCellPresenter.BuildSurfaceHover(null, position),
+                Is.EqualTo("学院地坪，可正常通行。"));
+            Assert.That(CombatBattlefieldCellPresenter.BuildTerrainEffectHover(state, null, tile, position), Is.Empty);
+            Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state, tile, position), Is.Empty);
+
+            state.Map.SetTile(position, new TileState { IsWater = true });
+            tile = state.Map.GetTile(position);
+            string effect = CombatBattlefieldCellPresenter.BuildTerrainEffectHover(state, null, tile, position);
+            Assert.That(effect, Does.StartWith("浅水"));
+            Assert.That(effect.Count(value => value == '。'), Is.EqualTo(1));
         }
 
         [Test]

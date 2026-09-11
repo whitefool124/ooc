@@ -1,6 +1,6 @@
 # mail +forward
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 转发指定邮件，自动处理：
 - 主题前缀 `Fwd: `（已含前缀时不重复）
@@ -13,7 +13,7 @@
 
 ## CRITICAL — 发送工作流（必须遵循）
 
-**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](references/lark-mail-html.md)，其中包含邮件书写规范**
+**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](lark-mail-html.md)，其中包含邮件书写规范**
 
 此命令默认**只保存草稿**，不会发送邮件。转发会将原邮件内容发送给新收件人，需要发送时有两种合规方式：
 

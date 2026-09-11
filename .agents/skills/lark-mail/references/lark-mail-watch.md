@@ -1,7 +1,7 @@
 
 # mail +watch
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 实时监听新邮件事件（`mail.user_mailbox.event.message_received_v1`）。
 
@@ -91,4 +91,4 @@ lark-cli mail +watch --print-output-schema
 
 - [lark-mail](../SKILL.md) — 邮箱域总览
 - [lark-mail-triage](lark-mail-triage.md) — 邮件摘要列表
-- [lark-event-subscribe](../../lark-event/references/lark-event-subscribe.md) — 通用事件订阅
+- [lark-event-subscribe](../../lark-event/SKILL.md) — 通用事件订阅

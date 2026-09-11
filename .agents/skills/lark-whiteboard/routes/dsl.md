@@ -78,8 +78,8 @@ Step 3: 渲染 & 审查 → 交付
 
 | 当前内容包含 | 必读指南 |
 |---|---|
-| @用户提及 | [`../scenes/mention.md`](../scenes/mention.md) |
-| 图片 / 配图 | [`../scenes/photo-showcase.md`](../scenes/photo-showcase.md) |
+| @用户提及 | 本分发包缺少该专用指南；先从当前 whiteboard CLI 帮助/schema 核实 mention 节点结构和联系人 ID，不猜字段 |
+| 图片 / 配图 | 本分发包缺少该专用指南；先从当前 whiteboard CLI 帮助/schema 核实图片节点、资源上传和引用格式，不猜 URL 或 token |
 
 ## 渲染前自查
 

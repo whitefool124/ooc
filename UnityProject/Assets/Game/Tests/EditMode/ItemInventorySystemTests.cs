@@ -221,12 +221,12 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FirelineScroll_UsesFrozenFourCellEightDamageFiregroundContract()
+        public void FirelineScroll_UsesFourCellEightDamageAndTwoTurnFiregroundContract()
         {
             FireSpellDefinition spell = ItemAbilityCatalog.For("F-S01");
             Assert.That(spell.ActionPointCost, Is.EqualTo(1)); Assert.That(spell.ManaCost, Is.Zero); Assert.That(spell.Shape, Is.EqualTo(FireSelectionShape.Line)); Assert.That(spell.ShapeLength, Is.EqualTo(4));
             Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage && rule.Amount == 8 && rule.Scope == FireRuleScope.Selection), Is.True);
-            Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground && rule.Duration == 4), Is.True);
+            Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground && rule.Duration == 2), Is.True);
         }
 
         [Test]

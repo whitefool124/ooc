@@ -90,27 +90,27 @@ namespace OCC.Combat
     {
         public static readonly RogueliteEncounterDefinition FirstBattleRainLanternCourt =
             new RogueliteEncounterDefinition(RainLanternCourtRuntime.EncounterId, RainLanternCourtRuntime.LevelId,
-                RogueliteEncounterTier.Weak, "雨后石庭／积水横带／双列灯藤",
+                RogueliteEncounterTier.Weak, "雨后石庭、积水横带、双列灯藤",
                 "主角从 B8 入场；缚环寻迹兽在 H7，高年级火矢生在 I2。灯藤搜索与烧藤顺序完全固定。",
                 "公开教学战", "奖励内容仍锁定", 1, "tether_hound", "pyromancer");
 
         public static readonly RogueliteEncounterDefinition SecondBattleGreenhouseCollectionRoom =
             new RogueliteEncounterDefinition("first_b2_greenhouse_collection_room", FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
-                RogueliteEncounterTier.Weak, "中央藤圈宝箱／南北双晶簇／南侧普通长路",
+                RogueliteEncounterTier.Weak, "中央藤圈宝箱、南北双晶簇、南侧普通长路",
                 "主角从 B5 入场；侧锋在 J3，承压检验偶在 J7，分别贴近北、南晶簇接近。",
                 "晶簇爆裂会伤害正交邻格并生成五格碎晶", "第二组固定三选一", 1,
                 "raider", "sigil_mauler");
 
         public static readonly RogueliteEncounterDefinition ThirdBattleRainPrismCourt =
             new RogueliteEncounterDefinition("first_b3_rain_prism_court", FirstRegionLevelCatalog.RainPrismCourt.Id,
-                RogueliteEncounterTier.Weak, "冷却沟／封门晶簇／南侧干路",
+                RogueliteEncounterTier.Weak, "冷却沟、封门晶簇、南侧干路",
                 "主角从 B5 入场；检验偶在 F5，火矢陪练生在 G2；器材匣位于 H5。",
                 "燃烧、浅水熄灭与封门晶簇", "第三组固定三选一", 1,
                 "sigil_mauler", "pyromancer");
 
         public static readonly RogueliteEncounterDefinition FirstEliteThreeMaterialPressure =
             new RogueliteEncounterDefinition("first_elite_three_material_pressure", FirstRegionLevelCatalog.ThreeMaterialPressure.Id,
-                RogueliteEncounterTier.Elite, "冷却沟／双灯藤带／中央稳压晶簇",
+                RogueliteEncounterTier.Elite, "冷却沟、双灯藤带、中央稳压晶簇",
                 "主角从 B5 入场；楔角在 H5，首条冲压公开锁定 B5 并先撞击 G5 晶簇。",
                 "公开锁线、冲压碰撞与干地卸压", "首次固定精英奖励包", 1,
                 "breach_ram");
@@ -153,27 +153,27 @@ namespace OCC.Combat
             Weak("weak_restraint_exam", "transmission_tower", "回廊折角", "约束助教守在远端，侧锋守着另一处出口", "轻松", W2(), "stone_snare", "raider"),
 
             Strong("strong_rail_patrol_a", "rail_patrol", "开阔交叉线", "盾术居中，火矢与侧锋分列两翼", "中高：主动进入的近远交叉", "shieldguard", "pyromancer", "raider"),
-            Strong("strong_rail_patrol_b", "rail_patrol", "开阔交叉线·反向翼位", "盾术前压，两翼远近职责反置", "中高：两翼压力与中央暴露", "shieldguard", "pyromancer", "raider"),
+            Strong("strong_rail_patrol_b", "rail_patrol", "开阔交叉线，反向翼位", "盾术前压，两翼远近职责反置", "中高：两翼压力与中央暴露", "shieldguard", "pyromancer", "raider"),
             Strong("strong_depot_wreck_a", "depot_wreck", "三口收束", "双束缚源错层，检验偶守中口", "高：束缚后贴身破势", "tether_hound", "sigil_mauler", "stone_snare"),
-            Strong("strong_depot_wreck_b", "depot_wreck", "三口收束·偏置中口", "寻迹兽近翼、助教远翼、检验偶偏心", "高：换路时的双束缚压力", "tether_hound", "sigil_mauler", "stone_snare"),
+            Strong("strong_depot_wreck_b", "depot_wreck", "三口收束，偏置中口", "寻迹兽近翼、助教远翼、检验偶偏心", "高：换路时的双束缚压力", "tether_hound", "sigil_mauler", "stone_snare"),
             Strong("strong_relay_raid_a", "relay_raid", "偏心目标", "目标两侧为侧锋与寻迹兽，重弩远守", "高：双接近与公开重弩线", "raider", "rune_arbalist", "tether_hound"),
-            Strong("strong_relay_raid_b", "relay_raid", "偏心目标·对角争夺", "重弩与目标对角，双近战分守两路", "高：目标争夺与远程重击", "raider", "rune_arbalist", "tether_hound"),
+            Strong("strong_relay_raid_b", "relay_raid", "偏心目标，对角争夺", "重弩与目标对角，双近战分守两路", "高：目标争夺与远程重击", "raider", "rune_arbalist", "tether_hound"),
             Strong("strong_signal_hub_a", "signal_hub", "三角维护网", "护障助教、巡查员、盾术形成三角", "高：护障、破势与回合盾循环", "barrier_mender", "lantern_revealer", "shieldguard"),
-            Strong("strong_signal_hub_b", "signal_hub", "三角维护网·断链", "巡查员前置，助教与盾术分居后翼", "高：先破显影或先断维护", "barrier_mender", "lantern_revealer", "shieldguard"),
+            Strong("strong_signal_hub_b", "signal_hub", "三角维护网，断链", "巡查员前置，助教与盾术分居后翼", "高：先破显影或先断维护", "barrier_mender", "lantern_revealer", "shieldguard"),
             Strong("strong_gatehouse_a", "gatehouse", "双向门厅", "盾术守一门、检验偶游走、重弩守另一门", "高：门厅封线与远程重击", "shieldguard", "sigil_mauler", "rune_arbalist"),
-            Strong("strong_gatehouse_b", "gatehouse", "双向门厅·错位门线", "两门压力错位且中央可换路", "高：正面阻挡与贴身破势", "shieldguard", "sigil_mauler", "rune_arbalist"),
+            Strong("strong_gatehouse_b", "gatehouse", "双向门厅，错位门线", "两门压力错位且中央可换路", "高：正面阻挡与贴身破势", "shieldguard", "sigil_mauler", "rune_arbalist"),
             Strong("strong_transmission_tower_a", "transmission_tower", "三扇区", "火矢、约束、显影各守一扇区", "高：三种公开远程状态压力", "pyromancer", "stone_snare", "lantern_revealer"),
-            Strong("strong_transmission_tower_b", "transmission_tower", "三扇区·对角封线", "远程三角错位且存在两条切入线", "高：燃烧、长束缚与破势", "pyromancer", "stone_snare", "lantern_revealer"),
+            Strong("strong_transmission_tower_b", "transmission_tower", "三扇区，对角封线", "远程三角错位且存在两条切入线", "高：燃烧、长束缚与破势", "pyromancer", "stone_snare", "lantern_revealer"),
 
             Elite("elite_foundry_a", "elite_foundry", "编织狭口", "教官居中、助教与检验偶分守两路", "elite_vanguard", "barrier_mender", "sigil_mauler"),
-            Elite("elite_foundry_b", "elite_foundry", "编织狭口·维护侧", "护障维护链偏左，右路可直取目标", "elite_vanguard", "barrier_mender", "sigil_mauler"),
-            Elite("elite_foundry_c", "elite_foundry", "编织狭口·检验侧", "检验偶前置，教官与助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
+            Elite("elite_foundry_b", "elite_foundry", "编织狭口，维护侧", "护障维护链偏左，右路可直取目标", "elite_vanguard", "barrier_mender", "sigil_mauler"),
+            Elite("elite_foundry_c", "elite_foundry", "编织狭口，检验侧", "检验偶前置，教官与助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
             Elite("core_approach_a", "core_approach", "对角封线", "教官与重弩对角，约束助教守换路线", "elite_vanguard", "rune_arbalist", "stone_snare"),
-            Elite("core_approach_b", "core_approach", "对角封线·双入口", "约束线不覆盖出生，左右均可切入", "elite_vanguard", "rune_arbalist", "stone_snare"),
-            Elite("core_approach_c", "core_approach", "对角封线·远近换位", "教官前置，远程二人分守外翼", "elite_vanguard", "rune_arbalist", "stone_snare"),
+            Elite("core_approach_b", "core_approach", "对角封线，双入口", "约束线不覆盖出生，左右均可切入", "elite_vanguard", "rune_arbalist", "stone_snare"),
+            Elite("core_approach_c", "core_approach", "对角封线，远近换位", "教官前置，远程二人分守外翼", "elite_vanguard", "rune_arbalist", "stone_snare"),
 
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
-                "中心核心／外围维护", "固定核心守卫居中；教官、助教与巡查员构成可拆维护链",
+                "中心核心与外围维护", "固定核心守卫居中；教官、助教与巡查员构成可拆维护链",
                 "终考", "终考奖励", 2,
                 "core_overseer", "elite_vanguard", "barrier_mender", "lantern_revealer")
         };

@@ -1,6 +1,8 @@
 {
   "schema": "occ-art-contract-v1",
   "version": 1,
+  "revision_date": "2026-09-10",
+  "revision_note": "New battlefield art uses 64px delivery with an approximately 48px readable-subject budget; existing 32px battlefield art is transitional.",
   "canonical_document": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
   "machine_mirror_only": true,
   "allowed_source_channels": [
@@ -49,7 +51,9 @@
       "life_stages": ["academy", "war", "turning_point"],
       "current_available_stage": "academy",
       "academy_only_visual_forbidden": true,
-      "focus_rule": "one_current_primary_focus"
+      "focus_rule": "one_current_primary_focus",
+      "new_game_flow": "main_menu_to_character_select_without_creating_save",
+      "continue_flow": "resume_authoritative_blocking_state_with_saved_character"
     },
     "character_select": {
       "canvas": [1920, 1080],
@@ -59,7 +63,22 @@
       "roster_slots_max": 6,
       "current_complete_character": "维克多·维恩",
       "unconfirmed_character_policy": "locked_placeholder_without_invented_identity_or_ability",
-      "save_rule": "selected_character_fixed_after_creation"
+      "save_rule": "create_save_and_fix_selected_character_only_after_confirm"
+    },
+    "academy_map": {
+      "canvas": [1920, 1080],
+      "map_content": ["nodes", "routes", "current_position", "reachable_state", "completed_state"],
+      "chrome_status": ["gold", "academy_contribution", "academy_timeline", "current_health", "selected_character", "current_stage"],
+      "current_stage": "academy",
+      "chrome_actions": ["backpack", "settings"],
+      "forbidden_persistent_chrome": ["node_summary", "region_legend", "loadout", "reset", "other_panels"]
+    },
+    "equipment_backpack": {
+      "canvas": [1920, 1080],
+      "columns_left_to_right": ["character_attributes_status_with_portrait", "equipment_with_four_tactical_slots", "backpack_grid_6x10"],
+      "tactical_bar_parent": "equipment_column",
+      "spell_loadout": "separate_11B_tab",
+      "item_detail": "shared_content_tooltip"
     }
   },
   "typography": {
@@ -139,33 +158,37 @@
     "pixel_perfect_canvas_required": true,
     "integer_position_required": true,
     "best_fit_forbidden": true,
+    "player_copy_separator_policy": {
+      "forbidden_layout_separators": ["·", "|", "/", "／"],
+      "ratios_require_semantic_labels": ["current", "maximum", "remaining", "total"],
+      "alternatives_use_words": true,
+      "proper_name_middle_dot_exempt": true,
+      "internal_paths_ids_and_serialization_exempt": true
+    },
     "dual_resolution_review": [
       "1920x1080",
       "960x540"
     ],
     "bounded_combat_decision_summary": {
       "rect": [
-        16,
-        40,
-        380,
-        52
+        136,
+        768,
+        524,
+        58
       ],
       "font_px": 24,
       "explicit_lines": 2,
-      "max_characters_per_line": 15,
+      "max_characters_per_line": 18,
       "reference_line_advance_px": 26,
       "automatic_wrap": false,
       "details": "existing hover",
-      "measured_reference_bottom_margin": {
-        "1920x1080": 6,
-        "960x540": 4
-      },
-      "review": "14 static glyph cases pass; actual input and full visual approval pending"
+      "ap_badge_rect": [32, 756, 96, 96],
+      "review": "battlefield toast and truthful AP badge implementation pending runtime review"
     },
     "reading_font_review": {
       "canonical": "FusionPixel12 normal Chinese text",
-      "observed": "SimHei in combat event log via ConfigureReadingParagraph",
-      "status": "conflict reported; awaiting user decision; not silently accepted as an exception"
+      "observed": "combat event log removed; remaining HUD text uses FusionPixel12",
+      "status": "resolved by the approved combat HUD adaptation"
     }
   },
   "roles": {
@@ -330,6 +353,23 @@
       ],
       "visibility_policy": "existing_empty_or_locked_state_only"
     },
+    "ui_map_node_icon_48": {
+      "delivery_size": [
+        48,
+        48
+      ],
+      "logical_cells": null,
+      "palette_max": 12,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [
+        1,
+        2,
+        3
+      ],
+      "state_policy": "type silhouette only; current, reachable, completed and locked state remains in the separate node frame"
+    },
     "floor_tile_32": {
       "delivery_size": [
         32,
@@ -342,6 +382,7 @@
       "palette_max": 6,
       "transparent_border_min": 0,
       "unity_ppu": 32,
+      "production_status": "legacy_transition_only_not_new_battlefield_baseline",
       "edge_policy": "self_contained_tile_with_distinct_physical_perimeter",
       "cross_tile_texture_continuation": false,
       "directional_shadow_rotation": "forbidden",
@@ -375,14 +416,16 @@
       ],
       "palette_max": 10,
       "transparent_border_min": 2,
-      "unity_ppu": 32
+      "unity_ppu": 32,
+      "battlefield_production_status": "legacy_transition_only; role remains valid for non-battlefield 32px assets"
     },
     "multi_cell_prop_32": {
       "delivery_formula": "logical_cells_times_32",
       "logical_cells": "manifest_required",
       "palette_max": 12,
       "transparent_border_min": 2,
-      "unity_ppu": 32
+      "unity_ppu": 32,
+      "battlefield_production_status": "legacy_transition_only; role remains valid for inventory and non-battlefield 32px assets"
     },
     "terrain_adjacency_overlay_32": {
       "delivery_size": [
@@ -396,6 +439,7 @@
       "palette_max": 10,
       "transparent_border_min": 0,
       "unity_ppu": 32,
+      "production_status": "legacy_transition_only_not_new_battlefield_baseline",
       "rotation_policy": "allowed_only_when_shadow_neutral"
     },
     "modular_structure_32": {
@@ -404,7 +448,128 @@
       "palette_max": 12,
       "transparent_border_min": 0,
       "unity_ppu": 32,
+      "battlefield_production_status": "legacy_transition_only; role remains valid for non-battlefield 32px assets",
       "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting"
+    },
+    "battlefield_floor_tile_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 8,
+      "transparent_border_min": 0,
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "readable_detail_budget": "approximately_48x48_connected_clusters_inside_64x64_delivery",
+      "edge_policy": "self_contained_tile_with_distinct_physical_perimeter",
+      "cross_tile_texture_continuation": false,
+      "surface_detail_policy": "sparse_low_contrast_connected_clusters; isolated_one_pixel_noise_forbidden",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_size": [32, 32],
+        "palette_max": 6,
+        "transparent_border_min": 0,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
+    "battlefield_single_cell_prop_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 14,
+      "transparent_border_min": 8,
+      "primary_readable_bounds_max": [48, 48],
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "cluster_policy": "deliberate_connected_blocks; isolated_one_pixel_noise_and_high_frequency_dither_forbidden",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_size": [32, 32],
+        "palette_max": 10,
+        "transparent_border_min": 4,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
+    "battlefield_multi_cell_prop_64": {
+      "delivery_formula": "logical_cells_times_64",
+      "logical_cells": "manifest_required",
+      "palette_max": 16,
+      "transparent_border_min": 8,
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "cluster_policy": "deliberate_connected_blocks; isolated_one_pixel_noise_and_high_frequency_dither_forbidden",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_formula": "logical_cells_times_32",
+        "palette_max": 12,
+        "transparent_border_min": 4,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
+    "battlefield_terrain_adjacency_overlay_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 14,
+      "transparent_border_min": 0,
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "readable_detail_budget": "approximately_48x48 connected material clusters; functional adjacency may touch selected edges",
+      "rotation_policy": "allowed_only_when_shadow_neutral",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_size": [32, 32],
+        "palette_max": 10,
+        "transparent_border_min": 0,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
+    "battlefield_modular_structure_64": {
+      "delivery_formula": "logical_cells_times_64",
+      "logical_cells": "manifest_required",
+      "palette_max": 16,
+      "transparent_border_min": 0,
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_formula": "logical_cells_times_32",
+        "palette_max": 12,
+        "transparent_border_min": 0,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
+    "battlefield_terrain_vfx_64": {
+      "delivery_size": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 16,
+      "transparent_border_min": 2,
+      "primary_motion_budget": [48, 48],
+      "frame_count": [4, 10],
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_size": [32, 32],
+        "palette_max": 12,
+        "transparent_border_min": 1,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
     },
     "tactical_unit_64": {
       "delivery_size": [
@@ -517,12 +682,15 @@
         "# 附录 A 美术规范与视觉反馈",
         "正交 2D 像素",
         "## A.2 像素与布局",
+        "新制战场地面、玩法地块、掩体与占格场景物使用64×64交付画布",
         "2px 细框"
       ]
     },
     {
       "path": "Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv",
       "required": [
+        "ART-BATTLE-64",
+        "ART-BATTLE-LOW-32",
         "ART-PIPELINE",
         "FORMAL_CANDIDATE",
         "仅FORMAL可进入正式运行时",
@@ -534,6 +702,7 @@
       "required": [
         "是唯一活动美术规范源",
         "occ-art-manifest-v1",
+        "64px战场交付主稿",
         "禁止使用本地生图工作台"
       ]
     }
@@ -554,6 +723,12 @@
       64,
       128
     ],
+    "battlefield_asset_delivery_1920x1080": [64, 64],
+    "battlefield_transparent_subject_budget": [48, 48],
+    "battlefield_asset_scales_1920x1080": [1, 2],
+    "battlefield_low_resolution_companion_960x540": [32, 32],
+    "battlefield_companion_scales_960x540": [1, 2],
+    "runtime_non_integer_asset_scaling": "forbidden",
     "unit_canvas_to_cell_ratio": 2,
     "position_quantum_reference": 2,
     "simultaneous_feedback": {
@@ -575,31 +750,22 @@
       768
     ],
     "console_modules_reference": {
-      "selected": [
-        16,
-        16,
-        416,
-        96
-      ],
       "hero": [
         16,
-        124,
+        16,
         416,
         244
       ],
       "timeline": [
         16,
-        380,
+        272,
         416,
-        264
-      ],
-      "log": [
-        16,
-        656,
-        416,
-        96
+        480
       ]
-    }
+    },
+    "battlefield_decision_toast_reference": [56, 768, 620, 58],
+    "action_point_badge_reference": [32, 756, 96, 96],
+    "combat_log_panel": "removed"
   },
   "feedback_presentation": {
     "source": "resolved_source_id_and_pre_resolution_position",

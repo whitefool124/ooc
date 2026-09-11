@@ -212,7 +212,7 @@ namespace OCC.Combat.Roguelite
                 record.EventKind == ShieldEventKind.Absorbed ? "吸收" :
                 record.EventKind == ShieldEventKind.ClearedAtTurnStart ? "回合开始清空" : "破势浪费";
             return action + " " + record.Amount + " 护盾" +
-                (record.TriggerTurn > 0 ? " · 第" + record.TriggerTurn + "回合" : string.Empty);
+                (record.TriggerTurn > 0 ? "　第" + record.TriggerTurn + "回合" : string.Empty);
         }
     }
 
@@ -254,7 +254,7 @@ namespace OCC.Combat.Roguelite
         public int ChargesCurrent { get; }
         public int ChargesMaximum { get; }
         public int QuickbarSlot { get; }
-        public string CompactBadge => IsEquipment ? Rarity.ToString() : ChargesCurrent + "/" + ChargesMaximum;
+        public string CompactBadge => IsEquipment ? Rarity.ToString() : "余 " + ChargesCurrent + "　共 " + ChargesMaximum;
 
         public RogueInventoryItemPresentation(RogueEquipmentRuntime runtime, string instanceId)
         {
@@ -316,5 +316,18 @@ namespace OCC.Combat.Roguelite
 
         public static RogueLoadoutGridPoint Footprint(int baseWidth, int baseHeight, bool rotated)
             => rotated ? new RogueLoadoutGridPoint(baseHeight, baseWidth) : new RogueLoadoutGridPoint(baseWidth, baseHeight);
+    }
+
+    // The save/runtime grid remains 6 columns by 10 rows. The formal 11A screen
+    // presents the same cells transposed as 10 columns by 6 rows.
+    public static class RogueLoadoutScreenGridPresentation
+    {
+        public const int Columns = RogueRuntimeConstants.BackpackHeight;
+        public const int Rows = RogueRuntimeConstants.BackpackWidth;
+
+        public static RogueLoadoutGridPoint FromRuntime(int x, int y) => new RogueLoadoutGridPoint(y, x);
+        public static RogueLoadoutGridPoint ToRuntime(int screenX, int screenY) => new RogueLoadoutGridPoint(screenY, screenX);
+        public static RogueLoadoutGridPoint FootprintFromRuntime(RogueLoadoutGridPoint footprint)
+            => new RogueLoadoutGridPoint(footprint.Y, footprint.X);
     }
 }

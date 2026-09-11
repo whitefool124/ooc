@@ -42,10 +42,10 @@ namespace OCC.Combat.Presentation
                 best.xMax <= viewport.xMax && best.yMax <= viewport.yMax);
         }
 
-        public static Rect ActiveFootprint(Vector2 cellFoot, float cellSize)
+        public static Rect ActiveTurnMarker(Vector2 cellFoot, float cellSize)
         {
             float scale = cellSize / 64f;
-            return new Rect(Snap(cellFoot.x + 4 * scale), Snap(cellFoot.y - 20 * scale), 56 * scale, 12 * scale);
+            return new Rect(Snap(cellFoot.x - 4 * scale), Snap(cellFoot.y - cellSize - 18 * scale), 72 * scale, 86 * scale);
         }
 
         private static Rect Clamp(Rect rect, Rect viewport)

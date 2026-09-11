@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OCC.Combat.Tests
@@ -244,6 +245,31 @@ namespace OCC.Combat.Tests
             Assert.That(hero.ActionValue, Is.EqualTo(76));
             Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
             Assert.That(CombatActionTimeline.PreviewDelayedValue(hero, 500), Is.Zero);
+        }
+
+        [Test]
+        public void ActionTimeline_DelayPreviewReportsEveryChangedPostTurnRank()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0)) { Speed = 12 };
+            var fast = new UnitState("fast", false, new GridPosition(1, 0)) { Speed = 11 };
+            var slow = new UnitState("slow", false, new GridPosition(2, 0)) { Speed = 9 };
+            var state = new CombatState(new GridMap(4, 2), new[] { hero, fast, slow });
+            CombatResolver.AdvanceToNextTurn(state);
+
+            IReadOnlyDictionary<string, int> changes = CombatTurnTrackPresentation.PreviewOrderChanges(state, fast.Id, 30);
+
+            Assert.That(changes[slow.Id], Is.EqualTo(1));
+            Assert.That(changes[fast.Id], Is.EqualTo(-1));
+            Assert.That(changes.ContainsKey(hero.Id), Is.False);
+        }
+
+        [Test]
+        public void CombatState_TurnSequenceIncrementsAndSurvivesPreviewClone()
+        {
+            var state = new CombatState(new GridMap(2, 2), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
+            CombatResolver.BeginTurn(state, "hero");
+            Assert.That(state.TurnSequence, Is.EqualTo(1));
+            Assert.That(state.Clone().TurnSequence, Is.EqualTo(1));
         }
     }
 }

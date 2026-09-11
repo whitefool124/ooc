@@ -5,7 +5,13 @@ namespace OCC.Combat.Presentation
         public const string ReturnToMapFree = "先回地图看看，不会花掉任何东西。";
 
         public static string AcademyTimeCost(int cost, int projectedTime)
-            => cost <= 0 ? "不花时间" : "用时 " + cost + " · 归来后 " + projectedTime;
+            => cost <= 0 ? "不花时间" : "用时 " + cost + "　归来后 " + projectedTime;
+
+        public static string CurrentAndMaximum(int current, int maximum)
+            => "当前" + current + "　上限" + maximum;
+
+        public static string RemainingAndTotal(int remaining, int total, string unit = "")
+            => "剩余" + remaining + "　总计" + total + unit;
 
         public static string AcademyTimeOutcome(bool entersFinale, bool warnsFinale, bool entersConsolidation)
         {

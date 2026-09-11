@@ -607,8 +607,8 @@ namespace OCC.Combat.Presentation
                 };
                 hintStyle.normal.textColor = new Color(.78f, .72f, 1f, .86f);
             }
-            GUI.Label(new Rect(0f, 26f, Screen.width, 46f), "EPIC TOON · AETHER ARSENAL", titleStyle);
-            GUI.Label(new Rect(0f, 70f, Screen.width, 34f), "左键：以太超新星    ·    右键：雷霆裁决", hintStyle);
+            GUI.Label(new Rect(0f, 26f, Screen.width, 46f), "EPIC TOON　AETHER ARSENAL", titleStyle);
+            GUI.Label(new Rect(0f, 70f, Screen.width, 34f), "左键：以太超新星　右键：雷霆裁决", hintStyle);
         }
 
         private void OnDestroy()

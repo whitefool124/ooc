@@ -1,15 +1,15 @@
 ---
 name: lark-workflow-standup-report
-version: 1.0.0
 description: "日程待办摘要：编排 calendar +agenda 和 task +get-my-tasks，生成指定日期的日程与未完成任务摘要。适用于了解今天/明天/本周的安排。"
 metadata:
+  version: 1.0.0
   requires:
     bins: ["lark-cli"]
 ---
 
 # 日程待办摘要工作流
 
-**CRITICAL — 开始前 MUST 先用 Read 工具读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)，其中包含认证、权限处理**
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 ## 适用场景
 
@@ -21,7 +21,7 @@ metadata:
 
 ## 前置条件
 
-仅支持 **user 身份**。执行前确保已授权：
+仅支持 **user 身份**，所有命令显式传 `--as user` 并沿用身份。仅当前认证或所需 scope 缺失时执行以下授权命令：
 
 ```bash
 lark-cli auth login --domain calendar,task
@@ -54,8 +54,8 @@ lark-cli calendar +agenda --start "2026-03-26T00:00:00+08:00" --end "2026-03-26T
 ### Step 2: 获取未完成待办
 
 ```bash
-# 默认 pending 摘要：必须显式过滤未完成任务（最多 20 条）
-lark-cli task +get-my-tasks --complete=false
+# 完整 pending 摘要：显式过滤未完成任务并取全页
+lark-cli task +get-my-tasks --complete=false --page-all
 
 # 只看指定日期前到期的未完成任务（推荐用于摘要场景，减少数据量）
 lark-cli task +get-my-tasks --complete=false --due-end "2026-03-27T23:59:59+08:00"
@@ -68,11 +68,11 @@ lark-cli task +get-my-tasks --complete=false --page-all
 >
 > 数据量层面也建议加过滤：
 > - 用 `--due-end` 过滤出目标日期前到期的任务
-> - 如果也需要无截止日期的任务，可不加 `--due-end`，但 AI 汇总时只展示**近 30 天内创建的**，其余折叠为"其他 N 项历史待办"
+> - 如果也需要无截止日期的任务，可不加 `--due-end`，完整读取后按截止日期和相关性组织；可以折叠较早任务并报真实数量，不能静默丢弃
 
 ### Step 3: AI 汇总
 
-将 Step 1 和 Step 2 的结果整合，按以下结构输出：
+整合两类结果，按用户需求和内容量输出；以下结构为较复杂摘要示例：
 
 ```
 ## {日期}摘要（{YYYY-MM-DD 星期X}）
@@ -104,7 +104,7 @@ lark-cli task +get-my-tasks --complete=false --page-all
    | `needs_action` | 待确认 |
    | `tentative` | 暂定 |
 3. **日程排序**：按开始时间升序排列
-4. **冲突检测**：按时间排序后，检查相邻日程是否有时间重叠（前一个 end\_time > 后一个 start\_time），有则在小结中列出冲突组
+4. **冲突检测**：按开始时间排序，维护尚未结束的忙碌日程集合，与每个新日程检查重叠；不能只比较相邻项，否则会漏掉跨越多个短会的长会。标为空闲及已拒绝的事件不计为忙碌冲突。
 5. **已拒绝日程**：标注"已拒绝"但不计入忙碌时段和冲突检测
 6. **待办排序**：按截止时间升序，已过期的标注"已过期"，无截止时间的排在最后
 
@@ -117,6 +117,6 @@ lark-cli task +get-my-tasks --complete=false --page-all
 
 ## 参考
 
-- [lark-shared](../lark-shared/SKILL.md) — 认证、权限（必读）
+- [lark-shared](../lark-shared/SKILL.md) — 认证、权限问题时读取
 - [lark-calendar](../lark-calendar/SKILL.md) — `+agenda` 详细用法
 - [lark-task](../lark-task/SKILL.md) — `+get-my-tasks` 详细用法

@@ -1,10 +1,10 @@
 # wiki +delete-space
 
-> **前置条件：** 先阅读 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 删除一个飞书知识空间（知识库）。OpenAPI 对应 `DELETE /open-apis/wiki/v2/spaces/:space_id`。
 
-- **不可逆**：该操作会将知识空间连同其下所有节点彻底删除，执行前必须反复确认
+- **不可逆**：该操作会将知识空间连同其下所有节点彻底删除，执行前核对空间 ID、下属节点范围与不可逆删除的具体授权；已有有效授权不重复询问
 - **同步 / 异步两种返回**：
   - 如果接口直接返回空 `task_id`，说明删除同步完成，shortcut 立即返回 `ready=true`
   - 如果接口返回非空 `task_id`，shortcut 会先对任务做有限轮询；轮询窗口内仍未完成会输出 `next_command`，引导调用方使用 `lark-cli drive +task_result --scenario wiki_delete_space --task-id <TASK_ID>` 继续查

@@ -315,7 +315,7 @@ namespace OCC.Combat.Presentation
                 new Vector2(560f, 78f), new Color(.12f, .025f, .022f, .98f));
             Image panel = enemyActionBanner.GetComponent<Image>();
             if (panel != null) panel.raycastTarget = false;
-            FormalUiKit.Label("敌方行动标题", "敌方行动 · " + enemy.DisplayName, enemyActionBanner.transform,
+            FormalUiKit.Label("敌方行动标题", "敌方行动　" + enemy.DisplayName, enemyActionBanner.transform,
                 new Vector2(20f, -10f), new Vector2(520f, 28f), 22, FormalUiTheme.Danger, TextAnchor.MiddleLeft);
             FormalUiKit.Label("敌方行动内容", intent?.CompactText ?? "正在行动", enemyActionBanner.transform,
                 new Vector2(20f, -40f), new Vector2(520f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);

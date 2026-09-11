@@ -26,7 +26,7 @@ namespace OCC.Combat.Tests
             Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_block_court_a"));
             Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(0f, 0f, 1f, 1f)));
             Assert.That(cell.TerrainBoundaryTexture, Is.Null);
-            Assert.That(cell.HoverText, Does.Contain("生命 18/18"));
+            Assert.That(cell.HoverText, Does.Contain("生命当前 18　上限 18"));
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void TerrainHover_ExplainsCoverEffectDurabilityAndDestroyedState()
+        public void ObjectHover_ExplainsCoverInOneSentenceAndOmitsEmptyCategory()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             CombatState state = new CombatState(new GridMap(3, 2), new[] { hero });
@@ -46,21 +46,24 @@ namespace OCC.Combat.Tests
             state.Map.SetTile(lightPosition, new TileState { Cover = CoverType.Light, Durability = 4 });
             state.Map.SetTile(heavyPosition, new TileState { Cover = CoverType.Heavy, Durability = 7 });
 
-            string light = CombatBattlefieldCellPresenter.BuildTerrainHover(state, null,
+            string light = CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(lightPosition), lightPosition);
-            string heavy = CombatBattlefieldCellPresenter.BuildTerrainHover(state, null,
+            string heavy = CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(heavyPosition), heavyPosition);
 
-            Assert.That(light, Does.StartWith("轻掩体\n"));
+            Assert.That(light, Does.StartWith("轻掩体"));
             Assert.That(light, Does.Contain("耐久 4"));
             Assert.That(light, Does.Contain("2 护盾"));
-            Assert.That(heavy, Does.StartWith("重掩体\n"));
+            Assert.That(light.Count(value => value == '。'), Is.EqualTo(1));
+            Assert.That(heavy, Does.StartWith("重掩体"));
             Assert.That(heavy, Does.Contain("阻挡移动与视线"));
             Assert.That(heavy, Does.Contain("4 护盾"));
 
             state.Map.GetTile(lightPosition).Durability = 0;
-            Assert.That(CombatBattlefieldCellPresenter.BuildTerrainHover(state, null,
+            Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(lightPosition), lightPosition), Does.Contain("已失去防护效果"));
+            Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state,
+                state.Map.GetTile(new GridPosition(0, 1)), new GridPosition(0, 1)), Is.Empty);
         }
 
         [Test]

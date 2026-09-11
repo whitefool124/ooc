@@ -67,12 +67,14 @@ namespace OCC.Combat
             unit.SetActionValue(Math.Max(CombatActionTimeline.ReadyThreshold, unit.ActionValue));
             bool slowedAtTurnStart = unit.HasStatus(StatusType.Slow);
             state.SetActiveUnit(unitId);
+            state.RecordTurnStart();
             state.BeginRogueliteTurn(unit);
             CombatEffectExecution execution = CombatStatusLifecycle.ResolveTurnStart(state, unit);
             LogStatusLifecycle(state, unit, execution);
             state.EvaluateOutcome();
             if (!unit.IsAlive) { if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
             unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, HeroActionPointsPerTurn), slowedAtTurnStart);
+            state.PassiveEffects.ResolveOwnTurnStart(state, unit);
             state.RogueSpells?.BeginOwnTurn(unitId);
             state.AddLog($"{unit.DisplayName} \u5f00\u59cb\u884c\u52a8\uff08{unit.ActionPoints} \u884c\u52a8\u70b9\uff09\u3002");
             return execution;

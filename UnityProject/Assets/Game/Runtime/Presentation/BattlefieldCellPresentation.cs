@@ -47,6 +47,9 @@ namespace OCC.Combat.Presentation
         public EnemyIntentPresentation Intent { get; }
         public Texture2D IntentTexture { get; }
         public string HoverText { get; }
+        public string SurfaceHoverText { get; }
+        public string TerrainEffectHoverText { get; }
+        public string ObjectHoverText { get; }
 
         public BattlefieldCellPresentation(GridPosition position, Texture2D floorTexture, Rect floorUv,
             float floorRotationDegrees,
@@ -57,7 +60,8 @@ namespace OCC.Combat.Presentation
             Color unitTint, Vector2 unitOffset, Texture2D objectTexture, string objectLabel, Color objectLabelColor,
             Texture2D lootTexture, UnitState unit, CombatUnitVitalsPresentation vitals,
             IReadOnlyList<BattlefieldStatusVisual> statuses, EnemyIntentPresentation intent, Texture2D intentTexture,
-            string hoverText, Vector2 unitTravelOffset = default, int objectForegroundRows = 0)
+            string hoverText, Vector2 unitTravelOffset = default, int objectForegroundRows = 0,
+            string surfaceHoverText = null, string terrainEffectHoverText = null, string objectHoverText = null)
         {
             Position = position;
             FloorTexture = floorTexture;
@@ -88,6 +92,9 @@ namespace OCC.Combat.Presentation
             Intent = intent;
             IntentTexture = intentTexture;
             HoverText = hoverText ?? string.Empty;
+            SurfaceHoverText = surfaceHoverText ?? string.Empty;
+            TerrainEffectHoverText = terrainEffectHoverText ?? string.Empty;
+            ObjectHoverText = objectHoverText ?? string.Empty;
         }
     }
 }

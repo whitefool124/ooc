@@ -1,6 +1,6 @@
 # mail +draft-edit
 
-> **前置条件：** 先阅读 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md) 了解认证、全局参数和安全规则。
+认证、身份、scope 或配置问题时读取 [`../../lark-shared/SKILL.md`](../../lark-shared/SKILL.md)；常规业务沿用既定身份并显式传 `--as`，不预先重登。高风险确认按完整会话中已有的具体授权处理；真正的权限或审批拒绝不得绕过。
 
 编辑已有的邮件草稿。命令会读取当前原始 EML，应用最小化补丁，然后将更新后的草稿写回。
 
@@ -12,7 +12,7 @@
 
 **正文整体替换的快捷方式：** `--body <text>` / `--body-file <path>`（二选一互斥）会自动展开为 `set_body` op。如果只想做整段正文替换且不需要保留引用区，用这两个 flag 即可，无需写 patch-file。要保留引用区或做更精细的 op 组合，仍走 `--patch-file`。两个入口与 `--patch-file` 内的 `set_body` / `set_reply_body` 互斥。
 
-**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](references/lark-mail-html.md)，其中包含邮件书写规范**
+**CRITICAL - 编辑邮件内容前 MUST 先用 Read 工具读取 [references/lark-mail-html.md](lark-mail-html.md)，其中包含邮件书写规范**
 
 ## 正文编辑：快捷 flag 与 typed op 的选择
 

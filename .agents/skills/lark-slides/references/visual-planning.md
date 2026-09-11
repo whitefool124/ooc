@@ -1,6 +1,6 @@
 # Visual Planning
 
-新建演示文稿或大幅改写页面时，在 `slide_plan.json` 完成后、生成 XML 前读取本文件。目标是让 `layout_type`、`visual_focus`、`text_density` 变成实际页面几何，而不是只写在 plan 里。
+需要设计布局时按需读取本文件；使用 slide_plan.json 时将计划映射为 XML。目标是让 `layout_type`、`visual_focus`、`text_density` 变成实际页面几何，而不是只写在 plan 里。
 
 默认画布按 `960 x 540` 规划。模板 XML 可以覆盖具体坐标，但不能覆盖这些原则：页面要有主视觉区域、文本要受密度约束、不同 `layout_type` 必须产生明显不同的坐标结构。
 
@@ -12,15 +12,14 @@
   - `low`: title plus one short statement, or 1-3 labels.
   - `medium`: title plus 2-4 concise bullets or labeled regions.
   - `high`: use a table, columns, grouped labels, or annotations. Do not use one long bullet box.
-- Do not create a deck where every content page is title plus bullets. For 4 or more pages, use at least 4 different layout structures when the content allows.
-- Keep safe outer margins around `40` px on standard content pages, and fill the content area densely with a card grid rather than leaving large empty space. Only go full-bleed for an intentional image or cover treatment.
+- Do not create a deck where every content page is title plus bullets. Choose layout variation for content relationships, with no minimum number of layouts.
+- Keep safe outer margins around `40` px on standard content pages, and use spacing appropriate to the content; no dense-card-grid requirement. Only go full-bleed for an intentional image or cover treatment.
 - Reserve vertical space for titles. A typical content title area is `y=36..90`; main content should usually start at `y>=110`.
 - Avoid crowding the bottom edge. Keep non-background content above `y=500` unless it is a footer.
 - Keep backgrounds consistent with the deck's `visual_system.background_strategy`. Normal content pages should use the same base background unless there is a clear page-role reason to change.
 - Treat text fit as a layout constraint, not a cleanup step. If a text box is too small for the intended line count, shorten the text, split it, or allocate more space before creating XML.
-- Do not use `<shape>` to build pictorial visuals like mock photos or fake objects. Use the image generation tool instead.
-- Do not place a `rect` or `line` for dividing or decorative purposes directly under a `headline` or `title`.
-- Do not use section bands, horizontal bars, vertical bars, or page-edge strips.
+- Use native shapes for diagrams and image generation for requested illustrations; neither may impersonate real screenshots or evidence.
+- Use separators and section bands only when they help grouping or follow the user’s template; avoid decoration that competes with content.
 
 ## Background And Motif Consistency
 

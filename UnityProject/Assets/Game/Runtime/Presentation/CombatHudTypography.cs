@@ -20,11 +20,12 @@ namespace OCC.Combat.Presentation
             string[] source = summary.Replace("\r", string.Empty).Split('\n');
             string first = Compact(source[0], MaximumDecisionLineLength);
             string second = source.Length > 1 ? source[1] : string.Empty;
-            if (second.StartsWith("目标 · ", StringComparison.Ordinal)) second = second.Substring(5);
-            int forecast = second.IndexOf(" · 预计 ", StringComparison.Ordinal);
+            if (second.StartsWith("选点中　", StringComparison.Ordinal)) second = second.Substring(4);
+            if (second.StartsWith("目标　", StringComparison.Ordinal)) second = second.Substring(3);
+            int forecast = second.IndexOf("　预计　", StringComparison.Ordinal);
             if (forecast >= 0) second = second.Substring(0, forecast);
             string damage = FinalHealthDamage(damageBreakdown);
-            if (!string.IsNullOrEmpty(damage)) second += (string.IsNullOrEmpty(second) ? string.Empty : " · ") + damage;
+            if (!string.IsNullOrEmpty(damage)) second += (string.IsNullOrEmpty(second) ? string.Empty : "　") + damage;
             second = Compact(second, MaximumDecisionLineLength);
             return string.IsNullOrEmpty(second) ? first : first + "\n" + second;
         }

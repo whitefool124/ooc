@@ -12,7 +12,9 @@ namespace OCC.Combat.Presentation
         public FormalRogueliteUi RogueliteUi { get; private set; }
         public FormalStartupPresentation Startup { get; private set; }
         public FormalBattlefieldView Battlefield { get; private set; }
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         public DeveloperConsolePanel DeveloperConsole { get; private set; }
+#endif
         public TarkovInventoryPanel Inventory { get; private set; }
 
         private CombatPresentationComposition()

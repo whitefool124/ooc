@@ -13,6 +13,8 @@
 
 `+formula-verify` 把两路信号合并成一份统一 JSON：一次调用聚合全表错误清单 + 编译失败清单 + 每类错误的定位与样本，AI 一眼就能定位修复，链路也能据 `status` 强制收敛到 `success`。
 
+验证优先限定本次受影响的 `--sheet-id` 与 `--range`，覆盖必要依赖；仅工作簿级任务扫描全本。成功返回后仍需核对关键计算语义。
+
 ## 调用契约
 
 最小调用形态：
@@ -51,7 +53,7 @@
 2. `status='partial'` → 扫描被内部上限截断。先缩小 `--range` 或拆 `--sheet-id` 续扫，**不允许**把 `partial` 当作 `success`。
 3. `status='errors_found'` 且 `compile_errors[]` 非空 → **先解决编译失败**：根据 `compile_errors[].reason` 修正公式语法（飞书函数名 / 范围语法 / 引用样式），用 `+cells-set` 重写后再调一次 `+formula-verify`。
 4. `status='errors_found'` 且只剩运行时错误 → 按 `error_summary` 的 `samples[].formula` + `depends_on` 排查根因（零除？空值参与运算？引用越界？日期差写法？数组语义？），修复后重新自检。
-5. 同一处错误连续修复 3 次仍未通过 → 改用 `IFERROR` 包裹兜底，或退回纯值写入；不要在 `errors_found` 状态下扩展 `+cells-set --copy-to-range`、追加批量写入。
+5. 错误反复出现时重新诊断依赖、类型与支持范围；无法修复则报告具体未解决项并继续独立工作，不能为通过校验用 IFERROR 隐藏错误或自动退成静态值。不要扩展已知错误公式。
 
 注意：
 

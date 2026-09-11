@@ -15,7 +15,7 @@ namespace OCC.Combat
         public GridPosition Destination { get; }
         public int ExpectedDamage { get; }
         public string CompactText => ActionName + " → " + TargetSummary;
-        public string DetailedText => CompactText + " · " + ResultSummary;
+        public string DetailedText => CompactText + "\n" + ResultSummary;
 
         internal EnemyIntentPresentation(string signature, string actionName, string targetSummary, string resultSummary,
             string iconId, bool hasDestination, GridPosition destination, int expectedDamage)
@@ -39,7 +39,7 @@ namespace OCC.Combat
         public string Weapon { get; }
         public string Skills { get; }
         public string Statuses { get; }
-        public string FullText => string.Join("\n", Name + " · " + Vitals, Defenses, Weapon, Skills, Statuses);
+        public string FullText => string.Join("\n", Name, Vitals, Defenses, Weapon, Skills, Statuses);
 
         internal EnemyInformationPresentation(string name, string vitals, string defenses, string weapon, string skills, string statuses)
         {
@@ -56,10 +56,10 @@ namespace OCC.Combat
         public string ObjectiveState { get; }
         public string Consequence { get; }
         public IReadOnlyList<string> RecentEvents { get; }
-        public string CompactDetailText => string.Join("\n", Reason, HeroState + " · 剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence);
+        public string CompactDetailText => string.Join("\n", Reason, HeroState, "剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence);
         public string RecentEventsText => RecentEvents.Count == 0 ? "最近事件：无" : string.Join("\n", RecentEvents.Take(5));
-        public string DetailText => string.Join("\n", Reason, HeroState + " · 剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence,
-            RecentEvents.Count == 0 ? "最近事件：无" : "最近事件：" + string.Join(" / ", RecentEvents.Take(3)));
+        public string DetailText => string.Join("\n", Reason, HeroState, "剩余敌人 " + RemainingEnemyCount, ObjectiveState, Consequence,
+            RecentEvents.Count == 0 ? "最近事件：无" : "最近事件：\n" + string.Join("\n", RecentEvents.Take(3)));
 
         internal CombatOutcomePresentation(string title, string reason, string heroState, int remainingEnemyCount,
             string objectiveState, string consequence, IReadOnlyList<string> recentEvents)
@@ -168,7 +168,7 @@ namespace OCC.Combat
                     iconId = "defend";
                     break;
             }
-            string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) : "自身/战场";
+            string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) : "自身或战场";
             return new EnemyIntentPresentation(CommandSignature(command), action, targetSummary, result,
                 iconId, hasDestination, destination, expectedDamage);
         }
@@ -176,14 +176,14 @@ namespace OCC.Combat
         public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy, bool roguelite = false)
         {
             if (enemy == null) throw new ArgumentNullException(nameof(enemy));
-            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + " · 伤害 " + enemy.MainHand.Damage + " · 射程 " + enemy.MainHand.Range;
+            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + enemy.MainHand.Range;
             string skills = "战法：" + string.Join("；", new[] { enemy.SkillOne, enemy.SkillTwo }.Where(skill => skill != null)
                 .Select(skill => skill.DisplayName + "——" + SkillResult(skill) + (enemy.Cooldown(skill) > 0 ? "；还需等待 " + enemy.Cooldown(skill) + " 回合" : string.Empty)));
             string statuses = enemy.Statuses.Count == 0 ? "状态：无" : "状态：" + string.Join("；", enemy.Statuses.OrderBy(pair => pair.Key)
                 .Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
             return new EnemyInformationPresentation(enemy.DisplayName,
-                "生命 " + enemy.Health + "/" + enemy.MaxHealth + " · 护盾 " + enemy.Shield + "/" + enemy.MaxShield,
-                roguelite ? "普通盾 " + enemy.Shield + " · 速度 " + enemy.EffectiveSpeed : "护甲 " + enemy.EffectiveArmor + " · 格挡 " + enemy.Block + " · 速度 " + enemy.EffectiveSpeed,
+                "生命当前 " + enemy.Health + "　上限 " + enemy.MaxHealth + "\n护盾当前 " + enemy.Shield + "　上限 " + enemy.MaxShield,
+                roguelite ? "普通盾 " + enemy.Shield + "　速度 " + enemy.EffectiveSpeed : "护甲 " + enemy.EffectiveArmor + "　格挡 " + enemy.Block + "　速度 " + enemy.EffectiveSpeed,
                 weapon, skills, statuses);
         }
 
@@ -194,10 +194,10 @@ namespace OCC.Combat
             bool victory = state.IsVictory;
             string title = victory ? "战斗胜利" : "战斗失败";
             string reason = victory ? "任务目标已完成。" : hero == null || !hero.IsAlive ? "失败原因：英雄倒下。" : "失败原因：任务目标未能完成。";
-            string heroState = hero == null ? "英雄状态不可用" : "英雄 生命 " + hero.Health + "/" + hero.MaxHealth + " · 护盾 " + hero.Shield + "/" + hero.MaxShield;
+            string heroState = hero == null ? "英雄状态不可用" : "英雄生命 当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n英雄护盾 当前 " + hero.Shield + "　上限 " + hero.MaxShield;
             int remaining = state.Units.Values.Count(unit => !unit.IsHero && unit.IsAlive);
             int complete = state.Objectives.Count(objective => objective.IsComplete(state));
-            string objective = "目标 " + complete + "/" + state.Objectives.Count + " 完成";
+            string objective = "目标已完成 " + complete + "　总计 " + state.Objectives.Count;
             string consequence = victory ? "回到地图后，就能带走本场收获。" : rogueliteMapCombat
                 ? "可以回到地图，或者从头再挑战一次。"
                 : "离开后这场战斗不会留下任何收获，也可以从头再挑战。";
@@ -213,18 +213,18 @@ namespace OCC.Combat
 
             string result = string.IsNullOrWhiteSpace(preview.ExpectedResult) ? "请选择目标" : preview.ExpectedResult;
             string intentText = intent == null ? "尚未显露" : intent.CompactText;
-            return target.DisplayName + " · 生命 " + target.Health + "/" + target.MaxHealth + " · 护盾 " + target.Shield + "/" + target.MaxShield +
+            return target.DisplayName + "\n生命当前 " + target.Health + "　上限 " + target.MaxHealth + "\n护盾当前 " + target.Shield + "　上限 " + target.MaxShield +
                 "\n行动  " + preview.Action + "\n" + availability + "\n预计  " + result + "\n敌人打算  " + intentText;
         }
 
         public static string BuildHudDecisionSummary(CombatActionPreview preview, UnitState target, bool keyboardTargeting)
         {
             if (preview == null) return "等待战斗状态";
-            string availability = preview.CanSubmit ? "可执行" : "不可执行 · " + preview.FailureReason;
+            string availability = preview.CanSubmit ? "可执行" : "不可执行，" + preview.FailureReason;
             string targetText = target != null ? target.DisplayName : preview.TargetRule.Length <= 20 ? preview.TargetRule : "可选格 " + preview.ValidCellCount;
             string expected = Compact(preview.ExpectedResult, 18);
-            string summary = preview.Action + " · " + availability + "\n" +
-                (keyboardTargeting ? "选点中 · " : string.Empty) + "目标 · " + targetText + (string.IsNullOrEmpty(expected) ? string.Empty : " · 预计 " + expected);
+            string summary = preview.Action + "　" + availability + "\n" +
+                (keyboardTargeting ? "选点中　" : string.Empty) + "目标　" + targetText + (string.IsNullOrEmpty(expected) ? string.Empty : "　预计　" + expected);
             return summary;
         }
 
@@ -239,15 +239,15 @@ namespace OCC.Combat
             if (preview == null) return "战斗状态尚未就绪。";
             List<string> lines = new List<string>
             {
-                preview.CanSubmit ? "● 可用" : "● 不可用 · " + preview.FailureReason,
-                "消耗 · " + (string.IsNullOrWhiteSpace(preview.Cost) ? "无" : preview.Cost),
-                "目标 · " + preview.TargetRule,
-                "效果 · " + preview.ExpectedResult
+                preview.CanSubmit ? "● 可用" : "● 不可用，" + preview.FailureReason,
+                "消耗　" + (string.IsNullOrWhiteSpace(preview.Cost) ? "无" : preview.Cost),
+                "目标　" + preview.TargetRule,
+                "效果　" + preview.ExpectedResult
             };
             if (!string.IsNullOrWhiteSpace(preview.DamageBreakdown)) lines.Add("伤害：" + preview.DamageBreakdown);
             if (!string.IsNullOrWhiteSpace(preview.StatusResults)) lines.Add("状态变化：" + preview.StatusResults);
-            if (preview.AffectedCellCount > 1) lines.Add("范围 · " + preview.AffectedCellCount + " 格" + (preview.FriendlyFireRisk ? " · 可能波及友军" : string.Empty));
-            else if (preview.FriendlyFireRisk) lines.Add("风险 · 可能波及友军");
+            if (preview.AffectedCellCount > 1) lines.Add("范围　" + preview.AffectedCellCount + " 格" + (preview.FriendlyFireRisk ? "，可能波及友军" : string.Empty));
+            else if (preview.FriendlyFireRisk) lines.Add("风险　可能波及友军");
             return string.Join("\n", lines);
         }
 
@@ -257,7 +257,7 @@ namespace OCC.Combat
             if (target != null)
             {
                 EnemyInformationPresentation profile = BuildEnemyInformation(target, roguelite);
-                sections.Add("敌人资料\n" + profile.Name + " · " + profile.Vitals + "\n" + profile.Weapon);
+                sections.Add("敌人资料\n" + profile.Name + "\n" + profile.Vitals + "\n" + profile.Weapon);
                 if (intent != null) sections.Add("敌人打算\n" + intent.DetailedText);
             }
             return string.Join("\n\n", sections);
@@ -299,23 +299,23 @@ namespace OCC.Combat
         public static string BuildHeroDetails(UnitState hero)
         {
             if (hero == null) return "英雄状态尚未就绪。";
-            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + " · 伤害 " + hero.MainHand.Damage + " · 射程 " + hero.MainHand.Range;
+            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + "\n伤害 " + hero.MainHand.Damage + "　射程 " + hero.MainHand.Range;
             string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
             return string.Join("\n",
-                "生命 " + hero.Health + "/" + hero.MaxHealth + " · 护盾 " + hero.Shield + "/" + hero.MaxShield + " · 以太 " + hero.Mana + "/" + hero.MaxMana,
-                "行动点 " + hero.ActionPoints + " · 护甲 " + hero.EffectiveArmor + " · 格挡 " + hero.Block + " · 速度 " + hero.EffectiveSpeed,
+                "生命当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n护盾当前 " + hero.Shield + "　上限 " + hero.MaxShield + "\n以太当前 " + hero.Mana + "　上限 " + hero.MaxMana,
+                "行动点 " + hero.ActionPoints + "　护甲 " + hero.EffectiveArmor + "　格挡 " + hero.Block + "　速度 " + hero.EffectiveSpeed,
                 weapon, statuses);
         }
 
         public static string BuildItemDetails(ItemDefinition definition, ItemInstance item, int slot)
         {
-            if (definition == null || item == null) return "快捷栏 " + (slot + 1) + " · 空槽";
-            string uses = definition.MaximumUses > 0 ? item.RemainingUses + "/" + definition.MaximumUses : "无限制";
+            if (definition == null || item == null) return "快捷栏 " + (slot + 1) + "　空槽";
+            string uses = definition.MaximumUses > 0 ? "剩余 " + item.RemainingUses + "　总计 " + definition.MaximumUses : "无限制";
             return string.Join("\n",
                 definition.Description,
-                "类别：" + ItemCategoryLabel(definition.Category) + " · 稀有度：" + ItemRarityLabel(definition.Rarity),
-                "占格 " + definition.Width + "×" + definition.Height + " · 重量 " + definition.Weight,
-                "快捷栏 " + (slot + 1) + " · 剩余次数 " + uses);
+                "类别：" + ItemCategoryLabel(definition.Category) + "　稀有度：" + ItemRarityLabel(definition.Rarity),
+                "占格 " + definition.Width + "×" + definition.Height + "　重量 " + definition.Weight,
+                "快捷栏 " + (slot + 1) + "\n次数 " + uses);
         }
 
         public static string PhaseText(CombatFlowPhase phase, CombatState state)
@@ -325,7 +325,7 @@ namespace OCC.Combat
             if (phase == CombatFlowPhase.TacticalRestart) return "正在重新部署";
             if (phase != CombatFlowPhase.Active) return "战斗即将开始";
             UnitState active = state?.GetUnit(state.ActiveUnitId);
-            return active?.IsHero == true ? "你的行动 · 选择指令" : "敌方行动";
+            return active?.IsHero == true ? "你的行动\n选择指令" : "敌方行动";
         }
 
         public static string CommandSignature(CombatCommand command) => string.Join("|", command.Type, command.UnitId ?? string.Empty,
@@ -333,7 +333,7 @@ namespace OCC.Combat
 
         public static string DamageBreakdown(CombatResolver.AttackPreview preview) => "基础 " + preview.BaseDamage +
             " - 掩体 " + preview.CoverReduction + " - 护甲 " + preview.ArmorReduction +
-            " - 格挡 " + preview.BlockReduction + " · 护盾吸收 " + preview.ShieldAbsorption + " · 生命伤害 " + preview.FinalDamage;
+            " - 格挡 " + preview.BlockReduction + "　护盾吸收 " + preview.ShieldAbsorption + "　生命伤害 " + preview.FinalDamage;
 
         public static string BuildActionResult(CombatState state, CombatCommand command, CombatEffectExecution execution)
         {
@@ -355,7 +355,7 @@ namespace OCC.Combat
                 else if (result.Kind == CombatEffectKind.DamageObject && result.AppliedAmount > 0) changes.Add("耐久 " + result.ValueBefore + "→" + result.ValueAfter);
             }
             if (changes.Count == 0) return string.Empty;
-            return (source?.DisplayName ?? command.UnitId) + " · " + action + " → " + (target?.DisplayName ?? "战场") + " · " + string.Join("；", changes);
+            return (source?.DisplayName ?? command.UnitId) + "　" + action + " → " + (target?.DisplayName ?? "战场") + "\n" + string.Join("；", changes);
         }
 
         private static string SkillResult(SkillDefinition skill, CombatResolver.AttackPreview? damagePreview = null)
@@ -379,12 +379,29 @@ namespace OCC.Combat
             return string.IsNullOrEmpty(effects) ? "选好目标后施放" : effects;
         }
 
-        public static string BuildRogueliteHeroDetails(UnitState hero)
+        public static string BuildRogueliteHeroDetails(UnitState hero) => BuildRogueliteHeroDetails(null, hero);
+
+        public static string BuildRogueliteHeroDetails(CombatState state, UnitState hero)
         {
             if (hero == null) return "英雄状态尚未就绪。";
             string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
-            return string.Join("\n", "生命 " + hero.Health + "/" + hero.MaxHealth + " · 普通盾 " + hero.Shield + " · 个人魔力 " + hero.Mana + "/" + hero.MaxMana,
-                "行动点 " + hero.ActionPoints + " · 速度 " + hero.EffectiveSpeed, statuses);
+            List<string> lines = new List<string>
+            {
+                "生命当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n普通盾 " + hero.Shield + "　个人魔力当前 " + hero.Mana + "　上限 " + hero.MaxMana,
+                "行动点 " + hero.ActionPoints + "　速度 " + hero.EffectiveSpeed,
+                statuses
+            };
+            if (state != null)
+            {
+                IReadOnlyList<CombatStatusBarEntry> entries = state.PassiveEffects.StatusBarEntriesFor(hero.Id);
+                CombatStatusBarEntry[] ongoing = entries.Where(value => value.Kind == CombatStatusBarEntryKind.OngoingEffect).ToArray();
+                CombatStatusBarEntry[] passives = entries.Where(value => value.Kind == CombatStatusBarEntryKind.Passive).ToArray();
+                if (ongoing.Length > 0)
+                    lines.Add("待触发：" + string.Join("；", ongoing.Select(value => value.DisplayName + "（" + value.TimingText + "）—" + value.Detail)));
+                if (passives.Length > 0)
+                    lines.Add("被动来源：" + string.Join("；", passives.Select(value => value.DisplayName + "（" + value.TimingText + "）—" + value.Detail)));
+            }
+            return string.Join("\n", lines);
         }
 
         private static int IncomingDamage(CombatResolver.AttackPreview preview) =>
