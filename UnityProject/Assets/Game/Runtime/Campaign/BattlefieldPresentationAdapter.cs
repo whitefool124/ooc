@@ -77,7 +77,7 @@ namespace OCC.Combat
         public BattlefieldRect ViewportRect => new BattlefieldRect(16f, BoardTop, BattlefieldWidth - 32f, BattlefieldHeight - BoardTop);
 
         public BattlefieldViewport CreateViewport(int width = DefaultWidth, int height = DefaultHeight)
-            => new BattlefieldViewport(ViewportRect, width, height, OverviewCellSize);
+            => new BattlefieldViewport(ViewportRect, width, height, CellSize);
 
         public BattlefieldRect BoardRect(int width = DefaultWidth, int height = DefaultHeight)
         {

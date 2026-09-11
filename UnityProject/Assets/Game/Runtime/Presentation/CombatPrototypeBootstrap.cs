@@ -54,6 +54,8 @@ namespace OCC.Combat.Presentation
         private FormalUiInteractionLayer interactionLayer => presentation?.Interaction;
         private FormalStartupPresentation startupPresentation => presentation?.Startup;
         private CombatFlowTransitionPresentation flowTransition => presentation?.FlowTransition;
+        private FormalCombatHud combatHud => presentation?.CombatHud;
+        private FormalBattlefieldView battlefieldView => presentation?.Battlefield;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         private DeveloperConsolePanel developerConsole => presentation?.DeveloperConsole;
 #endif
@@ -226,6 +228,8 @@ namespace OCC.Combat.Presentation
             PresentHeroTurnBannerIfNeeded();
             RefreshSceneHud();
             MarkPresentation(UiPresentationArea.Combat);
+            battlefieldView?.QueueCombatEntry();
+            combatHud?.QueueCombatEntry();
         }
         public void ReturnToDeveloperMenu()
         {

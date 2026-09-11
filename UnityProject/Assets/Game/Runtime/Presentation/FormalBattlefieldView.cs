@@ -42,7 +42,6 @@ namespace OCC.Combat.Presentation
         public int CrowdedIntentCount { get; private set; }
         public int OccludedUnitCount { get; private set; }
         public int OcclusionPixelCount { get; private set; }
-        private readonly BattlefieldViewportInputController input = new BattlefieldViewportInputController();
         private IBattlefieldViewHost host;
         private Canvas canvas;
         private GameObject root;
@@ -74,6 +73,7 @@ namespace OCC.Combat.Presentation
         private int contextMenuOpenedFrame = -1;
         private int mapWidth;
         private int mapHeight;
+        private bool combatEntryQueued;
 
         public bool IsVisible => root != null && root.activeSelf;
         // Reuse the regions of the currently drawn frame, rather than final simulation positions.
@@ -107,6 +107,8 @@ namespace OCC.Combat.Presentation
             host = source ?? throw new ArgumentNullException(nameof(source));
         }
 
+        public void QueueCombatEntry() => combatEntryQueued = true;
+
         private void Update()
         {
             if (host == null || !Application.isPlaying) return;
@@ -119,8 +121,13 @@ namespace OCC.Combat.Presentation
                 HideTooltip();
                 HideContextMenu();
                 CancelPendingPrimaryClick();
-                input.Reset();
                 return;
+            }
+
+            if (combatEntryQueued)
+            {
+                combatEntryQueued = false;
+                PlayCombatEntry();
             }
 
             if (contextMenuRoot != null && contextMenuRoot.activeSelf)
@@ -810,32 +817,48 @@ namespace OCC.Combat.Presentation
             if (viewport == null) return;
             Keyboard keyboard = Keyboard.current;
             if (keyboard?.homeKey.wasPressedThisFrame == true) host.FocusBattlefieldOnHero();
-            Mouse mouse = Mouse.current;
-            if (mouse == null) return;
-            bool held = mouse.backButton.isPressed || mouse.forwardButton.isPressed;
-            bool pressed = mouse.backButton.wasPressedThisFrame || mouse.forwardButton.wasPressedThisFrame;
-            Vector2 pointer = BattlefieldViewportInputController.ScreenToReferenceUi(mouse.position.ReadValue(),
-                Screen.width, Screen.height, ReferenceWidth, ReferenceHeight);
-            input.UpdateSideButtonPan(viewport, !host.IsInteractionModalOpen, held, pressed, pointer,
-                mouse.delta.ReadValue(), canvas.scaleFactor);
         }
 
         internal void BeginDrag(PointerEventData eventData)
         {
-            bool allowed = eventData.button == PointerEventData.InputButton.Middle ||
-                           (eventData.button == PointerEventData.InputButton.Left && Keyboard.current?.spaceKey.isPressed == true);
-            if (allowed && !host.IsInteractionModalOpen) eventData.Use();
+            if (eventData.button != PointerEventData.InputButton.Left || host.IsInteractionModalOpen) return;
+            // BeginDrag is dispatched only after Unity's drag threshold; cancel the matching click
+            // so panning across a cell cannot also submit a combat action.
+            eventData.eligibleForClick = false;
+            HideTooltip();
+            eventData.Use();
         }
 
         internal void Drag(PointerEventData eventData)
         {
-            bool allowed = eventData.button == PointerEventData.InputButton.Middle ||
-                           (eventData.button == PointerEventData.InputButton.Left && Keyboard.current?.spaceKey.isPressed == true);
-            if (!allowed || host.IsInteractionModalOpen || host.BattlefieldViewport == null) return;
+            if (eventData.button != PointerEventData.InputButton.Left || host.IsInteractionModalOpen || host.BattlefieldViewport == null) return;
             float scale = canvas != null && canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
             HideTooltip();
             host.BattlefieldViewport.Pan(eventData.delta.x / scale, -eventData.delta.y / scale);
             eventData.Use();
+        }
+
+        private void PlayCombatEntry()
+        {
+            if (root == null || viewportRect == null) return;
+            IUiPreferenceHost preferences = host as IUiPreferenceHost;
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(preferences == null ? 1f : preferences.UiPreferences.AnimationIntensity);
+            CanvasGroup group = root.GetComponent<CanvasGroup>() ?? root.AddComponent<CanvasGroup>();
+            DOTween.Kill(this);
+            group.DOKill();
+            viewportRect.DOKill();
+            if (motion.IsImmediate)
+            {
+                group.alpha = 1f;
+                viewportRect.localScale = Vector3.one;
+                return;
+            }
+            group.alpha = 0f;
+            viewportRect.localScale = Vector3.one * .96f;
+            DOTween.Sequence().SetTarget(this).SetUpdate(true)
+                .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.StandardDuration)
+                    .SetEase(FormalUiMotionTokens.StandardEase))
+                .Join(viewportRect.DOScale(1f, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
         }
 
         internal void Scroll(PointerEventData eventData)

@@ -95,6 +95,7 @@ namespace OCC.Combat.Presentation
         private GridPosition presentedTargetPosition;
         private bool refreshDirty = true;
         private int displayedActionVersion = -1;
+        private bool combatEntryQueued;
         public int RefreshCount { get; private set; }
 
         public void Initialize(ICombatHudHost source)
@@ -104,6 +105,8 @@ namespace OCC.Combat.Presentation
             LoadActionIcons();
             EnsureUi();
         }
+
+        public void QueueCombatEntry() => combatEntryQueued = true;
 
         private void OnPresentationChanged(UiPresentationChange change)
         {
@@ -125,6 +128,11 @@ namespace OCC.Combat.Presentation
                 wasVisible = false;
                 hasPresentedModel = false;
                 return;
+            }
+            if (combatEntryQueued)
+            {
+                combatEntryQueued = false;
+                PlayCombatEntry();
             }
             if (!wasVisible)
             {
@@ -151,6 +159,22 @@ namespace OCC.Combat.Presentation
             presentedTargetPosition = bootstrap.KeyboardTargetPosition;
             hasPresentedModel = true;
             Refresh();
+        }
+
+        private void PlayCombatEntry()
+        {
+            if (root == null) return;
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            CanvasGroup group = root.GetComponent<CanvasGroup>() ?? root.AddComponent<CanvasGroup>();
+            group.DOKill();
+            if (motion.IsImmediate)
+            {
+                group.alpha = 1f;
+                return;
+            }
+            group.alpha = 0f;
+            DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.StandardDuration)
+                .SetDelay(motion.QuickDuration * .5f).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(group);
         }
 
         private void EnsureUi()
