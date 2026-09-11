@@ -40,7 +40,7 @@ namespace OCC.Combat.Presentation
         private LoadoutSection loadoutSection = LoadoutSection.Equipment;
         private int selectedLoadoutSpellIndex;
         private string selectedLoadoutSpellId;
-        private const float LoadoutCellSize = 56f;
+        private const float LoadoutCellSize = 64f;
         private RectTransform loadoutGridRect;
         private RogueEquipmentRuntime loadoutDragRuntime;
         private readonly Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform> loadoutEquipmentSlotRects = new Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform>();
@@ -1263,7 +1263,7 @@ namespace OCC.Combat.Presentation
 
         private void DrawLoadoutNavigation(Transform parent, RogueEquipmentRuntime runtime, RogueRunDto dto)
         {
-            LoadoutTab(parent, LoadoutSection.Equipment, "装备、背包与战术栏", "装备槽 9　背包 10×6　战术栏 4", 16, cyan, FormalArtRegistry.ItemPath("category_armor"));
+            LoadoutTab(parent, LoadoutSection.Equipment, "装备、背包与战术栏", "装备槽 9　背包 6×10　战术栏 4", 16, cyan, FormalArtRegistry.ItemPath("category_armor"));
             LoadoutTab(parent, LoadoutSection.Spells, "术式编组", "8 个术式槽", 410, amber, RogueSpellIconPath(dto.EquippedSpellIds.FirstOrDefault()));
             int occupied = RogueInventoryPresentation.Build(runtime).Count;
             Label("整备摘要", "背包物品 " + occupied + "\n页面详情常驻，悬浮窗辅助快速查看", parent,
@@ -1341,39 +1341,48 @@ namespace OCC.Combat.Presentation
             RogueRunDto dto = run.RogueRunState;
             Label("角色栏标题", "角色状态", parent, new Vector2(24, -18), new Vector2(300, 42), 26, amber, TextAnchor.MiddleLeft);
             GameObject portrait = Panel("角色立绘框", parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(40, -72), new Vector2(370, 326), FormalUiTheme.SurfaceRaised);
+                new Vector2(40, -72), new Vector2(370, 260), FormalUiTheme.SurfaceRaised);
             GameObject heroObject = Create("角色像素像", portrait.transform);
             RectTransform heroRect = heroObject.AddComponent<RectTransform>();
             heroRect.anchorMin = heroRect.anchorMax = heroRect.pivot = new Vector2(.5f, .5f);
-            heroRect.anchoredPosition = new Vector2(0, -8); heroRect.sizeDelta = new Vector2(256, 256);
+            heroRect.anchoredPosition = new Vector2(0, -4); heroRect.sizeDelta = new Vector2(192, 192);
             Image hero = heroObject.AddComponent<Image>(); hero.sprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath("hero"));
             hero.preserveAspect = true; hero.raycastTarget = false;
-            Label("角色称谓", "学院学员", portrait.transform, new Vector2(20, -278), new Vector2(330, 32), 20, text, TextAnchor.MiddleCenter);
+            Label("角色称谓", "学院学员", portrait.transform, new Vector2(20, -210), new Vector2(330, 32), 20, text, TextAnchor.MiddleCenter);
 
-            MetricChip(parent, 24, -424, "生命", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentHealth, 18), FormalUiTheme.Health,
+            MetricChip(parent, 24, -356, "生命", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentHealth, 18), FormalUiTheme.Health,
                 FormalArtRegistry.ResourceMetricPath("health"), 190);
-            MetricChip(parent, 226, -424, "魔力", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentMana, RogueRuntimeConstants.MaximumPersonalMana), cyan,
+            MetricChip(parent, 226, -356, "魔力", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentMana, RogueRuntimeConstants.MaximumPersonalMana), cyan,
                 FormalArtRegistry.ResourceMetricPath("mana"), 190);
-            MetricChip(parent, 24, -496, "金币", dto.Gold.ToString(), amber, FormalArtRegistry.ResourceMetricPath("gold"), 190);
-            MetricChip(parent, 226, -496, "贡献", dto.StageContribution.ToString(), safe,
+            MetricChip(parent, 24, -428, "金币", dto.Gold.ToString(), amber, FormalArtRegistry.ResourceMetricPath("gold"), 190);
+            MetricChip(parent, 226, -428, "贡献", dto.StageContribution.ToString(), safe,
                 FormalArtRegistry.ResourceMetricPath("contribution"), 190);
 
             RogueEquipmentInstance equipment = runtime.EquipmentItem(selectedRogueInventoryId);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(selectedRogueInventoryId);
             string selectedName = equipment != null ? runtime.DefinitionFor(equipment.InstanceId).DisplayName :
                 tactical != null ? runtime.TacticalDefinitionFor(tactical.InstanceId).DisplayName : "尚未选择物品";
-            Label("当前选择标题", "当前选择", parent, new Vector2(24, -584), new Vector2(180, 28), 17, amber, TextAnchor.MiddleLeft);
-            Label("当前选择名称", selectedName, parent, new Vector2(24, -616), new Vector2(392, 42), 23, text, TextAnchor.MiddleLeft);
+            Label("当前选择标题", "当前选择", parent, new Vector2(24, -516), new Vector2(180, 28), 17, amber, TextAnchor.MiddleLeft);
+            Label("当前选择名称", selectedName, parent, new Vector2(24, -548), new Vector2(392, 42), 23, text, TextAnchor.MiddleLeft);
+            string selectedSummary = equipment != null
+                ? "占格 " + runtime.DefinitionFor(equipment.InstanceId).Width + "×" + runtime.DefinitionFor(equipment.InstanceId).Height +
+                    "\n重量 " + runtime.DefinitionFor(equipment.InstanceId).BaseWeight + "　以太负荷 " + runtime.DefinitionFor(equipment.InstanceId).BaseAetherLoad
+                : tactical != null
+                    ? "占格 " + runtime.TacticalDefinitionFor(tactical.InstanceId).Width + "×" + runtime.TacticalDefinitionFor(tactical.InstanceId).Height +
+                        "\n剩余 " + PlayerFacingCopy.RemainingAndTotal(tactical.ChargesCurrent, tactical.ChargesMaximum, " 次")
+                    : "从背包或装备槽选择一件物品。";
+            Text summary = Label("当前选择摘要", selectedSummary, parent, new Vector2(24, -594), new Vector2(392, 66), 15, muted, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(summary);
             bool inBackpack = runtime.Backpack.ContainsKey(selectedRogueInventoryId);
             if (inBackpack)
-                ActionButton("旋转", "R", parent, new Vector2(24, -676), new Vector2(188, 58), cyan, true,
+                ActionButton("旋转", "R", parent, new Vector2(24, -682), new Vector2(188, 58), cyan, true,
                     () => bootstrap.RotateRogueBackpackItem(selectedRogueInventoryId), iconPath: FormalArtRegistry.ItemPath("inventory_rotate"));
             if (equipment != null)
             {
                 EquipmentDefinition definition = runtime.DefinitionFor(equipment.InstanceId);
                 bool equippedNow = runtime.Equipped.Values.Contains(equipment.InstanceId);
                 OCC.Combat.Roguelite.EquipmentSlot equippedSlot = runtime.Equipped.FirstOrDefault(pair => pair.Value == equipment.InstanceId).Key;
-                ActionButton(equippedNow ? "卸下" : "装备", string.Empty, parent, new Vector2(226, -676), new Vector2(190, 58), amber, true,
+                ActionButton(equippedNow ? "卸下" : "装备", string.Empty, parent, new Vector2(226, -682), new Vector2(190, 58), amber, true,
                     () => { if (equippedNow) bootstrap.UnequipRogueEquipment(equippedSlot); else bootstrap.EquipRogueEquipment(equipment.InstanceId, PreferredEquipSlot(runtime, definition)); },
                     iconPath: FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
             }
@@ -1392,14 +1401,14 @@ namespace OCC.Combat.Presentation
                 TacticalItemDefinition definition = runtime.TacticalDefinitionFor(id);
                 ActionButton((index + 1) + "  " + (definition == null ? "空" : definition.DisplayName),
                     item == null ? string.Empty : PlayerFacingCopy.RemainingAndTotal(item.ChargesCurrent, item.ChargesMaximum, " 次"), parent,
-                    new Vector2(28 + index * 160, -452), new Vector2(148, 96), safe, true,
+                    new Vector2(28 + index % 2 * 326, -452 - index / 2 * 92), new Vector2(310, 76), safe, true,
                     () =>
                     {
                         if (runtime.TacticalItem(selectedRogueInventoryId) != null) bootstrap.AssignRogueQuickbar(selectedRogueInventoryId, slotIndex);
                         else if (item != null) { selectedRogueInventoryId = id; Invalidate(false); }
                     }, iconPath: item == null ? FormalArtRegistry.ItemPath("category_container") : FormalArtRegistry.ItemPath(item.DefinitionId));
             }
-            Label("整备提示", loadoutInteractionMessage, parent, new Vector2(28, -572), new Vector2(640, 30), 15, muted, TextAnchor.MiddleLeft);
+            Label("整备提示", loadoutInteractionMessage, parent, new Vector2(28, -646), new Vector2(640, 30), 15, muted, TextAnchor.MiddleLeft);
         }
 
         private static IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> EquipmentSlotsForPresentation()
@@ -1408,10 +1417,11 @@ namespace OCC.Combat.Presentation
         private void DrawLoadoutBackpack(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Vector2 position, Vector2 size)
         {
             GameObject backpackPanel = Panel("背包工作区", parent, new Vector2(0, 1), new Vector2(0, 1), position, size, FormalUiTheme.Surface);
-            Label("背包标题", "背包 10×6", backpackPanel.transform, new Vector2(24, -18), new Vector2(440, 40), 25, safe, TextAnchor.MiddleLeft);
+            Label("背包标题", "背包 6×10", backpackPanel.transform, new Vector2(24, -18), new Vector2(440, 40), 25, safe, TextAnchor.MiddleLeft);
             Label("背包提示", "拖拽整理　R 键或右键旋转", backpackPanel.transform, new Vector2(24, -54),
                 new Vector2(Mathf.Max(360f, size.x - 48f), 28f), 15, muted, TextAnchor.MiddleLeft);
-            Vector2 gridOrigin = new Vector2(44, -88);
+            float gridWidth = RogueLoadoutScreenGridPresentation.Columns * LoadoutCellSize;
+            Vector2 gridOrigin = new Vector2(Mathf.Round((size.x - gridWidth) * .5f), -104);
             GameObject gridObject = Panel("战外背包网格", backpackPanel.transform, new Vector2(0, 1), new Vector2(0, 1), gridOrigin,
                 new Vector2(RogueLoadoutScreenGridPresentation.Columns * LoadoutCellSize,
                     RogueLoadoutScreenGridPresentation.Rows * LoadoutCellSize), FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .5f));

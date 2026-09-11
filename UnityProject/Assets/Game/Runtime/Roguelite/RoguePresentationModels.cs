@@ -318,16 +318,16 @@ namespace OCC.Combat.Roguelite
             => rotated ? new RogueLoadoutGridPoint(baseHeight, baseWidth) : new RogueLoadoutGridPoint(baseWidth, baseHeight);
     }
 
-    // The save/runtime grid remains 6 columns by 10 rows. The formal 11A screen
-    // presents the same cells transposed as 10 columns by 6 rows.
+    // The formal backpack follows the saved 6 columns by 10 rows directly. Keeping
+    // display and save coordinates aligned makes the tall working grid legible.
     public static class RogueLoadoutScreenGridPresentation
     {
-        public const int Columns = RogueRuntimeConstants.BackpackHeight;
-        public const int Rows = RogueRuntimeConstants.BackpackWidth;
+        public const int Columns = RogueRuntimeConstants.BackpackWidth;
+        public const int Rows = RogueRuntimeConstants.BackpackHeight;
 
-        public static RogueLoadoutGridPoint FromRuntime(int x, int y) => new RogueLoadoutGridPoint(y, x);
-        public static RogueLoadoutGridPoint ToRuntime(int screenX, int screenY) => new RogueLoadoutGridPoint(screenY, screenX);
+        public static RogueLoadoutGridPoint FromRuntime(int x, int y) => new RogueLoadoutGridPoint(x, y);
+        public static RogueLoadoutGridPoint ToRuntime(int screenX, int screenY) => new RogueLoadoutGridPoint(screenX, screenY);
         public static RogueLoadoutGridPoint FootprintFromRuntime(RogueLoadoutGridPoint footprint)
-            => new RogueLoadoutGridPoint(footprint.Y, footprint.X);
+            => footprint;
     }
 }
