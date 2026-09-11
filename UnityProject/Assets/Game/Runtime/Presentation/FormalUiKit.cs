@@ -321,17 +321,25 @@ namespace OCC.Combat.Presentation
 
         public static Canvas CanvasRoot(string name, int sortingOrder)
         {
-            GameObject root = new GameObject(name);
-            Canvas canvas = root.AddComponent<Canvas>();
+            Canvas canvas = PresentationSceneAnchors.TryAcquireCanvas(name);
+            if (canvas == null)
+            {
+                GameObject root = new GameObject(name);
+                canvas = root.AddComponent<Canvas>();
+                root.AddComponent<CanvasScaler>();
+                root.AddComponent<GraphicRaycaster>();
+            }
+
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.sortingOrder = sortingOrder;
             canvas.pixelPerfect = true;
-            CanvasScaler scaler = root.AddComponent<CanvasScaler>();
+            CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+            if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight);
             scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
             scaler.referencePixelsPerUnit = 32f * OccPixelUiConfig.Data.logicalPixelScale;
-            root.AddComponent<GraphicRaycaster>();
+            if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
             RuntimeUiEventSystem.Ensure();
             return canvas;
         }

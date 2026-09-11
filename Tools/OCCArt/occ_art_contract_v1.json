@@ -7,6 +7,8 @@
   "machine_mirror_only": true,
   "allowed_source_channels": [
     "codex_builtin_imagegen",
+    "openai_image_api_gpt_image_2_5",
+    "easycli_chatgpt_pro_gpt_image_2_5",
     "pixelover",
     "aseprite",
     "hand_pixel"
@@ -703,7 +705,7 @@
         "是唯一活动美术规范源",
         "occ-art-manifest-v1",
         "64px战场交付主稿",
-        "禁止使用本地生图工作台"
+        "禁止使用未批准的本地生图工作台"
       ]
     }
   ],

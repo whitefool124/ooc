@@ -353,6 +353,11 @@ namespace OCC.Combat.Presentation
 
             bool current = node.Id == run.CurrentNodeId;
             bool cleared = run.CompletedNodes.Contains(node.Id);
+            if (node.IsCombat && !cleared)
+            {
+                DrawPixsoCombatDeparture(content.transform, run, node, current, NodeRoomAccent(node.Type));
+                return;
+            }
             AcademyEventDefinition nodeEvent = null;
             if (node.Type == RogueliteMapNodeType.Event && run.NodeContentAssignments.TryGetValue(node.Id, out string eventId))
                 nodeEvent = AcademyNodeContentCatalog.Event(eventId);
@@ -686,6 +691,61 @@ namespace OCC.Combat.Presentation
                 return "战术道具　占格 " + tactical.Width + "×" + tactical.Height + "\n完整次数 " + tactical.MaximumCharges + "　使用消耗 " + tactical.ActionPointCost + " 行动点";
             SpellDefinition spell = catalog.Spells.FirstOrDefault(value => value.DefinitionId == definitionId);
             return spell == null ? "商品详情不可用" : RogueliteSettlementPresentation.RogueSpellPlayerSummary(spell);
+        }
+
+        // Pixso 09 is a dedicated battle-node briefing, not the generic full-screen node room.
+        private void DrawPixsoCombatDeparture(Transform parent, RogueliteMapRun run, RogueliteMapNode node, bool current, Color accent)
+        {
+            bool canEnter = (current && RogueliteUiPreferences.CanOpenCombatBriefing(run, node)) || RogueliteUiPreferences.CanTravelTo(run, node);
+            RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.For(run, node.Id);
+            RogueNodePreviewPresentation preview = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node) : null;
+            string objective = encounter != null && !string.IsNullOrEmpty(encounter.ObjectiveSummary) ? encounter.ObjectiveSummary : node.Summary;
+            string enemies = encounter != null && (preview == null || string.IsNullOrEmpty(preview.EnemySummary))
+                ? string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName))
+                : preview?.EnemySummary ?? "敌情待确认";
+            string terrain = preview == null ? encounter.SpatialGrammar + "；" + encounter.SpawnRelationship : preview.SpatialRisk;
+            bool confirmOrigin = run.IsFirstRunExperience && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
+            bool canStart = canEnter || confirmOrigin;
+
+            GameObject top = Panel("Pixso出发准备顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
+                new Vector2(0, 80), FormalUiTheme.Ink);
+            Label("标题", "出发准备（" + node.DisplayName + "）", top.transform, new Vector2(32, -12), new Vector2(900, 52), 28, Color.white, TextAnchor.MiddleLeft);
+            Label("状态", node.Id + "　" + TypeLabel(node.Type) + "（" + (canEnter ? "可达" : "未达") + "）", top.transform,
+                new Vector2(1280, -16), new Vector2(600, 42), 18, canEnter ? cyan : muted, TextAnchor.MiddleRight);
+
+            GameObject dossier = Panel("Pixso任务档案", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(48, -254),
+                new Vector2(500, 650), FormalUiTheme.Ink);
+            string category = node.Type == RogueliteMapNodeType.Elite ? "精英任务" : node.Type == RogueliteMapNodeType.Finale ? "终局任务" : "巡哨任务　FIRST ENCOUNTER";
+            Label("任务类别", category, dossier.transform, new Vector2(32, -32), new Vector2(420, 30), 17, amber, TextAnchor.MiddleLeft);
+            Label("任务名称", node.DisplayName, dossier.transform, new Vector2(32, -86), new Vector2(410, 128), 46, Color.white, TextAnchor.UpperLeft);
+            Label("任务档案", node.Summary, dossier.transform, new Vector2(32, -250), new Vector2(420, 154), 21, Color.white, TextAnchor.UpperLeft);
+            GameObject cost = Panel("耗时", dossier.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(34, 108), new Vector2(432, 60), FormalUiTheme.Panel);
+            Label("标签", "耗时", cost.transform, new Vector2(58, -14), new Vector2(120, 28), 17, muted, TextAnchor.MiddleLeft);
+            Label("数值", preview == null || preview.IsZeroTime ? "不耗时" : "+" + preview.TimeCost, cost.transform, new Vector2(264, -12), new Vector2(136, 32), 22, text, TextAnchor.MiddleRight);
+
+            Label("公开标题", "任务公开信息", parent, new Vector2(580, -296), new Vector2(900, 58), 46, text, TextAnchor.MiddleLeft);
+            GameObject objectivePanel = Panel("Pixso行动目标", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), FormalUiTheme.Surface);
+            Image focus = FormalUiKit.FocusFrame(objectivePanel.transform); focus.color = cyan;
+            Icon("目标图标", FormalArtRegistry.ResourceMetricPath("risk"), objectivePanel.transform, new Vector2(26, -26), new Vector2(52, 52));
+            Label("目标", objective, objectivePanel.transform, new Vector2(92, -16), new Vector2(1160, 70), 28, text, TextAnchor.MiddleLeft);
+
+            GameObject enemy = Panel("Pixso敌情", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -508), new Vector2(632, 250), FormalUiTheme.Surface);
+            Label("标签", "敌情", enemy.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
+            Label("内容", enemies, enemy.transform, new Vector2(24, -70), new Vector2(568, 72), 28, text, TextAnchor.UpperLeft);
+            GameObject field = Panel("Pixso场地", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1240, -508), new Vector2(632, 250), FormalUiTheme.Surface);
+            Label("标签", "场地", field.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
+            Label("内容", terrain, field.transform, new Vector2(24, -70), new Vector2(568, 98), 28, text, TextAnchor.UpperLeft);
+
+            ActionButton("先不去", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(1000, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
+                () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+            ActionButton("学院整备", "调整装备与术式", parent, new Vector2(1276, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
+                () => SetOverlay(UiOverlay.Loadout), iconPath: FormalArtRegistry.NavigationPath("archive"));
+            string enterLabel = confirmOrigin ? "确认配置并出发" : "出发";
+            string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
+            GameObject start = ActionButton(enterLabel, enterReason, parent, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
+                () => { if (confirmOrigin) bootstrap.AcknowledgeFirstRunOrigin(); bootstrap.StartMapNodeCombat(node.Id); },
+                focusKey: "按钮_进入战斗", iconPath: FormalArtRegistry.NavigationPath("confirm"));
+            BindHover(start, enterLabel, confirmOrigin || !canEnter ? enterReason : "立刻前往场地。", canStart ? accent : muted);
         }
 
         private void DrawCombatActionDossier(Transform parent, RogueliteMapRun run, RogueliteMapNode node, bool current, Color accent)
@@ -1335,61 +1395,38 @@ namespace OCC.Combat.Presentation
 
         private void DrawEquipmentLoadout(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items)
         {
-            GameObject characterPanel = Panel("角色信息栏", parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(16, -96), new Vector2(450, 794), FormalUiTheme.Surface);
-            DrawLoadoutCharacter(characterPanel.transform, runtime);
+            RogueLoadoutEquipmentView view = RogueLoadoutEquipmentView.Create(parent);
+            DrawLoadoutCharacter(view.CharacterContentRoot, runtime);
 
-            GameObject equipmentPanel = Panel("装备工作区", parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(486, -96), new Vector2(700, 794), FormalUiTheme.Surface);
-            Label("装备区标题", "身体装备", equipmentPanel.transform, new Vector2(28, -18), new Vector2(360, 42), 26, cyan, TextAnchor.MiddleLeft);
-            Label("装备区说明", "拖入装备或替换\n将已装备物品拖回背包卸下", equipmentPanel.transform,
-                new Vector2(28, -56), new Vector2(640, 30), 16, muted, TextAnchor.MiddleLeft);
-            IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> slots = EquipmentSlotsForPresentation();
+            IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> slots = RogueInventoryGridSystem.EquipmentSlots;
             for (int index = 0; index < slots.Count; index++)
             {
                 OCC.Combat.Roguelite.EquipmentSlot slotType = slots[index];
                 runtime.Equipped.TryGetValue(slotType, out string instanceId);
                 EquipmentDefinition definition = runtime.DefinitionFor(instanceId);
                 bool selected = instanceId == selectedRogueInventoryId;
-                Vector2 slotPosition = new Vector2(28 + index % 3 * 214, -100 - index / 3 * 82);
-                GameObject slot;
-                if (definition == null)
-                {
-                    slot = Panel("空装备槽_" + slotType, equipmentPanel.transform, new Vector2(0, 1), new Vector2(0, 1),
-                        slotPosition, new Vector2(196, 68), Color.clear);
-                    Image transparentTarget = slot.GetComponent<Image>();
-                    Button emptyButton = slot.AddComponent<Button>(); emptyButton.targetGraphic = transparentTarget;
-                    emptyButton.onClick.AddListener(() => TryEquipSelected(runtime, slotType));
-                    FormalUiKit.ConfigureButtonFeedback(emptyButton, FormalUiButtonPalette.ForAccent(Color.clear, cyan),
-                        () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);
-                    Label("槽位名称", EquipmentSlotLabel(slotType), slot.transform, new Vector2(8, -18), new Vector2(180, 28),
-                        16, muted, TextAnchor.MiddleLeft);
-                    Line(slot.transform, new Vector2(8, -54), new Vector2(180, 2), FormalUiTheme.WithAlpha(muted, .28f));
-                }
-                else
-                {
-                    slot = ActionButton(EquipmentSlotLabel(slotType), string.Empty,
-                        equipmentPanel.transform, slotPosition, new Vector2(196, 68), selected ? amber : cyan, true,
-                        () => { selectedRogueInventoryId = instanceId; Invalidate(false); },
-                        iconPath: FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
-                    ConstrainCompactButtonText(slot);
-                }
-                loadoutEquipmentSlotRects[slotType] = slot.GetComponent<RectTransform>();
-                loadoutEquipmentDropOverlays[slotType] = CreateEquipmentDropOverlay(slot.transform);
+                RogueLoadoutSlotView slotView = view.EquipmentSlots[index];
+                GameObject slot = BindInventorySlot(slotView, selected ? amber : definition == null ? muted : cyan, true,
+                    definition == null ? (Action)(() => TryEquipSelected(runtime, slotType)) :
+                    () => { selectedRogueInventoryId = instanceId; Invalidate(false); },
+                    definition == null ? EquipmentIconPath(slotType) : FormalArtRegistry.EquipmentIconPath(definition.DefinitionId),
+                    definition == null ? 72f : 120f);
+                loadoutEquipmentSlotRects[slotType] = slotView.Root;
+                loadoutEquipmentDropOverlays[slotType] = slotView.DropOverlay;
+                RogueLoadoutDragHandler drag = slotView.EnsureDragHandler();
                 if (!string.IsNullOrEmpty(instanceId))
                 {
-                    if (slot.GetComponent<CanvasGroup>() == null) slot.AddComponent<CanvasGroup>();
-                    RogueLoadoutDragHandler drag = slot.AddComponent<RogueLoadoutDragHandler>();
                     drag.Configure(eventData => BeginEquippedLoadoutDrag(slotType, instanceId, slot, eventData), UpdateLoadoutDrag,
                         EndLoadoutDrag, RotateLoadoutDragPreview);
                 }
+                else drag.Configure(null, null, null, null);
                 BindContentHover(slot, "装备", definition == null ? EquipmentSlotLabel(slotType) : definition.DisplayName,
                     definition == null ? "选择背包中的匹配装备。" : RogueEquipmentDetailBody(runtime, instanceId, false), selected ? amber : cyan,
                     definition == null ? EquipmentIconPath(slotType) : FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
             }
 
-            DrawLoadoutQuickbar(equipmentPanel.transform, runtime);
-            DrawLoadoutBackpack(parent, runtime, items, new Vector2(1206, -96), new Vector2(650, 794));
+            BindLoadoutQuickbar(view, runtime);
+            BindEquipmentBackpack(view, runtime, items);
         }
 
         private void DrawLoadoutCharacter(Transform parent, RogueEquipmentRuntime runtime)
@@ -1425,31 +1462,33 @@ namespace OCC.Combat.Presentation
             FormalUiKit.ConfigureParagraph(summary);
         }
 
-        private void DrawLoadoutQuickbar(Transform parent, RogueEquipmentRuntime runtime)
+        private void BindLoadoutQuickbar(RogueLoadoutEquipmentView view, RogueEquipmentRuntime runtime)
         {
-            Label("快捷栏标题", "战斗快捷栏", parent, new Vector2(28, -372), new Vector2(320, 38), 24, safe, TextAnchor.MiddleLeft);
-            Label("快捷栏说明", "战斗中按 1–4 使用；点击空位可关联当前选中的战术道具", parent,
-                new Vector2(28, -408), new Vector2(640, 28), 15, muted, TextAnchor.MiddleLeft);
             for (int index = 0; index < RogueRuntimeConstants.ItemQuickbarSize; index++)
             {
                 int slotIndex = index;
                 string id = runtime.ItemQuickbarInstanceIds[index];
                 RogueTacticalItemInstance item = runtime.TacticalItem(id);
                 TacticalItemDefinition definition = runtime.TacticalDefinitionFor(id);
-                ActionButton((index + 1) + "  " + (definition == null ? "空" : definition.DisplayName),
-                    item == null ? string.Empty : PlayerFacingCopy.RemainingAndTotal(item.ChargesCurrent, item.ChargesMaximum, " 次"), parent,
-                    new Vector2(28 + index % 2 * 326, -452 - index / 2 * 92), new Vector2(310, 76), safe, true,
+                RogueLoadoutSlotView slotView = view.TacticalSlots[index];
+                GameObject quickSlot = BindInventorySlot(slotView, item == null ? muted : safe, true,
                     () =>
                     {
                         if (runtime.TacticalItem(selectedRogueInventoryId) != null) bootstrap.AssignRogueQuickbar(selectedRogueInventoryId, slotIndex);
                         else if (item != null) { selectedRogueInventoryId = id; Invalidate(false); }
-                    }, iconPath: item == null ? FormalArtRegistry.ItemPath("category_container") : FormalArtRegistry.ItemPath(item.DefinitionId));
+                    }, item == null ? FormalArtRegistry.ItemPath("category_container") : FormalArtRegistry.ItemPath(item.DefinitionId), 80f);
+                slotView.SlotNumber.text = (index + 1).ToString();
+                slotView.SlotNumber.color = FormalUiTheme.ReadableLabelColor(item == null ? muted : text);
+                slotView.Quantity.gameObject.SetActive(item != null);
+                slotView.Quantity.text = item == null ? string.Empty : item.ChargesCurrent.ToString();
+                slotView.Quantity.color = FormalUiTheme.ReadableLabelColor(safe);
+                if (item != null)
+                    BindContentHover(quickSlot, "战术道具", definition.DisplayName, RogueInventoryDetailBody(runtime, id, false), safe,
+                        FormalArtRegistry.ItemPath(item.DefinitionId));
             }
-            Label("整备提示", loadoutInteractionMessage, parent, new Vector2(28, -646), new Vector2(640, 30), 15, muted, TextAnchor.MiddleLeft);
+            view.TacticalStatus.text = loadoutInteractionMessage;
+            view.TacticalStatus.color = FormalUiTheme.ReadableLabelColor(muted);
         }
-
-        private static IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> EquipmentSlotsForPresentation()
-            => EquipmentSlotRules.ActiveSlots;
 
         private static void ConstrainCompactButtonText(GameObject button)
         {
@@ -1457,6 +1496,34 @@ namespace OCC.Combat.Presentation
             if (label == null) return;
             label.horizontalOverflow = HorizontalWrapMode.Wrap;
             label.verticalOverflow = VerticalWrapMode.Truncate;
+        }
+
+        private void BindEquipmentBackpack(RogueLoadoutEquipmentView view, RogueEquipmentRuntime runtime,
+            IReadOnlyList<RogueInventoryItemPresentation> items)
+        {
+            loadoutGridRect = view.BackpackGrid;
+            foreach (RogueInventoryItemPresentation item in items)
+            {
+                bool selected = item.InstanceId == selectedRogueInventoryId;
+                RogueLoadoutGridPoint screenPosition = RogueLoadoutScreenGridPresentation.FromRuntime(item.X, item.Y);
+                RogueLoadoutGridPoint screenFootprint = RogueLoadoutScreenGridPresentation.FootprintFromRuntime(
+                    new RogueLoadoutGridPoint(item.Width, item.Height));
+                GameObject itemButton = InventoryGridButton(item, view.BackpackItemsRoot,
+                    new Vector2(screenPosition.X * LoadoutCellSize, -screenPosition.Y * LoadoutCellSize),
+                    new Vector2(screenFootprint.X * LoadoutCellSize - 3, screenFootprint.Y * LoadoutCellSize - 3),
+                    selected ? amber : item.IsEquipment ? cyan : safe,
+                    () => { selectedRogueInventoryId = item.InstanceId; Invalidate(false); });
+                RogueLoadoutDragHandler drag = itemButton.AddComponent<RogueLoadoutDragHandler>();
+                drag.Configure(eventData => BeginLoadoutDrag(item, itemButton, eventData), UpdateLoadoutDrag,
+                    EndLoadoutDrag, RotateLoadoutDragPreview);
+                BindContentHover(itemButton, item.IsEquipment ? "装备" : "战术道具", item.DisplayName,
+                    RogueInventoryDetailBody(runtime, item.InstanceId, false), selected ? amber : item.IsEquipment ? cyan : safe,
+                    RogueInventoryIconPath(item));
+            }
+            if (items.Count == 0)
+                FormalUiEffects.AddEmptyIllustration(view.BackpackPanel, "empty_inventory_pouch", new Vector2(324, -252), 128f);
+            view.BackpackStatus.text = loadoutInteractionMessage;
+            view.BackpackStatus.color = FormalUiTheme.ReadableLabelColor(muted);
         }
 
         private void DrawLoadoutBackpack(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Vector2 position, Vector2 size)
@@ -2405,26 +2472,30 @@ namespace OCC.Combat.Presentation
         private void BackpackInsetCell(Transform parent, int x, int y)
         {
             float size = LoadoutCellSize - 3;
-            GameObject cell = Panel("背包格_" + x + "_" + y, parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(x * LoadoutCellSize, -y * LoadoutCellSize), new Vector2(size, size), FormalUiTheme.Surface);
-            Image background = cell.GetComponent<Image>(); background.raycastTarget = false;
-            Line(cell.transform, Vector2.zero, new Vector2(size, 3), FormalUiTheme.Ink);
-            Line(cell.transform, Vector2.zero, new Vector2(3, size), FormalUiTheme.Ink);
-            Line(cell.transform, new Vector2(0, -size + 2), new Vector2(size, 2), FormalUiTheme.WithAlpha(muted, .34f));
-            Line(cell.transform, new Vector2(size - 2, 0), new Vector2(2, size), FormalUiTheme.WithAlpha(muted, .34f));
+            GameObject cell = Create("背包格_" + x + "_" + y, parent);
+            RectTransform rect = cell.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1);
+            rect.anchoredPosition = new Vector2(x * LoadoutCellSize, -y * LoadoutCellSize); rect.sizeDelta = new Vector2(size, size);
+            Image background = cell.AddComponent<Image>(); background.color = FormalUiTheme.InventorySlotSurface; background.raycastTarget = false;
+            Line(cell.transform, Vector2.zero, new Vector2(size, 3), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .82f));
+            Line(cell.transform, new Vector2(size - 3, 0), new Vector2(3, size), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .62f));
+            Line(cell.transform, new Vector2(0, -size + 3), new Vector2(size, 3), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .62f));
         }
 
         private GameObject InventoryGridButton(RogueInventoryItemPresentation item, Transform parent, Vector2 position, Vector2 size, Color accent, Action action)
         {
-            GameObject result = Panel("背包物品_" + item.InstanceId, parent, new Vector2(0, 1), new Vector2(0, 1), position, size, FormalUiTheme.SurfaceRaised);
+            GameObject result = Create("背包物品_" + item.InstanceId, parent);
+            RectTransform rect = result.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1);
+            rect.anchoredPosition = position; rect.sizeDelta = size;
             result.AddComponent<CanvasGroup>();
-            Image background = result.GetComponent<Image>(); Button button = result.AddComponent<Button>(); button.targetGraphic = background;
+            Image background = result.AddComponent<Image>(); background.color = FormalUiTheme.SurfaceRaised;
+            Button button = result.AddComponent<Button>(); button.targetGraphic = background;
             if (action != null) button.onClick.AddListener(() => action());
-            Shadow shadow = result.AddComponent<Shadow>(); shadow.effectColor = FormalUiTheme.WithAlpha(Color.black, .72f); shadow.effectDistance = new Vector2(3, -3); shadow.useGraphicAlpha = true;
-            Line(result.transform, Vector2.zero, new Vector2(size.x, 3), FormalUiTheme.WithAlpha(accent, .82f));
+            Line(result.transform, Vector2.zero, new Vector2(size.x, 3), FormalUiTheme.WithAlpha(accent, .90f));
             Line(result.transform, Vector2.zero, new Vector2(3, size.y), accent);
-            Line(result.transform, new Vector2(0, -size.y + 2), new Vector2(size.x, 2), FormalUiTheme.Ink);
-            Line(result.transform, new Vector2(size.x - 2, 0), new Vector2(2, size.y), FormalUiTheme.Ink);
+            Line(result.transform, new Vector2(0, -size.y + 3), new Vector2(size.x, 3), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f));
+            Line(result.transform, new Vector2(size.x - 3, 0), new Vector2(3, size.y), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f));
             Sprite sprite = Resources.Load<Sprite>(RogueInventoryIconPath(item));
             GameObject iconObject = Create("图标", result.transform); RectTransform iconRect = iconObject.AddComponent<RectTransform>();
             iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(.5f, .5f); iconRect.anchoredPosition = Vector2.zero;
@@ -2437,6 +2508,41 @@ namespace OCC.Combat.Presentation
             FormalUiKit.ConfigureButtonFeedback(button, FormalUiButtonPalette.ForAccent(background.color, accent),
                 () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback, string.Empty);
             return result;
+        }
+
+        // The prefab owns slot hierarchy and serialized references. Runtime only binds the current
+        // item, state palette and interaction callbacks.
+        private GameObject BindInventorySlot(RogueLoadoutSlotView slotView, Color accent, bool interactable,
+            Action action, string iconPath, float requestedIconSize)
+        {
+            Sprite sprite = Resources.Load<Sprite>(iconPath);
+            if (sprite == null) throw new KeyNotFoundException("Missing inventory slot icon: " + iconPath);
+            RectTransform rect = slotView.Root;
+            slotView.Background.color = accent == amber ? FormalUiTheme.InventorySlotSelected : FormalUiTheme.InventorySlotSurface;
+            slotView.TopAccent.color = FormalUiTheme.WithAlpha(accent, .90f);
+            slotView.LeftAccent.color = accent;
+            slotView.BottomRule.color = FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f);
+            slotView.RightRule.color = FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f);
+            slotView.Icon.sprite = sprite;
+            slotView.Icon.preserveAspect = true;
+            slotView.Icon.raycastTarget = false;
+            int iconSize = FormalUiKit.IntegerSpriteSize(sprite, Mathf.Min(requestedIconSize, Mathf.Min(rect.rect.width, rect.rect.height) - 16f));
+            slotView.Icon.rectTransform.sizeDelta = Vector2.one * iconSize;
+            slotView.Icon.rectTransform.localEulerAngles = Vector3.zero;
+            slotView.CanvasGroup.alpha = 1f;
+            slotView.CanvasGroup.blocksRaycasts = true;
+            slotView.Button.onClick.RemoveAllListeners();
+            slotView.Button.interactable = interactable;
+            if (action != null) slotView.Button.onClick.AddListener(() => action());
+            if (slotView.DropOverlay != null)
+            {
+                slotView.DropOverlay.color = Color.clear;
+                slotView.DropOverlay.gameObject.SetActive(false);
+            }
+            FormalUiKit.ConfigureButtonFeedback(slotView.Button, FormalUiButtonPalette.ForAccent(slotView.Background.color, accent),
+                () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback, string.Empty);
+            if (!focusTargets.ContainsKey(rect.gameObject.name)) focusTargets.Add(rect.gameObject.name, rect.gameObject);
+            return rect.gameObject;
         }
 
         private static void AddActionIcon(Transform parent, string iconPath, float buttonHeight)

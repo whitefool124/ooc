@@ -187,6 +187,7 @@ namespace OCC.Combat.Presentation
         private GameObject renderRoot;
         private RenderTexture target;
         private Camera mapCamera;
+        private bool usesSceneAnchor;
         private readonly List<Material> materials = new List<Material>();
 
         public Texture Output => target;
@@ -206,7 +207,9 @@ namespace OCC.Combat.Presentation
                 autoGenerateMips = false
             };
             target.Create();
-            renderRoot = new GameObject("学院地块地图_运行时");
+            Transform anchoredRoot = PresentationSceneAnchors.TryAcquireAcademyMapRoot();
+            usesSceneAnchor = anchoredRoot != null;
+            renderRoot = usesSceneAnchor ? anchoredRoot.gameObject : new GameObject("学院地块地图_运行时");
             renderRoot.layer = MapLayer;
             BuildBoard(renderRoot.transform);
             CreateCamera(renderRoot.transform);
@@ -375,10 +378,12 @@ namespace OCC.Combat.Presentation
 
         private void CreateCamera(Transform root)
         {
-            GameObject cameraObject = new GameObject("学院地块地图相机");
+            Transform existing = root.Find("学院地块地图相机");
+            GameObject cameraObject = existing == null ? new GameObject("学院地块地图相机") : existing.gameObject;
+            if (existing == null) cameraObject.transform.SetParent(root, false);
             cameraObject.layer = MapLayer;
-            cameraObject.transform.SetParent(root, false);
-            mapCamera = cameraObject.AddComponent<Camera>();
+            mapCamera = cameraObject.GetComponent<Camera>();
+            if (mapCamera == null) mapCamera = cameraObject.AddComponent<Camera>();
             mapCamera.orthographic = true;
             mapCamera.orthographicSize = AcademyMap3DLayout.CameraOrthographicSize;
             mapCamera.clearFlags = CameraClearFlags.SolidColor;
@@ -444,7 +449,19 @@ namespace OCC.Combat.Presentation
 
         private void Release()
         {
-            if (renderRoot != null) Destroy(renderRoot);
+            if (renderRoot != null)
+            {
+                if (usesSceneAnchor)
+                {
+                    for (int i = renderRoot.transform.childCount - 1; i >= 0; i--)
+                    {
+                        Transform child = renderRoot.transform.GetChild(i);
+                        if (child.name != "学院地块地图相机") Destroy(child.gameObject);
+                    }
+                    renderRoot.SetActive(false);
+                }
+                else Destroy(renderRoot);
+            }
             if (target != null)
             {
                 target.Release();
@@ -456,6 +473,7 @@ namespace OCC.Combat.Presentation
             renderRoot = null;
             target = null;
             mapCamera = null;
+            usesSceneAnchor = false;
         }
     }
 }

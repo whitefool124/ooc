@@ -294,6 +294,53 @@ namespace OCC.Combat.Roguelite
         }
     }
 
+    // Shared visual contract for every roguelite inventory entry point.  Runtime placement,
+    // map preparation and combat-time inspection all use these exact cells and slot order.
+    public static class RogueInventoryGridSystem
+    {
+        public const int BackpackColumns = RogueRuntimeConstants.BackpackWidth;
+        public const int BackpackRows = RogueRuntimeConstants.BackpackHeight;
+        public const int EquipmentColumns = 3;
+        public const int EquipmentRows = 3;
+        public static readonly IReadOnlyList<EquipmentSlot> EquipmentSlots = new[]
+        {
+            EquipmentSlot.Weapon, EquipmentSlot.Head, EquipmentSlot.CastingUnit,
+            EquipmentSlot.Ring1, EquipmentSlot.Chest, EquipmentSlot.Ring2,
+            EquipmentSlot.Necklace, EquipmentSlot.Backpack, EquipmentSlot.Feet
+        };
+
+        public static RogueLoadoutGridPoint EquipmentCell(EquipmentSlot slot)
+        {
+            int index = Array.IndexOf(EquipmentSlots.ToArray(), slot);
+            return index < 0 ? new RogueLoadoutGridPoint(-1, -1)
+                : new RogueLoadoutGridPoint(index % EquipmentColumns, index / EquipmentColumns);
+        }
+
+        // Loot is a second owner of the same backpack cells, not a separate list-style
+        // presentation.  This keeps its temporary layout honest without persisting it.
+        public static bool TryFindFirstFit(bool[,] occupied, int width, int height, out RogueLoadoutGridPoint origin)
+        {
+            origin = new RogueLoadoutGridPoint(-1, -1);
+            if (occupied == null || width < 1 || height < 1) return false;
+            int columns = occupied.GetLength(0);
+            int rows = occupied.GetLength(1);
+            for (int y = 0; y <= rows - height; y++)
+            for (int x = 0; x <= columns - width; x++)
+            {
+                bool clear = true;
+                for (int fy = 0; fy < height && clear; fy++)
+                for (int fx = 0; fx < width; fx++)
+                    if (occupied[x + fx, y + fy]) { clear = false; break; }
+                if (!clear) continue;
+                for (int fy = 0; fy < height; fy++)
+                for (int fx = 0; fx < width; fx++) occupied[x + fx, y + fy] = true;
+                origin = new RogueLoadoutGridPoint(x, y);
+                return true;
+            }
+            return false;
+        }
+    }
+
     public readonly struct RogueLoadoutGridPoint : IEquatable<RogueLoadoutGridPoint>
     {
         public int X { get; }
@@ -322,8 +369,8 @@ namespace OCC.Combat.Roguelite
     // display and save coordinates aligned makes the tall working grid legible.
     public static class RogueLoadoutScreenGridPresentation
     {
-        public const int Columns = RogueRuntimeConstants.BackpackWidth;
-        public const int Rows = RogueRuntimeConstants.BackpackHeight;
+        public const int Columns = RogueInventoryGridSystem.BackpackColumns;
+        public const int Rows = RogueInventoryGridSystem.BackpackRows;
 
         public static RogueLoadoutGridPoint FromRuntime(int x, int y) => new RogueLoadoutGridPoint(x, y);
         public static RogueLoadoutGridPoint ToRuntime(int screenX, int screenY) => new RogueLoadoutGridPoint(screenX, screenY);
