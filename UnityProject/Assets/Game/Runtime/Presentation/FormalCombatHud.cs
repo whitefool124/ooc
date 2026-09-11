@@ -1447,7 +1447,8 @@ namespace OCC.Combat.Presentation
                 rect.anchoredPosition = target;
                 return;
             }
-            rect.DOAnchorPos(target, Mathf.Max(.08f, .32f * motion.Intensity))
+            DOTween.To(() => rect.anchoredPosition, value => rect.anchoredPosition = value,
+                    target, Mathf.Max(.08f, .32f * motion.Intensity))
                 .SetEase(Ease.InOutCubic).SetUpdate(true).SetTarget(rect);
         }
 
