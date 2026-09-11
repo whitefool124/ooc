@@ -942,6 +942,7 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
             bool identified = state != RogueliteMapNodeVisualState.Unknown;
+            bool dimmed = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown;
             bool selected = node.Id == selectedNodeId;
             Color accent = state == RogueliteMapNodeVisualState.Current || state == RogueliteMapNodeVisualState.Available ? cyan :
                 state == RogueliteMapNodeVisualState.Cleared ? safe : state == RogueliteMapNodeVisualState.Locked ? danger : state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Visited ? amber : muted;
@@ -957,7 +958,7 @@ namespace OCC.Combat.Presentation
             }, focusKey);
             if (identified)
             {
-                AddCompactNodeIcon(buttonObject.transform, node.Type);
+                AddCompactNodeIcon(buttonObject.transform, node.Type, dimmed ? .56f : 1f);
                 BindHover(buttonObject, RogueliteMapVisualPresentation.StateLabel(state) + " · " + node.DisplayName,
                     TypeLabel(node.Type) + time + "\n" + MapStateTooltip(state) + "\n" + node.Summary, accent);
             }
@@ -1012,7 +1013,7 @@ namespace OCC.Combat.Presentation
             image.raycastTarget = false;
         }
 
-        private static void AddCompactNodeIcon(Transform parent, RogueliteMapNodeType type)
+        private static void AddCompactNodeIcon(Transform parent, RogueliteMapNodeType type, float opacity)
         {
             string runtimeId = type.ToString().ToLowerInvariant();
             Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.MapNodeTypeIconPath(runtimeId));
@@ -1022,7 +1023,7 @@ namespace OCC.Combat.Presentation
             iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(.5f, .5f);
             float size = type == RogueliteMapNodeType.Finale ? 96f : type == RogueliteMapNodeType.Elite ? 80f : 64f;
             iconRect.anchoredPosition = Vector2.zero; iconRect.sizeDelta = new Vector2(size, size);
-            Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.raycastTarget = false;
+            Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.color = FormalUiTheme.WithAlpha(Color.white, opacity); icon.raycastTarget = false;
         }
 
         private static void AddMapNodeStateBadge(Transform parent, RogueliteMapNodeType type, RogueliteMapNodeVisualState state, Color accent)
@@ -2617,7 +2618,8 @@ namespace OCC.Combat.Presentation
         {
             float size = MapNodeDisplaySize(type);
             GameObject result = Panel(focusKey, parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position, new Vector2(size, size), Color.white);
-            Image image = result.GetComponent<Image>(); image.sprite = Resources.Load<Sprite>(FormalArtRegistry.LargeMapNodeMarkerPath(state.ToString())); image.type = Image.Type.Simple; image.color = Color.white;
+            float opacity = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown ? .56f : 1f;
+            Image image = result.GetComponent<Image>(); image.sprite = Resources.Load<Sprite>(FormalArtRegistry.LargeMapNodeMarkerPath(state.ToString())); image.type = Image.Type.Simple; image.color = FormalUiTheme.WithAlpha(Color.white, opacity);
             Button button = result.AddComponent<Button>(); button.targetGraphic = image; button.transition = Selectable.Transition.ColorTint;
             ColorBlock colors = button.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1f, 1f, 1f, .88f); colors.pressedColor = FormalUiTheme.WithAlpha(accent, .82f); colors.selectedColor = Color.white; colors.fadeDuration = .06f; button.colors = colors;
             if (action != null) button.onClick.AddListener(() => action());
