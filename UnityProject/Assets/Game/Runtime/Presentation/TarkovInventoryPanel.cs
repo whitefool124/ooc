@@ -130,7 +130,7 @@ namespace OCC.Combat.Presentation
             GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), rogue ? "B 键或 Esc 关闭　←↑↓→ 选择　R 旋转　1–4 关联　拖拽整理" : "B 键或 Esc 关闭　方向键选择　R 旋转　1–4 关联快捷栏　F 搜索或拿取　鼠标拖拽"); GUI.color = Color.white;
             if (ClickButton(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
 
-            if (rogue) { DrawRogueInventory(state); DrawSemanticTooltip(); return; }
+            if (rogue) { DrawRogueLootInventory(state); DrawSemanticTooltip(); return; }
 
             DrawInventory(state, new Rect(100, 160, 600, 720));
             DrawDetailsAndSearch(state, new Rect(730, 160, 500, 720));
@@ -138,6 +138,18 @@ namespace OCC.Combat.Presentation
             DrawQuickbar(state, new Rect(100, 900, 1710, 96));
             DrawInventoryOverlay(state);
             DrawSemanticTooltip();
+        }
+
+        // The battle loot screen follows the Pixso three-column contract: container, loadout, backpack.
+        private void DrawRogueLootInventory(CombatState state)
+        {
+            RogueEquipmentRuntime runtime = state.RogueEquipment;
+            IReadOnlyList<RogueInventoryItemPresentation> items = RogueInventoryPresentation.Build(runtime);
+            if (string.IsNullOrEmpty(selectedId) || runtime.EquipmentItem(selectedId) == null && runtime.TacticalItem(selectedId) == null)
+                selectedId = items.FirstOrDefault()?.InstanceId ?? runtime.Equipped.Values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
+            DrawLoot(state, new Rect(100, 160, 600, 720));
+            DrawRogueEquipmentSlots(runtime, new Rect(730, 160, 500, 720));
+            DrawRogueBackpack(runtime, items, new Rect(1260, 160, 550, 720));
         }
 
         private bool TryOpen()
@@ -560,7 +572,7 @@ namespace OCC.Combat.Presentation
             LootSourceState visualLoot = state.LootSource;
             string visualLootIcon = visualLoot == null || visualLoot.IsComplete ? "loot_empty" : visualLoot.State == LootSearchState.Unsearched ? "loot_unknown" : "loot_searching";
             DrawIcon(new Rect(rect.x + rect.width - 44, rect.y + 7, 28, 28), "Art/FormalItemIcons32/" + visualLootIcon);
-            Box(rect, "战利品"); LootSourceState loot = state.LootSource; float x = rect.x + 22; float y = rect.y + 58;
+            Box(rect, "检修备件箱"); LootSourceState loot = state.LootSource; float x = rect.x + 22; float y = rect.y + 58;
             if (loot == null) { DrawIcon(new Rect(x, y, 64, 64), "Art/FormalItemIcons32/loot_empty"); GUI.Label(new Rect(x + 82, y + 18, 400, 40), "当前战场没有可搜索容器。"); return; }
             GUI.Label(new Rect(x, y, 500, 62), "状态：" + StateName(loot.State) + "\n未知物品：" + loot.HiddenCount + "　已揭示可取：" + loot.RevealedItems.Count);
             UnitState hero = state.GetUnit("hero"); bool adjacent = hero != null && Math.Abs(hero.Position.X - loot.Position.X) + Math.Abs(hero.Position.Y - loot.Position.Y) == 1;
@@ -582,7 +594,9 @@ namespace OCC.Combat.Presentation
             {
                 ItemDefinition d = ItemCatalog.Get(item.DefinitionId); Rect lootRow = new Rect(x, y + row * 66, 500, 56); DrawIcon(lootRow, "Art/FormalUI32/slot", false); Texture2D icon = Icon(d.IconPath); if (icon != null) GUI.DrawTexture(new Rect(x + 5, y + row * 66 + 4, 48, 48), icon, ScaleMode.ScaleToFit, true);
                 GUI.Label(new Rect(x + 60, y + row * 66, 260, 48), d.DisplayName + "\n" + d.Width + "×" + d.Height + (item.MaximumUses > 0 ? "　剩余 " + item.RemainingUses + " 次" : string.Empty));
-                UiOperationAvailability availability = InventoryInteractionPresentation.LootTakeAvailability(state.ItemInventory, item);
+                UiOperationAvailability availability = state.RogueEquipment != null
+                    ? new UiOperationAvailability(true, "拿取", "将放入背包")
+                    : InventoryInteractionPresentation.LootTakeAvailability(state.ItemInventory, item);
                 GUI.enabled = availability.CanExecute;
                 if (IconButton(new Rect(x + 340, y + row * 66 + 4, 150, 48), "Art/FormalItemIcons32/inventory_autoplace", availability.Status)) bootstrap.TakeCurrentLoot(item.InstanceId);
                 GUI.enabled = true;
