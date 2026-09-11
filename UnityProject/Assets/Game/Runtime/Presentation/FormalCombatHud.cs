@@ -1340,6 +1340,14 @@ namespace OCC.Combat.Presentation
             if (turnBannerGroup == null || state == null || state.TurnSequence <= 0 || state.TurnSequence == displayedTurnSequence) return;
             displayedTurnSequence = state.TurnSequence;
             UnitState actor = state.GetUnit(state.ActiveUnitId);
+            // Enemy intent has its own top-of-screen presentation. Showing both it and the
+            // generic turn notice duplicates the same event and produces two competing bars.
+            if (actor != null && !actor.IsHero)
+            {
+                turnBannerGroup.DOKill();
+                turnBannerGroup.alpha = 0f;
+                return;
+            }
             turnBannerLabel.text = "第 " + state.TurnSequence + " 回合 · " + (actor?.DisplayName ?? "未知单位") + "的轮次";
             turnBanner.transform.SetAsLastSibling();
             turnBannerGroup.DOKill();

@@ -37,6 +37,8 @@ namespace OCC.Combat.Presentation
         private RectTransform activeTurnMarker;
         private readonly List<Image> activeTurnMarkerParts = new List<Image>();
         private string activeTurnMarkerUnitId;
+        private Vector2 activeTurnMarkerTarget;
+        private bool hasActiveTurnMarkerTarget;
         public int CrowdedIntentCount { get; private set; }
         public int OccludedUnitCount { get; private set; }
         public int OcclusionPixelCount { get; private set; }
@@ -646,7 +648,12 @@ namespace OCC.Combat.Presentation
             }
             CellView actor = visibleUnits.FirstOrDefault(cell => cell.PresentedUnitId == host.CurrentState?.ActiveUnitId);
             activeTurnMarker.gameObject.SetActive(actor != null);
-            if (actor == null) return;
+            if (actor == null)
+            {
+                activeTurnMarkerUnitId = null;
+                hasActiveTurnMarkerTarget = false;
+                return;
+            }
             float scale = host.BattlefieldViewport.CellSize / 64f;
             Rect frame = CombatIntentLayout.ActiveTurnMarker(actor.VisualFoot, host.BattlefieldViewport.CellSize);
             activeTurnMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
@@ -655,44 +662,52 @@ namespace OCC.Combat.Presentation
             if (unitLayerRect != null) activeTurnMarker.SetSiblingIndex(unitLayerRect.GetSiblingIndex());
             Vector2 target = new Vector2(frame.x, -frame.y);
             bool actorChanged = !string.IsNullOrEmpty(activeTurnMarkerUnitId) && activeTurnMarkerUnitId != actor.PresentedUnitId;
-            activeTurnMarker.DOKill();
-            if (actorChanged && activeTurnMarker.gameObject.activeInHierarchy)
+            bool targetChanged = !hasActiveTurnMarkerTarget || activeTurnMarkerTarget != target;
+            if (actorChanged && targetChanged && activeTurnMarker.gameObject.activeInHierarchy)
+            {
+                activeTurnMarker.DOKill();
                 DOTween.To(() => activeTurnMarker.anchoredPosition,
                     value => activeTurnMarker.anchoredPosition = value, target, .32f)
                     .SetEase(Ease.InOutCubic).SetUpdate(true).SetTarget(activeTurnMarker);
-            else
+            }
+            else if (targetChanged)
+            {
+                activeTurnMarker.DOKill();
                 activeTurnMarker.anchoredPosition = target;
+            }
             activeTurnMarkerUnitId = actor.PresentedUnitId;
+            activeTurnMarkerTarget = target;
+            hasActiveTurnMarkerTarget = true;
         }
 
         private void BuildActiveTurnMarker()
         {
             activeTurnMarker.anchorMin = activeTurnMarker.anchorMax = activeTurnMarker.pivot = new Vector2(0f, 1f);
             Color black = new Color(.015f, .018f, .018f, .94f);
-            Color white = FormalUiTheme.OnInk;
-            AddCorner(0, 14, false, false, black, white);
-            AddCorner(72, 14, true, false, black, white);
-            AddCorner(0, 86, false, true, black, white);
-            AddCorner(72, 86, true, true, black, white);
+            Color signal = FormalUiTheme.Cyan;
+            AddCorner(0, 14, false, false, black, signal);
+            AddCorner(72, 14, true, false, black, signal);
+            AddCorner(0, 86, false, true, black, signal);
+            AddCorner(72, 86, true, true, black, signal);
             AddMarkerPart("指针黑_0", new Rect(28, 0, 16, 4), black);
             AddMarkerPart("指针黑_1", new Rect(30, 4, 12, 4), black);
             AddMarkerPart("指针黑_2", new Rect(32, 8, 8, 4), black);
             AddMarkerPart("指针黑_3", new Rect(34, 12, 4, 2), black);
-            AddMarkerPart("指针白_0", new Rect(30, 1, 12, 2), white);
-            AddMarkerPart("指针白_1", new Rect(32, 5, 8, 2), white);
-            AddMarkerPart("指针白_2", new Rect(34, 9, 4, 2), white);
+            AddMarkerPart("指针青_0", new Rect(30, 1, 12, 2), signal);
+            AddMarkerPart("指针青_1", new Rect(32, 5, 8, 2), signal);
+            AddMarkerPart("指针青_2", new Rect(34, 9, 4, 2), signal);
         }
 
-        private void AddCorner(float x, float y, bool right, bool bottom, Color black, Color white)
+        private void AddCorner(float x, float y, bool right, bool bottom, Color black, Color signal)
         {
-            float horizontalX = right ? x - 20 : x;
-            float verticalX = right ? x - 6 : x;
-            float horizontalY = bottom ? y - 6 : y;
-            float verticalY = bottom ? y - 20 : y;
-            AddMarkerPart("角框黑横", new Rect(horizontalX, horizontalY, 20, 6), black);
-            AddMarkerPart("角框黑竖", new Rect(verticalX, verticalY, 6, 20), black);
-            AddMarkerPart("角框白横", new Rect(horizontalX + (right ? 0 : 2), horizontalY + 2, 18, 2), white);
-            AddMarkerPart("角框白竖", new Rect(verticalX + 2, verticalY + (bottom ? 0 : 2), 2, 18), white);
+            float horizontalX = right ? x - 24 : x;
+            float verticalX = right ? x - 8 : x;
+            float horizontalY = bottom ? y - 8 : y;
+            float verticalY = bottom ? y - 24 : y;
+            AddMarkerPart("角框黑横", new Rect(horizontalX, horizontalY, 24, 8), black);
+            AddMarkerPart("角框黑竖", new Rect(verticalX, verticalY, 8, 24), black);
+            AddMarkerPart("角框青横", new Rect(horizontalX + (right ? 0 : 4), horizontalY + 3, 20, 3), signal);
+            AddMarkerPart("角框青竖", new Rect(verticalX + 3, verticalY + (bottom ? 0 : 4), 3, 20), signal);
         }
 
         private void AddMarkerPart(string name, Rect bounds, Color color)
