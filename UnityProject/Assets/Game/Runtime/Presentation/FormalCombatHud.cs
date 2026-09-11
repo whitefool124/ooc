@@ -61,11 +61,13 @@ namespace OCC.Combat.Presentation
         private readonly Image[] timelineCurrentEndpoint = new Image[5];
         private readonly Image[] timelinePreviewEndpoint = new Image[5];
         private readonly Image[] timelineOrderArrows = new Image[5];
-        private readonly string[] timelineUnitIds = new string[5];
-        private readonly float[] displayedTimelineValues = { -1f, -1f, -1f, -1f, -1f };
-        private readonly float[] displayedTimelineWidths = { -1f, -1f, -1f, -1f, -1f };
+        // Values belong to a unit, rather than to a visual row. The order can change when a
+        // turn is earned, so retaining them by row would make the most important transitions
+        // jump as the entries swap places.
+        private readonly Dictionary<string, float> displayedTimelineValues = new Dictionary<string, float>();
+        private readonly Dictionary<string, float> displayedTimelineWidths = new Dictionary<string, float>();
         private float displayedTimelineGlobal = -1f;
-        private string timelineGlobalUnitId;
+        private CombatState displayedTimelineState;
         private Image healthFill;
         private Image shieldFill;
         private Image manaFill;
@@ -118,7 +120,11 @@ namespace OCC.Combat.Presentation
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
             if (!visible || bootstrap.CurrentState == null)
             {
-                if (wasVisible) ResetCardFlips();
+                if (wasVisible)
+                {
+                    ResetCardFlips();
+                    ResetTimelineMotionState();
+                }
                 wasVisible = false;
                 hasPresentedModel = false;
                 return;
@@ -514,6 +520,11 @@ namespace OCC.Combat.Presentation
         {
             RefreshCount++;
             CombatState state = bootstrap.CurrentState;
+            if (displayedTimelineState != state)
+            {
+                ResetTimelineMotionState();
+                displayedTimelineState = state;
+            }
             RefreshTurnBanner(state);
             UnitState hero = state.GetUnit("hero");
             hero = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(hero) ?? hero;
@@ -578,7 +589,7 @@ namespace OCC.Combat.Presentation
                 timelineCurrentEndpoint[i].gameObject.SetActive(previewed);
                 timelinePreviewEndpoint[i].gameObject.SetActive(previewed);
                 timelineRetained[i].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .62f);
-                SetTimelineRowValue(i, entry, previewed ? previewWidth : currentWidth);
+                SetTimelineRowValue(i, entry, previewed ? previewValue : entry.ActionValue, previewed ? previewWidth : currentWidth);
                 SetTimelineOrderArrow(i, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
                 if (previewed)
                 {
@@ -1337,9 +1348,8 @@ namespace OCC.Combat.Presentation
 
         private void SetTimelineGlobal(CombatTurnTrackEntry? leading)
         {
-            string unitId = leading.HasValue ? leading.Value.UnitId : string.Empty;
             float target = leading.HasValue ? leading.Value.ActionValue : 0f;
-            bool direct = displayedTimelineGlobal < 0f || timelineGlobalUnitId != unitId;
+            bool direct = displayedTimelineGlobal < 0f;
             timelineGlobalFill.rectTransform.DOKill();
             timelineGlobalValue.DOKill();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
@@ -1354,9 +1364,8 @@ namespace OCC.Combat.Presentation
                 {
                     displayedTimelineGlobal = value;
                     ApplyTimelineGlobal(leading, value);
-                }, target, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineGlobalFill.rectTransform);
+                }, target, TimelineMotionDuration(displayedTimelineGlobal, target, motion)).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineGlobalFill.rectTransform);
             }
-            timelineGlobalUnitId = unitId;
         }
 
         private void ApplyTimelineGlobal(CombatTurnTrackEntry? leading, float value)
@@ -1365,32 +1374,56 @@ namespace OCC.Combat.Presentation
             timelineGlobalFill.rectTransform.anchorMax = new Vector2(Mathf.Clamp01(value / CombatActionTimeline.MaximumValue), 1f);
         }
 
-        private void SetTimelineRowValue(int index, CombatTurnTrackEntry entry, float targetWidth)
+        // The game state always retains the real action value. While an action is previewed,
+        // this method instead animates the same row toward its projected value; cancelling the
+        // preview animates it back without mutating combat state.
+        private void SetTimelineRowValue(int index, CombatTurnTrackEntry entry, float targetValue, float targetWidth)
         {
-            bool direct = displayedTimelineValues[index] < 0f || timelineUnitIds[index] != entry.UnitId;
             timelineDetails[index].DOKill();
             timelineRetained[index].rectTransform.DOKill();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
-            if (direct || motion.IsImmediate)
+            if (!displayedTimelineValues.TryGetValue(entry.UnitId, out float displayedValue) ||
+                !displayedTimelineWidths.TryGetValue(entry.UnitId, out float displayedWidth) || motion.IsImmediate)
             {
-                displayedTimelineValues[index] = entry.ActionValue;
-                displayedTimelineWidths[index] = targetWidth;
-                ApplyTimelineRow(index, entry, entry.ActionValue, targetWidth);
+                displayedTimelineValues[entry.UnitId] = targetValue;
+                displayedTimelineWidths[entry.UnitId] = targetWidth;
+                ApplyTimelineRow(index, entry, targetValue, targetWidth);
+                return;
             }
-            else
+            // A unit may have changed order since the last refresh. Paint its retained value
+            // onto the new row before starting the tween, then let the discrete result play out.
+            ApplyTimelineRow(index, entry, displayedValue, displayedWidth);
+            float duration = TimelineMotionDuration(displayedValue, targetValue, motion);
+            DOTween.To(() => displayedTimelineValues[entry.UnitId], value =>
             {
-                DOTween.To(() => displayedTimelineValues[index], value =>
-                {
-                    displayedTimelineValues[index] = value;
-                    ApplyTimelineDetail(index, entry, value);
-                }, entry.ActionValue, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineDetails[index]);
-                DOTween.To(() => displayedTimelineWidths[index], value =>
-                {
-                    displayedTimelineWidths[index] = value;
-                    timelineRetained[index].rectTransform.sizeDelta = new Vector2(value, 4f);
-                }, targetWidth, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineRetained[index].rectTransform);
+                displayedTimelineValues[entry.UnitId] = value;
+                ApplyTimelineDetail(index, entry, value);
+            }, targetValue, duration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineDetails[index]);
+            DOTween.To(() => displayedTimelineWidths[entry.UnitId], value =>
+            {
+                displayedTimelineWidths[entry.UnitId] = value;
+                timelineRetained[index].rectTransform.sizeDelta = new Vector2(value, 4f);
+            }, targetWidth, duration).SetEase(FormalUiMotionTokens.StandardEase).SetUpdate(true).SetTarget(timelineRetained[index].rectTransform);
+        }
+
+        private static float TimelineMotionDuration(float from, float to, UiMotionProfile motion)
+        {
+            float distance = Mathf.Clamp01(Mathf.Abs(to - from) / CombatActionTimeline.MaximumValue);
+            return Mathf.Lerp(motion.StandardDuration, Mathf.Max(.08f, .42f * motion.Intensity), distance);
+        }
+
+        private void ResetTimelineMotionState()
+        {
+            displayedTimelineValues.Clear();
+            displayedTimelineWidths.Clear();
+            displayedTimelineGlobal = -1f;
+            displayedTimelineState = null;
+            if (timelineGlobalFill != null) timelineGlobalFill.rectTransform.DOKill();
+            for (int i = 0; i < timelineNames.Length; i++)
+            {
+                timelineDetails[i]?.DOKill();
+                timelineRetained[i]?.rectTransform.DOKill();
             }
-            timelineUnitIds[index] = entry.UnitId;
         }
 
         private void ApplyTimelineRow(int index, CombatTurnTrackEntry entry, float value, float width)
