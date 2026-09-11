@@ -1257,7 +1257,8 @@ namespace OCC.Combat.Presentation
             else
                 DrawSpellLoadout(card.transform, dto, spells);
 
-            ActionButton("返回地图", string.Empty, card.transform, new Vector2(1518, -906), new Vector2(330, 52), cyan, true,
+            Line(card.transform, new Vector2(16, -878), new Vector2(1832, 2), FormalUiTheme.Rule);
+            ActionButton("返回地图", string.Empty, card.transform, new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
         }
 
@@ -1312,10 +1313,11 @@ namespace OCC.Combat.Presentation
                 }
                 else
                 {
-                    slot = ActionButton(EquipmentSlotLabel(slotType) + "  " + definition.DisplayName, string.Empty,
+                    slot = ActionButton(EquipmentSlotLabel(slotType), string.Empty,
                         equipmentPanel.transform, slotPosition, new Vector2(196, 68), selected ? amber : cyan, true,
                         () => { selectedRogueInventoryId = instanceId; Invalidate(false); },
                         iconPath: FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
+                    ConstrainCompactButtonText(slot);
                 }
                 loadoutEquipmentSlotRects[slotType] = slot.GetComponent<RectTransform>();
                 loadoutEquipmentDropOverlays[slotType] = CreateEquipmentDropOverlay(slot.transform);
@@ -1350,42 +1352,22 @@ namespace OCC.Combat.Presentation
             hero.preserveAspect = true; hero.raycastTarget = false;
             Label("角色称谓", "学院学员", portrait.transform, new Vector2(20, -210), new Vector2(330, 32), 20, text, TextAnchor.MiddleCenter);
 
-            MetricChip(parent, 24, -356, "生命", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentHealth, 18), FormalUiTheme.Health,
+            MetricChip(parent, 24, -356, "生命", dto.CurrentHealth + "/" + 18, FormalUiTheme.Health,
                 FormalArtRegistry.ResourceMetricPath("health"), 190);
-            MetricChip(parent, 226, -356, "魔力", PlayerFacingCopy.CurrentAndMaximum(dto.CurrentMana, RogueRuntimeConstants.MaximumPersonalMana), cyan,
+            MetricChip(parent, 226, -356, "魔力", dto.CurrentMana + "/" + RogueRuntimeConstants.MaximumPersonalMana, cyan,
                 FormalArtRegistry.ResourceMetricPath("mana"), 190);
             MetricChip(parent, 24, -428, "金币", dto.Gold.ToString(), amber, FormalArtRegistry.ResourceMetricPath("gold"), 190);
             MetricChip(parent, 226, -428, "贡献", dto.StageContribution.ToString(), safe,
                 FormalArtRegistry.ResourceMetricPath("contribution"), 190);
 
-            RogueEquipmentInstance equipment = runtime.EquipmentItem(selectedRogueInventoryId);
-            RogueTacticalItemInstance tactical = runtime.TacticalItem(selectedRogueInventoryId);
-            string selectedName = equipment != null ? runtime.DefinitionFor(equipment.InstanceId).DisplayName :
-                tactical != null ? runtime.TacticalDefinitionFor(tactical.InstanceId).DisplayName : "尚未选择物品";
-            Label("当前选择标题", "当前选择", parent, new Vector2(24, -516), new Vector2(180, 28), 17, amber, TextAnchor.MiddleLeft);
-            Label("当前选择名称", selectedName, parent, new Vector2(24, -548), new Vector2(392, 42), 23, text, TextAnchor.MiddleLeft);
-            string selectedSummary = equipment != null
-                ? "占格 " + runtime.DefinitionFor(equipment.InstanceId).Width + "×" + runtime.DefinitionFor(equipment.InstanceId).Height +
-                    "\n重量 " + runtime.DefinitionFor(equipment.InstanceId).BaseWeight + "　以太负荷 " + runtime.DefinitionFor(equipment.InstanceId).BaseAetherLoad
-                : tactical != null
-                    ? "占格 " + runtime.TacticalDefinitionFor(tactical.InstanceId).Width + "×" + runtime.TacticalDefinitionFor(tactical.InstanceId).Height +
-                        "\n剩余 " + PlayerFacingCopy.RemainingAndTotal(tactical.ChargesCurrent, tactical.ChargesMaximum, " 次")
-                    : "从背包或装备槽选择一件物品。";
-            Text summary = Label("当前选择摘要", selectedSummary, parent, new Vector2(24, -594), new Vector2(392, 66), 15, muted, TextAnchor.UpperLeft);
+            RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
+            SpellDefinition passive = catalog.Spells.FirstOrDefault(value => value.Role == "passive" && dto.MasteredSpellIds.Contains(value.DefinitionId));
+            Label("被动标题", "被动", parent, new Vector2(24, -516), new Vector2(180, 28), 17, amber, TextAnchor.MiddleLeft);
+            Label("被动名称", passive == null ? "尚未获得被动术式" : passive.DisplayName, parent,
+                new Vector2(24, -548), new Vector2(392, 42), 23, text, TextAnchor.MiddleLeft);
+            string passiveSummary = passive == null ? "获得被动术式后会在这里说明其持续效果。" : SpellRuleText(passive.Rules.FirstOrDefault());
+            Text summary = Label("被动说明", passiveSummary, parent, new Vector2(24, -594), new Vector2(392, 66), 15, muted, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(summary);
-            bool inBackpack = runtime.Backpack.ContainsKey(selectedRogueInventoryId);
-            if (inBackpack)
-                ActionButton("旋转", "R", parent, new Vector2(24, -682), new Vector2(188, 58), cyan, true,
-                    () => bootstrap.RotateRogueBackpackItem(selectedRogueInventoryId), iconPath: FormalArtRegistry.ItemPath("inventory_rotate"));
-            if (equipment != null)
-            {
-                EquipmentDefinition definition = runtime.DefinitionFor(equipment.InstanceId);
-                bool equippedNow = runtime.Equipped.Values.Contains(equipment.InstanceId);
-                OCC.Combat.Roguelite.EquipmentSlot equippedSlot = runtime.Equipped.FirstOrDefault(pair => pair.Value == equipment.InstanceId).Key;
-                ActionButton(equippedNow ? "卸下" : "装备", string.Empty, parent, new Vector2(226, -682), new Vector2(190, 58), amber, true,
-                    () => { if (equippedNow) bootstrap.UnequipRogueEquipment(equippedSlot); else bootstrap.EquipRogueEquipment(equipment.InstanceId, PreferredEquipSlot(runtime, definition)); },
-                    iconPath: FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
-            }
         }
 
         private void DrawLoadoutQuickbar(Transform parent, RogueEquipmentRuntime runtime)
@@ -1413,6 +1395,14 @@ namespace OCC.Combat.Presentation
 
         private static IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> EquipmentSlotsForPresentation()
             => EquipmentSlotRules.ActiveSlots;
+
+        private static void ConstrainCompactButtonText(GameObject button)
+        {
+            Text label = button == null ? null : button.transform.Find("名称")?.GetComponent<Text>();
+            if (label == null) return;
+            label.horizontalOverflow = HorizontalWrapMode.Wrap;
+            label.verticalOverflow = VerticalWrapMode.Truncate;
+        }
 
         private void DrawLoadoutBackpack(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Vector2 position, Vector2 size)
         {
@@ -1447,15 +1437,8 @@ namespace OCC.Combat.Presentation
             }
             if (items.Count == 0)
                 FormalUiEffects.AddEmptyIllustration(backpackPanel.transform, "empty_inventory_pouch", new Vector2(324, -252), 128f);
-            Label("背包交互状态", loadoutInteractionMessage, backpackPanel.transform, new Vector2(24, -446),
-                new Vector2(size.x - 48f, 30), 15, muted, TextAnchor.MiddleLeft);
-            RogueEquipmentInstance selectedEquipment = runtime.EquipmentItem(selectedRogueInventoryId);
-            RogueTacticalItemInstance selectedTactical = runtime.TacticalItem(selectedRogueInventoryId);
-            string detail = selectedEquipment != null ? RogueEquipmentDetailBody(runtime, selectedEquipment.InstanceId, false) :
-                selectedTactical != null ? RogueInventoryDetailBody(runtime, selectedTactical.InstanceId, false) : "选择一件背包物品查看详情。";
-            Text detailLabel = Label("背包选中详情", detail, backpackPanel.transform, new Vector2(24, -492),
-                new Vector2(size.x - 48f, 250), 15, text, TextAnchor.UpperLeft);
-            FormalUiKit.ConfigureParagraph(detailLabel);
+            Label("背包交互状态", loadoutInteractionMessage, backpackPanel.transform, new Vector2(24, -752),
+                new Vector2(size.x - 48f, 30), 15, muted, TextAnchor.MiddleCenter);
         }
 
         private void DrawEmbeddedQuickbar(Transform parent, RogueEquipmentRuntime runtime, Vector2 position)
