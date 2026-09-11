@@ -1446,7 +1446,11 @@ namespace OCC.Combat.Presentation
             else if (selection.Action == "\u653b\u51fb" && enemy != null) TryCommand(CombatCommand.Attack("hero", enemy.Id));
             else if (selection.Action == "\u6280\u80fd1") TrySkillCell(0, state.GetUnit("hero").SkillOne, clickedUnit, p);
             else if (selection.Action == "\u6280\u80fd2") TrySkillCell(1, state.GetUnit("hero").SkillTwo, clickedUnit, p);
-            else if (selection.Action == "\u641c\u522e") TryCommand(CombatCommand.Loot("hero"));
+            else if (selection.Action == "\u641c\u522e")
+            {
+                if (state.LootSource != null) OpenCombatInventoryPanel();
+                else TryCommand(CombatCommand.Loot("hero"));
+            }
             else if (selection.Action == "\u4e92\u52a8") TryCommand(CombatCommand.Interact("hero", p));
         }
         private void EnsureArtifactBattle()

@@ -115,7 +115,9 @@ namespace OCC.Combat
             if (action == "攻击") return IsInAttackRange(state, position);
             if (action == "技能1") return IsSkillTargetInRange(state, hero.SkillOne, position);
             if (action == "技能2") return IsSkillTargetInRange(state, hero.SkillTwo, position);
-            if (action == "搜刮") return state.Loot != null && !state.Loot.IsLooted && position == state.Loot.Position && distance == 1;
+            if (action == "搜刮") return state.LootSource != null
+                ? !state.LootSource.IsComplete && position == state.LootSource.Position && distance == 1
+                : state.Loot != null && !state.Loot.IsLooted && position == state.Loot.Position && distance == 1;
             if (action == "互动") return distance == 1 && HasInteractionTarget(state, position);
             return false;
         }
@@ -156,7 +158,12 @@ namespace OCC.Combat
             }
             if (string.IsNullOrEmpty(failure) && action == "搜刮")
             {
-                if (state.Loot == null || state.Loot.IsLooted) failure = "现场没有可搜刮战利品";
+                if (state.LootSource != null)
+                {
+                    if (state.LootSource.IsComplete) failure = "容器已经清空";
+                    else if (Distance(hero.Position, state.LootSource.Position) != 1) failure = "容器不在相邻格";
+                }
+                else if (state.Loot == null || state.Loot.IsLooted) failure = "现场没有可搜刮战利品";
                 else if (!state.Backpack.CanAdd(state.Loot.Item)) failure = "背包已满，需要先调整物品";
                 else if (Distance(hero.Position, state.Loot.Position) != 1) failure = "战利品不在相邻格";
             }
@@ -214,6 +221,13 @@ namespace OCC.Combat
             }
             else if (action == "搜刮")
             {
+                if (state.LootSource != null)
+                {
+                    if (state.LootSource.IsComplete) return "容器已经清空";
+                    if (position != state.LootSource.Position) return "请选择容器所在格";
+                    if (distance != 1) return "只能搜刮相邻格的容器";
+                    return string.Empty;
+                }
                 if (state.Loot == null || state.Loot.IsLooted) return "现场没有可搜刮战利品";
                 if (position != state.Loot.Position) return "请选择战利品所在格";
                 if (distance != 1) return "只能搜刮相邻格的战利品";
