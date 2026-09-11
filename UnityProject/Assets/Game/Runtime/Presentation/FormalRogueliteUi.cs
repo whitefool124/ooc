@@ -943,6 +943,7 @@ namespace OCC.Combat.Presentation
             RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
             bool identified = state != RogueliteMapNodeVisualState.Unknown;
             bool dimmed = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown;
+            bool passedThrough = run.VisitedNodes.Contains(node.Id) && !run.CompletedNodes.Contains(node.Id) && node.Id != run.CurrentNodeId;
             bool selected = node.Id == selectedNodeId;
             Color accent = state == RogueliteMapNodeVisualState.Current || state == RogueliteMapNodeVisualState.Available ? cyan :
                 state == RogueliteMapNodeVisualState.Cleared ? safe : state == RogueliteMapNodeVisualState.Locked ? muted : state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Visited ? amber : muted;
@@ -959,11 +960,13 @@ namespace OCC.Combat.Presentation
             if (identified)
             {
                 AddCompactNodeIcon(buttonObject.transform, node.Type, dimmed ? .38f : 1f);
-                BindHover(buttonObject, RogueliteMapVisualPresentation.StateLabel(state) + " · " + node.DisplayName,
-                    TypeLabel(node.Type) + time + "\n" + MapStateTooltip(state) + "\n" + node.Summary, accent);
+                string visitPrefix = passedThrough ? "已途经 · " : string.Empty;
+                BindHover(buttonObject, visitPrefix + RogueliteMapVisualPresentation.StateLabel(state) + " · " + node.DisplayName,
+                    TypeLabel(node.Type) + time + "\n" + (passedThrough ? "曾从这里经过。" : MapStateTooltip(state)) + "\n" + node.Summary, accent);
             }
             else BindHover(buttonObject, "还看不清", "先走到附近，才能看清这里。", muted);
             AddMapNodeStateBadge(buttonObject.transform, node.Type, state, accent);
+            if (passedThrough) AddMapNodeVisitedBadge(buttonObject.transform, node.Type);
             if (selected && buttonObject.transform.Find("节点选中动效") == null) AddMapNodeSelectionEffect(buttonObject.transform, node.Type, accent);
         }
 
@@ -1058,6 +1061,33 @@ namespace OCC.Combat.Presentation
             icon.sprite = sprite;
             icon.preserveAspect = true;
             icon.color = FormalUiTheme.WithAlpha(accent, .98f);
+            icon.raycastTarget = false;
+        }
+
+        private static void AddMapNodeVisitedBadge(Transform parent, RogueliteMapNodeType type)
+        {
+            float nodeSize = MapNodeDisplaySize(type);
+            GameObject badge = Create("节点途经标记", parent);
+            RectTransform badgeRect = badge.AddComponent<RectTransform>();
+            badgeRect.anchorMin = badgeRect.anchorMax = badgeRect.pivot = new Vector2(.5f, .5f);
+            badgeRect.anchoredPosition = new Vector2(-nodeSize * .34f, -nodeSize * .34f);
+            badgeRect.sizeDelta = new Vector2(28f, 28f);
+            Image backdrop = badge.AddComponent<Image>();
+            backdrop.color = FormalUiTheme.WithAlpha(ink, .86f);
+            backdrop.raycastTarget = false;
+
+            string path = FormalArtRegistry.MapStatePath("Visited");
+            Sprite sprite = Resources.Load<Sprite>(path);
+            if (sprite == null) throw new KeyNotFoundException("Missing formal map-state icon: " + path);
+            GameObject iconObject = Create("足迹图标", badge.transform);
+            RectTransform iconRect = iconObject.AddComponent<RectTransform>();
+            iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(.5f, .5f);
+            iconRect.anchoredPosition = Vector2.zero;
+            iconRect.sizeDelta = new Vector2(20f, 20f);
+            Image icon = iconObject.AddComponent<Image>();
+            icon.sprite = sprite;
+            icon.preserveAspect = true;
+            icon.color = FormalUiTheme.WithAlpha(text, .88f);
             icon.raycastTarget = false;
         }
 
