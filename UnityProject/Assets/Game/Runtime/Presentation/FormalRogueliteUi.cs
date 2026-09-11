@@ -958,9 +958,11 @@ namespace OCC.Combat.Presentation
             if (identified)
             {
                 AddCompactNodeIcon(buttonObject.transform, node.Type);
-                BindHover(buttonObject, node.DisplayName, TypeLabel(node.Type) + time + "\n" + node.Summary, accent);
+                BindHover(buttonObject, RogueliteMapVisualPresentation.StateLabel(state) + " · " + node.DisplayName,
+                    TypeLabel(node.Type) + time + "\n" + MapStateTooltip(state) + "\n" + node.Summary, accent);
             }
             else BindHover(buttonObject, "还看不清", "先走到附近，才能看清这里。", muted);
+            AddMapNodeStateBadge(buttonObject.transform, node.Type, state, accent);
             if (selected && buttonObject.transform.Find("节点选中动效") == null) AddMapNodeSelectionEffect(buttonObject.transform, node.Type, accent);
         }
 
@@ -1021,6 +1023,35 @@ namespace OCC.Combat.Presentation
             float size = type == RogueliteMapNodeType.Finale ? 96f : type == RogueliteMapNodeType.Elite ? 80f : 64f;
             iconRect.anchoredPosition = Vector2.zero; iconRect.sizeDelta = new Vector2(size, size);
             Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.raycastTarget = false;
+        }
+
+        private static void AddMapNodeStateBadge(Transform parent, RogueliteMapNodeType type, RogueliteMapNodeVisualState state, Color accent)
+        {
+            float nodeSize = MapNodeDisplaySize(type);
+            bool unknown = state == RogueliteMapNodeVisualState.Unknown;
+            float badgeSize = unknown ? 44f : 32f;
+            GameObject badge = Create("节点状态_" + state, parent);
+            RectTransform badgeRect = badge.AddComponent<RectTransform>();
+            badgeRect.anchorMin = badgeRect.anchorMax = badgeRect.pivot = new Vector2(.5f, .5f);
+            badgeRect.anchoredPosition = unknown ? Vector2.zero : new Vector2(nodeSize * .34f, nodeSize * .34f);
+            badgeRect.sizeDelta = new Vector2(badgeSize, badgeSize);
+            Image backdrop = badge.AddComponent<Image>();
+            backdrop.color = FormalUiTheme.WithAlpha(ink, .92f);
+            backdrop.raycastTarget = false;
+
+            string path = FormalArtRegistry.MapStatePath(state.ToString());
+            Sprite sprite = Resources.Load<Sprite>(path);
+            if (sprite == null) throw new KeyNotFoundException("Missing formal map-state icon: " + path);
+            GameObject iconObject = Create("状态语义图标", badge.transform);
+            RectTransform iconRect = iconObject.AddComponent<RectTransform>();
+            iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(.5f, .5f);
+            iconRect.anchoredPosition = Vector2.zero;
+            iconRect.sizeDelta = new Vector2(badgeSize - 8f, badgeSize - 8f);
+            Image icon = iconObject.AddComponent<Image>();
+            icon.sprite = sprite;
+            icon.preserveAspect = true;
+            icon.color = FormalUiTheme.WithAlpha(accent, .98f);
+            icon.raycastTarget = false;
         }
 
         private static void AddNodeIcon(Transform parent, RogueliteMapNodeType type)
