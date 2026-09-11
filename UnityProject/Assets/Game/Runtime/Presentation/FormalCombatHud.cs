@@ -165,7 +165,11 @@ namespace OCC.Combat.Presentation
         {
             if (root == null) return;
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
-            CanvasGroup group = root.GetComponent<CanvasGroup>() ?? root.AddComponent<CanvasGroup>();
+            CanvasGroup group = root.GetComponent<CanvasGroup>();
+            // Unity can retain a managed wrapper for a component destroyed during a UI rebuild;
+            // use Unity's null check rather than ?? so that wrapper is not reused.
+            if (group == null) group = root.AddComponent<CanvasGroup>();
+            if (group == null) return;
             group.DOKill();
             if (motion.IsImmediate)
             {

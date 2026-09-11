@@ -843,7 +843,11 @@ namespace OCC.Combat.Presentation
             if (root == null || viewportRect == null) return;
             IUiPreferenceHost preferences = host as IUiPreferenceHost;
             UiMotionProfile motion = UiMotionProfile.FromIntensity(preferences == null ? 1f : preferences.UiPreferences.AnimationIntensity);
-            CanvasGroup group = root.GetComponent<CanvasGroup>() ?? root.AddComponent<CanvasGroup>();
+            CanvasGroup group = root.GetComponent<CanvasGroup>();
+            // Unity can retain a managed wrapper for a component destroyed during a UI rebuild;
+            // use Unity's null check rather than ?? so that wrapper is not reused.
+            if (group == null) group = root.AddComponent<CanvasGroup>();
+            if (group == null) return;
             DOTween.Kill(this);
             group.DOKill();
             viewportRect.DOKill();
