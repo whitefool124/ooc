@@ -1018,10 +1018,15 @@ namespace OCC.Combat.Presentation
             string runtimeId = type.ToString().ToLowerInvariant();
             Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.MapNodeTypeIconPath(runtimeId));
             if (sprite == null) throw new KeyNotFoundException("Missing formal node icon: " + runtimeId);
+            float size = type == RogueliteMapNodeType.Finale ? 96f : type == RogueliteMapNodeType.Elite ? 80f : 64f;
+            GameObject shadowObject = Create("节点类型图标投影_" + runtimeId, parent);
+            RectTransform shadowRect = shadowObject.AddComponent<RectTransform>();
+            shadowRect.anchorMin = shadowRect.anchorMax = shadowRect.pivot = new Vector2(.5f, .5f);
+            shadowRect.anchoredPosition = new Vector2(3f, -4f); shadowRect.sizeDelta = new Vector2(size, size);
+            Image shadow = shadowObject.AddComponent<Image>(); shadow.sprite = sprite; shadow.preserveAspect = true; shadow.color = FormalUiTheme.WithAlpha(ink, opacity * .82f); shadow.raycastTarget = false;
             GameObject iconObject = Create("节点类型图标_" + runtimeId, parent);
             RectTransform iconRect = iconObject.AddComponent<RectTransform>();
             iconRect.anchorMin = iconRect.anchorMax = iconRect.pivot = new Vector2(.5f, .5f);
-            float size = type == RogueliteMapNodeType.Finale ? 96f : type == RogueliteMapNodeType.Elite ? 80f : 64f;
             iconRect.anchoredPosition = Vector2.zero; iconRect.sizeDelta = new Vector2(size, size);
             Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.color = FormalUiTheme.WithAlpha(Color.white, opacity); icon.raycastTarget = false;
         }
@@ -2618,9 +2623,11 @@ namespace OCC.Combat.Presentation
         private GameObject FormalMapNodeButton(Transform parent, Vector2 position, RogueliteMapNodeType type, RogueliteMapNodeVisualState state, Color accent, Action action, string focusKey)
         {
             float size = MapNodeDisplaySize(type);
-            GameObject result = Panel(focusKey, parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position, new Vector2(size, size), Color.white);
             float opacity = state == RogueliteMapNodeVisualState.Locked || state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Unknown ? .38f : 1f;
             RogueliteMapNodeVisualState markerState = state == RogueliteMapNodeVisualState.Locked ? RogueliteMapNodeVisualState.Unknown : state;
+            GameObject shadow = Panel("节点落地投影", parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position + new Vector2(5f, -7f), new Vector2(size, size), Color.white);
+            Image shadowImage = shadow.GetComponent<Image>(); shadowImage.sprite = Resources.Load<Sprite>(FormalArtRegistry.LargeMapNodeMarkerPath(markerState.ToString())); shadowImage.type = Image.Type.Simple; shadowImage.color = FormalUiTheme.WithAlpha(ink, opacity * .82f); shadowImage.raycastTarget = false;
+            GameObject result = Panel(focusKey, parent, new Vector2(.5f, .5f), new Vector2(.5f, .5f), position, new Vector2(size, size), Color.white);
             Image image = result.GetComponent<Image>(); image.sprite = Resources.Load<Sprite>(FormalArtRegistry.LargeMapNodeMarkerPath(markerState.ToString())); image.type = Image.Type.Simple; image.color = FormalUiTheme.WithAlpha(Color.white, opacity);
             Button button = result.AddComponent<Button>(); button.targetGraphic = image; button.transition = Selectable.Transition.ColorTint;
             ColorBlock colors = button.colors; colors.normalColor = Color.white; colors.highlightedColor = new Color(1f, 1f, 1f, .88f); colors.pressedColor = FormalUiTheme.WithAlpha(accent, .82f); colors.selectedColor = Color.white; colors.fadeDuration = .06f; button.colors = colors;

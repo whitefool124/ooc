@@ -49,7 +49,7 @@ namespace OCC.Combat.Tests
             {
                 RogueliteMapNode to = RogueliteMapCatalog.Node(nextId);
                 float distance = Vector2.Distance(AcademyMapVisualLayout.AnchorFor(from).SourcePosition, AcademyMapVisualLayout.AnchorFor(to).SourcePosition);
-                if (distance > 430f) failures.Add(from.Id + " -> " + to.Id + " = " + distance.ToString("0"));
+                if (distance > 450f) failures.Add(from.Id + " -> " + to.Id + " = " + distance.ToString("0"));
             }
             Assert.That(failures, Is.Empty, string.Join("\n", failures));
         }
