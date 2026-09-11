@@ -203,9 +203,12 @@ namespace OCC.Combat.Presentation
 
         private void DrawRogueBackpack(RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Rect rect)
         {
-            Box(rect, "背包　6×10");
-            const float cell = 52f; float gx = rect.x + 26, gy = rect.y + 60;
-            for (int y = 0; y < RogueInventoryGridSystem.BackpackRows; y++) for (int x = 0; x < RogueInventoryGridSystem.BackpackColumns; x++)
+            int columns = runtime.BackpackColumns;
+            int rows = runtime.BackpackRows;
+            Box(rect, "背包　" + columns + "列×" + rows + "行");
+            float cell = Mathf.Min(52f, (rect.width - 52f) / columns, (rect.height - 120f) / rows);
+            float gx = rect.x + Mathf.Round((rect.width - columns * cell) * .5f), gy = rect.y + 60;
+            for (int y = 0; y < rows; y++) for (int x = 0; x < columns; x++)
                 DrawRogueGridFrame(new Rect(gx + x * cell, gy + y * cell, cell - 3, cell - 3));
             Event current = Event.current; RogueInventoryItemPresentation hovered = null; Rect hoveredRect = default;
             foreach (RogueInventoryItemPresentation item in items)
@@ -631,9 +634,9 @@ namespace OCC.Combat.Presentation
                 bootstrap.SearchCurrentLoot();
             GUI.enabled = true;
 
-            const float cell = 52f;
-            const int columns = RogueInventoryGridSystem.BackpackColumns;
-            const int rows = RogueInventoryGridSystem.BackpackRows;
+            const int columns = 10;
+            const int rows = 10;
+            float cell = Mathf.Min(52f, (rect.width - 40f) / columns, (rect.height - 112f) / rows);
             float gridX = rect.x + 20f;
             float gridY = rect.y + 62f;
             for (int y = 0; y < rows; y++)

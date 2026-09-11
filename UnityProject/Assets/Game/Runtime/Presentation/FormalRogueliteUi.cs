@@ -40,7 +40,7 @@ namespace OCC.Combat.Presentation
         private LoadoutSection loadoutSection = LoadoutSection.Equipment;
         private int selectedLoadoutSpellIndex;
         private string selectedLoadoutSpellId;
-        private const float LoadoutCellSize = 64f;
+        private float loadoutCellSize = 64f;
         private RectTransform loadoutGridRect;
         private RogueEquipmentRuntime loadoutDragRuntime;
         private readonly Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform> loadoutEquipmentSlotRects = new Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform>();
@@ -1379,7 +1379,9 @@ namespace OCC.Combat.Presentation
 
         private void DrawLoadoutNavigation(Transform parent, RogueEquipmentRuntime runtime, RogueRunDto dto)
         {
-            LoadoutTab(parent, LoadoutSection.Equipment, "装备、背包与战术栏", "装备槽 9　背包 6×10　战术栏 4", 16, cyan, FormalArtRegistry.ItemPath("category_armor"));
+            LoadoutTab(parent, LoadoutSection.Equipment, "装备、背包与战术栏",
+                "装备槽 9　背包 " + runtime.BackpackColumns + "列×" + runtime.BackpackRows + "行　战术栏 4",
+                16, cyan, FormalArtRegistry.ItemPath("category_armor"));
             LoadoutTab(parent, LoadoutSection.Spells, "术式编组", "8 个术式槽", 410, amber, RogueSpellIconPath(dto.EquippedSpellIds.FirstOrDefault()));
             int occupied = RogueInventoryPresentation.Build(runtime).Count;
             Label("整备摘要", "背包物品 " + occupied + "\n页面详情常驻，悬浮窗辅助快速查看", parent,
@@ -1396,6 +1398,7 @@ namespace OCC.Combat.Presentation
         private void DrawEquipmentLoadout(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items)
         {
             RogueLoadoutEquipmentView view = RogueLoadoutEquipmentView.Create(parent);
+            loadoutCellSize = view.ConfigureBackpackGrid(runtime.BackpackColumns, runtime.BackpackRows);
             DrawLoadoutCharacter(view.CharacterContentRoot, runtime);
 
             IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> slots = RogueInventoryGridSystem.EquipmentSlots;
@@ -1509,8 +1512,8 @@ namespace OCC.Combat.Presentation
                 RogueLoadoutGridPoint screenFootprint = RogueLoadoutScreenGridPresentation.FootprintFromRuntime(
                     new RogueLoadoutGridPoint(item.Width, item.Height));
                 GameObject itemButton = InventoryGridButton(item, view.BackpackItemsRoot,
-                    new Vector2(screenPosition.X * LoadoutCellSize, -screenPosition.Y * LoadoutCellSize),
-                    new Vector2(screenFootprint.X * LoadoutCellSize - 3, screenFootprint.Y * LoadoutCellSize - 3),
+                    new Vector2(screenPosition.X * loadoutCellSize, -screenPosition.Y * loadoutCellSize),
+                    new Vector2(screenFootprint.X * loadoutCellSize - 3, screenFootprint.Y * loadoutCellSize - 3),
                     selected ? amber : item.IsEquipment ? cyan : safe,
                     () => { selectedRogueInventoryId = item.InstanceId; Invalidate(false); });
                 RogueLoadoutDragHandler drag = itemButton.AddComponent<RogueLoadoutDragHandler>();
@@ -1529,17 +1532,18 @@ namespace OCC.Combat.Presentation
         private void DrawLoadoutBackpack(Transform parent, RogueEquipmentRuntime runtime, IReadOnlyList<RogueInventoryItemPresentation> items, Vector2 position, Vector2 size)
         {
             GameObject backpackPanel = Panel("背包工作区", parent, new Vector2(0, 1), new Vector2(0, 1), position, size, FormalUiTheme.Surface);
-            Label("背包标题", "背包 6×10", backpackPanel.transform, new Vector2(24, -18), new Vector2(440, 40), 25, safe, TextAnchor.MiddleLeft);
+            Label("背包标题", "背包 " + runtime.BackpackColumns + "列×" + runtime.BackpackRows + "行", backpackPanel.transform, new Vector2(24, -18), new Vector2(440, 40), 25, safe, TextAnchor.MiddleLeft);
             Label("背包提示", "拖拽整理　R 键或右键旋转", backpackPanel.transform, new Vector2(24, -54),
                 new Vector2(Mathf.Max(360f, size.x - 48f), 28f), 15, muted, TextAnchor.MiddleLeft);
-            float gridWidth = RogueLoadoutScreenGridPresentation.Columns * LoadoutCellSize;
+            loadoutCellSize = Mathf.Min(64f, (size.x - 48f) / runtime.BackpackColumns, (size.y - 154f) / runtime.BackpackRows);
+            float gridWidth = runtime.BackpackColumns * loadoutCellSize;
             Vector2 gridOrigin = new Vector2(Mathf.Round((size.x - gridWidth) * .5f), -104);
             GameObject gridObject = Panel("战外背包网格", backpackPanel.transform, new Vector2(0, 1), new Vector2(0, 1), gridOrigin,
-                new Vector2(RogueLoadoutScreenGridPresentation.Columns * LoadoutCellSize,
-                    RogueLoadoutScreenGridPresentation.Rows * LoadoutCellSize), FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .5f));
+                new Vector2(runtime.BackpackColumns * loadoutCellSize,
+                    runtime.BackpackRows * loadoutCellSize), FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .5f));
             loadoutGridRect = gridObject.GetComponent<RectTransform>();
-            for (int y = 0; y < RogueLoadoutScreenGridPresentation.Rows; y++)
-            for (int x = 0; x < RogueLoadoutScreenGridPresentation.Columns; x++)
+            for (int y = 0; y < runtime.BackpackRows; y++)
+            for (int x = 0; x < runtime.BackpackColumns; x++)
                 BackpackInsetCell(gridObject.transform, x, y);
             foreach (RogueInventoryItemPresentation item in items)
             {
@@ -1548,8 +1552,8 @@ namespace OCC.Combat.Presentation
                 RogueLoadoutGridPoint screenFootprint = RogueLoadoutScreenGridPresentation.FootprintFromRuntime(
                     new RogueLoadoutGridPoint(item.Width, item.Height));
                 GameObject itemButton = InventoryGridButton(item, gridObject.transform,
-                    new Vector2(screenPosition.X * LoadoutCellSize, -screenPosition.Y * LoadoutCellSize),
-                    new Vector2(screenFootprint.X * LoadoutCellSize - 3, screenFootprint.Y * LoadoutCellSize - 3),
+                    new Vector2(screenPosition.X * loadoutCellSize, -screenPosition.Y * loadoutCellSize),
+                    new Vector2(screenFootprint.X * loadoutCellSize - 3, screenFootprint.Y * loadoutCellSize - 3),
                     selected ? amber : item.IsEquipment ? cyan : safe, () => { selectedRogueInventoryId = item.InstanceId; Invalidate(false); });
                 RogueLoadoutDragHandler drag = itemButton.AddComponent<RogueLoadoutDragHandler>();
                 drag.Configure(eventData => BeginLoadoutDrag(item, itemButton, eventData), UpdateLoadoutDrag,
@@ -1784,7 +1788,7 @@ namespace OCC.Combat.Presentation
             loadoutDragRotated = item.Rotated;
             loadoutLastPointer = eventData.position;
             if (!TryLoadoutLocalPointer(eventData.position, out Vector2 local)) { CancelLoadoutDrag(); return; }
-            RogueLoadoutGridPoint pointerCell = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, LoadoutCellSize, 0, 0);
+            RogueLoadoutGridPoint pointerCell = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, loadoutCellSize, 0, 0);
             RogueLoadoutGridPoint screenPosition = RogueLoadoutScreenGridPresentation.FromRuntime(item.X, item.Y);
             loadoutGrabOffset = new Vector2Int(pointerCell.X - screenPosition.X, pointerCell.Y - screenPosition.Y);
             loadoutDragSource = source.GetComponent<CanvasGroup>();
@@ -1858,12 +1862,12 @@ namespace OCC.Combat.Presentation
             loadoutDragGhost.SetActive(true);
             int grabX = loadoutDragEquippedSlot.HasValue ? 0 : loadoutGrabOffset.x;
             int grabY = loadoutDragEquippedSlot.HasValue ? 0 : loadoutGrabOffset.y;
-            RogueLoadoutGridPoint anchor = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, LoadoutCellSize, grabX, grabY);
+            RogueLoadoutGridPoint anchor = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, loadoutCellSize, grabX, grabY);
             RogueLoadoutGridPoint footprint = LoadoutFootprint(loadoutDragRuntime, loadoutDragId, loadoutDragRotated);
             RogueLoadoutGridPoint runtimeAnchor = RogueLoadoutScreenGridPresentation.ToRuntime(anchor.X, anchor.Y);
             RectTransform rect = loadoutDragGhost.GetComponent<RectTransform>();
-            rect.anchoredPosition = new Vector2(anchor.X * LoadoutCellSize, -anchor.Y * LoadoutCellSize);
-            rect.sizeDelta = new Vector2(footprint.X * LoadoutCellSize - 3, footprint.Y * LoadoutCellSize - 3);
+            rect.anchoredPosition = new Vector2(anchor.X * loadoutCellSize, -anchor.Y * loadoutCellSize);
+            rect.sizeDelta = new Vector2(footprint.X * loadoutCellSize - 3, footprint.Y * loadoutCellSize - 3);
             bool legal = loadoutDragEquippedSlot.HasValue
                 ? loadoutDragRuntime.CanUnequipToBackpack(loadoutDragEquippedSlot.Value, runtimeAnchor.X, runtimeAnchor.Y, loadoutDragRotated)
                 : loadoutDragRuntime.CanMoveBackpack(loadoutDragId, runtimeAnchor.X, runtimeAnchor.Y, loadoutDragRotated);
@@ -1889,7 +1893,7 @@ namespace OCC.Combat.Presentation
                 submitted = true;
                 int grabX = loadoutDragEquippedSlot.HasValue ? 0 : loadoutGrabOffset.x;
                 int grabY = loadoutDragEquippedSlot.HasValue ? 0 : loadoutGrabOffset.y;
-                RogueLoadoutGridPoint anchor = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, LoadoutCellSize, grabX, grabY);
+                RogueLoadoutGridPoint anchor = RogueLoadoutDragPresentation.AnchorForLocalPointer(local.x, local.y, loadoutCellSize, grabX, grabY);
                 RogueLoadoutGridPoint runtimeAnchor = RogueLoadoutScreenGridPresentation.ToRuntime(anchor.X, anchor.Y);
                 succeeded = loadoutDragEquippedSlot.HasValue
                     ? bootstrap.UnequipRogueEquipmentTo(loadoutDragEquippedSlot.Value, runtimeAnchor.X, runtimeAnchor.Y, loadoutDragRotated)
@@ -2471,11 +2475,11 @@ namespace OCC.Combat.Presentation
 
         private void BackpackInsetCell(Transform parent, int x, int y)
         {
-            float size = LoadoutCellSize - 3;
+            float size = loadoutCellSize - 3;
             GameObject cell = Create("背包格_" + x + "_" + y, parent);
             RectTransform rect = cell.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(0, 1); rect.pivot = new Vector2(0, 1);
-            rect.anchoredPosition = new Vector2(x * LoadoutCellSize, -y * LoadoutCellSize); rect.sizeDelta = new Vector2(size, size);
+            rect.anchoredPosition = new Vector2(x * loadoutCellSize, -y * loadoutCellSize); rect.sizeDelta = new Vector2(size, size);
             Image background = cell.AddComponent<Image>(); background.color = FormalUiTheme.InventorySlotSurface; background.raycastTarget = false;
             Line(cell.transform, Vector2.zero, new Vector2(size, 3), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .82f));
             Line(cell.transform, new Vector2(size - 3, 0), new Vector2(3, size), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .62f));

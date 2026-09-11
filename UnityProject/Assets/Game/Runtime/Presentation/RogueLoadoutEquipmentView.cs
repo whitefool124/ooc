@@ -73,8 +73,8 @@ namespace OCC.Combat.Presentation
 
     /// <summary>
     /// Stable, inspectable skeleton for the roguelite preparation inventory. The prefab owns the
-    /// three columns, nine equipment slots, four tactical slots and sixty backpack cells; the
-    /// controller only binds run data and transient interaction state.
+    /// three columns, nine equipment slots, four tactical slots and backpack cell templates; the
+    /// controller sizes the grid from the current backpack and binds transient interaction state.
     /// </summary>
     public sealed class RogueLoadoutEquipmentView : MonoBehaviour
     {
@@ -127,11 +127,62 @@ namespace OCC.Combat.Presentation
             backpackStatus = backpackStatusLabel;
         }
 
+        public float ConfigureBackpackGrid(int columns, int rows)
+        {
+            if (columns < 1 || columns > OCC.Combat.Roguelite.RogueRuntimeConstants.MaximumBackpackColumns)
+                throw new ArgumentOutOfRangeException(nameof(columns));
+            if (rows < 1) throw new ArgumentOutOfRangeException(nameof(rows));
+            int required = checked(columns * rows);
+            if (backpackCells.Length < required)
+            {
+                RectTransform template = backpackCells[0];
+                RectTransform[] expanded = new RectTransform[required];
+                Array.Copy(backpackCells, expanded, backpackCells.Length);
+                for (int index = backpackCells.Length; index < required; index++)
+                {
+                    RectTransform clone = Instantiate(template.gameObject, template.parent, false).GetComponent<RectTransform>();
+                    clone.name = "背包格_" + (index % columns) + "_" + (index / columns);
+                    expanded[index] = clone;
+                }
+                backpackCells = expanded;
+            }
+
+            float panelWidth = backpackPanel.rect.width > 0f ? backpackPanel.rect.width : backpackPanel.sizeDelta.x;
+            float panelHeight = backpackPanel.rect.height > 0f ? backpackPanel.rect.height : backpackPanel.sizeDelta.y;
+            float availableWidth = Mathf.Max(64f, panelWidth - 48f);
+            float availableHeight = Mathf.Max(64f, panelHeight - 154f);
+            float cellSize = Mathf.Min(64f, availableWidth / columns, availableHeight / rows);
+            Vector2 gridSize = new Vector2(columns * cellSize, rows * cellSize);
+            Vector2 gridPosition = new Vector2(Mathf.Round((panelWidth - gridSize.x) * .5f), -104f);
+            backpackGrid.anchoredPosition = gridPosition;
+            backpackGrid.sizeDelta = gridSize;
+            backpackItemsRoot.anchoredPosition = Vector2.zero;
+            backpackItemsRoot.sizeDelta = gridSize;
+
+            for (int index = 0; index < backpackCells.Length; index++)
+            {
+                RectTransform cell = backpackCells[index];
+                bool active = index < required;
+                cell.gameObject.SetActive(active);
+                if (!active) continue;
+                int x = index % columns;
+                int y = index / columns;
+                cell.name = "背包格_" + x + "_" + y;
+                cell.anchorMin = cell.anchorMax = cell.pivot = new Vector2(0f, 1f);
+                cell.anchoredPosition = new Vector2(x * cellSize, -y * cellSize);
+                cell.sizeDelta = new Vector2(cellSize - 3f, cellSize - 3f);
+            }
+
+            Text title = backpackPanel.Find("背包标题")?.GetComponent<Text>();
+            if (title != null) title.text = "背包 " + columns + "列×" + rows + "行";
+            return cellSize;
+        }
+
         public bool IsValid()
         {
             if (characterContentRoot == null || backpackPanel == null || backpackGrid == null ||
                 backpackItemsRoot == null || tacticalStatus == null || backpackStatus == null ||
-                backpackCells == null || backpackCells.Length != 60 ||
+                backpackCells == null || backpackCells.Length < 1 ||
                 equipmentSlots == null || equipmentSlots.Length != 9 ||
                 tacticalSlots == null || tacticalSlots.Length != 4)
                 return false;

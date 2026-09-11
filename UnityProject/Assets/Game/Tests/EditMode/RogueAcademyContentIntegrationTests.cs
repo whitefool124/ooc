@@ -94,9 +94,9 @@ namespace OCC.Combat.Tests
         {
             RogueRunDto dto = RogueRunDto.CreateNew("full-reward", 621);
             dto.CurrentNodeId = "rail_patrol"; dto.AwaitingReward = true; dto.CompletedNodeIds.Add("rail_patrol");
-            dto.EquipmentInstances.Clear();
-            for (int y = 0; y < RogueRuntimeConstants.BackpackHeight; y++)
-            for (int x = 0; x < RogueRuntimeConstants.BackpackWidth; x++)
+            RogueEquipmentRuntime.CreateStarter(621).WriteToDto(dto);
+            for (int y = 0; y < 10; y++)
+            for (int x = 0; x < 6; x++)
                 dto.EquipmentInstances.Add(new EquipmentInstanceDto("fill-" + x + "-" + y, "ACA-EQ-AC01",
                     OCC.Combat.Roguelite.EquipmentSlot.Accessory1, EquipmentRarity.Uncommon, 0)
                 { AcquiredOrder = dto.EquipmentInstances.Count, BackpackX = x, BackpackY = y, SourceType = "test" });

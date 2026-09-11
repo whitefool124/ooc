@@ -9,6 +9,63 @@ namespace OCC.Combat.Tests
     public sealed class RogueEquipmentRuntimeTests
     {
         [Test]
+        public void BackpackCapacity_DefaultsToSixByFourAndEquippedBackpackSuppliesItsOwnSize()
+        {
+            RogueEquipmentRuntime empty = new RogueEquipmentRuntime(70);
+            Assert.That((empty.BackpackColumns, empty.BackpackRows), Is.EqualTo((6, 4)));
+
+            RogueEquipmentRuntime starter = RogueEquipmentRuntime.CreateStarter(71);
+            Assert.That((starter.BackpackColumns, starter.BackpackRows), Is.EqualTo((6, 10)));
+            EquipmentDefinition definition = starter.DefinitionFor(starter.Equipped[RogueEquipmentSlot.Backpack]);
+            Assert.That((definition.BackpackColumns, definition.BackpackRows), Is.EqualTo((6, 10)));
+            Assert.That(definition.BackpackColumns, Is.LessThanOrEqualTo(RogueRuntimeConstants.MaximumBackpackColumns));
+        }
+
+        [Test]
+        public void BackpackCapacity_DefaultGridRejectsFifthRow()
+        {
+            RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(72);
+            RogueEquipmentInstance ring = runtime.CreateInstance("ring", "ACA-EQ-AC01", EquipmentRarity.Uncommon, 0, "test");
+            Assert.That(runtime.AddToBackpack(ring), Is.True);
+            Assert.That(runtime.MoveBackpack(ring.InstanceId, 0, 3, false), Is.True);
+            Assert.That(runtime.MoveBackpack(ring.InstanceId, 0, 4, false), Is.False);
+        }
+
+        [Test]
+        public void BackpackCapacity_UnequipFailsAtomicallyUntilContentsFitDefaultGrid()
+        {
+            RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(73);
+            RogueEquipmentInstance ring = runtime.CreateInstance("ring", "ACA-EQ-AC01", EquipmentRarity.Uncommon, 2, "test");
+            Assert.That(runtime.AddToBackpack(ring), Is.True);
+            Assert.That(runtime.MoveBackpack(ring.InstanceId, 0, 9, false), Is.True);
+            string backpackId = runtime.Equipped[RogueEquipmentSlot.Backpack];
+
+            Assert.That(runtime.Unequip(RogueEquipmentSlot.Backpack), Is.False);
+            Assert.That(runtime.Equipped[RogueEquipmentSlot.Backpack], Is.EqualTo(backpackId));
+            Assert.That((runtime.BackpackColumns, runtime.BackpackRows), Is.EqualTo((6, 10)));
+
+            Assert.That(runtime.MoveBackpack(ring.InstanceId, 5, 3, false), Is.True);
+            Assert.That(runtime.Unequip(RogueEquipmentSlot.Backpack), Is.True);
+            Assert.That(runtime.Equipped[RogueEquipmentSlot.Backpack], Is.Empty);
+            Assert.That(runtime.Backpack.ContainsKey(backpackId), Is.True);
+            Assert.That((runtime.BackpackColumns, runtime.BackpackRows), Is.EqualTo((6, 4)));
+        }
+
+        [Test]
+        public void BackpackCapacity_LegacySaveWithoutEquippedBackpackReflowsIntoDefaultGrid()
+        {
+            RogueRunDto dto = RogueRunDto.CreateNew("legacy-no-pack", 74);
+            dto.EquipmentInstances.Add(new EquipmentInstanceDto("ring", "ACA-EQ-AC01",
+                RogueEquipmentSlot.Ring1, EquipmentRarity.Uncommon, 0)
+            { AcquiredOrder = 0, BackpackX = 0, BackpackY = 8, SourceType = "legacy" });
+
+            RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(dto);
+
+            Assert.That((runtime.BackpackColumns, runtime.BackpackRows), Is.EqualTo((6, 4)));
+            Assert.That(runtime.Backpack["ring"].Y, Is.LessThan(4));
+        }
+
+        [Test]
         public void M3Loadout_HasNineSlotsAndLegacyOffhandContentIsInactive()
         {
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(77);
@@ -139,11 +196,11 @@ namespace OCC.Combat.Tests
             runtime.AddTacticalToBackpack(item);
             RogueBackpackPlacement start = runtime.Backpack[item.InstanceId];
 
-            Assert.That(runtime.MoveBackpack(item.InstanceId, 3, 5, false), Is.True);
+            Assert.That(runtime.MoveBackpack(item.InstanceId, 3, 1, false), Is.True);
             Assert.That(runtime.RotateBackpack(item.InstanceId), Is.True);
             RogueInventoryItemPresentation presentation = RogueInventoryPresentation.Build(runtime).Single();
 
-            Assert.That(presentation.X, Is.EqualTo(3)); Assert.That(presentation.Y, Is.EqualTo(5));
+            Assert.That(presentation.X, Is.EqualTo(3)); Assert.That(presentation.Y, Is.EqualTo(1));
             Assert.That(presentation.Rotated, Is.True); Assert.That(presentation.DisplayName, Is.EqualTo("折盾匣"));
             Assert.That(presentation.ChargesMaximum, Is.EqualTo(3)); Assert.That(start.X, Is.Not.EqualTo(presentation.X));
         }

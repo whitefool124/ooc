@@ -70,7 +70,10 @@ namespace OCC.Combat.Tests
         [Test]
         public void Loadout11A_UsesRuntimeGridCoordinatesDirectly()
         {
-            Assert.That((RogueLoadoutScreenGridPresentation.Columns, RogueLoadoutScreenGridPresentation.Rows), Is.EqualTo((6, 10)));
+            RogueEquipmentRuntime empty = new RogueEquipmentRuntime(903);
+            RogueEquipmentRuntime starter = RogueEquipmentRuntime.CreateStarter(904);
+            Assert.That((empty.BackpackColumns, empty.BackpackRows), Is.EqualTo((6, 4)));
+            Assert.That((starter.BackpackColumns, starter.BackpackRows), Is.EqualTo((6, 10)));
             RogueLoadoutGridPoint screen = RogueLoadoutScreenGridPresentation.FromRuntime(2, 7);
             Assert.That(screen, Is.EqualTo(new RogueLoadoutGridPoint(2, 7)));
             Assert.That(RogueLoadoutScreenGridPresentation.ToRuntime(screen.X, screen.Y), Is.EqualTo(new RogueLoadoutGridPoint(2, 7)));

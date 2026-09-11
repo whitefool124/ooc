@@ -59,6 +59,8 @@ namespace OCC.Combat.Roguelite
 
         public IReadOnlyDictionary<EquipmentSlot, string> Equipped => equipped;
         public IReadOnlyDictionary<string, RogueBackpackPlacement> Backpack => backpack;
+        public int BackpackColumns => CurrentBackpackCapacity().columns;
+        public int BackpackRows => CurrentBackpackCapacity().rows;
         public string[] ItemQuickbarInstanceIds => (string[])quickbar.Clone();
         public IReadOnlyList<RogueEquipmentInstance> AllInstances => equipment.Values.OrderBy(value => value.AcquiredOrder).ToArray();
         public IReadOnlyList<RogueTacticalItemInstance> AllTacticalItems => tactical.Values.OrderBy(value => value.AcquiredOrder).ToArray();
@@ -95,12 +97,14 @@ namespace OCC.Combat.Roguelite
                 if (saved.BackpackX >= 0 && saved.BackpackY >= 0) runtime.backpack[instance.InstanceId] = new RogueBackpackPlacement(saved.BackpackX, saved.BackpackY, saved.BackpackRotated);
                 else if (!runtime.AddToBackpack(instance)) throw new InvalidOperationException("Saved equipment has no legal backpack position: " + instance.InstanceId);
             }
-            foreach (KeyValuePair<EquipmentSlot, string> slot in dto.EquipmentSlotInstanceIds.Where(value => !string.IsNullOrEmpty(value.Value))) runtime.Equip(slot.Value, slot.Key);
+            foreach (KeyValuePair<EquipmentSlot, string> slot in dto.EquipmentSlotInstanceIds.Where(value => !string.IsNullOrEmpty(value.Value)))
+                if (!runtime.Equip(slot.Value, slot.Key)) throw new InvalidOperationException("Saved equipment cannot be equipped: " + slot.Value);
             foreach (TacticalItemInstanceDto saved in dto.TacticalItemInstances)
             {
                 RogueTacticalItemInstance item = runtime.CreateTacticalItem(saved.InstanceId, saved.DefinitionId, 0, saved.SourceType); item.RestoreCharges(saved.ChargesCurrent);
                 runtime.backpack[item.InstanceId] = new RogueBackpackPlacement(saved.X, saved.Y, saved.Rotated);
             }
+            runtime.NormalizeBackpackPlacementsAfterLoad();
             for (int index = 0; index < runtime.quickbar.Length; index++) runtime.AssignQuickbar(index, dto.ItemQuickbarInstanceIds[index]);
             return runtime;
         }
@@ -180,6 +184,11 @@ namespace OCC.Combat.Roguelite
         {
             slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, false, out RogueEquipmentInstance instance)) return false;
+            if (slot == EquipmentSlot.Backpack)
+            {
+                (int columns, int rows) = CapacityFor(instanceId);
+                if (!AllPlacementsLegal(columns, rows, instanceId)) return false;
+            }
             backpack.Remove(instanceId); equipped[slot] = instanceId; NotifyLoadoutChanged(); return true;
         }
 
@@ -188,7 +197,11 @@ namespace OCC.Combat.Roguelite
             slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!CanEquip(instanceId, slot, true, out _)) return false;
             string previous = equipped[slot];
-            return string.IsNullOrEmpty(previous) || FindFirstFit(previous, instanceId).HasValue;
+            if (slot != EquipmentSlot.Backpack)
+                return string.IsNullOrEmpty(previous) || FindFirstFit(previous, instanceId).HasValue;
+            (int columns, int rows) = CapacityFor(instanceId);
+            if (!AllPlacementsLegal(columns, rows, instanceId)) return false;
+            return string.IsNullOrEmpty(previous) || FindFirstFit(previous, instanceId, columns, rows).HasValue;
         }
 
         public bool EquipOrReplace(string instanceId, EquipmentSlot slot)
@@ -197,7 +210,14 @@ namespace OCC.Combat.Roguelite
             if (!CanEquip(instanceId, slot, true, out _)) return false;
             string previous = equipped[slot];
             if (string.IsNullOrEmpty(previous)) return Equip(instanceId, slot);
-            RogueBackpackPlacement? previousPlacement = FindFirstFit(previous, instanceId);
+            int columns = BackpackColumns;
+            int rows = BackpackRows;
+            if (slot == EquipmentSlot.Backpack)
+            {
+                (columns, rows) = CapacityFor(instanceId);
+                if (!AllPlacementsLegal(columns, rows, instanceId)) return false;
+            }
+            RogueBackpackPlacement? previousPlacement = FindFirstFit(previous, instanceId, columns, rows);
             if (!previousPlacement.HasValue) return false;
             backpack.Remove(instanceId);
             backpack[previous] = previousPlacement.Value;
@@ -221,7 +241,10 @@ namespace OCC.Combat.Roguelite
             if (!equipped.ContainsKey(slot)) return false;
             string instanceId = equipped[slot];
             if (string.IsNullOrEmpty(instanceId)) return false;
-            RogueBackpackPlacement? placement = FindFirstFit(instanceId);
+            int columns = slot == EquipmentSlot.Backpack ? RogueRuntimeConstants.DefaultBackpackColumns : BackpackColumns;
+            int rows = slot == EquipmentSlot.Backpack ? RogueRuntimeConstants.DefaultBackpackRows : BackpackRows;
+            if (!AllPlacementsLegal(columns, rows)) return false;
+            RogueBackpackPlacement? placement = FindFirstFit(instanceId, null, columns, rows);
             if (!placement.HasValue) return false;
             backpack[instanceId] = placement.Value; equipped[slot] = string.Empty; NotifyLoadoutChanged(); return true;
         }
@@ -231,7 +254,9 @@ namespace OCC.Combat.Roguelite
             slot = EquipmentSlotRules.NormalizeLegacy(slot);
             if (!equipped.TryGetValue(slot, out string instanceId) || string.IsNullOrEmpty(instanceId)) return false;
             Size(instanceId, rotated, out int width, out int height);
-            return Fits(instanceId, x, y, rotated, width, height);
+            int columns = slot == EquipmentSlot.Backpack ? RogueRuntimeConstants.DefaultBackpackColumns : BackpackColumns;
+            int rows = slot == EquipmentSlot.Backpack ? RogueRuntimeConstants.DefaultBackpackRows : BackpackRows;
+            return AllPlacementsLegal(columns, rows) && Fits(instanceId, x, y, rotated, width, height, null, columns, rows);
         }
 
         public bool UnequipToBackpack(EquipmentSlot slot, int x, int y, bool rotated)
@@ -425,20 +450,26 @@ namespace OCC.Combat.Roguelite
             RogueBackpackPlacement? placement = FindFirstFit(instanceId); if (!placement.HasValue) return false;
             backpack[instanceId] = placement.Value; return true;
         }
-        private RogueBackpackPlacement? FindFirstFit(string instanceId, string ignoredInstanceId = null)
+        private RogueBackpackPlacement? FindFirstFit(string instanceId, string ignoredInstanceId = null,
+            int? capacityColumns = null, int? capacityRows = null)
         {
+            int columns = capacityColumns ?? BackpackColumns;
+            int rows = capacityRows ?? BackpackRows;
             Size(instanceId, false, out int width, out int height);
-            for (int y = 0; y < RogueRuntimeConstants.BackpackHeight; y++)
-            for (int x = 0; x < RogueRuntimeConstants.BackpackWidth; x++)
+            for (int y = 0; y < rows; y++)
+            for (int x = 0; x < columns; x++)
             {
-                if (Fits(instanceId, x, y, false, width, height, ignoredInstanceId)) return new RogueBackpackPlacement(x, y, false);
-                if (width != height && Fits(instanceId, x, y, true, height, width, ignoredInstanceId)) return new RogueBackpackPlacement(x, y, true);
+                if (Fits(instanceId, x, y, false, width, height, ignoredInstanceId, columns, rows)) return new RogueBackpackPlacement(x, y, false);
+                if (width != height && Fits(instanceId, x, y, true, height, width, ignoredInstanceId, columns, rows)) return new RogueBackpackPlacement(x, y, true);
             }
             return null;
         }
-        private bool Fits(string instanceId, int x, int y, bool rotated, int width, int height, string ignoredInstanceId = null)
+        private bool Fits(string instanceId, int x, int y, bool rotated, int width, int height,
+            string ignoredInstanceId = null, int? capacityColumns = null, int? capacityRows = null)
         {
-            if (x < 0 || y < 0 || x + width > RogueRuntimeConstants.BackpackWidth || y + height > RogueRuntimeConstants.BackpackHeight) return false;
+            int columns = capacityColumns ?? BackpackColumns;
+            int rows = capacityRows ?? BackpackRows;
+            if (x < 0 || y < 0 || x + width > columns || y + height > rows) return false;
             foreach (KeyValuePair<string, RogueBackpackPlacement> pair in backpack)
             {
                 if (pair.Key == ignoredInstanceId) continue;
@@ -446,6 +477,52 @@ namespace OCC.Combat.Roguelite
                 if (x < pair.Value.X + otherWidth && x + width > pair.Value.X && y < pair.Value.Y + otherHeight && y + height > pair.Value.Y) return false;
             }
             return true;
+        }
+        private (int columns, int rows) CurrentBackpackCapacity()
+        {
+            string instanceId = equipped[EquipmentSlot.Backpack];
+            return string.IsNullOrEmpty(instanceId)
+                ? (RogueRuntimeConstants.DefaultBackpackColumns, RogueRuntimeConstants.DefaultBackpackRows)
+                : CapacityFor(instanceId);
+        }
+        private (int columns, int rows) CapacityFor(string instanceId)
+        {
+            EquipmentDefinition definition = DefinitionFor(instanceId);
+            if (definition == null || definition.Slot != EquipmentSlot.Backpack)
+                throw new InvalidOperationException("Backpack capacity requires a backpack equipment definition: " + instanceId);
+            return (definition.BackpackColumns, definition.BackpackRows);
+        }
+        private bool AllPlacementsLegal(int columns, int rows, string ignoredInstanceId = null)
+        {
+            foreach (KeyValuePair<string, RogueBackpackPlacement> pair in backpack)
+            {
+                if (pair.Key == ignoredInstanceId) continue;
+                Size(pair.Key, pair.Value.Rotated, out int width, out int height);
+                if (pair.Value.X < 0 || pair.Value.Y < 0 || pair.Value.X + width > columns || pair.Value.Y + height > rows)
+                    return false;
+                foreach (KeyValuePair<string, RogueBackpackPlacement> other in backpack)
+                {
+                    if (other.Key == ignoredInstanceId || string.CompareOrdinal(pair.Key, other.Key) >= 0) continue;
+                    Size(other.Key, other.Value.Rotated, out int otherWidth, out int otherHeight);
+                    if (pair.Value.X < other.Value.X + otherWidth && pair.Value.X + width > other.Value.X &&
+                        pair.Value.Y < other.Value.Y + otherHeight && pair.Value.Y + height > other.Value.Y) return false;
+                }
+            }
+            return true;
+        }
+        private void NormalizeBackpackPlacementsAfterLoad()
+        {
+            if (AllPlacementsLegal(BackpackColumns, BackpackRows)) return;
+            string[] ordered = backpack.Keys.OrderBy(InstanceAcquiredOrder).ThenBy(value => value, StringComparer.Ordinal).ToArray();
+            backpack.Clear();
+            foreach (string instanceId in ordered)
+                if (!AddFirstFit(instanceId))
+                    throw new InvalidOperationException("Saved backpack contents do not fit the current capacity: " + instanceId);
+        }
+        private int InstanceAcquiredOrder(string instanceId)
+        {
+            if (equipment.TryGetValue(instanceId, out RogueEquipmentInstance equipmentItem)) return equipmentItem.AcquiredOrder;
+            return tactical.TryGetValue(instanceId, out RogueTacticalItemInstance tacticalItem) ? tacticalItem.AcquiredOrder : int.MaxValue;
         }
         private void Size(string instanceId, bool rotated, out int width, out int height)
         {

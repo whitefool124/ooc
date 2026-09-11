@@ -107,8 +107,8 @@ namespace OCC.Combat.Roguelite
             yield return E("ACA-EQ-HN02","回授护臂",EquipmentSlot.None,EquipmentHandedness.None,EquipmentRarity.Rare,2,1,2,1,0,"defensive_spell_shield:2");
             yield return E("ACA-EQ-LG01","石路行靴",EquipmentSlot.Feet,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,2,0,0,"first_move:+1");
             yield return E("ACA-EQ-LG02","定锚胫甲",EquipmentSlot.Feet,EquipmentHandedness.None,EquipmentRarity.Rare,2,2,3,0,0,"forced_move:-1");
-            yield return E("ACA-EQ-BP01","勘验背架",EquipmentSlot.Backpack,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,3,2,0,0,"first_search_free");
-            yield return E("ACA-EQ-BP02","快挂整备架",EquipmentSlot.Backpack,EquipmentHandedness.None,EquipmentRarity.Rare,2,3,2,0,0,"first_quickbar_swap_free");
+            yield return Backpack("ACA-EQ-BP01","勘验背架",EquipmentRarity.Uncommon,2,3,2,"first_search_free");
+            yield return Backpack("ACA-EQ-BP02","快挂整备架",EquipmentRarity.Rare,2,3,2,"first_quickbar_swap_free");
             yield return E("ACA-EQ-CR01","学院储能芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,1,0,"max_mana:+2");
             yield return E("ACA-EQ-CR02","余焰回收芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Uncommon,2,2,1,2,0,"burn_apply_mana:1");
             yield return E("ACA-EQ-CR03","塔心并联芯",EquipmentSlot.CastingUnit,EquipmentHandedness.None,EquipmentRarity.Legendary,2,2,2,3,0,"max_mana:+4");
@@ -129,6 +129,13 @@ namespace OCC.Combat.Roguelite
                 effects.Where(value => value.StartsWith("attack:") || value == "reload" || value.StartsWith("raise_shield:")),
                 effects.Where(value => !value.StartsWith("attack:") && value != "reload" && !value.StartsWith("raise_shield:")),
                 upgradeNodes: UpgradeNodesFor(id), sourceTypes: new[] { "combat", "shop", "event", "treasure", "boss" });
+
+        private static EquipmentDefinition Backpack(string id, string name, EquipmentRarity rarity,
+            int width, int height, int weight, params string[] effects)
+            => new EquipmentDefinition(id, name, EquipmentSlot.Backpack, EquipmentHandedness.None, rarity,
+                width, height, weight, 0, 0, Array.Empty<string>(), effects,
+                upgradeNodes: UpgradeNodesFor(id), sourceTypes: new[] { "combat", "shop", "event", "treasure", "boss" },
+                backpackColumns: 6, backpackRows: 10);
 
         private static IEnumerable<UpgradeNodeDefinition> UpgradeNodesFor(string id)
         {

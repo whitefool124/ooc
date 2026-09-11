@@ -29,6 +29,18 @@ namespace OCC.Combat.Tests
             Assert.That(view.BackpackCells, Has.Length.EqualTo(60));
             Assert.That(view.BackpackCells.Select(cell => cell.name).Distinct().Count(), Is.EqualTo(60));
             Assert.That(GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(prefab), Is.Zero);
+
+            GameObject instance = Object.Instantiate(prefab);
+            try
+            {
+                RogueLoadoutEquipmentView runtimeView = instance.GetComponent<RogueLoadoutEquipmentView>();
+                Assert.That(runtimeView.ConfigureBackpackGrid(6, 4), Is.EqualTo(64f));
+                Assert.That(runtimeView.BackpackCells.Count(cell => cell.gameObject.activeSelf), Is.EqualTo(24));
+                Assert.That(runtimeView.BackpackItemsRoot.anchoredPosition, Is.EqualTo(Vector2.zero));
+                Assert.That(runtimeView.BackpackItemsRoot.sizeDelta, Is.EqualTo(new Vector2(384f, 256f)));
+                Assert.That(runtimeView.BackpackPanel.Find("背包标题").GetComponent<UnityEngine.UI.Text>().text, Is.EqualTo("背包 6列×4行"));
+            }
+            finally { Object.DestroyImmediate(instance); }
         }
     }
 }

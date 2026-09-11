@@ -298,8 +298,6 @@ namespace OCC.Combat.Roguelite
     // map preparation and combat-time inspection all use these exact cells and slot order.
     public static class RogueInventoryGridSystem
     {
-        public const int BackpackColumns = RogueRuntimeConstants.BackpackWidth;
-        public const int BackpackRows = RogueRuntimeConstants.BackpackHeight;
         public const int EquipmentColumns = 3;
         public const int EquipmentRows = 3;
         public static readonly IReadOnlyList<EquipmentSlot> EquipmentSlots = new[]
@@ -365,13 +363,9 @@ namespace OCC.Combat.Roguelite
             => rotated ? new RogueLoadoutGridPoint(baseHeight, baseWidth) : new RogueLoadoutGridPoint(baseWidth, baseHeight);
     }
 
-    // The formal backpack follows the saved 6 columns by 10 rows directly. Keeping
-    // display and save coordinates aligned makes the tall working grid legible.
+    // Display and save coordinates stay aligned while capacity comes from the equipped backpack.
     public static class RogueLoadoutScreenGridPresentation
     {
-        public const int Columns = RogueInventoryGridSystem.BackpackColumns;
-        public const int Rows = RogueInventoryGridSystem.BackpackRows;
-
         public static RogueLoadoutGridPoint FromRuntime(int x, int y) => new RogueLoadoutGridPoint(x, y);
         public static RogueLoadoutGridPoint ToRuntime(int screenX, int screenY) => new RogueLoadoutGridPoint(screenX, screenY);
         public static RogueLoadoutGridPoint FootprintFromRuntime(RogueLoadoutGridPoint footprint)

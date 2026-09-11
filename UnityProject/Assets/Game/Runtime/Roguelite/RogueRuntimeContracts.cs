@@ -9,8 +9,9 @@ namespace OCC.Combat.Roguelite
         public const string SaveVersion = "rogue11";
         public const int SpellSlotCount = 8;
         public const int ItemQuickbarSize = 4;
-        public const int BackpackWidth = 6;
-        public const int BackpackHeight = 10;
+        public const int DefaultBackpackColumns = 6;
+        public const int DefaultBackpackRows = 4;
+        public const int MaximumBackpackColumns = 10;
         public const int MaximumPersonalMana = 12;
         public const int MaximumPercentageReduction = 50;
     }
@@ -228,12 +229,23 @@ namespace OCC.Combat.Roguelite
         public bool HasDurability { get; }
         public int Armor { get; }
         public int BlockChance { get; }
+        public int BackpackColumns { get; }
+        public int BackpackRows { get; }
 
         public EquipmentDefinition(string definitionId, string displayName, EquipmentSlot slot, EquipmentHandedness handedness,
             EquipmentRarity rarity, int width, int height, int baseWeight, int baseAetherLoad, int turnStartShield,
             IEnumerable<string> baseActionIds, IEnumerable<string> fixedEffectIds, IEnumerable<string> affixPoolIds = null,
-            IEnumerable<UpgradeNodeDefinition> upgradeNodes = null, IEnumerable<string> sourceTypes = null, string uniqueGroupId = "")
+            IEnumerable<UpgradeNodeDefinition> upgradeNodes = null, IEnumerable<string> sourceTypes = null, string uniqueGroupId = "",
+            int backpackColumns = 0, int backpackRows = 0)
         {
+            if (slot == EquipmentSlot.Backpack)
+            {
+                if (backpackColumns < 1 || backpackColumns > RogueRuntimeConstants.MaximumBackpackColumns)
+                    throw new ArgumentOutOfRangeException(nameof(backpackColumns));
+                if (backpackRows < 1) throw new ArgumentOutOfRangeException(nameof(backpackRows));
+            }
+            else if (backpackColumns != 0 || backpackRows != 0)
+                throw new ArgumentException("Only backpack equipment can define backpack capacity.");
             DefinitionId = definitionId; DisplayName = displayName; Slot = slot; Handedness = handedness;
             AllowedRarities = new[] { rarity }; Width = width; Height = height; Rotatable = true;
             BaseWeight = baseWeight; BaseAetherLoad = baseAetherLoad; TurnStartShield = turnStartShield;
@@ -241,6 +253,7 @@ namespace OCC.Combat.Roguelite
             AffixPoolIds = (affixPoolIds ?? Array.Empty<string>()).ToArray(); UpgradeNodes = (upgradeNodes ?? Array.Empty<UpgradeNodeDefinition>()).ToArray();
             SourceStage = "academy"; SourceTypes = (sourceTypes ?? new[] { "reward" }).ToArray(); UniqueGroupId = uniqueGroupId ?? string.Empty;
             ContentVersion = "academy-equipment-v0.1"; HasDurability = false; Armor = 0; BlockChance = 0;
+            BackpackColumns = backpackColumns; BackpackRows = backpackRows;
         }
     }
 
