@@ -66,6 +66,7 @@ namespace OCC.Combat.Presentation
         // jump as the entries swap places.
         private readonly Dictionary<string, float> displayedTimelineValues = new Dictionary<string, float>();
         private readonly Dictionary<string, float> displayedTimelineWidths = new Dictionary<string, float>();
+        private readonly Dictionary<string, int> timelineSlotsByUnit = new Dictionary<string, int>();
         private float displayedTimelineGlobal = -1f;
         private CombatState displayedTimelineState;
         private Image healthFill;
@@ -566,37 +567,41 @@ namespace OCC.Combat.Presentation
                 : new Dictionary<string, int>();
             CombatTurnTrackEntry? leading = track.Count > 0 ? track[0] : (CombatTurnTrackEntry?)null;
             SetTimelineGlobal(leading);
-            for (int i = 0; i < timelineNames.Length; i++)
+            ReconcileTimelineSlots(track);
+            for (int i = 0; i < timelineRows.Length; i++) timelineRows[i].gameObject.SetActive(false);
+            HashSet<int> occupiedTimelineSlots = new HashSet<int>();
+            for (int order = 0; order < track.Count; order++)
             {
-                bool visible = i < track.Count;
-                timelineRows[i].gameObject.SetActive(visible);
-                if (!visible) continue;
-                CombatTurnTrackEntry entry = track[i];
+                CombatTurnTrackEntry entry = track[order];
+                bool existingSlot = timelineSlotsByUnit.ContainsKey(entry.UnitId);
+                int slot = AcquireTimelineSlot(entry.UnitId, occupiedTimelineSlots);
+                PositionTimelineRow(slot, order, existingSlot);
+                timelineRows[slot].gameObject.SetActive(true);
                 Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
-                timelineNodes[i].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
-                timelineRows[i].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
-                timelineNames[i].text = entry.Order + " " + CompactHud(entry.DisplayName, 7);
-                timelineNames[i].color = entry.IsActive ? text : muted;
-                timelineSpeeds[i].text = "速 " + entry.EffectiveSpeed;
-                timelineSpeeds[i].color = entry.IsActive ? faction : muted;
-                timelineDetails[i].color = entry.IsActive ? faction : muted;
+                timelineNodes[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
+                timelineRows[slot].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
+                timelineNames[slot].text = entry.Order + " " + CompactHud(entry.DisplayName, 7);
+                timelineNames[slot].color = entry.IsActive ? text : muted;
+                timelineSpeeds[slot].text = "速 " + entry.EffectiveSpeed;
+                timelineSpeeds[slot].color = entry.IsActive ? faction : muted;
+                timelineDetails[slot].color = entry.IsActive ? faction : muted;
                 bool previewed = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview && timelinePreview.ActionValueTargetId == entry.UnitId;
                 int previewValue = previewed ? CombatActionTimeline.PreviewDelayedValue(state.GetUnit(entry.UnitId), timelinePreview.ActionValueDelay) : entry.ActionValue;
                 float currentWidth = 260f * entry.ActionValue / CombatActionTimeline.MaximumValue;
                 float previewWidth = 260f * previewValue / CombatActionTimeline.MaximumValue;
-                timelineRetained[i].gameObject.SetActive(true);
-                timelineRemoved[i].gameObject.SetActive(previewed);
-                timelineCurrentEndpoint[i].gameObject.SetActive(previewed);
-                timelinePreviewEndpoint[i].gameObject.SetActive(previewed);
-                timelineRetained[i].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .62f);
-                SetTimelineRowValue(i, entry, previewed ? previewValue : entry.ActionValue, previewed ? previewWidth : currentWidth);
-                SetTimelineOrderArrow(i, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
+                timelineRetained[slot].gameObject.SetActive(true);
+                timelineRemoved[slot].gameObject.SetActive(previewed);
+                timelineCurrentEndpoint[slot].gameObject.SetActive(previewed);
+                timelinePreviewEndpoint[slot].gameObject.SetActive(previewed);
+                timelineRetained[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .62f);
+                SetTimelineRowValue(slot, entry, previewed ? previewValue : entry.ActionValue, previewed ? previewWidth : currentWidth);
+                SetTimelineOrderArrow(slot, orderChanges.TryGetValue(entry.UnitId, out int direction) ? direction : 0);
                 if (previewed)
                 {
-                    timelineRemoved[i].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 10);
-                    timelineRemoved[i].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 4);
-                    timelineCurrentEndpoint[i].rectTransform.anchoredPosition = new Vector2(114 + currentWidth, 7);
-                    timelinePreviewEndpoint[i].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 7);
+                    timelineRemoved[slot].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 10);
+                    timelineRemoved[slot].rectTransform.sizeDelta = new Vector2(Mathf.Max(2, currentWidth - previewWidth), 4);
+                    timelineCurrentEndpoint[slot].rectTransform.anchoredPosition = new Vector2(114 + currentWidth, 7);
+                    timelinePreviewEndpoint[slot].rectTransform.anchoredPosition = new Vector2(114 + previewWidth, 7);
                 }
             }
             for (int i = 0; i < quickbarLabels.Length; i++)
@@ -1412,10 +1417,45 @@ namespace OCC.Combat.Presentation
             return Mathf.Lerp(motion.StandardDuration, Mathf.Max(.08f, .42f * motion.Intensity), distance);
         }
 
+        private void ReconcileTimelineSlots(IReadOnlyList<CombatTurnTrackEntry> track)
+        {
+            HashSet<string> visibleUnits = new HashSet<string>(track.Select(entry => entry.UnitId));
+            foreach (string unitId in timelineSlotsByUnit.Keys.Where(unitId => !visibleUnits.Contains(unitId)).ToArray())
+                timelineSlotsByUnit.Remove(unitId);
+        }
+
+        private int AcquireTimelineSlot(string unitId, ISet<int> occupiedSlots)
+        {
+            if (timelineSlotsByUnit.TryGetValue(unitId, out int existingSlot) && occupiedSlots.Add(existingSlot)) return existingSlot;
+            for (int slot = 0; slot < timelineRows.Length; slot++)
+            {
+                if (!occupiedSlots.Add(slot)) continue;
+                timelineSlotsByUnit[unitId] = slot;
+                return slot;
+            }
+            throw new InvalidOperationException("行动条没有可用显示行。");
+        }
+
+        private void PositionTimelineRow(int slot, int order, bool animate)
+        {
+            RectTransform rect = timelineRows[slot].rectTransform;
+            Vector2 target = new Vector2(14f, -104f - order * 66f);
+            rect.DOKill();
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
+            if (!animate || motion.IsImmediate)
+            {
+                rect.anchoredPosition = target;
+                return;
+            }
+            rect.DOAnchorPos(target, Mathf.Max(.08f, .32f * motion.Intensity))
+                .SetEase(Ease.InOutCubic).SetUpdate(true).SetTarget(rect);
+        }
+
         private void ResetTimelineMotionState()
         {
             displayedTimelineValues.Clear();
             displayedTimelineWidths.Clear();
+            timelineSlotsByUnit.Clear();
             displayedTimelineGlobal = -1f;
             displayedTimelineState = null;
             if (timelineGlobalFill != null) timelineGlobalFill.rectTransform.DOKill();
@@ -1423,6 +1463,7 @@ namespace OCC.Combat.Presentation
             {
                 timelineDetails[i]?.DOKill();
                 timelineRetained[i]?.rectTransform.DOKill();
+                timelineRows[i]?.rectTransform.DOKill();
             }
         }
 
