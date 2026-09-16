@@ -76,13 +76,19 @@ namespace OCC.Combat
         public int InitiativeDelay { get; }
         public SkillTargetRule TargetRule { get; }
         public SkillDeliveryMethod Delivery { get; }
+        /// <summary>
+        /// Selection geometry, so 范围 can be written as 形状＋距离 (总案 3.5.1.1) instead of a bare reach
+        /// number. Defaults to 单点 for the generic skills that only ever select one target; fire personal
+        /// spells carry their authored shape through this field.
+        /// </summary>
+        public FireSelectionShape Shape { get; }
         public IReadOnlyList<SkillEffectDefinition> Effects { get; }
         public IReadOnlyList<SkillModifierDefinition> Modifiers { get; }
         public CombatFeedbackKind PresentationKind { get; }
 
-        public SkillDefinition(string id, string displayName, DamageType damageType, int damage, int range, int manaCost, int cooldown, StatusType? status = null, int statusDuration = 0, int initiativeDelay = 0, int minimumRange = 0)
+        public SkillDefinition(string id, string displayName, DamageType damageType, int damage, int range, int manaCost, int cooldown, StatusType? status = null, int statusDuration = 0, int initiativeDelay = 0, int minimumRange = 0, FireSelectionShape shape = FireSelectionShape.Single)
         {
-            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; Status = status; StatusDuration = statusDuration; InitiativeDelay = initiativeDelay;
+            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; Status = status; StatusDuration = statusDuration; InitiativeDelay = initiativeDelay; Shape = shape;
             TargetRule = SkillTargetRule.EnemyUnit;
             Delivery = SkillDeliveryMethod.Projectile;
             List<SkillEffectDefinition> effects = new List<SkillEffectDefinition>();
@@ -93,9 +99,9 @@ namespace OCC.Combat
             PresentationKind = status.HasValue ? CombatFeedbackCatalog.ForStatus(status.Value) : CombatFeedbackKind.Damage;
         }
 
-        public SkillDefinition(string id, string displayName, SkillTargetRule targetRule, SkillDeliveryMethod delivery, int range, int manaCost, int cooldown, CombatFeedbackKind presentationKind, IEnumerable<SkillEffectDefinition> effects, IEnumerable<SkillModifierDefinition> modifiers = null, int minimumRange = 0)
+        public SkillDefinition(string id, string displayName, SkillTargetRule targetRule, SkillDeliveryMethod delivery, int range, int manaCost, int cooldown, CombatFeedbackKind presentationKind, IEnumerable<SkillEffectDefinition> effects, IEnumerable<SkillModifierDefinition> modifiers = null, int minimumRange = 0, FireSelectionShape shape = FireSelectionShape.Single)
         {
-            Id = id; DisplayName = displayName; TargetRule = targetRule; Delivery = delivery; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; PresentationKind = presentationKind;
+            Id = id; DisplayName = displayName; TargetRule = targetRule; Delivery = delivery; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; PresentationKind = presentationKind; Shape = shape;
             Effects = (effects ?? throw new ArgumentNullException(nameof(effects))).ToArray();
             Modifiers = modifiers == null ? Array.Empty<SkillModifierDefinition>() : modifiers.ToArray();
             SkillEffectDefinition? damage = Effects.Where(effect => effect.Type == SkillEffectType.Damage).Select(effect => (SkillEffectDefinition?)effect).FirstOrDefault();

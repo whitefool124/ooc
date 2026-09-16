@@ -116,14 +116,15 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ZeroTempoSpellsOnlyCashOutExistingBurningOrFireground()
+        public void BurningAndFiregroundCashingSpells_ChargeTempoAndConsumeTheirSource()
         {
-            string[] expected = { "F-P-M17", "F-P-U11", "F-P-R17" };
-            Assert.That(FireSpellCatalog.All.Where(spell => spell.ActionPointCost == 0 && spell.ManaCost == 0 && spell.Cooldown == 0)
-                .Select(spell => spell.Id), Is.EquivalentTo(expected));
-            foreach (string id in expected)
+            // 技能配置表 charges these three converters an ordinary action point; what stops them from
+            // repeating for free is that each consumes the burning or fireground it cashes out.
+            string[] converters = { "F-P-M17", "F-P-U11", "F-P-R17" };
+            foreach (string id in converters)
             {
                 FireSpellDefinition spell = FireSpellCatalog.Get(id);
+                Assert.That(spell.ActionPointCost, Is.EqualTo(1), id);
                 Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground), Is.True, id);
             }
             Assert.That(FireSpellCatalog.Get("F-P-M20").ActionPointCost, Is.EqualTo(2));
@@ -856,7 +857,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void PressureStrike_HasAPreviewedTwoToThreeTileRangeBand()
+        public void PressureStrike_MatchesTheOfficialRangeContractWithoutADeadZone()
         {
             GridMap map = new GridMap(6, 2);
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -872,17 +873,21 @@ namespace OCC.Combat.Tests
             FireBattleState battle = new FireBattleState(combat);
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R09");
 
-            Assert.That(spell.MinimumRange, Is.EqualTo(2));
+            // The official table defines 焰击术 as a plain three-cell spell. The 2–3 test-arena band was
+            // never part of it, so an adjacent target is legal here; the dead-zone presentation keeps its
+            // own coverage in CombatBattlefieldCellPresenterTests.
+            Assert.That(spell.DisplayName, Is.EqualTo("焰击术"));
+            Assert.That(spell.MinimumRange, Is.Zero);
             Assert.That(spell.Range, Is.EqualTo(3));
-            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(adjacent.Id)).CanCommit, Is.False);
-            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(adjacent.Id)).Failures,
-                Does.Contain("目标位于近身死区（需至少 2 格）"));
-            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(band.Id)).CanCommit, Is.True);
+            Assert.That(spell.InitiativeDelay, Is.EqualTo(4));
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(adjacent.Id)).CanCommit, Is.True);
             Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(edge.Id)).CanCommit, Is.True);
             Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(far.Id)).Failures,
                 Does.Contain("超出射程"));
+            // 总案 3.5.1.1: range is written as 形状＋距离, never as a bare reach number, and 选取范围 and
+            // 作用范围 are separate fields.
             Assert.That(OCC.Combat.Presentation.RogueliteSettlementPresentation.FireSpellTargetSummary(spell),
-                Does.Contain("2–3 格（近身死区）"));
+                Does.Contain("选取：单点 3 格内").And.Contain("；作用：目标格"));
 
             int before = band.Health + band.Shield;
             FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(band.Id));
@@ -1225,7 +1230,7 @@ namespace OCC.Combat.Tests
             {
                 { "F-P-M03", 2 }, { "F-P-U17", 2 }, { "F-P-R11", 3 },
                 { "F-P-R12", 2 }, { "F-P-R13", 4 }, { "F-P-R14", 4 },
-                { "F-P-R15", 2 }, { "F-P-R20", 3 }
+                { "F-P-R15", 3 }, { "F-P-R20", 3 }
             };
 
             foreach (var pair in expected)
@@ -1341,10 +1346,16 @@ namespace OCC.Combat.Tests
             combat.Map.SetTile(center, new TileState { Cover = CoverType.Light, Durability = 16 });
             FireBattleState battle = new FireBattleState(combat);
             UnitState neighbor = combat.GetUnit("range_armored");
+            int neighborBefore = neighbor.Health + neighbor.Shield;
+            int centerDurabilityBefore = combat.Map.GetTile(center).Durability;
             FireSpellEngine.Execute(battle, "hero", FireSpellCatalog.Get("F-P-R19"), FireSpellTarget.At(center, CardinalDirection.East));
 
-            Assert.That(combat.Map.GetTile(center).Durability, Is.EqualTo(8));
-            Assert.That(neighbor.Health + neighbor.Shield, Is.EqualTo(22));
+            // 技能配置表：对中心单位或物件造成 16 点伤害，并对正交相邻单位与物件各造成 8 点伤害。
+            // Asserted as deltas so the expectation tracks the factory's current vitality values.
+            Assert.That(centerDurabilityBefore - combat.Map.GetTile(center).Durability, Is.EqualTo(16),
+                "The centre deals its full value to whatever stands on the target cell.");
+            Assert.That(neighborBefore - (neighbor.Health + neighbor.Shield), Is.EqualTo(8),
+                "Each orthogonal neighbour takes the neighbour value, unit or object alike.");
         }
 
         [Test]

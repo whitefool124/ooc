@@ -334,6 +334,57 @@ namespace OCC.Combat.Tests
             Assert.That(FormalCombatHud.PrimaryClickInstruction(action), Is.EqualTo(expected));
         }
 
+        [Test]
+        public void ContextMenuPreview_ShowsTheHoveredRowsRangeInsteadOfTheCommittedAction()
+        {
+            CombatState state = State(out UnitState hero, out _);
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            hero.ConfigureMana(12, 12);
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            CombatResolver.BeginTurn(state, hero.Id);
+            GameObject root = new GameObject("context-preview-host");
+            try
+            {
+                CombatPrototypeBootstrap bootstrap = root.AddComponent<CombatPrototypeBootstrap>();
+                SetState(bootstrap, state);
+                CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+                assets.LoadRuntime();
+                CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                    new BattlefieldPresentationAdapter(), assets);
+                GridPosition anchor = new GridPosition(1, 0);
+
+                Assert.That(Present(presenter, bootstrap, state, anchor).MoveOverlayTexture, Is.Not.Null,
+                    "Without the menu the board shows the committed action's range.");
+
+                bootstrap.PreviewBattlefieldContextAction(anchor, string.Empty);
+                BattlefieldCellPresentation anchorOnly = Present(presenter, bootstrap, state, anchor);
+                Assert.That(anchorOnly.MoveOverlayTexture, Is.Null,
+                    "Opening the menu must not keep painting the committed action's range.");
+                Assert.That(anchorOnly.AttackOverlayTexture, Is.Null);
+                Assert.That(anchorOnly.SelectionOverlayTexture.name, Is.EqualTo("selected"),
+                    "The anchor cell must stay identifiable while the menu is open.");
+
+                bootstrap.PreviewBattlefieldContextAction(anchor, "attack");
+                Assert.That(Present(presenter, bootstrap, state, anchor).AttackOverlayTexture, Is.Not.Null,
+                    "Hovering the attack row previews the weapon envelope at the anchor.");
+
+                bootstrap.ClearBattlefieldContextPreview();
+                Assert.That(Present(presenter, bootstrap, state, anchor).MoveOverlayTexture, Is.Not.Null,
+                    "Closing the menu restores the committed action's range.");
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        private static BattlefieldCellPresentation Present(CombatBattlefieldCellPresenter presenter,
+            CombatPrototypeBootstrap bootstrap, CombatState state, GridPosition position)
+        {
+            CombatSelectionController selection = (CombatSelectionController)typeof(CombatPrototypeBootstrap)
+                .GetField("selection", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(bootstrap);
+            return presenter.Build(state, null, new FireBattleState(state), selection, false, null, position,
+                _ => null, (_, __) => null, _ => null, _ => null);
+        }
+
         private static void SetState(CombatPrototypeBootstrap bootstrap, CombatState state)
         {
             typeof(CombatPrototypeBootstrap).GetField("state", BindingFlags.Instance | BindingFlags.NonPublic)

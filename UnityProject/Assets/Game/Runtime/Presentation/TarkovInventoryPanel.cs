@@ -379,9 +379,15 @@ namespace OCC.Combat.Presentation
                 inventoryHoverText = InventoryInteractionPresentation.BuildHoverText(hovered, placement);
                 inventoryHoverPointer = pointer;
                 ItemDefinition definition = ItemCatalog.Get(hovered.DefinitionId);
-                contentHover = new FormalTooltipContent(CategoryName(definition.Category), definition.DisplayName,
-                    CombatInformationPresenter.BuildItemDetails(definition, hovered, Array.IndexOf(state.ItemQuickbar, hovered.InstanceId)), FormalUiTheme.Safe,
-                    definition.IconPath);
+                // 法宝类物品改用方框词条；普通物品没有目标概念，保持原样。
+                System.Collections.Generic.IReadOnlyList<string> itemTags = CombatSpellTags.ForItem(definition);
+                contentHover = itemTags.Count > 0
+                    ? new FormalTooltipContent(CategoryName(definition.Category), definition.DisplayName,
+                        CombatInformationPresenter.BuildItemDetails(definition, hovered, Array.IndexOf(state.ItemQuickbar, hovered.InstanceId)), FormalUiTheme.Safe,
+                        definition.IconPath, itemTags)
+                    : new FormalTooltipContent(CategoryName(definition.Category), definition.DisplayName,
+                        CombatInformationPresenter.BuildItemDetails(definition, hovered, Array.IndexOf(state.ItemQuickbar, hovered.InstanceId)), FormalUiTheme.Safe,
+                        definition.IconPath);
                 contentHoverPointer = pointer;
             }
 

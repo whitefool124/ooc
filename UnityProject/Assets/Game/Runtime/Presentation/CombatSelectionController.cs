@@ -17,12 +17,35 @@ namespace OCC.Combat.Presentation
         public bool IsKeyboardTargeting => navigation.Active;
         public GridPosition KeyboardPosition => navigation.Position;
 
+        /// <summary>
+        /// Transient right-click menu preview: which action the menu is offering at which anchor cell.
+        /// An empty action marks only the anchor, so opening the menu never repaints the board with the
+        /// committed action's range.
+        /// </summary>
+        public bool HasMenuPreview { get; private set; }
+        public string MenuPreviewAction { get; private set; } = string.Empty;
+        public GridPosition MenuPreviewPosition { get; private set; }
+
+        public void SetMenuPreview(string action, GridPosition position)
+        {
+            HasMenuPreview = true;
+            MenuPreviewAction = action ?? string.Empty;
+            MenuPreviewPosition = position;
+        }
+
+        public void ClearMenuPreview()
+        {
+            HasMenuPreview = false;
+            MenuPreviewAction = string.Empty;
+        }
+
         public void SelectAction(string action)
         {
             navigation.End();
             Action = string.IsNullOrEmpty(action) ? "移动" : action;
             TargetId = null;
             HasPreviewPosition = false;
+            ClearMenuPreview();
         }
 
         public void Reset(string action = "移动")
@@ -31,6 +54,7 @@ namespace OCC.Combat.Presentation
             Action = action;
             TargetId = null;
             HasPreviewPosition = false;
+            ClearMenuPreview();
         }
 
         public bool SetTarget(CombatState state, string unitId) =>

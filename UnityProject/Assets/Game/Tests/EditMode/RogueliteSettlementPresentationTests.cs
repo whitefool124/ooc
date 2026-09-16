@@ -126,18 +126,27 @@ namespace OCC.Combat.Tests
                 Assert.That(cards, Is.Not.Empty);
                 foreach (RectTransform card in cards)
                 {
-                    Assert.That(card.sizeDelta, Is.EqualTo(new Vector2(410f, 360f)));
+                    Assert.That(card.sizeDelta.x, Is.EqualTo(410f));
+                    Assert.That(card.sizeDelta.y, Is.GreaterThanOrEqualTo(360f));
                     Assert.That(FormalUiKit.SkinOverlay(card.GetComponent<Image>()), Is.Null);
+                    RectTransform stat = card.Find("数值").GetComponent<RectTransform>();
                     RectTransform detail = card.Find("完整效果").GetComponent<RectTransform>();
                     RectTransform choice = card.Find("选择").GetComponent<RectTransform>();
                     Assert.That(detail.GetComponent<Text>().text, Is.Not.Empty);
                     Assert.That(card.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null);
-                    Assert.That(detail.anchoredPosition, Is.EqualTo(new Vector2(24f, -146f)));
-                    Assert.That(detail.sizeDelta.y, Is.EqualTo(92f));
+                    Canvas.ForceUpdateCanvases();
+                    // 数值行按内容自量：标称 40 高，装不下就长高并让下方整体让位。此前固定 40 会被 Truncate 截断。
+                    Assert.That(stat.sizeDelta.y, Is.GreaterThanOrEqualTo(40f));
+                    Assert.That(stat.GetComponent<Text>().preferredHeight, Is.LessThanOrEqualTo(stat.sizeDelta.y + .01f));
+                    float statGrowth = stat.sizeDelta.y - 40f;
+                    Assert.That(detail.anchoredPosition, Is.EqualTo(new Vector2(24f, -146f - statGrowth)));
+                    Assert.That(detail.sizeDelta.y, Is.GreaterThanOrEqualTo(92f));
+                    Assert.That(detail.GetComponent<Text>().preferredHeight, Is.LessThanOrEqualTo(detail.sizeDelta.y + .01f));
                     Assert.That(-choice.anchoredPosition.y, Is.GreaterThanOrEqualTo(-detail.anchoredPosition.y + detail.rect.height));
                     Assert.That(choice.anchoredPosition.y - choice.rect.height, Is.GreaterThanOrEqualTo(-card.rect.height));
                     Assert.That(card.Find("奖励细框_上").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(410f, 2f)));
-                    Assert.That(card.Find("奖励细框_下").GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-358f));
+                    Assert.That(card.Find("奖励细框_下").GetComponent<RectTransform>().anchoredPosition.y,
+                        Is.EqualTo(-card.rect.height + 2f));
                     Assert.That(card.Find("奖励细框_右").GetComponent<RectTransform>().anchoredPosition.x, Is.EqualTo(408f));
                 }
             }

@@ -215,6 +215,8 @@ namespace OCC.Combat.Presentation
         void SubmitBattlefieldContextAction(GridPosition position, string actionId);
         void NotifyBattlefieldContextUnavailable(GridPosition position);
         void SetBattlefieldContextMenuOpen(bool open);
+        void PreviewBattlefieldContextAction(GridPosition position, string actionId);
+        void ClearBattlefieldContextPreview();
         void SetBattlefieldPreviewPosition(GridPosition position, bool active);
         void FocusBattlefieldOnHero();
     }

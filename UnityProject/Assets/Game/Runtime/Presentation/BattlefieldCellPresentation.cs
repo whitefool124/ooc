@@ -31,6 +31,7 @@ namespace OCC.Combat.Presentation
         public Texture2D AttackOverlayTexture { get; }
         public float AttackOverlayAlpha { get; }
         public Texture2D SkillOverlayTexture { get; }
+        public float SkillOverlayAlpha { get; }
         public Texture2D SelectionOverlayTexture { get; }
         public Texture2D UnitTexture { get; }
         public Rect UnitUv { get; }
@@ -64,7 +65,7 @@ namespace OCC.Combat.Presentation
             IReadOnlyList<BattlefieldStatusVisual> statuses, EnemyIntentPresentation intent, Texture2D intentTexture,
             string hoverText, Vector2 unitTravelOffset = default, int objectForegroundRows = 0,
             string surfaceHoverText = null, string terrainEffectHoverText = null, string objectHoverText = null,
-            Texture2D floorTextureLow = null, Texture2D objectTextureLow = null)
+            Texture2D floorTextureLow = null, Texture2D objectTextureLow = null, float skillOverlayAlpha = 1f)
         {
             Position = position;
             FloorTexture = floorTexture;
@@ -79,6 +80,7 @@ namespace OCC.Combat.Presentation
             AttackOverlayTexture = attackOverlayTexture;
             AttackOverlayAlpha = attackOverlayAlpha;
             SkillOverlayTexture = skillOverlayTexture;
+            SkillOverlayAlpha = skillOverlayAlpha;
             SelectionOverlayTexture = selectionOverlayTexture;
             UnitTexture = unitTexture;
             UnitUv = unitUv;

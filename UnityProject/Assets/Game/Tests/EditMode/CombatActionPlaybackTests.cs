@@ -154,25 +154,21 @@ namespace OCC.Combat.Tests
             finally { Object.DestroyImmediate(root); }
         }
 
-        [TestCase(64f)]
-        [TestCase(128f)]
+        [TestCase(192f)]
+        [TestCase(384f)]
         public void Camera_FollowsCurrentPositionByMinimumDistanceAndKeepsOverviewStable(float size)
         {
             var viewport = new BattlefieldPresentationAdapter().CreateViewport(12, 9);
-            if (size == 128f) viewport.ZoomAt(400, 400, 1);
+            while (viewport.CellSize < size) viewport.ZoomAt(400, 400, 1);
+            Assert.That(viewport.CellSize, Is.EqualTo(size));
+            // 定案后所有档位下盘面都大于视口，因此跟随一定是"越界才移动"。
             var before = viewport.BoardRect;
             viewport.FollowVisualPosition(5f, 4f);
             Assert.That(viewport.BoardRect.X, Is.EqualTo(before.X)); Assert.That(viewport.BoardRect.Y, Is.EqualTo(before.Y));
             viewport.FollowVisualPosition(10.5f, .5f);
-            if (size == 64f) { Assert.That(viewport.BoardRect.X, Is.EqualTo(before.X)); Assert.That(viewport.BoardRect.Y, Is.EqualTo(before.Y)); }
-            else
-            {
-                Assert.That(viewport.BoardRect.X % 2, Is.Zero); Assert.That(viewport.BoardRect.Y % 2, Is.Zero);
-                float pointX = viewport.BoardRect.X + 11f * size;
-                Assert.That(pointX, Is.LessThanOrEqualTo(viewport.ViewportRect.XMax - 1.5f * size + 1f));
-                var stayed = viewport.BoardRect; viewport.FollowVisualPosition(10.5f, .5f);
-                Assert.That(viewport.BoardRect.X, Is.EqualTo(stayed.X)); Assert.That(viewport.BoardRect.Y, Is.EqualTo(stayed.Y));
-            }
+            Assert.That(viewport.BoardRect.X % 2, Is.Zero); Assert.That(viewport.BoardRect.Y % 2, Is.Zero);
+            var stayed = viewport.BoardRect; viewport.FollowVisualPosition(10.5f, .5f);
+            Assert.That(viewport.BoardRect.X, Is.EqualTo(stayed.X)); Assert.That(viewport.BoardRect.Y, Is.EqualTo(stayed.Y));
         }
 
         private static string Signature(CombatState state) => string.Join("|", state.Units.Values.Select(u =>

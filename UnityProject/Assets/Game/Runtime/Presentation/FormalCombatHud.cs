@@ -1111,7 +1111,15 @@ namespace OCC.Combat.Presentation
                 ArtifactDefinition artifact = rogueSlot == 0 ? (bootstrap?.CurrentArmedArtifact ?? bootstrap?.CurrentTrainingRangeArtifact) : null;
                 iconPath = artifact?.IconPath ?? fire?.IconPath ?? string.Empty;
             }
-            return new FormalTooltipContent(category, title, body, line, iconPath);
+            // 作用对象与范围改用方框词条说明，避免散文式的「目标：…单点 4 格内…」。
+            FireSpellDefinition tagSpell = rogueSlot < 0 ? null : bootstrap?.FireSpellInSlot(rogueSlot);
+            ArtifactDefinition tagArtifact = rogueSlot == 0 ? (bootstrap?.CurrentArmedArtifact ?? bootstrap?.CurrentTrainingRangeArtifact) : null;
+            IReadOnlyList<string> tags = tagSpell != null ? CombatSpellTags.For(tagSpell)
+                : tagArtifact != null ? CombatSpellTags.For(tagArtifact)
+                : rogueSpell != null ? CombatSpellTags.For(rogueSpell) : null;
+            return tags == null || tags.Count == 0
+                ? new FormalTooltipContent(category, title, body, line, iconPath)
+                : new FormalTooltipContent(category, title, body, line, iconPath, tags);
         }
 
         private bool HandleSpellShortcutInput()
@@ -1393,8 +1401,12 @@ namespace OCC.Combat.Presentation
             ItemInstance item = state == null || slot < 0 || slot >= state.ItemQuickbar.Length ? null : state.ItemInventory.Get(state.ItemQuickbar[slot]);
             ItemDefinition definition = item == null ? null : ItemCatalog.Get(item.DefinitionId);
             string title = definition == null ? "快捷栏 " + (slot + 1) : definition.DisplayName;
-            return new FormalTooltipContent("物品", title, CombatInformationPresenter.BuildItemDetails(definition, item, slot), FormalUiTheme.Safe,
-                definition?.IconPath ?? string.Empty);
+            IReadOnlyList<string> itemTags = CombatSpellTags.ForItem(definition);
+            return itemTags.Count > 0
+                ? new FormalTooltipContent("物品", title, CombatInformationPresenter.BuildItemDetails(definition, item, slot), FormalUiTheme.Safe,
+                    definition.IconPath, itemTags)
+                : new FormalTooltipContent("物品", title, CombatInformationPresenter.BuildItemDetails(definition, item, slot), FormalUiTheme.Safe,
+                    definition?.IconPath ?? string.Empty);
         }
 
         private FormalTooltipContent BuildOutcomeTooltip()

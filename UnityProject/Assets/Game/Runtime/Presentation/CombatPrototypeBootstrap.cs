@@ -777,6 +777,40 @@ namespace OCC.Combat.Presentation
         }
         public void SetBattlefieldContextMenuOpen(bool open) => battlefieldContextMenuOpen = open;
 
+        /// <summary>
+        /// Shows what the right-click menu is offering at <paramref name="position"/> before it is
+        /// committed. An empty or unmapped <paramref name="actionId"/> marks only the anchor cell, so
+        /// opening the menu does not repaint the board with the committed action's range.
+        /// </summary>
+        public void PreviewBattlefieldContextAction(GridPosition position, string actionId)
+        {
+            selection.SetMenuPreview(ContextPreviewAction(actionId), position);
+            MarkPresentation(UiPresentationArea.Combat);
+        }
+
+        public void ClearBattlefieldContextPreview()
+        {
+            selection.ClearMenuPreview();
+            MarkPresentation(UiPresentationArea.Combat);
+        }
+
+        /// <summary>
+        /// Artifact rows deliberately preview nothing beyond the anchor: an artifact only becomes
+        /// 技能1 after ActivateInventoryQuickbar arms it, so previewing 技能1 here would show whatever
+        /// spell currently occupies that slot instead of the row the player is hovering.
+        /// </summary>
+        private static string ContextPreviewAction(string actionId)
+        {
+            if (string.IsNullOrEmpty(actionId)) return string.Empty;
+            if (actionId == "move") return "移动";
+            if (actionId == "attack") return "攻击";
+            if (actionId == "loot") return "搜刮";
+            if (actionId == "interact") return "互动";
+            if (actionId.StartsWith("spell:", StringComparison.Ordinal) &&
+                int.TryParse(actionId.Substring(6), out int slot)) return "技能" + (slot + 1);
+            return string.Empty;
+        }
+
         private void AddContextActionIfLegal(List<BattlefieldContextAction> actions, GridPosition position,
             string action, string id, string label, string detail)
         {
@@ -1808,7 +1842,20 @@ namespace OCC.Combat.Presentation
         public static bool CanSubmitTurnCommand(CombatCommand command, bool explicitHeroEndTurn) =>
             CombatCommandExecutionService.CanSubmit(command, explicitHeroEndTurn);
 
-        private string GetRangeDescription() { int count = 0; if (state != null) for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsInSelectedRange(new GridPosition(x, y))) count++; UnitState hero = state?.GetUnit("hero"); string rule = selection.Action == "\u79fb\u52a8" ? "\u79fb\u52a8\u8303\u56f4：" + (hero?.MovementRangeThisTurn ?? UnitState.BaseMovementRange) + " \u683c" : selection.Action == "\u653b\u51fb" ? "\u653b\u51fb\u8303\u56f4：4 \u683c" : selection.Action == "\u65bd\u672f" ? "\u706b\u672f\u8303\u56f4：5 \u683c" : selection.Action == "\u4e92\u52a8" ? "\u4e92\u52d5\u8303\u56f4：1 \u683c" : "\u9053\u5177：\u81ea\u8eab\u4f7f\u7528"; return rule + "　\u9ad8\u4eae " + count + " \u683c"; }
+        private string GetRangeDescription()
+        {
+            int count = 0;
+            if (state != null)
+                for (int y = 0; y < state.Map.Height; y++)
+                    for (int x = 0; x < state.Map.Width; x++)
+                        if (IsInSelectedRange(new GridPosition(x, y))) count++;
+            // Reuse the same preview text the combat HUD shows, so the announced range can never drift
+            // from the highlighted cells or from the numbers in the action panel.
+            CombatActionPreview preview = BuildActionPreview(selection.Action);
+            string rule = preview == null || string.IsNullOrWhiteSpace(preview.TargetRule)
+                ? selection.Action : selection.Action + "：" + preview.TargetRule;
+            return rule + "　高亮 " + count + " 格";
+        }
         private bool IsInSelectedRange(GridPosition p)
         {
             int slot = RogueSkillSlot(selection.Action);

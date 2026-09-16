@@ -34,21 +34,41 @@ namespace OCC.Combat.Presentation
                 ? assets.FiregroundFrame(environmentFrame)
                 : tile.SmokeExpiresAt > state.CurrentTime ? assets.SmokeFrame(environmentFrame)
                 : tile.IsWater ? assets.Environment("rain_court_water") : null;
-            PressureReactionPreview pressureReaction = selection.Action == "移动" && battlefield.IsInMoveRange(state, position)
+            // The right-click menu previews an action before it is committed. While the menu is open its
+            // preview replaces the committed action, so the board never mixes two actions' ranges; an
+            // empty preview action means only the menu's anchor cell is marked.
+            bool menuPreview = selection.HasMenuPreview;
+            string rangeAction = menuPreview ? selection.MenuPreviewAction : selection.Action;
+            bool showRange = !menuPreview || !string.IsNullOrEmpty(rangeAction);
+
+            bool inMoveRange = showRange && rangeAction == "移动" && battlefield.IsInMoveRange(state, position);
+            PressureReactionPreview pressureReaction = inMoveRange
                 ? state.PressureTest?.PreviewHeroMove(state, position) : null;
-            Texture2D move = selection.Action == "移动" && battlefield.IsInMoveRange(state, position)
-                ? assets.Overlay(pressureReaction?.WillTrigger == true ? "high_risk" : "move_range") : null;
-            Texture2D attack = selection.Action == "攻击" && battlefield.IsInAttackRange(state, position) ? assets.Overlay("attack_range") : null;
-            Texture2D skill = null;
-            int fireSlot = FireSpellSlot(selection.Action);
+            BattlefieldCellMarker moveMarker = !inMoveRange ? BattlefieldCellMarker.None
+                : pressureReaction?.WillTrigger == true ? BattlefieldCellMarker.MovementRisk
+                : BattlefieldCellMarker.MovementRange;
+            BattlefieldCellMarker attackMarker = BattlefieldCellMarker.None;
+            if (showRange && rangeAction == "攻击")
+            {
+                if (battlefield.IsInAttackRange(state, position))
+                    attackMarker = battlefield.IsLegalTarget(state, "攻击", position)
+                        ? BattlefieldCellMarker.AttackTarget : BattlefieldCellMarker.AttackEnvelope;
+                else if (IsInsideWeaponDeadZone(state, position))
+                    attackMarker = BattlefieldCellMarker.Undeliverable;
+            }
+            BattlefieldCellMarker skillMarker = BattlefieldCellMarker.None;
+            int fireSlot = showRange ? FireSpellSlot(rangeAction) : -1;
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : fireSpellInSlot(fireSlot);
             FireSpellPreview firePreview = fireSpell == null ? null : firePreviewAt(fireSpell, position);
             if (firePreview?.CanCommit == true)
-                skill = assets.Overlay(firePreview.FriendlyFireRisk ? "high_risk" : "attack_range");
-            else if (fireSpell != null && fireSpell.MinimumRange > 0 && state.GetUnit("hero") is UnitState rangeSource &&
-                rangeSource.Position.ManhattanDistance(position) < fireSpell.MinimumRange)
-                skill = assets.Overlay("unreachable");
-            GridPosition? previewCenter = selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
+                skillMarker = firePreview.FriendlyFireRisk ? BattlefieldCellMarker.SkillRisk : BattlefieldCellMarker.SkillSelectable;
+            else if (IsInsideSpellDeadZone(state, fireSpell, position))
+                skillMarker = BattlefieldCellMarker.Undeliverable;
+            else if (SupportsRangeEnvelope(fireSpell) && IsInsideDeclaredReach(firePreview))
+                // A spell with no legal target yet still has to answer "how far does this reach".
+                skillMarker = BattlefieldCellMarker.SkillRangeEnvelope;
+            GridPosition? previewCenter = menuPreview ? (GridPosition?)selection.MenuPreviewPosition
+                : selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
             if (!previewCenter.HasValue && fireSpell != null && !string.IsNullOrEmpty(selection.TargetId))
             {
                 UnitState selectedTarget = state.GetUnit(selection.TargetId);
@@ -63,9 +83,12 @@ namespace OCC.Combat.Presentation
                     UnitState source = state.GetUnit("hero");
                     bool friendlyCell = affected != null && source != null && affected.Id != source.Id && affected.IsHero == source.IsHero &&
                         fireSpell.Rules.Any(rule => rule.AffectAllies);
-                    skill = assets.Overlay(friendlyCell ? "high_risk" : "attack_range");
+                    skillMarker = friendlyCell ? BattlefieldCellMarker.SkillRisk : BattlefieldCellMarker.SkillCommitted;
                 }
             }
+            Texture2D move = OverlayFor(moveMarker);
+            Texture2D attack = OverlayFor(attackMarker);
+            Texture2D skill = OverlayFor(skillMarker);
 
             UnitState unit = state.Units.Values.Select(candidate => feedback?.PresentedUnit(candidate) ?? candidate).FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == position);
@@ -202,8 +225,9 @@ namespace OCC.Combat.Presentation
                 : searchableLootHere ? assets.Academy(state.LootSource.State == LootSearchState.Emptied
                     ? "academy_loot_chest_empty" : "academy_loot_chest_closed") : null;
             bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
-                unit != null && unit.Id == selection.TargetId;
-            Texture2D selectionOverlay = selected ? assets.Overlay("selected") : null;
+                unit != null && unit.Id == selection.TargetId ||
+                menuPreview && selection.MenuPreviewPosition == position;
+            Texture2D selectionOverlay = selected ? OverlayFor(BattlefieldCellMarker.Focus) : null;
             string surfaceHover = BuildSurfaceHover(level, position);
             string terrainEffectHover = BuildTerrainEffectHover(state, fireBattle, tile, position);
             string objectHover = BuildObjectHover(state, tile, position);
@@ -236,15 +260,73 @@ namespace OCC.Combat.Presentation
                 CombatUnitHudLayout.UnitTextureCropUv(unitTexture.name);
             return new BattlefieldCellPresentation(position, floor, floorUv, floorRotation,
                 terrainBoundary, terrainBoundaryRotation, environment, move,
-                .64f, attack, .72f,
+                BattlefieldMarkerLadder.Alpha(moveMarker), attack, BattlefieldMarkerLadder.Alpha(attackMarker),
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover, travelOffset,
                 tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
-                surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow);
+                surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow,
+                BattlefieldMarkerLadder.Alpha(skillMarker));
         }
 
-        private static int FireSpellSlot(string action)
+        private const string OutOfRangeFailure = "超出射程";
+        private const string DeadZoneFailure = "目标位于近身死区";
+        private const string SightLineFailure = "视线受阻";
+
+        /// <summary>
+        /// Only a single-anchor spell can advertise a per-cell reach field. Self spells target the caster,
+        /// and shaped spells derive their geometry from a chosen direction, so a cell-by-cell field would
+        /// describe a geometry those spells do not have.
+        /// </summary>
+        private static bool SupportsRangeEnvelope(FireSpellDefinition spell) =>
+            spell != null && spell.TargetKind != FireTargetKind.Self && spell.Shape == FireSelectionShape.Single;
+
+        /// <summary>
+        /// Reuses the resolver's own preview: a cell is inside the declared reach when the preview fails
+        /// only on what it found there, never on distance or the sight line. Classifying by the engine's
+        /// own failures keeps the envelope and the resolver on one geometry instead of restating the
+        /// range and line-of-sight rules here.
+        /// </summary>
+        private static bool IsInsideDeclaredReach(FireSpellPreview preview)
         {
+            if (preview == null) return false;
+            for (int i = 0; i < preview.Failures.Count; i++)
+            {
+                string failure = preview.Failures[i];
+                if (failure.StartsWith(OutOfRangeFailure, StringComparison.Ordinal) ||
+                    failure.StartsWith(DeadZoneFailure, StringComparison.Ordinal) ||
+                    failure.StartsWith(SightLineFailure, StringComparison.Ordinal)) return false;
+            }
+            return true;
+        }
+
+        /// <summary>Cells nearer than the spell's own minimum range. The caster's own cell is excluded:
+        /// it is never a target, so marking it would only add noise.</summary>
+        private static bool IsInsideSpellDeadZone(CombatState state, FireSpellDefinition spell, GridPosition position)
+        {
+            if (spell == null || spell.MinimumRange <= 0) return false;
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null) return false;
+            int distance = hero.Position.ManhattanDistance(position);
+            return distance >= 1 && distance < spell.MinimumRange;
+        }
+
+        private Texture2D OverlayFor(BattlefieldCellMarker marker)
+        {
+            string id = BattlefieldMarkerLadder.TextureId(marker);
+            return string.IsNullOrEmpty(id) ? null : assets.Overlay(id);
+        }
+
+        /// <summary>Cells nearer than the weapon's own minimum range: inside the declared reach but
+        /// refused by the resolver, so they are marked undeliverable instead of left unmarked.</summary>
+        private static bool IsInsideWeaponDeadZone(CombatState state, GridPosition position)
+        {
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null || hero.MainHand == null) return false;
+            int distance = hero.Position.ManhattanDistance(position);
+            return distance >= 1 && distance < Math.Max(1, hero.MainHand.MinimumRange);
+        }
+
+        private static int FireSpellSlot(string action)        {
             if (string.IsNullOrEmpty(action) || !action.StartsWith("技能", StringComparison.Ordinal) ||
                 !int.TryParse(action.Substring(2), out int oneBased)) return -1;
             return oneBased >= 1 && oneBased <= OCC.Combat.Roguelite.RogueRuntimeConstants.SpellSlotCount
@@ -256,6 +338,9 @@ namespace OCC.Combat.Presentation
             PressureReactionPreview pressureReaction, bool canMove, bool canAttack)
         {
             if (selection == null || state == null) return string.Empty;
+            // While the right-click menu owns the input, the committed action is not what the player is
+            // looking at, so the cell must not advertise it as "当前操作".
+            if (selection.HasMenuPreview) return string.Empty;
             if (selection.Action == "移动" && canMove)
             {
                 string result = "当前操作\n点击：移动至此";

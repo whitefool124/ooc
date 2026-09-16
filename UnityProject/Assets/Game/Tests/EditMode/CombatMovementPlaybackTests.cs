@@ -66,8 +66,8 @@ namespace OCC.Combat.Tests
             Assert.That(playback.Count, Is.Zero);
         }
 
-        [TestCase(64f)]
-        [TestCase(128f)]
+        [TestCase(192f)]
+        [TestCase(384f)]
         public void BodyAndVitals_UseTheSameTravelAtBothZoomTiers(float size)
         {
             GameObject root = new GameObject("movement-render-test", typeof(RectTransform), typeof(FormalBattlefieldView));
@@ -78,7 +78,8 @@ namespace OCC.Combat.Tests
                 object cell = typeof(FormalBattlefieldView).GetMethod("CreateCell", Private).Invoke(view, new object[] { P(2, 1) });
                 T Field<T>(string name) => (T)cell.GetType().GetField(name).GetValue(cell);
                 var viewport = new BattlefieldPresentationAdapter().CreateViewport(12, 9);
-                if (size == 128f) viewport.ZoomAt(300, 300, 1);
+                // 缩放到目标档位，而不是假设一步就到（步长是 32px 整数档）。
+                while (viewport.CellSize < size) viewport.ZoomAt(300, 300, 1);
                 Assert.That(viewport.CellSize, Is.EqualTo(size));
                 var unit = new UnitState("hero", true, P(2, 1));
                 Texture2D texture = Texture2D.whiteTexture;

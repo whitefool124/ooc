@@ -990,6 +990,132 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void SharedContentTooltip_RendersBoxedTagsInsteadOfTheProseTargetLine()
+        {
+            GameObject canvasObject = new GameObject("content-tooltip-tags-canvas", typeof(RectTransform), typeof(Canvas));
+            try
+            {
+                canvasObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1920f, 1080f);
+                FormalHoverTooltip tooltip = canvasObject.AddComponent<FormalHoverTooltip>();
+                tooltip.Initialize(canvasObject.GetComponent<Canvas>());
+                FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R19");
+                System.Collections.Generic.IReadOnlyList<string> tags = CombatSpellTags.For(spell);
+                Assert.That(tags, Is.Not.Empty);
+
+                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
+                    "行动 2", "魔力 3", "冷却 2", "造成 16 点火焰伤害", "对中心与正交邻格的可击打目标造成伤害。",
+                    FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"), tags), new Vector2(400f, 400f));
+
+                RectTransform panel = canvasObject.GetComponentsInChildren<RectTransform>(true).Single(item => item.gameObject.name == "悬浮详情");
+                RectTransform card = panel.Find("通用内容卡").GetComponent<RectTransform>();
+                RectTransform metricA = card.Find("内容指标格1").GetComponent<RectTransform>();
+
+                // 每个词条一个方框，文字就是词条本身。
+                RectTransform firstChip = card.Find("内容词条1").GetComponent<RectTransform>();
+                Assert.That(firstChip.gameObject.activeSelf, Is.True);
+                Assert.That(firstChip.childCount, Is.GreaterThan(0), "词条必须有方框子物体");
+                Text firstTagLabel = firstChip.Find("词条1").GetComponent<Text>();
+                Assert.That(firstTagLabel.text, Is.EqualTo(tags[0]));
+                // 实机曾出现「只看到方框、看不到字」：文字必须可见、不被裁掉、且画在描边之上。
+                Assert.That(firstTagLabel.gameObject.activeInHierarchy, Is.True);
+                Assert.That(firstTagLabel.color.a, Is.GreaterThan(0f));
+                Assert.That(firstTagLabel.verticalOverflow, Is.EqualTo(VerticalWrapMode.Overflow));
+                Assert.That(firstTagLabel.rectTransform.rect.height, Is.GreaterThan(0f));
+                Assert.That(firstTagLabel.transform.GetSiblingIndex(), Is.EqualTo(firstChip.childCount - 1),
+                    "词条文字必须是最后一个兄弟，否则会被描边盖住");
+                // 词条行必须让开图标画框（16..88）与标题同一起始 x。
+                Assert.That(firstChip.anchoredPosition.x, Is.GreaterThanOrEqualTo(104f), "词条不得遮挡图标画框");
+                Assert.That(firstChip.sizeDelta.x, Is.GreaterThan(tags[0].Length * 8f), "方框宽度应随词条文字自适应");
+                Assert.That(card.Find("内容词条2").gameObject.activeSelf, Is.True);
+                RectTransform secondChip = card.Find("内容词条2").GetComponent<RectTransform>();
+                Assert.That(secondChip.anchoredPosition.x, Is.GreaterThan(firstChip.anchoredPosition.x + firstChip.sizeDelta.x));
+                // 未使用的词条框保持隐藏。
+                Assert.That(card.Find("内容词条" + (tags.Count + 1)).gameObject.activeSelf, Is.False);
+
+                // 有词条时不再显示散文式的「目标」行，指标行整体让到词条行下方。
+                Assert.That(card.Find("内容身份").gameObject.activeSelf, Is.False);
+                Assert.That(metricA.anchoredPosition.y, Is.LessThan(firstChip.anchoredPosition.y - 20f));
+                // 词条行比它替换掉的「目标」行更矮，所以指标行紧贴词条框底边下方，而不是与词条重叠。
+                Assert.That(-metricA.anchoredPosition.y,
+                    Is.GreaterThanOrEqualTo(-firstChip.anchoredPosition.y + firstChip.sizeDelta.y + 8f));
+
+                // 没有词条的内容仍然显示「目标」行，退回旧行为。
+                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "灼触", "火系　相邻可见敌人",
+                    "行动 1", "魔力 0", "冷却 无", "造成 8 点物理伤害", "用于近距离打击相邻目标的基础火术。",
+                    FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill")), new Vector2(400f, 400f));
+                Assert.That(card.Find("内容身份").gameObject.activeSelf, Is.True);
+                Assert.That(card.Find("内容词条1").gameObject.activeSelf, Is.False);
+                Assert.That(metricA.anchoredPosition.y, Is.EqualTo(-148f).Within(.01f));
+            }
+            finally { Object.DestroyImmediate(canvasObject); }
+        }
+
+        [Test]
+        public void SharedContentTooltip_GrowsItsSectionsInsteadOfClippingALongRangeLine()
+        {
+            GameObject canvasObject = new GameObject("content-tooltip-growth-canvas", typeof(RectTransform), typeof(Canvas));
+            try
+            {
+                canvasObject.GetComponent<RectTransform>().sizeDelta = new Vector2(1920f, 1080f);
+                FormalHoverTooltip tooltip = canvasObject.AddComponent<FormalHoverTooltip>();
+                tooltip.Initialize(canvasObject.GetComponent<Canvas>());
+                FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R19");
+                const string longSummary =
+                    "对中心与正交邻格的可击打目标造成伤害，主目标另受 16 点耐久伤害；" +
+                    "正交邻格的单位与物件各自承受 8 点伤害与 8 点耐久伤害，友军同样会被波及。" +
+                    "这条简介刻意写长，用来让面板高度超过最小高度，从而验证各段是按内容伸缩而不是被最小值夹住。";
+                FormalTooltipContent shortContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
+                    "单点", "魔力 3", "冷却 2", "造成 16 点火焰伤害", longSummary,
+                    FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
+                FormalTooltipContent longContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
+                    CombatRangeText.SelectionLine(spell), "魔力 3", "冷却 2", "造成 16 点火焰伤害",
+                    longSummary, FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
+
+                RectTransform PanelOf() => canvasObject.GetComponentsInChildren<RectTransform>(true)
+                    .Single(item => item.gameObject.name == "悬浮详情");
+                RectTransform Find(string name) => PanelOf().Find("通用内容卡").Find(name) as RectTransform;
+
+                // 短内容：记录标称布局作为基线。
+                tooltip.Show(new object(), shortContent, new Vector2(400f, 400f));
+                float baseDivider = -Find("内容分隔线").anchoredPosition.y;
+                float baseEffect = -Find("效果内容").anchoredPosition.y;
+                float baseFooter = -Find("页脚分隔线").anchoredPosition.y;
+                float basePanel = PanelOf().sizeDelta.y;
+                Assert.That(basePanel, Is.GreaterThan(388f), "长简介应让面板超过最小高度，否则测不到按内容伸缩");
+
+                // 长内容：指标格按内容自量变高，下方各段让位同样的高度，面板随之变高。
+                tooltip.Show(new object(), longContent, new Vector2(400f, 400f));
+                RectTransform panel = PanelOf();
+                RectTransform card = panel.Find("通用内容卡").GetComponent<RectTransform>();
+                RectTransform metricA = card.Find("内容指标格1").GetComponent<RectTransform>();
+                RectTransform divider = card.Find("内容分隔线").GetComponent<RectTransform>();
+                Text effect = card.Find("效果内容").GetComponent<Text>();
+                RectTransform footerRule = card.Find("页脚分隔线").GetComponent<RectTransform>();
+                Text summary = card.Find("内容简介").GetComponent<Text>();
+
+                float growth = metricA.sizeDelta.y - 48f;
+                Assert.That(growth, Is.GreaterThan(0f), "指标格应随长范围文字变高而不是溢出");
+                Assert.That(metricA.anchoredPosition.y, Is.EqualTo(-148f), "指标行顶端保持标称位置");
+                Assert.That(-divider.anchoredPosition.y, Is.EqualTo(baseDivider + growth).Within(.01f));
+                Assert.That(-effect.rectTransform.anchoredPosition.y, Is.EqualTo(baseEffect + growth).Within(.01f));
+                Assert.That(-footerRule.anchoredPosition.y, Is.EqualTo(baseFooter + growth).Within(.01f));
+                Assert.That(panel.sizeDelta.y, Is.EqualTo(basePanel + growth).Within(.01f));
+                // 各段都必须留在面板内，且效果段不得压到页脚分隔线。
+                float summaryBottom = -summary.rectTransform.anchoredPosition.y + summary.rectTransform.sizeDelta.y;
+                Assert.That(summaryBottom, Is.LessThanOrEqualTo(panel.rect.height - 8f));
+                Assert.That(-effect.rectTransform.anchoredPosition.y + effect.rectTransform.sizeDelta.y,
+                    Is.LessThanOrEqualTo(-footerRule.anchoredPosition.y - 8f));
+
+                // 换回短内容时必须收缩回基线，而不是只会变高。
+                tooltip.Show(new object(), shortContent, new Vector2(400f, 400f));
+                Assert.That(Find("内容指标格1").sizeDelta.y, Is.EqualTo(48f).Within(.01f));
+                Assert.That(-Find("内容分隔线").anchoredPosition.y, Is.EqualTo(baseDivider).Within(.01f));
+                Assert.That(PanelOf().sizeDelta.y, Is.EqualTo(basePanel).Within(.01f));
+            }
+            finally { Object.DestroyImmediate(canvasObject); }
+        }
+
+        [Test]
         public void SharedContentTooltip_UsesPixelAlignedTypeAndKeepsEverySectionInsideTheFrame()
         {
             GameObject canvasObject = new GameObject("content-tooltip-canvas", typeof(RectTransform), typeof(Canvas));

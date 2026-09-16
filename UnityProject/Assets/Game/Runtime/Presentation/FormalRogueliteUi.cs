@@ -1665,7 +1665,8 @@ namespace OCC.Combat.Presentation
                 GameObject slot = ActionButton((index + 1) + "  " + name, detail, spellPanel.transform,
                     new Vector2(28 + (index % 2) * 506, -106 - (index / 2) * 124), new Vector2(482, 108), selected ? amber : cyan, true,
                     () => { selectedLoadoutSpellIndex = slotIndex; selectedLoadoutSpellId = id; Invalidate(false); }, iconPath: RogueSpellIconPath(id));
-                if (spell != null) BindContentHover(slot, "个人术式", name, SpellTooltipBody(spell), selected ? amber : cyan, RogueSpellIconPath(id));
+                if (spell != null) BindContentHover(slot, "个人术式", name, SpellTooltipBody(spell), selected ? amber : cyan, RogueSpellIconPath(id),
+                    CombatSpellTags.For(spell));
             }
             DrawSpellDetails(parent, dto, spells, new Vector2(1116, -104));
         }
@@ -2068,11 +2069,15 @@ namespace OCC.Combat.Presentation
             trigger.Configure(tooltip, () => new FormalTooltipContent(title, body, accent));
         }
 
-        private void BindContentHover(GameObject target, string category, string title, string body, Color accent, string iconPath = "")
+        private void BindContentHover(GameObject target, string category, string title, string body, Color accent, string iconPath = "",
+            IReadOnlyList<string> tags = null)
         {
             if (target == null || string.IsNullOrWhiteSpace(body)) return;
             FormalHoverTooltipTrigger trigger = target.GetComponent<FormalHoverTooltipTrigger>() ?? target.AddComponent<FormalHoverTooltipTrigger>();
-            trigger.Configure(tooltip, () => new FormalTooltipContent(category, title, body, accent, iconPath));
+            // 有词条时用方框词条取代散文式「目标」行；没有词条的内容保持原样。
+            trigger.Configure(tooltip, () => tags != null && tags.Count > 0
+                ? new FormalTooltipContent(category, title, body, accent, iconPath, tags)
+                : new FormalTooltipContent(category, title, body, accent, iconPath));
         }
 
         private void DetailIconMetric(Transform parent, string label, string value, string iconPath, Vector2 position, string tooltipBody, Color accent, float width = 180f, float height = 38f)

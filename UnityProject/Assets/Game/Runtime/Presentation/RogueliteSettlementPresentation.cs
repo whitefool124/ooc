@@ -241,7 +241,7 @@ namespace OCC.Combat.Presentation
                     statX = 144f;
                 }
             }
-            if (fireSpell != null) stat = "射程 " + FireSpellRangeText(fireSpell) + "　" + ShapeLabel(fireSpell.Shape);
+            if (fireSpell != null) stat = CombatRangeText.RangeLine(fireSpell);
             if (artifact != null)
             {
                 string perUseCost = artifact.PublicCost
@@ -265,13 +265,24 @@ namespace OCC.Combat.Presentation
             string availabilityText = string.IsNullOrWhiteSpace(availability.Reason) || availability.Reason == availability.Status
                 ? availability.Status : availability.Status + "，" + availability.Reason;
             AddLabel(card.transform, "选择", availabilityText, new Vector2(24, -306), new Vector2(360, 40), artifact != null ? 15 : 17, availability.CanExecute ? accent : FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+            // 自适应：标称布局原样保留，只有某行文字真的装不下时才把它和下面的内容一起下移。
+            AdaptRewardRow(rect, card.transform, "数值", 40f);
+            AdaptRewardRow(rect, card.transform, "完整效果", 92f);
             string tooltipBody = "数据　" + stat + "\n效果\n" + effect;
             if (!string.IsNullOrWhiteSpace(notice)) tooltipBody += "\n注意　" + notice;
             string comparison = RogueliteEconomyPresentation.RewardComparison(run, reward);
             if (!string.IsNullOrWhiteSpace(comparison) && !effect.Contains(comparison)) tooltipBody += "\n比较　" + comparison;
             tooltipBody += "\n领取　" + availabilityText;
             FormalHoverTooltipTrigger tooltipTrigger = card.AddComponent<FormalHoverTooltipTrigger>();
-            tooltipTrigger.Configure(tooltip, () => new FormalTooltipContent(rewardCategory, reward.DisplayName, tooltipBody, accent, rewardIconPath));
+            // 奖励卡悬停同样改用方框词条（个人术式／法宝），不再输出散文式目标行。
+            IReadOnlyList<string> cardTags = fireSpell != null ? CombatSpellTags.For(fireSpell)
+                : artifact != null ? CombatSpellTags.For(artifact)
+                : reward.RogueSpell != null ? CombatSpellTags.For(reward.RogueSpell)
+                : CombatSpellTags.ForItem(reward.Item);
+            bool hasTags = cardTags != null && cardTags.Count > 0;
+            tooltipTrigger.Configure(tooltip, () => hasTags
+                ? new FormalTooltipContent(rewardCategory, reward.DisplayName, tooltipBody, accent, rewardIconPath, cardTags)
+                : new FormalTooltipContent(rewardCategory, reward.DisplayName, tooltipBody, accent, rewardIconPath));
         }
 
         private static string AffinityLabel(FireCombatAffinity value) => value == FireCombatAffinity.MeleeOnly ? "近战亲和" : value == FireCombatAffinity.RangedSpell ? "远程亲和" : "近远程通用";
@@ -288,41 +299,43 @@ namespace OCC.Combat.Presentation
 
         private static string DeliveryLabel(FireDeliveryMode value) => value == FireDeliveryMode.WeaponAttachment ? "武器附着" : value == FireDeliveryMode.DetachedProjection ? "远程投射" : value == FireDeliveryMode.BodyEnhancement ? "身体强化" : value == FireDeliveryMode.ContactConduction ? "接触导能" : value == FireDeliveryMode.SelfStance ? "自身架势" : value == FireDeliveryMode.TargetMarking ? "目标标记" : value == FireDeliveryMode.Movement ? "位移" : "操纵火场";
         private static string WeaponLabel(FireWeaponRequirement value) => value == FireWeaponRequirement.MeleeWeapon ? "需近战武器" : value == FireWeaponRequirement.RangedWeapon ? "需远程武器" : value == FireWeaponRequirement.AnyWeapon ? "需任意武器" : "无武器要求";
-        private static string ShapeLabel(FireSelectionShape value) => value == FireSelectionShape.Single ? "单体" : value == FireSelectionShape.Line ? "直线" : value == FireSelectionShape.ContinuousLine ? "连续线" : value == FireSelectionShape.Cone ? "扇形" : value == FireSelectionShape.Cross ? "十字" : value == FireSelectionShape.OrthogonalRing ? "正交环" : value == FireSelectionShape.CenterAndOrthogonal ? "中心与正交邻格" : value == FireSelectionShape.Square3 ? "三乘三区域" : value == FireSelectionShape.AroundUnit ? "单位周边" : "路径";
+        private static string ShapeLabel(FireSelectionShape value) => CombatRangeText.ShapeText(value, 1);
+
 
         public static string FireSpellPlayerSummary(FireSpellDefinition spell)
         {
-            if (spell.Id == "F-P-M01") return "本回合移动 +2；下次近战攻击追加 8 点火焰伤害。";
-            if (spell.Id == "F-P-M05") return "标记相邻敌人；其首次主动移动后，追至原格。";
-            if (spell.Id == "F-P-M07") return "对燃烧敌人造成 20 点武器伤害和 8 点火焰伤害；施加破势并消耗燃烧。";
-            if (spell.Id == "F-P-M08") return "扇形内造成 12 点武器伤害和 4 点火焰伤害；伤及友军。";
-            if (spell.Id == "F-P-M12") return "获得 12 点护盾；首次受相邻攻击后，再获得 4 点护盾。";
+            if (spell.Id == "F-P-M01") return "立即：本轮额外移动 2 格；待触发：下一次合法近战武器攻击追加 8 点火焰伤害。";
+            if (spell.Id == "F-P-M05") return "标记相邻敌人；其首次主动移动后，若已不相邻，施术者进入目标刚离开的格。强制位移不触发。";
+            if (spell.Id == "F-P-M07") return "只能攻击相邻的燃烧敌人；造成 20 点武器伤害与 8 点火焰伤害，施加破势，然后消耗燃烧。";
+            if (spell.Id == "F-P-M08") return "前方 3 层扇形依次为 1／3／5 格；范围内所有单位包括友军均承受 12 点武器伤害与 4 点火焰伤害。";
+            if (spell.Id == "F-P-M12") return "获得 12 点护盾；首次相邻武器或技能攻击结算后，再获得 4 点护盾。";
             if (spell.Id == "F-P-M13") return "首次受相邻攻击后，反击 12 点武器伤害和 4 点火焰伤害。";
-            if (spell.Id == "F-P-M14") return "对相邻敌人造成 8 点火焰伤害；被束缚时解除束缚。";
-            if (spell.Id == "F-P-M15") return "造成 8 点火焰伤害；将目标推开 1 格。";
-            if (spell.Id == "F-P-M16") return "只能攻击相邻的燃烧敌人；造成 16 点武器伤害与 8 点火焰伤害，不消耗燃烧";
-            if (spell.Id == "F-P-M17") return "只能攻击相邻的燃烧敌人；造成 12 点火焰伤害，消耗其燃烧并令自身获得 12 点护盾";
+            if (spell.Id == "F-P-M14") return "对相邻敌人造成 8 点火焰伤害；自身被束缚时同时解除束缚。";
+            if (spell.Id == "F-P-M15") return "对相邻敌人造成 8 点火焰伤害，再沿远离自身的方向推开 1 格；落点被阻挡时只结算伤害。";
+            if (spell.Id == "F-P-M16") return "只能攻击相邻的燃烧敌人；造成 16 点武器伤害与 8 点火焰伤害，不消耗燃烧。";
+            if (spell.Id == "F-P-M17") return "只能攻击相邻的燃烧敌人；造成 12 点火焰伤害，消耗其燃烧并令自身获得 12 点护盾。";
             if (spell.Id == "F-P-M18") return "沿连续火场移动 3 格，不触发火场伤害。";
-            if (spell.Id == "F-P-M19") return "冲至目标身前，造成 24 点武器伤害和 12 点火焰伤害；失去 8 点生命。";
+            if (spell.Id == "F-P-M19") return "沿同一横线或竖线冲至其前一格；造成 24 点武器伤害与 12 点火焰伤害，最后无视护盾失去 8 点生命。";
             if (spell.Id == "F-P-M20") return "对燃烧或破势敌人造成 28 点武器伤害和 12 点火焰伤害；消耗燃烧。";
             if (spell.Id == "F-P-U12") return "下次命中燃烧目标时，消耗燃烧并获得 12 点护盾。";
             if (spell.Id == "F-P-U13") return "下次命中燃烧目标时，恢复 3 点个人魔力。";
             if (spell.Id == "F-P-U14") return "下次攻击燃烧目标时，追加 12 点火焰伤害。";
             if (spell.Id == "F-P-U15") return "下次攻击燃烧目标时，追加 4 点火焰伤害；燃烧延至 2 回合。";
-            if (spell.Id == "F-P-U16") return "下次在武器最大射程命中时，武器伤害 +12。";
+            if (spell.Id == "F-P-U16") return "下次在当前武器最大射程命中时，武器伤害 +12；较近距离攻击不会消耗窗口。";
             if (spell.Id == "F-P-U20") return "下次攻击燃烧或破势目标时，追加 20 点火焰伤害；两者兼具时改为 28 点。";
             if (spell.Id == "F-P-U04") return "造成 8 点伤害并施加熔障标记 4 回合；摧毁时回 2 魔力和 4 护盾。";
             if (spell.Id == "F-P-U05") return "下次命中后，正交邻格受到 4 点火焰伤害；伤及友军。";
-            if (spell.Id == "F-P-U06") return "下次武器攻击后，向后移动 1 格。";
-            if (spell.Id == "F-P-U08") return "未燃烧时获得 12 点护盾；燃烧时获得 20 点护盾并清除燃烧。";
+            if (spell.Id == "F-P-U06") return "下次武器攻击结算后，自动向远离攻击目标的方向后撤 1 格。";
+            if (spell.Id == "F-P-U08") return "未燃烧时获得 12 点护盾；燃烧时获得 20 点护盾并清除燃烧，两条分支互斥。";
             if (spell.Id == "F-P-U09") return "清除迟缓；本回合移动恢复至 5 格。";
             if (spell.Id == "F-P-U11") return "消耗火场；恢复 2 点个人魔力。";
-            if (spell.Id == "F-P-U01") return "直线突进 3 格；脱离威胁时，下回合行动 +1。";
+            if (spell.Id == "F-P-U01") return "沿四向主轴直线突进最多 3 格；起点处于至少一个敌方公开攻击范围且终点离开全部范围时，下回合行动力 +1。";
             if (spell.Id == "F-P-U18") return "直线突进 2 格；相邻单位受到 8 点伤害并被推开 1 格。";
             if (spell.Id == "F-P-U19") return "下次攻击燃烧目标后，造成 8 点火焰伤害并推开 1 格；生成火场 2 回合。";
+            if (spell.Id == "F-P-R05") return "造成 16 点火焰伤害；目标已燃烧时，将燃烧提高至至少 2 回合。";
             if (spell.Id == "F-P-R13") return "生成火场 4 回合；获得火势 +4，持续 2 回合。";
             if (spell.Id == "F-P-R20") return "范围内造成 20 点火焰伤害；施加助燃 +4，生成火场 3 回合。";
-            if (spell.Id == "F-P-R19") return "造成 8 点伤害；物块额外受到 8 点耐久伤害。";
+            if (spell.Id == "F-P-R19") return "对目标造成 16 点火焰伤害，并对其正交邻接 1 格内所有可受击目标各造成 8 点火焰伤害，可伤友军；中心与邻格均不区分单位或物件。";
             string timing = FireTimingPlayerText(spell.TriggerWindow);
             string effects = string.Join("；", spell.Rules.Select(FireRulePlayerText));
             return timing + effects;
@@ -343,11 +356,11 @@ namespace OCC.Combat.Presentation
                 spell.TargetKind == FireTargetKind.AdjacentEnemy ? "一名相邻敌人" :
                 spell.TargetKind == FireTargetKind.AdjacentBurningEnemy ? "一名相邻的燃烧敌人" :
                 "一名燃烧或已破甲的敌人";
-            return target + "　射程 " + FireSpellRangeText(spell) + "　" + ShapeLabel(spell.Shape);
+            return target + "　" + CombatRangeText.RangeLine(spell);
         }
 
         public static string FireSpellRangeText(FireSpellDefinition spell)
-            => spell.MinimumRange > 0 ? spell.MinimumRange + "–" + spell.Range + " 格（近身死区）" : spell.Range + " 格";
+            => CombatRangeText.SelectionLine(spell);
 
         public static string RogueSpellTargetSummary(OCC.Combat.Roguelite.SpellDefinition spell)
         {
@@ -511,7 +524,7 @@ namespace OCC.Combat.Presentation
         private static RogueliteReward AsReward(FireSpellDefinition spell)
         {
             int damage = spell.Rules.Where(rule => rule.Kind == FireRuleKind.Damage).Select(rule => rule.Amount).FirstOrDefault();
-            SkillDefinition adapter = new SkillDefinition(spell.Id, spell.DisplayName, DamageType.Fire, System.Math.Max(1, damage), spell.Range, spell.ManaCost, spell.Cooldown);
+            SkillDefinition adapter = new SkillDefinition(spell.Id, spell.DisplayName, DamageType.Fire, System.Math.Max(1, damage), spell.Range, spell.ManaCost, spell.Cooldown, shape: spell.Shape);
             return new RogueliteReward(spell.Id, spell.DisplayName, adapter, spell.Group.ToString());
         }
 
@@ -569,6 +582,56 @@ namespace OCC.Combat.Presentation
             AddRewardFrameEdge(parent, "奖励细框_下", new Vector2(0f, -size.y + 2f), new Vector2(size.x, 2f));
             AddRewardFrameEdge(parent, "奖励细框_左", Vector2.zero, new Vector2(2f, size.y));
             AddRewardFrameEdge(parent, "奖励细框_右", new Vector2(size.x - 2f, 0f), new Vector2(2f, size.y));
+        }
+
+        /// <summary>
+        /// Lets one text row of the settlement card stretch past its nominal height. Everything anchored below
+        /// that row moves down by the same delta, the card grows by it with the top edge pinned, and the frame
+        /// is recomputed. Nominal content therefore keeps the designed layout untouched; only a row that really
+        /// needs more room (a long 选取／作用 line, a three-line artifact effect) raises the card.
+        /// </summary>
+        private static void AdaptRewardRow(RectTransform card, Transform cardRoot, string rowName, float nominalHeight)
+        {
+            Transform row = cardRoot.Find(rowName);
+            Text text = row == null ? null : row.GetComponent<Text>();
+            RectTransform rowRect = row as RectTransform;
+            if (text == null || rowRect == null) return;
+            rowRect.sizeDelta = new Vector2(rowRect.sizeDelta.x, nominalHeight);
+            Canvas.ForceUpdateCanvases();
+            float needed = Mathf.Ceil(text.preferredHeight);
+            float delta = needed - nominalHeight;
+            if (delta <= 0f) return;
+            rowRect.sizeDelta = new Vector2(rowRect.sizeDelta.x, needed);
+            // Only what sits strictly below this row's bottom edge moves; the action/aether chips that share
+            // the 数值 row keep their place.
+            float rowBottom = rowRect.anchoredPosition.y - nominalHeight;
+            for (int i = 0; i < cardRoot.childCount; i++)
+            {
+                RectTransform child = cardRoot.GetChild(i) as RectTransform;
+                if (child == null || child == rowRect) continue;
+                if (child.anchoredPosition.y >= rowBottom) continue;
+                child.anchoredPosition -= new Vector2(0f, delta);
+            }
+            Vector2 size = card.sizeDelta + new Vector2(0f, delta);
+            card.sizeDelta = size;
+            card.anchoredPosition -= new Vector2(0f, delta * .5f);
+            ResizeRewardCardFrame(cardRoot, size);
+        }
+
+        private static void ResizeRewardCardFrame(Transform parent, Vector2 size)
+        {
+            ResizeRewardFrameEdge(parent, "奖励细框_上", Vector2.zero, new Vector2(size.x, 2f));
+            ResizeRewardFrameEdge(parent, "奖励细框_下", new Vector2(0f, -size.y + 2f), new Vector2(size.x, 2f));
+            ResizeRewardFrameEdge(parent, "奖励细框_左", Vector2.zero, new Vector2(2f, size.y));
+            ResizeRewardFrameEdge(parent, "奖励细框_右", new Vector2(size.x - 2f, 0f), new Vector2(2f, size.y));
+        }
+
+        private static void ResizeRewardFrameEdge(Transform parent, string name, Vector2 position, Vector2 size)
+        {
+            RectTransform edge = parent.Find(name) as RectTransform;
+            if (edge == null) return;
+            edge.anchoredPosition = position;
+            edge.sizeDelta = size;
         }
 
         private static void AddRewardFrameEdge(Transform parent, string name, Vector2 position, Vector2 size)

@@ -63,13 +63,16 @@ namespace OCC.Combat
     public sealed class BattlefieldPresentationAdapter
     {
         private readonly CombatMovementRangeCache movementRange = new CombatMovementRangeCache();
-        // Default view must fit the 12x9 board inside the 75% combat region.
-        // 128px remains available as the explicit zoom-in step.
-        public const float CellSize = 64f;
-        public const float OverviewCellSize = 64f;
-        public const float MinimumCellSize = 64f;
-        public const float MaximumCellSize = 128f;
-        public const float CellSizeStep = 64f;
+        // 定案（2026-09-16 风格定案 v1 / occ-art-contract-v1.battlefield_display_policy）：
+        // 战场默认按 6 倍档开场——原生 32 像素 × 6 = 192 画布单位，1 个原生像素 = 6 屏幕像素，
+        // 与主要参考《赛菲莉亚》同级。盘面大于一屏（1408×768 下可见 7×4 格）时靠移动视口查看。
+        // 所有档位都落在原生 32 像素网格上（Step = 32），因此任何档位都不重采样。
+        public const float CellSize = 192f;
+        public const float OverviewCellSize = 96f;
+        public const float MinimumCellSize = 96f;
+        public const float MaximumCellSize = 384f;
+        // Multiples of the native 32 px grid only, so no zoom tier ever resamples the tiles.
+        public const float CellSizeStep = 32f;
         public const float BattlefieldWidth = 1440f;
         public const float BattlefieldHeight = 848f;
         public const float BoardTop = 80f;
@@ -79,7 +82,21 @@ namespace OCC.Combat
         public BattlefieldRect ViewportRect => new BattlefieldRect(16f, BoardTop, BattlefieldWidth - 32f, BattlefieldHeight - BoardTop);
 
         public BattlefieldViewport CreateViewport(int width = DefaultWidth, int height = DefaultHeight)
-            => new BattlefieldViewport(ViewportRect, width, height, CellSize);
+            => new BattlefieldViewport(ViewportRect, width, height, DefaultCellSize(width, height));
+
+        /// <summary>
+        /// 定案下场默认开在 6 倍档（<see cref="CellSize"/>，192）；盘面更大时不会自动缩到更小的档位，
+        /// 而是靠移动视口查看——因为画风格式要求战场固定 6 倍整数放大。小盘面仍按"最紧的整数档"放大。
+        /// </summary>
+        public static float DefaultCellSize(int width, int height)
+        {
+            int columns = Math.Max(1, width);
+            int rows = Math.Max(1, height);
+            BattlefieldRect viewport = new BattlefieldPresentationAdapter().ViewportRect;
+            float fit = Math.Min(viewport.Width / columns, viewport.Height / rows);
+            float stepped = (float)Math.Floor(fit / CellSizeStep) * CellSizeStep;
+            return Math.Max(CellSize, Math.Min(MaximumCellSize, stepped));
+        }
 
         public BattlefieldRect BoardRect(int width = DefaultWidth, int height = DefaultHeight)
         {
@@ -128,8 +145,8 @@ namespace OCC.Combat
         {
             if (state == null) return new CombatActionPreview(action, "战场还在准备", "--", "--", 0, "请稍等片刻");
             UnitState hero = state.GetUnit("hero");
-            string globalFailure = state.IsVictory || state.IsDefeat ? "战斗已经结束" : state.ActiveUnitId != "hero" ? "等待敌方行动结束" : hero.ActionPoints < CombatResolver.BasicActionPointCost ? "行动点不足" : string.Empty;
-            string targetRule = TargetRule(action, hero);
+            string globalFailure = GlobalFailure(state);
+            string targetRule = TargetRule(state, action, hero);
             string cost = Cost(action, hero);
             string expected = ExpectedResult(state, action, hero, selectedTargetId);
             int validCells = CountValidCells(state, action);
@@ -250,7 +267,7 @@ namespace OCC.Combat
         {
             if (action == "移动") return CombatMovementQuery.PlayerTargetFailure(state, position, movementRange);
             CombatActionPreview preview = BuildPreview(state, action, null);
-            string global = state == null || state.IsVictory || state.IsDefeat || state.ActiveUnitId != "hero" || state.GetUnit("hero").ActionPoints < CombatResolver.BasicActionPointCost ? preview.FailureReason : string.Empty;
+            string global = string.IsNullOrEmpty(GlobalFailure(state)) ? string.Empty : preview.FailureReason;
             if (!string.IsNullOrEmpty(global)) return global;
             if (!state.Map.IsInside(position)) return "那里已经超出战场边界";
             UnitState hero = state.GetUnit("hero");
@@ -293,24 +310,74 @@ namespace OCC.Combat
             return string.Empty;
         }
 
+        /// <summary>Read-only global availability, shared by the preview and the per-cell legality query.</summary>
+        private static string GlobalFailure(CombatState state)
+        {
+            if (state == null) return "战场还在准备";
+            if (state.IsVictory || state.IsDefeat) return "战斗已经结束";
+            if (state.ActiveUnitId != "hero") return "等待敌方行动结束";
+            UnitState hero = state.GetUnit("hero");
+            return hero != null && hero.ActionPoints < CombatResolver.BasicActionPointCost ? "行动点不足" : string.Empty;
+        }
+
+        /// <summary>
+        /// Cells the player can actually submit. Deliberately narrower than <see cref="IsInSelectedRange"/>:
+        /// the attack overlay draws the weapon's whole reach envelope, but only cells holding a legal target
+        /// can be committed, so "how many cells can I pick" and "how many cells are lit" must not share a count.
+        /// Actions that target no board cell, such as ending the turn, always answer false here.
+        /// </summary>
+        public bool IsLegalTarget(CombatState state, string action, GridPosition position)
+        {
+            if (state == null || !string.IsNullOrEmpty(GlobalFailure(state))) return false;
+            if (action == "结束行动") return false;
+            if (!IsInSelectedRange(state, action, position)) return false;
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null) return false;
+            if (action == "攻击")
+            {
+                UnitState target = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
+                return target != null && !target.IsHero;
+            }
+            if (action == "技能1" || action == "技能2")
+            {
+                SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
+                return skill != null && hero.Cooldown(skill) == 0 && hero.Mana >= skill.ManaCost;
+            }
+            if (action == "搜刮") return state.LootSource != null || state.Backpack.CanAdd(state.Loot.Item);
+            return true;
+        }
+
         private int CountValidCells(CombatState state, string action)
         {
-            if (action == "结束行动") return 1;
+            if (state == null) return 0;
+            // Ending the turn picks no board cell, so it is one available action rather than a per-cell count.
+            if (action == "结束行动") return string.IsNullOrEmpty(GlobalFailure(state)) ? 1 : 0;
             int count = 0;
             for (int y = 0; y < state.Map.Height; y++)
                 for (int x = 0; x < state.Map.Width; x++)
-                    if (IsInSelectedRange(state, action, new GridPosition(x, y))) count++;
+                    if (IsLegalTarget(state, action, new GridPosition(x, y))) count++;
             return count;
         }
 
-        private static string TargetRule(string action, UnitState hero)
+        private static string TargetRule(CombatState state, string action, UnitState hero)
         {
-            if (action == "移动") return "选择 3 格内可通行空格";
+            // The step budget is turn state, not a constant: slowness, equipment bonuses and the
+            // rain-lantern court budget all change it, so it must be read from the same query the
+            // movement highlight uses instead of being restated here.
+            if (action == "移动")
+            {
+                int budget = state == null || hero == null ? UnitState.BaseMovementRange : CombatMovementQuery.Budget(state, hero);
+                return "选择 " + budget + " 格内可通行空格";
+            }
             if (action == "攻击") return "选择 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range) + "内可见敌人";
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
-                return skill == null ? "未装备" : SkillTargetRuleLabel(skill) + "　射程 " + skill.Range + " 格";
+                if (skill == null) return "未装备";
+                // Weapons already say "可见"; state the same line-of-sight requirement for unit-target
+                // skills, so a blocked delivery is foreseeable instead of only reported after the click.
+                string visibility = SkillRequiresLineOfSight(skill) ? "可见" : string.Empty;
+                return visibility + SkillTargetRuleLabel(skill) + "　" + CombatRangeText.RangeLine(skill);
             }
             if (action == "搜刮") return "选择相邻战利品格";
             if (action == "互动") return "选择相邻目标或调查格";
@@ -411,6 +478,13 @@ namespace OCC.Combat
         }
 
         private static string RangeText(int minimum, int maximum) => minimum > 0 ? minimum + "–" + maximum + " 格" : maximum + " 格";
+        private static string SkillRangeText(SkillDefinition skill) => CombatRangeText.SelectionLine(skill);
+        /// <summary>
+        /// Mirrors the line-of-sight rule the range query and the resolver apply to unit-target skills:
+        /// beyond one cell, delivery is blocked unless the skill declares it ignores sight lines.
+        /// </summary>
+        private static bool SkillRequiresLineOfSight(SkillDefinition skill) =>
+            RequiresUnitTarget(skill) && skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight);
 
         public static int Distance(GridPosition from, GridPosition to) => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
         public static GridPosition StepToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? new GridPosition(from.X + Math.Sign(to.X - from.X), from.Y) : new GridPosition(from.X, from.Y + Math.Sign(to.Y - from.Y));
@@ -427,6 +501,7 @@ namespace OCC.Combat
         private float cellSize;
         private float boardX;
         private float boardY;
+        private float defaultCellSize;
 
         public BattlefieldViewport(BattlefieldRect viewport, int mapWidth, int mapHeight, float initialCellSize)
         {
@@ -434,6 +509,7 @@ namespace OCC.Combat
             this.mapWidth = Math.Max(1, mapWidth);
             this.mapHeight = Math.Max(1, mapHeight);
             cellSize = ClampCellSize(initialCellSize);
+            defaultCellSize = cellSize;
             boardX = viewport.X + (viewport.Width - BoardWidth) * .5f;
             boardY = viewport.Y + (viewport.Height - BoardHeight) * .5f;
             ClampToViewport();
@@ -469,7 +545,8 @@ namespace OCC.Combat
 
         public void ResetOverview()
         {
-            cellSize = BattlefieldPresentationAdapter.OverviewCellSize;
+            // Restores this board's own opening scale, not a global constant.
+            cellSize = defaultCellSize;
             ClampToViewport();
         }
 

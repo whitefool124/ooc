@@ -42,7 +42,7 @@ namespace OCC.Combat.Tests
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatResolver.BeginTurn(state, hero.Id);
             FireBattleState fireBattle = new FireBattleState(state);
-            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R09");
+            FireSpellDefinition spell = BandedProbeSpell();
             CombatSelectionController selection = new CombatSelectionController();
             selection.SelectAction("技能8");
             CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
@@ -300,5 +300,251 @@ namespace OCC.Combat.Tests
             Assert.That(result.Forecast.WillDefeat, Is.True);
             Assert.That(enemy.Health, Is.EqualTo(health));
         }
+
+        [Test]
+        public void AttackOverlay_KeepsTheWholeReachVisibleButOnlyAMarkedTargetAtFullStrength()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 1));
+            CombatState state = new CombatState(new GridMap(5, 3), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("攻击");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            BattlefieldCellPresentation empty = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, new GridPosition(1, 0), _ => null, (_, __) => null, _ => null, _ => null);
+            BattlefieldCellPresentation target = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, enemy.Position, _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(empty.AttackOverlayTexture.name, Is.EqualTo("attack_range"),
+                "An empty cell inside the weapon envelope stays part of the reach field.");
+            Assert.That(target.AttackOverlayTexture.name, Is.EqualTo("attack_range"));
+            Assert.That(target.AttackOverlayAlpha, Is.GreaterThan(empty.AttackOverlayAlpha),
+                "Only the cell holding a legal target may keep the full-strength attack marker.");
+        }
+
+        [Test]
+        public void AttackOverlay_RecedesWhenTheHeroCannotActAtAll()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 1));
+            CombatState state = new CombatState(new GridMap(5, 3), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.SpendActionPoints(3));
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("攻击");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            BattlefieldCellPresentation target = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, enemy.Position, _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(target.AttackOverlayTexture, Is.Not.Null);
+            Assert.That(target.AttackOverlayAlpha,
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.AttackEnvelope)).Within(.001f),
+                "With no action points left, no cell may present itself as a committable target.");
+        }
+
+        [Test]
+        public void MarkerLadder_ResolvesEverySemanticToExactlyOneTextureAndOneOrderedTier()
+        {
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.None), Is.Null);
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.Focus), Is.EqualTo("selected"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.MovementRange), Is.EqualTo("move_range"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.MovementRisk), Is.EqualTo("high_risk"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.AttackEnvelope), Is.EqualTo("attack_range"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.AttackTarget), Is.EqualTo("attack_range"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.SkillSelectable), Is.EqualTo("attack_range"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.SkillCommitted), Is.EqualTo("attack_range"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.SkillRisk), Is.EqualTo("high_risk"));
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.Undeliverable), Is.EqualTo("unreachable"));
+
+            // One question per tier, strictly ordered, so brightness never contradicts meaning.
+            BattlefieldCellMarker[] ladder =
+            {
+                BattlefieldCellMarker.Focus,
+                BattlefieldCellMarker.SkillRisk,
+                BattlefieldCellMarker.SkillCommitted,
+                BattlefieldCellMarker.SkillSelectable,
+                BattlefieldCellMarker.SkillRangeEnvelope,
+                BattlefieldCellMarker.Undeliverable
+            };
+            for (int i = 1; i < ladder.Length; i++)
+                Assert.That(BattlefieldMarkerLadder.Alpha(ladder[i - 1]),
+                    Is.GreaterThan(BattlefieldMarkerLadder.Alpha(ladder[i])),
+                    ladder[i - 1] + " must outrank " + ladder[i]);
+
+            Assert.That(BattlefieldMarkerLadder.TextureId(BattlefieldCellMarker.SkillRangeEnvelope),
+                Is.EqualTo("attack_range"),
+                "The reach field is a range marker, not an unavailability marker.");
+            for (int i = 0; i < ladder.Length; i++)
+                Assert.That(BattlefieldMarkerLadder.Alpha(ladder[i]), Is.GreaterThanOrEqualTo(.4f),
+                    ladder[i] + " must stay legible: the marker is a thin bracket on light floors.");
+
+            Assert.That(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.AttackEnvelope),
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.SkillSelectable)),
+                "One meaning must look the same whichever action produced it.");
+            Assert.That(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.AttackTarget),
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.SkillCommitted)));
+            Assert.That(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.MovementRisk),
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.SkillRisk)));
+            // 落点 = 原来的四角边框 + 居中橙色强调点。只有强调点能上色（边框贴图像素是青色的，
+            // 乘橙色只会变脏），也只有它在落点位于玩家可达范围内时仍可辨认，所以它必须够亮够大。
+            UnityEngine.Color enemyTint = BattlefieldMarkerLadder.EnemyIntentDestinationTint;
+            Assert.That(enemyTint.r, Is.GreaterThan(.9f), "Enemy destination dot must be a bright orange.");
+            Assert.That(enemyTint.b, Is.LessThan(.3f), "Enemy destination dot must not read as white or grey.");
+            Assert.That(enemyTint, Is.Not.EqualTo(OCC.Combat.Presentation.FormalUiTheme.Amber),
+                "Palette amber #A86F22 multiplied into the cyan border rendered as pale grey.");
+            Assert.That(BattlefieldMarkerLadder.EnemyIntentDestinationAlpha,
+                Is.GreaterThan(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.MovementRange)),
+                "The dot must win the overlap with the player's own range.");
+            Assert.That(BattlefieldMarkerLadder.EnemyIntentDotFraction, Is.InRange(.2f, .5f),
+                "The emphasis dot must be a readable fraction of a cell, neither a speck nor a fill.");
+            // 中间菱形是程序生成的临时素材：必须真的能加载，且为 32x32 原生格。
+            UnityEngine.Texture2D marker = UnityEngine.Resources.Load<UnityEngine.Texture2D>(
+                BattlefieldMarkerLadder.EnemyIntentMarkerPath);
+            Assert.That(marker, Is.Not.Null, "敌方落点菱形素材缺失：" + BattlefieldMarkerLadder.EnemyIntentMarkerPath);
+            Assert.That(marker.width, Is.EqualTo(32));
+            Assert.That(marker.height, Is.EqualTo(32));
+        }
+
+        [Test]
+        public void AttackDeadZone_IsMarkedUndeliverableInsteadOfLeftBlank()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            hero.Equip(EnemyAbilityCatalog.HeavyCrossbow, hero.OffHand, hero.SkillOne, hero.SkillTwo);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 1));
+            CombatState state = new CombatState(new GridMap(6, 3), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("攻击");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            BattlefieldCellPresentation deadZone = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, new GridPosition(2, 1), _ => null, (_, __) => null, _ => null, _ => null);
+            BattlefieldCellPresentation inBand = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, new GridPosition(3, 1), _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(deadZone.AttackOverlayTexture.name, Is.EqualTo("unreachable"),
+                "The crossbow's own dead zone must answer why the adjacent cell is not a target.");
+            Assert.That(deadZone.AttackOverlayAlpha,
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.Undeliverable)).Within(.001f));
+            Assert.That(inBand.AttackOverlayTexture.name, Is.EqualTo("attack_range"),
+                "The legal band stays an ordinary reach marker.");
+        }
+
+        [Test]
+        public void SingleTargetSpell_ShowsItsDeclaredReachOnEmptyCellsBeforeAnyLegalTargetExists()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R02");
+            Assert.That(spell.Shape, Is.EqualTo(FireSelectionShape.Single));
+            Assert.That(spell.TargetKind, Is.EqualTo(FireTargetKind.Enemy));
+            Assert.That(spell.Range, Is.GreaterThan(0));
+
+            int width = spell.Range + 2;
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            // The only enemy sits beyond the spell's reach, so no anchor in range is legal yet.
+            UnitState farEnemy = new UnitState("enemy", false, new GridPosition(width - 1, 0));
+            CombatState state = new CombatState(new GridMap(width, 1), new[] { hero, farEnemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+            FireBattleState fireBattle = new FireBattleState(state);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能1");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            FireSpellPreview PreviewAt(FireSpellDefinition definition, GridPosition position)
+            {
+                UnitState unit = state.Units.Values.FirstOrDefault(candidate =>
+                    candidate.IsAlive && candidate.Position == position);
+                FireSpellTarget target = unit == null
+                    ? FireSpellTarget.At(position, CardinalDirection.East) : FireSpellTarget.Unit(unit.Id);
+                return FireSpellEngine.Preview(fireBattle, hero.Id, definition, target);
+            }
+
+            BattlefieldCellPresentation inReach = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(1, 0), _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation beyond = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(spell.Range + 1, 0), _ => spell, PreviewAt, _ => null, _ => null);
+
+            Assert.That(inReach.SkillOverlayTexture.name, Is.EqualTo("attack_range"),
+                "An empty cell inside the spell's reach must still show how far the spell goes.");
+            Assert.That(inReach.SkillOverlayAlpha,
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.SkillRangeEnvelope)).Within(.001f));
+            Assert.That(beyond.SkillOverlayTexture, Is.Null,
+                "Beyond the declared range there is no reach left to show.");
+        }
+
+        [Test]
+        public void MinimumRangeSpell_MarksTheDeadZoneButNeverTheCasterCell()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            FireSpellDefinition spell = BandedProbeSpell();
+            Assert.That(spell.MinimumRange, Is.EqualTo(2));
+            Assert.That(spell.Range, Is.EqualTo(3));
+
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState farEnemy = new UnitState("enemy", false, new GridPosition(6, 0));
+            CombatState state = new CombatState(new GridMap(7, 1), new[] { hero, farEnemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+            FireBattleState fireBattle = new FireBattleState(state);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能1");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            FireSpellPreview PreviewAt(FireSpellDefinition definition, GridPosition position)
+            {
+                UnitState unit = state.Units.Values.FirstOrDefault(candidate =>
+                    candidate.IsAlive && candidate.Position == position);
+                FireSpellTarget target = unit == null
+                    ? FireSpellTarget.At(position, CardinalDirection.East) : FireSpellTarget.Unit(unit.Id);
+                return FireSpellEngine.Preview(fireBattle, hero.Id, definition, target);
+            }
+
+            BattlefieldCellPresentation caster = presenter.Build(state, null, fireBattle, selection, false, null,
+                hero.Position, _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation deadZone = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(1, 0), _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation inBand = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(2, 0), _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation beyond = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(spell.Range + 1, 0), _ => spell, PreviewAt, _ => null, _ => null);
+
+            Assert.That(caster.SkillOverlayTexture, Is.Null,
+                "The caster's own cell is never a target, so it must stay unmarked.");
+            Assert.That(deadZone.SkillOverlayTexture.name, Is.EqualTo("unreachable"));
+            Assert.That(deadZone.SkillOverlayAlpha,
+                Is.EqualTo(BattlefieldMarkerLadder.Alpha(BattlefieldCellMarker.Undeliverable)).Within(.001f));
+            Assert.That(inBand.SkillOverlayTexture.name, Is.EqualTo("attack_range"),
+                "Inside the legal band the spell shows its reach.");
+            Assert.That(beyond.SkillOverlayTexture, Is.Null);
+        }
+
+        /// <summary>
+        /// The official catalogue no longer contains a range-band spell, so the dead-zone display is
+        /// exercised through a local probe. Keeping it here, rather than deleting the coverage, means a
+        /// future banded spell still has a tested presentation path.
+        /// </summary>
+        private static FireSpellDefinition BandedProbeSpell() => new FireSpellDefinition(
+            "probe_band", "试制距离带", FireSpellRarity.Uncommon, FireSpellGroup.Ranged,
+            FireCombatAffinity.RangedSpell, FireDeliveryMode.DetachedProjection, FireWeaponRequirement.None,
+            FireTriggerWindow.Immediate, FireConsumptionRule.OnCast, 2, 3, 1, 0, 2, 3,
+            FireTargetKind.Enemy, FireSelectionShape.Single, 1, true, false,
+            new[] { new FireSpellRule(FireRuleKind.Damage, 20) });
     }
 }

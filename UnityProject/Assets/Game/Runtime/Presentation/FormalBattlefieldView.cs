@@ -49,6 +49,7 @@ namespace OCC.Combat.Presentation
         public int OcclusionPixelCount { get; private set; }
         private IBattlefieldViewHost host;
         private Canvas canvas;
+        private PixelPerfectBattlefieldScaler battlefieldScaler;
         private GameObject root;
         private RectTransform viewportRect;
         private RectTransform boardRect;
@@ -65,7 +66,8 @@ namespace OCC.Combat.Presentation
         private bool hoverPointerInside;
         private bool hoverRevealed;
         private float hoverStartedAt;
-        private Texture2D moveIntentFrameTexture;
+        private Texture2D enemyIntentMarkerTexture;
+
         private GameObject contextMenuRoot;
         private RectTransform contextMenuPanel;
         private Text contextMenuTitle;
@@ -78,6 +80,8 @@ namespace OCC.Combat.Presentation
         private bool hasPendingPrimaryPosition;
         private bool submitPendingPrimaryOnTimeout;
         private int contextMenuOpenedFrame = -1;
+        private GridPosition contextMenuAnchor;
+        private string contextMenuHoverActionId = string.Empty;
         private int mapWidth;
         private int mapHeight;
         private bool combatEntryQueued;
@@ -166,8 +170,15 @@ namespace OCC.Combat.Presentation
         {
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式UGUI战场", UiLayoutContract.BattlefieldSortingOrder);
+            // 定案：战场画布走整数倍缩放（1920×1080 下 1 画布单位 = 1 屏幕像素，
+            // 一格 = 192 单位 = 32 原生像素 × 6），保证每个原生像素恰好 6 屏幕像素且落在同一栅格上。
+            // HUD 等其它画布不挂，避免小屏被整数倍裁切。
+            battlefieldScaler = PixelPerfectBattlefieldScaler.Attach(canvas);
             root = canvas.gameObject;
-            moveIntentFrameTexture = Resources.Load<Texture2D>("Art/FormalTacticalOverlays32V2/move_range");
+            enemyIntentMarkerTexture = Resources.Load<Texture2D>(BattlefieldMarkerLadder.EnemyIntentMarkerPath);
+            if (enemyIntentMarkerTexture == null)
+                throw new System.IO.FileNotFoundException("Missing enemy intent marker: " + BattlefieldMarkerLadder.EnemyIntentMarkerPath);
+
             GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
             viewportRect = viewport.AddComponent<RectTransform>();
             SetTopLeft(viewportRect, 0f, 0f, BattlefieldPresentationAdapter.BattlefieldWidth,
@@ -311,6 +322,7 @@ namespace OCC.Combat.Presentation
                 Attack = Layer("攻击范围", rect),
                 Skill = Layer("技能范围", rect),
                 IntentDestination = Layer("移动意图目标", rect),
+                IntentDot = CenteredLayer("移动意图强调点", rect),
                 Object = Layer("地形物件", rect),
                 Loot = Layer("战利品", rect),
                 Unit = Layer("单位", unitLayerRect),
@@ -389,6 +401,8 @@ namespace OCC.Combat.Presentation
             {
                 SetTopLeft(pair.Value.Rect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
                 SetTopLeft(pair.Value.OverlayRect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+                float dot = cellSize * BattlefieldMarkerLadder.EnemyIntentDotFraction;
+                pair.Value.IntentDot.rectTransform.sizeDelta = new Vector2(dot, dot);
             }
         }
 
@@ -432,8 +446,15 @@ namespace OCC.Combat.Presentation
             Set(cell.Environment, model.EnvironmentTexture, Color.white);
             cell.MoveMotion.Refresh(model.MoveOverlayTexture, model.MoveOverlayAlpha);
             cell.AttackMotion.Refresh(model.AttackOverlayTexture, model.AttackOverlayAlpha);
-            cell.SkillMotion.Refresh(model.SkillOverlayTexture, 1f);
-            Set(cell.IntentDestination, isIntentDestination ? moveIntentFrameTexture : null, Color.white);
+            cell.SkillMotion.Refresh(model.SkillOverlayTexture, model.SkillOverlayAlpha);
+            // 落点 = 橙色方框（中性白框贴图，可着成真橙）+ 居中的橙色强调点。
+            // 原来的 move_range 四角边框像素是青色（R≈0），乘任何暖色都只会变脏，无法做成橙色边框。
+            Set(cell.IntentDestination, isIntentDestination ? model.SelectionOverlayTexture : null,
+                FormalUiTheme.WithAlpha(BattlefieldMarkerLadder.EnemyIntentDestinationTint,
+                    BattlefieldMarkerLadder.EnemyIntentDestinationAlpha));
+            // 中间菱形：橙色已烘焙进贴图，所以用白色着色原样显示（避免乘法把颜色改脏）。
+            Set(cell.IntentDot, isIntentDestination ? enemyIntentMarkerTexture : null,
+                FormalUiTheme.WithAlpha(Color.white, BattlefieldMarkerLadder.EnemyIntentDestinationAlpha));
             Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
             Texture2D objectTexture = physicalCellSize <= 32.01f && model.ObjectTextureLow != null
                 ? model.ObjectTextureLow : model.ObjectTexture;
@@ -742,7 +763,15 @@ namespace OCC.Combat.Presentation
             activeTurnMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
             activeTurnMarker.localScale = new Vector3(scale, scale, 1f);
             activeTurnMarker.sizeDelta = new Vector2(72f, 86f);
-            if (unitLayerRect != null) activeTurnMarker.SetSiblingIndex(unitLayerRect.GetSiblingIndex());
+            // Place the marker just AFTER the unit layer, and only when it is not already there. Assigning
+            // the unit layer's own index every frame made the two swap draw order each frame, so the marker
+            // (whose black/cyan pointer sits over the actor's body) flickered in front of and behind the
+            // unit. +1 is a fixed point, so this settles after the first frame.
+            if (unitLayerRect != null)
+            {
+                int desired = unitLayerRect.GetSiblingIndex() + 1;
+                if (activeTurnMarker.GetSiblingIndex() != desired) activeTurnMarker.SetSiblingIndex(desired);
+            }
             Vector2 target = new Vector2(frame.x, -frame.y);
             bool actorChanged = !string.IsNullOrEmpty(activeTurnMarkerUnitId) && activeTurnMarkerUnitId != actor.PresentedUnitId;
             bool targetChanged = !hasActiveTurnMarkerTarget || activeTurnMarkerTarget != target;
@@ -806,7 +835,13 @@ namespace OCC.Combat.Presentation
             timelineHoverMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
             timelineHoverMarker.localScale = new Vector3(scale, scale, 1f);
             timelineHoverMarker.sizeDelta = new Vector2(72f, 86f);
-            if (unitLayerRect != null) timelineHoverMarker.SetSiblingIndex(unitLayerRect.GetSiblingIndex());
+            // Same stable placement as the active-turn marker: assigning the unit layer's own index here
+            // would swap the two siblings every frame.
+            if (unitLayerRect != null)
+            {
+                int desired = unitLayerRect.GetSiblingIndex() + 1;
+                if (timelineHoverMarker.GetSiblingIndex() != desired) timelineHoverMarker.SetSiblingIndex(desired);
+            }
             timelineHoverMarker.anchoredPosition = new Vector2(frame.x, -frame.y);
         }
 
@@ -1096,6 +1131,9 @@ namespace OCC.Combat.Presentation
                 Text label = contextMenuButtonLabels[i];
                 label.text = action.Label;
                 contextMenuButtonDetails[i].text = action.Detail;
+                ContextMenuRowPreview preview = button.GetComponent<ContextMenuRowPreview>();
+                if (preview == null) preview = button.gameObject.AddComponent<ContextMenuRowPreview>();
+                preview.Configure(this, position, action.Id);
                 button.onClick.RemoveAllListeners();
                 string actionId = action.Id;
                 button.onClick.AddListener(() =>
@@ -1109,6 +1147,11 @@ namespace OCC.Combat.Presentation
             contextMenuRoot.transform.SetAsLastSibling();
             contextMenuOpenedFrame = Time.frameCount;
             host.SetBattlefieldContextMenuOpen(true);
+            contextMenuAnchor = position;
+            contextMenuHoverActionId = string.Empty;
+            // Mark the anchor cell immediately; the row the pointer already rests on refines it on the
+            // next pointer event.
+            host.PreviewBattlefieldContextAction(position, string.Empty);
         }
 
         private void EnsureContextMenu()
@@ -1186,6 +1229,28 @@ namespace OCC.Combat.Presentation
             if (contextMenuRoot == null || !contextMenuRoot.activeSelf) return;
             contextMenuRoot.SetActive(false);
             host?.SetBattlefieldContextMenuOpen(false);
+            host?.ClearBattlefieldContextPreview();
+            contextMenuHoverActionId = string.Empty;
+        }
+
+        /// <summary>
+        /// The view arbitrates which row owns the preview, because a pointer moving between rows can
+        /// deliver the old row's exit after the new row's enter; a naive clear-on-exit would wipe the
+        /// preview the player just moved onto.
+        /// </summary>
+        internal void SetContextRowHover(GridPosition position, string actionId)
+        {
+            contextMenuAnchor = position;
+            contextMenuHoverActionId = actionId ?? string.Empty;
+            host?.PreviewBattlefieldContextAction(contextMenuAnchor, contextMenuHoverActionId);
+        }
+
+        internal void ClearContextRowHover(GridPosition position, string actionId)
+        {
+            if (contextMenuAnchor != position ||
+                !string.Equals(contextMenuHoverActionId, actionId ?? string.Empty, StringComparison.Ordinal)) return;
+            contextMenuHoverActionId = string.Empty;
+            host?.PreviewBattlefieldContextAction(contextMenuAnchor, string.Empty);
         }
 
         private void BeginCellHover(GridPosition position)
@@ -1284,6 +1349,19 @@ namespace OCC.Combat.Presentation
             return image;
         }
 
+        /// <summary>A centred, cell-fraction sized layer, used by the enemy-destination emphasis dot.</summary>
+        private static RawImage CenteredLayer(string name, Transform parent)
+        {
+            GameObject value = FormalUiKit.Create(name, parent);
+            RectTransform rect = value.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = Vector2.zero;
+            RawImage image = value.AddComponent<RawImage>();
+            image.raycastTarget = false;
+            return image;
+        }
+
         private static Text Label(string name, Transform parent)
         {
             Text label = FormalUiKit.Label(name, string.Empty, parent, Vector2.zero, Vector2.zero, FormalUiTheme.BodyFontSize,
@@ -1359,6 +1437,8 @@ namespace OCC.Combat.Presentation
                 contextMenuRoot.SetActive(false);
                 host?.SetBattlefieldContextMenuOpen(false);
             }
+            contextMenuHoverActionId = string.Empty;
+            host?.ClearBattlefieldContextPreview();
         }
 
         private void OnDestroy()
@@ -1428,6 +1508,7 @@ namespace OCC.Combat.Presentation
             public CombatRangeOverlayMotion AttackMotion;
             public CombatRangeOverlayMotion SkillMotion;
             public RawImage IntentDestination;
+            public RawImage IntentDot;
             public RawImage Selection;
             public RawImage Object;
             public RawImage ObjectFront;
@@ -1469,6 +1550,30 @@ namespace OCC.Combat.Presentation
             public float MarkerRatio;
             public Color MarkerColor;
         }
+    }
+
+    /// <summary>
+    /// Previews one right-click menu row on the board while the pointer rests on it, so the player can
+    /// compare actions before committing. The owning view arbitrates which row owns the preview.
+    /// </summary>
+    internal sealed class ContextMenuRowPreview : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+        ISelectHandler, IDeselectHandler
+    {
+        private FormalBattlefieldView view;
+        private GridPosition position;
+        private string actionId = string.Empty;
+
+        public void Configure(FormalBattlefieldView source, GridPosition cell, string id)
+        {
+            view = source;
+            position = cell;
+            actionId = id ?? string.Empty;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData) => view?.SetContextRowHover(position, actionId);
+        public void OnSelect(BaseEventData eventData) => view?.SetContextRowHover(position, actionId);
+        public void OnPointerExit(PointerEventData eventData) => view?.ClearContextRowHover(position, actionId);
+        public void OnDeselect(BaseEventData eventData) => view?.ClearContextRowHover(position, actionId);
     }
 
     internal sealed class CombatRangeOverlayMotion : MonoBehaviour

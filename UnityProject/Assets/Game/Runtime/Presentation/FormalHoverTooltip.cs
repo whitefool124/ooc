@@ -20,6 +20,8 @@ namespace OCC.Combat.Presentation
         public string Effect { get; }
         public string Summary { get; }
         public string Body { get; }
+        /// <summary>Boxed 词条 shown between the title and the resource cells, e.g. 单点／4格／伤害.</summary>
+        public IReadOnlyList<string> Tags { get; }
         public Color Accent { get; }
         public string IconPath { get; }
 
@@ -37,11 +39,13 @@ namespace OCC.Combat.Presentation
                 ParseMetric(body, 2), ParseEffect(body), ParseSummary(category, title, body), body, accent, iconPath) { }
 
         public FormalTooltipContent(string category, string status, string title, string identity,
-            string metricA, string metricB, string metricC, string effect, string summary, Color accent, string iconPath = "")
-            : this(category, status, title, identity, metricA, metricB, metricC, effect, summary, effect, accent, iconPath) { }
+            string metricA, string metricB, string metricC, string effect, string summary, Color accent, string iconPath = "",
+            IReadOnlyList<string> tags = null)
+            : this(category, status, title, identity, metricA, metricB, metricC, effect, summary, effect, accent, iconPath, tags) { }
 
         private FormalTooltipContent(string category, string status, string title, string identity,
-            string metricA, string metricB, string metricC, string effect, string summary, string body, Color accent, string iconPath)
+            string metricA, string metricB, string metricC, string effect, string summary, string body, Color accent, string iconPath,
+            IReadOnlyList<string> tags = null)
         {
             Category = category ?? string.Empty;
             Status = status ?? string.Empty;
@@ -55,7 +59,13 @@ namespace OCC.Combat.Presentation
             Body = body ?? string.Empty;
             Accent = accent;
             IconPath = iconPath ?? string.Empty;
+            Tags = tags ?? System.Array.Empty<string>();
         }
+
+        /// <summary>Keeps the parsed status/metrics/effect/summary, but replaces the prose 目标 line with 词条.</summary>
+        public FormalTooltipContent(string category, string title, string body, Color accent, string iconPath, IReadOnlyList<string> tags)
+            : this(category, ParseStatus(body), title, ParseIdentity(category, body), ParseMetric(body, 0), ParseMetric(body, 1),
+                ParseMetric(body, 2), ParseEffect(body), ParseSummary(category, title, body), body, accent, iconPath, tags) { }
 
         private static string[] Lines(string body) => (body ?? string.Empty).Replace("\r", string.Empty)
             .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(value => value.Trim()).ToArray();
@@ -200,6 +210,10 @@ namespace OCC.Combat.Presentation
         private const float ContentCardMinimumHeight = 388f;
         private const float ContentCardInset = 16f;
         private const float ContentEffectTop = 220f;
+        private const float MetricRowTop = 148f;
+        private const float MetricCellWidth = 124f;
+        private const float MetricCellHeight = 48f;
+        private const float MetricLabelWidth = 108f;
         private const float ContentEffectBodyWidth = ContentCardWidth - (ContentCardInset * 2f);
         private const float HorizontalPadding = 16f;
         private const float TopPadding = 16f;
@@ -221,6 +235,19 @@ namespace OCC.Combat.Presentation
         private Text cardTitle;
         private Text identityLabel;
         private readonly Text[] metricLabels = new Text[3];
+        private readonly RectTransform[] metricCells = new RectTransform[3];
+        private readonly Text[] tagLabels = new Text[MaximumTags];
+        private readonly RectTransform[] tagChips = new RectTransform[MaximumTags];
+        private RectTransform contentDivider;
+        private float effectTop = ContentEffectTop;
+        private float metricRowHeight = MetricCellHeight;
+        private float metricRowTop = MetricRowTop;
+        private const int MaximumTags = 6;
+        private const float TagRowTop = 96f;
+        // 词条行与「内容标题／内容身份」同一起始 x，避开 16..88 的图标画框。
+        private const float TagRowInset = 104f;
+        private const float TagHeight = 34f;
+        private const float TagGap = 8f;
         private Text effectBody;
         private Text summaryLabel;
         private object owner;
@@ -283,12 +310,27 @@ namespace OCC.Combat.Presentation
                 GameObject metric = FormalUiKit.FlatPanel("内容指标格" + (i + 1), cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
                     new Vector2(16f + i * 134f, -148f), new Vector2(124f, 48f), FormalUiTheme.SurfaceRaised);
                 FormalUiKit.ThinFrame(metric.transform, new Vector2(124f, 48f), FormalUiTheme.Ink, "内容指标描边");
+                metricCells[i] = metric.GetComponent<RectTransform>();
                 metricLabels[i] = FixedLabel("内容指标" + (i + 1), string.Empty, metric.transform, new Vector2(8f, -4f),
                     new Vector2(108f, 40f), 15, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             }
-            FormalUiKit.FlatPanel("内容分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
-                new Vector2(16f, -208f), new Vector2(400f, 2f), FormalUiTheme.Ink);
-            effectBody = FixedLabel("效果内容", string.Empty, cardRoot, new Vector2(ContentCardInset, -ContentEffectTop), new Vector2(ContentEffectBodyWidth, 40f), 16, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            contentDivider = FormalUiKit.FlatPanel("内容分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                new Vector2(16f, -208f), new Vector2(400f, 2f), FormalUiTheme.Ink).GetComponent<RectTransform>();
+            for (int i = 0; i < tagLabels.Length; i++)
+            {
+                GameObject tag = FormalUiKit.FlatPanel("内容词条" + (i + 1), cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                    new Vector2(ContentCardInset, -TagRowTop), new Vector2(60f, TagHeight), FormalUiTheme.SurfaceRaised);
+                tagChips[i] = tag.GetComponent<RectTransform>();
+                FormalUiKit.ThinFrame(tag.transform, new Vector2(60f, TagHeight), FormalUiTheme.Ink, "词条描边");
+                tagLabels[i] = FixedLabel("词条" + (i + 1), string.Empty, tag.transform, new Vector2(8f, -4f),
+                    new Vector2(44f, TagHeight - 8f), 14, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+                tagLabels[i].horizontalOverflow = HorizontalWrapMode.Overflow;
+                // 像素字体按 12 网格取整后单行可能高于内框，Truncate 会把整行裁掉，因此这里允许溢出。
+                tagLabels[i].verticalOverflow = VerticalWrapMode.Overflow;
+                tagLabels[i].transform.SetAsLastSibling();
+                tag.SetActive(false);
+            }
+            effectBody = FixedLabel("效果内容", string.Empty, cardRoot, new Vector2(ContentCardInset, -effectTop), new Vector2(ContentEffectBodyWidth, 40f), 16, FormalUiTheme.Text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(effectBody);
             effectBody.lineSpacing = 1f;
             effectBody.verticalOverflow = VerticalWrapMode.Overflow;
@@ -327,6 +369,7 @@ namespace OCC.Combat.Presentation
                 metricLabels[2].text = content.MetricC;
                 effectBody.text = WrapEffectAtClauses(content.Effect);
                 summaryLabel.text = content.Summary;
+                ApplyTags(content.Tags);
                 LayoutCategorizedCard();
             }
             else
@@ -374,12 +417,19 @@ namespace OCC.Combat.Presentation
 
         private void LayoutCategorizedCard()
         {
+            // 词条行占用原「目标」行；没有词条时退回该行文本。指标格与以下各段都跟着游标走。
+            LayoutTagRow();
+            MeasureMetricRow();
+            float dividerY = metricRowTop + metricRowHeight + 12f;
+            if (contentDivider != null) contentDivider.anchoredPosition = new Vector2(ContentCardInset, -dividerY);
+            effectTop = dividerY + 12f;
+            effectBody.rectTransform.anchoredPosition = new Vector2(ContentCardInset, -effectTop);
             effectBody.rectTransform.sizeDelta = new Vector2(ContentEffectBodyWidth, MaximumHeight);
             Canvas.ForceUpdateCanvases();
             float effectHeight = Mathf.Max(Mathf.Ceil(effectBody.preferredHeight), 40f);
             effectBody.rectTransform.sizeDelta = new Vector2(ContentEffectBodyWidth, effectHeight);
 
-            float footerTop = ContentEffectTop + effectHeight + 12f;
+            float footerTop = effectTop + effectHeight + 12f;
             RectTransform footerRule = cardRoot.Find("页脚分隔线") as RectTransform;
             if (footerRule != null) footerRule.anchoredPosition = new Vector2(ContentCardInset, -footerTop);
 
@@ -392,6 +442,83 @@ namespace OCC.Combat.Presentation
 
             float height = Mathf.Max(summaryTop + summaryHeight + ContentCardInset, ContentCardMinimumHeight);
             cardRoot.sizeDelta = panel.sizeDelta = new Vector2(ContentCardWidth, height);
+        }
+
+        private void ApplyTags(IReadOnlyList<string> tags)
+        {
+            int count = tags == null ? 0 : tags.Count;
+            for (int i = 0; i < tagLabels.Length; i++)
+            {
+                bool used = i < count;
+                tagLabels[i].gameObject.SetActive(used);
+                if (tagChips[i] != null) tagChips[i].gameObject.SetActive(used);
+                if (used) tagLabels[i].text = tags[i];
+            }
+            // 有词条时不再重复显示散文式的「目标」行。
+            identityLabel.gameObject.SetActive(count == 0);
+        }
+
+        /// <summary>
+        /// Lays the 词条 out as boxed chips, each sized to its own text and wrapping to a second line when the
+        /// card width runs out. The row feeds <see cref="metricRowTop"/> so everything below follows it.
+        /// </summary>
+        private void LayoutTagRow()
+        {
+            float cursorX = TagRowInset;
+            float cursorY = TagRowTop;
+            float rightLimit = ContentCardWidth - ContentCardInset;
+            int used = 0;
+            for (int i = 0; i < tagLabels.Length; i++)
+            {
+                if (tagChips[i] == null || !tagChips[i].gameObject.activeSelf) continue;
+                Text label = tagLabels[i];
+                label.rectTransform.sizeDelta = new Vector2(200f, TagHeight - 8f);
+                Canvas.ForceUpdateCanvases();
+                float width = Mathf.Ceil(label.preferredWidth) + 16f;
+                if (used > 0 && cursorX + width > rightLimit)
+                {
+                    cursorX = TagRowInset;
+                    cursorY += TagHeight + 6f;
+                }
+                tagChips[i].anchoredPosition = new Vector2(cursorX, -cursorY);
+                tagChips[i].sizeDelta = new Vector2(width, TagHeight);
+                FormalUiKit.ThinFrame(tagChips[i], new Vector2(width, TagHeight), FormalUiTheme.Ink, "词条描边");
+                label.rectTransform.sizeDelta = new Vector2(width - 16f, TagHeight - 8f);
+                label.rectTransform.anchoredPosition = new Vector2(8f, -4f);
+                // 描边是后加的兄弟物体，必须把文字重新提到最上层，否则会被框盖住。
+                label.transform.SetAsLastSibling();
+                cursorX += width + TagGap;
+                used++;
+            }
+            metricRowTop = used == 0 ? MetricRowTop : cursorY + TagHeight + 12f;
+        }
+
+        /// <summary>
+        /// Grows the metric row to whatever its tallest cell needs. Cells keep their 124 px width and the
+        /// text wraps inside them, so a long term raises the row instead of overflowing it.
+        /// </summary>
+        private void MeasureMetricRow()
+        {
+            float height = MetricCellHeight;
+            for (int i = 0; i < metricLabels.Length; i++)
+            {
+                Text label = metricLabels[i];
+                if (label == null) continue;
+                label.rectTransform.sizeDelta = new Vector2(MetricLabelWidth, MetricCellHeight);
+                Canvas.ForceUpdateCanvases();
+                float needed = Mathf.Ceil(label.preferredHeight) + 8f;
+                if (needed > height) height = needed;
+            }
+            metricRowHeight = height;
+            for (int i = 0; i < metricLabels.Length; i++)
+            {
+                Text label = metricLabels[i];
+                if (label == null || metricCells[i] == null) continue;
+                metricCells[i].anchoredPosition = new Vector2(16f + i * 134f, -metricRowTop);
+                metricCells[i].sizeDelta = new Vector2(MetricCellWidth, height);
+                label.rectTransform.sizeDelta = new Vector2(MetricLabelWidth, height - 8f);
+                FormalUiKit.ThinFrame(metricCells[i], new Vector2(MetricCellWidth, height), FormalUiTheme.Ink, "内容指标描边");
+            }
         }
 
         private static string WrapEffectAtClauses(string value)

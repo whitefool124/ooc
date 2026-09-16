@@ -141,7 +141,7 @@ namespace OCC.Combat
 
         public static readonly ArtifactDefinition DemolitionCanister = A("F-T01", "demolition_canister", "炎脉封装筒",
             ItemRarity.Rare, 2, 0, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Cross, "学院试制", "火",
-            "0 行动点；消耗 1 次", "4 格内空地；十字范围", "造成 16 点火焰伤害，摧毁轻掩体；生成火场 3 回合",
+            "不消耗行动点；消耗 1 次", "4 格内空地；十字范围", "造成 16 点火焰伤害，摧毁轻掩体；生成火场 3 回合",
             "伤及范围内所有单位；重掩体阻断投放", "破障、封路", "双手旋阀后投放", "火十字爆发与燃烧地格",
             RarePools, new[] { E(ArtifactEffectKind.Damage, 16, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
                 E(ArtifactEffectKind.DestroyLightCover, scope: ArtifactEffectScope.Selection),
