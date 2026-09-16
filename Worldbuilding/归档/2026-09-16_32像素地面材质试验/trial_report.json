@@ -1,0 +1,267 @@
+{
+  "schema": "occ-art-trial-report (PROTOTYPE, not a manifest)",
+  "status": "PROTOTYPE",
+  "date": "2026-09-16",
+  "authorization": "用户要求：不用生图，直接填像素",
+  "delivery": {
+    "floor_tile_32": [
+      32,
+      32
+    ],
+    "terrain_adjacency_overlay_32": [
+      32,
+      32
+    ],
+    "directional_outer_edge_32x40": [
+      32,
+      40
+    ]
+  },
+  "assets": {
+    "dirt_a_32.png": {
+      "role": "floor_tile_32",
+      "material": "dirt",
+      "variant": "a",
+      "colors": 6
+    },
+    "dirt_b_32.png": {
+      "role": "floor_tile_32",
+      "material": "dirt",
+      "variant": "b",
+      "colors": 6
+    },
+    "dirt_c_32.png": {
+      "role": "floor_tile_32",
+      "material": "dirt",
+      "variant": "c",
+      "colors": 6
+    },
+    "dirt_d_32.png": {
+      "role": "floor_tile_32",
+      "material": "dirt",
+      "variant": "d",
+      "colors": 6
+    },
+    "stone_a_32.png": {
+      "role": "floor_tile_32",
+      "material": "stone",
+      "variant": "a",
+      "colors": 6
+    },
+    "stone_b_32.png": {
+      "role": "floor_tile_32",
+      "material": "stone",
+      "variant": "b",
+      "colors": 6
+    },
+    "dirt_stone_n_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "n"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_e_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "e"
+      ],
+      "colors": 7
+    },
+    "dirt_stone_s_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "s"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_w_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "w"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_ne_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "n",
+        "e"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_se_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "s",
+        "e"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_sw_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "s",
+        "w"
+      ],
+      "colors": 8
+    },
+    "dirt_stone_nw_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "dirt",
+      "other": "stone",
+      "dirs": [
+        "n",
+        "w"
+      ],
+      "colors": 8
+    },
+    "stone_dirt_n_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "n"
+      ],
+      "colors": 7
+    },
+    "stone_dirt_e_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "e"
+      ],
+      "colors": 8
+    },
+    "stone_dirt_s_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "s"
+      ],
+      "colors": 9
+    },
+    "stone_dirt_w_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "w"
+      ],
+      "colors": 9
+    },
+    "stone_dirt_ne_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "n",
+        "e"
+      ],
+      "colors": 8
+    },
+    "stone_dirt_se_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "s",
+        "e"
+      ],
+      "colors": 9
+    },
+    "stone_dirt_sw_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "s",
+        "w"
+      ],
+      "colors": 9
+    },
+    "stone_dirt_nw_32.png": {
+      "role": "terrain_adjacency_overlay_32",
+      "own": "stone",
+      "other": "dirt",
+      "dirs": [
+        "n",
+        "w"
+      ],
+      "colors": 9
+    },
+    "dirt_outer_s_32x40.png": {
+      "role": "directional_outer_edge_32x40",
+      "material": "dirt",
+      "facade": "south_8px",
+      "colors": 6
+    },
+    "stone_outer_s_32x40.png": {
+      "role": "directional_outer_edge_32x40",
+      "material": "stone",
+      "facade": "south_8px",
+      "colors": 6
+    }
+  },
+  "palettes": {
+    "dirt": {
+      "dark": "#4E3928",
+      "base": "#674D34",
+      "mid": "#7A5E3F",
+      "light": "#8C6E48",
+      "hi": "#9E7F58",
+      "pebble": "#7C766C"
+    },
+    "stone": {
+      "mortar": "#383938",
+      "dark": "#4E5154",
+      "base": "#616569",
+      "mid": "#74797D",
+      "light": "#868C91",
+      "hi": "#9CA3A9"
+    }
+  },
+  "method": {
+    "dirt": "周期值噪声（每变体不同周期）+ 秩映射 5 阶色带 + 孤立像素清理 + 手工土脊/石子/土块",
+    "stone": "16 宽 8 高错缝砖 + 左上受光砖唇 + 缺口/浅坑/裂纹，无格子边框",
+    "transition": "按另一材质方向在本格贴边像素落笔：泥土侧接触暗线+不规则投影+外露石屑+砾石；石砖侧断续砖唇/压暗+泥土碎屑",
+    "outer_edge": "32×40：上方 32×32 为地面格，下方 8px 南向立面（接触影 / 受光上沿 / 主体 / 底部收暗）",
+    "field": "变体按格坐标确定性选取（2×2 区块内不重复），铺图可复现；不作镜像/旋转，避免破坏固定左上光源"
+  },
+  "constraints_checked": [
+    "32×32 原生，PPU 32；外沿 32×40，下方 8px 不参与交互",
+    "整数像素，无缩放插值、无渐变、无抖色、无抗锯齿",
+    "固定左上光源",
+    "地面格 6 色，过渡格 ≤10 色",
+    "地面不烘焙格子边框",
+    "表面细节不触格边（结构灰缝除外）",
+    "无孤立单像素噪点（一律 2px 簇落笔 + 色带清理）",
+    "变体之间共用同一调色板，可混铺"
+  ],
+  "not_allowed": [
+    "登记 occ-art-manifest-v1",
+    "写入 UnityProject/Assets",
+    "作为 FORMAL / FORMAL_CANDIDATE"
+  ],
+  "not_yet": [
+    "Unity 导入、GUID/Importer 复核、实机应用接触",
+    "湿滑/破损等状态变体，外沿东/西/北向立面",
+    "人工审美裁决"
+  ]
+}

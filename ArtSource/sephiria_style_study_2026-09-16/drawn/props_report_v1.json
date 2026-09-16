@@ -1,0 +1,22 @@
+{
+ "prop_crate_32.png": {
+  "role": "single_cell_prop_32",
+  "colors": 6,
+  "bbox": [
+   6,
+   5,
+   26,
+   28
+  ]
+ },
+ "prop_rubble_32.png": {
+  "role": "single_cell_prop_32",
+  "colors": 5,
+  "bbox": [
+   7,
+   10,
+   25,
+   24
+  ]
+ }
+}

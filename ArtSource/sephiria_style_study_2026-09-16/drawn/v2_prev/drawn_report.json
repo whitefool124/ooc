@@ -1,0 +1,161 @@
+{
+ "palettes": {
+  "dirt": {
+   "deep": "#785C34",
+   "shade": "#7E6038",
+   "base": "#92713E",
+   "face": "#A17F44",
+   "light": "#B09155",
+   "hi": "#BEA064",
+   "pebble": "#8C8578"
+  },
+  "stone": {
+   "seam": "#3A3A42",
+   "shade": "#4A4A54",
+   "base": "#565660",
+   "face": "#63636E",
+   "light": "#74747F",
+   "hi": "#868A90"
+  }
+ },
+ "assets": {
+  "dirt_a_32.png": {
+   "role": "floor_tile_32",
+   "colors": 6
+  },
+  "dirt_b_32.png": {
+   "role": "floor_tile_32",
+   "colors": 4
+  },
+  "dirt_c_32.png": {
+   "role": "floor_tile_32",
+   "colors": 4
+  },
+  "dirt_sparse_contract_32.png": {
+   "role": "floor_tile_32",
+   "colors": 6
+  },
+  "stone_a_32.png": {
+   "role": "floor_tile_32",
+   "colors": 4
+  },
+  "stone_b_32.png": {
+   "role": "floor_tile_32",
+   "colors": 4
+  },
+  "dirt_stone_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_dirt_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 4
+  },
+  "stone_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 5
+  }
+ },
+ "coverage": {
+  "dirt_a": {
+   "A17F44": 0.502,
+   "7E6038": 0.221,
+   "B09155": 0.164,
+   "92713E": 0.11,
+   "8C8578": 0.002,
+   "BEA064": 0.001
+  },
+  "dirt_b": {
+   "A17F44": 0.503,
+   "7E6038": 0.196,
+   "B09155": 0.168,
+   "92713E": 0.133
+  },
+  "dirt_c": {
+   "A17F44": 0.489,
+   "7E6038": 0.226,
+   "B09155": 0.167,
+   "92713E": 0.118
+  },
+  "dirt_sparse": {
+   "A17F44": 0.729,
+   "7E6038": 0.097,
+   "92713E": 0.096,
+   "B09155": 0.075,
+   "8C8578": 0.002,
+   "BEA064": 0.001
+  },
+  "stone_a": {
+   "63636E": 0.548,
+   "565660": 0.285,
+   "4A4A54": 0.133,
+   "74747F": 0.034
+  },
+  "stone_b": {
+   "63636E": 0.616,
+   "565660": 0.195,
+   "4A4A54": 0.145,
+   "74747F": 0.044
+  }
+ }
+}

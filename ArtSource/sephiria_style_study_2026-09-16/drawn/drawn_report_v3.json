@@ -1,0 +1,542 @@
+{
+ "materials": {
+  "d": {
+   "seam": "#6E5430",
+   "shade": "#7E6038",
+   "base": "#92713E",
+   "face": "#A17F44",
+   "light": "#B09155",
+   "hi": "#BEA064"
+  },
+  "s": {
+   "seam": "#3A3A42",
+   "shade": "#4A4A54",
+   "base": "#565660",
+   "face": "#63636E",
+   "light": "#74747F",
+   "hi": "#868A90"
+  },
+  "g": {
+   "seam": "#346042",
+   "shade": "#40784E",
+   "base": "#4C905A",
+   "face": "#5AA868",
+   "light": "#70BC7A",
+   "hi": "#88CC8E"
+  },
+  "w": {
+   "seam": "#6E422C",
+   "shade": "#83533B",
+   "base": "#9B6744",
+   "face": "#B98960",
+   "light": "#C79B76",
+   "hi": "#D7B28C"
+  },
+  "c": {
+   "seam": "#482220",
+   "shade": "#562523",
+   "base": "#632826",
+   "face": "#6C2A28",
+   "light": "#7E3632",
+   "hi": "#924840"
+  }
+ },
+ "assets": {
+  "dirt_a_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "dirt_b_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "dirt_c_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "dirt_d_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "dirt_e_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "dirt_f_32.png": {
+   "role": "floor_tile_32",
+   "material": "dirt",
+   "colors": 4
+  },
+  "stone_a_32.png": {
+   "role": "floor_tile_32",
+   "material": "stone",
+   "colors": 4
+  },
+  "stone_b_32.png": {
+   "role": "floor_tile_32",
+   "material": "stone",
+   "colors": 4
+  },
+  "grass_a_32.png": {
+   "role": "floor_tile_32",
+   "material": "grass",
+   "colors": 1
+  },
+  "wood_a_32.png": {
+   "role": "floor_tile_32",
+   "material": "wood",
+   "colors": 3
+  },
+  "wood_b_32.png": {
+   "role": "floor_tile_32",
+   "material": "wood",
+   "colors": 4
+  },
+  "carpet_a_32.png": {
+   "role": "floor_tile_32",
+   "material": "carpet",
+   "colors": 3
+  },
+  "carpet_b_32.png": {
+   "role": "floor_tile_32",
+   "material": "carpet",
+   "colors": 4
+  },
+  "dirt_stone_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_stone_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_dirt_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "dirt_grass_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "grass_dirt_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_dirt_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "stone_grass_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "stone_grass_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 6
+  },
+  "grass_stone_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "grass_stone_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 3
+  },
+  "stone_wood_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_wood_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "wood_stone_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "stone_carpet_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_stone_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_carpet_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_n_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_e_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_s_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_w_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_ne_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_se_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_sw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "carpet_dirt_nw_32.png": {
+   "role": "terrain_adjacency_overlay_32",
+   "colors": 5
+  },
+  "dirt_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 5
+  },
+  "stone_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 5
+  },
+  "grass_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 4
+  },
+  "wood_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 4
+  },
+  "carpet_outer_s_32x40.png": {
+   "role": "directional_outer_edge_32x40",
+   "colors": 4
+  }
+ },
+ "coverage": {
+  "dirt": {
+   "A17F44": 0.459,
+   "7E6038": 0.221,
+   "B09155": 0.18,
+   "92713E": 0.141
+  },
+  "stone": {
+   "63636E": 0.397,
+   "565660": 0.305,
+   "4A4A54": 0.252,
+   "74747F": 0.046
+  },
+  "grass": {
+   "5AA868": 1.0
+  },
+  "wood": {
+   "B98960": 0.602,
+   "83533B": 0.344,
+   "C79B76": 0.055
+  },
+  "carpet": {
+   "6C2A28": 0.988,
+   "632826": 0.009,
+   "562523": 0.003
+  }
+ }
+}

@@ -1,8 +1,8 @@
 {
   "schema": "occ-art-contract-v1",
   "version": 1,
-  "revision_date": "2026-09-15",
-  "revision_note": "Unified battlefield production at 32 PPU: logical occupancy is independent from adaptive 32-multiple visual canvases; side-view units, oblique props, deterministic source-grid decoding, a lossless opaque-ground window role, shared tactical grid and integer runtime scaling.",
+  "revision_date": "2026-09-16",
+  "revision_note": "2026-09-16: aligned the 32px ground surface-detail policy with the master plan and the art spec table (low-contrast connected clusters, dominant base tone 45-55 percent, no isolated single-pixel noise, no baked cell frame) after the user confirmed the Sephiria-measured density; recorded the measured native reference grid and the per-cell x2 conversion. Prior note: unified battlefield production at 32 PPU: logical occupancy is independent from adaptive 32-multiple visual canvases; side-view units, oblique props, deterministic source-grid decoding, a lossless opaque-ground window role, shared tactical grid and integer runtime scaling.",
   "primary_map_reference": {
     "name": "Sephiria",
     "scope": "map presentation only; derive organization, material layering and pixel density, do not copy assets",
@@ -12,6 +12,18 @@
     "prop_language": "one dominant silhouette plus one identifying feature; large scenes gain richness from combinations of simple modules, not a single miniature-building sprite",
     "source_pixel_language": "visibly coarse pixel art with large clear pixel clusters and a few connected light-shadow masses; never depend on later downscaling to create pixel character",
     "source_texture_forbidden": ["dense cracks", "dense moss flecks", "rivet fields", "isolated speckles", "high-frequency dithering", "fine gradients"],
+    "measured_reference_2026_09_16": {
+      "source": "user real-machine screenshots, C:/Users/FNHF/Videos/NVIDIA/Sephiria, 55 files, latest batch 2026-09-15 15:24-16:08; observation record ArtSource/sephiria_style_study_2026-09-16/analysis",
+      "native_pixel_pitch_screen_px": 6,
+      "native_canvas_width": 320,
+      "measured_feature_pitch_native_px": {"wood_plank_row": 4, "stone_course": "3-4", "stone_brick_width": 4},
+      "material_tone_step_luminance": "8-14 inside one material; the material's own dark sits about 30 below its base",
+      "dominant_tone_share_observed": {"wood_floor": 0.58, "dungeon_floor": 0.64, "carpet": 0.60},
+      "on_screen_pixel_size": {"sephiria": "1 native px = 6 screen px at 1920x1080", "occ_default_2x": "1 native px = 2 screen px", "occ_zoom_4x": "1 native px = 4 screen px"},
+      "occ_conversion": "match on-screen size, not pixel-count per cell: structural features are about 3x the reference native sizes, so stone and wood pitch is 16 native px with a 3 native px structural seam; organic mottling does not scale with structure and stays 6-11 native px (the reference soil clumps are 2-3 native px = 12-18 screen px)",
+      "conversion_basis_note": "the earlier per-cell x2 basis made ground art read about one third as coarse as the reference at the default 2x battlefield view; tuning to the 4x zoom instead would make the default view too fine, so the default 2x view governs structural features",
+      "boundary_rule": "material borders interlock in 2-4px steps and press the material's own dark tone; never a pure-black ground outline and never a baked per-cell frame"
+    },
     "depth_language": "visible top face plus a facade facing the bottom of the screen; internal material seams use material-dark tones rather than repeated pure-black outlines",
     "theme_batching": "change material story and one identifying feature while preserving camera axis, silhouette complexity, top-to-facade relationship, light direction and density budget",
     "generation_content_policy": "state what the object is, its application scene, gameplay occupancy and shared map view; do not prescribe part counts, part placement or target pixels",
@@ -441,7 +453,7 @@
       "directional_shadow_rotation": "forbidden",
       "dominant_material_units_per_tile": 1,
       "nested_masonry_grid": "forbidden",
-      "surface_detail_policy": "sparse_low_contrast_non_connecting_marks_only",
+      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
       "surface_detail_edge_contact": "forbidden",
       "perimeter_bevel_policy": "sparse_material_seams_only; never a repeated UI-button perimeter",
       "ground_window_normalization": "after stable source-grid decode, select the deterministic centered opaque 32x32 logical window; persist source hash, decoded field size and window bounds; no resizing, interpolation, painting, added colours or changed selected pixels. A regular opaque brick/material field may declare its observed square macro-pixel pitch only for REVIEW_READY evidence when generic confidence is ambiguous; it cannot become FORMAL_CANDIDATE without explicit human pixel-scale, material and application PASS",
@@ -819,7 +831,11 @@
         "### A.2.2 统一像素资产生产流程",
         "网格置信度低于1.2",
         "有方向的地图外沿地块使用32×40",
-        "2px 细框"
+        "2px 细框",
+        "## A.17 战场格标记强度阶梯",
+        "可以选择0.72",
+        "结构性不可投递0.42",
+        "显示0.58射程范围"
       ]
     },
     {
@@ -830,6 +846,11 @@
         "ART-PIXEL-PIPELINE",
         "ART-PIXEL-STABILITY",
         "ART-PIPELINE",
+        "ART-MARKER-LADDER",
+        "ART-SPELL-REACH",
+        "ART-MOVE-RANGE",
+        "ART-ATTACK-RANGE",
+        "ART-CONTEXT-PREVIEW",
         "FORMAL_CANDIDATE",
         "仅FORMAL可进入正式运行时",
         "FusionPixel12ProportionalZhHans"
@@ -1116,6 +1137,70 @@
       "move target failure reason"
     ],
     "review": "EditMode command equivalence and state changes; runtime GC/frame time and human visual review remain pending; v3 QA_PENDING 0/2"
+  },
+  "marker_ladder": {
+    "source": "BattlefieldMarkerLadder; every battlefield cell marker resolves to exactly one texture and one tier here and no call site writes its own alpha",
+    "tiers": {
+      "focus": 1.0,
+      "risky": 0.96,
+      "committed": 0.88,
+      "selectable": 0.72,
+      "range_envelope": 0.58,
+      "unavailable": 0.42
+    },
+    "legibility_note": "the marker texture is a thin corner bracket, so every tier sits high and the ordering, not a wide dynamic range, separates neighbouring tiers",
+    "compositing": "final alpha = tier alpha x 160ms fade-in x 0.91-1.0 per-cell offset pulse",
+    "same_meaning_same_strength": [
+      "movement reach, attack envelope and skill selectable anchor are all selectable",
+      "attack committable target and skill effect cell are both committed",
+      "movement pressure reaction and skill friendly-fire risk are both risky"
+    ],
+    "unmarked": [
+      "cells truncated by walls or smoke",
+      "beyond maximum range",
+      "hero own cell",
+      "globally unavailable turn, action points or battle end"
+    ],
+    "exposed_counts": "attack and skill valid-cell counts include only committable cells, never the lit selectable range",
+    "layout": "markers stay below terrain objects and units in the existing cell layer order"
+  },
+  "attack_range_presentation": {
+    "source": "BattlefieldPresentationAdapter.IsInAttackRange for the reach envelope and IsLegalTarget for committable cells, shared with InvalidReasonForCell and the resolver",
+    "reach_envelope": "selectable tier; sight-line filtered, so walls and smoke truncate the field instead of reshaping it",
+    "committable_target": "committed tier; requires an alive non-hero unit on the cell and no global failure",
+    "dead_zone": "closer than the weapon's own minimum range; uses the unreachable texture at the unavailable tier instead of being left blank",
+    "consumers": [
+      "attack overlay",
+      "valid cell count"
+    ],
+    "review": "EditMode tier, ladder-ordering, eligibility and dead-zone tests pass; steady-state rendered alpha read back 0.44 movement and attack envelope, 0.27 spell reach envelope, 0.44 skill selectable anchor; human aesthetic review pending"
+  },
+  "spell_reach_presentation": {
+    "source": "FireSpellEngine.Preview failures, so the reach field and the resolver share one geometry instead of restating distance and line-of-sight here",
+    "applies_to": "single-anchor spells only; self spells target the caster and shaped spells derive geometry from a chosen direction, so a per-cell field would describe a geometry they do not have",
+    "marker": "attack range texture at the range-envelope tier",
+    "rule": "a cell is inside the declared reach when the preview fails only on what it found there, never on range or the sight line",
+    "why": "a spell with no legal target still has to answer how far it reaches",
+    "dead_zone": "uses the unreachable texture at the unavailable tier, and never marks the caster's own cell",
+    "review": "EditMode empty-reach, out-of-reach and dead-zone tests pass; steady-state rendered alpha read back 0.27 for the reach field; human aesthetic review pending"
+  },
+  "enemy_intent_destination": {
+    "marker": "an orange cell frame (neutral white frame texture, tinted) plus a centred orange diamond",
+    "alpha": 0.9,
+    "dot_fraction_of_cell": 0.34,
+    "tint": "bright orange #FF8A1F on the frame; the diamond's orange is baked into its texture, which is drawn white",
+    "placeholder": "Art/FormalTacticalOverlays32V2/enemy_intent_diamond is a 32x32 diamond drawn programmatically on the user's explicit instruction, which this contract normally forbids; replace it with a generated source (hard alpha, single square macro-pixel grid, 1px outline) before the asset becomes formal",
+    "rule": "the neutral white frame is the only frame in the project that can be tinted: the move-range corner brackets are cyan (R≈0), so multiplying them by any warm tint renders muddy (the old 'pale grey') and they are identical in form to the player's own range. Both parts stay near-opaque (0.9 > the strongest player tier 0.72) so a destination inside the player's reachable cells still reads."
+  },
+  "context_menu_preview": {
+    "source": "CombatSelectionController menu preview state driven by FormalBattlefieldView row hover",
+    "on_open": "only the anchor cell is marked as focus; the committed action's range is not drawn",
+    "on_row_hover": "previews that row's selectable range and effect cells at the anchor",
+    "on_row_exit": "returns to anchor only",
+    "on_close": "restores the committed action's range",
+    "rows_without_preview": "actions that cannot preview a range (armed tactical items) keep the anchor marker only, because an item only becomes 技能1 once the quickbar arms it",
+    "hover_arbitration": "the view owns which row owns the preview, because a pointer moving between rows can deliver the old row exit after the new row enter",
+    "review": "EditMode anchor/row/restore transitions pass; live pointer flow and human aesthetic review pending"
   },
   "terrain_depth_presentation": {
     "lamp_vine": {

@@ -1,0 +1,18 @@
+{
+ "wall_straight_2x1_64.png": {
+  "role": "modular_structure_32",
+  "cells": [
+   2,
+   1
+  ],
+  "colors": 8
+ },
+ "wall_corner_l_2x2_64.png": {
+  "role": "modular_structure_32",
+  "cells": [
+   2,
+   2
+  ],
+  "colors": 8
+ }
+}
