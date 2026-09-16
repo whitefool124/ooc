@@ -57,13 +57,20 @@ def build_plan(args: argparse.Namespace, contract: dict) -> dict:
         for variant in variants:
             pieces.append({
                 "runtime_id": f"ground.{args.theme_id}.{piece}.{variant}",
-                "native": f"ground_{args.theme_id}_{piece}_{variant}_32.png",
+                "native": f"ground_{args.theme_id}_{piece}_{variant}_16.png",
                 "manifest": f"ground_{args.theme_id}_{piece}_{variant}.occ-art-manifest-v1.json",
                 "status": "PLANNED",
             })
     return {
         "schema": "occ-modular-ground-batch-plan-v1",
         "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+        "delivery": {
+            "surface_native_px": contract["logical_cell"]["ground_tile_native_px"],
+            "directional_edge_native_px": contract["directional_edge_canvas"]["native_px"],
+            "unity_ppu": contract["logical_cell"]["unity_ppu"],
+            "ground_tiles_per_gameplay_cell": contract["logical_cell"]["ground_tiles_per_gameplay_cell"],
+            "canonical_display_scale": contract["logical_cell"]["canonical_display_scale"],
+        },
         "theme": {
             "theme_id": args.theme_id,
             "material_family": args.material_family,
@@ -91,8 +98,10 @@ def main() -> None:
         (out / "README.md").write_text(
             "# Modular ground batch: " + args.theme_id + "\n\n"
             "This directory is a scaffold. Add independent Codex built-in image sources, decoded "
-            "32 PPU native assets, evidence and manifests before Unity import. Use the same native "
-            "asset only at integer runtime scales; do not create resolution companions.\n",
+            "16 PPU native assets (16x16 surfaces, 16x24 directional edges), evidence and manifests "
+            "before Unity import. Assets carry no scene lighting: only the fixed upper-left form "
+            "shading. Use the same native asset only at integer runtime scales (canonical 6x at "
+            "1920x1080); do not create resolution companions.\n",
             encoding="utf-8",
         )
         print(f"scaffolded {len(plan['pieces'])} pieces at {out}")
