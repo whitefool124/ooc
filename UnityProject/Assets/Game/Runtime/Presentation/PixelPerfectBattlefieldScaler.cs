@@ -30,6 +30,13 @@ namespace OCC.Combat.Presentation
         /// <summary>地面美术子网格的原生像素尺寸（每玩法格 2×2 张）。</summary>
         public const int GroundSubgridNativePixels = 16;
 
+        /// <summary>
+        /// 定案的默认玩法格画布尺寸：32 原生像素 × 6 = 192。
+        /// 战场表现层的 cellSize 应取本常量——`CombatObjectLayerLayout` 用 `cellSize / 32f`
+        /// 推导物件缩放，只有取 32 的整数倍时 1 个源像素才恰好是整数个画布单位。
+        /// </summary>
+        public const float GameplayCellCanvasUnitsAtReference = GameplayCellNativePixels * NativePixelUnitsAtReference;
+
         [SerializeField, Tooltip("是否在每帧分辨率变化时重算整数倍率。")]
         private bool _watchResolution = true;
 
