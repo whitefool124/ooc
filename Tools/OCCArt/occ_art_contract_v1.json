@@ -2,7 +2,7 @@
   "schema": "occ-art-contract-v1",
   "version": 1,
   "revision_date": "2026-09-16",
-  "revision_note": "2026-09-16: aligned the 32px ground surface-detail policy with the master plan and the art spec table (low-contrast connected clusters, dominant base tone 45-55 percent, no isolated single-pixel noise, no baked cell frame) after the user confirmed the Sephiria-measured density; recorded the measured native reference grid and the per-cell x2 conversion. Prior note: unified battlefield production at 32 PPU: logical occupancy is independent from adaptive 32-multiple visual canvases; side-view units, oblique props, deterministic source-grid decoding, a lossless opaque-ground window role, shared tactical grid and integer runtime scaling.",
+  "revision_note": "2026-09-16 (pixel-perfect normalisation, user confirmed): locked the battlefield display and ground authoring. Display is a 320x180 native buffer integer-upscaled exactly 6x to 1920x1080 (1 native px = 6 screen px, matching the primary reference grain); the 1408x768 viewport shows 7x4 gameplay cells. Gameplay cell = 32x32 native px = 192 screen units; ground is authored on a 16 px subgrid with 2x2 tiles per cell (floor_tile_16; brick pitch 4 px, seam 1 px), while structures and units keep 32 PPU (brick pitch 8 px, seam 2 px) and render at the same 6x scale; characters are explicitly allowed to be larger than the reference. Static art carries no lighting or dark areas: the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, so light and shadow stay a runtime URP 2D Light2D layer. Placement rules R1-R6 are recorded as machine rules. Integer scaling, one-pixel position snapping and zero fractional transform scale are mandatory. Prior note: aligned the 32px ground surface-detail policy with the master plan and the art spec table (low-contrast connected clusters, dominant base tone 45-55 percent, no isolated single-pixel noise, no baked cell frame) after the user confirmed the Sephiria-measured density; recorded the measured native reference grid and the per-cell x2 conversion.",
   "primary_map_reference": {
     "name": "Sephiria",
     "scope": "map presentation only; derive organization, material layering and pixel density, do not copy assets",
@@ -30,6 +30,36 @@
     "current_battlefield_scope": "current gameplay props default to one logical 32x32 cell, while units and transparent props retain 32 PPU and use the smallest 32-multiple visual canvas that preserves the decoded subject; prior 2x2 boards are material-adjacency experiments only",
     "review_policy": "review the same native 32px asset at 1x, 2x and 4x integer scales; reject distant unreadability and dark fragmented noise",
     "forbidden": ["per-object yaw rotation", "diagonal placement", "3/4 unit body angle", "dense insignia_flag_rivet_frame competition", "miniature_building treatment for ordinary cover"]
+  },
+  "battlefield_display_policy": {
+    "locked": "2026-09-16",
+    "native_buffer": [320, 180],
+    "integer_scale_at_1920x1080": 6,
+    "screen_px_per_native_px": 6,
+    "integer_scale_required": true,
+    "fractional_scale_forbidden": true,
+    "non_integer_resolution_policy": "integer scale plus letterbox; never fractional upscale and never half-pixel placement",
+    "battlefield_viewport": [1408, 768],
+    "visible_gameplay_cells_at_6x": [7, 4],
+    "gameplay_cell_native_px": 32,
+    "gameplay_cell_screen_units_at_6x": 192,
+    "ground_subgrid_native_px": 16,
+    "ground_tiles_per_gameplay_cell": [2, 2],
+    "ground_ppu": 16,
+    "structure_and_unit_ppu": 32,
+    "mixed_ppu_note": "the ground is authored on the 16 px subgrid while structures and units stay on the 32 px gameplay grid; both render at the same 6x integer scale so every native pixel is exactly 6 screen pixels, but the two grids must never be mixed when computing anchors",
+    "position_snap_native_px": 1,
+    "fractional_transform_scale_forbidden": true,
+    "reference_implementation": "the same native-resolution-then-integer-upscale path the primary reference uses: unlit areas keep zero intra-block variance, lighting is composited after the upscale"
+  },
+  "battlefield_placement_rules": {
+    "locked": "2026-09-16",
+    "R1": "gameplay cell = 32x32 native px; ground art is authored on the 16 px subgrid with 2x2 tiles per cell",
+    "R2": "objects anchor bottom-center to the owning cell's bottom edge; multi-cell objects use the bottom-left cell as the owning cell, bottom edge on the footprint's lowest row and horizontal center on the footprint center",
+    "R3": "overhang above, left and right is allowed; overhang past the footprint's bottom edge toward the screen bottom is forbidden",
+    "R4": "layer order back to front: ground, ground overlays, walls, large structures, small props, units, overlays",
+    "R5": "within a layer sort by bottom-edge y ascending, then by category priority structure < prop < unit",
+    "R6": "units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset"
   },
   "target_grid_outline_policy": {
     "applies_to": ["tactical_unit_32x64", "single_cell_prop_adaptive_32ppu", "single_cell_prop_32", "multi_cell_prop_32"],
@@ -435,6 +465,54 @@
       ],
       "state_policy": "type silhouette only; current, reachable, completed and locked state remains in the separate node frame"
     },
+    "floor_tile_16": {
+      "delivery_size": [
+        16,
+        16
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
+      "native_ppu": 16,
+      "ground_subgrid_per_gameplay_cell": [
+        2,
+        2
+      ],
+      "gameplay_cell_native_px": 32,
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "production_status": "new_battlefield_ground_baseline_2026_09_16",
+      "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
+      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
+      "measured_authoring_values": {
+        "brick_pitch_px": 4,
+        "structural_seam_px": 1,
+        "organic_cluster_px": "2-4",
+        "material_boundary_step_px": "2-4",
+        "boundary_contact_line": "the material's own dark tone, never pure black"
+      },
+      "runtime_review_sequence": [
+        "single_tile_1x_6x",
+        "four_variant_unlabelled_contact",
+        "large_area_12x9_runtime_at_6x"
+      ]
+    },
+    "terrain_adjacency_overlay_16": {
+      "delivery_size": [
+        16,
+        16
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
+      "native_ppu": 16,
+      "palette_max": 10,
+      "transparent_border_min": 0,
+      "production_status": "new_battlefield_ground_baseline_2026_09_16",
+      "rotation_policy": "allowed_only_when_shadow_neutral"
+    },
     "floor_tile_32": {
       "delivery_size": [
         32,
@@ -448,6 +526,7 @@
       "transparent_border_min": 0,
       "unity_ppu": 32,
       "production_status": "new_battlefield_baseline",
+      "role_revision_2026_09_16": "battlefield ground now uses floor_tile_16 on the 16 px subgrid; this 32 px tile role remains available for 32 PPU structure-layer and multi-cell surfaces",
       "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
       "cross_tile_texture_continuation": "allowed only through the recorded lossless ground-material window; each selected 32x32 delivery remains an independent asset",
       "directional_shadow_rotation": "forbidden",
@@ -826,11 +905,13 @@
         "# 附录 A 美术规范与视觉反馈",
         "正交 2D 像素",
         "## A.2 像素与布局",
-        "战场逻辑格统一对应原生32×32地块",
+        "战场显示统一为**6倍整数放大**",
+        "玩法格=32×32原生像素=192屏幕单位",
+        "地面按**16×16原生像素子网格**设计",
         "逻辑占格与视觉画布分离",
         "### A.2.2 统一像素资产生产流程",
         "网格置信度低于1.2",
-        "有方向的地图外沿地块使用32×40",
+        "有方向的地图外沿地块使用**16×24**画布",
         "2px 细框",
         "## A.17 战场格标记强度阶梯",
         "可以选择0.72",
