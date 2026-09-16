@@ -32,6 +32,8 @@ namespace OCC.Combat.Tests
                 Assert.That(item.IconPath, Is.EqualTo(artifact.IconPath), artifact.Id);
                 Assert.That(item.MaximumUses, Is.EqualTo(artifact.MaximumUses), artifact.Id);
                 Assert.That(artifact.ContentSources, Is.Not.EqualTo(ArtifactContentSource.None), artifact.Id);
+                Assert.That(artifact.ActionPointCost, Is.Zero, artifact.Id);
+                Assert.That(artifact.PublicCost, Does.Contain("不消耗行动点"), artifact.Id);
                 Assert.That(artifact.PublicCost, Is.Not.Empty, artifact.Id);
                 Assert.That(artifact.TargetSummary, Is.Not.Empty, artifact.Id);
                 Assert.That(artifact.EffectSummary, Is.Not.Empty, artifact.Id);
@@ -82,8 +84,7 @@ namespace OCC.Combat.Tests
             }
 
             Assert.That(reachable, Is.SupersetOf(ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).Select(artifact => artifact.Id)));
-            Assert.That(reachable, Does.Not.Contain("G-T04"));
-            Assert.That(reachable, Does.Not.Contain("G-T18"));
+            Assert.That(reachable, Does.Contain("G-T18"));
         }
 
         [Test]

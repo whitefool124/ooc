@@ -48,7 +48,7 @@ namespace OCC.Combat
             int armorPierce = isCast ? 0 : source.ArmorPierce;
             DamageType damageType = isCast ? CombatCatalog.FireBolt.DamageType : source.DamageType;
             DamageParts parts = CalculateDamage(state, attacker, defender, damage, damageType, armorPierce);
-            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.Map.HasLineOfSight(attacker.Position, defender.Position));
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.HasLineOfSight(attacker.Position, defender.Position));
         }
 
         public static AttackPreview PreviewSkillAttack(CombatState state, string attackerId, string targetId, SkillDefinition skill)
@@ -57,7 +57,7 @@ namespace OCC.Combat
             UnitState attacker = GetUnit(state, attackerId);
             UnitState defender = GetUnit(state, targetId);
             DamageParts parts = CalculateDamage(state, attacker, defender, skill.Damage, skill.DamageType, skill.ModifierValue(SkillModifierType.ArmorPierce));
-            bool lineOfSight = skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.Map.HasLineOfSight(attacker.Position, defender.Position);
+            bool lineOfSight = skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(attacker.Position, defender.Position);
             return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
         }
 
@@ -104,7 +104,7 @@ namespace OCC.Combat
                 case CombatCommandType.Attack: execution = ResolveWeaponAttack(state, unit, command.TargetUnitId, 0); break;
                 case CombatCommandType.Cast: execution = ResolveSkill(state, unit, CombatCatalog.FireBolt, command); break;
                 case CombatCommandType.UseSkill:
-                    execution = state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
+                    execution = unit.IsHero && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
                         ? state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects
                         : ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
                     break;
@@ -177,7 +177,7 @@ namespace OCC.Combat
                 ? weapon.Damage
                 : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
             CombatEffectExecution execution = ResolveDamageAction(state, attacker, targetId, weapon.DisplayName,
-                weapon.DamageType, reducedBaseDamage, weapon.Range, weapon.ArmorPierce,
+                weapon.DamageType, reducedBaseDamage, weapon.MinimumRange, weapon.Range, weapon.ArmorPierce,
                 weapon.InitiativeDelay, weapon.ManaCost, null, 0);
             state.RogueSpells?.AfterWeaponHit(attacker.Id, state.GetUnit(targetId));
             ExhaustEnemyActionPoints(state, attacker);
@@ -192,6 +192,11 @@ namespace OCC.Combat
             if (issues.Count > 0) throw new InvalidOperationException($"{skill.DisplayName}\u7684\u7ec4\u5408\u65e0\u6548\uff1a{issues[0].Code}\u3002");
 
             List<UnitState> targets = ResolveSkillTargets(state, attacker, skill, command);
+            if (skill.Damage > 0 && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+            {
+                foreach (UnitState target in targets.Where(target => attacker.Position.ManhattanDistance(target.Position) > 1))
+                    FireSpellEngine.ReduceIncomingDamage(state.RogueSpells.FireBattle, target.Id, attacker.Id, skill.Damage);
+            }
             List<CombatEffect> effects = new List<CombatEffect>();
             if (skill.ManaCost > 0) effects.Add(CombatEffect.SpendMana(skill.ManaCost));
             effects.Add(CombatEffect.SpendActionPoints(BasicActionPointCost));
@@ -230,8 +235,9 @@ namespace OCC.Combat
 
             UnitState primary = GetUnit(state, command.TargetUnitId);
             if (!primary.IsAlive || !MatchesTargetRule(attacker, primary, skill.TargetRule)) throw new InvalidOperationException("\u6280\u80fd\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
+            if (Manhattan(attacker.Position, primary.Position) < skill.MinimumRange) throw new InvalidOperationException("目标位于技能近身死区。");
             if (Manhattan(attacker.Position, primary.Position) > skill.Range) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
-            if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.Map.HasLineOfSight(attacker.Position, primary.Position)) throw new InvalidOperationException("\u91cd\u63a9\u4f53\u963b\u6321\u4e86\u6280\u80fd\u6295\u9012\u3002");
+            if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.HasLineOfSight(attacker.Position, primary.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了技能投递。");
             if (skill.Delivery != SkillDeliveryMethod.Area) return new List<UnitState> { primary };
 
             int radius = skill.ModifierValue(SkillModifierType.Radius);
@@ -247,6 +253,7 @@ namespace OCC.Combat
         private static void ValidateSkillDestination(CombatState state, UnitState attacker, SkillDefinition skill, GridPosition destination)
         {
             if (!state.Map.IsInside(destination)) throw new InvalidOperationException("\u6280\u80fd\u76ee\u6807\u683c\u8d85\u51fa\u5730\u56fe\u3002");
+            if (Manhattan(attacker.Position, destination) < skill.MinimumRange) throw new InvalidOperationException("目标格位于技能近身死区。");
             if (Manhattan(attacker.Position, destination) > skill.Range) throw new InvalidOperationException("\u76ee\u6807\u683c\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
             if (skill.TargetRule == SkillTargetRule.GridCell)
             {
@@ -275,7 +282,7 @@ namespace OCC.Combat
                     effects.Add(CombatEffect.DamageHealth(recipient.Id, parts.Final));
                     break;
                 case SkillEffectType.RestoreHealth: effects.Add(CombatEffect.RestoreHealth(recipient.Id, definition.Amount)); break;
-                case SkillEffectType.RestoreShield: effects.Add(CombatEffect.RestoreShield(recipient.Id, definition.Amount)); break;
+                case SkillEffectType.RestoreShield: effects.Add(CombatEffect.RestoreShield(recipient.Id, definition.Amount, skill.Id)); break;
                 case SkillEffectType.RestoreMana: effects.Add(CombatEffect.RestoreMana(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.ApplyStatus:
                     if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id,
@@ -308,12 +315,13 @@ namespace OCC.Combat
             state.AddLog($"{attacker.DisplayName}\u4f7f\u7528{skill.DisplayName}\uff1a{(summary.Count == 0 ? "\u6548\u679c\u5df2\u7ed3\u7b97" : string.Join("\uff0c", summary))}\u3002");
         }
 
-        private static CombatEffectExecution ResolveDamageAction(CombatState state, UnitState attacker, string targetId, string sourceName, DamageType damageType, int baseDamage, int range, int armorPierce, int initiativeDelay, int manaCost, StatusType? status, int statusDuration)
+        private static CombatEffectExecution ResolveDamageAction(CombatState state, UnitState attacker, string targetId, string sourceName, DamageType damageType, int baseDamage, int minimumRange, int range, int armorPierce, int initiativeDelay, int manaCost, StatusType? status, int statusDuration)
         {
             UnitState defender = GetUnit(state, targetId);
             if (!defender.IsAlive) throw new InvalidOperationException("\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
+            if (Manhattan(attacker.Position, defender.Position) < minimumRange) throw new InvalidOperationException("目标位于武器近身死区。");
             if (Manhattan(attacker.Position, defender.Position) > range) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u5c04\u7a0b\u3002");
-            if (range > 1 && !state.Map.HasLineOfSight(attacker.Position, defender.Position)) throw new InvalidOperationException("\u91cd\u63a9\u4f53\u963b\u6321\u4e86\u5c04\u7ebf\u3002");
+            if (range > 1 && !state.HasLineOfSight(attacker.Position, defender.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了射线。");
             if (range > 1 && defender.IsHero)
             {
                 DamageParts incoming = CalculateDamage(state, attacker, defender, baseDamage, damageType, armorPierce);
@@ -350,7 +358,7 @@ namespace OCC.Combat
         {
             List<CombatEffect> effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(BasicActionPointCost) };
             if (item.Heal > 0) effects.Add(CombatEffect.RestoreHealth(unit.Id, item.Heal));
-            if (item.RestoreShield > 0) effects.Add(CombatEffect.RestoreShield(unit.Id, item.RestoreShield));
+            if (item.RestoreShield > 0) effects.Add(CombatEffect.RestoreShield(unit.Id, item.RestoreShield, item.Id));
             if (item.RestoreMana > 0) effects.Add(CombatEffect.RestoreMana(unit.Id, item.RestoreMana));
             if (item.ClearStatus.HasValue) effects.Add(CombatEffect.ClearStatus(unit.Id, item.ClearStatus.Value));
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, effects.ToArray());
@@ -435,9 +443,10 @@ namespace OCC.Combat
             CombatEffectExecution execution = destructibleTarget
                 ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, unit.MainHand?.Damage ?? 0))
                 : CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
+            state.ArtifactBattle?.RefreshDecoyAt(target);
             state.MarkInvestigated(target);
             state.AddLog(destructibleTarget
-                ? $"{unit.DisplayName} \u7834\u574f{(tile.IsObjective ? "\u4e2d\u7ee7\u5668" : "\u63a9\u4f53")}\uff08\u8010\u4e45 {tile.Durability}\uff09\u3002"
+                ? $"{unit.DisplayName} \u7834\u574f{(tile.IsDecoy ? "诱导灯" : tile.IsObjective ? "\u4e2d\u7ee7\u5668" : "\u63a9\u4f53")}\uff08\u8010\u4e45 {tile.Durability}\uff09\u3002"
                 : $"{unit.DisplayName} \u5b8c\u6210\u4e86\u8c03\u67e5\u3002");
             state.EvaluateOutcome();
             return execution;
@@ -496,7 +505,9 @@ namespace OCC.Combat
                 ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);
                 if (reaction.Steps.Count > 0) state.AddLog("截击铃在标记格触发，完成伤害与推离。");
             }
-            return execution;
+            CombatEffectExecution pressureReaction = unit.IsHero
+                ? state.PressureTest?.ResolveHeroMove(state, unit.Position) : null;
+            return CombatEffectExecution.Combine(execution, pressureReaction);
         }
 
         private static int Applied(CombatEffectExecution execution, CombatEffectKind kind) =>
@@ -518,7 +529,7 @@ namespace OCC.Combat
         private static UnitState GetActiveUnit(CombatState state, string unitId)
         { UnitState unit = GetUnit(state, unitId); if (state.ActiveUnitId != unitId) throw new InvalidOperationException("\u53ea\u6709\u5f53\u524d\u884c\u52a8\u5355\u4f4d\u53ef\u4ee5\u6267\u884c\u52a8\u4f5c\u3002"); return unit; }
         private static int Manhattan(GridPosition a, GridPosition b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
-        private static string StatusName(StatusType type) => type == StatusType.Burning ? "\u71c3\u70e7" : type == StatusType.Slow ? "\u7f13\u6162" : type == StatusType.Bound ? "\u675f\u7f1a" : "\u7834\u7532";
+        private static string StatusName(StatusType type) => type == StatusType.Burning ? "\u71c3\u70e7" : type == StatusType.Slow ? "\u7f13\u6162" : type == StatusType.Bound ? "\u675f\u7f1a" : type == StatusType.FiregroundBoost ? "\u706b\u52bf" : type == StatusType.FiregroundVulnerable ? "\u52a9\u71c3" : "\u7834\u7532";
         private static string StatusPhaseName(CombatStatusLifecyclePhase phase) =>
             phase == CombatStatusLifecyclePhase.Refreshed ? "\u5237\u65b0\u81f3" :
             phase == CombatStatusLifecyclePhase.Preserved ? "\u7ef4\u6301" : "\u65bd\u52a0";

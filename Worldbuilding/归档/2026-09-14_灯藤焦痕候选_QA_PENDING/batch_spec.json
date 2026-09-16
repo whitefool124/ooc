@@ -1,0 +1,26 @@
+{
+  "batch_id": "academy_scorched_lamp_vine_terrain_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/application_contact_4x.png",
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "第二轮通过机器门槛；等待实际应用接触与人工审美门槛，不提前替换花盆废墟占位。"
+  },
+  "items": [
+    {
+      "id": "academy_scorched_lamp_vine_terrain_candidate",
+      "role": "single_cell_terrain_overlay_32",
+      "source": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/source/scorched_vine_round2_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/round2_candidate.png",
+      "qa": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/round2_qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/round1_qa.json",
+        "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/round2_qa.json"
+      ],
+      "selected_round": 2,
+      "palette_max": 9
+    }
+  ]
+}

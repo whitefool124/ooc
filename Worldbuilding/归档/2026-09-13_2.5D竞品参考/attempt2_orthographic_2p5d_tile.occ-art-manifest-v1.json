@@ -1,0 +1,32 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "battlefield_angle_study_attempt2_orthographic_2p5d_tile",
+  "role": "battlefield_angle_study",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "easycli_gpt_image",
+    "source_descriptor": "独立生成的方案2角度研究原料；正交伪2.5D单格，顶面占主导并带浅前侧立面",
+    "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2_orthographic_2p5d_tile.png",
+    "source_sha256": "1CF5CC2F80BDD4EE1752F7976CC074E3ADC9C66B0D57431E7559242218D57347"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2_orthographic_2p5d_tile.png",
+    "logical_cells": [1, 1],
+    "native_output_path": null
+  },
+  "application": {
+    "runtime_draw_rect": "仅用于角度对比，不得直接进入Unity正式资产",
+    "target_view": "orthographic pseudo-2.5D; 55-60 degrees above ground plane; shallow front side 20-30 percent"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "待与方案1纯俯视和方案3强倾斜并排比较"
+  },
+  "unity_import": {
+    "asset_path": null,
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

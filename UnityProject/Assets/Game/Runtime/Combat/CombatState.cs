@@ -38,6 +38,8 @@ namespace OCC.Combat
         public RainLanternCourtRuntime RainLanternCourt { get; private set; }
         public GreenhouseCollectionRoomRuntime GreenhouseCollectionRoom { get; private set; }
         public ThreeMaterialPressureRuntime ThreeMaterialPressure { get; private set; }
+        public AcademyCoreBossRuntime AcademyCoreBoss { get; private set; }
+        public CombatPressureTestRuntime PressureTest { get; private set; }
         public IReadOnlyList<Roguelite.ShieldSourceRecord> RogueShieldEvents => rogueShieldEvents;
         public int InventoryOpenCount { get; private set; }
 
@@ -83,9 +85,23 @@ namespace OCC.Combat
             if (ruleset == CombatRuleset.Roguelite)
                 foreach (UnitState unit in units.Values) unit.ClearShield();
         }
+        public bool HasLineOfSight(GridPosition from, GridPosition to) => Map.HasLineOfSight(from, to, CurrentTime);
+        internal int ResolveDisplacementLanding(UnitState unit, GridPosition previousPosition)
+        {
+            if (unit == null || unit.Position == previousPosition) return 0;
+            TileState landing = Map.GetTile(unit.Position);
+            if (landing.IsWater && unit.HasStatus(StatusType.Burning))
+            {
+                unit.ClearStatus(StatusType.Burning);
+                AddLog(unit.DisplayName + "进入浅水，燃烧已移除。");
+            }
+            return RogueSpells?.FireBattle.ResolveEntry(unit, previousPosition) ?? 0;
+        }
         internal void BeginRogueliteTurn(UnitState unit)
         {
             if (Ruleset != CombatRuleset.Roguelite || unit == null) return;
+            foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokeExpiresAt > 0 && tile.SmokeExpiresAt <= CurrentTime).ToArray())
+                Map.GetTile(position).SmokeExpiresAt = 0;
             if (unit.Shield > 0)
                 AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(unit.Id + ":turn_start", unit.Shield,
                     Roguelite.ShieldEventKind.ClearedAtTurnStart, RogueTurn(unit.Id) + 1));
@@ -94,9 +110,14 @@ namespace OCC.Combat
             rogueTurnSequences[unit.Id] = turn;
             if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
 
+            if (unit.EnemyArchetypeId == "shieldguard")
+                TryGrantRogueliteShield(unit.Id, "shieldguard-turn-brace", 2);
+
             RogueEquipment?.OnTurnStart(this, unit.Id);
             RainLanternCourt?.BeginTurn(unit);
             ThreeMaterialPressure?.BeginTurn(this, unit);
+            AcademyCoreBoss?.BeginTurn(this, unit);
+            PressureTest?.BeginTurn(unit);
 
         }
         internal void EndRogueliteTurn(UnitState unit)
@@ -178,7 +199,7 @@ namespace OCC.Combat
             !string.IsNullOrEmpty(unitId) && fixedTurnOrder.TryGetValue(unitId, out int order) ? order : int.MaxValue;
 
         public bool IsOccupied(GridPosition position, string ignoredUnitId = null) =>
-            units.Values.Any(unit => unit.Id != ignoredUnitId && unit.Position == position);
+            units.Values.Any(unit => unit.IsAlive && unit.Id != ignoredUnitId && unit.Position == position);
 
         public void SetLoot(LootContainer loot) => Loot = loot;
         internal void AttachArtifactBattle(ArtifactBattleState battle) => ArtifactBattle = battle;
@@ -207,6 +228,10 @@ namespace OCC.Combat
         { GreenhouseCollectionRoom = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachThreeMaterialPressure(ThreeMaterialPressureRuntime runtime)
         { ThreeMaterialPressure = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachAcademyCoreBoss(AcademyCoreBossRuntime runtime)
+        { AcademyCoreBoss = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachPressureTest(CombatPressureTestRuntime runtime)
+        { PressureTest = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         internal void RecordInventoryOpened() { InventoryOpenCount++; }
         public void SetLootSource(LootSourceState loot) => LootSource = loot;
         public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore)
@@ -275,8 +300,9 @@ namespace OCC.Combat
         public void AddLog(string message) { EventLog.Insert(0, message); if (EventLog.Count > 8) EventLog.RemoveAt(8); }
         internal void EvaluateOutcome()
         {
-            IsDefeat = !units.Values.Any(unit => unit.IsHero && unit.IsAlive);
-            IsVictory = Objectives != null && Objectives.Count > 0 && Objectives.All(objective => objective.IsComplete(this));
+            IsDefeat = !units.Values.Any(unit => unit.IsHero && unit.IsAlive) ||
+                Objectives != null && Objectives.Any(objective => objective.IsFailed(this));
+            IsVictory = !IsDefeat && Objectives != null && Objectives.Count > 0 && Objectives.All(objective => objective.IsComplete(this));
         }
         public void ResolveDebugOutcome(bool victory)
         {
@@ -306,6 +332,8 @@ namespace OCC.Combat
             if (RainLanternCourt != null) clone.RainLanternCourt = RainLanternCourt.Clone(clone.Map);
             if (GreenhouseCollectionRoom != null) clone.GreenhouseCollectionRoom = GreenhouseCollectionRoom.Clone();
             if (ThreeMaterialPressure != null) clone.ThreeMaterialPressure = ThreeMaterialPressure.Clone();
+            if (AcademyCoreBoss != null) clone.AcademyCoreBoss = AcademyCoreBoss.Clone();
+            if (PressureTest != null) clone.PressureTest = PressureTest.Clone();
             clone.EventLog.AddRange(EventLog); return clone;
         }
     }

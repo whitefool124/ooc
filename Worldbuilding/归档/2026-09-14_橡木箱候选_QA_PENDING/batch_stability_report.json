@@ -1,0 +1,39 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_oak_chest_qa_v1",
+  "items": 1,
+  "total_generations": 1,
+  "first_pass_technical_success": 1,
+  "first_pass_rate": 1.0,
+  "success_with_one_targeted_retry": 1,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "academy_prop_oak_chest_candidate",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 1,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 18,
+      "confidence": 3.2491,
+      "subject_size": [
+        42,
+        44
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "palette": 24,
+      "manifest": "Worldbuilding/归档/2026-09-14_橡木箱候选_QA_PENDING/oak_chest/academy_prop_oak_chest_candidate_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_橡木箱候选_QA_PENDING/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14"
+  },
+  "formal_assets_replaced": false
+}

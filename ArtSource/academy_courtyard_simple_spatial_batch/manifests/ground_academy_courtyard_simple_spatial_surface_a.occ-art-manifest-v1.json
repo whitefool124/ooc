@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ground.academy_courtyard_simple_spatial.surface.a",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent opaque warm ivory academy ground field, using declared observed 26px macro-pixel pitch. A lossless phase-aligned 32x32 window is selected; no resize, interpolation, repaint or new colours.",
+    "source_path": "ArtSource/academy_courtyard_simple_spatial_batch/sources/ground_academy_courtyard_simple_spatial_surface_a_source.png",
+    "source_sha256": "477378f32e4ca8c5afb5437d20f3ab8846f53f547cebeced3d714a3af799b09b"
+  },
+  "delivery": {
+    "output_path": "ArtSource/academy_courtyard_simple_spatial_batch/outputs/review_ground_academy_courtyard_simple_spatial_origin0_32.png",
+    "output_sha256": "2e106d4b604143a41fb28dc8989746ed427178266b1644140b57412b77b324de",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 logical battle cell; visible border is a separate one-native-pixel warm-umber tactical grid, never baked into this reusable ground material",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/academy_courtyard_simple_spatial_batch/evidence/ground_academy_courtyard_simple_spatial_surface_a_1x.png",
+    "four_x": "ArtSource/academy_courtyard_simple_spatial_batch/evidence/ground_academy_courtyard_simple_spatial_surface_a_4x.png",
+    "grayscale": "ArtSource/academy_courtyard_simple_spatial_batch/evidence/ground_academy_courtyard_simple_spatial_surface_a_grayscale.png",
+    "checker": "ArtSource/academy_courtyard_simple_spatial_batch/evidence/ground_academy_courtyard_simple_spatial_surface_a_checker.png",
+    "application_contact": "ArtSource/academy_courtyard_simple_spatial_batch/evidence/ground_academy_courtyard_simple_spatial_surface_a_tactical_grid_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Manual-pitch ground route. Confirm the intentionally quiet ivory material and the independent tactical-grid contact before FORMAL_CANDIDATE."
+  },
+  "unity_import": null,
+  "ground_window_qa": {
+    "qa_path": "ArtSource/academy_courtyard_simple_spatial_batch/qa/review_ground_academy_courtyard_simple_spatial_origin0_qa.json",
+    "macro_pitch": 26,
+    "window_bounds": [
+      0,
+      0,
+      32,
+      32
+    ],
+    "selection": "declared_phase_aligned_origin"
+  }
+}

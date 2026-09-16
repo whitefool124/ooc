@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "field_technician_native32x64_v1",
+  "role": "tactical_unit_32x64",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in side-view technician reference decoded from its own subject lattice",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/codex_builtin_field_technician_native32_reference_v2.png",
+    "source_sha256": "71dad0d3b83fb87c6252f92df1c603c0aca8a2cf50e0238dd557fa3000c5a990"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64.png",
+    "output_sha256": "6209ceeebc68799fcdca3a7f62b5798b383825c3771cb78cde26f546df4929e4",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 32,
+    "required_color_families": [
+      {"family": "cyan", "min_opaque_pixels": 2},
+      {"family": "ochre", "min_opaque_pixels": 4}
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64_4x.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64_preview8x.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64_application4x.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User confirmed all tests pass. 21x48 subject preserved on a 32x64 canvas without geometric resizing."
+  },
+  "unity_import": null
+}

@@ -3,7 +3,7 @@ name: funplay-unity-ui-composition
 description: Build and revise responsive Unity uGUI mobile interfaces, including portrait and landscape layouts, safe areas, prefabs, auto layout, scrolling, text, input, animation, and performance validation.
 ---
 <!-- Funplay Unity MCP managed project skills -->
-<!-- Funplay Unity MCP skill version: unity-ui-composition@1.0.3 -->
+<!-- Funplay Unity MCP skill version: unity-ui-composition@1.0.4 -->
 
 # Unity UI Composition
 
@@ -28,7 +28,7 @@ Use this built-in skill when creating, assembling, adapting, reviewing, or fixin
 4. Read back and validate.
    - Read exact hierarchy, anchors, offsets, sizes, sprites, text settings, raycast state, sorting, and references back from Unity.
    - Test layout, input, safe area, localization, animation interruption, close and reopen state, and runtime data changes.
-   - Capture screenshots at representative aspect ratios. Use a real device build for performance and platform behavior before claiming device validation.
+   - Capture screenshots at representative aspect ratios for static layout; use a short `record_game_view` clip when correctness depends on an animation or interaction sequence. Use a real device build for performance and platform behavior before claiming device validation.
 
 ## Component Selection
 
@@ -159,6 +159,9 @@ safeAreaRoot.offsetMax = Vector2.zero;
 - Avoid hiding large inactive screens only with alpha zero; they can still render or receive input depending on CanvasGroup state. Use the project's hide or pooling policy and measure reopen cost.
 - Validate portrait at 16:9, 19.5:9 or 20:9, a cutout phone, and a portrait tablet. Validate landscape at 16:9, ultrawide, 16:10, 4:3, and both cutout sides.
 - In every profile, verify full-bleed art, safe interactive content, text overflow and fallback glyphs, scroll bounds, modal input blocking, touch hit areas, selection navigation, animation interruption, and close and reopen state.
+- Use `capture_game_view` for static composition, text fit, and before/after comparisons. Use a short `record_game_view` clip for behavior a still image cannot establish, such as popup transitions, scroll inertia, caret blinking, interrupted animations, or repeated close and reopen actions; record only the sequence relevant to the change.
+- For a clip, finish compilation, enter Play Mode and wait for MCP recovery, keep the Game tab visible at a fixed resolution, then start recording before performing the interaction. Save `data.recording_id`, pass it to `action=status` or `action=stop`, and wait for `data.ready=true` before reviewing the local MP4. The Unity MCP Workflow skill describes supported Editors and failure handling. If recording or video viewing is unavailable, report that limitation; screenshots and hierarchy readback alone do not prove timing or transition correctness.
+- Review intermediate frames as well as the final state: look for clipping or layout jumps, stuck raycast blocking, input leaking through a modal, and interruption or reopen state. Pair the clip with component-state readback and actual input checks; a visual result alone cannot prove event routing. Recording is silent and adds overhead, so it cannot validate audio or replace Profiler and real-device performance checks.
 - Use Device Simulator for layout, safe-area, orientation, and basic single-touch checks. It does not simulate target CPU, GPU, memory, rendering backend, native plugins, or multitouch; use representative device builds for performance and final interaction validation.
 
 ## Official Unity References
@@ -177,6 +180,6 @@ safeAreaRoot.offsetMax = Vector2.zero;
 ## Metadata
 
 - Original skill id: `unity-ui-composition`
-- Skill version: `1.0.3`
+- Skill version: `1.0.4`
 - Platform: `codex`
 - Source repository: `https://github.com/FunplayAI/funplay-unity-mcp`

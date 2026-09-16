@@ -1,0 +1,39 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "sephiria_loot_chest_imageguided_v3",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      9,
+      14,
+      56,
+      56
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 10,
+    "accent_pixels": {},
+    "low_resolution_companion": {
+      "size": [
+        32,
+        32
+      ],
+      "bounds": [
+        4,
+        7,
+        28,
+        28
+      ],
+      "hard_alpha": true,
+      "fully_opaque": false,
+      "visible_colors": 10,
+      "accent_pixels": {}
+    }
+  },
+  "errors": []
+}

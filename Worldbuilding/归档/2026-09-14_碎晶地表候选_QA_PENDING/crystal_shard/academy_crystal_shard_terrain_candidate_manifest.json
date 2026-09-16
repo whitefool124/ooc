@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_crystal_shard_terrain_qa_v1_academy_crystal_shard_terrain_candidate",
+  "role": "single_cell_terrain_overlay_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/source/crystal_shard_round2_source.png",
+    "source_sha256": "8cd2c3731596eef117ad6c995ec60f058818bd36a4ad95bb014d7be0ce8980c5"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_candidate.png",
+    "output_sha256": "038da3b2dcbd6d94da33f80b772feff5f955314c6fad9c1096b5e61aadb3f460",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 9,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_candidate.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_candidate_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_candidate_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "REJECTED_SUPERSEDED_BY_HISTORICAL_CRYSTAL_FAMILY_DIRECTION",
+    "reviewer": "user_feedback_and_art_review",
+    "date": "2026-09-14",
+    "silhouette": "REJECTED",
+    "material": "REJECTED",
+    "perspective": "PASS",
+    "style": "REJECTED",
+    "application": "NOT_APPLICABLE",
+    "notes": "Technical decode passed, but the three-gem icon language conflicts with the user's historically approved low, broad, grey-blue natural crystal family. Round 3 corrected the direction but failed the 1.2 grid-confidence threshold; the item is skipped after three attempts and must not be promoted or imported."
+  },
+  "unity_import": null
+}

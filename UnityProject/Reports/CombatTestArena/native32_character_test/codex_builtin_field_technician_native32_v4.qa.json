@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "role": "unit_sideview",
+  "bounds": [
+    10,
+    1,
+    22,
+    30
+  ],
+  "visible_width": 12,
+  "visible_height": 29,
+  "palette_colors": 15,
+  "components": 1,
+  "checks": {
+    "exact_32x32": true,
+    "binary_alpha": true,
+    "palette_at_most_15_including_black": true,
+    "single_connected_silhouette": true,
+    "safe_canvas_border": true,
+    "role_occupancy": true
+  },
+  "note": "Pose/view correctness still requires image-model review; pixel mechanics are deterministic."
+}

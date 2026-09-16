@@ -1,0 +1,16 @@
+{
+  "batch_id": "academy_sealed_trunk_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/application_contact_4x.png",
+  "human_review": { "status": "PASS", "reviewer": "user", "date": "2026-09-14" },
+  "items": [{
+    "id": "academy_prop_sealed_trunk_candidate",
+    "role": "single_cell_prop_adaptive_32ppu",
+    "source": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/source/sealed_trunk_round2_source.png",
+    "output": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/native.png",
+    "qa": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/round2_qa.json",
+    "checker": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/checker.png",
+    "attempt_qas": ["Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/round1_qa.json", "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/round2_qa.json"],
+    "selected_round": 2,
+    "palette_max": 24
+  }]
+}

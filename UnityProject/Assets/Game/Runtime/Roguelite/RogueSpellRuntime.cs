@@ -227,7 +227,7 @@ namespace OCC.Combat.Roguelite
                 bool objectTarget = target == null && targetTile.Durability > 0 && (targetTile.Cover != CoverType.None || targetTile.IsDevice || targetTile.IsObjective || targetTile.IsLampVine);
                 int distance = source.Position.ManhattanDistance(targetCell);
                 if ((!objectTarget && (target == null || source.IsHero == target.IsHero)) || distance > spell.Range ||
-                    (spell.Range > 1 && !Combat.Map.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
+                    (spell.Range > 1 && !Combat.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
                 int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsSpecialized(spell.DefinitionId) ? 2 : 0));
                 if (objectTarget) effects.Add(CombatEffect.DamageObject(targetCell, raw));
                 else
@@ -272,7 +272,7 @@ namespace OCC.Combat.Roguelite
             int shapeLength = spell.Id == "F-P-U01" ? spell.ShapeLength + 1 : spell.ShapeLength;
             return new FireSpellDefinition(spell.Id, spell.DisplayName, spell.Rarity, spell.Group, spell.CombatAffinity,
                 spell.DeliveryMode, spell.WeaponRequirement, spell.TriggerWindow, spell.ConsumptionRule,
-                spell.ActionPointCost, spell.ManaCost, spell.Cooldown, spell.InitiativeDelay, range,
+                spell.ActionPointCost, spell.ManaCost, spell.Cooldown, spell.InitiativeDelay, spell.MinimumRange, range,
                 spell.TargetKind, spell.Shape, shapeLength, spell.RequiresLineOfSight, spell.HeavyCoverTruncates,
                 rules, spell.PresentationModules.ToArray());
         }

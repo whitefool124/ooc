@@ -19,14 +19,16 @@ namespace OCC.Combat
         {
             if (state == null) throw new ArgumentNullException(nameof(state));
             if (enemy == null || hero == null) throw new ArgumentNullException(enemy == null ? nameof(enemy) : nameof(hero));
+            if (TryChooseDecoy(state, enemy, out CombatCommand decoyCommand)) return decoyCommand;
             SkillDefinition skill = enemy.SkillOne;
             if (enemy.EnemyArchetypeId == "barrier_mender" && CanCast(enemy, skill))
             {
                 UnitState repairTarget = state.Units.Values.Where(unit => unit.IsAlive && unit.IsHero == enemy.IsHero && unit.MaxShield > unit.Shield &&
+                        (state.Ruleset != CombatRuleset.Roguelite || !unit.HasStatus(StatusType.BreakStance)) &&
                         enemy.Position.ManhattanDistance(unit.Position) <= skill.Range && HasLineOfSight(state, enemy, unit, skill))
                     .OrderByDescending(unit => unit.MaxShield - unit.Shield).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
                 if (repairTarget != null) return CombatCommand.UseSkill(enemy.Id, 0, repairTarget.Id);
-                return ChooseWeaponOrMove(enemy, hero);
+                return ChooseWeaponOrMove(state, enemy, hero);
             }
             StatusType? desiredStatus = DesiredStatus(enemy.EnemyArchetypeId);
             if (state.Ruleset == CombatRuleset.Roguelite && desiredStatus == StatusType.ArmorBreak) desiredStatus = StatusType.BreakStance;
@@ -34,10 +36,10 @@ namespace OCC.Combat
             {
                 if (!hero.HasStatus(desiredStatus.Value) && CanTarget(state, enemy, hero, skill))
                     return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
-                return ChooseWeaponOrMove(enemy, hero);
+                return ChooseWeaponOrMove(state, enemy, hero);
             }
             if (CanTarget(state, enemy, hero, skill)) return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
-            return Choose(enemy, hero);
+            return ChooseWeaponOrMove(state, enemy, hero);
         }
 
         public static CombatCommand Choose(UnitState enemy, UnitState hero)
@@ -46,7 +48,7 @@ namespace OCC.Combat
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             SkillDefinition skill = enemy.SkillOne;
             if (skill != null && (skill.TargetRule == SkillTargetRule.EnemyUnit || skill.TargetRule == SkillTargetRule.AnyUnit) &&
-                distance <= skill.Range && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill))
+                distance >= skill.MinimumRange && distance <= skill.Range && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill))
                 return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             return ChooseWeaponOrMove(enemy, hero);
         }
@@ -55,17 +57,73 @@ namespace OCC.Combat
         {
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
-            if (distance <= weapon.Range) return CombatCommand.Attack(enemy.Id, hero.Id);
+            if (distance >= weapon.MinimumRange && distance <= weapon.Range) return CombatCommand.Attack(enemy.Id, hero.Id);
+            if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
             GridPosition step = new GridPosition(enemy.Position.X + Math.Sign(hero.Position.X - enemy.Position.X), enemy.Position.Y);
             if (step == enemy.Position) step = new GridPosition(enemy.Position.X, enemy.Position.Y + Math.Sign(hero.Position.Y - enemy.Position.Y));
             return CombatCommand.Move(enemy.Id, step);
         }
 
+        private static CombatCommand ChooseWeaponOrMove(CombatState state, UnitState enemy, UnitState hero)
+        {
+            WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
+            int distance = enemy.Position.ManhattanDistance(hero.Position);
+            if (distance >= weapon.MinimumRange && distance <= weapon.Range && (weapon.Range <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
+                return CombatCommand.Attack(enemy.Id, hero.Id);
+            if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
+
+            int searchBudget = state.Map.Width * state.Map.Height * 4;
+            List<IReadOnlyList<GridPosition>> paths = new List<IReadOnlyList<GridPosition>>();
+            for (int y = 0; y < state.Map.Height; y++)
+                for (int x = 0; x < state.Map.Width; x++)
+                {
+                    GridPosition candidate = new GridPosition(x, y);
+                    if (candidate == enemy.Position || state.Map.IsBlocked(candidate) || state.IsOccupied(candidate, enemy.Id)) continue;
+                    IReadOnlyList<GridPosition> path = state.Map.FindLowestCostPath(enemy.Position, candidate, searchBudget,
+                        position => CombatMovementQuery.EntryCost(state, enemy, position),
+                        position => state.IsOccupied(position, enemy.Id));
+                    if (path.Count > 1) paths.Add(path);
+                }
+
+            IReadOnlyList<GridPosition> route = paths
+                .Where(path => path[path.Count - 1].ManhattanDistance(hero.Position) >= weapon.MinimumRange &&
+                    path[path.Count - 1].ManhattanDistance(hero.Position) <= weapon.Range &&
+                    (weapon.Range <= 1 || state.HasLineOfSight(path[path.Count - 1], hero.Position)))
+                .OrderBy(path => path.Count)
+                .ThenBy(path => path[path.Count - 1].Y)
+                .ThenBy(path => path[path.Count - 1].X)
+                .FirstOrDefault();
+            if (route == null)
+                route = paths.OrderBy(path => path[path.Count - 1].ManhattanDistance(hero.Position))
+                    .ThenBy(path => path.Count)
+                    .ThenBy(path => path[path.Count - 1].Y)
+                    .ThenBy(path => path[path.Count - 1].X)
+                    .FirstOrDefault();
+            return route == null ? CombatCommand.EndTurn(enemy.Id) : CombatCommand.Move(enemy.Id, route[1]);
+        }
+
+        private static bool TryChooseDecoy(CombatState state, UnitState enemy, out CombatCommand command)
+        {
+            command = default;
+            if (state.ArtifactBattle?.TryGetLureTarget(enemy, out GridPosition decoy) != true) return false;
+            if (enemy.Position.ManhattanDistance(decoy) == 1) { command = CombatCommand.Interact(enemy.Id, decoy); return true; }
+            GridPosition[] offsets = { new GridPosition(0, 1), new GridPosition(1, 0), new GridPosition(0, -1), new GridPosition(-1, 0) };
+            IReadOnlyList<GridPosition> path = offsets.Select(offset => decoy + offset)
+                .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position, enemy.Id))
+                .Select(position => state.Map.FindShortestPath(enemy.Position, position, 12, cell => state.IsOccupied(cell, enemy.Id)))
+                .Where(candidate => candidate.Count > 1)
+                .OrderBy(candidate => candidate.Count).ThenBy(candidate => candidate[candidate.Count - 1].Y).ThenBy(candidate => candidate[candidate.Count - 1].X)
+                .FirstOrDefault();
+            if (path == null) return false;
+            command = CombatCommand.Move(enemy.Id, path[1]); return true;
+        }
+
         private static bool CanCast(UnitState source, SkillDefinition skill) => skill != null && source.Mana >= skill.ManaCost && source.IsSkillReady(skill);
         private static bool CanTarget(CombatState state, UnitState source, UnitState target, SkillDefinition skill) => CanCast(source, skill) &&
+            source.Position.ManhattanDistance(target.Position) >= skill.MinimumRange &&
             source.Position.ManhattanDistance(target.Position) <= skill.Range && HasLineOfSight(state, source, target, skill);
         private static bool HasLineOfSight(CombatState state, UnitState source, UnitState target, SkillDefinition skill) => skill.Range <= 1 ||
-            skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.Map.HasLineOfSight(source.Position, target.Position);
+            skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(source.Position, target.Position);
         private static StatusType? DesiredStatus(string archetypeId)
         {
             switch (archetypeId)
@@ -125,7 +183,8 @@ namespace OCC.Combat
             new EnemyArchetype("warden", "结界卫士", 1, 4, 1, 7, CombatCatalog.Wand, artId: "shieldguard"),
             new EnemyArchetype("binder", "束缚术士", 0, 2, 0, 8, CombatCatalog.Wand, artId: "pyromancer", primarySkill: CombatCatalog.FrostBind),
             new EnemyArchetype("elite_vanguard", "刻阵教官", 2, 4, 2, 10, CombatCatalog.Hammer, true, artId: "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("core_overseer", "核心守备监工", 3, 4, 2, 8, CombatCatalog.Hammer, true, 30, "elite"),
+            new EnemyArchetype("core_overseer", "核心守备监工", 3, 4, 2, 8, CombatCatalog.Hammer, true, 30, "elite",
+                EnemyAbilityCatalog.CoreLance, EnemyAbilityCatalog.CorePulse, EnemyResolutionKind.Construct),
             new EnemyArchetype("purifier_overseer", "以太净化监工", 1, 6, 1, 9, CombatCatalog.Wand, true, 26, "elite"),
             new EnemyArchetype("sigil_mauler", "承压检验偶", 1, 0, 0, 8, CombatCatalog.Hammer, maxHealth: 14, artId: "sigil_mauler", primarySkill: EnemyAbilityCatalog.SunderingSigil, resolutionKind: EnemyResolutionKind.Construct),
             new EnemyArchetype("barrier_mender", "护障助教", 0, 4, 0, 7, CombatCatalog.Wand, maxHealth: 12, artId: "barrier_mender", primarySkill: EnemyAbilityCatalog.WardMend, resolutionKind: EnemyResolutionKind.Staff),

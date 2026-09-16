@@ -19,7 +19,7 @@ namespace OCC.Combat.Presentation
     {
         public CombatTargetForecastResult Evaluate(BattlefieldPresentationAdapter battlefield,
             CombatState state, FireBattleState fireBattle, string action, UnitState enemy,
-            FireSpellDefinition fireSpell, bool artifactArmed)
+            FireSpellDefinition fireSpell, ArtifactDefinition artifact, int artifactUses)
         {
             if (enemy == null || enemy.IsHero || !enemy.IsAlive || state == null ||
                 state.ActiveUnitId != "hero") return new CombatTargetForecastResult(null, fireBattle);
@@ -51,7 +51,17 @@ namespace OCC.Combat.Presentation
                     return new CombatTargetForecastResult(forecast, fireBattle);
                 }
 
-                if (slot == 0 && artifactArmed) return new CombatTargetForecastResult(null, fireBattle);
+                if (slot == 0 && artifact != null)
+                {
+                    ArtifactTarget target = ArtifactTarget.Unit(enemy.Id, enemy.Position);
+                    ArtifactPreview preview = ArtifactEngine.Preview(new ArtifactBattleState(state), "hero",
+                        artifact, target, artifactUses);
+                    bool canDamage = artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.Damage);
+                    CombatTargetDamageForecast forecast = preview.CanCommit && canDamage
+                        ? CombatTargetDamageForecaster.Artifact(state, "hero", artifact, target, enemy.Id, artifactUses)
+                        : null;
+                    return new CombatTargetForecastResult(forecast, fireBattle);
+                }
                 UnitState hero = state.GetUnit("hero");
                 SkillDefinition skill = slot == 0 ? hero.SkillOne : hero.SkillTwo;
                 if (skill == null || skill.Damage <= 0 ||

@@ -1,0 +1,38 @@
+{
+  "batch_id": "historical_crystal_family_native32_redecode_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/application_contact_4x.png",
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "用户明确指出历史晶簇版本方向优秀；已定位 2026-09-10 普通／稳压晶簇家族并按现行无缩放管线重解，等待对本次展示的具体两枚做最终人工确认。"
+  },
+  "items": [
+    {
+      "id": "academy_aether_crystal_intact_native32_redecode",
+      "role": "single_cell_destructible_crystal_prop_adaptive_32ppu",
+      "source": "Artifacts/OCC_TerrainArt64Sample_20260910/raw/academy_aether_crystal_intact_raw.png",
+      "output": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/standard/candidate_96x64.png",
+      "qa": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/standard/qa_96x64.json",
+      "checker": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/standard/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/standard/qa_96x64.json"
+      ],
+      "selected_round": "historical_source_redecode",
+      "palette_max": 14
+    },
+    {
+      "id": "academy_pressure_crystal_intact_native32_redecode",
+      "role": "single_cell_heavy_crystal_prop_adaptive_32ppu",
+      "source": "Artifacts/OCC_TerrainArt64Expansion_20260910/raw/academy_pressure_crystal_intact_raw.png",
+      "output": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure/candidate_96x64.png",
+      "qa": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure/qa_96x64.json",
+      "checker": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure/qa_96x64.json"
+      ],
+      "selected_round": "historical_source_redecode",
+      "palette_max": 14
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy.pressure_crystal.damaged",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Historical independent damaged pressure-crystal source re-decoded losslessly under the current native-32 contract",
+    "source_path": "Artifacts/OCC_TerrainArt64Expansion_20260910/raw/academy_pressure_crystal_damaged_raw.png",
+    "source_sha256": "9d2fa0dd451dc7cd943268183332af3ff21ed1aa9cceae17761052413e9d7f69"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_damaged.png",
+    "output_sha256": "e5776dccef6fbc34c8b17f939552e9310b3e80717e52690800c2fdc2f700b5d8",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 14,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "96x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure_damaged/candidate_96x64.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure_damaged/candidate_96x64_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure_damaged/candidate_96x64_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure_damaged/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/crystal_state_family_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user historical-direction approval and Codex state-family review",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Cracked compression ridges and darkened gaps communicate the post-impact 16-durability state while preserving the dense elite silhouette."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_damaged.png",
+    "stable_guid": "88ecdf5282f3c604f9ad745cdc102b6b",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

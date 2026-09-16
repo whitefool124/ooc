@@ -70,6 +70,29 @@ namespace OCC.Combat
         public IReadOnlyList<ArtifactExecution> TakeResolvedReactions()
         { var results = resolvedReactions.ToArray(); resolvedReactions.Clear(); return results; }
         public CombatState Combat { get; }
+        public bool HasFireground(GridPosition position) =>
+            Combat.RogueSpells?.FireBattle.HasFireground(position) == true || Firegrounds.ContainsKey(position);
+        public bool RemoveFireground(GridPosition position)
+        {
+            bool removed = Firegrounds.Remove(position);
+            FireBattleState shared = Combat.RogueSpells?.FireBattle;
+            if (shared?.HasFireground(position) == true) { shared.RemoveFireground(position); removed = true; }
+            return removed;
+        }
+        public void CreateOrRefreshFireground(GridPosition position, int damage, int duration, string sourceId, string sourceUnitId = null)
+        {
+            FireBattleState shared = Combat.RogueSpells?.FireBattle;
+            if (shared != null)
+            {
+                shared.CreateOrRefreshFireground(position, damage, duration, sourceId, sourceUnitId);
+                Firegrounds.Remove(position);
+                return;
+            }
+            TileState tile = Combat.Map.GetTile(position);
+            tile.IsWater = false;
+            tile.SmokeExpiresAt = 0;
+            Firegrounds[position] = duration;
+        }
         public ArtifactBattleState(CombatState combat)
         {
             Combat = combat ?? throw new ArgumentNullException(nameof(combat));
@@ -77,6 +100,9 @@ namespace OCC.Combat
         }
         public void BeginUnitTurn(string unitId)
         {
+            UnitState beginning = Combat.GetUnit(unitId);
+            if (beginning?.IsHero == true)
+                foreach (GridPosition position in Decoys.Keys.ToArray()) RemoveDecoy(position);
             foreach (GridPosition position in Firegrounds.Keys.ToArray())
             {
                 int remaining = Firegrounds[position] - 1;
@@ -86,6 +112,37 @@ namespace OCC.Combat
             if (ReservedAp.TryGetValue(unitId, out int ap)) { unit.GrantActionPoints(ap); ReservedAp.Remove(unitId); }
             if (ReservedMana.TryGetValue(unitId, out int mana)) { unit.RestoreMana(mana); ReservedMana.Remove(unitId); }
             Anchored.Remove(unitId);
+        }
+        public bool IsActiveDecoy(GridPosition position)
+        {
+            if (!Decoys.ContainsKey(position) || !Combat.Map.IsInside(position)) return false;
+            TileState tile = Combat.Map.GetTile(position);
+            if (!tile.IsDecoy || tile.Durability <= 0) { Decoys.Remove(position); return false; }
+            return true;
+        }
+        public bool TryGetLureTarget(UnitState enemy, out GridPosition target)
+        {
+            target = default;
+            if (enemy == null || enemy.IsHero || !enemy.IsAlive) return false;
+            GridPosition[] candidates = Decoys.Keys.ToArray().Where(IsActiveDecoy)
+                .Where(position => enemy.Position.ManhattanDistance(position) <= 5)
+                .OrderBy(position => enemy.Position.ManhattanDistance(position)).ThenBy(position => position.Y).ThenBy(position => position.X).ToArray();
+            if (candidates.Length == 0) return false;
+            target = candidates[0]; return true;
+        }
+        public void RefreshDecoyAt(GridPosition position)
+        {
+            if (Decoys.ContainsKey(position) && (!Combat.Map.GetTile(position).IsDecoy || Combat.Map.GetTile(position).Durability <= 0))
+                RemoveDecoy(position);
+        }
+        private void RemoveDecoy(GridPosition position)
+        {
+            Decoys.Remove(position);
+            if (!Combat.Map.IsInside(position)) return;
+            TileState tile = Combat.Map.GetTile(position);
+            if (!tile.IsDecoy) return;
+            tile = tile.Clone(); tile.IsDecoy = false; tile.IsDevice = false; tile.Durability = 0;
+            Combat.Map.SetTile(position, tile);
         }
         public bool TryPreventForcedMove(string unitId)
         {
@@ -102,6 +159,17 @@ namespace OCC.Combat
             Combat.AddLog("定锚支架自动咬合，抵消强制位移并消耗 1 次。");
             return true;
         }
+        public bool CanPreventForcedMove(string unitId)
+        {
+            if (Anchored.Contains(unitId)) return true;
+            UnitState unit = Combat.GetUnit(unitId);
+            if (unit == null || !unit.IsHero) return false;
+            return Combat.ItemQuickbar.Any(instanceId =>
+            {
+                ItemInstance instance = Combat.ItemInventory.Get(instanceId);
+                return instance != null && instance.DefinitionId == "G-T13" && instance.RemainingUses > 0;
+            });
+        }
         public ArtifactExecution ResolveEnemyEntered(string ownerId, string enemyId)
         {
             if (!Reactions.TryGetValue(ownerId, out ArtifactReaction reaction) || reaction.Trigger != ArtifactReactionTrigger.EnemyEnterMarkedCell) return new ArtifactExecution(Array.Empty<ArtifactStep>());
@@ -110,7 +178,12 @@ namespace OCC.Combat
             var feedback = new ArtifactFeedbackCapture(owner, enemy); GridPosition source = owner.Position;
             Reactions.Remove(ownerId); int before = enemy.Health + enemy.Shield; Damage(enemy, reaction.Amount);
             GridPosition pushed = StepAway(owner.Position, enemy.Position, Combat, enemy.Id);
-            if (pushed != enemy.Position) enemy.MoveTo(pushed);
+            if (pushed != enemy.Position)
+            {
+                GridPosition previous = enemy.Position;
+                enemy.MoveTo(pushed);
+                Combat.ResolveDisplacementLanding(enemy, previous);
+            }
             var execution = new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, enemy.Id, enemy.Position,
                 before - enemy.Health - enemy.Shield, "marked_cell_intercept_push", feedback.Finish(ArtifactEffectKind.ArmReaction)) }, owner.Id, source, true);
             resolvedReactions.Add(execution); return execution;
@@ -149,7 +222,7 @@ namespace OCC.Combat
 
     public static class ArtifactEngine
     {
-        private static readonly StatusType[] NegativeStatuses = { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.ArmorBreak, StatusType.Dazzled };
+        private static readonly StatusType[] NegativeStatuses = { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.ArmorBreak, StatusType.Dazzled, StatusType.FiregroundVulnerable };
 
         public static ArtifactPreview Preview(ArtifactBattleState battle, string sourceId, ArtifactDefinition artifact, ArtifactTarget target, int remainingUses = 1)
         {
@@ -164,7 +237,7 @@ namespace OCC.Combat
             if (source != null && combat.Map.IsInside(target.Cell))
             {
                 if (ArtifactBattleState.Distance(source.Position, target.Cell) > artifact.Range) failures.Add("目标超出使用范围");
-                if (artifact.RequiresLineOfSight && !combat.Map.HasLineOfSight(source.Position, target.Cell)) failures.Add("目标被重掩体遮挡");
+                if (artifact.RequiresLineOfSight && !combat.HasLineOfSight(source.Position, target.Cell)) failures.Add("目标被重掩体或烟幕遮挡");
             }
             ValidateTarget(battle, source, artifact, target, primary, failures);
             GridPosition[] cells = Selection(combat.Map, target.Cell, artifact.Shape).ToArray();
@@ -201,7 +274,7 @@ namespace OCC.Combat
             foreach (ArtifactEffectDefinition effect in artifact.Effects)
             {
                 IEnumerable<UnitState> targets = Targets(battle.Combat, source, primary, secondary, preview.Cells, effect);
-                if (effect.Kind == ArtifactEffectKind.MoveSource || effect.Kind == ArtifactEffectKind.CreateLightCover || effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover || effect.Kind == ArtifactEffectKind.CreateFireground || effect.Kind == ArtifactEffectKind.ClearFireground || effect.Kind == ArtifactEffectKind.DeployDecoy)
+                if (effect.Kind == ArtifactEffectKind.MoveSource || effect.Kind == ArtifactEffectKind.CreateLightCover || effect.Kind == ArtifactEffectKind.CreateHeavyCover || effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover || effect.Kind == ArtifactEffectKind.CreateFireground || effect.Kind == ArtifactEffectKind.CreateSmoke || effect.Kind == ArtifactEffectKind.ClearFireground || effect.Kind == ArtifactEffectKind.DeployDecoy)
                 { ApplyCellEffect(battle, source, artifact, target.Cell, preview.Cells, effect, steps, ref sequence); continue; }
                 foreach (UnitState unit in targets) ApplyUnitEffect(battle, source, unit, primary, secondary, effect, target.Cell, steps, ref sequence);
             }
@@ -233,6 +306,8 @@ namespace OCC.Combat
                 failures.Add("个人魔力已满");
             int sourceHealthCost = artifact.Effects.Where(effect => effect.Kind == ArtifactEffectKind.LoseHealth && effect.Scope == ArtifactEffectScope.Source || effect.Kind == ArtifactEffectKind.BacklashIfTargetSurvives).Sum(effect => effect.Amount);
             if (sourceHealthCost > 0 && source.Health <= sourceHealthCost) failures.Add("生命不足以承担公开代价");
+            int sourceShieldCost = artifact.Effects.Where(effect => effect.Kind == ArtifactEffectKind.ConsumeShield && effect.Scope == ArtifactEffectScope.Source).Sum(effect => effect.Amount);
+            if (sourceShieldCost > 0 && source.Shield < sourceShieldCost) failures.Add("自身护盾不足以承担公开代价");
             if (primary != null)
             {
                 if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.RestoreHealth) && primary.Health >= primary.MaxHealth) failures.Add("目标未受伤");
@@ -241,11 +316,10 @@ namespace OCC.Combat
                 int targetHealthCost = artifact.Effects.Where(effect => effect.Kind == ArtifactEffectKind.LoseHealth && effect.Scope != ArtifactEffectScope.Source).Sum(effect => effect.Amount);
                 if (targetHealthCost > 0 && primary.Health <= targetHealthCost) failures.Add("目标生命不足以承担公开代价");
                 if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.ClearNegativeStatuses) && !NegativeStatuses.Any(primary.HasStatus)) failures.Add("目标没有可清除的指定状态");
-                if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.TransferShield) && (primary == source || primary.Shield == source.Shield)) failures.Add("需要选择护盾值不同的另一名友军");
             }
-            if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.ClearFireground) && !cells.Any(cell => battle.Firegrounds.ContainsKey(cell) || combat.Map.GetTile(cell).SmokeExpiresAt > 0))
+            if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.ClearFireground) && !cells.Any(cell => battle.HasFireground(cell) || combat.Map.GetTile(cell).SmokeExpiresAt > 0))
                 failures.Add("范围内没有临时燃烧地格或烟尘");
-            if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.DelayInitiative && effect.Scope == ArtifactEffectScope.Selection) && !combat.Units.Values.Any(unit => unit.IsAlive && cells.Contains(unit.Position)))
+            if (artifact.Effects.Any(effect => (effect.Kind == ArtifactEffectKind.DelayInitiative || effect.Kind == ArtifactEffectKind.ForceMoveFromCell) && effect.Scope == ArtifactEffectScope.Selection) && !combat.Units.Values.Any(unit => unit.IsAlive && cells.Contains(unit.Position)))
                 failures.Add("范围内至少需要一个单位");
         }
 
@@ -283,17 +357,25 @@ namespace OCC.Combat
                 case ArtifactEffectKind.RestoreShield: before = target.Shield; target.GrantShield(effect.Amount); after = target.Shield; break;
                 case ArtifactEffectKind.RestoreMana: before = target.Mana; target.RestoreMana(effect.Amount); after = target.Mana; break;
                 case ArtifactEffectKind.ConsumeShield: before = target.Shield; target.AbsorbShield(effect.Amount); after = target.Shield; break;
-                case ArtifactEffectKind.ApplyStatus: before = target.StatusDuration(effect.Status); target.ApplyStatus(effect.Status, effect.Duration); after = target.StatusDuration(effect.Status); break;
+                case ArtifactEffectKind.ApplyStatus:
+                    before = target.StatusDuration(effect.Status);
+                    if (effect.Status == StatusType.BreakStance && battle.Combat.Ruleset == CombatRuleset.Roguelite)
+                        battle.Combat.ApplyRogueliteBreakStance(target.Id);
+                    else target.ApplyStatus(effect.Status, effect.Duration);
+                    after = target.StatusDuration(effect.Status);
+                    break;
                 case ArtifactEffectKind.ClearNegativeStatuses: before = NegativeStatuses.Count(target.HasStatus); foreach (StatusType status in NegativeStatuses) target.ClearStatus(status); after = 0; break;
                 case ArtifactEffectKind.ForceMoveTarget:
                     if (battle.TryPreventForcedMove(target.Id)) { before = after = 0; break; }
-                    GridPosition destination = StepToward(source.Position, target.Position, effect.Amount, battle.Combat, target.Id); if (destination != target.Position) { before = ArtifactBattleState.Distance(source.Position, target.Position); target.MoveTo(destination); after = ArtifactBattleState.Distance(source.Position, target.Position); } break;
+                    GridPosition destination = StepToward(source.Position, target.Position, effect.Amount, battle.Combat, target.Id); if (destination != target.Position) { GridPosition previous = target.Position; before = ArtifactBattleState.Distance(source.Position, target.Position); target.MoveTo(destination); battle.Combat.ResolveDisplacementLanding(target, previous); after = ArtifactBattleState.Distance(source.Position, target.Position); } break;
+                case ArtifactEffectKind.ForceMoveFromCell:
+                    if (battle.TryPreventForcedMove(target.Id)) { before = after = 0; break; }
+                    GridPosition pushed = StepAwayFrom(cell, target.Position, effect.Amount, battle.Combat, target.Id);
+                    if (pushed != target.Position) { GridPosition previous = target.Position; before = ArtifactBattleState.Distance(cell, target.Position); target.MoveTo(pushed); battle.Combat.ResolveDisplacementLanding(target, previous); after = ArtifactBattleState.Distance(cell, target.Position); }
+                    break;
                 case ArtifactEffectKind.Reveal: before = target.StatusDuration(StatusType.Revealed); target.ApplyStatus(StatusType.Revealed, effect.Duration); after = target.StatusDuration(StatusType.Revealed); break;
                 case ArtifactEffectKind.GrantLightCoverBypass: before = 0; after = effect.Amount; break;
                 case ArtifactEffectKind.DelayInitiative: before = target.ActionValue; target.ChangeActionValue(-effect.Amount); after = target.ActionValue; break;
-                case ArtifactEffectKind.TransferShield:
-                    UnitState partner = target; int total = source.Shield + partner.Shield; int sourceShare = total / 2; if ((total & 1) == 1 && source.Shield >= partner.Shield) sourceShare++;
-                    int partnerShare = total - sourceShare; before = Math.Abs(source.Shield - partner.Shield); source.AbsorbShield(source.Shield); partner.AbsorbShield(partner.Shield); source.GrantShield(sourceShare); partner.GrantShield(partnerShare); after = Math.Abs(source.Shield - partner.Shield); break;
                 case ArtifactEffectKind.ArmReaction: battle.Reactions[source.Id] = new ArtifactReaction(effect.Trigger, effect.Amount, effect.Duration, cell); after = 1; break;
                 case ArtifactEffectKind.ArmAnchor: battle.Anchored.Add(source.Id); source.LimitMovementRangeForTurn(1); after = 1; break;
                 case ArtifactEffectKind.GrantActionPoints: before = source.ActionPoints; source.GrantActionPoints(effect.Amount); after = source.ActionPoints; break;
@@ -321,17 +403,35 @@ namespace OCC.Combat
             {
                 var capture = new ArtifactFeedbackCapture(source, source); GridPosition before = source.Position;
                 source.MoveTo(cell);
+                battle.Combat.ResolveDisplacementLanding(source, before);
                 steps.Add(new ArtifactStep(sequence++, effect.Kind, source.Id, cell, ArtifactBattleState.Distance(before, cell), "move", capture.Finish(effect.Kind))); return;
             }
             foreach (GridPosition position in effect.Scope == ArtifactEffectScope.Selection ? selection : new[] { cell })
             {
                 TileState tile = battle.Combat.Map.GetTile(position); int applied = 0; int durabilityBefore = tile.Durability;
                 if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
+                else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DamageObject) { tile.Durability = Math.Max(0, tile.Durability - effect.Amount); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DestroyLightCover && tile.Cover == CoverType.Light) { applied = tile.Durability; tile.Durability = 0; }
-                else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.Firegrounds[position] = effect.Duration; applied = effect.Amount; }
-                else if (effect.Kind == ArtifactEffectKind.ClearFireground) { applied = battle.Firegrounds.Remove(position) ? 1 : 0; }
-                else if (effect.Kind == ArtifactEffectKind.DeployDecoy) { battle.Decoys[position] = effect.Amount; applied = effect.Amount; }
+                else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.CreateOrRefreshFireground(position, effect.Amount, effect.Duration, artifact.Id, source.Id); applied = FiregroundState.BaseDamage; }
+                else if (effect.Kind == ArtifactEffectKind.CreateSmoke)
+                {
+                    tile = tile.Clone();
+                    tile.SmokeExpiresAt = Math.Max(tile.SmokeExpiresAt, battle.Combat.CurrentTime + effect.Duration);
+                    battle.Combat.Map.SetTile(position, tile);
+                    applied = effect.Duration;
+                }
+                else if (effect.Kind == ArtifactEffectKind.ClearFireground)
+                {
+                    bool removed = battle.RemoveFireground(position);
+                    if (tile.SmokeExpiresAt > 0) { tile.SmokeExpiresAt = 0; removed = true; }
+                    applied = removed ? 1 : 0;
+                }
+                else if (effect.Kind == ArtifactEffectKind.DeployDecoy)
+                {
+                    tile = tile.Clone(); tile.IsDecoy = true; tile.IsDevice = true; tile.Durability = effect.Amount;
+                    battle.Combat.Map.SetTile(position, tile); battle.Decoys[position] = effect.Amount; applied = effect.Amount;
+                }
                 if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)
                     battle.Combat.ResolveAetherCrystalDamage(position, durabilityBefore);
                 var feedback = new List<CombatFeedbackEvent>();
@@ -345,7 +445,9 @@ namespace OCC.Combat
                 else if (applied > 0)
                 {
                     string message = effect.Kind == ArtifactEffectKind.CreateLightCover ? "掩体已建立" :
+                        effect.Kind == ArtifactEffectKind.CreateHeavyCover ? "重掩体已建立" :
                         effect.Kind == ArtifactEffectKind.CreateFireground ? "火场已生成" :
+                        effect.Kind == ArtifactEffectKind.CreateSmoke ? "烟幕已展开" :
                         effect.Kind == ArtifactEffectKind.ClearFireground ? "火场已清除" :
                         effect.Kind == ArtifactEffectKind.DeployDecoy ? "诱导灯已部署" : null;
                     if (message != null) feedback.Add(ArtifactFeedbackCapture.Utility(source, null, position, message));
@@ -359,6 +461,21 @@ namespace OCC.Combat
             int dx = Math.Sign(source.X - target.X), dy = Math.Sign(source.Y - target.Y); if (Math.Abs(target.X - source.X) >= Math.Abs(target.Y - source.Y)) dy = 0; else dx = 0;
             GridPosition current = target;
             for (int i = 0; i < distance; i++) { GridPosition next = new GridPosition(current.X + dx, current.Y + dy); if (!combat.Map.IsInside(next) || combat.Map.IsBlocked(next) || combat.IsOccupied(next, movingId) || next == source) break; current = next; }
+            return current;
+        }
+
+        private static GridPosition StepAwayFrom(GridPosition center, GridPosition target, int distance, CombatState combat, string movingId)
+        {
+            int dx = Math.Sign(target.X - center.X), dy = Math.Sign(target.Y - center.Y);
+            if (dx != 0 && dy != 0) { if (Math.Abs(target.X - center.X) >= Math.Abs(target.Y - center.Y)) dy = 0; else dx = 0; }
+            if (dx == 0 && dy == 0) return target;
+            GridPosition current = target;
+            for (int i = 0; i < distance; i++)
+            {
+                GridPosition next = new GridPosition(current.X + dx, current.Y + dy);
+                if (!combat.Map.IsInside(next) || combat.Map.IsBlocked(next) || combat.IsOccupied(next, movingId)) break;
+                current = next;
+            }
             return current;
         }
     }

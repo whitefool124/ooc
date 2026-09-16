@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_loot_chest_local_redraw_v1",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "依据已确认的赛菲莉娅地图阅读规律，从空白透明画布在本地整数像素网格自动重绘；64px交付采用约32px的粗像素语言，32px伴随稿独立组织；未采样、描摹、缩放或重着色参考图及生图原料",
+    "source_path": "Tools/OCCArt/draw_clean_treasure_chest.py",
+    "source_sha256": "2d2d6d8b5b51786e1e08d4390a0d62a22231e395eb96af97e334ec7c56a7d9c4"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_local_redraw_64.png",
+    "output_sha256": "04506ebe81269cddb40d86ee8d05b2324efdc0f827b66b2a072753caeb46433e",
+    "logical_cells": [1, 1],
+    "palette_max": 14,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_local_redraw_32.png",
+      "output_sha256": "2fa2bb01345ea495dee4a5a7285f908706f21d9b0b9ca66b84d1475773ab8c6c",
+      "palette_max": 10
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_local_redraw_64_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_local_redraw_64_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_local_redraw_64_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_local_redraw_64_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_local_redraw_64_ground_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "新的单格学院物资宝箱样板；64px文件以约32px有效绘制密度组织块面，保留可见顶面、深色前脸、锻铁包边和中央黄铜锁扣"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_local_redraw_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

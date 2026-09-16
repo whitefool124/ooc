@@ -1,0 +1,49 @@
+{
+  "status": "PASS_LOSSLESS_TARGET",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "inferred_subject_pixel_pitch": 39,
+  "inferred_subject_grid_phase": [
+    20,
+    2
+  ],
+  "subject_lattice_confidence": 3.5821,
+  "subject_lattice_confidence_min": 1.2,
+  "subject_lattice_is_stable": true,
+  "background_checker_used_for_scale": false,
+  "subject_bounds_on_logical_grid": [
+    0,
+    0,
+    19,
+    18
+  ],
+  "subject_logical_size": [
+    19,
+    18
+  ],
+  "target_canvas": [
+    32,
+    32
+  ],
+  "preview": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-09-14_苗床回流芯候选_QA_PENDING\\icon\\round1_preview.png",
+  "safe_border": 3,
+  "decoded_visible_colours_before_cleanup": 218,
+  "decoded_visible_colours_after_cleanup": 10,
+  "palette_max": 10,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "alpha_shape_preserved_pixel_for_pixel": true,
+  "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "macro_pixel_decoding_performed": true,
+  "geometric_resize_or_interpolation_performed": false,
+  "new_colours_introduced": false,
+  "logical_pixels_removed": 0,
+  "background_artifact_cells_removed": 0,
+  "alpha_components_before_cleanup": 1,
+  "alpha_components_after_cleanup": 1,
+  "dithering": false,
+  "structural_detail_loss_allowed": false,
+  "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+}

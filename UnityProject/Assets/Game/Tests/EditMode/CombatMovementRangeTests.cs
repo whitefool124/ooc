@@ -102,6 +102,31 @@ namespace OCC.Combat.Tests
             Assert.That(cache.RebuildCount, Is.EqualTo(2));
         }
 
+        [Test]
+        public void DefeatedUnitStopsBlockingANarrowRoute()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState blocker = new UnitState("blocker", false, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            blocker.ConfigureVitality(1);
+            CombatState state = new CombatState(new GridMap(3, 1), new[] { hero, blocker, enemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            Assert.That(state.IsOccupied(blocker.Position, hero.Id), Is.True);
+            Assert.That(CombatMovementQuery.FindPath(state, hero, blocker.Position), Is.Empty);
+            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.DamageHealth(blocker.Id, 1));
+
+            Assert.That(blocker.IsAlive, Is.False);
+            Assert.That(state.IsOccupied(blocker.Position, hero.Id), Is.False,
+                "已击倒单位不应继续作为不可见的占位墙。 ");
+            Assert.That(CombatMovementQuery.FindPath(state, hero, blocker.Position).Count, Is.EqualTo(2));
+            CombatCommandExecutionResult move = new CombatCommandExecutionService().Execute(state, null,
+                CombatCommand.Move(hero.Id, blocker.Position));
+            Assert.That(move.Accepted, Is.True, move.RejectionReason);
+            Assert.That(hero.Position, Is.EqualTo(blocker.Position));
+        }
+
         private static void AssertEmpty(BattlefieldPresentationAdapter adapter, CombatState state, string reason)
         {
             Assert.That(adapter.BuildPreview(state, "移动", null).ValidCellCount, Is.Zero);

@@ -1,0 +1,49 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_debug_heavy_cover_v2",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "Sephiria地图表现主参考方向的独立调试原料；只提炼地图组织与像素密度，不复制素材",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/heavy_cover_grid_aligned_v2.png",
+    "source_sha256": "8d3b0861b93ff9565bec205da4a122db1181e5ea4dd1f65aff08e65a26fe9b33"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_64.png",
+    "output_sha256": "e7a246809bbae44c2a0b6e870fc53aaca94f53c4296a2e32dc04738a4daa4bfe",
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 14,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_32.png",
+      "output_sha256": "6caa09ee0ad4d0054f3faa97e5af1050519cb0b19ac341e6a21ad8c123cc7be7",
+      "palette_max": 10
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_64_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_64_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_64_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_64_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_64_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "新方向调试样板，等待用户审美确认"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

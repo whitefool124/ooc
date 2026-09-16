@@ -1,0 +1,105 @@
+{
+  "schema": "occ-native32-generation-profiles-v1",
+  "backend": "codex_builtin_imagegen_only",
+  "delivery": {
+    "cell_pixels": 32,
+    "multi_cell_formula": "logical_width_times_32_by_logical_height_times_32",
+    "runtime_scaling": "integer_only",
+    "candidate_status": "QA_PENDING_until_machine_and_human_review"
+  },
+  "generation_loop": {
+    "candidates_per_round": 1,
+    "maximum_rounds": 3,
+    "retry_strategy": "change_only_the_failed_visual_dimension",
+    "source_policy": "new independent Image output for every retry",
+    "manual_redraw_forbidden": true,
+    "automatic_retry_triggers": [
+      "subject_lattice_confidence_below_1_2",
+      "mixed_subject_pixel_scale",
+      "single_cell_prop_requires_visual_canvas_larger_than_64x64",
+      "visual_silhouette_breaks_declared_occupancy"
+    ]
+  },
+  "shared_prompt": {
+    "pixel_language": "authentic coarse low-resolution pixel design shown enlarged with one uniform square macro-pixel lattice across the complete subject; large deliberate clusters; crisp hard edges; sparse controlled detail; limited cohesive palette; do not force the subject into a 32x32 generated-image composition",
+    "reference_policy": "Sephiria screenshot controls map readability and density; an approved OCC asset controls family scale; references never authorize copying their subject design",
+    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated"
+  },
+  "profiles": {
+    "unit_sideview": {
+      "view": "strict 90-degree side profile; only one eye may be visible; torso, pelvis, feet and equipment all face the same side",
+      "content_variables": ["unit_identity", "gameplay_role", "faction_material_story", "single_identity_accent"],
+      "canvas": "auto_round_each_axis_up_to_a_multiple_of_32; typical_humanoid_is_32x64",
+      "logical_footprint": [1, 1],
+      "palette_max_before_outline": 32,
+      "height_range": [32, 58],
+      "width_max": 30,
+      "baseline_y": "canvas_height_minus_2",
+      "reject_if": ["three_quarter_body", "front_facing_torso", "oversized_head_hides_body", "equipment_hides_body", "broken_silhouette", "muddy_clusters"]
+    },
+    "prop_oblique": {
+      "view": "shared oblique top-down map view with visible top and front faces; screen-axis alignment; never diagonal placement",
+      "content_variables": ["object_identity", "gameplay_use", "theme_material_story", "single_identity_feature"],
+      "canvas": "auto_round_each_axis_up_to_a_multiple_of_32",
+      "ordinary_single_cell_visual_canvas_review_limit": [64, 64],
+      "logical_footprint": "declared_separately_from_visual_canvas",
+      "palette_max_before_outline": 24,
+      "baseline_y": "canvas_height_minus_2",
+      "reject_if": ["flat_front_only", "top_and_front_merge", "diagonal_placement", "miniature_building_overdetail", "broken_silhouette", "muddy_clusters"]
+    }
+  },
+  "approved_calibration_assets": {
+    "unit_sideview": {
+      "asset_id": "field_technician_native32x64_v1",
+      "canvas": [32, 64],
+      "subject_bounds_size": [21, 48],
+      "palette_colors": 32,
+      "status": "FORMAL_CANDIDATE"
+    },
+    "prop_oblique": {
+      "asset_id": "sephiria_loot_chest_adaptive_pitch20_v1",
+      "canvas": [64, 64],
+      "subject_bounds_size": [38, 32],
+      "palette_colors": 24,
+      "status": "FORMAL_CANDIDATE"
+    }
+  },
+  "deterministic_postprocess": [
+    "infer_subject_pixel_pitch_and_phase_from_its_own_contour_and_colour_boundaries",
+    "reject_when_subject_lattice_confidence_is_below_1_2",
+    "remove_only_edge_connected_baked_checkerboard",
+    "decode_one_macro_pixel_to_one_native_pixel_using_an_observed_medoid_colour",
+    "select_the_smallest_canvas_whose_axes_are_multiples_of_32_and_fit_the_subject_without_resizing",
+    "crop_authored_silhouette_without_resampling",
+    "hard_alpha",
+    "merge_near_duplicate_generated_rgb_noise_to_observed_source_medoids_without_dither",
+    "replace_existing_outermost_opaque_pixels_with_one_pure_black_pixel",
+    "anchor_to_role_baseline"
+  ],
+  "machine_qa": [
+    "canvas_axes_are_multiples_of_32_and_fit_the_subject_without_resizing",
+    "logical_occupancy_is_declared_separately_from_visual_canvas",
+    "binary_alpha",
+    "palette_limit",
+    "single_connected_silhouette",
+    "safe_canvas_border",
+    "role_occupancy"
+  ],
+  "visual_qa": [
+    "role_view",
+    "silhouette_readability_at_1x",
+    "identity_feature_survives_at_1x",
+    "pixel_scale_matches_approved_family",
+    "application_contact_on_game_ground",
+    "single_cell_prop_visual_overhang_remains_limited_and_does_not_read_as_a_multi_cell_wall"
+  ],
+  "stability_baseline_2026_09_14": {
+    "batch": "academy_maintenance_mixed_v1",
+    "assets": 6,
+    "independent_generations": 11,
+    "first_pass_technical_grid_success": "2/6",
+    "success_after_one_targeted_uniform_lattice_retry": "6/6",
+    "machine_manifest_validation": "6/6",
+    "interpretation": "one-shot generation is not stable enough for unattended promotion; automatic rejection plus one targeted regeneration is part of the production loop"
+  }
+}

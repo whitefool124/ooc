@@ -12,6 +12,8 @@ namespace OCC.Combat.Presentation
 
         public string Action { get; private set; } = "移动";
         public string TargetId { get; private set; }
+        public bool HasPreviewPosition { get; private set; }
+        public GridPosition PreviewPosition { get; private set; }
         public bool IsKeyboardTargeting => navigation.Active;
         public GridPosition KeyboardPosition => navigation.Position;
 
@@ -20,6 +22,7 @@ namespace OCC.Combat.Presentation
             navigation.End();
             Action = string.IsNullOrEmpty(action) ? "移动" : action;
             TargetId = null;
+            HasPreviewPosition = false;
         }
 
         public void Reset(string action = "移动")
@@ -27,6 +30,7 @@ namespace OCC.Combat.Presentation
             navigation.End();
             Action = action;
             TargetId = null;
+            HasPreviewPosition = false;
         }
 
         public bool SetTarget(CombatState state, string unitId) =>
@@ -41,12 +45,21 @@ namespace OCC.Combat.Presentation
 
         public bool ClearTarget() => SetKnownTarget(null);
 
+        public void SetPreviewPosition(GridPosition position)
+        {
+            PreviewPosition = position;
+            HasPreviewPosition = true;
+        }
+
+        public void ClearPreviewPosition() => HasPreviewPosition = false;
+
         public bool BeginKeyboardTargeting(CombatState state)
         {
             UnitState hero = state?.GetUnit("hero");
             if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id) return false;
             UnitState selected = string.IsNullOrEmpty(TargetId) ? null : state.GetUnit(TargetId);
             navigation.Begin(selected?.Position ?? hero.Position, state.Map.Width, state.Map.Height);
+            SetPreviewPosition(navigation.Position);
             return true;
         }
 
@@ -57,6 +70,7 @@ namespace OCC.Combat.Presentation
             UnitState unit = state.Units.Values.FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == navigation.Position);
             TargetId = unit != null && !unit.IsHero ? unit.Id : null;
+            SetPreviewPosition(navigation.Position);
             return true;
         }
 
@@ -65,6 +79,7 @@ namespace OCC.Combat.Presentation
             position = navigation.Position;
             if (!navigation.Active) return false;
             navigation.End();
+            ClearPreviewPosition();
             return true;
         }
 
@@ -73,9 +88,10 @@ namespace OCC.Combat.Presentation
             if (!navigation.Active) return false;
             navigation.End();
             TargetId = null;
+            ClearPreviewPosition();
             return true;
         }
 
-        public void EndKeyboardTargeting() => navigation.End();
+        public void EndKeyboardTargeting() { navigation.End(); ClearPreviewPosition(); }
     }
 }

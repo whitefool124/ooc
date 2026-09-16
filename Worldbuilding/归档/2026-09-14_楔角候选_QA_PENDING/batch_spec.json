@@ -1,0 +1,21 @@
+{
+  "batch_id": "breach_ram_native32_candidate_v1",
+  "human_review": {
+    "status": "REJECT",
+    "reviewer": "pipeline",
+    "date": "2026-09-14",
+    "reason": "三轮均未同时满足统一主体网格与单格单位画布；依用户规则停止重试。"
+  },
+  "items": [{
+    "id": "breach_ram_candidate",
+    "role": "tactical_unit_32x64",
+    "logical_cells": [1, 1],
+    "selected_round": null,
+    "attempt_qas": [
+      "Worldbuilding/归档/2026-09-14_楔角候选_QA_PENDING/breach_ram/round1_qa.json",
+      "Worldbuilding/归档/2026-09-14_楔角候选_QA_PENDING/breach_ram/round2_qa.json",
+      "Worldbuilding/归档/2026-09-14_楔角候选_QA_PENDING/breach_ram/round3_qa.json"
+    ],
+    "palette_max": 32
+  }]
+}

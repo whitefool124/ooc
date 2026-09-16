@@ -74,12 +74,12 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EliteRewardIsOneCompatibleRareSpellOneScrollAndOneArtifact()
+        public void EliteRewardIsOneCompatibleUncommonOrRareSpellOneScrollAndOneArtifact()
         {
             RogueliteMapRun run = new RogueliteMapRun(8406, FireRogueliteStarterCatalog.Melee);
             var spells = FireSpellRewardPool.RollPersonalChoices(run.Seed, 3, RogueliteMapNodeType.Elite, run.OwnedFireSpellIds, run.EquippedWeapon);
             var support = RogueliteMapCatalog.RollFireSupportRewards(RogueliteMapNodeType.Elite);
-            Assert.That(spells.Count, Is.EqualTo(1)); Assert.That(spells[0].Rarity, Is.EqualTo(FireSpellRarity.Rare));
+            Assert.That(spells.Count, Is.EqualTo(1)); Assert.That(spells[0].Rarity, Is.EqualTo(FireSpellRarity.Uncommon).Or.EqualTo(FireSpellRarity.Rare));
             Assert.That(FireSpellCatalog.IsWeaponCompatible(spells[0], run.EquippedWeapon), Is.True);
             Assert.That(support.Count, Is.EqualTo(2));
             Assert.That(support[0].Id, Is.EqualTo(ItemCatalog.FirelineScroll.Id));

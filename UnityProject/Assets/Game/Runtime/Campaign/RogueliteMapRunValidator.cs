@@ -32,7 +32,8 @@ namespace OCC.Combat
         private static readonly HashSet<string> RewardIds = new HashSet<string>(RogueliteMapCatalog.Rewards.Select(reward => reward.Id)
             .Concat(ItemCatalog.All.Select(item => item.Id))
             .Concat(RogueContent.Spells.Select(item => item.DefinitionId))
-            .Concat(RogueContent.Equipment.Select(item => item.DefinitionId)), StringComparer.Ordinal);
+            .Concat(RogueContent.Equipment.Select(item => item.DefinitionId))
+            .Concat(RogueContent.TacticalItems.Select(item => item.DefinitionId)), StringComparer.Ordinal);
         private static readonly HashSet<string> FireSpellIds = new HashSet<string>(FireSpellCatalog.All.Select(spell => spell.Id), StringComparer.Ordinal);
         private static readonly HashSet<string> StarterIds = new HashSet<string>(FireRogueliteStarterCatalog.All, StringComparer.Ordinal);
 
@@ -210,7 +211,19 @@ namespace OCC.Combat
         {
             if (!NodeIds.Contains(run.CurrentNodeId)) return;
             RogueliteMapNode node = RogueliteMapCatalog.Node(run.CurrentNodeId);
-            if (run.AwaitingReward && run.PendingFireSpellReselections.Count == 0 && (!run.CompletedNodes.Contains(node.Id) || (!node.IsCombat && node.Type != RogueliteMapNodeType.Treasure)))
+            bool hasRoguePending = run.UsesRogue11 && run.RogueRunState != null && run.RogueRunState.PendingRewardIds != null && run.RogueRunState.PendingRewardIds.Count > 0;
+            if (hasRoguePending)
+            {
+                if (!run.AwaitingReward || !run.CompletedNodes.Contains(node.Id)) result.Add("rewards.pending_queue_inconsistent");
+                if (run.RogueRunState.PendingRewardIds.Distinct(StringComparer.Ordinal).Count() != run.RogueRunState.PendingRewardIds.Count)
+                    result.Add("rewards.pending_duplicate");
+                foreach (string id in run.RogueRunState.PendingRewardIds)
+                {
+                    if (!RewardIds.Contains(id)) result.Add("rewards.pending_unknown");
+                    if (run.ClaimedRewards.Contains(id)) result.Add("rewards.pending_already_claimed");
+                }
+            }
+            else if (run.AwaitingReward && run.PendingFireSpellReselections.Count == 0 && (!run.CompletedNodes.Contains(node.Id) || (!node.IsCombat && node.Type != RogueliteMapNodeType.Treasure)))
                 result.Add("rewards.awaiting_inconsistent");
             if (run.HasDeferredNodeReward && run.PendingFireSpellReselections.Count == 0) result.Add("rewards.deferred_inconsistent");
             if (run.HasPendingContentCombat)

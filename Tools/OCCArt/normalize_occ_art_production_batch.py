@@ -102,6 +102,10 @@ def normalize_asset(batch: Path, asset: dict, role: dict) -> tuple[Image.Image, 
         output = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
         output.alpha_composite(native, (4, 4))
         return output, native
+    if role_name == "tactical_unit_32x64":
+        return fit_transparent(source, (32, 64), palette_max, 1, occupancy=1.0, bottom_y=62), None
+    if role_name == "tactical_unit_32":
+        return fit_transparent(source, (32, 32), palette_max, 1, occupancy=1.0, bottom_y=30), None
     if role_name == "tactical_unit_64":
         return fit_transparent(source, (64, 64), palette_max, 1, occupancy=1.0, bottom_y=58), None
     if role_name == "character_portrait_b_384x576":
@@ -225,7 +229,7 @@ def build_character_contact(batch: Path, assets: list[dict]) -> Path:
     x = 24
     for asset in assets:
         image = Image.open(batch / "normalized" / f"{asset['stem']}.png").convert("RGBA")
-        if asset["role"] == "tactical_unit_64":
+        if asset["role"] in {"tactical_unit_32x64", "tactical_unit_32", "tactical_unit_64"}:
             scale = 4
         else:
             scale = 1
@@ -580,7 +584,7 @@ def main() -> None:
     vfx_assets = [asset for asset in assets if asset["role"] == "vfx_frame_32"]
     if vfx_assets:
         build_vfx_contact(batch, vfx_assets)
-    character_assets = [asset for asset in assets if asset["role"] in {"tactical_unit_64", "character_portrait_b_384x576", "character_performance_c_192x288"}]
+    character_assets = [asset for asset in assets if asset["role"] in {"tactical_unit_32x64", "tactical_unit_32", "tactical_unit_64", "character_portrait_b_384x576", "character_performance_c_192x288"}]
     if character_assets:
         build_character_contact(batch, character_assets)
     adjacency_assets = [asset for asset in assets if asset["role"] == "terrain_adjacency_overlay_32"]

@@ -89,6 +89,7 @@ namespace OCC.Combat.Presentation
                     }
                 }
                 else if (StartsWithLabel(line, "循环")) metrics.Add("冷却 " + ValueAfterLabel(line));
+                else if (StartsWithLabel(line, "次数")) metrics.Add(ValueAfterLabel(line));
                 else if (StartsWithLabel(line, "数据"))
                 {
                     foreach (string part in ValueAfterLabel(line).Split('·'))
@@ -109,7 +110,7 @@ namespace OCC.Combat.Presentation
                 List<string> result = new List<string>();
                 for (int i = effect + 1; i < lines.Length && !IsSection(lines[i]); i++)
                     result.Add(lines[i].TrimStart('·', ' ', '　'));
-                if (result.Count > 0) return string.Join("；", result.Take(2));
+                if (result.Count > 0) return string.Join("；", result);
             }
             string fallback = lines.FirstOrDefault(value => !IsMetricOrMeta(value));
             return string.IsNullOrEmpty(fallback) ? "—" : fallback.TrimStart('·', ' ', '　');
@@ -120,6 +121,16 @@ namespace OCC.Combat.Presentation
             string[] lines = Lines(body);
             string introduction = lines.FirstOrDefault(value => StartsWithLabel(value, "简介"));
             if (!string.IsNullOrEmpty(introduction)) return FirstSentence(ValueAfterLabel(introduction));
+
+            string condition = lines.FirstOrDefault(value => StartsWithLabel(value, "条件"));
+            string notice = lines.FirstOrDefault(value => StartsWithLabel(value, "注意"));
+            if (!string.IsNullOrEmpty(condition) || !string.IsNullOrEmpty(notice))
+            {
+                List<string> summary = new List<string>();
+                if (!string.IsNullOrEmpty(condition)) summary.Add("使用条件：" + ValueAfterLabel(condition));
+                if (!string.IsNullOrEmpty(notice)) summary.Add("注意：" + ValueAfterLabel(notice));
+                return string.Join("\n", summary);
+            }
 
             int effectIndex = Array.FindIndex(lines, value => value == "效果" || value == "附加效果");
             IEnumerable<string> preEffect = effectIndex < 0 ? lines : lines.Take(effectIndex);
@@ -152,10 +163,10 @@ namespace OCC.Combat.Presentation
             return split < 0 ? string.Empty : line.Substring(split + 1).Trim();
         }
 
-        private static bool IsSection(string line) => new[] { "效果", "附加效果", "注意", "比较", "领取", "来源", "目标", "当前" }
+        private static bool IsSection(string line) => new[] { "效果", "附加效果", "条件", "注意", "简介", "比较", "领取", "来源", "目标", "当前" }
             .Any(label => StartsWithLabel(line, label));
 
-        private static bool IsMetricOrMeta(string line) => new[] { "消耗", "循环", "数据", "目标", "当前", "领取", "来源", "注意", "比较" }
+        private static bool IsMetricOrMeta(string line) => new[] { "消耗", "循环", "次数", "数据", "目标", "条件", "当前", "领取", "来源", "注意", "比较" }
             .Any(label => StartsWithLabel(line, label)) || line == "效果" || line == "附加效果";
 
         private static string FirstNumber(string value)
@@ -184,12 +195,12 @@ namespace OCC.Combat.Presentation
         private const float MinimumWidth = 220f;
         private const float MaximumWidth = 480f;
         private const float MinimumHeight = 120f;
-        private const float MaximumHeight = 360f;
+        private const float MaximumHeight = 720f;
         private const float ContentCardWidth = 432f;
         private const float ContentCardMinimumHeight = 388f;
-        private const float ContentCardMaximumHeight = 520f;
         private const float ContentCardInset = 16f;
         private const float ContentEffectTop = 220f;
+        private const float ContentEffectBodyWidth = ContentCardWidth - (ContentCardInset * 2f);
         private const float HorizontalPadding = 16f;
         private const float TopPadding = 16f;
         private const float TitleHeight = 40f;
@@ -210,7 +221,6 @@ namespace OCC.Combat.Presentation
         private Text cardTitle;
         private Text identityLabel;
         private readonly Text[] metricLabels = new Text[3];
-        private Text effectLabel;
         private Text effectBody;
         private Text summaryLabel;
         private object owner;
@@ -249,6 +259,7 @@ namespace OCC.Combat.Presentation
                 new Vector2(MaximumWidth - HorizontalPadding * 2f, MaximumHeight - BodyTop - BottomPadding), 16,
                 FormalUiTheme.Text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(bodyLabel);
+            bodyLabel.verticalOverflow = VerticalWrapMode.Overflow;
 
             GameObject cardObject = FormalUiKit.Create("通用内容卡", panel);
             cardRoot = cardObject.AddComponent<RectTransform>();
@@ -277,14 +288,15 @@ namespace OCC.Combat.Presentation
             }
             FormalUiKit.FlatPanel("内容分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
                 new Vector2(16f, -208f), new Vector2(400f, 2f), FormalUiTheme.Ink);
-            effectLabel = FixedLabel("效果标签", "效果", cardRoot, new Vector2(16f, -ContentEffectTop), new Vector2(64f, 40f), 14, FormalUiTheme.Amber, TextAnchor.UpperLeft);
-            effectBody = FixedLabel("效果内容", string.Empty, cardRoot, new Vector2(88f, -ContentEffectTop), new Vector2(328f, 72f), 16, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            effectBody = FixedLabel("效果内容", string.Empty, cardRoot, new Vector2(ContentCardInset, -ContentEffectTop), new Vector2(ContentEffectBodyWidth, 40f), 16, FormalUiTheme.Text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(effectBody);
             effectBody.lineSpacing = 1f;
+            effectBody.verticalOverflow = VerticalWrapMode.Overflow;
             FormalUiKit.FlatPanel("页脚分隔线", cardRoot, new Vector2(0f, 1f), new Vector2(0f, 1f),
                 new Vector2(16f, -304f), new Vector2(400f, 2f), FormalUiTheme.Ink);
             summaryLabel = FixedLabel("内容简介", string.Empty, cardRoot, new Vector2(16f, -316f), new Vector2(400f, 72f), 14, FormalUiTheme.Muted, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(summaryLabel);
+            summaryLabel.verticalOverflow = VerticalWrapMode.Overflow;
             cardRoot.gameObject.SetActive(false);
             panelObject.SetActive(false);
         }
@@ -313,8 +325,7 @@ namespace OCC.Combat.Presentation
                 metricLabels[0].text = content.MetricA;
                 metricLabels[1].text = content.MetricB;
                 metricLabels[2].text = content.MetricC;
-                effectLabel.color = FormalUiTheme.Amber;
-                effectBody.text = content.Effect;
+                effectBody.text = WrapEffectAtClauses(content.Effect);
                 summaryLabel.text = content.Summary;
                 LayoutCategorizedCard();
             }
@@ -335,7 +346,7 @@ namespace OCC.Combat.Presentation
                 bodyLabel.horizontalOverflow = HorizontalWrapMode.Wrap;
                 bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, MaximumHeight - BodyTop - BottomPadding);
                 Canvas.ForceUpdateCanvases();
-                float height = Mathf.Clamp(BodyTop + bodyLabel.preferredHeight + BottomPadding, MinimumHeight, MaximumHeight);
+                float height = Mathf.Max(BodyTop + bodyLabel.preferredHeight + BottomPadding, MinimumHeight);
                 panel.sizeDelta = new Vector2(width, height);
                 bodyLabel.rectTransform.sizeDelta = new Vector2(textWidth, height - BodyTop - BottomPadding);
                 FormalUiKit.KeepInsideParentFrame(titleLabel);
@@ -363,10 +374,10 @@ namespace OCC.Combat.Presentation
 
         private void LayoutCategorizedCard()
         {
+            effectBody.rectTransform.sizeDelta = new Vector2(ContentEffectBodyWidth, MaximumHeight);
             Canvas.ForceUpdateCanvases();
-            float effectHeight = Mathf.Clamp(Mathf.Ceil(effectBody.preferredHeight), 72f, 144f);
-            effectBody.rectTransform.sizeDelta = new Vector2(328f, effectHeight);
-            effectLabel.rectTransform.sizeDelta = new Vector2(64f, Mathf.Max(40f, effectHeight));
+            float effectHeight = Mathf.Max(Mathf.Ceil(effectBody.preferredHeight), 40f);
+            effectBody.rectTransform.sizeDelta = new Vector2(ContentEffectBodyWidth, effectHeight);
 
             float footerTop = ContentEffectTop + effectHeight + 12f;
             RectTransform footerRule = cardRoot.Find("页脚分隔线") as RectTransform;
@@ -374,14 +385,62 @@ namespace OCC.Combat.Presentation
 
             float summaryTop = footerTop + 12f;
             summaryLabel.rectTransform.anchoredPosition = new Vector2(ContentCardInset, -summaryTop);
-            summaryLabel.rectTransform.sizeDelta = new Vector2(ContentCardWidth - ContentCardInset * 2f, 112f);
+            summaryLabel.rectTransform.sizeDelta = new Vector2(ContentCardWidth - ContentCardInset * 2f, MaximumHeight);
             Canvas.ForceUpdateCanvases();
-            float summaryHeight = Mathf.Clamp(Mathf.Ceil(summaryLabel.preferredHeight), 40f, 112f);
+            float summaryHeight = Mathf.Max(Mathf.Ceil(summaryLabel.preferredHeight), 40f);
             summaryLabel.rectTransform.sizeDelta = new Vector2(ContentCardWidth - ContentCardInset * 2f, summaryHeight);
 
-            float height = Mathf.Clamp(summaryTop + summaryHeight + ContentCardInset,
-                ContentCardMinimumHeight, ContentCardMaximumHeight);
+            float height = Mathf.Max(summaryTop + summaryHeight + ContentCardInset, ContentCardMinimumHeight);
             cardRoot.sizeDelta = panel.sizeDelta = new Vector2(ContentCardWidth, height);
+        }
+
+        private static string WrapEffectAtClauses(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return value;
+
+            List<string> clauses = new List<string>();
+            System.Text.StringBuilder clause = new System.Text.StringBuilder();
+            foreach (char character in value)
+            {
+                clause.Append(character);
+                if (character == '；' || character == '。' || character == '，')
+                {
+                    clauses.Add(clause.ToString());
+                    clause.Length = 0;
+                }
+            }
+            if (clause.Length > 0) clauses.Add(clause.ToString());
+
+            TextGenerationSettings settings = new TextGenerationSettings
+            {
+                font = FormalUiKit.Font,
+                fontSize = 16,
+                fontStyle = FontStyle.Bold,
+                color = Color.white,
+                textAnchor = TextAnchor.UpperLeft,
+                generationExtents = new Vector2(ContentEffectBodyWidth, MaximumHeight),
+                pivot = Vector2.zero,
+                horizontalOverflow = HorizontalWrapMode.Overflow,
+                verticalOverflow = VerticalWrapMode.Overflow,
+                scaleFactor = 1f,
+                lineSpacing = 1f,
+                richText = true
+            };
+            TextGenerator generator = new TextGenerator();
+            List<string> lines = new List<string>();
+            string currentLine = string.Empty;
+            foreach (string nextClause in clauses)
+            {
+                string candidate = currentLine + nextClause;
+                if (currentLine.Length > 0 && generator.GetPreferredWidth(candidate, settings) > ContentEffectBodyWidth)
+                {
+                    lines.Add(currentLine);
+                    currentLine = nextClause;
+                }
+                else currentLine = candidate;
+            }
+            if (currentLine.Length > 0) lines.Add(currentLine);
+            return string.Join("\n", lines);
         }
 
         private static string FallbackIconPath(string category)

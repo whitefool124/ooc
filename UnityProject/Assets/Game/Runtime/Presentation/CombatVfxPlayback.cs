@@ -179,7 +179,7 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.ClearStatus: case FireRuleKind.ClearOneSelfStatus: return "cleanse";
                 case FireRuleKind.MoveSource: case FireRuleKind.MoveAfterAttack: case FireRuleKind.SwapUnits: case FireRuleKind.Push: return "path";
                 case FireRuleKind.ArmTrigger: case FireRuleKind.RestoreMovement: case FireRuleKind.AddMovement:
-                case FireRuleKind.RepairWeapon: case FireRuleKind.ReduceIncomingDamage: case FireRuleKind.ExtendTriggerToAlly: return "fire_attachment";
+                case FireRuleKind.RepairWeapon: case FireRuleKind.ReduceIncomingDamage: return "fire_attachment";
                 default: return null;
             }
         }

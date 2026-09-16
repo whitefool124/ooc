@@ -1,0 +1,145 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_maintenance_mixed_v1",
+  "items": 6,
+  "total_generations": 11,
+  "first_pass_technical_success": 2,
+  "first_pass_rate": 0.3333333333333333,
+  "success_with_one_targeted_retry": 6,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "heavy_cover",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 21,
+      "confidence": 1.3662,
+      "subject_size": [
+        49,
+        37
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "palette": 24,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover_r2/heavy_cover_manifest.json"
+    },
+    {
+      "id": "archive_cabinet",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 19,
+      "confidence": 2.8529,
+      "subject_size": [
+        36,
+        57
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "palette": 24,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet_r2/archive_cabinet_manifest.json"
+    },
+    {
+      "id": "aether_power_box",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 23,
+      "confidence": 1.2146,
+      "subject_size": [
+        25,
+        26
+      ],
+      "canvas": [
+        32,
+        32
+      ],
+      "palette": 24,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_manifest.json"
+    },
+    {
+      "id": "maintenance_cart",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 16,
+      "confidence": 1.2929,
+      "subject_size": [
+        61,
+        48
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "palette": 24,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart_r2/maintenance_cart_manifest.json"
+    },
+    {
+      "id": "maintenance_guard",
+      "role": "tactical_unit_32x64",
+      "selected_round": 1,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 31,
+      "confidence": 1.566,
+      "subject_size": [
+        15,
+        34
+      ],
+      "canvas": [
+        32,
+        64
+      ],
+      "palette": 32,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_guard/maintenance_guard_manifest.json"
+    },
+    {
+      "id": "field_medic",
+      "role": "tactical_unit_32x64",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 25,
+      "confidence": 4.4543,
+      "subject_size": [
+        15,
+        35
+      ],
+      "canvas": [
+        32,
+        64
+      ],
+      "palette": 32,
+      "manifest": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic_r2/field_medic_manifest.json"
+    }
+  ],
+  "application_contact": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/batch_application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "scope": "all six selected batch assets and the unified workflow"
+  },
+  "formal_assets_replaced": false
+}

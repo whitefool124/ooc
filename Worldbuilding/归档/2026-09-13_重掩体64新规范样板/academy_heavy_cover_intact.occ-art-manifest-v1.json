@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_heavy_cover_intact_64_v3",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "EasyCLI GPT Image 2.5 独立生成的学院工业重掩体整体防爆屏障；独立32px伴随稿",
+    "source_path": "Worldbuilding/归档/2026-09-13_重掩体64新规范样板/academy_heavy_cover_64_source_v3.png",
+    "source_sha256": "82A35ADDDA3046B9F27628A3B111F6522A7F2D5534DC0700782F5F357B79EEDE",
+    "low_source_path": "Worldbuilding/归档/2026-09-13_重掩体64新规范样板/academy_heavy_cover_32_source_v3.png",
+    "low_source_sha256": "38401D6BCE3BAE18373A95324F97F39BAE8654C8DDE3362216BE45C5F13EFE97"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_64.png",
+    "output_sha256": "57EE5ED72E53C81EF36BF8A464E4B44B4C4EC60F6C1FEAE7248B639B449EB6E9",
+    "logical_cells": [1, 1],
+    "palette_max": 14,
+    "required_color_families": [],
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_32.png",
+      "output_sha256": "EC1A35A6922EFF1C495FD20B404F6AF6C40464DEC4F257D0ED679E666DB459DD",
+      "palette_max": 10,
+      "required_color_families": []
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena 完整重掩体占一格；主体约48×48，阻挡移动与攻击线，不参与移动点击",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "target_view": "64px主稿与独立32px伴随稿；固定左上光向；无运行时旋转"
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/heavy_cover/one_x.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/heavy_cover/four_x.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/heavy_cover/grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/heavy_cover/checker.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/heavy_cover/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "新规范重掩体样板；v3淘汰了箱体误读和低矮路障比例，待人工审美确认"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_64.png",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

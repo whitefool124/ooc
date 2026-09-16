@@ -108,7 +108,7 @@ namespace OCC.Combat
             if (!state.Map.GetTile(source).IsLampVine && state.Map.GetTile(destination).IsLampVine)
             {
                 UnitState hound = state.Units.Values.FirstOrDefault(value => value.EnemyArchetypeId == "tether_hound" && value.IsAlive);
-                if (hound != null && !state.Map.HasLineOfSight(hound.Position, destination))
+                if (hound != null && !state.HasLineOfSight(hound.Position, destination))
                 {
                     hasHoundEntrance = true;
                     houndEntrance = source;
@@ -155,7 +155,7 @@ namespace OCC.Combat
         public CombatCommand ChooseEnemyCommand(CombatState state, UnitState enemy, UnitState hero)
         {
             if (enemy == null || hero == null) return CombatCommand.EndTurn(enemy?.Id ?? string.Empty);
-            bool visible = state.Map.HasLineOfSight(enemy.Position, hero.Position);
+            bool visible = state.HasLineOfSight(enemy.Position, hero.Position);
             if (enemy.EnemyArchetypeId == "tether_hound") return ChooseHound(state, enemy, hero, visible);
             if (enemy.EnemyArchetypeId == "pyromancer") return ChoosePyromancer(state, enemy, hero, visible);
             return EnemyTactics.Choose(state, enemy, hero);

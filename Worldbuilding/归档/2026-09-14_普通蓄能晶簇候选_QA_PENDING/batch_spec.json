@@ -1,0 +1,27 @@
+{
+  "batch_id": "academy_standard_aether_crystal_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/application_contact_4x.png",
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "第三轮通过机器门槛；等待实际应用接触与人工审美门槛，不提前替换导能柱占位。"
+  },
+  "items": [
+    {
+      "id": "academy_standard_aether_crystal_intact_candidate",
+      "role": "single_cell_destructible_crystal_prop_32",
+      "source": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/source/standard_crystal_round3_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_candidate.png",
+      "qa": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round1_qa.json",
+        "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round2_qa.json",
+        "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_qa.json"
+      ],
+      "selected_round": 3,
+      "palette_max": 10
+    }
+  ]
+}

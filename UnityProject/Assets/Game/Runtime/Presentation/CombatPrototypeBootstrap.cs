@@ -78,6 +78,15 @@ namespace OCC.Combat.Presentation
         {
             if (!Application.isPlaying) return;
             CombatDebugTuning.TemporaryEnemyAssistEnabled = false;
+            // The dedicated arena owns its own entry screen. Do not construct
+            // the main first-experience landing page behind it: that page is a
+            // real input surface and would intercept clicks on the test picker.
+            if (GetComponent<CombatTestArenaEntry>() != null)
+            {
+                firstExperienceFrontEndComplete = true;
+                InitializeRuntime();
+                return;
+            }
             if (!initialized && !firstExperienceFrontEndComplete)
             {
                 FirstExperiencePrototypeController opening = GetComponent<FirstExperiencePrototypeController>();
@@ -211,6 +220,64 @@ namespace OCC.Combat.Presentation
             if (flowTransition == null) ActivateCombat();
             else flowTransition.Play(ActivateCombat);
         }
+
+        /// <summary>
+        /// Direct entry used only by the dedicated CombatTestArena scene. It bypasses
+        /// the first-experience front end while keeping the normal scene markers,
+        /// presentation stack and developer combat setup intact.
+        /// </summary>
+        public void StartDedicatedTestArena(string scenarioId = null)
+        {
+            if (!Application.isPlaying) return;
+            CombatTestArenaEntry entry = GetComponent<CombatTestArenaEntry>();
+            if (entry == null) entry = FindAnyObjectByType<CombatTestArenaEntry>();
+            if (entry != null) entry.CloseSelection();
+            firstExperienceFrontEndComplete = true;
+            FirstExperiencePrototypeController opening = GetComponent<FirstExperiencePrototypeController>();
+            if (opening != null) opening.enabled = false;
+            InitializeRuntime();
+            startupPresentation?.DismissImmediately();
+            presentation?.RogueliteUi?.SetFrontEndSuppressed(true);
+            CombatSceneSessionBuild build = CombatTestArenaScenarioCatalog.BuildRandomized(scenarioId);
+            state = build.State;
+            currentLevel = build.Level;
+            developerPreparation = build.Preparation;
+            developerFlow = new CombatFlowController();
+            developerFlow.Configure(developerPreparation, state);
+            rogueliteFlow.Reset();
+            trainingRangeActive = false;
+            artifactBattle = new ArtifactBattleState(state);
+            fireBattle = state.RogueSpells?.FireBattle;
+            selection.Reset();
+            outcomeSettlement.Reset();
+            ResetEnemyTurnSequence();
+            battlefieldViewport = battlefield.CreateViewport(state.Map.Width, state.Map.Height);
+            battlefieldViewport.Focus(state.GetUnit("hero").Position);
+            OpenDeveloperBriefing();
+            // Test-arena selection is already the preparation step. Activate the
+            // battle synchronously so a disabled/unfinished shared transition
+            // can never leave this dedicated scene stranded on its briefing.
+            ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement));
+            MarkPresentation(UiPresentationArea.Flow);
+        }
+
+        public void OpenDedicatedTestArenaSelection()
+        {
+            firstExperienceFrontEndComplete = true;
+            FirstExperiencePrototypeController opening = GetComponent<FirstExperiencePrototypeController>();
+            if (opening != null) opening.enabled = false;
+            CombatTestArenaEntry entry = GetComponent<CombatTestArenaEntry>();
+            if (entry == null) entry = FindAnyObjectByType<CombatTestArenaEntry>();
+            if (entry != null) entry.ShowSelection();
+            presentation?.Startup?.DismissImmediately();
+            presentation?.RogueliteUi?.SetFrontEndSuppressed(true);
+            GameObject editorMap = GameObject.Find("地图可视化");
+            if (editorMap != null) editorMap.SetActive(false);
+            GameObject formalRogueliteUi = GameObject.Find("OCC 表现层锚点/正式肉鸽UI");
+            if (formalRogueliteUi != null) formalRogueliteUi.SetActive(false);
+            GameObject formalStartupUi = GameObject.Find("OCC 表现层锚点/正式启动界面");
+            if (formalStartupUi != null) formalStartupUi.SetActive(false);
+        }
         public void TacticalRestartDeveloperCombat()
         {
             if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
@@ -338,9 +405,11 @@ namespace OCC.Combat.Presentation
                 result.SubjectId, message: result.PreviousNodeId + "→" + result.SubjectId));
             if (!result.StartsCombat)
             {
-                SaveMapRun(); return;
+                if (!SaveMapRun()) RestoreMapRunAfterFailedRewardSave();
+                return;
             }
-            SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing();
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, nodeId));
         }
 
@@ -348,7 +417,7 @@ namespace OCC.Combat.Presentation
         {
             if (mapRun == null || !mapRun.IsFirstRunExperience) return;
             mapInteractions.AcknowledgeFirstRunOrigin(mapRun);
-            SaveMapRun();
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
             MarkPresentation(UiPresentationArea.MapStructure);
         }
 
@@ -432,9 +501,37 @@ namespace OCC.Combat.Presentation
             RogueliteMapInteractionResult result = mapInteractions.ChooseContent(mapRun, choiceId);
             MarkPresentation(UiPresentationArea.MapStructure);
             PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
-            if (result.StartsCombat) { SaveMapRun(); BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, choiceId)); return; }
-            SaveMapRun();
+            if (!result.StartsCombat)
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, MapSettlementReceipt(result.ResourcesBefore, result.ResourcesAfter)));
+            if (result.StartsCombat)
+            {
+                if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+                BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); PublishUiVisual(new UiVisualEvent(UiVisualEventKind.BriefingOpened, choiceId)); return;
+            }
+            if (!SaveMapRun()) RestoreMapRunAfterFailedRewardSave();
         }
+
+        private static string MapSettlementReceipt(RogueliteMapResources before, RogueliteMapResources after)
+        {
+            System.Collections.Generic.List<string> changes = new System.Collections.Generic.List<string>();
+            if (after.UsesRogue11)
+            {
+                if (after.Gold != before.Gold) changes.Add("金币 " + Signed(after.Gold - before.Gold));
+                if (after.StageContribution != before.StageContribution) changes.Add("学院贡献 " + Signed(after.StageContribution - before.StageContribution));
+                if (after.StageTime != before.StageTime) changes.Add("学期进度 " + Signed(after.StageTime - before.StageTime));
+                if (after.CurrentHealth != before.CurrentHealth) changes.Add("生命 " + Signed(after.CurrentHealth - before.CurrentHealth));
+            }
+            else
+            {
+                if (after.Parts != before.Parts) changes.Add("零件 " + Signed(after.Parts - before.Parts));
+                if (after.Aether != before.Aether) changes.Add("以太 " + Signed(after.Aether - before.Aether));
+                if (after.Supplies != before.Supplies) changes.Add("补给 " + Signed(after.Supplies - before.Supplies));
+                if (after.Scouting != before.Scouting) changes.Add("侦测 " + Signed(after.Scouting - before.Scouting));
+            }
+            return changes.Count == 0 ? "事件已结算，没有资源变化。" : "事件结算：" + string.Join("　", changes);
+        }
+
+        private static string Signed(int value) => value > 0 ? "+" + value : value.ToString();
         public void ClaimMapReward(string rewardId)
         {
             RogueliteMapInteractionResult result = mapInteractions.ClaimReward(mapRun, rewardId);
@@ -460,25 +557,43 @@ namespace OCC.Combat.Presentation
                     }
                 });
         }
+        public void OpenRewardInventory()
+        {
+            if (mapRun == null || !mapRun.UsesRogue11) return;
+            ReturnToMapRun();
+            settlementPresentation?.HideForInventory();
+            presentation?.RogueliteUi?.OpenLoadoutForReward();
+        }
         public void ClaimMapFireSpell(string spellId)
         {
             mapInteractions.ClaimFireSpell(mapRun, spellId);
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, spellId));
             CompleteMapRewardClaim();
         }
-        public void EquipMapFireSpell(string spellId, int slot) { mapInteractions.EquipFireSpell(mapRun, spellId, slot); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat); }
+        public void EquipMapFireSpell(string spellId, int slot)
+        {
+            mapInteractions.EquipFireSpell(mapRun, spellId, slot);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat);
+        }
         public void EquipNextMapFireSpell(int slot)
         {
             if (!mapInteractions.TryEquipNextFireSpell(mapRun, slot)) return;
-            SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            MarkPresentation(UiPresentationArea.MapStructure); MarkPresentation(UiPresentationArea.Combat);
         }
-        public void EquipMapReward(string rewardId) { mapInteractions.EquipReward(mapRun, rewardId); SaveMapRun(); MarkPresentation(UiPresentationArea.MapStructure); }
+        public void EquipMapReward(string rewardId)
+        {
+            mapInteractions.EquipReward(mapRun, rewardId);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            MarkPresentation(UiPresentationArea.MapStructure);
+        }
         public void CalibrateMapAether()
         {
             RogueliteMapInteractionResult result = mapInteractions.CalibrateAether(mapRun);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
             MarkPresentation(UiPresentationArea.MapStructure);
             PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
-            SaveMapRun();
         }
         public void ReturnToMapRun() { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.ReturnToMap(); RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.MapStructure); }
         public void RequestReturnToLanding()
@@ -614,6 +729,11 @@ namespace OCC.Combat.Presentation
                 (clicked != null && !clicked.IsHero ? "「" + clicked.DisplayName + "」" : string.Empty), "1 行动点");
             AddContextActionIfLegal(actions, position, "搜刮", "loot", "搜刮这里", "1 行动点");
             AddContextActionIfLegal(actions, position, "互动", "interact", "与这里互动", "1 行动点");
+            for (int slot = 0; slot < RogueRuntimeConstants.ItemQuickbarSize; slot++)
+            {
+                if (!TryBuildContextArtifactAction(slot, position, out BattlefieldContextAction action)) continue;
+                actions.Add(action);
+            }
             for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++)
             {
                 if (!TryBuildContextSpellAction(slot, position, clicked, out BattlefieldContextAction action)) continue;
@@ -633,6 +753,15 @@ namespace OCC.Combat.Presentation
             if (actionId == "loot") { SelectHudAction("搜刮"); HandleCellClick(position); return; }
             if (actionId == "interact") { SelectHudAction("互动"); HandleCellClick(position); return; }
             if (actionId == "end-turn") { EndHeroTurn(); return; }
+            if (actionId.StartsWith("artifact:", StringComparison.Ordinal) &&
+                int.TryParse(actionId.Substring(9), out int artifactSlot))
+            {
+                ActivateInventoryQuickbar(artifactSlot);
+                ArtifactDefinition artifact = CurrentArmedArtifact;
+                if (artifact != null) TryArtifactCell(artifact,
+                    state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position), position);
+                return;
+            }
             if (actionId.StartsWith("spell:", StringComparison.Ordinal) &&
                 int.TryParse(actionId.Substring(6), out int slot) &&
                 string.IsNullOrEmpty(SpellShortcutFailureReason(slot)))
@@ -653,6 +782,27 @@ namespace OCC.Combat.Presentation
         {
             if (string.IsNullOrEmpty(battlefield.InvalidReasonForCell(state, action, position)))
                 actions.Add(new BattlefieldContextAction(id, label, detail));
+        }
+
+        private bool TryBuildContextArtifactAction(int slot, GridPosition position,
+            out BattlefieldContextAction action)
+        {
+            action = null;
+            if (state?.Ruleset != CombatRuleset.Roguelite || state.RogueEquipment == null ||
+                slot < 0 || slot >= RogueRuntimeConstants.ItemQuickbarSize) return false;
+            string instanceId = state.RogueEquipment.ItemQuickbarInstanceIds[slot];
+            RogueTacticalItemInstance tactical = state.RogueEquipment.TacticalItem(instanceId);
+            if (tactical == null || tactical.ChargesCurrent <= 0 ||
+                !ArtifactCatalog.All.Any(value => value.Id == tactical.DefinitionId)) return false;
+            ArtifactDefinition artifact = ArtifactCatalog.Get(tactical.DefinitionId);
+            // The anchor brace is a quickbar reaction and has no manual target selection.
+            if (artifact.Id == "G-T13") return false;
+            EnsureArtifactBattle();
+            if (!BuildArtifactTarget(artifact, position, out ArtifactTarget target) ||
+                !ArtifactEngine.Preview(artifactBattle, "hero", artifact, target, tactical.ChargesCurrent).CanCommit) return false;
+            action = new BattlefieldContextAction("artifact:" + slot,
+                "[战术栏 " + (slot + 1) + "] 使用「" + artifact.DisplayName + "」", artifact.PublicCost);
+            return true;
         }
 
         private bool TryBuildContextSpellAction(int slot, GridPosition position, UnitState clicked,
@@ -681,7 +831,7 @@ namespace OCC.Combat.Presentation
                 else
                 {
                     if (clicked == null || clicked.IsHero || Distance(hero.Position, position) > rogue.Range) return false;
-                    if (rogue.LineOfSightRule != "not_required" && !state.Map.HasLineOfSight(hero.Position, position)) return false;
+                    if (rogue.LineOfSightRule != "not_required" && !state.HasLineOfSight(hero.Position, position)) return false;
                 }
                 name = rogue.DisplayName;
                 cost = rogue.ActionPointCost + " 行动点　" + rogue.ManaCost + " 个人魔力";
@@ -726,6 +876,11 @@ namespace OCC.Combat.Presentation
             => BattlefieldCells.Build(state, currentLevel, fireBattle, selection, trainingRangeActive,
                 visualFeedback, position, FireSpellInSlot, BuildFireSpellPreviewAt,
                 TargetDamageForecast, EnemyIntent);
+        public void SetBattlefieldPreviewPosition(GridPosition position, bool active)
+        {
+            if (active && state?.Map.IsInside(position) == true) selection.SetPreviewPosition(position);
+            else selection.ClearPreviewPosition();
+        }
         public BattlefieldRect CurrentBattlefieldBoard => battlefieldViewport?.BoardRect ?? battlefield.BoardRect(state?.Map.Width ?? BattlefieldPresentationAdapter.DefaultWidth, state?.Map.Height ?? BattlefieldPresentationAdapter.DefaultHeight);
         public BattlefieldRect CurrentBattlefieldViewport => battlefieldViewport?.ViewportRect ?? battlefield.ViewportRect;
         public Vector2 GridToFeedbackPosition(GridPosition position)
@@ -737,6 +892,15 @@ namespace OCC.Combat.Presentation
         public EnemyTurnSequencePhase EnemyTurnPresentationPhase => enemyTurn.Phase;
         public string EnemyTurnPresentationUnitId => enemyTurn.UnitId;
         public string CurrentLevelId => currentLevel?.Id;
+        public Texture2D GetTestArenaGround(bool highResolution)
+        {
+            if (!CombatTestArenaEntry.IsDedicatedTestArena) return null;
+            // Retained for tooling compatibility; the modular arena no longer uses a board-wide
+            // texture. Callers should render the per-cell tile presentations instead.
+            return formalAssets.Academy(highResolution
+                ? "academy_test_ground_theme_slate_surface_64"
+                : "academy_test_ground_theme_slate_surface_32");
+        }
         public FireBattleState CurrentFireBattle => fireBattle;
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
         public string SelectedAction => selection.Action;
@@ -789,6 +953,8 @@ namespace OCC.Combat.Presentation
             {
                 OCC.Combat.Roguelite.SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(slot);
                 if (rogue == null) return new CombatActionPreview(action, "空术式槽", "0 行动", "未装备术式", 0, "术式槽为空");
+                FireSpellDefinition personal = FireSpellCatalog.All.FirstOrDefault(value => value.Id == rogue.DefinitionId);
+                if (personal != null) return BuildPersonalFireSpellActionPreview(action, personal);
                 int validTargets = rogue.Targeting == "self" ? 1 : state.Units.Values.Count(unit => unit.IsAlive && unit.IsHero != state.GetUnit("hero").IsHero);
                 return new CombatActionPreview(action, RogueliteSettlementPresentation.RogueSpellTargetSummary(rogue),
                     rogue.ActionPointCost + " 行动 + " + rogue.ManaCost + " 个人魔力",
@@ -797,21 +963,43 @@ namespace OCC.Combat.Presentation
             }
             FireSpellDefinition spell = slot < 0 ? null : FireSpellInSlot(slot);
             if (spell == null || state == null) return availability.Preview(state, action, selection.TargetId);
-            if (fireBattle == null || fireBattle.Combat != state) fireBattle = new FireBattleState(state);
+            return BuildPersonalFireSpellActionPreview(action, spell);
+        }
+        private CombatActionPreview BuildPersonalFireSpellActionPreview(string action, FireSpellDefinition spell)
+        {
+            if (fireBattle == null || fireBattle.Combat != state)
+                fireBattle = state.RogueSpells?.FireBattle ?? new FireBattleState(state);
             int valid = 0;
             for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++) if (IsFireSpellCellValid(spell, new GridPosition(x, y))) valid++;
             string failure = string.Empty;
+            string before = string.Empty;
+            string after = string.Empty;
+            string breakdown = string.Empty;
+            string statuses = string.Empty;
+            int affected = 0;
+            bool friendlyFire = false;
             UnitState selected = string.IsNullOrEmpty(selection.TargetId) ? null : state.GetUnit(selection.TargetId);
             if (selected != null)
             {
-                FireSpellPreview exact = FireSpellEngine.Preview(fireBattle, "hero", spell, FireSpellTarget.Unit(selected.Id, DirectionToward(state.GetUnit("hero").Position, selected.Position)));
+                FireSpellTarget target = FireSpellTarget.Unit(selected.Id, DirectionToward(state.GetUnit("hero").Position, selected.Position));
+                FireSpellPreview exact = FireSpellEngine.Preview(fireBattle, "hero", spell, target);
                 failure = string.Join("；", exact.Failures);
+                affected = exact.UnitIds.Count;
+                friendlyFire = exact.FriendlyFireRisk;
+                if (exact.CanCommit && spell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.WeaponDamage))
+                {
+                    CombatTargetDamageForecast forecast = CombatTargetDamageForecaster.FireSpell(fireBattle, "hero", spell, target, selected.Id);
+                    before = "生命 " + selected.Health + "　护盾 " + selected.Shield;
+                    after = "生命 " + forecast.RemainingHealth + "　护盾 " + forecast.RemainingShield;
+                    breakdown = forecast.PlayerSummary.Replace('\n', '；');
+                }
             }
             else if (valid == 0) failure = "现在没有可以选择的目标";
             string effects = RogueliteSettlementPresentation.FireSpellPlayerSummary(spell);
             string targetSummary = RogueliteSettlementPresentation.FireSpellTargetSummary(spell);
             return new CombatActionPreview(action, targetSummary,
                 spell.ActionPointCost + " 行动 + " + spell.ManaCost + " 以太", effects, valid, failure,
+                before, after, breakdown, statuses, affected, friendlyFire,
                 actionValueTargetId: spell.InitiativeDelay > 0 ? "hero" : string.Empty, actionValueDelay: spell.InitiativeDelay);
         }
         private bool IsFireSpellCellValid(FireSpellDefinition spell, GridPosition position)
@@ -1003,12 +1191,29 @@ namespace OCC.Combat.Presentation
         public void RequestLeaveCombat()
         {
             if (!IsDeveloperCombatActive) return;
+            bool returningToTestSelection = CombatTestArenaEntry.IsDedicatedTestArena;
             RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.LeaveCombat, "离开这场战斗？",
-                "离开后，这场战斗中的收获和损失都不会留下。你会回到地图。", "离开并返回地图"), () =>
+                returningToTestSelection
+                    ? "离开后，本场测试的状态不会保留。你会回到测试战斗选择。"
+                    : "离开后，这场战斗中的收获和损失都不会留下。你会回到地图。",
+                returningToTestSelection ? "离开并返回测试选择" : "离开并返回地图"), () =>
                 {
-                    if (mapRun != null) ReturnToMapRun();
+                    if (returningToTestSelection) ReturnToDedicatedTestArenaSelection();
+                    else if (mapRun != null) ReturnToMapRun();
                     else ReturnToDeveloperMenu();
                 });
+        }
+
+        private void ReturnToDedicatedTestArenaSelection()
+        {
+            developerFlow.ReturnToDeveloperMenu();
+            state = developerFlow.State;
+            selection.Reset();
+            outcomeSettlement.Reset();
+            rogueliteFlow.Reset();
+            RefreshSceneHud();
+            OpenDedicatedTestArenaSelection();
+            MarkPresentation(UiPresentationArea.Flow);
         }
         public void RequestConfirmation(UiConfirmationRequest request, Action onConfirm) => interactionLayer?.RequestConfirmation(request, onConfirm);
         public void ShowUiFeedback(UiActionFeedback feedback) => interactionLayer?.ShowFeedback(feedback);
@@ -1092,6 +1297,8 @@ namespace OCC.Combat.Presentation
             {
                 SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(slot);
                 if (rogue == null) return "术式槽 " + (slot + 1) + " 为空；请在战斗外重新编组。";
+                if (string.Equals(rogue.Role, "passive", StringComparison.Ordinal))
+                    return rogue.DisplayName + "是被动术式，装备后已经自动生效，无需选择目标。";
                 int cooldown = state.RogueSpells.CooldownRemaining(rogue.DefinitionId);
                 if (cooldown > 0) return rogue.DisplayName + "还需等待 " + cooldown + " 个自身回合。";
                 if (hero.ActionPoints < rogue.ActionPointCost)
@@ -1224,7 +1431,7 @@ namespace OCC.Combat.Presentation
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "术式未掌握、已在其他槽位，或槽位无效"));
                 return false;
             }
-            SaveMapRun();
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return false; }
             MarkPresentation(UiPresentationArea.MapStructure);
             MarkPresentation(UiPresentationArea.Combat);
             ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, string.IsNullOrEmpty(spellId) ? "已移除槽位术式" : "术式编组已保存"));
@@ -1237,7 +1444,11 @@ namespace OCC.Combat.Presentation
             RogueEquipmentRuntime runtime = combatRuntime ? state.RogueEquipment : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState);
             if (!operation(runtime)) { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, failure)); return false; }
             if (combatRuntime) PersistCombatInventory();
-            else { runtime.WriteToDto(mapRun.RogueRunState); SaveMapRun(); }
+            else
+            {
+                runtime.WriteToDto(mapRun.RogueRunState);
+                if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return false; }
+            }
             MarkPresentation(combatRuntime ? UiPresentationArea.Combat : UiPresentationArea.MapStructure);
             ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, success)); return true;
         }
@@ -1364,6 +1575,7 @@ namespace OCC.Combat.Presentation
         private void ResetEnemyTurnSequence()
         {
             enemyTurn.Reset();
+            enemyPlans.Invalidate();
             visualFeedback?.CancelEnemyAction();
         }
 
@@ -1391,9 +1603,9 @@ namespace OCC.Combat.Presentation
         {
             int slot = RogueSkillSlot(selection.Action);
             FireSpellDefinition fireSpell = slot < 0 ? null : FireSpellInSlot(slot);
-            bool artifactArmed = slot == 0 && (CurrentArmedArtifact != null || CurrentTrainingRangeArtifact != null);
+            ArtifactDefinition artifact = slot == 0 ? (CurrentArmedArtifact ?? CurrentTrainingRangeArtifact) : null;
             CombatTargetForecastResult result = targetForecasts.Evaluate(
-                battlefield, state, fireBattle, selection.Action, enemy, fireSpell, artifactArmed);
+                battlefield, state, fireBattle, selection.Action, enemy, fireSpell, artifact, CurrentArmedUses);
             fireBattle = result.FireBattle;
             return result.Forecast;
         }
@@ -1419,6 +1631,12 @@ namespace OCC.Combat.Presentation
             selection.EndKeyboardTargeting();
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
+            ArtifactDefinition artifact = CurrentArmedArtifact ?? CurrentTrainingRangeArtifact;
+            if (selection.Action == "技能1" && artifact != null)
+            {
+                TryArtifactCell(artifact, clickedUnit, p);
+                return;
+            }
             int fireSlot = RogueSkillSlot(selection.Action);
             if (fireSlot >= 0 && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
             {
@@ -1434,8 +1652,6 @@ namespace OCC.Combat.Presentation
                 TryFireSpellCell(fireSpell, clickedUnit, p);
                 return;
             }
-            ArtifactDefinition artifact = CurrentArmedArtifact ?? CurrentTrainingRangeArtifact;
-            if (selection.Action == "技能1" && artifact != null) { TryArtifactCell(artifact, clickedUnit, p); return; }
             string invalidReason = battlefield.InvalidReasonForCell(state, selection.Action, p);
             if (!string.IsNullOrEmpty(invalidReason))
             {

@@ -14,8 +14,8 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(VALIDATOR)
 
 CONTRACT = VALIDATOR.read_json(Path(__file__).resolve().with_name("occ_art_contract_v1.json"))
-V01 = ROOT / "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v01"
-V02 = ROOT / "Worldbuilding/05_美术与音频/正式美术生产/M-A18/QA/asset_stability_test_v02"
+CHARACTER = ROOT / "UnityProject/Reports/CombatTestArena/native32_character_test/adaptive_canvas_v1/field_technician_native32x64_manifest.json"
+CHEST = ROOT / "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_manifest.json"
 
 
 class OccArtContractTests(unittest.TestCase):
@@ -26,13 +26,8 @@ class OccArtContractTests(unittest.TestCase):
     def test_contract_documents_are_consistent(self):
         self.assertEqual(VALIDATOR.audit_contract(CONTRACT, ROOT), [])
 
-    def test_two_stability_batches_pass_the_single_contract(self):
-        manifests = [
-            V01 / "academy_communal_wood_table.occ-art.json",
-            V01 / "seasoning_bottle.occ-art.json",
-            V02 / "wooden_sapphire_staff.occ-art.json",
-            V02 / "academy_dormitory_bed.occ-art.json",
-        ]
+    def test_approved_adaptive_candidates_pass_the_single_contract(self):
+        manifests = [CHARACTER, CHEST]
         for path in manifests:
             with self.subTest(path=path.name):
                 errors, result = self.validate(path)
@@ -40,30 +35,37 @@ class OccArtContractTests(unittest.TestCase):
                 self.assertEqual(result["status"], "PASS")
 
     def test_semantic_blue_loss_is_rejected(self):
-        manifest = VALIDATOR.read_json(V02 / "wooden_sapphire_staff.occ-art.json")
+        manifest = VALIDATOR.read_json(CHARACTER)
         manifest = copy.deepcopy(manifest)
         manifest["delivery"]["required_color_families"][0]["min_opaque_pixels"] = 999
         errors, _ = VALIDATOR.validate_manifest(manifest, CONTRACT, ROOT)
-        self.assertTrue(any("required color family blue" in error for error in errors), errors)
+        self.assertTrue(any("required color family cyan" in error for error in errors), errors)
 
-    def test_two_cell_bed_cannot_be_declared_as_single_cell(self):
-        manifest = VALIDATOR.read_json(V02 / "academy_dormitory_bed.occ-art.json")
+    def test_adaptive_single_cell_prop_cannot_claim_two_cells(self):
+        manifest = VALIDATOR.read_json(CHEST)
         manifest = copy.deepcopy(manifest)
-        manifest["role"] = "single_cell_prop_32"
-        manifest["delivery"]["logical_cells"] = [1, 1]
+        manifest["delivery"]["logical_cells"] = [2, 1]
         errors, _ = VALIDATOR.validate_manifest(manifest, CONTRACT, ROOT)
-        self.assertTrue(any("delivery size" in error for error in errors), errors)
+        self.assertTrue(any("logical_cells" in error for error in errors), errors)
 
-    def test_new_battlefield_roles_use_64px_delivery(self):
+    def test_new_battlefield_roles_use_32ppu_adaptive_canvases(self):
         roles = CONTRACT["roles"]
-        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_floor_tile_64"], [1, 1]), (64, 64))
-        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_single_cell_prop_64"], [1, 1]), (64, 64))
-        self.assertEqual(VALIDATOR.expected_size(roles["battlefield_multi_cell_prop_64"], [2, 3]), (128, 192))
-        self.assertEqual(roles["battlefield_single_cell_prop_64"]["primary_readable_bounds_max"], [48, 48])
-        self.assertEqual(roles["battlefield_single_cell_prop_64"]["low_resolution_companion"]["delivery_size"], [32, 32])
+        self.assertEqual(VALIDATOR.expected_size(roles["floor_tile_32"], [1, 1]), (32, 32))
+        self.assertEqual(VALIDATOR.expected_size(roles["tactical_unit_32x64"], [1, 1]), (32, 64))
+        self.assertIsNone(VALIDATOR.expected_size(roles["single_cell_prop_adaptive_32ppu"], [1, 1]))
+        self.assertEqual(roles["single_cell_prop_adaptive_32ppu"]["unity_ppu"], 32)
+        self.assertEqual(roles["single_cell_prop_adaptive_32ppu"]["logical_cells"], [1, 1])
+
+    def test_legacy_64px_role_cannot_create_a_new_candidate(self):
+        manifest = VALIDATOR.read_json(CHEST)
+        manifest = copy.deepcopy(manifest)
+        manifest["role"] = "battlefield_single_cell_prop_64"
+        manifest["status"] = "QA_PENDING"
+        errors, _ = VALIDATOR.validate_manifest(manifest, CONTRACT, ROOT)
+        self.assertTrue(any("historical FORMAL assets only" in error for error in errors), errors)
 
     def test_forbidden_generation_route_is_rejected(self):
-        manifest = VALIDATOR.read_json(V02 / "wooden_sapphire_staff.occ-art.json")
+        manifest = VALIDATOR.read_json(CHARACTER)
         manifest = copy.deepcopy(manifest)
         manifest["provenance"]["source_channel"] = "local_workbench"
         manifest["provenance"]["source_descriptor"] = "localhost fallback"
@@ -72,7 +74,7 @@ class OccArtContractTests(unittest.TestCase):
         self.assertTrue(any("forbidden source route" in error for error in errors), errors)
 
     def test_formal_candidate_without_human_review_is_rejected(self):
-        manifest = VALIDATOR.read_json(V01 / "academy_communal_wood_table.occ-art.json")
+        manifest = VALIDATOR.read_json(CHARACTER)
         manifest = copy.deepcopy(manifest)
         manifest["human_review"]["overall"] = "PENDING"
         manifest["human_review"]["application"] = "PENDING"

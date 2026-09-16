@@ -1,0 +1,17 @@
+{
+  "schema": "occ-visual-assembly-review-v1",
+  "status": "VISUAL_REVIEW_READY",
+  "asset_id": "assembly.academy_courtyard.2x2_spatial_min.v1",
+  "source_channel": "codex_builtin_imagegen",
+  "source_path": "ArtSource/academy_courtyard_2x2_min_validation_v1/sources/academy_2x2_spatial_assembly_review_v1.png",
+  "source_sha256": "d53d5ac72eaed6d6c62b3660f704a66806c80dcfd8eb3569f79a81d3148cea84",
+  "purpose": "Minimum visual validation of the 2x2 modular battlefield relationship. This is a review board, not a Unity-ready atlas or a single runtime texture.",
+  "validated_relationships": [
+    "four equal walkable tiles meet at one clean central grid intersection",
+    "the regular tactical grid reads as stone seams",
+    "front, left and right platform faces share one oblique perspective",
+    "one environment prop is anchored to a tile and casts a local shadow",
+    "rear wall and low-detail background establish depth without entering the play area"
+  ],
+  "next_step": "After direction approval, extract separate native 32x32 surface, 32x40 front/left/right edge pieces, wall modules and the already-approved planter prop."
+}

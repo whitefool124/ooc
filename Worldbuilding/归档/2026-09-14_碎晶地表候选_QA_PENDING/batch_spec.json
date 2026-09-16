@@ -1,0 +1,27 @@
+{
+  "batch_id": "academy_crystal_shard_terrain_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/application_contact_4x.png",
+  "human_review": {
+    "status": "REJECTED_SKIPPED_AFTER_THREE_ATTEMPTS",
+    "reviewer": "user_feedback_and_pipeline",
+    "date": "2026-09-14",
+    "reason": "第二轮虽然通过机器门槛，但不符合用户指出的历史优秀晶簇家族语言；第三轮按历史原料校正后主体网格置信度仅 1.0343，低于 1.2。依用户规则三轮后跳过，不再追加生成。"
+  },
+  "items": [
+    {
+      "id": "academy_crystal_shard_terrain_candidate",
+      "role": "single_cell_terrain_overlay_32",
+      "source": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/source/crystal_shard_round2_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_candidate.png",
+      "qa": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round1_qa.json",
+        "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round2_qa.json",
+        "Worldbuilding/归档/2026-09-14_碎晶地表候选_QA_PENDING/crystal_shard/round3_qa.json"
+      ],
+      "selected_round": null,
+      "palette_max": 9
+    }
+  ]
+}

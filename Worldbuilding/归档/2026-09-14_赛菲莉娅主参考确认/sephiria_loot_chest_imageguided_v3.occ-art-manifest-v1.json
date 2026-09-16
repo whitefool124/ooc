@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_loot_chest_imageguided_v3",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "沿用独立Image造型参考，针对用户指出的圆顶错读与分面不清重新设计；本地v3改为硬矩形外轮廓，并将亮顶面、深色箱盖前沿和下箱体分为三个连续色面。64px与32px分别原生重绘，未采样、描摹、缩放、量化或重着色参考稿像素。重绘脚本 Tools/OCCArt/draw_imageguided_loot_chest_v3.py，SHA256 98219dc753d9239f583d5f3a343fe6b2830b6d158021f1f598e1dba6109662d0",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_loot_chest_image_reference_v2.png",
+    "source_sha256": "defdc586f8014803c3beb05ad281bdcbb6981f82ba1b6be0ba14b0d1aac7aea1"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_imageguided_v3_64.png",
+    "output_sha256": "e362e0db7a937b9ed3df3d09308731db7c9e98f576755abc0e9cda9461509148",
+    "logical_cells": [1, 1],
+    "palette_max": 14,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_imageguided_v3_32.png",
+      "output_sha256": "24c43aa17f940aff4a1d22aaed579a85e57e38b8c6042f54416682db29ff993e",
+      "palette_max": 10
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_imageguided_v3_64_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_imageguided_v3_64_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_imageguided_v3_64_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_imageguided_v3_64_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_imageguided_v3_64_ground_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "针对v2圆顶错读重做；箱体外轮廓为硬矩形，内部透视不改变外轮廓，顶面／箱盖前沿／下箱体以明度和水平结构明确分开"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_imageguided_v3_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

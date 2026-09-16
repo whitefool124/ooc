@@ -1,0 +1,51 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_heavy_cover_intact_pixel_density_v5",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "组合级像素密度统一：方形学院工业重掩体独立原料",
+    "source_path": "Worldbuilding/归档/2026-09-13_像素密度统一修复/source/heavy_cover_v5_64_source.png",
+    "source_sha256": "56718961063331C10BD4CD1D6087EDAEF58E294EFE06A8CA21775C74C97C60AB",
+    "low_source_path": "Worldbuilding/归档/2026-09-13_像素密度统一修复/source/heavy_cover_v5_32_source.png",
+    "low_source_sha256": "3E69C34D3123159CD3649536B14EFD9D0B4431E3A1734AFEC5E244BA7C91D24F"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_64.png",
+    "output_sha256": "59B2D939BECAB50425690B1A5304688B2040939686EA5320147AA14B61EC333C",
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 14,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_32.png",
+      "output_sha256": "A5AAE4E3976F6BF3AA3FF15C3B944E754A3C5992388EC363014DD5C1C2B67A53",
+      "palette_max": 10
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena 完整重掩体占一格；主体约45×44，阻挡移动与攻击线",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-13_像素密度统一修复/evidence/heavy_cover_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-13_像素密度统一修复/evidence/heavy_cover_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-13_像素密度统一修复/evidence/heavy_cover_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-13_像素密度统一修复/evidence/heavy_cover_checker.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/pixel_density_combo_final_with_crate_v2_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "组合级像素密度样板，待人工审美确认"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_heavy_cover_intact_64.png",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

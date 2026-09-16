@@ -225,8 +225,7 @@ namespace OCC.Combat
             new FormalEquipmentArtEntry("ACA-EQ-CR01", "aca_eq_cr01"),
             new FormalEquipmentArtEntry("ACA-EQ-CR02", "aca_eq_cr02"),
             new FormalEquipmentArtEntry("ACA-EQ-CR03", "aca_eq_cr03"),
-            // First-run CR04 has frozen gameplay but approved placeholder art; the item name/details remain explicit in UI.
-            new FormalEquipmentArtEntry("ACA-EQ-CR04", "aca_eq_cr03"),
+            new FormalEquipmentArtEntry("ACA-EQ-CR04", "aca_eq_cr04"),
             new FormalEquipmentArtEntry("ACA-EQ-DG01", "aca_eq_dg01"),
             new FormalEquipmentArtEntry("ACA-EQ-DG02", "aca_eq_dg02"),
             new FormalEquipmentArtEntry("ACA-EQ-AC01", "aca_eq_ac01"),

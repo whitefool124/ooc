@@ -34,6 +34,8 @@ namespace OCC.Combat.Tests
                 CurrentMapRun.AbandonCurrentReward(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
             }
 
+            public void OpenRewardInventory() { }
+
             public void PublishUiVisual(UiVisualEvent visualEvent) { }
             public void ShowUiFeedback(UiActionFeedback feedback) { LastFeedback = feedback; }
         }

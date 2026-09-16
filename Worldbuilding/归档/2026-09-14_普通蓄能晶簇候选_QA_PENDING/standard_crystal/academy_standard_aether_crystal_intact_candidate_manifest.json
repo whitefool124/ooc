@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_standard_aether_crystal_qa_v1_academy_standard_aether_crystal_intact_candidate",
+  "role": "single_cell_destructible_crystal_prop_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/source/standard_crystal_round3_source.png",
+    "source_sha256": "8fce238bb98c157f9a00979cef6c2a649b22786e646922e18580645adf2c81ea"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_candidate.png",
+    "output_sha256": "8ef7c049bb8d873bbbaaf94a2829fdad5490866c3766e653049dea6271839e86",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_candidate.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_candidate_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/round3_candidate_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/standard_crystal/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_普通蓄能晶簇候选_QA_PENDING/application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "REJECTED_SUPERSEDED_BY_2026_09_10_CRYSTAL_FAMILY",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Superseded after the user pointed to the stronger 2026-09-10 crystal family. The gemstone-on-mechanical-foot silhouette is not the active direction; no Unity import or formal promotion."
+  },
+  "unity_import": null
+}

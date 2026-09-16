@@ -94,6 +94,18 @@ namespace OCC.Combat
             return Build(before, after, neutralAfter);
         }
 
+        public static CombatTargetDamageForecast Artifact(CombatState liveState, string sourceId,
+            ArtifactDefinition artifact, ArtifactTarget target, string targetId, int remainingUses)
+        {
+            if (liveState == null) throw new ArgumentNullException(nameof(liveState));
+            if (artifact == null) throw new ArgumentNullException(nameof(artifact));
+            UnitState before = RequiredTarget(liveState, targetId);
+            CombatState clone = liveState.Clone();
+            ArtifactEngine.Execute(new ArtifactBattleState(clone), sourceId, artifact, target, remainingUses);
+            UnitState after = RequiredTarget(clone, targetId);
+            return Build(before, after, after);
+        }
+
         private static CombatTargetDamageForecast Build(UnitState before, UnitState after, UnitState neutralAfter)
         {
             int shieldLoss = Math.Max(0, before.Shield - after.Shield);

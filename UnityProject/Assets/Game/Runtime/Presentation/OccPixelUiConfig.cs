@@ -67,6 +67,7 @@ namespace OCC.Combat.Presentation
         private static Dictionary<string, OccPixelUiStateEntry> states;
         private static Dictionary<string, OccPixelUiLayoutEntry> layouts;
         private static Dictionary<string, Color> palette;
+        private static int loadedTextHash;
 
         public static OccPixelUiConfigData Data
         {
@@ -127,7 +128,12 @@ namespace OCC.Combat.Presentation
 
         private static void EnsureLoaded()
         {
-            if (data == null) Load();
+            // TextAssets can be reimported without a domain reload (notably in
+            // EditMode tests and during live UI iteration). Detect that case so
+            // callers never keep serving a stale layout contract.
+            TextAsset asset = Resources.Load<TextAsset>(ResourcePath);
+            int currentHash = asset == null ? 0 : asset.text.GetHashCode();
+            if (data == null || currentHash != loadedTextHash) Load();
         }
 
         private static void Load()
@@ -135,6 +141,7 @@ namespace OCC.Combat.Presentation
             TextAsset asset = Resources.Load<TextAsset>(ResourcePath);
             if (asset == null) throw new InvalidOperationException("Missing pixel UI config: " + ResourcePath);
             data = JsonUtility.FromJson<OccPixelUiConfigData>(asset.text);
+            loadedTextHash = asset.text.GetHashCode();
             if (data == null) throw new InvalidOperationException("Invalid pixel UI config JSON: " + ResourcePath);
             data.skins = data.skins ?? Array.Empty<OccPixelUiSkinEntry>();
             data.states = data.states ?? Array.Empty<OccPixelUiStateEntry>();

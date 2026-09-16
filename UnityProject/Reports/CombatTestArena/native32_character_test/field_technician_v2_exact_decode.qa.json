@@ -1,0 +1,39 @@
+{
+  "status": "REJECT_SOURCE_EXCEEDS_32",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "inferred_logical_grid": [
+    64,
+    64
+  ],
+  "border_run_observations": [
+    65,
+    65,
+    65,
+    65
+  ],
+  "subject_bounds_on_logical_grid": [
+    23,
+    13,
+    42,
+    57
+  ],
+  "subject_logical_size": [
+    19,
+    44
+  ],
+  "target_canvas": [
+    32,
+    32
+  ],
+  "safe_border": 1,
+  "decoded_visible_colours": 437,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "output_subject_equals_decoded_subject_pixel_for_pixel": false,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "resampling_performed": false,
+  "new_colours_introduced": false,
+  "detail_loss_allowed": false
+}

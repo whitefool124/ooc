@@ -41,8 +41,10 @@ namespace OCC.Combat
         public StatusType Status { get; }
         public int Duration { get; }
         public GridPosition Destination { get; }
+        public string SourceContentId { get; }
 
-        private CombatEffect(CombatEffectKind kind, string targetUnitId, int amount, StatusType status, int duration, GridPosition destination)
+        private CombatEffect(CombatEffectKind kind, string targetUnitId, int amount, StatusType status, int duration,
+            GridPosition destination, string sourceContentId = null)
         {
             Kind = kind;
             TargetUnitId = targetUnitId;
@@ -50,6 +52,7 @@ namespace OCC.Combat
             Status = status;
             Duration = duration;
             Destination = destination;
+            SourceContentId = sourceContentId ?? string.Empty;
         }
 
         public static CombatEffect SpendActionPoints(int amount) => new CombatEffect(CombatEffectKind.SpendActionPoints, null, amount, default, 0, default);
@@ -57,13 +60,15 @@ namespace OCC.Combat
         public static CombatEffect AbsorbShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.AbsorbShield, targetUnitId, amount, default, 0, default);
         public static CombatEffect DamageHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.DamageHealth, targetUnitId, amount, default, 0, default);
         public static CombatEffect RestoreHealth(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreHealth, targetUnitId, amount, default, 0, default);
-        public static CombatEffect RestoreShield(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreShield, targetUnitId, amount, default, 0, default);
+        public static CombatEffect RestoreShield(string targetUnitId, int amount, string sourceContentId = null) =>
+            new CombatEffect(CombatEffectKind.RestoreShield, targetUnitId, amount, default, 0, default, sourceContentId);
         public static CombatEffect RestoreMana(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreMana, targetUnitId, amount, default, 0, default);
         public static CombatEffect ApplyStatus(string targetUnitId, StatusType status, int duration) => new CombatEffect(CombatEffectKind.ApplyStatus, targetUnitId, 0, status, duration, default);
         public static CombatEffect ClearStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.ClearStatus, targetUnitId, 0, status, 0, default);
         public static CombatEffect TriggerStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.TriggerStatus, targetUnitId, 0, status, 0, default);
         public static CombatEffect ReduceStatusDuration(string targetUnitId, StatusType status, int amount = 1) => new CombatEffect(CombatEffectKind.ReduceStatusDuration, targetUnitId, amount, status, 0, default);
         public static CombatEffect Move(GridPosition destination) => new CombatEffect(CombatEffectKind.Move, null, 0, default, 0, destination);
+        public static CombatEffect Move(string targetUnitId, GridPosition destination) => new CombatEffect(CombatEffectKind.Move, targetUnitId, 0, default, 0, destination);
         public static CombatEffect DamageObject(GridPosition destination, int amount) => new CombatEffect(CombatEffectKind.DamageObject, null, amount, default, 0, destination);
         public static CombatEffect DelayInitiative(int amount) => new CombatEffect(CombatEffectKind.DelayInitiative, null, amount, default, 0, default);
     }
@@ -126,6 +131,15 @@ namespace OCC.Combat
         public IReadOnlyList<CombatEffectResult> Results => results;
 
         internal CombatEffectExecution(CombatEffectResult[] results) => this.results = results ?? Array.Empty<CombatEffectResult>();
+
+        public static CombatEffectExecution Combine(params CombatEffectExecution[] executions)
+        {
+            if (executions == null || executions.Length == 0) return Empty;
+            var merged = new List<CombatEffectResult>();
+            foreach (CombatEffectExecution execution in executions)
+                if (execution != null && execution.Results.Count > 0) merged.AddRange(execution.Results);
+            return merged.Count == 0 ? Empty : new CombatEffectExecution(merged.ToArray());
+        }
     }
 
     public static class CombatEffectExecutor
@@ -169,8 +183,9 @@ namespace OCC.Combat
                 }
                 else if (effect.Kind == CombatEffectKind.Move)
                 {
+                    string movingId = string.IsNullOrEmpty(effect.TargetUnitId) ? source.Id : effect.TargetUnitId;
                     if (!state.Map.IsInside(effect.Destination) || state.Map.IsBlocked(effect.Destination) ||
-                        state.IsOccupied(effect.Destination, source.Id))
+                        state.IsOccupied(effect.Destination, movingId))
                         throw new InvalidOperationException("Effect movement destination is not legal.");
                 }
                 else if (effect.Kind == CombatEffectKind.DamageObject && !state.Map.IsInside(effect.Destination))
@@ -224,7 +239,13 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.RestoreShield:
                     before = target.Shield;
-                    target.RestoreShield(effect.Amount);
+                    if (state.Ruleset == CombatRuleset.Roguelite)
+                    {
+                        string sourceContentId = string.IsNullOrWhiteSpace(effect.SourceContentId)
+                            ? source.Id + ":shield" : effect.SourceContentId;
+                        state.TryGrantRogueliteShield(target.Id, sourceContentId, effect.Amount);
+                    }
+                    else target.RestoreShield(effect.Amount);
                     after = target.Shield;
                     applied = after - before;
                     break;
@@ -263,10 +284,10 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.Move:
                     before = 0;
-                    source.MoveTo(effect.Destination);
+                    target.MoveTo(effect.Destination);
                     after = 0;
                     applied = 0;
-                    positionAfter = source.Position;
+                    positionAfter = target.Position;
                     break;
                 case CombatEffectKind.DamageObject:
                     TileState tile = state.Map.GetTile(effect.Destination);

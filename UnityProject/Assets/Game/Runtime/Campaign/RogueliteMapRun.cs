@@ -48,7 +48,7 @@ namespace OCC.Combat
         }
     }
 
-    public enum RogueliteRewardKind { Weapon, Spell, Item, Equipment }
+    public enum RogueliteRewardKind { Weapon, Spell, Item, Equipment, TacticalItem }
 
     public static class FireRogueliteStarterCatalog
     {
@@ -145,6 +145,7 @@ namespace OCC.Combat
         public OCC.Combat.Roguelite.SpellDefinition RogueSpell { get; }
         public ItemDefinition Item { get; }
         public OCC.Combat.Roguelite.EquipmentDefinition Equipment { get; }
+        public OCC.Combat.Roguelite.TacticalItemDefinition TacticalItem { get; }
         public RogueliteReward(string id, string displayName, WeaponDefinition weapon, string buildPath) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Weapon; Weapon = weapon; BuildPath = buildPath; }
         public RogueliteReward(string id, string displayName, SkillDefinition spell, string buildPath) { Id = id; DisplayName = displayName; Kind = RogueliteRewardKind.Spell; Spell = spell; BuildPath = buildPath; }
         public RogueliteReward(OCC.Combat.Roguelite.SpellDefinition spell, string buildPath)
@@ -152,6 +153,8 @@ namespace OCC.Combat
         public RogueliteReward(ItemDefinition item, string buildPath) { Item = item ?? throw new ArgumentNullException(nameof(item)); Id = item.Id; DisplayName = item.DisplayName; Kind = RogueliteRewardKind.Item; BuildPath = buildPath; }
         public RogueliteReward(OCC.Combat.Roguelite.EquipmentDefinition equipment, string buildPath)
         { Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment)); Id = equipment.DefinitionId; DisplayName = equipment.DisplayName; Kind = RogueliteRewardKind.Equipment; BuildPath = buildPath; }
+        public RogueliteReward(OCC.Combat.Roguelite.TacticalItemDefinition tactical, string buildPath)
+        { TacticalItem = tactical ?? throw new ArgumentNullException(nameof(tactical)); Id = tactical.DefinitionId; DisplayName = tactical.DisplayName; Kind = RogueliteRewardKind.TacticalItem; BuildPath = buildPath; }
     }
 
     public static class RogueliteMapCatalog
@@ -406,6 +409,19 @@ namespace OCC.Combat
                         if (spell != null) return new RogueliteReward(spell, "首次体验固定奖励");
                         OCC.Combat.Roguelite.EquipmentDefinition equipment = firstRunCatalog.Equipment.FirstOrDefault(value => value.DefinitionId == id);
                         return equipment == null ? null : new RogueliteReward(equipment, "首次体验固定奖励");
+                    }).Where(value => value != null).ToArray();
+                }
+                if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && rogueRunDto.PendingRewardIds.Count > 0)
+                {
+                    OCC.Combat.Roguelite.RogueContentCatalog pendingCatalog = OCC.Combat.Roguelite.RogueContentCatalog.CreateAcademyV01();
+                    return rogueRunDto.PendingRewardIds.Select(id =>
+                    {
+                        OCC.Combat.Roguelite.SpellDefinition spell = pendingCatalog.Spells.FirstOrDefault(value => value.DefinitionId == id);
+                        if (spell != null) return new RogueliteReward(spell, "事件结算");
+                        OCC.Combat.Roguelite.EquipmentDefinition equipment = pendingCatalog.Equipment.FirstOrDefault(value => value.DefinitionId == id);
+                        if (equipment != null) return new RogueliteReward(equipment, "事件结算");
+                        OCC.Combat.Roguelite.TacticalItemDefinition tactical = pendingCatalog.TacticalItems.FirstOrDefault(value => value.DefinitionId == id);
+                        return tactical == null ? null : new RogueliteReward(tactical, "事件结算");
                     }).Where(value => value != null).ToArray();
                 }
                 if (rogueRunDto == null) return RogueliteMapCatalog.RollFireSupportRewards(Seed, completed.Count, RogueliteMapCatalog.Node(CurrentNodeId).Type, Inventory.Items.Select(item => item.DefinitionId));
@@ -731,8 +747,19 @@ namespace OCC.Combat
                 rogueRunDto.StageContribution -= choice.ContributionCost;
             }
             PendingContentChoiceId = choice.Id;
-            if (choice.RequiresCombat) { PendingContentCombatMissionId = choice.CombatMissionId; return; }
+            if (choice.RequiresCombat)
+            {
+                PendingContentCombatMissionId = choice.CombatMissionId;
+                if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId) && !rogueRunDto.PendingRewardIds.Contains(choice.RewardId))
+                    rogueRunDto.PendingRewardIds.Add(choice.RewardId);
+                return;
+            }
+            if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId) && !rogueRunDto.PendingRewardIds.Contains(choice.RewardId))
+            {
+                rogueRunDto.PendingRewardIds.Add(choice.RewardId);
+            }
             ApplyContentChoice(choice); Complete(node, !UsesRogue11 && node.Type == RogueliteMapNodeType.Treasure); PendingContentChoiceId = null;
+            if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId)) AwaitingReward = true;
         }
         public void CompletePendingContentCombat()
         {
@@ -740,6 +767,7 @@ namespace OCC.Combat
             RogueliteNodeContentChoice choice = ResolveContentChoice(RogueliteMapCatalog.Node(CurrentNodeId), PendingContentChoiceId);
             ApplyContentChoice(choice); Complete(RogueliteMapCatalog.Node(CurrentNodeId), false);
             PendingContentChoiceId = null; PendingContentCombatMissionId = null;
+            if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId)) AwaitingReward = true;
         }
         private RogueliteNodeContentChoice ResolveContentChoice(RogueliteMapNode node, string choiceId)
         {
@@ -754,6 +782,11 @@ namespace OCC.Combat
             if ((!node.IsCombat && !HasPendingContentCombat) || completed.Contains(node.Id))
                 throw new InvalidOperationException("Current node has no active combat to fail.");
             Complete(node, false, OCC.Combat.Roguelite.RogueEncounterOutcome.SurvivedFailure);
+            if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(PendingContentChoiceId))
+            {
+                RogueliteNodeContentChoice failedChoice = ResolveContentChoice(node, PendingContentChoiceId);
+                if (!string.IsNullOrEmpty(failedChoice.RewardId)) rogueRunDto.PendingRewardIds.Remove(failedChoice.RewardId);
+            }
             PendingContentChoiceId = null; PendingContentCombatMissionId = null;
         }
         private void ApplyContentChoice(RogueliteNodeContentChoice choice)
@@ -766,7 +799,7 @@ namespace OCC.Combat
                 rogueRunDto.CurrentMana = Math.Max(0, Math.Min(12, rogueRunDto.CurrentMana + choice.ManaGain));
                 CurrentHealth = rogueRunDto.CurrentHealth; CurrentMana = rogueRunDto.CurrentMana;
                 string contentSourceId = string.IsNullOrEmpty(CurrentEventId) ? CurrentNodeId : CurrentEventId;
-                if (!string.IsNullOrEmpty(choice.RewardId)) GrantRogue11Content(choice.RewardId, "event:" + contentSourceId);
+                if (!string.IsNullOrEmpty(choice.RewardId) && (rogueRunDto.PendingRewardIds == null || !rogueRunDto.PendingRewardIds.Contains(choice.RewardId))) GrantRogue11Content(choice.RewardId, "event:" + contentSourceId);
                 return;
             }
             if (choice.Effect == RogueliteNodeContentEffect.Supplies) Supplies++;
@@ -890,6 +923,27 @@ namespace OCC.Combat
             if (reward == null) throw new InvalidOperationException("Reward is not available.");
             if (rogueRunDto != null)
             {
+                if (rogueRunDto.PendingRewardIds != null && rogueRunDto.PendingRewardIds.Contains(rewardId))
+                {
+                    if (claimedRewards.Contains(rewardId))
+                        throw new InvalidOperationException("Reward was already claimed.");
+                    GrantRogue11Content(rewardId, "event:" + CurrentEventId);
+                    if (reward.Kind == RogueliteRewardKind.TacticalItem)
+                    {
+                        OCC.Combat.Roguelite.RogueEquipmentRuntime runtime = OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto);
+                        if (runtime.AllTacticalItems.All(value => value.DefinitionId != rewardId))
+                        {
+                            string instanceId = "item-content-" + Seed + "-" + rogueRunDto.DeterministicCounter++;
+                            OCC.Combat.Roguelite.RogueTacticalItemInstance item = runtime.CreateTacticalItem(instanceId, rewardId, runtime.AllInstances.Count + runtime.AllTacticalItems.Count, "event:" + CurrentEventId);
+                            if (!runtime.AddTacticalToBackpack(item)) throw new InvalidOperationException("Backpack cannot accept tactical reward: " + rewardId);
+                            runtime.WriteToDto(rogueRunDto);
+                        }
+                    }
+                    rogueRunDto.PendingRewardIds.Remove(rewardId);
+                    claimedRewards.Add(rewardId);
+                    AwaitingReward = rogueRunDto.PendingRewardIds.Count > 0;
+                    return;
+                }
                 if (reward.RogueSpell != null)
                 {
                     if (!rogueRunDto.MasteredSpellIds.Contains(reward.Id)) rogueRunDto.MasteredSpellIds.Add(reward.Id);

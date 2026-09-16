@@ -132,34 +132,63 @@ namespace OCC.Combat
                     SkillDefinition skill = command.SlotIndex == 0 ? enemy.SkillOne : enemy.SkillTwo;
                     action = skill?.DisplayName ?? "施放技能";
                     iconId = "cast";
+                    int skillPreHitShield = skill != null && skill.Damage > 0 && target != null
+                        ? PendingPreHitShield(state, enemy, target) : 0;
+                    CombatState skillPreviewState = PreviewStateWithPreHitShield(state, target, skillPreHitShield);
                     CombatResolver.AttackPreview? skillDamage = skill != null && skill.Damage > 0 && target != null
-                        ? CombatResolver.PreviewSkillAttack(state, enemy.Id, target.Id, skill)
+                        ? CombatResolver.PreviewSkillAttack(skillPreviewState, enemy.Id, target.Id, skill)
                         : (CombatResolver.AttackPreview?)null;
                     expectedDamage = skillDamage.HasValue ? IncomingDamage(skillDamage.Value) : 0;
                     result = skill == null ? "技能数据缺失" : SkillResult(skill, skillDamage);
+                    if (skillPreHitShield > 0 && skillDamage.HasValue)
+                        result = PreHitShieldSummary(target.Shield, skillPreHitShield, skillDamage.Value.ShieldAbsorption, result);
+                    result += AdjacentCounterSummary(state, enemy, target);
                     break;
                 case CombatCommandType.Attack:
                     action = enemy.MainHand?.DisplayName ?? "武器攻击";
-                    CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, enemy.Id, command.TargetUnitId, false);
+                    int attackPreHitShield = target == null ? 0 : PendingPreHitShield(state, enemy, target);
+                    CombatState attackPreviewState = PreviewStateWithPreHitShield(state, target, attackPreHitShield);
+                    CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(attackPreviewState, enemy.Id, command.TargetUnitId, false);
                     expectedDamage = IncomingDamage(preview);
                     result = IncomingDamageSummary(preview);
+                    if (attackPreHitShield > 0)
+                        result = PreHitShieldSummary(target.Shield, attackPreHitShield, preview.ShieldAbsorption, result);
+                    result += AdjacentCounterSummary(state, enemy, target);
                     iconId = "attack";
                     break;
                 case CombatCommandType.Move:
                     action = "移动";
-                    result = "抵达 " + Cell(command.Destination);
+                    if (state.ArtifactBattle?.TryGetLureTarget(enemy, out GridPosition lure) == true &&
+                        command.Destination.ManhattanDistance(lure) < enemy.Position.ManhattanDistance(lure))
+                    {
+                        action = "受诱导接近";
+                        result = "向诱导灯 " + Cell(lure) + " 接近，抵达 " + Cell(command.Destination);
+                    }
+                    else if (enemy.EnemyArchetypeId == "rune_arbalist" && enemy.MainHand != null &&
+                        enemy.Position.ManhattanDistance(state.GetUnit("hero").Position) < enemy.MainHand.MinimumRange &&
+                        command.Destination.ManhattanDistance(state.GetUnit("hero").Position) >= enemy.MainHand.MinimumRange)
+                    {
+                        action = "重弩退距";
+                        result = "撤到 " + Cell(command.Destination) + "；相邻格是公开近身死区，无法发射绞盘重弩或重矢";
+                    }
+                    else result = "抵达 " + Cell(command.Destination);
                     iconId = "move";
                     hasDestination = true;
                     destination = command.Destination;
                     break;
                 case CombatCommandType.EndTurn:
-                    action = "结束行动";
-                    result = "放弃剩余行动点";
+                    action = enemy.HasStatus(StatusType.Bound) ? "受缚驻留" : "结束行动";
+                    result = enemy.HasStatus(StatusType.Bound)
+                        ? "当前无法移动；目标若进入现有攻击范围仍可攻击"
+                        : "放弃剩余行动点";
                     iconId = "defend";
                     break;
                 case CombatCommandType.Interact:
-                    action = "破坏物件";
-                    result = "影响 " + Cell(command.Destination);
+                    TileState interacted = state.Map.GetTile(command.Destination);
+                    action = interacted.IsDecoy ? "破坏诱导灯" : "破坏物件";
+                    result = interacted.IsDecoy
+                        ? "对 " + Cell(command.Destination) + " 的诱导灯造成 " + (enemy.MainHand?.Damage ?? 0) + " 耐久伤害；当前耐久 " + interacted.Durability
+                        : "影响 " + Cell(command.Destination);
                     iconId = "interact_destroy";
                     break;
                 default:
@@ -168,15 +197,59 @@ namespace OCC.Combat
                     iconId = "defend";
                     break;
             }
-            string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) : "自身或战场";
+            string targetSummary = target != null ? target.DisplayName : command.Type == CombatCommandType.Move ? Cell(command.Destination) :
+                command.Type == CombatCommandType.Interact && state.Map.GetTile(command.Destination).IsDecoy ? "诱导灯 " + Cell(command.Destination) : "自身或战场";
             return new EnemyIntentPresentation(CommandSignature(command), action, targetSummary, result,
                 iconId, hasDestination, destination, expectedDamage);
+        }
+
+        private static int PendingPreHitShield(CombatState state, UnitState attacker, UnitState target)
+        {
+            return state?.RogueSpells == null || attacker == null || target == null ? 0 :
+                FireSpellEngine.PendingPreHitShield(state.RogueSpells.FireBattle, target.Id, attacker.Id);
+        }
+
+        private static CombatState PreviewStateWithPreHitShield(CombatState state, UnitState target, int amount)
+        {
+            if (state == null || target == null || amount <= 0) return state;
+            CombatState clone = state.Clone();
+            clone.TryGrantRogueliteShield(target.Id, "preview:F-P-M11", amount);
+            return clone;
+        }
+
+        private static string PreHitShieldSummary(int currentShield, int amount, int absorbed, string damageSummary)
+        {
+            int raised = currentShield + amount;
+            int remaining = Math.Max(0, raised - Math.Max(0, absorbed));
+            return "热障架势先获得 " + amount + " 点护盾（" + currentShield + "→" + raised + "）；" +
+                damageSummary + "；结算后护盾 " + remaining;
+        }
+
+        private static string AdjacentCounterSummary(CombatState state, UnitState attacker, UnitState target)
+        {
+            if (state?.RogueSpells == null || attacker == null || target == null ||
+                attacker.Position.ManhattanDistance(target.Position) != 1) return string.Empty;
+            bool armed = state.RogueSpells.FireBattle.PendingEffects.Any(effect =>
+                effect.SourceUnitId == target.Id && effect.Spell.Id == "F-P-M13" &&
+                effect.Spell.TriggerWindow == FireTriggerWindow.FirstAdjacentAttack);
+            if (!armed) return string.Empty;
+
+            FireBattleState previewBattle = state.RogueSpells.FireBattle.Clone();
+            UnitState attackerBefore = previewBattle.Combat.GetUnit(attacker.Id);
+            int shieldBefore = attackerBefore.Shield;
+            int healthBefore = attackerBefore.Health;
+            FireSpellEngine.TriggerIncomingAdjacentAttack(previewBattle, attacker.Id, target.Id);
+            UnitState attackerAfter = previewBattle.Combat.GetUnit(attacker.Id);
+            int shieldLoss = Math.Max(0, shieldBefore - attackerAfter.Shield);
+            int healthLoss = Math.Max(0, healthBefore - attackerAfter.Health);
+            string result = "；公开反应：炉心反击将使攻击者护盾 -" + shieldLoss + "、生命 -" + healthLoss;
+            return !attackerAfter.IsAlive ? result + "，并击倒攻击者" : result;
         }
 
         public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy, bool roguelite = false)
         {
             if (enemy == null) throw new ArgumentNullException(nameof(enemy));
-            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + enemy.MainHand.Range;
+            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + RangeText(enemy.MainHand.MinimumRange, enemy.MainHand.Range);
             string skills = "战法：" + string.Join("；", new[] { enemy.SkillOne, enemy.SkillTwo }.Where(skill => skill != null)
                 .Select(skill => skill.DisplayName + "——" + SkillResult(skill) + (enemy.Cooldown(skill) > 0 ? "；还需等待 " + enemy.Cooldown(skill) + " 回合" : string.Empty)));
             string statuses = enemy.Statuses.Count == 0 ? "状态：无" : "状态：" + string.Join("；", enemy.Statuses.OrderBy(pair => pair.Key)
@@ -201,6 +274,8 @@ namespace OCC.Combat
             string consequence = victory ? "回到地图后，就能带走本场收获。" : rogueliteMapCombat
                 ? "可以回到地图，或者从头再挑战一次。"
                 : "离开后这场战斗不会留下任何收获，也可以从头再挑战。";
+            string efficiency = state.PressureTest?.EfficiencySummary(state) ?? string.Empty;
+            if (!string.IsNullOrEmpty(efficiency)) consequence += "\n" + efficiency;
             return new CombatOutcomePresentation(title, reason, heroState, remaining, objective, consequence, state.EventLog.Take(5).ToArray());
         }
 
@@ -282,7 +357,7 @@ namespace OCC.Combat
         {
             switch (archetypeId)
             {
-                case "shieldguard": return "盾术陪练生负责守线，会用铭盾冲撞使目标迟缓。";
+                case "shieldguard": return "盾术陪练生每次自己回合开始整盾获得 2 护盾，并会用铭盾冲撞使目标迟缓；破势可阻止整盾。";
                 case "pyromancer": return "火矢陪练生从远处施放受安全刻印约束的训练火矢。";
                 case "raider": return "侧锋陪练生行动迅速，贴近后用限位钩刃限制移动。";
                 case "elite_vanguard": return "刻阵教官主持高阶考核，重击会清除护盾并造成破势。";
@@ -291,7 +366,7 @@ namespace OCC.Combat
                 case "tether_hound": return "缚环寻迹兽移动迅速，扑咬会束缚目标。";
                 case "stone_snare": return "约束助教可从远处束缚目标，限制持续时间较长。";
                 case "lantern_revealer": return "档案巡查员用显影灯清除护盾并造成破势。";
-                case "rune_arbalist": return "重弩陪练生移动缓慢，但能从远处发射高伤害训练重矢。";
+                case "rune_arbalist": return "重弩陪练生移动缓慢，绞盘重弩与重矢有效距离为 2–4／2–5 格；相邻格是公开死区，会先退距再射击。";
                 default: return "会根据距离选择攻击、施术或靠近目标。";
             }
         }
@@ -299,13 +374,15 @@ namespace OCC.Combat
         public static string BuildHeroDetails(UnitState hero)
         {
             if (hero == null) return "英雄状态尚未就绪。";
-            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + "\n伤害 " + hero.MainHand.Damage + "　射程 " + hero.MainHand.Range;
+            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + "\n伤害 " + hero.MainHand.Damage + "　射程 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range);
             string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
             return string.Join("\n",
                 "生命当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n护盾当前 " + hero.Shield + "　上限 " + hero.MaxShield + "\n以太当前 " + hero.Mana + "　上限 " + hero.MaxMana,
                 "行动点 " + hero.ActionPoints + "　护甲 " + hero.EffectiveArmor + "　格挡 " + hero.Block + "　速度 " + hero.EffectiveSpeed,
                 weapon, statuses);
         }
+
+        private static string RangeText(int minimum, int maximum) => minimum > 0 ? minimum + "–" + maximum + " 格（近身死区）" : maximum + " 格";
 
         public static string BuildItemDetails(ItemDefinition definition, ItemInstance item, int slot)
         {
@@ -425,6 +502,8 @@ namespace OCC.Combat
                 case StatusType.Bound: return "束缚";
                 case StatusType.Slow: return "迟缓";
                 case StatusType.ArmorBreak: return "破甲";
+                case StatusType.FiregroundBoost: return "火势";
+                case StatusType.FiregroundVulnerable: return "助燃";
                 default: return status.ToString();
             }
         }

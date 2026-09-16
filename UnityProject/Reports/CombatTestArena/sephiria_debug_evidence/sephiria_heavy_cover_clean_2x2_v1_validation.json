@@ -1,0 +1,39 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "sephiria_heavy_cover_clean_2x2_v1",
+  "role": "battlefield_multi_cell_prop_64",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      128,
+      128
+    ],
+    "bounds": [
+      8,
+      36,
+      120,
+      118
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 12,
+    "accent_pixels": {},
+    "low_resolution_companion": {
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        4,
+        18,
+        60,
+        59
+      ],
+      "hard_alpha": true,
+      "fully_opaque": false,
+      "visible_colors": 12,
+      "accent_pixels": {}
+    }
+  },
+  "errors": []
+}

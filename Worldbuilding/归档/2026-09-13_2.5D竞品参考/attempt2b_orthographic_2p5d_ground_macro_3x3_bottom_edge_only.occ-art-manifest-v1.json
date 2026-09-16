@@ -1,0 +1,32 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "battlefield_angle_study_attempt2b_ground_macro_bottom_edge_only",
+  "role": "battlefield_ground_macro_study",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "easycli_gpt_image",
+    "source_descriptor": "方案2修正版：仅宏图最底边露出带阴影边沿，内部格子保持连续顶面",
+    "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2b_orthographic_2p5d_ground_macro_3x3_bottom_edge_only.png",
+    "source_sha256": "B0BA9C5E6DB13F95368AB47D9CABCD23F972F9AFD1B9FE49172FCB0E81875725"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2b_orthographic_2p5d_ground_macro_3x3_bottom_edge_only.png",
+    "logical_cells": [3, 3],
+    "native_output_path": null
+  },
+  "application": {
+    "runtime_draw_rect": "仅用于宏图角度与边缘规则研究，不得直接进入Unity正式资产",
+    "target_view": "orthographic pseudo-2.5D; only global bottom edge has exposed side and shadow"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "需在Unity中验证顶部两行与内部边界无重复暗边"
+  },
+  "unity_import": {
+    "asset_path": null,
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

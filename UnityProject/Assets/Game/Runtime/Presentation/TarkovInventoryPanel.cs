@@ -327,6 +327,9 @@ namespace OCC.Combat.Presentation
 
         private static string RogueItemIconPath(RogueInventoryItemPresentation item) => item.IsEquipment ? FormalArtRegistry.EquipmentFootprintPath(item.DefinitionId) : FormalArtRegistry.ItemPath(item.DefinitionId);
         private static string EquipmentIconPath(OCC.Combat.Roguelite.EquipmentSlot slot) => FormalArtRegistry.EquipmentSlotPath(slot.ToString());
+        // Compatibility query used by presentation audits; keep one source of truth for active slots.
+        private static IReadOnlyList<OCC.Combat.Roguelite.EquipmentSlot> EquipmentSlotsForPresentation()
+            => RogueInventoryGridSystem.EquipmentSlots;
         private static string EquipmentSlotName(OCC.Combat.Roguelite.EquipmentSlot slot) => slot == OCC.Combat.Roguelite.EquipmentSlot.Weapon ? "武器" : slot == OCC.Combat.Roguelite.EquipmentSlot.Head ? "头部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Chest ? "胸部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Feet ? "足部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Backpack ? "背部" : slot == OCC.Combat.Roguelite.EquipmentSlot.Ring1 ? "戒指一" : slot == OCC.Combat.Roguelite.EquipmentSlot.Ring2 ? "戒指二" : slot == OCC.Combat.Roguelite.EquipmentSlot.Necklace ? "项链" : "施法单元";
 
         private void DrawInventory(CombatState state, Rect rect)

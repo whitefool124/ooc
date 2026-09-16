@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "repeat_study_breach_ram_wedge_idle_round2",
+  "role": "tactical_unit_32x64",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent repeat study generated before the prior three-attempt skip record was rediscovered; retained for traceability only",
+    "source_path": "Worldbuilding/归档/2026-09-14_楔角待机正式化/round2/breach_ram_wedge_idle_raw.png",
+    "source_sha256": "5809c2c2ca400cf71df85b8b4bcff772d2cafb2b5212cc877f16d57da6b47823"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_楔角待机正式化/round2/breach_ram_wedge_idle_32x64.png",
+    "output_sha256": "6e8edf0da12ed1a48b09e0eae7c0fbecbbb768ff5847dff34ce1d19ca4eff6ea",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_楔角待机正式化/evidence/breach_ram_wedge_idle_round2_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_楔角待机正式化/evidence/breach_ram_wedge_idle_round2_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_楔角待机正式化/evidence/breach_ram_wedge_idle_round2_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_楔角待机正式化/evidence/breach_ram_wedge_idle_round2_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_楔角待机正式化/evidence/breach_ram_wedge_idle_round2_application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "REJECTED_UNDERSCALE_AND_ALREADY_SKIPPED",
+    "reviewer": "Codex OCC art-direction review",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "REJECTED",
+    "notes": "The 23x25 decoded body is materially smaller than the current combat-unit family. The original wedge batch had already reached its three-attempt limit, so this repeat study is archived and must not be imported or retried."
+  },
+  "unity_import": null
+}

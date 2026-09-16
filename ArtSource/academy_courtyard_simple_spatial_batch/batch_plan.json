@@ -1,0 +1,14 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {"theme_id": "academy_courtyard_simple_spatial", "material_family": "ivory_limestone", "base_palette": ["#FFF4D9", "#E8CE94", "#B98B50", "#5B3E30"], "wetness": 0, "wear": 0, "motif": "quiet_cut_stone", "edge_profile": "sandstone_retaining_face"},
+  "pieces": [
+    {"runtime_id": "ground.academy_courtyard_simple_spatial.surface.a", "native": "review_ground_academy_courtyard_simple_spatial_origin0_32.png", "manifest": "ground_academy_courtyard_simple_spatial_surface_a.occ-art-manifest-v1.json", "status": "REVIEW_READY"},
+    {"runtime_id": "ground.academy_courtyard_simple_spatial.front.base", "native": "ground_academy_courtyard_simple_spatial_front_base_32x40.png", "status": "PLANNED"},
+    {"runtime_id": "ground.academy_courtyard_simple_spatial.left.base", "native": "ground_academy_courtyard_simple_spatial_left_base_32x40.png", "status": "PLANNED"},
+    {"runtime_id": "ground.academy_courtyard_simple_spatial.right.base", "native": "ground_academy_courtyard_simple_spatial_right_base_32x40.png", "status": "PLANNED"}
+  ],
+  "approval_order": ["surface reference", "front/left/right directional outer edges", "corners", "variants"],
+  "status": "G0_REVIEW_READY",
+  "g0_reference_review": {"piece": "surface.a", "result": "REVIEW_READY_MANUAL_PITCH", "reason": "Quiet warm-ivory stone field selected at phase [0,0], retaining a minimal non-repeating material variation; grid is a separate overlay.", "next_gate": "Review this contact against the spatial map target before generating directional 32x40 edges.", "review_date": "2026-09-15"}
+}

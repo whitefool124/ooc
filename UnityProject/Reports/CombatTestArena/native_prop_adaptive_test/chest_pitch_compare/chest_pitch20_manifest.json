@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_loot_chest_adaptive_pitch20_v1",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Previously approved Codex built-in chest reference; decoded from its own subject lattice",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_loot_chest_native32_reference_v7.png",
+    "source_sha256": "05466cb8c53cec83150b5413a9c29d14297606fb79962f8233ecc69e789ae149"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_native.png",
+    "output_sha256": "97dbb4ed94185cc8d5acdcb83b8342da798af2b7632de4edb6e1400799f78514",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 24,
+    "required_color_families": [
+      {"family": "ochre", "min_opaque_pixels": 4},
+      {"family": "yellow", "min_opaque_pixels": 1}
+    ]
+  },
+  "application": {
+    "runtime_draw_rect": "64x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_native.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_application4x.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_preview8x.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/native_prop_adaptive_test/chest_pitch_compare/chest_pitch20_application4x.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User confirmed all tests pass. Pitch 20 selected from 20/23/24/37 comparison for maximum retained structure; not imported into Unity."
+  },
+  "unity_import": null
+}

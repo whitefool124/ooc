@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy.unit.pyromancer.idle",
+  "role": "tactical_unit_32x64",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent second-round fire-bolt sparring student source, decoded losslessly from its stable uniform macro-pixel lattice",
+    "source_path": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/round2/pyromancer_idle_source.png",
+    "source_sha256": "129b629b037733cb880115d0d3e1d9f7ee5ee76b237d9d734554d8085a9d9f55"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+    "output_sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 32,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/evidence/pyromancer_idle_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/round2/preview_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/evidence/pyromancer_idle_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/evidence/pyromancer_idle_checker_4x.png",
+    "application_contact": "Worldbuilding/归档/2026-09-15_火矢陪练生站姿正式化/evidence/pyromancer_before_after_application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex OCC art-direction and runtime contact review",
+    "date": "2026-09-15",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "Strict right-facing profile, compact wand and restrained ember accent keep the fire-bolt student readable at 1x. The 27x51 authored silhouette is materially clearer than the prior undersized formal sprite while preserving a one-cell footprint."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+    "stable_guid": "acc330d5d9d87c7479c701774999cdc3",
+    "texture_type": "Sprite",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "pixels_per_unit": 32,
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

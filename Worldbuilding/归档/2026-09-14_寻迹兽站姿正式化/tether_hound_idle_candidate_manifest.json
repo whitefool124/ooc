@@ -1,0 +1,45 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "tether_hound_idle_adaptive_candidate",
+  "role": "tactical_unit_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent second-round source following the user-approved compact tracker-hound direction; losslessly decoded on one stable subject lattice",
+    "source_path": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/round2/tether_hound_idle_raw.png",
+    "source_sha256": "267ab20f1edc08fefc5044f53f240a01c59278462da4e88f1a758e57922b2abf"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/round2/tether_hound_idle_64x32_final.png",
+    "output_sha256": "f7d0fd9428b9d21b41e2452b439036afb10510ab567ec4c76a48b634082b6d4d",
+    "native_output_path": null,
+    "logical_cells": [1, 1],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "64x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/evidence/tether_hound_idle_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/evidence/tether_hound_idle_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/evidence/tether_hound_idle_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/evidence/tether_hound_idle_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_寻迹兽站姿正式化/evidence/tether_hound_idle_before_after_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "DIRECTION_PASS_CONTRACT_ROLE_CONFIRMATION_REQUIRED",
+    "reviewer": "user historical direction approval and Codex current candidate review",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PENDING",
+    "notes": "The 53x28 low side-profile body and visible tether ring match the approved compact direction. Promotion is paused because the master plan permits adaptive 32-multiple unit canvases while the machine mirror lacks a 64x32-capable tactical-unit role."
+  },
+  "unity_import": null
+}

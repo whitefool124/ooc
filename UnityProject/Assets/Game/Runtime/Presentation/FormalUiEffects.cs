@@ -50,7 +50,10 @@ namespace OCC.Combat.Presentation
             Sprite sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.IllustrationPath(id));
             if (sprite == null) throw new KeyNotFoundException("Missing formal UI empty illustration: " + id);
             GameObject result = FormalUiKit.Create("空状态插图_" + id, parent);
-            int alignedSize = FormalUiKit.IntegerSpriteSize(sprite, size);
+            // Candidate illustrations are intentionally delivered at a large source
+            // resolution for clean UI presentation. Their runtime footprint must be
+            // the authored layout size, rather than the source pixel width.
+            int alignedSize = Mathf.Max(1, Mathf.RoundToInt(size));
             RectTransform rect = result.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
             rect.pivot = new Vector2(.5f, .5f); rect.anchoredPosition = position; rect.sizeDelta = new Vector2(alignedSize, alignedSize);
             Image image = result.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.preserveAspect = true; image.color = Color.white; image.raycastTarget = false;

@@ -59,6 +59,11 @@ namespace OCC.Combat
                 TileState tile = state.Map.GetTile(cell);
                 if (state.Map.IsBlocked(cell))
                 {
+                    if (tile.IsPermanentWall)
+                    {
+                        state.AddLog("楔角撞上 " + Cell(cell) + " 的永久墙体，冲压中止。 ");
+                        break;
+                    }
                     int before = tile.Durability;
                     tile.Durability = Math.Max(0, tile.Durability - 8);
                     state.ResolveAetherCrystalDamage(cell, before);
@@ -126,6 +131,7 @@ namespace OCC.Combat
         {
             UnitState unit = state.Units.Values.FirstOrDefault(value => value.IsAlive && value.Id != ram.Id && value.Position == end);
             if (unit != null) return "首个碰撞为" + unit.DisplayName + "，预计 8 伤害并推 1 格";
+            if (state.Map.GetTile(end).IsPermanentWall) return "首个碰撞为 " + Cell(end) + " 永久墙体，冲压中止";
             if (state.Map.IsBlocked(end)) return "首个碰撞为 " + Cell(end) + " 物块，预计耐久 -8";
             return end == lockedTarget ? "抵达锁定格" : "预计终点 " + Cell(end);
         }

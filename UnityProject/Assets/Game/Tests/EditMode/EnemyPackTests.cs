@@ -101,7 +101,10 @@ namespace OCC.Combat.Tests
             EnemyArchetype[] pack = PackIds.Select(EnemyArchetypes.Get).ToArray();
             Assert.That(pack.Select(enemy => enemy.ArtId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
             Assert.That(pack.Select(enemy => enemy.PrimarySkill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
-            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
+            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(12),
+                "The ten reusable pack skills are joined by the boss-only core lance and pulse.");
+            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id),
+                Does.Contain(EnemyAbilityCatalog.CoreLance.Id).And.Contain(EnemyAbilityCatalog.CorePulse.Id));
             Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 14), Is.True);
         }
 
@@ -175,6 +178,48 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void BarrierMender_SkipsABreakStanceRecipientInRogueliteCombat()
+        {
+            GridMap map = new GridMap(7, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
+            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
+            UnitState frontline = new UnitState("frontline", false, new GridPosition(2, 1));
+            EnemyArchetypes.Get("barrier_mender").Apply(mender);
+            EnemyArchetypes.Get("shieldguard").Apply(frontline);
+            CombatState state = new CombatState(map, new[] { hero, mender, frontline });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.ApplyRogueliteBreakStance(frontline.Id);
+
+            CombatCommand command = EnemyTactics.Choose(state, mender, hero);
+
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            Assert.That(command.TargetUnitId, Is.EqualTo(mender.Id),
+                "The support must visibly redirect its ward instead of promising shield that Break Stance will reject.");
+        }
+
+        [Test]
+        public void Shieldguard_BracesForTwoShieldAtRogueliteTurnStartAndBreakStanceBlocksIt()
+        {
+            GridMap map = new GridMap(5, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1));
+            UnitState shieldguard = new UnitState("shieldguard", false, new GridPosition(1, 1));
+            EnemyArchetypes.Get("shieldguard").Apply(shieldguard);
+            CombatState state = new CombatState(map, new[] { hero, shieldguard });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+
+            CombatResolver.BeginTurn(state, shieldguard.Id);
+            Assert.That(shieldguard.Shield, Is.EqualTo(2));
+            CombatEffectExecutor.Execute(state, shieldguard.Id, CombatEffect.AbsorbShield(shieldguard.Id, 2));
+            state.ApplyRogueliteBreakStance(shieldguard.Id);
+            CombatResolver.BeginTurn(state, shieldguard.Id);
+
+            Assert.That(shieldguard.Shield, Is.Zero);
+            Assert.That(state.RogueShieldEvents.Any(record =>
+                record.SourceId == "shieldguard-turn-brace" &&
+                record.EventKind == OCC.Combat.Roguelite.ShieldEventKind.PreventedByBreakStance), Is.True);
+        }
+
+        [Test]
         public void TetherHound_BindsOnlyWhenHeroIsNotAlreadyBound()
         {
             CombatState state = CreateState("tether_hound", new GridPosition(1, 0), out UnitState enemy, out UnitState hero);
@@ -210,6 +255,50 @@ namespace OCC.Combat.Tests
             CombatResolver.Resolve(state, first);
             Assert.That(hero.Health, Is.LessThan(hero.MaxHealth));
             Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.Move));
+        }
+
+        [Test]
+        public void RuneArbalist_ExposesAdjacentDeadzoneAndRetreatsBeforeFiringAgain()
+        {
+            CombatState state = CreateState("rune_arbalist", new GridPosition(1, 0), out UnitState enemy, out UnitState hero);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+
+            CombatCommand retreat = plans.GetExecutionCommand(state, enemy, hero);
+            EnemyIntentPresentation intent = plans.GetPublicIntent(state, enemy, hero);
+
+            Assert.That(EnemyAbilityCatalog.HeavyCrossbow.MinimumRange, Is.EqualTo(2));
+            Assert.That(EnemyAbilityCatalog.WindlassBolt.MinimumRange, Is.EqualTo(2));
+            Assert.That(retreat.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(retreat.Destination.ManhattanDistance(hero.Position), Is.EqualTo(2));
+            Assert.That(intent.ActionName, Is.EqualTo("重弩退距"));
+            Assert.That(intent.ResultSummary, Does.Contain("近身死区"));
+
+            CombatResolver.BeginTurn(state, enemy.Id);
+            Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state,
+                CombatCommand.UseSkill(enemy.Id, 0, hero.Id)));
+            Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state,
+                CombatCommand.Attack(enemy.Id, hero.Id)));
+        }
+
+        [Test]
+        public void BoundEnemy_AttacksWhenLegalButOtherwisePublishesAStationaryIntent()
+        {
+            CombatState distant = CreateState("tether_hound", new GridPosition(4, 0), out UnitState bound, out UnitState hero);
+            bound.ApplyStatus(StatusType.Bound, 2);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+
+            CombatCommand stationary = plans.GetExecutionCommand(distant, bound, hero);
+            EnemyIntentPresentation publicIntent = plans.GetPublicIntent(distant, bound, hero);
+
+            Assert.That(stationary.Type, Is.EqualTo(CombatCommandType.EndTurn));
+            Assert.That(publicIntent.ActionName, Is.EqualTo("受缚驻留"));
+            Assert.That(publicIntent.ResultSummary, Does.Contain("无法移动"));
+            Assert.That(publicIntent.ExpectedDamage, Is.Zero);
+
+            CombatState adjacent = CreateState("tether_hound", new GridPosition(1, 0), out UnitState adjacentBound, out UnitState adjacentHero);
+            adjacentBound.ApplyStatus(StatusType.Bound, 2);
+            Assert.That(EnemyTactics.Choose(adjacent, adjacentBound, adjacentHero).Type,
+                Is.EqualTo(CombatCommandType.UseSkill), "Binding stops movement, not an already legal adjacent attack.");
         }
 
         [TestCase("shieldguard")]

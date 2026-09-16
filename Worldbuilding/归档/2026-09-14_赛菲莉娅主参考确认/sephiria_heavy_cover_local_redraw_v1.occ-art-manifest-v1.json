@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_heavy_cover_local_redraw_v1",
+  "role": "battlefield_single_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "hand_pixel",
+    "source_descriptor": "依据已确认的地图视角与阅读规律，从空白透明画布在本地整数像素网格自动重绘；未采样、描摹、缩放或重着色参考图及生图原料",
+    "source_path": "Tools/OCCArt/draw_clean_single_heavy_cover.py",
+    "source_sha256": "8b2d7b5b4ea659f972e2af24fd16eb0e75bb01ac13cb6732b8a535de2a34f2f1"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_local_redraw_64.png",
+    "output_sha256": "7c86b0ca8d305476e992ebdf16798f8befd51b589f2f00b97df053c46f877cf8",
+    "logical_cells": [1, 1],
+    "palette_max": 14,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_local_redraw_32.png",
+      "output_sha256": "1f7119bcd8d8a9f3d9fb133ac4ac88c785e077e21903eafbdcd3245171cb2b23",
+      "palette_max": 10
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_local_redraw_64_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_local_redraw_64_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_local_redraw_64_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_local_redraw_64_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_local_redraw_2x2_placement.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "首个64px单格本地自动重绘样板；32px为正式低分辨率伴随稿；另有24px与16px原生重绘可读性对照稿，但不属于战场重掩体正式交付规格；2x2图仅重复摆放验证规模，不表示多格资产或邻接变体完成"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_local_redraw_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

@@ -45,7 +45,7 @@ namespace OCC.Combat.Tests
             string[] missing = active.Where(entry => Resources.Load<Sprite>(entry.ResourcePath) == null)
                 .Select(entry => entry.AssetId + " => " + entry.ResourcePath).ToArray();
             Assert.That(missing, Is.Empty, string.Join("\n", missing));
-            Assert.That(active, Has.Length.EqualTo(298), "Formal player UI includes the registered domains plus the explicitly shared CR04 placeholder entry.");
+            Assert.That(active, Has.Length.EqualTo(298), "Formal player UI includes every registered domain and the dedicated CR04 equipment entry.");
             Assert.That(blockedUnits.Count, Is.EqualTo(16), "Character/unit art is explicitly product-blocked, not silently omitted.");
         }
 
@@ -198,10 +198,12 @@ namespace OCC.Combat.Tests
                     Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f), definition.DefinitionId);
                 }
             }
-            Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.IconResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(32));
-            Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.FootprintResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(32));
-            Assert.That(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR04"), Is.EqualTo(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR03")));
-            Assert.That(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR04"), Is.EqualTo(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR03")));
+            Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.IconResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(33));
+            Assert.That(FormalArtRegistry.EquipmentItems.Select(entry => entry.FootprintResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(33));
+            Assert.That(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR04"), Is.Not.EqualTo(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR03")));
+            Assert.That(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR04"), Is.Not.EqualTo(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR03")));
+            Assert.That(ItemCatalog.NurseryReturnCore.IconPath, Is.EqualTo(FormalArtRegistry.EquipmentIconPath("ACA-EQ-CR04")));
+            Assert.That(ItemCatalog.NurseryReturnCore.InventoryArtPath, Is.EqualTo(FormalArtRegistry.EquipmentFootprintPath("ACA-EQ-CR04")));
         }
 
         [Test]

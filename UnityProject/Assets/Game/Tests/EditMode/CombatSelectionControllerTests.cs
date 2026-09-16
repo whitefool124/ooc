@@ -266,6 +266,65 @@ namespace OCC.Combat.Tests
             finally { Object.DestroyImmediate(root); }
         }
 
+        [Test]
+        public void ArmedRogueCoverStamp_ClickCreatesHeavyCoverInsteadOfCastingSpellOne()
+        {
+            CombatState state = State(out UnitState hero, out _);
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            hero.ConfigureMana(12, 12);
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            RogueEquipmentRuntime equipment = EquipmentWithCoverStamp(701, out RogueTacticalItemInstance stamp);
+            state.AttachRogueEquipmentRuntime(equipment);
+            CombatResolver.BeginTurn(state, hero.Id);
+            GridPosition target = new GridPosition(1, 1);
+            GameObject root = new GameObject("armed-artifact-submit-host");
+            try
+            {
+                CombatPrototypeBootstrap bootstrap = root.AddComponent<CombatPrototypeBootstrap>();
+                SetState(bootstrap, state);
+                int charges = stamp.ChargesCurrent;
+
+                bootstrap.ActivateInventoryQuickbar(0);
+                bootstrap.SubmitBattlefieldCell(target, false);
+
+                Assert.That(state.Map.GetTile(target).Cover, Is.EqualTo(CoverType.Heavy));
+                Assert.That(state.Map.GetTile(target).Durability, Is.EqualTo(TileState.HeavyDurability));
+                Assert.That(stamp.ChargesCurrent, Is.EqualTo(charges - 1));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [Test]
+        public void ContextMenu_ListsAndExecutesLegalQuickbarArtifact()
+        {
+            CombatState state = State(out UnitState hero, out _);
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            hero.ConfigureMana(12, 12);
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            RogueEquipmentRuntime equipment = EquipmentWithCoverStamp(702, out RogueTacticalItemInstance stamp);
+            state.AttachRogueEquipmentRuntime(equipment);
+            CombatResolver.BeginTurn(state, hero.Id);
+            GridPosition target = new GridPosition(1, 1);
+            GameObject root = new GameObject("context-artifact-submit-host");
+            try
+            {
+                CombatPrototypeBootstrap bootstrap = root.AddComponent<CombatPrototypeBootstrap>();
+                SetState(bootstrap, state);
+                BattlefieldContextAction action = bootstrap.ContextActionsAt(target)
+                    .Single(value => value.Id == "artifact:0");
+                Assert.That(action.Label, Does.Contain("掩体压模"));
+                int charges = stamp.ChargesCurrent;
+
+                bootstrap.SubmitBattlefieldContextAction(target, action.Id);
+
+                Assert.That(state.Map.GetTile(target).Cover, Is.EqualTo(CoverType.Heavy));
+                Assert.That(stamp.ChargesCurrent, Is.EqualTo(charges - 1));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
         [TestCase("移动", "双击空地：快捷移动")]
         [TestCase("攻击", "左键敌人：攻击")]
         [TestCase("技能8", "左键合法目标：施放术式")]
@@ -286,6 +345,15 @@ namespace OCC.Combat.Tests
             hero = new UnitState("hero", true, new GridPosition(0, 0));
             enemy = new UnitState("enemy", false, new GridPosition(2, 0));
             return new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+        }
+
+        private static RogueEquipmentRuntime EquipmentWithCoverStamp(int seed, out RogueTacticalItemInstance stamp)
+        {
+            RogueEquipmentRuntime equipment = new RogueEquipmentRuntime(seed);
+            stamp = equipment.CreateTacticalItem("cover-stamp-" + seed, ArtifactCatalog.CoverStamp.Id, 0, "test");
+            Assert.That(equipment.AddTacticalToBackpack(stamp), Is.True);
+            Assert.That(equipment.AssignQuickbar(0, stamp.InstanceId), Is.True);
+            return equipment;
         }
     }
 }

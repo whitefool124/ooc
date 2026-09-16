@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_field_lectern_qa_v1_academy_prop_field_lectern_candidate",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/source/field_lectern_round2_source.png",
+    "source_sha256": "f9fc0262fd6b237fb37e921c37ee752ea52099df261dc7dbb3c470df3c5c45a6"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/field_lectern/native.png",
+    "output_sha256": "916b55658f82709c40b70c1128178e5e4998a1e45b20007060f7656b69152812",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/field_lectern/native.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/field_lectern/native_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/field_lectern/native_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/field_lectern/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_野战讲台候选_QA_PENDING/application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Batch stability sample; no Unity import or formal promotion."
+  },
+  "unity_import": null
+}

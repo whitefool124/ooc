@@ -1,0 +1,20 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_pyromancer_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_path": "UnityProject/Reports/CombatTestArena/raw_pyromancer_pixel_v1.png",
+    "source_sha256": "DDC6E430CCD4DB906915AE4149EC99FA9E2C00896C4F45D3ED83456B567E232F"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/pyromancer_pixel_candidate_64.png",
+    "output_sha256": "FDA0C86C3F01700C154F530D1F223BA2C2CEA66CC005C424C50FF8363F6AD70C",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "火术师候选，与角色族共享 16px 语义网格"}
+}

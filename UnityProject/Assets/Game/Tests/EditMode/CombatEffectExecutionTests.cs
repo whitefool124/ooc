@@ -100,6 +100,29 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void RogueliteBreakStance_PreventsSkillShieldRestorationThroughTheSharedEffectExecutor()
+        {
+            GridMap map = new GridMap(5, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1));
+            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
+            UnitState ally = new UnitState("ally", false, new GridPosition(1, 1));
+            EnemyArchetypes.Get("barrier_mender").Apply(mender);
+            EnemyArchetypes.Get("shieldguard").Apply(ally);
+            CombatState state = new CombatState(map, new[] { hero, mender, ally });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.ApplyRogueliteBreakStance(ally.Id);
+
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, mender.Id,
+                CombatEffect.RestoreShield(ally.Id, 4, EnemyAbilityCatalog.WardMend.Id));
+
+            Assert.That(ally.Shield, Is.Zero);
+            Assert.That(execution.Results.Single().AppliedAmount, Is.Zero);
+            Assert.That(state.RogueShieldEvents.Any(record =>
+                record.SourceId == EnemyAbilityCatalog.WardMend.Id &&
+                record.EventKind == OCC.Combat.Roguelite.ShieldEventKind.PreventedByBreakStance), Is.True);
+        }
+
+        [Test]
         public void InvalidLateEffect_IsRejectedBeforeEarlierCostsMutateState()
         {
             CombatState state = CreateDuelState();

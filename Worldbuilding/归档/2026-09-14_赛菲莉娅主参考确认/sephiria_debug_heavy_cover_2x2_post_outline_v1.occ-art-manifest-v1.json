@@ -1,0 +1,49 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_debug_heavy_cover_2x2_post_outline_v1",
+  "role": "battlefield_multi_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "Sephiria地图表现主参考方向的独立调试原料；只提炼地图组织与像素密度，不复制素材",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/heavy_cover_2x2_v1.png",
+    "source_sha256": "1709a126adac8d60a7a0d6de469da494191206848243cad20a907d6698356595"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_2x2_post_outline_128.png",
+    "output_sha256": "7a8ac8a39f7b7fd6199461aa44777797858b00c9382067d12401de9279723332",
+    "logical_cells": [
+      2,
+      2
+    ],
+    "palette_max": 16,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_2x2_post_outline_64.png",
+      "output_sha256": "ed6e3a92fb5e170f99fe9c83de5cff4296fc0f03a9fdf961289c01054d989169",
+      "palette_max": 12
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_2x2_post_outline_128_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_2x2_post_outline_128_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_2x2_post_outline_128_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_2x2_post_outline_128_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_2x2_post_outline_128_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "新方向调试样板，等待用户审美确认"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_2x2_post_outline_128.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

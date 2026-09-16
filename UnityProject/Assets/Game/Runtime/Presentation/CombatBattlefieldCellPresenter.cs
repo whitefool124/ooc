@@ -34,14 +34,38 @@ namespace OCC.Combat.Presentation
                 ? assets.FiregroundFrame(environmentFrame)
                 : tile.SmokeExpiresAt > state.CurrentTime ? assets.SmokeFrame(environmentFrame)
                 : tile.IsWater ? assets.Environment("rain_court_water") : null;
-            Texture2D move = selection.Action == "移动" && battlefield.IsInMoveRange(state, position) ? assets.Overlay("move_range") : null;
+            PressureReactionPreview pressureReaction = selection.Action == "移动" && battlefield.IsInMoveRange(state, position)
+                ? state.PressureTest?.PreviewHeroMove(state, position) : null;
+            Texture2D move = selection.Action == "移动" && battlefield.IsInMoveRange(state, position)
+                ? assets.Overlay(pressureReaction?.WillTrigger == true ? "high_risk" : "move_range") : null;
             Texture2D attack = selection.Action == "攻击" && battlefield.IsInAttackRange(state, position) ? assets.Overlay("attack_range") : null;
             Texture2D skill = null;
-            int fireSlot = selection.Action == "技能1" ? 0 : selection.Action == "技能2" ? 1 : -1;
+            int fireSlot = FireSpellSlot(selection.Action);
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : fireSpellInSlot(fireSlot);
             FireSpellPreview firePreview = fireSpell == null ? null : firePreviewAt(fireSpell, position);
             if (firePreview?.CanCommit == true)
                 skill = assets.Overlay(firePreview.FriendlyFireRisk ? "high_risk" : "attack_range");
+            else if (fireSpell != null && fireSpell.MinimumRange > 0 && state.GetUnit("hero") is UnitState rangeSource &&
+                rangeSource.Position.ManhattanDistance(position) < fireSpell.MinimumRange)
+                skill = assets.Overlay("unreachable");
+            GridPosition? previewCenter = selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
+            if (!previewCenter.HasValue && fireSpell != null && !string.IsNullOrEmpty(selection.TargetId))
+            {
+                UnitState selectedTarget = state.GetUnit(selection.TargetId);
+                if (selectedTarget != null) previewCenter = selectedTarget.Position;
+            }
+            if (fireSpell != null && previewCenter.HasValue)
+            {
+                FireSpellPreview selectedPreview = firePreviewAt(fireSpell, previewCenter.Value);
+                if (selectedPreview?.CanCommit == true && selectedPreview.Cells.Contains(position))
+                {
+                    UnitState affected = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
+                    UnitState source = state.GetUnit("hero");
+                    bool friendlyCell = affected != null && source != null && affected.Id != source.Id && affected.IsHero == source.IsHero &&
+                        fireSpell.Rules.Any(rule => rule.AffectAllies);
+                    skill = assets.Overlay(friendlyCell ? "high_risk" : "attack_range");
+                }
+            }
 
             UnitState unit = state.Units.Values.Select(candidate => feedback?.PresentedUnit(candidate) ?? candidate).FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == position);
@@ -76,6 +100,7 @@ namespace OCC.Combat.Presentation
             Texture2D intentTexture = intent == null ? null : assets.Intent(intent.IconId);
 
             Texture2D objectTexture = null;
+            Texture2D objectTextureLow = null;
             string objectLabel = string.Empty;
             Color objectLabelColor = FormalUiTheme.Text;
             if (tile.IsLampVine)
@@ -87,8 +112,11 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsAetherCrystal)
             {
-                objectTexture = assets.Academy("academy_aether_pillar_intact");
-                objectLabel = "晶簇";
+                bool pressureCrystal = state.ThreeMaterialPressure != null;
+                bool damagedCrystal = tile.Durability <= (pressureCrystal ? 16 : 8);
+                string crystalKey = pressureCrystal ? "academy_pressure_crystal_" : "academy_aether_crystal_";
+                objectTexture = assets.Academy(crystalKey + (damagedCrystal ? "damaged" : "intact"));
+                objectLabel = pressureCrystal ? "稳压晶簇" : "晶簇";
                 objectLabelColor = new Color(.42f, .88f, 1f, .96f);
             }
             else if (tile.IsCrystalShard)
@@ -99,33 +127,62 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsScorched)
             {
-                objectTexture = assets.Academy("academy_light_planter_rubble");
+                objectTexture = assets.Academy("academy_scorched_lamp_vine");
                 objectLabel = "焦痕";
                 objectLabelColor = new Color(.48f, .38f, .31f, .9f);
             }
+            else if (tile.IsDecoy)
+            {
+                objectTexture = assets.Academy("academy_decoy_lantern_active");
+                objectLabel = "诱导灯";
+                objectLabelColor = new Color(1f, .7f, .24f, .96f);
+            }
             else if (tile.IsObjective)
             {
-                string key = tile.IsDestroyed ? "academy_aether_pillar_rubble" : tile.Durability < 6 ? "academy_aether_pillar_damaged" : "academy_aether_pillar_intact";
+                string key = tile.IsDestroyed ? "academy_aether_pillar_rubble" : tile.Durability <= 6 ? "academy_aether_pillar_damaged" : "academy_aether_pillar_intact";
                 objectTexture = assets.Academy(key);
-                if (!tile.IsDestroyed) objectLabel = "导能柱";
+                if (!tile.IsDestroyed) objectLabel = state.PressureTest?.HasProtection == true &&
+                    state.PressureTest.ProtectedPosition == position ? "保护目标" : "导能柱";
+            }
+            else if (tile.IsPermanentWall)
+            {
+                objectTexture = assets.Academy("academy_wall_straight");
+                objectLabel = "永久墙";
+                objectLabelColor = new Color(.72f, .78f, .86f, .96f);
             }
             else if (tile.Cover == CoverType.Light)
             {
                 string family = (position.X + position.Y) % 2 == 0 ? "academy_light_stone_bench_" : "academy_light_planter_";
                 string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 4 ? "damaged" : "intact";
+                if (CombatTestArenaEntry.IsDedicatedTestArena && stateKey == "intact")
+                {
+                    objectTexture = assets.Academy("academy_test_book_crate_intact_64");
+                    objectTextureLow = assets.Academy("academy_test_book_crate_intact_32");
+                }
+                else
+                {
                 string variant = stateKey == "intact"
                     ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Light)
                     : null;
                 objectTexture = assets.Academy(variant ?? family + stateKey);
+                }
             }
             else if (tile.Cover == CoverType.Heavy)
             {
                 string family = (position.X + position.Y) % 2 == 0 ? "academy_heavy_archive_stack_" : "academy_heavy_masonry_screen_";
                 string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 7 ? "damaged" : "intact";
-                string variant = stateKey == "intact"
-                    ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Heavy)
-                    : null;
-                objectTexture = assets.Academy(variant ?? family + stateKey);
+                if (CombatTestArenaEntry.IsDedicatedTestArena && stateKey == "intact")
+                {
+                    objectTexture = assets.Academy("academy_test_heavy_cover_intact_64");
+                    objectTextureLow = assets.Academy("academy_test_heavy_cover_intact_32");
+                }
+                else
+                {
+                    string variant = stateKey == "intact"
+                        ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Heavy)
+                        : null;
+                    objectTexture = assets.Academy(variant ?? family + stateKey);
+                }
             }
             else if (trainingRangeActive && tile.IsDevice)
             {
@@ -150,16 +207,26 @@ namespace OCC.Combat.Presentation
             string surfaceHover = BuildSurfaceHover(level, position);
             string terrainEffectHover = BuildTerrainEffectHover(state, fireBattle, tile, position);
             string objectHover = BuildObjectHover(state, tile, position);
-            string terrainHover = JoinHoverSections(surfaceHover, terrainEffectHover, objectHover);
+            string reactionHover = pressureReaction?.WillTrigger == true
+                ? "警戒反应\n" + pressureReaction.Summary : string.Empty;
+            string terrainHover = JoinHoverSections(surfaceHover, terrainEffectHover, objectHover, reactionHover);
             string hover = unit == null ? terrainHover : unit.IsHero
                 ? CombatInformationPresenter.BuildHeroDetails(unit)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
                   FixedEncounterEnemyRuleText(state, unit) +
                   (forecast == null ? string.Empty : "\n预计伤害：" + forecast.PlayerSummary);
+            string actionHover = BuildActionHover(state, selection, position, unit, forecast, fireSpell, firePreview,
+                pressureReaction, move != null, attack != null);
+            if (!string.IsNullOrWhiteSpace(actionHover))
+                hover = string.IsNullOrWhiteSpace(hover) ? actionHover : actionHover + "\n\n" + hover;
             if (unit != null)
                 hover = AppendTerrainHover(hover, terrainHover);
-            Texture2D floor = assets.Academy(FloorKey(level, state.Map.Height, position.X, position.Y));
-            Rect floorUv = FloorUv(position.X, position.Y);
+            string floorKey = FloorKey(level, state.Map.Height, position.X, position.Y);
+            Texture2D floor = assets.Academy(floorKey);
+            string floorLowKey = AcademyBattlefieldLayoutCatalog.FloorLowAsset(level, position.X, position.Y);
+            Texture2D floorLow = string.IsNullOrEmpty(floorLowKey) ? null : assets.Academy(floorLowKey);
+            Rect floorUv = CombatTestArenaEntry.IsDedicatedTestArena
+                ? new Rect(0f, 0f, 1f, 1f) : FloorUv(position.X, position.Y);
             float floorRotation = FloorRotationDegrees(level, position.X, position.Y);
             string boundaryId = AcademyBattlefieldLayoutCatalog.BoundaryOverlay(level, position.X, position.Y,
                 out int boundaryTurns);
@@ -173,7 +240,45 @@ namespace OCC.Combat.Presentation
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover, travelOffset,
                 tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
-                surfaceHover, terrainEffectHover, objectHover);
+                surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow);
+        }
+
+        private static int FireSpellSlot(string action)
+        {
+            if (string.IsNullOrEmpty(action) || !action.StartsWith("技能", StringComparison.Ordinal) ||
+                !int.TryParse(action.Substring(2), out int oneBased)) return -1;
+            return oneBased >= 1 && oneBased <= OCC.Combat.Roguelite.RogueRuntimeConstants.SpellSlotCount
+                ? oneBased - 1 : -1;
+        }
+
+        private static string BuildActionHover(CombatState state, CombatSelectionController selection, GridPosition position,
+            UnitState unit, CombatTargetDamageForecast forecast, FireSpellDefinition spell, FireSpellPreview spellPreview,
+            PressureReactionPreview pressureReaction, bool canMove, bool canAttack)
+        {
+            if (selection == null || state == null) return string.Empty;
+            if (selection.Action == "移动" && canMove)
+            {
+                string result = "当前操作\n点击：移动至此";
+                if (pressureReaction?.WillTrigger == true) result += "\n警戒：" + pressureReaction.Summary;
+                return result;
+            }
+            if (selection.Action == "攻击" && canAttack && unit != null && !unit.IsHero)
+            {
+                string result = "当前操作\n点击：攻击「" + unit.DisplayName + "」";
+                if (forecast != null) result += "\n预计：" + forecast.PlayerSummary.Replace("\n", "；");
+                return result;
+            }
+            if (spell == null || spellPreview == null) return string.Empty;
+            if (!spellPreview.CanCommit)
+                return selection.HasPreviewPosition && selection.PreviewPosition == position
+                    ? "当前操作\n不能施放：" + string.Join("；", spellPreview.Failures) : string.Empty;
+
+            string effect = RogueliteSettlementPresentation.FireSpellPlayerSummary(spell).TrimEnd('。');
+            string preview = "当前操作\n点击：施放「" + spell.DisplayName + "」"
+                + "\n影响：" + spellPreview.Cells.Count + " 格"
+                + (spellPreview.FriendlyFireRisk ? "，可能波及友军" : string.Empty)
+                + "\n效果：" + effect;
+            return preview;
         }
 
         public static string AppendTerrainHover(string unitHover, string terrainHover) =>
@@ -198,7 +303,7 @@ namespace OCC.Combat.Presentation
             if (fireBattle?.HasFireground(position) == true)
                 effects.Add("燃烧地面会在进入或停留时触发火焰伤害");
             if (tile.SmokeExpiresAt > state.CurrentTime)
-                effects.Add("烟雾会在第 " + tile.SmokeExpiresAt + " 行动时消散");
+                effects.Add("烟幕可进入，但会截断双方穿过、射入或射出的远程攻击线，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
             if (tile.IsScorched)
                 effects.Add("灯藤焦痕仅作视觉记录，不造成伤害、遮挡或状态");
             return effects.Count == 0 ? string.Empty : string.Join("；", effects) + "。";
@@ -215,14 +320,23 @@ namespace OCC.Combat.Presentation
             else if (tile.IsCrystalShard)
                 objects.Add("碎晶可进入，进入消耗 2 移动距离，不阻挡攻击线且不持续造成伤害");
             else if (tile.IsObjective)
-                objects.Add(tile.IsDestroyed ? "损毁导能柱已经失效" :
+            {
+                bool protectedTarget = state.PressureTest?.HasProtection == true &&
+                    state.PressureTest.ProtectedPosition == position;
+                objects.Add(tile.IsDestroyed ? (protectedTarget ? "稳压器已损毁，保护目标失败" : "损毁导能柱已经失效") :
+                    protectedTarget ? state.PressureTest.ProtectionSummary(state) + " 可通过拦截、切线、占位、束缚或推拉保护。" :
                     "导能柱耐久 " + tile.Durability + "，可被互动或指定术式影响");
+            }
+            else if (tile.IsPermanentWall)
+                objects.Add("永久墙体阻挡移动与视线，不可破坏");
             else if (tile.Cover == CoverType.Light)
                 objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果，可正常通行" :
                     "轻掩体耐久 " + tile.Durability + "，肉鸽战斗中站立其上会在自身回合结束获得 2 护盾");
             else if (tile.Cover == CoverType.Heavy)
                 objects.Add(tile.IsDestroyed ? "重掩体残骸已失去阻挡和防护效果" :
                     "重掩体耐久 " + tile.Durability + "，会阻挡移动与视线，肉鸽战斗中与其正交相邻会在自身回合结束获得 4 护盾");
+            else if (tile.IsDecoy)
+                objects.Add("诱导灯占据该格，耐久 " + tile.Durability + "；5 格内普通敌人会公开改为接近并破坏它，持续到主角下一回合开始");
             else if (tile.IsDevice)
                 objects.Add(tile.IsDestroyed ? "损毁设备已经失效" :
                     "战场设备耐久 " + tile.Durability + "，可被互动、破坏或指定术式影响");
@@ -250,7 +364,10 @@ namespace OCC.Combat.Presentation
 
         public static Rect FloorUv(int x, int y)
         {
-            return new Rect(0f, 0f, 1f, 1f);
+            const float slice = 1f / 3f;
+            int column = ((x % 3) + 3) % 3;
+            int row = ((y % 3) + 3) % 3;
+            return new Rect(column * slice, row * slice, slice, slice);
         }
 
         private static string FixedEncounterEnemyRuleText(CombatState state, UnitState unit)
@@ -264,6 +381,10 @@ namespace OCC.Combat.Presentation
                 return "\n固定规则：无法攻击主角时接近最近完整晶簇并公开贴晶校准；所贴晶簇被毁后正面追击。借晶强化量未冻结，当前按基础重击结算。";
             if (state.GreenhouseCollectionRoom != null && unit.EnemyArchetypeId == "raider")
                 return "\n固定规则：相邻时优先钩刃牵制，否则限位钩刃；不相邻时从灯藤侧翼接近，藤内隐藏，能出藤贴邻时才显形。";
+            if (state.PressureTest?.HasReaction == true && unit.Id == "enemy_0")
+                return "\n警戒反应：主角移动结束进入 2–4 格正交射界时，向射线上首个单位造成 6 伤害并击退 1 格；相邻为死区，每个主角回合限 1 次。";
+            if (state.PressureTest?.HasProtection == true && unit.Id == "enemy_0")
+                return "\n目标优先级：公开接近并拆毁稳压器；被击倒、束缚、推离或接近格被占用时会改线。";
             return string.Empty;
         }
     }

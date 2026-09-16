@@ -72,7 +72,7 @@ def color_family(pixel: tuple[int, int, int], family: str) -> bool:
     raise ValueError(f"Unknown color family: {family}")
 
 
-def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int]:
+def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int] | None:
     if "delivery_size" in role:
         return tuple(role["delivery_size"])
     formula = role.get("delivery_formula")
@@ -85,6 +85,8 @@ def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int]:
             raise ValueError("multi-cell role requires two positive integer logical_cells")
         cell_pixels = 64 if formula == "logical_cells_times_64" else 32
         return logical_cells[0] * cell_pixels, logical_cells[1] * cell_pixels
+    if role.get("delivery_canvas") == "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject":
+        return None
     raise ValueError("role has no delivery size rule")
 
 
@@ -98,8 +100,10 @@ def validate_image(
     errors: list[str] = []
     image = Image.open(image_path).convert("RGBA")
     expected = expected_size(role, logical_cells)
-    if image.size != expected:
+    if expected is not None and image.size != expected:
         errors.append(f"delivery size {image.size} != expected {expected}")
+    if expected is None and (image.width % 32 or image.height % 32):
+        errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
 
     pixels = list(image.get_flattened_data())
     alpha_values = {pixel[3] for pixel in pixels}
@@ -187,6 +191,8 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
     if role is None:
         errors.append(f"unknown role: {role_name}")
         return errors, {}
+    if role.get("new_production_forbidden") and status != "FORMAL":
+        errors.append(f"role is retained for historical FORMAL assets only: {role_name}")
 
     provenance = manifest.get("provenance", {})
     channel = provenance.get("source_channel")

@@ -1,0 +1,44 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_debug_unit_post_outline_v1",
+  "role": "tactical_unit_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "Sephiria地图表现主参考方向的独立调试原料；只提炼地图组织与像素密度，不复制素材",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/unit_side_v1.png",
+    "source_sha256": "c7479815e6dc0bca2e1d699e9ea9d0373486a294e24e6a486cd81af0b8a3ca20"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_unit_side_post_outline_64.png",
+    "output_sha256": "16a280b54fcec0f15f3eb818f84f17fb29d9279116a84a8a12b3d1b65323e5bd",
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_unit_side_post_outline_64_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_unit_side_post_outline_64_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_unit_side_post_outline_64_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_unit_side_post_outline_64_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_unit_side_post_outline_64_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "新方向调试样板，等待用户审美确认"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_unit_side_post_outline_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

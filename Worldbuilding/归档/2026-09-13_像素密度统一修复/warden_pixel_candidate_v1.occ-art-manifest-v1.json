@@ -1,0 +1,11 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_warden_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {"source_channel": "easycli_chatgpt_pro_gpt_image_2_5", "source_path": "UnityProject/Reports/CombatTestArena/raw_warden_pixel_v1.png", "source_sha256": "C797E106B9CA38D92C2867B5BDF0E86199265D8B03B2442B625D1435213BAD8B"},
+  "delivery": {"output_path": "UnityProject/Reports/CombatTestArena/warden_pixel_candidate_64.png", "output_sha256": "B274E8701CC6E6D2EB75C26EBBF8B847043A8E9BDA847EA5D2A3F06BBC74906B", "logical_cells": [1, 1], "palette_max": 10},
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "守望者候选，与角色族共享 16px 语义网格"}
+}

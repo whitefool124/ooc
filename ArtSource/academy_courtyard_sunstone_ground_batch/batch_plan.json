@@ -1,0 +1,107 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {
+    "theme_id": "academy_courtyard_sunstone",
+    "material_family": "ruin_masonry",
+    "base_palette": [
+      "#E8C98E",
+      "#C59661",
+      "#8C5A3D",
+      "#41322C"
+    ],
+    "wetness": 0,
+    "wear": 1,
+    "motif": "brick_joint",
+    "edge_profile": "retaining_face"
+  },
+  "pieces": [
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.surface.a",
+      "native": "ground_academy_courtyard_sunstone_surface_a_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_surface_a.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.surface.b",
+      "native": "ground_academy_courtyard_sunstone_surface_b_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_surface_b.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.surface.c",
+      "native": "ground_academy_courtyard_sunstone_surface_c_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_surface_c.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.surface.d",
+      "native": "ground_academy_courtyard_sunstone_surface_d_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_surface_d.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.north.base",
+      "native": "ground_academy_courtyard_sunstone_north_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_north_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.east.base",
+      "native": "ground_academy_courtyard_sunstone_east_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_east_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.south.base",
+      "native": "ground_academy_courtyard_sunstone_south_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_south_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.west.base",
+      "native": "ground_academy_courtyard_sunstone_west_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_west_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.nw.base",
+      "native": "ground_academy_courtyard_sunstone_nw_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_nw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.ne.base",
+      "native": "ground_academy_courtyard_sunstone_ne_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_ne_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.sw.base",
+      "native": "ground_academy_courtyard_sunstone_sw_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_sw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_sunstone.se.base",
+      "native": "ground_academy_courtyard_sunstone_se_base_32.png",
+      "manifest": "ground_academy_courtyard_sunstone_se_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    }
+  ],
+  "approval_order": [
+    "one surface reference tile",
+    "four directional edges",
+    "four corners",
+    "surface variants",
+    "remaining theme batch"
+  ],
+  "status": "REJECTED_G4_HUMAN_STYLE",
+  "g0_reference_review": {
+    "piece": "surface.a",
+    "result": "TECHNICAL_PASS_HUMAN_STYLE_REJECT",
+    "reason": "The first source now passes the authorized opaque-ground window normalization: stable confidence 1.6323 and a lossless centered 32x32 window. Human review rejects its dominant central crack and oversized stone masses: it does not read as a calm low-contrast tactical surface.",
+    "rule": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json G0-G4 and rework_policy; do not use this reference to generate edges, corners or a contact map.",
+    "review_date": "2026-09-15"
+  }
+}

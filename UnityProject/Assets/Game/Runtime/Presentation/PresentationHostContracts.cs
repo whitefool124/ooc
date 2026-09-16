@@ -145,6 +145,7 @@ namespace OCC.Combat.Presentation
         void ClaimMapFireSpell(string spellId);
         void ClaimMapReward(string rewardId);
         void RequestAbandonMapReward();
+        void OpenRewardInventory();
         void PublishUiVisual(UiVisualEvent visualEvent);
     }
 
@@ -214,6 +215,7 @@ namespace OCC.Combat.Presentation
         void SubmitBattlefieldContextAction(GridPosition position, string actionId);
         void NotifyBattlefieldContextUnavailable(GridPosition position);
         void SetBattlefieldContextMenuOpen(bool open);
+        void SetBattlefieldPreviewPosition(GridPosition position, bool active);
         void FocusBattlefieldOnHero();
     }
 }

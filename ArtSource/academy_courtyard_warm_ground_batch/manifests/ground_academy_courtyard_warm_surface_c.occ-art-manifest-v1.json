@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ground.academy_courtyard_warm.surface.c",
+  "role": "floor_tile_32",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent opaque warm academy stone-material source; 39px observed macro-pixel pitch decoded as a lossless 32x32 ground-field window, with no resize, interpolation, repaint or new colours.",
+    "source_path": "ArtSource/academy_courtyard_warm_ground_batch/sources/ground_academy_courtyard_warm_surface_c_source.png",
+    "source_sha256": "16f8c4e6e3b5c1aff2e6c6423867ee8400e9858585e3593a4378d37ccd2d830d"
+  },
+  "delivery": {
+    "output_path": "ArtSource/academy_courtyard_warm_ground_batch/outputs/ground_academy_courtyard_warm_surface_c_groundfield_32.png",
+    "output_sha256": "d40549215d2e348a70a308e261fe4029baee0325ba94dd593c6d7760e7f5ca55",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 logical battle cell; dark 1-native-pixel cell boundary is a separate tactical-grid overlay, not a floor-brick seam",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/academy_courtyard_warm_ground_batch/evidence/ground_academy_courtyard_warm_surface_c_1x.png",
+    "four_x": "ArtSource/academy_courtyard_warm_ground_batch/evidence/ground_academy_courtyard_warm_surface_c_4x.png",
+    "grayscale": "ArtSource/academy_courtyard_warm_ground_batch/evidence/ground_academy_courtyard_warm_surface_c_grayscale.png",
+    "checker": "ArtSource/academy_courtyard_warm_ground_batch/evidence/ground_academy_courtyard_warm_surface_c_checker.png",
+    "application_contact": "ArtSource/academy_courtyard_warm_ground_batch/evidence/ground_academy_courtyard_warm_surface_c_tactical_grid_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Review the warm stone material together with its separate dark tactical-grid overlay. Approval is required before FORMAL_CANDIDATE or Unity import."
+  },
+  "unity_import": null,
+  "ground_window_qa": {
+    "qa_path": "ArtSource/academy_courtyard_warm_ground_batch/qa/ground_academy_courtyard_warm_surface_c_groundfield_qa.json",
+    "macro_pitch": 39,
+    "window_bounds": [
+      1,
+      1,
+      33,
+      33
+    ],
+    "selection": "deterministic_center"
+  }
+}

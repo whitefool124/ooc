@@ -33,7 +33,8 @@ namespace OCC.Combat
         {
             if (string.IsNullOrWhiteSpace(skill.Id)) Add(skill, issues, "missing_id", "A stable id is required.");
             if (string.IsNullOrWhiteSpace(skill.DisplayName)) Add(skill, issues, "missing_name", "A readable display name is required.");
-            if (skill.Range < 0 || skill.ManaCost < 0 || skill.Cooldown < 0) Add(skill, issues, "negative_cost", "Range, mana and cooldown cannot be negative.");
+            if (skill.MinimumRange < 0 || skill.Range < 0 || skill.ManaCost < 0 || skill.Cooldown < 0) Add(skill, issues, "negative_cost", "Range, mana and cooldown cannot be negative.");
+            if (skill.MinimumRange > skill.Range) Add(skill, issues, "invalid_range_band", "Minimum range cannot exceed maximum range.");
             if (skill.Effects == null || skill.Effects.Count == 0) { Add(skill, issues, "empty_effects", "At least one effect is required."); return; }
             if (skill.TargetRule == SkillTargetRule.Self && skill.Range != 0) Add(skill, issues, "self_range", "Self skills must use range 0.");
             if (skill.Delivery == SkillDeliveryMethod.Area && skill.ModifierValue(SkillModifierType.Radius) <= 0) Add(skill, issues, "area_radius", "Area delivery requires a positive radius.");

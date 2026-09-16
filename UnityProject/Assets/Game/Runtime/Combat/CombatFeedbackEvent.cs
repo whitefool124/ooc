@@ -123,7 +123,8 @@ namespace OCC.Combat
                 case StatusType.Burning: return CombatFeedbackKind.Burning;
                 case StatusType.Bound: return CombatFeedbackKind.Bound;
                 case StatusType.Slow: return CombatFeedbackKind.Slow;
-                case StatusType.ArmorBreak: return CombatFeedbackKind.ArmorBreak;
+                case StatusType.ArmorBreak:
+                case StatusType.BreakStance: return CombatFeedbackKind.ArmorBreak;
                 default: throw new ArgumentOutOfRangeException(nameof(status), status, "Unknown status feedback.");
             }
         }

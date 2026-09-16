@@ -11,7 +11,9 @@ namespace OCC.Combat
             StatusType.Burning,
             StatusType.Slow,
             StatusType.Bound,
-            StatusType.ArmorBreak
+            StatusType.ArmorBreak,
+            StatusType.FiregroundBoost,
+            StatusType.FiregroundVulnerable
         };
 
         public static CombatEffectExecution ResolveTurnStart(CombatState state, UnitState unit)

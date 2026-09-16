@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_heavy_cover_clean_2x2_v1",
+  "role": "battlefield_multi_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "独立生成的低纹理粗像素2x2重掩体原料；目标网格先在64级粗网格重建，再整数放大为128主稿",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_clean_heavy_cover_v1_source.png",
+    "source_sha256": "cc5514124112029b67ce5e7bd433efe8f906d412df361738d0b5c7b6605d2dfa"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_clean_2x2_128.png",
+    "output_sha256": "31abb6f64e4323522655a17ae9a1e6332e87c875ebdd95befbe26621c279e12d",
+    "logical_cells": [2, 2],
+    "palette_max": 16,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_clean_2x2_64.png",
+      "output_sha256": "793901daab6493451e434c810641802a940382bb663e6e43774c51d510307063",
+      "palette_max": 12
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_clean_2x2_128_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_clean_2x2_128_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_clean_2x2_128_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_clean_2x2_128_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_clean_2x2_128_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "低纹理、粗像素清理候选；等待实际地图接触与用户审美确认，未替换正式资产"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_clean_2x2_128.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

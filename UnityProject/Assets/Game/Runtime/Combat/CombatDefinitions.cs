@@ -5,7 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum DamageType { Physical, Fire, Arcane }
-    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance }
+    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance, FiregroundBoost, FiregroundVulnerable }
     public enum EquipmentSlot { MainHand, OffHand }
 
     public enum SkillTargetRule { Self, EnemyUnit, AllyUnit, AnyUnit, GridCell, Destructible }
@@ -49,14 +49,15 @@ namespace OCC.Combat
         public string DisplayName { get; }
         public DamageType DamageType { get; }
         public int Damage { get; }
+        public int MinimumRange { get; }
         public int Range { get; }
         public int ArmorPierce { get; }
         public int InitiativeDelay { get; }
         public int ManaCost { get; }
 
-        public WeaponDefinition(string id, string displayName, DamageType damageType, int damage, int range, int armorPierce = 0, int initiativeDelay = 0, int manaCost = 0)
+        public WeaponDefinition(string id, string displayName, DamageType damageType, int damage, int range, int armorPierce = 0, int initiativeDelay = 0, int manaCost = 0, int minimumRange = 0)
         {
-            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; Range = range; ArmorPierce = armorPierce; InitiativeDelay = initiativeDelay; ManaCost = manaCost;
+            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; MinimumRange = minimumRange; Range = range; ArmorPierce = armorPierce; InitiativeDelay = initiativeDelay; ManaCost = manaCost;
         }
     }
 
@@ -66,6 +67,7 @@ namespace OCC.Combat
         public string DisplayName { get; }
         public DamageType DamageType { get; }
         public int Damage { get; }
+        public int MinimumRange { get; }
         public int Range { get; }
         public int ManaCost { get; }
         public int Cooldown { get; }
@@ -78,9 +80,9 @@ namespace OCC.Combat
         public IReadOnlyList<SkillModifierDefinition> Modifiers { get; }
         public CombatFeedbackKind PresentationKind { get; }
 
-        public SkillDefinition(string id, string displayName, DamageType damageType, int damage, int range, int manaCost, int cooldown, StatusType? status = null, int statusDuration = 0, int initiativeDelay = 0)
+        public SkillDefinition(string id, string displayName, DamageType damageType, int damage, int range, int manaCost, int cooldown, StatusType? status = null, int statusDuration = 0, int initiativeDelay = 0, int minimumRange = 0)
         {
-            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; Range = range; ManaCost = manaCost; Cooldown = cooldown; Status = status; StatusDuration = statusDuration; InitiativeDelay = initiativeDelay;
+            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; Status = status; StatusDuration = statusDuration; InitiativeDelay = initiativeDelay;
             TargetRule = SkillTargetRule.EnemyUnit;
             Delivery = SkillDeliveryMethod.Projectile;
             List<SkillEffectDefinition> effects = new List<SkillEffectDefinition>();
@@ -91,9 +93,9 @@ namespace OCC.Combat
             PresentationKind = status.HasValue ? CombatFeedbackCatalog.ForStatus(status.Value) : CombatFeedbackKind.Damage;
         }
 
-        public SkillDefinition(string id, string displayName, SkillTargetRule targetRule, SkillDeliveryMethod delivery, int range, int manaCost, int cooldown, CombatFeedbackKind presentationKind, IEnumerable<SkillEffectDefinition> effects, IEnumerable<SkillModifierDefinition> modifiers = null)
+        public SkillDefinition(string id, string displayName, SkillTargetRule targetRule, SkillDeliveryMethod delivery, int range, int manaCost, int cooldown, CombatFeedbackKind presentationKind, IEnumerable<SkillEffectDefinition> effects, IEnumerable<SkillModifierDefinition> modifiers = null, int minimumRange = 0)
         {
-            Id = id; DisplayName = displayName; TargetRule = targetRule; Delivery = delivery; Range = range; ManaCost = manaCost; Cooldown = cooldown; PresentationKind = presentationKind;
+            Id = id; DisplayName = displayName; TargetRule = targetRule; Delivery = delivery; MinimumRange = minimumRange; Range = range; ManaCost = manaCost; Cooldown = cooldown; PresentationKind = presentationKind;
             Effects = (effects ?? throw new ArgumentNullException(nameof(effects))).ToArray();
             Modifiers = modifiers == null ? Array.Empty<SkillModifierDefinition>() : modifiers.ToArray();
             SkillEffectDefinition? damage = Effects.Where(effect => effect.Type == SkillEffectType.Damage).Select(effect => (SkillEffectDefinition?)effect).FirstOrDefault();

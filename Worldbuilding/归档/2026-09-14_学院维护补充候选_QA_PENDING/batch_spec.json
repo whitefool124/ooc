@@ -1,0 +1,29 @@
+{
+  "batch_id": "academy_service_supplement_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/application_contact_4x.png",
+  "human_review": { "status": "PENDING" },
+  "items": [
+    {
+      "id": "service_supply_case",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "source": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/source/service_supply_case_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/native.png",
+      "qa": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/checker.png",
+      "attempt_qas": ["Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/qa.json"],
+      "selected_round": 1,
+      "palette_max": 24
+    },
+    {
+      "id": "service_maintenance_guard",
+      "role": "tactical_unit_32x64",
+      "source": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/source/service_maintenance_guard_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/maintenance_guard/native.png",
+      "qa": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/maintenance_guard/qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/maintenance_guard/checker.png",
+      "attempt_qas": ["Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/maintenance_guard/qa.json"],
+      "selected_round": 1,
+      "palette_max": 32
+    }
+  ]
+}

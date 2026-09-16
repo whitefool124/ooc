@@ -325,9 +325,11 @@ namespace OCC.Combat
                 return Blocked("行囊放不下", "先整理出一块 " + reward.Item.Width + "×" + reward.Item.Height + " 的空位");
             if (run.UsesRogue11 && reward.Kind == RogueliteRewardKind.Equipment && !CanAcceptRogueContent(run, reward.Id))
                 return Blocked("行囊放不下", "先整理出一块能放下这件装备的位置");
+            if (run.UsesRogue11 && reward.Kind == RogueliteRewardKind.TacticalItem && !CanAcceptRogueContent(run, reward.Id))
+                return Blocked("行囊放不下", "先整理出一块能放下这件战术道具的位置");
             if (reward.Kind != RogueliteRewardKind.Item && run.ClaimedRewards.Contains(reward.Id)) return Blocked("已经拿过了", "这件奖励已经带走");
             if (FireSpellCatalog.All.Any(spell => spell.Id == reward.Id) && run.OwnedFireSpellIds.Contains(reward.Id)) return Blocked("已经学会了", "术式册里已经有这道术式");
-            return new UiOperationAvailability(true, "可以带走", reward.Kind == RogueliteRewardKind.Item ? "会放进行囊" : "会收进术式册");
+            return new UiOperationAvailability(true, "可以带走", reward.Kind == RogueliteRewardKind.Item || reward.Kind == RogueliteRewardKind.Equipment || reward.Kind == RogueliteRewardKind.TacticalItem ? "会放进行囊" : "会收进术式册");
         }
 
         public static UiOperationAvailability ForEquipment(RogueliteMapRun run, RogueliteReward reward)

@@ -46,24 +46,26 @@ namespace OCC.Combat.Tests
                 }
                 checkedArtifacts++;
             }
-            Assert.That(checkedArtifacts, Is.EqualTo(18));
+            Assert.That(checkedArtifacts, Is.EqualTo(20));
         }
 
         [Test]
-        public void ShieldBalancer_ReportsTwoActualTransfersAndSnapshotDoesNotInventDamage()
+        public void ShieldBalancer_ReportsShieldTransferredIntoCoverWithoutInventingDamage()
         {
-            CombatState state = State(); var hero = state.GetUnit("hero"); var ally = state.GetUnit("ally");
-            CombatEffectExecutor.Execute(state, "hero", CombatEffect.RestoreShield("ally", 4));
+            CombatState state = State(); state.ConfigureRuleset(CombatRuleset.Roguelite);
+            var hero = state.GetUnit("hero"); Assert.That(state.TryGrantRogueliteShield(hero.Id, "test", 12), Is.True);
             var playback = new CombatActionPlayback(); var capture = playback.Capture(state, null, "hero", 0);
-            var execution = ArtifactEngine.Execute(new ArtifactBattleState(state), "hero", ArtifactCatalog.ShieldBalancer, ArtifactTarget.Unit("ally", ally.Position), 3);
+            GridPosition cell = P(2, 1);
+            var execution = ArtifactEngine.Execute(new ArtifactBattleState(state), "hero", ArtifactCatalog.ShieldBalancer, ArtifactTarget.At(cell), 3);
             CombatFeedbackEvent[] events = Events(execution);
-            Assert.That(hero.Shield, Is.EqualTo(4)); Assert.That(ally.Shield, Is.EqualTo(4));
-            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldTransferredIn).TargetUnitId, Is.EqualTo("hero"));
-            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldTransferredOut).TargetUnitId, Is.EqualTo("ally"));
-            Assert.That(events.All(e => e.Amount == 2), Is.True);
+            Assert.That(hero.Shield, Is.Zero);
+            Assert.That(state.Map.GetTile(cell).Cover, Is.EqualTo(CoverType.Light));
+            Assert.That(state.Map.GetTile(cell).Durability, Is.EqualTo(12));
+            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldConsumed).Amount, Is.EqualTo(12));
             foreach (var e in events) capture.AddFeedback(e);
             var shown = new List<CombatFeedbackEvent>(); playback.Start(capture, state, 0f, shown.Add); playback.Advance(1f);
             Assert.That(shown, Has.Count.EqualTo(2));
+            Assert.That(shown.Any(e => e.Kind == CombatFeedbackKind.UtilityResolved), Is.True);
             Assert.That(shown.Any(e => e.Kind == CombatFeedbackKind.Damage || e.Kind == CombatFeedbackKind.ShieldAbsorb || e.Kind == CombatFeedbackKind.ShieldRestore), Is.False);
         }
 
@@ -133,8 +135,8 @@ namespace OCC.Combat.Tests
                     Assert.That(icon.Invoke(feedback, new object[] { CombatFeedbackCatalog.For(kind).Key }), Is.Not.Null);
                     Assert.That(vfx.Invoke(null, new object[] { kind }), Is.Null);
                 }
-                Assert.That(ArtifactCatalog.IsCurrentlyUsable("G-T04"), Is.False);
-                Assert.That(ArtifactCatalog.IsCurrentlyUsable("G-T18"), Is.False);
+                Assert.That(ArtifactCatalog.IsCurrentlyUsable("G-T04"), Is.True);
+                Assert.That(ArtifactCatalog.IsCurrentlyUsable("G-T18"), Is.True);
             }
             finally { Object.DestroyImmediate(root); }
         }

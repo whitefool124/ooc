@@ -1,0 +1,57 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_service_supplement_qa_v1",
+  "items": 2,
+  "total_generations": 2,
+  "first_pass_technical_success": 2,
+  "first_pass_rate": 1.0,
+  "success_with_one_targeted_retry": 2,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "service_supply_case",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 1,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 23,
+      "confidence": 2.6036,
+      "subject_size": [
+        47,
+        29
+      ],
+      "canvas": [
+        64,
+        32
+      ],
+      "palette": 24,
+      "manifest": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/service_supply_case_manifest.json"
+    },
+    {
+      "id": "service_maintenance_guard",
+      "role": "tactical_unit_32x64",
+      "selected_round": 1,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 28,
+      "confidence": 1.247,
+      "subject_size": [
+        21,
+        62
+      ],
+      "canvas": [
+        32,
+        64
+      ],
+      "palette": 32,
+      "manifest": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/maintenance_guard/service_maintenance_guard_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PENDING"
+  },
+  "formal_assets_replaced": false
+}

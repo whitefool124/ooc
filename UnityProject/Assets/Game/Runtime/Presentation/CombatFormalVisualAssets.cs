@@ -18,6 +18,7 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Texture2D> relay = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> overlays = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> intents = new Dictionary<string, Texture2D>();
+        private readonly Dictionary<string, Texture2D> testArenaUnits = new Dictionary<string, Texture2D>();
         private readonly Dictionary<StatusType, Texture2D> statuses = new Dictionary<StatusType, Texture2D>();
         private readonly Texture2D[] firegroundFrames = new Texture2D[6];
         private readonly Texture2D[] smokeFrames = new Texture2D[6];
@@ -36,6 +37,12 @@ namespace OCC.Combat.Presentation
         public Texture2D Unit(UnitState unit, int animationFrame = -1)
         {
             if (unit == null) return null;
+            if (CombatTestArenaEntry.IsDedicatedTestArena)
+            {
+                if (unit.IsHero && testArenaUnits.TryGetValue("hero", out Texture2D testHero)) return testHero;
+                if (!string.IsNullOrEmpty(unit.EnemyArchetypeId) && testArenaUnits.TryGetValue(unit.EnemyArchetypeId, out Texture2D testUnit)) return testUnit;
+                if (!unit.IsHero && testArenaUnits.TryGetValue("raider", out Texture2D testFallback)) return testFallback;
+            }
             if (unit.IsHero) return TextureFor("hero");
             if (string.IsNullOrEmpty(unit.EnemyArchetypeId)) return null;
             if (animationFrame >= 0 && enemyAnimations.TryGetValue(unit.EnemyArchetypeId, out Texture2D[] frames))
@@ -51,6 +58,16 @@ namespace OCC.Combat.Presentation
         public void LoadRuntime()
         {
             LoadUnits();
+            if (CombatTestArenaEntry.IsDedicatedTestArena)
+            {
+                testArenaUnits["hero"] = LoadOptionalTexture("Art/CombatTestArenaSephiriaDebug/sephiria_unit_side_post_outline_64");
+                testArenaUnits["raider"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_raider_pixel_candidate_64");
+                testArenaUnits["shieldguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_shieldguard_pixel_candidate_64");
+                testArenaUnits["pyromancer"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_pyromancer_pixel_candidate_64");
+                testArenaUnits["elite_vanguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_elite_vanguard_pixel_candidate_64");
+                testArenaUnits["breaker"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_breaker_pixel_candidate_64");
+                testArenaUnits["warden"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_warden_pixel_candidate_64");
+            }
             LoadAcademy();
             foreach (FormalArtEntry entry in FormalArtRegistry.Environments)
                 environments[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
@@ -72,6 +89,8 @@ namespace OCC.Combat.Presentation
             statuses[StatusType.Bound] = RequiredTexture(FormalArtRegistry.StatusPath("bound"));
             statuses[StatusType.ArmorBreak] = RequiredTexture(FormalArtRegistry.StatusPath("armor_break"));
             statuses[StatusType.BreakStance] = statuses[StatusType.ArmorBreak];
+            statuses[StatusType.FiregroundBoost] = statuses[StatusType.Burning];
+            statuses[StatusType.FiregroundVulnerable] = statuses[StatusType.Burning];
             statuses[StatusType.Dazzled] = RequiredTexture(FormalArtRegistry.StatusPath("dazzled"));
             statuses[StatusType.Revealed] = RequiredTexture(FormalArtRegistry.StatusPath("revealed"));
             for (int frame = 0; frame < firegroundFrames.Length; frame++)
@@ -184,6 +203,9 @@ namespace OCC.Combat.Presentation
                 "academy_heavy_archive_stack_intact", "academy_heavy_archive_stack_damaged", "academy_heavy_archive_stack_rubble",
                 "academy_heavy_masonry_screen_intact", "academy_heavy_masonry_screen_damaged", "academy_heavy_masonry_screen_rubble",
                 "academy_aether_pillar_intact", "academy_aether_pillar_damaged", "academy_aether_pillar_rubble",
+                "academy_aether_crystal_intact", "academy_aether_crystal_damaged",
+                "academy_pressure_crystal_intact", "academy_pressure_crystal_damaged", "academy_scorched_lamp_vine",
+                "academy_decoy_lantern_active",
                 "academy_seal_plinth_intact", "academy_seal_plinth_damaged", "academy_seal_plinth_rubble",
                 "academy_loot_chest_closed", "academy_loot_chest_open", "academy_loot_chest_empty",
                 "academy_aether_line_straight", "academy_aether_line_corner", "academy_aether_line_tee", "academy_aether_line_cross"
@@ -208,6 +230,31 @@ namespace OCC.Combat.Presentation
             foreach (string id in new[] { "academy_curb_edge", "academy_curb_corner", "academy_curb_opposite",
                          "academy_curb_three", "academy_curb_enclosed" })
                 academy[id] = RequiredTexture("Art/FormalAcademyTerrainOverlays32/" + id);
+            // Dedicated CombatTestArena ground is a set of independently replaceable
+            // theme modules. Each theme has one interior surface and one south exposed
+            // edge, plus an explicit 32px companion for the low-resolution viewport.
+            foreach (string theme in new[] { "slate", "earth" })
+            foreach (string part in new[] { "surface", "edge_s" })
+            foreach (string resolution in new[] { "64", "32" })
+            {
+                string id = $"academy_test_ground_theme_{theme}_{part}_{resolution}";
+                academy[id] = RequiredTexture("Art/CombatTestArenaGround/" + id);
+            }
+            foreach (string resolution in new[] { "64", "32" })
+            {
+                string id = "academy_test_heavy_cover_intact_" + resolution;
+                academy[id] = RequiredTexture("Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_post_outline_" + resolution);
+                string lightId = "academy_test_book_crate_intact_" + resolution;
+                academy[lightId] = RequiredTexture("Art/CombatTestArenaGround/" + lightId);
+                foreach (char variant in new[] { 'a', 'b', 'c', 'd' })
+                {
+                    string courtId = "academy_test_ground_tile_court_" + variant + "_" + resolution;
+                    academy[courtId] = RequiredTexture("Art/CombatTestArenaGround/" + courtId);
+                }
+            }
+            academy["academy_test_ground_theme_slate_surface_64"] = RequiredTexture("Art/CombatTestArenaSephiriaDebug/sephiria_ground_64");
+            academy["academy_test_ground_theme_slate_surface_32"] = RequiredTexture("Art/CombatTestArenaSephiriaDebug/sephiria_ground_32");
+            academy["academy_wall_straight"] = RequiredTexture("Art/FormalAcademyStructures32/academy_wall_straight");
             foreach (string id in AcademyBattlefieldLayoutCatalog.CoverVisualAssetIds())
                 academy[id] = RequiredTexture("Art/FormalAcademyStructures32/" + id);
         }

@@ -1,0 +1,11 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_breaker_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {"source_channel": "easycli_chatgpt_pro_gpt_image_2_5", "source_path": "UnityProject/Reports/CombatTestArena/raw_breaker_pixel_v1.png", "source_sha256": "53E68969CEFC275643D36E993DF11253D81B0C0FBB38D4568E58220D87204469"},
+  "delivery": {"output_path": "UnityProject/Reports/CombatTestArena/breaker_pixel_candidate_64.png", "output_sha256": "E24FD8C18E3CF8EF47DC385ABC0714D1800B1F9C6B135606600854A5A4DA9A77", "logical_cells": [1, 1], "palette_max": 10},
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "破障者候选，与角色族共享 16px 语义网格"}
+}

@@ -1,0 +1,107 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {
+    "theme_id": "academy_courtyard_warm",
+    "material_family": "ruin_masonry",
+    "base_palette": [
+      "#E9D8B7",
+      "#C8AD80",
+      "#8A694C",
+      "#42362F"
+    ],
+    "wetness": 1,
+    "wear": 1,
+    "motif": "maintenance_cut",
+    "edge_profile": "retaining_face"
+  },
+  "pieces": [
+    {
+      "runtime_id": "ground.academy_courtyard_warm.surface.a",
+      "native": "ground_academy_courtyard_warm_surface_a_32.png",
+      "manifest": "ground_academy_courtyard_warm_surface_a.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.surface.b",
+      "native": "ground_academy_courtyard_warm_surface_b_32.png",
+      "manifest": "ground_academy_courtyard_warm_surface_b.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.surface.c",
+      "native": "ground_academy_courtyard_warm_surface_c_32.png",
+      "manifest": "ground_academy_courtyard_warm_surface_c.occ-art-manifest-v1.json",
+      "status": "REVIEW_READY"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.surface.d",
+      "native": "ground_academy_courtyard_warm_surface_d_32.png",
+      "manifest": "ground_academy_courtyard_warm_surface_d.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.north.base",
+      "native": "ground_academy_courtyard_warm_north_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_north_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.east.base",
+      "native": "ground_academy_courtyard_warm_east_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_east_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.south.base",
+      "native": "ground_academy_courtyard_warm_south_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_south_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.west.base",
+      "native": "ground_academy_courtyard_warm_west_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_west_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.nw.base",
+      "native": "ground_academy_courtyard_warm_nw_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_nw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.ne.base",
+      "native": "ground_academy_courtyard_warm_ne_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_ne_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.sw.base",
+      "native": "ground_academy_courtyard_warm_sw_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_sw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warm.se.base",
+      "native": "ground_academy_courtyard_warm_se_base_32.png",
+      "manifest": "ground_academy_courtyard_warm_se_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    }
+  ],
+  "approval_order": [
+    "one surface reference tile",
+    "four directional edges",
+    "four corners",
+    "surface variants",
+    "remaining theme batch"
+  ],
+  "status": "G0_REVIEW_READY",
+  "g0_reference_review": {
+    "piece": "surface.c",
+    "result": "REVIEW_READY",
+    "reason": "Warm stone ground field passed native 32x32 lossless-window decoding at 39px inferred source pitch and confidence 1.7213. Its 1px deep-umber tactical border is demonstrated as a separate grid overlay, not baked into the reusable floor texture.",
+    "next_gate": "Human review of the 12x9 tactical-grid contact before directional edges, corners or surface variants.",
+    "review_date": "2026-09-15"
+  }
+}

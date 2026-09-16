@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_service_supplement_qa_v1_service_supply_case",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/source/service_supply_case_source.png",
+    "source_sha256": "25a4c82e166a19c8b6ebfa74e8944cddc081e503a3f4d33d5e04f366211c27d1"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/native.png",
+    "output_sha256": "af0f56162301785bf0d936ea95156c2ea2b2ec28fd2e556918181f299f3bb192",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "64x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/native.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/native_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/native_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/supply_case/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_学院维护补充候选_QA_PENDING/application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Batch stability sample; no Unity import or formal promotion."
+  },
+  "unity_import": null
+}

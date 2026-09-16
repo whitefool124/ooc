@@ -1,0 +1,41 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_gear_cabinet_qa_v1",
+  "items": 1,
+  "total_generations": 3,
+  "first_pass_technical_success": 0,
+  "first_pass_rate": 0.0,
+  "success_with_one_targeted_retry": 1,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "academy_prop_gear_cabinet_candidate",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 3,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 23,
+      "confidence": 7.3035,
+      "subject_size": [
+        51,
+        39
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "palette": 24,
+      "manifest": "Worldbuilding/归档/2026-09-14_工具柜候选_QA_PENDING/gear_cabinet/academy_prop_gear_cabinet_candidate_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_工具柜候选_QA_PENDING/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14"
+  },
+  "formal_assets_replaced": false
+}

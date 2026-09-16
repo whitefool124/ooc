@@ -110,6 +110,27 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void EventReward_UsesPendingSettlementQueueUntilClaimed()
+        {
+            RogueliteMapRun run = CreateRogue11AtSwitchyard(FindSeedForSwitchyard("EV04"));
+            int contributionBefore = run.StageContribution;
+
+            run.ChooseCurrentNodeContent("EV04_medical");
+
+            Assert.That(run.AwaitingReward, Is.True);
+            Assert.That(run.CurrentRewards.Select(value => value.Id), Is.EqualTo(new[] { "G-T06" }));
+            Assert.That(run.RogueRunState.PendingRewardIds, Does.Contain("G-T06"));
+            Assert.That(run.RogueRunState.StageContribution, Is.EqualTo(contributionBefore - 1));
+            Assert.That(run.ClaimedRewards, Does.Not.Contain("G-T06"));
+
+            run.ClaimReward("G-T06");
+
+            Assert.That(run.RogueRunState.PendingRewardIds, Is.Empty);
+            Assert.That(run.ClaimedRewards, Does.Contain("G-T06"));
+            Assert.That(run.RogueRunState.TacticalItemInstances.Any(value => value.DefinitionId == "G-T06"), Is.True);
+        }
+
+        [Test]
         public void SurvivedEventCombatFailure_ClosesNodeAndGrantsOnlyHalfBaseCurrency()
         {
             RogueliteMapRun run = CreateRogue11AtSwitchyard(FindSeedForSwitchyard("EV03"));
@@ -143,6 +164,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.HasPendingContentCombat, Is.False);
             Assert.Throws<InvalidOperationException>(() => run.CompletePendingContentCombat());
         }
+
 
         [Test]
         public void ServiceAndFixedEventNodes_AreZeroTimeOneShotChoicesWithoutFreeBaseIncome()
@@ -183,9 +205,9 @@ namespace OCC.Combat.Tests
             int timeAfterEvents = run.StageTime;
             run.SelectNode("core_vault");
             run.ChooseCurrentNodeContent("vault_fire_cache");
+            run.ClaimReward("G-T19");
             Assert.That(run.ClaimedRewards, Does.Contain("G-T19"));
             Assert.That(run.StageTime, Is.EqualTo(timeAfterEvents + 1), "Reclassified fixed content follows the event-node time rule.");
-            Assert.That(run.AwaitingReward, Is.False);
 
             RogueliteMapNode towerEvent = RogueliteMapCatalog.Node("tower_lift");
             Assert.That(AcademyNodeContentCatalog.FunctionChoices(towerEvent).Single().RewardId, Is.EqualTo("G-T19"));

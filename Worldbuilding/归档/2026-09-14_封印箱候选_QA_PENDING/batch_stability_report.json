@@ -1,0 +1,40 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_sealed_trunk_qa_v1",
+  "items": 1,
+  "total_generations": 2,
+  "first_pass_technical_success": 1,
+  "first_pass_rate": 1.0,
+  "success_with_one_targeted_retry": 1,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "academy_prop_sealed_trunk_candidate",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 31,
+      "confidence": 2.9807,
+      "subject_size": [
+        17,
+        15
+      ],
+      "canvas": [
+        32,
+        32
+      ],
+      "palette": 24,
+      "manifest": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/sealed_trunk/academy_prop_sealed_trunk_candidate_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_封印箱候选_QA_PENDING/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14"
+  },
+  "formal_assets_replaced": false
+}

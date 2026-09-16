@@ -1,0 +1,97 @@
+{
+  "schema": "occ-native32-stability-batch-v1",
+  "batch_id": "academy_maintenance_mixed_v1",
+  "date": "2026-09-14",
+  "human_review": {
+    "status": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "scope": "all six selected batch assets and the unified workflow"
+  },
+  "application_contact": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/batch_application_contact_4x.png",
+  "items": [
+    {
+      "id": "heavy_cover",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "palette_max": 24,
+      "selected_round": 2,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/heavy_cover_r2_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover_r2/heavy_cover_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover_r2/heavy_cover_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover_r2/heavy_cover_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover/heavy_cover_qa.json",
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/heavy_cover_r2/heavy_cover_qa.json"
+      ]
+    },
+    {
+      "id": "archive_cabinet",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "palette_max": 24,
+      "selected_round": 2,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/archive_cabinet_r2_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet_r2/archive_cabinet_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet_r2/archive_cabinet_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet_r2/archive_cabinet_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet/archive_cabinet_qa.json",
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/archive_cabinet_r2/archive_cabinet_qa.json"
+      ]
+    },
+    {
+      "id": "aether_power_box",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "palette_max": 24,
+      "selected_round": 2,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/aether_power_box_r2_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box/aether_power_box_qa.json",
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_qa.json"
+      ]
+    },
+    {
+      "id": "maintenance_cart",
+      "role": "single_cell_prop_adaptive_32ppu",
+      "palette_max": 24,
+      "selected_round": 2,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/maintenance_cart_r2_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart_r2/maintenance_cart_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart_r2/maintenance_cart_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart_r2/maintenance_cart_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart/maintenance_cart_qa.json",
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_cart_r2/maintenance_cart_qa.json"
+      ]
+    },
+    {
+      "id": "maintenance_guard",
+      "role": "tactical_unit_32x64",
+      "palette_max": 32,
+      "selected_round": 1,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/maintenance_guard_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_guard/maintenance_guard_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_guard/maintenance_guard_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_guard/maintenance_guard_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/maintenance_guard/maintenance_guard_qa.json"
+      ]
+    },
+    {
+      "id": "field_medic",
+      "role": "tactical_unit_32x64",
+      "palette_max": 32,
+      "selected_round": 2,
+      "source": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/field_medic_r2_source.png",
+      "output": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic_r2/field_medic_native.png",
+      "qa": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic_r2/field_medic_qa.json",
+      "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic_r2/field_medic_preview8x.png",
+      "attempt_qas": [
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic/field_medic_qa.json",
+        "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/field_medic_r2/field_medic_qa.json"
+      ]
+    }
+  ]
+}

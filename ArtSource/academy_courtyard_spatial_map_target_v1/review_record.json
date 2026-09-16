@@ -1,0 +1,17 @@
+{
+  "schema": "occ-visual-target-review-v1",
+  "status": "VISUAL_TARGET_ONLY",
+  "asset_id": "visual_target.academy_courtyard_spatial_map.v1",
+  "source_channel": "codex_builtin_imagegen",
+  "source_path": "ArtSource/academy_courtyard_spatial_map_target_v1/sources/warm_academy_spatial_tactical_map_target_v1_source.png",
+  "source_sha256": "2ba2be68e0fe124a7fdd8f939eb1878fc30f4d3bca62ae3103223d7a1345769b",
+  "purpose": "Quick visual assembly target for the warm magical-academy battlefield. It proves the intended spatial reading; it is not an importable texture or a source from which to slice production tiles.",
+  "accepted_reading": [
+    "open warm-ivory grid top surface with one thin warm-dark cell seam",
+    "a raised platform with a visible front retaining face and visible side/end faces",
+    "rear stair and distant academy colonnade establish depth without occupying the play field",
+    "perimeter greenery and masonry remain outside the playable center",
+    "one upper-left warm light direction and down-right cast shadows"
+  ],
+  "production_follow_up": "Make native 32x32 ground and native 32x40 directional outer-edge assets against this target; do not import this full-frame image."
+}

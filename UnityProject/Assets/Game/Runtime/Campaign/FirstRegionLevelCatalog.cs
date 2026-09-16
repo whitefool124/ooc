@@ -5,7 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum FirstRegionFloorTheme { StoneRoad, Courtyard, Ruins, AetherMarked }
-    public enum LevelTerrainKind { LightCover, HeavyCover, AetherObjective, Water, LampVine, AetherCrystal }
+    public enum LevelTerrainKind { LightCover, HeavyCover, PermanentWall, AetherObjective, Water, LampVine, AetherCrystal }
     public enum LevelOpeningProfile { Melee, Ranged, Generalist }
 
     public sealed class LevelTerrainPlacement
@@ -270,8 +270,9 @@ namespace OCC.Combat
                 {
                     if (!Inside(level, routeAnchor)) errors.Add(level.Id + ": route anchor outside map");
                     if (occupied.Contains(routeAnchor)) errors.Add(level.Id + ": route anchor is occupied " + routeAnchor);
-                    if (level.Terrain.Any(terrain => terrain.Position == routeAnchor && terrain.Kind == LevelTerrainKind.HeavyCover))
-                        errors.Add(level.Id + ": route anchor is blocked by heavy cover " + routeAnchor);
+                    if (level.Terrain.Any(terrain => terrain.Position == routeAnchor &&
+                        (terrain.Kind == LevelTerrainKind.HeavyCover || terrain.Kind == LevelTerrainKind.PermanentWall)))
+                        errors.Add(level.Id + ": route anchor is blocked by terrain " + routeAnchor);
                 }
                 int objectiveCount = level.Terrain.Count(tile => tile.Kind == LevelTerrainKind.AetherObjective);
                 if (level.ObjectiveType == CombatObjectiveType.Destruction && objectiveCount == 0) errors.Add(level.Id + ": destruction objective has no target");
@@ -307,6 +308,7 @@ namespace OCC.Combat
                 {
                     case LevelTerrainKind.LightCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Light, Durability = TileState.LightDurability }); break;
                     case LevelTerrainKind.HeavyCover: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability }); break;
+                    case LevelTerrainKind.PermanentWall: map.SetTile(placement.Position, new TileState { IsPermanentWall = true }); break;
                     case LevelTerrainKind.AetherObjective: map.SetTile(placement.Position, new TileState { IsObjective = true, IsDevice = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.Water: map.SetTile(placement.Position, new TileState { IsWater = true }); break;
                     case LevelTerrainKind.LampVine: map.SetTile(placement.Position, new TileState { IsLampVine = true, Durability = TileState.FragileDurability }); break;
@@ -361,6 +363,8 @@ namespace OCC.Combat
                 state.Map.GetTile(new GridPosition(6, 4)).Durability = TileState.HeavyDurability;
                 state.AttachThreeMaterialPressure(new ThreeMaterialPressureRuntime());
             }
+            if (level.IsBoss && state.Units.Values.Any(unit => unit.EnemyArchetypeId == "core_overseer"))
+                state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
             return new FirstRegionLevelBuild(level, state);
         }
     }

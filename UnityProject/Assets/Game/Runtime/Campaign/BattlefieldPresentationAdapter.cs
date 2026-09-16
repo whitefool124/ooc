@@ -63,7 +63,9 @@ namespace OCC.Combat
     public sealed class BattlefieldPresentationAdapter
     {
         private readonly CombatMovementRangeCache movementRange = new CombatMovementRangeCache();
-        public const float CellSize = 128f;
+        // Default view must fit the 12x9 board inside the 75% combat region.
+        // 128px remains available as the explicit zoom-in step.
+        public const float CellSize = 64f;
         public const float OverviewCellSize = 64f;
         public const float MinimumCellSize = 64f;
         public const float MaximumCellSize = 128f;
@@ -147,8 +149,9 @@ namespace OCC.Combat
             {
                 UnitState target = state.GetUnit(selectedTargetId);
                 if (target == null || !target.IsAlive || target.IsHero) failure = "这个目标不能攻击，请换一个敌人";
+                else if (Distance(hero.Position, target.Position) < hero.MainHand.MinimumRange) failure = "目标位于武器近身死区";
                 else if (Distance(hero.Position, target.Position) > hero.MainHand.Range) failure = "目标超出武器射程";
-                else if (!state.Map.HasLineOfSight(hero.Position, target.Position)) failure = "重掩体挡住了视线";
+                else if (!state.HasLineOfSight(hero.Position, target.Position)) failure = "重掩体或烟幕挡住了视线";
             }
             if (string.IsNullOrEmpty(failure) && (action == "技能1" || action == "技能2") && !string.IsNullOrEmpty(selectedTargetId))
             {
@@ -170,14 +173,62 @@ namespace OCC.Combat
             if (string.IsNullOrEmpty(failure) && validCells == 0 && action != "结束行动") failure = "现在没有可以选择的位置";
             string before = string.Empty, after = string.Empty, breakdown = string.Empty, statuses = string.Empty;
             int affected = 0;
+            bool friendlyFireRisk = false;
             UnitState exactTarget = string.IsNullOrEmpty(selectedTargetId) ? null : state.GetUnit(selectedTargetId);
             if (exactTarget != null && action == "攻击")
             {
-                CombatResolver.AttackPreview damage = CombatResolver.PreviewAttack(state, hero.Id, exactTarget.Id, false);
                 before = "生命 " + exactTarget.Health + "　护盾 " + exactTarget.Shield;
-                after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + "　护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
-                breakdown = CombatInformationPresenter.DamageBreakdown(damage);
-                affected = 1;
+                FireBattleState liveFireBattle = state.RogueSpells?.FireBattle;
+                if (state.Ruleset == CombatRuleset.Roguelite && liveFireBattle != null)
+                {
+                    FirePendingEffect[] armedAttachments = liveFireBattle.PendingEffects.Where(effect =>
+                        effect.SourceUnitId == hero.Id && (effect.Spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack ||
+                        effect.Spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack)).ToArray();
+                    FireBattleState simulatedBattle = liveFireBattle.Clone();
+                    FireWeaponAttackResolution simulated = FireSpellEngine.ResolveWeaponAttack(simulatedBattle, hero.Id, exactTarget.Id);
+                    UnitState simulatedTarget = simulatedBattle.Combat.GetUnit(exactTarget.Id);
+                    after = "生命 " + simulatedTarget.Health + "　护盾 " + simulatedTarget.Shield;
+                    int shieldLoss = Math.Max(0, exactTarget.Shield - simulatedTarget.Shield);
+                    int healthLoss = Math.Max(0, exactTarget.Health - simulatedTarget.Health);
+                    breakdown = "武器与附着合计：护盾 -" + shieldLoss + "　生命 -" + healthLoss;
+                    string[] triggeredNames = simulated.TriggerExecutions.Select(value => value.Preview.Spell.DisplayName)
+                        .Distinct(StringComparer.Ordinal).ToArray();
+                    if (triggeredNames.Length > 0)
+                    {
+                        string triggerText = "将触发：" + string.Join("、", triggeredNames);
+                        string[] triggerResults = simulated.TriggerExecutions.SelectMany(value => value.Steps)
+                            .Select(FireTriggerResultLabel).Where(value => !string.IsNullOrEmpty(value))
+                            .Distinct(StringComparer.Ordinal).ToArray();
+                        string resultText = triggerResults.Length > 0 ? "；" + string.Join("、", triggerResults) : string.Empty;
+                        expected += "；" + triggerText + resultText;
+                        statuses = triggerText + resultText;
+                    }
+                    else if (armedAttachments.Length > 0)
+                    {
+                        expected += "；待触发术式条件未满足，本次攻击不会消耗其窗口";
+                        statuses = "待触发术式保留";
+                    }
+                    UnitState[] changedUnits = state.Units.Values.Where(live =>
+                    {
+                        UnitState copy = simulatedBattle.Combat.GetUnit(live.Id);
+                        return copy != null && (copy.Health != live.Health || copy.Shield != live.Shield ||
+                            copy.Statuses.Count != live.Statuses.Count);
+                    }).ToArray();
+                    affected = changedUnits.Length;
+                    friendlyFireRisk = changedUnits.Any(live =>
+                    {
+                        if (live.IsHero != hero.IsHero) return false;
+                        UnitState copy = simulatedBattle.Combat.GetUnit(live.Id);
+                        return copy.Health + copy.Shield < live.Health + live.Shield;
+                    });
+                }
+                else
+                {
+                    CombatResolver.AttackPreview damage = CombatResolver.PreviewAttack(state, hero.Id, exactTarget.Id, false);
+                    after = "生命 " + Math.Max(0, exactTarget.Health - damage.FinalDamage) + "　护盾 " + Math.Max(0, exactTarget.Shield - damage.ShieldAbsorption);
+                    breakdown = CombatInformationPresenter.DamageBreakdown(damage);
+                    affected = 1;
+                }
             }
             else if (exactTarget != null && (action == "技能1" || action == "技能2"))
             {
@@ -192,7 +243,7 @@ namespace OCC.Combat
                 statuses = skill == null ? string.Empty : string.Join("、", skill.Effects.Where(effect => effect.Type == SkillEffectType.ApplyStatus).Select(EffectLabel));
                 affected = 1;
             }
-            return new CombatActionPreview(action, targetRule, cost, expected, validCells, failure, before, after, breakdown, statuses, affected, false);
+            return new CombatActionPreview(action, targetRule, cost, expected, validCells, failure, before, after, breakdown, statuses, affected, friendlyFireRisk);
         }
 
         public string InvalidReasonForCell(CombatState state, string action, GridPosition position)
@@ -208,8 +259,9 @@ namespace OCC.Combat
             if (action == "攻击")
             {
                 if (target == null || target.IsHero) return "当前格没有可攻击目标";
+                if (distance < hero.MainHand.MinimumRange) return "目标位于武器近身死区";
                 if (distance > hero.MainHand.Range) return "目标超出武器射程";
-                if (!state.Map.HasLineOfSight(hero.Position, position)) return "重掩体挡住了视线";
+                if (!state.HasLineOfSight(hero.Position, position)) return "重掩体或烟幕挡住了视线";
             }
             else if (action == "技能1" || action == "技能2")
             {
@@ -254,7 +306,7 @@ namespace OCC.Combat
         private static string TargetRule(string action, UnitState hero)
         {
             if (action == "移动") return "选择 3 格内可通行空格";
-            if (action == "攻击") return "选择 " + hero.MainHand.Range + " 格内可见敌人";
+            if (action == "攻击") return "选择 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range) + "内可见敌人";
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
@@ -295,6 +347,13 @@ namespace OCC.Combat
         }
 
         private static string DamageSummary(CombatResolver.AttackPreview preview) => "预计生命 -" + preview.FinalDamage + "　护盾 -" + preview.ShieldAbsorption + "　减伤 " + (preview.CoverReduction + preview.ArmorReduction + preview.BlockReduction);
+        private static string FireTriggerResultLabel(FireSpellResultStep step)
+        {
+            if (step.Kind == FireRuleKind.ApplyBurning) return "目标获得燃烧";
+            if (step.Kind == FireRuleKind.ApplyBreakStance) return "目标进入破势";
+            if (step.Kind == FireRuleKind.ApplyArmorBreak) return "目标护甲降低";
+            return string.Empty;
+        }
         private static string EffectLabel(SkillEffectDefinition effect) => effect.Type == SkillEffectType.Damage ? effect.Amount + " 基础伤害" : effect.Type == SkillEffectType.RestoreHealth ? "生命 +" + effect.Amount : effect.Type == SkillEffectType.RestoreShield ? "护盾 +" + effect.Amount : effect.Type == SkillEffectType.RestoreMana ? "以太 +" + effect.Amount : effect.Type == SkillEffectType.ApplyStatus ? "施加 " + effect.Status + " " + effect.Duration : effect.Type == SkillEffectType.ClearStatus ? "清除 " + effect.Status : effect.Type == SkillEffectType.DamageObject ? "物件耐久 -" + effect.Amount : "位移";
         private static string SkillTargetRuleLabel(SkillDefinition skill) => skill.TargetRule == SkillTargetRule.Self ? "自身" : skill.TargetRule == SkillTargetRule.EnemyUnit ? "敌方单位" : skill.TargetRule == SkillTargetRule.AllyUnit ? "友方单位" : skill.TargetRule == SkillTargetRule.AnyUnit ? "任意单位" : skill.TargetRule == SkillTargetRule.Destructible ? "可破坏物" : "空地格";
         private static bool RequiresUnitTarget(SkillDefinition skill) => skill.TargetRule == SkillTargetRule.EnemyUnit || skill.TargetRule == SkillTargetRule.AllyUnit || skill.TargetRule == SkillTargetRule.AnyUnit;
@@ -308,12 +367,13 @@ namespace OCC.Combat
         private static string SkillInvalidReason(CombatState state, UnitState hero, SkillDefinition skill, GridPosition position, UnitState target)
         {
             int distance = Distance(hero.Position, position);
+            if (distance < skill.MinimumRange) return "目标位于技能近身死区";
             if (distance > skill.Range) return "目标超出技能射程";
             if (skill.TargetRule == SkillTargetRule.GridCell && state.Map.IsBlocked(position)) return "目标格被阻挡";
             if (skill.TargetRule == SkillTargetRule.GridCell && state.IsOccupied(position, hero.Id)) return "目标格已被占据";
             if (skill.TargetRule == SkillTargetRule.Destructible) return "目标格没有可破坏物件";
             if (RequiresUnitTarget(skill) && target == null) return "当前格没有技能目标";
-            if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.Map.HasLineOfSight(hero.Position, position)) return "重掩体阻挡了技能投递";
+            if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.HasLineOfSight(hero.Position, position)) return "重掩体或烟幕阻挡了技能投递";
             return "这道术式不能作用在这里";
         }
 
@@ -323,6 +383,7 @@ namespace OCC.Combat
             UnitState hero = state.GetUnit("hero");
             int distance = Distance(hero.Position, position);
             if (skill.TargetRule == SkillTargetRule.Self) return position == hero.Position;
+            if (distance < skill.MinimumRange) return false;
             if (distance > skill.Range) return false;
             if (skill.TargetRule == SkillTargetRule.GridCell) return distance > 0 && !state.Map.IsBlocked(position) && !state.IsOccupied(position, hero.Id);
             if (skill.TargetRule == SkillTargetRule.Destructible)
@@ -333,7 +394,7 @@ namespace OCC.Combat
             UnitState target = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
             if (target == null) return false;
             bool relation = skill.TargetRule == SkillTargetRule.AnyUnit || (skill.TargetRule == SkillTargetRule.EnemyUnit && !target.IsHero) || (skill.TargetRule == SkillTargetRule.AllyUnit && target.IsHero);
-            return relation && (distance <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.Map.HasLineOfSight(hero.Position, position));
+            return relation && (distance <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(hero.Position, position));
         }
 
         public bool IsInMoveRange(CombatState state, GridPosition position)
@@ -346,8 +407,10 @@ namespace OCC.Combat
             if (state == null || state.ActiveUnitId != "hero") return false;
             UnitState hero = state.GetUnit("hero");
             int distance = Distance(hero.Position, position);
-            return distance > 0 && distance <= hero.MainHand.Range && state.Map.HasLineOfSight(hero.Position, position);
+            return distance >= Math.Max(1, hero.MainHand.MinimumRange) && distance <= hero.MainHand.Range && state.HasLineOfSight(hero.Position, position);
         }
+
+        private static string RangeText(int minimum, int maximum) => minimum > 0 ? minimum + "–" + maximum + " 格" : maximum + " 格";
 
         public static int Distance(GridPosition from, GridPosition to) => Math.Abs(from.X - to.X) + Math.Abs(from.Y - to.Y);
         public static GridPosition StepToward(GridPosition from, GridPosition to) => Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y) ? new GridPosition(from.X + Math.Sign(to.X - from.X), from.Y) : new GridPosition(from.X, from.Y + Math.Sign(to.Y - from.Y));

@@ -1,0 +1,41 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_loot_chest_image_native32_v6",
+  "role": "single_cell_prop_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Image阶段直接以32×32逻辑像素密度、硬矩形箱体和顶面／箱盖前沿／下箱体三分面生成低信息量参考；后处理只执行纯色背景剥离、整幅28×23目标网格采样、统一调色板、硬Alpha和最外层单像素黑边，不重新绘制造型。规范化脚本 Tools/OCCArt/normalize_image_native32_chest.py，SHA256 f1db22281b2e24655d3c0fc23b79af2215071394209fbefbaaa3eb89a32efd7b",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_loot_chest_native32_reference_v5.png",
+    "source_sha256": "9a8554d5ccd9df20e88291dc518eae17d89b73fefcad0e87c747ce8c4f3a2ca5"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_image_native32_v6.png",
+    "output_sha256": "f1a40280ab274d03ff605a62b77e281e327a12ce7ad77315c7a97756c5862a20",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {
+    "runtime_draw_rect": "32px visual review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v6_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v6_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v6_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v6_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v6_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "按用户新要求仅交付32px。当前总案仍把新制战场占格物件定义为64主稿加32伴随稿，因此本候选只按single_cell_prop_32进行技术验证，未宣称正式战场资产"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_image_native32_v6.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

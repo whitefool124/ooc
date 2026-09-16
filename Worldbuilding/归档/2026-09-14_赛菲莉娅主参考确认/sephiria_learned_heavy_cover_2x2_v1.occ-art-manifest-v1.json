@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_learned_heavy_cover_2x2_v1",
+  "role": "battlefield_multi_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "固定赛菲莉娅地图阅读规律后独立生成的2x2重掩体原料；内容提示只声明用途、占格、统一地图视角和小尺寸阅读目标",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_learned_heavy_cover_v1_source.png",
+    "source_sha256": "c521e8cf2c01c3ebb292d83527b397c2435040f22e498dedfa85b42ddbe049c6"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_learned_2x2_128.png",
+    "output_sha256": "ea25e4f20736a80a9ad851fe8a998417041cc8513484d726e5f89abe137eb9cd",
+    "logical_cells": [2, 2],
+    "palette_max": 16,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_learned_2x2_64.png",
+      "output_sha256": "dab466fc34d6a5bb7298bbc4547f9dcc3cde51386cd72025d121da60b705da47",
+      "palette_max": 12
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_learned_2x2_128_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_learned_2x2_128_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_learned_2x2_128_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_learned_2x2_128_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_learned_2x2_128_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "视角与原料结构已改善；当前目标网格为高分辨率原料的技术预览，仍需人工审美和目标网格簇清理；64图尚未作为独立低分辨率伴随稿通过审核"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_learned_2x2_128.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

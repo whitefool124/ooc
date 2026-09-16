@@ -1,0 +1,47 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_loot_chest_image_native32_v7",
+  "role": "single_cell_prop_32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "在已确认的32px风格Image参考上进行单项编辑，仅向亮色顶面增加少量横向成簇木纹，保持矩形轮廓、三分面、铁件和锁扣不变；后处理只执行背景剥离、28×23整格采样、统一调色板、硬Alpha与最外层单像素黑边。脚本 Tools/OCCArt/normalize_image_native32_chest.py，SHA256 c1eb023497002166d96e8932a42878ac98e92a0911ef3662d58b9be4b79535f9",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/sephiria_loot_chest_native32_reference_v7.png",
+    "source_sha256": "05466cb8c53cec83150b5413a9c29d14297606fb79962f8233ecc69e789ae149"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_image_native32_v7.png",
+    "output_sha256": "6b5668ae3991ba8cbdc9dc7f8102b41eb4191135a35e4106ae312cd180ebdb0a",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {
+    "runtime_draw_rect": "32px visual review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_image_native32_v7.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v7_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v7_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v7_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_loot_chest_image_native32_v7_ground_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "用户确认允许使用；v6轮廓与分面不变，v7只在顶面增加能在32px存活的稀疏横向木纹。当前作为32px正式候选，Unity稳定GUID、Importer和运行时验证完成前不标记FORMAL"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_loot_chest_image_native32_v7.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

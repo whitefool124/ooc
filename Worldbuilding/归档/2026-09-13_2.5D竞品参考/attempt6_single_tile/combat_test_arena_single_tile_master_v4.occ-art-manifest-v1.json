@@ -1,0 +1,32 @@
+{
+  "schema":"occ-art-manifest-v1",
+  "contract_version":1,
+  "asset_id":"combat_test_arena_single_tile_master_v4",
+  "role":"battlefield_ground_macro_64",
+  "status":"QA_PENDING",
+  "provenance":{
+    "source_channel":"easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor":"GPT Image 2.5 独立生成统一四面石板结构，并独立生成32px低分辨率伴随稿；仅做像素网格归一化与轻度降饱和",
+    "source_path":"Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt6_single_tile/court_standard_source_v4.png",
+    "source_sha256":"AD070B4A1F909F6ACD4E1ABB3404AD333F8B5170C26F11DF36DADC751B067473",
+    "low_source_path":"Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt6_single_tile/court_standard_low_source_v4.png",
+    "low_source_sha256":"1C2D794957A346CF9BA9DE76244663FF617F7AA6768F3BD7354896691461C88D"
+  },
+  "delivery":{
+    "output_path":"UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_tile_court_master_v4_64.png",
+    "output_sha256":"F3AE5D503126B16A1FA5F3391E1356E771F4D1C8843E397D99D2F7E4E5B3DC76",
+    "logical_cells":[1,1],
+    "palette_max":16,
+    "low_resolution_companion":{
+      "output_path":"UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_tile_court_master_v4_32.png",
+      "output_sha256":"44BB64784AB5506A1162D067C68BB781F3A9447C3A55A118236B4288E0F7A7BB",
+      "palette_max":12,
+      "required_color_families":[]
+    },
+    "required_color_families":[]
+  },
+  "application":{"runtime_draw_rect":"候选样板；暂不替换已认可的拼装变体","default_integer_scale":1,"minimum_integer_scale":1,"target_view":"正交俯视；中心低对比、四边暗缝清晰"},
+  "evidence":{"one_x":"UnityProject/Reports/combat_test_arena_single_tile_master_v4_1x.png","four_x":"UnityProject/Reports/combat_test_arena_single_tile_master_v4_4x.png","grayscale":"UnityProject/Reports/combat_test_arena_single_tile_master_v4_grayscale.png","checker":"UnityProject/Reports/combat_test_arena_single_tile_master_v4_checker.png","application_contact":"UnityProject/Reports/combat_test_arena_modular_tiles_attempt5_1920x1080.png"},
+  "human_review":{"overall":"PENDING","reviewer":null,"notes":"等待用户确认单块材质与四面石板结构"},
+  "unity_import":{"asset_path":"Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_tile_court_master_v4_64.png","importer_verified":false,"runtime_verified":false}
+}

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace OCC.Combat
 {
-    public enum CombatObjectiveType { Elimination, Destruction, Rescue, Capture, Extraction, Investigation }
+    public enum CombatObjectiveType { Elimination, Destruction, Rescue, Capture, Extraction, Investigation, Protection }
 
     public abstract class CombatObjective
     {
@@ -12,6 +12,7 @@ namespace OCC.Combat
         public CombatObjectiveType Type { get; }
         protected CombatObjective(string id, CombatObjectiveType type) { Id = string.IsNullOrEmpty(id) ? type.ToString() : id; Type = type; }
         public abstract bool IsComplete(CombatState state);
+        public virtual bool IsFailed(CombatState state) => false;
         public abstract CombatObjective Clone();
     }
 
@@ -64,5 +65,15 @@ namespace OCC.Combat
         public InvestigationObjective(IEnumerable<GridPosition> positions, string id = "investigation") : base(id, CombatObjectiveType.Investigation) { Positions = (positions ?? throw new ArgumentNullException(nameof(positions))).Distinct().ToArray(); if (Positions.Count == 0) throw new ArgumentException("At least one investigation position is required.", nameof(positions)); }
         public override bool IsComplete(CombatState state) => Positions.All(state.IsInvestigated);
         public override CombatObjective Clone() => new InvestigationObjective(Positions, Id);
+    }
+
+    public sealed class ProtectionObjective : CombatObjective
+    {
+        public GridPosition Position { get; }
+        public ProtectionObjective(GridPosition position, string id = "protection") : base(id, CombatObjectiveType.Protection)
+        { Position = position; }
+        public override bool IsComplete(CombatState state) => !IsFailed(state);
+        public override bool IsFailed(CombatState state) => !state.Map.IsInside(Position) || state.Map.GetTile(Position).IsDestroyed;
+        public override CombatObjective Clone() => new ProtectionObjective(Position, Id);
     }
 }

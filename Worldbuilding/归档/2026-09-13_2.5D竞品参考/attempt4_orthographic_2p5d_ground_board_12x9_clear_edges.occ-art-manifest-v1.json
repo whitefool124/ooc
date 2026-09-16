@@ -1,0 +1,49 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_arena_ground_board_attempt4_clear_edges",
+  "role": "battlefield_ground_macro_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "独立生成的12×9正交浅伪2.5D战场板；每格清晰细边，仅整板底边带一次立面",
+    "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt4_orthographic_2p5d_ground_board_12x9_clear_edges.png",
+    "source_sha256": "0DB68DE9415997E3DAEAA02E24738B55E4DFBC6B482969379338E3CB46FB129A"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_board_12x9_64.png",
+    "output_sha256": "F3E24BFF360A113F77D520121F63F0C65D69E2AA4AD904CBAE1D14681E7900EE",
+    "logical_cells": [12, 9],
+    "palette_max": 16,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_board_12x9_32.png",
+      "output_sha256": "118D00B8E31D0EA66EC084438EA3562EC93C866785F5DDD8E9B42243956698CB",
+      "palette_max": 12,
+      "required_color_families": []
+    },
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena only; one 12×9 board image under the cell interaction layer",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "target_view": "orthographic pseudo-2.5D; visible per-cell grout; only global bottom facade"
+  },
+  "evidence": {
+    "one_x": "UnityProject/Assets/Game/Validation/CombatTestArenaGroundAttempt4/one_x.png",
+    "four_x": "UnityProject/Assets/Game/Validation/CombatTestArenaGroundAttempt4/four_x.png",
+    "grayscale": "UnityProject/Assets/Game/Validation/CombatTestArenaGroundAttempt4/grayscale.png",
+    "checker": "UnityProject/Assets/Game/Validation/CombatTestArenaGroundAttempt4/checker.png",
+    "application_contact": "UnityProject/Reports/combat_test_arena_ground_attempt4_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "已按用户反馈强化每格边缘；待人工确认细边强度与单位脚底关系"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_board_12x9_64.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

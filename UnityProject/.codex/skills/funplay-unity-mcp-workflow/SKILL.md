@@ -1,13 +1,13 @@
 ---
 name: funplay-unity-mcp-workflow
-description: Efficient workflow for using Unity MCP to edit, import, compile, inspect, and test Unity projects.
+description: Efficient workflow for using Unity MCP to edit, import, compile, inspect, and test Unity projects, including screenshot and Game View recording verification.
 ---
 <!-- Funplay Unity MCP managed project skills -->
-<!-- Funplay Unity MCP skill version: unity-mcp-workflow@1.0.3 -->
+<!-- Funplay Unity MCP skill version: unity-mcp-workflow@1.0.4 -->
 
 # Unity MCP Workflow
 
-Use this skill when Codex or another AI agent is working in a Unity project and needs to verify code, prefabs, UI, Play Mode behavior, screenshots, scene hierarchy, console logs, domain reloads, or MCP connection issues.
+Use this skill when Codex or another AI agent is working in a Unity project and needs to verify code, prefabs, UI, Play Mode behavior, screenshots, Game View recordings, scene hierarchy, console logs, domain reloads, or MCP connection issues.
 
 ## Operating Loop
 
@@ -49,7 +49,7 @@ Use this skill when Codex or another AI agent is working in a Unity project and 
 
 ## Tool Exposure
 
-- With the default `core` profile, rely on the focused workflow tools: `execute_code`, recompilation, Play Mode control, hierarchy, console logs, screenshots, input simulation, and performance inspection.
+- With the default `core` profile, rely on the focused workflow tools: `execute_code`, recompilation, Play Mode control, hierarchy, console logs, screenshots, Game View recording, input simulation, and performance inspection.
 - With the default `full` profile, prefer specific MCP tools for simple scene, asset, GameObject, component, prefab, camera, UI, package, animation, file, or visual-feedback operations.
 - If Tool Exposure is customized and a named tool is unavailable, adapt to the exposed tool list and report which expected tool is missing.
 
@@ -251,9 +251,30 @@ For gameplay or network work, verify object identity, ownership, live instance e
 - If compile errors appear after a change, fix them before Play Mode validation.
 - When Unity and text files disagree for serialized scene or prefab state, trust Unity readback and inspect the asset path.
 
+## Game View Recording
+
+Use `capture_game_view` for static layout or a single visual state. Use `record_game_view` when the task needs evidence over time, such as animation, transitions, or a reproducible interaction sequence; do not record every routine UI edit.
+
+1. Prepare. Finish compilation, enter Play Mode when needed, and wait for MCP reload recovery. Recording requires a graphics-enabled macOS or Windows Unity Editor with a visible, rendering Game tab. Keep that tab visible and its resolution unchanged throughout capture; hiding it or resizing the source can fail the recording. The MP4 includes overlay UI but no audio.
+2. Start a short, bounded clip before performing the relevant actions. For example, call `record_game_view` with:
+
+   ```json
+   {"action":"start","duration_seconds":10,"fps":15,"max_dimension":1280}
+   ```
+
+   Save `data.recording_id` from the response, then perform the interaction. Start returns immediately; recording stops automatically at the duration limit. These are the default settings; accepted ranges are 1-120 seconds, 1-60 fps, and a 128-1920 pixel maximum edge. Aspect ratio is preserved without upscaling. Prefer a shorter clip or lower sampling rate/resolution if capture overhead is disruptive.
+3. Poll `record_game_view` with `{"action":"status","recording_id":"<returned id>"}`. To finish early, use `{"action":"stop","recording_id":"<returned id>"}`, then poll status until finalization. Always pass the saved ID so a stale request cannot inspect or stop a newer recording. If another recording is already active, report it rather than stopping someone else's capture.
+4. Check the receipt, not just `success`. While `data.status` is `recording` or `stopping`, the file is not ready. Read the MP4 only when `data.ready=true`; a `success=true` status query can still describe a failed recording. Stop polling on terminal `completed`, `interrupted`, or `failed` status and inspect `error`, `stop_reason`, and the actual captured extent (`frame_count`, `elapsed_seconds`, `last_frame_seconds`). Leaving Play Mode or reloading scripts finalizes early; recover the receipt after reload and treat any usable partial clip as partial evidence, not a complete test.
+5. Review the actual file at `data.path`, under `<UnityProject>/Library/FunplayMcp/Recordings/`. MCP returns a local-file receipt, not video bytes or base64; the client must have access to that filesystem and a video viewer. A remote MCP connection alone does not provide file access. If video viewing is unavailable, inspect extracted frames when supported and state their limits, or report that the clip was saved but not reviewed. Do not claim to have watched an inaccessible clip or upload project footage without authorization.
+
+- Report the reproduction steps, clip path, observed result, and any interruption or unverified portion. Combine visual evidence with Unity state readback and console checks.
+- Capture is best-effort with real elapsed timestamps, not guaranteed target-fps sampling. Use it for visual behavior, not frame-accurate performance measurement; use Profiler and device tests for performance.
+- If the tool, platform, or rendering prerequisites are unavailable, report the limitation and use screenshots or state checks only for what they can establish. Do not loop on terminal failures or install recording dependencies merely to bypass the limitation.
+
+
 ## Metadata
 
 - Original skill id: `unity-mcp-workflow`
-- Skill version: `1.0.3`
+- Skill version: `1.0.4`
 - Platform: `codex`
 - Source repository: `https://github.com/FunplayAI/funplay-unity-mcp`

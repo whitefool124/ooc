@@ -1,0 +1,46 @@
+{
+  "status": "PASS_LOSSLESS_32",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "inferred_logical_grid": [
+    64,
+    64
+  ],
+  "border_run_observations": [
+    64,
+    64,
+    64,
+    64
+  ],
+  "subject_bounds_on_logical_grid": [
+    26,
+    20,
+    38,
+    47
+  ],
+  "subject_logical_size": [
+    12,
+    27
+  ],
+  "target_canvas": [
+    32,
+    32
+  ],
+  "preview": "E:\\数据库\\OCC_Codex\\UnityProject\\Reports\\CombatTestArena\\native32_character_test\\lossless_decode_v1\\field_technician_lossless_native32_preview8x.png",
+  "safe_border": 1,
+  "decoded_visible_colours_before_cleanup": 222,
+  "decoded_visible_colours_after_cleanup": 16,
+  "palette_max": 16,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "alpha_shape_preserved_pixel_for_pixel": true,
+  "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "resampling_performed": false,
+  "new_colours_introduced": false,
+  "logical_pixels_removed": 0,
+  "dithering": false,
+  "structural_detail_loss_allowed": false,
+  "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+}

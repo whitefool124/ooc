@@ -46,14 +46,14 @@ namespace OCC.Combat.Presentation
             "academy_prop_wicker_basket", "academy_prop_book_crate", "academy_prop_scroll_case",
             "academy_prop_tool_satchel", "academy_prop_folding_stool", "academy_prop_clay_jar",
             "academy_prop_coal_scuttle", "academy_prop_rope_coil", "academy_prop_practice_shields",
-            "academy_prop_stone_planter", "academy_prop_fire_bucket_stand", "academy_prop_medical_chest"
+            "academy_prop_stone_planter", "academy_prop_fire_bucket_stand"
         };
 
         private static readonly string[] HeavyCoverIds =
         {
-            "academy_prop_specimen_cage", "academy_prop_oak_chest", "academy_prop_iron_locker",
+            "academy_prop_specimen_cage", "academy_prop_iron_locker",
             "academy_prop_reagent_cabinet", "academy_prop_field_lectern", "academy_prop_gear_cabinet",
-            "academy_prop_warding_post", "academy_prop_sealed_trunk"
+            "academy_prop_warding_post"
         };
 
         private static readonly AcademyStructurePlacement NorthDais =
@@ -164,12 +164,49 @@ namespace OCC.Combat.Presentation
         public static string FloorAsset(FirstRegionLevelDefinition level, int x, int y, out int quarterTurns)
         {
             quarterTurns = 0;
+            if (CombatTestArenaEntry.IsDedicatedTestArena)
+            {
+                // Test maps are made from the same independent tiles, but each receives
+                // its own stable material mix so a selected arena reads at a glance.
+                string surface = DedicatedTestGroundSurface(level?.Id, x, y);
+                if (y == 0 && (surface.Contains("slate") || surface.Contains("earth")))
+                    return surface.Replace("_surface_64", "_edge_s_64");
+                return surface;
+            }
+            // Wargroove-like orthographic ground: each cell samples a shared 3x3
+            // macro so the board reads as one plane instead of a wall of cards.
             if (level == null)
-                return "academy_block_court_a";
+                return "academy_ground_macro_court_3x3";
 
             string family = FloorFamily(level.Id, x, y);
-            char variant = (char)('a' + StableVariant(level.Id, x, y));
-            return "academy_block_" + family + "_" + variant;
+            string variant = StableVariant(level.Id, x, y) % 2 == 0 ? string.Empty : "_b";
+            return "academy_ground_macro_" + family + variant + "_3x3";
+        }
+
+        public static string FloorLowAsset(FirstRegionLevelDefinition level, int x, int y)
+        {
+            if (!CombatTestArenaEntry.IsDedicatedTestArena) return null;
+            string high = FloorAsset(level, x, y, out _);
+            return high == null ? null : high.Replace("_64", "_32");
+        }
+
+        private static string DedicatedTestGroundSurface(string levelId, int x, int y)
+        {
+            string[] materials =
+            {
+                "academy_test_ground_theme_slate_surface_64",
+                "academy_test_ground_theme_earth_surface_64",
+                "academy_test_ground_tile_court_a_64",
+                "academy_test_ground_tile_court_b_64",
+                "academy_test_ground_tile_court_c_64",
+                "academy_test_ground_tile_court_d_64"
+            };
+            int seed = StableVariant(levelId, 0, 0);
+            int primary = seed % materials.Length;
+            // A sparse second material makes route surfaces legible without turning
+            // the compact board into a noisy checkerboard.
+            int accent = (primary + 1 + seed % (materials.Length - 1)) % materials.Length;
+            return (x * 3 + y * 5 + seed) % 11 == 0 ? materials[accent] : materials[primary];
         }
 
         private static int StableVariant(string levelId, int x, int y)
@@ -201,8 +238,11 @@ namespace OCC.Combat.Presentation
         public static string BoundaryOverlay(FirstRegionLevelDefinition level, int x, int y, out int quarterTurns)
         {
             quarterTurns = 0;
-            // Independent floor tiles own their physical perimeter. The former curb layer used
-            // rotated lit PNGs, which both reintroduced cross-tile transitions and rotated shadows.
+            // The player-facing perimeter retains the tile's regular top plane and adds
+            // only the lower masonry face below it. The extra pixels are visual-only;
+            // hit testing remains on the original 32 by 32 logical cell.
+            if (!CombatTestArenaEntry.IsDedicatedTestArena && y == 0)
+                return "academy_test_ground_theme_earth_edge_s_64";
             return null;
         }
 

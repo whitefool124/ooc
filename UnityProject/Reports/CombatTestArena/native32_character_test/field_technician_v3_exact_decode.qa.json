@@ -1,0 +1,39 @@
+{
+  "status": "PASS_LOSSLESS_32",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "inferred_logical_grid": [
+    64,
+    64
+  ],
+  "border_run_observations": [
+    64,
+    64,
+    64,
+    64
+  ],
+  "subject_bounds_on_logical_grid": [
+    26,
+    20,
+    38,
+    47
+  ],
+  "subject_logical_size": [
+    12,
+    27
+  ],
+  "target_canvas": [
+    32,
+    32
+  ],
+  "safe_border": 1,
+  "decoded_visible_colours": 222,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "output_subject_equals_decoded_subject_pixel_for_pixel": true,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "resampling_performed": false,
+  "new_colours_introduced": false,
+  "detail_loss_allowed": false
+}

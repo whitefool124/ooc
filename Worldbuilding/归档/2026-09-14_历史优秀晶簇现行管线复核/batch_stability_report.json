@@ -1,0 +1,60 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "historical_crystal_family_native32_redecode_v1",
+  "items": 2,
+  "total_generations": 2,
+  "first_pass_technical_success": 2,
+  "first_pass_rate": 1.0,
+  "success_with_one_targeted_retry": 2,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "academy_aether_crystal_intact_native32_redecode",
+      "role": "single_cell_destructible_crystal_prop_adaptive_32ppu",
+      "selected_round": "historical_source_redecode",
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 14,
+      "confidence": 1.454,
+      "subject_size": [
+        63,
+        43
+      ],
+      "canvas": [
+        96,
+        64
+      ],
+      "palette": 14,
+      "manifest": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/standard/academy_aether_crystal_intact_native32_redecode_manifest.json"
+    },
+    {
+      "id": "academy_pressure_crystal_intact_native32_redecode",
+      "role": "single_cell_heavy_crystal_prop_adaptive_32ppu",
+      "selected_round": "historical_source_redecode",
+      "attempt_statuses": [
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 13,
+      "confidence": 2.0171,
+      "subject_size": [
+        78,
+        48
+      ],
+      "canvas": [
+        96,
+        64
+      ],
+      "palette": 14,
+      "manifest": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/pressure/academy_pressure_crystal_intact_native32_redecode_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_历史优秀晶簇现行管线复核/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "用户明确指出历史晶簇版本方向优秀；已定位 2026-09-10 普通／稳压晶簇家族并按现行无缩放管线重解，等待对本次展示的具体两枚做最终人工确认。"
+  },
+  "formal_assets_replaced": false
+}

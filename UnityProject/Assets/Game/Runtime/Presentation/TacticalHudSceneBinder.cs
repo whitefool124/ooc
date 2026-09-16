@@ -196,7 +196,7 @@ namespace OCC.Combat.Presentation
             return string.Join(" ", unit.Statuses.Select(entry => "<color=" + StatusColor(entry.Key) + ">" + StatusName(entry.Key) + entry.Value + "</color>"));
         }
 
-        private static string StatusName(StatusType status) => status == StatusType.Burning ? "燃烧" : status == StatusType.Bound ? "束缚" : status == StatusType.ArmorBreak ? "破甲" : "缓慢";
-        private static string StatusColor(StatusType status) => status == StatusType.Burning ? "#E75642" : status == StatusType.Bound ? "#52D6FF" : status == StatusType.ArmorBreak ? "#FFC738" : "#79BFAF";
+        private static string StatusName(StatusType status) => status == StatusType.Burning ? "燃烧" : status == StatusType.Bound ? "束缚" : status == StatusType.ArmorBreak ? "破甲" : status == StatusType.FiregroundBoost ? "火势" : status == StatusType.FiregroundVulnerable ? "助燃" : "缓慢";
+        private static string StatusColor(StatusType status) => status == StatusType.Burning ? "#E75642" : status == StatusType.Bound ? "#52D6FF" : status == StatusType.ArmorBreak ? "#FFC738" : status == StatusType.FiregroundBoost ? "#FF9238" : status == StatusType.FiregroundVulnerable ? "#FF5D45" : "#79BFAF";
     }
 }

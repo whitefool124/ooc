@@ -78,8 +78,9 @@ namespace OCC.Combat
             {
                 if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) fireBattle = state.RogueSpells.FireBattle;
                 UnitState commandUnit = state.GetUnit(command.UnitId);
-                SkillDefinition deliveredSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null && state.Ruleset != CombatRuleset.Roguelite
+                SkillDefinition commandSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null
                     ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
+                SkillDefinition deliveredSkill = state.Ruleset != CombatRuleset.Roguelite ? commandSkill : null;
                 GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
                 GridPosition movementSource = deliverySource;
                 IReadOnlyList<GridPosition> movementPath = command.Type == CombatCommandType.Move && commandUnit != null
@@ -103,6 +104,9 @@ namespace OCC.Combat
                     attackTriggers = attack.TriggerExecutions;
                 }
                 else execution = CombatResolver.Resolve(state, command);
+                if (command.Type == CombatCommandType.UseSkill && commandSkill != null && commandSkill.Damage > 0 &&
+                    commandTarget != null && deliverySource.ManhattanDistance(deliveryTarget) == 1 && fireBattle != null)
+                    attackTriggers = FireSpellEngine.TriggerIncomingAdjacentAttack(fireBattle, commandUnit.Id, commandTarget.Id);
 
                 IReadOnlyList<FireSpellExecution> movementTriggers = Array.Empty<FireSpellExecution>();
                 if (command.Type == CombatCommandType.Move && commandUnit != null && fireBattle != null)

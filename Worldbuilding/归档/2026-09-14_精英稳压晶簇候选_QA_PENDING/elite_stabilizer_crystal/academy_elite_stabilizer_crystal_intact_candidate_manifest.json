@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_elite_stabilizer_crystal_qa_v1_academy_elite_stabilizer_crystal_intact_candidate",
+  "role": "single_cell_heavy_crystal_prop_adaptive_32ppu",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/source/elite_stabilizer_crystal_round2_source.png",
+    "source_sha256": "29b95cf9a276e877516cffe5fa3e3d6c09ce92258f9fd9ff9a8ac51bb7d81ce0"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_candidate.png",
+    "output_sha256": "bdae30c6080aa3ae03b8f71fb5c30bae0d4e94b7918b28eaeb1cae69f801c4f4",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "64x64 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_candidate.png",
+    "four_x": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_candidate_4x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_candidate_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "REJECTED_SUPERSEDED_BY_2026_09_10_CRYSTAL_FAMILY",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Superseded after the user pointed to the stronger 2026-09-10 crystal family. The mechanical stabilizer-base silhouette is not the active direction; no Unity import or formal promotion."
+  },
+  "unity_import": null
+}

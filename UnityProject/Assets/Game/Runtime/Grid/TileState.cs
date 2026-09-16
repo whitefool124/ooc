@@ -17,15 +17,18 @@ namespace OCC.Combat
         public bool IsWater { get; set; }
         public bool IsLampVine { get; set; }
         public bool IsAetherCrystal { get; set; }
+        public bool IsDecoy { get; set; }
         public bool IsCrystalShard { get; set; }
+        public bool IsPermanentWall { get; set; }
         public bool IsScorched { get; set; }
         public int SmokeExpiresAt { get; set; }
-        public bool IsDestroyed => Durability <= 0 && (Cover != CoverType.None || IsObjective || IsDevice || IsLampVine || IsScorched);
-        public bool BlocksMovement => (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0);
-        public bool BlocksLineOfSight => (Cover == CoverType.Heavy && !IsDestroyed) || (IsLampVine && Durability > 0);
+        public bool IsDestroyed => !IsPermanentWall && Durability <= 0 && (Cover != CoverType.None || IsObjective || IsDevice || IsLampVine || IsDecoy || IsScorched);
+        public bool BlocksMovement => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0) || (IsDecoy && Durability > 0);
+        public bool BlocksLineOfSight => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsLampVine && Durability > 0);
         public int DamageReduction => IsDestroyed ? 0 : Cover == CoverType.Light ? 1 : Cover == CoverType.Heavy ? 2 : 0;
         public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, IsObjective = IsObjective, IsDevice = IsDevice,
-            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsCrystalShard = IsCrystalShard,
+            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
+            IsPermanentWall = IsPermanentWall,
             IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt };
     }
 }

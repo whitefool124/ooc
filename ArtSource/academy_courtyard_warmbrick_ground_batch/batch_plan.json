@@ -1,0 +1,107 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {
+    "theme_id": "academy_courtyard_warmbrick",
+    "material_family": "ruin_masonry",
+    "base_palette": [
+      "#B85F43",
+      "#D48A4B",
+      "#633C31",
+      "#E1A35A"
+    ],
+    "wetness": 0,
+    "wear": 0,
+    "motif": "brick_joint",
+    "edge_profile": "retaining_face"
+  },
+  "pieces": [
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.surface.a",
+      "native": "ground_academy_courtyard_warmbrick_surface_a_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_surface_a.occ-art-manifest-v1.json",
+      "status": "REJECTED_USER_DIRECTION"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.surface.b",
+      "native": "ground_academy_courtyard_warmbrick_surface_b_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_surface_b.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.surface.c",
+      "native": "ground_academy_courtyard_warmbrick_surface_c_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_surface_c.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.surface.d",
+      "native": "ground_academy_courtyard_warmbrick_surface_d_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_surface_d.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.north.base",
+      "native": "ground_academy_courtyard_warmbrick_north_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_north_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.east.base",
+      "native": "ground_academy_courtyard_warmbrick_east_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_east_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.south.base",
+      "native": "ground_academy_courtyard_warmbrick_south_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_south_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.west.base",
+      "native": "ground_academy_courtyard_warmbrick_west_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_west_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.nw.base",
+      "native": "ground_academy_courtyard_warmbrick_nw_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_nw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.ne.base",
+      "native": "ground_academy_courtyard_warmbrick_ne_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_ne_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.sw.base",
+      "native": "ground_academy_courtyard_warmbrick_sw_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_sw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_warmbrick.se.base",
+      "native": "ground_academy_courtyard_warmbrick_se_base_32.png",
+      "manifest": "ground_academy_courtyard_warmbrick_se_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    }
+  ],
+  "approval_order": [
+    "one surface reference tile",
+    "four directional edges",
+    "four corners",
+    "surface variants",
+    "remaining theme batch"
+  ],
+  "status": "REJECTED_USER_DIRECTION",
+  "g0_reference_review": {
+    "piece": "surface.a",
+    "result": "REJECTED_USER_DIRECTION",
+    "reason": "User rejected this result because its horizontal brick courses read as wall bricks rather than floor paving. Retained only for provenance; do not extend or import.",
+    "next_gate": "Use the warm stone ground-field review instead; no directional edges, corners or variants may be derived from this batch.",
+    "review_date": "2026-09-15"
+  }
+}

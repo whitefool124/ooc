@@ -45,6 +45,22 @@ namespace OCC.Combat.Presentation
             return UnitPresentationRect(cell);
         }
 
+        /// <summary>
+        /// Keeps a unit's authored canvas ratio at 32 PPU.  Unit files are not all square:
+        /// for example, the fire trainee is 32x64 and must occupy a 64x128 UI rect at the
+        /// 64px overview instead of being stretched into a 128x128 square.
+        /// </summary>
+        public static Rect UnitVisibleContentRect(BattlefieldRect cell, Texture2D texture)
+        {
+            if (texture == null || texture.width <= 0 || texture.height <= 0)
+                return UnitPresentationRect(cell);
+
+            float scale = cell.Width / 32f;
+            float width = texture.width * scale;
+            float height = texture.height * scale;
+            return new Rect(cell.X + (cell.Width - width) * .5f, cell.Y + cell.Height - height, width, height);
+        }
+
         // Formal unit textures own their transparent safety margin. Cropping by legacy body bounds
         // hides weapons, shields, tails and casting implements that legitimately extend sideways.
         public static Rect UnitTextureCropUv(string textureName) => new Rect(0f, 0f, 1f, 1f);
@@ -105,6 +121,8 @@ namespace OCC.Combat.Presentation
         }
 
         private static float ElementScale(BattlefieldRect cell) =>
-            cell.Width / BattlefieldPresentationAdapter.CellSize;
+            // Vital/status tracks are authored against the 128px readable unit scale;
+            // keep their proportions stable when the board is shown at 64px overview.
+            cell.Width / 128f;
     }
 }

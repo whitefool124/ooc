@@ -1,0 +1,16 @@
+{
+  "batch_id": "academy_practice_shields_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/application_contact_4x.png",
+  "human_review": { "status": "PASS", "reviewer": "user", "date": "2026-09-14" },
+  "items": [{
+    "id": "academy_prop_practice_shields_candidate",
+    "role": "single_cell_prop_adaptive_32ppu",
+    "source": "Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/source/practice_shields_round1_source.png",
+    "output": "Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/practice_shields/native.png",
+    "qa": "Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/practice_shields/round1_qa.json",
+    "checker": "Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/practice_shields/checker.png",
+    "attempt_qas": ["Worldbuilding/归档/2026-09-14_训练盾架候选_QA_PENDING/practice_shields/round1_qa.json"],
+    "selected_round": 1,
+    "palette_max": 24
+  }]
+}

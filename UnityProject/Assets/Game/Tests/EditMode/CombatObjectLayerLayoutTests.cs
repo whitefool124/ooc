@@ -82,7 +82,73 @@ namespace OCC.Combat.Tests
             state.Map.GetTile(position).IsLampVine = false;
             state.Map.GetTile(position).IsScorched = true;
             Assert.That(Build().ObjectForegroundRows, Is.Zero);
-            Assert.That(Build().ObjectTexture, Is.Not.Null, "Existing scorch presentation is retained.");
+            Assert.That(Build().ObjectTexture, Is.Not.Null);
+            Assert.That(Build().ObjectTexture.name, Is.EqualTo("academy_scorched_lamp_vine"));
+        }
+
+        [Test]
+        public void GreenhouseCrystalUsesDedicatedWideVisualWithoutChangingOwningCell()
+        {
+            CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id).State;
+            var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
+            var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
+            var position = new GridPosition(8, 2);
+            var selection = new CombatSelectionController();
+            BattlefieldCellPresentation model = presenter.Build(state, FirstRegionLevelCatalog.GreenhouseCollectionRoom,
+                null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(model.ObjectTexture, Is.Not.Null);
+            Assert.That(model.ObjectTexture.name, Is.EqualTo("academy_aether_crystal_intact"));
+            Assert.That(model.ObjectTexture.width, Is.EqualTo(96));
+            Assert.That(model.ObjectTexture.height, Is.EqualTo(64));
+            Assert.That(model.Position, Is.EqualTo(position), "The wide visual remains owned by its single gameplay cell.");
+
+            var layout = new CombatObjectLayerLayout(64f, model.ObjectTexture.width, model.ObjectTexture.height, 0);
+            Assert.That(layout.BackRect.x, Is.EqualTo(-64f));
+            Assert.That(layout.BackRect.yMax, Is.EqualTo(64f), "The visual is bottom-aligned to the owning cell.");
+
+            state.Map.GetTile(position).Durability = 8;
+            model = presenter.Build(state, FirstRegionLevelCatalog.GreenhouseCollectionRoom,
+                null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+            Assert.That(model.ObjectTexture.name, Is.EqualTo("academy_aether_crystal_damaged"));
+        }
+
+        [Test]
+        public void ElitePressureCrystalUsesItsOwnIntactAndDamagedStates()
+        {
+            CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.ThreeMaterialPressure.Id).State;
+            var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
+            var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
+            var position = new GridPosition(6, 4);
+            var selection = new CombatSelectionController();
+            BattlefieldCellPresentation Build() => presenter.Build(state, FirstRegionLevelCatalog.ThreeMaterialPressure,
+                null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(Build().ObjectTexture.name, Is.EqualTo("academy_pressure_crystal_intact"));
+            Assert.That(Build().ObjectLabel, Is.EqualTo("稳压晶簇"));
+            state.Map.GetTile(position).Durability = 16;
+            Assert.That(Build().ObjectTexture.name, Is.EqualTo("academy_pressure_crystal_damaged"));
+        }
+
+        [Test]
+        public void DeployedDecoyUsesDedicatedSingleCellBattlefieldVisual()
+        {
+            CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id).State;
+            var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
+            var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
+            var position = new GridPosition(1, 1);
+            state.Map.SetTile(position, new TileState { IsDecoy = true, IsDevice = true, Durability = 12 });
+            var selection = new CombatSelectionController();
+
+            BattlefieldCellPresentation model = presenter.Build(state, FirstRegionLevelCatalog.GreenhouseCollectionRoom,
+                null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+
+            Assert.That(model.ObjectTexture, Is.Not.Null);
+            Assert.That(model.ObjectTexture.name, Is.EqualTo("academy_decoy_lantern_active"));
+            Assert.That(model.ObjectTexture.width, Is.EqualTo(32));
+            Assert.That(model.ObjectTexture.height, Is.EqualTo(32));
+            Assert.That(model.ObjectForegroundRows, Is.Zero);
+            Assert.That(model.ObjectLabel, Is.EqualTo("诱导灯"));
         }
     }
 }

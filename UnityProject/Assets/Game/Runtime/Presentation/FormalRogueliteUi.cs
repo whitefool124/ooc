@@ -206,6 +206,13 @@ namespace OCC.Combat.Presentation
             if (!value) Invalidate(false);
         }
 
+        public void OpenLoadoutForReward()
+        {
+            if (bootstrap?.CurrentMapRun == null || !bootstrap.CurrentMapRun.UsesRogue11) return;
+            loadoutSection = LoadoutSection.Equipment;
+            SetOverlay(UiOverlay.Loadout);
+        }
+
         private void DrawMap()
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun;
@@ -1712,13 +1719,7 @@ namespace OCC.Combat.Presentation
 
         public static string SpellTooltipBody(SpellDefinition spell)
         {
-            if (spell == null) return "尚未获得术式。";
-            string cooldown = spell.CooldownOwnTurns <= 0 ? "无冷却" : spell.CooldownOwnTurns + " 个自身回合";
-            string effects = string.Join("\n", spell.Rules.Take(4).Select(SpellRuleText));
-            return "消耗　" + spell.ActionPointCost + " 行动点　" + spell.ManaCost + " 个人魔力" +
-                "\n循环　" + cooldown +
-                "\n目标　" + SpellTargetSummary(spell) +
-                "\n效果\n" + effects;
+            return CombatHoverDescriptionTable.SpellBody(spell);
         }
 
         private static string SpellTargetSummary(SpellDefinition spell)
@@ -1736,6 +1737,7 @@ namespace OCC.Combat.Presentation
                 case "Unit": target = "任意单位"; break;
                 case "EmptyCell": target = "空地格"; break;
                 case "BurningUnit": target = "燃烧单位"; break;
+                case "BurningEnemy": target = "燃烧敌人"; break;
                 case "BurningCell": target = "燃烧地格"; break;
                 case "Destructible": target = "可破坏物件"; break;
                 case "Hittable": target = "敌方单位或可破坏物件"; break;
@@ -2112,6 +2114,10 @@ namespace OCC.Combat.Presentation
             RogueEquipmentInstance equipment = runtime.EquipmentItem(instanceId);
             if (equipment != null) return RogueEquipmentDetailBody(runtime, instanceId, includeName);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(instanceId); TacticalItemDefinition definition = runtime.TacticalDefinitionFor(instanceId);
+            ArtifactDefinition artifact = ArtifactCatalog.All.FirstOrDefault(candidate => candidate.Id == definition.DefinitionId);
+            if (artifact != null)
+                return (includeName ? definition.DisplayName + "\n" : string.Empty) +
+                    CombatHoverDescriptionTable.ArtifactBody(artifact, tactical.ChargesCurrent, tactical.ChargesMaximum);
             return (includeName ? definition.DisplayName + "\n" : string.Empty) +
                 "数据　占格 " + definition.Width + "×" + definition.Height + "\n次数　" + PlayerFacingCopy.RemainingAndTotal(tactical.ChargesCurrent, tactical.ChargesMaximum) +
                 "\n消耗　" + definition.ActionPointCost + " 行动点\n效果\n可关联至 4 格战术栏，战斗中快速使用";

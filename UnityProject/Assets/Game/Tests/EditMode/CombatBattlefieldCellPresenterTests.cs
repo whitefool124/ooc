@@ -23,17 +23,89 @@ namespace OCC.Combat.Tests
 
             Assert.That(cell.Unit, Is.SameAs(hero));
             Assert.That(cell.UnitTexture, Is.Not.Null);
-            Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_block_court_a"));
-            Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(0f, 0f, 1f, 1f)));
+            Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_ground_macro_court_3x3"));
+            Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(1f / 3f, 1f / 3f, 1f / 3f, 1f / 3f)));
             Assert.That(cell.TerrainBoundaryTexture, Is.Null);
             Assert.That(cell.HoverText, Does.Contain("生命当前 18　上限 18"));
         }
 
         [Test]
-        public void FloorKey_ReplacesPrototypeRailAndWarningWithAcademyVariants()
+        public void EighthSpell_ShowsItsInvalidInnerRangeAndValidOuterBand()
         {
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(null, 9, 2, 0), Is.EqualTo("academy_block_court_a"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorUv(5, 4), Is.EqualTo(new UnityEngine.Rect(0f, 0f, 1f, 1f)));
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState adjacent = new UnitState("adjacent", false, new GridPosition(1, 0));
+            UnitState band = new UnitState("band", false, new GridPosition(2, 0));
+            hero.ConfigureMana(99);
+            CombatState state = new CombatState(new GridMap(5, 2), new[] { hero, adjacent, band });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+            FireBattleState fireBattle = new FireBattleState(state);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R09");
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能8");
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            FireSpellPreview PreviewAt(FireSpellDefinition definition, GridPosition position)
+            {
+                UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.Position == position);
+                FireSpellTarget target = unit == null ? FireSpellTarget.At(position, CardinalDirection.East) : FireSpellTarget.Unit(unit.Id);
+                return FireSpellEngine.Preview(fireBattle, hero.Id, definition, target);
+            }
+
+            BattlefieldCellPresentation inner = presenter.Build(state, null, fireBattle, selection, false, null,
+                adjacent.Position, _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation valid = presenter.Build(state, null, fireBattle, selection, false, null,
+                band.Position, _ => spell, PreviewAt, _ => null, _ => null);
+
+            Assert.That(inner.SkillOverlayTexture.name, Is.EqualTo("unreachable"));
+            Assert.That(valid.SkillOverlayTexture.name, Is.EqualTo("attack_range"));
+        }
+
+        [Test]
+        public void HoveredAreaSpell_ShowsEveryAffectedCellBeforeCasting()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
+            UnitState target = new UnitState("target", false, new GridPosition(3, 1));
+            hero.ConfigureMana(99);
+            CombatState state = new CombatState(new GridMap(5, 3), new[] { hero, target });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(state, hero.Id);
+            FireBattleState fireBattle = new FireBattleState(state);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R06");
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能1");
+            selection.SetPreviewPosition(target.Position);
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+
+            FireSpellPreview PreviewAt(FireSpellDefinition definition, GridPosition position)
+            {
+                UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.Position == position);
+                FireSpellTarget spellTarget = unit == null
+                    ? FireSpellTarget.At(position, CardinalDirection.East)
+                    : FireSpellTarget.Unit(unit.Id, CardinalDirection.East);
+                return FireSpellEngine.Preview(fireBattle, hero.Id, definition, spellTarget);
+            }
+
+            BattlefieldCellPresentation middle = presenter.Build(state, null, fireBattle, selection, false, null,
+                new GridPosition(1, 1), _ => spell, PreviewAt, _ => null, _ => null);
+            BattlefieldCellPresentation endpoint = presenter.Build(state, null, fireBattle, selection, false, null,
+                target.Position, _ => spell, PreviewAt, _ => null, _ => null);
+
+            Assert.That(middle.SkillOverlayTexture.name, Is.EqualTo("attack_range"));
+            Assert.That(endpoint.SkillOverlayTexture.name, Is.EqualTo("attack_range"));
+        }
+
+        [Test]
+        public void FloorKey_UsesContinuousAcademyGroundMacroAndUvSlices()
+        {
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(null, 9, 2, 0), Is.EqualTo("academy_ground_macro_court_3x3"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorUv(5, 4), Is.EqualTo(new UnityEngine.Rect(2f / 3f, 1f / 3f, 1f / 3f, 1f / 3f)));
         }
 
         [Test]
@@ -72,25 +144,25 @@ namespace OCC.Combat.Tests
             FirstRegionLevelDefinition rail = FirstRegionLevelCatalog.For("rail_patrol");
             FirstRegionLevelDefinition depot = FirstRegionLevelCatalog.For("depot_wreck");
 
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_block_earth_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 5, 4), Does.StartWith("academy_block_road_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_block_ruin_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 5, 0), Does.StartWith("academy_block_road_"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_ground_macro_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 5, 4), Does.StartWith("academy_ground_macro_road"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 5, 0), Does.StartWith("academy_ground_macro_road"));
             Assert.That(CombatBattlefieldCellPresenter.FloorRotationDegrees(depot, 5, 0), Is.Zero);
         }
 
         [Test]
-        public void IndependentGroundVariants_StayInsideOneCellAndNeverRotate()
+        public void GroundMacros_KeepMaterialFamiliesAndNeverRotate()
         {
             FirstRegionLevelDefinition rail = FirstRegionLevelCatalog.For("rail_patrol");
             FirstRegionLevelDefinition relay = FirstRegionLevelCatalog.For("relay_raid");
             FirstRegionLevelDefinition depot = FirstRegionLevelCatalog.For("depot_wreck");
             FirstRegionLevelDefinition elite = FirstRegionLevelCatalog.For("elite_foundry");
 
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_block_earth_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(relay, 9, 11, 0), Does.StartWith("academy_block_earth_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_block_ruin_"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(elite, 9, 0, 0), Does.StartWith("academy_block_ruin_"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_ground_macro_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(relay, 9, 11, 0), Does.StartWith("academy_ground_macro_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(elite, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
             Assert.That(CombatBattlefieldCellPresenter.FloorRotationDegrees(elite, 0, 0), Is.Zero);
         }
 
@@ -201,11 +273,31 @@ namespace OCC.Combat.Tests
             int health = enemy.Health;
 
             CombatTargetForecastResult result = new CombatTargetForecastService().Evaluate(
-                new BattlefieldPresentationAdapter(), state, null, "攻击", enemy, null, false);
+                new BattlefieldPresentationAdapter(), state, null, "攻击", enemy, null, null, 0);
 
             Assert.That(result.FireBattle, Is.Not.Null);
             Assert.That(result.Forecast, Is.Not.Null);
             Assert.That(result.Forecast.TotalDamage, Is.GreaterThan(0));
+            Assert.That(enemy.Health, Is.EqualTo(health));
+        }
+
+        [Test]
+        public void ArtifactForecast_UsesRealResolverWithoutMutatingTarget()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            CombatState state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+            int health = enemy.Health;
+            ArtifactDefinition artifact = ArtifactCatalog.Get("G-T19");
+
+            CombatTargetForecastResult result = new CombatTargetForecastService().Evaluate(
+                new BattlefieldPresentationAdapter(), state, null, "技能1", enemy, null,
+                artifact, artifact.MaximumUses);
+
+            Assert.That(result.Forecast, Is.Not.Null);
+            Assert.That(result.Forecast.TotalDamage, Is.GreaterThan(0));
+            Assert.That(result.Forecast.WillDefeat, Is.True);
             Assert.That(enemy.Health, Is.EqualTo(health));
         }
     }

@@ -605,7 +605,16 @@ namespace OCC.Combat.Presentation
         private void ContinueSlot(int slot)
         {
             SaveData loaded = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(slot), ""));
-            if (loaded == null) return;
+            if (loaded == null)
+            {
+                // Keep the player in slot selection and explain why continue
+                // did not proceed; a silent return looked like a dead button.
+                selectedSlot = slot;
+                handoffError = "该存档无法读取，数据仍保留。请选择其他槽位，或返回后重新开始。";
+                data.stage = FlowStage.SaveSelection;
+                return;
+            }
+            handoffError = string.Empty;
             data = loaded; selectedSlot = slot; data.slot = slot;
             if (IsRuntimeStage(data.stage)) EnterAcademyMap(FirstExperienceSaveRouting.HasMapRun(slot));
         }

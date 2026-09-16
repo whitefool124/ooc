@@ -161,7 +161,9 @@ namespace OCC.Combat.Presentation
             Label("限制", "限制：长时间施术会导致手腕痉挛、脱水与注意力下降。", profile.transform, new Vector2(40, -414), new Vector2(940, 42), 24, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
 
             GameObject portrait = FormalUiKit.AnchoredPanel("角色立绘", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1160, -230), new Vector2(680, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .96f));
-            Sprite heroSprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath("hero"));
+            // The archive page uses the dedicated portrait candidate rather than the
+            // tiny combat unit sprite, so facial features remain readable at 320px.
+            Sprite heroSprite = Resources.Load<Sprite>("Art/FormalUICharacterPortraits/victor_portrait");
             GameObject portraitObject = FormalUiKit.Create("维克多像素立绘", portrait.transform);
             RectTransform portraitRect = portraitObject.AddComponent<RectTransform>(); portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(.5f, .5f); portraitRect.pivot = new Vector2(.5f, .5f); portraitRect.anchoredPosition = new Vector2(0, 24); portraitRect.sizeDelta = new Vector2(320, 320);
             Image portraitImage = portraitObject.AddComponent<Image>(); portraitImage.sprite = heroSprite; portraitImage.preserveAspect = true; portraitImage.raycastTarget = false;

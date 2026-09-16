@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stability_academy_maintenance_mixed_v1_aether_power_box",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation for native 32 PPU batch stability testing",
+    "source_path": "Worldbuilding/归档/2026-09-14_32ppu批量稳定性试产/source/aether_power_box_r2_source.png",
+    "source_sha256": "9b6fd7792a5ce32d3b4c125a25d3c4f2d1dc6f3d85bb4f56eeefbdef4a74bc45"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_native.png",
+    "output_sha256": "7c37e2e9a1c5c4827761eab48b98c5abab36e93eb8faa782ea49625790c0cdb6",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 visual canvas bottom-centered over one owning 32px cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_native.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_native_4x.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_native_grayscale.png",
+    "checker": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/aether_power_box_r2/aether_power_box_preview8x.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/native32_batch_stability_v1/batch_application_contact_4x.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-14",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "notes": "User approved the batch appearance and unified production process; Unity import remains pending."
+  },
+  "unity_import": null
+}

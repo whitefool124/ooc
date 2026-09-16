@@ -1,0 +1,20 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_hero_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_path": "UnityProject/Reports/CombatTestArena/raw_hero_pixel_v1.png",
+    "source_sha256": "783292A4F5717E14736DE02BF26BC722EC7EE92274838A3C8F9EF3ECF456046E"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/hero_pixel_candidate_64.png",
+    "output_sha256": "031606DC0EA2BA43419D9516ADCB5A14139CE2F83158B0DFF03B12460F3572C2",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "与 raider 候选共享 16px 语义网格和中频像素簇"}
+}

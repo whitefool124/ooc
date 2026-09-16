@@ -1,0 +1,13 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_arena_theme_earth_surface_attempt7",
+  "role": "battlefield_ground_macro_64",
+  "status": "QA_PENDING",
+  "provenance": {"source_channel": "easycli_chatgpt_pro_gpt_image_2_5", "source_descriptor": "EasyCLI GPT Image 2.5 独立生成的暖灰褐夯土地块样板", "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt7_two_theme_samples/earth_surface_source.png", "source_sha256": "4827C4F183D1258EBDCF72FD8CEB6D85BB57D842DE4F394B70D84D64A4A32E33"},
+  "delivery": {"output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_earth_surface_64.png", "output_sha256": "F1B6464448345B40FA1B8B5049E6641436FB2EE873454CA5C98A40B10BF5EE5D", "logical_cells": [1, 1], "palette_max": 16, "required_color_families": [], "low_resolution_companion": {"output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_earth_surface_32.png", "output_sha256": "C966A7739E93F9D2B0ACCA7168E2DF758F39956D774861C4E31FEF3725CCEF0F", "palette_max": 12, "required_color_families": []}},
+  "application": {"runtime_draw_rect": "CombatTestArena 每个逻辑格独立拼接；x>=6 的非南侧格", "default_integer_scale": 1, "minimum_integer_scale": 1, "target_view": "正交俯视；统一四边暗缝与左上光向"},
+  "evidence": {"one_x": "UnityProject/Reports/CombatTestArena/modular_ground/earth_surface/one_x.png", "four_x": "UnityProject/Reports/CombatTestArena/modular_ground/earth_surface/four_x.png", "grayscale": "UnityProject/Reports/CombatTestArena/modular_ground/earth_surface/grayscale.png", "checker": "UnityProject/Reports/CombatTestArena/modular_ground/earth_surface/checker.png", "application_contact": "UnityProject/Reports/CombatTestArena/modular_ground/earth_surface/application_contact.png"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "统一主题拼装样板，待人工审美确认"},
+  "unity_import": {"asset_path": "Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_earth_surface_64.png", "importer_verified": true, "runtime_verified": true}
+}

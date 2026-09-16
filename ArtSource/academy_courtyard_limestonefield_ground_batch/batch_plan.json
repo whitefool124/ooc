@@ -1,0 +1,107 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {
+    "theme_id": "academy_courtyard_limestonefield",
+    "material_family": "ruin_masonry",
+    "base_palette": [
+      "#F0D8A2",
+      "#D7AF70",
+      "#9C7049",
+      "#4A3930"
+    ],
+    "wetness": 0,
+    "wear": 1,
+    "motif": "brick_joint",
+    "edge_profile": "retaining_face"
+  },
+  "pieces": [
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.surface.a",
+      "native": "ground_academy_courtyard_limestonefield_surface_a_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_surface_a.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.surface.b",
+      "native": "ground_academy_courtyard_limestonefield_surface_b_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_surface_b.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.surface.c",
+      "native": "ground_academy_courtyard_limestonefield_surface_c_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_surface_c.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.surface.d",
+      "native": "ground_academy_courtyard_limestonefield_surface_d_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_surface_d.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.north.base",
+      "native": "ground_academy_courtyard_limestonefield_north_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_north_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.east.base",
+      "native": "ground_academy_courtyard_limestonefield_east_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_east_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.south.base",
+      "native": "ground_academy_courtyard_limestonefield_south_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_south_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.west.base",
+      "native": "ground_academy_courtyard_limestonefield_west_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_west_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.nw.base",
+      "native": "ground_academy_courtyard_limestonefield_nw_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_nw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.ne.base",
+      "native": "ground_academy_courtyard_limestonefield_ne_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_ne_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.sw.base",
+      "native": "ground_academy_courtyard_limestonefield_sw_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_sw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_limestonefield.se.base",
+      "native": "ground_academy_courtyard_limestonefield_se_base_32.png",
+      "manifest": "ground_academy_courtyard_limestonefield_se_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    }
+  ],
+  "approval_order": [
+    "one surface reference tile",
+    "four directional edges",
+    "four corners",
+    "surface variants",
+    "remaining theme batch"
+  ],
+  "status": "REJECTED_G0_REFERENCE",
+  "g0_reference_review": {
+    "piece": "surface.a",
+    "result": "REJECTED_AFTER_THREE_INDEPENDENT_SOURCES",
+    "reason": "The sources failed the unchanged 1.2 stable macro-lattice threshold at confidence 1.1541, 1.0167 and 1.1985. No surface output was created.",
+    "rule": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json G0-G2 and rework_policy; the opaque-ground window route does not lower lattice confidence and does not authorize a fourth retry.",
+    "review_date": "2026-09-15"
+  }
+}

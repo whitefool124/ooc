@@ -1,0 +1,30 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_arena_theme_slate_surface_attempt7",
+  "role": "battlefield_ground_macro_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "EasyCLI GPT Image 2.5 独立生成的冷灰蓝学院石板地块样板",
+    "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt7_two_theme_samples/slate_surface_source.png",
+    "source_sha256": "2524D2753DB8DCE27C9958B25F1DA3FCB863A5A61FB7F4BB358E202D1B940B4D"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_surface_64.png",
+    "output_sha256": "80A0E5B559BAF7ADBB37C2AFE586BB352850D56AE94879059114D0C42F1B2A05",
+    "logical_cells": [1, 1],
+    "palette_max": 16,
+    "required_color_families": [],
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_surface_32.png",
+      "output_sha256": "BF32056640ACA39312A9391392B642701E1317DC89A9872BE3AD233A1D4C2020",
+      "palette_max": 12,
+      "required_color_families": []
+    }
+  },
+  "application": {"runtime_draw_rect": "CombatTestArena 每个逻辑格独立拼接；x<6 的非南侧格", "default_integer_scale": 1, "minimum_integer_scale": 1, "target_view": "正交俯视；统一四边暗缝与左上光向"},
+  "evidence": {"one_x": "UnityProject/Reports/CombatTestArena/modular_ground/slate_surface/one_x.png", "four_x": "UnityProject/Reports/CombatTestArena/modular_ground/slate_surface/four_x.png", "grayscale": "UnityProject/Reports/CombatTestArena/modular_ground/slate_surface/grayscale.png", "checker": "UnityProject/Reports/CombatTestArena/modular_ground/slate_surface/checker.png", "application_contact": "UnityProject/Reports/CombatTestArena/modular_ground/slate_surface/application_contact.png"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "统一主题拼装样板，待人工审美确认"},
+  "unity_import": {"asset_path": "Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_surface_64.png", "importer_verified": true, "runtime_verified": true}
+}

@@ -102,7 +102,8 @@ namespace OCC.Combat.Presentation
             unitWeaponIcon.sprite = Resources.Load<Sprite>(WeaponIconPath(unit));
             unitWeaponIcon.color = unitWeaponIcon.sprite == null ? Color.clear : Color.white;
             unitWeapon.text = unit.MainHand == null ? "未装备武器" :
-                unit.MainHand.DisplayName + "\n伤害 " + unit.MainHand.Damage + "　射程 " + unit.MainHand.Range;
+                unit.MainHand.DisplayName + "\n伤害 " + unit.MainHand.Damage + "　射程 " +
+                (unit.MainHand.MinimumRange > 0 ? unit.MainHand.MinimumRange + "–" + unit.MainHand.Range + " 格（近身死区）" : unit.MainHand.Range + " 格");
 
             bool hasIntent = model.Intent != null && model.IntentTexture != null;
             unitIntentIcon.gameObject.SetActive(hasIntent);

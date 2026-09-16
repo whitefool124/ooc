@@ -1,0 +1,13 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_arena_theme_slate_edge_s_attempt7",
+  "role": "battlefield_directional_edge_64",
+  "status": "QA_PENDING",
+  "provenance": {"source_channel": "easycli_chatgpt_pro_gpt_image_2_5", "source_descriptor": "已批准slate地表精确复用为上方逻辑格，并拼接EasyCLI GPT Image 2.5独立生成的南侧立面；32×40伴随稿同样使用独立低分辨率立面原料", "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt8_extended_south_edges/slate_edge_s_tall_composite_source.png", "source_sha256": "4F9BD7776A88D2D34542C55F732395FD25671AD2FF3F83432838B45EA377C7CC", "surface_source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt7_two_theme_samples/slate_surface_source.png", "facade_source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt8_extended_south_edges/slate_edge_s_tall_source.png", "low_source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt8_extended_south_edges/slate_edge_s_tall_composite_low_source.png", "low_source_sha256": "12067D9F27F2C0A5D79BE5AD18B5B8B128F6797D502F407D96A9354B2A767A7E"},
+  "delivery": {"output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_edge_s_64.png", "output_sha256": "B1B928C84AF79018F6C9757D556408DF64E4BB4C84531F9932550E53DE3395C2", "logical_cells": [1, 1], "palette_max": 16, "required_color_families": [], "low_resolution_companion": {"output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_edge_s_32.png", "output_sha256": "743F6B5D9D9106040628121AFB6F7FCBA9BF9A227A76150B58BF28DD67876E80", "palette_max": 12, "required_color_families": []}},
+  "application": {"runtime_draw_rect": "CombatTestArena y=0 南侧边缘逐格拼接；x<6；上方64px对齐逻辑格，下方16px越出棋盘", "default_integer_scale": 1, "minimum_integer_scale": 1, "target_view": "固定南侧立面；禁止运行时旋转"},
+  "evidence": {"one_x": "UnityProject/Reports/CombatTestArena/modular_ground/slate_edge_s/one_x.png", "four_x": "UnityProject/Reports/CombatTestArena/modular_ground/slate_edge_s/four_x.png", "grayscale": "UnityProject/Reports/CombatTestArena/modular_ground/slate_edge_s/grayscale.png", "checker": "UnityProject/Reports/CombatTestArena/modular_ground/slate_edge_s/checker.png", "application_contact": "UnityProject/Reports/CombatTestArena/modular_ground/slate_edge_s/application_contact.png"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "统一主题拼装样板，待人工审美确认"},
+  "unity_import": {"asset_path": "Assets/Game/Resources/Art/CombatTestArenaGround/academy_test_ground_theme_slate_edge_s_64.png", "importer_verified": true, "runtime_verified": true}
+}

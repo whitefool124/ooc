@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using OCC.Combat.Presentation;
 using UnityEngine;
 
 namespace OCC.Combat.Tests
@@ -9,17 +10,20 @@ namespace OCC.Combat.Tests
     public sealed class FireSpellCatalogTests
     {
         [Test]
-        public void Catalog_IsV02WithTwentyMeleeUniversalAndRangedEntries()
+        public void Catalog_IsV03WithBalancedRarityAndTwentyMeleeUniversalAndRangedEntries()
         {
             string[] expected = new[] { "M", "U", "R" }.SelectMany(prefix =>
                 Enumerable.Range(1, 20).Select(index => $"F-P-{prefix}{index:00}")).ToArray();
-            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.2"));
+            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.3-rarity"));
             Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(60));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id), Is.EqualTo(expected));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(60));
             Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.MeleeOnly), Is.EqualTo(20));
             Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.WeaponUniversal), Is.EqualTo(20));
             Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.RangedSpell), Is.EqualTo(20));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Common), Is.EqualTo(30));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Uncommon), Is.EqualTo(21));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Rare), Is.EqualTo(9));
             Assert.That(FireSpellCatalog.All, Has.All.Matches<FireSpellDefinition>(spell =>
                 !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 1 && spell.ManaCost >= 0 &&
                 spell.Rules.Count > 0 && spell.PresentationModules.Count > 0 &&
@@ -111,6 +115,54 @@ namespace OCC.Combat.Tests
             Assert.That(prepared.Battle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-U16"), Is.False);
         }
 
+        [Test]
+        public void ZeroTempoSpellsOnlyCashOutExistingBurningOrFireground()
+        {
+            string[] expected = { "F-P-M17", "F-P-U11", "F-P-R17" };
+            Assert.That(FireSpellCatalog.All.Where(spell => spell.ActionPointCost == 0 && spell.ManaCost == 0 && spell.Cooldown == 0)
+                .Select(spell => spell.Id), Is.EquivalentTo(expected));
+            foreach (string id in expected)
+            {
+                FireSpellDefinition spell = FireSpellCatalog.Get(id);
+                Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground), Is.True, id);
+            }
+            Assert.That(FireSpellCatalog.Get("F-P-M20").ActionPointCost, Is.EqualTo(2));
+            Assert.That(FireSpellCatalog.Get("F-P-R01").ManaCost, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void FirelineCoordination_IsSingleHeroUsableAndOnlyTriggersOnItsMarkedBurningEnemy()
+        {
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, "hero");
+            UnitState hero = combat.GetUnit("hero");
+            UnitState marked = combat.GetUnit("range_normal");
+            UnitState other = combat.GetUnit("range_shield");
+            marked.ApplyStatus(StatusType.Burning, 3, 8);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U19");
+            GridPosition markedOrigin = marked.Position;
+
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell,
+                FireSpellTarget.Unit(marked.Id, CardinalDirection.East));
+            Assert.That(preview.CanCommit, Is.True);
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(marked.Id, CardinalDirection.East));
+
+            Assert.That(FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, other.Id), Is.Empty,
+                "An attack against another enemy must not spend the marked follow-up.");
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.True);
+
+            IReadOnlyList<FireSpellExecution> triggers = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, marked.Id);
+
+            Assert.That(triggers.Count, Is.EqualTo(1));
+            Assert.That(triggers[0].Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0), Is.True);
+            Assert.That(triggers[0].Steps.Any(step => step.Kind == FireRuleKind.Push && step.Applied == 1), Is.True);
+            Assert.That(marked.Position, Is.EqualTo(new GridPosition(markedOrigin.X + 1, markedOrigin.Y)));
+            Assert.That(battle.HasFireground(markedOrigin), Is.True);
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
+        }
+
         private static void AssertTriggerOrigin(IReadOnlyList<FireSpellExecution> executions,
             string sourceId, GridPosition origin, string spellId)
         {
@@ -188,13 +240,992 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void HeatPulseBoost_SeparatesImmediateMovementFromPendingMeleeDamage()
+        {
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, "hero");
+            FireBattleState battle = new FireBattleState(combat);
+            UnitState hero = combat.GetUnit("hero");
+            UnitState enemy = combat.GetUnit("range_normal");
+            hero.Equip(CombatCatalog.Hammer, null, null);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M01");
+            int movementBefore = hero.MovementRangeThisTurn;
+            int healthBefore = enemy.Health;
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id));
+
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(movementBefore + 2));
+            Assert.That(enemy.Health, Is.EqualTo(healthBefore), "追加伤害不能在施放时提前结算。 ");
+            Assert.That(battle.PendingEffects.Count(effect => effect.Spell.Id == spell.Id), Is.EqualTo(1));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.StartWith("立即：本轮额外移动 2 格").And.Contain("待触发：下一次合法近战武器攻击追加 8 点火焰伤害"));
+
+            FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, enemy.Id);
+            Assert.That(enemy.Health, Is.LessThan(healthBefore));
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
+        }
+
+        [Test]
+        public void BlastPursuit_FollowsIntoVacatedCellAndPublishesEveryBlockingRule()
+        {
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, "hero");
+            FireBattleState battle = new FireBattleState(combat);
+            UnitState hero = combat.GetUnit("hero");
+            UnitState enemy = combat.GetUnit("range_normal");
+            hero.Equip(CombatCatalog.Hammer, null, null);
+            GridPosition vacated = enemy.Position;
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M05");
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("刚离开的格").And.Contain("强制位移不触发"));
+            MoveUnitTo(combat, enemy, new GridPosition(6, 4));
+            FirePendingEffect pending = battle.PendingEffects.Single(effect => effect.Spell.Id == spell.Id);
+
+            FirePursuitPreview preview = FireSpellEngine.PreviewMarkedTargetMove(battle, pending, vacated);
+            IReadOnlyList<FireSpellExecution> triggered = FireSpellEngine.TriggerMarkedTargetMove(battle, enemy.Id, vacated);
+
+            Assert.That(preview.WillMove, Is.True);
+            Assert.That(preview.Destination, Is.EqualTo(vacated));
+            Assert.That(hero.Position, Is.EqualTo(vacated));
+            Assert.That(triggered.Single().Steps.Single(step => step.Kind == FireRuleKind.MoveSource).Detail,
+                Is.EqualTo("pursuit_to_vacated_cell"));
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
+
+            CombatState blockedCombat = TrainingRangeScenarioFactory.CreateStandard();
+            blockedCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(blockedCombat, "hero");
+            FireBattleState blockedBattle = new FireBattleState(blockedCombat);
+            UnitState blockedHero = blockedCombat.GetUnit("hero");
+            UnitState blockedEnemy = blockedCombat.GetUnit("range_normal");
+            blockedHero.Equip(CombatCatalog.Hammer, null, null);
+            FireSpellEngine.Execute(blockedBattle, blockedHero.Id, spell, FireSpellTarget.Unit(blockedEnemy.Id));
+            GridPosition blockedVacated = blockedEnemy.Position;
+            MoveUnitTo(blockedCombat, blockedEnemy, new GridPosition(6, 4));
+            pending = blockedBattle.PendingEffects.Single(effect => effect.Spell.Id == spell.Id);
+            blockedHero.ApplyStatus(StatusType.Bound, 1);
+
+            FirePursuitPreview blocked = FireSpellEngine.PreviewMarkedTargetMove(blockedBattle, pending, blockedVacated);
+
+            Assert.That(blocked.WillMove, Is.False);
+            Assert.That(blocked.Reason, Does.Contain("束缚"));
+            Assert.That(blocked.DetailCode, Is.EqualTo("pursuit_bound"));
+        }
+
+        [Test]
+        public void CorePierce_RequiresAndConsumesBurningForItsRareShieldBreakFinisher()
+        {
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, "hero");
+            FireBattleState battle = new FireBattleState(combat);
+            UnitState hero = combat.GetUnit("hero");
+            UnitState enemy = combat.GetUnit("range_normal");
+            hero.Equip(CombatCatalog.Hammer, null, null);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M07");
+
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id)).CanCommit, Is.False);
+            enemy.ApplyStatus(StatusType.Burning, 2, 8);
+            combat.TryGrantRogueliteShield(enemy.Id, "core-pierce-test", 16);
+            int vitalityBefore = enemy.Health + enemy.Shield;
+
+            FireSpellExecution execution = FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id));
+
+            Assert.That(execution.Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Requested == 20), Is.True);
+            Assert.That(execution.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Requested == 8), Is.True);
+            Assert.That(enemy.HasStatus(StatusType.BreakStance), Is.True);
+            Assert.That(enemy.HasStatus(StatusType.Burning), Is.False);
+            Assert.That(enemy.Shield, Is.Zero);
+            Assert.That(enemy.Health + enemy.Shield, Is.LessThan(vitalityBefore));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.StartWith("只能攻击相邻的燃烧敌人").And.Contain("然后消耗燃烧"));
+        }
+
+        [Test]
+        public void FurnaceSweep_PreviewsThreeConeLayersAndAppliesVisibleFriendlyFire()
+        {
+            GridMap map = new GridMap(9, 7);
+            UnitState hero = new UnitState("hero", true, new GridPosition(3, 3));
+            UnitState ally = new UnitState("ally", true, new GridPosition(5, 4));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 3));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            ally.ConfigureVitality(99); enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, ally, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M08");
+            FireSpellTarget target = FireSpellTarget.Unit(enemy.Id, CardinalDirection.East);
+            int allyBefore = ally.Health;
+            int enemyBefore = enemy.Health;
+
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell, target);
+
+            Assert.That(preview.CanCommit, Is.True);
+            Assert.That(preview.Cells.Count, Is.EqualTo(9));
+            Assert.That(preview.Cells, Does.Contain(new GridPosition(4, 3)));
+            Assert.That(preview.Cells, Does.Contain(new GridPosition(5, 4)));
+            Assert.That(preview.Cells, Does.Contain(new GridPosition(6, 1)));
+            Assert.That(preview.FriendlyFireRisk, Is.True);
+            FireSpellEngine.Execute(battle, hero.Id, spell, target);
+            Assert.That(enemy.Health, Is.LessThan(enemyBefore));
+            Assert.That(ally.Health, Is.LessThan(allyBefore));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("1／3／5 格").And.Contain("包括友军"));
+        }
+
+        [Test]
+        public void HeatBarrier_PreviewsAndAbsorbsTheFirstRangedSkillBeforeDamage()
+        {
+            GridMap map = new GridMap(6, 1);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 0));
+            hero.ConfigureVitality(40); hero.ConfigureMana(12);
+            hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(40); enemy.ConfigureMana(12);
+            enemy.Equip(EnemyAbilityCatalog.HeavyCrossbow, null, EnemyAbilityCatalog.WindlassBolt, null);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-M11", string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+            CombatCommand attack = CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
+
+            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(combat, enemy, attack);
+
+            Assert.That(intent.ResultSummary, Does.StartWith("热障架势先获得 8 点护盾（0→8）")
+                .And.Contain("预计造成 5 点护盾伤害").And.Contain("结算后护盾 3"));
+            Assert.That(intent.ExpectedDamage, Is.EqualTo(5));
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-M11"), Is.True,
+                "只读意图预览不得消耗架势。");
+
+            CombatResolver.BeginTurn(combat, enemy.Id);
+            CombatResolver.Resolve(combat, attack);
+
+            Assert.That(hero.Shield, Is.EqualTo(3));
+            Assert.That(hero.Health, Is.EqualTo(40));
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-M11"), Is.False);
+        }
+
+        [Test]
+        public void EmberBlock_GrantsImmediateShieldThenRebuildsAfterTheFirstAdjacentSkillHit()
+        {
+            GridMap map = new GridMap(3, 1);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            hero.ConfigureVitality(40); hero.ConfigureMana(12); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(40); enemy.ConfigureMana(12);
+            enemy.Equip(CombatCatalog.Hammer, null, EnemyAbilityCatalog.HookingStrike, null);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-M12", string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+
+            Assert.That(hero.Shield, Is.EqualTo(12));
+            Assert.That(runtime.FireBattle.PendingEffects.Single().Spell.TriggerWindow,
+                Is.EqualTo(FireTriggerWindow.FirstAdjacentAttack));
+            CombatResolver.BeginTurn(combat, enemy.Id);
+            CombatCommandExecutionResult result = new CombatCommandExecutionService().Execute(
+                combat, runtime.FireBattle, CombatCommand.UseSkill(enemy.Id, 0, hero.Id));
+
+            Assert.That(result.Accepted, Is.True);
+            Assert.That(hero.Health, Is.EqualTo(40));
+            Assert.That(hero.Shield, Is.EqualTo(13), "先承受 3 点护盾伤害，再由独立触发源补回 4 点。");
+            Assert.That(result.AttackFireExecutions.Single().Steps.Any(step =>
+                step.Kind == FireRuleKind.RestoreShield && step.Applied == 4), Is.True);
+            Assert.That(runtime.FireBattle.PendingEffects, Is.Empty);
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-M12")),
+                Does.Contain("相邻武器或技能攻击结算后"));
+        }
+
+        [Test]
+        public void CoreCounter_ShowsLethalReactionInIntentAndTriggersAfterAdjacentSkill()
+        {
+            GridMap map = new GridMap(3, 1);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            hero.ConfigureVitality(40); hero.ConfigureMana(12); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(12); enemy.ConfigureMana(12);
+            enemy.Equip(CombatCatalog.Hammer, null, EnemyAbilityCatalog.HookingStrike, null);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-M13", string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+            CombatCommand command = CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
+
+            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(combat, enemy, command);
+
+            Assert.That(intent.ResultSummary, Does.Contain("公开反应：炉心反击")
+                .And.Contain("生命 -12").And.Contain("击倒攻击者"));
+            Assert.That(enemy.Health, Is.EqualTo(12), "只读意图不得提前结算反击。");
+
+            CombatResolver.BeginTurn(combat, enemy.Id);
+            CombatCommandExecutionResult result = new CombatCommandExecutionService().Execute(
+                combat, runtime.FireBattle, command);
+
+            Assert.That(result.Accepted, Is.True);
+            Assert.That(enemy.IsAlive, Is.False);
+            Assert.That(result.AttackFireExecutions.Single().Steps.Any(step =>
+                step.Kind == FireRuleKind.WeaponDamage && step.Requested == 12), Is.True);
+            Assert.That(runtime.FireBattle.PendingEffects, Is.Empty);
+        }
+
+        [Test]
+        public void MeleeUtilityBranch_M14ToM17KeepsDistinctControlAndBurningRoles()
+        {
+            CombatState releaseCombat = TrainingRangeScenarioFactory.CreateStandard();
+            releaseCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(releaseCombat, "hero");
+            UnitState releaseHero = releaseCombat.GetUnit("hero");
+            UnitState releaseEnemy = releaseCombat.GetUnit("range_normal");
+            releaseHero.Equip(CombatCatalog.Hammer, null, null);
+            releaseHero.ApplyStatus(StatusType.Bound, 2);
+            int releaseHealth = releaseEnemy.Health;
+            FireSpellExecution release = FireSpellEngine.Execute(new FireBattleState(releaseCombat), releaseHero.Id,
+                FireSpellCatalog.Get("F-P-M14"), FireSpellTarget.Unit(releaseEnemy.Id));
+            Assert.That(releaseHero.HasStatus(StatusType.Bound), Is.False);
+            Assert.That(releaseEnemy.Health, Is.LessThan(releaseHealth));
+            Assert.That(release.Steps.Any(step => step.Kind == FireRuleKind.ClearStatus && step.Detail == StatusType.Bound.ToString()), Is.True);
+
+            CombatState pushCombat = TrainingRangeScenarioFactory.CreateStandard();
+            pushCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(pushCombat, "hero");
+            UnitState pushHero = pushCombat.GetUnit("hero");
+            UnitState pushEnemy = pushCombat.GetUnit("range_normal");
+            pushHero.Equip(CombatCatalog.Hammer, null, null);
+            GridPosition pushBefore = pushEnemy.Position;
+            FireSpellExecution push = FireSpellEngine.Execute(new FireBattleState(pushCombat), pushHero.Id,
+                FireSpellCatalog.Get("F-P-M15"), FireSpellTarget.Unit(pushEnemy.Id));
+            Assert.That(pushEnemy.Position.ManhattanDistance(pushBefore), Is.EqualTo(1));
+            Assert.That(push.Steps.Single(step => step.Kind == FireRuleKind.Push).Detail, Is.EqualTo("push"));
+
+            CombatState harvestCombat = TrainingRangeScenarioFactory.CreateStandard();
+            harvestCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(harvestCombat, "hero");
+            UnitState harvestHero = harvestCombat.GetUnit("hero");
+            UnitState harvestEnemy = harvestCombat.GetUnit("range_normal");
+            harvestHero.Equip(CombatCatalog.Hammer, null, null);
+            harvestEnemy.ApplyStatus(StatusType.Burning, 2, 8);
+            FireSpellExecution harvest = FireSpellEngine.Execute(new FireBattleState(harvestCombat), harvestHero.Id,
+                FireSpellCatalog.Get("F-P-M16"), FireSpellTarget.Unit(harvestEnemy.Id));
+            Assert.That(harvestEnemy.HasStatus(StatusType.Burning), Is.True, "收割分支保留燃烧供后续术式继续利用。");
+            Assert.That(harvest.Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Requested == 16), Is.True);
+
+            CombatState absorbCombat = TrainingRangeScenarioFactory.CreateStandard();
+            absorbCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(absorbCombat, "hero");
+            UnitState absorbHero = absorbCombat.GetUnit("hero");
+            UnitState absorbEnemy = absorbCombat.GetUnit("range_normal");
+            absorbHero.Equip(CombatCatalog.Hammer, null, null);
+            absorbEnemy.ApplyStatus(StatusType.Burning, 2, 8);
+            FireSpellExecution absorb = FireSpellEngine.Execute(new FireBattleState(absorbCombat), absorbHero.Id,
+                FireSpellCatalog.Get("F-P-M17"), FireSpellTarget.Unit(absorbEnemy.Id));
+            Assert.That(absorbEnemy.HasStatus(StatusType.Burning), Is.False, "吸热分支必须消费燃烧。");
+            Assert.That(absorbHero.Shield, Is.EqualTo(12));
+            Assert.That(absorb.Steps.Any(step => step.Kind == FireRuleKind.ConsumeBurning), Is.True);
+
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-M14")), Does.Contain("同时解除束缚"));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-M15")), Does.Contain("落点被阻挡"));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-M16")), Does.Contain("不消耗燃烧"));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-M17")), Does.Contain("消耗其燃烧"));
+        }
+
+        [Test]
+        public void CoreOverlimit_UsesAPublicStraightChargeLandingAndUnshieldedSelfCost()
+        {
+            GridMap map = new GridMap(5, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M19");
+            int heroHealth = hero.Health;
+            int enemyVitality = enemy.Health + enemy.Shield;
+
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id));
+            Assert.That(preview.CanCommit, Is.True);
+            Assert.That(preview.Cells, Is.EqualTo(new[] { new GridPosition(1, 0), new GridPosition(2, 0), new GridPosition(3, 0) }));
+
+            FireSpellExecution execution = FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id));
+
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(2, 0)), "落点固定为目标前一格，不从目标周围任意挑选。");
+            Assert.That(execution.Steps.Single(step => step.Kind == FireRuleKind.MoveSource).Detail, Is.EqualTo("charge_to_front_cell"));
+            Assert.That(enemy.Health + enemy.Shield, Is.LessThan(enemyVitality));
+            Assert.That(hero.Health, Is.EqualTo(heroHealth - 8));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("冲至其前一格").And.Contain("无视护盾失去 8 点生命"));
+
+            UnitState diagonalHero = new UnitState("hero2", true, new GridPosition(0, 0));
+            UnitState diagonalEnemy = new UnitState("diagonal", false, new GridPosition(2, 1));
+            diagonalHero.ConfigureVitality(99); diagonalHero.ConfigureMana(99); diagonalHero.Equip(CombatCatalog.Hammer, null, null);
+            CombatState diagonalCombat = new CombatState(map.Clone(), new[] { diagonalHero, diagonalEnemy }, Array.Empty<CombatObjective>());
+            diagonalCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(diagonalCombat, diagonalHero.Id);
+            Assert.That(FireSpellEngine.Preview(new FireBattleState(diagonalCombat), diagonalHero.Id, spell,
+                FireSpellTarget.Unit(diagonalEnemy.Id)).Failures, Does.Contain("目标必须位于同一横线或竖线"));
+        }
+
+        [TestCase("F-P-U12")]
+        [TestCase("F-P-U13")]
+        [TestCase("F-P-U14")]
+        [TestCase("F-P-U15")]
+        [TestCase("F-P-U20")]
+        public void ConditionalWeaponAttachments_WaitForAnActuallyLegalStatusTarget(string spellId)
+        {
+            GridMap map = new GridMap(3, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState wrong = new UnitState("wrong", false, new GridPosition(1, 2));
+            UnitState legal = new UnitState("legal", false, new GridPosition(2, 1));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            wrong.ConfigureVitality(99); legal.ConfigureVitality(99); legal.ApplyStatus(StatusType.Burning, 2, 8);
+            CombatState combat = new CombatState(map, new[] { hero, wrong, legal }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get(spellId);
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id));
+
+            IReadOnlyList<FireSpellExecution> wrongResult = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, wrong.Id);
+
+            Assert.That(wrongResult, Is.Empty, "不满足公开条件的攻击不得浪费待触发窗口：" + spellId);
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spellId), Is.True);
+
+            IReadOnlyList<FireSpellExecution> legalResult = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, legal.Id);
+
+            Assert.That(legalResult.Count, Is.EqualTo(1));
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spellId), Is.False);
+            if (spellId == "F-P-U12")
+            {
+                Assert.That(hero.Shield, Is.EqualTo(12), "余热必须先转化为护盾，再消耗燃烧状态。 ");
+                Assert.That(legal.HasStatus(StatusType.Burning), Is.False);
+            }
+        }
+
+        [Test]
+        public void FurnacePressureCharge_WaitsForCurrentWeaponMaximumRange()
+        {
+            int maximumRange = CombatCatalog.Rifle.Range;
+            GridMap map = new GridMap(maximumRange + 2, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState near = new UnitState("near", false, new GridPosition(1, 0));
+            UnitState far = new UnitState("far", false, new GridPosition(maximumRange, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Rifle, null, null);
+            near.ConfigureVitality(99); far.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, near, far }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U16");
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id));
+
+            Assert.That(FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, near.Id), Is.Empty);
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.True);
+
+            IReadOnlyList<FireSpellExecution> result = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, far.Id);
+
+            Assert.That(result.Single().Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Requested == 12), Is.True);
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("当前武器最大射程").And.Contain("较近距离攻击不会消耗"));
+        }
+
+        [Test]
+        public void WeaponPreview_ShowsPendingSplashFriendlyFireWithoutConsumingTheAttachment()
+        {
+            GridMap map = new GridMap(3, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 1));
+            UnitState ally = new UnitState("ally", true, new GridPosition(1, 2));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99); ally.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy, ally }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-U05", string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+            int heroHealth = hero.Health, allyHealth = ally.Health, enemyHealth = enemy.Health;
+
+            CombatActionPreview preview = new BattlefieldPresentationAdapter().BuildPreview(combat, "攻击", enemy.Id);
+
+            Assert.That(preview.ExpectedResult, Does.Contain("将触发：爆燃弹芯"));
+            Assert.That(preview.StatusResults, Does.Contain("爆燃弹芯"));
+            Assert.That(preview.FriendlyFireRisk, Is.True);
+            Assert.That(preview.AffectedCellCount, Is.EqualTo(3));
+            Assert.That(preview.DamageBreakdown, Does.StartWith("武器与附着合计"));
+            Assert.That(hero.Health, Is.EqualTo(heroHealth));
+            Assert.That(ally.Health, Is.EqualTo(allyHealth));
+            Assert.That(enemy.Health, Is.EqualTo(enemyHealth));
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-U05"), Is.True,
+                "预览不得消耗真实待触发窗口。 ");
+        }
+
+        [TestCase("F-P-U02", StatusType.Burning, "烙痕传递", "目标获得燃烧")]
+        [TestCase("F-P-U03", StatusType.BreakStance, "灼蚀校准", "目标进入破势")]
+        public void WeaponStatusAttachments_PreviewAndApplyTheExactSelectedTarget(string spellId, StatusType status,
+            string displayName, string resultText)
+        {
+            GridMap map = new GridMap(4, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                spellId, string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+
+            CombatActionPreview preview = new BattlefieldPresentationAdapter().BuildPreview(combat, "攻击", enemy.Id);
+
+            Assert.That(preview.ExpectedResult, Does.Contain("将触发：" + displayName).And.Contain(resultText));
+            Assert.That(preview.StatusResults, Does.Contain(resultText));
+            Assert.That(enemy.HasStatus(status), Is.False, "只读预览不能提前施加状态。 ");
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == spellId), Is.True);
+
+            FireSpellEngine.ResolveWeaponAttack(runtime.FireBattle, hero.Id, enemy.Id);
+            Assert.That(enemy.HasStatus(status), Is.True);
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == spellId), Is.False);
+        }
+
+        [Test]
+        public void EmberFireball_DealsBaseDamageAndRaisesEligibleBurningToAtLeastTwoTurns()
+        {
+            GridMap map = new GridMap(6, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState burning = new UnitState("burning", false, new GridPosition(3, 0));
+            UnitState plain = new UnitState("plain", false, new GridPosition(3, 1));
+            hero.ConfigureMana(99); burning.ConfigureVitality(99); plain.ConfigureVitality(99);
+            burning.ApplyStatus(StatusType.Burning, 1, 8);
+            CombatState combat = new CombatState(map, new[] { hero, burning, plain }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R05");
+            int burningVitality = burning.Health + burning.Shield;
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(burning.Id));
+
+            Assert.That(burning.Health + burning.Shield, Is.LessThan(burningVitality));
+            Assert.That(burning.StatusDuration(StatusType.Burning), Is.EqualTo(2),
+                "正式数据定义为延长至至少 2 回合，而不是额外增加 2 回合。 ");
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("提高至至少 2 回合"));
+
+            CombatState plainCombat = new CombatState(new GridMap(6, 2), new[]
+            {
+                new UnitState("hero", true, new GridPosition(0, 0)), plain = new UnitState("plain", false, new GridPosition(3, 1))
+            }, Array.Empty<CombatObjective>());
+            plainCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            plainCombat.GetUnit("hero").ConfigureMana(99); plain.ConfigureVitality(99);
+            CombatResolver.BeginTurn(plainCombat, "hero"); int plainVitality = plain.Health + plain.Shield;
+            FireSpellEngine.Execute(new FireBattleState(plainCombat), "hero", spell, FireSpellTarget.Unit(plain.Id));
+            Assert.That(plain.Health + plain.Shield, Is.LessThan(plainVitality));
+            Assert.That(plain.HasStatus(StatusType.Burning), Is.False,
+                "未燃烧目标仍受基础伤害，但不能凭空获得余烬延长。 ");
+        }
+
+        [Test]
+        public void RangedBasics_PreserveRangeDamageAndBurnEstablishmentTradeoffs()
+        {
+            GridMap directMap = new GridMap(7, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState close = new UnitState("close", false, new GridPosition(3, 0));
+            UnitState far = new UnitState("far", false, new GridPosition(5, 0));
+            hero.ConfigureMana(99); close.ConfigureVitality(99); far.ConfigureVitality(99);
+            CombatState direct = new CombatState(directMap, new[] { hero, close, far }, Array.Empty<CombatObjective>());
+            direct.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(direct, hero.Id);
+            FireBattleState directBattle = new FireBattleState(direct);
+            FireSpellDefinition fireball = FireSpellCatalog.Get("F-P-R01");
+            FireSpellDefinition arrow = FireSpellCatalog.Get("F-P-R02");
+
+            Assert.That(FireSpellEngine.Preview(directBattle, hero.Id, fireball, FireSpellTarget.Unit(close.Id)).CanCommit, Is.True);
+            Assert.That(FireSpellEngine.Preview(directBattle, hero.Id, fireball, FireSpellTarget.Unit(far.Id)).CanCommit, Is.False,
+                "高伤火弹必须实际受到 3 格短射程限制。 ");
+            Assert.That(FireSpellEngine.Preview(directBattle, hero.Id, arrow, FireSpellTarget.Unit(far.Id)).CanCommit, Is.True,
+                "低伤火矢必须真实换得 5 格射程。 ");
+            int closeBefore = close.Health + close.Shield;
+            int farBefore = far.Health + far.Shield;
+            FireSpellEngine.Execute(directBattle, hero.Id, fireball, FireSpellTarget.Unit(close.Id));
+            FireSpellEngine.Execute(directBattle, hero.Id, arrow, FireSpellTarget.Unit(far.Id));
+            Assert.That(closeBefore - (close.Health + close.Shield), Is.EqualTo(12));
+            Assert.That(farBefore - (far.Health + far.Shield), Is.EqualTo(8));
+
+            GridMap burnMap = new GridMap(6, 2);
+            hero = new UnitState("hero2", true, new GridPosition(0, 0));
+            UnitState branded = new UnitState("branded", false, new GridPosition(3, 0));
+            UnitState seeded = new UnitState("seeded", false, new GridPosition(4, 0));
+            hero.ConfigureMana(99); branded.ConfigureVitality(99); seeded.ConfigureVitality(99);
+            CombatState burnCombat = new CombatState(burnMap, new[] { hero, branded, seeded }, Array.Empty<CombatObjective>());
+            burnCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(burnCombat, hero.Id);
+            FireBattleState burnBattle = new FireBattleState(burnCombat);
+            int brandedBefore = branded.Health + branded.Shield;
+            int seededBefore = seeded.Health + seeded.Shield;
+            FireSpellEngine.Execute(burnBattle, hero.Id, FireSpellCatalog.Get("F-P-R03"), FireSpellTarget.Unit(branded.Id));
+            FireSpellEngine.Execute(burnBattle, hero.Id, FireSpellCatalog.Get("F-P-R04"), FireSpellTarget.Unit(seeded.Id));
+
+            Assert.That(brandedBefore - (branded.Health + branded.Shield), Is.EqualTo(4));
+            Assert.That(branded.StatusDuration(StatusType.Burning), Is.EqualTo(1));
+            Assert.That(branded.StatusStrength(StatusType.Burning), Is.EqualTo(8));
+            Assert.That(seeded.Health + seeded.Shield, Is.EqualTo(seededBefore), "火种只建立燃烧，不附带直伤。 ");
+            Assert.That(seeded.StatusDuration(StatusType.Burning), Is.EqualTo(2));
+            Assert.That(seeded.StatusStrength(StatusType.Burning), Is.EqualTo(8));
+        }
+
+        [Test]
+        public void DelayedRangedAttacks_ApplyDamageThenPublishTheirOwnTimelineCost()
+        {
+            GridMap impactMap = new GridMap(5, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            hero.ConfigureMana(99); enemy.ConfigureVitality(99);
+            CombatState impactCombat = new CombatState(impactMap, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            impactCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(impactCombat, hero.Id);
+            FireBattleState impactBattle = new FireBattleState(impactCombat);
+            int heroTimelineBefore = hero.ActionValue;
+            int enemyBefore = enemy.Health + enemy.Shield;
+            FireSpellEngine.Execute(impactBattle, hero.Id, FireSpellCatalog.Get("F-P-R09"), FireSpellTarget.Unit(enemy.Id));
+
+            Assert.That(enemyBefore - (enemy.Health + enemy.Shield), Is.EqualTo(20));
+            Assert.That(hero.ActionValue, Is.EqualTo(heroTimelineBefore - 4));
+
+            GridMap breachMap = new GridMap(5, 2);
+            hero = new UnitState("hero2", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy2", false, new GridPosition(3, 0));
+            hero.ConfigureMana(99); enemy.ConfigureVitality(99);
+            CombatState breachCombat = new CombatState(breachMap, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            breachCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(breachCombat, hero.Id);
+            FireBattleState breachBattle = new FireBattleState(breachCombat);
+            heroTimelineBefore = hero.ActionValue;
+            enemyBefore = enemy.Health + enemy.Shield;
+            FireSpellDefinition breach = FireSpellCatalog.Get("F-P-R10");
+            FireSpellEngine.Execute(breachBattle, hero.Id, breach, FireSpellTarget.Unit(enemy.Id));
+
+            Assert.That(enemyBefore - (enemy.Health + enemy.Shield), Is.EqualTo(12), "破势只影响后续伤害，不能回溯本次命中。 ");
+            Assert.That(enemy.HasStatus(StatusType.BreakStance), Is.True);
+            Assert.That(hero.ActionValue, Is.EqualTo(heroTimelineBefore - 4));
+            Assert.That(breach.InitiativeDelay, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void PressureStrike_HasAPreviewedTwoToThreeTileRangeBand()
+        {
+            GridMap map = new GridMap(6, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState adjacent = new UnitState("adjacent", false, new GridPosition(1, 0));
+            UnitState band = new UnitState("band", false, new GridPosition(2, 0));
+            UnitState edge = new UnitState("edge", false, new GridPosition(3, 0));
+            UnitState far = new UnitState("far", false, new GridPosition(4, 0));
+            hero.ConfigureMana(99);
+            foreach (UnitState enemy in new[] { adjacent, band, edge, far }) enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, adjacent, band, edge, far }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R09");
+
+            Assert.That(spell.MinimumRange, Is.EqualTo(2));
+            Assert.That(spell.Range, Is.EqualTo(3));
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(adjacent.Id)).CanCommit, Is.False);
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(adjacent.Id)).Failures,
+                Does.Contain("目标位于近身死区（需至少 2 格）"));
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(band.Id)).CanCommit, Is.True);
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(edge.Id)).CanCommit, Is.True);
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(far.Id)).Failures,
+                Does.Contain("超出射程"));
+            Assert.That(OCC.Combat.Presentation.RogueliteSettlementPresentation.FireSpellTargetSummary(spell),
+                Does.Contain("2–3 格（近身死区）"));
+
+            int before = band.Health + band.Shield;
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(band.Id));
+            Assert.That(before - (band.Health + band.Shield), Is.EqualTo(20));
+        }
+
+        [Test]
+        public void RangedLineSpells_UseTheirFullFourCellLineAndRejectAnOffAxisUnitAnchor()
+        {
+            GridMap map = new GridMap(8, 5);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 2));
+            UnitState target = new UnitState("target", false, new GridPosition(3, 2));
+            UnitState far = new UnitState("far", false, new GridPosition(5, 2));
+            UnitState ally = new UnitState("ally", true, new GridPosition(4, 2));
+            UnitState offAxis = new UnitState("off_axis", false, new GridPosition(3, 4));
+            hero.ConfigureMana(99); target.ConfigureVitality(99); far.ConfigureVitality(99);
+            ally.ConfigureVitality(99); offAxis.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, target, far, ally, offAxis }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition line = FireSpellCatalog.Get("F-P-R06");
+
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, line,
+                FireSpellTarget.Unit(target.Id, CardinalDirection.East));
+            Assert.That(preview.CanCommit, Is.True);
+            Assert.That(preview.Cells, Is.EqualTo(new[]
+            {
+                new GridPosition(2, 2), new GridPosition(3, 2), new GridPosition(4, 2), new GridPosition(5, 2)
+            }));
+            Assert.That(preview.FriendlyFireRisk, Is.True);
+            int farBefore = far.Health + far.Shield, allyBefore = ally.Health + ally.Shield;
+            FireSpellEngine.Execute(battle, hero.Id, line, FireSpellTarget.Unit(target.Id, CardinalDirection.East));
+            Assert.That(far.Health + far.Shield, Is.LessThan(farBefore));
+            Assert.That(ally.Health + ally.Shield, Is.LessThan(allyBefore));
+
+            CombatState offAxisCombat = new CombatState(new GridMap(8, 5), new[]
+            {
+                hero = new UnitState("hero2", true, new GridPosition(1, 2)),
+                offAxis = new UnitState("off_axis2", false, new GridPosition(3, 4))
+            }, Array.Empty<CombatObjective>());
+            hero.ConfigureMana(99); offAxisCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(offAxisCombat, hero.Id);
+            Assert.That(FireSpellEngine.Preview(new FireBattleState(offAxisCombat), hero.Id, line,
+                FireSpellTarget.Unit(offAxis.Id, CardinalDirection.East)).Failures, Does.Contain("所选单位不在作用范围内"));
+
+            CombatState roadCombat = new CombatState(new GridMap(8, 5), new[]
+            {
+                hero = new UnitState("hero3", true, new GridPosition(1, 2)),
+                new UnitState("enemy3", false, new GridPosition(7, 4))
+            }, Array.Empty<CombatObjective>());
+            hero.ConfigureMana(99); roadCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(roadCombat, hero.Id);
+            FireBattleState roadBattle = new FireBattleState(roadCombat);
+            FireSpellEngine.Execute(roadBattle, hero.Id, FireSpellCatalog.Get("F-P-R12"),
+                FireSpellTarget.At(new GridPosition(2, 2), CardinalDirection.East));
+            Assert.That(roadBattle.Firegrounds.Keys, Is.EquivalentTo(new[]
+            {
+                new GridPosition(2, 2), new GridPosition(3, 2), new GridPosition(4, 2), new GridPosition(5, 2)
+            }));
+        }
+
+        [Test]
+        public void RangedCones_HitBothSidesButDoNotPassThroughHeavyCover()
+        {
+            GridMap map = new GridMap(8, 7);
+            map.SetTile(new GridPosition(3, 3), new TileState { Cover = CoverType.Heavy, Durability = 24 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 3));
+            UnitState primary = new UnitState("primary", false, new GridPosition(2, 3));
+            UnitState visibleAlly = new UnitState("visible_ally", true, new GridPosition(3, 2));
+            UnitState screenedEnemy = new UnitState("screened_enemy", false, new GridPosition(4, 3));
+            hero.ConfigureMana(99); primary.ConfigureVitality(99); visibleAlly.ConfigureVitality(99); screenedEnemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, primary, visibleAlly, screenedEnemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spray = FireSpellCatalog.Get("F-P-R07");
+            FireSpellTarget target = FireSpellTarget.Unit(primary.Id, CardinalDirection.East);
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spray, target);
+            int primaryBefore = primary.Health + primary.Shield;
+            int allyBefore = visibleAlly.Health + visibleAlly.Shield;
+            int screenedBefore = screenedEnemy.Health + screenedEnemy.Shield;
+
+            Assert.That(preview.CanCommit, Is.True);
+            Assert.That(preview.Cells.Contains(primary.Position), Is.True);
+            Assert.That(preview.Cells.Contains(visibleAlly.Position), Is.True);
+            Assert.That(preview.Cells.Contains(screenedEnemy.Position), Is.False, "重型遮挡后的锥形格不能显示为将受影响。 ");
+            Assert.That(preview.FriendlyFireRisk, Is.True);
+            FireSpellEngine.Execute(battle, hero.Id, spray, target);
+
+            Assert.That(primary.Health + primary.Shield, Is.LessThan(primaryBefore));
+            Assert.That(visibleAlly.Health + visibleAlly.Shield, Is.LessThan(allyBefore));
+            Assert.That(screenedEnemy.Health + screenedEnemy.Shield, Is.EqualTo(screenedBefore));
+
+            GridMap igniteMap = new GridMap(7, 7);
+            hero = new UnitState("hero2", true, new GridPosition(1, 3));
+            primary = new UnitState("primary2", false, new GridPosition(2, 3));
+            visibleAlly = new UnitState("visible_ally2", true, new GridPosition(3, 2));
+            hero.ConfigureMana(99); primary.ConfigureVitality(99); visibleAlly.ConfigureVitality(99);
+            CombatState igniteCombat = new CombatState(igniteMap, new[] { hero, primary, visibleAlly }, Array.Empty<CombatObjective>());
+            igniteCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(igniteCombat, hero.Id);
+            FireBattleState igniteBattle = new FireBattleState(igniteCombat);
+            allyBefore = visibleAlly.Health + visibleAlly.Shield;
+            FireSpellEngine.Execute(igniteBattle, hero.Id, FireSpellCatalog.Get("F-P-R08"),
+                FireSpellTarget.Unit(primary.Id, CardinalDirection.East));
+
+            Assert.That(primary.HasStatus(StatusType.Burning), Is.True, "点燃喷射只给锥形内敌人施加燃烧。 ");
+            Assert.That(visibleAlly.Health + visibleAlly.Shield, Is.LessThan(allyBefore));
+            Assert.That(visibleAlly.HasStatus(StatusType.Burning), Is.False, "友军只受直接伤害，不应被点燃。 ");
+        }
+
+        [Test]
+        public void GroundDetonation_RequiresAndConsumesTheTargetUnitFireground()
+        {
+            GridMap map = new GridMap(6, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 1));
+            hero.ConfigureMana(99); enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R17");
+            FireSpellTarget target = FireSpellTarget.Unit(enemy.Id);
+
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, target).CanCommit, Is.False,
+                "没有通用火场前置时不能空耗术式。 ");
+            battle.CreateOrRefreshFireground(enemy.Position, 8, 2, "test-ground");
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, target).CanCommit, Is.True);
+            int vitalityBefore = enemy.Health + enemy.Shield;
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, target);
+
+            Assert.That(enemy.Health + enemy.Shield, Is.LessThan(vitalityBefore));
+            Assert.That(battle.HasFireground(enemy.Position), Is.False, "地火抽爆必须消费实际承载目标的火场。 ");
+        }
+
+        [Test]
+        public void RangedFinishers_RestrictDetonationToEnemiesAndLeaveFireUnderLivingTargets()
+        {
+            GridMap detonationMap = new GridMap(6, 5);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 2));
+            UnitState ally = new UnitState("ally", true, new GridPosition(2, 2));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 2));
+            hero.ConfigureMana(99); ally.ApplyStatus(StatusType.Burning, 2, 8); enemy.ApplyStatus(StatusType.Burning, 2, 8);
+            CombatState detonation = new CombatState(detonationMap, new[] { hero, ally, enemy }, Array.Empty<CombatObjective>());
+            detonation.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(detonation, hero.Id);
+            FireBattleState detonationBattle = new FireBattleState(detonation);
+            FireSpellDefinition r16 = FireSpellCatalog.Get("F-P-R16");
+            Assert.That(FireSpellEngine.Preview(detonationBattle, hero.Id, r16, FireSpellTarget.Unit(ally.Id)).CanCommit, Is.False);
+            Assert.That(FireSpellEngine.Preview(detonationBattle, hero.Id, r16, FireSpellTarget.Unit(enemy.Id)).CanCommit, Is.True);
+
+            GridMap boundaryMap = new GridMap(7, 7);
+            boundaryMap.SetTile(new GridPosition(4, 3), new TileState { Cover = CoverType.Heavy, Durability = 99 });
+            hero = new UnitState("hero2", true, new GridPosition(1, 3));
+            enemy = new UnitState("enemy2", false, new GridPosition(3, 3));
+            ally = new UnitState("ally2", true, new GridPosition(3, 4));
+            hero.ConfigureMana(99); enemy.ConfigureVitality(99); ally.ConfigureVitality(99);
+            CombatState boundary = new CombatState(boundaryMap, new[] { hero, enemy, ally }, Array.Empty<CombatObjective>());
+            boundary.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(boundary, hero.Id);
+            FireBattleState boundaryBattle = new FireBattleState(boundary);
+            FireSpellEngine.Execute(boundaryBattle, hero.Id, FireSpellCatalog.Get("F-P-R20"), FireSpellTarget.Unit(enemy.Id));
+
+            Assert.That(enemy.IsAlive, Is.True);
+            Assert.That(boundaryBattle.HasFireground(enemy.Position), Is.True, "存活的中心目标脚下仍应留下公开火场。 ");
+            Assert.That(boundaryBattle.HasFireground(ally.Position), Is.True, "占用格不会阻止场地效果生成。 ");
+            Assert.That(boundaryBattle.HasFireground(new GridPosition(4, 3)), Is.False, "重物块不是可燃地面。 ");
+        }
+
+        [Test]
+        public void RangedFiregroundSpells_StopAtHeavyCoverAndKeepOccupiedFloorInTheArea()
+        {
+            GridMap lineMap = new GridMap(8, 5);
+            lineMap.SetTile(new GridPosition(3, 2), new TileState { Cover = CoverType.Heavy, Durability = 24 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 2)); hero.ConfigureMana(99);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(7, 4));
+            CombatState lineCombat = new CombatState(lineMap, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            lineCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(lineCombat, hero.Id);
+            FireBattleState lineBattle = new FireBattleState(lineCombat);
+            FireSpellEngine.Execute(lineBattle, hero.Id, FireSpellCatalog.Get("F-P-R11"),
+                FireSpellTarget.At(new GridPosition(2, 2), CardinalDirection.East));
+            Assert.That(lineBattle.HasFireground(new GridPosition(2, 2)), Is.True);
+            Assert.That(lineBattle.HasFireground(new GridPosition(3, 2)), Is.False);
+            Assert.That(lineBattle.HasFireground(new GridPosition(4, 2)), Is.False, "火带不能越过重物块继续生成。 ");
+
+            GridMap areaMap = new GridMap(7, 7);
+            hero = new UnitState("hero2", true, new GridPosition(0, 3)); hero.ConfigureMana(99);
+            enemy = new UnitState("enemy2", false, new GridPosition(3, 3)); enemy.ConfigureVitality(99);
+            CombatState areaCombat = new CombatState(areaMap, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            areaCombat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(areaCombat, hero.Id);
+            FireBattleState areaBattle = new FireBattleState(areaCombat);
+            int vitalityBefore = enemy.Health + enemy.Shield;
+            FireSpellEngine.Execute(areaBattle, hero.Id, FireSpellCatalog.Get("F-P-R15"),
+                FireSpellTarget.At(new GridPosition(3, 2), CardinalDirection.East));
+            Assert.That(areaBattle.HasFireground(enemy.Position), Is.True, "区域内单位占位不应在地面火场中挖出空洞。 ");
+            Assert.That(enemy.Health + enemy.Shield, Is.EqualTo(vitalityBefore), "脚下生成火场时不立即追加进入伤害。 ");
+        }
+
+        [Test]
+        public void RangedBurnSweep_OnlyDamagesAndConsumesBurningUnitsInItsVisibleCone()
+        {
+            GridMap map = new GridMap(7, 5);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 2)); hero.ConfigureMana(99);
+            UnitState burningEnemy = new UnitState("burning_enemy", false, new GridPosition(2, 2));
+            UnitState plainEnemy = new UnitState("plain_enemy", false, new GridPosition(3, 3));
+            UnitState burningAlly = new UnitState("burning_ally", true, new GridPosition(3, 1));
+            burningEnemy.ConfigureVitality(99); plainEnemy.ConfigureVitality(99); burningAlly.ConfigureVitality(99);
+            burningEnemy.ApplyStatus(StatusType.Burning, 2, 8); burningAlly.ApplyStatus(StatusType.Burning, 2, 8);
+            CombatState combat = new CombatState(map, new[] { hero, burningEnemy, plainEnemy, burningAlly }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R18");
+            FireSpellTarget target = FireSpellTarget.Unit(burningEnemy.Id, CardinalDirection.East);
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell, target);
+            int burningBefore = burningEnemy.Health + burningEnemy.Shield;
+            int plainBefore = plainEnemy.Health + plainEnemy.Shield;
+            int allyBefore = burningAlly.Health + burningAlly.Shield;
+            Assert.That(preview.FriendlyFireRisk, Is.True);
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, target);
+
+            Assert.That(burningEnemy.Health + burningEnemy.Shield, Is.LessThan(burningBefore));
+            Assert.That(burningAlly.Health + burningAlly.Shield, Is.LessThan(allyBefore));
+            Assert.That(plainEnemy.Health + plainEnemy.Shield, Is.EqualTo(plainBefore));
+            Assert.That(burningEnemy.HasStatus(StatusType.Burning), Is.False);
+            Assert.That(burningAlly.HasStatus(StatusType.Burning), Is.False);
+        }
+
+        [Test]
+        public void HeatPressureFollowup_AutomaticallyRetreatsAwayFromTheWeaponTarget()
+        {
+            GridMap map = new GridMap(4, 1);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            string[] ids =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-U06", string.Empty, string.Empty, string.Empty
+            };
+            var loadout = OCC.Combat.Roguelite.RogueSpellLoadout.Restore(
+                ids.Where(value => !string.IsNullOrEmpty(value)), ids, true);
+            var runtime = new OCC.Combat.Roguelite.RogueSpellCombatRuntime(combat, loadout);
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            runtime.ExecuteSlot(4, CombatCommand.UseSkill(hero.Id, 4, hero.Id));
+
+            CombatCommandExecutionResult result = new CombatCommandExecutionService().Execute(
+                combat, runtime.FireBattle, CombatCommand.Attack(hero.Id, enemy.Id));
+
+            Assert.That(result.Accepted, Is.True);
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(0, 0)));
+            Assert.That(result.AttackFireExecutions.Single().Steps.Single(step => step.Kind == FireRuleKind.MoveAfterAttack).Detail,
+                Is.EqualTo("post_attack_retreat"));
+            Assert.That(runtime.FireBattle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-U06"), Is.False);
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(FireSpellCatalog.Get("F-P-U06")),
+                Does.Contain("自动向远离攻击目标的方向后撤 1 格"));
+        }
+
+        [Test]
+        public void EmberArmor_UsesExactlyOneOfItsBurningAndNonBurningShieldBranches()
+        {
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U08");
+            CombatState burningCombat = TrainingRangeScenarioFactory.CreateStandard();
+            burningCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState burningHero = burningCombat.GetUnit("hero");
+            burningHero.ConfigureMana(99); burningHero.ApplyStatus(StatusType.Burning, 2, 8);
+            CombatResolver.BeginTurn(burningCombat, burningHero.Id);
+
+            FireSpellExecution burningResult = FireSpellEngine.Execute(new FireBattleState(burningCombat), burningHero.Id,
+                spell, FireSpellTarget.Unit(burningHero.Id));
+
+            Assert.That(burningHero.Shield, Is.EqualTo(20));
+            Assert.That(burningHero.HasStatus(StatusType.Burning), Is.False);
+            Assert.That(burningResult.Steps.Count(step => step.Kind == FireRuleKind.RestoreShield && step.Applied > 0), Is.EqualTo(1));
+
+            CombatState coolCombat = TrainingRangeScenarioFactory.CreateStandard();
+            coolCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState coolHero = coolCombat.GetUnit("hero");
+            coolHero.ConfigureMana(99);
+            CombatResolver.BeginTurn(coolCombat, coolHero.Id);
+
+            FireSpellExecution coolResult = FireSpellEngine.Execute(new FireBattleState(coolCombat), coolHero.Id,
+                spell, FireSpellTarget.Unit(coolHero.Id));
+
+            Assert.That(coolHero.Shield, Is.EqualTo(12));
+            Assert.That(coolResult.Steps.Count(step => step.Kind == FireRuleKind.RestoreShield && step.Applied > 0), Is.EqualTo(1));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
+                Does.Contain("两条分支互斥"));
+        }
+
+        [Test]
+        public void UniversalSupport_U07U09U11UsesAllyMovementAndExclusiveFieldStateCorrectly()
+        {
+            CombatState shieldCombat = TrainingRangeScenarioFactory.CreateStandard();
+            shieldCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState shieldHero = shieldCombat.GetUnit("hero"), ally = shieldCombat.GetUnit("range_ally");
+            shieldHero.ConfigureMana(99);
+            CombatResolver.BeginTurn(shieldCombat, shieldHero.Id);
+            FireSpellEngine.Execute(new FireBattleState(shieldCombat), shieldHero.Id, FireSpellCatalog.Get("F-P-U07"),
+                FireSpellTarget.Unit(ally.Id));
+            Assert.That(ally.Shield, Is.EqualTo(12));
+
+            CombatState wakeCombat = TrainingRangeScenarioFactory.CreateStandard();
+            wakeCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState wakeHero = wakeCombat.GetUnit("hero");
+            wakeHero.ConfigureMana(99); wakeHero.ApplyStatus(StatusType.Slow, 2);
+            CombatResolver.BeginTurn(wakeCombat, wakeHero.Id);
+            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.SlowedMovementRange));
+            FireSpellEngine.Execute(new FireBattleState(wakeCombat), wakeHero.Id, FireSpellCatalog.Get("F-P-U09"),
+                FireSpellTarget.Unit(wakeHero.Id));
+            Assert.That(wakeHero.HasStatus(StatusType.Slow), Is.False);
+            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.BaseMovementRange));
+
+            CombatState recycleCombat = TrainingRangeScenarioFactory.CreateStandard();
+            recycleCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState recycleHero = recycleCombat.GetUnit("hero");
+            recycleHero.ConfigureMana(99, 10);
+            CombatResolver.BeginTurn(recycleCombat, recycleHero.Id);
+            FireBattleState recycleBattle = new FireBattleState(recycleCombat);
+            GridPosition field = new GridPosition(3, 2);
+            recycleBattle.CreateOrRefreshFireground(field, 8, 2, "test");
+            recycleBattle.CreateOrRefreshShallowWater(field);
+            Assert.That(FireSpellEngine.Preview(recycleBattle, recycleHero.Id, FireSpellCatalog.Get("F-P-U11"),
+                FireSpellTarget.At(field, CardinalDirection.South)).CanCommit, Is.False,
+                "后来生成的浅水已经覆盖火场，不能重复回收。 ");
+            recycleBattle.CreateOrRefreshFireground(field, 8, 2, "test-later-fire");
+            int manaBefore = recycleHero.Mana;
+            FireSpellEngine.Execute(recycleBattle, recycleHero.Id, FireSpellCatalog.Get("F-P-U11"),
+                FireSpellTarget.At(field, CardinalDirection.South));
+            Assert.That(recycleHero.Mana, Is.EqualTo(manaBefore + 2));
+            Assert.That(recycleBattle.HasFireground(field), Is.False);
+            Assert.That(recycleCombat.Map.GetTile(field).IsWater, Is.False);
+        }
+
+        [Test]
         public void FiregroundDurations_UseTwoThreeAndFourPublicTurns()
         {
             var expected = new Dictionary<string, int>
             {
                 { "F-P-M03", 2 }, { "F-P-U17", 2 }, { "F-P-R11", 3 },
                 { "F-P-R12", 2 }, { "F-P-R13", 4 }, { "F-P-R14", 4 },
-                { "F-P-R15", 3 }, { "F-P-R20", 3 }
+                { "F-P-R15", 2 }, { "F-P-R20", 3 }
             };
 
             foreach (var pair in expected)
@@ -207,7 +1238,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void Fireground_TicksBeforeTurnStartDamageAndExpiresBeforeTheFinalWindow()
+        public void Fireground_DurationAdvancesOnlyOnHeroTurnsAndDoesNotShrinkWithEnemyCount()
         {
             GridPosition burningCell = new GridPosition(1, 1);
             UnitState first = new UnitState("first", true, burningCell);
@@ -224,7 +1255,16 @@ namespace OCC.Combat.Tests
 
             battle.BeginUnitTurn(second.Id);
 
+            Assert.That(battle.HasFireground(burningCell), Is.True,
+                "An enemy turn must not consume a protagonist-round duration.");
+            Assert.That(battle.Firegrounds[burningCell].RemainingTurns, Is.EqualTo(1));
+
+            int afterFirstWindow = first.Health + first.Shield;
+            battle.BeginUnitTurn(first.Id);
+
             Assert.That(battle.HasFireground(burningCell), Is.False);
+            Assert.That(first.Health + first.Shield, Is.EqualTo(afterFirstWindow),
+                "Expiry is resolved before turn-start damage in the final window.");
         }
 
         [Test]
@@ -301,12 +1341,10 @@ namespace OCC.Combat.Tests
             combat.Map.SetTile(center, new TileState { Cover = CoverType.Light, Durability = 16 });
             FireBattleState battle = new FireBattleState(combat);
             UnitState neighbor = combat.GetUnit("range_armored");
-            int before = neighbor.Health + neighbor.Shield;
-
             FireSpellEngine.Execute(battle, "hero", FireSpellCatalog.Get("F-P-R19"), FireSpellTarget.At(center, CardinalDirection.East));
 
-            Assert.That(combat.Map.GetTile(center).Durability, Is.Zero);
-            Assert.That(before - (neighbor.Health + neighbor.Shield), Is.EqualTo(8));
+            Assert.That(combat.Map.GetTile(center).Durability, Is.EqualTo(8));
+            Assert.That(neighbor.Health + neighbor.Shield, Is.EqualTo(22));
         }
 
         [Test]

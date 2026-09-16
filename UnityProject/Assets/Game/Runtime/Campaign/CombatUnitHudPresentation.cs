@@ -105,6 +105,12 @@ namespace OCC.Combat
                 case StatusType.Revealed:
                     return new CombatStatusPresentation(status, "revealed", "显露", duration, strength,
                         "已被侦测。剩余 " + duration + " 回合。");
+                case StatusType.FiregroundBoost:
+                    return new CombatStatusPresentation(status, "fireground_boost", "火势", duration, strength,
+                        "你的火场伤害 +" + strength + "。剩余 " + duration + " 回合。");
+                case StatusType.FiregroundVulnerable:
+                    return new CombatStatusPresentation(status, "fireground_vulnerable", "助燃", duration, strength,
+                        "受到的火场伤害 +" + strength + "。剩余 " + duration + " 回合。");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, "Unknown combat status.");
             }

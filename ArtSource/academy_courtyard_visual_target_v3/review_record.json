@@ -1,0 +1,20 @@
+{
+  "schema": "occ-visual-target-review-v1",
+  "status": "VISUAL_TARGET_ONLY",
+  "asset_id": "visual_target.academy_courtyard_warm.v3",
+  "source_channel": "codex_builtin_imagegen",
+  "source_path": "ArtSource/academy_courtyard_visual_target_v3/sources/warm_academy_tactical_courtyard_target_v3_source.png",
+  "source_sha256": "80a486f01dcdea023c37ac0e0783147cc6886339804d88c88cbf7755b712b60c",
+  "purpose": "Human visual-quality target for the warm magical-academy tactical courtyard. It is not sliceable, not a modular asset, and must not be imported into Unity.",
+  "locked_reading": [
+    "large, calm warm-ivory paving slabs",
+    "one thin deep-warm-umber seam per tactical-cell boundary",
+    "late-afternoon light from upper-left with restrained down-right cast shadows",
+    "clear central play field; greenery and masonry stay on the perimeter",
+    "one shared oblique top-down perspective for pavement, terrain, and props"
+  ],
+  "rejected_reading": [
+    "wall-brick courses", "repeated stamped floor blobs", "thick black grid", "central crates or ropes", "cool/rainy technology mood"
+  ],
+  "next_gate": "Use this image only as the human visual target when reviewing a separately generated native32 ground module, directional 32x40 edge modules, and sparse perimeter props."
+}

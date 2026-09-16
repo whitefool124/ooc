@@ -30,8 +30,7 @@ namespace OCC.Combat
                 Add(CombatFeedbackKind.ShieldAbsorb,
                     kind == ArtifactEffectKind.Damage || kind == ArtifactEffectKind.BacklashIfTargetSurvives || kind == ArtifactEffectKind.ArmReaction ? old.Shield - unit.Shield : 0);
                 Add(CombatFeedbackKind.ShieldConsumed, kind == ArtifactEffectKind.ConsumeShield ? old.Shield - unit.Shield : 0);
-                Add(CombatFeedbackKind.ShieldTransferredOut, kind == ArtifactEffectKind.TransferShield ? old.Shield - unit.Shield : 0);
-                Add(kind == ArtifactEffectKind.TransferShield ? CombatFeedbackKind.ShieldTransferredIn : CombatFeedbackKind.ShieldRestore, unit.Shield - old.Shield);
+                Add(CombatFeedbackKind.ShieldRestore, unit.Shield - old.Shield);
                 Add(CombatFeedbackKind.Damage, old.Health - unit.Health);
                 Add(CombatFeedbackKind.Healing, unit.Health - old.Health);
                 Add(CombatFeedbackKind.ManaRestore, unit.Mana - old.Mana);

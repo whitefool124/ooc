@@ -1,0 +1,59 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ground.academy_courtyard_warmbrick.surface.a",
+  "role": "floor_tile_32",
+  "status": "PROTOTYPE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent warm academy brick-field source; declared observed 12px square macro-pixel pitch for a repetitive opaque ground field; no resize or repaint.",
+    "source_path": "ArtSource/academy_courtyard_warmbrick_ground_batch/sources/ground_academy_courtyard_warmbrick_surface_a_source.png",
+    "source_sha256": "4378e15e48e4342c92e0031870dd468aaec1c857981c3895c0ee70450e1c49e1"
+  },
+  "delivery": {
+    "output_path": "ArtSource/academy_courtyard_warmbrick_ground_batch/outputs/ground_academy_courtyard_warmbrick_surface_a_32.png",
+    "output_sha256": "236edbcc8842172c2d30bd50ad5881b7df52cd2b5e2acc5e5bfb881f58731845",
+    "native_output_path": null,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x32 logical battle cell; same native tile at 1x, 2x or 4x; visible cell edge is the separate tactical-grid layer",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/academy_courtyard_warmbrick_ground_batch/evidence/ground_academy_courtyard_warmbrick_surface_a_1x.png",
+    "four_x": "ArtSource/academy_courtyard_warmbrick_ground_batch/evidence/ground_academy_courtyard_warmbrick_surface_a_4x.png",
+    "grayscale": "ArtSource/academy_courtyard_warmbrick_ground_batch/evidence/ground_academy_courtyard_warmbrick_surface_a_grayscale.png",
+    "checker": "ArtSource/academy_courtyard_warmbrick_ground_batch/evidence/ground_academy_courtyard_warmbrick_surface_a_checker.png",
+    "application_contact": "ArtSource/academy_courtyard_warmbrick_ground_batch/evidence/ground_academy_courtyard_warmbrick_surface_a_12x9_contact.png"
+  },
+  "human_review": {
+    "overall": "REJECTED",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Rejected by user direction: horizontal brick courses read as wall bricks, not floor paving. Retained only for provenance; do not import or extend."
+  },
+  "unity_import": null,
+  "ground_window_qa": {
+    "qa_path": "ArtSource/academy_courtyard_warmbrick_ground_batch/qa/ground_academy_courtyard_warmbrick_surface_a_pitch12_qa.json",
+    "macro_pitch": 12,
+    "window_bounds": [
+      36,
+      34,
+      68,
+      66
+    ],
+    "selection": "declared_phase_aligned_origin"
+  }
+}

@@ -15,6 +15,9 @@ namespace OCC.Combat.Presentation
         private const float ReferenceWidth = 1920f;
         private const float ReferenceHeight = 1080f;
         private const float DoubleClickWindowSeconds = .32f;
+        private const string AcademyPerimeterPath =
+            "Art/CombatAcademyPerimeterPrototype/academy_warm_courtyard_perimeter_v2";
+        private const int SurroundPaddingCells = 6;
         public const float CellHoverRevealDelaySeconds = 2f;
         private const float ContextMenuWidth = 560f;
         private const float ContextMenuHeaderHeight = 84f;
@@ -52,6 +55,8 @@ namespace OCC.Combat.Presentation
         private RectTransform structureLayerRect;
         private RectTransform unitLayerRect;
         private RectTransform overlayLayerRect;
+        private RectTransform surroundLayerRect;
+        private RawImage academyPerimeter;
         private readonly List<RawImage> structures = new List<RawImage>();
         private string structureLevelId;
         private BattlefieldHoverCardView hoverCard;
@@ -176,6 +181,10 @@ namespace OCC.Combat.Presentation
             GameObject board = FormalUiKit.Create("战场棋盘", viewport.transform);
             boardRect = board.AddComponent<RectTransform>();
             boardRect.anchorMin = boardRect.anchorMax = boardRect.pivot = new Vector2(0f, 1f);
+            GameObject surround = FormalUiKit.Create("学院庭院延展地面", board.transform);
+            surroundLayerRect = surround.AddComponent<RectTransform>();
+            surroundLayerRect.anchorMin = surroundLayerRect.anchorMax = surroundLayerRect.pivot = new Vector2(0f, 1f);
+            surroundLayerRect.transform.SetAsFirstSibling();
 
             Button home = FormalUiKit.Button("战场归中", "全场", viewport.transform,
                 new Vector2(host.BattlefieldViewport.ViewportRect.Width - 100f, -8f), new Vector2(88f, 40f),
@@ -210,6 +219,7 @@ namespace OCC.Combat.Presentation
             structureLayerRect = null;
             mapWidth = width;
             mapHeight = height;
+            EnsureGroundSurround(width, height);
             EnsureUnitLayer();
             EnsureOverlayLayer();
             for (int y = 0; y < height; y++)
@@ -265,8 +275,9 @@ namespace OCC.Combat.Presentation
                 AcademyStructurePlacement placement = placements[index];
                 float top = (mapHeight - 1 - placement.TopY) * cellSize;
                 bool ground = placement.IsGroundAttachment && cells.ContainsKey(new GridPosition(placement.X, placement.TopY));
-                SetCenteredTopLeft(structures[index].rectTransform, ground ? 0 : placement.X * cellSize, ground ? 0 : top,
-                    placement.WidthCells * cellSize, placement.HeightCells * cellSize);
+                SetStructureVisual(structures[index].rectTransform, structures[index].texture,
+                    ground ? 0 : placement.X * cellSize, ground ? 0 : top,
+                    placement.WidthCells * cellSize, placement.HeightCells * cellSize, cellSize);
                 structures[index].rectTransform.localEulerAngles = new Vector3(0f, 0f, -90f * placement.QuarterTurns);
             }
         }
@@ -373,6 +384,7 @@ namespace OCC.Combat.Presentation
             SetTopLeft(viewportRect, view.X, view.Y, view.Width, view.Height);
             SetTopLeft(boardRect, board.X - view.X, board.Y - view.Y, board.Width, board.Height);
             float cellSize = viewport.CellSize;
+            RefreshGroundSurround(cellSize);
             foreach (KeyValuePair<GridPosition, CellView> pair in cells)
             {
                 SetTopLeft(pair.Value.Rect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
@@ -388,28 +400,52 @@ namespace OCC.Combat.Presentation
                 if (cell.ObjectFront != null) cell.ObjectFront.gameObject.SetActive(false); return; }
             cell.Root.SetActive(true);
             cell.OverlayRect.gameObject.SetActive(true);
-            Set(cell.Floor, model.FloorTexture, Color.white);
+            float physicalCellSize = viewport.CellSize * (canvas != null && canvas.scaleFactor > 0f
+                ? canvas.scaleFactor : 1f);
+            Texture2D floorTexture = physicalCellSize <= 32.01f && model.FloorTextureLow != null
+                ? model.FloorTextureLow : model.FloorTexture;
+            Set(cell.Floor, floorTexture, Color.white);
+            float cellSize = viewport.CellSize;
+            if (CombatTestArenaEntry.IsDedicatedTestArena && floorTexture != null && floorTexture.height > floorTexture.width)
+                SetTopLeft(cell.Floor.rectTransform, 0f, 0f, cellSize,
+                    cellSize * floorTexture.height / floorTexture.width);
+            else
+                Stretch(cell.Floor.rectTransform);
             cell.Floor.uvRect = model.FloorUv;
             cell.Floor.rectTransform.localEulerAngles = new Vector3(0f, 0f, model.FloorRotationDegrees);
             Set(cell.TerrainBoundary, model.TerrainBoundaryTexture, Color.white);
             cell.TerrainBoundary.rectTransform.localEulerAngles = new Vector3(0f, 0f,
                 model.TerrainBoundaryRotationDegrees);
+            if (model.TerrainBoundaryTexture != null && model.TerrainBoundaryTexture.height > model.TerrainBoundaryTexture.width)
+            {
+                // The lower quarter of the edge module is the vertical stone face.
+                // Place it just beyond the cell's top plane instead of scaling the
+                // complete module into the logical hit area.
+                cell.TerrainBoundary.uvRect = new Rect(0f, 0f, 1f, .25f);
+                SetTopLeft(cell.TerrainBoundary.rectTransform, 0f, cellSize, cellSize, cellSize * .25f);
+            }
+            else
+            {
+                cell.TerrainBoundary.uvRect = new Rect(0f, 0f, 1f, 1f);
+                Stretch(cell.TerrainBoundary.rectTransform);
+            }
             Set(cell.Environment, model.EnvironmentTexture, Color.white);
             cell.MoveMotion.Refresh(model.MoveOverlayTexture, model.MoveOverlayAlpha);
             cell.AttackMotion.Refresh(model.AttackOverlayTexture, model.AttackOverlayAlpha);
             cell.SkillMotion.Refresh(model.SkillOverlayTexture, 1f);
             Set(cell.IntentDestination, isIntentDestination ? moveIntentFrameTexture : null, Color.white);
             Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
-            Set(cell.Object, model.ObjectTexture, Color.white);
+            Texture2D objectTexture = physicalCellSize <= 32.01f && model.ObjectTextureLow != null
+                ? model.ObjectTextureLow : model.ObjectTexture;
+            Set(cell.Object, objectTexture, Color.white);
             Set(cell.Loot, model.LootTexture, Color.white);
-            float cellSize = viewport.CellSize;
             Vector2 travel = model.UnitTravelOffset * (cellSize / 64f);
             cell.OverlayRect.anchoredPosition = cell.Rect.anchoredPosition + new Vector2(travel.x, -travel.y);
             cell.VisualFoot = new Vector2(cell.Rect.anchoredPosition.x + travel.x,
                 -cell.Rect.anchoredPosition.y + cellSize + travel.y);
             // 32x32 battlefield assets render across the complete logical cell. Their authored
             // transparent margins determine visual footprint at approved integer pixel scales.
-            RefreshObjectLayers(cell, model, cellSize);
+            RefreshObjectLayers(cell, model, cellSize, objectTexture);
             SetInset(cell.Loot.rectTransform, 0f);
 
             cell.ObjectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.ObjectLabel));
@@ -427,7 +463,7 @@ namespace OCC.Combat.Presentation
                     cell.VitalsPointerBound = true;
                 }
                 BattlefieldRect contract = viewport.CellRect(model.Position);
-                Rect unit = CombatUnitHudLayout.UnitVisibleContentRect(contract, model.UnitTexture.name);
+                Rect unit = CombatUnitHudLayout.UnitVisibleContentRect(contract, model.UnitTexture);
                 float localX = cell.Rect.anchoredPosition.x + unit.x - contract.X + model.UnitOffset.x + travel.x;
                 float localY = -cell.Rect.anchoredPosition.y + unit.y - contract.Y + model.UnitOffset.y + travel.y;
                 SetTopLeft(cell.Unit.rectTransform, Mathf.Round(localX / 2f) * 2f, Mathf.Round(localY / 2f) * 2f, unit.width, unit.height);
@@ -462,6 +498,35 @@ namespace OCC.Combat.Presentation
                 FormalUiTheme.Shield, FormalUiTheme.Danger);
             RefreshStatuses(cell, model.Statuses, viewport.CellRect(model.Position));
             RefreshIntent(cell, model.Intent, model.IntentTexture, viewport.CellRect(model.Position));
+        }
+
+        private void EnsureGroundSurround(int width, int height)
+        {
+            if (surroundLayerRect == null) return;
+            if (academyPerimeter == null)
+            {
+                GameObject root = FormalUiKit.Create("暖色学院庭院外围", surroundLayerRect);
+                academyPerimeter = root.AddComponent<RawImage>();
+                academyPerimeter.raycastTarget = false;
+                academyPerimeter.color = Color.white;
+            }
+            academyPerimeter.texture = Resources.Load<Texture2D>(AcademyPerimeterPath);
+        }
+
+        private void RefreshGroundSurround(float cellSize)
+        {
+            if (academyPerimeter == null || academyPerimeter.texture == null) return;
+            float height = (mapHeight + SurroundPaddingCells * 2) * cellSize;
+            float width = height * academyPerimeter.texture.width / academyPerimeter.texture.height;
+            float mapAndPaddingWidth = (mapWidth + SurroundPaddingCells * 2) * cellSize;
+            if (width < mapAndPaddingWidth)
+            {
+                width = mapAndPaddingWidth;
+                height = width * academyPerimeter.texture.height / academyPerimeter.texture.width;
+            }
+            SetTopLeft(academyPerimeter.rectTransform,
+                (mapWidth * cellSize - width) * .5f,
+                -SurroundPaddingCells * cellSize, width, height);
         }
 
         private void RefreshUnitOrder()
@@ -531,19 +596,22 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void RefreshObjectLayers(CellView cell, BattlefieldCellPresentation model, float cellSize)
+        private void RefreshObjectLayers(CellView cell, BattlefieldCellPresentation model, float cellSize,
+            Texture2D objectTexture)
         {
-            var layout = new CombatObjectLayerLayout(cellSize, model.ObjectTexture == null ? 0 : model.ObjectTexture.height,
+            var layout = new CombatObjectLayerLayout(cellSize, objectTexture == null ? 0 : objectTexture.width,
+                objectTexture == null ? 0 : objectTexture.height,
                 model.ObjectForegroundRows);
             cell.Object.uvRect = layout.BackUv;
-            SetTopLeft(cell.Object.rectTransform, 0, 0, layout.BackRect.width, layout.BackRect.height);
-            if (!layout.HasFront || model.ObjectTexture == null)
+            SetTopLeft(cell.Object.rectTransform, layout.BackRect.x, layout.BackRect.y,
+                layout.BackRect.width, layout.BackRect.height);
+            if (!layout.HasFront || objectTexture == null)
             { if (cell.ObjectFront != null) cell.ObjectFront.gameObject.SetActive(false); return; }
             if (cell.ObjectFront == null)
                 cell.ObjectFront = Layer("地形前沿_" + model.Position.X + "_" + model.Position.Y, unitLayerRect);
-            Set(cell.ObjectFront, model.ObjectTexture, Color.white);
+            Set(cell.ObjectFront, objectTexture, Color.white);
             cell.ObjectFront.uvRect = layout.FrontUv;
-            SetTopLeft(cell.ObjectFront.rectTransform, cell.Rect.anchoredPosition.x,
+            SetTopLeft(cell.ObjectFront.rectTransform, cell.Rect.anchoredPosition.x + layout.FrontRect.x,
                 -cell.Rect.anchoredPosition.y + layout.FrontRect.y, layout.FrontRect.width, layout.FrontRect.height);
             // Fixed terrain never inherits an actor's travel or attack offset.
             cell.ObjectFoot = new Vector2(cell.Rect.anchoredPosition.x, -cell.Rect.anchoredPosition.y + cellSize);
@@ -1133,6 +1201,7 @@ namespace OCC.Combat.Presentation
             hasHoverPosition = true;
             hoverPointerInside = true;
             hoverStartedAt = Time.unscaledTime;
+            host?.SetBattlefieldPreviewPosition(position, true);
         }
 
         private void EndCellHover()
@@ -1145,7 +1214,11 @@ namespace OCC.Combat.Presentation
         private IEnumerator ClearHoverAfterPointerTransition(GridPosition position)
         {
             yield return null;
-            if (hasHoverPosition && hoverPosition == position && !hoverPointerInside) HideTooltip();
+            if (hasHoverPosition && hoverPosition == position && !hoverPointerInside)
+            {
+                host?.SetBattlefieldPreviewPosition(position, false);
+                HideTooltip();
+            }
         }
 
         private void UpdateHoverReveal()
@@ -1311,6 +1384,25 @@ namespace OCC.Combat.Presentation
             rect.pivot = new Vector2(.5f, .5f);
             rect.anchoredPosition = new Vector2(x + width * .5f, -y - height * .5f);
             rect.sizeDelta = new Vector2(Mathf.Max(0f, width), Mathf.Max(0f, height));
+        }
+
+        private static void SetStructureVisual(RectTransform rect, Texture texture, float x, float y,
+            float footprintWidth, float footprintHeight, float cellSize)
+        {
+            if (texture == null || texture.width <= 0 || texture.height <= 0)
+            {
+                SetCenteredTopLeft(rect, x, y, footprintWidth, footprintHeight);
+                return;
+            }
+
+            // All battlefield structure canvases are authored at 32 PPU.  Preserve their
+            // full canvas and bottom-centre foot rather than stretching a 64px chest/rope
+            // into the placement footprint or clipping its authored overhang.
+            float scale = cellSize / 32f;
+            float width = texture.width * scale;
+            float height = texture.height * scale;
+            SetCenteredTopLeft(rect, x + (footprintWidth - width) * .5f,
+                y + footprintHeight - height, width, height);
         }
 
         private static void Stretch(RectTransform rect)

@@ -1,0 +1,20 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_shieldguard_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_path": "UnityProject/Reports/CombatTestArena/raw_shieldguard_pixel_v1.png",
+    "source_sha256": "5F3DF38C36EF91CB26EAAD431F6AA28D5933293E1CA933775F42E7193EE1DC26"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/shieldguard_pixel_candidate_64.png",
+    "output_sha256": "F6D76A09DFD7A598F2A1F17F91AA5A8592A6DC33E38C8FDCE94913F84B30CEFD",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "盾牌体型候选，与主角和 raider 共享 16px 语义网格"}
+}

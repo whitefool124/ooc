@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sephiria_debug_heavy_cover_simple_axis_2x2_v1",
+  "role": "battlefield_multi_cell_prop_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_descriptor": "简化内容提示词并明确2x2占格用途与屏幕轴向的独立重掩体原料；未指定具体零件、像素尺寸或布局",
+    "source_path": "Worldbuilding/归档/2026-09-14_赛菲莉娅主参考确认/source/simple_prompt_heavy_cover_v4_source.png",
+    "source_sha256": "6c3114650e392d828e4a3cb2bcfe3dbf2470b12e6aebfc65d2cd80c408a92386"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_simple_axis_2x2_128.png",
+    "output_sha256": "9a0a5cee5592cb30b2fd2a6b991dc9ef7040568dddf0785acf5ba8aaa1c5cbff",
+    "logical_cells": [2, 2],
+    "palette_max": 16,
+    "low_resolution_companion": {
+      "output_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_simple_axis_2x2_64.png",
+      "output_sha256": "66433c8c48e029a5abf548604104925fe47a8016900f6f1bb7639c8eb095b92b",
+      "palette_max": 12
+    }
+  },
+  "application": {
+    "runtime_draw_rect": "CombatTestArena review only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_simple_axis_2x2_128_contact.png",
+    "four_x": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_simple_axis_2x2_128_contact.png",
+    "grayscale": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_simple_axis_2x2_128_contact.png",
+    "checker": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_simple_axis_2x2_128_contact.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/sephiria_debug_evidence/sephiria_heavy_cover_simple_axis_2x2_128_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "占格和轴向候选；目标尺寸细节密度偏高，等待用户审美判断，未替换正式资产"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatTestArenaSephiriaDebug/sephiria_heavy_cover_simple_axis_2x2_128.png",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

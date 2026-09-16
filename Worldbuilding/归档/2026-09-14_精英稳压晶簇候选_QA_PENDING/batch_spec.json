@@ -1,0 +1,26 @@
+{
+  "batch_id": "academy_elite_stabilizer_crystal_qa_v1",
+  "application_contact": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/application_contact_4x.png",
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "第二轮通过机器门槛；等待实际应用接触与人工审美门槛，不提前替换正式资产。"
+  },
+  "items": [
+    {
+      "id": "academy_elite_stabilizer_crystal_intact_candidate",
+      "role": "single_cell_heavy_crystal_prop_adaptive_32ppu",
+      "source": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/source/elite_stabilizer_crystal_round2_source.png",
+      "output": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_candidate.png",
+      "qa": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_qa.json",
+      "checker": "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/checker.png",
+      "attempt_qas": [
+        "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round1_qa.json",
+        "Worldbuilding/归档/2026-09-14_精英稳压晶簇候选_QA_PENDING/elite_stabilizer_crystal/round2_qa.json"
+      ],
+      "selected_round": 2,
+      "palette_max": 12
+    }
+  ]
+}

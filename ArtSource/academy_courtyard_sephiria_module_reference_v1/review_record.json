@@ -1,0 +1,80 @@
+{
+  "schema": "occ-module-reference-v1",
+  "status": "REFERENCE_ONLY",
+  "purpose": "Use the player-provided Sephiria screenshots to establish isolated ground and wall module generation direction. These are source references only, not Unity assets and not an assembled scene.",
+  "reference_inputs": [
+    "C:/Users/FNHF/Videos/NVIDIA/Sephiria/Sephiria Screenshot 2026.09.15 - 15.55.07.96.png",
+    "C:/Users/FNHF/Videos/NVIDIA/Sephiria/Sephiria Screenshot 2026.09.15 - 15.54.45.42.png",
+    "C:/Users/FNHF/Videos/NVIDIA/Sephiria/Sephiria Screenshot 2026.09.15 - 15.50.12.42.png"
+  ],
+  "sources": {
+    "ground": "sources/ground_warm_academy_shortbrick_reference_source.png",
+    "wall": "sources/wall_warm_academy_three_layer_reference_source.png"
+  },
+  "reference_assembly": {
+    "file": "reviews/ground_wall_reference_assembled_grid_review.png",
+    "method": "Deterministic placement of the two recorded sources: wall crop at the rear and tiled ground beneath it. A separate dark tactical-grid review overlay was added only to test readability.",
+    "status": "COMPOSITION_REVIEW_ONLY",
+    "finding": "The wall cap, dark facade and amber floor-facing trim establish depth. The grid reads clearly but is intentionally heavier than the final shared one-native-pixel tactical overlay."
+  },
+  "next_generation_raw_sources": {
+    "status": "RAW_UNVALIDATED",
+    "ground_shortbrick": "raw_next_modules/ground_shortbrick_v2_raw.png",
+    "straight_outer_edge": "raw_next_modules/wall_straight_outer_edge_v2_raw.png",
+    "inside_corner": "raw_next_modules/wall_inside_corner_v2_raw.png",
+    "note": "These are independent newly generated raw sources. They still require native-grid diagnosis and role-specific extraction before they can be called 32x32 ground or 32x40 directional edge assets."
+  },
+  "module_diagnostics": {
+    "ground_shortbrick_v2": {
+      "status": "REVIEW_READY",
+      "grid_confidence": 1.357,
+      "delivery_review": "32x32",
+      "qa": "diagnostics/ground_shortbrick_v2_field_qa.json"
+    },
+    "wall_straight_outer_edge_v2": {
+      "status": "REVIEW_READY_EXTRACT",
+      "grid_confidence": 1.2559,
+      "delivery_review": "32x40 extracted without resize",
+      "qa": "diagnostics/wall_straight_outer_edge_v2_raw_qa.json"
+    },
+    "wall_inside_corner_v2": {
+      "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+      "grid_confidence": 1.1729,
+      "reason": "below 1.2 threshold; do not repair by scaling"
+    },
+    "wall_inside_corner_v3": {
+      "status": "PASS_LOSSLESS_TARGET",
+      "grid_confidence": 1.2923,
+      "delivery_review": "32x40 padded without resize",
+      "qa": "diagnostics/wall_inside_corner_v3_qa.json"
+    },
+    "ground_shortbrick_v3_calm": {
+      "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+      "grid_confidence": 1.1791,
+      "reason": "density reduction improved calmness but broke the 1.2 lattice gate; retain v2 instead"
+    }
+  },
+  "actual_module_assembly_review": {
+    "file": "reviews/actual_modules_2x2_with_rear_wall_4x.png",
+    "modules": ["module_review_ready/ground_32x32_review_ready.png", "module_review_ready/wall_straight_32x40_review_ready.png"],
+    "status": "COMPOSITION_REVIEW_ONLY",
+    "scope": "2x2 ground plus two unrotated rear-wall modules at 4x nearest-neighbor display",
+    "corner_file": "reviews/actual_modules_2x2_corner_rear_wall_4x.png",
+    "finding": "Corner join is readable and grid dimensions remain stable; ground internal contrast is still too dense at 4x and is the next refinement target."
+  },
+  "observed_module_language": {
+    "camera": "strict top-down; no oblique or isometric construction",
+    "ground": "warm dark short horizontal stone courses; regular 32px tactical boundaries read as fine darker stone seams rather than a printed checkerboard",
+    "wall": "three layers: pale weathered stone cap, dark warm ashlar facade, thin amber floor-facing trim; corners/endcaps stay explicit",
+    "contrast": "keep floor quieter than walls; use silhouette and the wall cap for spatial depth instead of heavy black tile outlines"
+  },
+  "next_asset_step": [
+    "Generate an independent 32x32 native ground tile suite from the ground reference.",
+    "Generate independent 32x40 front, left, right and corner wall/outer-edge modules from the wall reference.",
+    "Only then assemble a 2x2 validation from those actual modules."
+  ],
+  "restrictions": [
+    "Do not directly slice, import, or claim these references as production sprites.",
+    "Do not create a full-scene illustration as evidence of modular assembly."
+  ]
+}

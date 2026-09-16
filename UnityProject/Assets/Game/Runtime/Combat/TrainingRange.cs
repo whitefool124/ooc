@@ -318,7 +318,8 @@ namespace OCC.Combat
         {
             Abilities = FireSpellCatalog.All.Select(spell => new TrainingRangeAbilityEntry(Id, spell.Id, spell.DisplayName,
                 "个人术式", GroupName(spell.Group), $"{spell.ActionPointCost} AP + {spell.ManaCost} 以太　CD {spell.Cooldown}",
-                $"{spell.CombatAffinity}　{spell.DeliveryMode}　{spell.WeaponRequirement}\n目标 {spell.TargetKind}　形状 {spell.Shape}　范围 {spell.Range}",
+                $"{spell.CombatAffinity}　{spell.DeliveryMode}　{spell.WeaponRequirement}\n目标 {spell.TargetKind}　形状 {spell.Shape}　范围 " +
+                (spell.MinimumRange > 0 ? spell.MinimumRange + "–" + spell.Range + "（近身死区）" : spell.Range.ToString()),
                 $"{spell.TriggerWindow}　{spell.ConsumptionRule}\n" + string.Join(" → ", spell.Rules.Select(rule => rule.Kind + (rule.Amount > 0 ? " " + rule.Amount : string.Empty))),
                 spell.IconPath, spell)).ToArray();
         }
@@ -366,10 +367,21 @@ namespace OCC.Combat
                     cell = spell.Range <= 2 ? new GridPosition(5, 4) : TrainingRangeScenarioFactory.ObjectTargetCell; unitId = null;
                     combat.Map.SetTile(cell, ObjectTileFor(spell)); target = FireSpellTarget.At(cell, CardinalDirection.East); break;
                 default:
+                    if (spell.MinimumRange > hero.Position.ManhattanDistance(enemy.Position))
+                        enemy.MoveTo(hero.Position + new GridPosition(spell.MinimumRange, 0));
                     cell = enemy.Position; unitId = enemy.Id; target = FireSpellTarget.Unit(enemy.Id, CardinalDirection.East); break;
             }
 
-            bool burning = spell.TargetKind == FireTargetKind.BurningUnit || spell.TargetKind == FireTargetKind.AdjacentBurningEnemy ||
+            bool delayedWeaponTarget = spell.TargetKind == FireTargetKind.Self &&
+                (spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack || spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack);
+            UnitState conditionTarget = delayedWeaponTarget ? enemy : string.IsNullOrEmpty(unitId) ? null : combat.GetUnit(unitId);
+            if (spell.Rules.Any(rule => rule.Condition == FireCondition.TargetAtWeaponMaxRange))
+            {
+                GridPosition maximumRangeCell = hero.Position + new GridPosition(0, hero.MainHand.Range);
+                enemy.MoveTo(maximumRangeCell);
+            }
+
+            bool burning = spell.TargetKind == FireTargetKind.BurningUnit || spell.TargetKind == FireTargetKind.BurningEnemy || spell.TargetKind == FireTargetKind.AdjacentBurningEnemy ||
                 spell.TargetKind == FireTargetKind.BurningOrArmorBrokenEnemy || spell.Rules.Any(rule =>
                 rule.Condition == FireCondition.TargetBurning || rule.Condition == FireCondition.TargetBurningAndOnFireground ||
                 rule.Consumption == FireSourceConsumption.BurningOnly || rule.Consumption == FireSourceConsumption.BurningAndGround ||
@@ -377,10 +389,12 @@ namespace OCC.Combat
             bool ground = spell.TargetKind == FireTargetKind.BurningCell || spell.Rules.Any(rule =>
                 rule.Condition == FireCondition.TargetOnFireground || rule.Condition == FireCondition.TargetBurningAndOnFireground ||
                 rule.Consumption == FireSourceConsumption.GroundOnly || rule.Consumption == FireSourceConsumption.BurningAndGround);
-            if (burning && unitId != null) combat.GetUnit(unitId).ApplyStatus(StatusType.Burning, 3, 8);
+            if (burning && conditionTarget != null) conditionTarget.ApplyStatus(StatusType.Burning, 3, 8);
             if (ground)
             {
-                if (spell.Shape == FireSelectionShape.Path)
+                if (delayedWeaponTarget && conditionTarget != null)
+                    battle.CreateOrRefreshFireground(conditionTarget.Position, 8, 8, "training-fixture");
+                else if (spell.Shape == FireSelectionShape.Path)
                     for (int y = hero.Position.Y - 1; y >= cell.Y; y--) battle.CreateOrRefreshFireground(new GridPosition(hero.Position.X, y), 8, 8, "training-fixture");
                 else battle.CreateOrRefreshFireground(cell, 8, 8, "training-fixture");
             }
@@ -463,8 +477,8 @@ namespace OCC.Combat
             }
             if (artifact.Id == "G-T17")
             {
-                cell = enemy.Position;
-                unitId = enemy.Id;
+                cell = hero.Position;
+                unitId = hero.Id;
                 target = ArtifactTarget.At(cell);
             }
             if (artifact.Id == "G-T11")
@@ -473,7 +487,7 @@ namespace OCC.Combat
                 TileState smoke = combat.Map.GetTile(cell).Clone(); smoke.SmokeExpiresAt = 4; combat.Map.SetTile(cell, smoke);
             }
             if (artifact.Id == "G-T05") hero.SpendMana(4);
-            if (artifact.Id == "G-T18") ally.ApplyStatus(StatusType.Slow, 2);
+            if (artifact.Id == "G-T16") hero.GrantShield(12);
             TrainingRangeAbilityEntry entry = Abilities.Single(ability => ability.Id == abilityId);
             return new ArtifactTrainingRangeCase(entry, battle, target, cell, unitId);
         }

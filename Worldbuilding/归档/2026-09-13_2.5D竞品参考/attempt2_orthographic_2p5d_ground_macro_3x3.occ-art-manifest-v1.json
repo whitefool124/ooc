@@ -1,0 +1,32 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "battlefield_angle_study_attempt2_ground_macro_3x3",
+  "role": "battlefield_ground_macro_study",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "easycli_gpt_image",
+    "source_descriptor": "独立生成的方案2地面宏图候选；九宫格连续石材、统一浅前侧立面",
+    "source_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2_orthographic_2p5d_ground_macro_3x3.png",
+    "source_sha256": "7C9B0578F12D1EB46EEB0A423B6B19EEE7121295AA69BEBC55E11D9A4275ECDB"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-13_2.5D竞品参考/attempt2_orthographic_2p5d_ground_macro_3x3.png",
+    "logical_cells": [3, 3],
+    "native_output_path": null
+  },
+  "application": {
+    "runtime_draw_rect": "仅用于宏图角度与连续性研究，不得直接进入Unity正式资产",
+    "target_view": "orthographic pseudo-2.5D; top surface dominant; shallow front side band; axis-aligned cells"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": null,
+    "notes": "待缩放至32px/64px并在Unity战斗场景中验证接缝与可读性"
+  },
+  "unity_import": {
+    "asset_path": null,
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

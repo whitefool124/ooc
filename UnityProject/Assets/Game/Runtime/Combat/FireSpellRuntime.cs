@@ -25,19 +25,37 @@ namespace OCC.Combat
         public FirePendingEffect Clone() => new FirePendingEffect(Spell, SourceUnitId, MarkedUnitId, MarkedCell, Direction, Stage);
     }
 
+    public sealed class FirePursuitPreview
+    {
+        public GridPosition Destination { get; }
+        public bool WillMove { get; }
+        public string Reason { get; }
+        public string DetailCode { get; }
+
+        public FirePursuitPreview(GridPosition destination, bool willMove, string reason, string detailCode)
+        {
+            Destination = destination;
+            WillMove = willMove;
+            Reason = reason ?? string.Empty;
+            DetailCode = detailCode ?? string.Empty;
+        }
+    }
+
     public sealed class FiregroundState
     {
+        public const int BaseDamage = 8;
         public int Damage { get; private set; }
         public int RemainingTurns { get; private set; }
         public string SourceSpellId { get; private set; }
-        public FiregroundState(int damage, int remainingTurns, string sourceSpellId)
-        { Damage = damage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; }
-        public void Refresh(int damage, int remainingTurns, string sourceSpellId)
-        { Damage = damage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; }
-        public void Extend(int minimumDamage, int additionalTurns, string sourceSpellId)
-        { Damage = Math.Max(Damage, minimumDamage); RemainingTurns += additionalTurns; SourceSpellId = sourceSpellId; }
+        public string SourceUnitId { get; private set; }
+        public FiregroundState(int damage, int remainingTurns, string sourceSpellId, string sourceUnitId = null)
+        { Damage = BaseDamage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; SourceUnitId = sourceUnitId; }
+        public void Refresh(int damage, int remainingTurns, string sourceSpellId, string sourceUnitId = null)
+        { Damage = BaseDamage; RemainingTurns = remainingTurns; SourceSpellId = sourceSpellId; SourceUnitId = sourceUnitId; }
+        public void Extend(int minimumDamage, int additionalTurns, string sourceSpellId, string sourceUnitId = null)
+        { Damage = BaseDamage; RemainingTurns += additionalTurns; SourceSpellId = sourceSpellId; SourceUnitId = sourceUnitId; }
         public void Tick() => RemainingTurns = Math.Max(0, RemainingTurns - 1);
-        public FiregroundState Clone() => new FiregroundState(Damage, RemainingTurns, SourceSpellId);
+        public FiregroundState Clone() => new FiregroundState(Damage, RemainingTurns, SourceSpellId, SourceUnitId);
     }
 
     public sealed class MeltBarrierMarkState
@@ -80,16 +98,22 @@ namespace OCC.Combat
             string prefix = unitId + "|";
             foreach (string key in cooldowns.Keys.Where(key => key.StartsWith(prefix, StringComparison.Ordinal)).ToArray())
             { int next = cooldowns[key] - 1; if (next <= 0) cooldowns.Remove(key); else cooldowns[key] = next; }
-            foreach (GridPosition position in firegrounds.Keys.ToArray())
+            UnitState unit = Combat.GetUnit(unitId);
+            // OCC is a single-protagonist combat. A field effect measured in
+            // "turns" advances once per protagonist turn, not once per unit;
+            // otherwise adding enemies silently shortens the same fireground.
+            if (unit != null && unit.IsHero)
             {
-                firegrounds[position].Tick();
-                if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
+                foreach (GridPosition position in firegrounds.Keys.ToArray())
+                {
+                    firegrounds[position].Tick();
+                    if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
+                }
             }
             RemoveExpiredEnvironment(Combat.CurrentTime);
-            UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && firegrounds.TryGetValue(unit.Position, out FiregroundState ground))
             {
-                ApplyRawFireDamage(unit, ground.Damage, Combat);
+                ApplyRawFireDamage(unit, FiregroundDamage(ground, unit), Combat);
                 firegroundTriggeredThisTurn.Add(unit.Id);
                 Combat.EvaluateOutcome();
             }
@@ -106,24 +130,40 @@ namespace OCC.Combat
         {
             if (unit == null || unit.Position == previousPosition || firegroundTriggeredThisTurn.Contains(unit.Id) || !firegrounds.TryGetValue(unit.Position, out FiregroundState ground)) return 0;
             firegroundTriggeredThisTurn.Add(unit.Id);
-            int damage = ApplyRawFireDamage(unit, ground.Damage, Combat);
+            int damage = ApplyRawFireDamage(unit, FiregroundDamage(ground, unit), Combat);
             Combat.EvaluateOutcome();
             return damage;
         }
-        public void CreateOrRefreshFireground(GridPosition position, int damage, int duration, string sourceSpellId)
+        public void CreateOrRefreshFireground(GridPosition position, int damage, int duration, string sourceSpellId, string sourceUnitId = null)
         {
             TileState tile = Combat.Map.GetTile(position);
             if (tile.IsWater)
             {
-                tile.IsWater = false; tile.SmokeExpiresAt = Math.Max(tile.SmokeExpiresAt, Combat.CurrentTime + duration);
-                firegrounds.Remove(position); return;
+                // Shallow water and fireground are two exclusive field effects.
+                // The later effect replaces the earlier one; no hidden steam
+                // third state is created by the default interaction.
+                tile.IsWater = false;
+                tile.SmokeExpiresAt = 0;
             }
-            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(damage, duration, sourceSpellId);
-            else firegrounds[position] = new FiregroundState(damage, duration, sourceSpellId);
+            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(damage, duration, sourceSpellId, sourceUnitId);
+            else firegrounds[position] = new FiregroundState(damage, duration, sourceSpellId, sourceUnitId);
         }
-        public void ExtendFireground(GridPosition position, int minimumDamage, int duration, string sourceSpellId)
+        public void CreateOrRefreshShallowWater(GridPosition position)
         {
-            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Extend(minimumDamage, duration, sourceSpellId);
+            TileState tile = Combat.Map.GetTile(position);
+            firegrounds.Remove(position);
+            tile.IsWater = true;
+            tile.SmokeExpiresAt = 0;
+        }
+        public void ExtendFireground(GridPosition position, int minimumDamage, int duration, string sourceSpellId, string sourceUnitId = null)
+        {
+            if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Extend(minimumDamage, duration, sourceSpellId, sourceUnitId);
+        }
+        private int FiregroundDamage(FiregroundState ground, UnitState target)
+        {
+            UnitState owner = string.IsNullOrWhiteSpace(ground.SourceUnitId) ? null : Combat.GetUnit(ground.SourceUnitId);
+            int boost = owner != null && owner.IsHero ? owner.StatusStrength(StatusType.FiregroundBoost) : 0;
+            return FiregroundState.BaseDamage + boost + target.StatusStrength(StatusType.FiregroundVulnerable);
         }
         private void RemoveExpiredEnvironment(int time)
         {
@@ -159,7 +199,7 @@ namespace OCC.Combat
                 foreach (SkillDefinition skill in new[] { enemy.SkillOne, enemy.SkillTwo }.Where(value => value != null && value.Damage > 0))
                     range = Math.Max(range, skill.Range);
                 int distance = enemy.Position.ManhattanDistance(cell);
-                return distance > 0 && distance <= range && (range <= 1 || Combat.Map.HasLineOfSight(enemy.Position, cell));
+                return distance > 0 && distance <= range && (range <= 1 || Combat.HasLineOfSight(enemy.Position, cell));
             });
         }
         public void ResolveMarkedDestructions()
@@ -377,10 +417,14 @@ namespace OCC.Combat
             if (spell.TargetKind == FireTargetKind.Self && string.IsNullOrEmpty(target.UnitId) && target.Cell != source.Position)
                 failures.Add("只能选择自身");
             int distance = source.Position.ManhattanDistance(center);
+            if (distance < spell.MinimumRange && spell.TargetKind != FireTargetKind.Self)
+                failures.Add("目标位于近身死区（需至少 " + spell.MinimumRange + " 格）");
             if (distance > spell.Range && spell.TargetKind != FireTargetKind.Self) failures.Add("超出射程");
-            if (spell.RequiresLineOfSight && !battle.Combat.Map.HasLineOfSight(source.Position, center)) failures.Add("视线受阻");
+            if (spell.RequiresLineOfSight && !battle.Combat.HasLineOfSight(source.Position, center)) failures.Add("视线受阻");
             ValidateTarget(battle, source, primary, center, spell, failures);
             List<GridPosition> cells = SelectCells(battle.Combat, source.Position, center, target.Direction, spell).Distinct().Where(battle.Combat.Map.IsInside).ToList();
+            if (primary != null && spell.TargetKind == FireTargetKind.Unit && spell.Shape != FireSelectionShape.Single &&
+                !cells.Contains(primary.Position)) failures.Add("所选单位不在作用范围内");
             string[] units = battle.Combat.Units.Values.Where(unit => unit.IsAlive && cells.Contains(unit.Position)).OrderBy(unit => unit.Id, StringComparer.Ordinal).Select(unit => unit.Id).ToArray();
             ValidateConsumption(battle, spell, primary, cells, units, failures);
             GridPosition[] objects = cells.Where(cell => { TileState tile = battle.Combat.Map.GetTile(cell); return tile.Cover != CoverType.None || tile.IsObjective || tile.IsDevice || tile.IsLampVine; }).ToArray();
@@ -432,8 +476,9 @@ namespace OCC.Combat
             UnitState source = battle.Combat.GetUnit(sourceUnitId) ?? throw new InvalidOperationException("Source unit does not exist.");
             UnitState target = battle.Combat.GetUnit(targetUnitId) ?? throw new InvalidOperationException("Weapon target does not exist.");
             if (!source.IsAlive || source.IsHero == target.IsHero) throw new InvalidOperationException("Weapon target is not legal.");
+            if (source.Position.ManhattanDistance(target.Position) < source.MainHand.MinimumRange) throw new InvalidOperationException("Weapon target is inside the minimum range.");
             if (source.Position.ManhattanDistance(target.Position) > source.MainHand.Range) throw new InvalidOperationException("Weapon target is out of range.");
-            if (source.MainHand.Range > 1 && !battle.Combat.Map.HasLineOfSight(source.Position, target.Position)) throw new InvalidOperationException("Weapon line of sight is blocked.");
+            if (source.MainHand.Range > 1 && !battle.Combat.HasLineOfSight(source.Position, target.Position)) throw new InvalidOperationException("Weapon line of sight is blocked.");
 
             List<FireSpellExecution> executions = new List<FireSpellExecution>();
             FirePendingEffect[] matches = battle.PendingEffects.Where(effect => effect.SourceUnitId == sourceUnitId &&
@@ -442,7 +487,13 @@ namespace OCC.Combat
             foreach (FirePendingEffect effect in matches)
             {
                 if (!FireSpellCatalog.IsWeaponCompatible(effect.Spell, source.MainHand)) continue;
-                if (effect.Stage > 0 && !string.IsNullOrEmpty(effect.MarkedUnitId) && effect.MarkedUnitId != targetUnitId) continue;
+                bool requiresMarkedTarget = effect.Stage > 0 || effect.Spell.TargetKind == FireTargetKind.BurningEnemy;
+                if (requiresMarkedTarget && !string.IsNullOrEmpty(effect.MarkedUnitId) && effect.MarkedUnitId != targetUnitId) continue;
+                FireSpellRule[] gatedBenefits = effect.Spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnTrigger &&
+                    rule.Condition != FireCondition.Always && rule.Kind != FireRuleKind.ConsumeBurning &&
+                    rule.Kind != FireRuleKind.ConsumeFireground).ToArray();
+                if (gatedBenefits.Length > 0 && !gatedBenefits.Any(rule =>
+                    ConditionMet(battle, source, target, target.Position, rule.Condition))) continue;
                 GridPosition sourceOrigin = source.Position;
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
                 if (effect.Stage > 0)
@@ -468,6 +519,7 @@ namespace OCC.Combat
         {
             if (battle == null) throw new ArgumentNullException(nameof(battle));
             UnitState source = battle.Combat.GetUnit(sourceUnitId) ?? throw new InvalidOperationException("Source unit does not exist.");
+            if (source.Position.ManhattanDistance(targetCell) < source.MainHand.MinimumRange) throw new InvalidOperationException("Weapon target is inside the minimum range.");
             if (source.Position.ManhattanDistance(targetCell) > source.MainHand.Range) throw new InvalidOperationException("Weapon target is out of range.");
             TileState tile = battle.Combat.Map.GetTile(targetCell);
             if (tile == null || tile.IsDestroyed || (tile.Cover == CoverType.None && !tile.IsDevice)) throw new InvalidOperationException("Weapon object target is not legal.");
@@ -512,18 +564,42 @@ namespace OCC.Combat
             foreach (FirePendingEffect effect in battle.PendingEffects.Where(value => value.Spell.TriggerWindow == FireTriggerWindow.FirstMarkedTargetMove && value.MarkedUnitId == movingUnitId).ToArray())
             {
                 UnitState source = battle.Combat.GetUnit(effect.SourceUnitId); if (source == null || !source.IsAlive) { battle.Consume(effect); continue; }
-                GridPosition step = Cardinal(source.Position, moving.Position, effect.Direction);
-                GridPosition destination = source.Position + step;
-                bool legal = !source.HasStatus(StatusType.Bound) && battle.Combat.Map.IsInside(destination) &&
-                    !battle.Combat.Map.IsBlocked(destination) && !battle.Combat.IsOccupied(destination);
+                FirePursuitPreview pursuit = PreviewMarkedTargetMove(battle, effect, previousPosition);
                 GridPosition sourceOrigin = source.Position;
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
-                if (legal && source.Position.ManhattanDistance(moving.Position) > 1) source.MoveTo(destination);
-                Add(steps, effect.Spell, FireRuleKind.MoveSource, source.Id, destination, 1, legal ? 1 : 0, legal ? "pursuit" : "pursuit_blocked");
-                battle.Consume(effect); Add(steps, effect.Spell, FireRuleKind.ConsumeTrigger, source.Id, destination, 1, 1, "marked_target_moved");
-                result.Add(new FireSpellExecution(TriggerPreview(effect.Spell, destination, moving.Id), steps, source.Id, sourceOrigin, true));
+                if (pursuit.WillMove) source.MoveTo(pursuit.Destination);
+                Add(steps, effect.Spell, FireRuleKind.MoveSource, source.Id, pursuit.Destination, 1,
+                    pursuit.WillMove ? 1 : 0, pursuit.DetailCode);
+                battle.Combat.AddLog(effect.Spell.DisplayName + "：" + pursuit.Reason);
+                battle.Consume(effect); Add(steps, effect.Spell, FireRuleKind.ConsumeTrigger, source.Id, pursuit.Destination, 1, 1, "marked_target_active_move");
+                result.Add(new FireSpellExecution(TriggerPreview(effect.Spell, pursuit.Destination, moving.Id), steps, source.Id, sourceOrigin, true));
             }
             return result;
+        }
+
+        public static FirePursuitPreview PreviewMarkedTargetMove(FireBattleState battle,
+            FirePendingEffect effect, GridPosition previousPosition)
+        {
+            if (battle == null) throw new ArgumentNullException(nameof(battle));
+            if (effect == null) throw new ArgumentNullException(nameof(effect));
+            UnitState source = battle.Combat.GetUnit(effect.SourceUnitId);
+            UnitState moving = battle.Combat.GetUnit(effect.MarkedUnitId);
+            if (source == null || !source.IsAlive)
+                return new FirePursuitPreview(previousPosition, false, "施术者已无法行动，追步取消。", "pursuit_source_unavailable");
+            if (moving == null || !moving.IsAlive)
+                return new FirePursuitPreview(previousPosition, false, "标记目标已失效，追步取消。", "pursuit_target_unavailable");
+            if (source.Position.ManhattanDistance(moving.Position) <= 1)
+                return new FirePursuitPreview(previousPosition, false, "目标移动后仍与施术者相邻，施术者保持原位。", "pursuit_already_adjacent");
+            if (source.HasStatus(StatusType.Bound))
+                return new FirePursuitPreview(previousPosition, false, "施术者受到束缚，无法进入目标离开的格。", "pursuit_bound");
+            if (!battle.Combat.Map.IsInside(previousPosition))
+                return new FirePursuitPreview(previousPosition, false, "目标离开的格位于战场外，追步取消。", "pursuit_outside");
+            if (battle.Combat.Map.IsBlocked(previousPosition))
+                return new FirePursuitPreview(previousPosition, false, "目标离开的格已被阻挡，追步取消。", "pursuit_blocked");
+            if (battle.Combat.IsOccupied(previousPosition))
+                return new FirePursuitPreview(previousPosition, false, "目标离开的格已被占用，追步取消。", "pursuit_occupied");
+            return new FirePursuitPreview(previousPosition, true,
+                "施术者进入目标离开的格 " + previousPosition + "。", "pursuit_to_vacated_cell");
         }
 
         public static IReadOnlyList<FireSpellExecution> TriggerEnemyEntry(FireBattleState battle, string enteringUnitId)
@@ -533,7 +609,7 @@ namespace OCC.Combat
             foreach (FirePendingEffect effect in battle.PendingEffects.Where(value => value.Spell.TriggerWindow == FireTriggerWindow.FirstEnemyEntry && value.MarkedCell == entering.Position).ToArray())
             {
                 UnitState source = battle.Combat.GetUnit(effect.SourceUnitId);
-                if (source == null || source.IsHero == entering.IsHero || !battle.Combat.Map.HasLineOfSight(source.Position, entering.Position)) continue;
+                if (source == null || source.IsHero == entering.IsHero || !battle.Combat.HasLineOfSight(source.Position, entering.Position)) continue;
                 GridPosition sourceOrigin = source.Position;
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
                 ApplyTriggeredRules(battle, effect, source, entering, entering.Position, new[] { entering.Position }, new[] { entering }, steps, null, DirectionToward(source.Position, entering.Position));
@@ -563,6 +639,22 @@ namespace OCC.Combat
             return Math.Max(0, requestedDamage - reduction);
         }
 
+        public static int PendingPreHitShield(FireBattleState battle, string targetUnitId,
+            string attackerUnitId, bool explosion = false)
+        {
+            if (battle == null || explosion) return 0;
+            UnitState target = battle.Combat.GetUnit(targetUnitId);
+            UnitState attacker = battle.Combat.GetUnit(attackerUnitId);
+            if (target == null || attacker == null || target.Position.ManhattanDistance(attacker.Position) <= 1) return 0;
+            return battle.PendingEffects
+                .Where(value => value.SourceUnitId == targetUnitId && value.Spell.TriggerWindow == FireTriggerWindow.UntilNextAction)
+                .SelectMany(value => value.Spell.Rules)
+                .Where(rule => rule.Kind == FireRuleKind.GrantShieldBeforeRanged)
+                .Select(rule => rule.Amount)
+                .DefaultIfEmpty(0)
+                .Max();
+        }
+
         private static void ApplyTriggeredRules(FireBattleState battle, FirePendingEffect effect, UnitState source,
             UnitState primary, GridPosition center, IReadOnlyList<GridPosition> cells, IReadOnlyList<UnitState> units,
             List<FireSpellResultStep> steps, GridPosition? followUpCell, CardinalDirection followUpDirection)
@@ -571,19 +663,20 @@ namespace OCC.Combat
             {
                 if (rule.Kind == FireRuleKind.MoveAfterAttack)
                 {
-                    GridPosition destination = followUpCell ?? source.Position; bool legal = followUpCell.HasValue &&
+                    GridPosition destination = followUpCell ?? (primary == null ? source.Position :
+                        source.Position + Cardinal(primary.Position, source.Position, followUpDirection) * Math.Max(1, rule.Amount));
+                    bool hasDestination = followUpCell.HasValue || primary != null;
+                    bool legal = hasDestination &&
                         source.Position.ManhattanDistance(destination) <= rule.Amount && battle.Combat.Map.IsInside(destination) &&
                         !battle.Combat.Map.IsBlocked(destination) && !battle.Combat.IsOccupied(destination, source.Id);
-                    if (legal) source.MoveTo(destination);
-                    Add(steps, effect.Spell, rule.Kind, source.Id, destination, rule.Amount, legal ? rule.Amount : 0, legal ? "post_attack_move" : "no_post_attack_cell");
-                    continue;
-                }
-                if (rule.Kind == FireRuleKind.ExtendTriggerToAlly)
-                {
-                    UnitState ally = battle.Combat.Units.Values.Where(unit => unit.IsAlive && unit.IsHero == source.IsHero && unit.Id != source.Id)
-                        .OrderBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
-                    if (ally != null) battle.Arm(new FirePendingEffect(effect.Spell, ally.Id, effect.MarkedUnitId, effect.MarkedCell, effect.Direction, 1));
-                    Add(steps, effect.Spell, rule.Kind, ally?.Id, center, rule.Amount, ally == null ? 0 : rule.Amount, "ally_followup_armed");
+                    GridPosition before = source.Position;
+                    if (legal)
+                    {
+                        source.MoveTo(destination);
+                        battle.Combat.ResolveDisplacementLanding(source, before);
+                    }
+                    Add(steps, effect.Spell, rule.Kind, source.Id, destination, rule.Amount, legal ? before.ManhattanDistance(destination) : 0,
+                        legal ? followUpCell.HasValue ? "post_attack_selected_move" : "post_attack_retreat" : "post_attack_retreat_blocked");
                     continue;
                 }
                 IEnumerable<GridPosition> scopedCells = CellsForScope(rule.Scope, cells, source.Position, center, effect.Direction, battle.Combat);
@@ -606,6 +699,9 @@ namespace OCC.Combat
                 case FireTargetKind.Unit: if (target == null) failures.Add("需要单位目标"); break;
                 case FireTargetKind.EmptyCell: if (!battle.Combat.Map.IsInside(cell) || occupied || battle.Combat.Map.IsBlocked(cell)) failures.Add("需要空地"); break;
                 case FireTargetKind.BurningUnit: if (target == null || !target.HasStatus(StatusType.Burning)) failures.Add("目标未燃烧"); break;
+                case FireTargetKind.BurningEnemy:
+                    if (target == null || target.IsHero == source.IsHero || !target.HasStatus(StatusType.Burning)) failures.Add("需要燃烧敌方");
+                    break;
                 case FireTargetKind.AdjacentBurningEnemy:
                     if (target == null || target.IsHero == source.IsHero || !target.HasStatus(StatusType.Burning) || source.Position.ManhattanDistance(target.Position) != 1) failures.Add("需要相邻燃烧敌方");
                     break;
@@ -630,11 +726,11 @@ namespace OCC.Combat
                 }
                 case FireTargetKind.AdjacentEnemy: if (target == null || target.IsHero == source.IsHero || source.Position.ManhattanDistance(target.Position) != 1) failures.Add("需要相邻敌方"); break;
             }
-            if (spell.Rules.Any(rule => rule.Condition == FireCondition.TargetOnFireground) && !battle.HasFireground(cell)) failures.Add("目标不在燃烧地格");
-            if (spell.Rules.Any(rule => rule.Condition == FireCondition.TargetBurningAndOnFireground) && (target == null || !target.HasStatus(StatusType.Burning) || !battle.HasFireground(cell))) failures.Add("需要燃烧单位同时站在燃烧地格");
-            if (spell.Rules.Any(rule => rule.Condition == FireCondition.SourceBurning) && !source.HasStatus(StatusType.Burning)) failures.Add("自身未燃烧");
-            if (spell.Rules.Any(rule => rule.Condition == FireCondition.SourceBound) && !source.HasStatus(StatusType.Bound)) failures.Add("自身未被束缚");
-            if (spell.Rules.Any(rule => rule.Condition == FireCondition.SourceSlowed) && !source.HasStatus(StatusType.Slow)) failures.Add("自身未被迟缓");
+            if (RequiresOnCastCondition(spell, FireCondition.TargetOnFireground) && !battle.HasFireground(cell)) failures.Add("目标不在燃烧地格");
+            if (RequiresOnCastCondition(spell, FireCondition.TargetBurningAndOnFireground) && (target == null || !target.HasStatus(StatusType.Burning) || !battle.HasFireground(cell))) failures.Add("需要燃烧单位同时站在燃烧地格");
+            if (RequiresOnCastCondition(spell, FireCondition.SourceBurning) && !source.HasStatus(StatusType.Burning)) failures.Add("自身未燃烧");
+            if (RequiresOnCastCondition(spell, FireCondition.SourceBound) && !source.HasStatus(StatusType.Bound)) failures.Add("自身未被束缚");
+            if (RequiresOnCastCondition(spell, FireCondition.SourceSlowed) && !source.HasStatus(StatusType.Slow)) failures.Add("自身未被迟缓");
             if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.MoveSource) && source.HasStatus(StatusType.Bound)) failures.Add("束缚时不能移动");
             int selfLoss = spell.Rules.Where(rule => rule.Kind == FireRuleKind.LoseHealth && rule.Scope == FireRuleScope.Source)
                 .Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
@@ -652,6 +748,17 @@ namespace OCC.Combat
                 if (!axial || path.Count != source.Position.ManhattanDistance(cell) || path.Take(Math.Max(0, path.Count - 1)).Any(position => battle.Combat.IsOccupied(position)))
                     failures.Add("突进必须沿无阻挡的四向直线");
             }
+            if (spell.Id == "F-P-M19" && target != null)
+            {
+                bool axial = source.Position.X == target.Position.X || source.Position.Y == target.Position.Y;
+                List<GridPosition> path = SelectCells(battle.Combat, source.Position, target.Position, CardinalDirection.East, spell);
+                bool reachesTarget = path.Count == source.Position.ManhattanDistance(target.Position) &&
+                    path.Count > 0 && path[path.Count - 1] == target.Position;
+                bool occupiedBeforeTarget = path.Take(Math.Max(0, path.Count - 1))
+                    .Any(position => battle.Combat.IsOccupied(position, source.Id));
+                if (!axial) failures.Add("目标必须位于同一横线或竖线");
+                else if (!reachesTarget || occupiedBeforeTarget) failures.Add("冲锋路径受阻");
+            }
         }
 
         private static void ValidateConsumption(FireBattleState battle, FireSpellDefinition spell, UnitState primary,
@@ -660,7 +767,8 @@ namespace OCC.Combat
             UnitState[] units = unitIds.Select(battle.Combat.GetUnit).Where(unit => unit != null).ToArray();
             bool hasBurning = units.Any(unit => unit.HasStatus(StatusType.Burning)) || (primary != null && primary.HasStatus(StatusType.Burning));
             bool hasGround = cells.Any(battle.HasFireground) || (primary != null && battle.HasFireground(primary.Position));
-            foreach (FireSourceConsumption consumption in spell.Rules.Select(rule => rule.Consumption).Where(value => value != FireSourceConsumption.None).Distinct())
+            foreach (FireSourceConsumption consumption in spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnCast)
+                .Select(rule => rule.Consumption).Where(value => value != FireSourceConsumption.None).Distinct())
             {
                 bool legal = consumption == FireSourceConsumption.BurningOnly ? hasBurning :
                     consumption == FireSourceConsumption.GroundOnly ? hasGround :
@@ -686,7 +794,7 @@ namespace OCC.Combat
             }
             if (spell.Shape == FireSelectionShape.Line || spell.Shape == FireSelectionShape.ContinuousLine)
             {
-                int count = spell.Shape == FireSelectionShape.ContinuousLine ? spell.ShapeLength : Math.Min(spell.ShapeLength, Math.Max(1, source.ManhattanDistance(center)));
+                int count = spell.ShapeLength;
                 GridPosition start = spell.Shape == FireSelectionShape.ContinuousLine ? center : source + direction;
                 List<GridPosition> line = new List<GridPosition>();
                 for (int i = 0; i < count; i++) { GridPosition cell = start + direction * i; if (!state.Map.IsInside(cell)) break; line.Add(cell); if (spell.HeavyCoverTruncates && state.Map.GetTile(cell).BlocksLineOfSight) break; }
@@ -696,7 +804,10 @@ namespace OCC.Combat
             {
                 GridPosition side = new GridPosition(-direction.Y, direction.X); List<GridPosition> cone = new List<GridPosition>();
                 for (int distance = 1; distance <= spell.ShapeLength; distance++) for (int offset = -(distance - 1); offset <= distance - 1; offset++) cone.Add(source + direction * distance + side * offset);
-                return cone;
+                IEnumerable<GridPosition> visibleCone = cone.Where(state.Map.IsInside);
+                if (spell.HeavyCoverTruncates)
+                    visibleCone = visibleCone.Where(cell => state.HasLineOfSight(source, cell));
+                return visibleCone.ToList();
             }
             if (spell.Shape == FireSelectionShape.Square3) return Around(center, true, true);
             if (spell.Shape == FireSelectionShape.OrthogonalRing || spell.Shape == FireSelectionShape.AroundUnit) return Around(center, false, false);
@@ -734,7 +845,7 @@ namespace OCC.Combat
             if (scope == FireRuleScope.Destination || scope == FireRuleScope.Primary) return new[] { center };
             if (scope == FireRuleScope.OrthogonalNeighbors) return Around(center, false, false).Where(combat.Map.IsInside);
             if (scope == FireRuleScope.PathAdjacentEnemies) return selected.SelectMany(cell => Around(cell, false, false)).Distinct().Where(combat.Map.IsInside);
-            if (scope == FireRuleScope.CoveredCells) return selected.Where(cell => !combat.IsOccupied(cell) && combat.Map.GetTile(cell).Cover != CoverType.Heavy);
+            if (scope == FireRuleScope.CoveredCells) return selected.Where(cell => combat.Map.GetTile(cell).Cover != CoverType.Heavy);
             return selected;
         }
 
@@ -767,10 +878,27 @@ namespace OCC.Combat
                 case FireCondition.SourceBound: return source.HasStatus(StatusType.Bound);
                 case FireCondition.SourceSlowed: return source.HasStatus(StatusType.Slow);
                 case FireCondition.SourceNotArmorBroken: return !source.HasStatus(StatusType.ArmorBreak);
+                case FireCondition.TargetAtWeaponMaxRange:
+                    return target != null && source.MainHand != null &&
+                        source.Position.ManhattanDistance(target.Position) == source.MainHand.Range;
                 case FireCondition.LightCoverDestroyed: { TileState tile = battle.Combat.Map.GetTile(cell); return tile.Cover == CoverType.Light && tile.IsDestroyed; }
                 case FireCondition.DurabilityDepleted: return battle.Combat.Map.GetTile(cell).IsDestroyed;
                 default: return true;
             }
+        }
+
+        private static bool IsPrimaryTargetCondition(FireCondition condition)
+        {
+            return condition == FireCondition.TargetBurning || condition == FireCondition.TargetOnFireground ||
+                condition == FireCondition.TargetBurningAndOnFireground || condition == FireCondition.TargetArmorBroken ||
+                condition == FireCondition.TargetBurningOrArmorBroken || condition == FireCondition.TargetBreakStance ||
+                condition == FireCondition.TargetBurningOrBreakStance || condition == FireCondition.TargetAtWeaponMaxRange;
+        }
+
+        private static bool RequiresOnCastCondition(FireSpellDefinition spell, FireCondition condition)
+        {
+            FireSpellRule[] onCast = spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnCast).ToArray();
+            return onCast.Length > 0 && onCast.All(rule => rule.Condition == condition);
         }
 
         private static void ApplyRule(FireBattleState battle, UnitState source, UnitState primary, GridPosition center, FireSpellDefinition spell,
@@ -781,7 +909,12 @@ namespace OCC.Combat
             {
                 GridPosition before = source.Position;
                 GridPosition destination = center;
-                if (primary != null && battle.Combat.IsOccupied(center, source.Id))
+                if (spell.Id == "F-P-M19" && primary != null)
+                {
+                    List<GridPosition> chargePath = SelectCells(battle.Combat, before, primary.Position, aimDirection, spell);
+                    destination = chargePath.Count >= 2 ? chargePath[chargePath.Count - 2] : before;
+                }
+                else if (primary != null && battle.Combat.IsOccupied(center, source.Id))
                 {
                     GridPosition[] candidates = Around(center, false, false)
                         .Where(battle.Combat.Map.IsInside)
@@ -793,14 +926,18 @@ namespace OCC.Combat
                 }
                 if (battle.Combat.Map.IsInside(destination) && !battle.Combat.IsOccupied(destination, source.Id) && !battle.Combat.Map.IsBlocked(destination)) source.MoveTo(destination);
                 if (!(spell.DeliveryMode == FireDeliveryMode.FiregroundManipulation && spell.TargetKind == FireTargetKind.BurningCell))
-                    battle.ResolveEntry(source, before);
-                Add(steps, spell, rule.Kind, source.Id, destination, rule.Amount, before == source.Position ? 0 : rule.Amount, "move");
+                    battle.Combat.ResolveDisplacementLanding(source, before);
+                int moved = before.ManhattanDistance(source.Position);
+                Add(steps, spell, rule.Kind, source.Id, destination, rule.Amount, moved,
+                    spell.Id == "F-P-M19" ? "charge_to_front_cell" : "move");
                 return;
             }
             if (rule.Kind == FireRuleKind.SwapUnits && primary != null)
             {
                 GridPosition sourceBefore = source.Position, targetBefore = primary.Position;
                 source.MoveTo(targetBefore); primary.MoveTo(sourceBefore);
+                battle.Combat.ResolveDisplacementLanding(source, sourceBefore);
+                battle.Combat.ResolveDisplacementLanding(primary, targetBefore);
                 Add(steps, spell, rule.Kind, primary.Id, targetBefore, 1, 1, "swap"); return;
             }
             if (rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.WeaponDamage)
@@ -820,13 +957,15 @@ namespace OCC.Combat
                     Add(steps, spell, rule.Kind, unit.Id, unit.Position, CombatDebugTuning.OutgoingDamageFor(source, requested), applied, rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
                 }
             }
-            else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak || rule.Kind == FireRuleKind.ApplyBreakStance)
+            else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak || rule.Kind == FireRuleKind.ApplyBreakStance || rule.Kind == FireRuleKind.ApplyFiregroundBoost || rule.Kind == FireRuleKind.ApplyFiregroundVulnerability)
             {
                 foreach (UnitState unit in unitArray) if (ConditionMet(battle, source, unit, unit.Position, rule.Condition))
                 {
+                    if (rule.Kind == FireRuleKind.ApplyFiregroundVulnerability && unit.IsHero == source.IsHero) continue;
+                    if (!rule.AffectAllies && unit.IsHero == source.IsHero && unit.Id != source.Id) continue;
                     if (rule.Kind == FireRuleKind.ApplyBreakStance) battle.Combat.ApplyRogueliteBreakStance(unit.Id);
-                    else unit.ApplyStatus(rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : StatusType.Burning, rule.Duration, rule.Amount);
-                    StatusType status = rule.Kind == FireRuleKind.ApplyBreakStance ? StatusType.BreakStance : rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : StatusType.Burning;
+                    else unit.ApplyStatus(rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : rule.Kind == FireRuleKind.ApplyFiregroundBoost ? StatusType.FiregroundBoost : rule.Kind == FireRuleKind.ApplyFiregroundVulnerability ? StatusType.FiregroundVulnerable : StatusType.Burning, rule.Duration, rule.Amount);
+                    StatusType status = rule.Kind == FireRuleKind.ApplyBreakStance ? StatusType.BreakStance : rule.Kind == FireRuleKind.ApplyArmorBreak ? StatusType.ArmorBreak : rule.Kind == FireRuleKind.ApplyFiregroundBoost ? StatusType.FiregroundBoost : rule.Kind == FireRuleKind.ApplyFiregroundVulnerability ? StatusType.FiregroundVulnerable : StatusType.Burning;
                     Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, rule.Amount, status.ToString());
                 }
             }
@@ -836,7 +975,7 @@ namespace OCC.Combat
             }
             else if (rule.Kind == FireRuleKind.CreateFireground || rule.Kind == FireRuleKind.ExtendFireground)
             {
-                foreach (GridPosition cell in cellArray) if (ConditionMet(battle, source, primary, cell, rule.Condition)) { if (rule.Kind == FireRuleKind.CreateFireground) battle.CreateOrRefreshFireground(cell, rule.Amount, rule.Duration, spell.Id); else battle.ExtendFireground(cell, rule.Amount, rule.Duration, spell.Id); Add(steps, spell, rule.Kind, null, cell, rule.Amount, rule.Amount, "fireground"); }
+                foreach (GridPosition cell in cellArray) if (!battle.Combat.Map.IsBlocked(cell) && ConditionMet(battle, source, primary, cell, rule.Condition)) { if (rule.Kind == FireRuleKind.CreateFireground) battle.CreateOrRefreshFireground(cell, rule.Amount, rule.Duration, spell.Id, source.Id); else battle.ExtendFireground(cell, rule.Amount, rule.Duration, spell.Id, source.Id); Add(steps, spell, rule.Kind, null, cell, FiregroundState.BaseDamage, FiregroundState.BaseDamage, "fireground"); }
             }
             else if (rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground)
             {
@@ -847,7 +986,7 @@ namespace OCC.Combat
             {
                 foreach (GridPosition cell in cellArray) { TileState tile = battle.Combat.Map.GetTile(cell); if (!MatchesObject(tile, rule.DestructibleMask)) continue; int before = tile.Durability; int amount = rule.Kind == FireRuleKind.DestroyLightCover ? before : (tile.Cover == CoverType.Heavy && rule.AlternateAmount > 0 ? rule.AlternateAmount : rule.Amount); tile.Durability = Math.Max(0, before - amount); battle.Combat.ResolveAetherCrystalDamage(cell, before); Add(steps, spell, rule.Kind, null, cell, amount, before - tile.Durability, "durability"); }
             }
-            else if (rule.Kind == FireRuleKind.RestoreShield) foreach (UnitState unit in unitArray.DefaultIfEmpty(source).Where(unit => unit != null)) { if (!ConditionMet(battle, source, unit, unit.Position, rule.Condition)) continue; int before = unit.Shield; if (battle.Combat.Ruleset == CombatRuleset.Roguelite) battle.Combat.TryGrantRogueliteShield(unit.Id, spell.Id, rule.Amount); else unit.GrantShield(rule.Amount); Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, unit.Shield - before, "shield"); }
+            else if (rule.Kind == FireRuleKind.RestoreShield) foreach (UnitState unit in unitArray.DefaultIfEmpty(source).Where(unit => unit != null)) { UnitState conditionTarget = IsPrimaryTargetCondition(rule.Condition) && primary != null ? primary : unit; GridPosition conditionCell = conditionTarget.Position; if (!ConditionMet(battle, source, conditionTarget, conditionCell, rule.Condition)) continue; int before = unit.Shield; string shieldSource = spell.Id + (rule.Timing == FireRuleTiming.OnTrigger ? ":trigger" : ":cast"); if (battle.Combat.Ruleset == CombatRuleset.Roguelite) battle.Combat.TryGrantRogueliteShield(unit.Id, shieldSource, rule.Amount); else unit.GrantShield(rule.Amount); Add(steps, spell, rule.Kind, unit.Id, unit.Position, rule.Amount, unit.Shield - before, "shield"); }
             else if (rule.Kind == FireRuleKind.ApplyMeltBarrierMark)
             {
                 battle.MarkMeltBarrier(source.Id, primary, center, rule.Duration);
@@ -861,7 +1000,7 @@ namespace OCC.Combat
             }
             else if (rule.Kind == FireRuleKind.ClearOneSelfStatus)
             {
-                StatusType? selected = new[] { StatusType.BreakStance, StatusType.Bound, StatusType.Slow, StatusType.Burning }.Where(source.HasStatus).Select(value => (StatusType?)value).FirstOrDefault();
+                StatusType? selected = new[] { StatusType.BreakStance, StatusType.Bound, StatusType.Slow, StatusType.Burning, StatusType.FiregroundVulnerable }.Where(source.HasStatus).Select(value => (StatusType?)value).FirstOrDefault();
                 if (selected.HasValue) { source.ClearStatus(selected.Value); Add(steps, spell, rule.Kind, source.Id, source.Position, 1, 1, selected.Value.ToString()); }
             }
             else if (rule.Kind == FireRuleKind.ClearStatus)
@@ -873,7 +1012,7 @@ namespace OCC.Combat
             else if (rule.Kind == FireRuleKind.AddMovement) { int before = source.MovementRangeThisTurn; source.SetMovementRangeForTurn(before + rule.Amount); Add(steps, spell, rule.Kind, source.Id, source.Position, rule.Amount, source.MovementRangeThisTurn - before, "movement_bonus"); }
             else if (rule.Kind == FireRuleKind.LoseHealth) { int before = source.Health; source.TakeDamage(rule.Amount); Add(steps, spell, rule.Kind, source.Id, source.Position, rule.Amount, before - source.Health, "unshielded_self_loss"); }
             else if (rule.Kind == FireRuleKind.RepairWeapon) { if (!ConditionMet(battle, source, source, source.Position, rule.Condition)) return; battle.AddWeaponMaintenance(source.Id, rule.Amount); Add(steps, spell, rule.Kind, source.Id, source.Position, rule.Amount, rule.Amount, "combat_weapon_durability"); }
-            else if (rule.Kind == FireRuleKind.Push && primary != null) { GridPosition before = primary.Position; GridPosition pushDirection = Cardinal(source.Position, primary.Position, aimDirection); GridPosition destination = primary.Position + pushDirection; bool prevented = battle.Combat.ArtifactBattle?.TryPreventForcedMove(primary.Id) == true; bool legal = !prevented && battle.Combat.Map.IsInside(destination) && !battle.Combat.Map.IsBlocked(destination) && !battle.Combat.IsOccupied(destination); if (legal) { primary.MoveTo(destination); battle.ResolveEntry(primary, before); } Add(steps, spell, rule.Kind, primary.Id, destination, rule.Amount, legal ? rule.Amount : 0, legal ? "push" : prevented ? "anchored" : "blocked"); }
+            else if (rule.Kind == FireRuleKind.Push && primary != null) { GridPosition before = primary.Position; GridPosition pushDirection = Cardinal(source.Position, primary.Position, aimDirection); GridPosition destination = primary.Position + pushDirection; bool prevented = battle.Combat.ArtifactBattle?.TryPreventForcedMove(primary.Id) == true; bool legal = !prevented && battle.Combat.Map.IsInside(destination) && !battle.Combat.Map.IsBlocked(destination) && !battle.Combat.IsOccupied(destination); if (legal) { primary.MoveTo(destination); battle.Combat.ResolveDisplacementLanding(primary, before); } Add(steps, spell, rule.Kind, primary.Id, destination, rule.Amount, legal ? rule.Amount : 0, legal ? "push" : prevented ? "anchored" : "blocked"); }
             else if (rule.Kind == FireRuleKind.PushAllUnits)
             {
                 foreach (UnitState unit in unitArray.Where(value => value.IsAlive))
@@ -883,7 +1022,7 @@ namespace OCC.Combat
                     GridPosition destination = before + direction * Math.Max(1, rule.Amount);
                     bool prevented = battle.Combat.ArtifactBattle?.TryPreventForcedMove(unit.Id) == true;
                     bool legal = !prevented && battle.Combat.Map.IsInside(destination) && !battle.Combat.Map.IsBlocked(destination) && !battle.Combat.IsOccupied(destination, unit.Id);
-                    if (legal) { unit.MoveTo(destination); battle.ResolveEntry(unit, before); }
+                    if (legal) { unit.MoveTo(destination); battle.Combat.ResolveDisplacementLanding(unit, before); }
                     Add(steps, spell, rule.Kind, unit.Id, destination, rule.Amount, legal ? rule.Amount : 0, legal ? "push" : prevented ? "anchored" : "blocked");
                 }
             }

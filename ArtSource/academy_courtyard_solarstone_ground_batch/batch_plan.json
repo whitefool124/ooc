@@ -1,0 +1,100 @@
+{
+  "schema": "occ-modular-ground-batch-plan-v1",
+  "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
+  "theme": {
+    "theme_id": "academy_courtyard_solarstone",
+    "material_family": "ruin_masonry",
+    "base_palette": [
+      "#F4D79A",
+      "#E7BA72",
+      "#C78D55",
+      "#A66748"
+    ],
+    "wetness": 0,
+    "wear": 1,
+    "motif": "none",
+    "edge_profile": "retaining_face"
+  },
+  "pieces": [
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.surface.a",
+      "native": "ground_academy_courtyard_solarstone_surface_a_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_surface_a.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.surface.b",
+      "native": "ground_academy_courtyard_solarstone_surface_b_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_surface_b.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.surface.c",
+      "native": "ground_academy_courtyard_solarstone_surface_c_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_surface_c.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.surface.d",
+      "native": "ground_academy_courtyard_solarstone_surface_d_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_surface_d.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.north.base",
+      "native": "ground_academy_courtyard_solarstone_north_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_north_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.east.base",
+      "native": "ground_academy_courtyard_solarstone_east_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_east_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.south.base",
+      "native": "ground_academy_courtyard_solarstone_south_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_south_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.west.base",
+      "native": "ground_academy_courtyard_solarstone_west_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_west_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.nw.base",
+      "native": "ground_academy_courtyard_solarstone_nw_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_nw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.ne.base",
+      "native": "ground_academy_courtyard_solarstone_ne_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_ne_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.sw.base",
+      "native": "ground_academy_courtyard_solarstone_sw_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_sw_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    },
+    {
+      "runtime_id": "ground.academy_courtyard_solarstone.se.base",
+      "native": "ground_academy_courtyard_solarstone_se_base_32.png",
+      "manifest": "ground_academy_courtyard_solarstone_se_base.occ-art-manifest-v1.json",
+      "status": "PLANNED"
+    }
+  ],
+  "approval_order": [
+    "one surface reference tile",
+    "four directional edges",
+    "four corners",
+    "surface variants",
+    "remaining theme batch"
+  ],
+  "status": "PLANNED"
+}

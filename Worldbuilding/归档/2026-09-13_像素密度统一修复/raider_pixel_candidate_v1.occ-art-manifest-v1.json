@@ -1,0 +1,20 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_test_raider_pixel_candidate_v1",
+  "role": "battlefield_tactical_unit_64_exploration",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "easycli_chatgpt_pro_gpt_image_2_5",
+    "source_path": "UnityProject/Reports/CombatTestArena/raw_raider_pixel_v2.png",
+    "source_sha256": "C51101EA453A9DDDF5991EDDCB9A55DFD4DDDA06B0E8C4E211F8FB354F4A4264"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Reports/CombatTestArena/raider_pixel_candidate_64.png",
+    "output_sha256": "FE08F8FA6D01CFCDE6FB8CC8EFB27774A7FE93713B828B42E4503C56CD9085AD",
+    "logical_cells": [1, 1],
+    "palette_max": 10
+  },
+  "application": {"runtime_draw_rect": "仅作组合审阅候选，尚未接入正式战斗"},
+  "human_review": {"overall": "PENDING", "reviewer": null, "notes": "与地面、书箱、重掩体共享 16px 语义网格的敌人候选"}
+}

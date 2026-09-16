@@ -20,6 +20,7 @@ namespace OCC.Combat.Presentation
     {
         public GridPosition Position { get; }
         public Texture2D FloorTexture { get; }
+        public Texture2D FloorTextureLow { get; }
         public Rect FloorUv { get; }
         public float FloorRotationDegrees { get; }
         public Texture2D TerrainBoundaryTexture { get; }
@@ -37,6 +38,7 @@ namespace OCC.Combat.Presentation
         public Vector2 UnitOffset { get; }
         public Vector2 UnitTravelOffset { get; }
         public Texture2D ObjectTexture { get; }
+        public Texture2D ObjectTextureLow { get; }
         public int ObjectForegroundRows { get; }
         public string ObjectLabel { get; }
         public Color ObjectLabelColor { get; }
@@ -61,10 +63,12 @@ namespace OCC.Combat.Presentation
             Texture2D lootTexture, UnitState unit, CombatUnitVitalsPresentation vitals,
             IReadOnlyList<BattlefieldStatusVisual> statuses, EnemyIntentPresentation intent, Texture2D intentTexture,
             string hoverText, Vector2 unitTravelOffset = default, int objectForegroundRows = 0,
-            string surfaceHoverText = null, string terrainEffectHoverText = null, string objectHoverText = null)
+            string surfaceHoverText = null, string terrainEffectHoverText = null, string objectHoverText = null,
+            Texture2D floorTextureLow = null, Texture2D objectTextureLow = null)
         {
             Position = position;
             FloorTexture = floorTexture;
+            FloorTextureLow = floorTextureLow;
             FloorUv = floorUv;
             FloorRotationDegrees = floorRotationDegrees;
             TerrainBoundaryTexture = terrainBoundaryTexture;
@@ -82,6 +86,7 @@ namespace OCC.Combat.Presentation
             UnitOffset = unitOffset;
             UnitTravelOffset = unitTravelOffset;
             ObjectTexture = objectTexture;
+            ObjectTextureLow = objectTextureLow;
             ObjectForegroundRows = objectForegroundRows;
             ObjectLabel = objectLabel ?? string.Empty;
             ObjectLabelColor = objectLabelColor;

@@ -1,17 +1,68 @@
 {
   "schema": "occ-art-contract-v1",
   "version": 1,
-  "revision_date": "2026-09-10",
-  "revision_note": "New battlefield art uses 64px delivery with an approximately 48px readable-subject budget; existing 32px battlefield art is transitional.",
+  "revision_date": "2026-09-15",
+  "revision_note": "Unified battlefield production at 32 PPU: logical occupancy is independent from adaptive 32-multiple visual canvases; side-view units, oblique props, deterministic source-grid decoding, a lossless opaque-ground window role, shared tactical grid and integer runtime scaling.",
+  "primary_map_reference": {
+    "name": "Sephiria",
+    "scope": "map presentation only; derive organization, material layering and pixel density, do not copy assets",
+    "map_camera": "shared oblique top-down grid camera for terrain and props; visible top faces; horizontal and vertical grid alignment",
+    "unit_exception": "battlefield units retain pure side-view horizontal-platformer bodies and use shared foot baseline and depth sorting",
+    "scene_reading_order": ["low_contrast_ground_mass", "boundary_depth_and_facade", "gameplay_prop_silhouette", "sparse_clustered_decoration"],
+    "prop_language": "one dominant silhouette plus one identifying feature; large scenes gain richness from combinations of simple modules, not a single miniature-building sprite",
+    "source_pixel_language": "visibly coarse pixel art with large clear pixel clusters and a few connected light-shadow masses; never depend on later downscaling to create pixel character",
+    "source_texture_forbidden": ["dense cracks", "dense moss flecks", "rivet fields", "isolated speckles", "high-frequency dithering", "fine gradients"],
+    "depth_language": "visible top face plus a facade facing the bottom of the screen; internal material seams use material-dark tones rather than repeated pure-black outlines",
+    "theme_batching": "change material story and one identifying feature while preserving camera axis, silhouette complexity, top-to-facade relationship, light direction and density budget",
+    "generation_content_policy": "state what the object is, its application scene, gameplay occupancy and shared map view; do not prescribe part counts, part placement or target pixels",
+    "current_battlefield_scope": "current gameplay props default to one logical 32x32 cell, while units and transparent props retain 32 PPU and use the smallest 32-multiple visual canvas that preserves the decoded subject; prior 2x2 boards are material-adjacency experiments only",
+    "review_policy": "review the same native 32px asset at 1x, 2x and 4x integer scales; reject distant unreadability and dark fragmented noise",
+    "forbidden": ["per-object yaw rotation", "diagonal placement", "3/4 unit body angle", "dense insignia_flag_rivet_frame competition", "miniature_building treatment for ordinary cover"]
+  },
+  "target_grid_outline_policy": {
+    "applies_to": ["tactical_unit_32x64", "single_cell_prop_adaptive_32ppu", "single_cell_prop_32", "multi_cell_prop_32"],
+    "timing": "after each delivery reaches its final native dimensions",
+    "operation": "replace the outermost opaque silhouette texels with pure black",
+    "width_native_pixels": 1,
+    "alpha_expansion_forbidden": true,
+    "second_dark_ring_forbidden": true,
+    "internal_material_outline_forbidden": true,
+    "floor_tile_outline_forbidden": true,
+    "high_resolution_arbitrary_downsample_policy": "review only until deliberate target-grid detail reconstruction"
+  },
+  "unified_pixel_asset_pipeline": {
+    "scope": "all future OCC pixel assets",
+    "source_channel": "codex_builtin_imagegen",
+    "independent_source_per_asset_and_retry": true,
+    "prompt_content": "identity, application, view, material story and one uniform coarse square macro-pixel lattice; avoid micromanaging part counts, part positions or generated-image target dimensions",
+    "subject_lattice_source": "subject contour and internal colour boundaries only; background checker or transparency never determines pitch",
+    "subject_lattice_confidence_min": 1.2,
+    "reject_if": [
+      "unstable_subject_lattice",
+      "mixed_subject_pixel_scales",
+      "silhouette_breaks_declared_gameplay_use",
+      "ordinary_single_cell_prop_requires_visual_canvas_larger_than_64x64"
+    ],
+    "maximum_independent_generation_rounds": 3,
+    "retry_policy": "change only the diagnosed failed visual dimension; never lower the lattice threshold to force acceptance",
+    "decode": "one inferred macro pixel to one native pixel without geometric resize or interpolation",
+    "colour_cleanup": "merge only to observed source medoids; no new colours and no dithering",
+    "canvas_routing": "fixed-size roles keep their contract dimensions; an opaque battlefield ground material field may use the recorded lossless 32x32 ground window after stable decoding, or a human-declared observed macro-pixel pitch when regular repetition makes generic confidence ambiguous; the latter stays REVIEW_READY until explicit human pixel-scale, material and application review; units and transparent battlefield props use 32 PPU and the smallest fitting 32-multiple canvas",
+    "required_evidence": ["one_x", "four_x", "grayscale", "checker", "application_contact"],
+    "promotion": "machine PASS then human review for FORMAL_CANDIDATE; stable GUID, importer and runtime review for FORMAL",
+    "stability_baseline": {
+      "batch_id": "academy_maintenance_mixed_v1",
+      "assets": 6,
+      "independent_generations": 11,
+      "first_pass_subject_lattice_pass": "2/6",
+      "pass_after_one_targeted_retry": "6/6",
+      "manifest_validation": "6/6"
+    }
+  },
   "canonical_document": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
   "machine_mirror_only": true,
   "allowed_source_channels": [
-    "codex_builtin_imagegen",
-    "openai_image_api_gpt_image_2_5",
-    "easycli_chatgpt_pro_gpt_image_2_5",
-    "pixelover",
-    "aseprite",
-    "hand_pixel"
+    "codex_builtin_imagegen"
   ],
   "forbidden_source_fragments": [
     "localhost",
@@ -384,15 +435,17 @@
       "palette_max": 6,
       "transparent_border_min": 0,
       "unity_ppu": 32,
-      "production_status": "legacy_transition_only_not_new_battlefield_baseline",
-      "edge_policy": "self_contained_tile_with_distinct_physical_perimeter",
-      "cross_tile_texture_continuation": false,
+      "production_status": "new_battlefield_baseline",
+      "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
+      "cross_tile_texture_continuation": "allowed only through the recorded lossless ground-material window; each selected 32x32 delivery remains an independent asset",
       "directional_shadow_rotation": "forbidden",
       "dominant_material_units_per_tile": 1,
       "nested_masonry_grid": "forbidden",
       "surface_detail_policy": "sparse_low_contrast_non_connecting_marks_only",
       "surface_detail_edge_contact": "forbidden",
-      "perimeter_bevel_policy": "restrained_physical_seam_not_ui_button",
+      "perimeter_bevel_policy": "sparse_material_seams_only; never a repeated UI-button perimeter",
+      "ground_window_normalization": "after stable source-grid decode, select the deterministic centered opaque 32x32 logical window; persist source hash, decoded field size and window bounds; no resizing, interpolation, painting, added colours or changed selected pixels. A regular opaque brick/material field may declare its observed square macro-pixel pitch only for REVIEW_READY evidence when generic confidence is ambiguous; it cannot become FORMAL_CANDIDATE without explicit human pixel-scale, material and application PASS",
+      "grid_layer": "shared 1-native-pixel tactical-grid overlay at integer scale; not baked into the ground texture and not a gameplay asset",
       "runtime_review_sequence": [
         "single_tile_1x_4x",
         "four_variant_unlabelled_contact",
@@ -419,7 +472,17 @@
       "palette_max": 10,
       "transparent_border_min": 2,
       "unity_ppu": 32,
-      "battlefield_production_status": "legacy_transition_only; role remains valid for non-battlefield 32px assets"
+      "battlefield_production_status": "new_battlefield_baseline"
+    },
+    "single_cell_prop_adaptive_32ppu": {
+      "delivery_canvas": "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject",
+      "logical_cells": [1, 1],
+      "palette_max": 24,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "anchor": "bottom_center_over_the_owning_cell",
+      "overhang_policy": "visual overhang does not change logical occupancy; collision and selection remain on the owning cell",
+      "production_status": "new_battlefield_baseline"
     },
     "multi_cell_prop_32": {
       "delivery_formula": "logical_cells_times_32",
@@ -427,7 +490,7 @@
       "palette_max": 12,
       "transparent_border_min": 2,
       "unity_ppu": 32,
-      "battlefield_production_status": "legacy_transition_only; role remains valid for inventory and non-battlefield 32px assets"
+      "battlefield_production_status": "new_battlefield_baseline"
     },
     "terrain_adjacency_overlay_32": {
       "delivery_size": [
@@ -441,7 +504,7 @@
       "palette_max": 10,
       "transparent_border_min": 0,
       "unity_ppu": 32,
-      "production_status": "legacy_transition_only_not_new_battlefield_baseline",
+      "production_status": "new_battlefield_baseline",
       "rotation_policy": "allowed_only_when_shadow_neutral"
     },
     "modular_structure_32": {
@@ -450,10 +513,11 @@
       "palette_max": 12,
       "transparent_border_min": 0,
       "unity_ppu": 32,
-      "battlefield_production_status": "legacy_transition_only; role remains valid for non-battlefield 32px assets",
+      "battlefield_production_status": "new_battlefield_baseline",
       "rotation_policy": "forbidden_when_asset_contains_directional_shadow_or_lighting"
     },
     "battlefield_floor_tile_64": {
+      "new_production_forbidden": true,
       "delivery_size": [64, 64],
       "logical_cells": [1, 1],
       "palette_max": 8,
@@ -475,7 +539,54 @@
         "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
       }
     },
+    "battlefield_directional_edge_64": {
+      "new_production_forbidden": true,
+      "delivery_size": [64, 80],
+      "logical_cells": [1, 1],
+      "palette_max": 16,
+      "transparent_border_min": 0,
+      "unity_ppu": 64,
+      "walkable_footprint": [64, 64],
+      "facade_overhang": {"direction": "south", "pixels": 16},
+      "runtime_scales_1920x1080": [1, 2],
+      "edge_policy": "top 64px aligns to one logical cell; lower 16px is a non-interactive exterior facade outside the board",
+      "rotation_policy": "forbidden; directional facade, wear, lighting and shadow are authored per edge",
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_size": [32, 40],
+        "palette_max": 12,
+        "transparent_border_min": 0,
+        "unity_ppu": 32,
+        "walkable_footprint": [32, 32],
+        "facade_overhang": {"direction": "south", "pixels": 8},
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64x80 master"
+      }
+    },
+    "battlefield_ground_macro_64": {
+      "new_production_forbidden": true,
+      "delivery_formula": "logical_cells_times_64",
+      "logical_cells": "manifest_required",
+      "palette_max": 16,
+      "transparent_border_min": 0,
+      "unity_ppu": 64,
+      "runtime_scales_1920x1080": [1, 2],
+      "edge_policy": "continuous top surface; only global bottom outer edge may expose facade and shadow",
+      "cross_tile_texture_continuation": true,
+      "low_resolution_companion": {
+        "required": true,
+        "delivery_formula": "logical_cells_times_32",
+        "palette_max": 12,
+        "transparent_border_min": 0,
+        "unity_ppu": 32,
+        "target_canvas": [960, 540],
+        "runtime_scales": [1, 2],
+        "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
+      }
+    },
     "battlefield_single_cell_prop_64": {
+      "new_production_forbidden": true,
       "delivery_size": [64, 64],
       "logical_cells": [1, 1],
       "palette_max": 14,
@@ -496,6 +607,7 @@
       }
     },
     "battlefield_multi_cell_prop_64": {
+      "new_production_forbidden": true,
       "delivery_formula": "logical_cells_times_64",
       "logical_cells": "manifest_required",
       "palette_max": 16,
@@ -515,6 +627,7 @@
       }
     },
     "battlefield_terrain_adjacency_overlay_64": {
+      "new_production_forbidden": true,
       "delivery_size": [64, 64],
       "logical_cells": [1, 1],
       "palette_max": 14,
@@ -535,6 +648,7 @@
       }
     },
     "battlefield_modular_structure_64": {
+      "new_production_forbidden": true,
       "delivery_formula": "logical_cells_times_64",
       "logical_cells": "manifest_required",
       "palette_max": 16,
@@ -554,6 +668,7 @@
       }
     },
     "battlefield_terrain_vfx_64": {
+      "new_production_forbidden": true,
       "delivery_size": [64, 64],
       "logical_cells": [1, 1],
       "palette_max": 16,
@@ -573,7 +688,21 @@
         "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
       }
     },
+    "tactical_unit_32x64": {
+      "delivery_size": [32, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 32,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "center_x": 16,
+      "baseline_y": 62,
+      "standard_height": [32, 58],
+      "view": "strict_90_degree_side_profile",
+      "footprint_policy": "feet occupy one logical cell; upper sprite may overhang without increasing logical occupancy",
+      "production_status": "new_battlefield_baseline"
+    },
     "tactical_unit_64": {
+      "new_production_forbidden": true,
       "delivery_size": [
         64,
         64
@@ -595,6 +724,7 @@
         48,
         54
       ],
+      "production_status": "legacy_existing_assets_only",
       "head_height": [
         12,
         14
@@ -684,15 +814,21 @@
         "# 附录 A 美术规范与视觉反馈",
         "正交 2D 像素",
         "## A.2 像素与布局",
-        "新制战场地面、玩法地块、掩体与占格场景物使用64×64交付画布",
+        "战场逻辑格统一对应原生32×32地块",
+        "逻辑占格与视觉画布分离",
+        "### A.2.2 统一像素资产生产流程",
+        "网格置信度低于1.2",
+        "有方向的地图外沿地块使用32×40",
         "2px 细框"
       ]
     },
     {
       "path": "Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv",
       "required": [
-        "ART-BATTLE-64",
-        "ART-BATTLE-LOW-32",
+        "ART-BATTLE-32",
+        "ART-BATTLE-NATIVE-32",
+        "ART-PIXEL-PIPELINE",
+        "ART-PIXEL-STABILITY",
         "ART-PIPELINE",
         "FORMAL_CANDIDATE",
         "仅FORMAL可进入正式运行时",
@@ -704,8 +840,10 @@
       "required": [
         "是唯一活动美术规范源",
         "occ-art-manifest-v1",
-        "64px战场交付主稿",
-        "禁止使用未批准的本地生图工作台"
+        "战场地面以原生32×32为逻辑格基线",
+        "逻辑占格与视觉画布分离",
+        "主体本身推断网格且置信度至少1.2",
+        "图片生成只使用 Codex 内置 `image_gen`"
       ]
     }
   ],
@@ -725,11 +863,13 @@
       64,
       128
     ],
-    "battlefield_asset_delivery_1920x1080": [64, 64],
-    "battlefield_transparent_subject_budget": [48, 48],
-    "battlefield_asset_scales_1920x1080": [1, 2],
-    "battlefield_low_resolution_companion_960x540": [32, 32],
-    "battlefield_companion_scales_960x540": [1, 2],
+    "logical_cell_native": [32, 32],
+    "battlefield_unity_ppu": 32,
+    "transparent_visual_canvas": "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject",
+    "typical_humanoid_canvas": [32, 64],
+    "single_cell_prop_example_canvas": [64, 64],
+    "visual_overhang_changes_logical_occupancy": false,
+    "battlefield_asset_integer_scales": [1, 2, 4],
     "runtime_non_integer_asset_scaling": "forbidden",
     "unit_canvas_to_cell_ratio": 2,
     "position_quantum_reference": 2,

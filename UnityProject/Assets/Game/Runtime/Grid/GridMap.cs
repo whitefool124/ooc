@@ -104,7 +104,14 @@ namespace OCC.Combat
 
         public bool HasLineOfSight(GridPosition from, GridPosition to)
         {
-            if (from.ManhattanDistance(to) > 1 && (GetTile(from).IsLampVine || GetTile(to).IsLampVine)) return false;
+            return HasLineOfSight(from, to, int.MaxValue);
+        }
+
+        public bool HasLineOfSight(GridPosition from, GridPosition to, int currentTime)
+        {
+            bool SmokeActive(GridPosition position) => GetTile(position).SmokeExpiresAt > currentTime;
+            if (from.ManhattanDistance(to) > 1 &&
+                (GetTile(from).IsLampVine || GetTile(to).IsLampVine || SmokeActive(from) || SmokeActive(to))) return false;
             int x = from.X;
             int y = from.Y;
             int dx = Math.Abs(to.X - from.X);
@@ -114,7 +121,11 @@ namespace OCC.Combat
             int error = dx - dy;
             while (x != to.X || y != to.Y)
             {
-                if (!(x == from.X && y == from.Y) && GetTile(new GridPosition(x, y)).BlocksLineOfSight) return false;
+                if (!(x == from.X && y == from.Y))
+                {
+                    GridPosition position = new GridPosition(x, y);
+                    if (GetTile(position).BlocksLineOfSight || SmokeActive(position)) return false;
+                }
                 int twice = 2 * error;
                 if (twice > -dy) { error -= dy; x += sx; }
                 if (twice < dx) { error += dx; y += sy; }

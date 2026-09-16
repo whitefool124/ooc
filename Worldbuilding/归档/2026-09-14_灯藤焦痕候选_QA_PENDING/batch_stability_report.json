@@ -1,0 +1,41 @@
+{
+  "schema": "occ-native32-stability-report-v1",
+  "batch_id": "academy_scorched_lamp_vine_terrain_qa_v1",
+  "items": 1,
+  "total_generations": 2,
+  "first_pass_technical_success": 0,
+  "first_pass_rate": 0.0,
+  "success_with_one_targeted_retry": 1,
+  "success_with_one_targeted_retry_rate": 1.0,
+  "items_detail": [
+    {
+      "id": "academy_scorched_lamp_vine_terrain_candidate",
+      "role": "single_cell_terrain_overlay_32",
+      "selected_round": 2,
+      "attempt_statuses": [
+        "REJECT_UNSTABLE_SUBJECT_GRID",
+        "PASS_LOSSLESS_TARGET"
+      ],
+      "pitch": 39,
+      "confidence": 2.4429,
+      "subject_size": [
+        20,
+        14
+      ],
+      "canvas": [
+        32,
+        32
+      ],
+      "palette": 9,
+      "manifest": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/scorched_vine/academy_scorched_lamp_vine_terrain_candidate_manifest.json"
+    }
+  ],
+  "application_contact": "Worldbuilding/归档/2026-09-14_灯藤焦痕候选_QA_PENDING/application_contact_4x.png",
+  "human_aesthetic_review": {
+    "status": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "reason": "第二轮通过机器门槛；等待实际应用接触与人工审美门槛，不提前替换花盆废墟占位。"
+  },
+  "formal_assets_replaced": false
+}
