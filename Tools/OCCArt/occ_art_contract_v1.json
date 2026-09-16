@@ -28,7 +28,7 @@
     "theme_batching": "change material story and one identifying feature while preserving camera axis, silhouette complexity, top-to-facade relationship, light direction and density budget",
     "generation_content_policy": "state what the object is, its application scene, gameplay occupancy and shared map view; do not prescribe part counts, part placement or target pixels",
     "current_battlefield_scope": "current gameplay props default to one logical 32x32 cell, while units and transparent props retain 32 PPU and use the smallest 32-multiple visual canvas that preserves the decoded subject; prior 2x2 boards are material-adjacency experiments only",
-    "review_policy": "review the same native 32px asset at 1x, 2x and 4x integer scales; reject distant unreadability and dark fragmented noise",
+    "review_policy": "review each native asset at its own role PPU and at integer display tiers only, with 1x and the canonical 6x battlefield tier as the required pair; reject distant unreadability, dark fragmented noise and any baked scene lighting",
     "forbidden": ["per-object yaw rotation", "diagonal placement", "3/4 unit body angle", "dense insignia_flag_rivet_frame competition", "miniature_building treatment for ordinary cover"]
   },
   "battlefield_display_policy": {
@@ -482,6 +482,7 @@
       "gameplay_cell_native_px": 32,
       "palette_max": 6,
       "transparent_border_min": 0,
+      "requires_six_x_evidence": true,
       "production_status": "new_battlefield_ground_baseline_2026_09_16",
       "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
       "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
@@ -511,6 +512,7 @@
       "palette_max": 10,
       "transparent_border_min": 0,
       "production_status": "new_battlefield_ground_baseline_2026_09_16",
+      "requires_six_x_evidence": true,
       "rotation_policy": "allowed_only_when_shadow_neutral"
     },
     "floor_tile_32": {
@@ -898,6 +900,37 @@
     "style",
     "application"
   ],
+  "illumination_review_requirement": {
+    "locked": "2026-09-16",
+    "applies_to": "every asset promoted to FORMAL",
+    "rule": "资产不含场景光照：不烘焙光斑、地面投影、暗角、环境变暗，也不烘焙火把或以太辉光；资产里唯一的明暗是固定左上的体积明暗（顶面亮、正面暗），这是形状语言而不是光照",
+    "runtime_owner": "URP 2D Light2D composites all scene light and shadow after the integer upscale",
+    "reason": "the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, which only holds when light is applied after the integer upscale instead of being painted into the art"
+  },
+  "formal_requirements": {
+    "locked": "2026-09-16",
+    "evidence_extra": ["six_x"],
+    "human_review_extra": ["illumination"],
+    "unity_import_required": {
+      "filter_mode": "Point",
+      "mesh_type": "Full Rect",
+      "compression": "None",
+      "mipmaps": false,
+      "wrap_mode": "Clamp",
+      "atlas_padding": 0,
+      "atlas_rotation": false,
+      "atlas_tight_packing": false,
+      "atlas_extrude": 0,
+      "reason": "a tight mesh crops the quad and shifts the sprite off the native pixel lattice, which breaks uniform pixel size and seam-free adjacency"
+    },
+    "runtime_lattice_check": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "method": "capture the running game at the target resolution and measure block uniformity: the true tier makes nearly every p x p block internally uniform for p = screen px per native px, and the lattice must be aligned to the image origin",
+      "pass_condition": "expected integer tier detected and zero lattice offset on both axes",
+      "uniform_pixel_size": "ground tiles, directional edges, props, structures and units in one battle view must share the same screen pixels per native pixel"
+    },
+    "note": "FORMAL_CANDIDATE keeps the standing five evidence files and five review dimensions; the canonical six-times evidence, the illumination review, the verified importer and the runtime lattice record are additional gates for FORMAL, so already approved candidates are not retroactively invalidated"
+  },
   "consistency_checks": [
     {
       "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",

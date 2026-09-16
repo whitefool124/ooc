@@ -2,10 +2,46 @@
   "schema": "occ-native32-generation-profiles-v1",
   "backend": "codex_builtin_imagegen_only",
   "delivery": {
-    "cell_pixels": 32,
+    "gameplay_cell_pixels": 32,
+    "ground_subgrid_pixels": 16,
+    "ground_tiles_per_gameplay_cell": [2, 2],
     "multi_cell_formula": "logical_width_times_32_by_logical_height_times_32",
     "runtime_scaling": "integer_only",
     "candidate_status": "QA_PENDING_until_machine_and_human_review"
+  },
+  "display_policy": {
+    "locked": "2026-09-16",
+    "native_buffer": [320, 180],
+    "canonical_integer_scale": 6,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 6,
+    "battlefield_viewport": [1408, 768],
+    "visible_gameplay_cells_at_canonical": [7, 4],
+    "gameplay_cell_native_px": 32,
+    "gameplay_cell_screen_units_at_canonical": 192,
+    "role_native_ppu": {
+      "ground_field_16": 16,
+      "directional_edge_16x24": 16,
+      "wall_16x24": 16,
+      "combat_prop_32": 32,
+      "structure_32": 32,
+      "unit_sideview": 32
+    },
+    "uniform_pixel_size_rule": "every role in one battle view must render at the same screen pixels per native pixel (6 at the canonical tier): a 16 px ground tile occupies 96 screen units, a 32 px prop or unit occupies 192 screen units, and both show 6 screen px per native px",
+    "mixed_ppu_rule": "ground is authored on the 16 px subgrid while props, structures and units stay on the 32 px gameplay grid; the two grids are never mixed when computing anchors or occupancy",
+    "fractional_scale_forbidden": true,
+    "fractional_transform_scale_forbidden": true,
+    "position_snap_native_px": 1,
+    "non_integer_resolution_policy": "integer scale plus letterbox; never fractional upscale and never half-pixel placement",
+    "reference_basis": "measured from the primary reference: one integer upscale of a native buffer, unlit areas keep zero intra-block variance and lighting is composited after the upscale"
+  },
+  "lighting_policy": {
+    "locked": "2026-09-16",
+    "scene_lighting": "forbidden in the asset: no baked light pool, no cast floor shadow, no vignette, no ambient darkening gradient, no darkened border, no torch or aether glow",
+    "form_shading": "the only shading the asset carries: one fixed upper-left direction (lit top face, dark front face) so a solid reads as a volume; this is shape language, not illumination, and no role may vary it",
+    "runtime_owner": "URP 2D Light2D (day cycle, character light, baked shadow overlay sprites) owns all scene light and shadow at runtime",
+    "reason": "the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, which is only possible when light is applied after the integer upscale rather than painted into the art",
+    "reject_if": ["baked scene lighting", "floor shadow or light pool baked into a ground tile", "vignette or edge darkening", "global ambient gradient across the piece", "torch or aether glow baked into a prop"]
   },
   "generation_loop": {
     "candidates_per_round": 1,
@@ -17,35 +53,71 @@
       "subject_lattice_confidence_below_1_2",
       "mixed_subject_pixel_scale",
       "single_cell_prop_requires_visual_canvas_larger_than_64x64",
-      "visual_silhouette_breaks_declared_occupancy"
+      "visual_silhouette_breaks_declared_occupancy",
+      "baked_scene_lighting_detected",
+      "role_ppu_mismatch_against_display_policy"
     ]
   },
   "shared_prompt": {
     "pixel_language": "authentic coarse low-resolution pixel design shown enlarged with one uniform square macro-pixel lattice across the complete subject; large deliberate clusters; crisp hard edges; sparse controlled detail; limited cohesive palette; do not force the subject into a 32x32 generated-image composition",
+    "illumination": "flat even illumination with no directional scene light, no cast shadows, no glow and no darkening at the edges; the only shading is the fixed upper-left form shading on solid volumes",
     "reference_policy": "Sephiria screenshot controls map readability and density; an approved OCC asset controls family scale; references never authorize copying their subject design",
-    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated"
+    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated, baked lighting or shadow"
   },
   "profiles": {
+    "ground_field_16": {
+      "view": "orthographic top-down material field; one 16x16 tile of a gameplay cell; no object, no facade, no border frame",
+      "content_variables": ["theme_material_story", "one_surface_identity", "wear_level", "wetness_level"],
+      "canvas": "fixed_16x16",
+      "native_ppu": 16,
+      "logical_cells": [1, 1],
+      "tiles_per_gameplay_cell": [2, 2],
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
+      "measured_authoring_values": {
+        "brick_pitch_px": 4,
+        "structural_seam_px": 1,
+        "organic_cluster_px": "2-4",
+        "material_boundary_step_px": "2-4",
+        "boundary_contact_line": "the material's own dark tone, never pure black"
+      },
+      "lighting": "no scene lighting; only the fixed upper-left form shading; see lighting_policy",
+      "reject_if": ["baked cell frame", "baked lighting or shadow", "isolated single-pixel noise", "dominant tone below 45 percent", "microtexture", "gradient"]
+    },
+    "directional_edge_16x24": {
+      "view": "one 16x16 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
+      "canvas": "fixed_16x24",
+      "native_ppu": 16,
+      "walkable_px": [16, 16],
+      "facade_overhang_px": 8,
+      "palette_max": 10,
+      "rotation_policy": "authored per direction; runtime rotation forbidden when the piece carries light, facade, wear or shadow direction",
+      "reject_if": ["facade inside the walkable area", "missing facade", "directional identity lost", "baked lighting or shadow"]
+    },
     "unit_sideview": {
       "view": "strict 90-degree side profile; only one eye may be visible; torso, pelvis, feet and equipment all face the same side",
       "content_variables": ["unit_identity", "gameplay_role", "faction_material_story", "single_identity_accent"],
       "canvas": "auto_round_each_axis_up_to_a_multiple_of_32; typical_humanoid_is_32x64",
+      "native_ppu": 32,
       "logical_footprint": [1, 1],
+      "visual_footprint_note": "the canvas may exceed one gameplay cell: OCC characters are deliberately about two cells tall while the reference is about 1.2",
       "palette_max_before_outline": 32,
       "height_range": [32, 58],
       "width_max": 30,
       "baseline_y": "canvas_height_minus_2",
-      "reject_if": ["three_quarter_body", "front_facing_torso", "oversized_head_hides_body", "equipment_hides_body", "broken_silhouette", "muddy_clusters"]
+      "reject_if": ["three_quarter_body", "front_facing_torso", "oversized_head_hides_body", "equipment_hides_body", "broken_silhouette", "muddy_clusters", "baked_scene_lighting"]
     },
     "prop_oblique": {
       "view": "shared oblique top-down map view with visible top and front faces; screen-axis alignment; never diagonal placement",
       "content_variables": ["object_identity", "gameplay_use", "theme_material_story", "single_identity_feature"],
       "canvas": "auto_round_each_axis_up_to_a_multiple_of_32",
+      "native_ppu": 32,
       "ordinary_single_cell_visual_canvas_review_limit": [64, 64],
       "logical_footprint": "declared_separately_from_visual_canvas",
       "palette_max_before_outline": 24,
       "baseline_y": "canvas_height_minus_2",
-      "reject_if": ["flat_front_only", "top_and_front_merge", "diagonal_placement", "miniature_building_overdetail", "broken_silhouette", "muddy_clusters"]
+      "reject_if": ["flat_front_only", "top_and_front_merge", "diagonal_placement", "miniature_building_overdetail", "broken_silhouette", "muddy_clusters", "baked_scene_lighting"]
     }
   },
   "approved_calibration_assets": {
@@ -69,21 +141,23 @@
     "reject_when_subject_lattice_confidence_is_below_1_2",
     "remove_only_edge_connected_baked_checkerboard",
     "decode_one_macro_pixel_to_one_native_pixel_using_an_observed_medoid_colour",
-    "select_the_smallest_canvas_whose_axes_are_multiples_of_32_and_fit_the_subject_without_resizing",
+    "select_the_smallest_canvas_whose_axes_are_multiples_of_the_role_native_ppu_grid_and_fit_the_subject_without_resizing",
     "crop_authored_silhouette_without_resampling",
     "hard_alpha",
     "merge_near_duplicate_generated_rgb_noise_to_observed_source_medoids_without_dither",
     "replace_existing_outermost_opaque_pixels_with_one_pure_black_pixel",
-    "anchor_to_role_baseline"
+    "anchor_to_role_baseline",
+    "never_paint_or_restore_lighting: a source whose lighting was removed by decoding is rejected, not repaired"
   ],
   "machine_qa": [
-    "canvas_axes_are_multiples_of_32_and_fit_the_subject_without_resizing",
+    "canvas_matches_the_role_delivery_size_or_is_multiples_of_the_role_native_ppu_grid",
     "logical_occupancy_is_declared_separately_from_visual_canvas",
     "binary_alpha",
     "palette_limit",
     "single_connected_silhouette",
     "safe_canvas_border",
-    "role_occupancy"
+    "role_occupancy",
+    "ground_role_tile_is_16x16_and_directional_edge_is_16x24"
   ],
   "visual_qa": [
     "role_view",
@@ -91,8 +165,36 @@
     "identity_feature_survives_at_1x",
     "pixel_scale_matches_approved_family",
     "application_contact_on_game_ground",
-    "single_cell_prop_visual_overhang_remains_limited_and_does_not_read_as_a_multi_cell_wall"
+    "single_cell_prop_visual_overhang_remains_limited_and_does_not_read_as_a_multi_cell_wall",
+    "no_baked_scene_lighting_anywhere_in_the_piece",
+    "rendered_pixel_size_is_identical_across_ground_structures_props_and_units"
   ],
+  "runtime_promotion_gates": {
+    "locked": "2026-09-16",
+    "importer": {
+      "filter_mode": "Point",
+      "mesh_type": "Full Rect",
+      "compression": "None",
+      "mipmaps": false,
+      "wrap_mode": "Clamp",
+      "atlas": "padding 0, rotation off, tight packing off, extrude 0",
+      "reason": "a tight mesh crops the quad and shifts the sprite off the native pixel lattice, which breaks both uniform pixel size and seam-free adjacency"
+    },
+    "runtime_lattice_check": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "method": "capture the running game at the target resolution and measure block uniformity: the true tier makes nearly every p x p block internally uniform at p = screen px per native px, and the lattice must be aligned to the image origin",
+      "pass_condition": "integer tier detected at the expected canonical multiple, lattice offset zero on both axes"
+    },
+    "placement_rules": [
+      "R1 gameplay cell = 32x32 native px; ground art sits on the 16 px subgrid with 2x2 tiles per cell",
+      "R2 objects anchor bottom-center to the owning cell bottom edge; multi-cell objects own their bottom-left cell",
+      "R3 overhang above, left and right is allowed; overhang past the footprint bottom edge toward the screen bottom is forbidden",
+      "R4 layer order back to front: ground, ground overlays, walls, large structures, small props, units, overlays",
+      "R5 within a layer sort by bottom-edge y ascending, then structure < prop < unit",
+      "R6 units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset"
+    ],
+    "formal_requires": "machine PASS plus human PASS plus stable GUID plus verified importer plus a runtime contact capture that passes the lattice check"
+  },
   "stability_baseline_2026_09_14": {
     "batch": "academy_maintenance_mixed_v1",
     "assets": 6,

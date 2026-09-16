@@ -29,9 +29,32 @@ Audit every registered OCC art manifest in one command:
 
 The validator never draws or repairs art. A machine `PASS` plus human review
 permits `FORMAL_CANDIDATE`, not direct Unity import. `FORMAL` additionally needs
-a stable GUID, verified importer and runtime application record.
+the canonical six-times evidence, the illumination review, a stable GUID, a
+verified importer and a passing runtime lattice capture (see below).
 
-## Approved 32 PPU production workflow
+## Per-role PPU and the locked display policy
+
+Locked 2026-09-16 (`occ_art_contract_v1.json` → `battlefield_display_policy`).
+One native buffer of 320x180 is integer upscaled exactly 6x to 1920x1080, so one
+native pixel is 6 screen pixels; the 1408x768 battlefield viewport shows 7x4
+gameplay cells.
+
+| role family | native PPU | delivery |
+| --- | --- | --- |
+| battlefield ground surface | 16 | 16x16 tile, 2x2 tiles per 32 px gameplay cell |
+| directional board edge | 16 | 16x24 = 16x16 walkable + 8 px facade outside the board |
+| wall | 16 | 16x24 = cell + 8 px above the owning cell |
+| prop, structure, unit | 32 | role contract size, e.g. 32x64 humanoid |
+
+Ground art sits on the 16 px subgrid while props, structures and units stay on
+the 32 px gameplay grid. The two grids are never mixed when computing anchors or
+occupancy, but **every role in one battle view must render at the same screen
+pixels per native pixel** (6 at the canonical tier): a 16 px tile therefore
+occupies 96 screen units and a 32 px prop or unit occupies 192. Display tiers are
+integer only; a resolution that is not an integer multiple is letterboxed rather
+than fractionally scaled.
+
+## Approved generation workflow
 
 Use Codex built-in `image_gen` to create an independent coarse pixel-art reference.
 Do not call EasyCLI or another local image service. Describe the object, application
@@ -41,9 +64,10 @@ fixed-size role still keeps its own delivery contract.
 
 Decode the generated subject's own macro-pixel lattice with
 `decode_generated_pixel_grid.py`. Use `--target-size auto` for units and transparent
-props so each canvas axis rounds up to a multiple of 32 without resizing the subject.
-Ground stays 32x32 per logical cell. Typical humanoids use a 32x64 canvas; a one-cell
-prop may use a 64x64 visual canvas while its gameplay footprint remains 1x1.
+props so each canvas axis rounds up to a multiple of the role's PPU grid without
+resizing the subject. Ground decodes to a 16x16 tile per subgrid cell; typical
+humanoids use a 32x64 canvas; a one-cell prop may use a 64x64 visual canvas while its
+gameplay footprint remains 1x1.
 
 Require a single uniform subject lattice and confidence of at least `1.2`. Reject a
 mixed or unstable grid instead of lowering the threshold. Retry with a new independent
@@ -51,20 +75,34 @@ source, changing only the diagnosed failed dimension, for at most three rounds. 
 macro pixel becomes one native pixel; geometric resize, interpolation, dithering and
 new colours are forbidden.
 
-`native32_generation_profiles.json` contains the approved unit and prop profiles and
-their calibration assets. Every output still requires 1x, 4x, grayscale, checker and
-application-contact evidence before promotion.
+`native32_generation_profiles.json` contains the approved profiles, the role PPU
+table, the display policy, the lighting policy and their calibration assets. Every
+output still requires 1x, 4x, grayscale, checker and application-contact evidence
+before promotion, plus the canonical 6x evidence for the battlefield ground roles.
+
+## Assets carry no scene lighting
+
+Generated sources must not contain any scene illumination: no light pool, no cast
+floor shadow, no vignette, no ambient darkening, no darkened border and no baked
+torch or aether glow. The single exception is the fixed upper-left **form shading**
+(lit top face, dark front face) that makes a solid read as a volume; that is shape
+language, not lighting, and no role may vary its direction.
+
+All scene light and shadow belongs to the runtime URP 2D Light2D layer. This is what
+the reference does: unlit regions keep zero intra-block variance because light is
+composited after the integer upscale instead of being painted into the art. The
+`illumination` human-review dimension and the FORMAL gate enforce it.
 
 ## Modular battlefield ground batches
 
 For a family of many themed, composable floor tiles, use the machine-readable
 batch contract in `occ_modular_ground_batch_contract_v1.json`. It fixes the
-topology (four surface variants, four directional edges and four corners), one
-native 32 PPU delivery, the light/value invariants and the review gates.
+topology (four surface variants, four directional edges and four corners), the
+16 PPU delivery, the light/value invariants and the review gates G0-G6.
 
 Opaque ground is role-specific: it is a decoded material field, not an isolated
 transparent subject. After a stable decode, it may produce its deterministic
-centered 32×32 logical window using `--ground-window 32x32`. This extracts only
+centered 16x16 logical window using `--ground-window 16x16`. This extracts only
 observed decoded pixels: it never rescales, interpolates, paints, adds colours,
 or changes a selected pixel. Record the source hash, decoded field size and
 window bounds in the QA report and manifest. Visible cell edges belong to the
@@ -93,3 +131,35 @@ For a new single-cell battlefield prop, use `single_cell_prop_adaptive_32ppu`.
 Its visual canvas is the smallest width and height, each a multiple of 32, that
 preserves the decoded subject. The canvas may overhang adjacent cells visually;
 selection, collision and gameplay occupancy remain bound to the declared owning cell.
+
+## Promotion to FORMAL
+
+`FORMAL_CANDIDATE` keeps the standing five evidence files and five human-review
+dimensions. `FORMAL` adds four gates (`occ_art_contract_v1.json` →
+`formal_requirements`), all recorded in the manifest:
+
+1. `evidence.six_x` — the canonical 6x contact sheet.
+2. `human_review.illumination: PASS` — no baked scene lighting.
+3. `unity_import` — `filter_mode: Point`, `mesh_type: Full Rect`, `compression: None`,
+   `mipmaps: false`, `wrap_mode: Clamp`, atlas padding 0 / no rotation / no tight
+   packing / extrude 0, plus the stable GUID. A tight mesh crops the sprite quad and
+   shifts it off the native pixel lattice, which breaks uniform pixel size and
+   seam-free adjacency.
+4. `unity_import.runtime_lattice` — the result of the runtime pixel-grid check.
+
+Verify the runtime lattice on a real capture:
+
+```powershell
+& 'C:/Users/FNHF/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' `
+  Tools/OCCArt/verify_runtime_pixel_grid.py `
+  --capture path/to/runtime_capture.png --expect-tier 6 `
+  --region ground:40,300,700,760 --region props:150,120,900,420 `
+  --json-out path/to/runtime_lattice.json
+```
+
+The tool reports the detected tier per region, the lattice offset and whether the
+regions agree; the true tier is the largest pitch whose blocks are internally
+uniform. It exits non-zero when the tier differs from the expectation or the lattice
+is offset, and its JSON is what the manifest records. Use it for every battlefield
+promotion, because it is the only check that catches a role rendering at the wrong
+pixel size or a fractional scale.

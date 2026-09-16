@@ -14,18 +14,29 @@
     "output_path": "repo/relative/output.png",
     "output_sha256": "replace_me",
     "native_output_path": null,
+    "native_ppu": 16,
     "logical_cells": null,
     "palette_max": 10,
     "required_color_families": []
   },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "ground tiles, directional edges, props, structures and units in one battle view must share one pixel size; a 16 px tile occupies 96 screen units and a 32 px prop or unit occupies 192"
+  },
   "application": {
     "runtime_draw_rect": "describe the real slot or complete logical footprint",
-    "default_integer_scale": 4,
-    "minimum_integer_scale": 2
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
   },
   "evidence": {
     "one_x": "repo/relative/1x.png",
     "four_x": "repo/relative/4x.png",
+    "six_x": "repo/relative/6x.png",
     "grayscale": "repo/relative/grayscale.png",
     "checker": "repo/relative/checker.png",
     "application_contact": "repo/relative/contact.png"
@@ -39,7 +50,27 @@
     "perspective": "PENDING",
     "style": "PENDING",
     "application": "PENDING",
+    "illumination": "PENDING",
     "notes": ""
   },
-  "unity_import": null
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "",
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "repo/relative/runtime_capture.png",
+      "tier": 6,
+      "offset": [0, 0],
+      "pass": false,
+      "uniform_with_siblings": false
+    }
+  }
 }

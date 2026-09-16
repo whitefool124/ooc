@@ -1,10 +1,24 @@
 {
   "schema": "occ-modular-ground-batch-contract-v1",
-  "contract_version": 3,
+  "contract_version": 4,
   "base_art_contract": "Tools/OCCArt/occ_art_contract_v1.json",
   "purpose": "用固定拓扑和固定像素合同批量生产几十种主题的可拼接战场地块，避免每个主题重新设计边缘与交付流程。",
-  "logical_cell": {"native_px": [32, 32], "unity_ppu": 32, "runtime_filter": "Point", "runtime_wrap": "Clamp", "mipmaps": false, "compression": "None", "runtime_scaling": "integer_only"},
-  "directional_edge_canvas": {"native_px": [32, 40], "walkable_px": [32, 32], "south_facade_overhang_px": 8},
+  "logical_cell": {
+    "gameplay_cell_native_px": [32, 32],
+    "ground_tile_native_px": [16, 16],
+    "ground_tiles_per_gameplay_cell": [2, 2],
+    "unity_ppu": 16,
+    "runtime_filter": "Point",
+    "runtime_mesh": "Full Rect",
+    "runtime_wrap": "Clamp",
+    "mipmaps": false,
+    "compression": "None",
+    "runtime_scaling": "integer_only",
+    "canonical_display_scale": 6,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 6
+  },
+  "directional_edge_canvas": {"native_px": [16, 24], "walkable_px": [16, 16], "south_facade_overhang_px": 8},
   "topology": {
     "surface_variants": ["a", "b", "c", "d"],
     "directional_edges": ["north", "east", "south", "west"],
@@ -12,20 +26,22 @@
     "minimum_piece_count_per_theme": 12,
     "optional_piece_sets": ["inner_corner", "center_mark", "damage_state", "water_transition"],
     "rotation_policy": "directional pieces are authored per direction; runtime rotation is forbidden for any piece with light, facade, wear or shadow direction",
-    "assembly_rule": "each logical cell receives exactly one surface or directional piece; no board-wide baked texture; adjacency is resolved by layout coordinates; directional outer-edge facade may overhang outside the board without changing the logical or hit footprint"
+    "assembly_rule": "one gameplay cell is covered by exactly 2x2 surface tiles; a board edge row replaces the outer tile with the matching directional piece, whose 16x16 walkable part aligns to the tile grid and whose 8 px facade overhangs outside the board without changing the logical or hit footprint; no board-wide baked texture; adjacency is resolved by layout coordinates"
   },
   "locked_invariants": {
     "view": "orthographic top-down pseudo-2.5D",
-    "footprint": "the full 32x32 ground canvas is one walkable cell",
+    "footprint": "the full 16x16 ground tile canvas is one ground subgrid cell; four of them make one 32x32 walkable gameplay cell",
     "perimeter": "surface pieces do not bake a repeated dark cell frame; the shared tactical-grid layer supplies visible cell boundaries, while material seams remain sparse internal features",
-    "lighting": "single fixed upper-left light for every theme and every piece",
+    "illumination": "资产不含任何场景光照：不烘焙光斑、地面投影、暗角或边缘变暗；场景光与影全部由运行时 URP 2D Light2D 负责",
+    "form_shading": "资产只保留体积明暗：固定的左上方向一处，顶面亮、正面暗，用来让实体读成立体；这是形状语言而不是光照，且每个主题每块都一致",
     "value_hierarchy": "center surface low contrast; border and collision silhouette readable; gameplay overlays remain highest contrast",
-    "density": "three to five connected material clusters plus at most two controlled wear cues; no high-frequency dither or isolated noise",
+    "density": "three to five connected material clusters plus at most two controlled wear cues; no high-frequency dither or isolated noise; dominant material tone at least 45 percent, typically 50 to 70",
     "palette": "neutral material base first; cyan only for active aether; rust red only for hostile or damage semantics; safety yellow only for service, warning or loot",
-    "single_native_source": "one 32 PPU native asset is reused at 1x, 2x or 4x integer display scale; no separate resolution companion",
-    "directional_edge_identity": "the top 32x32 is the approved theme surface copied exactly; only the exterior facade overhang is independently generated and normalized, preventing a material jump on the boundary row",
-    "ground_window_normalization": "an opaque ground-material source may decode to a larger stable logical field; the deterministic centered 32x32 window, or a recorded phase-aligned window origin when needed to avoid clipping a regular brick rhythm, is the formal surface delivery. It records logical bounds and source hash and may neither resize, interpolate, paint, add colours nor alter any selected logical pixel. For a regular repeating brick/material field whose repetition makes the generic non-repeating-subject confidence ambiguous, a reviewer may declare the observed square macro-pixel pitch; this path remains REVIEW_READY and requires explicit human pixel-scale, material and application approval before FORMAL_CANDIDATE",
-    "grid_layer": "a shared 1-native-pixel tactical-grid overlay supplies visible cell edges at 1x, 2x and 4x; it is not baked into ground materials and has no terrain, collision or selection semantics"
+    "single_native_source": "one 16 PPU native asset per piece, displayed at integer tiers only, canonical 6x at 1920x1080 (6 screen px per native px); no separate resolution companion",
+    "uniform_pixel_size": "ground tiles, directional edges, props, structures and units must all render at the same screen pixels per native pixel in one battle view; a 16 px ground tile therefore occupies 96 screen units while a 32 px prop or unit occupies 192",
+    "directional_edge_identity": "the top 16x16 is the approved theme surface copied exactly; only the exterior facade overhang is independently generated and normalized, preventing a material jump on the boundary row",
+    "ground_window_normalization": "an opaque ground-material source may decode to a larger stable logical field; the deterministic centered 16x16 window, or a recorded phase-aligned window origin when needed to avoid clipping a regular brick rhythm, is the formal surface delivery. It records logical bounds and source hash and may neither resize, interpolate, paint, add colours nor alter any selected logical pixel. For a regular repeating brick/material field whose repetition makes the generic non-repeating-subject confidence ambiguous, a reviewer may declare the observed square macro-pixel pitch; this path remains REVIEW_READY and requires explicit human pixel-scale, material and application approval before FORMAL_CANDIDATE",
+    "grid_layer": "a shared 1-native-pixel tactical-grid overlay supplies visible cell edges at every integer tier; it is not baked into ground materials and has no terrain, collision or selection semantics"
   },
   "theme_parameters": {
     "theme_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
@@ -48,27 +64,27 @@
   },
   "naming": {
     "source": "ground_{theme_id}_{piece}_{variant}_source.png",
-    "native": "ground_{theme_id}_{piece}_{variant}_32.png",
+    "native": "ground_{theme_id}_{piece}_{variant}_16.png",
     "manifest": "ground_{theme_id}_{piece}_{variant}.occ-art-manifest-v1.json",
     "runtime_id": "ground.{theme_id}.{piece}.{variant}"
   },
   "prompt_contract": {
-    "prefix": "single isolated battlefield floor piece for a near-modern aether-industrial tactical map; orthographic top-down; one logical cell only",
-    "required": ["exact piece type and direction", "fixed upper-left light", "full-canvas opaque material field", "visibly coarse pixel art with large connected clusters", "low-contrast gameplay center", "opaque background"],
-    "exclusions": ["board or contact sheet", "neighboring tiles", "perspective", "unrequested facade", "bright corner hotspot", "microtexture", "anti-aliasing", "gradient", "text", "UI", "characters", "objects"]
+    "prefix": "single isolated battlefield floor piece for a near-modern aether-industrial tactical map; orthographic top-down; one ground tile only",
+    "required": ["exact piece type and direction", "flat even illumination with no directional scene light, no cast shadow and no edge darkening", "fixed upper-left form shading on raised material only", "full-canvas opaque material field", "visibly coarse pixel art with large connected clusters", "low-contrast gameplay center", "opaque background"],
+    "exclusions": ["board or contact sheet", "neighboring tiles", "perspective", "unrequested facade", "bright corner hotspot", "baked light pool", "baked cast shadow", "vignette", "microtexture", "anti-aliasing", "gradient", "text", "UI", "characters", "objects"]
   },
   "production_gates": [
     {"id": "G0", "name": "theme_lock", "rule": "freeze theme parameters and one reference tile before batch generation"},
     {"id": "G1", "name": "source", "rule": "one independent image-model generation per formal surface or facade; directional-edge delivery composes the approved surface top with the independently generated facade overhang and records both component sources and hashes"},
-    {"id": "G2", "name": "normalize", "rule": "decode the material lattice without geometric resizing; a stable opaque field may yield its recorded centered 32x32 logical window without changing selected pixels; deliver surfaces at 32x32 and directional outer edges at 32x40; hard alpha, limited palette, Point/Clamp"},
-    {"id": "G3", "name": "batch_contact", "rule": "review 1x, 4x, grayscale, checker and a randomized 12x9 assembly contact before Unity"},
-    {"id": "G4", "name": "human_style", "rule": "reject the whole theme batch if the reference tile breaks seam, light or value invariants"},
-    {"id": "G5", "name": "runtime_contact", "rule": "verify 1920x1080 and 960x540 using the same native asset at integer scale; no board texture"},
-    {"id": "G6", "name": "promotion", "rule": "only after stable GUID, importer and runtime evidence may a piece become FORMAL"}
+    {"id": "G2", "name": "normalize", "rule": "decode the material lattice without geometric resizing; a stable opaque field may yield its recorded centered 16x16 logical window without changing selected pixels; deliver surfaces at 16x16 and directional outer edges at 16x24 with 8 px facade overhang; hard alpha, limited palette, Point/Clamp/Full Rect"},
+    {"id": "G3", "name": "batch_contact", "rule": "review 1x, 6x, grayscale, checker and a randomized 12x9 assembly contact before Unity"},
+    {"id": "G4", "name": "human_style", "rule": "reject the whole theme batch if the reference tile breaks seam, illumination, form-shading or value invariants"},
+    {"id": "G5", "name": "runtime_contact", "rule": "verify 1920x1080 at the canonical 6x tier using the same native asset with an integer scale only, and run Tools/OCCArt/verify_runtime_pixel_grid.py on the capture: the detected lattice must be the expected integer tier with zero offset, and ground, props, structures and units must share one pixel size; no board texture"},
+    {"id": "G6", "name": "promotion", "rule": "only after stable GUID, verified importer (Point / Full Rect / no compression / no mipmaps), lattice check and runtime evidence may a piece become FORMAL"}
   ],
   "rework_policy": {
     "regenerate_scope": "regenerate only the rejected piece unless it violates a locked theme invariant; invariant failure invalidates the full theme batch",
     "approval_order": ["one surface reference tile", "four directional edges", "four corners", "surface variants", "remaining theme batch"],
-    "never": ["do not generate a full board as a production source", "do not rotate directional pieces at runtime", "do not create a new border grammar per theme", "do not use palette reduction to hide noisy structure", "do not resize, interpolate, repaint or synthesize the selected ground window"]
+    "never": ["do not generate a full board as a production source", "do not rotate directional pieces at runtime", "do not create a new border grammar per theme", "do not use palette reduction to hide noisy structure", "do not resize, interpolate, repaint or synthesize the selected ground window", "do not bake scene lighting or shadow into any piece"]
   }
 }

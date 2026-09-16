@@ -286,6 +286,12 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
         if path is None or not path.is_file():
             errors.append(f"required evidence missing: {key}")
 
+    # 定案 2026-09-16：新的战场地面角色在候选阶段就必须提供定案六倍档证据。
+    if role.get("requires_six_x_evidence") and status not in {"CONCEPT", "PROTOTYPE"}:
+        six_path = repo_path(root, evidence.get("six_x"))
+        if six_path is None or not six_path.is_file():
+            errors.append("role requires the canonical six-times evidence: six_x")
+
     review = manifest.get("human_review", {})
     if status in {"FORMAL_CANDIDATE", "FORMAL"}:
         if review.get("overall") != "PASS":
@@ -295,6 +301,38 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
         for dimension in contract.get("human_review_dimensions", []):
             if review.get(dimension) != "PASS":
                 errors.append(f"human review dimension must PASS: {dimension}")
+
+    if status == "FORMAL":
+        formal = contract.get("formal_requirements", {})
+        for key in formal.get("evidence_extra", []):
+            extra_path = repo_path(root, evidence.get(key))
+            if extra_path is None or not extra_path.is_file():
+                errors.append(f"FORMAL requires extra evidence: {key}")
+        for dimension in formal.get("human_review_extra", []):
+            if review.get(dimension) != "PASS":
+                errors.append(f"FORMAL requires human review dimension PASS: {dimension}")
+
+        importer = manifest.get("unity_import")
+        if not isinstance(importer, dict):
+            errors.append("FORMAL requires a unity_import record")
+        else:
+            for field, expected in formal.get("unity_import_required", {}).items():
+                if field == "reason":
+                    continue
+                if importer.get(field) != expected:
+                    errors.append(f"FORMAL unity_import.{field} must be {expected!r}, got {importer.get(field)!r}")
+            lattice = importer.get("runtime_lattice")
+            if not isinstance(lattice, dict):
+                errors.append("FORMAL requires unity_import.runtime_lattice from the pixel-grid check")
+            else:
+                if lattice.get("pass") is not True:
+                    errors.append("FORMAL runtime lattice check must pass")
+                expected_tier = contract.get("battlefield_display_policy", {}).get("integer_scale_at_1920x1080")
+                if expected_tier is not None and lattice.get("tier") != expected_tier:
+                    errors.append(f"FORMAL runtime lattice tier must be the canonical {expected_tier}")
+                capture = repo_path(root, lattice.get("capture"))
+                if capture is None or not capture.is_file():
+                    errors.append("FORMAL runtime lattice capture file is missing")
 
     if status == "FORMAL":
         unity = manifest.get("unity_import") or {}
