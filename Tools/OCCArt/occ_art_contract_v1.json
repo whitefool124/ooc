@@ -562,6 +562,36 @@
         "large_area_12x9_runtime_at_6x"
       ]
     },
+    "permanent_wall_32x32": {
+      "delivery_size": [
+        32,
+        32
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
+      "native_ppu": 32,
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "alpha_policy": "fully_opaque_hard_alpha",
+      "unity_ppu": 32,
+      "production_status": "new_battlefield_wall_baseline_2026_09_16",
+      "role_purpose": "indestructible terrain: one solid pillar block that fills its whole gameplay cell, so a run of adjacent cells reads as a continuous wall",
+      "canvas_rule": "32x32, fully opaque, filling the cell edge to edge: a square top surface with a front face turned toward the bottom of the screen, and the left and right sides slightly inset so the block reads as a standing column rather than a flat floor tile",
+      "tiling_rule": "all four edges are edge-to-edge and match, so identical neighbouring blocks join with no gap and no seam; there is no overhang in any direction",
+      "damage_policy": "none: solid permanent masonry with no cracks, chips, rubble or breakable-cover treatment, because the gameplay meaning is that this terrain cannot be destroyed",
+      "reading_rule": "a pale weathered stone cap over a darker warm stone body, the same two-tone language as the approved academy wall family",
+      "illumination": "no scene lighting: no light pool, no cast shadow on the floor, no glow, no vignette; the only shading is the fixed upper-left form shading (lit top surface, darker front face)",
+      "surface_detail_policy": "large deliberate masonry clusters; limited palette; no dither, no microtexture, no isolated single-pixel noise",
+      "requires_six_x_evidence": true,
+      "runtime_review_sequence": [
+        "single_pillar_1x_6x",
+        "four_identical_pillars_tiled_contact",
+        "pillar_run_beside_ground_squares_contact",
+        "large_area_12x9_runtime_at_6x"
+      ]
+    },
     "floor_tile_32": {
       "delivery_size": [
         32,

@@ -102,6 +102,19 @@
       "lighting": "no scene lighting; the face is darker than the tile top by material form only; see lighting_policy",
       "reject_if": ["lighting or cast shadow baked in", "face tone lighter than the tile top", "isolated single-pixel noise", "a second decorative perimeter"]
     },
+    "permanent_wall_32x32": {
+      "view": "orthographic top-down pseudo-2.5D: one solid pillar block filling its whole gameplay cell, with a square top surface and a front face turned toward the bottom of the screen, the left and right sides slightly inset so it reads as a standing column",
+      "canvas": "fixed_32x32, fully opaque, filling the cell edge to edge, no overhang in any direction",
+      "native_ppu": 32,
+      "logical_cells": [1, 1],
+      "palette_max": 6,
+      "content_variables": ["theme_material_story", "masonry_blocking_story", "wear_level"],
+      "reading": "pale weathered stone cap over a darker warm stone body, the same two-tone language as the approved academy wall family; solid and thick so the cell clearly reads as indestructible terrain",
+      "must_not_show": ["cracks", "chips", "rubble", "damage", "destructible cover treatment"],
+      "tiling": "all four edges are edge-to-edge and match, so four identical blocks tile with no gap and no seam; a run of them reads as a continuous wall",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": ["baked scene lighting or floor shadow", "damage or breakable-cover reading", "transparent gaps inside the cell", "edges that do not join", "a low wall strip that does not fill the cell", "microtexture", "dither", "gradient"]
+    },
     "directional_edge_32x40": {
       "view": "one 32x32 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
       "canvas": "fixed_32x40",
