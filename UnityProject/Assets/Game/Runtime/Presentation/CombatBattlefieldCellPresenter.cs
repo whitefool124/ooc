@@ -169,7 +169,9 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsPermanentWall)
             {
-                objectTexture = assets.Academy("academy_wall_straight");
+                // Temporary: full-cell pillar placeholder until the permanent_wall_32x32
+                // generation result lands. Swap this id back to the generated asset then.
+                objectTexture = assets.Academy("academy_permanent_pillar_placeholder");
                 objectLabel = "永久墙";
                 objectLabelColor = new Color(.72f, .78f, .86f, .96f);
             }

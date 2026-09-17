@@ -255,6 +255,11 @@ namespace OCC.Combat.Presentation
             academy["academy_test_ground_theme_slate_surface_64"] = RequiredTexture("Art/CombatTestArenaSephiriaDebug/sephiria_ground_64");
             academy["academy_test_ground_theme_slate_surface_32"] = RequiredTexture("Art/CombatTestArenaSephiriaDebug/sephiria_ground_32");
             academy["academy_wall_straight"] = RequiredTexture("Art/FormalAcademyStructures32/academy_wall_straight");
+            // Temporary placeholder for indestructible terrain (the planned role is
+            // permanent_wall_32x32: a full-cell pillar block). Program-drawn, so it lives
+            // outside the formal art folders and must be replaced by the image-generation
+            // pipeline result before it can be called FORMAL.
+            academy["academy_permanent_pillar_placeholder"] = RequiredTexture("Art/Placeholder/academy_permanent_pillar_placeholder");
             foreach (string id in AcademyBattlefieldLayoutCatalog.CoverVisualAssetIds())
                 academy[id] = RequiredTexture("Art/FormalAcademyStructures32/" + id);
         }
