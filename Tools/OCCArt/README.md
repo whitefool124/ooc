@@ -41,18 +41,21 @@ gameplay cells.
 
 | role family | native PPU | delivery |
 | --- | --- | --- |
-| battlefield ground surface | 16 | 16x16 tile, 2x2 tiles per 32 px gameplay cell |
-| directional board edge | 16 | 16x24 = 16x16 walkable + 8 px facade outside the board |
-| wall | 16 | 16x24 = cell + 8 px above the owning cell |
+| battlefield ground square | 32 | **32x32, exactly one per gameplay cell**, self-contained with a visible 1 px cell border |
+| ground front face | 32 | 32x8, attached to a cell's south edge for depth |
+| directional board edge | 32 | 32x40 = 32x32 walkable + 8 px facade outside the board |
+| wall | 32 | 32x40 = cell + 8 px above the owning cell |
 | prop, structure, unit | 32 | role contract size, e.g. 32x64 humanoid |
 
-Ground art sits on the 16 px subgrid while props, structures and units stay on
-the 32 px gameplay grid. The two grids are never mixed when computing anchors or
-occupancy, but **every role in one battle view must render at the same screen
-pixels per native pixel** (6 at the canonical tier): a 16 px tile therefore
-occupies 96 screen units and a 32 px prop or unit occupies 192. Display tiers are
-integer only; a resolution that is not an integer multiple is letterboxed rather
-than fractionally scaled.
+The whole battlefield is one 32 PPU grid, so every native pixel is exactly 6 screen
+pixels at the canonical tier and no role can drift out of scale against another. The
+cell is deliberately shorter than the characters: a unit's 32-58 px body is 1.0x to
+1.8x the 32 px cell, so the upper body overhangs its own cell while occupancy stays
+unchanged. This version ships **no material transitions**: each square carries its own
+**visible border** (1 px, the material's own dark tone, never pure black, all four edges
+identical so neighbours overlap into one seam, plus a 1 px lighter inner lip) and depth
+comes from the separate front face. Display tiers are integer only; a resolution that is
+not an integer multiple is letterboxed rather than fractionally scaled.
 
 ## Approved generation workflow
 
@@ -65,15 +68,20 @@ fixed-size role still keeps its own delivery contract.
 Decode the generated subject's own macro-pixel lattice with
 `decode_generated_pixel_grid.py`. Use `--target-size auto` for units and transparent
 props so each canvas axis rounds up to a multiple of the role's PPU grid without
-resizing the subject. Ground decodes to a 16x16 tile per subgrid cell; typical
+resizing the subject. Ground decodes to one 32x32 square per gameplay cell; typical
 humanoids use a 32x64 canvas; a one-cell prop may use a 64x64 visual canvas while its
 gameplay footprint remains 1x1.
 
-Require a single uniform subject lattice and confidence of at least `1.2`. Reject a
-mixed or unstable grid instead of lowering the threshold. Retry with a new independent
-source, changing only the diagnosed failed dimension, for at most three rounds. One
-macro pixel becomes one native pixel; geometric resize, interpolation, dithering and
-new colours are forbidden.
+Require a single uniform subject lattice and confidence of at least `1.2`. **Also require
+that the decoded design field stays within 1.4x of the delivery in each axis**: a window
+that crops a much larger, finer-grained design yields a fragment of a bigger picture
+instead of one whole square. That was the recorded failure of the 16 px ground trial,
+where decoded fields measured 34x33 up to 158x157 against a 16 px window (coverage 23
+percent down to 1 percent) and the delivered tile read as noise instead of a paving
+square. Reject a mixed or unstable grid instead of lowering the threshold. Retry with a
+new independent source, changing only the diagnosed failed dimension, for at most three
+rounds. One macro pixel becomes one native pixel; geometric resize, interpolation,
+dithering and new colours are forbidden.
 
 `native32_generation_profiles.json` contains the approved profiles, the role PPU
 table, the display policy, the lighting policy and their calibration assets. Every
@@ -95,18 +103,21 @@ composited after the integer upscale instead of being painted into the art. The
 
 ## Modular battlefield ground batches
 
-For a family of many themed, composable floor tiles, use the machine-readable
-batch contract in `occ_modular_ground_batch_contract_v1.json`. It fixes the
-topology (four surface variants, four directional edges and four corners), the
-16 PPU delivery, the light/value invariants and the review gates G0-G6.
+For a family of themed battlefield squares, use the machine-readable batch contract in
+`occ_modular_ground_batch_contract_v1.json` (v5). It fixes the topology (**four square
+variants and two front faces first**, then four directional edges and four corners), the
+32 PPU delivery, the bolder/flatness/illumination invariants and the review gates G0-G6.
+A square is **self-contained**: the map editor places and swaps one square at a time, so
+there is no cross-cell continuation and no material transition piece in this version.
 
 Opaque ground is role-specific: it is a decoded material field, not an isolated
-transparent subject. After a stable decode, it may produce its deterministic
-centered 16x16 logical window using `--ground-window 16x16`. This extracts only
-observed decoded pixels: it never rescales, interpolates, paints, adds colours,
-or changes a selected pixel. Record the source hash, decoded field size and
-window bounds in the QA report and manifest. Visible cell edges belong to the
-shared tactical-grid layer, not a dark frame baked into each ground tile.
+transparent subject. After a stable decode, it produces its deterministic centered
+**32x32** logical window using `--ground-window 32x32`. This extracts only observed
+decoded pixels: it never rescales, interpolates, paints, adds colours or changes a
+selected pixel. Record the source hash, decoded field size and window bounds in the QA
+report and manifest, and confirm the decoded field is within 1.4x of the window. The
+visible cell edge is **baked into the square** as its 1 px border; a shared tactical-grid
+overlay may still be drawn on top but is no longer what defines the cells.
 
 Regular repeating brick/material fields may make the generic non-repeating-subject
 confidence ambiguous. In that role only, a reviewer may declare the visibly
@@ -118,14 +129,22 @@ Plan a theme without generating art:
 ```powershell
 & 'C:/Users/FNHF/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' `
   Tools/OCCArt/prepare_modular_ground_batch.py `
-  --theme-id archive_court --material-family slate `
-  --base-palette '#3E4850' '#56636B' '#252C31' `
-  --wetness 2 --wear 1 --motif maintenance_cut --edge-profile low_curb
+  --theme-id academy_court --material-family slate `
+  --base-palette '#9D9884' '#898676' '#666459' '#B4AE96' `
+  --wetness 1 --wear 1 --motif brick_joint --edge-profile low_curb
 ```
 
-Only after the single reference tile passes G0-G3 should the remaining pieces
+Only after the single reference square passes G0-G3 should the remaining pieces
 be generated. The script is planning/scaffolding only; it never calls an image
 model and never imports assets into Unity.
+
+Check every square before review — this is the per-tile style gate, and it is the one
+that catches "a fragment of a bigger design" and "no visible border":
+
+```powershell
+& 'C:/Users/FNHF/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe' `
+  Tools/OCCArt/verify_ground_tile.py path/to/ground_x_square_a_32.png --paving
+```
 
 For a new single-cell battlefield prop, use `single_cell_prop_adaptive_32ppu`.
 Its visual canvas is the smallest width and height, each a multiple of 32, that

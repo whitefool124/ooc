@@ -2,7 +2,7 @@
   "schema": "occ-art-contract-v1",
   "version": 1,
   "revision_date": "2026-09-16",
-  "revision_note": "2026-09-16 (pixel-perfect normalisation, user confirmed): locked the battlefield display and ground authoring. Display is a 320x180 native buffer integer-upscaled exactly 6x to 1920x1080 (1 native px = 6 screen px, matching the primary reference grain); the 1408x768 viewport shows 7x4 gameplay cells. Gameplay cell = 32x32 native px = 192 screen units; ground is authored on a 16 px subgrid with 2x2 tiles per cell (floor_tile_16; brick pitch 4 px, seam 1 px), while structures and units keep 32 PPU (brick pitch 8 px, seam 2 px) and render at the same 6x scale; characters are explicitly allowed to be larger than the reference. Static art carries no lighting or dark areas: the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, so light and shadow stay a runtime URP 2D Light2D layer. Placement rules R1-R6 are recorded as machine rules. Integer scaling, one-pixel position snapping and zero fractional transform scale are mandatory. Prior note: aligned the 32px ground surface-detail policy with the master plan and the art spec table (low-contrast connected clusters, dominant base tone 45-55 percent, no isolated single-pixel noise, no baked cell frame) after the user confirmed the Sephiria-measured density; recorded the measured native reference grid and the per-cell x2 conversion.",
+  "revision_note": "2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier. Prior note: 2026-09-16 (pixel-perfect normalisation, user confirmed) - locked the battlefield display and ground authoring. Display is a 320x180 native buffer integer-upscaled exactly 6x to 1920x1080 (1 native px = 6 screen px, matching the primary reference grain); the 1408x768 viewport shows 7x4 gameplay cells. Placement rules R1-R7 are recorded as machine rules. Static art carries no scene lighting: the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, so light and shadow stay a runtime URP 2D Light2D layer. Integer scaling, one-pixel position snapping and zero fractional transform scale are mandatory.",
   "primary_map_reference": {
     "name": "Sephiria",
     "scope": "map presentation only; derive organization, material layering and pixel density, do not copy assets",
@@ -43,23 +43,46 @@
     "visible_gameplay_cells_at_6x": [7, 4],
     "gameplay_cell_native_px": 32,
     "gameplay_cell_screen_units_at_6x": 192,
-    "ground_subgrid_native_px": 16,
-    "ground_tiles_per_gameplay_cell": [2, 2],
-    "ground_ppu": 16,
+    "ground_tile_native_px": [32, 32],
+    "ground_tiles_per_gameplay_cell": [1, 1],
+    "ground_ppu": 32,
     "structure_and_unit_ppu": 32,
-    "mixed_ppu_note": "the ground is authored on the 16 px subgrid while structures and units stay on the 32 px gameplay grid; both render at the same 6x integer scale so every native pixel is exactly 6 screen pixels, but the two grids must never be mixed when computing anchors",
+    "single_ppu_note": "the whole battlefield is authored at one 32 PPU grid: one 32x32 ground tile per cell, structures and units on the same grid, every native pixel exactly 6 screen pixels at the canonical tier",
+    "ground_front_face": {
+      "native_px": [32, 8],
+      "overhang_px": 8,
+      "placement": "south edge of the owning cell, overlapping the top 8 px of the next row so the tile reads as a raised block",
+      "optional_per_cell": true,
+      "does_not_change_occupancy_or_hit_area": true
+    },
+    "baked_cell_border": {
+      "required": true,
+      "width_native_px": 1,
+      "tone": "the material's own dark tone, never pure black",
+      "consistency": "all four edges identical; adjacent tiles must overlap into a single seam line",
+      "inner_lip": "1 native px lighter lip inside the border so the tile reads as raised",
+      "reason": "the current version ships no material transitions, so the per-cell border is the only visible cell separation; this intentionally supersedes the earlier no-baked-frame rule"
+    },
+    "character_sticks_out_of_its_cell": {
+      "rule": "the cell is lower than the character but higher than half the character",
+      "body_height_native_px": [32, 58],
+      "cell_height_native_px": 32,
+      "ratio": "body 1.0x to 1.8x the cell height, so the upper body always overhangs the owning cell upward",
+      "occupancy_unchanged": true
+    },
     "position_snap_native_px": 1,
     "fractional_transform_scale_forbidden": true,
     "reference_implementation": "the same native-resolution-then-integer-upscale path the primary reference uses: unlit areas keep zero intra-block variance, lighting is composited after the upscale"
   },
   "battlefield_placement_rules": {
     "locked": "2026-09-16",
-    "R1": "gameplay cell = 32x32 native px; ground art is authored on the 16 px subgrid with 2x2 tiles per cell",
+    "R1": "gameplay cell = 32x32 native px; exactly one 32x32 ground tile per cell, no subgrid and no cross-cell base texture",
     "R2": "objects anchor bottom-center to the owning cell's bottom edge; multi-cell objects use the bottom-left cell as the owning cell, bottom edge on the footprint's lowest row and horizontal center on the footprint center",
-    "R3": "overhang above, left and right is allowed; overhang past the footprint's bottom edge toward the screen bottom is forbidden",
-    "R4": "layer order back to front: ground, ground overlays, walls, large structures, small props, units, overlays",
+    "R3": "overhang above, left and right is allowed; overhang past the footprint's bottom edge toward the screen bottom is forbidden, except for the ground front face which is defined to overhang its own cell southward by 8 px",
+    "R4": "layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
     "R5": "within a layer sort by bottom-edge y ascending, then by category priority structure < prop < unit",
-    "R6": "units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset"
+    "R6": "units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
+    "R7": "a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row, so the raised block occludes the cell in front of it while units still draw over both"
   },
   "target_grid_outline_policy": {
     "applies_to": ["tactical_unit_32x64", "single_cell_prop_adaptive_32ppu", "single_cell_prop_32", "multi_cell_prop_32"],
@@ -70,6 +93,7 @@
     "second_dark_ring_forbidden": true,
     "internal_material_outline_forbidden": true,
     "floor_tile_outline_forbidden": true,
+    "floor_tile_border_note": "the black silhouette outline stays forbidden for floor tiles; the required per-cell border is a different thing: 1 native px, the material's own dark tone, drawn inside the 32x32 canvas, never pure black",
     "high_resolution_arbitrary_downsample_policy": "review only until deliberate target-grid detail reconstruction"
   },
   "unified_pixel_asset_pipeline": {
@@ -483,16 +507,11 @@
       "palette_max": 6,
       "transparent_border_min": 0,
       "requires_six_x_evidence": true,
-      "production_status": "new_battlefield_ground_baseline_2026_09_16",
-      "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
-      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
-      "measured_authoring_values": {
-        "brick_pitch_px": 4,
-        "structural_seam_px": 1,
-        "organic_cluster_px": "2-4",
-        "material_boundary_step_px": "2-4",
-        "boundary_contact_line": "the material's own dark tone, never pure black"
-      },
+      "production_status": "superseded_2026_09_16",
+      "new_production_forbidden": true,
+      "deprecation_note": "the 16 px ground subgrid is retired: ground is one 32x32 tile per gameplay cell (user decision 2026-09-16). This role is retained only so the superseded trial batch still validates; do not start new assets on it.",
+      "edge_policy": "superseded; see floor_tile_32",
+      "surface_detail_policy": "superseded; see floor_tile_32",
       "runtime_review_sequence": [
         "single_tile_1x_6x",
         "four_variant_unlabelled_contact",
@@ -511,9 +530,37 @@
       "native_ppu": 16,
       "palette_max": 10,
       "transparent_border_min": 0,
-      "production_status": "new_battlefield_ground_baseline_2026_09_16",
-      "requires_six_x_evidence": true,
+      "production_status": "superseded_2026_09_16",
+      "new_production_forbidden": true,
+      "deprecation_note": "material transitions are out of scope for the current version; the per-cell border separates cells instead",
       "rotation_policy": "allowed_only_when_shadow_neutral"
+    },
+    "ground_front_face_32x8": {
+      "delivery_size": [
+        32,
+        8
+      ],
+      "logical_cells": [
+        1,
+        1
+      ],
+      "native_ppu": 32,
+      "palette_max": 6,
+      "transparent_border_min": 0,
+      "unity_ppu": 32,
+      "production_status": "new_battlefield_ground_baseline_2026_09_16",
+      "role_purpose": "the tile's front face: gives each ground square readable thickness so the board reads as raised blocks without any material transition pieces",
+      "placement": "south edge of the owning cell, 8 px overhang into the next row, drawn after the next row's ground and before that row's walls, structures, props and units",
+      "occupancy_unchanged": true,
+      "optional_per_cell": true,
+      "edge_policy": "topmost 1 px repeats the tile border tone so the face joins the cell border without a seam",
+      "surface_detail_policy": "one flat face tone plus at most two connected darker bands; dominant tone at least 45 percent; isolated one pixel noise forbidden",
+      "requires_six_x_evidence": true,
+      "runtime_review_sequence": [
+        "single_face_1x_6x",
+        "tile_plus_face_contact",
+        "large_area_12x9_runtime_at_6x"
+      ]
     },
     "floor_tile_32": {
       "delivery_size": [
@@ -527,20 +574,35 @@
       "palette_max": 6,
       "transparent_border_min": 0,
       "unity_ppu": 32,
-      "production_status": "new_battlefield_baseline",
-      "role_revision_2026_09_16": "battlefield ground now uses floor_tile_16 on the 16 px subgrid; this 32 px tile role remains available for 32 PPU structure-layer and multi-cell surfaces",
-      "edge_policy": "no_baked_repeated_cell_frame; visible_cell_boundary_is_shared_tactical_grid_layer",
-      "cross_tile_texture_continuation": "allowed only through the recorded lossless ground-material window; each selected 32x32 delivery remains an independent asset",
+      "native_ppu": 32,
+      "tiles_per_gameplay_cell": [
+        1,
+        1
+      ],
+      "production_status": "active_battlefield_ground_baseline_2026_09_16",
+      "role_purpose": "one self-contained 32x32 ground square per gameplay cell; no cross-cell base texture and no material transition pieces in this version",
+      "edge_policy": "baked_cell_border_required: 1 native px in the material's own dark tone (never pure black), all four edges identical, adjacent tiles overlapping into a single seam line, plus a 1 px lighter inner lip so the cell reads as raised",
+      "cross_tile_texture_continuation": "forbidden: each tile is self-contained, because the map editor places and swaps single squares",
       "directional_shadow_rotation": "forbidden",
       "dominant_material_units_per_tile": 1,
       "nested_masonry_grid": "forbidden",
-      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
-      "surface_detail_edge_contact": "forbidden",
-      "perimeter_bevel_policy": "sparse_material_seams_only; never a repeated UI-button perimeter",
+      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_80; isolated_one_pixel_noise_forbidden; baked_cell_border_required",
+      "surface_detail_edge_contact": "the baked border is the only edge feature",
+      "perimeter_bevel_policy": "the baked cell border plus its inner lip; no additional decorative perimeter",
+      "measured_authoring_values": {
+        "stone_slab_pitch_px": 8,
+        "wood_plank_pitch_px": 4,
+        "structural_seam_px": 1,
+        "organic_cluster_px": "4-8",
+        "cell_border_px": 1,
+        "cell_border_tone": "the material's own dark tone, never pure black"
+      },
+      "approved_baseline_reference": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a and ArtSource/sephiria_style_study_2026-09-16/project_assets/approved_ground_stone_16.png (2-4 colours, dominant 75-88 percent, zero isolated pixels)",
       "ground_window_normalization": "after stable source-grid decode, select the deterministic centered opaque 32x32 logical window; persist source hash, decoded field size and window bounds; no resizing, interpolation, painting, added colours or changed selected pixels. A regular opaque brick/material field may declare its observed square macro-pixel pitch only for REVIEW_READY evidence when generic confidence is ambiguous; it cannot become FORMAL_CANDIDATE without explicit human pixel-scale, material and application PASS",
-      "grid_layer": "shared 1-native-pixel tactical-grid overlay at integer scale; not baked into the ground texture and not a gameplay asset",
+      "grid_layer": "a shared 1-native-pixel tactical-grid overlay may still be drawn on top, but it is no longer required to define the cells because the tile itself carries a visible border",
       "runtime_review_sequence": [
-        "single_tile_1x_4x",
+        "single_tile_1x_4x_6x",
+        "tile_plus_front_face_contact",
         "four_variant_unlabelled_contact",
         "large_area_12x9_runtime"
       ]
@@ -940,11 +1002,14 @@
         "## A.2 像素与布局",
         "战场显示统一为**6倍整数放大**",
         "玩法格=32×32原生像素=192屏幕单位",
-        "地面按**16×16原生像素子网格**设计",
+        "地面**每格一张32×32方格素材**",
+        "每块地面**自带明显格边框**",
+        "**立体感由独立的前立面素材提供**",
+        "人物**允许冒出所属格**",
         "逻辑占格与视觉画布分离",
         "### A.2.2 统一像素资产生产流程",
         "网格置信度低于1.2",
-        "有方向的地图外沿地块使用**16×24**画布",
+        "有方向的地图外沿地块使用**32×40**画布",
         "2px 细框",
         "## A.17 战场格标记强度阶梯",
         "可以选择0.72",

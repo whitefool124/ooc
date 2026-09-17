@@ -52,12 +52,13 @@ def validate(args: argparse.Namespace, contract: dict) -> None:
 
 def build_plan(args: argparse.Namespace, contract: dict) -> dict:
     pieces = []
-    for piece in ["surface", "north", "east", "south", "west", "nw", "ne", "sw", "se"]:
-        variants = ["a", "b", "c", "d"] if piece == "surface" else ["base"]
+    variant_sets = {"square": ["a", "b", "c", "d"], "front_face": ["a", "b"]}
+    for piece in ["square", "front_face", "north", "east", "south", "west", "nw", "ne", "sw", "se"]:
+        variants = variant_sets.get(piece, ["base"])
         for variant in variants:
             pieces.append({
                 "runtime_id": f"ground.{args.theme_id}.{piece}.{variant}",
-                "native": f"ground_{args.theme_id}_{piece}_{variant}_16.png",
+                "native": f"ground_{args.theme_id}_{piece}_{variant}_32.png",
                 "manifest": f"ground_{args.theme_id}_{piece}_{variant}.occ-art-manifest-v1.json",
                 "status": "PLANNED",
             })
@@ -65,10 +66,11 @@ def build_plan(args: argparse.Namespace, contract: dict) -> dict:
         "schema": "occ-modular-ground-batch-plan-v1",
         "contract": "Tools/OCCArt/occ_modular_ground_batch_contract_v1.json",
         "delivery": {
-            "surface_native_px": contract["logical_cell"]["ground_tile_native_px"],
+            "square_native_px": contract["logical_cell"]["ground_tile_native_px"],
+            "front_face_native_px": contract["logical_cell"]["front_face_native_px"],
             "directional_edge_native_px": contract["directional_edge_canvas"]["native_px"],
             "unity_ppu": contract["logical_cell"]["unity_ppu"],
-            "ground_tiles_per_gameplay_cell": contract["logical_cell"]["ground_tiles_per_gameplay_cell"],
+            "squares_per_gameplay_cell": contract["logical_cell"]["ground_tiles_per_gameplay_cell"],
             "canonical_display_scale": contract["logical_cell"]["canonical_display_scale"],
         },
         "theme": {
@@ -98,10 +100,12 @@ def main() -> None:
         (out / "README.md").write_text(
             "# Modular ground batch: " + args.theme_id + "\n\n"
             "This directory is a scaffold. Add independent Codex built-in image sources, decoded "
-            "16 PPU native assets (16x16 surfaces, 16x24 directional edges), evidence and manifests "
-            "before Unity import. Assets carry no scene lighting: only the fixed upper-left form "
-            "shading. Use the same native asset only at integer runtime scales (canonical 6x at "
-            "1920x1080); do not create resolution companions.\n",
+            "32 PPU native assets (32x32 self-contained squares with a visible 1 px cell border, "
+            "32x8 front faces for depth, 32x40 directional board edges), evidence and manifests "
+            "before Unity import. No material transitions in this version. Assets carry no scene "
+            "lighting: only the fixed upper-left form shading. Use the same native asset only at "
+            "integer runtime scales (canonical 6x at 1920x1080); do not create resolution companions. "
+            "Verify every square with Tools/OCCArt/verify_ground_tile.py --paving before review.\n",
             encoding="utf-8",
         )
         print(f"scaffolded {len(plan['pieces'])} pieces at {out}")

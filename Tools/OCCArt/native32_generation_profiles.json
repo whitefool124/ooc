@@ -3,8 +3,9 @@
   "backend": "codex_builtin_imagegen_only",
   "delivery": {
     "gameplay_cell_pixels": 32,
-    "ground_subgrid_pixels": 16,
-    "ground_tiles_per_gameplay_cell": [2, 2],
+    "ground_tile_pixels": [32, 32],
+    "ground_tiles_per_gameplay_cell": [1, 1],
+    "ground_front_face_pixels": [32, 8],
     "multi_cell_formula": "logical_width_times_32_by_logical_height_times_32",
     "runtime_scaling": "integer_only",
     "candidate_status": "QA_PENDING_until_machine_and_human_review"
@@ -20,15 +21,14 @@
     "gameplay_cell_native_px": 32,
     "gameplay_cell_screen_units_at_canonical": 192,
     "role_native_ppu": {
-      "ground_field_16": 16,
-      "directional_edge_16x24": 16,
-      "wall_16x24": 16,
+      "ground_field_32": 32,
+      "ground_front_face_32x8": 32,
+      "directional_edge_32x40": 32,
       "combat_prop_32": 32,
       "structure_32": 32,
       "unit_sideview": 32
     },
-    "uniform_pixel_size_rule": "every role in one battle view must render at the same screen pixels per native pixel (6 at the canonical tier): a 16 px ground tile occupies 96 screen units, a 32 px prop or unit occupies 192 screen units, and both show 6 screen px per native px",
-    "mixed_ppu_rule": "ground is authored on the 16 px subgrid while props, structures and units stay on the 32 px gameplay grid; the two grids are never mixed when computing anchors or occupancy",
+    "single_ppu_note": "the whole battlefield is one 32 PPU grid: one 32x32 ground square per cell, a 32x8 front face for depth, structures and units on the same grid; every native pixel is exactly 6 screen pixels at the canonical tier, so nothing can drift out of scale against anything else",
     "fractional_scale_forbidden": true,
     "fractional_transform_scale_forbidden": true,
     "position_snap_native_px": 1,
@@ -55,41 +55,58 @@
       "single_cell_prop_requires_visual_canvas_larger_than_64x64",
       "visual_silhouette_breaks_declared_occupancy",
       "baked_scene_lighting_detected",
-      "role_ppu_mismatch_against_display_policy"
+      "role_ppu_mismatch_against_display_policy",
+      "decoded_design_field_larger_than_1_4x_the_delivery",
+      "missing_or_black_cell_border",
+      "dominant_tone_below_45_percent"
     ]
   },
   "shared_prompt": {
     "pixel_language": "authentic coarse low-resolution pixel design shown enlarged with one uniform square macro-pixel lattice across the complete subject; large deliberate clusters; crisp hard edges; sparse controlled detail; limited cohesive palette; do not force the subject into a 32x32 generated-image composition",
+    "ground_square": "the subject is exactly one square battlefield cell, complete and self-contained: a near-flat paving square with at most three darker clusters and a clearly visible 1-pixel border on all four edges in the material's own dark tone (never pure black), plus a slightly lighter lip just inside that border; the whole design spans about 32 macro pixels across, not a crop of a larger floor",
     "illumination": "flat even illumination with no directional scene light, no cast shadows, no glow and no darkening at the edges; the only shading is the fixed upper-left form shading on solid volumes",
-    "reference_policy": "Sephiria screenshot controls map readability and density; an approved OCC asset controls family scale; references never authorize copying their subject design",
-    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated, baked lighting or shadow"
+    "reference_policy": "Sephiria screenshot controls map readability and density; an approved OCC asset controls family scale (for paving: ArtSource/sephiria_style_study_2026-09-16/project_assets/approved_ground_stone_16_at6x.png - 2 colours, dominant 88 percent, zero isolated pixels); references never authorize copying their subject design",
+    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated, baked lighting or shadow, evenly spread palette steps that read as dither noise"
   },
   "profiles": {
-    "ground_field_16": {
-      "view": "orthographic top-down material field; one 16x16 tile of a gameplay cell; no object, no facade, no border frame",
+    "ground_field_32": {
+      "view": "orthographic top-down material field: exactly one square gameplay cell, self-contained; no object, no facade, no neighbouring tile",
       "content_variables": ["theme_material_story", "one_surface_identity", "wear_level", "wetness_level"],
-      "canvas": "fixed_16x16",
-      "native_ppu": 16,
+      "canvas": "fixed_32x32",
+      "native_ppu": 32,
       "logical_cells": [1, 1],
-      "tiles_per_gameplay_cell": [2, 2],
+      "tiles_per_gameplay_cell": [1, 1],
       "palette_max": 6,
+      "target_palette": "3 or fewer: the approved stone baseline uses 2",
       "transparent_border_min": 0,
-      "surface_detail_policy": "low_contrast_connected_clusters; dominant_material_tone_at_least_45_percent_typically_50_to_70; isolated_one_pixel_noise_forbidden; no_baked_cell_frame",
+      "baked_cell_border": "required: 1 native px on all four edges in the material's own dark tone (never pure black), plus a 1 px lighter lip inside it so the square reads as raised; adjacent tiles must overlap into one seam line",
+      "why_border": "this version ships no material transitions, so the baked border is the only visible cell separation and it also gives the map editor an obvious square to select",
+      "surface_detail_policy": "near-flat field: dominant tone at least 45 percent and for a paving theme target 75-90 percent; at most three connected darker clusters; isolated one pixel noise forbidden; no dithering, no gradient, no microtexture",
       "measured_authoring_values": {
-        "brick_pitch_px": 4,
+        "stone_slab_pitch_px": 8,
+        "wood_plank_pitch_px": 4,
         "structural_seam_px": 1,
-        "organic_cluster_px": "2-4",
-        "material_boundary_step_px": "2-4",
-        "boundary_contact_line": "the material's own dark tone, never pure black"
+        "organic_cluster_px": "4-8",
+        "cell_border_px": 1
       },
-      "lighting": "no scene lighting; only the fixed upper-left form shading; see lighting_policy",
-      "reject_if": ["baked cell frame", "baked lighting or shadow", "isolated single-pixel noise", "dominant tone below 45 percent", "microtexture", "gradient"]
+      "lighting": "no scene lighting; a paving surface stays tonally neutral (no directional shading); see lighting_policy",
+      "reject_if": ["missing or black cell border", "baked lighting or shadow", "isolated single-pixel noise", "dominant tone below 45 percent", "even spread of all palette steps (dither noise)", "microtexture", "gradient", "cross-cell continuation", "a fragment of a larger design rather than one whole square"]
     },
-    "directional_edge_16x24": {
-      "view": "one 16x16 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
-      "canvas": "fixed_16x24",
-      "native_ppu": 16,
-      "walkable_px": [16, 16],
+    "ground_front_face_32x8": {
+      "view": "the south front face of one raised ground square: a 32x8 strip showing the tile's thickness",
+      "canvas": "fixed_32x8",
+      "native_ppu": 32,
+      "palette_max": 6,
+      "placement": "bottom edge of the owning cell, overlapping the top 8 px of the next row; drawn after the next row's ground and before that row's walls, structures, props and units; optional per cell, added where a height step is wanted",
+      "surface_detail_policy": "one flat face tone plus at most two connected darker bands; dominant tone at least 45 percent; the topmost 1 px repeats the tile border tone so the face joins the border without a seam",
+      "lighting": "no scene lighting; the face is darker than the tile top by material form only; see lighting_policy",
+      "reject_if": ["lighting or cast shadow baked in", "face tone lighter than the tile top", "isolated single-pixel noise", "a second decorative perimeter"]
+    },
+    "directional_edge_32x40": {
+      "view": "one 32x32 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
+      "canvas": "fixed_32x40",
+      "native_ppu": 32,
+      "walkable_px": [32, 32],
       "facade_overhang_px": 8,
       "palette_max": 10,
       "rotation_policy": "authored per direction; runtime rotation forbidden when the piece carries light, facade, wear or shadow direction",
@@ -147,7 +164,9 @@
     "merge_near_duplicate_generated_rgb_noise_to_observed_source_medoids_without_dither",
     "replace_existing_outermost_opaque_pixels_with_one_pure_black_pixel",
     "anchor_to_role_baseline",
-    "never_paint_or_restore_lighting: a source whose lighting was removed by decoding is rejected, not repaired"
+    "never_paint_or_restore_lighting: a source whose lighting was removed by decoding is rejected, not repaired",
+    "reject_when_the_decoded_design_field_exceeds_1_4x_the_delivery_in_either_axis: a window that crops a finer-grained design yields a fragment of a bigger picture rather than one whole square, which is the recorded failure mode for ground tiles",
+    "verify_the_baked_cell_border_exists_on_all_four_edges_in_the_material_own_dark_tone_before_delivery"
   ],
   "machine_qa": [
     "canvas_matches_the_role_delivery_size_or_is_multiples_of_the_role_native_ppu_grid",
@@ -157,7 +176,10 @@
     "single_connected_silhouette",
     "safe_canvas_border",
     "role_occupancy",
-    "ground_role_tile_is_16x16_and_directional_edge_is_16x24"
+    "ground_role_tile_is_32x32_self_contained_with_a_visible_border",
+    "front_face_role_is_32x8",
+    "decoded_design_field_is_within_1_4x_the_delivery_in_each_axis",
+    "visible_border_is_the_material_own_dark_tone_and_never_pure_black"
   ],
   "visual_qa": [
     "role_view",
@@ -167,7 +189,10 @@
     "application_contact_on_game_ground",
     "single_cell_prop_visual_overhang_remains_limited_and_does_not_read_as_a_multi_cell_wall",
     "no_baked_scene_lighting_anywhere_in_the_piece",
-    "rendered_pixel_size_is_identical_across_ground_structures_props_and_units"
+    "rendered_pixel_size_is_identical_across_ground_structures_props_and_units",
+    "the_square_reads_as_one_whole_cell_with_a_visible_border_and_not_as_a_crop_of_a_larger_field",
+    "the_tile_is_near_flat_against_the_approved_stone_baseline",
+    "tile_plus_front_face_reads_as_a_raised_block_at_6x"
   ],
   "runtime_promotion_gates": {
     "locked": "2026-09-16",
@@ -186,12 +211,13 @@
       "pass_condition": "integer tier detected at the expected canonical multiple, lattice offset zero on both axes"
     },
     "placement_rules": [
-      "R1 gameplay cell = 32x32 native px; ground art sits on the 16 px subgrid with 2x2 tiles per cell",
+      "R1 gameplay cell = 32x32 native px; exactly one 32x32 ground tile per cell, no subgrid and no cross-cell base texture",
       "R2 objects anchor bottom-center to the owning cell bottom edge; multi-cell objects own their bottom-left cell",
-      "R3 overhang above, left and right is allowed; overhang past the footprint bottom edge toward the screen bottom is forbidden",
-      "R4 layer order back to front: ground, ground overlays, walls, large structures, small props, units, overlays",
+      "R3 overhang above, left and right is allowed; overhang past the footprint bottom edge toward the screen bottom is forbidden, except for the ground front face which is defined to overhang its own cell southward by 8 px",
+      "R4 layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
       "R5 within a layer sort by bottom-edge y ascending, then structure < prop < unit",
-      "R6 units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset"
+      "R6 units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
+      "R7 a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row"
     ],
     "formal_requires": "machine PASS plus human PASS plus stable GUID plus verified importer plus a runtime contact capture that passes the lattice check"
   },
