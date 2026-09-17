@@ -120,7 +120,8 @@
       "logical_footprint": [1, 1],
       "visual_footprint_note": "the canvas may exceed one gameplay cell: OCC characters are deliberately about two cells tall while the reference is about 1.2",
       "palette_max_before_outline": 32,
-      "height_range": [32, 58],
+      "height_range": [46, 58],
+      "height_range_note": "user decision 2026-09-16: the fire mage (body 51 px = 1.59 of a 32 px cell) is the approved proportion; a new humanoid should read as clearly overhanging its cell, so aim at 46-58 px. Quadrupeds and genuinely small units are judged separately and may sit inside their cell.",
       "width_max": 30,
       "baseline_y": "canvas_height_minus_2",
       "reject_if": ["three_quarter_body", "front_facing_torso", "oversized_head_hides_body", "equipment_hides_body", "broken_silhouette", "muddy_clusters", "baked_scene_lighting"]

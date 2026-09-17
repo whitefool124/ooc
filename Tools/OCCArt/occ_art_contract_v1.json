@@ -851,7 +851,10 @@
       "unity_ppu": 32,
       "center_x": 16,
       "baseline_y": 62,
-      "standard_height": [32, 58],
+      "standard_height": [46, 58],
+      "standard_height_note": "user decision 2026-09-16: the fire mage is the approved proportion. Its body is 51 px = 1.59 cells on a 32 px cell, so a new humanoid should land at 46-58 px (1.4-1.8 cells) to read as overhanging its own cell. The previous 32 px floor is retired: a 34 px body overhangs by only 12 screen px and reads as flush, and a body shorter than the cell breaks the intended silhouette.",
+      "approved_proportion_reference": "ArtSource/sephiria_style_study_2026-09-16/project_assets/unit_proportion_reference_pyromancer_6x.png",
+      "quadruped_and_small_unit_exception": "four-legged and genuinely small units are judged separately: they may sit inside their cell without overhanging, because forcing them to 46 px would deform the silhouette",
       "view": "strict_90_degree_side_profile",
       "footprint_policy": "feet occupy one logical cell; upper sprite may overhang without increasing logical occupancy",
       "production_status": "new_battlefield_baseline"
