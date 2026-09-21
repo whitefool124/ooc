@@ -1,8 +1,18 @@
 {
   "schema": "occ-art-contract-v1",
   "version": 1,
-  "revision_date": "2026-09-16",
-  "revision_note": "2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier. Prior note: 2026-09-16 (pixel-perfect normalisation, user confirmed) - locked the battlefield display and ground authoring. Display is a 320x180 native buffer integer-upscaled exactly 6x to 1920x1080 (1 native px = 6 screen px, matching the primary reference grain); the 1408x768 viewport shows 7x4 gameplay cells. Placement rules R1-R7 are recorded as machine rules. Static art carries no scene lighting: the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, so light and shadow stay a runtime URP 2D Light2D layer. Integer scaling, one-pixel position snapping and zero fractional transform scale are mandatory.",
+  "revision_date": "2026-09-21",
+  "revision_note": "2026-09-21 (stage art direction, user decision): the overall visual theme changes by life stage instead of treating stone, old timber and forged iron as permanent global core materials. The current academy stage is Japanese fantasy magic isekai: clear adventurous magical-academy spaces, fantasy nature and light readable forms, with materials selected by region and function. Aether remains measurable, maintainable and costly energy engineering. Pixel scale, role dimensions, lighting separation and production gates are unchanged. Prior note: 2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier.",
+  "stage_visual_direction": {
+    "policy": "visual theme and material story change by life stage; no fixed material set governs the whole game",
+    "current_stage": "academy",
+    "academy_theme": "Japanese fantasy magic isekai",
+    "academy_reading": "clear adventurous magical academy, fantasy nature, light layered silhouettes and readable magical function",
+    "academy_materials": ["light stone", "warm timber", "glazed roof tile", "fabric banners", "plants", "water", "aether apparatus"],
+    "material_selection": "choose by region and function rather than treating stone, old timber and forged iron as global core materials",
+    "aether_invariant": "aether remains measurable, maintainable and costly energy engineering",
+    "avoid": ["gritty medieval realism", "decorative steampunk as the global default", "modern science fiction", "functionless ornament", "copying a specific existing work", "generic anime shorthand without material or gameplay logic"]
+  },
   "primary_map_reference": {
     "name": "Sephiria",
     "scope": "map presentation only; derive organization, material layering and pixel density, do not copy assets",
@@ -19,10 +29,10 @@
       "measured_feature_pitch_native_px": {"wood_plank_row": 4, "stone_course": "3-4", "stone_brick_width": 4},
       "material_tone_step_luminance": "8-14 inside one material; the material's own dark sits about 30 below its base",
       "dominant_tone_share_observed": {"wood_floor": 0.58, "dungeon_floor": 0.64, "carpet": 0.60},
-      "on_screen_pixel_size": {"sephiria": "1 native px = 6 screen px at 1920x1080", "occ_default_2x": "1 native px = 2 screen px", "occ_zoom_4x": "1 native px = 4 screen px"},
-      "occ_conversion": "match on-screen size, not pixel-count per cell: structural features are about 3x the reference native sizes, so stone and wood pitch is 16 native px with a 3 native px structural seam; organic mottling does not scale with structure and stays 6-11 native px (the reference soil clumps are 2-3 native px = 12-18 screen px)",
-      "conversion_basis_note": "the earlier per-cell x2 basis made ground art read about one third as coarse as the reference at the default 2x battlefield view; tuning to the 4x zoom instead would make the default view too fine, so the default 2x view governs structural features",
-      "boundary_rule": "material borders interlock in 2-4px steps and press the material's own dark tone; never a pure-black ground outline and never a baked per-cell frame"
+      "on_screen_pixel_size": {"sephiria": "1 native px = 6 screen px at 1920x1080", "occ_canonical_6x": "1 native px = 6 screen px, the locked tier, identical for every role"},
+      "occ_conversion_2026_09_16": "the reference and OCC now share the same on-screen pixel size (6 screen px per native px), so no cross-PPU conversion is needed any more. OCC detail is expressed in its own 32 PPU grid: stone slab pitch 8 native px, wood plank pitch 4 native px, structural seam 1 native px, organic clusters 4-8 native px. These values replace the earlier 16/3/6-11 conversion, which assumed a 2x default view that no longer exists.",
+      "superseded_conversion_note": "the old 'per-cell x2 basis' and '3x structural features' reasoning is retired together with the 2x default view; the canonical tier is fixed at 6x by the display policy",
+      "boundary_rule": "each ground square bakes a visible 1 native px cell border in the material's own dark tone (never pure black) plus a 1 px lighter inner lip; material seams inside a tile press the material's own dark tone; a pure-black ground outline stays forbidden, and the earlier ban on baking a per-cell frame is itself superseded"
     },
     "depth_language": "visible top face plus a facade facing the bottom of the screen; internal material seams use material-dark tones rather than repeated pure-black outlines",
     "theme_batching": "change material story and one identifying feature while preserving camera axis, silhouette complexity, top-to-facade relationship, light direction and density budget",
@@ -30,6 +40,19 @@
     "current_battlefield_scope": "current gameplay props default to one logical 32x32 cell, while units and transparent props retain 32 PPU and use the smallest 32-multiple visual canvas that preserves the decoded subject; prior 2x2 boards are material-adjacency experiments only",
     "review_policy": "review each native asset at its own role PPU and at integer display tiers only, with 1x and the canonical 6x battlefield tier as the required pair; reject distant unreadability, dark fragmented noise and any baked scene lighting",
     "forbidden": ["per-object yaw rotation", "diagonal placement", "3/4 unit body angle", "dense insignia_flag_rivet_frame competition", "miniature_building treatment for ordinary cover"]
+  },
+  "small_prop_scale_rule": {
+    "locked": "2026-09-16",
+    "principle": "PPU is a project-wide constant, never a per-asset choice. Changing it per object would put two different pixel sizes on the same battlefield, which is exactly the defect the display policy exists to prevent.",
+    "true_scale_reference": "at 1 px = 3.125 cm: 100 cm = 32 px, 50 cm = 16 px, 40 cm = 13 px, 30 cm = 10 px, 20 cm = 6 px, 10 cm = 3 px",
+    "how_to_make_a_small_object": "keep 32 PPU and shrink the drawing inside the 32x32 cell canvas, bottom-centre anchored to the owning cell. The existing material_pickup_24_to_ui32 role already does exactly this: a 24x24 subject embedded unscaled at offset (4,4) inside a 32x32 canvas.",
+    "answer_to_do_we_need_16_ppu": "no. A sub-50 cm prop does not need a smaller PPU; it needs a smaller drawing or a smaller subject canvas inside the same 32 PPU grid. 16 PPU is a retired experiment and must not be reintroduced.",
+    "readability_floor": "below about 40 cm the true-scale drawing is 12 px or less and reads as a coloured blob rather than an identifiable object. Those props are drawn at roughly 1.5x to 2x true scale so the player can tell what they are, and the deliberate over-scale is recorded in the manifest.",
+    "never": [
+      "change the project PPU per asset",
+      "resample or halve an existing asset to fit a small object",
+      "introduce a second pixel size on the battlefield"
+    ]
   },
   "world_scale": {
     "locked": "2026-09-16",
@@ -597,7 +620,7 @@
       "canvas_rule": "32x32, fully opaque, filling the cell edge to edge: a square top surface with a front face turned toward the bottom of the screen, and the left and right sides slightly inset so the block reads as a standing column rather than a flat floor tile",
       "tiling_rule": "all four edges are edge-to-edge and match, so identical neighbouring blocks join with no gap and no seam; there is no overhang in any direction",
       "damage_policy": "none: solid permanent masonry with no cracks, chips, rubble or breakable-cover treatment, because the gameplay meaning is that this terrain cannot be destroyed",
-      "reading_rule": "a pale weathered stone cap over a darker warm stone body, the same two-tone language as the approved academy wall family",
+      "reading_rule": "a solid stage-appropriate wall block with a legible top and darker front face; in the academy stage, material and shape follow the current region's Japanese-fantasy magical-academy language rather than one fixed stone family",
       "illumination": "no scene lighting: no light pool, no cast shadow on the floor, no glow, no vignette; the only shading is the fixed upper-left form shading (lit top surface, darker front face)",
       "surface_detail_policy": "large deliberate masonry clusters; limited palette; no dither, no microtexture, no isolated single-pixel noise",
       "requires_six_x_evidence": true,
