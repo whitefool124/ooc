@@ -1,5 +1,9 @@
 # OCC Art Contract Tools
 
+> **开始任何美术工作前，先读 `ART_SPEC_LOCK_2026-09-16.md`** —— 它是唯一入口：一句话规格、
+> 角色尺寸表、画风硬规则、世界尺度推导、摆放规则、生图六步、验收门禁、FORMAL 要求，以及
+> **已废弃口径清单**（16 PPU / 1／2／4 倍 / 无边框等旧决定）。本 README 只讲工具怎么用。
+
 `Worldbuilding/策划案/OCC_项目总策划案_v1.0.md` is the only active art-direction
 source. `Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv` is its structured
 companion, and the JSON contract in this folder is only a machine-readable mirror.
