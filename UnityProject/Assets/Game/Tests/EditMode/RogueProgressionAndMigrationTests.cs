@@ -98,7 +98,7 @@ namespace OCC.Combat.Tests
             string[] fields = new RogueliteMapRun(622).ToJson().Split('|'); fields[33] = "999"; fields[34] = "77"; fields[35] = "99";
             RogueMigrationReport report; RogueRunDto dto = LegacyMap10Migrator.Migrate(RogueliteMapRun.FromJson(string.Join("|", fields)), "m", out report);
             RogueliteMapRun restored = RogueliteMapRun.FromRogue11(dto);
-            Assert.That(dto.CurrentHealth, Is.EqualTo(18)); Assert.That(dto.CurrentMana, Is.EqualTo(12));
+            Assert.That(dto.CurrentHealth, Is.EqualTo(UnitState.HeroBaseHealth)); Assert.That(dto.CurrentMana, Is.EqualTo(12));
             Assert.That(restored.CurrentShield, Is.Zero);
         }
     }

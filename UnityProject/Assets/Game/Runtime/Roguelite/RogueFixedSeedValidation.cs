@@ -62,7 +62,7 @@ namespace OCC.Combat.Roguelite
             int perTurnShield = loadout == RogueValidationLoadout.OutputUtility ? 0 : loadout == RogueValidationLoadout.StandardChest ? 2 : 12;
             int raw = loadout == RogueValidationLoadout.ShieldSpecialist ? 8 : 5;
             int activeUses = loadout == RogueValidationLoadout.OutputUtility ? 0 : loadout == RogueValidationLoadout.StandardChest ? 1 : 2;
-            int health = 18, granted = 0, absorbed = 0, wasted = 0, prevented = 0;
+            int health = UnitState.HeroBaseHealth, granted = 0, absorbed = 0, wasted = 0, prevented = 0;
             for (int turn = 0; turn < turns; turn++)
             {
                 bool broken = turn == 2 && perTurnShield > 0; int shield = 0;
@@ -76,7 +76,7 @@ namespace OCC.Combat.Roguelite
             var rewards = content.Roll(seed, "combat", SpellRarity.Common, EquipmentRarity.Common, 2, 1).ToArray();
             return new RogueFixedSeedRunRecord
             {
-                SeedCode = code, Seed = seed, Loadout = loadout, HealthIn = 18, HealthOut = Math.Max(1, health), ManaIn = 12,
+                SeedCode = code, Seed = seed, Loadout = loadout, HealthIn = UnitState.HeroBaseHealth, HealthOut = Math.Max(1, health), ManaIn = 12,
                 ManaOut = Math.Max(0, 12 - turns + (loadout == RogueValidationLoadout.OutputUtility ? 2 : 0)), Turns = turns,
                 EquipmentShieldGranted = granted, ShieldAbsorbed = absorbed, ShieldWasted = wasted, BreakStancePrevented = prevented,
                 ActiveShieldUses = activeUses, SpellCasts = turns, WeaponAttacks = loadout == RogueValidationLoadout.OutputUtility ? turns : turns - 1,

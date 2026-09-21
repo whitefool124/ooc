@@ -21,13 +21,13 @@ namespace OCC.Combat.Tests
             var state = new CombatState(new GridMap(4, 3), new[] { hero, new UnitState("enemy", false, P(3, 2)) });
             state.Map.SetTile(P(1, 0), new TileState { Cover = CoverType.Heavy, Durability = 10 });
             CombatResolver.BeginTurn(state, hero.Id);
-            var result = new CombatCommandExecutionService().Execute(state, null, CombatCommand.Move(hero.Id, P(2, 0)));
+            var result = new CombatCommandExecutionService().Execute(state, null, CombatCommand.Move(hero.Id, P(2, 1)));
             Assert.That(result.Accepted, Is.True);
-            Assert.That(result.MovementPath.Count, Is.EqualTo(5));
+            Assert.That(result.MovementPath.Count, Is.EqualTo(4));
             int ap = hero.ActionPoints, health = hero.Health;
             var playback = new CombatMovementPlayback();
             Assert.That(playback.Play(hero.Id, P(0, 0), hero.Position, result.MovementPath, 0f), Is.True);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 3; i++)
             {
                 var sample = playback.Sample(hero.Id, hero.Position, (i + .5f) * .08f);
                 Vector2 expected = new Vector2(result.MovementPath[i].X + result.MovementPath[i + 1].X,
@@ -35,8 +35,8 @@ namespace OCC.Combat.Tests
                 Assert.That(Vector2.Distance(sample.Position, expected), Is.LessThan(.001f));
                 Assert.That(sample.Position, Is.Not.EqualTo(new Vector2(1f, 0f)));
             }
-            Assert.That(playback.Sample(hero.Id, hero.Position, .4f).Position, Is.EqualTo(new Vector2(2, 0)));
-            Assert.That(hero.Position, Is.EqualTo(P(2, 0))); Assert.That(hero.ActionPoints, Is.EqualTo(ap));
+            Assert.That(playback.Sample(hero.Id, hero.Position, .32f).Position, Is.EqualTo(new Vector2(2, 1)));
+            Assert.That(hero.Position, Is.EqualTo(P(2, 1))); Assert.That(hero.ActionPoints, Is.EqualTo(ap));
             Assert.That(hero.Health, Is.EqualTo(health)); Assert.That(playback.Count, Is.Zero);
         }
 

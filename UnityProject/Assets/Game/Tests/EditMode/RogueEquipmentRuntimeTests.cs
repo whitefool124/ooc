@@ -264,11 +264,11 @@ namespace OCC.Combat.Tests
             combat.AttachRogueEquipmentRuntime(runtime);
 
             CombatResolver.BeginTurn(combat, hero.Id);
-            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange + 1));
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.HeroBaseMovementRange + 1));
             runtime.AfterMove(hero.Id);
-            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange));
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.HeroBaseMovementRange));
             CombatResolver.BeginTurn(combat, hero.Id);
-            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.BaseMovementRange + 1));
+            Assert.That(CombatMovementQuery.Budget(combat, hero), Is.EqualTo(UnitState.HeroBaseMovementRange + 1));
         }
 
         [Test]

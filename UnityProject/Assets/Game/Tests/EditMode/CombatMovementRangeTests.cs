@@ -79,13 +79,13 @@ namespace OCC.Combat.Tests
             Assert.That(adapter.IsInMoveRange(state, target), Is.False);
             state.RainLanternCourt.CastBorrowedCover(state, state.GetUnit("hero"));
             Assert.That(adapter.IsInMoveRange(state, target), Is.True, "Six dry steps become legal with the existing +2 budget.");
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 6)));
+            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 4)));
             Assert.That(adapter.IsInMoveRange(state, new GridPosition(1, 0)), Is.False, "Consumed bonus cannot linger.");
-            var vineTarget = new GridPosition(5, 6);
-            state.Map.SetTile(new GridPosition(2, 6), new TileState { IsLampVine = true });
-            state.Map.SetTile(new GridPosition(3, 6), new TileState { IsLampVine = true });
+            var vineTarget = new GridPosition(3, 4);
+            state.Map.SetTile(new GridPosition(2, 4), new TileState { IsLampVine = true });
+            state.Map.SetTile(new GridPosition(3, 4), new TileState { IsLampVine = true });
             Assert.That(adapter.IsInMoveRange(state, vineTarget), Is.False);
-            for (int x = 2; x <= 5; x++) state.Map.SetTile(new GridPosition(x, 6), new TileState());
+            for (int x = 2; x <= 3; x++) state.Map.SetTile(new GridPosition(x, 4), new TileState());
             Assert.That(adapter.IsInMoveRange(state, vineTarget), Is.True);
         }
 
@@ -94,7 +94,7 @@ namespace OCC.Combat.Tests
         {
             var cache = new CombatMovementRangeCache();
             CombatState state = Create(0);
-            var target = new GridPosition(1, 6);
+            var target = new GridPosition(1, 4);
             for (int n = 0; n < 10; n++) Assert.That(cache.Contains(state, state.GetUnit("hero"), target), Is.True);
             Assert.That(cache.RebuildCount, Is.EqualTo(1));
             state = Create(0);

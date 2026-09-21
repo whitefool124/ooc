@@ -79,7 +79,7 @@ namespace OCC.Combat.Roguelite
 
         public static RogueRunDto CreateNew(string runId, int seed)
         {
-            RogueRunDto dto = new RogueRunDto { RunId = runId, Seed = seed, Gold = 8, StageContribution = 0, CurrentHealth = 18, CurrentMana = 12 };
+            RogueRunDto dto = new RogueRunDto { RunId = runId, Seed = seed, Gold = 8, StageContribution = 0, CurrentHealth = UnitState.HeroBaseHealth, CurrentMana = 12 };
             for (int index = 0; index < dto.EquippedSpellIds.Length; index++) dto.EquippedSpellIds[index] = string.Empty;
             for (int index = 0; index < dto.ItemQuickbarInstanceIds.Length; index++) dto.ItemQuickbarInstanceIds[index] = string.Empty;
             string[] basics = { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER" };

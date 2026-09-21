@@ -66,7 +66,7 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(parts[31]) && !StarterIds.Contains(parts[31])) result.Add("build.starter_unknown");
             ValidateNonNegative(parts, new[] { 5, 6, 7, 8, 9, 10 }, "resources", result);
             if (TryInt(parts[4], out int level) && level < 1) result.Add("resources.level_invalid");
-            if (TryInt(parts[33], out int health) && (health < 0 || health > 18)) result.Add("combat.health_out_of_range");
+            if (TryInt(parts[33], out int health) && (health < 0 || health > UnitState.HeroBaseHealth)) result.Add("combat.health_out_of_range");
             if (TryInt(parts[34], out int shield) && (shield < 0 || shield > 6)) result.Add("combat.shield_out_of_range");
             if (TryInt(parts[35], out int mana) && (mana < 0 || mana > 12)) result.Add("combat.mana_out_of_range");
 
@@ -114,10 +114,10 @@ namespace OCC.Combat
 
             if (run.Level < 1 || run.Experience < 0 || run.Supplies < 0 || run.ScoutingBeacons < 0 || run.Parts < 0 || run.Aether < 0)
                 result.Add("resources.out_of_range");
-            if (run.CurrentHealth < 0 || run.CurrentHealth > 18) result.Add("combat.health_out_of_range");
+            if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth) result.Add("combat.health_out_of_range");
             if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
             if (run.CurrentMana < 0 || run.CurrentMana > 12) result.Add("combat.mana_out_of_range");
-            if (!run.HasCombatSnapshot && (run.CurrentHealth != 18 || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
+            if (!run.HasCombatSnapshot && (run.CurrentHealth != UnitState.HeroBaseHealth || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
             if (run.HasCombatSnapshot && run.CurrentHealth <= 0) result.Add("combat.defeated_snapshot");
 
             bool weaponValid = string.IsNullOrEmpty(run.EquippedWeaponId) || RogueliteMapCatalog.Rewards.Any(reward => reward.Id == run.EquippedWeaponId && reward.Kind == RogueliteRewardKind.Weapon);
@@ -208,7 +208,7 @@ namespace OCC.Combat
             if (state.Shop.Opened && ((!state.EliteRewardClaimed && !state.EliteRewardAbandoned) || state.Outcome != FirstRunOutcome.EliteVictory)) result.Add("first_run.shop_gate");
             if (state.RunSealed != (state.Outcome == FirstRunOutcome.EliteDefeat) || state.RunSealed && state.Shop.Opened) result.Add("first_run.terminal_state");
             if (run.EncounterAssignments.Count != 0 || run.NodeContentAssignments.Count != 0) result.Add("first_run.legacy_assignments");
-            if (run.CurrentHealth < 0 || run.CurrentHealth > 18 || run.CurrentMana < 0 || run.CurrentMana > 12 || run.CurrentShield < 0 || run.CurrentShield > 6)
+            if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth || run.CurrentMana < 0 || run.CurrentMana > 12 || run.CurrentShield < 0 || run.CurrentShield > 6)
                 result.Add("combat.snapshot_out_of_range");
             if (state.RunSealed ? run.CurrentHealth != 0 : run.CurrentHealth <= 0) result.Add("first_run.health_state");
         }
@@ -236,10 +236,10 @@ namespace OCC.Combat
                 result.Add("academy_layer.finale_without_settlement");
 
             if (!string.Equals(run.RegionBossId, "core_overseer", StringComparison.Ordinal)) result.Add("academy_layer.region_boss_unknown");
-            if (run.CurrentHealth < 0 || run.CurrentHealth > 18) result.Add("combat.health_out_of_range");
+            if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth) result.Add("combat.health_out_of_range");
             if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
             if (run.CurrentMana < 0 || run.CurrentMana > 12) result.Add("combat.mana_out_of_range");
-            if (!run.HasCombatSnapshot && (run.CurrentHealth != 18 || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
+            if (!run.HasCombatSnapshot && (run.CurrentHealth != UnitState.HeroBaseHealth || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
             if (run.HasCombatSnapshot && run.CurrentHealth <= 0) result.Add("combat.defeated_snapshot");
 
             ValidateAcademyEncounters(run, result);

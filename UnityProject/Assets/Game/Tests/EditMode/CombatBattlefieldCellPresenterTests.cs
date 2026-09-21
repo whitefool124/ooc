@@ -26,7 +26,7 @@ namespace OCC.Combat.Tests
             Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_ground_macro_court_3x3"));
             Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(1f / 3f, 1f / 3f, 1f / 3f, 1f / 3f)));
             Assert.That(cell.TerrainBoundaryTexture, Is.Null);
-            Assert.That(cell.HoverText, Does.Contain("生命当前 18　上限 18"));
+            Assert.That(cell.HoverText, Does.Contain("生命当前 50　上限 50"));
         }
 
         [Test]

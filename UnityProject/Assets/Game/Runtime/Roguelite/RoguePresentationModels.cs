@@ -70,7 +70,7 @@ namespace OCC.Combat.Roguelite
     public sealed class RogueMapStatusPresentation
     {
         public int Health { get; }
-        public int MaximumHealth => 18;
+        public int MaximumHealth => UnitState.HeroBaseHealth;
         public int Mana { get; }
         public int MaximumMana => RogueRuntimeConstants.MaximumPersonalMana;
         public int Gold { get; }

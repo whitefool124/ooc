@@ -1254,11 +1254,11 @@ namespace OCC.Combat.Tests
             UnitState wakeHero = wakeCombat.GetUnit("hero");
             wakeHero.ConfigureMana(99); wakeHero.ApplyStatus(StatusType.Slow, 2);
             CombatResolver.BeginTurn(wakeCombat, wakeHero.Id);
-            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.SlowedMovementRange));
+            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
             FireSpellEngine.Execute(new FireBattleState(wakeCombat), wakeHero.Id, FireSpellCatalog.Get("F-P-U09"),
                 FireSpellTarget.Unit(wakeHero.Id));
             Assert.That(wakeHero.HasStatus(StatusType.Slow), Is.False);
-            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.BaseMovementRange));
+            Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroBaseMovementRange));
 
             CombatState recycleCombat = TrainingRangeScenarioFactory.CreateStandard();
             recycleCombat.ConfigureRuleset(CombatRuleset.Roguelite);

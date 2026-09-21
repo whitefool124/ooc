@@ -327,7 +327,7 @@ namespace OCC.Combat.Presentation
             if (spell.Id == "F-P-U05") return "下次命中后，正交邻格受到 4 点火焰伤害；伤及友军。";
             if (spell.Id == "F-P-U06") return "下次武器攻击结算后，自动向远离攻击目标的方向后撤 1 格。";
             if (spell.Id == "F-P-U08") return "未燃烧时获得 12 点护盾；燃烧时获得 20 点护盾并清除燃烧，两条分支互斥。";
-            if (spell.Id == "F-P-U09") return "清除迟缓；本回合移动恢复至 5 格。";
+            if (spell.Id == "F-P-U09") return "清除迟缓；本回合移动恢复至 3 格。";
             if (spell.Id == "F-P-U11") return "消耗火场；恢复 2 点个人魔力。";
             if (spell.Id == "F-P-U01") return "沿四向主轴直线突进最多 3 格；起点处于至少一个敌方公开攻击范围且终点离开全部范围时，下回合行动力 +1。";
             if (spell.Id == "F-P-U18") return "直线突进 2 格；相邻单位受到 8 点伤害并被推开 1 格。";

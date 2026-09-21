@@ -343,7 +343,7 @@ namespace OCC.Combat
         public string PendingContentCombatMissionId { get; private set; }
         public string StarterId { get; private set; }
         public bool HasCombatSnapshot { get; private set; }
-        public int CurrentHealth { get; private set; } = 18;
+        public int CurrentHealth { get; private set; } = UnitState.HeroBaseHealth;
         public int CurrentShield { get; private set; } = 2;
         public int CurrentMana { get; private set; } = 12;
         public FirstRunExperienceState FirstRunExperience { get; private set; }
@@ -911,7 +911,7 @@ namespace OCC.Combat
             {
                 rogueRunDto.Gold += choice.GoldGain;
                 rogueRunDto.StageContribution += choice.ContributionGain;
-                rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(18, rogueRunDto.CurrentHealth + choice.HealthGain));
+                rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth + choice.HealthGain));
                 rogueRunDto.CurrentMana = Math.Max(0, Math.Min(12, rogueRunDto.CurrentMana + choice.ManaGain));
                 CurrentHealth = rogueRunDto.CurrentHealth; CurrentMana = rogueRunDto.CurrentMana;
                 string contentSourceId = string.IsNullOrEmpty(CurrentEventId) ? CurrentNodeId : CurrentEventId;
@@ -926,7 +926,7 @@ namespace OCC.Combat
                 Supplies++;
                 if (HasCombatSnapshot)
                 {
-                    CurrentHealth = Math.Min(18, CurrentHealth + 6);
+                    CurrentHealth = Math.Min(UnitState.HeroBaseHealth, CurrentHealth + 6);
                     if (CurrentShield < 6) CurrentShield = Math.Min(6, CurrentShield + 2);
                     CurrentMana = Math.Min(12, CurrentMana + 4);
                 }
@@ -1258,7 +1258,7 @@ namespace OCC.Combat
             }
             if (rogueRunDto.StageContribution < 1) throw new InvalidOperationException("Insufficient stage contribution.");
             rogueRunDto.StageContribution--;
-            rogueRunDto.CurrentHealth = Math.Min(18, rogueRunDto.CurrentHealth + 9);
+            rogueRunDto.CurrentHealth = Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth + UnitState.HeroBaseHealth / 2);
             CurrentHealth = rogueRunDto.CurrentHealth;
             if (IsTutorialPhase)
             {
@@ -1439,7 +1439,7 @@ namespace OCC.Combat
                     rogueRunDto.MasteredSpellIds.Add(spellId);
             if (!rogueRunDto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
                 rogueRunDto.MasteredSpellIds.Add(FirstRunExperienceCatalog.OriginSpellId);
-            rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(18, rogueRunDto.CurrentHealth));
+            rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth));
             rogueRunDto.CurrentMana = Math.Max(0, Math.Min(12, rogueRunDto.CurrentMana));
             CurrentHealth = rogueRunDto.CurrentHealth;
             CurrentMana = rogueRunDto.CurrentMana;
@@ -1495,7 +1495,7 @@ namespace OCC.Combat
             OCC.Combat.Roguelite.RogueRunDto dto = preserved ?? rogueRunDto ?? OCC.Combat.Roguelite.RogueRunDto.CreateNew("run-" + Seed, Seed);
             rogueRunDto = dto;
             dto.CurrentNodeId = CurrentNodeId; dto.RegionBossId = IsInAcademyLayer ? "core_overseer" : IsFirstRunExperience ? string.Empty : "core_overseer"; dto.StarterId = StarterId;
-            dto.CurrentHealth = IsFirstRunExperience && FirstRunExperience.RunSealed ? 0 : Math.Max(1, Math.Min(18, CurrentHealth)); dto.CurrentMana = Math.Max(0, Math.Min(12, CurrentMana));
+            dto.CurrentHealth = IsFirstRunExperience && FirstRunExperience.RunSealed ? 0 : Math.Max(1, Math.Min(UnitState.HeroBaseHealth, CurrentHealth)); dto.CurrentMana = Math.Max(0, Math.Min(12, CurrentMana));
             dto.AwaitingReward = AwaitingReward; dto.PendingContentChoiceId = PendingContentChoiceId ?? string.Empty;
             dto.PendingContentCombatMissionId = PendingContentCombatMissionId ?? string.Empty;
             Replace(dto.VisitedNodeIds, visited.OrderBy(id => id, StringComparer.Ordinal));

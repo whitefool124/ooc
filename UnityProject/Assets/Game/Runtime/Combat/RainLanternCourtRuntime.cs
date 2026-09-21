@@ -11,30 +11,29 @@ namespace OCC.Combat
         public const string OriginSpellId = "ORIGIN-SPELL-01";
         public const string OriginTalentSourceId = "ORIGIN-TALENT-01:first-move-cover";
 
-        public static readonly IReadOnlyList<GridPosition> WaterCells = Row(2, 6, 5);
-        public static readonly IReadOnlyList<GridPosition> LampVineCells = Rectangle(4, 0, 2, 5);
+        public static readonly IReadOnlyList<GridPosition> WaterCells = Row(2, 4, 3);
+        public static readonly IReadOnlyList<GridPosition> LampVineCells = Rectangle(3, 0, 2, 4);
         public static readonly IReadOnlyList<GridPosition> BurnOrder = new[]
         {
-            new GridPosition(5, 2), new GridPosition(5, 3), new GridPosition(5, 4)
+            new GridPosition(4, 1), new GridPosition(4, 2), new GridPosition(4, 3)
         };
         public static readonly IReadOnlyList<GridPosition> HoundSearchPerimeter = new[]
         {
-            new GridPosition(3, 0), new GridPosition(3, 1), new GridPosition(3, 2),
-            new GridPosition(3, 3), new GridPosition(3, 4), new GridPosition(3, 5),
-            new GridPosition(4, 5), new GridPosition(5, 5), new GridPosition(6, 5),
-            new GridPosition(6, 4), new GridPosition(6, 3), new GridPosition(6, 2),
-            new GridPosition(6, 1), new GridPosition(6, 0)
+            new GridPosition(2, 0), new GridPosition(2, 1), new GridPosition(2, 2),
+            new GridPosition(2, 3), new GridPosition(2, 4), new GridPosition(3, 4),
+            new GridPosition(4, 4), new GridPosition(5, 4), new GridPosition(5, 3),
+            new GridPosition(5, 2), new GridPosition(5, 1), new GridPosition(5, 0)
         };
         public static readonly IReadOnlyList<GridPosition> PyromancerShootingPoints = new[]
         {
-            new GridPosition(8, 1), new GridPosition(8, 3), new GridPosition(7, 5)
+            new GridPosition(6, 1), new GridPosition(6, 3), new GridPosition(5, 5)
         };
         public static readonly IReadOnlyDictionary<string, IReadOnlyList<GridPosition>> VerificationRoutes =
             new Dictionary<string, IReadOnlyList<GridPosition>>(StringComparer.Ordinal)
             {
-                ["FIRST-B1-ROUTE-VINE"] = new[] { new GridPosition(1, 7), new GridPosition(3, 5), new GridPosition(4, 4), new GridPosition(6, 4), new GridPosition(7, 3), new GridPosition(8, 2) },
-                ["FIRST-B1-ROUTE-WATER"] = new[] { new GridPosition(1, 7), new GridPosition(2, 6), new GridPosition(4, 6), new GridPosition(6, 6), new GridPosition(7, 5), new GridPosition(8, 2) },
-                ["FIRST-B1-ROUTE-COVER"] = new[] { new GridPosition(1, 7), new GridPosition(2, 7), new GridPosition(5, 7), new GridPosition(7, 7), new GridPosition(8, 6), new GridPosition(8, 2) }
+                ["FIRST-B1-ROUTE-VINE"] = new[] { new GridPosition(1, 5), new GridPosition(2, 3), new GridPosition(3, 3), new GridPosition(5, 3), new GridPosition(5, 2), new GridPosition(6, 1) },
+                ["FIRST-B1-ROUTE-WATER"] = new[] { new GridPosition(1, 5), new GridPosition(2, 4), new GridPosition(3, 4), new GridPosition(4, 4), new GridPosition(5, 4), new GridPosition(5, 3), new GridPosition(6, 1) },
+                ["FIRST-B1-ROUTE-COVER"] = new[] { new GridPosition(1, 5), new GridPosition(2, 5), new GridPosition(4, 5), new GridPosition(5, 5), new GridPosition(6, 4), new GridPosition(6, 1) }
             };
 
         private enum HoundSearchMode { Chase, ApproachEntrance, Sniff, ClockwisePerimeter }

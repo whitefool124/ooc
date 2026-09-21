@@ -44,18 +44,36 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void TurnStart_UsesPublishedThreeActionPointsAndFiveOrThreeMovement()
+        public void TurnStart_UsesPublishedThreeActionPointsAndHeroThreeOrTwoMovement()
         {
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
             CombatResolver.BeginTurn(state, hero.Id);
             Assert.That(hero.ActionPoints, Is.EqualTo(3));
-            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.BaseMovementRange));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroBaseMovementRange));
 
             hero.ApplyStatus(StatusType.Slow, 2);
             CombatResolver.BeginTurn(state, hero.Id);
             Assert.That(hero.ActionPoints, Is.EqualTo(3));
-            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.SlowedMovementRange));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
+        }
+
+        [Test]
+        public void HeroMove_AllowsThreeCellsAndRejectsFourCells()
+        {
+            CombatState withinRange = new CombatState(new GridMap(5, 2),
+                new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
+            CombatResolver.BeginTurn(withinRange, "hero");
+            Assert.DoesNotThrow(() => CombatResolver.Resolve(withinRange,
+                CombatCommand.Move("hero", new GridPosition(3, 0))));
+
+            CombatState beyondRange = new CombatState(new GridMap(5, 2),
+                new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
+            CombatResolver.BeginTurn(beyondRange, "hero");
+            Assert.Throws<InvalidOperationException>(() => CombatResolver.Resolve(beyondRange,
+                CombatCommand.Move("hero", new GridPosition(4, 0))));
+            Assert.That(CombatMovementQuery.PlayerTargetFailure(beyondRange, new GridPosition(4, 0)),
+                Is.EqualTo("目标格超出当前步数"));
         }
 
         [Test]

@@ -7,7 +7,10 @@ namespace OCC.Combat
     public sealed class UnitState
     {
         public const int BaseMovementRange = 5;
+        public const int HeroBaseMovementRange = 3;
         public const int SlowedMovementRange = 3;
+        public const int HeroSlowedMovementRange = 2;
+        public const int HeroBaseHealth = 50;
 
         private readonly Dictionary<StatusType, int> statuses = new Dictionary<StatusType, int>();
         private readonly Dictionary<StatusType, int> statusStrengths = new Dictionary<StatusType, int>();
@@ -37,7 +40,9 @@ namespace OCC.Combat
         public bool IsAlive => Health > 0;
         public int EffectiveArmor => Math.Max(0, Armor - (HasStatus(StatusType.ArmorBreak) ? StatusStrength(StatusType.ArmorBreak, 2) : 0));
         public int EffectiveSpeed => Math.Max(1, Speed - (HasStatus(StatusType.Slow) ? 3 : 0));
-        public int MovementRangeThisTurn { get; private set; } = BaseMovementRange;
+        public int MovementRangeThisTurn { get; private set; }
+        public int NaturalMovementRange => IsHero ? HeroBaseMovementRange : BaseMovementRange;
+        public int SlowedNaturalMovementRange => IsHero ? HeroSlowedMovementRange : SlowedMovementRange;
         /// <summary>霸体：处于该状态时不会受到健康伤害，用于封存塔首领的阶段〇走流程。</summary>
         public bool IsSuperArmored { get; internal set; }
         /// <summary>还能替本单位承受多少次健康伤害（引链：机关代核心承伤）。</summary>
@@ -47,7 +52,8 @@ namespace OCC.Combat
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("A unit id is required.", nameof(id));
             Id = id; IsHero = isHero; Position = position; DisplayName = id;
-            MaxHealth = isHero ? 18 : 12; Health = MaxHealth; MaxMana = isHero ? 6 : 4; Mana = MaxMana;
+            MaxHealth = isHero ? HeroBaseHealth : 12; Health = MaxHealth; MaxMana = isHero ? 6 : 4; Mana = MaxMana;
+            MovementRangeThisTurn = NaturalMovementRange;
         }
 
         public bool HasStatus(StatusType type) => statuses.TryGetValue(type, out int turns) && turns > 0;
@@ -82,7 +88,7 @@ namespace OCC.Combat
         }
 
         internal void BeginTurn(int actionPoints, bool slowedAtTurnStart = false)
-        { ActionPoints = actionPoints; MovementRangeThisTurn = slowedAtTurnStart ? SlowedMovementRange : BaseMovementRange; }
+        { ActionPoints = actionPoints; MovementRangeThisTurn = slowedAtTurnStart ? SlowedNaturalMovementRange : NaturalMovementRange; }
         internal void GrantActionPoints(int amount) { if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount)); ActionPoints = Math.Min(3, ActionPoints + amount); }
         internal void GrantBonusActionPoints(int amount) { if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount)); ActionPoints += amount; }
         internal void SetMovementRangeForTurn(int range) => MovementRangeThisTurn = Math.Max(MovementRangeThisTurn, range);

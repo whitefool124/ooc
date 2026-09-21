@@ -120,65 +120,69 @@ namespace OCC.Combat
 
         public static readonly FirstRegionLevelDefinition RainLanternCourt =
             new FirstRegionLevelDefinition(RainLanternCourtRuntime.LevelId, "雨后灯庭", "让寻迹兽失去行动能力，并让高年级火矢生认输。", CombatObjectiveType.Elimination, 1,
-                new GridPosition(1, 7), FirstRegionFloorTheme.Courtyard, false, false, Array.Empty<string>(),
-                new[] { E("tether_hound", 7, 6), E("pyromancer", 8, 1) },
+                new GridPosition(1, 5), FirstRegionFloorTheme.Courtyard, false, false, Array.Empty<string>(),
+                new[] { E("tether_hound", 5, 4), E("pyromancer", 6, 1) },
                 new[]
                 {
-                    W(2, 6), W(3, 6), W(4, 6), W(5, 6), W(6, 6),
-                    V(4, 0), V(5, 0), V(4, 1), V(5, 1), V(4, 2), V(5, 2), V(4, 3), V(5, 3), V(4, 4), V(5, 4),
-                    L(2, 2), L(7, 3), L(2, 7),
-                    H(0, 0), H(1, 0), H(11, 0), H(0, 1), H(11, 1),
-                    H(0, 8), H(1, 8), H(2, 8), H(7, 8), H(8, 8), H(9, 8), H(10, 8), H(11, 8)
+                    W(2, 4), W(3, 4), W(4, 4),
+                    V(3, 0), V(4, 0), V(3, 1), V(4, 1), V(3, 2), V(4, 2), V(3, 3), V(4, 3),
+                    L(1, 2), L(5, 2), L(2, 5),
+                    H(0, 0), H(1, 0), H(7, 0), H(0, 1), H(7, 1),
+                    H(0, 6), H(1, 6), H(5, 6), H(6, 6), H(7, 6)
                 },
                 new LevelSpaceContract("雨后石庭、积水横带、双列灯藤",
-                    new[] { new GridPosition(1, 6), new GridPosition(2, 5), new GridPosition(7, 7) },
+                    new[] { new GridPosition(1, 4), new GridPosition(2, 3), new GridPosition(5, 5) },
                     "积水提高主角穿越成本；灯藤遮断远程视线，并会被火矢生依次烧开。",
-                    "可沿西侧稳进、借积水灭火，或利用灯藤让寻迹兽进入公开的嗅探搜索。"));
+                    "可沿西侧稳进、借积水灭火，或利用灯藤让寻迹兽进入公开的嗅探搜索。"),
+                width: 8, height: 7);
 
         public static readonly FirstRegionLevelDefinition GreenhouseCollectionRoom =
             new FirstRegionLevelDefinition("first_battle_greenhouse_collection_room", "温室藏品间",
                 "击倒替身偶与侧锋生；中央备件箱可搜刮苗床回流芯。", CombatObjectiveType.Elimination, 2,
-                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, false, false, new[] { RainLanternCourtRuntime.LevelId },
-                new[] { E("raider", 9, 2), E("sigil_mauler", 9, 6) },
+                new GridPosition(1, 3), FirstRegionFloorTheme.Courtyard, false, false, new[] { RainLanternCourtRuntime.LevelId },
+                new[] { E("raider", 7, 1), E("sigil_mauler", 7, 5) },
                 new[]
                 {
-                    V(4, 3), V(5, 3), V(6, 3), V(4, 4), V(6, 4), V(4, 5), V(5, 5), V(6, 5),
-                    C(8, 2), C(8, 6)
+                    V(3, 2), V(4, 2), V(5, 2), V(3, 3), V(5, 3), V(3, 4), V(4, 4), V(5, 4),
+                    C(6, 1), C(6, 5)
                 },
                 new LevelSpaceContract("中央藤圈宝箱、南北双晶簇、南侧普通长路",
-                    new[] { new GridPosition(3, 4), new GridPosition(5, 6), new GridPosition(7, 8) },
+                    new[] { new GridPosition(2, 3), new GridPosition(4, 5), new GridPosition(6, 6) },
                     "晶簇被摧毁时伤害正交邻格并生成五格碎晶；灯藤遮断攻击线。",
-                    "可跃进抢箱、等待敌人贴晶引爆，或不依赖奖励沿南侧长路推进。"));
+                    "可跃进抢箱、等待敌人贴晶引爆，或不依赖奖励沿南侧长路推进。"),
+                width: 8, height: 7);
 
         public static readonly FirstRegionLevelDefinition RainPrismCourt =
             new FirstRegionLevelDefinition("first_b3_rain_prism_court", "雨痕晶庭",
                 "击倒替身偶与火矢生；可破坏封门晶簇搜刮学院储能芯。", CombatObjectiveType.Elimination, 3,
-                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, false, false, new[] { GreenhouseCollectionRoom.Id },
-                new[] { E("sigil_mauler", 5, 4), E("pyromancer", 6, 1) },
+                new GridPosition(1, 3), FirstRegionFloorTheme.Courtyard, false, false, new[] { GreenhouseCollectionRoom.Id },
+                new[] { E("sigil_mauler", 4, 3), E("pyromancer", 5, 1) },
                 new[]
                 {
-                    W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7), W(4, 1), W(5, 1),
-                    C(6, 4), H(7, 3), H(7, 5), H(8, 4), L(1, 2), L(1, 6), L(8, 2), L(9, 6)
+                    W(2, 1), W(2, 2), W(2, 3), W(2, 4), W(2, 5), W(3, 1), W(4, 1),
+                    C(5, 3), H(6, 2), H(6, 4), H(7, 3), L(1, 1), L(1, 5), L(7, 1), L(7, 5)
                 },
                 new LevelSpaceContract("冷却沟、封门晶簇、南侧干路",
-                    new[] { new GridPosition(4, 4), new GridPosition(3, 8), new GridPosition(5, 2) },
+                    new[] { new GridPosition(3, 3), new GridPosition(2, 6), new GridPosition(4, 2) },
                     "火矢施加燃烧；封门晶簇阻挡器材匣唯一入口。",
-                    "可破晶开匣、入水熄火反压，或从 D9 干路绕行。"));
+                    "可破晶开匣、入水熄火反压，或从 C7 干路绕行。"),
+                width: 8, height: 7);
 
         public static readonly FirstRegionLevelDefinition ThreeMaterialPressure =
             new FirstRegionLevelDefinition("first_elite_three_material_pressure", "三材承压场",
                 "击倒楔角。", CombatObjectiveType.Elimination, 4,
-                new GridPosition(1, 4), FirstRegionFloorTheme.Courtyard, true, false, new[] { RainPrismCourt.Id },
-                new[] { E("breach_ram", 7, 4) },
+                new GridPosition(1, 3), FirstRegionFloorTheme.Courtyard, true, false, new[] { RainPrismCourt.Id },
+                new[] { E("breach_ram", 6, 3) },
                 new[]
                 {
-                    W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), W(3, 6), W(3, 7),
-                    V(4, 2), V(5, 2), V(6, 2), V(4, 5), V(5, 5), V(6, 5), C(6, 4)
+                    W(2, 1), W(2, 2), W(2, 3), W(2, 4), W(2, 5),
+                    V(3, 1), V(4, 1), V(5, 1), V(3, 5), V(4, 5), V(5, 5), C(5, 3)
                 },
                 new LevelSpaceContract("冷却沟、双灯藤带、中央稳压晶簇",
-                    new[] { new GridPosition(3, 8), new GridPosition(2, 4), new GridPosition(8, 4) },
+                    new[] { new GridPosition(2, 6), new GridPosition(1, 2), new GridPosition(7, 3) },
                     "楔角公开锁定冲压线，并会撞击晶簇、单位或灯藤。",
-                    "可诱导撞晶、藏入灯藤、用浅水缩短冲压，或走 D9 干路等待卸压。"));
+                    "可诱导撞晶、藏入灯藤、用浅水缩短冲压，或走 C7 干路等待卸压。"),
+                width: 8, height: 7);
 
         public static readonly IReadOnlyList<FirstRegionLevelDefinition> All = new[]
         {
@@ -330,7 +334,12 @@ namespace OCC.Combat
             List<string> errors = new List<string>();
             foreach (FirstRegionLevelDefinition level in All.Concat(new[] { RainLanternCourt, GreenhouseCollectionRoom, RainPrismCourt, ThreeMaterialPressure }).Concat(NewEliteLevels))
             {
-                if (level.Width != 12 || level.Height != 9) errors.Add(level.Id + ": map must be 12x9");
+                bool compactFirstRun = level.Id == RainLanternCourtRuntime.LevelId || level.Id == GreenhouseCollectionRoom.Id ||
+                    level.Id == RainPrismCourt.Id || level.Id == ThreeMaterialPressure.Id;
+                int expectedWidth = compactFirstRun ? 8 : 12;
+                int expectedHeight = compactFirstRun ? 7 : 9;
+                if (level.Width != expectedWidth || level.Height != expectedHeight)
+                    errors.Add(level.Id + ": map must be " + expectedWidth + "x" + expectedHeight);
                 if (!Inside(level, level.HeroSpawn)) errors.Add(level.Id + ": hero spawn outside map");
                 int minimumEnemies = level.IsBoss || level.Id == ThreeMaterialPressure.Id ? 1 :
                     level.Id == RainLanternCourtRuntime.LevelId || level.Id == GreenhouseCollectionRoom.Id || level.Id == RainPrismCourt.Id ? 2 : 3;
@@ -491,15 +500,15 @@ namespace OCC.Combat
             if (level.Id == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id)
             {
                 state.AttachGreenhouseCollectionRoom(new GreenhouseCollectionRoomRuntime());
-                state.SetLootSource(new LootSourceState("FIRST-B2-CENTRAL-CHEST", new GridPosition(5, 4),
+                state.SetLootSource(new LootSourceState("FIRST-B2-CENTRAL-CHEST", new GridPosition(4, 3),
                     new[] { new ItemInstance("FIRST-B2-ACA-EQ-CR04", "ACA-EQ-CR04", 0) }));
             }
             if (level.Id == FirstRegionLevelCatalog.RainPrismCourt.Id)
-                state.SetLootSource(new LootSourceState("FIRST-B3-CHEST", new GridPosition(7, 4),
+                state.SetLootSource(new LootSourceState("FIRST-B3-CHEST", new GridPosition(6, 3),
                     new[] { new ItemInstance("FIRST-B3-ACA-EQ-CR01", "ACA-EQ-CR01", 0) }));
             if (level.Id == FirstRegionLevelCatalog.ThreeMaterialPressure.Id)
             {
-                state.Map.GetTile(new GridPosition(6, 4)).Durability = TileState.HeavyDurability;
+                state.Map.GetTile(new GridPosition(5, 3)).Durability = TileState.HeavyDurability;
                 state.AttachThreeMaterialPressure(new ThreeMaterialPressureRuntime());
             }
             // 场上只要有通用场地敌人（老寻／灯台值守／小铃），就接上公开条件反应运行时。

@@ -366,7 +366,7 @@ namespace OCC.Combat
             // movement highlight uses instead of being restated here.
             if (action == "移动")
             {
-                int budget = state == null || hero == null ? UnitState.BaseMovementRange : CombatMovementQuery.Budget(state, hero);
+                int budget = state == null || hero == null ? UnitState.HeroBaseMovementRange : CombatMovementQuery.Budget(state, hero);
                 return "选择 " + budget + " 格内可通行空格";
             }
             if (action == "攻击") return "选择 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range) + "内可见敌人";

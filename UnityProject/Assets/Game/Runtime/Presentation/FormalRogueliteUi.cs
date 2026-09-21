@@ -868,9 +868,9 @@ namespace OCC.Combat.Presentation
         {
             FirstRunMedicalSnapshot medical = run.CurrentMedicalService;
             string[] meals = { "MEAL-POWER", "MEAL-AETHER", "MEAL-GUARD" };
-            bool canHeal = medical.HealthCheckCompleted && !medical.HealUsed && run.StageContribution >= 1 && run.CurrentHealth < 18;
+            bool canHeal = medical.HealthCheckCompleted && !medical.HealUsed && run.StageContribution >= 1 && run.CurrentHealth < UnitState.HeroBaseHealth;
             string healStatus = medical.HealUsed ? "本轮已经治疗" : !medical.HealthCheckCompleted ? "请先完成健康确认" :
-                run.CurrentHealth >= 18 ? "生命已满" : run.StageContribution < 1 ? "缺少 1 学院贡献" : "可治疗";
+                run.CurrentHealth >= UnitState.HeroBaseHealth ? "生命已满" : run.StageContribution < 1 ? "缺少 1 学院贡献" : "可治疗";
             bool mealAvailable = medical.HealthCheckCompleted && !medical.MealUsed;
 
             DrawServiceTopBar(parent, run, "医务室（健康确认与服务）", "不消耗学院时序");
@@ -880,7 +880,7 @@ namespace OCC.Combat.Presentation
             Label("身份类别", "ACADEMY MEDICAL　SERVICE", identity.transform, new Vector2(28, -28), new Vector2(444, 26), 15,
                 Color.Lerp(FormalUiTheme.Safe, Color.white, .4f), TextAnchor.MiddleLeft);
             Label("身份名称", "公共\n医务室", identity.transform, new Vector2(28, -66), new Vector2(420, 150), 44, Color.white, TextAnchor.UpperLeft);
-            MedicalMetricRow(identity.transform, new Vector2(28, -238), "生命（上限 18）", run.CurrentHealth.ToString(), FormalUiTheme.Health);
+            MedicalMetricRow(identity.transform, new Vector2(28, -238), "生命（上限 50）", run.CurrentHealth.ToString(), FormalUiTheme.Health);
             MedicalMetricRow(identity.transform, new Vector2(28, -314), "魔力（上限 12）", run.CurrentMana.ToString(), FormalUiTheme.Magic);
             MedicalMetricRow(identity.transform, new Vector2(28, -390), "金・贡・食",
                 run.Gold + "・" + run.StageContribution + "・" + run.FirstRunExperience.AcademyFoodCount, amber);
@@ -1883,7 +1883,7 @@ namespace OCC.Combat.Presentation
             hero.preserveAspect = true; hero.raycastTarget = false;
             Label("角色称谓", "学院学员", portrait.transform, new Vector2(20, -210), new Vector2(330, 32), 20, text, TextAnchor.MiddleCenter);
 
-            MetricChip(parent, 24, -356, "生命", dto.CurrentHealth + "/" + 18, FormalUiTheme.Health,
+            MetricChip(parent, 24, -356, "生命", dto.CurrentHealth + "/" + UnitState.HeroBaseHealth, FormalUiTheme.Health,
                 FormalArtRegistry.ResourceMetricPath("health"), 190);
             MetricChip(parent, 226, -356, "魔力", dto.CurrentMana + "/" + RogueRuntimeConstants.MaximumPersonalMana, cyan,
                 FormalArtRegistry.ResourceMetricPath("mana"), 190);

@@ -92,7 +92,7 @@ namespace OCC.Combat.Tests
             CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id).State;
             var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
             var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
-            var position = new GridPosition(8, 2);
+            var position = new GridPosition(6, 1);
             var selection = new CombatSelectionController();
             BattlefieldCellPresentation model = presenter.Build(state, FirstRegionLevelCatalog.GreenhouseCollectionRoom,
                 null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
@@ -119,7 +119,7 @@ namespace OCC.Combat.Tests
             CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.ThreeMaterialPressure.Id).State;
             var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
             var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
-            var position = new GridPosition(6, 4);
+            var position = new GridPosition(5, 3);
             var selection = new CombatSelectionController();
             BattlefieldCellPresentation Build() => presenter.Build(state, FirstRegionLevelCatalog.ThreeMaterialPressure,
                 null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
