@@ -319,20 +319,31 @@ namespace OCC.Combat.Presentation
             ShowTurnBanner("你的行动　第 " + turnSequence + " 回合", hero.ActionPoints + " 行动点　" + hero.Mana + " 个人魔力", FormalUiTheme.Cyan, .92f);
         }
 
+        // The turn banner rides under the header and to the right of the docked mission goal, so
+        // it never tucks behind the header strip or collides with the goal card. Values are
+        // screen-space in the 1920x1080 reference canvas.
+        private const float TurnBannerLeft = 716f;
+        private const float TurnBannerTop = 76f;
+        private const float TurnBannerWidth = 560f;
+        private const float TurnBannerHeight = 78f;
+
         // Both factions use this one banner lifecycle. The enemy-only method above merely adds
         // intent focus before it enters the shared visual path.
         private void ShowTurnBanner(string title, string detail, Color accent, float visibleSeconds)
         {
             EnsureCanvas();
+            // Anchored top-centre so the scale-in grows from the middle, then offset to the
+            // intended left edge.
+            float centerOffsetX = TurnBannerLeft + TurnBannerWidth * .5f - UiLayoutContract.ReferenceWidth * .5f;
             enemyActionBanner = FormalUiKit.AnchoredPanel("回合行动提示", canvas.transform,
-                new Vector2(.375f, 1f), new Vector2(.5f, 1f), new Vector2(0f, -42f),
-                new Vector2(560f, 78f), new Color(.12f, .025f, .022f, .98f));
+                new Vector2(.5f, 1f), new Vector2(.5f, 1f), new Vector2(centerOffsetX, -TurnBannerTop),
+                new Vector2(TurnBannerWidth, TurnBannerHeight), new Color(.12f, .025f, .022f, .98f));
             Image panel = enemyActionBanner.GetComponent<Image>();
             if (panel != null) panel.raycastTarget = false;
             FormalUiKit.Label("行动提示标题", title, enemyActionBanner.transform,
-                new Vector2(20f, -10f), new Vector2(520f, 28f), 22, accent, TextAnchor.MiddleLeft);
+                new Vector2(20f, -10f), new Vector2(TurnBannerWidth - 40f, 28f), 22, accent, TextAnchor.MiddleLeft);
             FormalUiKit.Label("行动提示内容", detail, enemyActionBanner.transform,
-                new Vector2(20f, -40f), new Vector2(520f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                new Vector2(20f, -40f), new Vector2(TurnBannerWidth - 40f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);
 
             RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
             CanvasGroup group = enemyActionBanner.AddComponent<CanvasGroup>();

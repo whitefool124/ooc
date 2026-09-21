@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 
 namespace OCC.Combat.Presentation
@@ -90,7 +90,29 @@ namespace OCC.Combat.Presentation
                     }).ToArray();
                 case "relay_raid":
                 case "core_approach":
+                case "cliff_relay_survey":
                     return BrokenNorthBoundary(true);
+                case "library_discipline":
+                    return BrokenNorthBoundary(false).Concat(new[]
+                    {
+                        new AcademyStructurePlacement("academy_low_bookcase_2x1", 1, 4, 2, 1),
+                        new AcademyStructurePlacement("academy_low_bookcase_2x1", 7, 4, 2, 1),
+                        new AcademyStructurePlacement("academy_tool_cabinet_2x1", 5, 2, 2, 1)
+                    }).ToArray();
+                case "outer_ring_clearance":
+                    return FullNorthBoundary();
+                case "calibration_lockdown":
+                    return BrokenNorthBoundary(false).Concat(new[]
+                    {
+                        new AcademyStructurePlacement("academy_smithing_table_2x1", 4, 3, 2, 1),
+                        new AcademyStructurePlacement("academy_tool_cabinet_2x1", 5, 6, 2, 1)
+                    }).ToArray();
+                case "sealed_vault_certification":
+                    return BrokenNorthBoundary(false).Concat(new[]
+                    {
+                        new AcademyStructurePlacement("academy_low_bookcase_2x1", 4, 4, 2, 1),
+                        new AcademyStructurePlacement("academy_tool_cabinet_2x1", 6, 2, 2, 1)
+                    }).ToArray();
                 case "core_finale":
                     return FullNorthBoundary();
                 default:

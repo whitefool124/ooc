@@ -54,6 +54,7 @@ namespace OCC.Combat.Presentation
         private FormalUiInteractionLayer interactionLayer => presentation?.Interaction;
         private FormalStartupPresentation startupPresentation => presentation?.Startup;
         private CombatFlowTransitionPresentation flowTransition => presentation?.FlowTransition;
+        private CombatEntrySequencePresentation entrySequence => presentation?.EntrySequence;
         private FormalCombatHud combatHud => presentation?.CombatHud;
         private FormalBattlefieldView battlefieldView => presentation?.Battlefield;
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -111,7 +112,7 @@ namespace OCC.Combat.Presentation
             if (sceneUi != null) sceneUi.gameObject.SetActive(false);
             GameObject editorMap = GameObject.Find("地图可视化");
             if (editorMap != null) editorMap.SetActive(false);
-            developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术陪练生、火矢陪练生、侧锋陪练生、承压检验偶、缚环寻迹兽");
+            developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术生、火矢生、侧锋生、替身偶、寻迹兽");
             presentation = CombatPresentationComposition.Attach(gameObject, this);
             BuildCombatFromSceneStageTwo();
             formalAssets.ApplySceneSprites(transform);
@@ -281,9 +282,11 @@ namespace OCC.Combat.Presentation
         public void TacticalRestartDeveloperCombat()
         {
             if (trainingRangeActive) { PrepareTrainingRangeCurrent(); return; }
-            ApplyCombatSessionActivation(combatSession.Restart(developerFlow, enemyTurn, outcomeSettlement));
+            // A tactical restart resumes an already-introduced fight; replaying the opening
+            // cinematic there would only delay the player.
+            ApplyCombatSessionActivation(combatSession.Restart(developerFlow, enemyTurn, outcomeSettlement), false);
         }
-        private void ApplyCombatSessionActivation(CombatSessionActivation activation)
+        private void ApplyCombatSessionActivation(CombatSessionActivation activation, bool playEntrySequence = true)
         {
             state = activation.State;
             fireBattle = activation.FireBattle;
@@ -292,18 +295,25 @@ namespace OCC.Combat.Presentation
             visualFeedback?.ResetBattleFeedback();
             displayedHeroTurnSequence = -1;
             PublishCombatEffects(activation.InitialTurnEffects);
-            PresentHeroTurnBannerIfNeeded();
             RefreshSceneHud();
             MarkPresentation(UiPresentationArea.Combat);
             battlefieldView?.QueueCombatEntry();
             combatHud?.QueueCombatEntry();
+            // The entry cinematic owns this beat. Until it hands control back, Update() is
+            // frozen, which also defers the hero turn banner instead of talking over the tour.
+            if (playEntrySequence && entrySequence != null && entrySequence.Play())
+            {
+                MarkPresentation(UiPresentationArea.Flow);
+                return;
+            }
+            PresentHeroTurnBannerIfNeeded();
         }
         public void ReturnToDeveloperMenu()
         {
             if (trainingRangeActive)
             {
                 trainingRangeActive = false; rogueliteFlow.Reset();
-                developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术陪练生、火矢陪练生、侧锋陪练生、承压检验偶、缚环寻迹兽");
+                developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术生、火矢生、侧锋生、替身偶、寻迹兽");
                 BuildCombatFromSceneStageTwo(); selection.Reset();
                 RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
                 OpenFirstExperienceLanding();
@@ -441,8 +451,10 @@ namespace OCC.Combat.Presentation
 
         public void CompleteFirstRunExperience()
         {
-            if (!ExecuteFirstRunService(() => mapInteractions.CompleteFirstRunExperience(mapRun), "首次学院体验已完成，进度已保存。")) return;
-            ReturnToDeveloperMenu();
+            // 离开商店不再结束本局：同一局继续进入随机层，因此留在学院地图上。
+            if (!ExecuteFirstRunService(() => mapInteractions.CompleteFirstRunExperience(mapRun), "固定教学段已完成，学院一层已经展开。")) return;
+            MarkPresentation(UiPresentationArea.MapStructure);
+            ReturnToMapRun();
         }
 
         private bool ExecuteFirstRunService(Func<RogueliteMapInteractionResult> operation, string success)
@@ -1108,12 +1120,22 @@ namespace OCC.Combat.Presentation
         }
         public CombatFlowPhase CurrentFlowPhase => developerFlow == null ? CombatFlowPhase.DeveloperMenu : developerFlow.Phase;
         public MissionPreparation CurrentPreparation => developerFlow?.Preparation ?? developerPreparation;
+        public string CombatObjectiveSummary => CurrentPreparation?.RulesSummary ?? string.Empty;
+        public Texture2D UnitPortrait(UnitState unit) => unit == null ? null : formalAssets.Unit(unit);
+        public void CompleteCombatEntrySequence()
+        {
+            // The cinematic parked the camera on the hero; make the interactive pose explicit
+            // so the first player command starts from a legal, clamped view.
+            FocusHeroInBattlefield();
+            MarkPresentation(UiPresentationArea.Combat);
+        }
         public bool IsMapMenuOpen => mapMenuOpen;
         public bool IsRogueliteMenuOpen => rogueliteMenuOpen;
         public RogueliteUiPreferences UiPreferences => uiPreferences;
         public UiVisualEventStream UiVisualEvents => uiVisualEvents;
         public UiPresentationVersions UiPresentationVersions => uiPresentationVersions;
         public bool IsDeveloperCombatActive => developerFlow != null && developerFlow.Phase == CombatFlowPhase.Active;
+        public bool IsCombatEntryBlocking => entrySequence != null && entrySequence.IsBlockingInput;
         public bool IsTrainingRangeActive => trainingRangeActive;
         public TrainingRangeSession TrainingRange => trainingRangeSession;
         public ArtifactDefinition CurrentTrainingRangeArtifact => trainingRangeSession?.CurrentArtifact;
@@ -1136,6 +1158,7 @@ namespace OCC.Combat.Presentation
         public int CombatActionPresentationVersion => visualFeedback?.ActionPresentationVersion ?? 0;
         public UnitState PresentCombatUnit(UnitState unit) => visualFeedback?.PresentedUnit(unit) ?? unit;
         public bool IsInteractionModalOpen => IsCombatActionPlaying || battlefieldContextMenuOpen ||
+            (entrySequence != null && entrySequence.IsBlockingInput) ||
             (interactionLayer != null && interactionLayer.IsConfirmationOpen) ||
             (inventoryPanel != null && inventoryPanel.IsOpen);
         public void ToggleDeveloperConsole()
@@ -1428,6 +1451,8 @@ namespace OCC.Combat.Presentation
         public bool TryOpenCombatInventory()
         {
             UnitState hero = state?.GetUnit("hero");
+            if (IsCombatEntryBlocking)
+            { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "战场还在展开，请稍候。")); return false; }
             if (!IsDeveloperCombatActive || hero == null || state.ActiveUnitId != hero.Id)
             { ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "只能在自己的行动阶段进入整理界面。")); return false; }
             int openCountBefore = state.InventoryOpenCount;
@@ -1492,6 +1517,9 @@ namespace OCC.Combat.Presentation
         private void Update()
         {
             if (!Application.isPlaying || developerFlow == null || state == null) return;
+            // The entry cinematic drives the camera and owns the opening beat; hold the
+            // simulation, the hero-follow panner and the turn banner until it hands control back.
+            if (entrySequence != null && entrySequence.IsBlockingInput) return;
             if (followHeroMovement) FollowHeroAtSafeEdge();
             if (IsCombatActionPlaying) return;
             if (!trainingRangeActive)
@@ -1551,6 +1579,43 @@ namespace OCC.Combat.Presentation
             if (!DeveloperBuildGate.IsEnabled) return;
             if (developerFlow?.Phase != CombatFlowPhase.Active) return;
             state.ResolveDebugOutcome(victory); developerFlow.RefreshOutcome(); HandleRogueliteOutcome(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
+        }
+
+        // 开发线一键过关：只在开发构建可用，不影响正式玩家 UI。
+        public bool CanUseDeveloperMapAdvance => DeveloperBuildGate.IsEnabled && mapRun != null && !mapRun.IsComplete;
+        public string DeveloperMapAdvanceSummary { get; private set; } = string.Empty;
+
+        public void DeveloperForceWinCurrentCombat()
+        {
+            if (!CanUseDeveloperMapAdvance) return;
+            RogueliteDeveloperAdvanceReport report = RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(mapRun);
+            PublishDeveloperMapAdvance(report);
+        }
+
+        public void DeveloperAdvanceToFinale()
+        {
+            if (!CanUseDeveloperMapAdvance) return;
+            RogueliteDeveloperAdvanceReport report = RogueliteDeveloperRunPolicy.AdvanceToFinale(mapRun);
+            PublishDeveloperMapAdvance(report);
+        }
+
+        public void DeveloperSettleCurrentReward()
+        {
+            if (!CanUseDeveloperMapAdvance) return;
+            RogueliteDeveloperAdvanceReport report = new RogueliteDeveloperAdvanceReport();
+            RogueliteDeveloperRunPolicy.TrySettlePendingReward(mapRun, report);
+            PublishDeveloperMapAdvance(report);
+        }
+
+        private void PublishDeveloperMapAdvance(RogueliteDeveloperAdvanceReport report)
+        {
+            DeveloperMapAdvanceSummary = report.Summary;
+            MarkPresentation(UiPresentationArea.MapStructure);
+            MarkPresentation(UiPresentationArea.MapResources);
+            MarkPresentation(UiPresentationArea.Settlement);
+            if (!SaveMapRun()) return;
+            settlementPresentation?.RefreshNow();
+            ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, report.Summary));
         }
         private void RefreshSceneHud()
         {

@@ -58,20 +58,44 @@ namespace OCC.Combat.Presentation
 
         private void DrawHome()
         {
-            Rect panel = new Rect(590, 220, 740, 520); Panel(panel, new Color(.95f, .72f, .24f));
-            Title(panel, "开发控制台　F1 关闭", "F2 可直接进入全游戏术式调试靶场。");
-            if (ClickButton(new Rect(panel.x + 28, panel.y + 126, 684, 72), "进入全游戏术式调试靶场\n77 项能力　目标预览　确定性施放　数值复测"))
+            Rect panel = new Rect(500, 130, 920, 820); Panel(panel, new Color(.95f, .72f, .24f));
+            Title(panel, "开发控制台　F1 关闭", "F2 可直接进入全游戏术式调试靶场。地图开发线只影响本地存档。");
+            if (ClickButton(new Rect(panel.x + 28, panel.y + 126, 864, 72), "进入全游戏术式调试靶场\n77 项能力　目标预览　确定性施放　数值复测"))
             { bootstrap.StartTrainingRange(); lastError = null; }
             GUI.enabled = bootstrap.IsDeveloperCombatActive;
             if (ClickButton(new Rect(panel.x + 28, panel.y + 224, 212, 58), "战术重开")) bootstrap.TacticalRestartDeveloperCombat();
             if (ClickButton(new Rect(panel.x + 264, panel.y + 224, 212, 58), "测试胜利")) bootstrap.ForceCurrentOutcome(true);
             if (ClickButton(new Rect(panel.x + 500, panel.y + 224, 212, 58), "测试失败")) bootstrap.ForceCurrentOutcome(false);
             GUI.enabled = true;
-            if (ClickButton(new Rect(panel.x + 28, panel.y + 310, 332, 58), "返回入口")) bootstrap.ReturnToDeveloperMenu();
-            if (ClickButton(new Rect(panel.x + 380, panel.y + 310, 332, 58), "关闭控制台")) open = false;
+
+            Box(new Rect(panel.x + 28, panel.y + 300, 864, 300), "学院地图开发线　一键过关 / 连续推进到首领");
+            GUI.enabled = bootstrap.CanUseDeveloperMapAdvance;
+            if (ClickButton(new Rect(panel.x + 46, panel.y + 350, 268, 60), "一键过关\n结算当前战斗与掉落"))
+                Safe(bootstrap.DeveloperForceWinCurrentCombat);
+            if (ClickButton(new Rect(panel.x + 326, panel.y + 350, 268, 60), "连续推进到首领\n自动处理沿途节点"))
+                Safe(bootstrap.DeveloperAdvanceToFinale);
+            if (ClickButton(new Rect(panel.x + 606, panel.y + 350, 268, 60), "结算当前奖励\n领取或放弃悬空奖励"))
+                Safe(bootstrap.DeveloperSettleCurrentReward);
+            GUI.enabled = true;
+            GUI.color = new Color(.92f, .86f, .58f);
+            GUI.Label(new Rect(panel.x + 46, panel.y + 424, 828, 56), string.IsNullOrEmpty(bootstrap.DeveloperMapAdvanceSummary)
+                ? "连续推进会按真实相邻路线走到终考开放；首领战仍需点击地图上的古塔核心出发，再用“测试胜利”结算。"
+                : bootstrap.DeveloperMapAdvanceSummary);
             GUI.color = new Color(.58f, .65f, .68f);
-            GUI.Label(new Rect(panel.x + 28, panel.y + 400, 684, 70), "靶场不推进剧情或肉鸽存档；敌方 AI、胜负收束与自动结束行动均停用。关闭控制台后仍可在棋盘上手动选格施术。");
+            GUI.Label(new Rect(panel.x + 46, panel.y + 486, 828, 96), "开发线不走正式玩家 UI：按钮只在 OCC_DEVELOPER_TOOLS 构建出现。每一步都会保存存档，便于复现。");
             GUI.color = Color.white;
+
+            if (ClickButton(new Rect(panel.x + 28, panel.y + 618, 424, 58), "返回入口")) bootstrap.ReturnToDeveloperMenu();
+            if (ClickButton(new Rect(panel.x + 468, panel.y + 618, 424, 58), "关闭控制台")) open = false;
+            GUI.color = new Color(.58f, .65f, .68f);
+            GUI.Label(new Rect(panel.x + 28, panel.y + 696, 864, 96), "靶场不推进剧情或肉鸽存档；敌方 AI、胜负收束与自动结束行动均停用。关闭控制台后仍可在棋盘上手动选格施术。");
+            GUI.color = Color.white;
+            if (!string.IsNullOrEmpty(lastError))
+            {
+                GUI.color = new Color(.94f, .32f, .25f);
+                GUI.Label(new Rect(panel.x + 28, panel.y + 776, 864, 30), "控制台错误　" + lastError);
+                GUI.color = Color.white;
+            }
         }
 
         private void DrawTrainingRange()

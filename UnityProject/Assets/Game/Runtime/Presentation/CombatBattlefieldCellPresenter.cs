@@ -393,6 +393,12 @@ namespace OCC.Combat.Presentation
                 effects.Add("烟幕可进入，但会截断双方穿过、射入或射出的远程攻击线，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
             if (tile.IsScorched)
                 effects.Add("灯藤焦痕仅作视觉记录，不造成伤害、遮挡或状态");
+            if (tile.IsLoosePaper)
+                effects.Add("散页使进入消耗 2 移动距离，被浅水打湿后暂时不可燃，被点燃即转为燃烧地格，并可被风逐格搬动");
+            if (tile.HasTrace)
+                effects.Add("痕迹记录经过的单位，供追踪类单位读取；被浅水、燃烧地格或强风作用时立即移除");
+            if (tile.IsBindingMark)
+                effects.Add("约束纹使进入者留在原格且本回合不能主动移动；被浅水、燃烧地格或烟尘覆盖即失效");
             return effects.Count == 0 ? string.Empty : string.Join("；", effects) + "。";
         }
 
@@ -416,6 +422,9 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsPermanentWall)
                 objects.Add("永久墙体阻挡移动与视线，不可破坏");
+            else if (tile.IsStakedStructure)
+                objects.Add(tile.IsDestroyed ? "标定结构残骸已失去阻挡和防护效果" :
+                    "标定结构是现场夯筑的掩体，耐久 " + tile.Durability + "，阻挡移动与视线，与其正交相邻会在自身回合结束获得 4 护盾");
             else if (tile.Cover == CoverType.Light)
                 objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果，可正常通行" :
                     "轻掩体耐久 " + tile.Durability + "，肉鸽战斗中站立其上会在自身回合结束获得 2 护盾");
@@ -424,6 +433,18 @@ namespace OCC.Combat.Presentation
                     "重掩体耐久 " + tile.Durability + "，会阻挡移动与视线，肉鸽战斗中与其正交相邻会在自身回合结束获得 4 护盾");
             else if (tile.IsDecoy)
                 objects.Add("诱导灯占据该格，耐久 " + tile.Durability + "；5 格内普通敌人会公开改为接近并破坏它，持续到主角下一回合开始");
+            else if (tile.IsOverloadDevice)
+                objects.Add(tile.IsDestroyed ? "过载装置已引爆，不再有威胁" :
+                    "过载装置不可进入，耐久 " + tile.Durability + "，被摧毁时对正交四格结算 8 点以太伤害，敌我一致");
+            else if (tile.IsCertifierStand)
+                objects.Add(tile.IsDestroyed ? "检定台已损毁，不再提供读数" :
+                    "检定台不可进入，耐久 " + tile.Durability + "，单位进入正交邻接时公开邻接单位的耐久与护盾读数，敌我同规则");
+            else if (tile.IsWardGenerator)
+                objects.Add(tile.IsDestroyed ? "护罩发生器已损毁，不再提供结构护盾" :
+                    "护罩发生器不可进入，耐久 " + tile.Durability + "，自身回合结束时为正交相邻单位提供 4 点结构护盾，被摧毁即不再提供");
+            else if (tile.IsTowerMechanism)
+                objects.Add(tile.IsDestroyed ? "塔内机关已拆除，不再计入维护链" :
+                    "塔内机关不可进入，耐久 " + tile.Durability + "，放行前不提供任何效果，放行后计入维护链，双方均可拆除");
             else if (tile.IsDevice)
                 objects.Add(tile.IsDestroyed ? "损毁设备已经失效" :
                     "战场设备耐久 " + tile.Durability + "，可被互动、破坏或指定术式影响");

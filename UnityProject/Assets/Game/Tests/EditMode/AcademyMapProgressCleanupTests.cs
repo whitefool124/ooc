@@ -44,18 +44,28 @@ namespace OCC.Combat.Tests
                 .Take(12).Select(n => n.Id).ToArray();
             dto.VisitedNodeIds.AddRange(nodes);
             if (!dto.VisitedNodeIds.Contains("core_vault")) dto.VisitedNodeIds.Add("core_vault");
-            dto.CompletedNodeIds.AddRange(nodes.Take(11));
+            // 走进 11 个节点但只完成 10 个：终考门槛按“已完成”而不是“已访问”计算。
+            dto.CompletedNodeIds.AddRange(nodes.Take(AcademyMapTuning.BossMinimumProgress));
             RogueliteMapRun run = RogueliteMapRun.FromRogue11(dto);
 
             Assert.That(run.AcademyProgress, Is.GreaterThanOrEqualTo(12));
-            Assert.That(run.CanChallengeAcademyFinale, Is.False);
+            Assert.That(run.CanChallengeAcademyFinale, Is.True);
+            Assert.That(run.IsNodeAvailable("core_finale"), Is.True);
             RogueMapStatusPresentation status = new RogueMapStatusPresentation(run);
-            Assert.That(status.CompletedNodes, Is.EqualTo(11));
-            Assert.That(status.EarlyFinaleReady, Is.False);
+            Assert.That(status.CompletedNodes, Is.EqualTo(AcademyMapTuning.BossMinimumProgress));
+            Assert.That(status.EarlyFinaleReady, Is.True);
             Assert.That(RogueliteMapVisualPresentation.RestrictionText(run, run.MapNode("core_finale")),
-                Is.EqualTo("还不能参加终考：再完成 1 个地点"));
+                Is.EqualTo("可以直接前往"));
 
-            dto.CompletedNodeIds.Add(nodes[11]);
+            // 只访问、不完成就不会开门。
+            dto.CompletedNodeIds.Clear();
+            dto.CompletedNodeIds.AddRange(nodes.Take(AcademyMapTuning.BossMinimumProgress - 1));
+            run = RogueliteMapRun.FromRogue11(dto);
+            Assert.That(run.AcademyProgress, Is.GreaterThanOrEqualTo(12));
+            Assert.That(run.CanChallengeAcademyFinale, Is.False);
+            Assert.That(new RogueMapStatusPresentation(run).EarlyFinaleReady, Is.False);
+
+            dto.CompletedNodeIds.Add(nodes[AcademyMapTuning.BossMinimumProgress - 1]);
             run = RogueliteMapRun.FromRogue11(dto);
             Assert.That(run.IsNodeAvailable("core_finale"), Is.True);
             Assert.That(new RogueMapStatusPresentation(run).EarlyFinaleReady, Is.True);

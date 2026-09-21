@@ -49,12 +49,14 @@ namespace OCC.Combat.Presentation
             if (inventoryBackdrop == null) throw new KeyNotFoundException("Missing formal inventory backdrop");
         }
         public bool IsOpen => open;
-        public static Rect LauncherRect => new Rect(1472f, 16f, 160f, 48f);
         public bool RequestOpen() => TryOpen();
 
         private void OnGUI()
         {
             if (bootstrap == null || !Application.isPlaying || !bootstrap.IsDeveloperCombatActive) return;
+            // IMGUI composites above every canvas, so the entry cinematic's black fade cannot
+            // hide this launcher - it has to stand down for the duration itself.
+            if (bootstrap.IsCombatEntryBlocking) return;
             HandleHotkey();
             float scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f); Matrix4x4 previous = GUI.matrix;
             GUI.matrix = Matrix4x4.TRS(new Vector2((Screen.width - 1920f * scale) * .5f, (Screen.height - 1080f * scale) * .5f), Quaternion.identity, Vector3.one * scale);
@@ -62,8 +64,8 @@ namespace OCC.Combat.Presentation
             GUI.depth = -1100; ConfigureFormalSkin(previousSkin);
             if (!open)
             {
-                if (ClickButton(LauncherRect, "背包 [B]　消耗 1 AP")) TryOpen();
-                DrawClickFeedback();
+                // The launcher is retired: the formal HUD header already owns a proper 背包
+                // button, and this IMGUI one drew on top of it (and 重开) every frame.
                 GUI.skin = previousSkin; GUI.matrix = previous; return;
             }
             DrawPanel(); DrawClickFeedback(); GUI.skin = previousSkin; GUI.matrix = previous;

@@ -128,12 +128,17 @@ namespace OCC.Combat.Tests
                 {
                     RectTransform row = rows[index];
                     Assert.That(row.sizeDelta, Is.EqualTo(new Vector2(388f, 60f)));
-                    Assert.That(row.anchoredPosition.y, Is.EqualTo(-104f - index * 66f));
+                    Assert.That(row.anchoredPosition.y, Is.EqualTo(-56f - index * 56f));
                     Assert.That(row.Find("正式皮肤"), Is.Null,
                         "a compact action-value row cannot spend 12px on a repeated heavy frame");
                     RectTransform divider = row.Find("细分隔").GetComponent<RectTransform>();
                     Assert.That(divider.anchoredPosition.y, Is.EqualTo(-58f));
                     Assert.That(divider.sizeDelta.y, Is.EqualTo(2f));
+                    // The value bar spans the row instead of leaving the left third of the cell
+                    // empty, which is what the packed row layout is for.
+                    RectTransform track = row.Find("单位行动值轨道").GetComponent<RectTransform>();
+                    Assert.That(track.anchoredPosition.x, Is.EqualTo(16f));
+                    Assert.That(track.sizeDelta.x, Is.EqualTo(356f));
                     foreach (Text label in row.GetComponentsInChildren<Text>())
                     {
                         label.cachedTextGenerator.Populate(label.text, label.GetGenerationSettings(label.rectTransform.rect.size));
@@ -248,7 +253,7 @@ namespace OCC.Combat.Tests
                 RectTransform row = panel.Find("位置行动_0").GetComponent<RectTransform>();
                 Text action = row.GetComponentInChildren<Text>();
                 Text detail = row.Find("行动资源").GetComponent<Text>();
-                action.text = "攻击 高年级陪练生";
+                action.text = "攻击 盾术生";
                 detail.text = "1 行动点　11 个人魔力";
                 action.cachedTextGenerator.Populate(action.text, action.GetGenerationSettings(action.rectTransform.rect.size));
                 detail.cachedTextGenerator.Populate(detail.text, detail.GetGenerationSettings(detail.rectTransform.rect.size));
@@ -372,7 +377,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void CombatStatusSummary_CollapsesOverflowInsteadOfCoveringActionPoints()
+        public void CombatStatusEntries_KeepEveryStatusSeparateAndNeverExceedTheirSlots()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             hero.ApplyStatus(StatusType.Burning, 2);
@@ -380,13 +385,33 @@ namespace OCC.Combat.Tests
             hero.ApplyStatus(StatusType.Bound, 1);
             hero.ApplyStatus(StatusType.ArmorBreak, 3);
             CombatState state = new CombatState(new GridMap(2, 2), new[] { hero });
-            MethodInfo method = typeof(FormalCombatHud).GetMethod("StatusText", BindingFlags.Static | BindingFlags.NonPublic);
 
-            string summary = (string)method.Invoke(null, new object[] { state, hero });
+            GameObject hudObject = new GameObject("status-entry-hud", typeof(FormalCombatHud));
+            try
+            {
+                FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
+                MethodInfo build = typeof(FormalCombatHud).GetMethod("BuildHeroStatusRows", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(build, Is.Not.Null, "the status column builds one entry per status");
+                build.Invoke(hud, new object[] { state, hero });
 
-            Assert.That(summary, Does.Contain("+3"));
-            Assert.That(summary.Split(new[] { "<color=" }, System.StringSplitOptions.None).Length - 1, Is.EqualTo(1));
-            Assert.That(summary.Length, Is.LessThan(64));
+                FieldInfo field = typeof(FormalCombatHud).GetField("heroStatusRows", BindingFlags.Instance | BindingFlags.NonPublic);
+                var rows = (System.Collections.IList)field.GetValue(hud);
+                Assert.That(rows, Has.Count.EqualTo(4), "each status gets its own entry");
+                Assert.That(rows.Count, Is.LessThanOrEqualTo(5), "the column must not exceed its slots");
+
+                List<string> labels = new List<string>();
+                foreach (object row in rows)
+                {
+                    var rowType = row.GetType();
+                    string label = (string)rowType.GetField("Label").GetValue(row);
+                    string body = (string)rowType.GetField("Body").GetValue(row);
+                    Assert.That(label, Is.Not.Empty);
+                    Assert.That(body, Does.Contain("剩余"), "each entry carries its own duration detail");
+                    labels.Add(label);
+                }
+                Assert.That(labels.Distinct().Count(), Is.EqualTo(4), "entries must be distinguishable");
+            }
+            finally { Object.DestroyImmediate(hudObject); }
         }
 
         [Test]

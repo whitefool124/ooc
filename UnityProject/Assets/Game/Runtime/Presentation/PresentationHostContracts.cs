@@ -153,6 +153,12 @@ namespace OCC.Combat.Presentation
     {
         CombatState CurrentState { get; }
         bool IsDeveloperCombatActive { get; }
+        /// <summary>
+        /// True while the combat-entry cinematic still owns the screen.  This panel draws with
+        /// IMGUI, which composites above every canvas, so it has to suppress itself rather than
+        /// rely on the entry overlay covering it.
+        /// </summary>
+        bool IsCombatEntryBlocking { get; }
         bool TryOpenCombatInventory();
         void ActivateInventoryQuickbar(int slot);
         void EquipInventoryQuickbar(string instanceId, int slot);
@@ -181,7 +187,12 @@ namespace OCC.Combat.Presentation
         bool IsDeveloperCombatActive { get; }
         bool IsTrainingRangeActive { get; }
         TrainingRangeSession TrainingRange { get; }
+        bool CanUseDeveloperMapAdvance { get; }
+        string DeveloperMapAdvanceSummary { get; }
         void BrowseTrainingRangeAbility(string abilityId);
+        void DeveloperAdvanceToFinale();
+        void DeveloperForceWinCurrentCombat();
+        void DeveloperSettleCurrentReward();
         TrainingRangeExecutionReport ExecuteTrainingRangeCurrent();
         void ForceCurrentOutcome(bool victory);
         void PrepareTrainingRangeCurrent();
@@ -193,9 +204,23 @@ namespace OCC.Combat.Presentation
         void TacticalRestartDeveloperCombat();
     }
 
+    public interface ICombatEntrySequenceHost : IUiPreferenceHost
+    {
+        CombatState CurrentState { get; }
+        BattlefieldViewport BattlefieldViewport { get; }
+        bool IsDeveloperCombatActive { get; }
+        /// <summary>Player-facing mission goal, shown in full at entry and docked afterwards.</summary>
+        string CombatObjectiveSummary { get; }
+        /// <summary>Formal battlefield sprite for a unit; reuses the live asset lookup.</summary>
+        Texture2D UnitPortrait(UnitState unit);
+        /// <summary>Called once the entry cinematic has handed control back to the battle.</summary>
+        void CompleteCombatEntrySequence();
+    }
+
     public interface ICombatPresentationCompositionHost : ICombatFeedbackHost, ICombatHudHost,
         IRogueliteUiHost, IStartupPresentationHost, IInteractionPresentationHost,
-        ISettlementPresentationHost, IInventoryPresentationHost, IDeveloperConsoleHost, IBattlefieldViewHost
+        ISettlementPresentationHost, IInventoryPresentationHost, IDeveloperConsoleHost, IBattlefieldViewHost,
+        ICombatEntrySequenceHost
     {
     }
 

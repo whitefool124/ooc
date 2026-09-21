@@ -7,7 +7,9 @@ namespace OCC.Combat
     public static class CombatMovementQuery
     {
         public static int Budget(CombatState state, UnitState unit) =>
-            state.RainLanternCourt == null ? unit.MovementRangeThisTurn + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) : state.RainLanternCourt.MovementBudget(unit);
+            state.RainLanternCourt == null
+                ? unit.MovementRangeThisTurn + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) + (state.AcademyFieldEnemy?.MovementBonus(state, unit) ?? 0)
+                : state.RainLanternCourt.MovementBudget(unit);
 
         public static IReadOnlyList<GridPosition> FindPath(CombatState state, UnitState unit, GridPosition destination) =>
             state.RainLanternCourt == null
@@ -19,7 +21,8 @@ namespace OCC.Combat
         {
             if (state.RainLanternCourt != null) return state.RainLanternCourt.EntryCost(unit, position);
             TileState tile = state.Map.GetTile(position);
-            return tile.IsWater || tile.IsLampVine || tile.IsCrystalShard ? 2 : 1;
+            int cost = tile.IsWater || tile.IsLampVine || tile.IsCrystalShard || tile.IsLoosePaper ? 2 : 1;
+            return state.AcademyFieldEnemy?.EntryCost(state, unit, position, cost) ?? cost;
         }
 
         public static string PlayerTargetFailure(CombatState state, GridPosition destination, CombatMovementRangeCache cache = null)

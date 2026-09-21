@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -29,11 +29,11 @@ namespace OCC.Combat.Tests
             EnemyArchetype hound = EnemyArchetypes.Get("tether_hound");
 
             Assert.That((mauler.DisplayName, mauler.MaxHealth, mauler.Armor, mauler.Shield, mauler.Speed),
-                Is.EqualTo(("承压检验偶", 14, 1, 0, 8)));
+                Is.EqualTo(("替身偶", 14, 1, 0, 8)));
             Assert.That((mender.DisplayName, mender.MaxHealth, mender.Armor, mender.Shield, mender.Speed),
-                Is.EqualTo(("护障助教", 12, 0, 4, 7)));
+                Is.EqualTo(("补盾助教", 12, 0, 4, 7)));
             Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
-                Is.EqualTo(("缚环寻迹兽", 12, 0, 0, 10)));
+                Is.EqualTo(("寻迹兽", 12, 0, 0, 10)));
             Assert.That(hound.Weapon.Damage, Is.EqualTo(3));
 
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
@@ -49,16 +49,16 @@ namespace OCC.Combat.Tests
         {
             var expected = new Dictionary<string, (string Name, EnemyResolutionKind Kind, string Resolution)>
             {
-                ["shieldguard"] = ("高年级陪练生·盾术", EnemyResolutionKind.Student, "认输并退出考核"),
-                ["pyromancer"] = ("高年级陪练生·火矢", EnemyResolutionKind.Student, "认输并退出考核"),
-                ["raider"] = ("高年级陪练生·侧锋", EnemyResolutionKind.Student, "认输并退出考核"),
-                ["rune_arbalist"] = ("高年级陪练生·重弩", EnemyResolutionKind.Student, "认输并退出考核"),
-                ["barrier_mender"] = ("护障助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
-                ["stone_snare"] = ("约束助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
-                ["lantern_revealer"] = ("档案巡查员", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
-                ["elite_vanguard"] = ("刻阵教官", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
-                ["tether_hound"] = ("缚环寻迹兽", EnemyResolutionKind.Beast, "被制服并重新约束"),
-                ["sigil_mauler"] = ("承压检验偶", EnemyResolutionKind.Construct, "被摧毁")
+                ["shieldguard"] = ("盾术生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["pyromancer"] = ("火矢生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["raider"] = ("侧锋生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["rune_arbalist"] = ("背弩生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["barrier_mender"] = ("补盾助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["stone_snare"] = ("拴索助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["lantern_revealer"] = ("提灯巡查", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["elite_vanguard"] = ("划线教官", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["tether_hound"] = ("寻迹兽", EnemyResolutionKind.Beast, "被制服并重新约束"),
+                ["sigil_mauler"] = ("替身偶", EnemyResolutionKind.Construct, "被摧毁")
             };
 
             foreach (KeyValuePair<string, (string Name, EnemyResolutionKind Kind, string Resolution)> pair in expected)
@@ -101,10 +101,13 @@ namespace OCC.Combat.Tests
             EnemyArchetype[] pack = PackIds.Select(EnemyArchetypes.Get).ToArray();
             Assert.That(pack.Select(enemy => enemy.ArtId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
             Assert.That(pack.Select(enemy => enemy.PrimarySkill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
-            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(12),
-                "The ten reusable pack skills are joined by the boss-only core lance and pulse.");
+            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(18),
+                "The ten reusable pack skills are joined by the boss-only core lance and pulse plus the six field-enemy abilities.");
             Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id),
-                Does.Contain(EnemyAbilityCatalog.CoreLance.Id).And.Contain(EnemyAbilityCatalog.CorePulse.Id));
+                Does.Contain(EnemyAbilityCatalog.CoreLance.Id).And.Contain(EnemyAbilityCatalog.CorePulse.Id)
+                    .And.Contain(EnemyAbilityCatalog.TrackerSnap.Id).And.Contain(EnemyAbilityCatalog.TrackerMaul.Id)
+                    .And.Contain(EnemyAbilityCatalog.SpotlightMirror.Id).And.Contain(EnemyAbilityCatalog.WindScrollEdge.Id)
+                    .And.Contain(EnemyAbilityCatalog.LegacyPulse.Id).And.Contain(EnemyAbilityCatalog.PrototypeDeploy.Id));
             Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 14), Is.True);
         }
 
@@ -270,7 +273,7 @@ namespace OCC.Combat.Tests
             Assert.That(EnemyAbilityCatalog.WindlassBolt.MinimumRange, Is.EqualTo(2));
             Assert.That(retreat.Type, Is.EqualTo(CombatCommandType.Move));
             Assert.That(retreat.Destination.ManhattanDistance(hero.Position), Is.EqualTo(2));
-            Assert.That(intent.ActionName, Is.EqualTo("重弩退距"));
+            Assert.That(intent.ActionName, Is.EqualTo("背弩生退距"));
             Assert.That(intent.ResultSummary, Does.Contain("近身死区"));
 
             CombatResolver.BeginTurn(state, enemy.Id);

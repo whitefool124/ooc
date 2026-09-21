@@ -69,6 +69,7 @@ namespace OCC.Combat.Presentation
         private static LevelTerrainPlacement V(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LampVine);
         private static LevelTerrainPlacement W(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.Water);
         private static LevelTerrainPlacement C(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.AetherCrystal);
+        private static LevelTerrainPlacement M(int mechanismKind, int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.TowerMechanism, mechanismKind);
 
         private static readonly string[] FlankSpells =
         {
@@ -153,15 +154,15 @@ namespace OCC.Combat.Presentation
 
         private static CombatTestArenaScenario CreateSpellLab(string suffix, string name, string[] spells, string[] artifacts = null)
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6 H6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             string id = "arena_l_" + suffix;
             FirstRegionLevelDefinition level = Level(id, "L｜" + name,
                 "在同一紧凑场地验证整组术式的射程、条件、位移、场地覆盖与友伤预览。",
-                new GridPosition(2, 3), new[] { E("shieldguard", 4, 3), E("pyromancer", 7, 1), E("barrier_mender", 7, 5) },
+                new GridPosition(2, 3), new[] { E("shieldguard", 4, 3), E("pyromancer", 6, 1), E("barrier_mender", 6, 4) },
                 new[] { L(3, 2), L(3, 4), H(5, 2), H(5, 4), W(4, 1), W(4, 5), C(6, 3) }, walkable,
                 "近身目标、远距目标与支援目标同时公开", "掩体、水区和晶簇提供通用条件，不绑定单关机关");
             return new CombatTestArenaScenario(id, name, "L｜" + name,
-                "8 个术式全满；近、中、远目标及通用场地同时可用。", level, spells,
+                "25 格紧凑场地；近、中、远目标及通用场地同时可用。", level, spells,
                 artifacts ?? new[] { "G-T01", "G-T09", "G-T18", "G-T11" }, false, false, true);
         }
 
@@ -273,214 +274,217 @@ namespace OCC.Combat.Presentation
 
         private static CombatTestArenaScenario CreateFlankDrill()
         {
-            HashSet<GridPosition> walkable = Cells("D2 E2 F2 G2 C3 D3 E3 G3 H3 B4 C4 D4 E4 F4 G4 H4 C5 D5 E5 G5 H5 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("D2 E2 F2 G2 C3 D3 E3 G3 B4 C4 D4 E4 F4 G4 C5 D5 E5 G5 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n01_flank", "N01｜中庭侧锋对练",
-                "击倒盾术陪练生与侧锋陪练生。中线会卡住，北侧与南侧都能绕开。",
+                "击倒盾术生与侧锋生。重掩墙收窄了中线，迫使更快接敌。",
                 new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("raider", 6, 5) },
                 new[] { L(2, 3), L(4, 5), L(4, 1), L(6, 1), H(5, 2), H(5, 4) }, walkable,
-                "中线压盾，北截侧锋，南线绕侧", "盾术守中，侧锋从北线逼近；任一侧线都能改变先手。 ");
+                "中线压盾，北截侧锋，南线绕侧", "盾术生守中，侧锋从北线逼近；收窄后两侧接敌更快。 ");
             return new CombatTestArenaScenario("arena_n01_flank", "侧锋对练", "N01｜中庭侧锋对练",
-                "25 格可走区；可试罗盘拉近→火种＋协同标记→武器命中推位留火。", level, FlankSpells,
+                "22 格可走区；可试罗盘拉近→火种＋协同标记→武器命中推位留火。", level, FlankSpells,
                 new[] { "G-T09", "G-T07", "G-T01", "G-T13" });
         }
 
         private static CombatTestArenaScenario CreateTrackerDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 G3 H3 B4 C4 D4 E4 G4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 G3 B4 C4 D4 E4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n02_tracker", "N02｜宿舍外寻迹测试",
-                "击倒盾术陪练生与缚环寻迹兽。灯藤会遮住攻击线，但不会提供永久安全。",
+                "击倒盾术生与寻迹兽。收窄后灯藤遮断占比更高，走位更紧凑。",
                 new GridPosition(1, 3), new[] { E("shieldguard", 6, 5), E("tether_hound", 6, 1) },
                 new[] { L(2, 3), L(2, 5), L(2, 1), L(5, 5), L(5, 1), V(4, 2), V(4, 3), V(4, 4), H(5, 2), H(5, 3) }, walkable,
-                "藤带拆压，北截盾术，南诱寻迹兽", "灯藤延迟视线与追击；北、南干路依旧可走。 ");
+                "藤带拆压，北截盾术生，南诱寻迹兽", "灯藤延迟视线与追击；北、南干路依旧可走。 ");
             return new CombatTestArenaScenario("arena_n02_tracker", "寻迹测试", "N02｜宿舍外寻迹测试",
-                "28 格可走区；可试诱导灯只引开寻迹兽，再用灯藤高移动成本与缚位框维持拆分。", level, ControlSpells,
+                "26 格可走区；可试诱导灯只引开寻迹兽，再用灯藤高移动成本与缚位框维持拆分。", level, ControlSpells,
                 new[] { "G-T15", "G-T10", "G-T03", "G-T09" });
         }
 
         private static CombatTestArenaScenario CreateBarrierDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 F3 G3 H3 B4 C4 D4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 F3 G3 B4 C4 D4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n03_barrier", "N03｜护障课程示范",
-                "击倒护障助教与盾术陪练生。用柜体、站位或位移切断维护线。",
+                "击倒补盾助教与盾术生。收窄后排布更密，维护线更短。",
                 new GridPosition(1, 3), new[] { E("barrier_mender", 6, 5), E("shieldguard", 5, 3) },
                 new[] { L(2, 3), L(3, 5), L(3, 1), L(6, 2), H(4, 2), H(4, 3) }, walkable,
-                "北拆支援，中继切线，南侧压盾", "护障先于盾术行动；在 G5 建立重掩体会公开截断本轮续盾线。 ");
+                "北拆支援，中继切线，南侧压盾", "护障先于盾术生行动；紧凑排布下维护线更易被切断。 ");
             return new CombatTestArenaScenario("arena_n03_barrier", "护障示范", "N03｜护障课程示范",
-                "29 格可走区；可试移至 E5→在 G5 建墙，花满 3 AP 换一次公开续盾断档。", level, ControlSpells,
+                "26 格可走区；可试移至 E5→在 G5 建墙，花满 3 AP 换一次公开续盾断档。", level, ControlSpells,
                 new[] { "G-T08", "G-T07", "G-T09", "G-T04" });
         }
 
         private static CombatTestArenaScenario CreateFireDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n04_fire", "N04｜锅炉房火线演练",
-                "击倒火矢陪练生与侧锋陪练生。浅水带能清出安全落脚点，火线会迫使双方改道。",
+                "击倒火矢生与侧锋生。收窄后火线更快覆盖全场，浅水区选择更关键。",
                 new GridPosition(1, 3), new[] { E("pyromancer", 6, 1), E("raider", 6, 4) },
                 new[] { L(2, 2), L(2, 4), H(4, 2), H(4, 4), W(3, 3), W(4, 3), W(5, 3) }, walkable,
-                "水带越线，掩体逼近，侧廊追火矢", "浅水与火场互相覆盖；站在水带上安全，但会暴露在两侧攻击线上。 ");
+                "水带越线，掩体逼近，侧廊追火矢", "浅水与火场互相覆盖；紧凑场地中水带安全区更宝贵。 ");
             return new CombatTestArenaScenario("arena_n04_fire", "火线演练", "N04｜锅炉房火线演练",
-                "29 格可走区；可试火路覆盖水带→冷凝器清通道→封装筒续火→导位器拉回侧锋。", level, FireSpells,
+                "26 格可走区；可试火路覆盖水带→冷凝器清通道→封装筒续火→导位器拉回侧锋。", level, FireSpells,
                 new[] { "G-T11", "G-T07", "G-T09", "F-T01" });
         }
 
         private static CombatTestArenaScenario CreateArbalistDrill()
         {
-            HashSet<GridPosition> walkable = Cells("D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 H3 B4 C4 D4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6 H6");
-            FirstRegionLevelDefinition level = Level("arena_n05_arbalist", "N05｜回廊重弩校准",
-                "击倒重弩陪练生与侧锋陪练生。重柜切断远射线，短掩体只够完成一次换位。",
-                new GridPosition(1, 3), new[] { E("rune_arbalist", 7, 1), E("raider", 6, 4) },
+            HashSet<GridPosition> walkable = Cells("D2 E2 F2 G2 B3 C3 D3 E3 F3 B4 C4 D4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
+            FirstRegionLevelDefinition level = Level("arena_n05_arbalist", "N05｜回廊背弩生校准",
+                "击倒背弩生与侧锋生。收窄后重柜迫近，远程死区更易进入。",
+                new GridPosition(1, 3), new[] { E("rune_arbalist", 6, 1), E("raider", 6, 4) },
                 new[] { L(2, 2), L(2, 4), L(5, 2), H(4, 3), H(6, 3), H(6, 5) }, walkable,
-                "柜后换线，近身压弩，侧锋封退路", "直线留给重弩，柜后留给逼近；破坏柜体会同时打开双方射线。 ");
-            return new CombatTestArenaScenario("arena_n05_arbalist", "重弩校准", "N05｜回廊重弩校准",
-                "30 格可走区；可试 D4 拆 E4 重柜后越线，再贴入重弩 1 格死区迫其公开退距。", level, ArbalistSpells,
+                "柜后换线，近身压弩，侧锋封退路", "紧凑回廊中背弩生死区距离更短，柜后换线收益更高。 ");
+            return new CombatTestArenaScenario("arena_n05_arbalist", "背弩生校准", "N05｜回廊背弩生校准",
+                "25 格可走区；可试 D4 拆 E4 重柜后越线，再贴入背弩生 1 格死区迫其公开退距。", level, ArbalistSpells,
                 new[] { "G-T07", "G-T08", "G-T14", "G-T15" });
         }
 
         private static CombatTestArenaScenario CreateRestraintDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n06_restraint", "N06｜石索约束考核",
-                "击倒约束助教与侧锋陪练生。石索封步后仍可解缚、换位或守住窄口。",
+                "击倒拴索助教与侧锋生。收窄后晶簇争夺更激烈，通行线更少。",
                 new GridPosition(1, 3), new[] { E("stone_snare", 5, 2), E("raider", 6, 4) },
                 new[] { L(2, 3), L(3, 1), L(4, 4), L(3, 2), H(5, 4), C(4, 3) }, walkable,
-                "晶体争位，窄口抗缚，侧路换线", "石索控制通路、侧锋贴身；晶体是可争夺资源，不是唯一解。 ");
+                "晶体争位，窄口抗缚，侧路换线", "石索控制通路、侧锋贴身；紧凑场地中晶体争夺更关键。 ");
             return new CombatTestArenaScenario("arena_n06_restraint", "约束考核", "N06｜石索约束考核",
-                "30 格可走区；可试 D4 承受石索→罗盘拉助教到 D3→灼缚解离后立即换线。", level, RestraintSpells,
+                "27 格可走区；可试 D4 承受石索→罗盘拉拴索助教到 D3→灼缚解离后立即换线。", level, RestraintSpells,
                 new[] { "G-T03", "G-T09", "G-T13", "G-T06" });
         }
 
         private static CombatTestArenaScenario CreateMaintenanceDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n07_maintenance", "N07｜档案廊维护链",
-                "击倒护障助教、巡查员与盾术陪练生。先切断维护线，还是先处理显影威胁，由站位决定。",
-                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("barrier_mender", 6, 5), E("lantern_revealer", 7, 1) },
+                "击倒补盾助教、提灯巡查与盾术生。收窄后三敌排布更密，优先序更紧迫。",
+                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("barrier_mender", 6, 5), E("lantern_revealer", 6, 1) },
                 new[] { L(2, 2), L(2, 4), L(6, 2), H(4, 2), H(4, 4), V(5, 1), V(5, 5) }, walkable,
-                "中路断援，北压显影，南追维护", "三敌分处不同攻击线；灯藤能遮线，也可能掩护维护者。 ");
+                "中路断援，北压显影，南追维护", "三敌分处不同攻击线；紧凑排布下优先序更紧迫。 ");
             return new CombatTestArenaScenario("arena_n07_maintenance", "维护链", "N07｜档案廊维护链",
-                "30 格可走区；可试罗盘将盾术拉出 4 格维护范围，再以烙印＋贴身占位拆开三种意图。", level, ControlSpells,
+                "26 格可走区；可试罗盘将盾术生拉出 4 格维护范围，再以烙印＋贴身占位拆开三种意图。", level, ControlSpells,
                 new[] { "G-T08", "G-T09", "G-T14", "G-T15" });
         }
 
         private static CombatTestArenaScenario CreateContainmentDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n08_containment", "N08｜器材库收束演练",
-                "击倒寻迹兽、承压检验偶与约束助教。不要让束缚与近身破势在同一回合闭合。",
-                new GridPosition(1, 3), new[] { E("tether_hound", 6, 1), E("sigil_mauler", 7, 3), E("stone_snare", 6, 5) },
+                "击倒寻迹兽、替身偶与拴索助教。收窄后三线更密，闭合更快。",
+                new GridPosition(1, 3), new[] { E("tether_hound", 6, 1), E("sigil_mauler", 6, 2), E("stone_snare", 6, 5) },
                 new[] { L(2, 2), L(2, 4), L(4, 1), L(4, 5), H(4, 3), H(6, 3), C(3, 3) }, walkable,
-                "中轴卡偶，上下拆缚，晶体换资源", "上下两路施加束缚，中轴重偶负责惩罚停留；三者不会修改行动条。 ");
+                "中轴卡偶，上下拆缚，晶体换资源", "上下两路施加束缚，中轴重偶负责惩罚停留；紧凑场地中更易形成交叉。 ");
             return new CombatTestArenaScenario("arena_n08_containment", "收束演练", "N08｜器材库收束演练",
-                "30 格可走区；北路进位后用缚位框截住寻迹兽一轮，再以震测铅锤推开中轴重偶并撤出夹击线。", level, RestraintSpells,
+                "27 格可走区；北路进位后用缚位框截住寻迹兽一轮，再以震测铅锤推开中轴重偶并撤出夹击线。", level, RestraintSpells,
                 new[] { "G-T03", "G-T07", "G-T09", "G-T17" });
         }
 
         private static CombatTestArenaScenario CreateCrossfireDrill()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 B4 C4 D4 E4 F4 G4 B5 C5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_n09_crossfire", "N09｜终段交叉火线",
-                "击倒盾术、火矢与侧锋陪练生。火线会重画安全区，掩体破坏会改变全场射线。",
-                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("pyromancer", 7, 1), E("raider", 6, 5) },
+                "击倒盾术生、火矢与侧锋生。收窄后火线覆盖密度更高，掩体破坏影响更大。",
+                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("pyromancer", 6, 1), E("raider", 6, 5) },
                 new[] { L(2, 2), L(2, 4), L(5, 1), H(4, 2), H(4, 4), H(6, 3), W(3, 3), W(4, 3) }, walkable,
-                "水带抢中，拆柜开线，侧路分敌", "盾术占中、火矢控远、侧锋封退；每次破坏或点火都改变下一轮站位。 ");
+                "水带抢中，拆柜开线，侧路分敌", "盾术生占中、火矢控远、侧锋封退；紧凑场地下每次破坏都改变全场态势。 ");
             return new CombatTestArenaScenario("arena_n09_crossfire", "交叉火线", "N09｜终段交叉火线",
-                "30 格可走区；火路覆盖水带并压住中轴盾术，冷凝出入口后可追击抢效率，或以熔障爆点削柜后择一路解构推进。", level, CrossfireSpells,
+                "26 格可走区；火路覆盖水带并压住中轴盾术生，冷凝出入口后可追击抢效率，或以熔障爆点削柜后择一路解构推进。", level, CrossfireSpells,
                 new[] { "G-T11", "G-T08", "G-T09", "G-T01" });
         }
 
         private static CombatTestArenaScenario CreateEliteMaintenance()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6 H6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_e01_maintenance", "E01｜刻阵工坊断供",
-                "击倒刻阵教官、护障助教与承压检验偶。切断续盾线，再决定从哪一侧处理破势近战。",
-                new GridPosition(1, 3), new[] { E("elite_vanguard", 5, 3), E("barrier_mender", 7, 1), E("sigil_mauler", 6, 5) },
+                "击倒划线教官、补盾助教与替身偶。收窄后维护线更短，切线窗口更紧。",
+                new GridPosition(1, 3), new[] { E("elite_vanguard", 5, 3), E("barrier_mender", 6, 1), E("sigil_mauler", 6, 5) },
                 new[] { L(2, 2), L(2, 4), L(6, 2), H(4, 2), H(4, 4), C(5, 1) }, walkable,
-                "断供换线，双侧破势，晶体抢窗", "教官占中、助教续盾、检验偶封侧；三者的维护与接敌线全程公开。 ",
+                "断供换线，双侧破势，晶体抢窗", "划线教官占中、补盾助教续盾、替身偶封侧；紧凑场地中三角维护更易被切断。 ",
                 true);
             return new CombatTestArenaScenario("arena_e01_maintenance", "工坊断供", "E01｜刻阵工坊断供",
-                "32 格可走区；罗盘可把教官拉出维护距离，再以 U03 附着主手攻击、M09 重击完成断供；也可破晶或削柜换线。", level, PressureSpells,
+                "27 格可走区；罗盘可把划线教官拉出维护距离，再以 U03 附着主手攻击、M09 重击完成断供；也可破晶或削柜换线。", level, PressureSpells,
                 new[] { "G-T08", "G-T09", "G-T14", "G-T16" }, true);
         }
 
         private static CombatTestArenaScenario CreateEliteCrosslock()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6 H6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_e02_crosslock", "E02｜塔前对角封锁",
-                "击倒刻阵教官、重弩陪练生与约束助教。两条远程线交叉，但不能同时覆盖两侧外廊。",
-                new GridPosition(1, 3), new[] { E("elite_vanguard", 5, 3), E("rune_arbalist", 7, 1), E("stone_snare", 7, 5) },
+                "击倒划线教官、背弩生与拴索助教。收窄后封锁线交叉更快，外廊更短。",
+                new GridPosition(1, 3), new[] { E("elite_vanguard", 5, 3), E("rune_arbalist", 6, 1), E("stone_snare", 5, 4) },
                 new[] { L(2, 2), L(2, 4), L(5, 1), L(5, 5), H(4, 3), H(6, 2), H(6, 4) }, walkable,
-                "双廊切角，中轴诱敌，拆柜反射线", "重弩与石索覆盖相反外廊；教官只惩罚直穿中央。 ",
+                "双廊切角，中轴诱敌，拆柜反射线", "背弩生与拴索助教覆盖相反外廊；紧凑场地中划线教官覆盖范围更大。 ",
                 true);
             return new CombatTestArenaScenario("arena_e02_crosslock", "对角封锁", "E02｜塔前对角封锁",
-                "31 格可走区；北压重弩、南拆石索或中轴诱教官后换线。", level, CrossfireSpells,
+                "27 格可走区；北压背弩生、南拆石索或中轴诱划线教官后换线。", level, CrossfireSpells,
                 new[] { "G-T07", "G-T08", "G-T18", "G-T15" }, true);
         }
 
         private static CombatTestArenaScenario CreateElitePressure()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6 H6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_e03_pressure", "E03｜楔角稳压测试",
-                "击倒贯阵承压机·楔角与火矢陪练生。公开冲压线会先撞晶簇；水沟、灯藤和干路产生三种卸压结果。",
-                new GridPosition(1, 3), new[] { E("breach_ram", 7, 3), E("pyromancer", 7, 1) },
+                "击倒楔角与火矢生。收窄后冲压线覆盖范围更大，卸压窗口更短。",
+                new GridPosition(1, 3), new[] { E("breach_ram", 6, 2), E("pyromancer", 6, 1) },
                 new[] { W(3, 1), W(3, 2), W(3, 3), W(3, 4), W(3, 5), V(5, 1), V(5, 2), V(5, 4), V(5, 5), C(6, 3), L(2, 5) }, walkable,
-                "水沟冷却，藤带藏线，撞晶开窗", "楔角锁定主角并按五点移动预算冲压；碰撞对象与干湿地卸压结果在行动前公开。 ",
+                "水沟冷却，藤带藏线，撞晶开窗", "楔角锁定主角并按五点移动预算冲压；紧凑场地中卸压路线选择更关键。 ",
                 true);
             return new CombatTestArenaScenario("arena_e03_pressure", "楔角稳压", "E03｜楔角稳压测试",
-                "32 格可走区；诱撞晶簇、借水冷却或从南侧干路等卸压。", level, ControlSpells,
+                "27 格可走区；诱撞晶簇、借水冷却或从南侧干路等卸压。", level, ControlSpells,
                 new[] { "G-T09", "G-T10", "G-T01", "G-T13" }, true);
         }
 
         private static CombatTestArenaScenario CreateAcademyCoreBoss()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 I2 J2 B3 C3 D3 E3 F3 G3 H3 I3 J3 B4 C4 D4 E4 F4 G4 H4 I4 J4 B5 C5 D5 E5 F5 G5 H5 I5 J5 B6 C6 D6 E6 F6 G6 H6 I6 J6 C7 D7 E7 F7 G7 H7 I7");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 I3 J3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 B6 C6 D6 E6 F6 G6 H6 C7 D7 E7 F7 G7 H7");
             FirstRegionLevelDefinition level = Level("arena_b01_core", "B01｜学院封存塔核心",
-                "击倒核心守备及三条外围维护链。首回合公开核心、教官、护障和显影四个意图。",
-                new GridPosition(1, 3), new[] { E("core_overseer", 5, 3), E("elite_vanguard", 6, 6), E("barrier_mender", 9, 1), E("lantern_revealer", 3, 1) },
-                new[] { L(2, 3), L(3, 5), L(8, 1), L(8, 5), H(4, 2), H(6, 2), H(4, 4), H(6, 4), C(7, 3) }, walkable,
-                "中心核心，三链环绕，双缺口换序", "上路连向显影与护障，下路连向教官；先拆哪条链决定核心周围的安全缺口。 ",
+                "击倒拦在必经之路上的塔之守卫。三组塔内机关在阶段〇逐组放行，放行前不提供任何效果；拆掉已放行的机关即切断维护链。",
+                new GridPosition(1, 3), new[] { E("core_overseer", 5, 3) },
+                new[] { L(2, 3), L(3, 5), L(8, 1), L(8, 5), H(4, 2), H(6, 2), H(4, 4), H(6, 4), C(7, 3),
+                    M(FirstRegionLevelCatalog.TowerMechanismWard, 1, 1),
+                    M(FirstRegionLevelCatalog.TowerMechanismReveal, 9, 3),
+                    M(FirstRegionLevelCatalog.TowerMechanismPress, 8, 6) }, walkable,
+                "中心核心，三道机关门槛，双缺口换序", "收窄后两侧外廊更短；三组机关耐久公开，可先拆以切断维护链。 ",
                 false, true, 11, 8);
             return new CombatTestArenaScenario("arena_b01_core", "封存塔核心", "B01｜学院封存塔核心",
-                "51 格可走区；四条公开意图与两种拆链顺序；预设火路、踏行、超限与断击完整终结链。", level, FinisherSpells,
+                "42 格可走区；收窄后往返距离更短，拆链顺序窗口更紧。", level, FinisherSpells,
                 new[] { "G-T08", "G-T09", "G-T12", "G-T16" }, true);
         }
 
         private static CombatTestArenaScenario CreateReactionPressureTest()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_s01_reaction", "S01｜警戒火线反应",
-                "击倒重弩与侧锋。主角移动结束进入重弩 2–4 格正交射界时触发一次公开反应；射线先命中谁就打谁。",
-                new GridPosition(1, 3), new[] { E("rune_arbalist", 7, 3), E("raider", 5, 3) },
+                "击倒背弩生与侧锋。收窄后警戒射界覆盖比例更高，钻死区收益更显著。",
+                new GridPosition(1, 3), new[] { E("rune_arbalist", 6, 2), E("raider", 5, 3) },
                 new[] { L(2, 3), L(2, 1), L(2, 5), H(4, 2), H(4, 4), L(6, 1), L(6, 5) }, walkable,
-                "中央诱导友伤，上下切线，相邻钻入死区", "高风险移动格直接显示警戒结果；反应每个主角回合限一次，不改变行动条。 ");
+                "中央诱导友伤，上下切线，相邻钻入死区", "高风险移动格直接显示警戒结果；紧凑场地下死区距离更短。 ");
             return new CombatTestArenaScenario("arena_s01_reaction", "警戒火线", "S01｜警戒火线反应",
-                "移动到 D4 可诱导重弩先命中 F4 的侧锋；上下线可切断射界，相邻格是重弩死区。", level,
+                "25 格可走区；紧凑场地下可更快钻入背弩生死区诱导友伤。", level,
                 FlankSpells, new[] { "G-T09", "G-T10", "G-T07", "G-T01" }, false, true);
         }
 
         private static CombatTestArenaScenario CreateProtectionPressureTest()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_s02_protect", "S02｜稳压器守护",
-                "击倒两名进攻者并保护 F4 稳压器。稳压器耐久 12；侧锋相邻时每次公开造成 6 点耐久伤害，归零立即失败。",
-                new GridPosition(1, 3), new[] { E("raider", 6, 3), E("stone_snare", 7, 1) },
+                "击倒两名进攻者并保护 F4 稳压器。收窄后拦截路线更短，进攻者更接近目标。",
+                new GridPosition(1, 3), new[] { E("raider", 6, 3), E("stone_snare", 6, 1) },
                 new[] { new LevelTerrainPlacement(5, 3, LevelTerrainKind.AetherObjective),
                     L(2, 3), L(3, 1), L(3, 5), H(4, 2), H(4, 4), L(6, 5) }, walkable,
-                "北路切线，南路推离，中线占位护柱", "侧锋公开以稳压器为优先目标；约束助教限制玩家拦截路线。 ");
+                "北路切线，南路推离，中线占位护柱", "侧锋公开以稳压器为优先目标；紧凑场地下进攻者更早到达威胁位置。 ");
             return new CombatTestArenaScenario("arena_s02_protect", "稳压器守护", "S02｜稳压器守护",
-                "保护柱可承受两次侧锋重击；从上下两路拦截、束缚或推离进攻者。", level,
+                "25 格可走区；拦截路线更短，保护柱承受压力的节奏更快。", level,
                 RestraintSpells, new[] { "G-T09", "G-T03", "G-T07", "G-T06" }, false, true);
         }
 
         private static CombatTestArenaScenario CreateEfficiencyPressureTest()
         {
-            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 C6 D6 E6 F6 G6");
+            HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_s03_efficiency", "S03｜短程压制评级",
-                "击倒盾术与重弩。3 次主角回合内完成可保留效率奖励；超出阈值仍可正常胜利并获得基础奖励。",
-                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("rune_arbalist", 7, 1) },
+                "击倒盾术生与背弩生。收窄后接敌更直接，效率阈值下走位容错更小。",
+                new GridPosition(1, 3), new[] { E("shieldguard", 5, 3), E("rune_arbalist", 6, 1) },
                 new[] { L(2, 3), L(3, 1), L(3, 5), H(4, 2), H(4, 4), L(6, 5) }, walkable,
-                "中路拆盾，上路钻入重弩死区，下路切线后包夹", "公开的 3 回合效率阈值鼓励主动换线；错过只取消额外奖励，不造成失败。 ");
+                "中路拆盾，上路钻入背弩生死区，下路切线后包夹", "收窄后 3 回合效率阈值压力更大；紧凑场地中位移收益更高。 ");
             return new CombatTestArenaScenario("arena_s03_efficiency", "效率评级", "S03｜短程压制评级",
-                "效率奖励阈值固定为 3 次主角回合；用位移、拉扯、烟幕和行动资源缩短接敌，而非退到远处放风筝。", level,
+                "25 格可走区；收窄场地迫使更快接敌，位移与换线收益更高。", level,
                 CrossfireSpells, new[] { "G-T09", "G-T17", "G-T18", "G-T12" }, false, true);
         }
 
@@ -503,18 +507,66 @@ namespace OCC.Combat.Presentation
 
         private static LevelTerrainPlacement[] PermanentWalls(string id, HashSet<GridPosition> walkable, int width, int height)
         {
-            // Boundary walls turn the already unusable perimeter into a readable room
-            // without invalidating authored test routes or hiding their first-turn intent.
-            int offset = Math.Abs(StableSeed(id)) % 3;
-            GridPosition[] candidates =
+            // Place indestructible wall tiles on every blocked cell adjacent to the
+            // walkable bounding box, creating a solid visual wall around the arena.
+            if (walkable.Count == 0) return System.Array.Empty<LevelTerrainPlacement>();
+
+            int minX = width, maxX = 0, minY = height, maxY = 0;
+            foreach (GridPosition pos in walkable)
             {
-                new GridPosition(0, 0), new GridPosition(width - 1, 0),
-                new GridPosition(0, 1 + offset), new GridPosition(width - 1, 1 + offset),
-                new GridPosition(0, 4 + offset % 2), new GridPosition(width - 1, 4 + offset % 2),
-                new GridPosition(0, height - 1), new GridPosition(width - 1, height - 1)
-            };
-            return candidates.Where(position => !walkable.Contains(position)).Distinct()
-                .Select(position => new LevelTerrainPlacement(position.X, position.Y, LevelTerrainKind.PermanentWall)).ToArray();
+                if (pos.X < minX) minX = pos.X;
+                if (pos.X > maxX) maxX = pos.X;
+                if (pos.Y < minY) minY = pos.Y;
+                if (pos.Y > maxY) maxY = pos.Y;
+            }
+
+            HashSet<GridPosition> walls = new HashSet<GridPosition>();
+
+            // Left column (x = minX - 1): wall every non-walkable cell
+            if (minX > 0)
+            {
+                int x = minX - 1;
+                for (int y = 0; y < height; y++)
+                {
+                    GridPosition p = new GridPosition(x, y);
+                    if (!walkable.Contains(p)) walls.Add(p);
+                }
+            }
+
+            // Right column (x = maxX + 1): wall every non-walkable cell
+            if (maxX < width - 1)
+            {
+                int x = maxX + 1;
+                for (int y = 0; y < height; y++)
+                {
+                    GridPosition p = new GridPosition(x, y);
+                    if (!walkable.Contains(p)) walls.Add(p);
+                }
+            }
+
+            // Top row (y = minY - 1): wall blocks spanning the full walkable width
+            if (minY > 0)
+            {
+                int y = minY - 1;
+                for (int x = minX; x <= maxX; x++)
+                {
+                    GridPosition p = new GridPosition(x, y);
+                    if (!walkable.Contains(p)) walls.Add(p);
+                }
+            }
+
+            // Bottom row (y = maxY + 1): wall blocks spanning the full walkable width
+            if (maxY < height - 1)
+            {
+                int y = maxY + 1;
+                for (int x = minX; x <= maxX; x++)
+                {
+                    GridPosition p = new GridPosition(x, y);
+                    if (!walkable.Contains(p)) walls.Add(p);
+                }
+            }
+
+            return walls.Select(p => new LevelTerrainPlacement(p.X, p.Y, LevelTerrainKind.PermanentWall)).ToArray();
         }
 
         private static int StableSeed(string value)

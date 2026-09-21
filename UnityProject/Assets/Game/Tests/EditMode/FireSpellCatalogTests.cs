@@ -25,7 +25,7 @@ namespace OCC.Combat.Tests
             Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Uncommon), Is.EqualTo(21));
             Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Rare), Is.EqualTo(9));
             Assert.That(FireSpellCatalog.All, Has.All.Matches<FireSpellDefinition>(spell =>
-                !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 1 && spell.ManaCost >= 0 &&
+                !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 0 && spell.ManaCost >= 0 &&
                 spell.Rules.Count > 0 && spell.PresentationModules.Count > 0 &&
                 Enum.IsDefined(typeof(FireDeliveryMode), spell.DeliveryMode) &&
                 Enum.IsDefined(typeof(FireWeaponRequirement), spell.WeaponRequirement) &&
@@ -118,17 +118,73 @@ namespace OCC.Combat.Tests
         [Test]
         public void BurningAndFiregroundCashingSpells_ChargeTempoAndConsumeTheirSource()
         {
-            // 技能配置表 charges these three converters an ordinary action point; what stops them from
-            // repeating for free is that each consumes the burning or fireground it cashes out.
+            // 总案 3.5.6.5：这三张收租术式是首批 0 行动点／0 魔力／0 冷却术式，必须消耗已存在的燃烧或火场，
+            // 靠"消费掉火源"而不是费用来防止无限循环。
             string[] converters = { "F-P-M17", "F-P-U11", "F-P-R17" };
             foreach (string id in converters)
             {
                 FireSpellDefinition spell = FireSpellCatalog.Get(id);
-                Assert.That(spell.ActionPointCost, Is.EqualTo(1), id);
+                Assert.That(spell.ActionPointCost, Is.Zero, id);
+                Assert.That(spell.ManaCost, Is.Zero, id);
+                Assert.That(spell.Cooldown, Is.Zero, id);
                 Assert.That(spell.Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground), Is.True, id);
             }
             Assert.That(FireSpellCatalog.Get("F-P-M20").ActionPointCost, Is.EqualTo(2));
             Assert.That(FireSpellCatalog.Get("F-P-R01").ManaCost, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void FiregroundSpells_CarryTheirDeclaredPerSourceDamage()
+        {
+            // 总案 3.5.6.1／3.5.1.2 与技能配置表：火场按来源配置伤害，取 8 或 12。
+            Assert.That(FireSpellCatalog.Get("F-P-R13").Rules.Single(rule => rule.Kind == FireRuleKind.CreateFireground).Amount, Is.EqualTo(12));
+            Assert.That(FireSpellCatalog.Get("F-P-R20").Rules.Single(rule => rule.Kind == FireRuleKind.CreateFireground).Amount, Is.EqualTo(12));
+            foreach (string id in new[] { "F-P-M03", "F-P-R11", "F-P-R12", "F-P-R14", "F-P-R15", "F-P-U17", "F-P-U19" })
+                Assert.That(FireSpellCatalog.Get(id).Rules.Where(rule => rule.Kind == FireRuleKind.CreateFireground).All(rule => rule.Amount == 8), Is.True, id);
+
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            FireBattleState battle = new FireBattleState(combat);
+            GridPosition cell = new GridPosition(5, 4);
+            battle.CreateOrRefreshFireground(cell, 12, 3, "F-P-R13", "hero");
+            Assert.That(battle.Firegrounds[cell].Damage, Is.EqualTo(12));
+            // 重复生成同级火场时以新来源覆盖伤害，并刷新完整持续回合。
+            battle.CreateOrRefreshFireground(cell, 8, 2, "F-P-R12", "hero");
+            Assert.That(battle.Firegrounds[cell].Damage, Is.EqualTo(8));
+            Assert.That(battle.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SpellDamage_AlsoReducesObjectDurabilityInTheSameGeometry()
+        {
+            // 总案 3.5.6.2／3.6.1：术式伤害在结算单位的同时让作用几何内的物块扣减同值耐久。
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            GridPosition cell = TrainingRangeScenarioFactory.ObjectTargetCell;
+            combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 40 });
+            FireBattleState battle = new FireBattleState(combat);
+            CombatResolver.BeginTurn(combat, "hero");
+            FireSpellEngine.Execute(battle, "hero", FireSpellCatalog.Get("F-P-U04"), FireSpellTarget.At(cell, CardinalDirection.East));
+            Assert.That(combat.Map.GetTile(cell).Durability, Is.EqualTo(32));
+        }
+
+        [Test]
+        public void BreakBarrierTag_DoublesObjectDurabilityDamage()
+        {
+            // 总案 3.5.6.1：带有破障的伤害使物块扣减双倍耐久。
+            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            GridPosition cell = TrainingRangeScenarioFactory.ObjectTargetCell;
+            combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 40 });
+            FireBattleState battle = new FireBattleState(combat);
+            CombatResolver.BeginTurn(combat, "hero");
+            FireSpellDefinition breach = new FireSpellDefinition("test_break_barrier", "测试破障",
+                FireSpellRarity.Common, FireSpellGroup.Breach, FireCombatAffinity.RangedSpell,
+                FireDeliveryMode.DetachedProjection, FireWeaponRequirement.None, FireTriggerWindow.Immediate,
+                FireConsumptionRule.OnCast, 1, 2, 0, 0, 4, FireTargetKind.Hittable, FireSelectionShape.Single,
+                1, true, false, new[] { new FireSpellRule(FireRuleKind.BreakBarrier), new FireSpellRule(FireRuleKind.Damage, 8) });
+            FireSpellEngine.Execute(battle, "hero", breach, FireSpellTarget.At(cell, CardinalDirection.East));
+            Assert.That(combat.Map.GetTile(cell).Durability, Is.EqualTo(24));
         }
 
         [Test]
@@ -813,7 +869,7 @@ namespace OCC.Combat.Tests
             FireSpellEngine.Execute(burnBattle, hero.Id, FireSpellCatalog.Get("F-P-R03"), FireSpellTarget.Unit(branded.Id));
             FireSpellEngine.Execute(burnBattle, hero.Id, FireSpellCatalog.Get("F-P-R04"), FireSpellTarget.Unit(seeded.Id));
 
-            Assert.That(brandedBefore - (branded.Health + branded.Shield), Is.EqualTo(4));
+            Assert.That(brandedBefore - (branded.Health + branded.Shield), Is.EqualTo(0));  // 总案 3.5.6.5 伤害类别分区：R03 烙印改为纯点燃起手，不再造成直伤。
             Assert.That(branded.StatusDuration(StatusType.Burning), Is.EqualTo(1));
             Assert.That(branded.StatusStrength(StatusType.Burning), Is.EqualTo(8));
             Assert.That(seeded.Health + seeded.Shield, Is.EqualTo(seededBefore), "火种只建立燃烧，不附带直伤。 ");
@@ -993,8 +1049,8 @@ namespace OCC.Combat.Tests
                 FireSpellTarget.Unit(primary.Id, CardinalDirection.East));
 
             Assert.That(primary.HasStatus(StatusType.Burning), Is.True, "点燃喷射只给锥形内敌人施加燃烧。 ");
-            Assert.That(visibleAlly.Health + visibleAlly.Shield, Is.LessThan(allyBefore));
-            Assert.That(visibleAlly.HasStatus(StatusType.Burning), Is.False, "友军只受直接伤害，不应被点燃。 ");
+            Assert.That(visibleAlly.Health + visibleAlly.Shield, Is.EqualTo(allyBefore));  // 总案 3.5.6.5：R08 改为纯点燃起手，友军不再承受直伤。
+            Assert.That(visibleAlly.HasStatus(StatusType.Burning), Is.False, "友军不承受直伤，也不被点燃。 ");
         }
 
         [Test]
@@ -1097,6 +1153,8 @@ namespace OCC.Combat.Tests
             combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
             FireBattleState battle = new FireBattleState(combat);
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R18");
+            // 技能配置表：燃烧单位各受到 12 点火焰伤害并消费燃烧。
+            Assert.That(spell.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(12));
             FireSpellTarget target = FireSpellTarget.Unit(burningEnemy.Id, CardinalDirection.East);
             FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell, target);
             int burningBefore = burningEnemy.Health + burningEnemy.Shield;

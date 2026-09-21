@@ -6,7 +6,9 @@ using System.Text;
 namespace OCC.Combat
 {
     public enum RogueliteRunProgram { EvergreenAcademy, FirstRunV1, LegacyGrandfathered }
-    public enum FirstRunLifecycle { OriginPending, Active, EliteDefeat, ShopOpened, Complete }
+    // Complete = 固定教学段已经收束（旧存档口径）；RandomLayer = 已经交接进随机层；
+    // RunSettled = 整轮在首领战后完成单轮结算。Complete 只在读取旧存档时出现，运行期一律推进到 RandomLayer。
+    public enum FirstRunLifecycle { OriginPending, Active, EliteDefeat, ShopOpened, Complete, RandomLayer }
     public enum FirstRunOutcome { None, EliteDefeat, EliteVictory }
     public enum FirstRunNodeType { Origin, Combat, Event, Workshop, Medical, Elite, Shop }
 
@@ -155,6 +157,7 @@ namespace OCC.Combat
         public bool EliteRewardAbandoned { get; internal set; }
         public string EliteSelectedPassiveId { get; internal set; } = string.Empty;
         public bool RunSealed { get; internal set; }
+        public bool RoundSettled { get; internal set; }
         public int ForgeMaterialCount { get; internal set; }
         public int SpecializationMaterialCount { get; internal set; }
         public int AcademyFoodCount { get; internal set; }
@@ -170,7 +173,9 @@ namespace OCC.Combat
         public Dictionary<string, string> LootProgress { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
         internal bool RequiresRuntimeBackfill { get; set; }
 
-        public bool IsTerminal => RunSealed || Lifecycle == FirstRunLifecycle.Complete;
+        public bool IsTerminal => RunSealed || RoundSettled;
+        /// <summary>固定教学段已经收束，本局进入固定段之后的随机层。</summary>
+        public bool IsRandomLayer => Lifecycle == FirstRunLifecycle.RandomLayer || Lifecycle == FirstRunLifecycle.Complete;
         public FirstRunNodeSnapshot Node(string id) => Nodes.Single(value => value.Id == id);
         public FirstRunRewardGroupSnapshot RewardForNode(string nodeId) => RewardGroups.SingleOrDefault(value => value.NodeId == nodeId);
         public FirstRunEventSnapshot EventForNode(string nodeId) => Events.SingleOrDefault(value => value.NodeId == nodeId);
@@ -369,8 +374,16 @@ namespace OCC.Combat
             if (!Shop.Opened || Outcome != FirstRunOutcome.EliteVictory || (!EliteRewardClaimed && !EliteRewardAbandoned))
                 throw new InvalidOperationException("First-run experience cannot be completed before the shop is opened.");
             SetCompleted(FirstRunExperienceCatalog.ShopNodeId);
-            Lifecycle = FirstRunLifecycle.Complete;
+            // 离开商店不再结束本局：固定教学段到此收束，同一局继续进入随机层。
+            Lifecycle = FirstRunLifecycle.RandomLayer;
             RecomputeNodeFlags();
+        }
+
+        /// <summary>整轮在首领战结算完成时调用；只有它让 IsTerminal 成立。</summary>
+        public void SettleRound()
+        {
+            if (RunSealed) throw new InvalidOperationException("First-run experience is sealed.");
+            RoundSettled = true;
         }
 
         public void SealEliteDefeat()
@@ -477,15 +490,15 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<RogueliteMapNode> MapNodes = new[]
         {
             new RogueliteMapNode("O", RogueliteMapNodeType.Start, "学生基础配置", "确认维克多的首次体验固定配置。", 0, 2, "B1"),
-            new RogueliteMapNode("B1", RogueliteMapNodeType.Combat, "雨后灯庭", "学院实地对抗课程：击倒缚环寻迹兽与高年级火矢生。", 1, 2, "O", "B2", "EV1", "EV2"),
+            new RogueliteMapNode("B1", RogueliteMapNodeType.Combat, "雨后灯庭", "学院实地对抗课程：击倒寻迹兽与高年级火矢生。", 1, 2, "O", "B2", "EV1", "EV2"),
             new RogueliteMapNode("EV1", RogueliteMapNodeType.Event, "受阻的温室传令", "领取轻装传令衣与承力合金。", 1, 1, "B1"),
             new RogueliteMapNode("EV2", RogueliteMapNodeType.Event, "温室勤务签领", "领取导位罗盘、学院食材与勤务报酬。", 1, 3, "B1"),
-            new RogueliteMapNode("B2", RogueliteMapNodeType.Combat, "温室藏品间", "击倒承压检验偶与高年级陪练生·侧锋，并可搜刮中央备件箱。", 2, 2, "B1", "B3", "W", "EV3"),
+            new RogueliteMapNode("B2", RogueliteMapNodeType.Combat, "温室藏品间", "击倒替身偶与侧锋生，并可搜刮中央备件箱。", 2, 2, "B1", "B3", "W", "EV3"),
             new RogueliteMapNode("W", RogueliteMapNodeType.Workshop, "工坊", "一次锻造与一次术式专精。", 2, 1, "B2"),
             new RogueliteMapNode("EV3", RogueliteMapNodeType.Event, "折光庭校验签领", "领取增幅刻墨，并在学院贡献与截击铃之间选择。", 2, 3, "B2"),
-            new RogueliteMapNode("B3", RogueliteMapNodeType.Combat, "雨痕晶庭", "击倒检验偶与火矢陪练生；可破晶搜刮学院储能芯。", 3, 2, "B2", "X", "M"),
+            new RogueliteMapNode("B3", RogueliteMapNodeType.Combat, "雨痕晶庭", "击倒替身偶与火矢生；可破晶搜刮学院储能芯。", 3, 2, "B2", "X", "M"),
             new RogueliteMapNode("M", RogueliteMapNodeType.Medical, "医务室", "健康确认、治疗与固定餐食。", 3, 3, "B3"),
-            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "三材承压场", "击倒贯阵承压机·楔角；失败不会开放商店。", 3, 1, "B3", "S"),
+            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "三材承压场", "击倒楔角；失败不会开放商店。", 3, 1, "B3", "S"),
             new RogueliteMapNode("S", RogueliteMapNodeType.Shop, "精英后商店", "首次展开即完成固定教学段。", 4, 1, "X")
         };
 
@@ -589,7 +602,8 @@ namespace OCC.Combat
             {
                 Row("H", state.ContentVersion, state.Lifecycle.ToString(), state.Outcome.ToString(), state.CurrentNodeId,
                     state.PendingRewardGroupId, Bool(state.EliteRewardClaimed), Bool(state.RunSealed), state.ForgeMaterialCount.ToString(),
-                    state.SpecializationMaterialCount.ToString(), state.AcademyFoodCount.ToString(), Bool(state.EliteRewardAbandoned)),
+                    state.SpecializationMaterialCount.ToString(), state.AcademyFoodCount.ToString(), Bool(state.EliteRewardAbandoned),
+                    Bool(state.RoundSettled)),
                 Row("O", state.Origin.StoryId, state.Origin.TalentId, state.Origin.SpellId, Bool(state.Origin.Acknowledged)),
                 Row("W", Bool(state.Workshop.ForgeCompleted), Bool(state.Workshop.SpecializationCompleted), state.Workshop.ForgedTargetId, state.Workshop.SpecializedTargetId),
                 Row("M", Bool(state.Medical.HealthCheckCompleted), Bool(state.Medical.HealUsed), Bool(state.Medical.MealUsed), state.Medical.SelectedMealId, List(state.Medical.MealCandidateIds)),
@@ -616,12 +630,13 @@ namespace OCC.Combat
             {
                 string[] f = line.Split('\t');
                 string kind = f[0];
-                if (kind == "H" && (f.Length == 11 || f.Length == 12))
+                if (kind == "H" && (f.Length == 11 || f.Length == 12 || f.Length == 13))
                 {
                     state.ContentVersion = U(f[1]); state.Lifecycle = Parse<FirstRunLifecycle>(f[2]); state.Outcome = Parse<FirstRunOutcome>(f[3]);
                     state.CurrentNodeId = U(f[4]); state.PendingRewardGroupId = U(f[5]); state.EliteRewardClaimed = Boolean(f[6]); state.RunSealed = Boolean(f[7]);
                     state.ForgeMaterialCount = Int(f[8]); state.SpecializationMaterialCount = Int(f[9]); state.AcademyFoodCount = Int(f[10]);
-                    if (f.Length == 12) state.EliteRewardAbandoned = Boolean(f[11]);
+                    if (f.Length >= 12) state.EliteRewardAbandoned = Boolean(f[11]);
+                    if (f.Length >= 13) state.RoundSettled = Boolean(f[12]);
                 }
                 else if (kind == "O" && f.Length == 5) { state.Origin.StoryId = U(f[1]); state.Origin.TalentId = U(f[2]); state.Origin.SpellId = U(f[3]); state.Origin.Acknowledged = Boolean(f[4]); }
                 else if (kind == "W" && f.Length == 5) { state.Workshop.ForgeCompleted = Boolean(f[1]); state.Workshop.SpecializationCompleted = Boolean(f[2]); state.Workshop.ForgedTargetId = U(f[3]); state.Workshop.SpecializedTargetId = U(f[4]); }

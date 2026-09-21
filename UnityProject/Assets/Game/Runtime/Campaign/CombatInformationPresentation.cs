@@ -168,7 +168,7 @@ namespace OCC.Combat
                         enemy.Position.ManhattanDistance(state.GetUnit("hero").Position) < enemy.MainHand.MinimumRange &&
                         command.Destination.ManhattanDistance(state.GetUnit("hero").Position) >= enemy.MainHand.MinimumRange)
                     {
-                        action = "重弩退距";
+                        action = "背弩生退距";
                         result = "撤到 " + Cell(command.Destination) + "；相邻格是公开近身死区，无法发射绞盘重弩或重矢";
                     }
                     else result = "抵达 " + Cell(command.Destination);
@@ -357,16 +357,16 @@ namespace OCC.Combat
         {
             switch (archetypeId)
             {
-                case "shieldguard": return "盾术陪练生每次自己回合开始整盾获得 2 护盾，并会用铭盾冲撞使目标迟缓；破势可阻止整盾。";
-                case "pyromancer": return "火矢陪练生从远处施放受安全刻印约束的训练火矢。";
-                case "raider": return "侧锋陪练生行动迅速，贴近后用限位钩刃限制移动。";
-                case "elite_vanguard": return "刻阵教官主持高阶考核，重击会清除护盾并造成破势。";
-                case "sigil_mauler": return "承压检验偶必须邻接，锤印会清除护盾并造成破势。";
-                case "barrier_mender": return "护障助教优先为护盾受损最严重的友军续接护障。";
-                case "tether_hound": return "缚环寻迹兽移动迅速，扑咬会束缚目标。";
-                case "stone_snare": return "约束助教可从远处束缚目标，限制持续时间较长。";
-                case "lantern_revealer": return "档案巡查员用显影灯清除护盾并造成破势。";
-                case "rune_arbalist": return "重弩陪练生移动缓慢，绞盘重弩与重矢有效距离为 2–4／2–5 格；相邻格是公开死区，会先退距再射击。";
+                case "shieldguard": return "盾术生每次自己回合开始整盾获得 2 护盾，并会用铭盾冲撞使目标迟缓；破势可阻止整盾。";
+                case "pyromancer": return "火矢生从远处施放受安全刻印约束的训练火矢。";
+                case "raider": return "侧锋生行动迅速，贴近后用限位钩刃限制移动。";
+                case "elite_vanguard": return "划线教官主持高阶考核，重击会清除护盾并造成破势。";
+                case "sigil_mauler": return "替身偶必须邻接，锤印会清除护盾并造成破势。";
+                case "barrier_mender": return "补盾助教优先为护盾受损最严重的友军续接护障。";
+                case "tether_hound": return "寻迹兽移动迅速，扑咬会束缚目标。";
+                case "stone_snare": return "拴索助教可从远处束缚目标，限制持续时间较长。";
+                case "lantern_revealer": return "提灯巡查用显影灯清除护盾并造成破势。";
+                case "rune_arbalist": return "背弩生移动缓慢，绞盘重弩与重矢有效距离为 2–4／2–5 格；相邻格是公开死区，会先退距再射击。";
                 default: return "会根据距离选择攻击、施术或靠近目标。";
             }
         }

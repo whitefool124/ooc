@@ -413,7 +413,7 @@ namespace OCC.Combat
                 else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DamageObject) { tile.Durability = Math.Max(0, tile.Durability - effect.Amount); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DestroyLightCover && tile.Cover == CoverType.Light) { applied = tile.Durability; tile.Durability = 0; }
-                else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.CreateOrRefreshFireground(position, effect.Amount, effect.Duration, artifact.Id, source.Id); applied = FiregroundState.BaseDamage; }
+                else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.CreateOrRefreshFireground(position, effect.Amount, effect.Duration, artifact.Id, source.Id); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.CreateSmoke)
                 {
                     tile = tile.Clone();

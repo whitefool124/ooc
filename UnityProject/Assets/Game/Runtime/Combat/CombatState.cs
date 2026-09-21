@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,6 +39,10 @@ namespace OCC.Combat
         public GreenhouseCollectionRoomRuntime GreenhouseCollectionRoom { get; private set; }
         public ThreeMaterialPressureRuntime ThreeMaterialPressure { get; private set; }
         public AcademyCoreBossRuntime AcademyCoreBoss { get; private set; }
+        /// <summary>通用场地敌人的公开条件反应（老寻、灯台值守）。</summary>
+        public AcademyFieldEnemyRuntime AcademyFieldEnemy { get; private set; }
+        /// <summary>全场环境状态：风与光带。不占格，随战斗创建并在克隆时一并复制。</summary>
+        public FieldEnvironmentState Environment { get; private set; } = new FieldEnvironmentState();
         public CombatPressureTestRuntime PressureTest { get; private set; }
         public IReadOnlyList<Roguelite.ShieldSourceRecord> RogueShieldEvents => rogueShieldEvents;
         public int InventoryOpenCount { get; private set; }
@@ -102,6 +106,8 @@ namespace OCC.Combat
             if (Ruleset != CombatRuleset.Roguelite || unit == null) return;
             foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokeExpiresAt > 0 && tile.SmokeExpiresAt <= CurrentTime).ToArray())
                 Map.GetTile(position).SmokeExpiresAt = 0;
+            // 主角回合开始即公共回合开始：此时公开风况并让风搬动场地上的松散材料。
+            if (unit.IsHero) AdvanceFieldEnvironment();
             if (unit.Shield > 0)
                 AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(unit.Id + ":turn_start", unit.Shield,
                     Roguelite.ShieldEventKind.ClearedAtTurnStart, RogueTurn(unit.Id) + 1));
@@ -117,6 +123,7 @@ namespace OCC.Combat
             RainLanternCourt?.BeginTurn(unit);
             ThreeMaterialPressure?.BeginTurn(this, unit);
             AcademyCoreBoss?.BeginTurn(this, unit);
+            AcademyFieldEnemy?.BeginTurn(this, unit);
             PressureTest?.BeginTurn(unit);
 
         }
@@ -126,10 +133,90 @@ namespace OCC.Combat
             GrantCoverShield(unit);
             RogueSpells?.EndOwnTurn(unit.Id);
             RainLanternCourt?.EndTurn(unit);
+            AcademyFieldEnemy?.EndTurn(this, unit);
+            AcademyCoreBoss?.EndTurn(this, unit);
             ThreeMaterialPressure?.EndTurn(unit);
             PassiveEffects.ExpireOwnTurnEnd(unit.Id);
             if (rogueBreakStanceSeenThisTurn.Remove(unit.Id)) unit.ClearStatus(StatusType.BreakStance);
         }
+        /// <summary>单位踏入约束纹：留在原格，本回合不能主动移动。</summary>
+        internal void ResolveBindingMarkEntry(UnitState unit)
+        {
+            if (unit == null || !unit.IsAlive || !Map.IsInside(unit.Position)) return;
+            if (!Map.GetTile(unit.Position).IsBindingMark) return;
+            unit.ApplyStatus(StatusType.Bound, 1);
+            AddLog(unit.DisplayName + "踏入约束纹，留在原格，本回合不能主动移动。");
+        }
+
+        /// <summary>检定台读数：单位进入正交邻接时公开邻接单位的耐久与护盾，敌我同规则读取。</summary>
+        internal void PublishCertifierReadout(UnitState unit)
+        {
+            if (unit == null || !Map.IsInside(unit.Position)) return;
+            GridPosition[] around = Adjacent(unit.Position);
+            GridPosition[] stands = around.Where(position => Map.IsInside(position) &&
+                Map.GetTile(position).IsCertifierStand && !Map.GetTile(position).IsDestroyed).ToArray();
+            if (stands.Length == 0) return;
+            // 读数为公开信息：读取检定台正交邻接格上的全部单位，敌我同规则。
+            GridPosition[] readable = stands.SelectMany(Adjacent).Where(Map.IsInside).Distinct().ToArray();
+            UnitState[] readings = units.Values
+                .Where(value => value.IsAlive && readable.Contains(value.Position)).OrderBy(value => value.Id).ToArray();
+            if (readings.Length == 0) { AddLog("检定台读数：邻接格没有可读取的单位。"); return; }
+            foreach (UnitState reading in readings)
+                AddLog("检定台读数：" + reading.DisplayName + " 耐久 " + reading.Health + "/" + reading.MaxHealth +
+                    "，护盾 " + reading.Shield + "。");
+        }
+
+        private static GridPosition[] Adjacent(GridPosition position) => new[]
+        {
+            position + new GridPosition(0, 1),
+            position + new GridPosition(1, 0),
+            position + new GridPosition(0, -1),
+            position + new GridPosition(-1, 0)
+        };
+
+        /// <summary>公共回合开始的环境结算：公开风况，并按风向逐格搬动松散材料、吹散痕迹。</summary>
+        private void AdvanceFieldEnvironment()
+        {
+            FieldWindState wind = Environment.Wind;
+            AddLog("风况：" + wind.PreviewText() + "。");
+            if (wind.Level <= 0) return;
+
+            if (wind.Level >= 3)
+                foreach (GridPosition position in Map.PositionsWith(tile => tile.HasTrace).ToArray())
+                {
+                    TileState cleared = Map.GetTile(position).Clone();
+                    cleared.HasTrace = false;
+                    Map.SetTile(position, cleared);
+                    AddLog("强风吹散了 (" + position.X + "," + position.Y + ") 的痕迹。");
+                }
+
+            // 逆风向处理：先推动下风处的材料，同一份材料不会被连续推动多格。
+            List<GridPosition> sources = Map.PositionsWith(IsLooseMaterial).ToList();
+            GridPosition direction = wind.Direction;
+            sources.Sort((left, right) => Project(right, direction).CompareTo(Project(left, direction)));
+            int moved = 0;
+            foreach (GridPosition from in sources)
+            {
+                GridPosition to = from + direction;
+                if (!Map.IsInside(to) || Map.IsBlocked(to) || IsOccupied(to)) continue;
+                TileState source = Map.GetTile(from).Clone(), target = Map.GetTile(to).Clone();
+                if (IsLooseMaterial(target) || target.HasEffectLayer) continue;
+                if (source.IsLoosePaper) { target.IsLoosePaper = true; target.IsPaperSoaked = source.IsPaperSoaked; source.IsLoosePaper = false; source.IsPaperSoaked = false; }
+                if (source.IsCrystalShard) { target.IsCrystalShard = true; source.IsCrystalShard = false; }
+                if (source.SmokeExpiresAt > 0) { target.SmokeExpiresAt = source.SmokeExpiresAt; source.SmokeExpiresAt = 0; }
+                Map.SetTile(from, source);
+                Map.SetTile(to, target);
+                moved++;
+            }
+            if (moved > 0) AddLog("风搬动 " + moved + " 处松散材料，方向 " + FieldWindState.DirectionName(direction) + "。");
+        }
+
+        private static bool IsLooseMaterial(TileState tile) =>
+            tile != null && (tile.IsLoosePaper || tile.IsCrystalShard || tile.SmokeExpiresAt > 0);
+
+        private static int Project(GridPosition position, GridPosition direction) =>
+            position.X * direction.X + position.Y * direction.Y;
+
         private void GrantCoverShield(UnitState unit)
         {
             int coverShield = 0;
@@ -145,12 +232,22 @@ namespace OCC.Combat
             if (adjacent.Any(position => Map.IsInside(position) && Map.GetTile(position).Cover == CoverType.Heavy && !Map.GetTile(position).IsDestroyed))
                 coverShield = Math.Max(coverShield, 4);
             if (coverShield > 0) TryGrantRogueliteShield(unit.Id, coverShield == 4 ? "cover-heavy" : "cover-light", coverShield);
+            // 护罩发生器：为邻接单位额外提供结构护盾，来源独立、可与掩体护盾叠加；装置被摧毁即不再提供。
+            bool wardAdjacent = adjacent.Any(position => Map.IsInside(position) &&
+                Map.GetTile(position).IsWardGenerator && !Map.GetTile(position).IsDestroyed);
+            if (wardAdjacent) TryGrantRogueliteShield(unit.Id, "ward-generator", 4);
         }
         public bool TryGrantRogueliteShield(string unitId, string sourceId, int amount)
         {
             if (Ruleset != CombatRuleset.Roguelite || amount <= 0 || string.IsNullOrWhiteSpace(sourceId)) return false;
             UnitState unit = GetUnit(unitId);
             if (unit == null || !unit.IsAlive) return false;
+            // 老库管的登记：被标记单位下一次获得的护盾被优先清除。
+            if (AcademyFieldEnemy != null && AcademyFieldEnemy.ConsumeInspectionMark(unit.Id))
+            {
+                AddLog("登记生效：" + unit.DisplayName + "本次获得的护盾被优先清除。");
+                return false;
+            }
             if (unit.HasStatus(StatusType.BreakStance))
             {
                 AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(sourceId, amount,
@@ -230,12 +327,16 @@ namespace OCC.Combat
         { ThreeMaterialPressure = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachAcademyCoreBoss(AcademyCoreBossRuntime runtime)
         { AcademyCoreBoss = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachAcademyFieldEnemy(AcademyFieldEnemyRuntime runtime)
+        { AcademyFieldEnemy = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachPressureTest(CombatPressureTestRuntime runtime)
         { PressureTest = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         internal void RecordInventoryOpened() { InventoryOpenCount++; }
         public void SetLootSource(LootSourceState loot) => LootSource = loot;
+        /// <summary>解析物件被摧毁后的结果。当前覆盖蓄能晶簇爆裂与过载装置引爆。</summary>
         public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore)
         {
+            if (ResolveOverloadDeviceDamage(position, durabilityBefore)) return true;
             if (!Map.IsInside(position)) return false;
             TileState crystal = Map.GetTile(position);
             if (!crystal.IsAetherCrystal || durabilityBefore <= 0 || crystal.Durability > 0) return false;
@@ -266,6 +367,37 @@ namespace OCC.Combat
                 unit.TakeDamage(damage.HealthDamage);
             }
             AddLog("蓄能晶簇爆裂，正交四格受到 8 点以太伤害并留下五格碎晶。");
+            EvaluateOutcome();
+            return true;
+        }
+
+        /// <summary>过载装置耐久归零时引爆，正交四格结算一次不分敌我的以太伤害。</summary>
+        public bool ResolveOverloadDeviceDamage(GridPosition position, int durabilityBefore)
+        {
+            if (!Map.IsInside(position)) return false;
+            TileState device = Map.GetTile(position);
+            if (!device.IsOverloadDevice || durabilityBefore <= 0 || device.Durability > 0) return false;
+
+            TileState clearedDevice = device.Clone();
+            clearedDevice.IsOverloadDevice = false;
+            Map.SetTile(position, clearedDevice);
+            GridPosition[] blast =
+            {
+                position + new GridPosition(0, 1),
+                position + new GridPosition(1, 0),
+                position + new GridPosition(0, -1),
+                position + new GridPosition(-1, 0)
+            };
+            foreach (UnitState unit in units.Values.Where(value => value.IsAlive && blast.Contains(value.Position)))
+            {
+                Roguelite.DamagePacket packet = new Roguelite.DamagePacket("overload-device", string.Empty, unit.Id,
+                    "overload-device", new[] { new Roguelite.DamageComponent(Roguelite.DamageComponentKind.Aether, 8) });
+                Roguelite.DamageResolution damage = Roguelite.RogueDamageResolver.Resolve(packet, unit.Shield, unit.Health);
+                unit.AbsorbShield(damage.ShieldAbsorbed);
+                RecordRogueliteShieldAbsorption(unit.Id, "overload-device", damage.ShieldAbsorbed);
+                unit.TakeDamage(damage.HealthDamage);
+            }
+            AddLog("过载装置引爆，正交四格受到 8 点以太伤害，敌我一致。");
             EvaluateOutcome();
             return true;
         }
@@ -333,6 +465,8 @@ namespace OCC.Combat
             if (GreenhouseCollectionRoom != null) clone.GreenhouseCollectionRoom = GreenhouseCollectionRoom.Clone();
             if (ThreeMaterialPressure != null) clone.ThreeMaterialPressure = ThreeMaterialPressure.Clone();
             if (AcademyCoreBoss != null) clone.AcademyCoreBoss = AcademyCoreBoss.Clone();
+            if (AcademyFieldEnemy != null) clone.AcademyFieldEnemy = AcademyFieldEnemy.Clone();
+            clone.Environment = Environment.Clone();
             if (PressureTest != null) clone.PressureTest = PressureTest.Clone();
             clone.EventLog.AddRange(EventLog); return clone;
         }

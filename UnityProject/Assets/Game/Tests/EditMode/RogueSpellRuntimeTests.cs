@@ -178,7 +178,60 @@ namespace OCC.Combat.Tests
             breach.AttachRogueSpellRuntime(breachRuntime);
             CombatResolver.BeginTurn(breach, "hero");
             breachRuntime.ExecuteSlot(4, CombatCommand.UseSkillAt("hero", 4, objectCell, CardinalDirection.East));
-            Assert.That(breach.Map.GetTile(objectCell).Durability, Is.EqualTo(20));
+            // R19 熔障爆点带破障标记（总案 3.5.6.1）：物块承受双倍耐久伤害，故 40 耐久的轻掩体被打空。
+            Assert.That(breach.Map.GetTile(objectCell).Durability, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AmplifySpecialization_CoversTheDocumentedTwelveAndKeepsBalancedCosts()
+        {
+            string[] documented =
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER",
+                "F-P-M01", "F-P-M03", "F-P-M06", "F-P-U01", "F-P-U04", "F-P-U18", "F-P-R01", "F-P-R19"
+            };
+            foreach (string id in documented) Assert.That(RogueSpellCombatRuntime.SupportsSpecialization(id), Is.True, id);
+            Assert.That(RogueSpellCombatRuntime.SupportsSpecialization("F-P-U07"), Is.False);
+            Assert.That(RogueSpellCombatRuntime.SupportsSpecialization("F-P-R02"), Is.False);
+
+            FireSpellDefinition m01 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-M01"));
+            Assert.That(m01.Rules.Where(rule => rule.Kind == FireRuleKind.Damage && rule.Timing == FireRuleTiming.OnTrigger).Max(rule => rule.Amount), Is.EqualTo(10));
+
+            FireSpellDefinition m06 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-M06"));
+            Assert.That(m06.Rules.Any(rule => rule.Kind == FireRuleKind.Damage && rule.Amount == 2 && rule.Timing == FireRuleTiming.OnTrigger), Is.True);
+
+            FireSpellDefinition r01 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-R01"));
+            Assert.That(r01.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(14));
+
+            // 变体不得二次减费：行动点、魔力与冷却必须与目录中的平衡值一致。
+            foreach (string id in new[] { "F-P-M01", "F-P-M03", "F-P-M06", "F-P-U01", "F-P-U04", "F-P-U18", "F-P-R01", "F-P-R19" })
+            {
+                FireSpellDefinition origin = FireSpellCatalog.Get(id);
+                FireSpellDefinition variant = RogueSpellCombatRuntime.ApplyAmplifySpecialization(origin);
+                Assert.That(variant.ActionPointCost, Is.EqualTo(origin.ActionPointCost), id);
+                Assert.That(variant.ManaCost, Is.EqualTo(origin.ManaCost), id);
+                Assert.That(variant.Cooldown, Is.EqualTo(origin.Cooldown), id);
+            }
+
+            // 总案 3.5.6.5：只有普通与罕见下调 1 点魔力，稀有不下调（与技能配置表一致）。
+            // 三链落表后 U17 焦土警戒为普通（落表魔力 4 → 结算 3），R19 熔障爆点为稀有不参与下调。
+            Assert.That(FireSpellCatalog.Get("F-P-M07").ManaCost, Is.EqualTo(5));
+            Assert.That(FireSpellCatalog.Get("F-P-U17").ManaCost, Is.EqualTo(3));
+            Assert.That(FireSpellCatalog.Get("F-P-R19").ManaCost, Is.EqualTo(4));
+
+            // 未登记专精的术式原样返回，不产生空结果变体。
+            Assert.That(RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-U07")).Rules.Count,
+                Is.EqualTo(FireSpellCatalog.Get("F-P-U07").Rules.Count));
+
+            // 节流刻墨（总案 4.2.2.1）：在已生效费用上再降 1 点魔力（最低 0）；回路调息的节流降的是冷却。
+            string[] throttled = { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER", "F-P-M01", "F-P-M06", "F-P-U01", "F-P-R01" };
+            foreach (string id in throttled) Assert.That(RogueSpellCombatRuntime.SupportsThrottleSpecialization(id), Is.True, id);
+            Assert.That(RogueSpellCombatRuntime.SupportsThrottleSpecialization("F-P-R02"), Is.False);
+            Assert.That(RogueSpellCombatRuntime.ApplyThrottleSpecialization(FireSpellCatalog.Get("F-P-M01")).ManaCost,
+                Is.EqualTo(FireSpellCatalog.Get("F-P-M01").ManaCost - 1));
+            Assert.That(RogueSpellCombatRuntime.ApplyThrottleSpecialization(FireSpellCatalog.Get("F-P-R01")).ManaCost,
+                Is.EqualTo(0));
+            // 基础四式不在 FireSpellCatalog 内（属另一套 SpellDefinition），其节流由 ExecuteBasic 路径处理。
         }
 
         private static RogueSpellLoadout LockedLoadout(string extraSpellId = "")

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,7 +56,13 @@ namespace OCC.Combat
             new FormalArtEntry("unit.tether_hound", "tether_hound", "Art/FormalUnits64/tether_hound"),
             new FormalArtEntry("unit.stone_snare", "stone_snare", "Art/FormalUnits64/stone_snare"),
             new FormalArtEntry("unit.lantern_revealer", "lantern_revealer", "Art/FormalUnits64/lantern_revealer"),
-            new FormalArtEntry("unit.rune_arbalist", "rune_arbalist", "Art/FormalUnits64/rune_arbalist")
+            new FormalArtEntry("unit.rune_arbalist", "rune_arbalist", "Art/FormalUnits64/rune_arbalist"),
+            // 新单位正式美术尚未入库，先复用最接近的既有剪影作为占位资源；正式图入库后再替换。
+            new FormalArtEntry("unit.elder_tracker_hound", "elder_tracker_hound", "Art/FormalUnits64/tether_hound"),
+            new FormalArtEntry("unit.signal_keeper", "signal_keeper", "Art/FormalUnits64/lantern_revealer"),
+            new FormalArtEntry("unit.wind_librarian", "wind_librarian", "Art/FormalUnits64/pyromancer"),
+            new FormalArtEntry("unit.legacy_storekeeper", "legacy_storekeeper", "Art/FormalUnits64/barrier_mender"),
+            new FormalArtEntry("unit.prototype_hand", "prototype_hand", "Art/FormalUnits64/stone_snare")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Commands = new[]

@@ -218,7 +218,7 @@ namespace OCC.Combat.Tests
             EnemyArchetype boss = EnemyArchetypes.Get("core_overseer");
             var unit = new UnitState("boss", false, new GridPosition(1, 1));
             boss.Apply(unit);
-            Assert.That(unit.DisplayName, Is.EqualTo("核心守备监工")); Assert.That(unit.MaxHealth, Is.EqualTo(30));
+            Assert.That(unit.DisplayName, Is.EqualTo("塔之守卫")); Assert.That(unit.MaxHealth, Is.EqualTo(30));
             Assert.That(unit.Health, Is.EqualTo(30)); Assert.That(unit.Shield, Is.EqualTo(4)); Assert.That(unit.Armor, Is.EqualTo(3));
         }
 

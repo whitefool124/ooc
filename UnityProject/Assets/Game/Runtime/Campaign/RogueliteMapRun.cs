@@ -12,7 +12,8 @@ namespace OCC.Combat
     public static class AcademyMapTuning
     {
         public const int ExpectedBossProgress = 20;
-        public const int BossMinimumProgress = 12;
+        // 固定段收束后交接到随机层：再完成 10 个随机阶段节点即可提前挑战首领。
+        public const int BossMinimumProgress = 10;
         public const int ConsolidationProgress = 21;
         public const int TransitionWarningProgress = 25;
         public const int TransitionProgress = 28;
@@ -173,7 +174,7 @@ namespace OCC.Combat
             new RogueliteMapNode("signal_hub", RogueliteMapNodeType.Combat, "传讯石庭", "清除石庭守军。", 3, 1, "switchyard", "relay_event", "elite_foundry"),
             new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "导能柱记录", "查阅现场记录。", 3, 2, "switchyard", "relay_raid", "signal_hub", "med_bay", "gatehouse"),
             new RogueliteMapNode("med_bay", RogueliteMapNodeType.Medical, "行军医帐", "治疗与餐食服务。", 3, 3, "relay_raid", "field_workshop", "relay_event", "records_archive", "sealed_market"),
-            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "刻阵工坊", "教官带着维护队守在里面，准备考验来访者。", 4, 1, "signal_hub", "gatehouse", "transmission_tower"),
+            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "刻阵工坊", "划线教官带着维护队守在里面，准备考验来访者。", 4, 1, "signal_hub", "gatehouse", "transmission_tower"),
             new RogueliteMapNode("gatehouse", RogueliteMapNodeType.Combat, "石闸关口", "打开通往古塔的道路。", 4, 2, "relay_event", "elite_foundry", "sealed_market", "aether_refinery"),
             new RogueliteMapNode("sealed_market", RogueliteMapNodeType.Shop, "封存商行", "商人既收金币，也愿意换取学院贡献。", 4, 3, "med_bay", "gatehouse", "records_archive", "aether_refinery", "safety_room"),
             new RogueliteMapNode("records_archive", RogueliteMapNodeType.Event, "档案整理", "帮助管理员整理积压的学院记录。", 4, 4, "field_workshop", "med_bay", "sealed_market", "safety_room"),
@@ -182,7 +183,7 @@ namespace OCC.Combat
             new RogueliteMapNode("safety_room", RogueliteMapNodeType.Event, "守夜值班记录", "值班生准备了补给和情报，也可能请你出手帮忙。", 5, 3, "sealed_market", "records_archive", "aether_refinery", "core_vault"),
             new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "塔前石庭", "高年级守卫把住了古塔前庭。", 6, 1, "transmission_tower", "core_vault", "core_finale"),
             new RogueliteMapNode("core_vault", RogueliteMapNodeType.Event, "学院封存库", "管理员允许你从封存柜里带走一件东西。", 6, 2, "aether_refinery", "safety_room", "core_approach", "core_finale"),
-            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败封存塔的核心守卫。", 7, 1, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
+            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败拦在必经之路上的塔之守卫。", 7, 1, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
             new RogueliteMapNode("academy_gate", RogueliteMapNodeType.Event, "学院正门公告", "公告板上贴着新生委托和几张手绘地图。", 0, 0, "tutorial_hall", "dorm_drill"),
             new RogueliteMapNode("tutorial_hall", RogueliteMapNodeType.Combat, "新生演练厅", "处理公开演练中的失控傀儡。", 0, 1, "academy_gate", "start", "dorm_watch"),
             new RogueliteMapNode("dorm_watch", RogueliteMapNodeType.Combat, "宿舍夜间巡查", "清理夜间异常并保护宿舍区。", 0, 3, "tutorial_hall", "market_lane"),
@@ -340,19 +341,37 @@ namespace OCC.Combat
                 ? RogueliteRunProgram.LegacyGrandfathered
                 : RogueliteRunProgram.EvergreenAcademy;
         public bool IsFirstRunExperience => FirstRunExperience != null;
-        public IReadOnlyList<RogueliteMapNode> MapNodes => IsFirstRunExperience ? FirstRunExperienceCatalog.MapNodes : RogueliteMapCatalog.Nodes;
-        public RogueliteMapNode MapNode(string id) => IsFirstRunExperience ? FirstRunExperienceCatalog.MapNode(id) : RogueliteMapCatalog.Node(id);
+        /// <summary>固定教学段阶段：节点集取 FirstRunExperienceCatalog，行为仍是教程语义。</summary>
+        public bool IsTutorialPhase => IsFirstRunExperience && !IsInAcademyLayer;
+        /// <summary>随机层阶段：固定段已收束，同一局继续走学院层 20 节点子图。</summary>
+        public bool IsInAcademyLayer { get; private set; }
+        public bool IsInAcademyLayerPhase => IsInAcademyLayer;
+        public IReadOnlyList<RogueliteMapNode> AcademyLayerNodes => RogueliteAcademyLayerCatalog.LayerNodes;
+        public IReadOnlyList<RogueliteMapNode> MapNodes => IsTutorialPhase
+            ? FirstRunExperienceCatalog.MapNodes
+            : IsInAcademyLayer ? RogueliteAcademyLayerCatalog.LayerNodes : RogueliteMapCatalog.Nodes;
+        public RogueliteMapNode MapNode(string id)
+        {
+            if (IsTutorialPhase)
+            {
+                // 教学段以固定段节点集为准；查不到的 id 回落到完整节点表而不是抛异常。
+                RogueliteMapNode fixedNode = FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
+                if (fixedNode != null) return fixedNode;
+            }
+            return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id)
+                ?? throw new KeyNotFoundException("Unknown map node in the current stage: " + id);
+        }
         public bool UsesRogue11 => rogueRunDto != null;
         public int Gold => rogueRunDto?.Gold ?? 0;
         public int StageContribution => rogueRunDto?.StageContribution ?? 0;
         public int StageTime => rogueRunDto?.StageTime ?? AcademyProgress;
         public OCC.Combat.Roguelite.RogueRunDto RogueRunState => rogueRunDto;
         public bool AwaitingReward { get; private set; }
-        public bool IsComplete => IsFirstRunExperience
+        public bool IsComplete => FirstRunExperience != null
             ? FirstRunExperience.IsTerminal
             : completed.Contains("core_finale") && !AwaitingReward;
         public int AcademyProgress => Math.Max(0, visited.Count - 1);
-        public int CompletedAcademyNodeCount => completed.Count(id => RogueliteMapCatalog.Node(id).Type != RogueliteMapNodeType.Finale);
+        public int CompletedAcademyNodeCount => completed.Count(id => TryMapNode(id)?.Type != RogueliteMapNodeType.Finale && TryMapNode(id) != null);
         public AcademyMapPhase AcademyPhase => StageTime >= AcademyMapTuning.TransitionProgress
             ? AcademyMapPhase.TransitionReady
             : StageTime >= AcademyMapTuning.ConsolidationProgress
@@ -362,11 +381,14 @@ namespace OCC.Combat
             CompletedAcademyNodeCount >= AcademyMapTuning.BossMinimumProgress;
         public bool IsTransitionPending => AcademyMapTuning.EnforceTransition
             && StageTime >= AcademyMapTuning.TransitionProgress;
-        public IReadOnlyCollection<string> UnlockedNodes => IsFirstRunExperience
+        public IReadOnlyCollection<string> UnlockedNodes => IsTutorialPhase
             ? FirstRunExperience.Nodes.Where(node => (node.Flags & FirstRunNodeFlags.Locked) == 0).Select(node => node.Id).ToArray()
-            : visited;
+            : IsInAcademyLayer
+                ? FirstRunExperience.Nodes.Where(node => (node.Flags & FirstRunNodeFlags.Locked) == 0).Select(node => node.Id)
+                    .Concat(visited).Distinct(StringComparer.Ordinal).ToArray()
+                : visited;
         public IReadOnlyCollection<string> VisitedNodes => visited;
-        public IReadOnlyCollection<string> CompletedNodes => IsFirstRunExperience
+        public IReadOnlyCollection<string> CompletedNodes => IsTutorialPhase
             ? FirstRunExperience.Nodes.Where(node => (node.Flags & FirstRunNodeFlags.Completed) != 0).Select(node => node.Id).ToArray()
             : completed;
         public IReadOnlyList<string> ClaimedRewards => claimedRewards;
@@ -387,6 +409,7 @@ namespace OCC.Combat
             get
             {
                 if (!IsFirstRunExperience || !AwaitingReward) return Array.Empty<string>();
+                if (IsInAcademyLayer) return Array.Empty<string>();
                 if (FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !FirstRunExperience.EliteRewardClaimed && !FirstRunExperience.EliteRewardAbandoned)
                     return FirstRunExperienceCatalog.ElitePassiveRewardIds;
                 FirstRunRewardGroupSnapshot group = FirstRunExperience.RewardGroups.SingleOrDefault(value => value.Id == FirstRunExperience.PendingRewardGroupId);
@@ -400,7 +423,7 @@ namespace OCC.Combat
             get
             {
                 if (!AwaitingReward) return Array.Empty<RogueliteReward>();
-                if (IsFirstRunExperience)
+                if (IsTutorialPhase)
                 {
                     OCC.Combat.Roguelite.RogueContentCatalog firstRunCatalog = OCC.Combat.Roguelite.RogueContentCatalog.CreateAcademyV01();
                     return CurrentFirstRunRewardIds.Select(id =>
@@ -439,7 +462,7 @@ namespace OCC.Combat
         {
             get
             {
-                if (IsFirstRunExperience) return Array.Empty<FireSpellDefinition>();
+                if (IsTutorialPhase) return Array.Empty<FireSpellDefinition>();
                 if (rogueRunDto != null) return Array.Empty<FireSpellDefinition>();
                 if (pendingFireSpellReselections.Count > 0)
                 {
@@ -459,7 +482,7 @@ namespace OCC.Combat
             get
             {
                 RogueliteMapNode node = MapNode(CurrentNodeId);
-                if (IsFirstRunExperience)
+                if (IsTutorialPhase)
                 {
                     FirstRunEventSnapshot currentEvent = FirstRunExperience.EventForNode(CurrentNodeId);
                     if (currentEvent == null || !string.IsNullOrEmpty(currentEvent.SelectedOptionId)) return Array.Empty<RogueliteNodeContentChoice>();
@@ -569,7 +592,7 @@ namespace OCC.Combat
                 if (combat.LootSource != null)
                 {
                     lootProgress[combat.LootSource.Id] = combat.LootSource.ToProgressString();
-                    if (IsFirstRunExperience) FirstRunExperience.LootProgress[combat.LootSource.Id] = combat.LootSource.ToProgressString();
+                    if (IsTutorialPhase) FirstRunExperience.LootProgress[combat.LootSource.Id] = combat.LootSource.ToProgressString();
                 }
                 return;
             }
@@ -584,16 +607,33 @@ namespace OCC.Combat
         public void RestoreLootProgress(LootSourceState loot)
         {
             if (loot == null) return;
-            if (IsFirstRunExperience && FirstRunExperience.LootProgress.TryGetValue(loot.Id, out string firstRunProgress)) loot.RestoreProgress(firstRunProgress);
+            if (IsTutorialPhase && FirstRunExperience.LootProgress.TryGetValue(loot.Id, out string firstRunProgress)) loot.RestoreProgress(firstRunProgress);
             else if (lootProgress.TryGetValue(loot.Id, out string progress)) loot.RestoreProgress(progress);
         }
 
         public bool IsAdjacentToCurrent(string nodeId)
         {
-            RogueliteMapNode current = MapNode(CurrentNodeId);
-            RogueliteMapNode target = MapNode(nodeId);
-            return current.NextIds.Contains(nodeId) || target.NextIds.Contains(CurrentNodeId);
+            RogueliteMapNode current = ResolveNode(CurrentNodeId);
+            RogueliteMapNode target = ResolveNode(nodeId);
+            if (current == null || target == null) return false;
+            return current.NextIds.Contains(target.Id) || target.NextIds.Contains(current.Id);
         }
+
+        /// <summary>
+        /// 阶段权威的节点解析。固定段与学院层共用少量节点 id（academy_gate/dorm_drill 等）但连线不同，
+        /// 所以学院层一律以完整节点表为准，固定段一律以固定段节点表为准。
+        /// </summary>
+        private RogueliteMapNode ResolveNode(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            if (RogueliteAcademyLayerCatalog.IsLayerNode(id))
+                return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id);
+            if (IsTutorialPhase)
+                return FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
+            return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id);
+        }
+
+        private RogueliteMapNode TryMapNode(string id) => ResolveNode(id);
 
         public static RogueliteMapRun CreateFirstRunV1(int seed)
         {
@@ -621,10 +661,21 @@ namespace OCC.Combat
         }
         public bool IsNodeAvailable(string nodeId)
         {
-            if (IsFirstRunExperience) return FirstRunExperience.FindTravelPath(nodeId).Count > 0;
+            if (IsTutorialPhase) return FirstRunExperience.FindTravelPath(nodeId).Count > 0;
+            if (IsInAcademyLayer) return IsAcademyLayerNodeAvailable(nodeId);
             RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
             if (!IsAdjacentToCurrent(nodeId)) return false;
             if (AcademyMapTuning.EnforceTransition && !visited.Contains(nodeId) && IsTransitionPending && node.Type != RogueliteMapNodeType.Finale) return false;
+            if (node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale) return false;
+            return true;
+        }
+        /// <summary>随机层的一层推进规则：相邻且未完成，首领受终考门槛限制。</summary>
+        public bool IsAcademyLayerNodeAvailable(string nodeId)
+        {
+            if (!RogueliteAcademyLayerCatalog.IsLayerNode(nodeId)) return false;
+            RogueliteMapNode node = RogueliteMapCatalog.Node(nodeId);
+            if (node.Id != CurrentNodeId && !IsAdjacentToCurrent(nodeId)) return false;
+            if (node.Id != CurrentNodeId && completed.Contains(node.Id)) return false;
             if (node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale) return false;
             return true;
         }
@@ -632,57 +683,85 @@ namespace OCC.Combat
         {
             return node != null && node.Type == RogueliteMapNodeType.Finale && AcademyMapTuning.EnforceBossGate && !CanChallengeAcademyFinale;
         }
-        public bool IsNodeKnown(string nodeId) => IsFirstRunExperience
+        public bool IsNodeKnown(string nodeId) => IsTutorialPhase
             ? (FirstRunExperience.Node(nodeId).Flags & FirstRunNodeFlags.Locked) == 0 || CompletedNodes.Contains(nodeId)
-            : visited.Contains(nodeId) || RogueliteMapCatalog.Node(CurrentNodeId).NextIds.Contains(nodeId);
+            : visited.Contains(nodeId) || MapNode(CurrentNodeId).NextIds.Contains(nodeId);
         public RogueliteMapNodeVisualState VisualStateFor(string nodeId)
         {
             RogueliteMapNode node = MapNode(nodeId);
             if (node.Id == CurrentNodeId) return RogueliteMapNodeVisualState.Current;
             if (CompletedNodes.Contains(node.Id)) return RogueliteMapNodeVisualState.Cleared;
             if (IsNodeAvailable(node.Id)) return RogueliteMapNodeVisualState.Available;
-            if (IsFirstRunExperience && (FirstRunExperience.Node(node.Id).Flags & FirstRunNodeFlags.Locked) != 0) return RogueliteMapNodeVisualState.Locked;
+            if (IsTutorialPhase && (FirstRunExperience.Node(node.Id).Flags & FirstRunNodeFlags.Locked) != 0) return RogueliteMapNodeVisualState.Locked;
             if (IsAdjacentToCurrent(node.Id) && IsAcademyFinaleGateLocked(node)) return RogueliteMapNodeVisualState.Locked;
             if (visited.Contains(node.Id) || IsNodeKnown(node.Id)) return RogueliteMapNodeVisualState.Known;
             return RogueliteMapNodeVisualState.Unknown;
         }
-        public IReadOnlyList<RogueliteMapNode> AvailableNodes => MapNodes.Where(node => IsNodeAvailable(node.Id)).ToArray();
+        /// <summary>
+        /// 当前随机层里玩家能实际前往的节点。学院层与旧郊道在图上仍有少量跨层连接，
+        /// 但一层的内容只包含学院节点，因此可前往列表不把旧郊道节点算进来。
+        /// </summary>
+        public IReadOnlyList<RogueliteMapNode> AvailableNodes => IsInAcademyLayer
+            ? MapNodes.Where(node => RogueliteAcademyLayerCatalog.IsAcademyLayerNode(node.Id) && IsNodeAvailable(node.Id)).ToArray()
+            : MapNodes.Where(node => IsNodeAvailable(node.Id)).ToArray();
         public void SelectNode(string nodeId)
         {
-            if (IsFirstRunExperience)
+            if (IsTutorialPhase)
             {
                 FirstRunExperience.TravelTo(nodeId);
                 visited.Add(nodeId);
                 SyncFirstRunProjection();
                 return;
             }
+            if (IsInAcademyLayer)
+            {
+                if (!IsAcademyLayerNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
+                    ? "Academy finale requires " + AcademyMapTuning.BossMinimumProgress + " completed academy nodes."
+                    : "Node is not adjacent or is unavailable in the current stage.");
+                CurrentNodeId = nodeId; visited.Add(nodeId);
+                if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
+                return;
+            }
             if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
-                ? "Academy finale requires 12 completed nodes."
+                ? "Academy finale requires " + AcademyMapTuning.BossMinimumProgress + " completed nodes."
                 : "Node is not adjacent or is unavailable in the current stage.");
             CurrentNodeId = nodeId; visited.Add(nodeId);
         }
+
+        /// <summary>
+        /// 随机层里重复经过已经清理过的节点。玩家在同一层可以回走，因此这里跳过“未完成”限制，
+        /// 但仍然要求相邻，并且把当前节点同步进存档。
+        /// </summary>
+        internal void TravelToVisitedAcademyNode(string nodeId)
+        {
+            if (!IsInAcademyLayer) throw new InvalidOperationException("Revisiting cleared nodes is only available inside the academy layer.");
+            if (!RogueliteAcademyLayerCatalog.IsLayerNode(nodeId)) throw new InvalidOperationException("Node is outside the academy layer: " + nodeId);
+            if (!completed.Contains(nodeId)) throw new InvalidOperationException("Only cleared academy nodes can be revisited: " + nodeId);
+            if (!IsAdjacentToCurrent(nodeId)) throw new InvalidOperationException("Revisit target is not adjacent to the current node: " + nodeId);
+            CurrentNodeId = nodeId; visited.Add(nodeId);
+            if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
+        }
         public void CompleteCurrentCombat()
         {
-            if (IsFirstRunExperience)
+            if (IsTutorialPhase)
             {
                 FirstRunExperience.CompleteCombat(CurrentNodeId);
                 SyncFirstRunProjection();
                 return;
             }
-            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
-            if (!node.IsCombat || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
-            Complete(node, true);
+            RogueliteMapNode node = MapNode(CurrentNodeId);
+            if (!node.IsCombat || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");            Complete(node, true);
         }
         public void CompleteCurrentNode()
         {
-            if (IsFirstRunExperience) throw new InvalidOperationException("Use the typed first-run event or service action.");
-            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
+            if (IsTutorialPhase) throw new InvalidOperationException("Use the typed first-run event or service action.");
+            RogueliteMapNode node = MapNode(CurrentNodeId);
             if (node.Type == RogueliteMapNodeType.Start || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not available.");
             Complete(node, node.IsCombat);
         }
         public void ChooseCurrentNodeContent(string choiceId)
         {
-            if (IsFirstRunExperience)
+            if (IsTutorialPhase)
             {
                 RogueliteNodeContentChoice firstRunChoice = CurrentContentChoices.FirstOrDefault(value => value.Id == choiceId)
                     ?? throw new InvalidOperationException("Event option is not available.");
@@ -725,7 +804,7 @@ namespace OCC.Combat
                 SyncFirstRunProjection();
                 return;
             }
-            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
+            RogueliteMapNode node = MapNode(CurrentNodeId);
             if (node.IsCombat || completed.Contains(node.Id) || HasPendingContentCombat) throw new InvalidOperationException("Current node content is not available.");
             RogueliteNodeContentChoice choice = ResolveContentChoice(node, choiceId);
             if (rogueRunDto == null)
@@ -764,8 +843,9 @@ namespace OCC.Combat
         public void CompletePendingContentCombat()
         {
             if (!HasPendingContentCombat) throw new InvalidOperationException("No event combat is active.");
-            RogueliteNodeContentChoice choice = ResolveContentChoice(RogueliteMapCatalog.Node(CurrentNodeId), PendingContentChoiceId);
-            ApplyContentChoice(choice); Complete(RogueliteMapCatalog.Node(CurrentNodeId), false);
+            RogueliteMapNode current = MapNode(CurrentNodeId);
+            RogueliteNodeContentChoice choice = ResolveContentChoice(current, PendingContentChoiceId);
+            ApplyContentChoice(choice); Complete(current, false);
             PendingContentChoiceId = null; PendingContentCombatMissionId = null;
             if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId)) AwaitingReward = true;
         }
@@ -778,7 +858,7 @@ namespace OCC.Combat
         }
         public void FailCurrentCombatSurvived()
         {
-            RogueliteMapNode node = RogueliteMapCatalog.Node(CurrentNodeId);
+            RogueliteMapNode node = MapNode(CurrentNodeId);
             if ((!node.IsCombat && !HasPendingContentCombat) || completed.Contains(node.Id))
                 throw new InvalidOperationException("Current node has no active combat to fail.");
             Complete(node, false, OCC.Combat.Roguelite.RogueEncounterOutcome.SurvivedFailure);
@@ -896,10 +976,22 @@ namespace OCC.Combat
             else if (node.IsCombat) { Parts += 2; Aether++; }
             AwaitingReward = offerReward;
             if (AwaitingReward && rogueRunDto != null && CurrentRewards.Count == 0) AwaitingReward = false;
+            if (IsInAcademyLayer && node.Type == RogueliteMapNodeType.Finale && !AwaitingReward) SettleAcademyRound();
         }
+
+        /// <summary>
+        /// 首领战结束且奖励已经落地时收束整轮：把 FirstRunExperience 推进到终态，
+        /// 这是 IsComplete 唯一成立的地方。
+        /// </summary>
+        private void SettleAcademyRound()
+        {
+            if (FirstRunExperience == null || FirstRunExperience.RoundSettled) return;
+            FirstRunExperience.SettleRound();
+        }
+        internal void SettleAcademyRoundForDeveloper() => SettleAcademyRound();
         public void ClaimReward(string rewardId)
         {
-            if (IsFirstRunExperience)
+            if (IsTutorialPhase)
             {
                 if (FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !FirstRunExperience.EliteRewardClaimed)
                 {
@@ -942,6 +1034,7 @@ namespace OCC.Combat
                     rogueRunDto.PendingRewardIds.Remove(rewardId);
                     claimedRewards.Add(rewardId);
                     AwaitingReward = rogueRunDto.PendingRewardIds.Count > 0;
+                    if (!AwaitingReward) SettleAcademyRoundIfFinale();
                     return;
                 }
                 if (reward.RogueSpell != null)
@@ -959,7 +1052,7 @@ namespace OCC.Combat
                     rogueRunDto.DeterministicCounter++;
                     runtime.WriteToDto(rogueRunDto);
                 }
-                claimedRewards.Add(rewardId); AwaitingReward = false; return;
+                claimedRewards.Add(rewardId); AwaitingReward = false; SettleAcademyRoundIfFinale(); return;
             }
             if (reward.Kind == RogueliteRewardKind.Item) GrantItem(reward.Item.Id);
             claimedRewards.Add(rewardId); AwaitingReward = false;
@@ -968,7 +1061,7 @@ namespace OCC.Combat
         public void AbandonCurrentReward()
         {
             if (!AwaitingReward) throw new InvalidOperationException("No reward is awaiting resolution.");
-            if (IsFirstRunExperience)
+            if (IsTutorialPhase)
             {
                 FirstRunExperience.AbandonReward();
                 claimedRewards.Add("abandoned:" + CurrentNodeId);
@@ -979,6 +1072,13 @@ namespace OCC.Combat
                 throw new InvalidOperationException("Migration replacement rewards cannot be abandoned.");
             claimedRewards.Add("abandoned:" + CurrentNodeId + ":" + completed.Count);
             AwaitingReward = false;
+            SettleAcademyRoundIfFinale();
+        }
+
+        private void SettleAcademyRoundIfFinale()
+        {
+            if (!IsInAcademyLayer || AwaitingReward) return;
+            if (CurrentNodeId == RogueliteAcademyLayerCatalog.FinaleNodeId) SettleAcademyRound();
         }
 
         private void GrantFirstRunEliteReward(string passiveId)
@@ -1142,7 +1242,70 @@ namespace OCC.Combat
         {
             RequireFirstRun();
             FirstRunExperience.CompleteExperience();
-            SyncFirstRunProjection();
+            EnterAcademyLayer();
+        }
+
+        /// <summary>
+        /// 固定段 → 随机层的交接：同一局继续，把教程段成果原样带进学院层，
+        /// 再把节点集、遭遇分配与事件分配切换到学院层 20 节点子图。
+        /// </summary>
+        private void EnterAcademyLayer()
+        {
+            if (IsInAcademyLayer) { SyncAcademyLayerProjection(); return; }
+            CarryOverTutorialProgress();
+            ReplaceEncounterAssignments(RogueliteAcademyLayerCatalog.GenerateEncounterAssignments(Seed));
+            ReplaceNodeContentAssignments(RogueliteAcademyLayerCatalog.GenerateNodeContentAssignments());
+            IsInAcademyLayer = true;
+            completed.Clear();
+            completed.Add(FirstRunExperienceCatalog.ShopNodeId);
+            CurrentNodeId = RogueliteAcademyLayerCatalog.EntryNodeIds[0];
+            visited.Clear();
+            visited.Add(FirstRunExperienceCatalog.ShopNodeId);
+            visited.Add(CurrentNodeId);
+            foreach (string entry in RogueliteAcademyLayerCatalog.EntryNodeIds) visited.Add(entry);
+            AwaitingReward = false;
+            PendingContentChoiceId = null;
+            PendingContentCombatMissionId = null;
+            deferredNodeReward = false;
+            SyncAcademyLayerProjection();
+        }
+
+        /// <summary>
+        /// 交接搬运：术式/精英被动、装备与背包、资源（金币/贡献/食材/补给/以太）、
+        /// 战斗快照（生命/护盾/魔力）、日志与已领取奖励都已经在 rogueRunDto 与 claimedRewards 里，
+        /// 这里只补齐教程段结束后需要收敛的部分。
+        /// </summary>
+        private void CarryOverTutorialProgress()
+        {
+            if (rogueRunDto == null) return;
+            if (!string.IsNullOrEmpty(FirstRunExperience.EliteSelectedPassiveId) &&
+                !rogueRunDto.MasteredSpellIds.Contains(FirstRunExperience.EliteSelectedPassiveId))
+                rogueRunDto.MasteredSpellIds.Add(FirstRunExperience.EliteSelectedPassiveId);
+            // 教程段的战场能力与固定术式必须留在掌握列表里，才能带进随机层战斗。
+            foreach (string spellId in ownedFireSpells)
+                if (FireSpellCatalog.All.Any(spell => spell.Id == spellId) && !rogueRunDto.MasteredSpellIds.Contains(spellId))
+                    rogueRunDto.MasteredSpellIds.Add(spellId);
+            if (!rogueRunDto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
+                rogueRunDto.MasteredSpellIds.Add(FirstRunExperienceCatalog.OriginSpellId);
+            rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(18, rogueRunDto.CurrentHealth));
+            rogueRunDto.CurrentMana = Math.Max(0, Math.Min(12, rogueRunDto.CurrentMana));
+            CurrentHealth = rogueRunDto.CurrentHealth;
+            CurrentMana = rogueRunDto.CurrentMana;
+            CurrentShield = 0;
+            HasCombatSnapshot = true;
+            foreach (KeyValuePair<string, string> row in FirstRunExperience.LootProgress)
+                if (!lootProgress.ContainsKey(row.Key)) lootProgress[row.Key] = row.Value;
+        }
+
+        private void SyncAcademyLayerProjection()
+        {
+            RegionBossId = "core_overseer";
+            if (rogueRunDto == null) return;
+            rogueRunDto.CurrentNodeId = CurrentNodeId;
+            rogueRunDto.RegionBossId = RegionBossId;
+            rogueRunDto.AwaitingReward = AwaitingReward;
+            rogueRunDto.RunProgramId = RogueliteRunProgram.FirstRunV1.ToString();
+            rogueRunDto.FirstRunExperience = FirstRunExperience;
         }
 
         public void SealFirstRunEliteDefeat()
@@ -1161,7 +1324,7 @@ namespace OCC.Combat
 
         private void SyncFirstRunProjection()
         {
-            if (!IsFirstRunExperience) return;
+            if (!IsTutorialPhase) return;
             CurrentNodeId = FirstRunExperience.CurrentNodeId;
             completed.Clear();
             completed.UnionWith(FirstRunExperience.Nodes.Where(value => (value.Flags & FirstRunNodeFlags.Completed) != 0).Select(value => value.Id));
@@ -1179,15 +1342,16 @@ namespace OCC.Combat
         {
             OCC.Combat.Roguelite.RogueRunDto dto = preserved ?? rogueRunDto ?? OCC.Combat.Roguelite.RogueRunDto.CreateNew("run-" + Seed, Seed);
             rogueRunDto = dto;
-            dto.CurrentNodeId = CurrentNodeId; dto.RegionBossId = IsFirstRunExperience ? string.Empty : "core_overseer"; dto.StarterId = StarterId;
+            dto.CurrentNodeId = CurrentNodeId; dto.RegionBossId = IsInAcademyLayer ? "core_overseer" : IsFirstRunExperience ? string.Empty : "core_overseer"; dto.StarterId = StarterId;
             dto.CurrentHealth = IsFirstRunExperience && FirstRunExperience.RunSealed ? 0 : Math.Max(1, Math.Min(18, CurrentHealth)); dto.CurrentMana = Math.Max(0, Math.Min(12, CurrentMana));
             dto.AwaitingReward = AwaitingReward; dto.PendingContentChoiceId = PendingContentChoiceId ?? string.Empty;
             dto.PendingContentCombatMissionId = PendingContentCombatMissionId ?? string.Empty;
             Replace(dto.VisitedNodeIds, visited.OrderBy(id => id, StringComparer.Ordinal));
             Replace(dto.CompletedNodeIds, completed.OrderBy(id => id, StringComparer.Ordinal));
             Replace(dto.ClaimedContentIds, claimedRewards);
-            Replace(dto.EncounterAssignments, IsFirstRunExperience ? Array.Empty<string>() : encounterAssignments.OrderBy(value => value.Key, StringComparer.Ordinal).Select(value => value.Key + "=" + value.Value));
-            Replace(dto.NodeContentAssignments, IsFirstRunExperience ? Array.Empty<string>() : nodeContentAssignments.OrderBy(value => value.Key, StringComparer.Ordinal).Select(value => value.Key + "=" + value.Value));
+            bool keepsAssignments = IsInAcademyLayer || !IsFirstRunExperience;
+            Replace(dto.EncounterAssignments, keepsAssignments ? encounterAssignments.OrderBy(value => value.Key, StringComparer.Ordinal).Select(value => value.Key + "=" + value.Value) : Array.Empty<string>());
+            Replace(dto.NodeContentAssignments, keepsAssignments ? nodeContentAssignments.OrderBy(value => value.Key, StringComparer.Ordinal).Select(value => value.Key + "=" + value.Value) : Array.Empty<string>());
             foreach (string id in ownedFireSpells.Where(id => FireSpellCatalog.All.Any(spell => spell.Id == id)))
                 if (!dto.MasteredSpellIds.Contains(id)) dto.MasteredSpellIds.Add(id);
             for (int index = 0; index < equippedFireSpells.Length; index++)
@@ -1218,14 +1382,31 @@ namespace OCC.Combat
             if (dto.FirstRunExperience != null)
             {
                 run.FirstRunExperience = dto.FirstRunExperience;
-                run.CurrentNodeId = dto.FirstRunExperience.CurrentNodeId;
-                run.RegionBossId = string.Empty;
-                run.encounterAssignments.Clear();
-                run.nodeContentAssignments.Clear();
-                run.visited.Clear();
-                foreach (string id in dto.VisitedNodeIds.Where(id => FirstRunExperienceCatalog.MapNodes.Any(node => node.Id == id))) run.visited.Add(id);
-                if (run.visited.Count == 0) run.visited.Add(FirstRunExperienceCatalog.OriginNodeId);
-                run.SyncFirstRunProjection();
+                // RandomLayer 是本局已经交接到随机层的标记；Complete 是旧存档里的同一含义。
+                run.IsInAcademyLayer = dto.FirstRunExperience.IsRandomLayer;
+                if (run.IsInAcademyLayer)
+                {
+                    run.CurrentNodeId = AcademyMapSaveMigration.NodeId(dto.CurrentNodeId);
+                    if (!RogueliteAcademyLayerCatalog.IsLayerNode(run.CurrentNodeId))
+                        run.CurrentNodeId = RogueliteAcademyLayerCatalog.EntryNodeIds[0];
+                    run.RegionBossId = "core_overseer";
+                    run.visited.Clear();
+                    foreach (string id in dto.VisitedNodeIds.Where(RogueliteAcademyLayerCatalog.IsLayerNode)) run.visited.Add(id);
+                    if (run.visited.Count == 0)
+                        foreach (string entry in RogueliteAcademyLayerCatalog.EntryNodeIds) run.visited.Add(entry);
+                    run.AwaitingReward = dto.AwaitingReward;
+                }
+                else
+                {
+                    run.CurrentNodeId = dto.FirstRunExperience.CurrentNodeId;
+                    run.RegionBossId = string.Empty;
+                    run.encounterAssignments.Clear();
+                    run.nodeContentAssignments.Clear();
+                    run.visited.Clear();
+                    foreach (string id in dto.VisitedNodeIds.Where(id => FirstRunExperienceCatalog.MapNodes.Any(node => node.Id == id))) run.visited.Add(id);
+                    if (run.visited.Count == 0) run.visited.Add(FirstRunExperienceCatalog.OriginNodeId);
+                    run.SyncFirstRunProjection();
+                }
             }
             else
             {
@@ -1275,10 +1456,43 @@ namespace OCC.Combat
             if (run.IsFirstRunExperience && dto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId) &&
                 dto.EquippedSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
                 run.rogueEquippedSpellIds[4] = FirstRunExperienceCatalog.OriginSpellId;
+            if (run.IsInAcademyLayer)
+            {
+                // 随机层的节点绑定必须整体覆盖构造函数里的默认分配，避免残留旧郊道的绑定。
+                run.completed.Clear();
+                foreach (string id in dto.CompletedNodeIds.Where(RogueliteAcademyLayerCatalog.IsLayerNode)) run.completed.Add(id);
+                run.visited.RemoveWhere(id => !RogueliteAcademyLayerCatalog.IsLayerNode(id));
+                run.ReplaceEncounterAssignments(RestoreEncounterAssignments(dto.EncounterAssignments));
+                run.ReplaceNodeContentAssignments(RestoreNodeContentAssignments(dto.NodeContentAssignments));
+                run.SyncAcademyLayerProjection();
+            }
             return run;
         }
-        private static string StarterWeaponId(string starterId)
+        private static IReadOnlyList<RogueliteEncounterAssignment> RestoreEncounterAssignments(IEnumerable<string> rows)
         {
+            List<RogueliteEncounterAssignment> restored = new List<RogueliteEncounterAssignment>();
+            foreach (string row in rows ?? Array.Empty<string>())
+            {
+                int separator = row.IndexOf('=');
+                if (separator <= 0 || separator == row.Length - 1) throw new InvalidOperationException("Invalid encounter assignment row.");
+                restored.Add(new RogueliteEncounterAssignment(AcademyMapSaveMigration.NodeId(row.Substring(0, separator)), row.Substring(separator + 1)));
+            }
+            return restored;
+        }
+
+        private static IReadOnlyList<AcademyEventAssignment> RestoreNodeContentAssignments(IEnumerable<string> rows)
+        {
+            List<AcademyEventAssignment> restored = new List<AcademyEventAssignment>();
+            foreach (string row in rows ?? Array.Empty<string>())
+            {
+                int separator = row.IndexOf('=');
+                if (separator <= 0 || separator == row.Length - 1) throw new InvalidOperationException("Invalid node content assignment row.");
+                restored.Add(new AcademyEventAssignment(AcademyMapSaveMigration.NodeId(row.Substring(0, separator)), row.Substring(separator + 1)));
+            }
+            return restored;
+        }
+
+        private static string StarterWeaponId(string starterId)        {
             if (starterId == FireRogueliteStarterCatalog.Melee) return "war_hammer";
             if (starterId == FireRogueliteStarterCatalog.Ranged) return "arcane_wand";
             return null;

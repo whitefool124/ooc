@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using OCC.Combat.Roguelite;
@@ -437,30 +438,44 @@ namespace OCC.Combat.Tests
             Assert.That(state.AcademyCoreBoss, Is.Not.Null);
             UnitState core = state.Units.Values.Single(unit => unit.EnemyArchetypeId == "core_overseer");
             UnitState hero = state.GetUnit("hero");
+            Assert.That(state.AcademyCoreBoss.SurvivingMechanismCount(state), Is.EqualTo(3), "三组塔内机关。");
+            Assert.That(state.AcademyCoreBoss.ReleasedMechanismCount(state), Is.Zero, "放行前不提供任何效果。");
 
-            CombatResolver.BeginTurn(state, core.Id);
-            Assert.That(core.Shield, Is.EqualTo(8), "2 点首领基础回合盾加三条维护链各 2 点。 ");
+            // 阶段〇：走流程。三道门槛逐组放行，且此阶段不可被打倒。
+            MethodInfo beginBossTurn = typeof(AcademyCoreBossRuntime).GetMethod("BeginTurn", BindingFlags.Instance | BindingFlags.NonPublic);
+            for (int turn = 1; turn <= 3; turn++)
+            {
+                beginBossTurn.Invoke(state.AcademyCoreBoss, new object[] { state, core });
+                Assert.That(state.AcademyCoreBoss.ReleasedMechanismCount(state), Is.EqualTo(turn));
+                Assert.That(core.IsSuperArmored, Is.True, "阶段〇期间不可被打倒。");
+            }
+            Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(0), "第三个自身回合仍属阶段〇。");
+            beginBossTurn.Invoke(state.AcademyCoreBoss, new object[] { state, core });
             Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(1));
+            Assert.That(core.IsSuperArmored, Is.False, "三道门槛走完后不再具有霸体。");
+            Assert.That(state.AcademyCoreBoss.ReleasedMechanismCount(state), Is.EqualTo(3));
+            Assert.That(state.AcademyCoreBoss.PendingMechanismCount(state), Is.Zero);
             EnemyTurnPlanBook phaseOnePlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseOne = phaseOnePlans.GetPublicIntent(state, core, hero);
             Assert.That(phaseOne.ActionName, Is.EqualTo("核心定向束"));
             Assert.That(phaseOne.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
 
+            // 阶段二：生命降到 30% 及以下时改用两格破势脉冲。
             UnitState phaseTwoHero = new UnitState("phase_two_hero", true, new GridPosition(0, 2));
             UnitState phaseTwoCore = new UnitState("phase_two_core", false, new GridPosition(2, 2));
-            UnitState finalLink = new UnitState("final_link", false, new GridPosition(4, 4));
             EnemyArchetypes.Get("core_overseer").Apply(phaseTwoCore);
-            EnemyArchetypes.Get("barrier_mender").Apply(finalLink);
             phaseTwoCore.ConfigureMana(8);
-            CombatState phaseTwoState = new CombatState(new GridMap(5, 5),
-                new[] { phaseTwoHero, phaseTwoCore, finalLink });
+            CombatState phaseTwoState = new CombatState(new GridMap(5, 5), new[] { phaseTwoHero, phaseTwoCore });
             phaseTwoState.ConfigureRuleset(CombatRuleset.Roguelite);
             phaseTwoState.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
+            MethodInfo takeDamage = typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic);
+            takeDamage.Invoke(phaseTwoCore, new object[] { phaseTwoCore.MaxHealth - phaseTwoCore.MaxHealth * 3 / 10 });
+            Assert.That(phaseTwoCore.Health * 10, Is.LessThanOrEqualTo(phaseTwoCore.MaxHealth * 3));
             Assert.That(phaseTwoState.AcademyCoreBoss.PhaseFor(phaseTwoState, phaseTwoCore), Is.EqualTo(2));
             EnemyTurnPlanBook phaseTwoPlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseTwo = phaseTwoPlans.GetPublicIntent(phaseTwoState, phaseTwoCore, phaseTwoHero);
             Assert.That(phaseTwo.ActionName, Is.EqualTo("核心破势脉冲"));
-            Assert.That(phaseTwo.DetailedText, Does.Contain("阶段二").And.Contain("1 条维护链"));
+            Assert.That(phaseTwo.DetailedText, Does.Contain("阶段二"));
         }
 
         [Test]

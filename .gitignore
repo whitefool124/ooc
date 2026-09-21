@@ -50,3 +50,7 @@ __pycache__/
 # 第三方版权素材：赛菲莉亚游戏贴图与截图裁切，仅本地研究，不入库
 ArtSource/sephiria_style_study_2026-09-16/sephiria_extract/
 ArtSource/sephiria_style_study_2026-09-16/refs/
+
+# External reference repos (read-only study material; keep only the README tracked)
+/Reference/*
+!/Reference/README.md

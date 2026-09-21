@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -95,9 +95,13 @@ namespace OCC.Combat.Tests
 
             foreach (FirstRegionLevelDefinition level in FirstRegionLevelCatalog.All)
             {
-                bool surroundsSpawn = level.EnemyPlacements.Any(enemy => enemy.Position.X <= level.HeroSpawn.X);
-                bool crossesMapCenter = level.EnemyPlacements.Any(enemy => enemy.Position.X <= 5) &&
-                    level.EnemyPlacements.Any(enemy => enemy.Position.X >= 6);
+                // 塔内机关与敌人单位共同构成 B01 的对抗布点，按同一套空间规则检查。
+                GridPosition[] opposing = level.EnemyPlacements.Select(enemy => enemy.Position)
+                    .Concat(level.Terrain.Where(tile => tile.Kind == LevelTerrainKind.TowerMechanism).Select(tile => tile.Position))
+                    .ToArray();
+                bool surroundsSpawn = opposing.Any(position => position.X <= level.HeroSpawn.X);
+                bool crossesMapCenter = opposing.Any(position => position.X <= 5) &&
+                    opposing.Any(position => position.X >= 6);
                 Assert.That(surroundsSpawn || crossesMapCenter, Is.True, level.Id + " must not reduce to a far-right enemy wall");
             }
         }

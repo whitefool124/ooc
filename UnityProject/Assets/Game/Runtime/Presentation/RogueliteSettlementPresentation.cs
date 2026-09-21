@@ -101,7 +101,7 @@ namespace OCC.Combat.Presentation
             GameObject card = FormalUiKit.LayoutPanel("结算卡", panel.transform, "settlement.card", FormalUiTheme.SurfaceRaised);
             RectTransform cardRect = card.GetComponent<RectTransform>();
 
-            bool firstEliteReward = run.IsFirstRunExperience && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !run.FirstRunExperience.EliteRewardClaimed;
+            bool firstEliteReward = run.IsTutorialPhase && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !run.FirstRunExperience.EliteRewardClaimed;
             AddLabel(card.transform, "标题", "战斗胜利", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "副标题", firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "等级", "等级 " + run.Level + "　经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
@@ -409,6 +409,8 @@ namespace OCC.Combat.Presentation
 
         private static string FireRulePlayerText(FireSpellRule rule)
         {
+            // 破障是词条标记（总案 3.5.6.1）：卡面只写可读结果，不暴露内部枚举名。
+            if (rule.Kind == FireRuleKind.BreakBarrier) return "破障：对物件造成双倍耐久伤害";
             string condition = rule.Condition == FireCondition.TargetBurning ? "若目标正在燃烧，" :
                 rule.Condition == FireCondition.TargetOnFireground ? "若目标位于火场，" :
                 rule.Condition == FireCondition.TargetBurningAndOnFireground ? "若目标燃烧且位于火场，" :

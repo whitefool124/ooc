@@ -217,7 +217,7 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun;
             if (string.IsNullOrEmpty(selectedNodeId) || !run.MapNodes.Any(node => node.Id == selectedNodeId)) selectedNodeId = run.CurrentNodeId;
-            if (run.IsFirstRunExperience && run.FirstRunExperience.Origin.Acknowledged && run.CurrentNodeId == FirstRunExperienceCatalog.OriginNodeId &&
+            if (run.IsTutorialPhase && run.FirstRunExperience.Origin.Acknowledged && run.CurrentNodeId == FirstRunExperienceCatalog.OriginNodeId &&
                 (selectedNodeId == FirstRunExperienceCatalog.OriginNodeId || string.IsNullOrEmpty(selectedNodeId)) && run.MapNodes.Any(node => node.Id == "B1"))
                 selectedNodeId = "B1";
             Header("学院地图", run.UsesRogue11
@@ -320,7 +320,7 @@ namespace OCC.Combat.Presentation
             Label("名称", title, card.transform, new Vector2(18, -14), new Vector2(300, 38), 26, text, TextAnchor.MiddleLeft);
             Label("摘要", type + (string.IsNullOrEmpty(time) ? string.Empty : "　" + time) + "　" + RogueliteMapVisualPresentation.StateLabel(state),
                 card.transform, new Vector2(18, -54), new Vector2(320, 28), 16, identified ? cyan : muted, TextAnchor.MiddleLeft);
-            bool firstBattleNext = run.IsFirstRunExperience && node.Id == "B1" && run.FirstRunExperience.Origin.Acknowledged && run.CurrentNodeId == FirstRunExperienceCatalog.OriginNodeId;
+            bool firstBattleNext = run.IsTutorialPhase && node.Id == "B1" && run.FirstRunExperience.Origin.Acknowledged && run.CurrentNodeId == FirstRunExperienceCatalog.OriginNodeId;
             Label("提示", identified ? firstBattleNext ? "下一步：查看第一战，再决定是否出发" : "先看看这里，再决定要不要去" : "走近后才能看清",
                 card.transform, new Vector2(18, -84), new Vector2(320, 24), 14, muted, TextAnchor.MiddleLeft);
             if (identified) AddNodeIcon(card.transform, node.Type);
@@ -409,7 +409,7 @@ namespace OCC.Combat.Presentation
 
         private void DrawNodeRoomActions(Transform parent, RogueliteMapRun run, RogueliteMapNode node, bool current, bool cleared, Color accent)
         {
-            if (run.IsFirstRunExperience && current && node.Id == FirstRunExperienceCatalog.OriginNodeId && !run.FirstRunExperience.Origin.Acknowledged)
+            if (run.IsTutorialPhase && current && node.Id == FirstRunExperienceCatalog.OriginNodeId && !run.FirstRunExperience.Origin.Acknowledged)
             {
                 DrawDepartureProgress(parent, new Vector2(44, -22), 336f, 0);
                 Label("页面标题", "这是维克多的固定基础配置", parent, new Vector2(44, -106), new Vector2(900, 42), 30, text, TextAnchor.MiddleLeft);
@@ -425,17 +425,17 @@ namespace OCC.Combat.Presentation
                     () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
                 return;
             }
-            if (run.IsFirstRunExperience && current && node.Id == "W")
+            if (run.IsTutorialPhase && current && node.Id == "W")
             {
                 DrawFirstRunWorkshop(parent, run);
                 return;
             }
-            if (run.IsFirstRunExperience && current && node.Id == "M")
+            if (run.IsTutorialPhase && current && node.Id == "M")
             {
                 DrawFirstRunMedical(parent, run);
                 return;
             }
-            if (run.IsFirstRunExperience && current && node.Id == FirstRunExperienceCatalog.ShopNodeId)
+            if (run.IsTutorialPhase && current && node.Id == FirstRunExperienceCatalog.ShopNodeId)
             {
                 DrawFirstRunShop(parent, run);
                 return;
@@ -496,7 +496,10 @@ namespace OCC.Combat.Presentation
             FirstRunWorkshopSnapshot workshop = run.FirstRunExperience.Workshop;
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(run.RogueRunState);
             RogueEquipmentInstance[] equipment = runtime.AllInstances.Where(item => IsFirstRunForgeSlot(runtime.DefinitionFor(item.InstanceId).Slot)).ToArray();
+            // 只有总案 4.2.2.1 登记了专精的术式才是合法目标：其余术式没有定义增幅结果，
+            // 允许选择会让玩家白耗一份增幅刻墨（总案 6.2.7 要求非法时禁用并显示原因）。
             string[] spells = run.RogueRunState.MasteredSpellIds.Where(id =>
+                RogueSpellCombatRuntime.SupportsSpecialization(id) &&
                 RogueContentCatalog.CreateAcademyV01().Spells.Any(spell => spell.DefinitionId == id && spell.Role != "passive")).Distinct(StringComparer.Ordinal).ToArray();
             if (equipment.All(item => item.InstanceId != selectedWorkshopEquipmentId)) selectedWorkshopEquipmentId = equipment.FirstOrDefault()?.InstanceId;
             if (!spells.Contains(selectedWorkshopSpellId)) selectedWorkshopSpellId = spells.FirstOrDefault();
@@ -711,7 +714,7 @@ namespace OCC.Combat.Presentation
                 ? string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName))
                 : preview?.EnemySummary ?? "敌情待确认";
             string terrain = preview == null ? encounter.SpatialGrammar + "；" + encounter.SpawnRelationship : preview.SpatialRisk;
-            bool confirmOrigin = run.IsFirstRunExperience && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
+            bool confirmOrigin = run.IsTutorialPhase && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
             bool canStart = canEnter || confirmOrigin;
 
             GameObject top = Panel("Pixso出发准备顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
@@ -768,7 +771,7 @@ namespace OCC.Combat.Presentation
                 : preview?.EnemySummary ?? "阶段 A 敌人脚本槽";
             string spatialText = preview == null ? encounter.SpatialGrammar + "；" + encounter.SpawnRelationship : preview.SpatialRisk;
 
-            bool firstBattleDossier = run.IsFirstRunExperience && node.Id == "B1";
+            bool firstBattleDossier = run.IsTutorialPhase && node.Id == "B1";
             if (firstBattleDossier) DrawDepartureProgress(parent, new Vector2(44, -12), 336f, 2);
             float headingY = firstBattleDossier ? -88f : -28f;
             float descriptionY = firstBattleDossier ? -126f : -76f;
@@ -812,7 +815,7 @@ namespace OCC.Combat.Presentation
             }
 
             bool contentReady = true;
-            bool confirmOrigin = run.IsFirstRunExperience && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
+            bool confirmOrigin = run.IsTutorialPhase && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
             bool canStart = contentReady && (canEnter || confirmOrigin);
             string enterLabel = confirmOrigin ? "确认配置并出发" : "出发";
             string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" :
@@ -1363,7 +1366,7 @@ namespace OCC.Combat.Presentation
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(dto);
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
             Dictionary<string, SpellDefinition> spells = catalog.Spells.ToDictionary(value => value.DefinitionId, StringComparer.Ordinal);
-            if (run.IsFirstRunExperience)
+            if (run.IsTutorialPhase)
                 spells[RogueSpellCombatRuntime.FirstBattleOriginSpell.DefinitionId] = RogueSpellCombatRuntime.FirstBattleOriginSpell;
             IReadOnlyList<RogueInventoryItemPresentation> items = RogueInventoryPresentation.Build(runtime);
             loadoutDragRuntime = runtime;

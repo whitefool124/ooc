@@ -100,15 +100,15 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void InventoryLauncher_UsesHeaderFootprintWithoutOverlappingFullWidthCommands()
+        public void HeaderZones_DoNotOverlapAndStayInsideTheHeaderPanel()
         {
-            Rect commands = new Rect(16f, 864f, 1888f, 200f);
-            Rect launcher = TarkovInventoryPanel.LauncherRect;
+            Rect resources = FormalCombatHud.HeaderResourceZone;
+            Rect actions = FormalCombatHud.HeaderActionsZone;
+            Rect header = new Rect(0f, 0f, FormalCombatHud.HeaderPanelWidth, 56f);
 
-            Assert.That(launcher.xMin, Is.GreaterThanOrEqualTo(BattlefieldPresentationAdapter.BattlefieldWidth));
-            Assert.That(launcher.xMax, Is.LessThanOrEqualTo(1920f));
-            Assert.That(launcher.yMin, Is.LessThan(80f));
-            Assert.That(launcher.Overlaps(commands), Is.False);
+            Assert.That(resources.Overlaps(actions), Is.False, "resource row overlaps the action buttons");
+            Assert.That(header.Contains(resources.min) && header.Contains(resources.max), Is.True);
+            Assert.That(header.Contains(actions.min) && header.Contains(actions.max), Is.True);
         }
 
         [Test]

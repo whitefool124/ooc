@@ -93,9 +93,15 @@ namespace OCC.Combat
             RogueliteMapRunValidationResult result = new RogueliteMapRunValidationResult();
             if (run == null) { result.Add("run.null"); return result; }
 
-            if (run.IsFirstRunExperience)
+            if (run.IsTutorialPhase)
             {
                 ValidateFirstRun(run, result);
+                ValidateInventory(run, result);
+                return result;
+            }
+            if (run.IsInAcademyLayer)
+            {
+                ValidateAcademyLayer(run, result);
                 ValidateInventory(run, result);
                 return result;
             }
@@ -205,6 +211,115 @@ namespace OCC.Combat
             if (run.CurrentHealth < 0 || run.CurrentHealth > 18 || run.CurrentMana < 0 || run.CurrentMana > 12 || run.CurrentShield < 0 || run.CurrentShield > 6)
                 result.Add("combat.snapshot_out_of_range");
             if (state.RunSealed ? run.CurrentHealth != 0 : run.CurrentHealth <= 0) result.Add("first_run.health_state");
+        }
+
+        // 随机层：固定段已经收束，节点集换成学院层，内容接口按“节点绑定”工作。
+        private static void ValidateAcademyLayer(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            FirstRunExperienceState state = run.FirstRunExperience;
+            if (state == null) { result.Add("academy_layer.state_missing"); return; }
+            if (!state.Shop.Opened || state.Outcome != FirstRunOutcome.EliteVictory ||
+                (!state.EliteRewardClaimed && !state.EliteRewardAbandoned)) result.Add("academy_layer.handoff_incomplete");
+            if (state.RunSealed) result.Add("academy_layer.sealed");
+
+            if (!RogueliteAcademyLayerCatalog.IsLayerNode(run.CurrentNodeId)) result.Add("academy_layer.current_node_unknown");
+            if (!run.VisitedNodes.Contains(run.CurrentNodeId)) result.Add("academy_layer.visited_inconsistent");
+            if (run.VisitedNodes.Any(id => TryKnownMapNode(id) == null)) result.Add("academy_layer.visited_unknown");
+            if (run.CompletedNodes.Any(id => TryKnownMapNode(id) == null)) result.Add("academy_layer.completed_unknown");
+            if (run.CompletedNodes.Any(id => !run.VisitedNodes.Contains(id))) result.Add("academy_layer.completed_not_visited");
+            if (run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId) && !state.RoundSettled &&
+                run.CurrentNodeId != RogueliteAcademyLayerCatalog.FinaleNodeId)
+                result.Add("academy_layer.finale_without_settlement");
+
+            if (!string.Equals(run.RegionBossId, "core_overseer", StringComparison.Ordinal)) result.Add("academy_layer.region_boss_unknown");
+            if (run.CurrentHealth < 0 || run.CurrentHealth > 18) result.Add("combat.health_out_of_range");
+            if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
+            if (run.CurrentMana < 0 || run.CurrentMana > 12) result.Add("combat.mana_out_of_range");
+            if (!run.HasCombatSnapshot && (run.CurrentHealth != 18 || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
+            if (run.HasCombatSnapshot && run.CurrentHealth <= 0) result.Add("combat.defeated_snapshot");
+
+            ValidateAcademyEncounters(run, result);
+            ValidateAcademyNodeContents(run, result);
+            ValidatePendingState(run, result);
+
+            if (run.IsComplete)
+            {
+                if (!state.RoundSettled) result.Add("academy_layer.complete_without_settlement");
+                if (run.AwaitingReward) result.Add("academy_layer.complete_with_reward");
+            }
+            if (state.RoundSettled && !run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId))
+                result.Add("academy_layer.settled_without_finale");
+        }
+
+        private static void ValidateAcademyEncounters(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            string[] combatNodes = RogueliteAcademyLayerCatalog.EncounterNodeIds.ToArray();
+            if (run.EncounterAssignments.Count != combatNodes.Length ||
+                combatNodes.Any(id => !run.EncounterAssignments.ContainsKey(id)))
+            { result.Add("academy_layer.encounter_coverage"); return; }
+            if (run.EncounterAssignments.Keys.Any(id => !RogueliteAcademyLayerCatalog.IsAcademyLayerNode(id)))
+                result.Add("academy_layer.encounter_node_invalid");
+
+            List<RogueliteEncounterDefinition> definitions = new List<RogueliteEncounterDefinition>();
+            foreach (KeyValuePair<string, string> row in run.EncounterAssignments)
+            {
+                if (!RogueliteAcademyLayerCatalog.TryMapping(row.Key, out RogueliteAcademyLayerCatalog.AcademyNodeContentMapping mapping)) continue;
+                if (!string.Equals(mapping.EncounterVariantId, row.Value, StringComparison.Ordinal))
+                    result.Add("academy_layer.encounter_mapping_drift");
+                RogueliteEncounterDefinition definition;
+                try { definition = RogueliteEncounterCatalog.Package(row.Value); }
+                catch (InvalidOperationException) { result.Add("academy_layer.encounter_unknown"); continue; }
+                definitions.Add(definition.BindToNode(row.Key));
+                RogueliteMapNode node = RogueliteMapCatalog.Node(row.Key);
+                bool tierValid = node.Type == RogueliteMapNodeType.Combat &&
+                        (definition.Tier == RogueliteEncounterTier.Weak || definition.Tier == RogueliteEncounterTier.Strong) ||
+                    node.Type == RogueliteMapNodeType.Elite && definition.Tier == RogueliteEncounterTier.Elite ||
+                    node.Type == RogueliteMapNodeType.Finale && definition.Tier == RogueliteEncounterTier.Boss;
+                if (!tierValid) result.Add("academy_layer.encounter_tier_mismatch");
+                if (definition.EnemyArchetypeIds.Any(id => !EnemyArchetypes.All.Any(enemy => enemy.Id == id)))
+                    result.Add("academy_layer.encounter_enemy_unknown");
+            }
+
+            foreach (RogueliteEncounterDefinition left in definitions)
+            foreach (RogueliteEncounterDefinition right in definitions.Where(value =>
+                string.CompareOrdinal(value.NodeId, left.NodeId) > 0 && IsAcademyLayerAdjacent(left.NodeId, value.NodeId)))
+                if (left.VariantKey == right.VariantKey || left.LevelId == right.LevelId || left.SpatialGrammar == right.SpatialGrammar)
+                    result.Add("academy_layer.encounter_adjacent_repeat");
+
+            RogueliteEncounterDefinition boss = definitions.SingleOrDefault(value => value.Tier == RogueliteEncounterTier.Boss);
+            if (boss == null || boss.VariantKey != RogueliteEncounterCatalog.FixedBoss.VariantKey ||
+                boss.EnemyArchetypeIds.FirstOrDefault() != "core_overseer") result.Add("academy_layer.boss_not_fixed");
+            if (run.CanChallengeAcademyFinale == false && run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId))
+                result.Add("academy_layer.finale_without_gate");
+        }
+
+        private static bool IsAcademyLayerAdjacent(string a, string b)
+        {
+            RogueliteMapNode left = RogueliteMapCatalog.Node(a);
+            return left.NextIds.Contains(b) || RogueliteMapCatalog.Node(b).NextIds.Contains(a);
+        }
+
+        // 交接进随机层之后，教学段的完成标记（例如商店节点 S）仍然留在进度里，这是合法的跨阶段记录。
+        private static RogueliteMapNode TryKnownMapNode(string id) =>
+            RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id) ??
+            FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
+
+        private static void ValidateAcademyNodeContents(RogueliteMapRun run, RogueliteMapRunValidationResult result)
+        {
+            string[] eventNodes = RogueliteAcademyLayerCatalog.EventNodeIds.ToArray();
+            if (run.NodeContentAssignments.Count != eventNodes.Length ||
+                eventNodes.Any(id => !run.NodeContentAssignments.ContainsKey(id)))
+            { result.Add("academy_layer.content_coverage"); return; }
+            if (run.NodeContentAssignments.Values.Distinct(StringComparer.Ordinal).Count() != run.NodeContentAssignments.Count)
+                result.Add("academy_layer.content_duplicate");
+            foreach (KeyValuePair<string, string> row in run.NodeContentAssignments)
+            {
+                if (!RogueliteAcademyLayerCatalog.IsAcademyLayerNode(row.Key) ||
+                    RogueliteMapCatalog.Node(row.Key).Type != RogueliteMapNodeType.Event)
+                    result.Add("academy_layer.content_node_invalid");
+                if (!AcademyNodeContentCatalog.Events.Any(value => value.Id == row.Value))
+                    result.Add("academy_layer.content_unknown");
+            }
         }
 
         private static void ValidatePendingState(RogueliteMapRun run, RogueliteMapRunValidationResult result)

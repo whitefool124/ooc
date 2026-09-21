@@ -37,6 +37,8 @@ namespace OCC.Combat
         public int EffectiveArmor => Math.Max(0, Armor - (HasStatus(StatusType.ArmorBreak) ? StatusStrength(StatusType.ArmorBreak, 2) : 0));
         public int EffectiveSpeed => Math.Max(1, Speed - (HasStatus(StatusType.Slow) ? 3 : 0));
         public int MovementRangeThisTurn { get; private set; } = BaseMovementRange;
+        /// <summary>霸体：处于该状态时不会受到健康伤害，用于封存塔首领的阶段〇走流程。</summary>
+        public bool IsSuperArmored { get; internal set; }
 
         public UnitState(string id, bool isHero, GridPosition position)
         {
@@ -57,6 +59,8 @@ namespace OCC.Combat
         public void Equip(WeaponDefinition weapon, SkillDefinition skillOne, SkillDefinition skillTwo)
         { MainHand = weapon ?? MainHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo; }
         internal void AssignEnemyArchetype(string archetypeId) => EnemyArchetypeId = archetypeId;
+        /// <summary>清除第二技能槽：用于只有一套公开战法、其余手段由运行时结算的单位。</summary>
+        internal void ClearSecondarySkill() => SkillTwo = null;
         public void ConfigureVitality(int maxHealth)
         {
             if (maxHealth < 1) throw new ArgumentOutOfRangeException(nameof(maxHealth));
@@ -76,7 +80,11 @@ namespace OCC.Combat
         internal void LimitMovementRangeForTurn(int range) => MovementRangeThisTurn = Math.Min(MovementRangeThisTurn, Math.Max(0, range));
         internal void MoveTo(GridPosition destination) => Position = destination;
         internal void SpendActionPoint(int amount) { if (amount < 0 || amount > ActionPoints) throw new InvalidOperationException("Unit does not have enough action points."); ActionPoints -= amount; }
-        internal void TakeDamage(int amount) => Health = Math.Max(0, Health - amount);
+        internal void TakeDamage(int amount)
+        {
+            if (IsSuperArmored || amount <= 0) return;
+            Health = Math.Max(0, Health - amount);
+        }
         internal int AbsorbShield(int amount) { int absorbed = Math.Min(Shield, amount); Shield -= absorbed; return absorbed; }
         internal void ClearShield() => Shield = 0;
         internal void Heal(int amount) => Health = Math.Min(MaxHealth, Health + amount);
@@ -119,7 +127,7 @@ namespace OCC.Combat
         {
             UnitState clone = new UnitState(Id, IsHero, Position) { DisplayName = DisplayName, EnemyArchetypeId = EnemyArchetypeId, Armor = Armor, Shield = Shield, MaxShield = MaxShield, Block = Block, Speed = Speed, MainHand = MainHand, SkillOne = SkillOne, SkillTwo = SkillTwo };
             clone.Health = Health; clone.Mana = Mana; clone.ActionPoints = ActionPoints; clone.ActionValue = ActionValue; clone.MovementRangeThisTurn = MovementRangeThisTurn;
-            clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana;
+            clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored;
             foreach (KeyValuePair<StatusType, int> entry in statuses) clone.statuses[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, int> entry in statusStrengths) clone.statusStrengths[entry.Key] = entry.Value;
             foreach (KeyValuePair<string, int> entry in cooldowns) clone.cooldowns[entry.Key] = entry.Value;

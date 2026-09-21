@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 
 namespace OCC.Combat.Tests
@@ -161,10 +161,15 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyArchetypes_IncludeFixedFirstRunElite()
         {
-            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(16));
-            Assert.That(EnemyArchetypes.All, Has.Exactly(4).Matches<EnemyArchetype>(archetype => archetype.IsElite));
-            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("刻阵教官"));
+            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(21));
+            Assert.That(EnemyArchetypes.All, Has.Exactly(8).Matches<EnemyArchetype>(archetype => archetype.IsElite));
+            Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("划线教官"));
             Assert.That(EnemyArchetypes.Get("breach_ram").MaxHealth, Is.EqualTo(36));
+            Assert.That(EnemyArchetypes.Get("elder_tracker_hound").DisplayName, Is.EqualTo("老寻"));
+            Assert.That(EnemyArchetypes.Get("signal_keeper").DisplayName, Is.EqualTo("灯台值守"));
+            Assert.That(EnemyArchetypes.Get("wind_librarian").DisplayName, Is.EqualTo("小铃"));
+            Assert.That(EnemyArchetypes.Get("legacy_storekeeper").DisplayName, Is.EqualTo("老库管"));
+            Assert.That(EnemyArchetypes.Get("prototype_hand").DisplayName, Is.EqualTo("试制员"));
         }
 
         [Test]

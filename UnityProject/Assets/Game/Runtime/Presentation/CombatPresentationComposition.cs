@@ -12,6 +12,7 @@ namespace OCC.Combat.Presentation
         public FormalRogueliteUi RogueliteUi { get; private set; }
         public FormalStartupPresentation Startup { get; private set; }
         public CombatFlowTransitionPresentation FlowTransition { get; private set; }
+        public CombatEntrySequencePresentation EntrySequence { get; private set; }
         public FormalBattlefieldView Battlefield { get; private set; }
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         public DeveloperConsolePanel DeveloperConsole { get; private set; }
@@ -35,6 +36,7 @@ namespace OCC.Combat.Presentation
                 RogueliteUi = Attach(owner, (FormalRogueliteUi value) => value.Initialize(host)),
                 Startup = Attach(owner, (FormalStartupPresentation value) => value.Initialize(host)),
                 FlowTransition = Attach(owner, (CombatFlowTransitionPresentation value) => value.Initialize(host)),
+                EntrySequence = Attach(owner, (CombatEntrySequencePresentation value) => value.Initialize(host)),
                 Battlefield = Attach(owner, (FormalBattlefieldView value) => value.Initialize(host))
             };
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

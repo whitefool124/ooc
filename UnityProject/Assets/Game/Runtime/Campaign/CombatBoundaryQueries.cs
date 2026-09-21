@@ -23,6 +23,8 @@ namespace OCC.Combat
             if (state.GreenhouseCollectionRoom != null) return state.GreenhouseCollectionRoom.PresentIntent(state, enemy, command);
             if (state.ThreeMaterialPressure != null) return state.ThreeMaterialPressure.PresentIntent(state, enemy, command);
             if (state.AcademyCoreBoss != null) return state.AcademyCoreBoss.PresentIntent(state, enemy, command);
+            if (state.AcademyFieldEnemy != null && AcademyFieldEnemyRuntime.Handles(enemy))
+                return state.AcademyFieldEnemy.PresentIntent(state, enemy, command);
             if (state.PressureTest != null) return state.PressureTest.PresentIntent(state, enemy, command);
             return CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
         }
@@ -41,6 +43,8 @@ namespace OCC.Combat
                             ? state.ThreeMaterialPressure.ChooseEnemyCommand(state, enemy, hero)
                         : state.AcademyCoreBoss != null
                             ? state.AcademyCoreBoss.ChooseEnemyCommand(state, enemy, hero)
+                            : state.AcademyFieldEnemy != null && AcademyFieldEnemyRuntime.Handles(enemy)
+                                ? state.AcademyFieldEnemy.ChooseEnemyCommand(state, enemy, hero)
                         : state.PressureTest != null
                             ? state.PressureTest.ChooseEnemyCommand(state, enemy, hero)
                         : EnemyTactics.Choose(state, enemy, hero);

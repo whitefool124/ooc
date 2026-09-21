@@ -104,7 +104,7 @@ namespace OCC.Combat
             bool orthogonal = source.Position.X == destination.X || source.Position.Y == destination.Y;
             if (!orthogonal || distance < ReactionMinimumRange || distance > ReactionMaximumRange)
                 return PressureReactionPreview.None(destination,
-                    distance < ReactionMinimumRange ? "相邻格位于重弩警戒死区。 " : "该格不在重弩的 2–4 格正交警戒线。 ");
+                    distance < ReactionMinimumRange ? "相邻格位于背弩生警戒死区。 " : "该格不在背弩生的 2–4 格正交警戒线。 ");
             if (!state.HasLineOfSight(source.Position, destination))
                 return PressureReactionPreview.None(destination, "警戒线被重掩体、灯藤或烟幕切断。 ");
 

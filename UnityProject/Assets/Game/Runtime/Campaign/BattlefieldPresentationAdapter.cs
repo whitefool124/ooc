@@ -557,6 +557,22 @@ namespace OCC.Combat
             ClampToViewport();
         }
 
+        /// <summary>
+        /// Sets a continuous camera pose for the combat-entry sequence.  Unlike
+        /// <see cref="Focus"/> it accepts a fractional grid point and an arbitrary zoom so a
+        /// tween can drive it, and it deliberately skips the interactive zoom-tier snapping.
+        /// The board is still clamped to the viewport, so a cinematic can never park the camera
+        /// on an illegal view and then snap when normal interaction resumes.
+        /// </summary>
+        public void ApplyCinematicPose(float zoom, float gridX, float gridY)
+        {
+            cellSize = (float)Math.Max(BattlefieldPresentationAdapter.MinimumCellSize,
+                Math.Min(BattlefieldPresentationAdapter.MaximumCellSize, zoom));
+            boardX = viewport.X + viewport.Width * .5f - (gridX + .5f) * cellSize;
+            boardY = viewport.Y + viewport.Height * .5f - (mapHeight - gridY - .5f) * cellSize;
+            ClampToViewport();
+        }
+
         public bool IsNearSafeEdge(GridPosition position, float safeInsetCells = 2f)
         {
             if (BoardWidth <= viewport.Width && BoardHeight <= viewport.Height) return false;

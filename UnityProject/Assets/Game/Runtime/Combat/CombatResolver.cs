@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using OCC.Combat.Roguelite;
@@ -124,6 +124,8 @@ namespace OCC.Combat
                 default: throw new ArgumentOutOfRangeException(nameof(command), command.Type, "Unsupported combat command.");
             }
             ExhaustEnemyActionPoints(state, unit);
+            state.AcademyCoreBoss?.ObserveCommand(state, unit);
+            if (unit.IsHero) state.AcademyFieldEnemy?.ObserveHeroCommand(state, command);
             return execution;
         }
 
@@ -491,6 +493,7 @@ namespace OCC.Combat
             IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, unit, command.Destination);
             if (path.Count == 0) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u884c\u79fb\u52a8\u8def\u5f84\u6216\u8d85\u51fa\u79fb\u52a8\u8303\u56f4\u3002");
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(command.Destination));
+            state.AcademyFieldEnemy?.AfterMove(state, unit, path);
             state.RainLanternCourt?.AfterMove(state, unit, path);
             state.GreenhouseCollectionRoom?.AfterMove(state, unit, path);
             state.RogueSpells?.AfterMove(unit.Id, path);
@@ -500,6 +503,8 @@ namespace OCC.Combat
                 state.AddLog(unit.DisplayName + "进入浅水，燃烧已移除。");
             }
             state.RogueEquipment?.AfterMove(unit.Id);
+            state.ResolveBindingMarkEntry(unit);
+            state.PublishCertifierReadout(unit);
             if (!unit.IsHero && state.ArtifactBattle != null)
             {
                 ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);

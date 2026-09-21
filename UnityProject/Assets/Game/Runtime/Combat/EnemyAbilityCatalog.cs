@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace OCC.Combat
@@ -44,6 +44,40 @@ namespace OCC.Combat
             "enemy_windlass_bolt", "绞盘重矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 1, 2,
             CombatFeedbackKind.Damage,
             new[] { SkillEffectDefinition.Damage(5, DamageType.Physical) }, minimumRange: 2);
+        public static readonly WeaponDefinition TrackerBite = new WeaponDefinition("tracker_bite", "近战撕咬", DamageType.Physical, 3, 1);
+        public static readonly WeaponDefinition KeeperMirror = new WeaponDefinition("keeper_mirror", "塔上灯镜", DamageType.Arcane, 2, 3);
+        public static readonly WeaponDefinition LibrarianStaff = new WeaponDefinition("librarian_staff", "引风短杖", DamageType.Arcane, 2, 3);
+        /// <summary>卷页：消耗一格散页打出风刃。散页的消耗由 AcademyFieldEnemyRuntime 结算。</summary>
+        public static readonly SkillDefinition WindScrollEdge = new SkillDefinition(
+            "enemy_wind_scroll_edge", "卷页", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 4, 0, 0,
+            CombatFeedbackKind.Damage,
+            new[] { SkillEffectDefinition.Damage(4, DamageType.Arcane) });
+        public static readonly SkillDefinition TrackerSnap = new SkillDefinition(
+            "enemy_tracker_snap", "扑咬", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 0,
+            CombatFeedbackKind.Damage,
+            new[] { SkillEffectDefinition.Damage(3, DamageType.Physical) });
+        public static readonly SkillDefinition TrackerMaul = new SkillDefinition(
+            "enemy_tracker_maul", "循味直扑", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 0,
+            CombatFeedbackKind.Bound,
+            new[] { SkillEffectDefinition.Damage(6, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 1) });
+        public static readonly WeaponDefinition StorekeeperStand = new WeaponDefinition("storekeeper_stand", "旧检定台", DamageType.Arcane, 2, 3);
+        public static readonly WeaponDefinition PrototypeTools = new WeaponDefinition("prototype_tools", "工具", DamageType.Physical, 3, 1);
+        /// <summary>旧脉冲：直线长度、清盾与破势由 AcademyFieldEnemyRuntime 结算；本条目承载公开描述与单体伤害参数。</summary>
+        public static readonly SkillDefinition LegacyPulse = new SkillDefinition(
+            "enemy_legacy_pulse", "旧脉冲", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 4, 0, 0,
+            CombatFeedbackKind.ArmorBreak,
+            new[] { SkillEffectDefinition.Damage(5, DamageType.Arcane), SkillEffectDefinition.ApplyStatus(StatusType.ArmorBreak, 2) });
+        /// <summary>布放：在正交相邻空格放下试制件；具体装置由 AcademyFieldEnemyRuntime 结算。</summary>
+        public static readonly SkillDefinition PrototypeDeploy = new SkillDefinition(
+            "enemy_prototype_deploy", "布放", SkillTargetRule.Self, SkillDeliveryMethod.Direct, 0, 0, 0,
+            CombatFeedbackKind.ShieldRestore,
+            new[] { SkillEffectDefinition.RestoreShield(2) });
+        /// <summary>转镜：光柱的方向、暗段与回合结束伤害由 AcademyFieldEnemyRuntime 结算；
+        /// 本条目只承载公开描述，不参与技能管道的伤害结算。</summary>
+        public static readonly SkillDefinition SpotlightMirror = new SkillDefinition(
+            "enemy_spotlight_mirror", "转镜", SkillTargetRule.Self, SkillDeliveryMethod.Direct, 0, 0, 0,
+            CombatFeedbackKind.Damage,
+            new[] { SkillEffectDefinition.Damage(5, DamageType.Arcane) });
         public static readonly SkillDefinition CoreLance = new SkillDefinition(
             "enemy_core_lance", "核心定向束", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 4, 1, 1,
             CombatFeedbackKind.Damage,
@@ -57,7 +91,8 @@ namespace OCC.Combat
         {
             ShieldRam, CombatCatalog.FireBolt, HookingStrike, VanguardCrush,
             SunderingSigil, WardMend, TetherPounce, StoneSnare, RevealingLantern, WindlassBolt,
-            CoreLance, CorePulse
+            CoreLance, CorePulse, TrackerSnap, TrackerMaul, SpotlightMirror, WindScrollEdge,
+            LegacyPulse, PrototypeDeploy
         };
         public static SkillDefinition Get(string id) => All.Single(skill => skill.Id == id);
     }

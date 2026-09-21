@@ -409,6 +409,9 @@ namespace OCC.Combat
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)Prepare(abilityId);
             prepared.Combat.GetUnit("hero").BeginTurn(0);
+            // 0 行动点／0 魔力的收租术式（M17／U11／R17）不靠费用非法，因此同时抽掉它们必须消耗的火源。
+            foreach (UnitState unit in prepared.Combat.Units.Values) unit.ClearStatus(StatusType.Burning);
+            foreach (GridPosition cell in prepared.Battle.Firegrounds.Keys.ToArray()) prepared.Battle.RemoveFireground(cell);
             return prepared;
         }
 

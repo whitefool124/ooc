@@ -204,7 +204,10 @@ namespace OCC.Combat.Tests
             restored.SelectNode("S");
             Assert.That(restored.IsComplete, Is.False);
             restored.CompleteFirstRunExperience();
-            Assert.That(restored.IsComplete, Is.True);
+            // 离开商店不再结束本局：同一局进入随机层，只有首领战结算才结束整轮。
+            Assert.That(restored.IsInAcademyLayer, Is.True);
+            Assert.That(restored.IsComplete, Is.False);
+            Assert.That(restored.FirstRunExperience.Lifecycle, Is.EqualTo(FirstRunLifecycle.RandomLayer));
         }
 
         [Test]
@@ -227,7 +230,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EliteRewardCanBeAbandonedAndShopExitCompletesExperience()
+        public void EliteRewardCanBeAbandonedAndShopExitHandsOffToTheRandomLayer()
         {
             RogueliteMapRun run = ReadyForElite(9012);
             run.SelectNode("X"); run.CompleteCurrentCombat();
@@ -239,7 +242,9 @@ namespace OCC.Combat.Tests
             run.SelectNode("S");
             Assert.That(run.IsComplete, Is.False);
             run.CompleteFirstRunExperience();
-            Assert.That(run.IsComplete, Is.True);
+            Assert.That(run.IsInAcademyLayer, Is.True);
+            Assert.That(run.FirstRunExperience.Lifecycle, Is.EqualTo(FirstRunLifecycle.RandomLayer));
+            Assert.That(run.IsComplete, Is.False, "整轮结束只由首领战结算决定");
         }
 
         [Test]

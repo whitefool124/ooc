@@ -251,30 +251,114 @@ namespace OCC.Combat.Roguelite
 
         private bool IsSpecialized(string spellId) => string.Equals(specializedSpellId, spellId, StringComparison.Ordinal);
 
-        private FireSpellDefinition Specialized(FireSpellDefinition spell)
+        // 总案 4.2.2.1 的专精表只登记这 12 项。工坊的合法目标、运行时强化共用这一处定义，
+        // 避免出现"卡面写了增幅、运行时没有效果"的空结果（例：炉温护持）。
+        public static bool SupportsSpecialization(string spellId)
         {
-            if (!IsSpecialized(spell.Id) || spell.Id != "F-P-M03" && spell.Id != "F-P-R19" &&
-                spell.Id != "F-P-U04" && spell.Id != "F-P-U01" && spell.Id != "F-P-U18") return spell;
-            FireSpellRule[] rules = spell.Rules.Select(rule =>
-                spell.Id == "F-P-M03" && (rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
-                    ? new FireSpellRule(rule.Kind, 10, rule.Duration, rule.Scope, rule.Condition, rule.AlternateAmount,
-                        rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing)
-                    : spell.Id == "F-P-R19" && rule.Scope == FireRuleScope.Primary &&
-                        (rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 16
-                        ? new FireSpellRule(rule.Kind, 20, rule.Duration, rule.Scope, rule.Condition, rule.AlternateAmount,
-                            rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing)
-                    : (spell.Id == "F-P-U04" || spell.Id == "F-P-U18") &&
-                        (rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
-                        ? new FireSpellRule(rule.Kind, 10, rule.Duration, rule.Scope, rule.Condition, rule.AlternateAmount,
-                            rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing)
-                        : rule).ToArray();
+            switch (spellId)
+            {
+                case "BASE-FIRE-MELEE":
+                case "BASE-FIRE-RANGED":
+                case "BASE-AETHER-SHIELD":
+                case "BASE-MANA-RECOVER":
+                case "F-P-M01":
+                case "F-P-M03":
+                case "F-P-M06":
+                case "F-P-U01":
+                case "F-P-U04":
+                case "F-P-U18":
+                case "F-P-R01":
+                case "F-P-R19":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private FireSpellDefinition Specialized(FireSpellDefinition spell) =>
+            IsSpecialized(spell.Id) ? ApplyAmplifySpecialization(spell) : spell;
+
+        // 增幅刻墨的固定结果，逐条对应总案 4.2.2.1 与 OCC_锻造与专精数据表_v1.0.csv。
+        public static FireSpellDefinition ApplyAmplifySpecialization(FireSpellDefinition spell)
+        {
+            if (spell == null || !SupportsSpecialization(spell.Id)) return spell;
+            List<FireSpellRule> rules = new List<FireSpellRule>();
+            foreach (FireSpellRule rule in spell.Rules)
+            {
+                switch (spell.Id)
+                {
+                    case "F-P-M01":
+                        // 追加火伤 8 → 10；移动加值不变。
+                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Timing == FireRuleTiming.OnTrigger && rule.Amount == 8
+                            ? Copy(rule, 10) : rule);
+                        break;
+                    case "F-P-M03":
+                        // 路径邻接单位与物件伤害 8 → 10；起点火场仍为 8 点。
+                        rules.Add((rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
+                            ? Copy(rule, 10) : rule);
+                        break;
+                    case "F-P-M06":
+                        // 下次近战命中额外造成 2 点火焰伤害。
+                        rules.Add(rule);
+                        if (rule.Kind == FireRuleKind.ApplyBreakStance && rule.Timing == FireRuleTiming.OnTrigger)
+                            rules.Add(new FireSpellRule(FireRuleKind.Damage, 2, timing: FireRuleTiming.OnTrigger));
+                        break;
+                    case "F-P-U04":
+                    case "F-P-U18":
+                        // 单位与物件伤害 8 → 10；标记奖励与推位距离不变。
+                        rules.Add((rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
+                            ? Copy(rule, 10) : rule);
+                        break;
+                    case "F-P-R01":
+                        // 伤害 12 → 14。
+                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Amount == 12 ? Copy(rule, 14) : rule);
+                        break;
+                    case "F-P-R19":
+                        // 中心单位与物件伤害 16 → 20；邻格 8 点不变。
+                        rules.Add(rule.Scope == FireRuleScope.Primary &&
+                            (rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 16
+                            ? Copy(rule, 20) : rule);
+                        break;
+                    default:
+                        rules.Add(rule);
+                        break;
+                }
+            }
             int range = spell.Id == "F-P-U01" ? spell.Range + 1 : spell.Range;
             int shapeLength = spell.Id == "F-P-U01" ? spell.ShapeLength + 1 : spell.ShapeLength;
-            return new FireSpellDefinition(spell.Id, spell.DisplayName, spell.Rarity, spell.Group, spell.CombatAffinity,
-                spell.DeliveryMode, spell.WeaponRequirement, spell.TriggerWindow, spell.ConsumptionRule,
-                spell.ActionPointCost, spell.ManaCost, spell.Cooldown, spell.InitiativeDelay, spell.MinimumRange, range,
-                spell.TargetKind, spell.Shape, shapeLength, spell.RequiresLineOfSight, spell.HeavyCoverTruncates,
-                rules, spell.PresentationModules.ToArray());
+            return new FireSpellDefinition(spell, rules, spell.MinimumRange, range, shapeLength);
+        }
+
+        private static FireSpellRule Copy(FireSpellRule rule, int amount) =>
+            new FireSpellRule(rule.Kind, amount, rule.Duration, rule.Scope, rule.Condition, rule.AlternateAmount,
+                rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing);
+
+        // 节流刻墨（总案 4.2.2.1）：在已生效的基础费用上再降 1 点魔力（最低 0）；回路调息的节流降的是冷却（1→0）。
+        // 基础四式不在个人术式 60 张的下调范围内，因此灼触／火花／以太护幕的节流结果与专精表逐条一致。
+        public static bool SupportsThrottleSpecialization(string spellId)
+        {
+            switch (spellId)
+            {
+                case "BASE-FIRE-MELEE":
+                case "BASE-FIRE-RANGED":
+                case "BASE-AETHER-SHIELD":
+                case "BASE-MANA-RECOVER":
+                case "F-P-M01":
+                case "F-P-M06":
+                case "F-P-U01":
+                case "F-P-R01":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static FireSpellDefinition ApplyThrottleSpecialization(FireSpellDefinition spell)
+        {
+            if (spell == null || !SupportsThrottleSpecialization(spell.Id)) return spell;
+            int cooldown = spell.Id == "BASE-MANA-RECOVER" ? Math.Max(0, spell.Cooldown - 1) : spell.Cooldown;
+            int mana = spell.Id == "BASE-MANA-RECOVER" ? spell.ManaCost : Math.Max(0, spell.ManaCost - 1);
+            return new FireSpellDefinition(spell, spell.Rules, spell.MinimumRange, spell.Range, spell.ShapeLength, mana, cooldown);
         }
     }
 

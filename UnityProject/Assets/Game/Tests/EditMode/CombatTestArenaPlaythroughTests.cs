@@ -41,7 +41,9 @@ namespace OCC.Combat.Tests
         private static void AssertCompleteSnapshot(CombatScenarioSnapshot snapshot)
         {
             string scenarioId = snapshot.ScenarioId;
-            Assert.That(snapshot.Units.Count, Is.GreaterThanOrEqualTo(3), scenarioId);
+            // B01 的敌方设计输入是 1 名首领加 3 组塔内机关；机关属于场地装置，不计入单位数。
+            int minimumUnits = scenarioId == "arena_b01_core" ? 2 : 3;
+            Assert.That(snapshot.Units.Count, Is.GreaterThanOrEqualTo(minimumUnits), scenarioId);
             Assert.That(snapshot.Intents.Count, Is.EqualTo(snapshot.Units.Count - 1), scenarioId);
             Assert.That(snapshot.ReachableCells, Is.Not.Empty, scenarioId);
             Assert.That(snapshot.Spells.Count, Is.EqualTo(RogueRuntimeConstants.SpellSlotCount), scenarioId);
@@ -146,23 +148,29 @@ namespace OCC.Combat.Tests
             CombatScenarioRouteHarness route = CombatScenarioRouteHarness.Start(scenario.Id);
             UnitState core = route.Enemy("core_overseer");
             EnemyIntentPresentation opening = route.Plans.GetPublicIntent(route.State, core, route.Hero);
-            Assert.That(opening.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
+            Assert.That(opening.DetailedText, Does.Contain("阶段〇").And.Contain("维护链尚未放行"));
+            Assert.That(route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State), Is.Zero);
+            Assert.That(route.State.AcademyCoreBoss.SurvivingMechanismCount(route.State), Is.EqualTo(3));
 
-            route.Move(new GridPosition(4, 3), "T1进入核心近侧缺口");
+            // 阶段〇：走流程。三道门槛逐组放行；此阶段核心不可被打倒，主角不会受到攻击。
+            int advances = 0;
+            while (route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State) < 3 && advances < 8)
+            {
+                route.EndHeroTurnAndAdvance();
+                advances++;
+                Assert.That(route.Hero.IsAlive, Is.True, route.TraceSummary);
+            }
+            Assert.That(route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State), Is.EqualTo(3), "三道门槛应全部放行。");
+            // 第四回合起换装：核心失去霸体并进入阶段一。
             route.EndHeroTurnAndAdvance();
             Assert.That(route.Hero.IsAlive, Is.True, route.TraceSummary);
-            Assert.That(route.Hero.Position.ManhattanDistance(core.Position), Is.EqualTo(1));
+            advances++;
+            Assert.That(route.State.AcademyCoreBoss.PhaseFor(route.State, core), Is.EqualTo(1));
+            Assert.That(core.IsSuperArmored, Is.False, "三道门槛走完后不再具有霸体。");
+            EnemyIntentPresentation phaseOne = route.Plans.GetPublicIntent(route.State, core, route.Hero);
+            Assert.That(phaseOne.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
 
-            route.Spell(1, core.Id, "T2烙印核心");
-            int actionValueBeforeLedger = route.Hero.ActionValue;
-            route.Artifact(2, ArtifactTarget.Unit("hero", route.Hero.Position), "T2行程簿购买第四动作");
-            Assert.That(route.Hero.ActionPoints, Is.EqualTo(3));
-            Assert.That(route.Hero.ActionValue, Is.EqualTo(actionValueBeforeLedger - 8));
-            route.Spell(7, core.Id, "T2终炉断击");
-            Assert.That(core.IsAlive, Is.False, route.TraceSummary);
-            Assert.That(route.Hero.ActionPoints, Is.Zero);
-
-            PlaythroughResult result = RunBaselineRoute(scenario, route.State, 2);
+            PlaythroughResult result = RunBaselineRoute(scenario, route.State, advances);
             Assert.That(result.Rejection, Is.Empty, result.Rejection + "\n" + route.TraceSummary);
             Assert.That(result.State.IsVictory, Is.True, result.Summary + "\n" + route.TraceSummary);
             Assert.That(result.State.GetUnit("hero").IsAlive, Is.True);
@@ -335,10 +343,10 @@ namespace OCC.Combat.Tests
                 "The support acts first at the shared speed so the visible cut creates a real maintenance gap.");
             CombatCommand redirected = route.Plans.GetExecutionCommand(route.State, mender, hero);
             Assert.That(redirected.TargetUnitId, Is.EqualTo(mender.Id));
-            route.ExecuteActiveEnemyAction("T1助教自护");
+            route.ExecuteActiveEnemyAction("T1补盾助教自护");
             Assert.That(shieldguard.Shield, Is.Zero,
                 "The frontline remains unshielded after the support spends its action on itself.");
-            route.EndActiveEnemyTurn("T1助教结束回合");
+            route.EndActiveEnemyTurn("T1补盾助教结束回合");
             route.AdvanceEnemiesToHero();
 
             PlaythroughResult result = RunBaselineRoute(scenario, route.State, 2);
@@ -449,7 +457,7 @@ namespace OCC.Combat.Tests
             Assert.That(arbalist.Cooldown(EnemyAbilityCatalog.WindlassBolt), Is.GreaterThan(0),
                 "Opening the cabinet must expose the hero to the same real firing line they created.");
 
-            route.Move(new GridPosition(6, 1), "T2进入重弩死区");
+            route.Move(new GridPosition(6, 1), "T2进入背弩生死区");
             Assert.That(hero.Position.ManhattanDistance(arbalist.Position), Is.EqualTo(1));
             route.Spell(0, arbalist.Id, "T2贴身攻击一");
             route.Spell(0, arbalist.Id, "T2贴身攻击二");
@@ -459,7 +467,7 @@ namespace OCC.Combat.Tests
             EnemyIntentPresentation retreatIntent = route.Plans.GetPublicIntent(route.State, arbalist, hero);
             Assert.That(retreat.Type, Is.EqualTo(CombatCommandType.Move));
             Assert.That(retreat.Destination.ManhattanDistance(hero.Position), Is.EqualTo(2));
-            Assert.That(retreatIntent.ActionName, Is.EqualTo("重弩退距"));
+            Assert.That(retreatIntent.ActionName, Is.EqualTo("背弩生退距"));
             Assert.That(retreatIntent.ResultSummary, Does.Contain("近身死区"));
             Assert.That(retreatIntent.ExpectedDamage, Is.Zero);
 

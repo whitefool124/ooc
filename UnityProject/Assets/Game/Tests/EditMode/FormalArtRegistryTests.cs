@@ -37,8 +37,14 @@ namespace OCC.Combat.Tests
         [Test]
         public void UnitMappings_AreUniqueAndUnknownIdDoesNotFallback()
         {
-            Assert.That(FormalArtRegistry.Units.Count, Is.EqualTo(16));
-            Assert.That(FormalArtRegistry.Units.Select(entry => entry.ResourcePath).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(16));
+            // 新单位（老寻／灯台值守／小铃／老库管／试制员）正式美术尚未入库，暂时复用最接近的既有剪影；
+            // 这五条以外的资源路径必须唯一，正式图入库后应恢复"全部唯一"的口径。
+            string[] placeholderIds = { "elder_tracker_hound", "signal_keeper", "wind_librarian", "legacy_storekeeper", "prototype_hand" };
+            Assert.That(FormalArtRegistry.Units.Count, Is.EqualTo(21));
+            Assert.That(FormalArtRegistry.Units.Select(entry => entry.RuntimeId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(21));
+            string[] uniquePaths = FormalArtRegistry.Units.Where(entry => !placeholderIds.Contains(entry.RuntimeId))
+                .Select(entry => entry.ResourcePath).ToArray();
+            Assert.That(uniquePaths.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(uniquePaths.Length));
             Assert.Throws<System.Collections.Generic.KeyNotFoundException>(() => FormalArtRegistry.UnitPath("unknown_unit"));
         }
 

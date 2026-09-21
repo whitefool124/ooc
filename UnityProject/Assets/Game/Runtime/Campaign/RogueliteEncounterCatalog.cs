@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,6 +46,8 @@ namespace OCC.Combat
         public IReadOnlyList<string> EnemyArchetypeIds { get; }
         public bool IsElite => Tier == RogueliteEncounterTier.Elite;
         public bool IsBoss => Tier == RogueliteEncounterTier.Boss;
+        /// <summary>是否参与每局的固定精英分配。备用变体等节点映射确定后再并入。</summary>
+        public bool InFixedPool { get; private set; } = true;
 
         public RogueliteEncounterDefinition(string variantKey, string levelId, RogueliteEncounterTier tier,
             string spatialGrammar, string spawnRelationship, string publicRisk, string rewardTier,
@@ -72,6 +74,9 @@ namespace OCC.Combat
             EnemyArchetypeIds = enemyArchetypeIds ?? Array.Empty<string>();
         }
 
+        /// <summary>把该变体标记为备用：可被按名解析与建图，但不参与每局的固定精英分配。</summary>
+        public RogueliteEncounterDefinition AsReserve() { InFixedPool = false; return this; }
+
         internal RogueliteEncounterDefinition BindToNode(string nodeId) =>
             new RogueliteEncounterDefinition(nodeId, VariantKey, LevelId, Tier, SpatialGrammar,
                 SpawnRelationship, PublicRisk, RewardTier, MaximumOpeningThreatOverlap, Layout, EnemyArchetypeIds);
@@ -91,20 +96,20 @@ namespace OCC.Combat
         public static readonly RogueliteEncounterDefinition FirstBattleRainLanternCourt =
             new RogueliteEncounterDefinition(RainLanternCourtRuntime.EncounterId, RainLanternCourtRuntime.LevelId,
                 RogueliteEncounterTier.Weak, "雨后石庭、积水横带、双列灯藤",
-                "主角从 B8 入场；缚环寻迹兽在 H7，高年级火矢生在 I2。灯藤搜索与烧藤顺序完全固定。",
+                "主角从 B8 入场；寻迹兽在 H7，高年级火矢生在 I2。灯藤搜索与烧藤顺序完全固定。",
                 "公开教学战", "奖励内容仍锁定", 1, "tether_hound", "pyromancer");
 
         public static readonly RogueliteEncounterDefinition SecondBattleGreenhouseCollectionRoom =
             new RogueliteEncounterDefinition("first_b2_greenhouse_collection_room", FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
                 RogueliteEncounterTier.Weak, "中央藤圈宝箱、南北双晶簇、南侧普通长路",
-                "主角从 B5 入场；侧锋在 J3，承压检验偶在 J7，分别贴近北、南晶簇接近。",
+                "主角从 B5 入场；侧锋在 J3，替身偶在 J7，分别贴近北、南晶簇接近。",
                 "晶簇爆裂会伤害正交邻格并生成五格碎晶", "第二组固定三选一", 1,
                 "raider", "sigil_mauler");
 
         public static readonly RogueliteEncounterDefinition ThirdBattleRainPrismCourt =
             new RogueliteEncounterDefinition("first_b3_rain_prism_court", FirstRegionLevelCatalog.RainPrismCourt.Id,
                 RogueliteEncounterTier.Weak, "冷却沟、封门晶簇、南侧干路",
-                "主角从 B5 入场；检验偶在 F5，火矢陪练生在 G2；器材匣位于 H5。",
+                "主角从 B5 入场；替身偶在 F5，火矢生在 G2；器材匣位于 H5。",
                 "燃烧、浅水熄灭与封门晶簇", "第三组固定三选一", 1,
                 "sigil_mauler", "pyromancer");
 
@@ -127,6 +132,11 @@ namespace OCC.Combat
             string relation, params string[] enemies) =>
             new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Elite, grammar, relation,
                 "危险", "稀有奖励", 2, enemies);
+        /// <summary>总案扩展池（E04–E06）的变体：可建图与校验，但不参与本阶段的地图生成与奖励循环。</summary>
+        private static RogueliteEncounterDefinition EliteReserve(string key, string map, string grammar,
+            string relation, params string[] enemies) =>
+            new RogueliteEncounterDefinition(key, map, RogueliteEncounterTier.Elite, grammar, relation,
+                "危险", "稀有奖励", 2, enemies).AsReserve();
 
         private static LevelTerrainPlacement L(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LightCover);
         private static LevelTerrainPlacement H(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.HeavyCover);
@@ -148,34 +158,36 @@ namespace OCC.Combat
             Weak("weak_flank_drill", "rail_patrol", "半开放演练场", "盾术生守在中间，侧锋从一侧接近；身后有退路", "轻松", W1(), "raider", "shieldguard"),
             Weak("weak_fire_drill", "relay_raid", "双台校准场", "火矢生留在远处，侧锋从旁接近；起步位置很安全", "轻松", W4(), "pyromancer", "raider"),
             Weak("weak_tracker_test", "depot_wreck", "环形练习场", "寻迹兽与盾术生分守两侧", "轻松", W3(), "tether_hound", "shieldguard"),
-            Weak("weak_barrier_demo", "signal_hub", "环形练习场", "护障助教和盾术生隔着设施相互照应", "轻松", W3(), "barrier_mender", "shieldguard"),
-            Weak("weak_arbalist_calibration", "gatehouse", "回廊折角", "重弩守在远端，侧锋守着下方通道", "轻松", W2(), "rune_arbalist", "raider"),
-            Weak("weak_restraint_exam", "transmission_tower", "回廊折角", "约束助教守在远端，侧锋守着另一处出口", "轻松", W2(), "stone_snare", "raider"),
+            Weak("weak_barrier_demo", "signal_hub", "环形练习场", "补盾助教和盾术生隔着设施相互照应", "轻松", W3(), "barrier_mender", "shieldguard"),
+            Weak("weak_arbalist_calibration", "gatehouse", "回廊折角", "背弩生守在远端，侧锋守着下方通道", "轻松", W2(), "rune_arbalist", "raider"),
+            Weak("weak_restraint_exam", "transmission_tower", "回廊折角", "拴索助教守在远端，侧锋守着另一处出口", "轻松", W2(), "stone_snare", "raider"),
 
-            Strong("strong_rail_patrol_a", "rail_patrol", "开阔交叉线", "盾术居中，火矢与侧锋分列两翼", "中高：主动进入的近远交叉", "shieldguard", "pyromancer", "raider"),
-            Strong("strong_rail_patrol_b", "rail_patrol", "开阔交叉线，反向翼位", "盾术前压，两翼远近职责反置", "中高：两翼压力与中央暴露", "shieldguard", "pyromancer", "raider"),
-            Strong("strong_depot_wreck_a", "depot_wreck", "三口收束", "双束缚源错层，检验偶守中口", "高：束缚后贴身破势", "tether_hound", "sigil_mauler", "stone_snare"),
-            Strong("strong_depot_wreck_b", "depot_wreck", "三口收束，偏置中口", "寻迹兽近翼、助教远翼、检验偶偏心", "高：换路时的双束缚压力", "tether_hound", "sigil_mauler", "stone_snare"),
-            Strong("strong_relay_raid_a", "relay_raid", "偏心目标", "目标两侧为侧锋与寻迹兽，重弩远守", "高：双接近与公开重弩线", "raider", "rune_arbalist", "tether_hound"),
-            Strong("strong_relay_raid_b", "relay_raid", "偏心目标，对角争夺", "重弩与目标对角，双近战分守两路", "高：目标争夺与远程重击", "raider", "rune_arbalist", "tether_hound"),
-            Strong("strong_signal_hub_a", "signal_hub", "三角维护网", "护障助教、巡查员、盾术形成三角", "高：护障、破势与回合盾循环", "barrier_mender", "lantern_revealer", "shieldguard"),
-            Strong("strong_signal_hub_b", "signal_hub", "三角维护网，断链", "巡查员前置，助教与盾术分居后翼", "高：先破显影或先断维护", "barrier_mender", "lantern_revealer", "shieldguard"),
-            Strong("strong_gatehouse_a", "gatehouse", "双向门厅", "盾术守一门、检验偶游走、重弩守另一门", "高：门厅封线与远程重击", "shieldguard", "sigil_mauler", "rune_arbalist"),
+            Strong("strong_rail_patrol_a", "rail_patrol", "开阔交叉线", "盾术生居中，火矢与侧锋分列两翼", "中高：主动进入的近远交叉", "shieldguard", "pyromancer", "raider"),
+            Strong("strong_rail_patrol_b", "rail_patrol", "开阔交叉线，反向翼位", "盾术生前压，两翼远近职责反置", "中高：两翼压力与中央暴露", "shieldguard", "pyromancer", "raider"),
+            Strong("strong_depot_wreck_a", "depot_wreck", "三口收束", "双束缚源错层，替身偶守中口", "高：束缚后贴身破势", "tether_hound", "sigil_mauler", "stone_snare"),
+            Strong("strong_depot_wreck_b", "depot_wreck", "三口收束，偏置中口", "寻迹兽近翼、拴索助教远翼、替身偶偏心", "高：换路时的双束缚压力", "tether_hound", "sigil_mauler", "stone_snare"),
+            Strong("strong_relay_raid_a", "relay_raid", "偏心目标", "目标两侧为侧锋与寻迹兽，背弩生远守", "高：双接近与公开背弩生线", "raider", "rune_arbalist", "tether_hound"),
+            Strong("strong_relay_raid_b", "relay_raid", "偏心目标，对角争夺", "背弩生与目标对角，双近战分守两路", "高：目标争夺与远程重击", "raider", "rune_arbalist", "tether_hound"),
+            Strong("strong_signal_hub_a", "signal_hub", "三角维护网", "补盾助教、提灯巡查、盾术生形成三角", "高：护障、破势与回合盾循环", "barrier_mender", "lantern_revealer", "shieldguard"),
+            Strong("strong_signal_hub_b", "signal_hub", "三角维护网，断链", "提灯巡查前置，补盾助教与盾术生分居后翼", "高：先破显影或先断维护", "barrier_mender", "lantern_revealer", "shieldguard"),
+            Strong("strong_gatehouse_a", "gatehouse", "双向门厅", "盾术生守一门、替身偶游走、背弩生守另一门", "高：门厅封线与远程重击", "shieldguard", "sigil_mauler", "rune_arbalist"),
             Strong("strong_gatehouse_b", "gatehouse", "双向门厅，错位门线", "两门压力错位且中央可换路", "高：正面阻挡与贴身破势", "shieldguard", "sigil_mauler", "rune_arbalist"),
             Strong("strong_transmission_tower_a", "transmission_tower", "三扇区", "火矢、约束、显影各守一扇区", "高：三种公开远程状态压力", "pyromancer", "stone_snare", "lantern_revealer"),
             Strong("strong_transmission_tower_b", "transmission_tower", "三扇区，对角封线", "远程三角错位且存在两条切入线", "高：燃烧、长束缚与破势", "pyromancer", "stone_snare", "lantern_revealer"),
 
-            Elite("elite_foundry_a", "elite_foundry", "编织狭口", "教官居中、助教与检验偶分守两路", "elite_vanguard", "barrier_mender", "sigil_mauler"),
+            Elite("elite_foundry_a", "elite_foundry", "编织狭口", "划线教官居中、补盾助教与替身偶分守两路", "elite_vanguard", "barrier_mender", "sigil_mauler"),
             Elite("elite_foundry_b", "elite_foundry", "编织狭口，维护侧", "护障维护链偏左，右路可直取目标", "elite_vanguard", "barrier_mender", "sigil_mauler"),
-            Elite("elite_foundry_c", "elite_foundry", "编织狭口，检验侧", "检验偶前置，教官与助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
-            Elite("core_approach_a", "core_approach", "对角封线", "教官与重弩对角，约束助教守换路线", "elite_vanguard", "rune_arbalist", "stone_snare"),
-            Elite("core_approach_b", "core_approach", "对角封线，双入口", "约束线不覆盖出生，左右均可切入", "elite_vanguard", "rune_arbalist", "stone_snare"),
-            Elite("core_approach_c", "core_approach", "对角封线，远近换位", "教官前置，远程二人分守外翼", "elite_vanguard", "rune_arbalist", "stone_snare"),
+            Elite("elite_foundry_c", "elite_foundry", "编织狭口，检验侧", "替身偶前置，划线教官与补盾助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
 
+            Elite("cliff_relay_survey_a", "cliff_relay_survey", "断崖坡面与导能柱基座", "老寻循痕破藏身，灯台值守封住一条廊道，补盾助教贴结构续盾", "elder_tracker_hound", "signal_keeper", "barrier_mender"),
+            EliteReserve("library_discipline_a", "library_discipline", "高书架切出的走廊与阅览长桌", "小铃换风搬散页，书架切出暗段，补盾助教贴结构续盾", "wind_librarian", "barrier_mender", "sigil_mauler"),
+            Elite("outer_ring_clearance_a", "outer_ring_clearance", "高塔外环的直线廊道与物块堆", "划线教官现场改掩体，提灯巡查沿直线显影，背弩生封住长线", "elite_vanguard", "lantern_revealer", "rune_arbalist"),
+            Elite("calibration_lockdown_a", "calibration_lockdown", "设备间的校准台走廊", "试制员逐件布放装置，背弩生封住长线，拴索助教刻印地面", "prototype_hand", "rune_arbalist", "stone_snare"),
+            EliteReserve("sealed_vault_certification_a", "sealed_vault_certification", "旧检定台与读数桩之间的库房通道", "老库管投影直线并退件，提灯巡查沿直线显影，替身偶贴身破势", "legacy_storekeeper", "lantern_revealer", "sigil_mauler"),
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
-                "中心核心与外围维护", "固定核心守卫居中；教官、助教与巡查员构成可拆维护链",
+                "中心核心与三道机关门槛", "固定塔之守卫居中；三组塔内机关在阶段〇逐组放行，拆掉已放行的机关即切断其施术介质",
                 "终考", "终考奖励", 2,
-                "core_overseer", "elite_vanguard", "barrier_mender", "lantern_revealer")
+                "core_overseer")
         };
 
         private static readonly IReadOnlyDictionary<string, RogueliteEncounterDefinition> ByVariant =
@@ -183,7 +195,8 @@ namespace OCC.Combat
 
         public static IReadOnlyList<RogueliteEncounterDefinition> WeakPool => Packages.Where(value => value.Tier == RogueliteEncounterTier.Weak).ToArray();
         public static IReadOnlyList<RogueliteEncounterDefinition> StrongPool => Packages.Where(value => value.Tier == RogueliteEncounterTier.Strong).ToArray();
-        public static IReadOnlyList<RogueliteEncounterDefinition> ElitePool => Packages.Where(value => value.Tier == RogueliteEncounterTier.Elite).ToArray();
+        public static IReadOnlyList<RogueliteEncounterDefinition> ElitePool => Packages
+            .Where(value => value.Tier == RogueliteEncounterTier.Elite && value.InFixedPool).ToArray();
         public static RogueliteEncounterDefinition FixedBoss => Packages.Single(value => value.Tier == RogueliteEncounterTier.Boss);
 
         public static RogueliteEncounterDefinition Package(string variantKey) =>
@@ -209,6 +222,8 @@ namespace OCC.Combat
         public static RogueliteEncounterDefinition For(RogueliteMapRun run, string nodeId)
         {
             if (run != null && run.TryGetEncounter(nodeId, out RogueliteEncounterDefinition encounter)) return encounter;
+            if (run != null && run.IsInAcademyLayer && nodeId != null)
+                throw new InvalidOperationException("No registered academy-layer encounter package for map node: " + nodeId);
             if (run?.IsFirstRunExperience == true && nodeId == "B1")
                 return FirstBattleRainLanternCourt.BindToNode(nodeId);
             if (run?.IsFirstRunExperience == true && nodeId == "B2")
@@ -222,7 +237,7 @@ namespace OCC.Combat
                 string eventId = run.CurrentEventId;
                 if (eventId == "EV08" || eventId == "EV13" || eventId == "EV16")
                     return new RogueliteEncounterDefinition("event_maintenance_elite", "elite_foundry", RogueliteEncounterTier.Elite,
-                        "狭窄的维护通道", "两条路分别通向教官和护障助教", "危险",
+                        "狭窄的维护通道", "两条路分别通向划线教官和补盾助教", "危险",
                         "稀有奖励", 3, "elite_vanguard", "barrier_mender", "sigil_mauler").BindToNode(nodeId);
                 if (eventId == "EV03" || eventId == "EV06")
                     return new RogueliteEncounterDefinition("event_archive_rescue", "signal_hub", RogueliteEncounterTier.Strong,
@@ -230,7 +245,7 @@ namespace OCC.Combat
                         "金币与学院贡献", 2, "barrier_mender", "lantern_revealer", "shieldguard").BindToNode(nodeId);
                 if (eventId == "EV15")
                     return new RogueliteEncounterDefinition("event_relay_objective", "relay_raid", RogueliteEncounterTier.Strong,
-                        "偏心校准场", "近路会暴露在重弩前；绕远一些可以先处理守卫。破坏目标就算完成", "危险",
+                        "偏心校准场", "近路会暴露在背弩生前；绕远一些可以先处理守卫。破坏目标就算完成", "危险",
                         "稀有法宝", 2, "raider", "rune_arbalist", "tether_hound").BindToNode(nodeId);
                 return new RogueliteEncounterDefinition("event_field_drill", "rail_patrol", RogueliteEncounterTier.Weak,
                     "半开放演练场", "两名陪练分守前方两侧，起步位置很安全", "轻松",
