@@ -138,6 +138,29 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void ContextActions_ExposeLootForAnAdjacentSearchableContainer()
+        {
+            CombatState state = State(out UnitState hero, out _);
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.SetLootSource(new LootSourceState("visible-crate", new GridPosition(1, 0),
+                new[] { new ItemInstance("visible-loot", "F-S01", 0) }));
+            CombatResolver.BeginTurn(state, hero.Id);
+            GameObject root = new GameObject("context-loot-host");
+            try
+            {
+                CombatPrototypeBootstrap bootstrap = root.AddComponent<CombatPrototypeBootstrap>();
+                SetState(bootstrap, state);
+
+                BattlefieldContextAction action = bootstrap.ContextActionsAt(new GridPosition(1, 0))
+                    .Single(value => value.Id == "loot");
+
+                Assert.That(action.Label, Is.EqualTo("搜刮这里"));
+                Assert.That(action.Detail, Is.EqualTo("1 行动点"));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [Test]
         public void QuickMoveConfirmation_RequiresTwoClicksOnTheSameLegalCell()
         {
             GridPosition first = new GridPosition(2, 3);

@@ -226,6 +226,9 @@ namespace OCC.Combat.Tests
 
                 GameObject menuRoot = root.transform.Find("战场右键菜单遮罩").gameObject;
                 Transform panel = menuRoot.transform.Find("战场右键行动菜单");
+                Transform viewport = panel.Find("行动滚动视口");
+                Transform content = viewport.Find("行动滚动内容");
+                Transform scrollbar = panel.Find("行动滚动条");
                 Text title = panel.Find("菜单标题").GetComponent<Text>();
                 Text hint = panel.Find("菜单提示").GetComponent<Text>();
 
@@ -238,6 +241,16 @@ namespace OCC.Combat.Tests
                 Assert.That(menuCanvas.sortingOrder, Is.LessThan(UiLayoutContract.InteractionSortingOrder),
                     "confirmation and feedback overlays must remain above the context menu");
                 Assert.That(menuRoot.GetComponent<GraphicRaycaster>(), Is.Not.Null);
+                Assert.That(viewport.GetComponent<RectMask2D>(), Is.Not.Null);
+                Assert.That(viewport.GetComponent<ScrollRect>().content, Is.SameAs(content.GetComponent<RectTransform>()));
+                Assert.That(scrollbar.GetComponent<Scrollbar>(), Is.Not.Null);
+                MethodInfo needsScrolling = typeof(FormalBattlefieldView).GetMethod("ContextMenuNeedsScrolling",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                MethodInfo menuHeight = typeof(FormalBattlefieldView).GetMethod("ContextMenuHeightForActionCount",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That((bool)needsScrolling.Invoke(null, new object[] { 4 }), Is.False);
+                Assert.That((bool)needsScrolling.Invoke(null, new object[] { 12 }), Is.True);
+                Assert.That((float)menuHeight.Invoke(null, new object[] { 12 }), Is.LessThan(1080f));
                 Assert.That(title.font, Is.SameAs(FormalUiKit.Font));
                 Assert.That(title.fontStyle, Is.EqualTo(FontStyle.Normal));
                 Assert.That(title.fontSize, Is.EqualTo(FormalUiTheme.BodyFontSize));
@@ -250,7 +263,7 @@ namespace OCC.Combat.Tests
 
                 typeof(FormalBattlefieldView).GetMethod("CreateContextMenuButton", BindingFlags.Instance | BindingFlags.NonPublic)
                     ?.Invoke(view, null);
-                RectTransform row = panel.Find("位置行动_0").GetComponent<RectTransform>();
+                RectTransform row = content.Find("位置行动_0").GetComponent<RectTransform>();
                 Text action = row.GetComponentInChildren<Text>();
                 Text detail = row.Find("行动资源").GetComponent<Text>();
                 action.text = "攻击 盾术生";

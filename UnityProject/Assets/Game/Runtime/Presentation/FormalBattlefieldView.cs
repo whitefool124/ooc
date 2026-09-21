@@ -24,6 +24,9 @@ namespace OCC.Combat.Presentation
         private const float ContextMenuRowHeight = 112f;
         private const float ContextMenuButtonHeight = 104f;
         private const float ContextMenuPadding = 12f;
+        private const float ContextMenuMaximumHeight = ReferenceHeight - 96f;
+        private const float ContextMenuScrollbarWidth = 16f;
+        private const float ContextMenuScrollbarGap = 8f;
         private const int ContextMenuTitleFontSize = FormalUiTheme.BodyFontSize;
         private const int ContextMenuActionFontSize = FormalUiTheme.BodyFontSize;
         private const int ContextMenuDetailFontSize = FormalUiTheme.BodyFontSize;
@@ -70,6 +73,10 @@ namespace OCC.Combat.Presentation
 
         private GameObject contextMenuRoot;
         private RectTransform contextMenuPanel;
+        private RectTransform contextMenuViewport;
+        private RectTransform contextMenuContent;
+        private ScrollRect contextMenuScrollRect;
+        private Scrollbar contextMenuScrollbar;
         private Text contextMenuTitle;
         private Text contextMenuHint;
         private readonly List<Button> contextMenuButtons = new List<Button>();
@@ -1101,13 +1108,23 @@ namespace OCC.Combat.Presentation
             }
 
             EnsureContextMenu();
-            float height = ContextMenuHeaderHeight + actions.Count * ContextMenuRowHeight + ContextMenuPadding;
+            float contentHeight = actions.Count * ContextMenuRowHeight;
+            float height = ContextMenuHeightForActionCount(actions.Count);
+            float viewportHeight = height - ContextMenuHeaderHeight - ContextMenuPadding;
+            bool needsScrolling = ContextMenuNeedsScrolling(actions.Count);
             Vector2 screen = Mouse.current == null ? Vector2.zero : Mouse.current.position.ReadValue();
             Vector2 pointer = BattlefieldViewportInputController.ScreenToReferenceUi(screen,
                 Screen.width, Screen.height, ReferenceWidth, ReferenceHeight);
             float x = Mathf.Clamp(pointer.x + 12f, 8f, ReferenceWidth - ContextMenuWidth - 8f);
             float y = Mathf.Clamp(pointer.y + 12f, 64f, ReferenceHeight - height - 8f);
             SetTopLeft(contextMenuPanel, x, y, ContextMenuWidth, height);
+            float viewportWidth = ContextMenuWidth - ContextMenuPadding * 2f -
+                (needsScrolling ? ContextMenuScrollbarWidth + ContextMenuScrollbarGap : 0f);
+            SetTopLeft(contextMenuViewport, ContextMenuPadding, ContextMenuHeaderHeight, viewportWidth, viewportHeight);
+            SetTopLeft(contextMenuContent, 0f, 0f, viewportWidth, Mathf.Max(contentHeight, viewportHeight));
+            SetTopLeft(contextMenuScrollbar.GetComponent<RectTransform>(), ContextMenuWidth - ContextMenuPadding - ContextMenuScrollbarWidth,
+                ContextMenuHeaderHeight, ContextMenuScrollbarWidth, viewportHeight);
+            contextMenuScrollbar.gameObject.SetActive(needsScrolling);
             contextMenuTitle.text = "位置 " + position.X + "," + position.Y + " 的可执行行动";
             contextMenuHint.text = "右键切换目标　Esc 或左键空白处关闭";
 
@@ -1124,13 +1141,14 @@ namespace OCC.Combat.Presentation
                 if (!active) continue;
                 BattlefieldContextAction action = actions[i];
                 RectTransform rect = button.GetComponent<RectTransform>();
-                SetTopLeft(rect, ContextMenuPadding,
-                    ContextMenuHeaderHeight + i * ContextMenuRowHeight,
-                    ContextMenuWidth - ContextMenuPadding * 2f, ContextMenuButtonHeight);
+                SetTopLeft(rect, 0f, i * ContextMenuRowHeight, viewportWidth, ContextMenuButtonHeight);
                 button.GetComponent<UiButtonFeedback>()?.RefreshLayoutPosition();
                 Text label = contextMenuButtonLabels[i];
+                SetTopLeft(label.rectTransform, 14f, 12f, viewportWidth - 28f, 40f);
                 label.text = action.Label;
-                contextMenuButtonDetails[i].text = action.Detail;
+                Text detail = contextMenuButtonDetails[i];
+                SetTopLeft(detail.rectTransform, 14f, 52f, viewportWidth - 28f, 40f);
+                detail.text = action.Detail;
                 ContextMenuRowPreview preview = button.GetComponent<ContextMenuRowPreview>();
                 if (preview == null) preview = button.gameObject.AddComponent<ContextMenuRowPreview>();
                 preview.Configure(this, position, action.Id);
@@ -1144,6 +1162,8 @@ namespace OCC.Combat.Presentation
             }
 
             contextMenuRoot.SetActive(true);
+            Canvas.ForceUpdateCanvases();
+            contextMenuScrollRect.verticalNormalizedPosition = 1f;
             contextMenuRoot.transform.SetAsLastSibling();
             contextMenuOpenedFrame = Time.frameCount;
             host.SetBattlefieldContextMenuOpen(true);
@@ -1153,6 +1173,14 @@ namespace OCC.Combat.Presentation
             // next pointer event.
             host.PreviewBattlefieldContextAction(position, string.Empty);
         }
+
+        internal static float ContextMenuHeightForActionCount(int actionCount) => Mathf.Min(
+            ContextMenuHeaderHeight + Mathf.Max(0, actionCount) * ContextMenuRowHeight + ContextMenuPadding,
+            ContextMenuMaximumHeight);
+
+        internal static bool ContextMenuNeedsScrolling(int actionCount) =>
+            ContextMenuHeaderHeight + Mathf.Max(0, actionCount) * ContextMenuRowHeight + ContextMenuPadding >
+            ContextMenuMaximumHeight;
 
         private void EnsureContextMenu()
         {
@@ -1183,13 +1211,44 @@ namespace OCC.Combat.Presentation
                 ContextMenuDetailFontSize,
                 FormalUiTheme.Muted, TextAnchor.MiddleLeft);
             FormalUiKit.PreventAutomaticWrapping(contextMenuHint);
+
+            GameObject viewportObject = FormalUiKit.Create("行动滚动视口", panel.transform);
+            contextMenuViewport = viewportObject.AddComponent<RectTransform>();
+            Image viewportImage = viewportObject.AddComponent<Image>();
+            viewportImage.color = Color.clear;
+            viewportImage.raycastTarget = true;
+            viewportObject.AddComponent<RectMask2D>();
+            contextMenuScrollRect = viewportObject.AddComponent<ScrollRect>();
+            contextMenuScrollRect.horizontal = false;
+            contextMenuScrollRect.vertical = true;
+            contextMenuScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            contextMenuScrollRect.scrollSensitivity = ContextMenuRowHeight * .65f;
+
+            GameObject contentObject = FormalUiKit.Create("行动滚动内容", viewportObject.transform);
+            contextMenuContent = contentObject.AddComponent<RectTransform>();
+            contextMenuScrollRect.viewport = contextMenuViewport;
+            contextMenuScrollRect.content = contextMenuContent;
+
+            GameObject scrollbarObject = FormalUiKit.Create("行动滚动条", panel.transform);
+            contextMenuScrollbar = scrollbarObject.AddComponent<Scrollbar>();
+            Image scrollbarTrack = scrollbarObject.AddComponent<Image>();
+            scrollbarTrack.color = FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .7f);
+            GameObject handleObject = FormalUiKit.Create("滑块", scrollbarObject.transform);
+            RectTransform handleRect = handleObject.AddComponent<RectTransform>();
+            Stretch(handleRect);
+            Image handle = handleObject.AddComponent<Image>();
+            handle.color = FormalUiTheme.Cyan;
+            contextMenuScrollbar.handleRect = handleRect;
+            contextMenuScrollbar.targetGraphic = handle;
+            contextMenuScrollbar.direction = Scrollbar.Direction.BottomToTop;
+            contextMenuScrollRect.verticalScrollbar = contextMenuScrollbar;
             contextMenuRoot.SetActive(false);
         }
 
         private void CreateContextMenuButton()
         {
             Button button = FormalUiKit.Button("位置行动_" + contextMenuButtons.Count, string.Empty,
-                contextMenuPanel, new Vector2(ContextMenuPadding, -ContextMenuHeaderHeight),
+                contextMenuContent, Vector2.zero,
                 new Vector2(ContextMenuWidth - ContextMenuPadding * 2f, ContextMenuButtonHeight),
                 FormalUiTheme.Interactive, ContextMenuActionFontSize);
             Text label = button.GetComponentInChildren<Text>();

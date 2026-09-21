@@ -46,6 +46,8 @@ namespace OCC.Combat.Presentation
         private RogueEquipmentRuntime loadoutDragRuntime;
         private readonly Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform> loadoutEquipmentSlotRects = new Dictionary<OCC.Combat.Roguelite.EquipmentSlot, RectTransform>();
         private readonly Dictionary<OCC.Combat.Roguelite.EquipmentSlot, Image> loadoutEquipmentDropOverlays = new Dictionary<OCC.Combat.Roguelite.EquipmentSlot, Image>();
+        private readonly Dictionary<int, RectTransform> loadoutQuickbarSlotRects = new Dictionary<int, RectTransform>();
+        private readonly Dictionary<int, Image> loadoutQuickbarDropOverlays = new Dictionary<int, Image>();
         private string loadoutDragId;
         private OCC.Combat.Roguelite.EquipmentSlot? loadoutDragEquippedSlot;
         private bool loadoutDragRotated;
@@ -1799,6 +1801,8 @@ namespace OCC.Combat.Presentation
             loadoutGridRect = null;
             loadoutEquipmentSlotRects.Clear();
             loadoutEquipmentDropOverlays.Clear();
+            loadoutQuickbarSlotRects.Clear();
+            loadoutQuickbarDropOverlays.Clear();
             if (string.IsNullOrEmpty(selectedRogueInventoryId) || runtime.EquipmentItem(selectedRogueInventoryId) == null && runtime.TacticalItem(selectedRogueInventoryId) == null)
                 selectedRogueInventoryId = items.FirstOrDefault()?.InstanceId ?? runtime.Equipped.Values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
 
@@ -1910,6 +1914,8 @@ namespace OCC.Combat.Presentation
                 RogueTacticalItemInstance item = runtime.TacticalItem(id);
                 TacticalItemDefinition definition = runtime.TacticalDefinitionFor(id);
                 RogueLoadoutSlotView slotView = view.TacticalSlots[index];
+                loadoutQuickbarSlotRects[slotIndex] = slotView.Root;
+                loadoutQuickbarDropOverlays[slotIndex] = slotView.DropOverlay;
                 GameObject quickSlot = BindInventorySlot(slotView, item == null ? muted : safe, true,
                     () =>
                     {
@@ -2276,6 +2282,16 @@ namespace OCC.Combat.Presentation
         {
             if (loadoutDragGhost == null || loadoutDragRuntime == null) return;
             ClearEquipmentDropHighlights();
+            if (!loadoutDragEquippedSlot.HasValue && loadoutDragRuntime.TacticalItem(loadoutDragId) != null &&
+                TryQuickbarSlotAtPointer(loadoutLastPointer, out int quickbarSlot))
+            {
+                Image overlay = loadoutQuickbarDropOverlays[quickbarSlot];
+                overlay.color = FormalUiTheme.WithAlpha(safe, .32f);
+                overlay.gameObject.SetActive(true);
+                loadoutDragGhost.SetActive(false);
+                loadoutInteractionMessage = "松开以装入战术栏 " + (quickbarSlot + 1);
+                return;
+            }
             if (!loadoutDragEquippedSlot.HasValue && TryEquipmentSlotAtPointer(loadoutLastPointer, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
             {
                 bool compatible = loadoutDragRuntime.CanEquipOrReplace(loadoutDragId, targetSlot);
@@ -2314,7 +2330,14 @@ namespace OCC.Combat.Presentation
             loadoutLastPointer = eventData.position;
             bool submitted = false;
             bool succeeded = false;
-            if (!loadoutDragEquippedSlot.HasValue && TryEquipmentSlotAtPointer(eventData.position, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
+            if (!loadoutDragEquippedSlot.HasValue && loadoutDragRuntime.TacticalItem(loadoutDragId) != null &&
+                TryQuickbarSlotAtPointer(eventData.position, out int quickbarSlot))
+            {
+                submitted = true;
+                succeeded = bootstrap.AssignRogueQuickbar(loadoutDragId, quickbarSlot);
+                loadoutInteractionMessage = succeeded ? "已装入战术栏 " + (quickbarSlot + 1) : "无法装入战术栏，物品保持原位";
+            }
+            else if (!loadoutDragEquippedSlot.HasValue && TryEquipmentSlotAtPointer(eventData.position, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
             {
                 submitted = true;
                 succeeded = bootstrap.EquipOrReplaceRogueEquipment(loadoutDragId, targetSlot);
@@ -2353,6 +2376,16 @@ namespace OCC.Combat.Presentation
             return false;
         }
 
+        private bool TryQuickbarSlotAtPointer(Vector2 screenPoint, out int slot)
+        {
+            Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
+            foreach (KeyValuePair<int, RectTransform> pair in loadoutQuickbarSlotRects)
+                if (pair.Value != null && RectTransformUtility.RectangleContainsScreenPoint(pair.Value, screenPoint, eventCamera))
+                { slot = pair.Key; return true; }
+            slot = -1;
+            return false;
+        }
+
         private static Image CreateEquipmentDropOverlay(Transform parent)
         {
             GameObject overlayObject = Create("装备槽拖入反馈", parent);
@@ -2365,6 +2398,8 @@ namespace OCC.Combat.Presentation
         private void ClearEquipmentDropHighlights()
         {
             foreach (Image overlay in loadoutEquipmentDropOverlays.Values)
+                if (overlay != null) overlay.gameObject.SetActive(false);
+            foreach (Image overlay in loadoutQuickbarDropOverlays.Values)
                 if (overlay != null) overlay.gameObject.SetActive(false);
         }
 
