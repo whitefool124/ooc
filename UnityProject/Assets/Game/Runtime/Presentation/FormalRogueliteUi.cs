@@ -228,14 +228,16 @@ namespace OCC.Combat.Presentation
         private void DrawMap()
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun;
+            FormalRogueliteMapShellView shell = FormalRogueliteMapShellView.Create(content.transform);
             if (string.IsNullOrEmpty(selectedNodeId) || !run.MapNodes.Any(node => node.Id == selectedNodeId)) selectedNodeId = run.CurrentNodeId;
             if (run.IsTutorialPhase && run.FirstRunExperience.Origin.Acknowledged && run.CurrentNodeId == FirstRunExperienceCatalog.OriginNodeId &&
                 (selectedNodeId == FirstRunExperienceCatalog.OriginNodeId || string.IsNullOrEmpty(selectedNodeId)) && run.MapNodes.Any(node => node.Id == "B1"))
                 selectedNodeId = "B1";
             Header("学院地图", run.UsesRogue11
                 ? new RogueMapStatusPresentation(run).PhaseLabel + "　" + run.MapNode(run.CurrentNodeId).DisplayName
-                : FireRogueliteStarterCatalog.DisplayName(run.StarterId) + "　" + RogueliteMapVisualPresentation.AcademyStatus(run));
-            GameObject status = FormalUiKit.LayoutPanel("行动状态栏", content.transform, "map.status", panel);
+                : FireRogueliteStarterCatalog.DisplayName(run.StarterId) + "　" + RogueliteMapVisualPresentation.AcademyStatus(run), shell.Header.gameObject);
+            GameObject status = shell.Status.gameObject;
+            FormalUiKit.ApplySkin(status.GetComponent<Image>(), "panel_module", panel);
             if (run.UsesRogue11)
             {
                 RogueMapStatusPresentation model = new RogueMapStatusPresentation(run);
@@ -260,18 +262,17 @@ namespace OCC.Combat.Presentation
             BindHover(loadout, "背包与整备", "更换术式、装备和随身道具。", cyan);
             ActionButton("设置", string.Empty, status.transform, new Vector2(1662, -16), new Vector2(190, 60), amber, true, () => SetOverlay(UiOverlay.Settings), iconPath: FormalArtRegistry.NavigationPath("settings"));
 
-            GameObject mapPanel = FormalUiKit.LayoutPanel("节点地图视口", content.transform, "map.board", FormalUiTheme.Surface);
-            mapPanel.AddComponent<RectMask2D>();
-            GameObject mapCanvas = Create("学院分区地图画布", mapPanel.transform);
-            RectTransform mapCanvasRect = mapCanvas.AddComponent<RectTransform>();
-            mapCanvasRect.anchorMin = mapCanvasRect.anchorMax = mapCanvasRect.pivot = new Vector2(.5f, .5f);
+            GameObject mapPanel = shell.MapViewport.gameObject;
+            FormalUiKit.ApplySkin(mapPanel.GetComponent<Image>(), "panel", FormalUiTheme.Surface);
+            GameObject mapCanvas = shell.MapCanvas.gameObject;
+            RectTransform mapCanvasRect = shell.MapCanvas;
             mapCanvasRect.anchoredPosition = Vector2.zero;
             mapCanvasRect.sizeDelta = new Vector2(run.IsInAcademyLayer ? AcademyLayerCanvasWidth : 1872f, 874f);
             ApplyFormalMapBoard(mapCanvas, run.IsInAcademyLayer);
             DrawDistrictLabels(mapCanvas.transform, run.IsInAcademyLayer);
             DrawConnections(mapCanvas.transform, run);
             DrawRevealedMapNodes(mapCanvas.transform, run);
-            mapViewportController = mapPanel.AddComponent<RogueMapViewportController>();
+            mapViewportController = shell.ViewportController;
             mapViewportController.Initialize(mapPanel.GetComponent<RectTransform>(), mapCanvasRect, canvas);
             Vector2 currentPosition = NodePosition(run, run.MapNode(run.CurrentNodeId));
             mapViewportController.SetView(run.IsInAcademyLayer ? new Vector2(-currentPosition.x, 0f) : Vector2.zero, 0);
@@ -635,6 +636,8 @@ namespace OCC.Combat.Presentation
         /// </summary>
         private void DrawFirstRunWorkshop(Transform parent, RogueliteMapRun run)
         {
+            FormalRogueliteServiceShellView shell = FormalRogueliteServiceShellView.Create(parent);
+            parent = shell.Body;
             FirstRunWorkshopSnapshot workshop = run.CurrentWorkshopService;
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(run.RogueRunState);
             RogueEquipmentInstance[] equipment = runtime.AllInstances
@@ -657,7 +660,7 @@ namespace OCC.Combat.Presentation
             string preview = forge ? ForgePreview(runtime, targetId) : SpecializationPreview(targetId);
             int materialTotal = run.FirstRunExperience.ForgeMaterialCount + run.FirstRunExperience.SpecializationMaterialCount;
 
-            DrawServiceTopBar(parent, run, "校准工坊｜确定性强化",
+            DrawServiceTopBar(shell.TopBar.gameObject, run, "校准工坊｜确定性强化",
                 (run.IsTutorialPhase ? "精英门槛　" : "节点额度　") + "锻造 " + (workshop.ForgeCompleted ? "1/1" : "0/1") + "　专精 " + (workshop.SpecializationCompleted ? "1/1" : "0/1"));
 
             // 页签与库存块至少 64 高：FormalUiKit.Label 会把文字槽压进父框内，
@@ -733,17 +736,16 @@ namespace OCC.Combat.Presentation
                         new Vector2(24, -96), new Vector2(1700, 60), 20, muted, TextAnchor.MiddleLeft);
             }
 
-            GameObject hint = Panel("操作提示", parent, new Vector2(0, 1), new Vector2(0, 1),
+            GameObject hint = Panel("操作提示", shell.Footer, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(48, -900), new Vector2(1824, 68), FormalUiTheme.Ink);
             Label("操作提示文字", "点击卡牌：选择强化目标｜确认安装：消耗 1 份材料｜返回地图：不消耗学院时序", hint.transform,
                 new Vector2(20, -14), new Vector2(1784, 40), 16, Color.white, TextAnchor.MiddleLeft);
         }
 
         /// <summary>服务类节点共用的 Pixso 顶栏：左标题、右门槛读数、最右返回地图。</summary>
-        private void DrawServiceTopBar(Transform parent, RogueliteMapRun run, string title, string gate)
+        private void DrawServiceTopBar(GameObject top, RogueliteMapRun run, string title, string gate)
         {
-            GameObject top = Panel("服务顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
-                new Vector2(0, 80), FormalUiTheme.Ink);
+            FormalUiKit.ApplySkin(top.GetComponent<Image>(), "panel", FormalUiTheme.Ink);
             Label("服务标题", title, top.transform, new Vector2(32, -14), new Vector2(880, 50), 28, Color.white, TextAnchor.MiddleLeft);
             if (!string.IsNullOrEmpty(gate))
                 Label("服务门槛", gate, top.transform, new Vector2(880, -20), new Vector2(720, 40), 18,
@@ -868,6 +870,8 @@ namespace OCC.Combat.Presentation
         /// </summary>
         private void DrawFirstRunMedical(Transform parent, RogueliteMapRun run)
         {
+            FormalRogueliteServiceShellView shell = FormalRogueliteServiceShellView.Create(parent);
+            parent = shell.Body;
             FirstRunMedicalSnapshot medical = run.CurrentMedicalService;
             string[] meals = { "MEAL-POWER", "MEAL-AETHER", "MEAL-GUARD" };
             bool canHeal = medical.HealthCheckCompleted && !medical.HealUsed && run.StageContribution >= 1 && run.CurrentHealth < UnitState.HeroBaseHealth;
@@ -875,7 +879,7 @@ namespace OCC.Combat.Presentation
                 run.CurrentHealth >= UnitState.HeroBaseHealth ? "生命已满" : run.StageContribution < 1 ? "缺少 1 学院贡献" : "可治疗";
             bool mealAvailable = medical.HealthCheckCompleted && !medical.MealUsed;
 
-            DrawServiceTopBar(parent, run, "医务室（健康确认与服务）", "不消耗学院时序");
+            DrawServiceTopBar(shell.TopBar.gameObject, run, "医务室（健康确认与服务）", "不消耗学院时序");
 
             GameObject identity = Panel("医务室身份卡", parent, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(48, -140), new Vector2(500, 660), FormalUiTheme.Ink);
@@ -924,9 +928,9 @@ namespace OCC.Combat.Presentation
                 BindHover(meal, MealName(mealId), MealCost(mealId) + "\n" + MealEffect(mealId), canBuy ? safe : muted);
             }
 
-            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(1252, -1000), new Vector2(280, 64), amber, true,
+            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, shell.Footer, new Vector2(1252, -1000), new Vector2(280, 64), amber, true,
                 () => ReturnFromService(run), focusKey: "按钮_返回地图", iconPath: FormalArtRegistry.NavigationPath("back"));
-            ActionButton(medical.HealUsed ? "治疗已完成" : "接受治疗", medical.HealUsed ? "本轮已经治疗过" : healStatus, parent,
+            ActionButton(medical.HealUsed ? "治疗已完成" : "接受治疗", medical.HealUsed ? "本轮已经治疗过" : healStatus, shell.Footer,
                 new Vector2(1552, -1000), new Vector2(320, 64), medical.HealUsed ? safe : amber, canHeal,
                 bootstrap.UseFirstRunHeal, focusKey: "按钮_接受治疗");
         }
@@ -967,9 +971,11 @@ namespace OCC.Combat.Presentation
 
         private void DrawFirstRunShop(Transform parent, RogueliteMapRun run)
         {
+            FormalRogueliteServiceShellView shell = FormalRogueliteServiceShellView.Create(parent);
+            parent = shell.Body;
             FirstRunShopSnapshot shop = run.CurrentShopService;
-            GameObject top = Panel("商店顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
-                new Vector2(0, 80), FormalUiTheme.Ink);
+            GameObject top = shell.TopBar.gameObject;
+            FormalUiKit.ApplySkin(top.GetComponent<Image>(), "panel", FormalUiTheme.Ink);
             Label("商店标题", run.IsTutorialPhase ? "学院市集（精英后商店展开）" : "学院补给商店", top.transform,
                 new Vector2(32, -14), new Vector2(900, 50), 28, Color.white, TextAnchor.MiddleLeft);
             ShopMetric(top.transform, new Vector2(940, -10), "金币", run.Gold.ToString(), FormalArtRegistry.ResourceMetricPath("gold"), amber);
@@ -1005,16 +1011,16 @@ namespace OCC.Combat.Presentation
                 BindHover(card, name, ShopContentDetail(catalog, offer.DefinitionId), offer.Sold ? muted : amber);
                 BindHover(button, name, reason, offer.Sold ? muted : canBuy ? cyan : amber);
             }
-            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(64, -898), new Vector2(260, 68), amber, true,
+            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, shell.Footer, new Vector2(64, -898), new Vector2(260, 68), amber, true,
                 () => { if (run.IsTutorialPhase) bootstrap.CompleteFirstRunExperience(); else ReturnFromService(run); },
                 focusKey: "按钮_返回地图", iconPath: FormalArtRegistry.NavigationPath("back"));
-            ActionButton("打开行囊", "购买前可腾出背包空间", parent, new Vector2(1596, -898), new Vector2(260, 68), cyan, true,
+            ActionButton("打开行囊", "购买前可腾出背包空间", shell.Footer, new Vector2(1596, -898), new Vector2(260, 68), cyan, true,
                 () => SetOverlay(UiOverlay.Loadout));
             ActionButton(run.IsTutorialPhase ? "离开商店并完成首次体验" : "离开商店并结算节点", "购买并非必需；离开后写入完成标记",
-                parent, new Vector2(700, -690), new Vector2(520, 76), safe, true,
+                shell.Footer, new Vector2(700, -690), new Vector2(520, 76), safe, true,
                 () => { if (run.IsTutorialPhase) bootstrap.CompleteFirstRunExperience(); else ReturnFromService(run); },
                 iconPath: FormalArtRegistry.NavigationPath("confirm"));
-            Label("离店说明", "库存、购买与完成状态都会保留；返回地图后可继续前进。", parent,
+            Label("离店说明", "库存、购买与完成状态都会保留；返回地图后可继续前进。", shell.Footer,
                 new Vector2(500, -792), new Vector2(920, 52), 17, muted, TextAnchor.MiddleCenter);
         }
 
@@ -1132,6 +1138,7 @@ namespace OCC.Combat.Presentation
         // Pixso 09 is a dedicated battle-node briefing, not the generic full-screen node room.
         private void DrawPixsoCombatDeparture(Transform parent, RogueliteMapRun run, RogueliteMapNode node, bool current, Color accent)
         {
+            FormalRogueliteDepartureShellView shell = FormalRogueliteDepartureShellView.Create(parent);
             bool canEnter = (current && RogueliteUiPreferences.CanOpenCombatBriefing(run, node)) || RogueliteUiPreferences.CanTravelTo(run, node);
             RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.For(run, node.Id);
             RogueNodePreviewPresentation preview = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node) : null;
@@ -1143,14 +1150,14 @@ namespace OCC.Combat.Presentation
             bool confirmOrigin = run.IsTutorialPhase && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
             bool canStart = canEnter || confirmOrigin;
 
-            GameObject top = Panel("Pixso出发准备顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
-                new Vector2(0, 80), FormalUiTheme.Ink);
+            GameObject top = shell.TopBar.gameObject;
+            FormalUiKit.ApplySkin(top.GetComponent<Image>(), "panel", FormalUiTheme.Ink);
             Label("标题", "出发准备（" + node.DisplayName + "）", top.transform, new Vector2(32, -12), new Vector2(900, 52), 28, Color.white, TextAnchor.MiddleLeft);
             Label("状态", node.Id + "　" + TypeLabel(node.Type) + "（" + (canEnter ? "可达" : "未达") + "）", top.transform,
                 new Vector2(1280, -16), new Vector2(600, 42), 18, canEnter ? cyan : muted, TextAnchor.MiddleRight);
 
-            GameObject dossier = Panel("Pixso任务档案", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(48, -254),
-                new Vector2(500, 650), FormalUiTheme.Ink);
+            GameObject dossier = shell.Dossier.gameObject;
+            FormalUiKit.ApplySkin(dossier.GetComponent<Image>(), "panel", FormalUiTheme.Ink);
             string category = node.Type == RogueliteMapNodeType.Elite ? "精英任务" : node.Type == RogueliteMapNodeType.Finale ? "终局任务" : "巡哨任务　FIRST ENCOUNTER";
             Label("任务类别", category, dossier.transform, new Vector2(32, -32), new Vector2(420, 30), 17, amber, TextAnchor.MiddleLeft);
             Label("任务名称", node.DisplayName, dossier.transform, new Vector2(32, -86), new Vector2(410, 128), 46, Color.white, TextAnchor.UpperLeft);
@@ -1159,26 +1166,26 @@ namespace OCC.Combat.Presentation
             Label("标签", "耗时", cost.transform, new Vector2(58, -14), new Vector2(120, 28), 17, muted, TextAnchor.MiddleLeft);
             Label("数值", preview == null || preview.IsZeroTime ? "不耗时" : "+" + preview.TimeCost, cost.transform, new Vector2(264, -12), new Vector2(136, 32), 22, text, TextAnchor.MiddleRight);
 
-            Label("公开标题", "任务公开信息", parent, new Vector2(580, -296), new Vector2(900, 58), 46, text, TextAnchor.MiddleLeft);
-            GameObject objectivePanel = Panel("Pixso行动目标", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), Color.Lerp(FormalUiTheme.Surface, cyan, .14f));
+            Label("公开标题", "任务公开信息", shell.Body, new Vector2(580, -296), new Vector2(900, 58), 46, text, TextAnchor.MiddleLeft);
+            GameObject objectivePanel = Panel("Pixso行动目标", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), Color.Lerp(FormalUiTheme.Surface, cyan, .14f));
             Line(objectivePanel.transform, Vector2.zero, new Vector2(5, 104), cyan);
             Icon("目标图标", FormalArtRegistry.ResourceMetricPath("risk"), objectivePanel.transform, new Vector2(26, -26), new Vector2(52, 52));
             Label("目标", objective, objectivePanel.transform, new Vector2(92, -16), new Vector2(1160, 70), 28, text, TextAnchor.MiddleLeft);
 
-            GameObject enemy = Panel("Pixso敌情", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -508), new Vector2(632, 250), FormalUiTheme.Surface);
+            GameObject enemy = Panel("Pixso敌情", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -508), new Vector2(632, 250), FormalUiTheme.Surface);
             Label("标签", "敌情", enemy.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
             Label("内容", enemies, enemy.transform, new Vector2(24, -70), new Vector2(568, 72), 28, text, TextAnchor.UpperLeft);
-            GameObject field = Panel("Pixso场地", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1240, -508), new Vector2(632, 250), FormalUiTheme.Surface);
+            GameObject field = Panel("Pixso场地", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1240, -508), new Vector2(632, 250), FormalUiTheme.Surface);
             Label("标签", "场地", field.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
             Label("内容", terrain, field.transform, new Vector2(24, -70), new Vector2(568, 98), 28, text, TextAnchor.UpperLeft);
 
-            ActionButton("先不去", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(1000, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
+            ActionButton("先不去", PlayerFacingCopy.ReturnToMapFree, shell.Footer, new Vector2(1000, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
-            ActionButton("学院整备", "调整装备与术式", parent, new Vector2(1276, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
+            ActionButton("学院整备", "调整装备与术式", shell.Footer, new Vector2(1276, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
                 () => SetOverlay(UiOverlay.Loadout), iconPath: FormalArtRegistry.NavigationPath("archive"));
             string enterLabel = confirmOrigin ? "确认配置并出发" : "出发";
             string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
-            GameObject start = ActionButton(enterLabel, enterReason, parent, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
+            GameObject start = ActionButton(enterLabel, enterReason, shell.Footer, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
                 () => { if (confirmOrigin) bootstrap.AcknowledgeFirstRunOrigin(); bootstrap.StartMapNodeCombat(node.Id); },
                 focusKey: "按钮_进入战斗", iconPath: FormalArtRegistry.NavigationPath("confirm"));
             BindHover(start, enterLabel, confirmOrigin || !canEnter ? enterReason : "立刻前往场地。", canStart ? accent : muted);
@@ -1771,16 +1778,17 @@ namespace OCC.Combat.Presentation
         {
             Header("辅助设置", "即时生效");
             RogueliteUiPreferences p = bootstrap.UiPreferences;
-            GameObject card = FormalUiKit.LayoutPanel("设置卡", content.transform, "settings.card", panel);
-            Label("标题", "显示、动效与输入提示", card.transform, new Vector2(48, -38), new Vector2(920, 46), 32, text, TextAnchor.MiddleLeft);
-            SettingRow(card.transform, 0, "主音量", Mathf.RoundToInt(p.MasterVolume * 100) + "%", "档位　0　25　50　75　100", cyan, () => ChangeSettings(volume: Step(p.MasterVolume)));
-            SettingRow(card.transform, 1, "动画强度", Mathf.RoundToInt(p.AnimationIntensity * 100) + "%", "档位　0　25　50　75　100", cyan, () => ChangeSettings(animation: Step(p.AnimationIntensity)));
-            SettingRow(card.transform, 2, "屏幕震动", OnOff(p.ScreenShake), string.Empty, p.ScreenShake ? safe : muted, () => ChangeSettings(screenShake: !p.ScreenShake));
-            SettingRow(card.transform, 3, "战斗浮字", OnOff(p.FloatingText), string.Empty, p.FloatingText ? safe : muted, () => ChangeSettings(floatingText: !p.FloatingText));
-            SettingRow(card.transform, 4, "高对比色彩", OnOff(p.HighContrast), string.Empty, p.HighContrast ? Color.white : muted, () => ChangeSettings(highContrast: !p.HighContrast));
-            SettingRow(card.transform, 5, "大号文字", OnOff(p.LargeText), string.Empty, p.LargeText ? safe : muted, () => ChangeSettings(largeText: !p.LargeText));
-            SettingRow(card.transform, 6, "键位提示", OnOff(p.KeyHints), string.Empty, p.KeyHints ? safe : muted, () => ChangeSettings(keyHints: !p.KeyHints));
-            ActionButton("返回", bootstrap.SettingsSaveDetail, card.transform, new Vector2(48, -660), new Vector2(944, 62), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+            FormalRogueliteAuxiliaryShellView shell = FormalRogueliteAuxiliaryShellView.CreateSettings(content.transform);
+            FormalUiKit.ApplySkin(shell.Card.GetComponent<Image>(), "panel", panel);
+            Label("标题", "显示、动效与输入提示", shell.Body, new Vector2(48, -38), new Vector2(920, 46), 32, text, TextAnchor.MiddleLeft);
+            SettingRow(shell.Body, 0, "主音量", Mathf.RoundToInt(p.MasterVolume * 100) + "%", "档位　0　25　50　75　100", cyan, () => ChangeSettings(volume: Step(p.MasterVolume)));
+            SettingRow(shell.Body, 1, "动画强度", Mathf.RoundToInt(p.AnimationIntensity * 100) + "%", "档位　0　25　50　75　100", cyan, () => ChangeSettings(animation: Step(p.AnimationIntensity)));
+            SettingRow(shell.Body, 2, "屏幕震动", OnOff(p.ScreenShake), string.Empty, p.ScreenShake ? safe : muted, () => ChangeSettings(screenShake: !p.ScreenShake));
+            SettingRow(shell.Body, 3, "战斗浮字", OnOff(p.FloatingText), string.Empty, p.FloatingText ? safe : muted, () => ChangeSettings(floatingText: !p.FloatingText));
+            SettingRow(shell.Body, 4, "高对比色彩", OnOff(p.HighContrast), string.Empty, p.HighContrast ? Color.white : muted, () => ChangeSettings(highContrast: !p.HighContrast));
+            SettingRow(shell.Body, 5, "大号文字", OnOff(p.LargeText), string.Empty, p.LargeText ? safe : muted, () => ChangeSettings(largeText: !p.LargeText));
+            SettingRow(shell.Body, 6, "键位提示", OnOff(p.KeyHints), string.Empty, p.KeyHints ? safe : muted, () => ChangeSettings(keyHints: !p.KeyHints));
+            ActionButton("返回", bootstrap.SettingsSaveDetail, shell.Footer, new Vector2(48, -660), new Vector2(944, 62), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
         }
 
         private void DrawLoadout()
@@ -1788,8 +1796,9 @@ namespace OCC.Combat.Presentation
             RogueliteMapRun run = bootstrap.CurrentMapRun ?? bootstrap.ArchivedMapRun;
             if (run == null || !run.UsesRogue11) { SetOverlay(UiOverlay.None); return; }
             Header("角色与整备", "换好装备和术式，再去下一站");
-            GameObject card = Panel("整备总览", content.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(24, -80), new Vector2(1872, 976), panel);
+            FormalRogueliteLoadoutShellView shell = FormalRogueliteLoadoutShellView.Create(content.transform);
+            GameObject card = shell.Card.gameObject;
+            FormalUiKit.ApplySkin(card.GetComponent<Image>(), "panel", panel);
             RogueRunDto dto = run.RogueRunState;
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(dto);
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
@@ -1806,14 +1815,14 @@ namespace OCC.Combat.Presentation
             if (string.IsNullOrEmpty(selectedRogueInventoryId) || runtime.EquipmentItem(selectedRogueInventoryId) == null && runtime.TacticalItem(selectedRogueInventoryId) == null)
                 selectedRogueInventoryId = items.FirstOrDefault()?.InstanceId ?? runtime.Equipped.Values.FirstOrDefault(value => !string.IsNullOrEmpty(value));
 
-            DrawLoadoutNavigation(card.transform, runtime, dto);
+            DrawLoadoutNavigation(shell.Navigation, runtime, dto);
             if (loadoutSection == LoadoutSection.Equipment)
-                DrawEquipmentLoadout(card.transform, runtime, items);
+                DrawEquipmentLoadout(shell.Body, runtime, items);
             else
-                DrawSpellLoadout(card.transform, dto, spells);
+                DrawSpellLoadout(shell.Body, dto, spells);
 
-            Line(card.transform, new Vector2(16, -878), new Vector2(1832, 2), FormalUiTheme.Rule);
-            ActionButton("返回地图", string.Empty, card.transform, new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
+            Line(shell.Footer, new Vector2(16, -878), new Vector2(1832, 2), FormalUiTheme.Rule);
+            ActionButton("返回地图", string.Empty, shell.Footer, new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
         }
 
@@ -2702,76 +2711,78 @@ namespace OCC.Combat.Presentation
         {
             Header("行程与行囊", string.Empty);
             RogueliteMapRun run = bootstrap.ArchivedMapRun;
-            GameObject card = FormalUiKit.LayoutPanel("档案卡", content.transform, "archive.card", panel);
-            Label("标题", run == null ? "还没有开始旅程" : "这次学院旅程", card.transform, new Vector2(48, -42), new Vector2(940, 48), 32, text, TextAnchor.MiddleLeft);
+            FormalRogueliteAuxiliaryShellView shell = FormalRogueliteAuxiliaryShellView.CreateArchive(content.transform);
+            FormalUiKit.ApplySkin(shell.Card.GetComponent<Image>(), "panel", panel);
+            Transform card = shell.Body;
+            Label("标题", run == null ? "还没有开始旅程" : "这次学院旅程", card, new Vector2(48, -42), new Vector2(940, 48), 32, text, TextAnchor.MiddleLeft);
             if (run == null)
-                FormalUiEffects.AddEmptyIllustration(card.transform, "empty_archive_tray", new Vector2(512, -314), 256f);
+                FormalUiEffects.AddEmptyIllustration(card, "empty_archive_tray", new Vector2(512, -314), 256f);
             if (run != null)
             {
                 if (run.UsesRogue11)
                 {
                     RogueliteMapNode rogueCurrent = run.MapNode(run.CurrentNodeId);
-                    ArchiveMetric(card.transform, new Vector2(48, -132), new Vector2(440, 64), "当前位置", rogueCurrent.DisplayName, cyan);
-                    ArchiveMetric(card.transform, new Vector2(508, -132), new Vector2(220, 64), "已访问", run.VisitedNodes.Count.ToString(), safe);
-                    ArchiveMetric(card.transform, new Vector2(748, -132), new Vector2(240, 64), "已完成", run.CompletedNodes.Count.ToString(), safe);
-                    ArchiveMetric(card.transform, new Vector2(48, -212), new Vector2(216, 56), "金币", run.Gold.ToString(), amber);
-                    ArchiveMetric(card.transform, new Vector2(284, -212), new Vector2(216, 56), "学院贡献", run.StageContribution.ToString(), safe);
-                    ArchiveMetric(card.transform, new Vector2(520, -212), new Vector2(216, 56), "学期进度", run.StageTime.ToString(), cyan);
+                    ArchiveMetric(card, new Vector2(48, -132), new Vector2(440, 64), "当前位置", rogueCurrent.DisplayName, cyan);
+                    ArchiveMetric(card, new Vector2(508, -132), new Vector2(220, 64), "已访问", run.VisitedNodes.Count.ToString(), safe);
+                    ArchiveMetric(card, new Vector2(748, -132), new Vector2(240, 64), "已完成", run.CompletedNodes.Count.ToString(), safe);
+                    ArchiveMetric(card, new Vector2(48, -212), new Vector2(216, 56), "金币", run.Gold.ToString(), amber);
+                    ArchiveMetric(card, new Vector2(284, -212), new Vector2(216, 56), "学院贡献", run.StageContribution.ToString(), safe);
+                    ArchiveMetric(card, new Vector2(520, -212), new Vector2(216, 56), "学期进度", run.StageTime.ToString(), cyan);
                     Label("构筑标题", FireRogueliteStarterCatalog.DisplayName(run.StarterId) + "　生命 " + run.CurrentHealth + "　个人魔力 " + run.CurrentMana,
-                        card.transform, new Vector2(48, -292), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
+                        card, new Vector2(48, -292), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
                     string equipped = string.Join("\n", run.RogueRunState.EquippedSpellIds.Select((id, index) => (index + 1) + "：" + FireSpellDisplayName(id)));
-                    Label("八槽", equipped, card.transform, new Vector2(48, -338), new Vector2(924, 92), 14, amber, TextAnchor.UpperLeft);
+                    Label("八槽", equipped, card, new Vector2(48, -338), new Vector2(924, 92), 14, amber, TextAnchor.UpperLeft);
                     Label("装备", "背包装备 " + run.RogueRunState.EquipmentInstances.Count + "　战术道具 " + run.RogueRunState.TacticalItemInstances.Count + "\n护盾不会保留到下一场战斗",
-                        card.transform, new Vector2(48, -448), new Vector2(924, 40), 16, muted, TextAnchor.UpperLeft);
-                    ActionButton("返回", string.Empty, card.transform, new Vector2(520, -638), new Vector2(472, 48), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+                        card, new Vector2(48, -448), new Vector2(924, 40), 16, muted, TextAnchor.UpperLeft);
+                    ActionButton("返回", string.Empty, shell.Footer, new Vector2(520, -638), new Vector2(472, 48), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
                     return;
                 }
                 RogueliteMapNode current = run.MapNode(run.CurrentNodeId);
-                Label("进度标题", "旅程概况", card.transform, new Vector2(48, -98), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
-                ArchiveMetric(card.transform, new Vector2(48, -132), new Vector2(440, 64), "当前位置", current.DisplayName, cyan);
-                ArchiveMetric(card.transform, new Vector2(508, -132), new Vector2(220, 64), "已访问", "当前 " + run.VisitedNodes.Count + "　总计 " + run.MapNodes.Count, safe);
-                ArchiveMetric(card.transform, new Vector2(748, -132), new Vector2(240, 64), "已完成", run.CompletedNodes.Count.ToString(), safe);
-                ArchiveMetric(card.transform, new Vector2(48, -212), new Vector2(216, 56), "等级", run.Level.ToString(), cyan);
-                ArchiveMetric(card.transform, new Vector2(284, -212), new Vector2(216, 56), "经验", run.Experience.ToString(), cyan);
-                ArchiveMetric(card.transform, new Vector2(520, -212), new Vector2(216, 56), "零件", run.Parts.ToString(), amber);
-                ArchiveMetric(card.transform, new Vector2(756, -212), new Vector2(216, 56), "以太", run.Aether.ToString(), cyan);
-                ArchiveMetric(card.transform, new Vector2(48, -284), new Vector2(216, 56), "补给", run.Supplies.ToString(), safe);
-                ArchiveMetric(card.transform, new Vector2(284, -284), new Vector2(216, 56), "侦测", run.ScoutingBeacons.ToString(), muted);
-                ArchiveMetric(card.transform, new Vector2(756, -284), new Vector2(216, 56), "锻造规则", "确定性分支", safe);
-                Label("构筑标题", FireRogueliteStarterCatalog.DisplayName(run.StarterId) + "　生命 " + run.CurrentHealth + "　护盾 " + run.CurrentShield + "　以太 " + run.CurrentMana, card.transform, new Vector2(48, -360), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
-                ArchiveMetric(card.transform, new Vector2(48, -398), new Vector2(292, 72), "主手武器", RewardDisplayName(run.EquippedWeaponId, "学院训练武器"), cyan);
-                ArchiveMetric(card.transform, new Vector2(356, -398), new Vector2(292, 72), "个人术式 1", FireSpellDisplayName(run.EquippedFireSpellIds[0]), amber);
-                ArchiveMetric(card.transform, new Vector2(664, -398), new Vector2(308, 72), "个人术式 2", FireSpellDisplayName(run.EquippedFireSpellIds[1]), amber);
+                Label("进度标题", "旅程概况", card, new Vector2(48, -98), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
+                ArchiveMetric(card, new Vector2(48, -132), new Vector2(440, 64), "当前位置", current.DisplayName, cyan);
+                ArchiveMetric(card, new Vector2(508, -132), new Vector2(220, 64), "已访问", "当前 " + run.VisitedNodes.Count + "　总计 " + run.MapNodes.Count, safe);
+                ArchiveMetric(card, new Vector2(748, -132), new Vector2(240, 64), "已完成", run.CompletedNodes.Count.ToString(), safe);
+                ArchiveMetric(card, new Vector2(48, -212), new Vector2(216, 56), "等级", run.Level.ToString(), cyan);
+                ArchiveMetric(card, new Vector2(284, -212), new Vector2(216, 56), "经验", run.Experience.ToString(), cyan);
+                ArchiveMetric(card, new Vector2(520, -212), new Vector2(216, 56), "零件", run.Parts.ToString(), amber);
+                ArchiveMetric(card, new Vector2(756, -212), new Vector2(216, 56), "以太", run.Aether.ToString(), cyan);
+                ArchiveMetric(card, new Vector2(48, -284), new Vector2(216, 56), "补给", run.Supplies.ToString(), safe);
+                ArchiveMetric(card, new Vector2(284, -284), new Vector2(216, 56), "侦测", run.ScoutingBeacons.ToString(), muted);
+                ArchiveMetric(card, new Vector2(756, -284), new Vector2(216, 56), "锻造规则", "确定性分支", safe);
+                Label("构筑标题", FireRogueliteStarterCatalog.DisplayName(run.StarterId) + "　生命 " + run.CurrentHealth + "　护盾 " + run.CurrentShield + "　以太 " + run.CurrentMana, card, new Vector2(48, -360), new Vector2(940, 26), 18, cyan, TextAnchor.MiddleLeft);
+                ArchiveMetric(card, new Vector2(48, -398), new Vector2(292, 72), "主手武器", RewardDisplayName(run.EquippedWeaponId, "学院训练武器"), cyan);
+                ArchiveMetric(card, new Vector2(356, -398), new Vector2(292, 72), "个人术式 1", FireSpellDisplayName(run.EquippedFireSpellIds[0]), amber);
+                ArchiveMetric(card, new Vector2(664, -398), new Vector2(308, 72), "个人术式 2", FireSpellDisplayName(run.EquippedFireSpellIds[1]), amber);
                 string ownedFire = run.OwnedFireSpellIds.Count == 0 ? "无" : string.Join("、", run.OwnedFireSpellIds.Select(FireSpellDisplayName));
-                Label("火术档案", "已学会：" + ownedFire, card.transform, new Vector2(48, -478), new Vector2(924, 40), 16, amber, TextAnchor.UpperLeft);
+                Label("火术档案", "已学会：" + ownedFire, card, new Vector2(48, -478), new Vector2(924, 40), 16, amber, TextAnchor.UpperLeft);
                 string migration = run.PendingFireSpellReselections.Count == 0 && run.FireSpellRetirementCompensations.Count == 0 && run.FireSpellMigrationWarnings.Count == 0
                     ? "所有术式都已收好"
                     : "旧术式待重选 " + run.PendingFireSpellReselections.Count + "　替代术式待领取 " + run.FireSpellRetirementCompensations.Count + "　无法辨认 " + run.FireSpellMigrationWarnings.Count;
-                Label("术式整理", migration, card.transform, new Vector2(48, -516), new Vector2(924, 34), 15,
+                Label("术式整理", migration, card, new Vector2(48, -516), new Vector2(924, 34), 15,
                     run.FireSpellMigrationWarnings.Count > 0 ? danger : muted, TextAnchor.UpperLeft);
                 ItemInstance[] artifacts = run.Inventory.Items.Where(item => ItemCatalog.Get(item.DefinitionId).Category == ItemCategory.Artifact).ToArray();
                 if (artifacts.Length == 0)
                 {
-                    Label("法宝档案", "本次行动尚未获得法宝", card.transform, new Vector2(48, -552), new Vector2(924, 72), 16, muted, TextAnchor.UpperLeft);
+                    Label("法宝档案", "本次行动尚未获得法宝", card, new Vector2(48, -552), new Vector2(924, 72), 16, muted, TextAnchor.UpperLeft);
                 }
                 else
                 {
                     archiveArtifactIndex = ((archiveArtifactIndex % artifacts.Length) + artifacts.Length) % artifacts.Length;
                     ItemInstance instance = artifacts[archiveArtifactIndex]; ArtifactDefinition artifact = ArtifactCatalog.Get(instance.DefinitionId);
                     Label("法宝档案", "第 " + (archiveArtifactIndex + 1) + " 件　共 " + artifacts.Length + " 件\n" + artifact.DisplayName + "　" + PlayerFacingCopy.RemainingAndTotal(instance.RemainingUses, artifact.MaximumUses, " 次") + "\n来源 " + artifact.Provenance,
-                        card.transform, new Vector2(48, -548), new Vector2(924, 30), 16, amber, TextAnchor.UpperLeft);
-                    FormalUiKit.SemanticChip("action", artifact.ActionPointCost.ToString(), card.transform, new Vector2(48, -580), tooltip, 32, 16, cyan);
+                        card, new Vector2(48, -548), new Vector2(924, 30), 16, amber, TextAnchor.UpperLeft);
+                    FormalUiKit.SemanticChip("action", artifact.ActionPointCost.ToString(), card, new Vector2(48, -580), tooltip, 32, 16, cyan);
                     string perUseCost = artifact.PublicCost
                         .Replace(artifact.ActionPointCost + " 行动点，", string.Empty)
                         .Replace("消耗 ", string.Empty);
                     Label("法宝详情", "每次 " + perUseCost + "\n" + artifact.EffectSummary + "\n目标：" + artifact.TargetSummary,
-                        card.transform, new Vector2(108, -580), new Vector2(864, 28), 13, text, TextAnchor.UpperLeft);
-                    FormalUiKit.SemanticChip("notice", string.Empty, card.transform, new Vector2(48, -620), tooltip, 32, 16, amber);
-                    Label("法宝注意", artifact.RiskSummary, card.transform, new Vector2(80, -608), new Vector2(892, 26), 13, amber, TextAnchor.UpperLeft);
+                        card, new Vector2(108, -580), new Vector2(864, 28), 13, text, TextAnchor.UpperLeft);
+                    FormalUiKit.SemanticChip("notice", string.Empty, card, new Vector2(48, -620), tooltip, 32, 16, amber);
+                    Label("法宝注意", artifact.RiskSummary, card, new Vector2(80, -608), new Vector2(892, 26), 13, amber, TextAnchor.UpperLeft);
                 }
-                ActionButton("下一件法宝", artifacts.Length > 1 ? string.Empty : "仅有一件", card.transform, new Vector2(48, -638), new Vector2(452, 48), amber, artifacts.Length > 1, () => { archiveArtifactIndex++; Invalidate(false); }, iconPath: FormalArtRegistry.NavigationPath("continue"));
+                ActionButton("下一件法宝", artifacts.Length > 1 ? string.Empty : "仅有一件", shell.Footer, new Vector2(48, -638), new Vector2(452, 48), amber, artifacts.Length > 1, () => { archiveArtifactIndex++; Invalidate(false); }, iconPath: FormalArtRegistry.NavigationPath("continue"));
             }
-            ActionButton("返回", string.Empty, card.transform, new Vector2(520, -638), new Vector2(472, 48), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+            ActionButton("返回", string.Empty, shell.Footer, new Vector2(520, -638), new Vector2(472, 48), cyan, true, () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
         }
 
         private void ArchiveMetric(Transform parent, Vector2 position, Vector2 size, string label, string value, Color accent)
@@ -2877,9 +2888,10 @@ namespace OCC.Combat.Presentation
             if (content != null) content.transform.DOKill();
         }
 
-        private void Header(string title, string subtitle)
+        private void Header(string title, string subtitle, GameObject existingHeader = null)
         {
-            GameObject header = FormalUiKit.LayoutPanel("页眉", content.transform, "global.header", FormalUiTheme.SurfaceRaised);
+            GameObject header = existingHeader ?? FormalUiKit.LayoutPanel("页眉", content.transform, "global.header", FormalUiTheme.SurfaceRaised);
+            if (existingHeader != null) FormalUiKit.ApplySkin(header.GetComponent<Image>(), "header", FormalUiTheme.SurfaceRaised);
             Label("标题", title, header.transform, new Vector2(20, -8), new Vector2(string.IsNullOrEmpty(subtitle) ? 1810 : 800, 38), 23, text, TextAnchor.MiddleLeft);
             if (!string.IsNullOrEmpty(subtitle)) Label("副标题", subtitle, header.transform, new Vector2(850, -8), new Vector2(980, 38), 17, muted, TextAnchor.MiddleRight);
             Line(header.transform, new Vector2(18, -53), new Vector2(1836, 2), FormalUiTheme.Rule);

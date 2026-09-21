@@ -248,15 +248,16 @@ namespace OCC.Combat.Presentation
         {
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式战斗HUD", UiLayoutContract.CombatSortingOrder);
-            root = canvas.gameObject;
+            FormalCombatHudShellView shell = FormalCombatHudShellView.Create(canvas.transform);
+            root = shell.gameObject;
             tooltip = root.AddComponent<FormalHoverTooltip>();
             tooltip.Initialize(canvas);
 
-            GameObject top = FormalUiKit.LayoutPanel("战斗抬头", root.transform, "combat.header", FormalUiTheme.SurfaceRaised);
+            GameObject top = shell.Header.gameObject;
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
             BuildHeaderResources(top.transform);
 
-            GameObject side = FormalUiKit.LayoutPanel("战斗信息", root.transform, "combat.rightConsole", Color.clear);
+            GameObject side = shell.RightConsole.gameObject;
             Image sideSurface = side.GetComponent<Image>();
             sideSurface.color = Color.clear;
             sideSurface.raycastTarget = false;
@@ -288,7 +289,7 @@ namespace OCC.Combat.Presentation
             heroBack.SetActive(false);
             timelineBack.SetActive(false);
 
-            GameObject apBadge = FormalUiKit.LayoutPanel("行动点徽章", root.transform, "combat.actionPointBadge", Color.clear);
+            GameObject apBadge = shell.ActionPointBadge.gameObject;
             GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(48, -48), new Vector2(64, 64), FormalUiTheme.Cyan);
             outerDiamond.transform.localRotation = Quaternion.Euler(0, 0, -45);
@@ -305,7 +306,7 @@ namespace OCC.Combat.Presentation
             SetBadgeTextRect(actionPointBadgeValue, new Vector2(0, -42), new Vector2(96, 36));
             BindTooltip(apBadge, () => new FormalTooltipContent("行动点", "大号数字是当前值。\n本回合基础上限为 " + CombatResolver.HeroActionPointsPerTurn + "；额外行动点可以超过基础上限。", FormalUiTheme.Cyan));
 
-            GameObject bottom = FormalUiKit.LayoutPanel("战术指令", root.transform, "combat.commands", ink);
+            GameObject bottom = shell.Commands.gameObject;
             GameObject spellGroup = Panel("术式组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(8, -2), new Vector2(1292, 196), panel);
             GameObject itemGroup = Panel("战术栏", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1308, -14), new Vector2(360, 172), panel);
             for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++)

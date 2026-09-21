@@ -50,7 +50,8 @@ namespace OCC.Combat.Presentation
         private static T Attach<T>(GameObject owner, Action<T> initialize) where T : Component
         {
             T component = owner.GetComponent<T>();
-            if (component == null) component = owner.AddComponent<T>();
+            if (component == null)
+                throw new InvalidOperationException("Combat presentation prefab is missing " + typeof(T).Name + ".");
             initialize(component);
             return component;
         }

@@ -108,14 +108,8 @@ namespace OCC.Combat.Presentation
             barTexture = Resources.Load<Texture2D>("UI/Bar");
             uiPreferences = saveGateway.LoadUiPreferences();
             ApplyUiPreferences();
-            Transform sceneUi = transform.Find("场景UI");
-            if (sceneUi != null) sceneUi.gameObject.SetActive(false);
-            GameObject editorMap = GameObject.Find("地图可视化");
-            if (editorMap != null) editorMap.SetActive(false);
             developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术生、火矢生、侧锋生、替身偶、寻迹兽");
             presentation = CombatPresentationComposition.Attach(gameObject, this);
-            BuildCombatFromSceneStageTwo();
-            formalAssets.ApplySceneSprites(transform);
             formalAssets.LoadRuntime();
         }
 
@@ -189,10 +183,6 @@ namespace OCC.Combat.Presentation
                 sceneCamera.backgroundColor = new Color(.012f, .018f, .025f, 1f);
             }
         }
-
-        public void EnsureEditorVisuals() => formalAssets.EnsureEditorVisuals(transform);
-        public void EnsureEditorMapVisuals() => formalAssets.EnsureEditorMapVisuals(transform);
-        public void EnsureEditorUiVisuals() => formalAssets.EnsureEditorUiVisuals(transform);
 
         private void BuildCombatFromSceneStageTwo()
         {
@@ -272,8 +262,6 @@ namespace OCC.Combat.Presentation
             if (entry != null) entry.ShowSelection();
             presentation?.Startup?.DismissImmediately();
             presentation?.RogueliteUi?.SetFrontEndSuppressed(true);
-            GameObject editorMap = GameObject.Find("地图可视化");
-            if (editorMap != null) editorMap.SetActive(false);
             GameObject formalRogueliteUi = GameObject.Find("OCC 表现层锚点/正式肉鸽UI");
             if (formalRogueliteUi != null) formalRogueliteUi.SetActive(false);
             GameObject formalStartupUi = GameObject.Find("OCC 表现层锚点/正式启动界面");
@@ -314,7 +302,8 @@ namespace OCC.Combat.Presentation
             {
                 trainingRangeActive = false; rogueliteFlow.Reset();
                 developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术生、火矢生、侧锋生、替身偶、寻迹兽");
-                BuildCombatFromSceneStageTwo(); selection.Reset();
+                state = null; currentLevel = null; developerFlow = null; battlefieldViewport = null;
+                artifactBattle = null; fireBattle = null; selection.Reset(); outcomeSettlement.Reset(); ResetEnemyTurnSequence();
                 RefreshSceneHud(); MarkPresentation(UiPresentationArea.Flow); MarkPresentation(UiPresentationArea.Combat);
                 OpenFirstExperienceLanding();
                 return;

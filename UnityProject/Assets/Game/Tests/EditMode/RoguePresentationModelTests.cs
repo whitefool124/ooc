@@ -50,7 +50,8 @@ namespace OCC.Combat.Tests
 
             RogueCombatHudPresentation model = new RogueCombatHudPresentation(combat, run);
             Assert.That(model.SpellSlots.Count, Is.EqualTo(8)); Assert.That(model.Quickbar.Count, Is.EqualTo(4));
-            Assert.That((model.Health, model.Shield, model.Mana, model.Gold, model.StageContribution), Is.EqualTo((18, 5, 7, 13, 4)));
+            Assert.That((model.Health, model.Shield, model.Mana, model.Gold, model.StageContribution),
+                Is.EqualTo((UnitState.HeroBaseHealth, 5, 7, 13, 4)));
             Assert.That(model.SpellSlots.Take(4).All(value => !string.IsNullOrEmpty(value.DefinitionId)), Is.True);
             Assert.That(model.SpellSlots[0].CompactSlotLabel, Is.EqualTo("1"));
             Assert.That(model.SpellSlots[0].CompactSlotLabel, Does.Not.Contain(model.SpellSlots[0].DisplayName));

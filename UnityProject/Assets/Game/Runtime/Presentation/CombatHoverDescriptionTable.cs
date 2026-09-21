@@ -95,7 +95,35 @@ namespace OCC.Combat.Presentation
 
         private static CombatHoverDescriptionRow BuildArtifactRow(ArtifactDefinition artifact)
             => new CombatHoverDescriptionRow(artifact.Id, artifact.PublicCost, string.Empty,
-                artifact.TargetSummary, string.Empty, artifact.EffectSummary, artifact.RiskSummary);
+                artifact.TargetSummary, string.Empty, artifact.EffectSummary, artifact.RiskSummary, ArtifactLore(artifact.Id));
+
+        private static string ArtifactLore(string definitionId)
+        {
+            switch (definitionId)
+            {
+                case "F-T01": return "学院封装的试制炎脉器。";
+                case "G-T01": return "护具工坊常见的折叠匣。";
+                case "G-T02": return "旧式定距器留下的线轴。";
+                case "G-T03": return "猎团用来固定猎物的框架。";
+                case "G-T04": return "勘验人员随身携带的测镜。";
+                case "G-T05": return "边境检修工坊的手压泵。";
+                case "G-T06": return "教会救护工坊的折叠编架。";
+                case "G-T07": return "守备石工搬运的重型压模。";
+                case "G-T08": return "采石行会沿用的短柄楔。";
+                case "G-T09": return "商路救援队校准的罗盘。";
+                case "G-T10": return "猎团挂在隘口的铜铃。";
+                case "G-T11": return "消防与勘验人员共用的冷凝器。";
+                case "G-T12": return "旧文明旅人记录行程的簿册。";
+                case "G-T13": return "驿站装卸工使用的三足支架。";
+                case "G-T14": return "光学师校准镜片的便携器。";
+                case "G-T15": return "商队驱兽灯改装的小灯。";
+                case "G-T16": return "医护工坊校准护具的阀门。";
+                case "G-T17": return "旧文明测绘队留下的铅锤。";
+                case "G-T18": return "旧文明封存库留下的幕布。";
+                case "G-T19": return "黑市回收的远古封签。";
+                default: return "学院登记的便携式器材。";
+            }
+        }
 
         private static string PassiveEffect(string definitionId)
         {

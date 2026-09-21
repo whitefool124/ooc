@@ -177,13 +177,13 @@ namespace OCC.Combat
 
             Elite("elite_foundry_a", "elite_foundry", "编织狭口", "划线教官居中、补盾助教与替身偶分守两路", "elite_vanguard", "barrier_mender", "sigil_mauler"),
             Elite("elite_foundry_b", "elite_foundry", "编织狭口，维护侧", "护障维护链偏左，右路可直取目标", "elite_vanguard", "barrier_mender", "sigil_mauler"),
-            Elite("elite_foundry_c", "elite_foundry", "编织狭口，检验侧", "替身偶前置，划线教官与补盾助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
+            EliteReserve("elite_foundry_c", "elite_foundry", "编织狭口，检验侧", "替身偶前置，划线教官与补盾助教后置", "elite_vanguard", "barrier_mender", "sigil_mauler"),
 
             Elite("cliff_relay_survey_a", "cliff_relay_survey", "断崖坡面与导能柱基座", "老寻循痕破藏身，灯台值守封住一条廊道，补盾助教贴结构续盾", "elder_tracker_hound", "signal_keeper", "barrier_mender"),
             EliteReserve("library_discipline_a", "library_discipline", "高书架切出的走廊与阅览长桌", "小铃换风搬散页，书架切出暗段，补盾助教贴结构续盾", "wind_librarian", "barrier_mender", "sigil_mauler"),
             EliteReserve("outer_ring_clearance_a", "outer_ring_clearance", "高塔外环的直线廊道与物块堆", "划线教官现场改掩体，提灯巡查沿直线显影，背弩生封住长线", "elite_vanguard", "lantern_revealer", "rune_arbalist"),
             Elite("calibration_lockdown_a", "calibration_lockdown", "设备间的校准台走廊", "试制员逐件布放装置，背弩生封住长线，拴索助教刻印地面", "prototype_hand", "rune_arbalist", "stone_snare"),
-            Elite("calibration_lockdown_b", "calibration_lockdown", "校准台走廊，装置侧", "试制件先铺在靠核心一侧，长线与刻印从另一侧压上", "prototype_hand", "rune_arbalist", "stone_snare"),
+            EliteReserve("calibration_lockdown_b", "calibration_lockdown", "校准台走廊，装置侧", "试制件先铺在靠核心一侧，长线与刻印从另一侧压上", "prototype_hand", "rune_arbalist", "stone_snare"),
             EliteReserve("sealed_vault_certification_a", "sealed_vault_certification", "旧检定台与读数桩之间的库房通道", "老库管投影直线并退件，提灯巡查沿直线显影，替身偶贴身破势", "legacy_storekeeper", "lantern_revealer", "sigil_mauler"),
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
                 "中心核心与三道机关门槛", "固定塔之守卫居中；三组塔内机关在阶段〇逐组放行，拆掉已放行的机关即切断其施术介质",
@@ -198,6 +198,11 @@ namespace OCC.Combat
         public static IReadOnlyList<RogueliteEncounterDefinition> StrongPool => Packages.Where(value => value.Tier == RogueliteEncounterTier.Strong).ToArray();
         public static IReadOnlyList<RogueliteEncounterDefinition> ElitePool => Packages
             .Where(value => value.Tier == RogueliteEncounterTier.Elite && value.InFixedPool).ToArray();
+        /// <summary>仅供旧版六精英节点全图生成；第一阶段学院层不得使用此池。</summary>
+        public static IReadOnlyList<RogueliteEncounterDefinition> LegacyElitePool => Packages
+            .Where(value => value.Tier == RogueliteEncounterTier.Elite &&
+                (value.LevelId == "elite_foundry" || value.LevelId == "calibration_lockdown" || value.LevelId == "cliff_relay_survey"))
+            .ToArray();
         public static RogueliteEncounterDefinition FixedBoss => Packages.Single(value => value.Tier == RogueliteEncounterTier.Boss);
 
         public static RogueliteEncounterDefinition Package(string variantKey) =>
@@ -273,7 +278,7 @@ namespace OCC.Combat
             RogueliteMapNode[] eliteOrder = RogueliteMapCatalog.Nodes.Where(value => value.Type == RogueliteMapNodeType.Elite)
                 .OrderByDescending(value => RogueliteMapCatalog.Nodes.Count(other => IsAdjacent(value.Id, other.Id)))
                 .ThenBy(value => StableKey(seed, "elite-node|" + value.Id)).ToArray();
-            if (!TryAssign(eliteOrder, 0, ElitePool.OrderBy(value => StableKey(seed, "elite|" + value.VariantKey)).ToList(), result, null, seed))
+            if (!TryAssign(eliteOrder, 0, LegacyElitePool.OrderBy(value => StableKey(seed, "elite|" + value.VariantKey)).ToList(), result, null, seed))
                 throw new InvalidOperationException("Unable to generate a valid fixed elite assignment.");
             result.Add(new RogueliteEncounterAssignment("core_finale", FixedBoss.VariantKey));
             return result.OrderBy(value => value.NodeId, StringComparer.Ordinal).ToArray();

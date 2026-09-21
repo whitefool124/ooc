@@ -334,6 +334,47 @@ namespace OCC.Combat.Tests
             }
         }
 
+        [Test]
+        public void AcademyLayer_ExcludesLegacyCrossLayerNodesAndUsesTheDeclaredFirstStageContent()
+        {
+            Assert.That(RogueliteAcademyLayerCatalog.LayerNodes.Select(node => node.Id),
+                Is.EquivalentTo(RogueliteAcademyLayerCatalog.NodeIds));
+            Assert.That(RogueliteAcademyLayerCatalog.IsLayerNode("elite_foundry"), Is.False);
+            Assert.That(RogueliteAcademyLayerCatalog.IsLayerNode("core_approach"), Is.False);
+            Assert.That(RogueliteAcademyLayerCatalog.LayerNodes.Count(node => node.Type == RogueliteMapNodeType.Elite),
+                Is.EqualTo(4));
+
+            string[] expectedContentIds =
+            {
+                "N01", "N02", "N07", "N08", "N09", "N10", "N12", "N13", "N14", "N15", "N17", "N18",
+                "E01", "E02", "E03", "EV01", "EV08", "EV09", "T02", "W01", "S01", "SHOP01", "B01"
+            };
+            Assert.That(RogueliteAcademyLayerCatalog.ContentMappings.Select(mapping => mapping.ContentTableId).Distinct(),
+                Is.EquivalentTo(expectedContentIds));
+        }
+
+        [Test]
+        public void AcademyLayerSave_MigratesLegacyCrossLayerProgressBackToAFormalEntry()
+        {
+            RogueliteMapRun source = ReadyForShop(4212);
+            source.CompleteFirstRunExperience();
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(source), Is.True, gateway.LastError);
+            RogueRunDto dto = Rogue11Serializer.Deserialize(store.Values[RogueliteSaveGateway.MapRunKey]);
+            dto.CurrentNodeId = "elite_foundry";
+            dto.VisitedNodeIds.Add("elite_foundry");
+            dto.CompletedNodeIds.Add("core_approach");
+
+            RogueliteMapRun restored = RogueliteMapRun.FromRogue11(dto);
+
+            Assert.That(restored.CurrentNodeId, Is.EqualTo(RogueliteAcademyLayerCatalog.EntryNodeIds[0]));
+            Assert.That(restored.VisitedNodes, Does.Not.Contain("elite_foundry"));
+            Assert.That(restored.CompletedNodes, Does.Not.Contain("core_approach"));
+            Assert.That(RogueliteMapRunValidator.Validate(restored).IsValid, Is.True,
+                RogueliteMapRunValidator.Validate(restored).Summary);
+        }
+
         private sealed class MemoryStore : IRogueliteSaveStore
         {
             public readonly Dictionary<string, string> Values = new Dictionary<string, string>();

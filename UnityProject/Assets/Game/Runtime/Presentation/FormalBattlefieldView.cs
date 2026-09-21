@@ -181,32 +181,19 @@ namespace OCC.Combat.Presentation
             // 一格 = 192 单位 = 32 原生像素 × 6），保证每个原生像素恰好 6 屏幕像素且落在同一栅格上。
             // HUD 等其它画布不挂，避免小屏被整数倍裁切。
             battlefieldScaler = PixelPerfectBattlefieldScaler.Attach(canvas);
-            root = canvas.gameObject;
+            FormalBattlefieldShellView shell = FormalBattlefieldShellView.Create(canvas.transform);
+            root = shell.gameObject;
+            viewportRect = shell.Viewport;
+            boardRect = shell.Board;
+            surroundLayerRect = shell.SurroundLayer;
+            shell.InputSurface.Initialize(this);
             enemyIntentMarkerTexture = Resources.Load<Texture2D>(BattlefieldMarkerLadder.EnemyIntentMarkerPath);
             if (enemyIntentMarkerTexture == null)
                 throw new System.IO.FileNotFoundException("Missing enemy intent marker: " + BattlefieldMarkerLadder.EnemyIntentMarkerPath);
 
-            GameObject viewport = FormalUiKit.Create("战场裁切视口", root.transform);
-            viewportRect = viewport.AddComponent<RectTransform>();
-            SetTopLeft(viewportRect, 0f, 0f, BattlefieldPresentationAdapter.BattlefieldWidth,
-                BattlefieldPresentationAdapter.BattlefieldHeight);
-            Image surface = viewport.AddComponent<Image>();
-            surface.color = new Color(.16f, .17f, .15f, 1f);
-            viewport.AddComponent<RectMask2D>();
-            BattlefieldViewportInputSurface inputSurface = viewport.AddComponent<BattlefieldViewportInputSurface>();
-            inputSurface.Initialize(this);
-
-            GameObject board = FormalUiKit.Create("战场棋盘", viewport.transform);
-            boardRect = board.AddComponent<RectTransform>();
-            boardRect.anchorMin = boardRect.anchorMax = boardRect.pivot = new Vector2(0f, 1f);
-            GameObject surround = FormalUiKit.Create("学院庭院延展地面", board.transform);
-            surroundLayerRect = surround.AddComponent<RectTransform>();
-            surroundLayerRect.anchorMin = surroundLayerRect.anchorMax = surroundLayerRect.pivot = new Vector2(0f, 1f);
-            surroundLayerRect.transform.SetAsFirstSibling();
-
-            Button home = FormalUiKit.Button("战场归中", "全场", viewport.transform,
-                new Vector2(host.BattlefieldViewport.ViewportRect.Width - 100f, -8f), new Vector2(88f, 40f),
-                FormalUiTheme.SurfaceRaised, FormalUiTheme.BodyFontSize);
+            Button home = shell.HomeButton;
+            home.GetComponent<RectTransform>().anchoredPosition =
+                new Vector2(BattlefieldPresentationAdapter.BattlefieldWidth - 100f, -8f);
             home.onClick.AddListener(() => host.BattlefieldViewport.ResetOverview());
             FormalUiKit.ConfigureButtonFeedback(home,
                 FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
@@ -1673,17 +1660,6 @@ namespace OCC.Combat.Presentation
             float pulse = .91f + .09f * (.5f + .5f * Mathf.Sin(Time.unscaledTime * 4.2f + phase));
             image.color = new Color(1f, 1f, 1f, Mathf.Clamp01(baseAlpha) * visibility * pulse);
         }
-    }
-
-    internal sealed class BattlefieldViewportInputSurface : MonoBehaviour, IBeginDragHandler, IDragHandler,
-        IEndDragHandler, IScrollHandler
-    {
-        private FormalBattlefieldView view;
-        public void Initialize(FormalBattlefieldView value) => view = value;
-        public void OnBeginDrag(PointerEventData eventData) => view?.BeginDrag(eventData);
-        public void OnDrag(PointerEventData eventData) => view?.Drag(eventData);
-        public void OnEndDrag(PointerEventData eventData) { }
-        public void OnScroll(PointerEventData eventData) => view?.Scroll(eventData);
     }
 
     internal sealed class BattlefieldCellPointer : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,

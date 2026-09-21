@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://occ.local/schema/occ-battle-map-v1.schema.json",
+  "title": "OCC Battle Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "displayName", "objectiveSummary", "objectiveType", "tier", "width", "height", "floorTheme", "isElite", "isBoss", "prerequisites", "heroSpawn", "enemies", "terrain", "blockedPositions", "spaceContract"],
+  "properties": {
+    "schemaVersion": { "const": "occ-battle-map-v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9_$-]+$" },
+    "displayName": { "type": "string", "minLength": 1 },
+    "objectiveSummary": { "type": "string" },
+    "objectiveType": { "enum": ["Elimination", "Destruction"] },
+    "tier": { "type": "integer", "minimum": 1 },
+    "width": { "type": "integer", "minimum": 4, "maximum": 32 },
+    "height": { "type": "integer", "minimum": 4, "maximum": 24 },
+    "floorTheme": { "enum": ["StoneRoad", "Courtyard", "Ruins", "AetherMarked"] },
+    "isElite": { "type": "boolean" },
+    "isBoss": { "type": "boolean" },
+    "prerequisites": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+    "heroSpawn": { "$ref": "#/$defs/nullablePosition" },
+    "enemies": { "type": "array", "items": { "$ref": "#/$defs/enemy" } },
+    "terrain": { "type": "array", "items": { "$ref": "#/$defs/terrain" } },
+    "blockedPositions": { "type": "array", "items": { "$ref": "#/$defs/position" } },
+    "spaceContract": { "$ref": "#/$defs/spaceContract" },
+    "notes": { "type": "string" },
+    "updatedAt": { "type": "string" }
+  },
+  "$defs": {
+    "position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "integer", "minimum": 0 }, "y": { "type": "integer", "minimum": 0 } }
+    },
+    "nullablePosition": { "anyOf": [{ "$ref": "#/$defs/position" }, { "type": "null" }] },
+    "enemy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["archetypeId", "x", "y"],
+      "properties": {
+        "archetypeId": { "type": "string", "minLength": 1 },
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "terrain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "kind", "mechanismKind"],
+      "properties": {
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 },
+        "kind": { "enum": ["LightCover", "HeavyCover", "PermanentWall", "AetherObjective", "Water", "LampVine", "AetherCrystal", "TowerMechanism", "StakedStructure", "OverloadDevice", "CertifierStand", "WardGenerator", "LoosePaper", "Trace", "BindingMark"] },
+        "mechanismKind": { "type": "integer", "minimum": 0, "maximum": 3 }
+      }
+    },
+    "spaceContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grammar", "routeAnchors", "publicRisk", "counterplayWindow"],
+      "properties": {
+        "grammar": { "type": "string" },
+        "routeAnchors": { "type": "array", "items": { "$ref": "#/$defs/position" } },
+        "publicRisk": { "type": "string" },
+        "counterplayWindow": { "type": "string" }
+      }
+    }
+  }
+}

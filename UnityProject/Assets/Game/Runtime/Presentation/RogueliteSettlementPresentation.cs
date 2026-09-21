@@ -91,25 +91,26 @@ namespace OCC.Combat.Presentation
             claimPending = false;
             presentedSeed = run.Seed;
             bootstrap.PublishUiVisual(new UiVisualEvent(UiVisualEventKind.SettlementOpened, run.Seed.ToString()));
-            panel = CreateObject("肉鸽结算面板", canvas.transform);
-            RectTransform root = panel.AddComponent<RectTransform>();
-            Stretch(root);
-            Image veil = panel.AddComponent<Image>();
+            FormalRogueliteSettlementShellView shell = FormalRogueliteSettlementShellView.Create(canvas.transform);
+            panel = shell.gameObject;
+            Image veil = panel.GetComponent<Image>();
             FormalUiEffects.ApplyBackdrop(veil, "settlement");
             FormalUiEffects.AddPageDecorations(panel.transform, "settlement", bootstrap.UiPreferences.AnimationIntensity);
 
-            GameObject card = FormalUiKit.LayoutPanel("结算卡", panel.transform, "settlement.card", FormalUiTheme.SurfaceRaised);
-            RectTransform cardRect = card.GetComponent<RectTransform>();
+            GameObject card = shell.Card.gameObject;
+            FormalUiKit.ApplySkin(card.GetComponent<Image>(), "panel_elevated", FormalUiTheme.SurfaceRaised);
+            card.transform.SetAsLastSibling();
+            RectTransform cardRect = shell.Card;
 
             bool firstEliteReward = run.IsTutorialPhase && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !run.FirstRunExperience.EliteRewardClaimed;
-            AddLabel(card.transform, "标题", "战斗胜利", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            AddLabel(card.transform, "副标题", firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            AddLabel(card.transform, "等级", "等级 " + run.Level + "　经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            FormalUiKit.Line(card.transform, new Vector2(56, -204), new Vector2(1260, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Muted, .72f), "分隔");
+            AddLabel(shell.Header, "标题", "战斗胜利", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            AddLabel(shell.Header, "副标题", firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            AddLabel(shell.Header, "等级", "等级 " + run.Level + "　经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            FormalUiKit.Line(shell.Header, new Vector2(56, -204), new Vector2(1260, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Muted, .72f), "分隔");
 
             List<RogueliteReward> choices = run.CurrentFireSpellChoices.Select(AsReward).ToList();
             choices.AddRange(run.CurrentRewards.Take(3 - choices.Count));
-            for (int i = 0; i < choices.Count; i++) AddRewardCard(card.transform, choices[i], i, run);
+            for (int i = 0; i < choices.Count; i++) AddRewardCard(shell.Rewards, choices[i], i, run);
             RogueliteMapNode settlementNode = run.MapNodes.FirstOrDefault(value => value.Id == run.CurrentNodeId);
             bool eventSettlement = settlementNode != null && settlementNode.Type == RogueliteMapNodeType.Event;
             int fixedGold = run.UsesRogue11 ? eventSettlement ? 1 : 3 : 0;
@@ -117,11 +118,11 @@ namespace OCC.Combat.Presentation
             string fixedText = firstEliteReward
                 ? "固定获得　低压回路护额 ×1　定锚支架 ×1（4次）　金币 " + (run.UsesRogue11 ? 6 : 0)
                 : run.UsesRogue11 ? "固定所得　金币 +" + fixedGold + "　学院贡献 +" + fixedContribution : "固定所得　结算资源已写入行程";
-            AddLabel(card.transform, "固定获得", fixedText, new Vector2(56, -566), new Vector2(1260, 34), 18, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            AddLabel(shell.Rewards, "固定获得", fixedText, new Vector2(56, -552), new Vector2(1260, 34), 18, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             if (choices.Count == 0)
             {
-                FormalUiEffects.AddEmptyIllustration(card.transform, "empty_reward_crate", new Vector2(710, -384), 128f);
-                AddLabel(card.transform, "空奖励说明", run.UsesRogue11 ? "本次为资源结算，固定所得已写入行程。" : "这次没有可领取的物品。返回地图继续前进。", new Vector2(430, -476), new Vector2(560, 40),
+                FormalUiEffects.AddEmptyIllustration(shell.Rewards, "empty_reward_crate", new Vector2(710, -384), 128f);
+                AddLabel(shell.Rewards, "空奖励说明", run.UsesRogue11 ? "本次为资源结算，固定所得已写入行程。" : "这次没有可领取的物品。返回地图继续前进。", new Vector2(430, -476), new Vector2(560, 40),
                     FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
             }
 
@@ -129,15 +130,15 @@ namespace OCC.Combat.Presentation
                 RogueliteEconomyPresentation.ForReward(run, value).Status.Contains("行囊"));
             if (needsInventory && run.UsesRogue11)
             {
-                Button inventory = FormalUiKit.Button("整理行囊", "整理行囊", card.transform, new Vector2(56, -598), new Vector2(286, 56), FormalUiTheme.Interactive);
+                Button inventory = FormalUiKit.Button("整理行囊", "整理行囊", shell.Footer, new Vector2(56, -584), new Vector2(286, 56), FormalUiTheme.Interactive);
                 inventory.onClick.AddListener(bootstrap.OpenRewardInventory);
                 FormalUiKit.ConfigureButtonFeedback(inventory, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Primary),
                     () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);
-                AddLabel(card.transform, "空间提示", "奖励会保留在这里；腾出空间后返回即可领取。", new Vector2(356, -598), new Vector2(650, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+                AddLabel(shell.Footer, "空间提示", "奖励会保留在这里；腾出空间后返回即可领取。", new Vector2(356, -584), new Vector2(650, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             }
 
-            AddLabel(card.transform, "说明", "点击想要的奖励。也可以明确放弃本次全部奖励。", new Vector2(56, -606), new Vector2(900, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            Button abandon = FormalUiKit.Button("放弃奖励", "放弃奖励", card.transform, new Vector2(1030, -598), new Vector2(286, 56), FormalUiTheme.Interactive);
+            AddLabel(shell.Footer, "说明", "点击想要的奖励。也可以明确放弃本次全部奖励。", new Vector2(56, -592), new Vector2(900, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            Button abandon = FormalUiKit.Button("放弃奖励", "放弃奖励", shell.Footer, new Vector2(1030, -584), new Vector2(286, 56), FormalUiTheme.Interactive);
             abandon.onClick.AddListener(bootstrap.RequestAbandonMapReward);
             FormalUiKit.ConfigureButtonFeedback(abandon, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Dangerous),
                 () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);

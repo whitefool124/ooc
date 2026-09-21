@@ -104,6 +104,10 @@ def validate_image(
         errors.append(f"delivery size {image.size} != expected {expected}")
     if expected is None and (image.width % 32 or image.height % 32):
         errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
+    maximum = role.get("maximum_canvas")
+    if isinstance(maximum, list) and len(maximum) == 2:
+        if image.width > int(maximum[0]) or image.height > int(maximum[1]):
+            errors.append(f"delivery size {image.size} exceeds role maximum {tuple(maximum)}")
 
     # Pillow added get_flattened_data() after the project's currently supported
     # 11.1 runtime. Keep validation working on both sides of that API change.

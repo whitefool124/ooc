@@ -74,9 +74,10 @@ namespace OCC.Combat.Tests
         public void FortuneSeal_UsesSurvivingVictimConditionAndBacklashBypassesCasterShield(int enemyHealth, bool backlash)
         {
             var state = State(enemyHealth); var hero = state.GetUnit("hero"); var enemy = state.GetUnit("enemy");
+            int startingHealth = hero.Health;
             var execution = ArtifactEngine.Execute(new ArtifactBattleState(state), "hero", ArtifactCatalog.FortuneSeal, ArtifactTarget.Unit("enemy", enemy.Position), 2);
             var events = Events(execution);
-            Assert.That(hero.Health, Is.EqualTo(backlash ? 6 : 18)); Assert.That(hero.Shield, Is.EqualTo(2));
+            Assert.That(hero.Health, Is.EqualTo(startingHealth - (backlash ? 12 : 0))); Assert.That(hero.Shield, Is.EqualTo(2));
             Assert.That(execution.Steps.Any(s => s.Kind == ArtifactEffectKind.BacklashIfTargetSurvives), Is.EqualTo(backlash));
             Assert.That(events.Where(e => e.TargetUnitId == "hero" && e.Kind == CombatFeedbackKind.Damage).Sum(e => e.Amount), Is.EqualTo(backlash ? 12 : 0));
             Assert.That(events.Any(e => e.TargetUnitId == "hero" && e.Kind == CombatFeedbackKind.ShieldAbsorb), Is.False);

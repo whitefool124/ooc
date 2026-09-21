@@ -47,16 +47,11 @@ namespace OCC.Combat
         private static readonly IReadOnlyDictionary<string, RogueliteMapNode> ServiceNodeById =
             ServiceNodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
 
-        /// <summary>不在学院层节点集里、但被学院层节点连接的旧郊道节点。</summary>
-        private static readonly IReadOnlyList<string> CrossLayerNodeIds = new[]
-        {
-            "start", "depot_wreck", "switchyard", "signal_hub", "elite_foundry",
-            "records_archive", "transmission_tower", "core_approach", "core_vault"
-        };
-
-        /// <summary>学院层一层可以走到的全部节点（含少数跨层连接与 3 个服务节点）。</summary>
-        public static readonly IReadOnlyList<string> LayerNodeIds =
-            NodeIds.Concat(CrossLayerNodeIds).ToArray();
+        /// <summary>
+        /// 第一阶段学院层的完整活动节点集。旧郊道节点仍留在全图目录供旧存档解析，
+        /// 但不再计入本层、可达性或当前节点验证。
+        /// </summary>
+        public static readonly IReadOnlyList<string> LayerNodeIds = NodeIds;
 
         private static readonly HashSet<string> NodeIdSet = new HashSet<string>(NodeIds, StringComparer.Ordinal);
         private static readonly HashSet<string> LayerNodeIdSet = new HashSet<string>(LayerNodeIds, StringComparer.Ordinal);
@@ -75,7 +70,7 @@ namespace OCC.Combat
         public static bool IsServiceNode(string nodeId) => nodeId != null && ServiceNodeById.ContainsKey(nodeId);
 
         public static bool IsAcademyLayerNode(string nodeId) => nodeId != null && NodeIdSet.Contains(nodeId);
-        public static bool IsLayerNode(string nodeId) => nodeId != null && LayerNodeIdSet.Contains(nodeId);
+        public static bool IsLayerNode(string nodeId) => IsAcademyLayerNode(nodeId);
 
         /// <summary>学院层 20 个常规节点（不含首领）＋ 3 个服务节点。</summary>
         public static IReadOnlyList<RogueliteMapNode> RegularNodes =>

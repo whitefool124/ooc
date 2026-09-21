@@ -20,13 +20,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void Catalog_ContainsSixTwoUnitWeakTwelveStrongSixEliteAndFixedBoss()
+        public void Catalog_ContainsSixTwoUnitWeakTwelveStrongFourActiveEliteAndFixedBoss()
         {
             Assert.That(RogueliteEncounterCatalog.WeakPool.Count, Is.EqualTo(6));
             Assert.That(RogueliteEncounterCatalog.WeakPool.All(value => value.EnemyArchetypeIds.Count == 2), Is.True);
             Assert.That(RogueliteEncounterCatalog.StrongPool.Count, Is.EqualTo(12));
             Assert.That(RogueliteEncounterCatalog.StrongPool.All(value => value.EnemyArchetypeIds.Count == 3), Is.True);
-            Assert.That(RogueliteEncounterCatalog.ElitePool.Count, Is.EqualTo(6));
+            Assert.That(RogueliteEncounterCatalog.ElitePool.Count, Is.EqualTo(4));
+            Assert.That(RogueliteEncounterCatalog.LegacyElitePool.Count, Is.EqualTo(6));
             Assert.That(RogueliteEncounterCatalog.FixedBoss.VariantKey, Is.EqualTo("boss_academy_sealed_core"));
             Assert.That(RogueliteEncounterCatalog.FixedBoss.EnemyArchetypeIds[0], Is.EqualTo("core_overseer"));
         }

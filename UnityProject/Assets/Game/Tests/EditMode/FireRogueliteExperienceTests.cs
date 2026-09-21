@@ -36,7 +36,8 @@ namespace OCC.Combat.Tests
             string data = run.ToJson(); Assert.That(data, Does.StartWith("map10|"));
             RogueliteMapRun restored = RogueliteMapRun.FromJson(data);
             UnitState next = new UnitState("hero", true, new GridPosition(0, 0)); restored.ApplyBuild(next);
-            Assert.That((next.Health, next.Shield, next.Mana), Is.EqualTo((13, 1, 8)));
+            Assert.That((next.Health, next.Shield, next.Mana),
+                Is.EqualTo((UnitState.HeroBaseHealth - 5, 1, 8)));
             Assert.That(restored.ToJson(), Is.EqualTo(data));
         }
 
@@ -69,7 +70,8 @@ namespace OCC.Combat.Tests
             run.SelectNode("supply_checkpoint"); run.ChooseCurrentNodeContent("medical_cache");
             run.SelectNode("field_workshop"); run.ChooseCurrentNodeContent("supply_strip");
             run.SelectNode("med_bay"); run.ChooseCurrentNodeContent("field_repair");
-            Assert.That((run.CurrentHealth, run.CurrentShield, run.CurrentMana), Is.EqualTo((14, 2, 8)));
+            Assert.That((run.CurrentHealth, run.CurrentShield, run.CurrentMana),
+                Is.EqualTo((UnitState.HeroBaseHealth - 4, 2, 8)));
             Assert.That(run.Supplies, Is.EqualTo(3));
         }
 

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OCC 战斗地图配置与可视化编辑器" />
+  <title>OCC 战斗地图编辑器</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230b1118'/%3E%3Cpath d='M5 6h22v20H5z' fill='%2317222e' stroke='%23d9a441' stroke-width='2'/%3E%3Cpath d='M12 6v20M20 6v20M5 13h22M5 20h22' stroke='%236d8498'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23f3c969'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div><strong>OCC 战斗地图编辑器</strong><small id="document-state">未保存</small></div>
+      </div>
+      <nav class="file-actions" aria-label="文件操作">
+        <button id="new-map" class="button ghost" title="新建地图 (Ctrl+N)">新建</button>
+        <button id="open-map" class="button ghost" title="打开 JSON (Ctrl+O)">打开</button>
+        <button id="save-map" class="button primary" title="保存当前地图 (Ctrl+S)">保存</button>
+        <button id="save-as-map" class="button ghost">另存为</button>
+        <div class="menu-wrap">
+          <button id="export-menu-button" class="button ghost" aria-expanded="false">导出⌄</button>
+          <div id="export-menu" class="popup-menu" hidden>
+            <button data-export="json">下载 JSON</button>
+            <button data-export="csv">下载配置表 CSV</button>
+            <button data-export="csharp">复制 Unity 配置</button>
+          </div>
+        </div>
+      </nav>
+      <div class="history-actions">
+        <button id="undo" class="icon-button" title="撤销 (Ctrl+Z)" aria-label="撤销">↶</button>
+        <button id="redo" class="icon-button" title="重做 (Ctrl+Y)" aria-label="重做">↷</button>
+      </div>
+    </header>
+
+    <section class="meta-strip" aria-label="地图基础配置">
+      <label class="field wide"><span>地图名称</span><input id="map-name" data-meta="displayName" /></label>
+      <label class="field code"><span>地图 ID</span><input id="map-id" data-meta="id" spellcheck="false" /></label>
+      <label class="field short"><span>宽</span><input id="map-width" type="number" min="4" max="32" /></label>
+      <label class="field short"><span>高</span><input id="map-height" type="number" min="4" max="24" /></label>
+      <label class="field"><span>地板主题</span><select id="floor-theme" data-meta="floorTheme">
+        <option value="StoneRoad">石路</option><option value="Courtyard">庭院</option>
+        <option value="Ruins">遗迹</option><option value="AetherMarked">以太刻印</option>
+      </select></label>
+      <label class="field"><span>目标</span><select id="objective-type" data-meta="objectiveType">
+        <option value="Elimination">歼灭</option><option value="Destruction">破坏目标</option>
+      </select></label>
+      <label class="field short"><span>等级</span><input id="map-tier" data-meta="tier" type="number" min="1" max="9" /></label>
+      <label class="toggle"><input id="map-elite" data-meta="isElite" type="checkbox" /><span>精英</span></label>
+      <label class="toggle"><input id="map-boss" data-meta="isBoss" type="checkbox" /><span>首领</span></label>
+    </section>
+
+    <main class="workspace">
+      <aside class="palette-panel panel">
+        <section class="library-section">
+          <div class="section-heading"><div><span class="eyebrow">本机草稿</span><h2>地图库</h2></div><button id="save-library" class="small-button">存入库</button></div>
+          <select id="map-library" aria-label="本机地图库"></select>
+        </section>
+        <section class="tool-section">
+          <div class="section-heading"><div><span class="eyebrow">绘制工具</span><h2>素材</h2></div><span id="active-layer-label" class="layer-pill">选择</span></div>
+          <div class="basic-tools" role="toolbar" aria-label="基础工具">
+            <button class="tool-button active" data-tool="select"><b>V</b><span>选择</span></button>
+            <button class="tool-button" data-tool="erase"><b>E</b><span>擦除</span></button>
+          </div>
+          <label class="field enemy-picker"><span>放置的敌人</span><select id="enemy-archetype"></select></label>
+          <div id="palette-groups"></div>
+        </section>
+        <section class="shortcut-note">
+          <strong>顺手操作</strong>
+          <p>拖动可连续绘制；右键擦除；Ctrl+点击清空格子；滚轮缩放；Ctrl+S 保存。</p>
+        </section>
+      </aside>
+
+      <section class="canvas-panel panel" aria-label="地图画布">
+        <div class="canvas-toolbar">
+          <div class="tool-readout"><span id="active-tool-swatch"></span><strong id="active-tool-name">选择</strong><small id="cursor-position">移动到格子上查看坐标</small></div>
+          <div class="layer-toggles" aria-label="图层显示">
+            <label><input type="checkbox" data-layer-toggle="effects" checked />效果</label>
+            <label><input type="checkbox" data-layer-toggle="objects" checked />物件</label>
+            <label><input type="checkbox" data-layer-toggle="units" checked />单位</label>
+            <label><input type="checkbox" data-layer-toggle="markers" checked />标记</label>
+          </div>
+          <div class="zoom-control"><button id="zoom-out" aria-label="缩小">−</button><input id="zoom" type="range" min="32" max="76" value="52" /><button id="zoom-in" aria-label="放大">＋</button><output id="zoom-value">52</output></div>
+        </div>
+        <div class="canvas-scroll" id="canvas-scroll">
+          <div id="grid-stage" class="grid-stage">
+            <div id="map-grid" class="map-grid" role="grid" aria-label="战斗地图格图"></div>
+          </div>
+        </div>
+        <div class="canvas-footer">
+          <div class="legend"><span><i class="legend-dot passable"></i>可通行</span><span><i class="legend-dot blocked"></i>阻挡</span><span><i class="legend-dot los"></i>阻挡攻击线</span></div>
+          <span>坐标原点位于左下角，与 Unity 配置一致</span>
+        </div>
+      </section>
+
+      <aside class="inspector-panel panel">
+        <div class="inspector-tabs" role="tablist">
+          <button class="tab active" data-tab="cell" role="tab">格子</button>
+          <button class="tab" data-tab="map" role="tab">地图</button>
+          <button class="tab" data-tab="check" role="tab">校验 <span id="issue-count">0</span></button>
+        </div>
+        <div id="tab-cell" class="tab-content active"></div>
+        <div id="tab-map" class="tab-content"></div>
+        <div id="tab-check" class="tab-content"></div>
+      </aside>
+    </main>
+
+    <footer class="statusbar">
+      <span id="status-message">就绪</span>
+      <div class="map-stats"><span id="stat-size">12×9</span><span id="stat-terrain">0 个地形</span><span id="stat-enemies">0 个敌人</span><span id="stat-validation">待校验</span></div>
+    </footer>
+  </div>
+  <input id="file-input" type="file" accept="application/json,.json" hidden />
+  <div id="toast-region" class="toast-region" aria-live="polite"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

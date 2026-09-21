@@ -30,7 +30,12 @@ namespace OCC.Combat.Tests
                 Assert.That(row, Is.Not.Null, artifact.Id);
                 Assert.That(row.Effect, Is.EqualTo(artifact.EffectSummary), artifact.Id);
                 Assert.That(row.FormatBody(), Does.Contain(artifact.TargetSummary), artifact.Id);
+                Assert.That(row.Lore, Is.Not.Empty, artifact.Id);
+                Assert.That(row.Lore.Length, Is.LessThanOrEqualTo(FormalTooltipContent.MaximumSummaryCharacters), artifact.Id);
+                Assert.That(row.Lore, Does.Not.Contain(artifact.EffectSummary), artifact.Id);
             }
+            Assert.That(CombatHoverDescriptionTable.Artifacts.Values.Select(row => row.Lore).Distinct().Count(),
+                Is.EqualTo(ArtifactCatalog.All.Count));
         }
 
         [Test]
@@ -49,7 +54,7 @@ namespace OCC.Combat.Tests
             FormalTooltipContent parsed = new FormalTooltipContent("法宝", "测试法宝", artifactBody, Color.white);
             Assert.That(parsed.MetricA, Does.Contain("剩余2"));
             Assert.That(parsed.Effect, Is.EqualTo(ArtifactCatalog.Get("F-T01").EffectSummary));
-            Assert.That(parsed.Summary, Is.EqualTo("学院登记的便携式器材。"));
+            Assert.That(parsed.Summary, Is.EqualTo("学院封装的试制炎脉器。"));
             Assert.That(parsed.Summary.Length, Is.LessThanOrEqualTo(FormalTooltipContent.MaximumSummaryCharacters));
             Assert.That(parsed.Summary, Does.Not.Contain(ArtifactCatalog.Get("F-T01").EffectSummary));
         }

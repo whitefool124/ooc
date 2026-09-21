@@ -2,7 +2,7 @@
   "schema": "occ-art-contract-v1",
   "version": 1,
   "revision_date": "2026-09-21",
-  "revision_note": "2026-09-21 (asset semantics and scene assembly, user-authorized optimization): runtime art roles are declared before generation and may not combine walkable ground with blocking walls. Concept room shells are review references only. New manifests record placement semantics, mount type, visible contact line, depth baseline, support object and screen axis. Scene batches lock a shared material palette family and fixed upper-left form light before generation; assembly review checks gameplay semantics before aesthetics. Ground tiles keep the current baked material-dark 1 px border and inner lip; the obsolete shared-grid-layer wording is retired. Prior note: 2026-09-21 (indoor real scale, user decision): ordinary indoor objects use common real-world width, depth and height converted at 1 native px = 3.125 cm; physical size is measured from visible subject bounds, not transparent canvas padding. Fictional magical devices use the nearest real furniture, furnace, laboratory or maintenance analogue. Concept display images are exempt from the battlefield 7x4 viewport and occupancy layout, but not from world scale, shared prop camera, fixed light, 32 PPU or integer display. Prior note: 2026-09-21 (stage art direction, user decision): the overall visual theme changes by life stage instead of treating stone, old timber and forged iron as permanent global core materials. The current academy stage is Japanese fantasy magic isekai: clear adventurous magical-academy spaces, fantasy nature and light readable forms, with materials selected by region and function. Aether remains measurable, maintainable and costly energy engineering. Pixel scale, role dimensions, lighting separation and production gates are unchanged. Prior note: 2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier.",
+  "revision_note": "2026-09-21 (fixed generation templates, user-approved optimization): production no longer searches for a usable size through progressively smaller prompts. A brief locks one macro-pixel template before generation; retries keep the same canvas, subject zone, centre axis and contact baseline. Humanoids use 32x64; horizontal beasts and other non-humanoid units preselect the smallest fitting 32-multiple canvas, capped at 64x64 for ordinary single-cell units. Decoding verifies the locked template and never resizes. Prior note: 2026-09-21 (asset semantics and scene assembly): runtime art roles are declared before generation and may not combine walkable ground with blocking walls. Concept room shells are review references only. New manifests record placement semantics, mount type, visible contact line, depth baseline, support object and screen axis. Scene batches lock a shared material palette family and fixed upper-left form light before generation; assembly review checks gameplay semantics before aesthetics. Ground tiles keep the current baked material-dark 1 px border and inner lip. Prior note: 2026-09-21 (indoor real scale): ordinary indoor objects use common real-world dimensions at 1 native px = 3.125 cm. Prior note: 2026-09-21 (stage art direction): the current academy stage is Japanese fantasy magic isekai while aether remains measurable engineering. Prior note: 2026-09-16 (ground tiles): the battlefield uses one 32x32 ground square per gameplay cell on one 32 PPU grid.",
   "stage_visual_direction": {
     "policy": "visual theme and material story change by life stage; no fixed material set governs the whole game",
     "current_stage": "academy",
@@ -148,7 +148,7 @@
     "R3": "overhang above, left and right is allowed; overhang past the footprint's bottom edge toward the screen bottom is forbidden, except for the ground front face which is defined to overhang its own cell southward by 8 px",
     "R4": "layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
     "R5": "within a layer sort by bottom-edge y ascending, then by category priority structure < prop < unit",
-    "R6": "units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
+    "R6": "humanoid units keep a 32x64 canvas; non-humanoid units preselect the smallest fitting 32-multiple canvas up to 64x64; all keep the body on the declared contact baseline without runtime resizing",
     "R7": "a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row, so the raised block occludes the cell in front of it while units still draw over both",
     "R8": "new assets declare mount type and visible contact line before generation; depth sorting uses that contact line rather than transparent canvas bounds",
     "R9": "floor-standing, wall-mounted and tabletop variants are distinct application roles; changing only scene coordinates never changes an asset's mount type",
@@ -945,6 +945,18 @@
         "authoring": "identity-matched deliberate low-resolution adaptation; never runtime non-integer scaling of the 64px master"
       }
     },
+    "tactical_unit_adaptive_32ppu": {
+      "delivery_canvas": "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject",
+      "maximum_canvas": [64, 64],
+      "logical_cells": [1, 1],
+      "palette_max": 32,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "view": "strict_90_degree_side_profile",
+      "footprint_policy": "visual canvas may overhang while feet or paws remain bottom-centred on one logical cell",
+      "generation_template_policy": "canvas, safe border, subject zone, centre axis and contact baseline are locked before the first generation and unchanged by retries",
+      "production_status": "new_non_humanoid_battlefield_baseline"
+    },
     "tactical_unit_32x64": {
       "delivery_size": [32, 64],
       "logical_cells": [1, 1],
@@ -959,6 +971,7 @@
       "quadruped_and_small_unit_exception": "four-legged and genuinely small units are judged separately: they may sit inside their cell without overhanging, because forcing them to 46 px would deform the silhouette",
       "view": "strict_90_degree_side_profile",
       "footprint_policy": "feet occupy one logical cell; upper sprite may overhang without increasing logical occupancy",
+      "generation_template_policy": "32x64 canvas, safe border, subject zone, centre axis and contact baseline are locked before the first generation and unchanged by retries",
       "production_status": "new_battlefield_baseline"
     },
     "tactical_unit_64": {

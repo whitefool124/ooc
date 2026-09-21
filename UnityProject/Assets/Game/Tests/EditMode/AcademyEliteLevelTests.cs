@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Tests
 {
@@ -13,7 +14,6 @@ namespace OCC.Combat.Tests
             "calibration_lockdown", "cliff_relay_survey", "library_discipline", "sealed_vault_certification", "outer_ring_clearance"
         };
 
-        /// <summary>已确认为备用变体、尚未决定占用哪个精英节点的底图。</summary>
         /// <summary>总案扩展池（E04–E06）底图：可解析建图，但不进本阶段固定精英分配。</summary>
         private static readonly string[] ReserveLevelIds = { "library_discipline", "sealed_vault_certification", "outer_ring_clearance" };
 
@@ -98,6 +98,11 @@ namespace OCC.Combat.Tests
             {
                 CombatState state = FirstRegionLevelBuilder.Build(id).State;
                 UnitState hero = state.GetUnit("hero");
+                // Use the always-available ranged baseline for a neutral reachability check. Elite runs
+                // arrive with a developed build; testing the bare hammer would conflate level reachability
+                // with one deliberately short-ranged loadout.
+                hero.Equip(CombatCatalog.Rifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+                hero.ConfigureMana(RogueRuntimeConstants.MaximumPersonalMana, RogueRuntimeConstants.MaximumPersonalMana);
                 int commands = 0;
                 CombatResolver.BeginTurn(state, "hero");
                 while (!state.IsVictory && !state.IsDefeat && commands < 400)
@@ -122,7 +127,8 @@ namespace OCC.Combat.Tests
                         continue;
                     }
                     UnitState target = state.Units.Values.Where(value => value.IsAlive && value.IsHero != unit.IsHero)
-                        .OrderBy(value => value.Position.ManhattanDistance(unit.Position))
+                        .OrderByDescending(value => unit.IsHero ? ThreatPriority(value.EnemyArchetypeId) : 0)
+                        .ThenBy(value => value.Position.ManhattanDistance(unit.Position))
                         .ThenBy(value => value.Id, StringComparer.Ordinal).FirstOrDefault();
                     if (target == null) break;
                     CombatCommand command = unit.IsHero ? HeroCommand(state, unit, target)
@@ -132,15 +138,36 @@ namespace OCC.Combat.Tests
                     commands++;
                 }
 
-                Assert.That(state.IsVictory, Is.True, id + " 未能在有限指令内取胜（commands=" + commands + "）");
+                string unitSummary = string.Join(", ", state.Units.Values.OrderBy(value => value.Id, StringComparer.Ordinal)
+                    .Select(value => value.Id + "@" + value.Position + " hp=" + value.Health + " sh=" + value.Shield));
+                Assert.That(state.IsVictory, Is.True, id + " 未能在有限指令内取胜（commands=" + commands + "；" +
+                    unitSummary + "；log=" + string.Join(" / ", state.EventLog) + "）");
                 Assert.That(commands, Is.LessThan(400), id);
             }
         }
 
         /// <summary>验收用的简单主角策略：能打就打，否则走到目标的正交邻格。</summary>
+        private static int ThreatPriority(string archetypeId)
+        {
+            if (archetypeId == "sigil_mauler" || archetypeId == "elite_vanguard" ||
+                archetypeId == "prototype_hand" || archetypeId == "legacy_storekeeper") return 4;
+            if (archetypeId == "barrier_mender" || archetypeId == "rune_arbalist") return 3;
+            if (archetypeId == "signal_keeper" || archetypeId == "lantern_revealer") return 2;
+            return 1;
+        }
+
         private static CombatCommand HeroCommand(CombatState state, UnitState hero, UnitState target)
         {
-            if (hero.Position.ManhattanDistance(target.Position) <= 1) return CombatCommand.Attack(hero.Id, target.Id);
+            int distance = hero.Position.ManhattanDistance(target.Position);
+            SkillDefinition skill = hero.SkillOne;
+            if (skill != null && hero.Mana >= skill.ManaCost && hero.IsSkillReady(skill) &&
+                distance >= skill.MinimumRange && distance <= skill.Range &&
+                CombatResolver.PreviewSkillAttack(state, hero.Id, target.Id, skill).HasLineOfSight)
+                return CombatCommand.UseSkill(hero.Id, 0, target.Id);
+            WeaponDefinition weapon = hero.MainHand ?? CombatCatalog.Rifle;
+            if (distance >= weapon.MinimumRange && distance <= weapon.Range &&
+                CombatResolver.PreviewAttack(state, hero.Id, target.Id, false).HasLineOfSight)
+                return CombatCommand.Attack(hero.Id, target.Id);
             GridPosition[] spots = new[]
                 {
                     new GridPosition(0, 1), new GridPosition(1, 0), new GridPosition(0, -1), new GridPosition(-1, 0)
@@ -185,11 +212,16 @@ namespace OCC.Combat.Tests
         [Test]
         public void ElitePool_OffersExactlyOneVariantPerEliteNode()
         {
-            int eliteNodes = RogueliteMapCatalog.Nodes.Count(node => node.Type == RogueliteMapNodeType.Elite);
+            int eliteNodes = RogueliteAcademyLayerCatalog.NodeIds
+                .Select(RogueliteMapCatalog.Node).Count(node => node.Type == RogueliteMapNodeType.Elite);
             Assert.That(RogueliteEncounterCatalog.ElitePool.Count, Is.EqualTo(eliteNodes),
                 "固定精英分配要求变体数恰好等于精英节点数。");
             Assert.That(RogueliteEncounterCatalog.ElitePool.Select(package => package.VariantKey).Distinct(StringComparer.Ordinal).Count(),
                 Is.EqualTo(eliteNodes));
+            Assert.That(RogueliteEncounterCatalog.ElitePool.Select(package => package.VariantKey),
+                Is.EquivalentTo(RogueliteAcademyLayerCatalog.ContentMappings
+                    .Where(mapping => mapping.Type == RogueliteMapNodeType.Elite)
+                    .Select(mapping => mapping.EncounterVariantId)));
         }
 
         [Test]

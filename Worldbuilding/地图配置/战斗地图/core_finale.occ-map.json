@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "core_finale",
+  "displayName": "古塔核心",
+  "objectiveSummary": "击败拦在必经之路上的塔之守卫",
+  "objectiveType": "Elimination",
+  "tier": 5,
+  "width": 12,
+  "height": 9,
+  "floorTheme": "AetherMarked",
+  "isElite": false,
+  "isBoss": true,
+  "prerequisites": [
+    "core_approach"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "core_overseer",
+      "x": 6,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "x": 3,
+      "y": 3,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 9,
+      "y": 4,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 9,
+      "y": 6,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 5,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 9,
+      "y": 2,
+      "kind": "TowerMechanism",
+      "mechanismKind": 1
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "kind": "TowerMechanism",
+      "mechanismKind": 2
+    },
+    {
+      "x": 6,
+      "y": 7,
+      "kind": "TowerMechanism",
+      "mechanismKind": 3
+    }
+  ],
+  "blockedPositions": [],
+  "spaceContract": {
+    "grammar": "中心核心与三道机关门槛",
+    "routeAnchors": [
+      {
+        "x": 2,
+        "y": 2
+      },
+      {
+        "x": 2,
+        "y": 6
+      }
+    ],
+    "publicRisk": "塔之守卫居中；三组塔内机关在三个阶段内逐组放行，放行前不提供任何效果。",
+    "counterplayWindow": "三组机关是塔之守卫的施术介质，耐久公开、可以先拆；拆掉已放行的机关即切断对应加成。"
+  },
+  "notes": "从当前 Unity FirstRegionLevelCatalog 同步的编辑器示例。",
+  "updatedAt": "2026-09-21T10:35:02.400Z"
+}
