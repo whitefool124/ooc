@@ -31,6 +31,22 @@
     "review_policy": "review each native asset at its own role PPU and at integer display tiers only, with 1x and the canonical 6x battlefield tier as the required pair; reject distant unreadability, dark fragmented noise and any baked scene lighting",
     "forbidden": ["per-object yaw rotation", "diagonal placement", "3/4 unit body angle", "dense insignia_flag_rivet_frame competition", "miniature_building treatment for ordinary cover"]
   },
+  "world_scale": {
+    "locked": "2026-09-16",
+    "anchor": "one native pixel = 3.125 cm; one gameplay cell = 32x32 native px = 1.00 m square",
+    "derived": {
+      "character_body_m": [1.44, 1.81],
+      "fire_mage_body_px": 51,
+      "fire_mage_body_m": 1.59,
+      "cell_move_m": 1.0,
+      "board_12x9_m": [12.0, 9.0],
+      "viewport_7x4_cells_m": [7.0, 4.0],
+      "ground_front_face_8px_cm": 25.0,
+      "hound_body_28px_m": 0.88
+    },
+    "why_this_value": "the character spec (body 46-58 px) was locked independently for the silhouette, and only at a 1 m cell does it land inside the human height range (1.44-1.81 m). A 1.25 m cell would make every humanoid 1.80-2.27 m and a 1.5 m cell 2.16-2.72 m, which is visibly giant. The two decisions therefore confirm each other, and every later size question can be derived from this single number instead of re-negotiating PPU or display scale.",
+    "vertical_caveat": "side-view characters are drawn at true metric height, so their pixel height is a real height. Top-down ground and walls are a projection: their canvas height is a height cue, not a measured height. Indestructible terrain fills its cell and is defined to block movement and sight lines regardless of how tall its sprite looks."
+  },
   "battlefield_display_policy": {
     "locked": "2026-09-16",
     "native_buffer": [320, 180],
