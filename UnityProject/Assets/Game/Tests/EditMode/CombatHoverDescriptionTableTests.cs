@@ -49,7 +49,9 @@ namespace OCC.Combat.Tests
             FormalTooltipContent parsed = new FormalTooltipContent("法宝", "测试法宝", artifactBody, Color.white);
             Assert.That(parsed.MetricA, Does.Contain("剩余2"));
             Assert.That(parsed.Effect, Is.EqualTo(ArtifactCatalog.Get("F-T01").EffectSummary));
-            Assert.That(parsed.Summary, Does.Contain("注意："));
+            Assert.That(parsed.Summary, Is.EqualTo("学院登记的便携式器材。"));
+            Assert.That(parsed.Summary.Length, Is.LessThanOrEqualTo(FormalTooltipContent.MaximumSummaryCharacters));
+            Assert.That(parsed.Summary, Does.Not.Contain(ArtifactCatalog.Get("F-T01").EffectSummary));
         }
     }
 }

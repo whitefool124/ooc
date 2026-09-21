@@ -94,11 +94,16 @@ namespace OCC.Combat.Roguelite
             {
                 RogueEquipmentInstance instance = runtime.CreateInstance(saved.InstanceId, saved.DefinitionId, saved.Rarity, saved.AcquiredOrder, saved.SourceType);
                 instance.MutableAffixIds.AddRange(saved.MutableAffixIds); instance.UpgradeBranchIds.AddRange(saved.UpgradeBranchIds); instance.ReforgeCount = saved.ReforgeCount;
+            }
+
+            HashSet<string> equippedIds = runtime.RestoreEquippedSlots(dto.EquipmentSlotInstanceIds);
+            foreach (EquipmentInstanceDto saved in dto.EquipmentInstances.OrderBy(value => value.AcquiredOrder))
+            {
+                if (equippedIds.Contains(saved.InstanceId)) continue;
+                RogueEquipmentInstance instance = runtime.equipment[saved.InstanceId];
                 if (saved.BackpackX >= 0 && saved.BackpackY >= 0) runtime.backpack[instance.InstanceId] = new RogueBackpackPlacement(saved.BackpackX, saved.BackpackY, saved.BackpackRotated);
                 else if (!runtime.AddToBackpack(instance)) throw new InvalidOperationException("Saved equipment has no legal backpack position: " + instance.InstanceId);
             }
-            foreach (KeyValuePair<EquipmentSlot, string> slot in dto.EquipmentSlotInstanceIds.Where(value => !string.IsNullOrEmpty(value.Value)))
-                if (!runtime.Equip(slot.Value, slot.Key)) throw new InvalidOperationException("Saved equipment cannot be equipped: " + slot.Value);
             foreach (TacticalItemInstanceDto saved in dto.TacticalItemInstances)
             {
                 RogueTacticalItemInstance item = runtime.CreateTacticalItem(saved.InstanceId, saved.DefinitionId, 0, saved.SourceType); item.RestoreCharges(saved.ChargesCurrent);
@@ -441,6 +446,19 @@ namespace OCC.Combat.Roguelite
         }
 
         private EquipmentDefinition Definition(RogueEquipmentInstance instance) => catalog.Equipment.Single(value => value.DefinitionId == instance.DefinitionId);
+        private HashSet<string> RestoreEquippedSlots(IReadOnlyDictionary<EquipmentSlot, string> savedSlots)
+        {
+            HashSet<string> restored = new HashSet<string>(StringComparer.Ordinal);
+            foreach (KeyValuePair<EquipmentSlot, string> pair in savedSlots.Where(value => !string.IsNullOrEmpty(value.Value)))
+            {
+                EquipmentSlot slot = EquipmentSlotRules.NormalizeLegacy(pair.Key);
+                if (!equipped.ContainsKey(slot) || !equipment.TryGetValue(pair.Value, out RogueEquipmentInstance instance) ||
+                    !EquipmentSlotRules.CanEquip(Definition(instance).Slot, slot) || !restored.Add(pair.Value))
+                    throw new InvalidOperationException("Saved equipment cannot be equipped: " + pair.Value);
+                equipped[slot] = pair.Value;
+            }
+            return restored;
+        }
         private bool HasEquippedEffect(string effectId) => equipped.Values.Where(value => !string.IsNullOrEmpty(value))
             .Select(value => equipment[value]).SelectMany(value => Definition(value).FixedEffectIds)
             .Any(value => string.Equals(value, effectId, StringComparison.Ordinal));

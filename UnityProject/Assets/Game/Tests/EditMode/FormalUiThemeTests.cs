@@ -1216,7 +1216,9 @@ namespace OCC.Combat.Tests
             Assert.That(content.MetricB, Is.EqualTo("魔力 0"));
             Assert.That(content.MetricC, Is.EqualTo("冷却 无冷却"));
             Assert.That(content.Effect, Is.EqualTo("造成 8 点物理伤害"));
-            Assert.That(content.Summary, Is.EqualTo("灼触是一项个人术式，主要效果是造成 8 点物理伤害。"));
+            Assert.That(content.Summary, Is.EqualTo("学院备案的可维护术式。"));
+            Assert.That(content.Summary.Length, Is.LessThanOrEqualTo(FormalTooltipContent.MaximumSummaryCharacters));
+            Assert.That(content.Summary, Does.Not.Contain("效果"));
         }
 
         [Test]

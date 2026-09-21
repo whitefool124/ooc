@@ -189,6 +189,26 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FromDto_RestoresEquippedItemsBeforeResolvingBackpackPlacements()
+        {
+            RogueRunDto dto = RogueRunDto.CreateNew("equipped-before-backpack", 304);
+            RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(dto.Seed);
+            RogueEquipmentInstance coat = runtime.CreateInstance("eq-first-event-304-1", "ACA-EQ-CH04",
+                EquipmentRarity.Uncommon, 2, "first-run:EV1");
+            Assert.That(runtime.AddToBackpack(coat), Is.True);
+            Assert.That(runtime.EquipOrReplace(coat.InstanceId, RogueEquipmentSlot.Chest), Is.True);
+            runtime.WriteToDto(dto);
+            dto = Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(dto));
+
+            RogueEquipmentRuntime restored = null;
+            Assert.DoesNotThrow(() => restored = RogueEquipmentRuntime.FromDto(dto));
+            Assert.That(restored.Equipped[RogueEquipmentSlot.Chest], Is.EqualTo(coat.InstanceId));
+            Assert.That(restored.Equipped[RogueEquipmentSlot.Backpack], Is.EqualTo("starter-backpack"));
+            Assert.That(restored.Backpack.ContainsKey(coat.InstanceId), Is.False);
+            Assert.That(restored.Backpack.ContainsKey("starter-chest"), Is.True);
+        }
+
+        [Test]
         public void UxUnifiedInventory_MoveRotateAndPresentationUseOneRogueGridContract()
         {
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(404);

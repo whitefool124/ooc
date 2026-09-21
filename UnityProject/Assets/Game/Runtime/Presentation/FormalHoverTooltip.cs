@@ -10,6 +10,7 @@ namespace OCC.Combat.Presentation
 {
     public readonly struct FormalTooltipContent
     {
+        public const int MaximumSummaryCharacters = 20;
         public string Category { get; }
         public string Status { get; }
         public string Title { get; }
@@ -55,7 +56,7 @@ namespace OCC.Combat.Presentation
             MetricB = metricB ?? string.Empty;
             MetricC = metricC ?? string.Empty;
             Effect = effect ?? string.Empty;
-            Summary = summary ?? string.Empty;
+            Summary = NormalizeSummary(category, summary);
             Body = body ?? string.Empty;
             Accent = accent;
             IconPath = iconPath ?? string.Empty;
@@ -130,30 +131,24 @@ namespace OCC.Combat.Presentation
         {
             string[] lines = Lines(body);
             string introduction = lines.FirstOrDefault(value => StartsWithLabel(value, "简介"));
-            if (!string.IsNullOrEmpty(introduction)) return FirstSentence(ValueAfterLabel(introduction));
+            if (!string.IsNullOrEmpty(introduction)) return NormalizeSummary(category, ValueAfterLabel(introduction));
+            return NormalizeSummary(category, string.Empty);
+        }
 
-            string condition = lines.FirstOrDefault(value => StartsWithLabel(value, "条件"));
-            string notice = lines.FirstOrDefault(value => StartsWithLabel(value, "注意"));
-            if (!string.IsNullOrEmpty(condition) || !string.IsNullOrEmpty(notice))
-            {
-                List<string> summary = new List<string>();
-                if (!string.IsNullOrEmpty(condition)) summary.Add("使用条件：" + ValueAfterLabel(condition));
-                if (!string.IsNullOrEmpty(notice)) summary.Add("注意：" + ValueAfterLabel(notice));
-                return string.Join("\n", summary);
-            }
+        private static string NormalizeSummary(string category, string value)
+        {
+            string text = string.IsNullOrWhiteSpace(value) ? DefaultSettingSummary(category) : FirstSentence(value);
+            if (string.IsNullOrWhiteSpace(text) || text.Length <= MaximumSummaryCharacters) return text ?? string.Empty;
+            return text.Substring(0, MaximumSummaryCharacters - 1).TrimEnd('，', '；', '：', '。', '！', '？', ' ') + "。";
+        }
 
-            int effectIndex = Array.FindIndex(lines, value => value == "效果" || value == "附加效果");
-            IEnumerable<string> preEffect = effectIndex < 0 ? lines : lines.Take(effectIndex);
-            string plainText = preEffect.FirstOrDefault(value => !IsMetricOrMeta(value) && !IsSection(value));
-            if (!string.IsNullOrEmpty(plainText)) return FirstSentence(plainText.TrimStart('·', ' ', '　'));
-
-            string type = (category ?? string.Empty).Split('·')[0].Trim();
-            string effect = ParseEffect(body).Trim().TrimEnd('。', '！', '？');
-            if (string.IsNullOrWhiteSpace(title)) return string.Empty;
-            if (string.IsNullOrWhiteSpace(effect) || effect == "—")
-                return title + (string.IsNullOrWhiteSpace(type) ? "是一项可用内容。" : "是一项" + type + "。");
-            return title + (string.IsNullOrWhiteSpace(type) ? "的主要效果是" : "是一项" + type + "，主要效果是") +
-                effect.Replace("；", "，并") + "。";
+        private static string DefaultSettingSummary(string category)
+        {
+            string type = category ?? string.Empty;
+            if (type.Contains("装备")) return "学院登记的标准化装备。";
+            if (type.Contains("法宝") || type.Contains("道具") || type.Contains("物品")) return "学院登记的便携式器材。";
+            if (type.Contains("术式")) return "学院备案的可维护术式。";
+            return string.IsNullOrWhiteSpace(type) ? string.Empty : "学院档案中的常用内容。";
         }
 
         private static string FirstSentence(string value)
