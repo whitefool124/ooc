@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -72,12 +72,11 @@ namespace OCC.Combat
                 return destination == enemy.Position ? CombatCommand.EndTurn(enemy.Id) : CombatCommand.Move(enemy.Id, destination);
             }
 
-            int slot = PhaseFor(state, enemy) == 1 ? 0 : 1;
-            SkillDefinition skill = slot == 0 ? enemy.SkillOne : enemy.SkillTwo;
+            // 换装后两套招式都可用：贴身后用拆架重锤，够不到就压上；塔压的直线结算在回合开始完成。
+            SkillDefinition maul = enemy.SkillOne;
             int distance = enemy.Position.ManhattanDistance(hero.Position);
-            if (skill != null && distance <= skill.Range && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill) &&
-                (skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(enemy.Position, hero.Position)))
-                return CombatCommand.UseSkill(enemy.Id, slot, hero.Id);
+            if (maul != null && distance <= maul.Range && enemy.Mana >= maul.ManaCost && enemy.IsSkillReady(maul))
+                return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             if (distance <= (enemy.MainHand?.Range ?? 1)) return CombatCommand.Attack(enemy.Id, hero.Id);
             return CombatCommand.Move(enemy.Id, StepToward(state, enemy.Position, hero.Position));
         }
@@ -92,8 +91,8 @@ namespace OCC.Combat
             string phaseRule = phase == 0
                 ? "阶段〇：走流程，向前一步并放行一组塔内机关；此阶段无法被打倒。"
                 : phase == 1
-                    ? "阶段一：使用" + (enemy.SkillOne?.DisplayName ?? "核心定向束") + "；维护单位全灭或核心半血后切换。"
-                    : "阶段二：改用" + (enemy.SkillTwo?.DisplayName ?? "核心破势脉冲") + "，并与塔完成接口校准。";
+                    ? "阶段一：换装后使用" + (enemy.SkillOne?.DisplayName ?? "拆架重锤") + "；每回合开始还会结算一次" + (enemy.SkillTwo?.DisplayName ?? "塔压") + "的直线。"
+                    : "阶段二：继续" + (enemy.SkillOne?.DisplayName ?? "拆架重锤") + "与" + (enemy.SkillTwo?.DisplayName ?? "塔压") + "，并与塔完成接口校准，每次出手带动全部机关。";
             string maintenance = released == 0
                 ? "维护链尚未放行，本回合开始不获得维护护盾。"
                 : "已放行 " + released + " 条维护链，本回合开始获得 " + (released * MaintenanceShieldPerMechanism) + " 护盾。";
@@ -118,6 +117,41 @@ namespace OCC.Combat
             }
             int amount = ReleasedMechanismCount(state) * MaintenanceShieldPerMechanism;
             if (amount > 0) state.TryGrantRogueliteShield(unit.Id, "academy-core-maintenance", amount);
+            if (phase >= 1)
+            {
+                // 并链附带的换装效果：全部攻击冷却 −1（最低 1 回合），换装当回合生效一次。
+                if (!phaseOneCooldownReduced) { unit.ReduceCooldowns(1); phaseOneCooldownReduced = true; }
+                ResolveChainPull(state, unit);
+                ResolveTowerPress(state, unit);
+            }
+        }
+
+        /// <summary>塔压：沿核心到主角的正交直线结算，长度与伤害随已放行机关成长（上限 6 格／8 点）。</summary>
+        private static void ResolveTowerPress(CombatState state, UnitState core)
+        {
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null || !hero.IsAlive) return;
+            int released = state.Map.PositionsWith(tile => tile.IsTowerMechanism && tile.IsReleased && !tile.IsDestroyed).Count();
+            int length = Math.Min(6, 4 + released);
+            int damage = Math.Min(8, 5 + released);
+            GridPosition direction = DirectionToward(core.Position, hero.Position);
+            int hits = 0;
+            for (int step = 1; step <= length; step++)
+            {
+                GridPosition cell = core.Position + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight) break;
+                foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive && unit.Position == cell).ToArray())
+                {
+                    Roguelite.DamagePacket packet = new Roguelite.DamagePacket("academy-core-tower-press", core.Id, target.Id,
+                        "academy-core-tower-press", new[] { new Roguelite.DamageComponent(Roguelite.DamageComponentKind.Aether, damage) });
+                    Roguelite.DamageResolution resolved = Roguelite.RogueDamageResolver.Resolve(packet, target.Shield, target.Health);
+                    target.AbsorbShield(resolved.ShieldAbsorbed);
+                    state.RecordRogueliteShieldAbsorption(target.Id, "academy-core-tower-press", resolved.ShieldAbsorbed);
+                    target.TakeDamage(resolved.HealthDamage);
+                    hits++;
+                }
+            }
+            state.AddLog("塔压：沿" + FieldWindState.DirectionName(direction) + "结算 " + length + " 格、每格 " + damage + " 点以太，命中 " + hits + " 个单位。");
         }
 
         /// <summary>放行下一组尚未放行的机关，返回其种类；没有可放行的机关时返回 0。</summary>
@@ -155,7 +189,81 @@ namespace OCC.Combat
                 state.AddLog("冲压隔离放行：公开" + FieldWindState.DirectionName(direction) + "方向 " + PressLineLength +
                     " 格冲压线，回合结束时线上单位受到 " + PressLineDamage + " 点伤害。");
             else
-                state.AddLog("护障维护放行：维护链开始为核心供盾，核心回合开始获得 " + MaintenanceShieldPerMechanism + " 护盾。");
+                state.AddLog(BarrierWallMessage(state, position));
+        }
+
+        /// <summary>引链：把最近的一组已放行机关拉到核心正交相邻格，并让它代核心承受一次伤害。</summary>
+        private void ResolveChainPull(CombatState state, UnitState core)
+        {
+            GridPosition[] released = state.Map
+                .PositionsWith(tile => tile.IsTowerMechanism && tile.IsReleased && !tile.IsDestroyed).ToArray();
+            if (released.Length == 0) return;
+            GridPosition linked = released.OrderBy(position => position.ManhattanDistance(core.Position))
+                .ThenBy(position => position.Y).ThenBy(position => position.X).First();
+            if (linked.ManhattanDistance(core.Position) > 1)
+            {
+                GridPosition[] slots =
+                {
+                    core.Position + new GridPosition(0, 1), core.Position + new GridPosition(1, 0),
+                    core.Position + new GridPosition(0, -1), core.Position + new GridPosition(-1, 0)
+                };
+                GridPosition? free = null;
+                foreach (GridPosition slot in slots)
+                    if (state.Map.IsInside(slot) && !state.Map.IsBlocked(slot) && !state.IsOccupied(slot)) { free = slot; break; }
+                if (free.HasValue)
+                {
+                    TileState moved = state.Map.GetTile(linked).Clone();
+                    TileState emptied = state.Map.GetTile(linked).Clone();
+                    emptied.IsDevice = false; emptied.IsTowerMechanism = false; emptied.IsReleased = false;
+                    emptied.MechanismKind = 0; emptied.Durability = 0;
+                    state.Map.SetTile(linked, emptied);
+                    state.Map.SetTile(free.Value, moved);
+                    linked = free.Value;
+                    state.AddLog("引链：把一组已放行机关拉到核心身边。");
+                }
+            }
+            if (core.DamageAbsorptions == 0 && chainLinkedPosition.HasValue)
+            {
+                GridPosition spent = chainLinkedPosition.Value;
+                chainLinkedPosition = null;
+                if (state.Map.IsInside(spent) && state.Map.GetTile(spent).IsTowerMechanism)
+                {
+                    TileState broken = state.Map.GetTile(spent).Clone();
+                    broken.Durability = 0;
+                    state.Map.SetTile(spent, broken);
+                    state.AddLog("引链：机关替核心承受了一次伤害并被摧毁。");
+                }
+            }
+            // 承伤转移暂不自动挂载：它必须占用核心的一次行动（节奏代价），否则会白送三刀。
+            // 当前只实现"把机关拉到身边"；承伤转移等待与核心行动绑定的实现方式确定后再接入。
+        }
+
+        /// <summary>引链每场可用次数（技能数据表 SK-BOSS-07）。</summary>
+        public const int ChainUses = 3;
+        private int chainUses;
+        private GridPosition? chainLinkedPosition;
+
+        /// <summary>护障墙：升起标定结构并返回公开文案。</summary>
+        private static string BarrierWallMessage(CombatState state, GridPosition mechanism) =>
+            "护障维护放行：升起 " + BuildBarrierWalls(state, mechanism) + " 面护障墙（耐久 " + TileState.StakedDurability +
+            "，阻挡移动与攻击线），维护链开始为核心供盾，核心回合开始获得 " + MaintenanceShieldPerMechanism + " 护盾。";
+
+        /// <summary>护障墙：在机关正交相邻的空格夯起标定结构，耐久 12 并阻挡攻击线。</summary>
+        public const int BarrierWallCount = 2;
+
+        private static int BuildBarrierWalls(CombatState state, GridPosition mechanism)
+        {
+            GridPosition[] slots = new[]
+                {
+                    mechanism + new GridPosition(0, 1), mechanism + new GridPosition(1, 0),
+                    mechanism + new GridPosition(0, -1), mechanism + new GridPosition(-1, 0)
+                }
+                .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position) &&
+                    !state.Map.GetTile(position).HasEffectLayer && state.Map.GetTile(position).Cover == CoverType.None)
+                .Take(BarrierWallCount).ToArray();
+            foreach (GridPosition slot in slots)
+                state.Map.SetTile(slot, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability });
+            return slots.Length;
         }
 
         /// <summary>并链：阶段二每次出手时，场上存活的已放行机关各同时结算一次。</summary>
@@ -288,10 +396,13 @@ namespace OCC.Combat
 
         /// <summary>阶段〇这一步的方向：核心下一次放行机关时沿用，便于并链阶段复算同一方向。</summary>
         private GridPosition? pendingDirection;
+        /// <summary>换装当回合的"全部攻击冷却 −1"是否已经结算（并链附带效果）。</summary>
+        private bool phaseOneCooldownReduced;
 
         public AcademyCoreBossRuntime Clone()
         {
-            AcademyCoreBossRuntime clone = new AcademyCoreBossRuntime { coreTurns = coreTurns, pendingDirection = pendingDirection };
+            AcademyCoreBossRuntime clone = new AcademyCoreBossRuntime { coreTurns = coreTurns, pendingDirection = pendingDirection,
+                phaseOneCooldownReduced = phaseOneCooldownReduced, chainLinkedPosition = chainLinkedPosition, chainUses = chainUses };
             foreach (KeyValuePair<int, GridPosition> pair in mechanismDirections) clone.mechanismDirections[pair.Key] = pair.Value;
             return clone;
         }

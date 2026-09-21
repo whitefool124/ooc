@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OCC.Combat
 {
@@ -186,7 +188,8 @@ namespace OCC.Combat
         {
             var tags = new List<string>();
             if (spell == null) return tags;
-            FireSpellDefinition fire = FireSpellCatalog.Get(spell.DefinitionId);
+            FireSpellDefinition fire = FireSpellCatalog.All.FirstOrDefault(candidate =>
+                string.Equals(candidate.Id, spell.DefinitionId, StringComparison.Ordinal));
             if (fire != null) return For(fire);
             Add(tags, TargetingTag(spell.Targeting));
             if (spell.Range > 0) Add(tags, spell.Range + "格");
@@ -206,10 +209,10 @@ namespace OCC.Combat
         private static string TargetingTag(string targeting)
         {
             if (string.IsNullOrWhiteSpace(targeting)) return null;
-            if (targeting.Contains("自身")) return SelfSelectionTag;
-            if (targeting.Contains("友")) return "友军";
-            if (targeting.Contains("空地") || targeting.Contains("空格")) return "空地";
-            if (targeting.Contains("物")) return "可破坏";
+            if (targeting.Contains("自身") || targeting.IndexOf("self", StringComparison.OrdinalIgnoreCase) >= 0) return SelfSelectionTag;
+            if (targeting.Contains("友") || targeting.IndexOf("ally", StringComparison.OrdinalIgnoreCase) >= 0) return "友军";
+            if (targeting.Contains("空地") || targeting.Contains("空格") || targeting.IndexOf("empty", StringComparison.OrdinalIgnoreCase) >= 0) return "空地";
+            if (targeting.Contains("物") || targeting.IndexOf("object", StringComparison.OrdinalIgnoreCase) >= 0) return "可破坏";
             return "敌人";
         }
 

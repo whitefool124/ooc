@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -218,8 +218,8 @@ namespace OCC.Combat.Tests
             EnemyArchetype boss = EnemyArchetypes.Get("core_overseer");
             var unit = new UnitState("boss", false, new GridPosition(1, 1));
             boss.Apply(unit);
-            Assert.That(unit.DisplayName, Is.EqualTo("塔之守卫")); Assert.That(unit.MaxHealth, Is.EqualTo(30));
-            Assert.That(unit.Health, Is.EqualTo(30)); Assert.That(unit.Shield, Is.EqualTo(4)); Assert.That(unit.Armor, Is.EqualTo(3));
+            Assert.That(unit.DisplayName, Is.EqualTo("塔之守卫")); Assert.That(unit.MaxHealth, Is.EqualTo(36));
+            Assert.That(unit.Health, Is.EqualTo(36)); Assert.That(unit.Shield, Is.EqualTo(4)); Assert.That(unit.Armor, Is.EqualTo(3));
         }
 
         [Test]
@@ -230,7 +230,7 @@ namespace OCC.Combat.Tests
             Assert.That(even.RegionBossId, Is.EqualTo("core_overseer")); Assert.That(odd.RegionBossId, Is.EqualTo("core_overseer"));
             Assert.That(RogueliteMapRun.FromJson(odd.ToJson()).RegionBossId, Is.EqualTo("core_overseer"));
             EnemyArchetype fixedBoss = EnemyArchetypes.Get(odd.RegionBossId);
-            Assert.That(fixedBoss.MaxHealth, Is.EqualTo(30)); Assert.That(fixedBoss.Shield, Is.EqualTo(4)); Assert.That(fixedBoss.Armor, Is.EqualTo(3));
+            Assert.That(fixedBoss.MaxHealth, Is.EqualTo(36)); Assert.That(fixedBoss.Shield, Is.EqualTo(4)); Assert.That(fixedBoss.Armor, Is.EqualTo(3));
         }
 
         [Test]

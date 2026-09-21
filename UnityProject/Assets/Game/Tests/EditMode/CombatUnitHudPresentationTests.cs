@@ -1,4 +1,4 @@
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
 
@@ -136,7 +136,7 @@ namespace OCC.Combat.Tests
             CombatStatusPresentation armorBreak = CombatStatusPresentation.From(enemy, StatusType.ArmorBreak);
 
             Assert.That(burning.ValueText, Is.EqualTo("3"));
-            Assert.That(burning.Detail, Does.Contain("失去 2 点生命"));
+            Assert.That(burning.Detail, Does.Contain("自身回合结束时失去 4 点生命"));
             Assert.That(burning.Detail, Does.Contain("无视护盾"));
             Assert.That(armorBreak.Detail, Does.Contain("护甲降低 4"));
             Assert.That(armorBreak.Detail, Does.Contain("剩余 2 回合"));

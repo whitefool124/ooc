@@ -446,7 +446,10 @@ namespace OCC.Combat
                     case SkillEffectType.RestoreHealth: return "恢复 " + effect.Amount + " 点生命";
                     case SkillEffectType.RestoreShield: return "恢复 " + effect.Amount + " 点护盾";
                     case SkillEffectType.RestoreMana: return "恢复 " + effect.Amount + " 点以太";
-                    case SkillEffectType.ApplyStatus: return "施加" + StatusLabel(effect.Status) + " " + effect.Duration + " 回合";
+                    case SkillEffectType.ApplyStatus:
+                        // 束缚在目标自身回合开始衰减，构造值比生效回合数多 1，公开文本按生效回合数给出。
+                        int shownRounds = effect.Status == StatusType.Bound ? Math.Max(1, effect.Duration - 1) : effect.Duration;
+                        return "施加" + StatusLabel(effect.Status) + " " + shownRounds + " 回合";
                     case SkillEffectType.ClearStatus: return "清除" + StatusLabel(effect.Status);
                     case SkillEffectType.MoveSource: return "移动 " + effect.Amount + " 格";
                     case SkillEffectType.DamageObject: return "对物件造成 " + effect.Amount + " 点耐久伤害";

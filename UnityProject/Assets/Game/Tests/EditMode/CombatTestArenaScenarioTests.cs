@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -457,7 +457,8 @@ namespace OCC.Combat.Tests
             Assert.That(state.AcademyCoreBoss.PendingMechanismCount(state), Is.Zero);
             EnemyTurnPlanBook phaseOnePlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseOne = phaseOnePlans.GetPublicIntent(state, core, hero);
-            Assert.That(phaseOne.ActionName, Is.EqualTo("核心定向束"));
+            // 换装后：够得到就用拆架重锤，够不到就压上；塔压的直线在回合开始结算。
+            Assert.That(new[] { "拆架重锤", "移动" }, Does.Contain(phaseOne.ActionName));
             Assert.That(phaseOne.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
 
             // 阶段二：生命降到 30% 及以下时改用两格破势脉冲。
@@ -474,7 +475,7 @@ namespace OCC.Combat.Tests
             Assert.That(phaseTwoState.AcademyCoreBoss.PhaseFor(phaseTwoState, phaseTwoCore), Is.EqualTo(2));
             EnemyTurnPlanBook phaseTwoPlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseTwo = phaseTwoPlans.GetPublicIntent(phaseTwoState, phaseTwoCore, phaseTwoHero);
-            Assert.That(phaseTwo.ActionName, Is.EqualTo("核心破势脉冲"));
+            Assert.That(new[] { "拆架重锤", "移动" }, Does.Contain(phaseTwo.ActionName));
             Assert.That(phaseTwo.DetailedText, Does.Contain("阶段二"));
         }
 

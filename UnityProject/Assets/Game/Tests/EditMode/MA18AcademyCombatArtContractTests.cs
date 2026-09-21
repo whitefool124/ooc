@@ -38,7 +38,7 @@ namespace OCC.Combat.Tests
         private static readonly string[] AnimationIds =
         {
             "sigil_mauler", "barrier_mender", "tether_hound", "shieldguard", "pyromancer", "raider",
-            "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer", "purifier_overseer"
+            "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer"
         };
 
         private static readonly string[] FireVfxIds =
@@ -123,7 +123,6 @@ namespace OCC.Combat.Tests
         }
 
         [TestCase("core_overseer")]
-        [TestCase("purifier_overseer")]
         public void P0Bosses_AreIndependent64PixelFootAnchoredSprites(string id)
         {
             Sprite sprite = AssertSprite(UnitRoot + id, new Vector2(64, 64), 32f, true);
@@ -154,9 +153,10 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FormalEnemyAnimations64_ContainsTwelveTwoStateEndpointActions()
+        public void FormalEnemyAnimations64_ContainsOneTwoStateEndpointActionPerUnit()
         {
-            Assert.That(AnimationIds, Has.Length.EqualTo(12));
+            // 幽灵单位（breaker／warden／binder／purifier_overseer）已按设计口径删除，动作表随之收敛为 11 个单位。
+            Assert.That(AnimationIds, Has.Length.EqualTo(11));
             foreach (string id in AnimationIds)
                 AssertEndpointFrames(AnimationRoot + id, new Vector2(64, 64), 32f);
         }

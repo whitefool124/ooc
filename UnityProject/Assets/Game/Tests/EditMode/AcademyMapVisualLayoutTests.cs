@@ -76,5 +76,19 @@ namespace OCC.Combat.Tests
                 Assert.That(center.y, Is.InRange(0f, AcademyMapVisualLayout.SourceSize.y));
             }
         }
+
+        [Test]
+        public void AcademyLayerContinuesStrictlyRightOfTheTutorialShopWithoutAnchorOverlap()
+        {
+            float shopX = AcademyMapVisualLayout.SourcePositionFor(FirstRunExperienceCatalog.MapNode("S"), false).x;
+            Vector2[] positions = RogueliteAcademyLayerCatalog.NodeIds
+                .Select(id => AcademyMapVisualLayout.SourcePositionFor(RogueliteMapCatalog.Node(id), true))
+                .ToArray();
+
+            Assert.That(positions.All(position => position.x > shopX), Is.True);
+            float minimum = positions.SelectMany((left, index) => positions.Skip(index + 1)
+                .Select(right => Vector2.Distance(left, right))).Min();
+            Assert.That(minimum, Is.GreaterThanOrEqualTo(112f));
+        }
     }
 }

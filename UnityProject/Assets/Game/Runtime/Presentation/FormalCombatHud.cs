@@ -1752,7 +1752,9 @@ namespace OCC.Combat.Presentation
             rect.DOKill();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
             if (motion.IsImmediate) rect.anchorMax = new Vector2(value, 1f);
-            else DOTween.To(() => rect.anchorMax.x, next => rect.anchorMax = new Vector2(next, 1f), value, motion.QuickDuration).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
+            else DOTween.To(() => rect != null ? rect.anchorMax.x : value,
+                    next => { if (rect != null) rect.anchorMax = new Vector2(next, 1f); }, value, motion.QuickDuration)
+                .SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true).SetTarget(rect);
             if (previous >= 0f && resourceChangeMarkers.TryGetValue(fill, out Image marker) && marker != null)
             {
                 marker.DOKill();

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,8 +25,27 @@ namespace OCC.Combat
             "field_infirmary", "lecture_annex", "study_vault", "archive_wing", "sparring_ring",
             "workshop_yard", "clinic_hall", "supply_depot", "wilds_path", "observatory_path",
             "wilds_camp", "seal_bridge", "tower_foyer", "tower_records", "tower_lift",
+            "layer_workshop", "layer_medical", "layer_shop",
             FinaleNodeId
         };
+
+        /// <summary>
+        /// 展开区固定的 3 个服务节点。它们是学院层专属节点：全图目录在 (5,1)(6,1)(5,3) 上有别的节点，
+        /// 所以这 3 个节点只存在于本层节点集，不进入 <see cref="RogueliteMapCatalog.Nodes"/>。
+        /// 每个服务节点各自结算一次，与商店前的工坊、医务室互不影响（见学院节点内容表 W01／S01／SHOP01）。
+        /// </summary>
+        public static readonly IReadOnlyList<RogueliteMapNode> ServiceNodes = new[]
+        {
+            new RogueliteMapNode("layer_workshop", RogueliteMapNodeType.Workshop, "校准工坊",
+                "免费完成一次装备锻造和一次术式专精；只消耗对应材料，结果立即保存。", 5, 1, "clinic_hall", "layer_medical"),
+            new RogueliteMapNode("layer_medical", RogueliteMapNodeType.Medical, "公共医务室",
+                "健康确认只记录状态；治疗支付 1 学院贡献恢复最大生命的 50%；餐食三选一。", 6, 1, "wilds_path", "layer_workshop"),
+            new RogueliteMapNode("layer_shop", RogueliteMapNodeType.Shop, "学院补给商店",
+                "移相线轴、解构楔与测距护目镜各限购 1 件。", 5, 3, "supply_depot", "observatory_path")
+        };
+
+        private static readonly IReadOnlyDictionary<string, RogueliteMapNode> ServiceNodeById =
+            ServiceNodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
 
         /// <summary>不在学院层节点集里、但被学院层节点连接的旧郊道节点。</summary>
         private static readonly IReadOnlyList<string> CrossLayerNodeIds = new[]
@@ -35,21 +54,38 @@ namespace OCC.Combat
             "records_archive", "transmission_tower", "core_approach", "core_vault"
         };
 
-        /// <summary>学院层一层可以走到的全部节点（含少数跨层连接）。</summary>
-        public static readonly IReadOnlyList<string> LayerNodeIds = NodeIds.Concat(CrossLayerNodeIds).ToArray();
+        /// <summary>学院层一层可以走到的全部节点（含少数跨层连接与 3 个服务节点）。</summary>
+        public static readonly IReadOnlyList<string> LayerNodeIds =
+            NodeIds.Concat(CrossLayerNodeIds).ToArray();
 
         private static readonly HashSet<string> NodeIdSet = new HashSet<string>(NodeIds, StringComparer.Ordinal);
         private static readonly HashSet<string> LayerNodeIdSet = new HashSet<string>(LayerNodeIds, StringComparer.Ordinal);
 
+        /// <summary>学院层专属节点解析：先查本层服务节点，再查全图目录。</summary>
+        public static bool TryResolveLayerNode(string nodeId, out RogueliteMapNode node)
+        {
+            node = null;
+            if (string.IsNullOrEmpty(nodeId)) return false;
+            if (ServiceNodeById.TryGetValue(nodeId, out node)) return true;
+            if (!LayerNodeIdSet.Contains(nodeId)) return false;
+            node = RogueliteMapCatalog.Nodes.FirstOrDefault(value => value.Id == nodeId);
+            return node != null;
+        }
+
+        public static bool IsServiceNode(string nodeId) => nodeId != null && ServiceNodeById.ContainsKey(nodeId);
+
         public static bool IsAcademyLayerNode(string nodeId) => nodeId != null && NodeIdSet.Contains(nodeId);
         public static bool IsLayerNode(string nodeId) => nodeId != null && LayerNodeIdSet.Contains(nodeId);
 
-        /// <summary>学院层 20 个常规节点（不含首领）。</summary>
+        /// <summary>学院层 20 个常规节点（不含首领）＋ 3 个服务节点。</summary>
         public static IReadOnlyList<RogueliteMapNode> RegularNodes =>
-            NodeIds.Where(id => id != FinaleNodeId).Select(RogueliteMapCatalog.Node).ToArray();
+            NodeIds.Where(id => id != FinaleNodeId)
+                .Select(id => TryResolveLayerNode(id, out RogueliteMapNode node) ? node : null)
+                .Where(node => node != null).ToArray();
 
         public static IReadOnlyList<RogueliteMapNode> LayerNodes =>
-            LayerNodeIds.Select(RogueliteMapCatalog.Node).ToArray();
+            LayerNodeIds.Select(id => TryResolveLayerNode(id, out RogueliteMapNode node) ? node : null)
+                .Where(node => node != null).ToArray();
 
         /// <summary>一层计划走的常规节点数（用于界面文案与验收）。</summary>
         public static int PlannedRegularNodeCount => NodeIds.Count - 1;
@@ -68,7 +104,7 @@ namespace OCC.Combat
                 NodeId = nodeId;
                 ContentTableId = contentTableId ?? string.Empty;
                 EncounterVariantId = encounterVariantId ?? string.Empty;
-                Type = RogueliteMapCatalog.Node(nodeId).Type;
+                Type = TryResolveLayerNode(nodeId, out RogueliteMapNode node) ? node.Type : RogueliteMapCatalog.Node(nodeId).Type;
             }
         }
 
@@ -90,13 +126,16 @@ namespace OCC.Combat
             new AcademyNodeContentMapping("clinic_hall", "N12", "strong_rail_patrol_b"),
             new AcademyNodeContentMapping("supply_depot", "E01", "elite_foundry_a"),
             new AcademyNodeContentMapping("wilds_path", "N14", "strong_depot_wreck_b"),
-            new AcademyNodeContentMapping("observatory_path", "E06", "outer_ring_clearance_a"),
+            new AcademyNodeContentMapping("observatory_path", "E02", "calibration_lockdown_a"),
             new AcademyNodeContentMapping("wilds_camp", "E03", "cliff_relay_survey_a"),
             new AcademyNodeContentMapping("seal_bridge", "N15", "strong_gatehouse_b"),
-            new AcademyNodeContentMapping("tower_foyer", "E04", "library_discipline_a"),
+            new AcademyNodeContentMapping("tower_foyer", "E01", "elite_foundry_b"),
             new AcademyNodeContentMapping("tower_records", "EV08", string.Empty),
             new AcademyNodeContentMapping("tower_lift", "T02", string.Empty),
-            new AcademyNodeContentMapping(FinaleNodeId, "B01", "boss_academy_sealed_core")
+            new AcademyNodeContentMapping(FinaleNodeId, "B01", "boss_academy_sealed_core"),
+            new AcademyNodeContentMapping("layer_workshop", "W01", string.Empty),
+            new AcademyNodeContentMapping("layer_medical", "S01", string.Empty),
+            new AcademyNodeContentMapping("layer_shop", "SHOP01", string.Empty)
         };
 
         private static readonly IReadOnlyDictionary<string, AcademyNodeContentMapping> ByNode =

@@ -22,6 +22,7 @@ namespace OCC.Combat
             for (int i = 0; i < dto.CompletedNodeIds.Count; i++) dto.CompletedNodeIds[i] = NodeId(dto.CompletedNodeIds[i]);
             for (int i = 0; i < dto.EncounterAssignments.Count; i++) dto.EncounterAssignments[i] = Assignment(dto.EncounterAssignments[i]);
             for (int i = 0; i < dto.NodeContentAssignments.Count; i++) dto.NodeContentAssignments[i] = Assignment(dto.NodeContentAssignments[i]);
+            for (int i = 0; i < dto.SettledServiceNodeIds.Count; i++) dto.SettledServiceNodeIds[i] = NodeId(dto.SettledServiceNodeIds[i]);
             dto.ClaimedContentIds.RemoveAll(IsRetiredProgressMarker);
         }
 

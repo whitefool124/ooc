@@ -19,21 +19,27 @@ namespace OCC.Combat.Tests
 
             Assert.That(execution.Results.Select(result => result.Kind), Is.EqualTo(new[]
             {
-                CombatEffectKind.TriggerStatus, CombatEffectKind.DamageHealth, CombatEffectKind.ReduceStatusDuration,
+                CombatEffectKind.TriggerStatus,
                 CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration,
                 CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration,
                 CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration
             }));
             Assert.That(execution.Results.Where(result => result.Kind == CombatEffectKind.TriggerStatus).Select(result => result.Status),
                 Is.EqualTo(new[] { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.ArmorBreak }));
-            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth - CombatStatusLifecycle.BurningDamagePerTurn));
+            // 燃烧的伤害与持续量按数据表口径在自身回合结束结算，回合开始只做公开触发标记。
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth));
+            Assert.That(hero.StatusDuration(StatusType.Burning), Is.EqualTo(2));
             Assert.That(hero.Shield, Is.EqualTo(2), "Burning preserves the existing direct-health rule.");
-            Assert.That(hero.StatusDuration(StatusType.Burning), Is.EqualTo(1));
             Assert.That(hero.StatusDuration(StatusType.Slow), Is.EqualTo(1));
             Assert.That(hero.HasStatus(StatusType.Bound), Is.False);
             Assert.That(hero.StatusDuration(StatusType.ArmorBreak), Is.EqualTo(1));
             Assert.That(hero.EffectiveSpeed, Is.EqualTo(7));
             Assert.That(hero.EffectiveArmor, Is.EqualTo(0));
+
+            CombatResolver.EndTurn(state, hero);
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth - CombatStatusLifecycle.BurningDamagePerTurn),
+                "回合结束时结算 4 点燃烧伤害。");
+            Assert.That(hero.StatusDuration(StatusType.Burning), Is.EqualTo(1), "回合结束扣一次持续量。");
         }
 
         [Test]
@@ -72,26 +78,22 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void BurningLethalTick_IsRecordedBeforeExpiryAndDefeat()
+        public void BurningLethalTick_IsRecordedAtOwnTurnEndBeforeExpiryAndDefeat()
         {
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
             CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.DamageHealth(hero.Id, hero.MaxHealth - 1));
             hero.ApplyStatus(StatusType.Burning, 1);
+            CombatResolver.BeginTurn(state, hero.Id);
 
-            CombatEffectExecution execution = CombatResolver.BeginTurn(state, hero.Id);
+            // 燃烧在自身回合结束结算：伤害先于持续量到期，倒地结果写进公开日志。
+            CombatResolver.EndTurn(state, hero);
 
-            CombatEffectResult damage = execution.Results.Single(result => result.Kind == CombatEffectKind.DamageHealth);
-            CombatEffectResult expiry = execution.Results.Single(result => result.Kind == CombatEffectKind.ReduceStatusDuration);
-            Assert.That(damage.Sequence, Is.LessThan(expiry.Sequence));
-            Assert.That(damage.AppliedAmount, Is.EqualTo(1));
-            Assert.That(expiry.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Expired));
+            Assert.That(hero.IsAlive, Is.False);
             Assert.That(state.IsDefeat, Is.True);
-            Assert.That(hero.ActionPoints, Is.EqualTo(0));
             Assert.That(state.EventLog, Has.Some.Contains("失去行动能力"));
             Assert.That(state.EventLog, Has.None.Contains("击杀"));
-            Assert.That(state.EventLog, Has.Some.Contains("\u71c3\u70e7\u89e6\u53d1"));
-            Assert.That(state.EventLog, Has.Some.Contains("\u71c3\u70e7\u5df2\u5230\u671f"));
+            Assert.That(state.EventLog, Has.Some.Contains("燃烧触发"));
         }
 
         [Test]

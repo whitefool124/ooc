@@ -105,7 +105,10 @@ def validate_image(
     if expected is None and (image.width % 32 or image.height % 32):
         errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
 
-    pixels = list(image.get_flattened_data())
+    # Pillow added get_flattened_data() after the project's currently supported
+    # 11.1 runtime. Keep validation working on both sides of that API change.
+    get_pixels = getattr(image, "get_flattened_data", image.getdata)
+    pixels = list(get_pixels())
     alpha_values = {pixel[3] for pixel in pixels}
     if not alpha_values.issubset({0, 255}):
         errors.append("alpha is not hard 0/255")
@@ -279,6 +282,56 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
         value = application.get(key)
         if not isinstance(value, int) or value <= 0:
             errors.append(f"application.{key} must be a positive integer")
+
+    # Placement semantics are mandatory for the new scene-assembly contract,
+    # but remain opt-in for historical manifests so existing formal assets do
+    # not become invalid merely because the contract gained new fields.
+    placement = manifest.get("placement_semantics")
+    if placement is not None:
+        assembly_contract = contract.get("scene_assembly_contract", {})
+        required = assembly_contract.get("placement_semantics_required_for_new_assets", [])
+        for key in required:
+            if key not in placement:
+                errors.append(f"placement_semantics.{key} is required")
+
+        if placement.get("application_scope") not in {"runtime_layout", "concept_display"}:
+            errors.append("placement_semantics.application_scope must be runtime_layout or concept_display")
+        if placement.get("mount_type") not in set(assembly_contract.get("mount_types", [])):
+            errors.append("placement_semantics.mount_type is not recognized")
+
+        anchor = placement.get("native_anchor")
+        if not (isinstance(anchor, list) and len(anchor) == 2 and all(isinstance(v, int) for v in anchor)):
+            errors.append("placement_semantics.native_anchor must be two native integer coordinates")
+
+        contact = placement.get("visible_contact_line")
+        if not (
+            isinstance(contact, dict)
+            and contact.get("axis") in {"x", "y"}
+            and isinstance(contact.get("native_px"), int)
+        ):
+            errors.append("placement_semantics.visible_contact_line must declare axis and native_px")
+
+        if not isinstance(placement.get("depth_sort_baseline"), int):
+            errors.append("placement_semantics.depth_sort_baseline must be a native integer")
+        if placement.get("screen_axis") != "horizontal_vertical_locked":
+            errors.append("placement_semantics.screen_axis must be horizontal_vertical_locked")
+
+        mount_type = placement.get("mount_type")
+        support_asset = placement.get("support_asset")
+        if mount_type in {"wall_mounted", "tabletop"} and not str(support_asset or "").strip():
+            errors.append(f"placement_semantics.support_asset is required for {mount_type}")
+
+        if placement.get("combined_room_shell"):
+            if placement.get("application_scope") != "concept_display":
+                errors.append("combined room shells are concept_display only")
+            if status in {"FORMAL_CANDIDATE", "FORMAL"}:
+                errors.append("combined room shells cannot be promoted beyond REVIEW_READY")
+
+        if status in {"FORMAL_CANDIDATE", "FORMAL"}:
+            review = manifest.get("human_review", {})
+            for dimension in assembly_contract.get("human_review_dimensions", []):
+                if review.get(dimension) != "PASS":
+                    errors.append(f"scene assembly human review dimension must PASS: {dimension}")
 
     evidence = manifest.get("evidence", {})
     for key in contract.get("required_evidence", []):

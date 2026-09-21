@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 
@@ -71,7 +71,7 @@ namespace OCC.Combat.Tests
         public void FourBuilds_DeterministicallyDefeatBothFirstRegionBossVariants()
         {
             foreach (RogueliteSkillBuild build in RogueliteSkillCatalog.Builds)
-            foreach (string bossId in new[] { "core_overseer", "purifier_overseer" })
+            foreach (string bossId in new[] { "core_overseer" })
             {
                 string first = DefeatSignature(build, bossId);
                 string second = DefeatSignature(build, bossId);

@@ -43,6 +43,20 @@
     "reason": "the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, which is only possible when light is applied after the integer upscale rather than painted into the art",
     "reject_if": ["baked scene lighting", "floor shadow or light pool baked into a ground tile", "vignette or edge darkening", "global ambient gradient across the piece", "torch or aether glow baked into a prop"]
   },
+  "scene_assembly_contract": {
+    "locked": "2026-09-21",
+    "production_brief_required_before_generation": ["asset_role", "application_scope", "logical_cells", "real_dimensions_m", "mount_type", "native_anchor", "visible_contact_line", "depth_sort_baseline", "support_asset", "screen_axis", "material_palette_family", "light_direction"],
+    "application_scopes": ["runtime_layout", "concept_display"],
+    "mount_types": ["ground", "floor_standing", "wall_mounted", "tabletop", "structural", "unit"],
+    "runtime_role_substitution_forbidden": true,
+    "combined_walkable_floor_and_blocking_wall_asset_forbidden": true,
+    "concept_room_shell_maximum_status": "REVIEW_READY",
+    "depth_sort_source": "visible_contact_line_not_canvas_bottom",
+    "wall_mount_rule": "dedicated wall-mounted source and wall anchor required; do not raise a floor-standing prop",
+    "tabletop_rule": "declare support asset and native support height",
+    "palette_rule": "lock material_palette_family and upper-left form light before the first source in a scene batch; regenerate mismatched assets instead of recolouring them during assembly",
+    "assembly_evidence": ["native_coordinate_table", "draw_order", "one_x_application_contact", "six_x_application_contact"]
+  },
   "generation_loop": {
     "candidates_per_round": 1,
     "maximum_rounds": 3,
@@ -109,7 +123,7 @@
       "logical_cells": [1, 1],
       "palette_max": 6,
       "content_variables": ["theme_material_story", "masonry_blocking_story", "wear_level"],
-      "reading": "pale weathered stone cap over a darker warm stone body, the same two-tone language as the approved academy wall family; solid and thick so the cell clearly reads as indestructible terrain",
+      "reading": "a stage-appropriate solid wall block whose material follows the current region; in the academy stage it should read as clear Japanese-fantasy magical-academy architecture with a legible top and darker front face, while remaining solid and thick enough to read as indestructible terrain",
       "must_not_show": ["cracks", "chips", "rubble", "damage", "destructible cover treatment"],
       "tiling": "all four edges are edge-to-edge and match, so four identical blocks tile with no gap and no seam; a run of them reads as a continuous wall",
       "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
@@ -206,7 +220,12 @@
     "rendered_pixel_size_is_identical_across_ground_structures_props_and_units",
     "the_square_reads_as_one_whole_cell_with_a_visible_border_and_not_as_a_crop_of_a_larger_field",
     "the_tile_is_near_flat_against_the_approved_stone_baseline",
-    "tile_plus_front_face_reads_as_a_raised_block_at_6x"
+    "tile_plus_front_face_reads_as_a_raised_block_at_6x",
+    "asset_mount_type_matches_its_visual_support_and_application",
+    "visible_contact_line_is_not_floating_or_penetrating_its_support",
+    "runtime_room_assets_keep_walkable_ground_separate_from_blocking_walls",
+    "scene_draw_order_uses_visible_contact_lines",
+    "scene_batch_uses_one_material_palette_family_and_fixed_upper_left_form_light"
   ],
   "runtime_promotion_gates": {
     "locked": "2026-09-16",
@@ -231,7 +250,12 @@
       "R4 layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
       "R5 within a layer sort by bottom-edge y ascending, then structure < prop < unit",
       "R6 units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
-      "R7 a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row"
+      "R7 a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row",
+      "R8 new assets declare application scope, mount type, native anchor, visible contact line, depth baseline and support before generation",
+      "R9 floor-standing, wall-mounted and tabletop variants are separate roles; scene coordinates cannot change mount type",
+      "R10 runtime rooms split walkable ground, blocking walls, directional edges or front faces and independent props; combined shells are concept-only",
+      "R11 verify walkability, collision, click ownership and occlusion before aesthetic approval",
+      "R12 record native coordinates and draw order and review the assembly at 1x and canonical 6x"
     ],
     "formal_requires": "machine PASS plus human PASS plus stable GUID plus verified importer plus a runtime contact capture that passes the lattice check"
   },

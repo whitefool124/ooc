@@ -37,9 +37,16 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void DefaultConfiguration_DoesNotEnableDeveloperEntrypoints()
+        public void DeveloperEntrypoints_AreGatedByTheExplicitBuildFlag()
         {
-            Assert.That(DeveloperBuildGate.IsEnabled, Is.False);
+            // 开发入口只允许跟随 OCC_DEVELOPER_TOOLS 这一个显式开关：默认构建必须关闭，
+            // 验收构建打开该符号时才可见。断言写成不变量，避免再把验收开关当成缺陷。
+#if OCC_DEVELOPER_TOOLS
+            Assert.That(DeveloperBuildGate.IsEnabled, Is.True,
+                "打开 OCC_DEVELOPER_TOOLS 的构建必须暴露开发入口，否则验收用的开发按钮会失效。");
+#else
+            Assert.That(DeveloperBuildGate.IsEnabled, Is.False, "默认构建不得暴露开发入口。");
+#endif
         }
 
         [Test]

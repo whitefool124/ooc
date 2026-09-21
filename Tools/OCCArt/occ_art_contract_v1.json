@@ -2,7 +2,7 @@
   "schema": "occ-art-contract-v1",
   "version": 1,
   "revision_date": "2026-09-21",
-  "revision_note": "2026-09-21 (stage art direction, user decision): the overall visual theme changes by life stage instead of treating stone, old timber and forged iron as permanent global core materials. The current academy stage is Japanese fantasy magic isekai: clear adventurous magical-academy spaces, fantasy nature and light readable forms, with materials selected by region and function. Aether remains measurable, maintainable and costly energy engineering. Pixel scale, role dimensions, lighting separation and production gates are unchanged. Prior note: 2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier.",
+  "revision_note": "2026-09-21 (asset semantics and scene assembly, user-authorized optimization): runtime art roles are declared before generation and may not combine walkable ground with blocking walls. Concept room shells are review references only. New manifests record placement semantics, mount type, visible contact line, depth baseline, support object and screen axis. Scene batches lock a shared material palette family and fixed upper-left form light before generation; assembly review checks gameplay semantics before aesthetics. Ground tiles keep the current baked material-dark 1 px border and inner lip; the obsolete shared-grid-layer wording is retired. Prior note: 2026-09-21 (indoor real scale, user decision): ordinary indoor objects use common real-world width, depth and height converted at 1 native px = 3.125 cm; physical size is measured from visible subject bounds, not transparent canvas padding. Fictional magical devices use the nearest real furniture, furnace, laboratory or maintenance analogue. Concept display images are exempt from the battlefield 7x4 viewport and occupancy layout, but not from world scale, shared prop camera, fixed light, 32 PPU or integer display. Prior note: 2026-09-21 (stage art direction, user decision): the overall visual theme changes by life stage instead of treating stone, old timber and forged iron as permanent global core materials. The current academy stage is Japanese fantasy magic isekai: clear adventurous magical-academy spaces, fantasy nature and light readable forms, with materials selected by region and function. Aether remains measurable, maintainable and costly energy engineering. Pixel scale, role dimensions, lighting separation and production gates are unchanged. Prior note: 2026-09-16 later (ground tiles, user decision): the battlefield uses one 32x32 ground square per gameplay cell again - a self-contained tile that a map editor can place and swap individually. Every tile bakes a visible 1 px cell border in the material's own dark tone plus a 1 px lighter inner lip, because this version ships no material transitions; that intentionally supersedes the earlier no-baked-frame rule. Depth comes from a separate 32x8 front-face asset placed at the cell's south edge with an 8 px overhang, drawn after the next row's ground and before that row's objects. Characters stay 32x64 with a 32-58 px body, i.e. 1.0x to 1.8x the cell height, so the upper body deliberately overhangs the owning cell while occupancy is unchanged. The 16 px ground subgrid (floor_tile_16, terrain_adjacency_overlay_16) is retired and new production on it is forbidden; the whole battlefield is one 32 PPU grid displayed at the canonical 6x tier.",
   "stage_visual_direction": {
     "policy": "visual theme and material story change by life stage; no fixed material set governs the whole game",
     "current_stage": "academy",
@@ -70,6 +70,34 @@
     "why_this_value": "the character spec (body 46-58 px) was locked independently for the silhouette, and only at a 1 m cell does it land inside the human height range (1.44-1.81 m). A 1.25 m cell would make every humanoid 1.80-2.27 m and a 1.5 m cell 2.16-2.72 m, which is visibly giant. The two decisions therefore confirm each other, and every later size question can be derived from this single number instead of re-negotiating PPU or display scale.",
     "vertical_caveat": "side-view characters are drawn at true metric height, so their pixel height is a real height. Top-down ground and walls are a projection: their canvas height is a height cue, not a measured height. Indestructible terrain fills its cell and is defined to block movement and sight lines regardless of how tall its sprite looks."
   },
+  "indoor_real_scale_policy": {
+    "locked": "2026-09-21",
+    "principle": "ordinary indoor objects use common real-world dimensions instead of per-image aesthetic scaling",
+    "measurement": "record real width, depth and height before generation and convert visible subject bounds at 1 native px = 3.125 cm; transparent canvas padding is excluded",
+    "fictional_device_reference": "use the nearest real furniture, furnace, laboratory or maintenance equipment analogue",
+    "readability_exception": "an intentional over-scale below the readability floor must record its multiplier and reason in the manifest",
+    "concept_display": "exempt from battlefield 7x4 viewport, occupancy and walkability layout; still bound by world scale, shared prop camera, fixed light, native 32 PPU and integer display"
+  },
+  "scene_assembly_contract": {
+    "locked": "2026-09-21",
+    "declare_role_before_generation": true,
+    "runtime_role_substitution_forbidden": true,
+    "walkable_ground_and_blocking_wall_must_be_separate_assets": true,
+    "concept_room_shell": {
+      "maximum_status": "REVIEW_READY",
+      "runtime_occupancy_forbidden": true,
+      "use": "concept display and assembly reference only"
+    },
+    "placement_semantics_required_for_new_assets": ["application_scope", "mount_type", "logical_cell", "native_anchor", "visible_contact_line", "depth_sort_baseline", "allowed_occlusion_direction", "screen_axis", "support_asset"],
+    "mount_types": ["ground", "floor_standing", "wall_mounted", "tabletop", "structural", "unit"],
+    "wall_mount_rule": "a wall-mounted object needs a dedicated wall-mounted asset and wall anchor; raising a floor-standing asset is forbidden",
+    "tabletop_rule": "a tabletop object names its support asset and native contact height",
+    "depth_sort_rule": "sort by visible contact line, never transparent canvas bottom or file dimensions",
+    "assembly_evidence": ["native_coordinate_table", "draw_order", "one_x_application_contact", "six_x_application_contact"],
+    "human_review_dimensions": ["placement_semantics", "support_and_contact", "material_palette_family", "walkability_and_occlusion"],
+    "assembly_review_order": ["walkability_collision_click_occlusion_semantics", "real_scale_and_support", "contact_and_depth", "perspective_and_light", "material_palette_family", "aesthetics"],
+    "material_palette_family": "lock one approved material family and fixed upper-left form light before the first generation in a scene batch; regenerate mismatched sources instead of post-hoc recolouring"
+  },
   "battlefield_display_policy": {
     "locked": "2026-09-16",
     "native_buffer": [320, 180],
@@ -121,7 +149,12 @@
     "R4": "layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
     "R5": "within a layer sort by bottom-edge y ascending, then by category priority structure < prop < unit",
     "R6": "units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
-    "R7": "a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row, so the raised block occludes the cell in front of it while units still draw over both"
+    "R7": "a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row, so the raised block occludes the cell in front of it while units still draw over both",
+    "R8": "new assets declare mount type and visible contact line before generation; depth sorting uses that contact line rather than transparent canvas bounds",
+    "R9": "floor-standing, wall-mounted and tabletop variants are distinct application roles; changing only scene coordinates never changes an asset's mount type",
+    "R10": "a runtime room separates walkable 32x32 ground, blocking 32x32 walls, directional edges or front faces, and independent props; a combined room shell is concept-only",
+    "R11": "runtime layout review verifies walkability, collision, click ownership and occlusion before visual polish",
+    "R12": "every scene assembly records native coordinates and draw order and is reviewed at native 1x and canonical 6x"
   },
   "target_grid_outline_policy": {
     "applies_to": ["tactical_unit_32x64", "single_cell_prop_adaptive_32ppu", "single_cell_prop_32", "multi_cell_prop_32"],

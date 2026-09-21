@@ -27,6 +27,8 @@ namespace OCC.Combat.Presentation
     {
         public static readonly Vector2 SourceSize = new Vector2(1536, 864);
         public const float UnityDisplayScale = 1f;
+        // 固定教学段在第 4 列的商店收束；展开区整体向右接 5 列，避免重新铺回旧节点上。
+        public const float AcademyLayerSourceOffsetX = 1000f;
         public static readonly Vector2 LogicalCanvasSize = SourceSize * UnityDisplayScale;
         public const float AnchorDiameter = 32f;
 
@@ -48,6 +50,14 @@ namespace OCC.Combat.Presentation
             if (node.GridX < 0 || node.GridX >= 8 || node.GridY < 0 || node.GridY >= 5)
                 throw new ArgumentOutOfRangeException(nameof(node), "Academy visual anchors require the frozen 8x5 topology coordinates.");
             return anchors[node.GridY * 8 + node.GridX];
+        }
+
+        public static Vector2 SourcePositionFor(RogueliteMapNode node, bool continueAfterTutorial)
+        {
+            Vector2 source = AnchorFor(node).SourcePosition;
+            if (continueAfterTutorial && RogueliteAcademyLayerCatalog.IsAcademyLayerNode(node.Id))
+                source.x += AcademyLayerSourceOffsetX;
+            return source;
         }
 
         public static Vector2 LogicalPositionFor(RogueliteMapNode node)

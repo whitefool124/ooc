@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -15,7 +15,7 @@ namespace OCC.Combat.Tests
 
         /// <summary>已确认为备用变体、尚未决定占用哪个精英节点的底图。</summary>
         /// <summary>总案扩展池（E04–E06）底图：可解析建图，但不进本阶段固定精英分配。</summary>
-        private static readonly string[] ReserveLevelIds = { "library_discipline", "sealed_vault_certification" };
+        private static readonly string[] ReserveLevelIds = { "library_discipline", "sealed_vault_certification", "outer_ring_clearance" };
 
         [Test]
         public void NewEliteLevels_AreRegisteredAndValidate()
@@ -80,7 +80,7 @@ namespace OCC.Combat.Tests
             Assert.That(ring.State.GetUnit("enemy_0").EnemyArchetypeId, Is.EqualTo("elite_vanguard"));
             Assert.That(ring.State.Map.PositionsWith(tile => tile.IsWardGenerator).Count(), Is.EqualTo(1));
             Assert.That(ring.State.Map.PositionsWith(tile => tile.IsCertifierStand).Count(), Is.EqualTo(1));
-            Assert.That(ring.State.AcademyFieldEnemy, Is.Null, "没有场地敌人时不挂载该运行时。");
+            Assert.That(ring.State.AcademyFieldEnemy, Is.Not.Null, "划线教官与提灯巡查的岗位机制由同一运行时结算。");
         }
 
         [Test]
@@ -110,6 +110,17 @@ namespace OCC.Combat.Tests
                         continue;
                     }
                     if (unit.ActionPoints <= 0) { CombatResolver.EndTurn(state, unit); commands++; continue; }
+                    // 束缚只禁止移动；贴身时仍应攻击，否则验收策略会被永久定身而误判为打不过。
+                    if (unit.HasStatus(StatusType.Bound))
+                    {
+                        UnitState bound = state.Units.Values.Where(value => value.IsAlive && value.IsHero != unit.IsHero &&
+                                value.Position.ManhattanDistance(unit.Position) <= 1)
+                            .OrderBy(value => value.Id, StringComparer.Ordinal).FirstOrDefault();
+                        if (bound == null || !unit.IsHero) { CombatResolver.EndTurn(state, unit); commands++; continue; }
+                        CombatResolver.Resolve(state, CombatCommand.Attack(unit.Id, bound.Id));
+                        commands++;
+                        continue;
+                    }
                     UnitState target = state.Units.Values.Where(value => value.IsAlive && value.IsHero != unit.IsHero)
                         .OrderBy(value => value.Position.ManhattanDistance(unit.Position))
                         .ThenBy(value => value.Id, StringComparer.Ordinal).FirstOrDefault();
@@ -165,10 +176,10 @@ namespace OCC.Combat.Tests
         {
             Assert.That(RogueliteAcademyLayerCatalog.Mapping("wilds_camp").EncounterVariantId, Is.EqualTo("cliff_relay_survey_a"));
             Assert.That(RogueliteAcademyLayerCatalog.Mapping("wilds_camp").ContentTableId, Is.EqualTo("E03"));
-            Assert.That(RogueliteAcademyLayerCatalog.Mapping("observatory_path").EncounterVariantId, Is.EqualTo("outer_ring_clearance_a"));
-            Assert.That(RogueliteAcademyLayerCatalog.Mapping("observatory_path").ContentTableId, Is.EqualTo("E06"));
-            Assert.That(RogueliteAcademyLayerCatalog.Mapping("tower_foyer").EncounterVariantId, Is.EqualTo("library_discipline_a"));
-            Assert.That(RogueliteAcademyLayerCatalog.Mapping("tower_foyer").ContentTableId, Is.EqualTo("E04"));
+            Assert.That(RogueliteAcademyLayerCatalog.Mapping("observatory_path").EncounterVariantId, Is.EqualTo("calibration_lockdown_a"));
+            Assert.That(RogueliteAcademyLayerCatalog.Mapping("observatory_path").ContentTableId, Is.EqualTo("E02"));
+            Assert.That(RogueliteAcademyLayerCatalog.Mapping("tower_foyer").EncounterVariantId, Is.EqualTo("elite_foundry_b"));
+            Assert.That(RogueliteAcademyLayerCatalog.Mapping("tower_foyer").ContentTableId, Is.EqualTo("E01"));
         }
 
         [Test]

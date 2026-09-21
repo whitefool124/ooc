@@ -457,6 +457,23 @@ namespace OCC.Combat.Presentation
             ReturnToMapRun();
         }
 
+        public void CompleteCurrentServiceNode()
+        {
+            if (mapRun == null || !mapRun.IsInAcademyLayer) return;
+            try
+            {
+                mapRun.SettleCurrentServiceNode();
+                MarkPresentation(UiPresentationArea.MapStructure);
+                MarkPresentation(UiPresentationArea.MapResources);
+                if (!SaveMapRun()) return;
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, "服务节点已经结算。"));
+            }
+            catch (Exception exception)
+            {
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, exception.Message));
+            }
+        }
+
         private bool ExecuteFirstRunService(Func<RogueliteMapInteractionResult> operation, string success)
         {
             if (mapRun == null || !mapRun.IsFirstRunExperience)
@@ -470,7 +487,7 @@ namespace OCC.Combat.Presentation
                 PublishResourceChanges(result.ResourcesBefore, result.ResourcesAfter);
                 MarkPresentation(UiPresentationArea.MapStructure);
                 MarkPresentation(UiPresentationArea.MapResources);
-                if (!SaveMapRun()) return false;
+                if (!mapRun.IsInAcademyLayer && !SaveMapRun()) return false;
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Success, success));
                 return true;
             }
@@ -1571,8 +1588,16 @@ namespace OCC.Combat.Presentation
             if (mapRun != null && developerFlow.Phase == CombatFlowPhase.Victory) { ReturnToMapRun(); return; }
             if (rogueliteRun == null || (developerFlow.Phase != CombatFlowPhase.Victory && developerFlow.Phase != CombatFlowPhase.Defeat)) return;
             if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.IsShortRun) { OpenShortRunPhase(); return; }
-            if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); }
-            else { developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.OpenRogueliteMenu(); RefreshSceneHud(); }
+            if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain && !rogueliteRun.Package.IsComplete) { BuildCombatFromSceneStageTwo(); developerFlow.OpenBriefing(); return; }
+            // 首段（含首次体验）的战斗全部打完：进入并继续首段地图局，回到地图屏，而不是掉回开始界面。
+            if (developerFlow.Phase == CombatFlowPhase.Victory && rogueliteRun.Kind == RogueliteLaunchKind.StoryChain &&
+                TryStartMapRoguelite(true, FireRogueliteStarterCatalog.Universal))
+            {
+                rogueliteRun = null;
+                ReturnToMapRun();
+                return;
+            }
+            developerFlow.ReturnToDeveloperMenu(); state = developerFlow.State; rogueliteFlow.OpenRogueliteMenu(); RefreshSceneHud();
         }
         public void ForceCurrentOutcome(bool victory)
         {
@@ -1584,6 +1609,26 @@ namespace OCC.Combat.Presentation
         // 开发线一键过关：只在开发构建可用，不影响正式玩家 UI。
         public bool CanUseDeveloperMapAdvance => DeveloperBuildGate.IsEnabled && mapRun != null && !mapRun.IsComplete;
         public string DeveloperMapAdvanceSummary { get; private set; } = string.Empty;
+
+        /// <summary>
+        /// 开发线一键过关（战斗内也生效）：战斗内先按正常胜利路径消灭全部敌人并播放胜利，
+        /// 然后停在战后奖励界面由玩家自己挑；不在战斗中时才结算地图节点。
+        /// </summary>
+        public void DeveloperForceWinEverywhere()
+        {
+            if (!DeveloperBuildGate.IsEnabled) return;
+            if (developerFlow?.Phase == CombatFlowPhase.Active)
+            {
+                ForceCurrentOutcome(true);
+                return;
+            }
+            if (developerFlow?.Phase == CombatFlowPhase.Victory || developerFlow?.Phase == CombatFlowPhase.Defeat) return;
+            if (CanUseDeveloperMapAdvance)
+            {
+                RogueliteDeveloperAdvanceReport report = RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(mapRun, false);
+                PublishDeveloperMapAdvance(report);
+            }
+        }
 
         public void DeveloperForceWinCurrentCombat()
         {

@@ -161,8 +161,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void EnemyArchetypes_IncludeFixedFirstRunElite()
         {
-            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(21));
-            Assert.That(EnemyArchetypes.All, Has.Exactly(8).Matches<EnemyArchetype>(archetype => archetype.IsElite));
+            Assert.That(EnemyArchetypes.All.Count, Is.EqualTo(17));
+            Assert.That(EnemyArchetypes.All, Has.Exactly(7).Matches<EnemyArchetype>(archetype => archetype.IsElite));
             Assert.That(EnemyArchetypes.Get("elite_vanguard").DisplayName, Is.EqualTo("划线教官"));
             Assert.That(EnemyArchetypes.Get("breach_ram").MaxHealth, Is.EqualTo(36));
             Assert.That(EnemyArchetypes.Get("elder_tracker_hound").DisplayName, Is.EqualTo("老寻"));

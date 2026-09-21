@@ -70,8 +70,8 @@ namespace OCC.Combat.Presentation
 
             Box(new Rect(panel.x + 28, panel.y + 300, 864, 300), "学院地图开发线　一键过关 / 连续推进到首领");
             GUI.enabled = bootstrap.CanUseDeveloperMapAdvance;
-            if (ClickButton(new Rect(panel.x + 46, panel.y + 350, 268, 60), "一键过关\n结算当前战斗与掉落"))
-                Safe(bootstrap.DeveloperForceWinCurrentCombat);
+            if (ClickButton(new Rect(panel.x + 46, panel.y + 350, 268, 60), "一键过关\n战斗内：消灭全部敌人并进入战后奖励"))
+                Safe(bootstrap.DeveloperForceWinEverywhere);
             if (ClickButton(new Rect(panel.x + 326, panel.y + 350, 268, 60), "连续推进到首领\n自动处理沿途节点"))
                 Safe(bootstrap.DeveloperAdvanceToFinale);
             if (ClickButton(new Rect(panel.x + 606, panel.y + 350, 268, 60), "结算当前奖励\n领取或放弃悬空奖励"))

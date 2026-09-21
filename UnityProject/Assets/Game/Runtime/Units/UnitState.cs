@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OCC.Combat
 {
@@ -39,6 +40,8 @@ namespace OCC.Combat
         public int MovementRangeThisTurn { get; private set; } = BaseMovementRange;
         /// <summary>霸体：处于该状态时不会受到健康伤害，用于封存塔首领的阶段〇走流程。</summary>
         public bool IsSuperArmored { get; internal set; }
+        /// <summary>还能替本单位承受多少次健康伤害（引链：机关代核心承伤）。</summary>
+        public int DamageAbsorptions { get; internal set; }
 
         public UnitState(string id, bool isHero, GridPosition position)
         {
@@ -61,6 +64,12 @@ namespace OCC.Combat
         internal void AssignEnemyArchetype(string archetypeId) => EnemyArchetypeId = archetypeId;
         /// <summary>清除第二技能槽：用于只有一套公开战法、其余手段由运行时结算的单位。</summary>
         internal void ClearSecondarySkill() => SkillTwo = null;
+        /// <summary>把所有技能冷却整体减一（最低 0）。用于塔之守卫换装时的并链效果。</summary>
+        internal void ReduceCooldowns(int amount)
+        {
+            if (amount <= 0 || cooldowns.Count == 0) return;
+            foreach (string key in cooldowns.Keys.ToArray()) cooldowns[key] = Math.Max(0, cooldowns[key] - amount);
+        }
         public void ConfigureVitality(int maxHealth)
         {
             if (maxHealth < 1) throw new ArgumentOutOfRangeException(nameof(maxHealth));
@@ -83,6 +92,8 @@ namespace OCC.Combat
         internal void TakeDamage(int amount)
         {
             if (IsSuperArmored || amount <= 0) return;
+            // 引链：已放行的塔内机关替核心承受一次健康伤害；消耗由首领运行时在下一回合拆掉该机关。
+            if (DamageAbsorptions > 0) { DamageAbsorptions--; return; }
             Health = Math.Max(0, Health - amount);
         }
         internal int AbsorbShield(int amount) { int absorbed = Math.Min(Shield, amount); Shield -= absorbed; return absorbed; }
@@ -127,7 +138,7 @@ namespace OCC.Combat
         {
             UnitState clone = new UnitState(Id, IsHero, Position) { DisplayName = DisplayName, EnemyArchetypeId = EnemyArchetypeId, Armor = Armor, Shield = Shield, MaxShield = MaxShield, Block = Block, Speed = Speed, MainHand = MainHand, SkillOne = SkillOne, SkillTwo = SkillTwo };
             clone.Health = Health; clone.Mana = Mana; clone.ActionPoints = ActionPoints; clone.ActionValue = ActionValue; clone.MovementRangeThisTurn = MovementRangeThisTurn;
-            clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored;
+            clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored; clone.DamageAbsorptions = DamageAbsorptions;
             foreach (KeyValuePair<StatusType, int> entry in statuses) clone.statuses[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, int> entry in statusStrengths) clone.statusStrengths[entry.Key] = entry.Value;
             foreach (KeyValuePair<string, int> entry in cooldowns) clone.cooldowns[entry.Key] = entry.Value;

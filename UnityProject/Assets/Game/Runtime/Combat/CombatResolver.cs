@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OCC.Combat.Roguelite;
@@ -150,6 +150,11 @@ namespace OCC.Combat
         public static CombatEffectExecution EndTurn(CombatState state, UnitState unit)
         {
             state.EndRogueliteTurn(unit);
+            // 燃烧在自身回合结束结算（数据表口径），与规则集无关：剧情与肉鸽共用同一条生命结算。
+            CombatEffectExecution burning = CombatStatusLifecycle.ResolveTurnEnd(state, unit);
+            foreach (CombatEffectResult result in burning.Results)
+                if (result.Kind == CombatEffectKind.DamageHealth && result.AppliedAmount > 0)
+                    state.AddLog(unit.DisplayName + "\u7684\u71c3\u70e7\u89e6\u53d1\uff1a" + result.AppliedAmount + " \u4f24\u5bb3\u3002");
             unit.ChangeActionValue(-CombatActionTimeline.ReadyThreshold);
             unit.BeginTurn(0);
             state.SetActiveUnit(null);

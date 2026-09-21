@@ -8,6 +8,10 @@
         public const int LightDurability = 8;
         public const int StandardDurability = 16;
         public const int HeavyDurability = 24;
+        /// <summary>标定结构耐久：现场夯筑的临时墙低于重掩体（技能数据表 SK-CORE-02）。</summary>
+        public const int StakedDurability = 12;
+        /// <summary>试制件耐久（敌人技能数据表 SK-SUP-13）。</summary>
+        public const int PrototypeDurability = 8;
 
         public static TileState Empty => new TileState();
         public CoverType Cover { get; set; }

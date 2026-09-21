@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -65,8 +65,6 @@ namespace OCC.Combat.Presentation
                 testArenaUnits["shieldguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_shieldguard_pixel_candidate_64");
                 testArenaUnits["pyromancer"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_pyromancer_pixel_candidate_64");
                 testArenaUnits["elite_vanguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_elite_vanguard_pixel_candidate_64");
-                testArenaUnits["breaker"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_breaker_pixel_candidate_64");
-                testArenaUnits["warden"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_warden_pixel_candidate_64");
             }
             LoadAcademy();
             foreach (FormalArtEntry entry in FormalArtRegistry.Environments)
@@ -174,7 +172,7 @@ namespace OCC.Combat.Presentation
         {
             units["hero"] = RequiredTexture(FormalArtRegistry.UnitPath("hero"));
             string[] requiredEnemyIds = { "sigil_mauler", "barrier_mender", "tether_hound", "shieldguard", "pyromancer", "raider",
-                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer", "purifier_overseer"
+                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer"
             };
             foreach (string id in requiredEnemyIds)
                 units[EnemyArchetypes.Get(id).ArtId] = RequiredTexture(FormalArtRegistry.UnitPath(id));

@@ -88,13 +88,15 @@ namespace OCC.Combat
             {
                 case StatusType.Burning:
                     return new CombatStatusPresentation(status, "burning", "燃烧", duration, strength,
-                        "回合开始时失去 " + CombatStatusLifecycle.BurningDamagePerTurn + " 点生命，无视护盾。剩余 " + duration + " 回合。");
+                        "自身回合结束时失去 " + CombatStatusLifecycle.BurningDamagePerTurn + " 点生命，无视护盾。剩余 " + duration + " 回合。");
                 case StatusType.Slow:
                     return new CombatStatusPresentation(status, "slow", "迟缓", duration, strength,
                         "速度降低 3。剩余 " + duration + " 回合。");
                 case StatusType.Bound:
-                    return new CombatStatusPresentation(status, "bound", "束缚", duration, strength,
-                        "无法移动。剩余 " + duration + " 回合。");
+                    // 束缚在目标自身回合开始衰减：构造值比"实际受缚回合数"多 1，展示时按生效回合数给出。
+                    int boundRounds = Math.Max(1, duration - 1);
+                    return new CombatStatusPresentation(status, "bound", "束缚", boundRounds, strength,
+                        "无法移动。剩余 " + boundRounds + " 回合。");
                 case StatusType.ArmorBreak:
                     int armorLoss = unit.StatusStrength(status, 2);
                     return new CombatStatusPresentation(status, "armor_break", "破甲", duration, armorLoss,

@@ -38,6 +38,7 @@ namespace OCC.Combat.Presentation
         private string selectedWorkshopEquipmentId;
         private string selectedWorkshopSpellId;
         private LoadoutSection loadoutSection = LoadoutSection.Equipment;
+        private bool workshopForgeTab = true;
         private int selectedLoadoutSpellIndex;
         private string selectedLoadoutSpellId;
         private float loadoutCellSize = 64f;
@@ -57,6 +58,10 @@ namespace OCC.Combat.Presentation
         private string loadoutInteractionMessage = "左键拖拽物品　拖拽中按 R 键或右键旋转";
         private bool pageDirty = true;
         private bool animateNextRebuild = true;
+        private readonly HashSet<string> appearedMapNodes = new HashSet<string>(StringComparer.Ordinal);
+        private bool appearedMapNodesReady;
+        private bool appearedMapNodesLayerPhase;
+        private const float AcademyLayerCanvasWidth = 4200f;
         public int FullRebuildCount { get; private set; }
         public int PartialRefreshCount { get; private set; }
 
@@ -133,7 +138,12 @@ namespace OCC.Combat.Presentation
         private void Rebuild()
         {
             mapViewportController = null;
-            if (content != null) { content.transform.DOKill(); Destroy(content); }
+            if (content != null)
+            {
+                DOTween.Kill(content);
+                content.transform.DOKill();
+                Destroy(content);
+            }
             focusTargets.Clear();
             resourceValues.Clear();
             FullRebuildCount++;
@@ -254,11 +264,133 @@ namespace OCC.Combat.Presentation
             RectTransform mapCanvasRect = mapCanvas.AddComponent<RectTransform>();
             mapCanvasRect.anchorMin = mapCanvasRect.anchorMax = mapCanvasRect.pivot = new Vector2(.5f, .5f);
             mapCanvasRect.anchoredPosition = Vector2.zero;
-            mapCanvasRect.sizeDelta = new Vector2(1872, 874);
-            ApplyFormalMapBoard(mapCanvas);
-            DrawDistrictLabels(mapCanvas.transform);
+            mapCanvasRect.sizeDelta = new Vector2(run.IsInAcademyLayer ? AcademyLayerCanvasWidth : 1872f, 874f);
+            ApplyFormalMapBoard(mapCanvas, run.IsInAcademyLayer);
+            DrawDistrictLabels(mapCanvas.transform, run.IsInAcademyLayer);
             DrawConnections(mapCanvas.transform, run);
-            foreach (RogueliteMapNode node in run.MapNodes) DrawNode(mapCanvas.transform, run, node);
+            DrawRevealedMapNodes(mapCanvas.transform, run);
+            mapViewportController = mapPanel.AddComponent<RogueMapViewportController>();
+            mapViewportController.Initialize(mapPanel.GetComponent<RectTransform>(), mapCanvasRect, canvas);
+            Vector2 currentPosition = NodePosition(run, run.MapNode(run.CurrentNodeId));
+            mapViewportController.SetView(run.IsInAcademyLayer ? new Vector2(-currentPosition.x, 0f) : Vector2.zero, 0);
+        }
+
+        /// <summary>
+        /// 学院层不是另一张图：首轮固定段走过的节点留在原处，新区块从商店那一侧接着长出来。
+        /// 这里只画固定段已经确定的位置与连线，正式交互仍由学院层节点负责。
+        /// </summary>
+        private void DrawTutorialRegion(Transform parent, RogueliteMapRun run)
+        {
+            if (run == null || !run.IsFirstRunExperience || !run.IsInAcademyLayer) return;
+            var drawn = new HashSet<string>(StringComparer.Ordinal);
+            foreach (RogueliteMapNode from in FirstRunExperienceCatalog.MapNodes)
+            foreach (string nextId in from.NextIds)
+            {
+                RogueliteMapNode to;
+                try { to = FirstRunExperienceCatalog.MapNode(nextId); }
+                catch (InvalidOperationException) { continue; }
+                string key = string.CompareOrdinal(from.Id, to.Id) < 0 ? from.Id + "|" + to.Id : to.Id + "|" + from.Id;
+                if (!drawn.Add(key)) continue;
+                bool passed = TutorialRegionWalked(run, from.Id) && TutorialRegionWalked(run, to.Id);
+                DrawRoutePath(parent, OrthogonalRoute(NodePosition(from), NodePosition(to)),
+                    passed ? RogueliteMapRouteVisualState.Safe : RogueliteMapRouteVisualState.Known);
+            }
+            foreach (RogueliteMapNode node in FirstRunExperienceCatalog.MapNodes)
+            {
+                if (node.Id == FirstRunExperienceCatalog.ShopNodeId) continue;
+                bool visited = TutorialRegionWalked(run, node.Id);
+                RogueliteMapNodeVisualState state = visited ? RogueliteMapNodeVisualState.Cleared : RogueliteMapNodeVisualState.Known;
+                Color accent = visited ? safe : muted;
+                GameObject mark = FormalMapNodeButton(parent, NodePosition(node), node.Type, state, accent, null, "map.cleared." + node.Id);
+                AddCompactNodeIcon(mark.transform, node.Type, visited ? .92f : .4f);
+                AddMapNodeStateBadge(mark.transform, node.Type, state, accent);
+                BindHover(mark, node.DisplayName, visited ? "首轮固定段走过这里，位置不会再变。" : "首轮固定段当时没有走这条路。", accent);
+            }
+        }
+
+        /// <summary>首轮固定段节点是否已经走过：节点状态里只有已完成记录，因此以它为准。</summary>
+        private static bool TutorialRegionWalked(RogueliteMapRun run, string nodeId)
+            => (run.FirstRunExperience.Node(nodeId).Flags & FirstRunNodeFlags.Completed) != 0;
+
+        /// <summary>
+        /// 学院层从商店起点开始逐环显现：未探明节点不落图，每次新探明的节点按与起点的距离依次冒出来。
+        /// 首轮固定段沿用教学锁定态，节点集与以前一致。
+        /// </summary>
+        private void DrawRevealedMapNodes(Transform parent, RogueliteMapRun run)
+        {
+            if (appearedMapNodesReady && appearedMapNodesLayerPhase != run.IsInAcademyLayer) appearedMapNodes.Clear();
+            appearedMapNodesReady = true;
+            appearedMapNodesLayerPhase = run.IsInAcademyLayer;
+            Vector2 origin = MapRevealOrigin(run);
+            DrawTutorialRegion(parent, run);
+            if (run.IsInAcademyLayer) DrawShopOriginLandmark(parent, run);
+            foreach (RogueliteMapNode node in run.MapNodes)
+            {
+                if (!IsMapNodeRevealed(run, node)) continue;
+                GameObject nodeObject = DrawNode(parent, run, node);
+                if (appearedMapNodes.Add(node.Id)) PlayMapNodeEmergence(nodeObject, NodePosition(run, node), origin);
+            }
+        }
+
+        /// <summary>未探明节点不落图；学院层只落本层节点，跨层旧郊道节点不再进入视图。</summary>
+        private static bool IsMapNodeRevealed(RogueliteMapRun run, RogueliteMapNode node)
+        {
+            if (run.VisualStateFor(node.Id) == RogueliteMapNodeVisualState.Unknown) return false;
+            if (!run.IsInAcademyLayer) return true;
+            return RogueliteAcademyLayerCatalog.IsAcademyLayerNode(node.Id) || node.Id == run.CurrentNodeId;
+        }
+
+        /// <summary>显现波纹的起点：学院层是商店，其余阶段是当前位置。</summary>
+        private static Vector2 MapRevealOrigin(RogueliteMapRun run)
+        {
+            if (run.IsInAcademyLayer) return NodePosition(FirstRunExperienceCatalog.MapNode(FirstRunExperienceCatalog.ShopNodeId));
+            return NodePosition(run.MapNode(run.CurrentNodeId));
+        }
+
+        /// <summary>学院层起点标记：新节点从这座商店接入，之后它只作位置参照。</summary>
+        private void DrawShopOriginLandmark(Transform parent, RogueliteMapRun run)
+        {
+            RogueliteMapNode shop = FirstRunExperienceCatalog.MapNode(FirstRunExperienceCatalog.ShopNodeId);
+            Vector2 position = NodePosition(shop);
+            foreach (string entryId in RogueliteAcademyLayerCatalog.EntryNodeIds)
+            {
+                RogueliteMapNode entry = run.MapNode(entryId);
+                if (!IsMapNodeRevealed(run, entry)) continue;
+                DrawRoutePath(parent, OrthogonalRoute(position, NodePosition(run, entry)), RogueliteMapRouteVisualState.Safe);
+            }
+            GameObject landmark = FormalMapNodeButton(parent, position, RogueliteMapNodeType.Shop,
+                RogueliteMapNodeVisualState.Cleared, safe, null, "map.origin.shop");
+            AddCompactNodeIcon(landmark.transform, RogueliteMapNodeType.Shop, 1f);
+            AddMapNodeStateBadge(landmark.transform, RogueliteMapNodeType.Shop, RogueliteMapNodeVisualState.Cleared, safe);
+            BindHover(landmark, "起点 · 精英后商店", "首轮固定段在这里收束。学院地图的其余节点从这里依次接入。", safe);
+
+            // 节点自身带框，文字只能贴在节点外面，否则会被框体裁掉。
+            GameObject caption = Create("起点标注", parent);
+            RectTransform captionRect = caption.AddComponent<RectTransform>();
+            captionRect.anchorMin = captionRect.anchorMax = captionRect.pivot = new Vector2(.5f, .5f);
+            captionRect.anchoredPosition = position + new Vector2(0f, -84f);
+            captionRect.sizeDelta = new Vector2(224, 32);
+            Image captionPlate = caption.AddComponent<Image>();
+            captionPlate.color = FormalUiTheme.WithAlpha(ink, .86f);
+            captionPlate.raycastTarget = false;
+            Label("起点文字", "起点　精英后商店", caption.transform, new Vector2(10, -2), new Vector2(204, 28), 16,
+                safe, TextAnchor.MiddleCenter);
+        }
+
+        /// <summary>新探明节点的出场：按与起点的距离依次放大淡入，让地图看起来是从起点长出来的。</summary>
+        private void PlayMapNodeEmergence(GameObject nodeObject, Vector2 position, Vector2 origin)
+        {
+            if (nodeObject == null) return;
+            float intensity = bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity;
+            if (intensity <= 0f) return;
+            CanvasGroup group = nodeObject.GetComponent<CanvasGroup>();
+            if (group == null) group = nodeObject.AddComponent<CanvasGroup>();
+            float delay = Mathf.Clamp(Vector2.Distance(position, origin) / 900f, 0f, .5f) * intensity;
+            float duration = Mathf.Lerp(.34f, .2f, intensity);
+            group.alpha = 0f;
+            nodeObject.transform.localScale = new Vector3(.82f, .82f, 1f);
+            DOTween.To(() => group.alpha, value => group.alpha = value, 1f, duration).SetDelay(delay).SetLink(nodeObject);
+            nodeObject.transform.DOScale(Vector3.one, duration).SetDelay(delay).SetEase(Ease.OutBack).SetLink(nodeObject);
         }
 
         private void DrawFlatMapDistricts(Transform parent)
@@ -290,12 +422,13 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void DrawDistrictLabels(Transform parent)
+        private void DrawDistrictLabels(Transform parent, bool academyLayer)
         {
             string[] ids = { "teaching_archive", "training_workshop", "sealed_tower", "market_infirmary", "courtyard_dormitory", "campus_wilds" };
             foreach (string regionId in ids)
             {
                 Vector2 center = AcademyMapVisualLayout.SourceCenterForRegion(regionId);
+                if (academyLayer) center.x += AcademyMapVisualLayout.AcademyLayerSourceOffsetX;
                 Vector2 position = ProjectMapPosition(center) + RegionLabelOffset(regionId);
                 GameObject chip = Create("分区标签_" + regionId, parent);
                 RectTransform chipRect = chip.AddComponent<RectTransform>();
@@ -360,6 +493,11 @@ namespace OCC.Combat.Presentation
 
             bool current = node.Id == run.CurrentNodeId;
             bool cleared = run.CompletedNodes.Contains(node.Id);
+            // 工坊与医务室按 Pixso 是独立整页，不再塞进节点房间的右栏。
+            // 做完动作后仍停留在该页：治疗与餐食要在健康确认之后继续可用。
+            if (current && node.Type == RogueliteMapNodeType.Workshop) { DrawFirstRunWorkshop(content.transform, run); return; }
+            if (current && node.Type == RogueliteMapNodeType.Medical) { DrawFirstRunMedical(content.transform, run); return; }
+            if (current && node.Type == RogueliteMapNodeType.Shop) { DrawFirstRunShop(content.transform, run); return; }
             if (node.IsCombat && !cleared)
             {
                 DrawPixsoCombatDeparture(content.transform, run, node, current, NodeRoomAccent(node.Type));
@@ -425,17 +563,15 @@ namespace OCC.Combat.Presentation
                     () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
                 return;
             }
-            if (run.IsTutorialPhase && current && node.Id == "W")
+            if (current && node.Type == RogueliteMapNodeType.Workshop)
             {
-                DrawFirstRunWorkshop(parent, run);
                 return;
             }
-            if (run.IsTutorialPhase && current && node.Id == "M")
+            if (current && node.Type == RogueliteMapNodeType.Medical)
             {
-                DrawFirstRunMedical(parent, run);
                 return;
             }
-            if (run.IsTutorialPhase && current && node.Id == FirstRunExperienceCatalog.ShopNodeId)
+            if (current && node.Type == RogueliteMapNodeType.Shop)
             {
                 DrawFirstRunShop(parent, run);
                 return;
@@ -491,129 +627,417 @@ namespace OCC.Combat.Presentation
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
         }
 
+        /// <summary>
+        /// Pixso 11C／11D／11E：校准工坊是一张独立整页。页签切换装备锻造与术式专精，
+        /// 各自只有一次结算，结果由目标与材料唯一确定，不做随机重掷。
+        /// </summary>
         private void DrawFirstRunWorkshop(Transform parent, RogueliteMapRun run)
         {
-            FirstRunWorkshopSnapshot workshop = run.FirstRunExperience.Workshop;
+            FirstRunWorkshopSnapshot workshop = run.CurrentWorkshopService;
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(run.RogueRunState);
-            RogueEquipmentInstance[] equipment = runtime.AllInstances.Where(item => IsFirstRunForgeSlot(runtime.DefinitionFor(item.InstanceId).Slot)).ToArray();
+            RogueEquipmentInstance[] equipment = runtime.AllInstances
+                .Where(item => IsFirstRunForgeSlot(runtime.DefinitionFor(item.InstanceId).Slot)).ToArray();
             // 只有总案 4.2.2.1 登记了专精的术式才是合法目标：其余术式没有定义增幅结果，
             // 允许选择会让玩家白耗一份增幅刻墨（总案 6.2.7 要求非法时禁用并显示原因）。
             string[] spells = run.RogueRunState.MasteredSpellIds.Where(id =>
                 RogueSpellCombatRuntime.SupportsSpecialization(id) &&
-                RogueContentCatalog.CreateAcademyV01().Spells.Any(spell => spell.DefinitionId == id && spell.Role != "passive")).Distinct(StringComparer.Ordinal).ToArray();
-            if (equipment.All(item => item.InstanceId != selectedWorkshopEquipmentId)) selectedWorkshopEquipmentId = equipment.FirstOrDefault()?.InstanceId;
-            if (!spells.Contains(selectedWorkshopSpellId)) selectedWorkshopSpellId = spells.FirstOrDefault();
+                RogueContentCatalog.CreateAcademyV01().Spells.Any(spell => spell.DefinitionId == id && spell.Role != "passive"))
+                .Distinct(StringComparer.Ordinal).ToArray();
 
-            Label("页面标题", "工坊加工台", parent, new Vector2(44, -34), new Vector2(850, 44), 32, text, TextAnchor.MiddleLeft);
-            Label("页面说明", "两项加工各结算一次、分别保存；完成后会刷新精英入口条件。", parent, new Vector2(44, -82), new Vector2(900, 32), 17, muted, TextAnchor.MiddleLeft);
-            DrawWorkshopOperation(parent, run, runtime, true, new Vector2(44, -142), equipment, spells);
-            DrawWorkshopOperation(parent, run, runtime, false, new Vector2(580, -142), equipment, spells);
-            string gate = workshop.ForgeCompleted && workshop.SpecializationCompleted ? "精英门槛：工坊项目已完成" :
-                "精英门槛尚缺：" + (!workshop.ForgeCompleted ? "装备锻造" : string.Empty) +
-                (!workshop.ForgeCompleted && !workshop.SpecializationCompleted ? "、" : string.Empty) + (!workshop.SpecializationCompleted ? "术式专精" : string.Empty);
-            Label("门槛", gate, parent, new Vector2(44, -604), new Vector2(1068, 34), 18,
-                workshop.ForgeCompleted && workshop.SpecializationCompleted ? safe : amber, TextAnchor.MiddleCenter);
-            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(224, -650), new Vector2(720, 64), amber, true,
-                () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
-        }
-
-        private void DrawWorkshopOperation(Transform parent, RogueliteMapRun run, RogueEquipmentRuntime runtime, bool forge,
-            Vector2 position, RogueEquipmentInstance[] equipment, string[] spells)
-        {
-            FirstRunWorkshopSnapshot workshop = run.FirstRunExperience.Workshop;
+            bool forge = workshopForgeTab;
             bool completed = forge ? workshop.ForgeCompleted : workshop.SpecializationCompleted;
             string targetId = forge ? selectedWorkshopEquipmentId : selectedWorkshopSpellId;
-            string completedTarget = forge ? workshop.ForgedTargetId : workshop.SpecializedTargetId;
-            if (completed) targetId = completedTarget;
+            if (completed) targetId = forge ? workshop.ForgedTargetId : workshop.SpecializedTargetId;
             string targetName = forge ? EquipmentName(runtime, targetId) : SpellName(targetId);
             int material = forge ? run.FirstRunExperience.ForgeMaterialCount : run.FirstRunExperience.SpecializationMaterialCount;
-            GameObject card = Panel(forge ? "锻造卡" : "专精卡", parent, new Vector2(0, 1), new Vector2(0, 1), position, new Vector2(512, 432), FormalUiTheme.SurfaceRaised);
-            Label("类别", forge ? "装备锻造" : "术式专精", card.transform, new Vector2(26, -22), new Vector2(300, 38), 25, forge ? amber : cyan, TextAnchor.MiddleLeft);
-            Label("状态", completed ? "已完成" : "待处理", card.transform, new Vector2(350, -22), new Vector2(132, 38), 18, completed ? safe : muted, TextAnchor.MiddleRight);
-            Label("目标", string.IsNullOrEmpty(targetName) ? "没有合法目标" : targetName, card.transform, new Vector2(26, -86), new Vector2(460, 42), 24, text, TextAnchor.MiddleLeft);
-            string result = forge ? ForgePreview(runtime, targetId) : SpecializationPreview(targetId);
-            Label("唯一结果", "安装前 → 安装后\n" + result, card.transform, new Vector2(26, -138), new Vector2(460, 92), 17, text, TextAnchor.UpperLeft);
-            Label("材料", (forge ? "承力合金" : "增幅刻墨") + "　当前 " + material + "　需要 1", card.transform, new Vector2(26, -240), new Vector2(460, 30), 17, material > 0 ? safe : muted, TextAnchor.MiddleLeft);
-            int count = forge ? equipment.Length : spells.Length;
-            ActionButton("切换目标", count > 1 ? "查看下一个合法目标" : "当前仅有一个合法目标", card.transform,
-                new Vector2(26, -286), new Vector2(218, 58), cyan, !completed && count > 1,
-                () => CycleWorkshopTarget(forge, equipment, spells));
-            bool canConfirm = !completed && material > 0 && !string.IsNullOrEmpty(targetId);
-            ActionButton(completed ? "本轮已安装" : "确认安装", completed ? "结果已保存，不能更换" : canConfirm ? "消耗 1 份材料并保存" : "缺少材料或合法目标",
-                card.transform, new Vector2(264, -286), new Vector2(222, 58), completed ? safe : amber, canConfirm,
-                () => { if (forge) bootstrap.CompleteFirstRunForge(selectedWorkshopEquipmentId); else bootstrap.CompleteFirstRunSpecialization(selectedWorkshopSpellId); });
-            Label("不可更换提示", "确认后本轮不可撤回或改装。", card.transform, new Vector2(26, -366), new Vector2(460, 30), 15, muted, TextAnchor.MiddleCenter);
-        }
+            string materialName = forge ? "承力合金" : "增幅刻墨";
+            string materialIcon = forge ? FormalArtRegistry.ResourceMetricPath("parts") : FormalArtRegistry.ResourceMetricPath("operational_aether");
+            string preview = forge ? ForgePreview(runtime, targetId) : SpecializationPreview(targetId);
+            int materialTotal = run.FirstRunExperience.ForgeMaterialCount + run.FirstRunExperience.SpecializationMaterialCount;
 
-        private void CycleWorkshopTarget(bool forge, RogueEquipmentInstance[] equipment, string[] spells)
-        {
-            if (forge)
+            DrawServiceTopBar(parent, run, "校准工坊｜确定性强化",
+                (run.IsTutorialPhase ? "精英门槛　" : "节点额度　") + "锻造 " + (workshop.ForgeCompleted ? "1/1" : "0/1") + "　专精 " + (workshop.SpecializationCompleted ? "1/1" : "0/1"));
+
+            // 页签与库存块至少 64 高：FormalUiKit.Label 会把文字槽压进父框内，
+            // 小于 36 的文字槽连一行 24 号像素字都放不下，会整行不显示。
+            ActionButton("装备锻造", string.Empty, parent, new Vector2(48, -96), new Vector2(300, 64),
+                Color.Lerp(FormalUiTheme.SurfaceRaised, cyan, forge ? .3f : .06f), true,
+                () => { workshopForgeTab = true; Invalidate(false); }, focusKey: "页签_装备锻造");
+            ActionButton("术式专精", string.Empty, parent, new Vector2(364, -96), new Vector2(300, 64),
+                Color.Lerp(FormalUiTheme.SurfaceRaised, cyan, forge ? .06f : .3f), true,
+                () => { workshopForgeTab = false; Invalidate(false); }, focusKey: "页签_术式专精");
+            Label("页签说明", "从下方库存选中强化目标；放入后立即得到唯一结果，不随机。", parent,
+                new Vector2(700, -108), new Vector2(1172, 32), 17, muted, TextAnchor.MiddleRight);
+
+            GameObject bench = Panel("强化台", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -170), new Vector2(780, 356), FormalUiTheme.SurfaceRaised);
+            Label("强化台标题", "强化台", bench.transform, new Vector2(24, -16), new Vector2(320, 36), 24, text, TextAnchor.MiddleLeft);
+            DrawWorkshopTargetSlot(bench.transform, new Vector2(24, -68), new Vector2(352, 256), forge, runtime,
+                targetId, targetName, completed);
+            DrawWorkshopMaterialSlot(bench.transform, new Vector2(400, -68), new Vector2(352, 256), materialName, materialIcon, material);
+
+            GameObject previewPanel = Panel("强化预览", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(856, -170), new Vector2(1016, 356), FormalUiTheme.Surface);
+            Label("强化预览标题", "强化预览", previewPanel.transform, new Vector2(24, -16), new Vector2(320, 36), 24, text, TextAnchor.MiddleLeft);
+            bool hasTarget = !string.IsNullOrEmpty(targetId);
+            if (hasTarget)
             {
-                int index = Array.FindIndex(equipment, value => value.InstanceId == selectedWorkshopEquipmentId);
-                if (equipment.Length > 0) selectedWorkshopEquipmentId = equipment[(index + 1 + equipment.Length) % equipment.Length].InstanceId;
+                Icon("预览目标图标", forge ? FormalArtRegistry.EquipmentIconPath(runtime.DefinitionFor(targetId).DefinitionId) : RogueSpellIconPath(targetId),
+                    previewPanel.transform, new Vector2(24, -68), new Vector2(56, 56));
+                Label("预览目标", targetName, previewPanel.transform, new Vector2(96, -74), new Vector2(560, 42), 26, text, TextAnchor.MiddleLeft);
+                Label("预览差异", "安装前 → 安装后\n" + preview, previewPanel.transform, new Vector2(24, -140), new Vector2(964, 108), 19, text, TextAnchor.UpperLeft);
+                Label("预览材料", materialName + "　当前 " + material + " 份　本次消耗 1 份", previewPanel.transform,
+                    new Vector2(24, -252), new Vector2(600, 30), 17, material > 0 ? safe : danger, TextAnchor.MiddleLeft);
             }
             else
             {
-                int index = Array.IndexOf(spells, selectedWorkshopSpellId);
-                if (spells.Length > 0) selectedWorkshopSpellId = spells[(index + 1 + spells.Length) % spells.Length];
+                GameObject empty = Panel("空预览", previewPanel.transform, new Vector2(0, 1), new Vector2(0, 1),
+                    new Vector2(24, -68), new Vector2(964, 116), FormalUiTheme.SurfaceRaised);
+                Label("空预览标题", forge ? "先放入一件装备" : "先放入一项术式", empty.transform,
+                    new Vector2(0, 0), new Vector2(964, 60), 24, muted, TextAnchor.MiddleCenter);
+                Label("空预览说明", "放入目标后显示强化前后差异；结果固定、不随机，确认前不消耗材料。", empty.transform,
+                    new Vector2(0, -60), new Vector2(964, 44), 17, muted, TextAnchor.MiddleCenter);
             }
-            Invalidate(false);
+            bool canConfirm = !completed && hasTarget && material > 0;
+            string confirmDetail = completed ? "结果已保存，不能更换" : !hasTarget
+                ? (forge ? "先选一件装备" : "先选一项术式") : material > 0 ? "消耗 1 份" + materialName + "并保存" : "缺少 1 份" + materialName;
+            ActionButton(completed ? "本轮已安装" : "确认安装", confirmDetail, previewPanel.transform,
+                new Vector2(24, -290), new Vector2(320, 60), completed ? safe : amber, canConfirm,
+                () => { if (forge) bootstrap.CompleteFirstRunForge(selectedWorkshopEquipmentId); else bootstrap.CompleteFirstRunSpecialization(selectedWorkshopSpellId); },
+                focusKey: "按钮_确认安装");
+            Label("不可更换提示", "确认后本轮不可撤回或更换。", previewPanel.transform,
+                new Vector2(360, -300), new Vector2(628, 40), 16, muted, TextAnchor.MiddleLeft);
+
+            GameObject stock = Panel("库存", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -554), new Vector2(1824, 330), FormalUiTheme.Surface);
+            DrawWorkshopStockChip(stock.transform, new Vector2(24, -18), new Vector2(268, 64), "已有装备 " + equipment.Length, forge);
+            DrawWorkshopStockChip(stock.transform, new Vector2(308, -18), new Vector2(268, 64), "已有术式 " + spells.Length, !forge);
+            DrawWorkshopStockChip(stock.transform, new Vector2(592, -18), new Vector2(268, 64), "背包材料 " + materialTotal, false);
+            Label("库存提示", "点击卡牌即可把它放进强化台。", stock.transform,
+                new Vector2(900, -30), new Vector2(900, 40), 17, muted, TextAnchor.MiddleRight);
+            if (forge)
+            {
+                for (int index = 0; index < equipment.Length && index < 4; index++) DrawWorkshopEquipmentCard(stock.transform, index, runtime, equipment[index], workshop);
+                if (equipment.Length == 0)
+                    Label("空库存", "现在没有可锻造的装备。先在地图与奖励里拿一件。", stock.transform,
+                        new Vector2(24, -96), new Vector2(1700, 60), 20, muted, TextAnchor.MiddleLeft);
+            }
+            else
+            {
+                for (int index = 0; index < spells.Length && index < 4; index++)
+                    DrawWorkshopSpellCard(stock.transform, index, spells[index], workshop.SpecializationCompleted, workshop.SpecializedTargetId);
+                if (spells.Length == 0)
+                    Label("空库存", "现在没有可专精的术式。", stock.transform,
+                        new Vector2(24, -96), new Vector2(1700, 60), 20, muted, TextAnchor.MiddleLeft);
+            }
+
+            GameObject hint = Panel("操作提示", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -900), new Vector2(1824, 68), FormalUiTheme.Ink);
+            Label("操作提示文字", "点击卡牌：选择强化目标｜确认安装：消耗 1 份材料｜返回地图：不消耗学院时序", hint.transform,
+                new Vector2(20, -14), new Vector2(1784, 40), 16, Color.white, TextAnchor.MiddleLeft);
         }
 
+        /// <summary>服务类节点共用的 Pixso 顶栏：左标题、右门槛读数、最右返回地图。</summary>
+        private void DrawServiceTopBar(Transform parent, RogueliteMapRun run, string title, string gate)
+        {
+            GameObject top = Panel("服务顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
+                new Vector2(0, 80), FormalUiTheme.Ink);
+            Label("服务标题", title, top.transform, new Vector2(32, -14), new Vector2(880, 50), 28, Color.white, TextAnchor.MiddleLeft);
+            if (!string.IsNullOrEmpty(gate))
+                Label("服务门槛", gate, top.transform, new Vector2(880, -20), new Vector2(720, 40), 18,
+                    Color.Lerp(FormalUiTheme.Amber, Color.white, .45f), TextAnchor.MiddleRight);
+            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, top.transform, new Vector2(1640, -12), new Vector2(240, 56), amber, true,
+                () => ReturnFromService(run), focusKey: "按钮_返回地图", iconPath: FormalArtRegistry.NavigationPath("back"));
+        }
+
+        private void DrawWorkshopTargetSlot(Transform parent, Vector2 position, Vector2 size, bool forge,
+            RogueEquipmentRuntime runtime, string targetId, string targetName, bool completed)
+        {
+            GameObject slot = Panel("强化目标位", parent, new Vector2(0, 1), new Vector2(0, 1), position, size,
+                string.IsNullOrEmpty(targetId) ? FormalUiTheme.Surface : Color.Lerp(FormalUiTheme.Surface, cyan, .14f));
+            Line(slot.transform, Vector2.zero, new Vector2(5, size.y), string.IsNullOrEmpty(targetId) ? muted : cyan);
+            if (string.IsNullOrEmpty(targetId))
+            {
+                Label("空位标题", "选择强化目标", slot.transform, new Vector2(0, -84), new Vector2(size.x, 48), 25, cyan, TextAnchor.MiddleCenter);
+                Label("空位说明", forge ? "装备锻造：背包与身上的已激活装备" : "术式专精：已经掌握的合法术式", slot.transform,
+                    new Vector2(0, -140), new Vector2(size.x - 24, 30), 16, muted, TextAnchor.MiddleCenter);
+                Label("空位提示", "点击下方卡牌放入。", slot.transform, new Vector2(0, -186), new Vector2(size.x, 30), 16, muted, TextAnchor.MiddleCenter);
+                return;
+            }
+            string iconPath = forge ? FormalArtRegistry.EquipmentIconPath(runtime.DefinitionFor(targetId).DefinitionId) : RogueSpellIconPath(targetId);
+            Icon("目标图标", iconPath, slot.transform, new Vector2(24, -24), new Vector2(64, 64));
+            Label("目标名称", targetName, slot.transform, new Vector2(24, -104), new Vector2(size.x - 48, 76), 24, text, TextAnchor.UpperLeft);
+            Label("目标状态", completed ? "本轮安装已完成" : "待安装", slot.transform,
+                new Vector2(24, -196), new Vector2(size.x - 48, 32), 17, completed ? safe : cyan, TextAnchor.MiddleLeft);
+        }
+
+        private void DrawWorkshopMaterialSlot(Transform parent, Vector2 position, Vector2 size, string materialName, string iconPath, int material)
+        {
+            GameObject slot = Panel("强化材料位", parent, new Vector2(0, 1), new Vector2(0, 1), position, size,
+                material > 0 ? Color.Lerp(FormalUiTheme.Surface, amber, .18f) : FormalUiTheme.Surface);
+            Line(slot.transform, Vector2.zero, new Vector2(5, size.y), material > 0 ? amber : muted);
+            Icon("材料图标", iconPath, slot.transform, new Vector2(24, -24), new Vector2(64, 64));
+            Label("材料名称", materialName, slot.transform, new Vector2(24, -104), new Vector2(size.x - 48, 42), 24, text, TextAnchor.UpperLeft);
+            Label("材料数量", "当前 " + material + " 份", slot.transform, new Vector2(24, -152), new Vector2(size.x - 48, 34), 20,
+                material > 0 ? safe : danger, TextAnchor.MiddleLeft);
+            Label("材料提示", material > 0 ? "本次消耗 1 份，剩余 " + (material - 1) + " 份。" : "材料不足，先去拿一份再回来。", slot.transform,
+                new Vector2(24, -196), new Vector2(size.x - 48, 52), 16, muted, TextAnchor.UpperLeft);
+        }
+
+        private void DrawWorkshopStockChip(Transform parent, Vector2 position, Vector2 size, string label, bool active)
+        {
+            GameObject chip = Panel("库存页签", parent, new Vector2(0, 1), new Vector2(0, 1), position, size,
+                active ? FormalUiTheme.Ink : FormalUiTheme.SurfaceRaised);
+            Label("库存页签文字", label, chip.transform, new Vector2(12, -12), new Vector2(size.x - 24, 40), 19,
+                active ? Color.white : text, TextAnchor.MiddleCenter);
+        }
+
+        private void DrawWorkshopEquipmentCard(Transform parent, int index, RogueEquipmentRuntime runtime,
+            RogueEquipmentInstance item, FirstRunWorkshopSnapshot workshop)
+        {
+            EquipmentDefinition definition = runtime.DefinitionFor(item.InstanceId);
+            bool selected = item.InstanceId == (workshop.ForgeCompleted ? workshop.ForgedTargetId : selectedWorkshopEquipmentId);
+            string effects = RogueEquipmentEffects(definition, item);
+            string detail = "类别　" + EquipmentSlotLabel(definition.Slot) + "　" + RarityLabel(item.Rarity) +
+                "\n编号　" + definition.DefinitionId + "　来源　" + string.Join("、", definition.SourceTypes) +
+                "\n占格 " + definition.Width + "×" + definition.Height + "　重量 " + definition.BaseWeight +
+                "　强化位 " + (workshop.ForgeCompleted ? "已用" : "空") +
+                "\n效果\n" + (string.IsNullOrWhiteSpace(effects) ? "无额外效果" : effects) +
+                "\n锻造结果\n" + ForgePreview(runtime, item.InstanceId);
+            GameObject card = DrawWorkshopCard(parent, index, definition.DisplayName, definition.DefinitionId,
+                EquipmentSlotLabel(definition.Slot) + "　" + RarityLabel(item.Rarity),
+                "占格 " + definition.Width + "×" + definition.Height + "　重量 " + definition.BaseWeight +
+                "　强化位 " + (workshop.ForgeCompleted ? "已用" : "空"),
+                string.IsNullOrWhiteSpace(effects) ? "无额外效果" : effects.Split('\n')[0],
+                selected: selected, completed: workshop.ForgeCompleted,
+                onPick: () => { selectedWorkshopEquipmentId = item.InstanceId; Invalidate(false); });
+            BindContentHover(card, "装备强化目标", definition.DisplayName, detail, selected ? amber : cyan,
+                FormalArtRegistry.EquipmentIconPath(definition.DefinitionId),
+                new[] { EquipmentSlotLabel(definition.Slot), RarityLabel(item.Rarity), "占格 " + definition.Width + "×" + definition.Height });
+        }
+
+        private void DrawWorkshopSpellCard(Transform parent, int index, string spellId, bool specializationCompleted, string specializedTargetId)
+        {
+            SpellDefinition spell = RogueContentCatalog.CreateAcademyV01().Spells.FirstOrDefault(value => value.DefinitionId == spellId);
+            if (spell == null) return;
+            bool completed = specializationCompleted && specializedTargetId == spellId;
+            bool selected = spellId == (completed ? specializedTargetId : selectedWorkshopSpellId);
+            string rules = string.Join("；", spell.Rules.Select(SpellRuleText).Where(value => !string.IsNullOrWhiteSpace(value)).Take(2));
+            GameObject card = DrawWorkshopCard(parent, index, spell.DisplayName, spell.DefinitionId,
+                "个人术式　" + spell.Element + "　" + spell.Role,
+                spell.ActionPointCost + " AP　魔力 " + spell.ManaCost + "　冷却 " + spell.CooldownOwnTurns,
+                string.IsNullOrWhiteSpace(rules) ? SpecializationPreview(spellId) : rules,
+                selected: selected, completed: completed,
+                onPick: () => { selectedWorkshopSpellId = spellId; Invalidate(false); });
+            BindContentHover(card, "术式专精目标", spell.DisplayName, SpellTooltipBody(spell) + "\n专精结果\n" + SpecializationPreview(spellId),
+                selected ? amber : cyan, RogueSpellIconPath(spell.DefinitionId),
+                new[] { spell.Role, spell.ActionPointCost + " AP", "魔力 " + spell.ManaCost });
+        }
+
+        /// <summary>工坊库存卡：一张卡就是一条确定性强化结果，点击即选中，不提供随机重掷。</summary>
+        private GameObject DrawWorkshopCard(Transform parent, int index, string name, string id, string eyebrow,
+            string tags, string effect, bool selected, bool completed, Action onPick)
+        {
+            GameObject card = Panel("工坊卡_" + id, parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(24 + index * 444, -86), new Vector2(428, 214),
+                selected ? Color.Lerp(FormalUiTheme.Surface, cyan, .16f) : FormalUiTheme.SurfaceRaised);
+            Image image = card.GetComponent<Image>();
+            Line(card.transform, Vector2.zero, new Vector2(5, 214), selected ? cyan : muted);
+            Label("卡类别", eyebrow, card.transform, new Vector2(18, -12), new Vector2(392, 26), 15, muted, TextAnchor.MiddleLeft);
+            Label("卡名称", name, card.transform, new Vector2(18, -40), new Vector2(392, 40), 24, text, TextAnchor.MiddleLeft);
+            Label("卡编号", id + "　" + (completed ? "强化位已用" : "强化位空"), card.transform,
+                new Vector2(18, -82), new Vector2(392, 26), 14, muted, TextAnchor.MiddleLeft);
+            Label("卡标签", tags, card.transform, new Vector2(18, -112), new Vector2(392, 26), 15, text, TextAnchor.MiddleLeft);
+            Label("卡效果", effect, card.transform, new Vector2(18, -144), new Vector2(392, 58), 15, muted, TextAnchor.UpperLeft);
+            Button button = card.AddComponent<Button>();
+            button.targetGraphic = image; button.interactable = !completed;
+            if (onPick != null) button.onClick.AddListener(() => onPick());
+            FormalUiKit.ConfigureButtonFeedback(button, FormalUiButtonPalette.ForAccent(image.color, selected ? amber : cyan),
+                () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback,
+                completed ? "本轮强化位已经用掉" : string.Empty);
+            string focusKey = "工坊卡_" + id;
+            if (!focusTargets.ContainsKey(focusKey)) focusTargets.Add(focusKey, card);
+            return card;
+        }
+
+        /// <summary>
+        /// Pixso 12：医务室是一张独立整页。左侧是身份与三项读数，右侧是三条按顺序解锁的服务：
+        /// 健康确认只记录状态、治疗消耗学院贡献、餐食固定三选一，三者分别保存。
+        /// </summary>
         private void DrawFirstRunMedical(Transform parent, RogueliteMapRun run)
         {
-            FirstRunMedicalSnapshot medical = run.FirstRunExperience.Medical;
-            Label("页面标题", "医务室", parent, new Vector2(44, -34), new Vector2(760, 44), 32, text, TextAnchor.MiddleLeft);
-            Label("页面说明", "健康确认不治疗；治疗与餐食都是可选服务，并分别保存。", parent, new Vector2(44, -82), new Vector2(900, 32), 17, muted, TextAnchor.MiddleLeft);
-            RoomMetric(parent, "当前生命", PlayerFacingCopy.CurrentAndMaximum(run.CurrentHealth, 18), FormalArtRegistry.ResourceMetricPath("health"), new Vector2(44, -136), safe, 250);
-            RoomMetric(parent, "学院贡献", run.StageContribution.ToString(), FormalArtRegistry.ResourceMetricPath("contribution"), new Vector2(306, -136), cyan, 250);
-            RoomMetric(parent, "金币", run.Gold.ToString(), FormalArtRegistry.ResourceMetricPath("gold"), new Vector2(568, -136), amber, 250);
-            RoomMetric(parent, "学院食材", run.FirstRunExperience.AcademyFoodCount.ToString(), FormalArtRegistry.SemanticPath("notice"), new Vector2(830, -136), text, 250);
-
-            ActionButton(medical.HealthCheckCompleted ? "健康确认已完成" : "免费健康确认", medical.HealthCheckCompleted ? "精英入口条件已经记录" : "只记录状态，不恢复生命",
-                parent, new Vector2(44, -214), new Vector2(330, 92), medical.HealthCheckCompleted ? safe : cyan, !medical.HealthCheckCompleted, bootstrap.CompleteFirstRunHealthCheck);
-            bool canHeal = medical.HealthCheckCompleted && !medical.HealUsed && run.StageContribution >= 1 && run.CurrentHealth < 18;
-            string healReason = medical.HealUsed ? "本轮已经治疗" : !medical.HealthCheckCompleted ? "请先完成健康确认" : run.CurrentHealth >= 18 ? "生命已满" : run.StageContribution < 1 ? "缺少 1 学院贡献" : "学院贡献 -1\n恢复 9 生命（不超过 18）";
-            ActionButton(medical.HealUsed ? "治疗已完成" : "接受治疗", healReason, parent, new Vector2(398, -214), new Vector2(330, 92), medical.HealUsed ? safe : amber, canHeal, bootstrap.UseFirstRunHeal);
-            Label("餐食标题", medical.MealUsed ? "餐食已选择：" + MealName(medical.SelectedMealId) : "选择一份餐食（可跳过）", parent,
-                new Vector2(44, -332), new Vector2(1036, 38), 23, medical.MealUsed ? safe : text, TextAnchor.MiddleLeft);
+            FirstRunMedicalSnapshot medical = run.CurrentMedicalService;
             string[] meals = { "MEAL-POWER", "MEAL-AETHER", "MEAL-GUARD" };
-            for (int i = 0; i < meals.Length; i++)
+            bool canHeal = medical.HealthCheckCompleted && !medical.HealUsed && run.StageContribution >= 1 && run.CurrentHealth < 18;
+            string healStatus = medical.HealUsed ? "本轮已经治疗" : !medical.HealthCheckCompleted ? "请先完成健康确认" :
+                run.CurrentHealth >= 18 ? "生命已满" : run.StageContribution < 1 ? "缺少 1 学院贡献" : "可治疗";
+            bool mealAvailable = medical.HealthCheckCompleted && !medical.MealUsed;
+
+            DrawServiceTopBar(parent, run, "医务室（健康确认与服务）", "不消耗学院时序");
+
+            GameObject identity = Panel("医务室身份卡", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(48, -140), new Vector2(500, 660), FormalUiTheme.Ink);
+            Label("身份类别", "ACADEMY MEDICAL　SERVICE", identity.transform, new Vector2(28, -28), new Vector2(444, 26), 15,
+                Color.Lerp(FormalUiTheme.Safe, Color.white, .4f), TextAnchor.MiddleLeft);
+            Label("身份名称", "公共\n医务室", identity.transform, new Vector2(28, -66), new Vector2(420, 150), 44, Color.white, TextAnchor.UpperLeft);
+            MedicalMetricRow(identity.transform, new Vector2(28, -238), "生命（上限 18）", run.CurrentHealth.ToString(), FormalUiTheme.Health);
+            MedicalMetricRow(identity.transform, new Vector2(28, -314), "魔力（上限 12）", run.CurrentMana.ToString(), FormalUiTheme.Magic);
+            MedicalMetricRow(identity.transform, new Vector2(28, -390), "金・贡・食",
+                run.Gold + "・" + run.StageContribution + "・" + run.FirstRunExperience.AcademyFoodCount, amber);
+            Label("身份说明", "治疗与餐食都是可选服务，结果分别保存。\n离开医务室不会退还已经用掉的次数。", identity.transform,
+                new Vector2(28, -504), new Vector2(444, 120), 17, FormalUiTheme.WithAlpha(Color.white, .78f), TextAnchor.UpperLeft);
+
+            Label("页面标题", "健康确认与服务", parent, new Vector2(580, -150), new Vector2(1292, 62), 46, text, TextAnchor.MiddleLeft);
+            DrawMedicalServiceRow(parent, new Vector2(580, -240), new Vector2(1292, 140), FormalArtRegistry.SemanticPath("notice"),
+                "免费健康确认",
+                medical.HealthCheckCompleted ? "已完成：只记录当前状态，不恢复生命。" : "只记录当前状态，不恢复生命。",
+                medical.HealthCheckCompleted ? "精英门槛项已满足。" : "完成健康确认后，才开放治疗与餐食。",
+                medical.HealthCheckCompleted ? "已完成" : "可以确认", medical.HealthCheckCompleted ? safe : cyan,
+                !medical.HealthCheckCompleted, bootstrap.CompleteFirstRunHealthCheck);
+
+            DrawMedicalServiceRow(parent, new Vector2(580, -400), new Vector2(1292, 140), FormalArtRegistry.ResourceMetricPath("health"),
+                "接受治疗", "支付 1 学院贡献，恢复最大生命的 50%（9 点）。", "首轮限 1 次，不恢复魔力。",
+                healStatus, medical.HealUsed ? safe : canHeal ? safe : muted, canHeal, bootstrap.UseFirstRunHeal);
+
+            GameObject mealRow = Panel("服务_餐食选择", parent, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(580, -560), new Vector2(1292, 224),
+                mealAvailable ? FormalUiTheme.Surface : FormalUiTheme.SurfaceRaised);
+            Line(mealRow.transform, Vector2.zero, new Vector2(5, 224), mealAvailable ? safe : muted);
+            Icon("餐食图标", FormalArtRegistry.ResourceMetricPath("contribution"), mealRow.transform, new Vector2(24, -24), new Vector2(48, 48));
+            Label("餐食标题", "餐食选择", mealRow.transform, new Vector2(88, -22), new Vector2(760, 40), 26, text, TextAnchor.MiddleLeft);
+            Label("餐食说明", "固定展示 3 种餐食，最多购买 1 种，增益持续 3 场战斗。", mealRow.transform, new Vector2(88, -64), new Vector2(900, 40), 18, text, TextAnchor.MiddleLeft);
+            Label("餐食状态", medical.MealUsed ? "已选择 " + MealName(medical.SelectedMealId) : mealAvailable ? "可选" : "完成健康确认后开放",
+                mealRow.transform, new Vector2(992, -20), new Vector2(276, 40), 20,
+                medical.MealUsed ? safe : mealAvailable ? safe : muted, TextAnchor.MiddleRight);
+            for (int index = 0; index < meals.Length; index++)
             {
-                string mealId = meals[i]; bool affordable = MealAffordable(run, mealId); bool canBuy = medical.HealthCheckCompleted && !medical.MealUsed && affordable;
-                string reason = medical.MealUsed ? (medical.SelectedMealId == mealId ? "本轮已选择" : "本轮只能选择一种餐食") :
-                    !medical.HealthCheckCompleted ? "请先完成健康确认" : !affordable ? MealCostShortage(run, mealId) : MealEffect(mealId);
-                ActionButton(MealName(mealId), MealCost(mealId) + "\n" + reason, parent, new Vector2(44 + i * 354, -386), new Vector2(330, 112),
-                    canBuy ? safe : muted, canBuy, () => bootstrap.ChooseFirstRunMeal(mealId));
+                string mealId = meals[index];
+                bool affordable = MealAffordable(run, mealId);
+                bool canBuy = mealAvailable && affordable;
+                string state = medical.MealUsed ? (medical.SelectedMealId == mealId ? "本轮已选择" : "本轮只能选一种") :
+                    !medical.HealthCheckCompleted ? "请先完成健康确认" : !affordable ? MealCostShortage(run, mealId) : "选择后生效";
+                GameObject meal = ActionButton(MealName(mealId), MealCost(mealId) + "　" + state, mealRow.transform,
+                    new Vector2(24 + index * 424, -116), new Vector2(400, 104), canBuy ? safe : muted, canBuy,
+                    () => bootstrap.ChooseFirstRunMeal(mealId), focusKey: "按钮_餐食_" + mealId);
+                BindHover(meal, MealName(mealId), MealCost(mealId) + "\n" + MealEffect(mealId), canBuy ? safe : muted);
             }
-            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(224, -650), new Vector2(720, 64), amber, true,
-                () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+
+            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(1252, -1000), new Vector2(280, 64), amber, true,
+                () => ReturnFromService(run), focusKey: "按钮_返回地图", iconPath: FormalArtRegistry.NavigationPath("back"));
+            ActionButton(medical.HealUsed ? "治疗已完成" : "接受治疗", medical.HealUsed ? "本轮已经治疗过" : healStatus, parent,
+                new Vector2(1552, -1000), new Vector2(320, 64), medical.HealUsed ? safe : amber, canHeal,
+                bootstrap.UseFirstRunHeal, focusKey: "按钮_接受治疗");
+        }
+
+        /// <summary>医务室左侧读数行：色标 + 名称 + 数值。行高 76 才放得下一行 24 号像素字。</summary>
+        private void MedicalMetricRow(Transform parent, Vector2 position, string label, string value, Color accent)
+        {
+            GameObject row = Panel("读数_" + label, parent, new Vector2(0, 1), new Vector2(0, 1), position, new Vector2(444, 76), FormalUiTheme.Surface);
+            Panel("读数色标", row.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(16, -22), new Vector2(32, 32), accent);
+            Label("读数名称", label, row.transform, new Vector2(64, -18), new Vector2(240, 40), 18, text, TextAnchor.MiddleLeft);
+            Label("读数数值", value, row.transform, new Vector2(300, -18), new Vector2(132, 40), 24, text, TextAnchor.MiddleRight);
+        }
+
+        /// <summary>医务室右侧服务行：图标、名称、两行说明与状态；整行可点击执行。</summary>
+        private void DrawMedicalServiceRow(Transform parent, Vector2 position, Vector2 size, string iconPath, string title,
+            string detail, string note, string status, Color accent, bool enabled, Action action)
+        {
+            Color surface = enabled ? Color.Lerp(FormalUiTheme.Surface, accent, .1f) : FormalUiTheme.SurfaceRaised;
+            GameObject row = Panel("服务_" + title, parent, new Vector2(0, 1), new Vector2(0, 1), position, size, surface);
+            Image image = row.GetComponent<Image>();
+            Line(row.transform, Vector2.zero, new Vector2(5, size.y), enabled ? accent : muted);
+            Icon("服务图标", iconPath, row.transform, new Vector2(24, -24), new Vector2(48, 48));
+            Label("服务标题", title, row.transform, new Vector2(88, -20), new Vector2(760, 40), 26, text, TextAnchor.MiddleLeft);
+            Label("服务说明", detail + "\n" + note, row.transform, new Vector2(88, -68), new Vector2(900, 72), 18, text, TextAnchor.UpperLeft);
+            Label("服务状态", status, row.transform, new Vector2(size.x - 312, -20), new Vector2(288, 40), 20,
+                enabled ? accent : muted, TextAnchor.MiddleRight);
+            if (action != null)
+            {
+                Button button = row.AddComponent<Button>();
+                button.targetGraphic = image; button.interactable = enabled;
+                button.onClick.AddListener(() => action());
+                FormalUiKit.ConfigureButtonFeedback(button, FormalUiButtonPalette.ForAccent(surface, accent),
+                    () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback,
+                    enabled ? string.Empty : status);
+                BindHover(row, title, detail + "\n" + note, accent);
+            }
         }
 
         private void DrawFirstRunShop(Transform parent, RogueliteMapRun run)
         {
-            Label("页面标题", "精英后商店", parent, new Vector2(44, -34), new Vector2(760, 44), 32, text, TextAnchor.MiddleLeft);
-            Label("页面说明", "购买可选；每件商品独立结算并保存。离开商店后完成固定首次体验。", parent, new Vector2(44, -82), new Vector2(1000, 32), 17, muted, TextAnchor.MiddleLeft);
-            RoomMetric(parent, "金币", run.Gold.ToString(), FormalArtRegistry.ResourceMetricPath("gold"), new Vector2(44, -132), amber, 260);
+            FirstRunShopSnapshot shop = run.CurrentShopService;
+            GameObject top = Panel("商店顶栏", parent, new Vector2(0, 1), new Vector2(1, 1), Vector2.zero,
+                new Vector2(0, 80), FormalUiTheme.Ink);
+            Label("商店标题", run.IsTutorialPhase ? "学院市集（精英后商店展开）" : "学院补给商店", top.transform,
+                new Vector2(32, -14), new Vector2(900, 50), 28, Color.white, TextAnchor.MiddleLeft);
+            ShopMetric(top.transform, new Vector2(940, -10), "金币", run.Gold.ToString(), FormalArtRegistry.ResourceMetricPath("gold"), amber);
+            ShopMetric(top.transform, new Vector2(1250, -10), "贡献", run.StageContribution.ToString(), FormalArtRegistry.ResourceMetricPath("contribution"), safe);
+            ShopMetric(top.transform, new Vector2(1560, -10), "食材", run.FirstRunExperience.AcademyFoodCount.ToString(), FormalArtRegistry.ResourceMetricPath("operational_aether"), cyan);
+
+            Label("页面标题", "本次可用货品", parent, new Vector2(64, -112), new Vector2(1200, 62), 46, text, TextAnchor.MiddleLeft);
+            Label("页面说明", "每件商品在这个节点限购 1 件；购买结果在离开商店时一并保存。", parent,
+                new Vector2(64, -174), new Vector2(1500, 36), 18, muted, TextAnchor.MiddleLeft);
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
-            for (int i = 0; i < run.FirstRunExperience.Shop.Offers.Count; i++)
+            for (int i = 0; i < shop.Offers.Count; i++)
             {
-                FirstRunShopOfferSnapshot offer = run.FirstRunExperience.Shop.Offers[i];
+                FirstRunShopOfferSnapshot offer = shop.Offers[i];
                 string name = ContentName(catalog, offer.DefinitionId);
                 bool space = run.CanAcceptFirstRunOffer(offer.OfferId);
                 bool affordable = run.Gold >= offer.Price;
                 bool canBuy = !offer.Sold && affordable && space;
-                string reason = offer.Sold ? "已售罄" : !affordable ? "还差 " + (offer.Price - run.Gold) + " 金币" : !space ? "背包空间不足，请先整理" : "点击后直接购买并放入背包";
-                string cardDetail = offer.Price + " 金币\n" + reason + "\n" + ShopContentDetail(catalog, offer.DefinitionId);
-                GameObject button = ActionButton(name, cardDetail, parent, new Vector2(44 + i * 354, -220), new Vector2(330, 190),
-                    offer.Sold ? muted : canBuy ? amber : muted, canBuy, () => bootstrap.PurchaseFirstRunOffer(offer.OfferId));
-                BindHover(button, name, ShopContentDetail(catalog, offer.DefinitionId), offer.Sold ? muted : amber);
+                string reason = offer.Sold ? "已售罄" : !affordable ? "金币不足：还差 " + (offer.Price - run.Gold) : !space ? "背包空间不足" : "可购买";
+                Vector2 position = new Vector2(424 + i * 368, -246);
+                GameObject card = Panel("商品卡_" + offer.OfferId, parent, new Vector2(0, 1), new Vector2(0, 1), position,
+                    new Vector2(336, 292), offer.Sold ? FormalUiTheme.SurfaceRaised : FormalUiTheme.Surface);
+                Line(card.transform, Vector2.zero, new Vector2(5, 292), offer.Sold ? muted : canBuy ? cyan : amber);
+                Label("商品类别", ContentCategory(catalog, offer.DefinitionId) + "　价值 " + offer.Price + " 金币", card.transform,
+                    new Vector2(16, -14), new Vector2(304, 28), 15, offer.Sold ? muted : amber, TextAnchor.MiddleLeft);
+                Label("商品名称", name, card.transform, new Vector2(16, -54), new Vector2(304, 44), 27, text, TextAnchor.MiddleLeft);
+                Label("商品编号", offer.DefinitionId, card.transform, new Vector2(16, -102), new Vector2(304, 26), 15, muted, TextAnchor.MiddleLeft);
+                Label("商品效果", ShopContentDetail(catalog, offer.DefinitionId), card.transform, new Vector2(16, -142), new Vector2(304, 108), 16, text, TextAnchor.UpperLeft);
+                Label("商品状态", reason, card.transform, new Vector2(16, -254), new Vector2(304, 28), 16,
+                    offer.Sold ? danger : canBuy ? safe : muted, TextAnchor.MiddleLeft);
+                GameObject button = ActionButton(offer.Sold ? "已售罄" : "购买｜" + offer.Price + " 金币", reason, parent,
+                    new Vector2(position.x, -558), new Vector2(336, 68), offer.Sold ? muted : canBuy ? cyan : muted, canBuy,
+                    () => bootstrap.PurchaseFirstRunOffer(offer.OfferId));
+                BindHover(card, name, ShopContentDetail(catalog, offer.DefinitionId), offer.Sold ? muted : amber);
+                BindHover(button, name, reason, offer.Sold ? muted : canBuy ? cyan : amber);
             }
-            ActionButton("整理行囊", "购买前可腾出背包空间", parent, new Vector2(44, -446), new Vector2(330, 84), cyan, true, () => SetOverlay(UiOverlay.Loadout));
-            ActionButton("离开商店并完成首次体验", "购买并非必需；离开后写入完成标记", parent, new Vector2(398, -446), new Vector2(684, 84), safe, true,
-                bootstrap.CompleteFirstRunExperience, iconPath: FormalArtRegistry.NavigationPath("confirm"));
-            Label("离店说明", "库存、购买与完成状态都会保留；返回入口后可继续查看档案。", parent,
-                new Vector2(44, -558), new Vector2(1038, 52), 17, muted, TextAnchor.MiddleCenter);
+            ActionButton("返回地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(64, -898), new Vector2(260, 68), amber, true,
+                () => { if (run.IsTutorialPhase) bootstrap.CompleteFirstRunExperience(); else ReturnFromService(run); },
+                focusKey: "按钮_返回地图", iconPath: FormalArtRegistry.NavigationPath("back"));
+            ActionButton("打开行囊", "购买前可腾出背包空间", parent, new Vector2(1596, -898), new Vector2(260, 68), cyan, true,
+                () => SetOverlay(UiOverlay.Loadout));
+            ActionButton(run.IsTutorialPhase ? "离开商店并完成首次体验" : "离开商店并结算节点", "购买并非必需；离开后写入完成标记",
+                parent, new Vector2(700, -690), new Vector2(520, 76), safe, true,
+                () => { if (run.IsTutorialPhase) bootstrap.CompleteFirstRunExperience(); else ReturnFromService(run); },
+                iconPath: FormalArtRegistry.NavigationPath("confirm"));
+            Label("离店说明", "库存、购买与完成状态都会保留；返回地图后可继续前进。", parent,
+                new Vector2(500, -792), new Vector2(920, 52), 17, muted, TextAnchor.MiddleCenter);
+        }
+
+        private void ShopMetric(Transform parent, Vector2 position, string label, string value, string iconPath, Color accent)
+        {
+            GameObject metric = Panel("商店资源_" + label, parent, new Vector2(0, 1), new Vector2(0, 1), position,
+                new Vector2(286, 60), FormalUiTheme.Surface);
+            Icon("资源图标", iconPath, metric.transform, new Vector2(12, -10), new Vector2(40, 40));
+            Label("资源名", label, metric.transform, new Vector2(64, -10), new Vector2(116, 40), 17, muted, TextAnchor.MiddleLeft);
+            Label("资源值", value, metric.transform, new Vector2(184, -10), new Vector2(86, 40), 23, accent, TextAnchor.MiddleRight);
+        }
+
+        private static string ContentCategory(RogueContentCatalog catalog, string definitionId)
+        {
+            if (catalog.Equipment.Any(value => value.DefinitionId == definitionId)) return "装备";
+            if (catalog.TacticalItems.Any(value => value.DefinitionId == definitionId)) return "战术道具";
+            if (catalog.Spells.Any(value => value.DefinitionId == definitionId)) return "术式";
+            return "货品";
+        }
+
+        private void ReturnFromService(RogueliteMapRun run)
+        {
+            SetOverlay(UiOverlay.None);
+            if (!run.IsTutorialPhase && run.IsInAcademyLayer && !run.IsServiceNodeSettled(run.CurrentNodeId))
+                bootstrap.CompleteCurrentServiceNode();
         }
 
         private static bool IsFirstRunForgeSlot(OCC.Combat.Roguelite.EquipmentSlot slot)
@@ -734,8 +1158,8 @@ namespace OCC.Combat.Presentation
             Label("数值", preview == null || preview.IsZeroTime ? "不耗时" : "+" + preview.TimeCost, cost.transform, new Vector2(264, -12), new Vector2(136, 32), 22, text, TextAnchor.MiddleRight);
 
             Label("公开标题", "任务公开信息", parent, new Vector2(580, -296), new Vector2(900, 58), 46, text, TextAnchor.MiddleLeft);
-            GameObject objectivePanel = Panel("Pixso行动目标", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), FormalUiTheme.Surface);
-            Image focus = FormalUiKit.FocusFrame(objectivePanel.transform); focus.color = cyan;
+            GameObject objectivePanel = Panel("Pixso行动目标", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), Color.Lerp(FormalUiTheme.Surface, cyan, .14f));
+            Line(objectivePanel.transform, Vector2.zero, new Vector2(5, 104), cyan);
             Icon("目标图标", FormalArtRegistry.ResourceMetricPath("risk"), objectivePanel.transform, new Vector2(26, -26), new Vector2(52, 52));
             Label("目标", objective, objectivePanel.transform, new Vector2(92, -16), new Vector2(1160, 70), 28, text, TextAnchor.MiddleLeft);
 
@@ -999,7 +1423,8 @@ namespace OCC.Combat.Presentation
                 string key = string.CompareOrdinal(from.Id, nextId) < 0 ? from.Id + "|" + nextId : nextId + "|" + from.Id;
                 if (!drawn.Add(key)) continue;
                 RogueliteMapNode to = run.MapNode(nextId);
-                Vector2 a = NodePosition(from); Vector2 b = NodePosition(to);
+                if (!IsMapNodeRevealed(run, from) || !IsMapNodeRevealed(run, to)) continue;
+                Vector2 a = NodePosition(run, from); Vector2 b = NodePosition(run, to);
                 RogueliteMapNodeVisualState fromState = run.VisualStateFor(from.Id);
                 RogueliteMapNodeVisualState toState = run.VisualStateFor(to.Id);
                 RogueliteMapRouteVisualState route = RogueliteMapVisualPresentation.RouteState(fromState, toState);
@@ -1008,7 +1433,7 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void DrawNode(Transform parent, RogueliteMapRun run, RogueliteMapNode node)
+        private GameObject DrawNode(Transform parent, RogueliteMapRun run, RogueliteMapNode node)
         {
             RogueliteMapNodeVisualState state = run.VisualStateFor(node.Id);
             bool identified = state != RogueliteMapNodeVisualState.Unknown;
@@ -1019,7 +1444,7 @@ namespace OCC.Combat.Presentation
                 state == RogueliteMapNodeVisualState.Cleared ? safe : state == RogueliteMapNodeVisualState.Locked ? muted : state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Visited ? amber : muted;
             string focusKey = RogueliteMapVisualPresentation.FocusKey(node.Id);
             string time = identified && run.UsesRogue11 ? (AcademyMapTuning.TimeCost(node.Type) == 0 ? "　零时" : "　+" + AcademyMapTuning.TimeCost(node.Type) + "时") : string.Empty;
-            GameObject buttonObject = FormalMapNodeButton(parent, NodePosition(node), node.Type, state, accent, () =>
+            GameObject buttonObject = FormalMapNodeButton(parent, NodePosition(run, node), node.Type, state, accent, () =>
             {
                 selectedNodeId = node.Id;
                 pendingFocusKey = focusKey;
@@ -1038,6 +1463,7 @@ namespace OCC.Combat.Presentation
             AddMapNodeStateBadge(buttonObject.transform, node.Type, state, accent);
             if (passedThrough) AddMapNodeVisitedBadge(buttonObject.transform, node.Type);
             if (selected && buttonObject.transform.Find("节点选中动效") == null) AddMapNodeSelectionEffect(buttonObject.transform, node.Type, accent);
+            return buttonObject;
         }
 
         private void AddMapNodeSelectionEffect(Transform parent, RogueliteMapNodeType type, Color accent)
@@ -2401,9 +2827,10 @@ namespace OCC.Combat.Presentation
             Vector2 end = rect.anchoredPosition;
             rect.anchoredPosition = end + new Vector2(motion.PageOffset, 0f);
             group.alpha = 0f;
-            DOTween.Sequence().SetUpdate(true).SetTarget(this)
-                .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.StandardDuration))
-                .Join(DOTween.To(() => rect.anchoredPosition, value => rect.anchoredPosition = value, end, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
+            GameObject page = content;
+            DOTween.Sequence().SetUpdate(true).SetTarget(page)
+                .Join(DOTween.To(() => group != null ? group.alpha : 0f, value => { if (group != null) group.alpha = value; }, 1f, motion.StandardDuration))
+                .Join(DOTween.To(() => rect != null ? rect.anchoredPosition : end, value => { if (rect != null) rect.anchoredPosition = value; }, end, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
         }
 
         private void OnDestroy()
@@ -2633,6 +3060,11 @@ namespace OCC.Combat.Presentation
             return ProjectMapPosition(AcademyMapVisualLayout.AnchorFor(node).SourcePosition);
         }
 
+        private static Vector2 NodePosition(RogueliteMapRun run, RogueliteMapNode node)
+        {
+            return ProjectMapPosition(AcademyMapVisualLayout.SourcePositionFor(node, run != null && run.IsInAcademyLayer));
+        }
+
         private static Vector2 ProjectMapPosition(Vector2 source)
         {
             return new Vector2(source.x / AcademyMapVisualLayout.SourceSize.x * 1760f - 880f,
@@ -2664,14 +3096,21 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private static void ApplyFormalMapBoard(GameObject mapCanvas)
+        private static void ApplyFormalMapBoard(GameObject mapCanvas, bool academyLayer)
         {
             Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.MapDecorPath("academy_network"));
             if (sprite == null) throw new KeyNotFoundException("Missing formal academy map board");
-            GameObject backdrop = Create("学院连续鸟瞰底图", mapCanvas.transform);
+            AddMapBackdrop(mapCanvas.transform, sprite, "学院连续鸟瞰底图", Vector2.zero);
+            if (academyLayer)
+                AddMapBackdrop(mapCanvas.transform, sprite, "学院连续鸟瞰底图_展开区", new Vector2(1872f, 0f));
+        }
+
+        private static void AddMapBackdrop(Transform parent, Sprite sprite, string name, Vector2 position)
+        {
+            GameObject backdrop = Create(name, parent);
             RectTransform rect = backdrop.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
-            rect.anchoredPosition = Vector2.zero;
+            rect.anchoredPosition = position;
             rect.sizeDelta = new Vector2(1872f, 1053f);
             Image image = backdrop.AddComponent<Image>(); image.sprite = sprite; image.type = Image.Type.Simple; image.color = Color.white; image.raycastTarget = false;
             backdrop.transform.SetAsFirstSibling();

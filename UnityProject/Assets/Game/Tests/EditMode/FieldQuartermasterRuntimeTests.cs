@@ -67,12 +67,14 @@ namespace OCC.Combat.Tests
         [Test]
         public void Storekeeper_PulseOutOfRangeFallsBackToRetireOrRegister()
         {
-            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(10, 3), out _);
+            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(4, 3), out _);
+            // 重掩体截断旧脉冲的直线，主角仍在登记射程（4 格）内。
+            Set(state, 3, 3, tile => { tile.Cover = CoverType.Heavy; tile.Durability = TileState.HeavyDurability; });
 
             CombatResolver.BeginTurn(state, "enemy_0");
 
             Assert.That(state.EventLog.Any(line => line.Contains("旧脉冲")), Is.False);
-            Assert.That(state.AcademyFieldEnemy.InspectionMarkCount, Is.EqualTo(1), "射程外改为登记主角。");
+            Assert.That(state.AcademyFieldEnemy.InspectionMarkCount, Is.EqualTo(1), "直线被截断后改为登记主角。");
             Assert.That(state.EventLog.Any(line => line.Contains("登记")), Is.True);
         }
 
@@ -83,18 +85,20 @@ namespace OCC.Combat.Tests
             CombatResolver.BeginTurn(state, "enemy_0");
             state.AcademyFieldEnemy.Clone(); // 快照在上一回合结束时已经建立
             CombatResolver.BeginTurn(state, "hero");
-            Set(state, 6, 5, tile => tile.IsLoosePaper = true);
+            // 退件射程上限 5 格：把新生成的散页放进该范围内。
+            Set(state, 5, 3, tile => tile.IsLoosePaper = true);
 
             CombatResolver.BeginTurn(state, "enemy_0");
 
-            Assert.That(Tile(state, 6, 5).IsLoosePaper, Is.False, "主角新生成的散页被优先退掉。");
+            Assert.That(Tile(state, 5, 3).IsLoosePaper, Is.False, "主角新生成的散页被优先退掉。");
             Assert.That(state.EventLog.Any(line => line.Contains("退件")), Is.True);
         }
 
         [Test]
         public void Storekeeper_RegisterClearsTheNextShieldGrant()
         {
-            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(10, 3), out _);
+            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(4, 3), out _);
+            Set(state, 3, 3, tile => { tile.Cover = CoverType.Heavy; tile.Durability = TileState.HeavyDurability; });
             CombatResolver.BeginTurn(state, "enemy_0");
             Assert.That(state.AcademyFieldEnemy.InspectionMarkCount, Is.EqualTo(1));
 

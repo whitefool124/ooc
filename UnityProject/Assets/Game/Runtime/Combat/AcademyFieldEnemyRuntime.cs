@@ -16,6 +16,12 @@ namespace OCC.Combat
         public const string LibrarianId = "wind_librarian";
         public const string StorekeeperId = "legacy_storekeeper";
         public const string PrototypeHandId = "prototype_hand";
+        /// <summary>退件射程上限（技能数据表 SK-SUP-18）。</summary>
+        public const int RetireRange = 5;
+        /// <summary>登记射程上限（技能数据表 SK-SUP-19）。</summary>
+        public const int RegisterRange = 4;
+        /// <summary>旧脉冲冷却回合数（技能数据表 SK-SUP-17）。</summary>
+        public const int PulseCooldown = 2;
 
         /// <summary>气味痕持续的主角回合数。</summary>
         public const int TraceRounds = 3;
@@ -31,6 +37,7 @@ namespace OCC.Combat
         private int heroRounds;
         private int rotateUses;
         private int windChanges;
+        private int pulseCooldown;
         private readonly HashSet<string> inspectionMarks = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<GridPosition> knownFieldCells = new HashSet<GridPosition>();
         private readonly HashSet<GridPosition> knownDeviceCells = new HashSet<GridPosition>();
@@ -84,7 +91,9 @@ namespace OCC.Combat
 
         /// <summary>守塔之外的场地敌人是否接管该单位的行动。</summary>
         public static bool Handles(UnitState unit) =>
-            IsTracker(unit) || IsKeeper(unit) || IsLibrarian(unit) || IsStorekeeper(unit) || IsPrototypeHand(unit);
+            IsTracker(unit) || IsKeeper(unit) || IsLibrarian(unit) || IsStorekeeper(unit) || IsPrototypeHand(unit) ||
+            unit.EnemyArchetypeId == "elite_vanguard" || unit.EnemyArchetypeId == "stone_snare" ||
+            unit.EnemyArchetypeId == "lantern_revealer" || unit.EnemyArchetypeId == "barrier_mender";
 
         public CombatCommand ChooseEnemyCommand(CombatState state, UnitState enemy, UnitState hero)
         {
@@ -129,10 +138,10 @@ namespace OCC.Combat
             return EnemyTactics.Choose(state, enemy, hero);
         }
 
-        /// <summary>灯台值守：先在射程内转镜，否则保持距离并等待。</summary>
+        /// <summary>灯台值守：转镜（光柱）在自身回合开始由运行时结算，因此这里只用灯镜攻击或走位。
+        /// 注意：`转镜` 条目是 Self 语义的公开描述，若走技能管道会对自身结算伤害，禁止在此施放。</summary>
         private static CombatCommand ChooseKeeperCommand(CombatState state, UnitState enemy, UnitState hero)
         {
-            if (enemy.IsSkillReady(enemy.SkillOne)) return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             int weaponRange = enemy.MainHand?.Range ?? 1;
             if (distance <= weaponRange && (weaponRange <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
@@ -152,7 +161,7 @@ namespace OCC.Combat
                 string bite = TraceCount(state) > 0
                     ? "扑咬：目标位于气味痕上时改为 6 点伤害并束缚 1 回合。"
                     : "场上暂无气味痕，扑咬只结算 3 点伤害。";
-                return new EnemyIntentPresentation("tracker:" + (onTrace ? "on" : "off") + ":" + basic.Signature,
+                return new EnemyIntentPresentation(basic.Signature,
                     basic.ActionName, basic.TargetSummary, rule + " " + bite + " " + basic.ResultSummary,
                     basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
             }
@@ -163,7 +172,7 @@ namespace OCC.Combat
                     "下一次获得的护盾被优先清除）。";
                 string marks = inspectionMarks.Count == 0 ? "当前没有待检定标记。" : "当前有 " + inspectionMarks.Count + " 个待检定标记。";
                 string retireReaction = "反应：主角本回合新生成的效果或装置会被优先退掉。";
-                return new EnemyIntentPresentation("storekeeper:marks" + inspectionMarks.Count + ":" + basic.Signature,
+                return new EnemyIntentPresentation(basic.Signature,
                     basic.ActionName, basic.TargetSummary, kit + " " + marks + " " + retireReaction + " " + basic.ResultSummary,
                     basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
             }
@@ -172,7 +181,7 @@ namespace OCC.Combat
                 string kit = "可用场地手段：布放（在正交相邻空格放下一件试制件；先放护罩发生器，再放过载装置）／引爆（引爆与主角相邻的过载装置，敌我一致）。";
                 string stock = "试制箱剩余 " + PrototypeRemaining + " 件（已布放 " + PrototypePlaced + " 件）。";
                 string deployReaction = "反应：主角站在试制件相邻时优先引爆该件；主角拆除试制件时优先补放一件。";
-                return new EnemyIntentPresentation("prototype:stock" + PrototypeRemaining + ":" + basic.Signature,
+                return new EnemyIntentPresentation(basic.Signature,
                     basic.ActionName, basic.TargetSummary, kit + " " + stock + " " + deployReaction + " " + basic.ResultSummary,
                     basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
             }
@@ -185,7 +194,7 @@ namespace OCC.Combat
                     windChanges + "/" + WindChanges + " 次）。";
                 string field = "场上散页 " + papers + " 格，火场 " + fires + " 处。";
                 string fireReaction = "反应：场上有火时优先换风，把火吹向主角所在的一侧。";
-                return new EnemyIntentPresentation("librarian:papers" + papers + ":fires" + fires + ":wind" + windChanges + ":" + basic.Signature,
+                return new EnemyIntentPresentation(basic.Signature,
                     basic.ActionName, basic.TargetSummary, kit + " " + field + " " + fireReaction + " " + basic.ResultSummary,
                     basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
             }
@@ -195,8 +204,7 @@ namespace OCC.Combat
                 : "转镜：光柱方向 " + FieldWindState.DirectionName(lane.Direction) + "，柱上单位在灯台值守回合结束时受到 " +
                     SpotlightDamage + " 点伤害，暗段内不受影响。";
             string reaction = "反应·绕行转向：玩家角色结束移动时不在光柱照明格内（含借遮蔽形成的暗段）就转向其新路线（剩余 " + RotateUsesRemaining + " 次）。";
-            return new EnemyIntentPresentation("keeper:" + (lane?.Direction.X ?? 0) + "," + (lane?.Direction.Y ?? 0) +
-                ":uses" + RotateUsesRemaining + ":" + basic.Signature,
+            return new EnemyIntentPresentation(basic.Signature,
                 basic.ActionName, basic.TargetSummary, laneText + " " + reaction + " " + basic.ResultSummary,
                 basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
         }
@@ -215,6 +223,9 @@ namespace OCC.Combat
             if (IsLibrarian(unit)) ResolveLibrarianTurn(state, unit, state.GetUnit("hero"));
             if (IsStorekeeper(unit)) ResolveStorekeeperTurn(state, unit, state.GetUnit("hero"));
             if (IsPrototypeHand(unit)) ResolvePrototypeTurn(state, unit, state.GetUnit("hero"));
+            if (unit.EnemyArchetypeId == "elite_vanguard" || unit.EnemyArchetypeId == "stone_snare" ||
+                unit.EnemyArchetypeId == "lantern_revealer" || unit.EnemyArchetypeId == "barrier_mender")
+                ResolveStaffTurn(state, unit, state.GetUnit("hero"));
         }
 
         internal void EndTurn(CombatState state, UnitState unit)
@@ -351,7 +362,8 @@ namespace OCC.Combat
         {
             if (hero == null || !hero.IsAlive) { SnapshotField(state); return; }
             if (TryRetireFreshField(state, storekeeper, hero)) return;
-            if (TryLegacyPulse(state, storekeeper, hero)) return;
+            if (pulseCooldown > 0) pulseCooldown--;
+            if (pulseCooldown == 0 && TryLegacyPulse(state, storekeeper, hero)) { pulseCooldown = PulseCooldown; return; }
             if (TryRetireNearestField(state, storekeeper, hero)) return;
             TryRegister(state, storekeeper, hero);
         }
@@ -360,6 +372,7 @@ namespace OCC.Combat
         private bool TryRegister(CombatState state, UnitState storekeeper, UnitState hero)
         {
             if (inspectionMarks.Contains(hero.Id)) return false;
+            if (storekeeper.Position.ManhattanDistance(hero.Position) > RegisterRange) return false;
             inspectionMarks.Add(hero.Id);
             state.AddLog("老库管登记：" + hero.DisplayName + "被挂上待检定标记，下一次获得的护盾会被优先清除。");
             return true;
@@ -376,6 +389,7 @@ namespace OCC.Combat
         private bool TryRetireFreshField(CombatState state, UnitState storekeeper, UnitState hero)
         {
             GridPosition? fresh = FieldCells(state).Where(position => !knownFieldCells.Contains(position))
+                .Where(position => position.ManhattanDistance(storekeeper.Position) <= RetireRange)
                 .Cast<GridPosition?>().FirstOrDefault();
             if (!fresh.HasValue) return false;
             return Retire(state, storekeeper, fresh.Value, "反应·退件");
@@ -385,7 +399,9 @@ namespace OCC.Combat
         {
             GridPosition[] fields = FieldCells(state);
             if (fields.Length == 0) return false;
-            GridPosition nearest = fields.OrderBy(position => position.ManhattanDistance(hero.Position))
+            GridPosition[] inRange = fields.Where(position => position.ManhattanDistance(storekeeper.Position) <= RetireRange).ToArray();
+            if (inRange.Length == 0) return false;
+            GridPosition nearest = inRange.OrderBy(position => position.ManhattanDistance(hero.Position))
                 .ThenBy(position => position.Y).ThenBy(position => position.X).First();
             return Retire(state, storekeeper, nearest, "退件");
         }
@@ -441,6 +457,161 @@ namespace OCC.Combat
             foreach (GridPosition position in FieldCells(state)) knownFieldCells.Add(position);
         }
 
+        // ── 学院岗位单位的专属机制（划线教官／拴索助教／提灯巡查／补盾助教） ──────
+
+        /// <summary>守位：贴着结构时自身回合开始获得的护盾。</summary>
+        public const int PositionGuardShield = 4;
+        /// <summary>转灯：显影光带长度。</summary>
+        public const int LanternLaneLength = 4;
+        /// <summary>借障：每次获得的护盾与每场次数。</summary>
+        public const int BorrowShield = 4;
+        public const int BorrowUses = 2;
+        /// <summary>夯墙：每场最多夯起的标定结构数量。</summary>
+        public const int WallBuildLimit = 2;
+        /// <summary>刻印：约束纹持续的主角回合数。</summary>
+        public const int MarkRounds = 3;
+
+        private int borrowUses;
+        private int wallBuilds;
+        private readonly Dictionary<GridPosition, int> markAge = new Dictionary<GridPosition, int>();
+        private GridPosition? coverToBreak;
+
+        private void ResolveStaffTurn(CombatState state, UnitState unit, UnitState hero)
+        {
+            ExpireMarks(state);
+            switch (unit.EnemyArchetypeId)
+            {
+                case "elite_vanguard": ResolveVanguard(state, unit, hero); break;
+                case "stone_snare": ResolveSnare(state, unit, hero); break;
+                case "lantern_revealer": ResolveLantern(state, unit, hero); break;
+                case "barrier_mender": ResolveMender(state, unit, hero); break;
+            }
+        }
+
+        /// <summary>划线教官：先执行"拆你所倚"，再守位取盾，没有结构可倚时夯起标定结构。</summary>
+        private void ResolveVanguard(CombatState state, UnitState vanguard, UnitState hero)
+        {
+            if (coverToBreak.HasValue)
+            {
+                GridPosition target = coverToBreak.Value;
+                coverToBreak = null;
+                if (state.Map.IsInside(target))
+                {
+                    TileState cover = state.Map.GetTile(target);
+                    if (cover.Cover != CoverType.None && !cover.IsDestroyed)
+                    {
+                        TileState broken = cover.Clone();
+                        broken.Durability = 0;
+                        state.Map.SetTile(target, broken);
+                        state.AddLog("划线教官拆你所倚：拆掉主角上一回合取盾所倚的掩体。");
+                    }
+                }
+            }
+            if (Adjacent(vanguard.Position).Any(position => state.Map.IsInside(position) && IsStructure(state.Map.GetTile(position))))
+            {
+                state.TryGrantRogueliteShield(vanguard.Id, "vanguard-position-guard", PositionGuardShield);
+                state.AddLog("划线教官守位：贴着结构，回合开始获得 " + PositionGuardShield + " 护盾。");
+                return;
+            }
+            if (wallBuilds < WallBuildLimit) BuildStakedWall(state, vanguard);
+        }
+
+        private void BuildStakedWall(CombatState state, UnitState unit)
+        {
+            GridPosition[] slots = Adjacent(unit.Position)
+                .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position) &&
+                    !state.Map.GetTile(position).HasEffectLayer && state.Map.GetTile(position).Cover == CoverType.None)
+                .ToArray();
+            if (slots.Length == 0) return;
+            GridPosition pick = slots.OrderBy(position => position.Y).ThenBy(position => position.X).First();
+            state.Map.SetTile(pick, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability });
+            wallBuilds++;
+            state.AddLog("划线教官夯墙：在 (" + pick.X + "," + pick.Y + ") 夯起标定结构（耐久 " + TileState.StakedDurability + "）。");
+        }
+
+        /// <summary>拴索助教：在主角所在格刻下约束纹；主角上一回合移动过则先前移一格。</summary>
+        private void ResolveSnare(CombatState state, UnitState snare, UnitState hero)
+        {
+            if (snare.HasStatus(StatusType.Bound)) return;
+            if (hero != null && hero.IsAlive)
+            {
+                TileState marked = state.Map.GetTile(hero.Position).Clone();
+                if (!marked.IsBindingMark)
+                {
+                    marked.ClearEffectLayers();
+                    marked.IsBindingMark = true;
+                    state.Map.SetTile(hero.Position, marked);
+                    markAge[hero.Position] = heroRounds;
+                    state.AddLog("拴索助教刻印：在主角所在格刻下约束纹，持续 " + MarkRounds + " 个主角回合。");
+                }
+            }
+        }
+
+        /// <summary>提灯巡查：沿观测方向投出 4 格显影光带，光带上单位护盾被清除。</summary>
+        private void ResolveLantern(CombatState state, UnitState lantern, UnitState hero)
+        {
+            GridPosition direction = hero != null && hero.IsAlive ? DirectionToward(lantern.Position, hero.Position)
+                : (spotlightDirection.TryGetValue(lantern.Id, out GridPosition stored) ? stored : FieldWindState.East);
+            spotlightDirection[lantern.Id] = direction;
+            state.Environment.ReplaceLightLanes(lantern.Id,
+                new[] { new FieldLightLaneState(lantern.Id, lantern.Position, direction, LanternLaneLength) });
+            int cleared = 0;
+            for (int step = 1; step <= LanternLaneLength; step++)
+            {
+                GridPosition cell = lantern.Position + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight) break;
+                foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive && unit.Position == cell).ToArray())
+                {
+                    if (target.Shield <= 0) continue;
+                    target.ClearShield();
+                    cleared++;
+                    state.AddLog(target.DisplayName + "位于显影光带上，护盾被清除。");
+                }
+            }
+            state.AddLog("提灯巡查转灯：亮起" + FieldWindState.DirectionName(direction) + "方向 " + LanternLaneLength +
+                " 格光带，清除 " + cleared + " 个单位的护盾，被遮断处留下暗段。");
+        }
+
+        /// <summary>补盾助教：贴着同一片结构才能续盾；否则每场最多两次借障给自己 +4 护盾。</summary>
+        private void ResolveMender(CombatState state, UnitState mender, UnitState hero)
+        {
+            bool onStructure = Adjacent(mender.Position).Any(position => state.Map.IsInside(position) && IsStructure(state.Map.GetTile(position)));
+            if (onStructure) return;
+            if (borrowUses >= BorrowUses) return;
+            if (state.TryGrantRogueliteShield(mender.Id, "mender-borrow", BorrowShield))
+            {
+                borrowUses++;
+                state.AddLog("补盾助教借障：脱离结构，借障给自己 " + BorrowShield + " 护盾（剩余 " + (BorrowUses - borrowUses) + " 次）。");
+            }
+        }
+
+        private static bool IsStructure(TileState tile) =>
+            (tile.Cover == CoverType.Heavy || tile.IsStakedStructure) && !tile.IsDestroyed;
+
+        private void ExpireMarks(CombatState state)
+        {
+            foreach (GridPosition position in markAge.Keys.ToArray())
+            {
+                if (!state.Map.IsInside(position)) { markAge.Remove(position); continue; }
+                TileState tile = state.Map.GetTile(position);
+                if (!tile.IsBindingMark) { markAge.Remove(position); continue; }
+                if (heroRounds - markAge[position] < MarkRounds) continue;
+                TileState cleared = tile.Clone();
+                cleared.IsBindingMark = false;
+                state.Map.SetTile(position, cleared);
+                markAge.Remove(position);
+            }
+        }
+
+        /// <summary>把主角上一回合取过盾的掩体记为"拆你所倚"的目标。</summary>
+        internal void NoteHeroCoverAnchor(CombatState state, UnitState hero)
+        {
+            if (state == null || hero == null) return;
+            TileState standing = state.Map.GetTile(hero.Position);
+            if (IsStructure(standing)) { coverToBreak = hero.Position; return; }
+            foreach (GridPosition position in Adjacent(hero.Position))
+                if (state.Map.IsInside(position) && IsStructure(state.Map.GetTile(position))) { coverToBreak = position; return; }
+        }
         // ── 试制员：布放与引爆 ────────────────────────────────────────────────────
 
         /// <summary>试制箱容量，全场共四件试制件。</summary>
@@ -505,7 +676,7 @@ namespace OCC.Combat
                 : slots.OrderByDescending(position => position.ManhattanDistance(hero?.Position ?? position)).ThenBy(position => position.Y).ThenBy(position => position.X).First();
             TileState tile = state.Map.GetTile(pick).Clone();
             tile.IsDevice = true;
-            tile.Durability = TileState.StandardDurability;
+            tile.Durability = TileState.PrototypeDurability;
             tile.IsWardGenerator = wantWard;
             tile.IsOverloadDevice = !wantWard;
             state.Map.SetTile(pick, tile);
@@ -711,7 +882,9 @@ namespace OCC.Combat
 
         public AcademyFieldEnemyRuntime Clone()
         {
-            AcademyFieldEnemyRuntime clone = new AcademyFieldEnemyRuntime { heroRounds = heroRounds, rotateUses = rotateUses, lastHeroCell = lastHeroCell, windChanges = windChanges, PrototypePlaced = PrototypePlaced };
+            AcademyFieldEnemyRuntime clone = new AcademyFieldEnemyRuntime { heroRounds = heroRounds, rotateUses = rotateUses, lastHeroCell = lastHeroCell, windChanges = windChanges, PrototypePlaced = PrototypePlaced, pulseCooldown = pulseCooldown,
+                borrowUses = borrowUses, wallBuilds = wallBuilds, coverToBreak = coverToBreak };
+            foreach (KeyValuePair<GridPosition, int> pair in markAge) clone.markAge[pair.Key] = pair.Value;
             foreach (string mark in inspectionMarks) clone.inspectionMarks.Add(mark);
             foreach (GridPosition cell in knownFieldCells) clone.knownFieldCells.Add(cell);
             foreach (GridPosition cell in knownDeviceCells) clone.knownDeviceCells.Add(cell);

@@ -181,8 +181,9 @@ namespace OCC.Combat
 
             Elite("cliff_relay_survey_a", "cliff_relay_survey", "断崖坡面与导能柱基座", "老寻循痕破藏身，灯台值守封住一条廊道，补盾助教贴结构续盾", "elder_tracker_hound", "signal_keeper", "barrier_mender"),
             EliteReserve("library_discipline_a", "library_discipline", "高书架切出的走廊与阅览长桌", "小铃换风搬散页，书架切出暗段，补盾助教贴结构续盾", "wind_librarian", "barrier_mender", "sigil_mauler"),
-            Elite("outer_ring_clearance_a", "outer_ring_clearance", "高塔外环的直线廊道与物块堆", "划线教官现场改掩体，提灯巡查沿直线显影，背弩生封住长线", "elite_vanguard", "lantern_revealer", "rune_arbalist"),
+            EliteReserve("outer_ring_clearance_a", "outer_ring_clearance", "高塔外环的直线廊道与物块堆", "划线教官现场改掩体，提灯巡查沿直线显影，背弩生封住长线", "elite_vanguard", "lantern_revealer", "rune_arbalist"),
             Elite("calibration_lockdown_a", "calibration_lockdown", "设备间的校准台走廊", "试制员逐件布放装置，背弩生封住长线，拴索助教刻印地面", "prototype_hand", "rune_arbalist", "stone_snare"),
+            Elite("calibration_lockdown_b", "calibration_lockdown", "校准台走廊，装置侧", "试制件先铺在靠核心一侧，长线与刻印从另一侧压上", "prototype_hand", "rune_arbalist", "stone_snare"),
             EliteReserve("sealed_vault_certification_a", "sealed_vault_certification", "旧检定台与读数桩之间的库房通道", "老库管投影直线并退件，提灯巡查沿直线显影，替身偶贴身破势", "legacy_storekeeper", "lantern_revealer", "sigil_mauler"),
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
                 "中心核心与三道机关门槛", "固定塔之守卫居中；三组塔内机关在阶段〇逐组放行，拆掉已放行的机关即切断其施术介质",

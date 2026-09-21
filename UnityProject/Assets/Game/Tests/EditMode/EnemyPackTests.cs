@@ -29,9 +29,9 @@ namespace OCC.Combat.Tests
             EnemyArchetype hound = EnemyArchetypes.Get("tether_hound");
 
             Assert.That((mauler.DisplayName, mauler.MaxHealth, mauler.Armor, mauler.Shield, mauler.Speed),
-                Is.EqualTo(("替身偶", 14, 1, 0, 8)));
+                Is.EqualTo(("替身偶", 16, 1, 0, 8)));
             Assert.That((mender.DisplayName, mender.MaxHealth, mender.Armor, mender.Shield, mender.Speed),
-                Is.EqualTo(("补盾助教", 12, 0, 4, 7)));
+                Is.EqualTo(("补盾助教", 16, 0, 4, 7)));
             Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
                 Is.EqualTo(("寻迹兽", 12, 0, 0, 10)));
             Assert.That(hound.Weapon.Damage, Is.EqualTo(3));
@@ -39,7 +39,7 @@ namespace OCC.Combat.Tests
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_sundering_sigil", 1, 1, 2)));
             Assert.That((mender.PrimarySkill.Id, mender.PrimarySkill.Range, mender.PrimarySkill.ManaCost, mender.PrimarySkill.Cooldown),
-                Is.EqualTo(("enemy_ward_mend", 4, 2, 2)));
+                Is.EqualTo(("enemy_ward_mend", 4, 2, 1)));
             Assert.That((hound.PrimarySkill.Id, hound.PrimarySkill.Range, hound.PrimarySkill.ManaCost, hound.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_tether_pounce", 1, 1, 1)));
         }
@@ -58,7 +58,7 @@ namespace OCC.Combat.Tests
                 ["lantern_revealer"] = ("提灯巡查", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
                 ["elite_vanguard"] = ("划线教官", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
                 ["tether_hound"] = ("寻迹兽", EnemyResolutionKind.Beast, "被制服并重新约束"),
-                ["sigil_mauler"] = ("替身偶", EnemyResolutionKind.Construct, "被摧毁")
+                ["sigil_mauler"] = ("替身偶", EnemyResolutionKind.Construct, "停机、封签并回收校准")
             };
 
             foreach (KeyValuePair<string, (string Name, EnemyResolutionKind Kind, string Resolution)> pair in expected)
@@ -102,13 +102,13 @@ namespace OCC.Combat.Tests
             Assert.That(pack.Select(enemy => enemy.ArtId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
             Assert.That(pack.Select(enemy => enemy.PrimarySkill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
             Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(18),
-                "The ten reusable pack skills are joined by the boss-only core lance and pulse plus the six field-enemy abilities.");
+                "The ten reusable pack skills are joined by the boss's sunder maul and tower press plus the six field-enemy abilities.");
             Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id),
-                Does.Contain(EnemyAbilityCatalog.CoreLance.Id).And.Contain(EnemyAbilityCatalog.CorePulse.Id)
+                Does.Contain(EnemyAbilityCatalog.BossSunderMaul.Id).And.Contain(EnemyAbilityCatalog.BossTowerPress.Id)
                     .And.Contain(EnemyAbilityCatalog.TrackerSnap.Id).And.Contain(EnemyAbilityCatalog.TrackerMaul.Id)
                     .And.Contain(EnemyAbilityCatalog.SpotlightMirror.Id).And.Contain(EnemyAbilityCatalog.WindScrollEdge.Id)
                     .And.Contain(EnemyAbilityCatalog.LegacyPulse.Id).And.Contain(EnemyAbilityCatalog.PrototypeDeploy.Id));
-            Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 14), Is.True);
+            Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 24), Is.True);
         }
 
         [Test]
@@ -166,8 +166,8 @@ namespace OCC.Combat.Tests
             UnitState allyA = new UnitState("ally_a", false, new GridPosition(1, 1));
             UnitState allyB = new UnitState("ally_b", false, new GridPosition(2, 1));
             EnemyArchetypes.Get("barrier_mender").Apply(mender);
-            EnemyArchetypes.Get("warden").Apply(allyA);
-            EnemyArchetypes.Get("warden").Apply(allyB);
+            EnemyArchetypes.Get("shieldguard").Apply(allyA);
+            EnemyArchetypes.Get("shieldguard").Apply(allyB);
             CombatState state = new CombatState(map, new[] { hero, mender, allyB, allyA });
             CombatEffectExecutor.Execute(state, mender.Id, CombatEffect.AbsorbShield(allyA.Id, 4), CombatEffect.AbsorbShield(allyB.Id, 4));
 

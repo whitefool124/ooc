@@ -438,7 +438,9 @@ namespace OCC.Combat
                 case "EV3": return RewardClaimedFor("B2");
                 case "B3": return Completed("EV3");
                 case "M": return RewardClaimedFor("B3");
-                case "X": return RewardClaimedFor("B3") && Workshop.ForgeCompleted && Workshop.SpecializationCompleted && Medical.HealthCheckCompleted;
+                // 工坊与医务室是可选服务，不应成为精英战的隐藏必修门槛。
+                // 第三场战斗及其奖励结算完毕后，就允许从当前已开放路线进入精英战。
+                case "X": return RewardClaimedFor("B3");
                 case "S": return Completed("X") && Outcome == FirstRunOutcome.EliteVictory && (EliteRewardClaimed || EliteRewardAbandoned);
                 default: return false;
             }

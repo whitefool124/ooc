@@ -218,7 +218,15 @@ namespace OCC.Combat
             .Concat(ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id))
                 .Select(artifact => new RogueliteReward(ItemCatalog.Get(artifact.Id), artifact.BuildUse)))
             .ToArray();
-        public static RogueliteMapNode Node(string id) => Nodes.First(node => node.Id == id);
+        /// <summary>
+        /// 全图节点解析。学院层的 3 个服务节点是层专属节点（同一锚点上有别的全图节点），
+        /// 因此这里先问学院层目录，再回到全图节点表。
+        /// </summary>
+        public static RogueliteMapNode Node(string id)
+        {
+            if (RogueliteAcademyLayerCatalog.TryResolveLayerNode(id, out RogueliteMapNode layerNode)) return layerNode;
+            return Nodes.First(node => node.Id == id);
+        }
         public static IReadOnlyList<RogueliteReward> RollRewards(int seed, int completedCombatCount)
         {
             var random = new Random(seed + completedCombatCount * 7919);
@@ -314,6 +322,10 @@ namespace OCC.Combat
         private readonly Dictionary<string, string> lootProgress = new Dictionary<string, string>(StringComparer.Ordinal);
         private readonly Dictionary<string, string> encounterAssignments = new Dictionary<string, string>(StringComparer.Ordinal);
         private readonly Dictionary<string, string> nodeContentAssignments = new Dictionary<string, string>(StringComparer.Ordinal);
+        private string activeLayerServiceNodeId = string.Empty;
+        private FirstRunWorkshopSnapshot layerWorkshopService;
+        private FirstRunMedicalSnapshot layerMedicalService;
+        private FirstRunShopSnapshot layerShopService;
         private OCC.Combat.Roguelite.RogueRunDto rogueRunDto;
         public int Seed { get; }
         public string CurrentNodeId { get; private set; } = "start";
@@ -358,6 +370,8 @@ namespace OCC.Combat
                 RogueliteMapNode fixedNode = FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
                 if (fixedNode != null) return fixedNode;
             }
+            // 学院层专属服务节点只存在于层目录。
+            if (RogueliteAcademyLayerCatalog.TryResolveLayerNode(id, out RogueliteMapNode layerNode)) return layerNode;
             return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id)
                 ?? throw new KeyNotFoundException("Unknown map node in the current stage: " + id);
         }
@@ -404,6 +418,27 @@ namespace OCC.Combat
         public IReadOnlyDictionary<string, string> LootProgress => lootProgress;
         public IReadOnlyDictionary<string, string> EncounterAssignments => encounterAssignments;
         public IReadOnlyDictionary<string, string> NodeContentAssignments => nodeContentAssignments;
+        public IReadOnlyCollection<string> SettledServiceNodeIds => rogueRunDto != null
+            ? (IReadOnlyCollection<string>)rogueRunDto.SettledServiceNodeIds
+            : Array.Empty<string>();
+        public bool IsServiceNodeSettled(string nodeId) => !string.IsNullOrEmpty(nodeId) && SettledServiceNodeIds.Contains(nodeId);
+
+        public void SettleServiceNode(string nodeId)
+        {
+            if (rogueRunDto == null) throw new InvalidOperationException("Service node settlement requires a rogue11 run.");
+            if (!RogueliteAcademyLayerCatalog.IsServiceNode(nodeId))
+                throw new InvalidOperationException("Unknown academy service node: " + nodeId);
+            if (!rogueRunDto.SettledServiceNodeIds.Contains(nodeId)) rogueRunDto.SettledServiceNodeIds.Add(nodeId);
+        }
+        public FirstRunWorkshopSnapshot CurrentWorkshopService => IsTutorialPhase
+            ? FirstRunExperience.Workshop
+            : EnsureLayerServiceSession(RogueliteMapNodeType.Workshop).layerWorkshopService;
+        public FirstRunMedicalSnapshot CurrentMedicalService => IsTutorialPhase
+            ? FirstRunExperience.Medical
+            : EnsureLayerServiceSession(RogueliteMapNodeType.Medical).layerMedicalService;
+        public FirstRunShopSnapshot CurrentShopService => IsTutorialPhase
+            ? FirstRunExperience.Shop
+            : EnsureLayerServiceSession(RogueliteMapNodeType.Shop).layerShopService;
         public IReadOnlyList<string> CurrentFirstRunRewardIds
         {
             get
@@ -626,8 +661,7 @@ namespace OCC.Combat
         private RogueliteMapNode ResolveNode(string id)
         {
             if (string.IsNullOrEmpty(id)) return null;
-            if (RogueliteAcademyLayerCatalog.IsLayerNode(id))
-                return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id);
+            if (RogueliteAcademyLayerCatalog.TryResolveLayerNode(id, out RogueliteMapNode layerNode)) return layerNode;
             if (IsTutorialPhase)
                 return FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
             return RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id);
@@ -720,6 +754,8 @@ namespace OCC.Combat
                     : "Node is not adjacent or is unavailable in the current stage.");
                 CurrentNodeId = nodeId; visited.Add(nodeId);
                 if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
+                RogueliteMapNode selected = MapNode(nodeId);
+                if (IsServiceNodeType(selected.Type) && !IsServiceNodeSettled(nodeId)) BeginLayerServiceSession(nodeId, selected.Type);
                 return;
             }
             if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
@@ -1166,39 +1202,85 @@ namespace OCC.Combat
 
         public void CompleteFirstRunForge(string targetId)
         {
-            RequireFirstRun();
-            FirstRunExperience.CompleteForge(targetId);
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                RequireFirstRun();
+                FirstRunExperience.CompleteForge(targetId);
+                SyncFirstRunProjection();
+                return;
+            }
+            FirstRunWorkshopSnapshot workshop = CurrentWorkshopService;
+            if (workshop.ForgeCompleted || FirstRunExperience.ForgeMaterialCount <= 0)
+                throw new InvalidOperationException("Academy-layer forge is unavailable.");
+            workshop.ForgeCompleted = true;
+            workshop.ForgedTargetId = RequireServiceTarget(targetId);
+            FirstRunExperience.ForgeMaterialCount--;
         }
 
         public void CompleteFirstRunSpecialization(string targetId)
         {
-            RequireFirstRun();
-            FirstRunExperience.CompleteSpecialization(targetId);
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                RequireFirstRun();
+                FirstRunExperience.CompleteSpecialization(targetId);
+                SyncFirstRunProjection();
+                return;
+            }
+            FirstRunWorkshopSnapshot workshop = CurrentWorkshopService;
+            if (workshop.SpecializationCompleted || FirstRunExperience.SpecializationMaterialCount <= 0)
+                throw new InvalidOperationException("Academy-layer specialization is unavailable.");
+            workshop.SpecializationCompleted = true;
+            workshop.SpecializedTargetId = RequireServiceTarget(targetId);
+            FirstRunExperience.SpecializationMaterialCount--;
         }
 
         public void CompleteFirstRunHealthCheck()
         {
-            RequireFirstRun();
-            FirstRunExperience.CompleteHealthCheck();
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                RequireFirstRun();
+                FirstRunExperience.CompleteHealthCheck();
+                SyncFirstRunProjection();
+                return;
+            }
+            CurrentMedicalService.HealthCheckCompleted = true;
         }
 
         public void UseFirstRunHeal()
         {
             RequireFirstRun();
+            FirstRunMedicalSnapshot layerMedical = null;
+            if (!IsTutorialPhase)
+            {
+                layerMedical = CurrentMedicalService;
+                if (!layerMedical.HealthCheckCompleted || layerMedical.HealUsed)
+                    throw new InvalidOperationException("Academy-layer treatment is unavailable.");
+            }
             if (rogueRunDto.StageContribution < 1) throw new InvalidOperationException("Insufficient stage contribution.");
             rogueRunDto.StageContribution--;
             rogueRunDto.CurrentHealth = Math.Min(18, rogueRunDto.CurrentHealth + 9);
             CurrentHealth = rogueRunDto.CurrentHealth;
-            FirstRunExperience.MarkHealUsed();
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                FirstRunExperience.MarkHealUsed();
+                SyncFirstRunProjection();
+            }
+            else
+            {
+                layerMedical.HealUsed = true;
+            }
         }
 
         public void ChooseFirstRunMeal(string mealId)
         {
             RequireFirstRun();
+            FirstRunMedicalSnapshot layerMedical = null;
+            if (!IsTutorialPhase)
+            {
+                layerMedical = CurrentMedicalService;
+                if (!layerMedical.HealthCheckCompleted || layerMedical.MealUsed || !layerMedical.MealCandidateIds.Contains(mealId))
+                    throw new InvalidOperationException("Academy-layer meal is unavailable.");
+            }
             if (mealId == "MEAL-POWER")
             {
                 if (rogueRunDto.Gold < 3) throw new InvalidOperationException("Insufficient gold.");
@@ -1214,28 +1296,98 @@ namespace OCC.Combat
                 if (FirstRunExperience.AcademyFoodCount < 1) throw new InvalidOperationException("Insufficient academy food.");
                 FirstRunExperience.AcademyFoodCount--;
             }
-            FirstRunExperience.ChooseMeal(mealId);
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                FirstRunExperience.ChooseMeal(mealId);
+                SyncFirstRunProjection();
+            }
+            else
+            {
+                layerMedical.MealUsed = true;
+                layerMedical.SelectedMealId = mealId;
+            }
         }
 
         public void PurchaseFirstRunOffer(string offerId)
         {
             RequireFirstRun();
-            FirstRunShopOfferSnapshot offer = FirstRunExperience.Shop.Offers.SingleOrDefault(value => value.OfferId == offerId);
-            if (offer == null || offer.Sold) throw new InvalidOperationException("First-run shop offer is unavailable.");
+            FirstRunShopSnapshot shop = CurrentShopService;
+            FirstRunShopOfferSnapshot offer = shop.Offers.SingleOrDefault(value => value.OfferId == offerId);
+            if (offer == null || offer.Sold) throw new InvalidOperationException("Shop offer is unavailable.");
             if (offer.CurrencyId != "gold" || rogueRunDto.Gold < offer.Price) throw new InvalidOperationException("Insufficient gold.");
             if (!CanAcceptRogue11Content(offer.DefinitionId)) throw new InvalidOperationException("Backpack cannot accept shop item.");
             rogueRunDto.Gold -= offer.Price;
             GrantRogue11Content(offer.DefinitionId, "first-run-shop");
-            FirstRunExperience.Purchase(offerId);
-            SyncFirstRunProjection();
+            if (IsTutorialPhase)
+            {
+                FirstRunExperience.Purchase(offerId);
+                SyncFirstRunProjection();
+            }
+            else offer.Sold = true;
         }
 
         public bool CanAcceptFirstRunOffer(string offerId)
         {
             if (!IsFirstRunExperience) return false;
-            FirstRunShopOfferSnapshot offer = FirstRunExperience.Shop.Offers.SingleOrDefault(value => value.OfferId == offerId);
+            FirstRunShopOfferSnapshot offer = CurrentShopService.Offers.SingleOrDefault(value => value.OfferId == offerId);
             return offer != null && !offer.Sold && CanAcceptRogue11Content(offer.DefinitionId);
+        }
+
+        public void SettleCurrentServiceNode()
+        {
+            if (!IsInAcademyLayer) throw new InvalidOperationException("Only academy-layer services use per-node settlement.");
+            RogueliteMapNode node = MapNode(CurrentNodeId);
+            if (!IsServiceNodeType(node.Type)) throw new InvalidOperationException("Current node is not a service node.");
+            if (IsServiceNodeSettled(node.Id)) return;
+            SettleServiceNode(node.Id);
+            Complete(node, false);
+            ClearLayerServiceSession();
+        }
+
+        private RogueliteMapRun EnsureLayerServiceSession(RogueliteMapNodeType expectedType)
+        {
+            if (!IsInAcademyLayer) throw new InvalidOperationException("Academy-layer service state is unavailable.");
+            RogueliteMapNode node = MapNode(CurrentNodeId);
+            if (node.Type != expectedType) throw new InvalidOperationException("Current service node type does not match the requested page.");
+            if (IsServiceNodeSettled(node.Id)) throw new InvalidOperationException("Service node was already settled.");
+            if (!string.Equals(activeLayerServiceNodeId, node.Id, StringComparison.Ordinal)) BeginLayerServiceSession(node.Id, node.Type);
+            return this;
+        }
+
+        private void BeginLayerServiceSession(string nodeId, RogueliteMapNodeType type)
+        {
+            ClearLayerServiceSession();
+            activeLayerServiceNodeId = nodeId;
+            if (type == RogueliteMapNodeType.Workshop) layerWorkshopService = new FirstRunWorkshopSnapshot();
+            else if (type == RogueliteMapNodeType.Medical)
+            {
+                layerMedicalService = new FirstRunMedicalSnapshot();
+                layerMedicalService.MealCandidateIds.AddRange(new[] { "MEAL-POWER", "MEAL-AETHER", "MEAL-GUARD" });
+            }
+            else if (type == RogueliteMapNodeType.Shop)
+            {
+                layerShopService = new FirstRunShopSnapshot { Opened = true };
+                layerShopService.Offers.Add(new FirstRunShopOfferSnapshot("LAYER-SHOP-WEDGE", "G-T08", 3, "gold"));
+                layerShopService.Offers.Add(new FirstRunShopOfferSnapshot("LAYER-SHOP-SPINDLE", "G-T02", 6, "gold"));
+                layerShopService.Offers.Add(new FirstRunShopOfferSnapshot("LAYER-SHOP-GOGGLES", "ACA-EQ-HD01", 4, "gold"));
+            }
+        }
+
+        private void ClearLayerServiceSession()
+        {
+            activeLayerServiceNodeId = string.Empty;
+            layerWorkshopService = null;
+            layerMedicalService = null;
+            layerShopService = null;
+        }
+
+        private static bool IsServiceNodeType(RogueliteMapNodeType type) =>
+            type == RogueliteMapNodeType.Workshop || type == RogueliteMapNodeType.Medical || type == RogueliteMapNodeType.Shop;
+
+        private static string RequireServiceTarget(string targetId)
+        {
+            if (string.IsNullOrWhiteSpace(targetId)) throw new InvalidOperationException("Service target is required.");
+            return targetId;
         }
 
         public void CompleteFirstRunExperience()
@@ -1382,6 +1534,9 @@ namespace OCC.Combat
             if (dto.FirstRunExperience != null)
             {
                 run.FirstRunExperience = dto.FirstRunExperience;
+                // 节点可达标记是规则的派生结果。读取旧存档时必须按当前规则重算，
+                // 否则旧版写下的 Locked 会继续挡住已经满足新门槛的节点。
+                run.FirstRunExperience.RecomputeNodeFlags();
                 // RandomLayer 是本局已经交接到随机层的标记；Complete 是旧存档里的同一含义。
                 run.IsInAcademyLayer = dto.FirstRunExperience.IsRandomLayer;
                 if (run.IsInAcademyLayer)

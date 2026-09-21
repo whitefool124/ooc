@@ -59,6 +59,8 @@ namespace OCC.Combat.Tests
             CombatState state = BossState(out UnitState core);
             for (int turn = 0; turn < 4; turn++) BeginBossTurn(state, core);
             Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(1));
+            // 引链会把伤害转给机关；先把承伤次数用尽，测试才能把核心打到阶段二。
+            typeof(UnitState).GetProperty("DamageAbsorptions").SetValue(core, 0);
             MethodInfo takeDamage = typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             takeDamage.Invoke(core, new object[] { core.Health - (core.MaxHealth * 2 / 10) });
             Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(2), "血量降到三成以下进入阶段二。");

@@ -227,6 +227,10 @@ namespace OCC.Combat
             if (run.VisitedNodes.Any(id => TryKnownMapNode(id) == null)) result.Add("academy_layer.visited_unknown");
             if (run.CompletedNodes.Any(id => TryKnownMapNode(id) == null)) result.Add("academy_layer.completed_unknown");
             if (run.CompletedNodes.Any(id => !run.VisitedNodes.Contains(id))) result.Add("academy_layer.completed_not_visited");
+            if (run.SettledServiceNodeIds.Count != run.SettledServiceNodeIds.Distinct(StringComparer.Ordinal).Count())
+                result.Add("academy_layer.service_settlement_duplicate");
+            if (run.SettledServiceNodeIds.Any(id => !RogueliteAcademyLayerCatalog.IsServiceNode(id)))
+                result.Add("academy_layer.service_settlement_unknown");
             if (run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId) && !state.RoundSettled &&
                 run.CurrentNodeId != RogueliteAcademyLayerCatalog.FinaleNodeId)
                 result.Add("academy_layer.finale_without_settlement");
@@ -295,12 +299,18 @@ namespace OCC.Combat
 
         private static bool IsAcademyLayerAdjacent(string a, string b)
         {
-            RogueliteMapNode left = RogueliteMapCatalog.Node(a);
-            return left.NextIds.Contains(b) || RogueliteMapCatalog.Node(b).NextIds.Contains(a);
+            if (!TryLayerNode(a, out RogueliteMapNode left)) return false;
+            if (!TryLayerNode(b, out RogueliteMapNode right)) return false;
+            return left.NextIds.Contains(b) || right.NextIds.Contains(a);
         }
+
+        /// <summary>学院层邻居判定要认学院层专属服务节点，否则验证会抛未知节点。</summary>
+        private static bool TryLayerNode(string id, out RogueliteMapNode node)
+            => RogueliteAcademyLayerCatalog.TryResolveLayerNode(id, out node);
 
         // 交接进随机层之后，教学段的完成标记（例如商店节点 S）仍然留在进度里，这是合法的跨阶段记录。
         private static RogueliteMapNode TryKnownMapNode(string id) =>
+            RogueliteAcademyLayerCatalog.LayerNodes.FirstOrDefault(node => node.Id == id) ??
             RogueliteMapCatalog.Nodes.FirstOrDefault(node => node.Id == id) ??
             FirstRunExperienceCatalog.MapNodes.FirstOrDefault(node => node.Id == id);
 

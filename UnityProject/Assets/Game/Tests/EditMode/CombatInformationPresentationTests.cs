@@ -1,10 +1,22 @@
 using System.Linq;
 using NUnit.Framework;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Tests
 {
     public sealed class CombatInformationPresentationTests
     {
+        [Test]
+        public void GenericRogueliteSpellsUseTheirOwnTargetingTagsWithoutFireCatalogErrors()
+        {
+            RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
+            SpellDefinition shield = catalog.Spells.Single(spell => spell.DefinitionId == "BASE-AETHER-SHIELD");
+            SpellDefinition passive = catalog.Spells.Single(spell => spell.DefinitionId == "PASSIVE-ELITE-01");
+
+            Assert.That(CombatSpellTags.For(shield), Does.Contain("自身"));
+            Assert.That(CombatSpellTags.For(passive), Does.Contain("自身"));
+        }
+
         [Test]
         public void EnemyIntent_UsesAuthoritativeTacticsCommandAndExposesExactSignature()
         {

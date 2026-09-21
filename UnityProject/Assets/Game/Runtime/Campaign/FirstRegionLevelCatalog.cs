@@ -445,7 +445,7 @@ namespace OCC.Combat
                     case LevelTerrainKind.LampVine: map.SetTile(placement.Position, new TileState { IsLampVine = true, Durability = TileState.FragileDurability }); break;
                     case LevelTerrainKind.AetherCrystal: map.SetTile(placement.Position, new TileState { IsDevice = true, IsAetherCrystal = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.TowerMechanism: map.SetTile(placement.Position, new TileState { IsDevice = true, IsTowerMechanism = true, MechanismKind = placement.MechanismKind, Durability = TileState.HeavyDurability }); break;
-                    case LevelTerrainKind.StakedStructure: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.HeavyDurability }); break;
+                    case LevelTerrainKind.StakedStructure: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability }); break;
                     case LevelTerrainKind.OverloadDevice: map.SetTile(placement.Position, new TileState { IsDevice = true, IsOverloadDevice = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.CertifierStand: map.SetTile(placement.Position, new TileState { IsDevice = true, IsCertifierStand = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.WardGenerator: map.SetTile(placement.Position, new TileState { IsDevice = true, IsWardGenerator = true, Durability = TileState.StandardDurability }); break;

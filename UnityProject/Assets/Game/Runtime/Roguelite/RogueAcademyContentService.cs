@@ -36,7 +36,8 @@ namespace OCC.Combat.Roguelite
         public RogueAcademyContentService()
         {
             catalog = RogueContentCatalog.CreateAcademyV01();
-            enemies = OCC.Combat.EnemyArchetypes.All.ToDictionary(value => value.Id, value => Baseline(value.Id, value.IsElite), StringComparer.Ordinal);
+            // 生命来自 EnemyArchetypes（其值即数据表口径），此处只补初始护盾的来源 Id，不再另设一套生命数值。
+            enemies = OCC.Combat.EnemyArchetypes.All.ToDictionary(value => value.Id, value => Baseline(value), StringComparer.Ordinal);
         }
 
         public IReadOnlyList<RogueAcademyRewardEntry> Roll(int seed, string source, SpellRarity spellRarity, EquipmentRarity equipmentRarity,
@@ -62,14 +63,20 @@ namespace OCC.Combat.Roguelite
             if (baseline.StartingShield > 0) combat.TryGrantRogueliteShield(unit.Id, baseline.ShieldSourceId, baseline.StartingShield);
         }
 
-        private static RogueEnemyBaselineDefinition Baseline(string id, bool elite)
+        /// <summary>初始生命唯一来源＝EnemyArchetypes（其值即 OCC_学院敌人数据表 的生命基线）；初始护盾数值同样取自数据表，这里只声明公开来源 Id。</summary>
+        private static RogueEnemyBaselineDefinition Baseline(OCC.Combat.EnemyArchetype archetype)
         {
-            if (id == "warden") return new RogueEnemyBaselineDefinition(id, 18, 4, "enemy-warden-barrier");
-            if (id == "barrier_mender") return new RogueEnemyBaselineDefinition(id, 16, 4, "enemy-mender-barrier");
-            if (id == "core_overseer") return new RogueEnemyBaselineDefinition(id, 36, 6, "boss-core-barrier");
-            if (id == "purifier_overseer") return new RogueEnemyBaselineDefinition(id, 32, 6, "boss-purifier-barrier");
-            if (id == "breach_ram") return new RogueEnemyBaselineDefinition(id, 36, 8, "breach-ram-initial-pressure");
-            return new RogueEnemyBaselineDefinition(id, elite ? 24 : id == "tether_hound" ? 12 : 16);
+            switch (archetype.Id)
+            {
+                case "barrier_mender": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 4, "enemy-mender-barrier");
+                case "core_overseer": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 6, "boss-core-barrier");
+                case "breach_ram": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 8, "breach-ram-initial-pressure");
+                case "wind_librarian": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 2, "baseline-wind_librarian-shield");
+                case "prototype_hand": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 2, "baseline-prototype_hand-shield");
+                case "legacy_storekeeper": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 2, "baseline-legacy_storekeeper-shield");
+                case "signal_keeper": return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth, 1, "baseline-signal_keeper-shield");
+                default: return new RogueEnemyBaselineDefinition(archetype.Id, archetype.MaxHealth);
+            }
         }
 
         private static int StableKey(int seed, string id)

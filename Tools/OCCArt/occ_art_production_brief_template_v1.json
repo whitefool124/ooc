@@ -1,0 +1,53 @@
+{
+  "schema": "occ-art-production-brief-v1",
+  "asset_id": "replace_me",
+  "player_reading": "what the player must understand in one second",
+  "asset_role": "replace_with_occ_art_contract_role",
+  "application_scope": "runtime_layout",
+  "logical_cells": [1, 1],
+  "real_dimensions_m": {
+    "width": 1.0,
+    "depth": 1.0,
+    "height": 1.0,
+    "reference_object": "real-world analogue used for scale"
+  },
+  "placement_semantics": {
+    "mount_type": "floor_standing",
+    "logical_cell": [0, 0],
+    "native_anchor": [16, 31],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 31
+    },
+    "depth_sort_baseline": 31,
+    "allowed_occlusion_direction": ["front"],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": null
+  },
+  "visual_contract": {
+    "stage": "academy",
+    "view": "shared oblique top-down map view or declared role exception",
+    "material_palette_family": "replace_with_approved_family_id",
+    "light_direction": "upper_left_form_light_only",
+    "silhouette": "one dominant readable form",
+    "identity_feature": "one controlled identifying feature",
+    "density_budget": "large connected clusters and sparse controlled detail"
+  },
+  "generation_contract": {
+    "source_channel": "codex_builtin_imagegen",
+    "independent_source_per_asset_and_retry": true,
+    "uniform_square_macro_pixel_lattice": true,
+    "maximum_rounds": 3,
+    "retry_policy": "change_only_the_diagnosed_failed_dimension",
+    "geometric_resize_or_interpolation_forbidden": true,
+    "new_colours_in_postprocess_forbidden": true
+  },
+  "assembly_acceptance": {
+    "walkability_collision_click_occlusion_checked": false,
+    "support_and_contact_checked": false,
+    "native_coordinate_table_path": "",
+    "draw_order_path": "",
+    "one_x_application_contact_path": "",
+    "six_x_application_contact_path": ""
+  }
+}

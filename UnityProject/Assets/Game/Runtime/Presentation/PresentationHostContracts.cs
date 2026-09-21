@@ -100,6 +100,7 @@ namespace OCC.Combat.Presentation
         void ChooseFirstRunMeal(string mealId);
         void PurchaseFirstRunOffer(string offerId);
         void CompleteFirstRunExperience();
+        void CompleteCurrentServiceNode();
         void SelectMapNode(string nodeId);
         void StartMapNodeCombat(string nodeId);
         void ChooseMapNodeContent(string choiceId);
@@ -192,6 +193,8 @@ namespace OCC.Combat.Presentation
         void BrowseTrainingRangeAbility(string abilityId);
         void DeveloperAdvanceToFinale();
         void DeveloperForceWinCurrentCombat();
+        /// <summary>开发线一键过关：战斗内也生效（先按胜利收束当前战斗，再结算地图节点与掉落）。</summary>
+        void DeveloperForceWinEverywhere();
         void DeveloperSettleCurrentReward();
         TrainingRangeExecutionReport ExecuteTrainingRangeCurrent();
         void ForceCurrentOutcome(bool victory);

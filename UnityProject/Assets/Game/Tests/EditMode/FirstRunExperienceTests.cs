@@ -211,6 +211,46 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void EliteUnlocksAfterBattleThreeWithoutOptionalServiceCompletion()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(9005);
+            run.AcknowledgeFirstRunOrigin();
+            ResolveBattle(run, "B1");
+            VisitEvent(run, "EV1", 0);
+            VisitEvent(run, "EV2", 0);
+            ResolveBattle(run, "B2");
+            VisitEvent(run, "EV3", 1);
+            ResolveBattle(run, "B3");
+
+            Assert.That(run.FirstRunExperience.Workshop.ForgeCompleted, Is.False);
+            Assert.That(run.FirstRunExperience.Medical.HealthCheckCompleted, Is.False);
+            Assert.That(run.IsNodeAvailable("X"), Is.True);
+
+            run.SelectNode("X");
+            Assert.That(run.CurrentNodeId, Is.EqualTo("X"));
+        }
+
+        [Test]
+        public void LoadingAnOldLockedEliteFlagRecomputesTheCurrentGate()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(9006);
+            run.AcknowledgeFirstRunOrigin();
+            ResolveBattle(run, "B1");
+            VisitEvent(run, "EV1", 0);
+            VisitEvent(run, "EV2", 0);
+            ResolveBattle(run, "B2");
+            VisitEvent(run, "EV3", 1);
+            ResolveBattle(run, "B3");
+            typeof(FirstRunNodeSnapshot).GetProperty(nameof(FirstRunNodeSnapshot.Flags))
+                ?.SetValue(run.FirstRunExperience.Node("X"), FirstRunNodeFlags.Locked);
+
+            RogueliteMapRun restored = RogueliteMapRun.FromRogue11(
+                Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(run.RogueRunState)));
+
+            Assert.That(restored.IsNodeAvailable("X"), Is.True);
+        }
+
+        [Test]
         public void OrdinaryRewardCanBeAbandonedAndRoundTripsBeforeEventsUnlock()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(9011);

@@ -138,10 +138,10 @@ namespace OCC.Combat.Presentation
             rect.anchoredPosition = end + new Vector2(0, motion.PageOffset);
             group.alpha = 0f;
             Sequence sequence = DOTween.Sequence().SetUpdate(true).SetTarget(shownToast);
-            sequence.Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.QuickDuration));
-            sequence.Join(DOTween.To(() => rect.anchoredPosition, value => rect.anchoredPosition = value, end, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
+            sequence.Join(DOTween.To(() => group != null ? group.alpha : 0f, value => { if (group != null) group.alpha = value; }, 1f, motion.QuickDuration));
+            sequence.Join(DOTween.To(() => rect != null ? rect.anchoredPosition : end, value => { if (rect != null) rect.anchoredPosition = value; }, end, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
             sequence.AppendInterval(holdDuration);
-            sequence.Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, motion.ToastDuration));
+            sequence.Append(DOTween.To(() => group != null ? group.alpha : 0f, value => { if (group != null) group.alpha = value; }, 0f, motion.ToastDuration));
             sequence.OnComplete(() =>
             {
                 if (toastRoot != shownToast) return;

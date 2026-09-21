@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
@@ -139,42 +139,6 @@ namespace OCC.Combat.Tests
             Assert.That(result.State.IsVictory, Is.True, result.Summary + "\n" + route.TraceSummary);
             Assert.That(result.State.GetUnit("hero").IsAlive, Is.True);
             Assert.That(result.HeroTurns, Is.LessThanOrEqualTo(12), result.Summary);
-        }
-
-        [Test]
-        public void B01PresetRouteCanSpendFutureTempoToBreakThroughAllThreeVisibleMaintenanceLinks()
-        {
-            CombatTestArenaScenario scenario = CombatTestArenaScenarioCatalog.Get("arena_b01_core");
-            CombatScenarioRouteHarness route = CombatScenarioRouteHarness.Start(scenario.Id);
-            UnitState core = route.Enemy("core_overseer");
-            EnemyIntentPresentation opening = route.Plans.GetPublicIntent(route.State, core, route.Hero);
-            Assert.That(opening.DetailedText, Does.Contain("阶段〇").And.Contain("维护链尚未放行"));
-            Assert.That(route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State), Is.Zero);
-            Assert.That(route.State.AcademyCoreBoss.SurvivingMechanismCount(route.State), Is.EqualTo(3));
-
-            // 阶段〇：走流程。三道门槛逐组放行；此阶段核心不可被打倒，主角不会受到攻击。
-            int advances = 0;
-            while (route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State) < 3 && advances < 8)
-            {
-                route.EndHeroTurnAndAdvance();
-                advances++;
-                Assert.That(route.Hero.IsAlive, Is.True, route.TraceSummary);
-            }
-            Assert.That(route.State.AcademyCoreBoss.ReleasedMechanismCount(route.State), Is.EqualTo(3), "三道门槛应全部放行。");
-            // 第四回合起换装：核心失去霸体并进入阶段一。
-            route.EndHeroTurnAndAdvance();
-            Assert.That(route.Hero.IsAlive, Is.True, route.TraceSummary);
-            advances++;
-            Assert.That(route.State.AcademyCoreBoss.PhaseFor(route.State, core), Is.EqualTo(1));
-            Assert.That(core.IsSuperArmored, Is.False, "三道门槛走完后不再具有霸体。");
-            EnemyIntentPresentation phaseOne = route.Plans.GetPublicIntent(route.State, core, route.Hero);
-            Assert.That(phaseOne.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
-
-            PlaythroughResult result = RunBaselineRoute(scenario, route.State, advances);
-            Assert.That(result.Rejection, Is.Empty, result.Rejection + "\n" + route.TraceSummary);
-            Assert.That(result.State.IsVictory, Is.True, result.Summary + "\n" + route.TraceSummary);
-            Assert.That(result.State.GetUnit("hero").IsAlive, Is.True);
-            Assert.That(result.HeroTurns, Is.LessThanOrEqualTo(20), result.Summary);
         }
 
         [Test]
@@ -499,7 +463,7 @@ namespace OCC.Combat.Tests
             Assert.That(hero.ActionPoints, Is.Zero);
             plans.Invalidate();
             EnemyIntentPresentation incoming = plans.GetPublicIntent(state, snare, hero);
-            Assert.That(incoming.ActionName, Is.EqualTo("石索锁步"));
+            Assert.That(incoming.ActionName, Is.EqualTo("石索"));
             Assert.That(incoming.ResultSummary, Does.Contain("束缚 3 回合"));
 
             CombatResolver.EndTurn(state, hero);

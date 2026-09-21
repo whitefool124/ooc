@@ -21,7 +21,26 @@ namespace OCC.Combat
             if (enemy == null || hero == null) return CombatCommand.EndTurn(enemy?.Id ?? string.Empty);
             if (enemy.EnemyArchetypeId != "breach_ram") return EnemyTactics.Choose(state, enemy, hero);
             if (enemy.Position.ManhattanDistance(hero.Position) == 1) return CombatCommand.Attack(enemy.Id, hero.Id);
-            return chargeCooldown == 0 ? CombatCommand.BreachCharge(enemy.Id, hero.Position) : EnemyTactics.Choose(state, enemy, hero);
+            if (chargeCooldown == 0) return CombatCommand.BreachCharge(enemy.Id, hero.Position);
+            // 冲压冷却期间只做普通近战或换位；不得回落到通用战法选择，否则楔角会施放文档里不存在的远程术式。
+            return StepOrHold(state, enemy, hero);
+        }
+
+        /// <summary>冷却期间的普通行动：能打就打，否则朝主角走一格。</summary>
+        private static CombatCommand StepOrHold(CombatState state, UnitState enemy, UnitState hero)
+        {
+            if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
+            GridPosition[] steps =
+            {
+                new GridPosition(enemy.Position.X + Math.Sign(hero.Position.X - enemy.Position.X), enemy.Position.Y),
+                new GridPosition(enemy.Position.X, enemy.Position.Y + Math.Sign(hero.Position.Y - enemy.Position.Y))
+            };
+            foreach (GridPosition step in steps)
+            {
+                if (step == enemy.Position || !state.Map.IsInside(step) || state.Map.IsBlocked(step) || state.IsOccupied(step, enemy.Id)) continue;
+                return CombatCommand.Move(enemy.Id, step);
+            }
+            return CombatCommand.EndTurn(enemy.Id);
         }
 
         public EnemyIntentPresentation PresentIntent(CombatState state, UnitState enemy, CombatCommand command)

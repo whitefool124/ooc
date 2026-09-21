@@ -165,8 +165,13 @@ namespace OCC.Combat.Presentation
                 if (rect != null) rect.anchoredPosition = position;
                 return;
             }
-            DOTween.To(() => image.color, value => image.color = value, target, profile.QuickDuration).SetTarget(image).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
-            if (rect != null) DOTween.To(() => rect.anchoredPosition, value => rect.anchoredPosition = value, position, profile.QuickDuration).SetTarget(rect).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
+            DOTween.To(() => image != null ? image.color : target,
+                    value => { if (image != null) image.color = value; }, target, profile.QuickDuration)
+                .SetTarget(image).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
+            if (rect != null)
+                DOTween.To(() => rect != null ? rect.anchoredPosition : position,
+                        value => { if (rect != null) rect.anchoredPosition = value; }, position, profile.QuickDuration)
+                    .SetTarget(rect).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
         }
 
         private void ApplyImmediate() => Apply(true);
@@ -174,8 +179,9 @@ namespace OCC.Combat.Presentation
         private void OnDestroy()
         {
             DOTween.Kill(this);
-            image?.DOKill();
-            (transform as RectTransform)?.DOKill();
+            if (image != null) image.DOKill();
+            RectTransform rect = transform as RectTransform;
+            if (rect != null) rect.DOKill();
         }
     }
 }

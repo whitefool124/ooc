@@ -43,13 +43,14 @@ namespace OCC.Combat
         /// 把当前节点结算掉：战斗直接胜利、事件取可行选项、设施走一次服务。
         /// 已经清理过的节点不会被重复结算。
         /// </summary>
-        public static bool TryResolveCurrentNode(RogueliteMapRun run, RogueliteDeveloperAdvanceReport report)
+        public static bool TryResolveCurrentNode(RogueliteMapRun run, RogueliteDeveloperAdvanceReport report,
+            bool settlePendingReward = true)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             string nodeId = run.CurrentNodeId;
             if (run.CompletedNodes.Contains(nodeId) && !run.HasPendingContentCombat)
             {
-                TrySettlePendingReward(run, report);
+                if (settlePendingReward) TrySettlePendingReward(run, report);
                 return false;
             }
             RogueliteMapNode node = run.MapNode(nodeId);
@@ -58,7 +59,7 @@ namespace OCC.Combat
                 string mission = run.PendingContentCombatMissionId;
                 run.CompletePendingContentCombat();
                 report?.Steps.Add("完成事件战 " + mission + " @" + nodeId);
-                TrySettlePendingReward(run, report);
+                if (settlePendingReward) TrySettlePendingReward(run, report);
                 return true;
             }
             if (node.IsCombat)
@@ -66,13 +67,14 @@ namespace OCC.Combat
                 RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.For(run, nodeId);
                 run.CompleteCurrentCombat();
                 report?.Steps.Add("战斗胜利 " + encounter.VariantKey + " @" + nodeId);
-                TrySettlePendingReward(run, report);
+                if (settlePendingReward) TrySettlePendingReward(run, report);
                 return true;
             }
-            return ResolveContentNode(run, node, report);
+            return ResolveContentNode(run, node, report, settlePendingReward);
         }
 
-        private static bool ResolveContentNode(RogueliteMapRun run, RogueliteMapNode node, RogueliteDeveloperAdvanceReport report)
+        private static bool ResolveContentNode(RogueliteMapRun run, RogueliteMapNode node,
+            RogueliteDeveloperAdvanceReport report, bool settlePendingReward = true)
         {
             IReadOnlyList<RogueliteNodeContentChoice> choices = run.CurrentContentChoices;
             if (choices.Count == 0)
@@ -85,7 +87,7 @@ namespace OCC.Combat
             run.ChooseCurrentNodeContent(choice.Id);
             report?.Steps.Add("选择 " + choice.Id + " @" + node.Id);
             if (run.HasPendingContentCombat) return true;
-            TrySettlePendingReward(run, report);
+            if (settlePendingReward) TrySettlePendingReward(run, report);
             return true;
         }
 
@@ -263,16 +265,16 @@ namespace OCC.Combat
             return path;
         }
 
-        /// <summary>一键过关：直接打赢当前战斗并结算掉落。</summary>
-        public static RogueliteDeveloperAdvanceReport ForceWinCurrentCombat(RogueliteMapRun run)
+        /// <summary>一键过关：直接打赢当前战斗并结算掉落。settlePendingReward=false 时停在战后奖励界面，等玩家自己挑。</summary>
+        public static RogueliteDeveloperAdvanceReport ForceWinCurrentCombat(RogueliteMapRun run, bool settlePendingReward = true)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             RogueliteDeveloperAdvanceReport report = new RogueliteDeveloperAdvanceReport();
             if (run.HasPendingContentCombat || run.MapNode(run.CurrentNodeId).IsCombat)
             {
-                if (TryResolveCurrentNode(run, report)) report.NodesResolved = 1;
+                if (TryResolveCurrentNode(run, report, settlePendingReward)) report.NodesResolved = 1;
                 report.StoppedAt = run.CurrentNodeId;
-                report.StopReason = "当前战斗已按胜利结算";
+                report.StopReason = settlePendingReward ? "当前战斗已按胜利结算" : "当前战斗已按胜利结算，战后奖励待处理";
                 if (run.CurrentNodeId == RogueliteAcademyLayerCatalog.FinaleNodeId) report.ReachedFinale = true;
                 report.RoundSettled = run.IsComplete;
                 return report;

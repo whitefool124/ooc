@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -174,6 +174,66 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void ServiceNodeSettlement_RoundTripsAndOldSaveMigratesToEmptySet()
+        {
+            RogueliteMapRun run = ReadyForShop(4210);
+            run.CompleteFirstRunExperience();
+            run.SettleServiceNode("layer_workshop");
+
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            string current = store.Values[RogueliteSaveGateway.MapRunKey];
+            RogueRunDto restoredDto = Rogue11Serializer.Deserialize(current);
+            RogueliteMapRun restored = RogueliteMapRun.FromRogue11(restoredDto);
+            Assert.That(restored.SettledServiceNodeIds, Is.EquivalentTo(new[] { "layer_workshop" }));
+            Assert.That(restored.IsServiceNodeSettled("layer_workshop"), Is.True);
+            Assert.That(RogueliteMapRunValidator.Validate(restored).IsValid, Is.True,
+                RogueliteMapRunValidator.Validate(restored).Summary);
+
+            string[] fields = current.Split('|');
+            string legacy = string.Join("|", fields.Take(fields.Length - 1));
+            RogueRunDto migrated = Rogue11Serializer.Deserialize(legacy);
+            Assert.That(migrated.SettledServiceNodeIds, Is.Empty);
+        }
+
+        [Test]
+        public void ServiceNodeSettlement_ValidatorRejectsDuplicateAndNonLayerIds()
+        {
+            RogueliteMapRun run = ReadyForShop(4211);
+            run.CompleteFirstRunExperience();
+            run.RogueRunState.SettledServiceNodeIds.Add("layer_workshop");
+            run.RogueRunState.SettledServiceNodeIds.Add("layer_workshop");
+            run.RogueRunState.SettledServiceNodeIds.Add("W");
+
+            RogueliteMapRunValidationResult result = RogueliteMapRunValidator.Validate(run);
+            Assert.That(result.Errors, Contains.Item("academy_layer.service_settlement_duplicate"));
+            Assert.That(result.Errors, Contains.Item("academy_layer.service_settlement_unknown"));
+        }
+
+        [Test]
+        public void AcademyLayerWorkshop_UsesFreshNodeStateAndSettlesWithoutTouchingFixedWorkshop()
+        {
+            RogueliteMapRun run = ReadyForShop(4212);
+            FirstRunWorkshopSnapshot fixedWorkshop = run.FirstRunExperience.Workshop;
+            Assert.That(fixedWorkshop.ForgeCompleted, Is.True);
+            Assert.That(fixedWorkshop.SpecializationCompleted, Is.True);
+            run.CompleteFirstRunExperience();
+
+            TravelToService(run, "layer_workshop");
+            FirstRunWorkshopSnapshot layerWorkshop = run.CurrentWorkshopService;
+            Assert.That(layerWorkshop, Is.Not.SameAs(fixedWorkshop));
+            Assert.That(layerWorkshop.ForgeCompleted, Is.False);
+            Assert.That(layerWorkshop.SpecializationCompleted, Is.False);
+
+            run.SettleCurrentServiceNode();
+            Assert.That(run.IsServiceNodeSettled("layer_workshop"), Is.True);
+            Assert.That(run.CompletedNodes, Contains.Item("layer_workshop"));
+            Assert.That(fixedWorkshop.ForgeCompleted, Is.True);
+            Assert.That(fixedWorkshop.SpecializationCompleted, Is.True);
+        }
+
+        [Test]
         public void BossGate_RequiresTenCompletedAcademyNodes()
         {
             RogueliteMapRun run = ReadyForShop(4206);
@@ -241,6 +301,37 @@ namespace OCC.Combat.Tests
         {
             run.SelectNode(nodeId);
             run.ChooseCurrentNodeContent(run.FirstRunExperience.EventForNode(nodeId).OptionIds[optionIndex]);
+        }
+
+        private static void TravelToService(RogueliteMapRun run, string targetId)
+        {
+            HashSet<string> allowed = new HashSet<string>(RogueliteAcademyLayerCatalog.NodeIds, StringComparer.Ordinal);
+            Queue<string> queue = new Queue<string>();
+            Dictionary<string, string> previous = new Dictionary<string, string>(StringComparer.Ordinal);
+            queue.Enqueue(run.CurrentNodeId);
+            previous[run.CurrentNodeId] = null;
+            while (queue.Count > 0 && !previous.ContainsKey(targetId))
+            {
+                string current = queue.Dequeue();
+                RogueliteMapNode currentNode = RogueliteMapCatalog.Node(current);
+                foreach (string next in allowed.Where(id => !previous.ContainsKey(id)))
+                {
+                    if (RogueliteAcademyLayerCatalog.IsServiceNode(next) && next != targetId) continue;
+                    RogueliteMapNode nextNode = RogueliteMapCatalog.Node(next);
+                    if (!currentNode.NextIds.Contains(next) && !nextNode.NextIds.Contains(current)) continue;
+                    previous[next] = current;
+                    queue.Enqueue(next);
+                }
+            }
+            Assert.That(previous.ContainsKey(targetId), Is.True, "No academy-layer route to " + targetId);
+            List<string> path = new List<string>();
+            for (string cursor = targetId; cursor != run.CurrentNodeId; cursor = previous[cursor]) path.Add(cursor);
+            path.Reverse();
+            foreach (string nodeId in path)
+            {
+                run.SelectNode(nodeId);
+                if (nodeId != targetId) RogueliteDeveloperRunPolicy.TryResolveCurrentNode(run, null);
+            }
         }
 
         private sealed class MemoryStore : IRogueliteSaveStore
