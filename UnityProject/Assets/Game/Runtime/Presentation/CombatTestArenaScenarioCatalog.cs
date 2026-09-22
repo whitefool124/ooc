@@ -501,7 +501,7 @@ namespace OCC.Combat.Presentation
             LevelTerrainPlacement[] permanentWalls = PermanentWalls(id, walkable, width, height);
             return new FirstRegionLevelDefinition(id, name, objective, CombatObjectiveType.Elimination, 1, hero,
                 FirstRegionFloorTheme.Courtyard, elite, boss, Array.Empty<string>(), placedEnemies, authoredTerrain.Concat(permanentWalls),
-                new LevelSpaceContract(grammar, walkable.OrderBy(p => p.X).ThenBy(p => p.Y).Take(3).ToArray(), risk, "始终保留一条不依赖场地效果的推进路线。"),
+                new LevelSpaceContract(grammar, risk, "始终保留一条不依赖场地效果的推进路线。"),
                 width, height, blocked);
         }
 

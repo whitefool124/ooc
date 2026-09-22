@@ -201,10 +201,10 @@ namespace OCC.Combat.Tests
                 BattlefieldRect cell = viewport.CellRect(new GridPosition(x, y));
                 Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
                 Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 5);
-                Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
+                Rect shield = CombatUnitHudLayout.UnitShieldBadgeRect(cell);
                 // 定案 6 倍档下盘面大于视口，"全部装进视口"的前提不再成立；
                 // 改为守住真实不变量：三者都以所属格为锚、越界量有确定上界（单位画布 2×2 格、底部对齐，
-                // 意图徽章浮在单位上沿，护盾条贴在格底下方），且都保持原生像素对齐。
+                // 意图徽章浮在单位上沿，护盾读数与生命条共用格底基线），且都保持原生像素对齐。
                 Assert.That(unit.width, Is.LessThanOrEqualTo(cell.Width * 2f + .01f));
                 Assert.That(unit.xMin, Is.GreaterThanOrEqualTo(cell.X - cell.Width * .5f - .01f));
                 Assert.That(unit.xMax, Is.LessThanOrEqualTo(cell.XMax + cell.Width * .5f + .01f));

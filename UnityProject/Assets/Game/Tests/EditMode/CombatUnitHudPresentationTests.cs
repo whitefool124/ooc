@@ -107,6 +107,9 @@ namespace OCC.Combat.Tests
             Assert.That(presentation.Health.CompactText, Is.EqualTo("1 -1 → 0　上限 12"));
             Assert.That(presentation.Health.CurrentRatio, Is.EqualTo(1f / 12f));
             Assert.That(presentation.Health.RemainingRatio, Is.Zero);
+            Assert.That(presentation.Mana.Current, Is.EqualTo(enemy.Mana));
+            Assert.That(presentation.Mana.Maximum, Is.EqualTo(enemy.MaxMana));
+            Assert.That(presentation.Mana.RemainingRatio, Is.EqualTo(enemy.Mana / (float)enemy.MaxMana));
             Assert.That(presentation.WillDefeat, Is.True);
         }
 

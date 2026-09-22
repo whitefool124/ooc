@@ -46,6 +46,9 @@ namespace OCC.Combat.Presentation
         public static readonly Color Health = new Color(.68f, .25f, .19f, 1f);
         public static readonly Color Shield = new Color(.27f, .56f, .38f, 1f);
         public static readonly Color Magic = new Color(.18f, .48f, .51f, 1f);
+        public static readonly Color ResourceHealthFill = new Color(.94f, .12f, .16f, 1f);
+        public static readonly Color ResourceShieldFill = new Color(.72f, .78f, .84f, 1f);
+        public static readonly Color ResourceMagicFill = new Color(.04f, .72f, .90f, 1f);
         public static Color ResourceTrack => highContrast
             ? new Color(.72f, .70f, .65f, 1f)
             : Color.Lerp(SurfaceRaised, Ink, .24f);
@@ -221,6 +224,7 @@ namespace OCC.Combat.Presentation
     public static class FormalUiKit
     {
         private static Font font;
+        private static Sprite solidFillSprite;
         private static Font displayFont;
         private static Font readingFont;
         private static readonly System.Collections.Generic.Dictionary<string, Sprite> skin = new System.Collections.Generic.Dictionary<string, Sprite>(StringComparer.Ordinal);
@@ -230,14 +234,43 @@ namespace OCC.Combat.Presentation
         public static Font Font => font != null ? font : font = Resources.Load<Font>(FontResourcePath);
         public static Font DisplayFont => displayFont != null ? displayFont : displayFont = Resources.Load<Font>(DisplayFontResourcePath);
         public static Font ReadingFont => readingFont != null ? readingFont : readingFont = Resources.Load<Font>(ReadingFontResourcePath);
+        public static Sprite SolidFillSprite
+        {
+            get
+            {
+                if (solidFillSprite != null) return solidFillSprite;
+                solidFillSprite = Sprite.Create(Texture2D.whiteTexture,
+                    new Rect(0f, 0f, Texture2D.whiteTexture.width, Texture2D.whiteTexture.height),
+                    new Vector2(.5f, .5f), Texture2D.whiteTexture.width);
+                solidFillSprite.name = "occ_solid_resource_fill";
+                return solidFillSprite;
+            }
+        }
 
         public static Sprite SkinSprite(string id)
         {
             if (skin.TryGetValue(id, out Sprite cached)) return cached;
             Sprite loaded = Resources.Load<Sprite>(OccPixelUiConfig.SkinPath(id));
+            if (loaded == null)
+            {
+                Sprite[] subAssets = Resources.LoadAll<Sprite>(OccPixelUiConfig.SkinPath(id));
+                if (subAssets != null && subAssets.Length > 0) loaded = subAssets[0];
+            }
             if (loaded == null) throw new InvalidOperationException("Missing formal pixel UI skin: " + id);
             skin[id] = loaded;
             return loaded;
+        }
+
+        public static void ApplyBarFillSkin(Image image, string id)
+        {
+            if (image == null) return;
+            Sprite sprite = SkinSprite(id);
+            image.sprite = sprite;
+            image.type = sprite.border.sqrMagnitude > 0f ? Image.Type.Sliced : Image.Type.Simple;
+            image.fillCenter = true;
+            image.preserveAspect = false;
+            image.color = Color.white;
+            image.raycastTarget = false;
         }
 
         public static void ApplySkin(Image image, string id, Color tint)

@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "resource_bar_track_32_v1",
+  "role": "ui_resource_bar_32",
+  "status": "CONCEPT",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset",
+    "source_path": "Worldbuilding/归档/2026-09-22_资源条32px重制/raw/resource_bar_track_32_source.png",
+    "source_sha256": "PENDING"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-22_资源条32px重制/normalized/resource_bar_track_32.png",
+    "output_sha256": "PENDING",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": ["charcoal", "warm_ivory", "oxidized_brass"]
+  },
+  "display": {
+    "canonical_integer_scale": 3,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 3,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "32 px nine-slice source; only the quiet centre stretches"
+  },
+  "application": {
+    "runtime_draw_rect": "hero status resource track, horizontal nine-slice",
+    "default_integer_scale": 3,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_track_32_1x.png",
+    "four_x": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_track_32_4x.png",
+    "six_x": null,
+    "grayscale": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_track_32_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_track_32_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_track_32_contact.png"
+  },
+  "human_review": {"overall":"REJECT","reviewer":"Codex preflight","date":"2026-09-22","silhouette":"REJECT","material":"PENDING","perspective":"PENDING","style":"REJECT","application":"REJECT","illumination":"PENDING","notes":"Three source rounds exhausted; final lattice confidence 1.0335 below the required 1.2."},
+  "unity_import": {"filter_mode":"Point","mesh_type":"Full Rect","compression":"None","mipmaps":false,"wrap_mode":"Clamp","atlas_padding":0,"atlas_rotation":false,"atlas_tight_packing":false,"atlas_extrude":0,"guid":"","sprite_border":[8,8,8,8]}
+}

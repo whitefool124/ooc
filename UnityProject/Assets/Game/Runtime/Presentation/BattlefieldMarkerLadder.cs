@@ -36,10 +36,13 @@ namespace OCC.Combat.Presentation
     /// </summary>
     public static class BattlefieldMarkerLadder
     {
-        /// <summary>Path of the centre mark drawn inside the destination frame. PLACEHOLDER: this 32x32
-        /// diamond was drawn programmatically on the user's explicit instruction, which the art contract
-        /// normally forbids; it must be replaced by a generated source before the asset becomes formal.</summary>
+        /// <summary>Formal 32x32 centre mark drawn inside the enemy destination frame.</summary>
         public const string EnemyIntentMarkerPath = "Art/FormalTacticalOverlays32V2/enemy_intent_diamond";
+
+        /// <summary>Formal native-16 silver-white marker shown above the unit represented by a hovered timeline row.</summary>
+        public const string TimelineHoverArrowPath = "Art/FormalCombatIndicators16/timeline_hover_arrow";
+        public const float TimelineHoverArrowNativePixels = 16f;
+        public const float TimelineHoverArrowGapNativePixels = 2f;
 
         /// <summary>The frame around the enemy plan. It uses the neutral white frame texture (the one the
         /// player's selection outline uses) because it is the only frame in the project that can actually
@@ -53,7 +56,7 @@ namespace OCC.Combat.Presentation
         public const float EnemyIntentDestinationAlpha = .9f;
 
         /// <summary>Centre mark edge as a fraction of one cell, so the marker scales with the board.</summary>
-        public const float EnemyIntentDotFraction = .34f;
+        public const float EnemyIntentDotFraction = 1f / 3f;
 
         public static string TextureId(BattlefieldCellMarker marker)
         {

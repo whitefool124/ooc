@@ -406,12 +406,20 @@ namespace OCC.Combat.Tests
                 "The dot must win the overlap with the player's own range.");
             Assert.That(BattlefieldMarkerLadder.EnemyIntentDotFraction, Is.InRange(.2f, .5f),
                 "The emphasis dot must be a readable fraction of a cell, neither a speck nor a fill.");
-            // 中间菱形是程序生成的临时素材：必须真的能加载，且为 32x32 原生格。
+            Assert.That(BattlefieldMarkerLadder.EnemyIntentDotFraction * 192f, Is.EqualTo(64f).Within(.001f),
+                "The 32px marker must render at an exact 2x lattice in the 192px battlefield tier.");
+            // 中间菱形使用通过像素资产流程的正式候选：必须真的能加载，且为 32x32 原生格。
             UnityEngine.Texture2D marker = UnityEngine.Resources.Load<UnityEngine.Texture2D>(
                 BattlefieldMarkerLadder.EnemyIntentMarkerPath);
             Assert.That(marker, Is.Not.Null, "敌方落点菱形素材缺失：" + BattlefieldMarkerLadder.EnemyIntentMarkerPath);
             Assert.That(marker.width, Is.EqualTo(32));
             Assert.That(marker.height, Is.EqualTo(32));
+            UnityEngine.Sprite arrow = UnityEngine.Resources.Load<UnityEngine.Sprite>(
+                BattlefieldMarkerLadder.TimelineHoverArrowPath);
+            Assert.That(arrow, Is.Not.Null, "行动条头顶箭头素材缺失：" + BattlefieldMarkerLadder.TimelineHoverArrowPath);
+            Assert.That(arrow.texture.width, Is.EqualTo(16));
+            Assert.That(arrow.texture.height, Is.EqualTo(16));
+            Assert.That(arrow.pixelsPerUnit, Is.EqualTo(16f));
         }
 
         [Test]

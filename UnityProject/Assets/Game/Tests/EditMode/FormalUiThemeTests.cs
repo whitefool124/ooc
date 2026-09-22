@@ -11,6 +11,31 @@ namespace OCC.Combat.Tests
 {
     public sealed class FormalUiThemeTests
     {
+        [TestCase("resource_bar_health_32")]
+        [TestCase("resource_bar_shield_32")]
+        [TestCase("resource_bar_mana_32")]
+        [TestCase("unit_bar_health_16")]
+        [TestCase("bar_segment_shield")]
+        public void ResourceBarFillSkins_PreserveTheirSlicedPixelContour(string skinId)
+        {
+            GameObject root = new GameObject("resource-bar-fill-test", typeof(RectTransform), typeof(Image));
+            try
+            {
+                Image image = root.GetComponent<Image>();
+                FormalUiKit.ApplyBarFillSkin(image, skinId);
+
+                Assert.That(image.sprite, Is.Not.Null, skinId);
+                Assert.That(image.sprite.border.sqrMagnitude, Is.GreaterThan(0f), skinId);
+                Assert.That(image.type, Is.EqualTo(Image.Type.Sliced), skinId);
+                Assert.That(image.fillCenter, Is.True, skinId);
+                Assert.That(image.color, Is.EqualTo(Color.white), skinId);
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
+        }
+
         [Test]
         public void CombatInventoryPresentation_UsesOnlyActiveEquipmentSlots()
         {
@@ -163,7 +188,7 @@ namespace OCC.Combat.Tests
             {
                 MethodInfo textMethod = typeof(FormalCombatHud).GetMethod("ActionPointText", BindingFlags.Static | BindingFlags.NonPublic);
                 Assert.That(textMethod, Is.Not.Null);
-                Assert.That(textMethod.Invoke(null, new object[] { 4 }), Is.EqualTo("4"));
+                Assert.That(textMethod.Invoke(null, new object[] { 4 }), Is.EqualTo("4／3"));
             }
             finally
             {
@@ -436,19 +461,20 @@ namespace OCC.Combat.Tests
             {
                 FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
                 MethodInfo create = typeof(FormalCombatHud).GetMethod("ResourceBar", BindingFlags.Instance | BindingFlags.NonPublic);
-                object[] arguments = { root.transform, "生命", new Vector2(16f, -104f), FormalUiTheme.Health, null };
+                object[] arguments = { root.transform, "生命", new Vector2(16f, -104f), FormalUiTheme.ResourceHealthFill, null };
                 Image fill = (Image)create.Invoke(hud, arguments);
                 RectTransform track = root.transform.Find("生命轨道").GetComponent<RectTransform>();
                 Transform marker = track.Find("生命变化落点");
 
-                Assert.That(track.sizeDelta.y, Is.EqualTo(20f));
+                Assert.That(track.sizeDelta.y, Is.EqualTo(24f));
                 Assert.That(track.GetComponent<Image>().color, Is.EqualTo(FormalUiTheme.ResourceTrack));
-                Assert.That(fill.color, Is.EqualTo(FormalUiTheme.Health));
+                Assert.That(fill.color, Is.EqualTo(FormalUiTheme.ResourceHealthFill));
+                Assert.That(fill.sprite, Is.SameAs(FormalUiKit.SolidFillSprite));
+                Assert.That(fill.type, Is.EqualTo(Image.Type.Filled));
                 Assert.That(FormalUiKit.SkinOverlay(fill), Is.Null);
-                Assert.That(fill.rectTransform.offsetMin, Is.EqualTo(new Vector2(4f, 4f)));
-                Assert.That(fill.rectTransform.offsetMax, Is.EqualTo(new Vector2(-4f, -4f)));
+                Assert.That(fill.rectTransform.offsetMin, Is.EqualTo(new Vector2(3f, 3f)));
+                Assert.That(fill.rectTransform.offsetMax, Is.EqualTo(new Vector2(-3f, -3f)));
                 Assert.That(fill.transform.GetSiblingIndex(), Is.GreaterThan(FormalUiKit.SkinOverlay(track.GetComponent<Image>()).transform.GetSiblingIndex()));
-                Assert.That(FormalUiTheme.ContrastRatio(fill.color, track.GetComponent<Image>().color), Is.GreaterThan(1.5f));
                 Assert.That(FormalUiTheme.Health, Is.Not.EqualTo(FormalUiTheme.Shield));
                 Assert.That(FormalUiTheme.Shield, Is.Not.EqualTo(FormalUiTheme.Magic));
                 Assert.That(FormalUiTheme.Magic, Is.Not.EqualTo(FormalUiTheme.Health));
@@ -463,6 +489,9 @@ namespace OCC.Combat.Tests
                 setBar.Invoke(hud, first);
                 object[] second = { fill, .25f, first[2] };
                 setBar.Invoke(hud, second);
+                Assert.That(fill.fillAmount, Is.EqualTo(.25f).Within(.001f));
+                Assert.That(fill.rectTransform.anchorMin, Is.EqualTo(Vector2.zero));
+                Assert.That(fill.rectTransform.anchorMax, Is.EqualTo(Vector2.one));
                 Assert.That(marker.GetComponent<RectTransform>().anchorMin.x, Is.EqualTo(.25f).Within(.001f));
                 Assert.That(marker.GetComponent<Image>().color.a, Is.GreaterThan(.5f));
             }
@@ -474,17 +503,17 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyIntentBadge_DisplaysNative16PixelIconAtExactTwoTimesScale()
+        public void EnemyIntentBadge_DisplaysNative16PixelIconAtExactThreeTimesScaleWithoutBackingTile()
         {
             BattlefieldRect cell = new BattlefieldRect(100f, 120f, 128f, 128f);
             Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 7);
             Rect icon = CombatUnitHudLayout.EnemyIntentIconLocalRect();
             Rect damage = CombatUnitHudLayout.EnemyIntentDamageLocalRect(badge.width);
 
-            Assert.That(badge.size, Is.EqualTo(new Vector2(68f, 40f)));
-            Assert.That(icon, Is.EqualTo(new Rect(4f, 4f, 32f, 32f)));
-            Assert.That(icon.width / 16f, Is.EqualTo(2f));
-            Assert.That(icon.height / 16f, Is.EqualTo(2f));
+            Assert.That(badge.size, Is.EqualTo(new Vector2(92f, 56f)));
+            Assert.That(icon, Is.EqualTo(new Rect(4f, 4f, 48f, 48f)));
+            Assert.That(icon.width / 16f, Is.EqualTo(3f));
+            Assert.That(icon.height / 16f, Is.EqualTo(3f));
             Assert.That(damage.x, Is.GreaterThanOrEqualTo(icon.xMax));
             Assert.That(damage.xMax, Is.LessThanOrEqualTo(badge.width - 4f));
         }
@@ -519,15 +548,15 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void SemanticIcons_KeepTheirNativeThirtyTwoPixelGrid()
+        public void SemanticIcons_UseNativeTwelvePixelArtAtAnIntegerDisplayScale()
         {
             GameObject root = new GameObject("semantic-size-root", typeof(RectTransform));
             try
             {
                 FormalUiKit.SemanticChip("action", "2", root.transform, Vector2.zero, null, 22, 14);
                 Image icon = root.GetComponentsInChildren<Image>().Single();
-                Assert.That(icon.sprite.rect.size, Is.EqualTo(new Vector2(32f, 32f)));
-                Assert.That(icon.rectTransform.sizeDelta, Is.EqualTo(new Vector2(32f, 32f)));
+                Assert.That(icon.sprite.rect.size, Is.EqualTo(new Vector2(12f, 12f)));
+                Assert.That(icon.rectTransform.sizeDelta, Is.EqualTo(new Vector2(24f, 24f)));
             }
             finally { Object.DestroyImmediate(root); }
         }

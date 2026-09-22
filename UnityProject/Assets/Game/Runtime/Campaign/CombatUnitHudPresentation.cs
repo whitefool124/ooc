@@ -36,12 +36,15 @@ namespace OCC.Combat
     {
         public CombatUnitVitalPresentation Health { get; }
         public CombatUnitVitalPresentation Shield { get; }
+        public CombatUnitVitalPresentation Mana { get; }
         public bool WillDefeat => Health.WillEmpty;
 
-        private CombatUnitVitalsPresentation(CombatUnitVitalPresentation health, CombatUnitVitalPresentation shield)
+        private CombatUnitVitalsPresentation(CombatUnitVitalPresentation health, CombatUnitVitalPresentation shield,
+            CombatUnitVitalPresentation mana)
         {
             Health = health;
             Shield = shield;
+            Mana = mana;
         }
 
         public static CombatUnitVitalsPresentation From(UnitState unit, CombatTargetDamageForecast forecast, bool uncappedShield = false)
@@ -54,7 +57,8 @@ namespace OCC.Combat
             return new CombatUnitVitalsPresentation(
                 new CombatUnitVitalPresentation(unit.Health, unit.MaxHealth, healthLoss, remainingHealth),
                 new CombatUnitVitalPresentation(unit.Shield, uncappedShield ? Math.Max(1, unit.Shield) : unit.MaxShield,
-                    shieldLoss, remainingShield, uncappedShield));
+                    shieldLoss, remainingShield, uncappedShield),
+                new CombatUnitVitalPresentation(unit.Mana, unit.MaxMana, 0, unit.Mana));
         }
     }
 

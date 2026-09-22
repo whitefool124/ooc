@@ -1,0 +1,79 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.resource.contribution",
+  "role": "resource_icon_12",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "manual_pixel_authoring",
+    "source_path": "ArtSource/resource_icons_12_handdrawn_2026-09-22/contribution.png",
+    "source_sha256": "5f685672d3f09bde2e901b87646194fa77b6ac272922d00bef31f5b79bbadc5a",
+    "source_descriptor": "User-authorized fresh native 12px semantic drawing; no 8px source scaling or recolouring."
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceIcons12/contribution.png",
+    "output_sha256": "5f685672d3f09bde2e901b87646194fa77b6ac272922d00bef31f5b79bbadc5a",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 3,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "Native 12x12 transparent glyph displayed at 2x or 3x integer scale.",
+    "default_integer_scale": 3,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "ArtSource/resource_icons_12_handdrawn_2026-09-22/contribution.png",
+    "four_x": "ArtSource/resource_icons_12_handdrawn_2026-09-22/evidence/resource_icons_12_contact_12x.png",
+    "six_x": "ArtSource/resource_icons_12_handdrawn_2026-09-22/evidence/contribution_6x.png",
+    "grayscale": "ArtSource/resource_icons_12_handdrawn_2026-09-22/evidence/contribution_grayscale.png",
+    "checker": "ArtSource/resource_icons_12_handdrawn_2026-09-22/evidence/resource_icons_12_contact_12x.png",
+    "application_contact": "ArtSource/resource_icons_12_handdrawn_2026-09-22/evidence/resource_icons_12_application_mock.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex visual QA",
+    "date": "2026-09-22",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PASS",
+    "notes": "Native 12px silhouettes and pure-black outlines passed contact review; imported at 12 PPU and verified in the combat HUD."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalResourceIcons12/contribution.png",
+    "stable_guid": "0eba8941491367c4c87d4684930a2e42",
+    "texture_type": "Sprite",
+    "pixels_per_unit": 12,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_lattice": {
+      "pass": true,
+      "tier": 3,
+      "capture": "UnityProject/Reports/CombatTestArena/ui_refine_final_1920x1080.png",
+      "notes": "Registry load, importer readback and combat HUD runtime capture verified."
+    }
+  },
+  "pixel_grid_qa": {
+    "authoring_mode": "direct_native_grid",
+    "target_canvas": [
+      12,
+      12
+    ],
+    "geometric_resize_or_interpolation_performed": false,
+    "new_colours_introduced_after_authoring": false,
+    "outline": "one_pixel_pure_black"
+  }
+}

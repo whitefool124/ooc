@@ -1,14 +1,26 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace OCC.Combat.Tests
 {
     public sealed class CombatHoverInformationTests
     {
+        [Test]
+        public void FormalHoverTooltip_IsPersistedAsReusableResourcePrefab()
+        {
+            FormalHoverTooltip prefab = Resources.Load<FormalHoverTooltip>(FormalHoverTooltip.ResourcePath);
+
+            Assert.That(prefab, Is.Not.Null);
+            Assert.That(prefab.GetComponent<Canvas>(), Is.Null);
+            Assert.That(prefab.transform.childCount, Is.EqualTo(1));
+        }
+
         [Test]
         public void CompactTargetSummary_KeepsDecisionDataButLeavesReferenceDetailsForTooltip()
         {
@@ -112,6 +124,42 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void HeaderResourceChips_HaveRaycastHitAreasAndTooltipTriggers()
+        {
+            GameObject canvasRoot = new GameObject("header-tooltip-canvas", typeof(RectTransform), typeof(Canvas));
+            GameObject hudObject = new GameObject("header-tooltip-hud", typeof(FormalCombatHud));
+            GameObject header = new GameObject("header", typeof(RectTransform));
+            header.transform.SetParent(canvasRoot.transform, false);
+            try
+            {
+                FormalCombatHud hud = hudObject.GetComponent<FormalCombatHud>();
+                FormalHoverTooltip tooltip = FormalHoverTooltip.Create(canvasRoot.GetComponent<Canvas>());
+                typeof(FormalCombatHud).GetField("tooltip", BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?.SetValue(hud, tooltip);
+                MethodInfo build = typeof(FormalCombatHud).GetMethod("BuildHeaderResources",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(build, Is.Not.Null);
+                build.Invoke(hud, new object[] { header.transform });
+
+                string[] names = { "资源_生命", "资源_金币", "资源_学院贡献", "资源_剩余时间" };
+                foreach (string name in names)
+                {
+                    Transform chip = header.transform.Find(name);
+                    Assert.That(chip, Is.Not.Null, name);
+                    Assert.That(chip.GetComponent<Image>()?.raycastTarget, Is.True, name + " should receive pointer hover");
+                    Assert.That(chip.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null, name + " should open the shared tooltip");
+                    Assert.That(chip.Find("图标").GetComponent<Image>().raycastTarget, Is.False,
+                        name + " glyph must let the parent hit area receive hover");
+                }
+            }
+            finally
+            {
+                Object.DestroyImmediate(hudObject);
+                Object.DestroyImmediate(canvasRoot);
+            }
+        }
+
+        [Test]
         public void EnemyInspectionTarget_OnlySelectsLivingEnemyCells()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -176,10 +224,10 @@ namespace OCC.Combat.Tests
             float healthBarTop = CombatUnitHudLayout.UnitHealthBarRect(cell).yMin;
 
             Assert.That(badge.yMin, Is.LessThan(cell.Y));
-            Assert.That(badge.yMax, Is.LessThanOrEqualTo(cell.Y + 18f));
+            Assert.That(badge.yMax, Is.LessThanOrEqualTo(cell.Y + 28.5f));
             Assert.That(badge.yMax, Is.LessThan(healthBarTop));
-            Assert.That(badge.height, Is.EqualTo(40f));
-            Assert.That(badge.width, Is.EqualTo(68f));
+            Assert.That(badge.height, Is.EqualTo(56f));
+            Assert.That(badge.width, Is.EqualTo(92f));
         }
 
         [Test]
@@ -187,8 +235,8 @@ namespace OCC.Combat.Tests
         {
             BattlefieldRect cell = new BattlefieldRect(100f, 120f, 128f, 128f);
             Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
-            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell);
-            Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
+            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell, true);
+            Rect shield = CombatUnitHudLayout.UnitShieldBadgeRect(cell);
             Rect firstStatus = CombatUnitHudLayout.UnitStatusIconRect(cell, 0);
             Rect sixthStatus = CombatUnitHudLayout.UnitStatusIconRect(cell, 5);
 
@@ -198,8 +246,9 @@ namespace OCC.Combat.Tests
             Assert.That(unit.yMax, Is.LessThanOrEqualTo(cell.Y + cell.Height));
             Assert.That(health.Overlaps(shield), Is.False);
             Assert.That(health.yMin, Is.GreaterThanOrEqualTo(unit.yMin + unit.height * 58f / 64f));
-            Assert.That(shield.yMin, Is.GreaterThan(health.yMax));
-            Assert.That(health.width, Is.EqualTo(112f));
+            Assert.That(shield.yMin, Is.EqualTo(health.yMin));
+            Assert.That(health.width, Is.EqualTo(128f));
+            Assert.That(health.center.x, Is.EqualTo(cell.X + cell.Width * .5f));
             Assert.That(firstStatus.width, Is.EqualTo(32f));
             Assert.That(firstStatus.xMin, Is.GreaterThanOrEqualTo(cell.X));
             Assert.That(sixthStatus.xMax, Is.LessThanOrEqualTo(cell.X + cell.Width));
@@ -209,38 +258,40 @@ namespace OCC.Combat.Tests
         [TestCase(96f)]
         [TestCase(128f)]
         [TestCase(160f)]
-        public void UnitUsesWholeNativeScaleWhileVitalBarsKeepConstantProportionAtEveryZoomStep(float cellSize)
+        public void UnitUsesWholeNativeScaleWhileVitalBarsKeepFixedPixelsAtEveryZoomStep(float cellSize)
         {
             BattlefieldRect cell = new BattlefieldRect(0f, 0f, cellSize, cellSize);
             Rect unit = CombatUnitHudLayout.UnitPresentationRect(cell);
-            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell);
-            Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
+            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell, true);
+            Rect shield = CombatUnitHudLayout.UnitShieldBadgeRect(cell);
 
             Assert.That(unit.width % 64f, Is.Zero.Within(.0001f));
             Assert.That(unit.height, Is.EqualTo(unit.width));
             Assert.That(unit.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
             Assert.That(unit.yMax, Is.EqualTo(cell.Y + cell.Height).Within(.0001f));
-            Assert.That(health.width / cellSize, Is.EqualTo(112f / 128f).Within(.0001f));
-            Assert.That(health.height / cellSize, Is.EqualTo(16f / 128f).Within(.0001f));
-            Assert.That(shield.width / cellSize, Is.EqualTo(112f / 128f).Within(.0001f));
-            Assert.That(shield.height / cellSize, Is.EqualTo(8f / 128f).Within(.0001f));
+            Assert.That(health.width, Is.EqualTo(128f).Within(.0001f));
+            Assert.That(health.height, Is.EqualTo(16f).Within(.0001f));
+            Assert.That(health.center.x, Is.EqualTo(cell.X + cell.Width * .5f).Within(.0001f));
+            Rect mana = CombatUnitHudLayout.UnitManaBarRect(cell);
+            Assert.That(mana.width, Is.EqualTo(128f).Within(.0001f));
+            Assert.That(mana.height, Is.EqualTo(8f).Within(.0001f));
+            Assert.That(mana.center.x, Is.EqualTo(health.center.x).Within(.0001f));
+            Assert.That(shield.width, Is.EqualTo(32f).Within(.0001f));
+            Assert.That(shield.height, Is.EqualTo(16f).Within(.0001f));
         }
 
         [Test]
-        public void VitalText_HidesAtOverviewAndPreservesForecastAtReadableZooms()
+        public void VitalText_RemainsVisibleAndFixedAcrossZoomSteps()
         {
             var vital = new CombatUnitVitalPresentation(8, 12, 3, 5);
 
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 64f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.Empty);
-            Assert.That(CombatUnitHudLayout.VitalText(vital, 256f), Is.EqualTo("8 -3 → 5　上限 12"));
-            Assert.That(CombatUnitHudLayout.VitalFontSize(64f, true), Is.Zero);
-            Assert.That(CombatUnitHudLayout.VitalFontSize(96f, false), Is.Zero);
-            Assert.That(CombatUnitHudLayout.VitalFontSize(128f, true), Is.Zero);
-            Assert.That(CombatUnitHudLayout.VitalFontSize(160f, false), Is.Zero);
-            Assert.That(CombatUnitHudLayout.VitalFontSize(256f, false), Is.EqualTo(FormalUiTheme.BodyFontSize));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 64f), Is.EqualTo("5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 96f), Is.EqualTo("5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 128f), Is.EqualTo("5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 160f), Is.EqualTo("5/12"));
+            Assert.That(CombatUnitHudLayout.VitalText(vital, 256f), Is.EqualTo("5/12"));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(64f, true), Is.EqualTo(12));
+            Assert.That(CombatUnitHudLayout.VitalFontSize(256f, false), Is.EqualTo(12));
         }
 
         [Test]
@@ -262,9 +313,14 @@ namespace OCC.Combat.Tests
         [Test]
         public void BattlefieldHover_RevealsAfterTwoSecondsAndUsesIndependentOrderedWindows()
         {
-            Assert.That(FormalBattlefieldView.CellHoverRevealDelaySeconds, Is.EqualTo(2f));
-            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(1.999f, true, true, false), Is.False);
-            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(2f, true, true, false), Is.True);
+            Assert.That(FormalBattlefieldView.CellHoverRevealDelaySeconds, Is.EqualTo(.35f));
+            Assert.That(FormalBattlefieldView.CellHoverWarmRevealDelaySeconds, Is.EqualTo(.10f));
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(.349f, true, true, false), Is.False);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(.35f, true, true, false), Is.True);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(.099f, true, true, false,
+                FormalBattlefieldView.CellHoverWarmRevealDelaySeconds), Is.False);
+            Assert.That(FormalBattlefieldView.ShouldRevealCellHover(.10f, true, true, false,
+                FormalBattlefieldView.CellHoverWarmRevealDelaySeconds), Is.True);
             Assert.That(FormalBattlefieldView.ShouldRevealCellHover(3f, true, false, false), Is.False);
             Assert.That(FormalBattlefieldView.ShouldRevealCellHover(3f, true, true, true), Is.False);
             GameObject prefab = Resources.Load<GameObject>(BattlefieldHoverCardView.ResourcePath);

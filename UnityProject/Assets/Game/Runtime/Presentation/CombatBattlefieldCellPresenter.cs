@@ -422,9 +422,6 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsPermanentWall)
                 objects.Add("永久墙体阻挡移动与视线，不可破坏");
-            else if (tile.IsStakedStructure)
-                objects.Add(tile.IsDestroyed ? "标定结构残骸已失去阻挡和防护效果" :
-                    "标定结构是现场夯筑的掩体，耐久 " + tile.Durability + "，阻挡移动与视线，与其正交相邻会在自身回合结束获得 4 护盾");
             else if (tile.Cover == CoverType.Light)
                 objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果，可正常通行" :
                     "轻掩体耐久 " + tile.Durability + "，肉鸽战斗中站立其上会在自身回合结束获得 2 护盾");
@@ -436,9 +433,6 @@ namespace OCC.Combat.Presentation
             else if (tile.IsOverloadDevice)
                 objects.Add(tile.IsDestroyed ? "过载装置已引爆，不再有威胁" :
                     "过载装置不可进入，耐久 " + tile.Durability + "，被摧毁时对正交四格结算 8 点以太伤害，敌我一致");
-            else if (tile.IsCertifierStand)
-                objects.Add(tile.IsDestroyed ? "检定台已损毁，不再提供读数" :
-                    "检定台不可进入，耐久 " + tile.Durability + "，单位进入正交邻接时公开邻接单位的耐久与护盾读数，敌我同规则");
             else if (tile.IsWardGenerator)
                 objects.Add(tile.IsDestroyed ? "护罩发生器已损毁，不再提供结构护盾" :
                     "护罩发生器不可进入，耐久 " + tile.Durability + "，自身回合结束时为正交相邻单位提供 4 点结构护盾，被摧毁即不再提供");

@@ -35,6 +35,10 @@
     { "id": "bar_segment_health", "resourcePath": "Art/FormalUISkin16/bar_segment_health" },
     { "id": "bar_segment_shield", "resourcePath": "Art/FormalUISkin16/bar_segment_shield" },
     { "id": "bar_segment_mana", "resourcePath": "Art/FormalUISkin16/bar_segment_mana" },
+    { "id": "resource_bar_health_32", "resourcePath": "Art/FormalResourceBars32/health" },
+    { "id": "resource_bar_shield_32", "resourcePath": "Art/FormalResourceBars32/shield" },
+    { "id": "resource_bar_mana_32", "resourcePath": "Art/FormalResourceBars32/mana" },
+    { "id": "unit_bar_health_16", "resourcePath": "Art/FormalUnitBars16/health" },
     { "id": "badge_cost", "resourcePath": "Art/FormalUISkin16/badge_cost" },
     { "id": "slot_locked", "resourcePath": "Art/FormalUISkin16/slot_locked" },
     { "id": "timeline_node", "resourcePath": "Art/FormalUISkin16/timeline_node" }

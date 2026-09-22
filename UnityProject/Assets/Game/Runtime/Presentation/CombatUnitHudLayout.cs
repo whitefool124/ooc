@@ -17,19 +17,25 @@ namespace OCC.Combat.Presentation
 
         public static Rect EnemyIntentBadgeRect(BattlefieldRect cell, int expectedDamage)
         {
-            float width = expectedDamage > 0 ? 68f : 40f;
+            float width = expectedDamage > 0 ? 92f : 56f;
             Rect unit = UnitPresentationRect(cell);
-            return new Rect(cell.X + (cell.Width - width) * .5f, unit.y + cell.Width * .3125f - 40f, width, 40f);
+            // This is the same visible-head boundary used by the annotation obstacle pass. Leave
+            // its two-reference-pixel padding here so the placement solver keeps this close pose
+            // instead of moving the badge one whole candidate step upward.
+            float unitScale = unit.width / 128f;
+            float visibleHead = unit.y + 24f * unitScale;
+            return new Rect(cell.X + (cell.Width - width) * .5f,
+                visibleHead - 56f - 2f * unitScale, width, 56f);
         }
 
         public static Rect EnemyIntentIconLocalRect()
         {
-            return new Rect(4f, 4f, 32f, 32f);
+            return new Rect(4f, 4f, 48f, 48f);
         }
 
         public static Rect EnemyIntentDamageLocalRect(float badgeWidth)
         {
-            return new Rect(38f, 0f, Mathf.Max(0f, badgeWidth - 42f), 40f);
+            return new Rect(56f, 0f, Mathf.Max(0f, badgeWidth - 60f), 56f);
         }
 
         public static Rect UnitPresentationRect(BattlefieldRect cell)
@@ -65,31 +71,36 @@ namespace OCC.Combat.Presentation
         // hides weapons, shields, tails and casting implements that legitimately extend sideways.
         public static Rect UnitTextureCropUv(string textureName) => new Rect(0f, 0f, 1f, 1f);
 
-        public static Rect UnitHealthBarRect(BattlefieldRect cell)
+        public static Rect UnitHealthBarRect(BattlefieldRect cell, bool shieldVisible = false)
         {
-            float scale = ElementScale(cell);
-            float width = 112f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.YMax - 8f * scale, width, 16f * scale);
+            const float healthWidth = 128f;
+            return new Rect(cell.X + (cell.Width - healthWidth) * .5f,
+                cell.YMax - 8f, healthWidth, 16f);
         }
 
-        public static Rect UnitShieldBarRect(BattlefieldRect cell)
+        public static Rect UnitShieldBadgeRect(BattlefieldRect cell)
         {
-            float scale = ElementScale(cell);
-            float width = 112f * scale;
-            return new Rect(cell.X + (cell.Width - width) * .5f, cell.YMax + 12f * scale, width, 8f * scale);
+            Rect health = UnitHealthBarRect(cell, true);
+            return new Rect(health.xMin - 34f, health.yMin, 32f, 16f);
         }
+
+        public static Rect UnitManaBarRect(BattlefieldRect cell)
+        {
+            const float manaWidth = 128f;
+            return new Rect(cell.X + (cell.Width - manaWidth) * .5f,
+                cell.YMax + 10f, manaWidth, 8f);
+        }
+
+        public static float UnitBarBorder(BattlefieldRect cell) => 1f;
 
         public static string VitalText(CombatUnitVitalPresentation vital, float cellSize)
         {
-            if (vital == null || cellSize < 256f) return string.Empty;
-            if (cellSize < 112f)
-                return vital.ForecastLoss > 0 ? "-" + vital.ForecastLoss + "→" + vital.Remaining : "当前 " + vital.Current + "　上限 " + vital.Maximum;
-            return vital.CompactText;
+            return vital == null ? string.Empty : vital.Remaining + "/" + vital.Maximum;
         }
 
         public static int VitalFontSize(float cellSize, bool health)
         {
-            return cellSize < 256f ? 0 : FormalUiTheme.BodyFontSize;
+            return 12;
         }
 
         public static Color VitalTextColor() => FormalUiTheme.OnInk;

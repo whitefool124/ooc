@@ -1,0 +1,61 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.combat.enemy_intent_destination",
+  "role": "ui_trim_square_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent bright-orange battlefield intent destination glyph in the approved OCC coarse-pixel UI language. One continuous directional diamond, hard alpha, no black backing panel. Decoded losslessly from one stable 40px macro-pixel lattice; no resize, interpolation, repaint, dithering or new colours.",
+    "source_path": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/source.png",
+    "source_sha256": "08589a7da85b313da8d82c9372a9dd24448b53f1ae24d739c896dc6cd7fd232b"
+  },
+  "delivery": {
+    "output_path": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/candidate_32.png",
+    "output_sha256": "18b7c15fbcd49caddc22bcf3cdbbe9ccaa2a99cdc3c06497a14d748c871b8823",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "32x32 transparent overlay texture displayed at the existing enemy-intent destination marker rect; centered inside one battle cell",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/evidence/enemy_intent_destination_1x.png",
+    "four_x": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/evidence/enemy_intent_destination_4x.png",
+    "grayscale": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/evidence/enemy_intent_destination_grayscale.png",
+    "checker": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/evidence/enemy_intent_destination_checker.png",
+    "application_contact": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/evidence/enemy_intent_destination_mock_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "The contact image is an explicitly labelled mock for scale and contrast review only. Actual Unity application contact, stable GUID, importer and runtime verification remain required before promotion."
+  },
+  "unity_import": null,
+  "pixel_grid_qa": {
+    "qa_path": "ArtSource/combat_ui_refresh_2026-09-22/enemy_intent_destination/qa.json",
+    "inferred_subject_pixel_pitch": 40,
+    "subject_lattice_confidence": 12.5424,
+    "subject_logical_size": [
+      21,
+      22
+    ],
+    "target_canvas": [
+      32,
+      32
+    ],
+    "decoded_visible_colours": 4,
+    "geometric_resize_or_interpolation_performed": false,
+    "new_colours_introduced": false
+  }
+}

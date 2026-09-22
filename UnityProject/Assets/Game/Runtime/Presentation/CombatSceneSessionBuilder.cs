@@ -129,8 +129,6 @@ namespace OCC.Combat.Presentation
             GridPosition heroSpawn = layout?.HeroSpawn ?? level.HeroSpawn;
             IReadOnlyList<LevelTerrainPlacement> terrain = layout?.Terrain ?? level.Terrain;
             CombatObjectiveType objectiveType = layout == null ? level.ObjectiveType : CombatObjectiveType.Elimination;
-            IReadOnlyList<GridPosition> routeAnchors = layout == null ? level.SpaceContract.RouteAnchors :
-                new[] { new GridPosition(Math.Max(0, heroSpawn.X - 2), heroSpawn.Y), new GridPosition(Math.Min(layout.Width - 1, heroSpawn.X + 2), heroSpawn.Y) };
             string objectiveSummary = string.IsNullOrEmpty(encounter.ObjectiveSummary) ? level.ObjectiveSummary : encounter.ObjectiveSummary;
             int width = layout?.Width ?? level.Width;
             int height = layout?.Height ?? level.Height;
@@ -138,7 +136,7 @@ namespace OCC.Combat.Presentation
             return new FirstRegionLevelDefinition(level.Id, level.DisplayName, objectiveSummary, objectiveType,
                 level.Tier, heroSpawn, level.FloorTheme, encounter.IsElite, encounter.IsBoss,
                 level.PrerequisiteLevelIds, enemies, terrain,
-                new LevelSpaceContract(encounter.SpatialGrammar, routeAnchors,
+                new LevelSpaceContract(encounter.SpatialGrammar,
                     encounter.PublicRisk, encounter.SpawnRelationship), width, height, blockedPositions);
         }
 
@@ -230,11 +228,13 @@ namespace OCC.Combat.Presentation
                 mapRun?.RestoreLootProgress(state.LootSource);
                 return;
             }
-            state.SetLoot(new LootContainer(new GridPosition(2, 0),
+            GridPosition lootPosition = state.Map.PositionsWith(tile => tile.IsLootChest)
+                .DefaultIfEmpty(new GridPosition(2, 0)).First();
+            state.SetLoot(new LootContainer(lootPosition,
                 new InventoryItem("aether_core", "以太核心", 2, 1)));
             string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";
             ArtifactDefinition lootArtifact = ArtifactRewardPool.RollLoot(mapRun?.Seed ?? 0, lootKey);
-            state.SetLootSource(new LootSourceState(lootKey, new GridPosition(2, 0), new[]
+            state.SetLootSource(new LootSourceState(lootKey, lootPosition, new[]
             {
                 new ItemInstance(lootKey + "-medkit", "medkit", 0),
                 new ItemInstance(lootKey + "-scroll-F-S01", "F-S01", 1),

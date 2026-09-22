@@ -48,6 +48,37 @@ namespace OCC.Combat.Presentation
             return new Rect(Snap(cellFoot.x - 4 * scale), Snap(cellFoot.y - cellSize - 18 * scale), 72 * scale, 86 * scale);
         }
 
+        public static Rect TimelineHoverArrow(Rect unitBounds, Rect intentBounds, bool hasIntent,
+            Rect viewport, float cellSize, IReadOnlyList<Rect> bodiesAndVitals = null,
+            IReadOnlyList<Rect> placedBadges = null)
+        {
+            float scale = cellSize / 64f;
+            float size = BattlefieldMarkerLadder.TimelineHoverArrowNativePixels * scale;
+            float gap = BattlefieldMarkerLadder.TimelineHoverArrowGapNativePixels * scale;
+            float x = unitBounds.center.x - size * .5f;
+            // The arrow points at the visible head, not the top of the texture canvas. When the
+            // intent badge occupies that point, prefer the clear vertical reading order requested
+            // by art direction: arrow above intent, intent above actor. Only a viewport edge forces
+            // the compact side fallback.
+            float y = unitBounds.yMin - size - gap;
+            if (hasIntent && new Rect(x, y, size, size).Overlaps(intentBounds))
+            {
+                float above = intentBounds.yMin - size - gap;
+                if (above >= viewport.yMin + 4f)
+                {
+                    x = intentBounds.center.x - size * .5f;
+                    y = above;
+                }
+                else
+                {
+                    x = intentBounds.xMin - size - gap;
+                    if (x < viewport.xMin) x = intentBounds.xMax + gap;
+                }
+            }
+            Rect preferred = Clamp(new Rect(Snap(x), Snap(y), size, size), viewport);
+            return Place(preferred, viewport, bodiesAndVitals, placedBadges).Bounds;
+        }
+
         private static Rect Clamp(Rect rect, Rect viewport)
         {
             float left = Mathf.Ceil((viewport.xMin + 4) / 2) * 2;

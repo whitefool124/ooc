@@ -432,12 +432,12 @@ namespace OCC.Combat.Presentation
             objectiveTabRect = objectiveTab.GetComponent<RectTransform>();
             objectiveTabGroup = objectiveTab.AddComponent<CanvasGroup>();
             DisableRaycast(objectiveTab);
-            // Explicit break so the tab reads vertically whatever the font metrics do.
-            Text caption = FormalUiKit.Label("页签文字", "本关\n目标", objectiveTab.transform,
-                new Vector2(0f, -22f), new Vector2(ObjectiveTabWidth, 96f),
-                FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.UpperCenter);
-            caption.horizontalOverflow = HorizontalWrapMode.Overflow;
-            caption.verticalOverflow = VerticalWrapMode.Overflow;
+            Sprite targetSprite = Resources.Load<Sprite>("Art/FormalTacticalOverlays32/objective");
+            if (targetSprite == null) throw new InvalidOperationException("Missing formal collapsed-objective target icon.");
+            Image targetIcon = FormalUiKit.TopLeftIconSlot("目标靶标", objectiveTab.transform, targetSprite,
+                new Vector2(6f, -50f));
+            targetIcon.rectTransform.sizeDelta = new Vector2(32f, 32f);
+            targetIcon.color = Color.white;
             objectiveTabGroup.alpha = 0f;
             objectiveTab.SetActive(false);
         }

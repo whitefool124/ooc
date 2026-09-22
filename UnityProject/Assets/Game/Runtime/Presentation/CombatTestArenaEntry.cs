@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace OCC.Combat.Presentation
@@ -10,11 +11,13 @@ namespace OCC.Combat.Presentation
     [DisallowMultipleComponent]
     public sealed class CombatTestArenaEntry : MonoBehaviour
     {
+        private const string QuickTestScenarioKey = "OCC.CombatUiQuickTest.PendingScenario";
         public static bool IsDedicatedTestArena { get; private set; }
         private static int playSessionGeneration;
         private int observedPlaySessionGeneration = -1;
         private bool selectionOpen;
         private bool arenaStarted;
+        private bool quickStartPending;
         private int scenarioPage;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -33,6 +36,7 @@ namespace OCC.Combat.Presentation
             // picker instead of remembering a previous test battle.
             selectionOpen = false;
             arenaStarted = false;
+            quickStartPending = false;
             selectedScenarioId = CombatTestArenaScenarioCatalog.DefaultScenarioId;
             scenarioPage = 0;
         }
@@ -67,6 +71,18 @@ namespace OCC.Combat.Presentation
                 selectedScenarioId = CombatTestArenaScenarioCatalog.DefaultScenarioId;
                 scenarioPage = 0;
             }
+#if UNITY_EDITOR
+            string quickTestScenario = PlayerPrefs.GetString(QuickTestScenarioKey, string.Empty);
+            if (!string.IsNullOrEmpty(quickTestScenario) && !quickStartPending)
+            {
+                PlayerPrefs.DeleteKey(QuickTestScenarioKey);
+                PlayerPrefs.Save();
+                quickStartPending = true;
+                StartCoroutine(StartQuickTestAfterSceneStart(quickTestScenario));
+                return;
+            }
+#endif
+            if (quickStartPending) return;
             if (arenaStarted) return;
             IsDedicatedTestArena = true;
             CombatPrototypeBootstrap bootstrap = GetComponent<CombatPrototypeBootstrap>();
@@ -75,7 +91,17 @@ namespace OCC.Combat.Presentation
             selectionOpen = true;
         }
 
-        private void StartArena(string scenarioId)
+        private IEnumerator StartQuickTestAfterSceneStart(string scenarioId)
+        {
+            // Allow every scene component to complete Start before the direct
+            // activation builds and binds the formal presentation stack.
+            yield return null;
+            yield return null;
+            quickStartPending = false;
+            StartArena(scenarioId, playEntrySequence: false);
+        }
+
+        private void StartArena(string scenarioId, bool playEntrySequence = true)
         {
             IsDedicatedTestArena = true;
             CombatPrototypeBootstrap bootstrap = GetComponent<CombatPrototypeBootstrap>();
@@ -89,7 +115,7 @@ namespace OCC.Combat.Presentation
             // frame. Explicitly suppress any shared front-end presentation
             // before building the test combat.
             bootstrap.OpenDedicatedTestArenaSelection();
-            bootstrap.StartDedicatedTestArena(scenarioId);
+            bootstrap.StartDedicatedTestArena(scenarioId, playEntrySequence);
             selectionOpen = false;
             arenaStarted = true;
         }

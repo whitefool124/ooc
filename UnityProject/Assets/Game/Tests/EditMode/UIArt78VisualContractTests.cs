@@ -33,13 +33,20 @@ namespace OCC.Combat.Tests
         public void UnitVitals_UseReadableSeparatedPixelTracks()
         {
             BattlefieldRect cell = new BattlefieldRect(0f, 0f, 128f, 128f);
-            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell);
-            Rect shield = CombatUnitHudLayout.UnitShieldBarRect(cell);
+            Rect health = CombatUnitHudLayout.UnitHealthBarRect(cell, true);
+            Rect shield = CombatUnitHudLayout.UnitShieldBadgeRect(cell);
 
-            Assert.That(health.width, Is.EqualTo(112f));
+            Rect mana = CombatUnitHudLayout.UnitManaBarRect(cell);
+
+            Assert.That(health.width, Is.EqualTo(128f));
             Assert.That(health.height, Is.EqualTo(16f));
-            Assert.That(shield.width, Is.EqualTo(112f));
-            Assert.That(shield.height, Is.EqualTo(8f));
+            Assert.That(health.center.x, Is.EqualTo(cell.X + cell.Width * .5f));
+            Assert.That(mana.width, Is.EqualTo(128f));
+            Assert.That(mana.height, Is.EqualTo(8f));
+            Assert.That(mana.center.x, Is.EqualTo(health.center.x));
+            Assert.That(mana.yMin, Is.GreaterThan(health.yMax));
+            Assert.That(shield.width, Is.EqualTo(32f));
+            Assert.That(shield.height, Is.EqualTo(16f));
             Assert.That(health.Overlaps(shield), Is.False);
             Assert.That(FormalUiKit.SkinSprite("bar_track"), Is.Not.Null);
             Assert.That(FormalUiKit.SkinSprite("bar_segment_health"), Is.Not.Null);
@@ -53,19 +60,20 @@ namespace OCC.Combat.Tests
             try
             {
                 typeof(FormalBattlefieldView).GetMethod("Bar", BindingFlags.Static | BindingFlags.NonPublic)
-                    ?.Invoke(null, new object[] { "生命", root.transform, FormalUiTheme.Health });
+                    ?.Invoke(null, new object[] { "生命", root.transform, "unit_bar_health_16" });
                 Transform track = root.transform.Find("生命");
                 Image trackImage = track.GetComponent<Image>();
                 Image fill = track.Find("当前").GetComponent<Image>();
 
-                Assert.That(trackImage.color, Is.EqualTo(FormalUiTheme.ResourceTrack));
-                Assert.That(FormalUiKit.SkinOverlay(trackImage), Is.Not.Null);
+                Assert.That(trackImage.color, Is.EqualTo(FormalUiTheme.Ink));
+                Assert.That(FormalUiKit.SkinOverlay(trackImage), Is.Null);
                 Assert.That(FormalUiKit.SkinOverlay(fill), Is.Null,
                     "small unit fills must not reuse the thick legacy segment skin");
-                Assert.That(fill.rectTransform.offsetMin, Is.EqualTo(new Vector2(2f, 2f)));
-                Assert.That(fill.rectTransform.offsetMax, Is.EqualTo(new Vector2(-2f, -2f)));
+                Assert.That(fill.rectTransform.offsetMin, Is.EqualTo(new Vector2(1f, 1f)));
+                Assert.That(fill.rectTransform.offsetMax, Is.EqualTo(new Vector2(-1f, -1f)));
+                Assert.That(fill.type, Is.EqualTo(Image.Type.Filled));
                 Assert.That(track.GetComponentsInChildren<RectTransform>(true)
-                    .Count(rect => rect.name.StartsWith("生命比例刻度_")), Is.EqualTo(3));
+                    .Count(rect => rect.name.StartsWith("生命比例刻度_")), Is.Zero);
                 Assert.That(track.Find("变化落点"), Is.Not.Null);
             }
             finally
@@ -76,16 +84,16 @@ namespace OCC.Combat.Tests
 
         [TestCase(true)]
         [TestCase(false)]
-        public void OverviewUnitTracks_RetainVisibleFillAtHalfResolution(bool health)
+        public void OverviewUnitTracks_RetainVisibleFillAtHalfResolution(bool shieldVisible)
         {
             GameObject root = new GameObject("overview-vital", typeof(RectTransform));
             try
             {
                 object bar = typeof(FormalBattlefieldView).GetMethod("Bar", BindingFlags.Static | BindingFlags.NonPublic)
-                    .Invoke(null, new object[] { "资源", root.transform, FormalUiTheme.Health });
+                    .Invoke(null, new object[] { "资源", root.transform, "unit_bar_health_16" });
                 typeof(FormalBattlefieldView).GetMethod("RefreshVital", BindingFlags.Static | BindingFlags.NonPublic)
                     .Invoke(null, new object[] { bar, new CombatUnitVitalPresentation(4, 4, 0, 4),
-                        new BattlefieldRect(0f, 0f, 64f, 64f), health, FormalUiTheme.Health, FormalUiTheme.Danger });
+                        new BattlefieldRect(0f, 0f, 64f, 64f), shieldVisible, FormalUiTheme.Danger });
                 Canvas.ForceUpdateCanvases();
                 RectTransform track = root.transform.Find("资源").GetComponent<RectTransform>();
                 RectTransform fill = track.Find("当前").GetComponent<RectTransform>();

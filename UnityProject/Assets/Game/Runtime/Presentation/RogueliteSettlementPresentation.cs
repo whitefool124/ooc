@@ -541,8 +541,7 @@ namespace OCC.Combat.Presentation
         {
             if (canvas != null) return;
             canvas = FormalUiKit.CanvasRoot("肉鸽结算UI", UiLayoutContract.SettlementSortingOrder);
-            tooltip = canvas.gameObject.AddComponent<FormalHoverTooltip>();
-            tooltip.Initialize(canvas);
+            tooltip = FormalHoverTooltip.Create(canvas);
         }
 
         private static void SetHover(RewardCardInput card, bool hovering)

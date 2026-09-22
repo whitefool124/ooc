@@ -217,7 +217,7 @@ namespace OCC.Combat.Presentation
         /// the first-experience front end while keeping the normal scene markers,
         /// presentation stack and developer combat setup intact.
         /// </summary>
-        public void StartDedicatedTestArena(string scenarioId = null)
+        public void StartDedicatedTestArena(string scenarioId = null, bool playEntrySequence = true)
         {
             if (!Application.isPlaying) return;
             CombatTestArenaEntry entry = GetComponent<CombatTestArenaEntry>();
@@ -248,7 +248,7 @@ namespace OCC.Combat.Presentation
             // Test-arena selection is already the preparation step. Activate the
             // battle synchronously so a disabled/unfinished shared transition
             // can never leave this dedicated scene stranded on its briefing.
-            ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement));
+            ApplyCombatSessionActivation(combatSession.Begin(developerFlow, enemyTurn, outcomeSettlement), playEntrySequence);
             MarkPresentation(UiPresentationArea.Flow);
         }
 

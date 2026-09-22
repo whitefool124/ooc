@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "resource_bar_health_32_v3",
+  "role": "ui_resource_bar_32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent third-round semantic health-bar source",
+    "source_path": "Worldbuilding/归档/2026-09-22_资源条32px重制/raw/resource_bar_health_32_v3_source.png",
+    "source_sha256": "1DB2A4D25F16AEA9091A0343242E0D87582FE3388E6BE0F56EB94B971D103CB6"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-22_资源条32px重制/normalized/resource_bar_health_32_v3.png",
+    "output_sha256": "ED5566F6EC0E5B0FF7604ED141C32EF0A08AF6E70A83429D1F83F8D3287D2CBE",
+    "native_output_path": "UnityProject/Assets/Game/Resources/Art/FormalResourceBars32/health.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 8,
+    "required_color_families": [{"family":"red","min_opaque_pixels":2}]
+  },
+  "display": {
+    "canonical_integer_scale": 3,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 3,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Machine-decoded horizontal candidate; family incomplete and therefore not approved for Unity import."
+  },
+  "application": {
+    "runtime_draw_rect": "hero status health fill",
+    "default_integer_scale": 3,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-22_资源条32px重制/normalized/resource_bar_health_32_v3.png",
+    "four_x": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_health_32_v3_4x.png",
+    "six_x": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_health_32_v3_6x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_health_32_v3_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-22_资源条32px重制/QA/resource_bar_health_32_v3_checker.png",
+    "application_contact": "UnityProject/Reports/CombatTestArena/resource_bars_32_16_formal_combat_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-09-22",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PASS",
+    "notes": "User approved the visual result and requested direct implementation. PASS_LOSSLESS_TARGET; confidence 1.3432; live 1920x1080 contact verified."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "79e52ab681d1b694f965e7c17f7a54fb",
+    "sprite_border": [1, 1, 1, 1]
+  }
+}

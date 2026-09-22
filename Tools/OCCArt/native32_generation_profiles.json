@@ -139,6 +139,26 @@
       "rotation_policy": "authored per direction; runtime rotation forbidden when the piece carries light, facade, wear or shadow direction",
       "reject_if": ["facade inside the walkable area", "missing facade", "directional identity lost", "baked lighting or shadow"]
     },
+    "ui_resource_bar_32": {
+      "view": "front-facing square nine-slice source for a horizontal academy dossier resource gauge; complete frame or complete fill-cap tile, not a long composed bar",
+      "canvas": "fixed_32x32",
+      "native_ppu": 32,
+      "palette_max": 10,
+      "stretch_policy": "only the quiet central strip may stretch; the 1 px outer contour, corners, clasps and end-cap thickness remain fixed",
+      "material_story": "charcoal ink contour, warm ivory or pale academy stone frame, sparse oxidized brass structure, dark recessed track; semantic fills use sealed red, steel silver or aether cyan",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": ["terminal-blue global skin", "gradient", "antialiasing", "microtexture", "text or numerals", "dense ornament", "baked glow", "corner details entering the stretch region"]
+    },
+    "ui_unit_bar_16": {
+      "view": "front-facing square nine-slice source for a compact horizontal unit health or shield gauge; complete frame or complete fill-cap tile",
+      "canvas": "fixed_16x16",
+      "native_ppu": 16,
+      "palette_max": 6,
+      "stretch_policy": "only the quiet central strip may stretch; the 1 px contour and end caps remain fixed",
+      "material_story": "compact descendant of the 32 px academy dossier gauge: charcoal contour, pale stone frame, one structural highlight, dark recessed track; sealed red or steel silver semantic fill",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": ["downscaled 32 px source", "terminal-blue global skin", "gradient", "antialiasing", "microtexture", "text or numerals", "ornament obscuring the fill"]
+    },
     "unit_sideview": {
       "view": "strict 90-degree side profile; only one eye may be visible; torso, pelvis, feet and equipment all face the same side",
       "content_variables": ["unit_identity", "gameplay_role", "faction_material_story", "single_identity_accent"],

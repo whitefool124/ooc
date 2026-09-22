@@ -133,8 +133,7 @@ namespace OCC.Combat.Presentation
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式肉鸽UI", UiLayoutContract.RogueliteSortingOrder);
             root = canvas.gameObject;
-            tooltip = root.AddComponent<FormalHoverTooltip>();
-            tooltip.Initialize(canvas);
+            tooltip = FormalHoverTooltip.Create(canvas);
         }
 
         private void Rebuild()

@@ -1,0 +1,56 @@
+{
+  "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "inferred_subject_pixel_pitch": 27,
+  "inferred_subject_grid_phase": [
+    3,
+    21
+  ],
+  "subject_lattice_confidence": 1.1059,
+  "subject_lattice_confidence_min": 1.2,
+  "subject_lattice_is_stable": false,
+  "ground_field_manual_pitch": null,
+  "ground_field_manual_pitch_review_required": false,
+  "background_checker_used_for_scale": false,
+  "subject_bounds_on_logical_grid": [
+    0,
+    0,
+    34,
+    31
+  ],
+  "subject_logical_size": [
+    34,
+    31
+  ],
+  "target_canvas": [
+    32,
+    32
+  ],
+  "normalization_mode": "intact_subject_canvas",
+  "ground_window_bounds_on_logical_grid": null,
+  "ground_window_selection": "deterministic_center",
+  "preview": null,
+  "safe_border": 1,
+  "decoded_visible_colours_before_cleanup": 201,
+  "decoded_visible_colours_after_cleanup": 10,
+  "palette_max": 10,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "alpha_shape_preserved_pixel_for_pixel": true,
+  "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": false,
+  "ground_window_equals_decoded_source_pixels_pixel_for_pixel": null,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "macro_pixel_decoding_performed": true,
+  "geometric_resize_or_interpolation_performed": false,
+  "new_colours_introduced": false,
+  "logical_pixels_removed": 0,
+  "background_artifact_cells_removed": 0,
+  "alpha_components_before_cleanup": 1,
+  "alpha_components_after_cleanup": 1,
+  "dithering": false,
+  "structural_detail_loss_allowed": false,
+  "promotion_limit": null,
+  "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+}

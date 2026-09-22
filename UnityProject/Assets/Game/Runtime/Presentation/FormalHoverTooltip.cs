@@ -197,6 +197,7 @@ namespace OCC.Combat.Presentation
 
     public sealed class FormalHoverTooltip : MonoBehaviour
     {
+        public const string ResourcePath = "UI/Prefabs/FormalHoverTooltip";
         private const float MinimumWidth = 220f;
         private const float MaximumWidth = 480f;
         private const float MinimumHeight = 120f;
@@ -217,23 +218,23 @@ namespace OCC.Combat.Presentation
         private const float BottomPadding = 16f;
         private const float EdgeMargin = 24f;
         private Canvas canvas;
-        private RectTransform layer;
-        private RectTransform panel;
-        private Text titleLabel;
-        private Text bodyLabel;
-        private RectTransform titleRule;
-        private RectTransform cardRoot;
-        private Text categoryLabel;
-        private Text statusLabel;
-        private Image artworkFrame;
-        private Image contentIcon;
-        private Text cardTitle;
-        private Text identityLabel;
-        private readonly Text[] metricLabels = new Text[3];
-        private readonly RectTransform[] metricCells = new RectTransform[3];
-        private readonly Text[] tagLabels = new Text[MaximumTags];
-        private readonly RectTransform[] tagChips = new RectTransform[MaximumTags];
-        private RectTransform contentDivider;
+        [SerializeField] private RectTransform layer;
+        [SerializeField] private RectTransform panel;
+        [SerializeField] private Text titleLabel;
+        [SerializeField] private Text bodyLabel;
+        [SerializeField] private RectTransform titleRule;
+        [SerializeField] private RectTransform cardRoot;
+        [SerializeField] private Text categoryLabel;
+        [SerializeField] private Text statusLabel;
+        [SerializeField] private Image artworkFrame;
+        [SerializeField] private Image contentIcon;
+        [SerializeField] private Text cardTitle;
+        [SerializeField] private Text identityLabel;
+        [SerializeField] private Text[] metricLabels = new Text[3];
+        [SerializeField] private RectTransform[] metricCells = new RectTransform[3];
+        [SerializeField] private Text[] tagLabels = new Text[MaximumTags];
+        [SerializeField] private RectTransform[] tagChips = new RectTransform[MaximumTags];
+        [SerializeField] private RectTransform contentDivider;
         private float effectTop = ContentEffectTop;
         private float metricRowHeight = MetricCellHeight;
         private float metricRowTop = MetricRowTop;
@@ -243,16 +244,28 @@ namespace OCC.Combat.Presentation
         private const float TagRowInset = 104f;
         private const float TagHeight = 34f;
         private const float TagGap = 8f;
-        private Text effectBody;
-        private Text summaryLabel;
+        [SerializeField] private Text effectBody;
+        [SerializeField] private Text summaryLabel;
         private object owner;
 
         public bool IsVisible => panel != null && panel.gameObject.activeSelf;
 
+        public static FormalHoverTooltip Create(Canvas hostCanvas)
+        {
+            if (hostCanvas == null) throw new ArgumentNullException(nameof(hostCanvas));
+            FormalHoverTooltip prefab = Resources.Load<FormalHoverTooltip>(ResourcePath);
+            if (prefab == null)
+                throw new InvalidOperationException("Missing formal hover tooltip prefab at Resources/" + ResourcePath + ".prefab");
+            FormalHoverTooltip view = Instantiate(prefab, hostCanvas.transform, false);
+            view.name = "通用悬浮窗";
+            view.Initialize(hostCanvas);
+            return view;
+        }
+
         public void Initialize(Canvas hostCanvas)
         {
-            if (panel != null) return;
             canvas = hostCanvas != null ? hostCanvas : throw new ArgumentNullException(nameof(hostCanvas));
+            if (panel != null) return;
 
             GameObject layerObject = FormalUiKit.Create("悬浮信息层", canvas.transform);
             layer = layerObject.AddComponent<RectTransform>();

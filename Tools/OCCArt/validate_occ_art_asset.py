@@ -384,9 +384,14 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
             else:
                 if lattice.get("pass") is not True:
                     errors.append("FORMAL runtime lattice check must pass")
-                expected_tier = contract.get("battlefield_display_policy", {}).get("integer_scale_at_1920x1080")
-                if expected_tier is not None and lattice.get("tier") != expected_tier:
-                    errors.append(f"FORMAL runtime lattice tier must be the canonical {expected_tier}")
+                allowed_tiers = role.get("runtime_scales")
+                if isinstance(allowed_tiers, list) and allowed_tiers:
+                    if lattice.get("tier") not in allowed_tiers:
+                        errors.append(f"FORMAL runtime lattice tier must be one of the role scales {allowed_tiers}")
+                else:
+                    expected_tier = contract.get("battlefield_display_policy", {}).get("integer_scale_at_1920x1080")
+                    if expected_tier is not None and lattice.get("tier") != expected_tier:
+                        errors.append(f"FORMAL runtime lattice tier must be the canonical {expected_tier}")
                 capture = repo_path(root, lattice.get("capture"))
                 if capture is None or not capture.is_file():
                     errors.append("FORMAL runtime lattice capture file is missing")

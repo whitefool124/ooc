@@ -200,7 +200,8 @@
   "canonical_document": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
   "machine_mirror_only": true,
   "allowed_source_channels": [
-    "codex_builtin_imagegen"
+    "codex_builtin_imagegen",
+    "manual_pixel_authoring"
   ],
   "forbidden_source_fragments": [
     "localhost",
@@ -318,6 +319,8 @@
       32
     ],
     "combat_spell_resource_icon_display_size": 32,
+    "combat_resource_icon_native_size": 12,
+    "combat_resource_icon_integer_scales": [2, 3],
     "combat_spell_notice_chip_reference": [
       32,
       28
@@ -332,17 +335,23 @@
     "combat_resource_track_height_min": 24,
     "combat_resource_fill_inset_reference": 4,
     "battlefield_unit_health_track_reference": [
-      112,
+      128,
       16
     ],
-    "battlefield_unit_shield_track_reference": [
-      112,
+    "battlefield_unit_mana_track_reference": [
+      128,
       8
     ],
-    "battlefield_unit_resource_fill_inset_reference": 2,
+    "battlefield_unit_shield_badge_reference": [
+      32,
+      16
+    ],
+    "battlefield_unit_resource_fill_inset_reference": 1,
     "enemy_intent_badge_top_offset_reference": -22,
     "enemy_intent_icon_native_size": 16,
-    "enemy_intent_icon_display_size": 32,
+    "enemy_intent_icon_display_size": 48,
+    "enemy_intent_badge_height": 56,
+    "enemy_intent_badge_background": "transparent",
     "synthetic_styles_forbidden": true,
     "text_shadow_forbidden": true,
     "multi_outline_forbidden": true,
@@ -383,6 +392,38 @@
     }
   },
   "roles": {
+    "resource_icon_12": {
+      "delivery_size": [
+        12,
+        12
+      ],
+      "logical_cells": null,
+      "palette_max": 4,
+      "transparent_border_min": 1,
+      "unity_ppu": 12,
+      "runtime_scales": [
+        2,
+        3
+      ]
+    },
+    "ui_resource_bar_32": {
+      "delivery_size": [32, 32],
+      "logical_cells": null,
+      "palette_max": 8,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [1, 2, 3, 4]
+    },
+    "ui_unit_bar_16": {
+      "delivery_size": [16, 16],
+      "logical_cells": null,
+      "palette_max": 6,
+      "transparent_border_min": 1,
+      "unity_ppu": 16,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [1, 2, 3, 4]
+    },
     "semantic_icon_16": {
       "delivery_size": [
         16,
@@ -391,7 +432,28 @@
       "logical_cells": null,
       "palette_max": 4,
       "transparent_border_min": 1,
-      "unity_ppu": 16
+      "unity_ppu": 16,
+      "runtime_scales": [
+        2,
+        3,
+        4
+      ]
+    },
+    "combat_indicator_16": {
+      "delivery_size": [
+        16,
+        16
+      ],
+      "logical_cells": null,
+      "palette_max": 8,
+      "transparent_border_min": 1,
+      "unity_ppu": 16,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [
+        2,
+        3,
+        4
+      ]
     },
     "material_pickup_24_to_ui32": {
       "native_size": [

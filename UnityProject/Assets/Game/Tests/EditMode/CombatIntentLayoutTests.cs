@@ -76,5 +76,53 @@ namespace OCC.Combat.Tests
             Assert.That(start.yMax, Is.EqualTo(foot.y + size / 16f));
             Assert.That(start.width, Is.GreaterThan(size));
         }
+
+        [Test]
+        public void TimelineHoverArrow_SitsAboveAUnitWhenNoIntentBadgeExists()
+        {
+            Rect unit = new Rect(300f, 240f, 192f, 384f);
+            Rect viewport = new Rect(0f, 0f, 1408f, 768f);
+
+            Rect arrow = CombatIntentLayout.TimelineHoverArrow(unit, default, false, viewport, 192f);
+
+            Assert.That(arrow.width, Is.EqualTo(48f));
+            Assert.That(arrow.height, Is.EqualTo(48f));
+            Assert.That(arrow.center.x, Is.EqualTo(unit.center.x));
+            Assert.That(arrow.yMax, Is.EqualTo(unit.yMin - 6f));
+        }
+
+        [Test]
+        public void TimelineHoverArrow_AvoidsEnemyIntentBadgeAndFallsBesideItAtViewportTop()
+        {
+            Rect unit = new Rect(980f, 32f, 192f, 384f);
+            Rect intent = new Rect(1048f, 4f, 56f, 56f);
+            Rect viewport = new Rect(0f, 0f, 1408f, 768f);
+
+            Rect neighbouringIntent = new Rect(1048f, 66f, 56f, 56f);
+            Rect arrow = CombatIntentLayout.TimelineHoverArrow(unit, intent, true, viewport, 192f,
+                null, new[] { intent, neighbouringIntent });
+
+            Assert.That(arrow.Overlaps(intent), Is.False);
+            Assert.That(arrow.Overlaps(neighbouringIntent), Is.False);
+            Assert.That(arrow.xMin, Is.GreaterThanOrEqualTo(viewport.xMin));
+            Assert.That(arrow.yMin, Is.GreaterThanOrEqualTo(viewport.yMin));
+            Assert.That(arrow.xMax, Is.LessThanOrEqualTo(viewport.xMax));
+            Assert.That(arrow.yMax, Is.LessThanOrEqualTo(viewport.yMax));
+        }
+
+        [Test]
+        public void TimelineHoverArrow_PrefersCenteredPositionAboveIntentWhenThereIsRoom()
+        {
+            Rect unit = new Rect(300f, 240f, 192f, 384f);
+            Rect intent = new Rect(368f, 180f, 56f, 56f);
+            Rect viewport = new Rect(0f, 0f, 1408f, 768f);
+
+            Rect arrow = CombatIntentLayout.TimelineHoverArrow(unit, intent, true, viewport, 192f,
+                null, new[] { intent });
+
+            Assert.That(arrow.Overlaps(intent), Is.False);
+            Assert.That(arrow.center.x, Is.EqualTo(intent.center.x));
+            Assert.That(arrow.yMax, Is.EqualTo(intent.yMin - 6f));
+        }
     }
 }

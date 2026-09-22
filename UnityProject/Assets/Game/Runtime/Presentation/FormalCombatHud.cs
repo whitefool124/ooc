@@ -22,19 +22,19 @@ namespace OCC.Combat.Presentation
         public const float HeaderPanelWidth = 1872f;
         private const float HeaderActionWidth = 120f;
         private const float HeaderActionGap = 12f;
-        private const float HeaderResourceIconSize = 32f;
+        private const float HeaderResourceIconSize = 36f;
         private const float HeaderResourceGap = 16f;
         // Keeps the packed row bounded even if a run accumulates very large numbers.
         private const float HeaderResourceMaxValueWidth = 80f;
 
         private static readonly string[] HeaderResourceIds = { "health", "gold", "contribution", "stage_time" };
-        private static readonly string[] HeaderResourceNames = { "生命", "金币", "学院贡献", "学期时间" };
+        private static readonly string[] HeaderResourceNames = { "生命", "金币", "学院贡献", "剩余时间" };
         private static readonly string[] HeaderResourceHints =
         {
             "维克多当前的体力和上限。",
-            "本次探索累计获得的金币。",
-            "本次探索累计获得的学院贡献。",
-            "本次探索已经消耗的学期时间。"
+            "当前拥有的金币。",
+            "当前拥有的学院贡献。",
+            "当前距离学期节点的剩余时间。"
         };
 
         /// <summary>One status-column row, covering timed statuses, field effects and pending spells.</summary>
@@ -147,6 +147,8 @@ namespace OCC.Combat.Presentation
         private Text[] quickbarLabels = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly Text[] quickbarKeys = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private Image[] quickbarIcons = new Image[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly GameObject[] quickbarEmptyStates = new GameObject[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Button[] quickbarButtons = new Button[RogueRuntimeConstants.ItemQuickbarSize];
         private float displayedHealth = -1f;
         private float displayedShield = -1f;
         private float displayedMana = -1f;
@@ -250,8 +252,7 @@ namespace OCC.Combat.Presentation
             canvas = FormalUiKit.CanvasRoot("正式战斗HUD", UiLayoutContract.CombatSortingOrder);
             FormalCombatHudShellView shell = FormalCombatHudShellView.Create(canvas.transform);
             root = shell.gameObject;
-            tooltip = root.AddComponent<FormalHoverTooltip>();
-            tooltip.Initialize(canvas);
+            tooltip = FormalHoverTooltip.Create(canvas);
 
             GameObject top = shell.Header.gameObject;
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
@@ -267,9 +268,9 @@ namespace OCC.Combat.Presentation
             heroFront = CardFace("英雄概况正面", heroModule.transform);
             heroBack = CardFace("英雄概况背面", heroModule.transform);
             // The front face is vitals only: three bars and the status button.
-            healthFill = ResourceBar(heroFront.transform, "生命", new Vector2(16, -HeroBarTop), FormalUiTheme.Health, out healthValue);
-            shieldFill = ResourceBar(heroFront.transform, "护盾", new Vector2(16, -(HeroBarTop + HeroBarPitch)), FormalUiTheme.Shield, out shieldValue);
-            manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(16, -(HeroBarTop + HeroBarPitch * 2f)), FormalUiTheme.Magic, out manaValue);
+            healthFill = ResourceBar(heroFront.transform, "生命", new Vector2(16, -HeroBarTop), FormalUiTheme.ResourceHealthFill, out healthValue);
+            shieldFill = ResourceBar(heroFront.transform, "护盾", new Vector2(16, -(HeroBarTop + HeroBarPitch)), FormalUiTheme.ResourceShieldFill, out shieldValue);
+            manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(16, -(HeroBarTop + HeroBarPitch * 2f)), FormalUiTheme.ResourceMagicFill, out manaValue);
             BuildHeroBack();
             heroFlipButton = Button(heroModule.transform, "英雄概况翻面", new Vector2(296, -3), new Vector2(104, 36), "状态", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(heroFlipButton);
@@ -291,19 +292,22 @@ namespace OCC.Combat.Presentation
 
             GameObject apBadge = shell.ActionPointBadge.gameObject;
             GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(48, -48), new Vector2(64, 64), FormalUiTheme.Cyan);
+                new Vector2(48, -50), new Vector2(70, 70), FormalUiTheme.Cyan);
+            outerDiamond.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
             outerDiamond.transform.localRotation = Quaternion.Euler(0, 0, -45);
             GameObject innerDiamond = Panel("行动点内菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(48, -48), new Vector2(48, 48), FormalUiTheme.Ink);
+                new Vector2(48, -50), new Vector2(54, 54), FormalUiTheme.Ink);
+            innerDiamond.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
             innerDiamond.transform.localRotation = Quaternion.Euler(0, 0, -45);
-            Text apTitle = Label("行动点标题", apBadge.transform, new Vector2(0, -12), new Vector2(96, 28),
-                CombatHudTypography.TimelineDetailFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
-            apTitle.text = "AP";
-            SetBadgeTextRect(apTitle, new Vector2(0, -10), new Vector2(96, 28));
-            actionPointBadgeValue = Label("行动点数值", apBadge.transform, new Vector2(0, -40), new Vector2(96, 36),
+            Sprite apSprite = Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath("action_point"));
+            if (apSprite == null) throw new KeyNotFoundException("Missing formal resource icon: action_point");
+            Image apIcon = FormalUiKit.TopLeftIconSlot("行动点正式图标", apBadge.transform, apSprite, new Vector2(30, -14));
+            apIcon.rectTransform.sizeDelta = new Vector2(36, 36);
+            apIcon.color = Color.white;
+            actionPointBadgeValue = Label("行动点数值", apBadge.transform, new Vector2(0, -44), new Vector2(96, 36),
                 FormalUiTheme.BodyFontSize, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
             FormalUiKit.ConfigureNumericLabel(actionPointBadgeValue);
-            SetBadgeTextRect(actionPointBadgeValue, new Vector2(0, -42), new Vector2(96, 36));
+            SetBadgeTextRect(actionPointBadgeValue, new Vector2(16, -48), new Vector2(64, 30));
             BindTooltip(apBadge, () => new FormalTooltipContent("行动点", "大号数字是当前值。\n本回合基础上限为 " + CombatResolver.HeroActionPointsPerTurn + "；额外行动点可以超过基础上限。", FormalUiTheme.Cyan));
 
             GameObject bottom = shell.Commands.gameObject;
@@ -349,9 +353,16 @@ namespace OCC.Combat.Presentation
             {
                 int slot = i;
                 Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(16 + (i % 2) * 164, -24 - (i / 2) * 62), new Vector2(156, 54), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+                quickbarButtons[i] = quick;
                 quickbarLabels[i] = quick.GetComponentInChildren<Text>();
+                quickbarLabels[i].gameObject.SetActive(false);
                 ConfigureCompactFrame(quick);
-                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(4, 0));
+                quickbarEmptyStates[i] = Panel("空槽内凹", quick.transform, new Vector2(0, 1), new Vector2(0, 1),
+                    new Vector2(12, -10), new Vector2(132, 34), Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Surface, .24f));
+                quickbarEmptyStates[i].GetComponent<Image>().raycastTarget = false;
+                FormalUiKit.ThinFrame(quickbarEmptyStates[i].transform, new Vector2(132, 34), Color.Lerp(muted, FormalUiTheme.Rule, .5f));
+                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(62, -11));
+                quickbarIcons[i].rectTransform.sizeDelta = new Vector2(32, 32);
                 quickbarKeys[i] = FormalUiKit.Label("槽位", (i + 1).ToString(), quick.transform,
                     new Vector2(130, -2), new Vector2(18, 24), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleCenter);
                 quick.onClick.AddListener(() => bootstrap.ActivateInventoryQuickbar(slot));
@@ -439,11 +450,13 @@ namespace OCC.Combat.Presentation
         private void RefreshQuickbarReadout(int slot, bool occupied, int charges)
         {
             Text label = quickbarLabels[slot];
-            quickbarKeys[slot].gameObject.SetActive(occupied);
-            label.text = occupied ? charges.ToString() : (slot + 1) + " 空";
-            SetCompactTextRect(label, occupied ? new Vector2(40, -26) : new Vector2(4, -6),
-                occupied ? new Vector2(32, 24) : new Vector2(68, 42));
-            label.alignment = TextAnchor.MiddleCenter;
+            quickbarKeys[slot].gameObject.SetActive(true);
+            quickbarKeys[slot].text = (slot + 1).ToString();
+            label.text = string.Empty;
+            label.gameObject.SetActive(false);
+            quickbarEmptyStates[slot].SetActive(!occupied);
+            Image surface = quickbarButtons[slot].targetGraphic as Image ?? quickbarButtons[slot].GetComponent<Image>();
+            surface.color = occupied ? FormalUiTheme.SurfaceRaised : Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Surface, .38f);
         }
 
         private static GameObject ConsoleModule(string name, Transform parent, string layoutId)
@@ -636,6 +649,11 @@ namespace OCC.Combat.Presentation
                 chipRect.anchorMin = chipRect.anchorMax = chipRect.pivot = new Vector2(0f, 1f);
                 chipRect.anchoredPosition = new Vector2(HeaderResourceZone.x, -HeaderResourceZone.y);
                 chipRect.sizeDelta = new Vector2(HeaderResourceIconSize, HeaderResourceZone.height);
+                // The glyph and number deliberately do not block raycasts. Give the whole packed
+                // chip a transparent hit surface so its tooltip trigger can actually receive hover.
+                Image hitArea = chip.AddComponent<Image>();
+                hitArea.color = Color.clear;
+                hitArea.raycastTarget = true;
 
                 // These icons are already authored in the palette's warm tones; tinting them only
                 // muddies them, so the accent colour is used for the tooltip instead.
@@ -698,7 +716,7 @@ namespace OCC.Combat.Presentation
             headerResourceValues[0].text = hero.Health + "／" + hero.MaxHealth;
             headerResourceValues[1].text = (run?.Gold ?? 0).ToString();
             headerResourceValues[2].text = (run?.StageContribution ?? 0).ToString();
-            headerResourceValues[3].text = (run?.StageTime ?? 0).ToString();
+            headerResourceValues[3].text = Math.Max(0, AcademyMapTuning.TransitionProgress - (run?.StageTime ?? 0)).ToString();
             LayoutHeaderResources();
             FireSpellDefinition fireOne = bootstrap.FireSpellInSlot(0), fireTwo = bootstrap.FireSpellInSlot(1);
             ArtifactDefinition artifactOne = bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact;
@@ -714,9 +732,9 @@ namespace OCC.Combat.Presentation
                 for (int slot = 2; slot < RogueRuntimeConstants.SpellSlotCount; slot++) RefreshEmptySpellButton("技能" + (slot + 1));
             }
             actionPointBadgeValue.text = ActionPointText(hero.ActionPoints);
-            healthValue.text = RatioText(hero.Health, hero.MaxHealth);
-            shieldValue.text = rogue ? hero.Shield + "　无上限" : RatioText(hero.Shield, hero.MaxShield);
-            manaValue.text = RatioText(hero.Mana, hero.MaxMana);
+            healthValue.text = hero.Health + "／" + hero.MaxHealth;
+            shieldValue.text = rogue ? hero.Shield.ToString() : hero.Shield + "／" + hero.MaxShield;
+            manaValue.text = hero.Mana + "／" + hero.MaxMana;
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
             SetBar(shieldFill, rogue ? (hero.Shield > 0 ? 1f : 0f) : hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
@@ -1012,7 +1030,7 @@ namespace OCC.Combat.Presentation
 
         private static Color SpellResourceBlockColor(bool empty)
         {
-            return Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Magic, empty ? .08f : .18f);
+            return FormalUiTheme.WithAlpha(FormalUiTheme.Magic, empty ? .06f : .14f);
         }
 
         private static void ConfigurePopulatedSpellCard(Button button)
@@ -1071,7 +1089,7 @@ namespace OCC.Combat.Presentation
             chipRect.anchoredPosition = position;
             chipRect.sizeDelta = new Vector2(56, 32);
             Image background = chip.GetComponent<Image>() ?? chip.gameObject.AddComponent<Image>();
-            background.color = spellSlot ? Color.clear : FormalUiTheme.Ink;
+            background.color = Color.clear;
             background.raycastTarget = false;
 
             RectTransform iconRect = chip.GetChild(0).GetComponent<RectTransform>();
@@ -1128,7 +1146,7 @@ namespace OCC.Combat.Presentation
             chipRect.anchoredPosition = new Vector2(cardWidth - 104f, -24f);
             chipRect.sizeDelta = new Vector2(32f, 28f);
             Image background = chip.GetComponent<Image>() ?? chip.gameObject.AddComponent<Image>();
-            background.color = FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .90f);
+            background.color = Color.clear;
             background.raycastTarget = false;
             RectTransform iconRect = chip.GetChild(0).GetComponent<RectTransform>();
             if (iconRect != null)
@@ -1587,37 +1605,19 @@ namespace OCC.Combat.Presentation
             trigger.Configure(tooltip, provider);
         }
 
-        private Image ResourceBar(Transform parent, string title, Vector2 position, Color color, out Text valueLabel)
+        private Image ResourceBar(Transform parent, string title, Vector2 position, Color fillColor, out Text valueLabel)
         {
             Label(title, parent, position, new Vector2(200, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
             valueLabel = Label(title + "数值", parent, position, new Vector2(374, 32), CombatHudTypography.ResourceValueFontSize,
                 text, CombatHudTypography.ResourceValueAlignment);
             FormalUiKit.ConfigureNumericLabel(valueLabel);
-            GameObject track = Panel(title + "轨道", parent, new Vector2(0, 1), new Vector2(0, 1), position + new Vector2(0, -32), new Vector2(384, 20), FormalUiTheme.ResourceTrack);
-            FormalUiKit.ApplySkin(track.GetComponent<Image>(), "bar_track", FormalUiTheme.ResourceTrack);
-            GameObject fill = FormalUiKit.FlatPanel(title + "填充", track.transform,
-                new Vector2(0, 0), new Vector2(1, 1), Vector2.zero, Vector2.zero, color);
-            // The formal track skin is the bottom frame; the semantic fill sits above it with a
-            // four-pixel inset. Some legacy 16px skins paint a dark center even with fillCenter off.
-            // Keeping the fill above the skin prevents that center from hiding the resource color.
-            RectTransform rect = fill.GetComponent<RectTransform>();
-            rect.offsetMin = new Vector2(4f, 4f);
-            rect.offsetMax = new Vector2(-4f, -4f);
-            rect.anchorMax = new Vector2(1, 1);
-            for (int index = 1; index <= 3; index++)
-            {
-                float fraction = index / 4f;
-                GameObject tick = FormalUiKit.FlatPanel(title + "比例刻度_" + index, track.transform,
-                    new Vector2(fraction, 0f), new Vector2(fraction, 1f), Vector2.zero, new Vector2(2f, -6f),
-                    FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .58f));
-                tick.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
-            }
-            GameObject marker = FormalUiKit.FlatPanel(title + "变化落点", track.transform,
-                new Vector2(1f, 0f), new Vector2(1f, 1f), Vector2.zero, new Vector2(8f, -6f), Color.clear);
-            marker.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
-            Image fillImage = fill.GetComponent<Image>();
-            resourceChangeMarkers[fillImage] = marker.GetComponent<Image>();
-            return fillImage;
+            FormalResourceBarView prefab = FormalResourceBarView.InstantiateHud(parent);
+            prefab.ConfigureHud(title, fillColor);
+            prefab.Root.anchorMin = prefab.Root.anchorMax = prefab.Root.pivot = new Vector2(0f, 1f);
+            prefab.Root.anchoredPosition = position + new Vector2(0f, -32f);
+            prefab.Root.sizeDelta = new Vector2(384f, 24f);
+            resourceChangeMarkers[prefab.Fill] = prefab.Marker;
+            return prefab.Fill;
         }
 
         // The game state always retains the real action value. While an action is previewed,
@@ -1749,13 +1749,12 @@ namespace OCC.Combat.Presentation
             value = Mathf.Clamp01(value);
             if (Mathf.Approximately(displayed, value)) return;
             float previous = displayed;
-            RectTransform rect = fill.rectTransform;
-            rect.DOKill();
+            fill.DOKill();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
-            if (motion.IsImmediate) rect.anchorMax = new Vector2(value, 1f);
-            else DOTween.To(() => rect != null ? rect.anchorMax.x : value,
-                    next => { if (rect != null) rect.anchorMax = new Vector2(next, 1f); }, value, motion.QuickDuration)
-                .SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true).SetTarget(rect);
+            if (!Application.isPlaying || motion.IsImmediate) fill.fillAmount = value;
+            else DOTween.To(() => fill != null ? fill.fillAmount : value,
+                    next => { if (fill != null) fill.fillAmount = next; }, value, motion.QuickDuration)
+                .SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true).SetTarget(fill);
             if (previous >= 0f && resourceChangeMarkers.TryGetValue(fill, out Image marker) && marker != null)
             {
                 marker.DOKill();
@@ -1773,7 +1772,7 @@ namespace OCC.Combat.Presentation
             displayed = value;
         }
 
-        private static string ActionPointText(int current) => current.ToString();
+        private static string ActionPointText(int current) => current + "／" + CombatResolver.HeroActionPointsPerTurn;
 
         private void RefreshAvailability(CombatState state, UnitState hero)
         {
