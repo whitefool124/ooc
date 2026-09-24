@@ -1,0 +1,109 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "elite_foundry",
+  "displayName": "精英战斗 02 · 刻阵工坊",
+  "width": 6,
+  "height": 6,
+  "objectiveSummary": "摧毁工坊内的敌方导能柱",
+  "objectiveType": "Destruction",
+  "tier": 3,
+  "floorTheme": "Ruins",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": false,
+  "prerequisites": [
+    "signal_hub"
+  ],
+  "heroSpawn": {
+    "x": 2,
+    "y": 5
+  },
+  "enemies": [
+    {
+      "archetypeId": "elite_vanguard",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "archetypeId": "barrier_mender",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 0,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "AetherObjective",
+      "x": 5,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [
+    {
+      "id": "vanguard_temp_heavy_cover",
+      "type": "temporary",
+      "label": "划线教官生成临时重掩体",
+      "timing": "划线教官回合开始",
+      "trigger": "场上没有可倚靠的完整重掩体且本场生成次数未满",
+      "result": "在划线教官正交相邻合法空格生成耐久12的重掩体",
+      "duration": "直到被摧毁；每场最多2次",
+      "source": "elite_vanguard",
+      "positions": []
+    }
+  ],
+  "spaceContract": {
+    "grammar": "编织狭口与双短路",
+    "publicRisk": "左路承受破势，右路更快接近目标但会被教官横移拦截。",
+    "counterplayWindow": "两路在中部连通，单个敌人无法封死双路。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

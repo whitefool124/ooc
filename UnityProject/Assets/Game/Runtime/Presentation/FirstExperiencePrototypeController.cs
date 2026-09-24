@@ -90,6 +90,9 @@ namespace OCC.Combat.Presentation
 
         public void Bind(CombatPrototypeBootstrap bootstrap) => combatBootstrap = bootstrap;
 
+        public bool IsEncyclopediaOpen => combatBootstrap != null && combatBootstrap.IsEncyclopediaOpen;
+        public void OpenEncyclopedia() => combatBootstrap?.OpenEncyclopedia();
+
         public static bool IsRuntimeStage(FlowStage stage) => stage >= FlowStage.Map;
 
         private void Awake()

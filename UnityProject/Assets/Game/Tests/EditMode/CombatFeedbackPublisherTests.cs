@@ -60,6 +60,26 @@ namespace OCC.Combat.Tests
             Assert.That(logs, Is.EqualTo(new[] { spell.DisplayName + "：产生 1 项结果" }));
         }
 
+        [Test]
+        public void AttributeStack_EmitsUpdatedSignedValueEvenWhenDurationStaysTheSame()
+        {
+            CombatState state = State(out UnitState hero, out UnitState enemy);
+            RecordingSink sink = new RecordingSink();
+            CombatEffectExecution first = CombatEffectExecutor.Execute(state, hero.Id,
+                CombatEffect.ApplyStatus(enemy.Id, StatusType.Agility, 2, -1));
+            var publisher = new CombatFeedbackPublisher();
+            publisher.PublishCombatEffects(state, sink, first);
+            CombatEffectExecution second = CombatEffectExecutor.Execute(state, hero.Id,
+                CombatEffect.ApplyStatus(enemy.Id, StatusType.Agility, 2, -1));
+
+            publisher.PublishCombatEffects(state, sink, second);
+
+            Assert.That(sink.Events, Has.Count.EqualTo(2));
+            Assert.That(sink.Events[0].FloatingText, Is.EqualTo("敏捷-1"));
+            Assert.That(sink.Events[1].Kind, Is.EqualTo(CombatFeedbackKind.Attribute));
+            Assert.That(sink.Events[1].FloatingText, Is.EqualTo("敏捷-2"));
+        }
+
         private static CombatState State(out UnitState hero, out UnitState enemy)
         {
             hero = new UnitState("hero", true, new GridPosition(0, 0));

@@ -72,12 +72,12 @@ namespace OCC.Combat.Presentation
         public const int SpaceLarge = 24;
         public const int IconSlotSize = 32;
         public const int IconTextInset = 36;
-        public const int FrameThickness = 6;
-        public const int FrameTextSafetyMargin = 6;
+        public const int FrameThickness = 1;
+        public const int FrameTextSafetyMargin = 11;
         public const int FramedContentInset = FrameThickness + FrameTextSafetyMargin;
         public const int FullyFramedSingleLineHeight = BodyFontSize + FramedContentInset * 2;
         public const int FrameCornerSize = 12;
-        public const int InnerHighlightThickness = 2;
+        public const int InnerHighlightThickness = 1;
         public const int PressedOffset = 4;
         public static readonly Vector2 FocusDistance = new Vector2(FrameThickness, -FrameThickness);
 
@@ -290,6 +290,15 @@ namespace OCC.Combat.Presentation
             if (existingFrame != null) existingFrame.gameObject.SetActive(false);
 
             Image overlay = SkinOverlay(image, true);
+            if (UsesThinBorder(id))
+            {
+                overlay.sprite = null;
+                overlay.color = Color.clear;
+                overlay.raycastTarget = false;
+                Color border = id == "focus" ? FormalUiTheme.Cyan : ThinBorderColor(tint);
+                SetThinBorder(image.transform, border);
+                return;
+            }
             Sprite sprite = SkinSprite(id);
             overlay.sprite = sprite;
             overlay.type = sprite.border.sqrMagnitude > 0f ? Image.Type.Sliced : Image.Type.Simple;
@@ -297,6 +306,56 @@ namespace OCC.Combat.Presentation
             overlay.preserveAspect = false;
             overlay.color = Color.white;
             overlay.raycastTarget = false;
+        }
+
+        private static bool UsesThinBorder(string id)
+        {
+            return id == "focus" || id == "header" || id == "slot" || id == "bar_track" ||
+                id.StartsWith("panel", StringComparison.Ordinal) ||
+                id.StartsWith("button", StringComparison.Ordinal) ||
+                id.StartsWith("tab", StringComparison.Ordinal) ||
+                id.StartsWith("group", StringComparison.Ordinal);
+        }
+
+        private static Color ThinBorderColor(Color fill)
+        {
+            return Mathf.Max(fill.r, fill.g, fill.b) < .32f
+                ? Color.Lerp(FormalUiTheme.OnInk, fill, .28f)
+                : FormalUiTheme.Rule;
+        }
+
+        private static void SetThinBorder(Transform parent, Color color)
+        {
+            SetThinBorderEdge(parent, "细边_上", new Vector2(0f, 1f), new Vector2(1f, 1f),
+                new Vector2(0f, -1f), Vector2.zero, color);
+            SetThinBorderEdge(parent, "细边_下", Vector2.zero, new Vector2(1f, 0f),
+                Vector2.zero, new Vector2(0f, 1f), color);
+            SetThinBorderEdge(parent, "细边_左", Vector2.zero, new Vector2(0f, 1f),
+                Vector2.zero, new Vector2(1f, 0f), color);
+            SetThinBorderEdge(parent, "细边_右", new Vector2(1f, 0f), Vector2.one,
+                new Vector2(-1f, 0f), Vector2.zero, color);
+        }
+
+        private static void SetThinBorderEdge(Transform parent, string name, Vector2 minAnchor, Vector2 maxAnchor,
+            Vector2 minOffset, Vector2 maxOffset, Color color)
+        {
+            Transform child = parent.Find(name);
+            if (child != null && !(child is RectTransform))
+            {
+                if (Application.isPlaying) UnityEngine.Object.Destroy(child.gameObject);
+                else UnityEngine.Object.DestroyImmediate(child.gameObject);
+                child = null;
+            }
+            GameObject edge = child == null ? new GameObject(name, typeof(RectTransform), typeof(Image)) : child.gameObject;
+            if (child == null) edge.transform.SetParent(parent, false);
+            RectTransform rect = edge.GetComponent<RectTransform>();
+            rect.anchorMin = minAnchor;
+            rect.anchorMax = maxAnchor;
+            rect.offsetMin = minOffset;
+            rect.offsetMax = maxOffset;
+            Image stroke = edge.GetComponent<Image>() ?? edge.AddComponent<Image>();
+            stroke.color = color;
+            stroke.raycastTarget = false;
         }
 
         public static Image SkinOverlay(Image image, bool createIfMissing = false)

@@ -145,7 +145,7 @@ namespace OCC.Combat.Tests
             }
             else state = FirstRegionLevelBuilder.Build(RainLanternCourtRuntime.LevelId).State;
             state.ConfigureRuleset(CombatRuleset.Roguelite);
-            if (scenario == 1) state.GetUnit("hero").ApplyStatus(StatusType.Slow, 2);
+            if (scenario == 1) state.GetUnit("hero").ApplyStatus(StatusType.Agility, 2, -1);
             CombatResolver.BeginTurn(state, "hero");
             if (scenario == 2) state.RainLanternCourt.CastBorrowedCover(state, state.GetUnit("hero"));
             return state;

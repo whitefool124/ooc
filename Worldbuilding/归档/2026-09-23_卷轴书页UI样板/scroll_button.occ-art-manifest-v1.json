@@ -1,0 +1,52 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "archive_scroll_button_sample_v1",
+  "role": "ui_archive_scroll_button",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent scroll-button source",
+    "source_path": "Worldbuilding/归档/2026-09-23_卷轴书页UI样板/raw/scroll_button_source.png",
+    "source_sha256": "D81DBF84C6488361192734A87C69DBE6C714ECDF2DB511361BC689D73FF45F71"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-23_卷轴书页UI样板/normalized/scroll_button.png",
+    "output_sha256": "649300D3F1D2F3FD947BD34BEC0828F255D1FCE2CED297949FD6B50D198C8C17",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": ["warm_ivory", "dark_brown", "aged_brass"]
+  },
+  "display": {
+    "canonical_integer_scale": 3,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 3,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "192x32 archive scroll source; nine-slice the quiet centre"
+  },
+  "application": {
+    "runtime_draw_rect": "home-page archive action button, 520x90 or 330x78",
+    "default_integer_scale": 3,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": null, "four_x": null, "six_x": null,
+    "grayscale": null, "checker": null, "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING", "reviewer": "", "date": "",
+    "silhouette": "PENDING", "material": "PENDING", "perspective": "PENDING",
+    "style": "PENDING", "application": "PENDING", "illumination": "PENDING",
+    "notes": "Lattice decode passed with confidence 1.2905; await in-game review."
+  },
+  "unity_import": {
+    "filter_mode": "Point", "mesh_type": "Full Rect", "compression": "None",
+    "mipmaps": false, "wrap_mode": "Clamp", "atlas_padding": 0,
+    "atlas_rotation": false, "atlas_tight_packing": false, "atlas_extrude": 0,
+    "guid": "", "sprite_border": [16, 8, 16, 8]
+  }
+}

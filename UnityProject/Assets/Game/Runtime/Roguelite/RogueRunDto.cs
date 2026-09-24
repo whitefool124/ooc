@@ -52,6 +52,7 @@ namespace OCC.Combat.Roguelite
         public string RegionBossId { get; set; } = string.Empty;
         public string StarterId { get; set; } = string.Empty;
         public List<string> VisitedNodeIds { get; } = new List<string>();
+        public List<string> RouteHistoryNodeIds { get; } = new List<string>();
         public List<string> CompletedNodeIds { get; } = new List<string>();
         public List<string> ClaimedContentIds { get; } = new List<string>();
         public bool AwaitingReward { get; set; }
@@ -114,14 +115,15 @@ namespace OCC.Combat.Roguelite
                 dto.AwaitingReward ? 1 : 0, B(dto.PendingContentChoiceId), B(dto.PendingContentCombatMissionId),
                 B(JoinStrings(dto.EncounterAssignments)), B(JoinStrings(dto.NodeContentAssignments)));
             string settledServices = B(JoinStrings(dto.SettledServiceNodeIds));
-            if (string.IsNullOrEmpty(dto.RunProgramId) && dto.FirstRunExperience == null) return legacyFields + "|" + settledServices;
-            return legacyFields + "|" + B(dto.RunProgramId) + "|" + B(OCC.Combat.FirstRunExperienceCodec.Serialize(dto.FirstRunExperience)) + "|" + settledServices;
+            return legacyFields + "|" + B(dto.RunProgramId) + "|" +
+                B(OCC.Combat.FirstRunExperienceCodec.Serialize(dto.FirstRunExperience)) + "|" +
+                settledServices + "|" + B(JoinStrings(dto.RouteHistoryNodeIds));
         }
 
         public static RogueRunDto Deserialize(string data)
         {
             string[] fields = (data ?? string.Empty).Split('|');
-            if ((fields.Length != 28 && fields.Length != 29 && fields.Length != 30 && fields.Length != 31 && fields.Length != 32 && fields.Length != 33) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
+            if ((fields.Length < 28 || fields.Length > 34) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
             RogueRunDto dto = new RogueRunDto
             {
                 RunId = U(fields[1]), Seed = I(fields[2]), StageId = U(fields[3]), StageTime = I(fields[4]), Gold = I(fields[5]),
@@ -142,13 +144,14 @@ namespace OCC.Combat.Roguelite
             dto.ClaimedContentIds.AddRange(SplitStrings(U(fields[24])));
             if (fields.Length >= 29) dto.EncounterAssignments.AddRange(SplitStrings(U(fields[28])));
             if (fields.Length >= 30) dto.NodeContentAssignments.AddRange(SplitStrings(U(fields[29])));
-            if (fields.Length == 32 || fields.Length == 33)
+            if (fields.Length == 32 || fields.Length == 33 || fields.Length == 34)
             {
                 dto.RunProgramId = U(fields[30]);
                 dto.FirstRunExperience = OCC.Combat.FirstRunExperienceCodec.Deserialize(U(fields[31]));
             }
             if (fields.Length == 31) dto.SettledServiceNodeIds.AddRange(SplitStrings(U(fields[30])));
-            if (fields.Length == 33) dto.SettledServiceNodeIds.AddRange(SplitStrings(U(fields[32])));
+            if (fields.Length == 33 || fields.Length == 34) dto.SettledServiceNodeIds.AddRange(SplitStrings(U(fields[32])));
+            if (fields.Length == 34) dto.RouteHistoryNodeIds.AddRange(SplitStrings(U(fields[33])));
             OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
             ValidateShape(dto);
             return dto;

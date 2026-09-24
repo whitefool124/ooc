@@ -204,14 +204,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void SixtyFireSpells_ReachAllFourteenModulesWithoutChangingRuleContracts()
+        public void EightyFireSpells_ReachAllFourteenModulesWithoutChangingRuleContracts()
         {
             HashSet<string> reached = FireSpellCatalog.All
                 .SelectMany(CombatVisualFeedback.FireVfxModules)
                 .Append("fire_cast")
                 .ToHashSet();
             Assert.That(reached, Is.EquivalentTo(FireVfxIds));
-            Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(60));
+            Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
         }
 
         [Test]

@@ -307,7 +307,7 @@ namespace OCC.Combat.Presentation
         {
             if (spell.Id == "F-P-M01") return "立即：本轮额外移动 2 格；待触发：下一次合法近战武器攻击追加 8 点火焰伤害。";
             if (spell.Id == "F-P-M05") return "标记相邻敌人；其首次主动移动后，若已不相邻，施术者进入目标刚离开的格。强制位移不触发。";
-            if (spell.Id == "F-P-M07") return "只能攻击相邻的燃烧敌人；造成 20 点武器伤害与 8 点火焰伤害，施加破势，然后消耗燃烧。";
+            if (spell.Id == "F-P-M07") return "对相邻敌人造成 20 点武器伤害和 8 点火焰伤害，并施加破势。";
             if (spell.Id == "F-P-M08") return "前方 3 层扇形依次为 1／3／5 格；范围内所有单位包括友军均承受 12 点武器伤害与 4 点火焰伤害。";
             if (spell.Id == "F-P-M12") return "获得 12 点护盾；首次相邻武器或技能攻击结算后，再获得 4 点护盾。";
             if (spell.Id == "F-P-M13") return "首次受相邻攻击后，反击 12 点武器伤害和 4 点火焰伤害。";
@@ -318,12 +318,21 @@ namespace OCC.Combat.Presentation
             if (spell.Id == "F-P-M18") return "沿连续火场移动 3 格，不触发火场伤害。";
             if (spell.Id == "F-P-M19") return "沿同一横线或竖线冲至其前一格；造成 24 点武器伤害与 12 点火焰伤害，最后无视护盾失去 8 点生命。";
             if (spell.Id == "F-P-M20") return "对燃烧或破势敌人造成 28 点武器伤害和 12 点火焰伤害；消耗燃烧。";
+            if (spell.Id == "F-P-M21") return "沿可通行路径移动最多 3 格、最多转向一次；逐格显示敌方反应覆盖。Shift+点击切换先横向或先纵向。";
+            if (spell.Id == "F-P-M24") return "附着于自身；下一次突进结算完毕后，可点击实际路径上向起点回退 1 格的落点，或执行其他操作放弃。";
+            if (spell.Id == "F-P-M26") return "下次完成突进后进入反击架势；下次自身回合开始前首次受到相邻主动攻击并完成其结算后，对攻击者造成 12 点武器伤害。";
             if (spell.Id == "F-P-U12") return "下次命中燃烧目标时，消耗燃烧并获得 12 点护盾。";
             if (spell.Id == "F-P-U13") return "下次命中燃烧目标时，恢复 3 点个人魔力。";
             if (spell.Id == "F-P-U14") return "下次攻击燃烧目标时，追加 12 点火焰伤害。";
             if (spell.Id == "F-P-U15") return "下次攻击燃烧目标时，追加 4 点火焰伤害；燃烧延至 2 回合。";
-            if (spell.Id == "F-P-U16") return "下次在当前武器最大射程命中时，武器伤害 +12；较近距离攻击不会消耗窗口。";
+            if (spell.Id == "F-P-U16") return "下一次武器攻击基础伤害 +12。";
             if (spell.Id == "F-P-U20") return "下次攻击燃烧或破势目标时，追加 20 点火焰伤害；两者兼具时改为 28 点。";
+            if (spell.Id == "F-P-U21") return "直线首个目标为物块时施加裂痕；为单位时清空其护盾并施加破势。裂痕物块被摧毁时，施加者回流 2 魔力与 4 护盾。";
+            if (spell.Id == "F-P-U22") return "消耗本回合被己方摧毁的一个物件材料，在其原格或相邻空格筑起 8 耐久轻掩体；每份材料只能使用一次。";
+            if (spell.Id == "F-P-U23") return "直线突进至首个单位或物件前一格，造成 12 点武器伤害；若打碎的是物件且该格可站立，再进入破口。";
+            if (spell.Id == "F-P-U24") return "沿直线路径移动最多 3 格；必须经过本回合的破口。路径旁每名敌人各受一次 6 点武器伤害。";
+            if (spell.Id == "F-P-U26") return "附着于自身；下一次由自身摧毁物件后，可点击 3 格内空出的可站立格移动，或执行其他操作放弃。";
+            if (spell.Id == "F-P-U28") return "清除自身束缚或敏捷负值之一；两者同时存在时，普通点击清束缚，Shift+点击清敏捷负值。";
             if (spell.Id == "F-P-U04") return "造成 8 点伤害并施加熔障标记 4 回合；摧毁时回 2 魔力和 4 护盾。";
             if (spell.Id == "F-P-U05") return "下次命中后，正交邻格受到 4 点火焰伤害；伤及友军。";
             if (spell.Id == "F-P-U06") return "下次武器攻击结算后，自动向远离攻击目标的方向后撤 1 格。";
@@ -334,8 +343,11 @@ namespace OCC.Combat.Presentation
             if (spell.Id == "F-P-U18") return "直线突进 2 格；相邻单位受到 8 点伤害并被推开 1 格。";
             if (spell.Id == "F-P-U19") return "下次攻击燃烧目标后，造成 8 点火焰伤害并推开 1 格；生成火场 2 回合。";
             if (spell.Id == "F-P-R05") return "造成 16 点火焰伤害；目标已燃烧时，将燃烧提高至至少 2 回合。";
-            if (spell.Id == "F-P-R13") return "生成火场 4 回合；获得火势 +4，持续 2 回合。";
-            if (spell.Id == "F-P-R20") return "范围内造成 20 点火焰伤害；施加助燃 +4，生成火场 3 回合。";
+            if (spell.Id == "F-P-R13") return "在目标格生成持续 4 回合的火场。";
+            if (spell.Id == "F-P-R20") return "范围内的敌人和友方各受 20 点火焰伤害，空格生成持续 3 回合的火场。";
+            if (spell.Id == "F-P-R21") return "直线首个目标受到 6 点伤害；物块施加裂痕，单位推开 1 格。裂痕物块被摧毁时，施加者回流 2 魔力与 4 护盾。";
+            if (spell.Id == "F-P-R24") return "下次自身回合开始前，下一处被己方摧毁的裂痕物块在标准回流外，额外获得 4 护盾；只触发一次。";
+            if (spell.Id == "F-P-R25") return "选择可见空格旁的重掩体作折射点，射线穿向另一侧最多 2 格，首个单位或物件受 10 点伤害；Shift／Ctrl／Alt 切换相邻掩体方向。";
             if (spell.Id == "F-P-R19") return "对目标造成 16 点火焰伤害，并对其正交邻接 1 格内所有可受击目标各造成 8 点火焰伤害，可伤友军；中心与邻格均不区分单位或物件。";
             string timing = FireTimingPlayerText(spell.TriggerWindow);
             string effects = string.Join("；", spell.Rules.Select(FireRulePlayerText));
@@ -348,6 +360,7 @@ namespace OCC.Combat.Presentation
                 spell.TargetKind == FireTargetKind.Enemy ? "一名敌人" :
                 spell.TargetKind == FireTargetKind.AllyOrSelf ? "自身或一名友军" :
                 spell.TargetKind == FireTargetKind.Unit ? "一个单位" :
+                spell.TargetKind == FireTargetKind.Cell ? "一处战场格" :
                 spell.TargetKind == FireTargetKind.EmptyCell ? "一个空地格" :
                 spell.TargetKind == FireTargetKind.BurningUnit ? "一名燃烧单位" :
                 spell.TargetKind == FireTargetKind.BurningEnemy ? "一名燃烧敌人" :
@@ -447,7 +460,16 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.SwapUnits: effect = "与目标交换位置"; break;
                 case FireRuleKind.Push: effect = "将目标推开 " + rule.Amount + " 格"; break;
                 case FireRuleKind.PushAllUnits: effect = "将范围内单位推开 " + rule.Amount + " 格"; break;
+                case FireRuleKind.PushFromDestroyedObjects: effect = "物件被摧毁时，将其相邻单位向外推 " + rule.Amount + " 格，同一单位最多一次"; break;
+                case FireRuleKind.BreakBarrier: effect = "对物块造成的耐久伤害翻倍"; break;
+                case FireRuleKind.CreateLightCover: effect = "在目标格生成耐久 " + rule.Amount + " 的轻掩体"; break;
+                case FireRuleKind.AdvanceIntoBreach: effect = "打开缺口后继续前进 " + rule.Amount + " 格"; break;
+                case FireRuleKind.ClearBoundOrSlow: effect = "清除自身的束缚或迟缓"; break;
+                case FireRuleKind.OfferRetreat: effect = "下次突进后可撤退 " + rule.Amount + " 格"; break;
+                case FireRuleKind.OfferBreachMove: effect = "下次摧毁物块后可沿新缺口移动 " + rule.Amount + " 格"; break;
                 case FireRuleKind.ApplyMeltBarrierMark: effect = "施加持续 " + rule.Duration + " 回合的熔障标记"; break;
+                case FireRuleKind.ApplyFracture: effect = "施加裂痕"; break;
+                case FireRuleKind.ArmFractureShield: effect = "下次己方摧毁裂痕物块时额外获得 4 护盾"; break;
                 case FireRuleKind.ReserveNextTurnAction: effect = "脱离全部敌方攻击范围时，下回合行动力 +" + rule.Amount; break;
                 case FireRuleKind.ReduceIncomingDamage: effect = "下一次受到的伤害减少 " + rule.Amount; break;
                 case FireRuleKind.GrantShieldBeforeRanged: effect = "首次符合条件的远距伤害前获得 " + rule.Amount + " 点护盾"; break;
@@ -462,6 +484,7 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.RepairWeapon: effect = "恢复武器 " + rule.Amount + " 点耐久"; break;
                 case FireRuleKind.SpendActionPoints: effect = "额外消耗 " + rule.Amount + " 点行动"; break;
                 case FireRuleKind.SpendMana: effect = "额外消耗 " + rule.Amount + " 点以太"; break;
+                case FireRuleKind.ReduceForcedMove: effect = "自身下回合前，下一次受到的强制位移距离减少 " + rule.Amount + " 格，最低为 0"; break;
                 case FireRuleKind.ArmTrigger: effect = "布置一次待触发效果"; break;
                 case FireRuleKind.ConsumeTrigger: effect = "触发后移除该效果"; break;
                 case FireRuleKind.OverloadDevice: effect = "使装置过载" + (rule.Amount > 0 ? "，造成 " + rule.Amount + " 点效果" : string.Empty); break;

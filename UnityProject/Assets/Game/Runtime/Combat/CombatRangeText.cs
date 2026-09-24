@@ -37,6 +37,8 @@ namespace OCC.Combat
             if (spell.TargetKind == FireTargetKind.Self) return "选取：" + SelfSelection;
             if (spell.Shape == FireSelectionShape.Path)
                 return "选取：" + LineExtent(spell.ShapeLength) + DeadZoneSuffix(spell.MinimumRange);
+            if (spell.Shape == FireSelectionShape.FirstHitLine)
+                return "选取：正交直线 " + spell.Range + " 格内定方向";
             return "选取：单点" + ReachText(spell.MinimumRange, spell.Range);
         }
 
@@ -97,6 +99,7 @@ namespace OCC.Combat
                 case FireSelectionShape.Line:
                 case FireSelectionShape.ContinuousLine:
                 case FireSelectionShape.Path: return LineExtent(extent);
+                case FireSelectionShape.FirstHitLine: return "正交直线 " + extent + " 格（首个单位或物块）";
                 case FireSelectionShape.Cone: return "锥形范围 " + extent + " 格";
                 case FireSelectionShape.Cross:
                 case FireSelectionShape.CenterAndOrthogonal: return "十字范围 1 格（含中心）";
@@ -286,6 +289,7 @@ namespace OCC.Combat
                 case FireSelectionShape.Line:
                 case FireSelectionShape.ContinuousLine:
                 case FireSelectionShape.Path: return "直线";
+                case FireSelectionShape.FirstHitLine: return "首个命中";
                 case FireSelectionShape.Cone: return "锥形";
                 case FireSelectionShape.Cross:
                 case FireSelectionShape.CenterAndOrthogonal: return "十字";
@@ -331,6 +335,7 @@ namespace OCC.Combat
                 case FireSelectionShape.Line:
                 case FireSelectionShape.ContinuousLine:
                 case FireSelectionShape.Path: return "直线";
+                case FireSelectionShape.FirstHitLine: return "首个命中";
                 case FireSelectionShape.Cone: return "锥形";
                 case FireSelectionShape.Cross:
                 case FireSelectionShape.CenterAndOrthogonal: return "十字";
@@ -363,6 +368,7 @@ namespace OCC.Combat
                 case FireTargetKind.Self: return null;
                 case FireTargetKind.AllyOrSelf: return "友军";
                 case FireTargetKind.Unit: return "敌我";
+                case FireTargetKind.Cell: return "目标格";
                 case FireTargetKind.EmptyCell:
                 case FireTargetKind.BurningCell: return "空地";
                 case FireTargetKind.Hittable:
@@ -384,6 +390,7 @@ namespace OCC.Combat
                 case FireRuleKind.MoveAfterAttack:
                 case FireRuleKind.Push:
                 case FireRuleKind.PushAllUnits:
+                case FireRuleKind.PushFromDestroyedObjects:
                 case FireRuleKind.SwapUnits:
                 case FireRuleKind.RestoreMovement: return "位移";
                 case FireRuleKind.ApplyBurning:
@@ -391,6 +398,8 @@ namespace OCC.Combat
                 case FireRuleKind.ExtendBurning:
                 case FireRuleKind.ConsumeBurning: return "燃烧";
                 case FireRuleKind.ApplyBreakStance: return "破势";
+                case FireRuleKind.ApplyFracture: return "裂痕";
+                case FireRuleKind.ArmFractureShield: return "护盾";
                 case FireRuleKind.CreateFireground:
                 case FireRuleKind.ConsumeFireground:
                 case FireRuleKind.ApplyFiregroundBoost:

@@ -84,11 +84,11 @@ namespace OCC.Combat.Tests
         {
             FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom);
             CombatState state = build.State;
-            GridPosition northCrystal = new GridPosition(6, 1);
-            GridPosition southCrystal = new GridPosition(6, 5);
+            GridPosition northCrystal = new GridPosition(5, 1);
+            GridPosition southCrystal = new GridPosition(5, 4);
 
-            Assert.That(build.Definition.Width, Is.EqualTo(8));
-            Assert.That(build.Definition.Height, Is.EqualTo(7));
+            Assert.That(build.Definition.Width, Is.EqualTo(7));
+            Assert.That(build.Definition.Height, Is.EqualTo(6));
             Assert.That(build.Definition.HeroSpawn, Is.EqualTo(new GridPosition(1, 3)));
             Assert.That(state.Map.GetTile(northCrystal).BlocksMovement, Is.True);
             Assert.That(state.Map.GetTile(northCrystal).BlocksLineOfSight, Is.False);
@@ -102,7 +102,7 @@ namespace OCC.Combat.Tests
             Assert.That(raider.Health, Is.EqualTo(8));
             Assert.That(state.Map.GetTile(northCrystal).IsCrystalShard, Is.True);
             Assert.That(state.Map.GetTile(northCrystal).BlocksMovement, Is.False);
-            Assert.That(new[] { northCrystal, new GridPosition(6, 0), new GridPosition(7, 1), new GridPosition(6, 2), new GridPosition(5, 1) }
+            Assert.That(new[] { northCrystal, new GridPosition(5, 0), new GridPosition(6, 1), new GridPosition(5, 2), new GridPosition(4, 1) }
                 .All(cell => state.Map.GetTile(cell).IsCrystalShard), Is.True);
             Assert.That(CombatMovementQuery.EntryCost(state, state.GetUnit("hero"), northCrystal), Is.EqualTo(2));
             Assert.That(state.Map.GetTile(southCrystal).Durability, Is.EqualTo(16));
@@ -138,11 +138,11 @@ namespace OCC.Combat.Tests
             Assert.That(calibrate.Type, Is.EqualTo(CombatCommandType.EndTurn));
             Assert.That(intent.ActionName, Is.EqualTo("贴晶校准"));
 
-            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.DamageObject(new GridPosition(6, 5), 24));
+            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.DamageObject(new GridPosition(5, 4), 24));
             plans.Invalidate();
             CombatCommand chase = plans.GetExecutionCommand(state, mauler, hero);
             Assert.That(chase.Type, Is.EqualTo(CombatCommandType.Move));
-            Assert.That(chase.Destination, Is.Not.EqualTo(new GridPosition(6, 5)));
+            Assert.That(chase.Destination, Is.Not.EqualTo(new GridPosition(5, 4)));
         }
 
         [Test]
@@ -156,13 +156,15 @@ namespace OCC.Combat.Tests
 
             CombatResolver.BeginTurn(state, raider.Id);
             CombatCommand approach = plans.GetExecutionCommand(state, raider, hero);
-            Assert.That(approach.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(approach.Type, Is.EqualTo(CombatCommandType.Move),
+                $"Raider {raider.Position}, hero {hero.Position}, movement budget {CombatMovementQuery.Budget(state, raider)}, vines {state.Map.PositionsWith(tile => tile.IsLampVine).Count()}");
             CombatResolver.Resolve(state, approach);
             Assert.That(state.Map.GetTile(raider.Position).IsLampVine, Is.False);
 
             plans.Invalidate(); CombatResolver.BeginTurn(state, raider.Id);
             CombatCommand enter = plans.GetExecutionCommand(state, raider, hero);
-            Assert.That(enter.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(enter.Type, Is.EqualTo(CombatCommandType.Move),
+                $"Raider {raider.Position}, hero {hero.Position}, movement budget {CombatMovementQuery.Budget(state, raider)}");
             CombatResolver.Resolve(state, enter);
             Assert.That(state.Map.GetTile(raider.Position).IsLampVine, Is.True);
             Assert.That(state.GreenhouseCollectionRoom.IsRaiderHidden(state, raider), Is.True);
@@ -312,17 +314,17 @@ namespace OCC.Combat.Tests
         {
             FirstRegionLevelBuild b3 = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.RainPrismCourt);
             Assert.That(b3.Definition.Width, Is.EqualTo(8));
-            Assert.That(b3.Definition.Height, Is.EqualTo(7));
-            Assert.That(b3.Definition.HeroSpawn, Is.EqualTo(new GridPosition(1, 3)));
-            Assert.That(b3.State.Map.GetTile(new GridPosition(2, 3)).IsWater, Is.True);
-            Assert.That(b3.State.Map.GetTile(new GridPosition(5, 3)).Durability, Is.EqualTo(16));
-            Assert.That(b3.State.LootSource.Position, Is.EqualTo(new GridPosition(6, 3)));
+            Assert.That(b3.Definition.Height, Is.EqualTo(5));
+            Assert.That(b3.Definition.HeroSpawn, Is.EqualTo(new GridPosition(1, 2)));
+            Assert.That(b3.State.Map.GetTile(new GridPosition(2, 2)).IsWater, Is.True);
+            Assert.That(b3.State.Map.GetTile(new GridPosition(5, 2)).Durability, Is.EqualTo(16));
+            Assert.That(b3.State.LootSource.Position, Is.EqualTo(new GridPosition(6, 2)));
             Assert.That(b3.State.LootSource.RevealNext().DefinitionId, Is.EqualTo("ACA-EQ-CR01"));
             b3.State.ConfigureRuleset(CombatRuleset.Roguelite);
             UnitState b3Hero = b3.State.GetUnit("hero");
             b3Hero.ApplyStatus(StatusType.Burning, 2, 4);
             CombatResolver.BeginTurn(b3.State, b3Hero.Id);
-            CombatResolver.Resolve(b3.State, CombatCommand.Move(b3Hero.Id, new GridPosition(2, 3)));
+            CombatResolver.Resolve(b3.State, CombatCommand.Move(b3Hero.Id, new GridPosition(2, 2)));
             Assert.That(b3Hero.HasStatus(StatusType.Burning), Is.False);
 
             CombatState elite = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.ThreeMaterialPressure).State;
@@ -333,7 +335,7 @@ namespace OCC.Combat.Tests
             Assert.That(ram.Health, Is.EqualTo(36));
             Assert.That(ram.Shield, Is.EqualTo(8));
             Assert.That(elite.Map.Width, Is.EqualTo(8));
-            Assert.That(elite.Map.Height, Is.EqualTo(7));
+            Assert.That(elite.Map.Height, Is.EqualTo(6));
             Assert.That(elite.Map.GetTile(new GridPosition(5, 3)).Durability, Is.EqualTo(24));
             EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
             CombatCommand charge = plans.GetExecutionCommand(elite, ram, hero);

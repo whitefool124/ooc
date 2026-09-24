@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "first_b3_rain_prism_court",
+  "displayName": "普通战斗 03 · 雨痕晶庭",
+  "objectiveSummary": "击倒替身偶与火矢生；可破坏封门晶簇搜刮学院储能芯。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "width": 8,
+  "height": 5,
+  "complexMechanics": true,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [
+    "first_battle_greenhouse_collection_room"
+  ],
+  "heroSpawn": {
+    "x": 1,
+    "y": 2
+  },
+  "enemies": [
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 4,
+      "y": 2
+    },
+    {
+      "archetypeId": "pyromancer",
+      "x": 5,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 4,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "AetherCrystal",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 7,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 7,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "kind": "LightCover",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "纵向冷却沟、封门晶簇与南侧干路",
+    "publicRisk": "火矢生从干地施加燃烧，封门晶簇与永久重物块围出器材匣。",
+    "counterplayWindow": "可破晶开匣并爆伤替身偶、退入浅水熄火，或放弃搜刮走北侧普通路线。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:31:03.735Z"
+}

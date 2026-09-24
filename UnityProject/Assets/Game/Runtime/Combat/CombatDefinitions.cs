@@ -5,7 +5,12 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum DamageType { Physical, Fire, Arcane }
-    public enum StatusType { Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance, FiregroundBoost, FiregroundVulnerable }
+    public enum StatusType
+    {
+        Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance, FiregroundBoost, FiregroundVulnerable,
+        Agility, Strength, SpellPower, Speed, Range, DamageTaken, ShieldEfficiency, ShieldGrant, Control,
+        Marked, Prepared, Invulnerable
+    }
     public enum EquipmentSlot { MainHand, OffHand }
 
     public enum SkillTargetRule { Self, EnemyUnit, AllyUnit, AnyUnit, GridCell, Destructible }
@@ -30,7 +35,8 @@ namespace OCC.Combat
         public static SkillEffectDefinition RestoreHealth(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.RestoreHealth, amount, default, default, 0, recipient);
         public static SkillEffectDefinition RestoreShield(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.RestoreShield, amount, default, default, 0, recipient);
         public static SkillEffectDefinition RestoreMana(int amount, SkillEffectRecipient recipient = SkillEffectRecipient.Source) => new SkillEffectDefinition(SkillEffectType.RestoreMana, amount, default, default, 0, recipient);
-        public static SkillEffectDefinition ApplyStatus(StatusType status, int duration) => new SkillEffectDefinition(SkillEffectType.ApplyStatus, 0, default, status, duration, SkillEffectRecipient.PrimaryTarget);
+        public static SkillEffectDefinition ApplyStatus(StatusType status, int duration, int strength = 0) =>
+            new SkillEffectDefinition(SkillEffectType.ApplyStatus, strength, default, status, duration, SkillEffectRecipient.PrimaryTarget);
         public static SkillEffectDefinition ClearStatus(StatusType status, SkillEffectRecipient recipient = SkillEffectRecipient.PrimaryTarget) => new SkillEffectDefinition(SkillEffectType.ClearStatus, 0, default, status, 0, recipient);
         public static SkillEffectDefinition MoveSource(int distance) => new SkillEffectDefinition(SkillEffectType.MoveSource, distance, default, default, 0, SkillEffectRecipient.Source);
         public static SkillEffectDefinition DamageObject(int amount) => new SkillEffectDefinition(SkillEffectType.DamageObject, amount, default, default, 0, SkillEffectRecipient.PrimaryTarget);

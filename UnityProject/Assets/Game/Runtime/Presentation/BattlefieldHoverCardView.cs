@@ -103,7 +103,7 @@ namespace OCC.Combat.Presentation
             unitWeaponIcon.color = unitWeaponIcon.sprite == null ? Color.clear : Color.white;
             unitWeapon.text = unit.MainHand == null ? "未装备武器" :
                 unit.MainHand.DisplayName + "\n伤害 " + unit.MainHand.Damage + "　射程 " +
-                (unit.MainHand.MinimumRange > 0 ? unit.MainHand.MinimumRange + "–" + unit.MainHand.Range + " 格（近身死区）" : unit.MainHand.Range + " 格");
+                (unit.MainHand.MinimumRange > 0 ? unit.MainHand.MinimumRange + "–" + unit.EffectiveRange(unit.MainHand.Range) + " 格（近身死区）" : unit.EffectiveRange(unit.MainHand.Range) + " 格");
 
             bool hasIntent = model.Intent != null && model.IntentTexture != null;
             unitIntentIcon.gameObject.SetActive(hasIntent);
@@ -127,8 +127,12 @@ namespace OCC.Combat.Presentation
                 if (!active) continue;
                 BattlefieldStatusVisual status = model.Statuses[index];
                 statusIcons[index].texture = status.Texture;
-                statusLabels[index].text = status.Presentation.DisplayName + "　" +
-                    status.Presentation.Duration + " 回合";
+                CombatStatusPresentation description = status.Presentation;
+                string lifetime = UnitState.IsAttributeStatus(description.Status)
+                    ? description.Duration == int.MaxValue ? "（本场）" : "（剩余" + description.Duration + "回合）"
+                    : " 回合";
+                statusLabels[index].text = description.DisplayName + " " + description.ValueText + lifetime + "\n" +
+                    description.Detail.Split('；')[0];
                 Place(statusCards[index], x, ref y, StatusWindowHeight);
             }
 

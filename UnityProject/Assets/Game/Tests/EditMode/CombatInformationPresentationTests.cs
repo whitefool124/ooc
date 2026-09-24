@@ -1,6 +1,7 @@
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Roguelite;
+using OCC.Combat.Presentation;
 
 namespace OCC.Combat.Tests
 {
@@ -51,6 +52,24 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void MoveIntent_UsesExecutionPathAndShowsWaterStatusRemoval()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 1));
+            CombatState state = new CombatState(new GridMap(6, 3), new[] { hero, enemy });
+            enemy.ApplyStatus(StatusType.Burning, 2);
+            state.Map.SetTile(new GridPosition(1, 1), new TileState { IsWater = true });
+            CombatCommand command = CombatCommand.Move(enemy.Id, new GridPosition(2, 1));
+
+            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command)
+                .WithMovementPreview(state, enemy, command);
+
+            Assert.That(intent.Route, Is.EqualTo(CombatMovementQuery.FindPath(state, enemy, command.Destination)));
+            Assert.That(intent.DetailedText, Does.Contain("经过浅水会移除燃烧"));
+            Assert.That(FormalBattlefieldView.CollectIntentRoute(new[] { intent }), Does.Contain(new GridPosition(1, 1)));
+        }
+
+        [Test]
         public void DamageIntent_RecalculatesAgainstTheCurrentDefenses()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
@@ -59,13 +78,31 @@ namespace OCC.Combat.Tests
             CombatCommand command = CombatCommand.Attack(enemy.Id, hero.Id);
 
             EnemyIntentPresentation before = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
-            hero.ApplyStatus(StatusType.ArmorBreak, 2, 2);
+            hero.ApplyStatus(StatusType.DamageTaken, 2, 2);
             EnemyIntentPresentation after = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
 
             Assert.That(before.IconId, Is.EqualTo("attack"));
             Assert.That(before.ExpectedDamage, Is.GreaterThan(0));
             Assert.That(after.ExpectedDamage, Is.GreaterThan(before.ExpectedDamage));
             Assert.That(after.ResultSummary, Does.Contain(after.ExpectedDamage + " 点"));
+        }
+
+        [Test]
+        public void AttackIntent_SeparatesSelectableRangeFromThisAttackFootprint()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(2, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(0, 1));
+            enemy.ApplyStatus(StatusType.Range, 2, 1, "scout");
+            CombatState state = new CombatState(new GridMap(5, 3), new[] { hero, enemy });
+            CombatCommand command = CombatCommand.Attack(enemy.Id, hero.Id);
+
+            EnemyIntentPresentation intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command)
+                .WithAttackPreview(state, enemy, command);
+
+            Assert.That(intent.AttackRange, Does.Contain(new GridPosition(3, 1)));
+            Assert.That(intent.AffectedCells, Is.EqualTo(new[] { hero.Position }));
+            Assert.That(intent.DetailedText, Does.Contain("可选范围"));
+            Assert.That(intent.DetailedText, Does.Contain("本次生效"));
         }
 
         [Test]

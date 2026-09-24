@@ -177,13 +177,10 @@ namespace OCC.Combat
             if (owner == null || enemy == null || enemy.Position != reaction.MarkedCell || owner.IsHero == enemy.IsHero) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             var feedback = new ArtifactFeedbackCapture(owner, enemy); GridPosition source = owner.Position;
             Reactions.Remove(ownerId); int before = enemy.Health + enemy.Shield; Damage(enemy, reaction.Amount);
-            GridPosition pushed = StepAway(owner.Position, enemy.Position, Combat, enemy.Id);
-            if (pushed != enemy.Position)
-            {
-                GridPosition previous = enemy.Position;
-                enemy.MoveTo(pushed);
-                Combat.ResolveDisplacementLanding(enemy, previous);
-            }
+            GridPosition pushDirection = new GridPosition(
+                Math.Sign(enemy.Position.X - owner.Position.X), Math.Sign(enemy.Position.Y - owner.Position.Y));
+            if (TryPreventForcedMove(enemy.Id) != true)
+                Combat.ResolveForcedMove(enemy, pushDirection, 1, owner.Id + "-intercept");
             var execution = new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, enemy.Id, enemy.Position,
                 before - enemy.Health - enemy.Shield, "marked_cell_intercept_push", feedback.Finish(ArtifactEffectKind.ArmReaction)) }, owner.Id, source, true);
             resolvedReactions.Add(execution); return execution;
@@ -222,7 +219,7 @@ namespace OCC.Combat
 
     public static class ArtifactEngine
     {
-        private static readonly StatusType[] NegativeStatuses = { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.ArmorBreak, StatusType.Dazzled, StatusType.FiregroundVulnerable };
+        private static readonly StatusType[] NegativeStatuses = { StatusType.Burning, StatusType.Agility, StatusType.Bound, StatusType.BreakStance, StatusType.Dazzled, StatusType.FiregroundVulnerable };
 
         public static ArtifactPreview Preview(ArtifactBattleState battle, string sourceId, ArtifactDefinition artifact, ArtifactTarget target, int remainingUses = 1)
         {
@@ -367,13 +364,12 @@ namespace OCC.Combat
                 case ArtifactEffectKind.ClearNegativeStatuses: before = NegativeStatuses.Count(target.HasStatus); foreach (StatusType status in NegativeStatuses) target.ClearStatus(status); after = 0; break;
                 case ArtifactEffectKind.ForceMoveTarget:
                     if (battle.TryPreventForcedMove(target.Id)) { before = after = 0; break; }
-                    GridPosition destination = StepToward(source.Position, target.Position, effect.Amount, battle.Combat, target.Id); if (destination != target.Position) { GridPosition previous = target.Position; before = ArtifactBattleState.Distance(source.Position, target.Position); target.MoveTo(destination); battle.Combat.ResolveDisplacementLanding(target, previous); after = ArtifactBattleState.Distance(source.Position, target.Position); } break;
+                    GridPosition pullDirection = DirectionToward(target.Position, source.Position); before = ArtifactBattleState.Distance(source.Position, target.Position); battle.Combat.ResolveForcedMove(target, pullDirection, effect.Amount, source.Id + "-artifact"); after = ArtifactBattleState.Distance(source.Position, target.Position); break;
                 case ArtifactEffectKind.ForceMoveFromCell:
                     if (battle.TryPreventForcedMove(target.Id)) { before = after = 0; break; }
-                    GridPosition pushed = StepAwayFrom(cell, target.Position, effect.Amount, battle.Combat, target.Id);
-                    if (pushed != target.Position) { GridPosition previous = target.Position; before = ArtifactBattleState.Distance(cell, target.Position); target.MoveTo(pushed); battle.Combat.ResolveDisplacementLanding(target, previous); after = ArtifactBattleState.Distance(cell, target.Position); }
+                    GridPosition pushDirection = DirectionAway(cell, target.Position); before = ArtifactBattleState.Distance(cell, target.Position); battle.Combat.ResolveForcedMove(target, pushDirection, effect.Amount, source.Id + "-artifact"); after = ArtifactBattleState.Distance(cell, target.Position);
                     break;
-                case ArtifactEffectKind.Reveal: before = target.StatusDuration(StatusType.Revealed); target.ApplyStatus(StatusType.Revealed, effect.Duration); after = target.StatusDuration(StatusType.Revealed); break;
+                case ArtifactEffectKind.Reveal: before = target.StatusDuration(StatusType.Marked); target.ApplyStatus(StatusType.Marked, effect.Duration, 0, source.Id); after = target.StatusDuration(StatusType.Marked); break;
                 case ArtifactEffectKind.GrantLightCoverBypass: before = 0; after = effect.Amount; break;
                 case ArtifactEffectKind.DelayInitiative: before = target.ActionValue; target.ChangeActionValue(-effect.Amount); after = target.ActionValue; break;
                 case ArtifactEffectKind.ArmReaction: battle.Reactions[source.Id] = new ArtifactReaction(effect.Trigger, effect.Amount, effect.Duration, cell); after = 1; break;
@@ -477,6 +473,24 @@ namespace OCC.Combat
                 current = next;
             }
             return current;
+        }
+
+        private static GridPosition DirectionToward(GridPosition from, GridPosition to)
+        {
+            int dx = Math.Sign(to.X - from.X), dy = Math.Sign(to.Y - from.Y);
+            if (Math.Abs(to.X - from.X) >= Math.Abs(to.Y - from.Y)) dy = 0; else dx = 0;
+            return new GridPosition(dx, dy);
+        }
+
+        private static GridPosition DirectionAway(GridPosition center, GridPosition target)
+        {
+            int dx = Math.Sign(target.X - center.X), dy = Math.Sign(target.Y - center.Y);
+            if (dx != 0 && dy != 0)
+            {
+                if (Math.Abs(target.X - center.X) >= Math.Abs(target.Y - center.Y)) dy = 0;
+                else dx = 0;
+            }
+            return new GridPosition(dx, dy);
         }
     }
 }

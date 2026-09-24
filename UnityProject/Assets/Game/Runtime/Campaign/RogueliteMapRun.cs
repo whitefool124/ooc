@@ -165,25 +165,25 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<RogueliteMapNode> Nodes = new[]
         {
             new RogueliteMapNode("start", RogueliteMapNodeType.Start, "学院郊道", "首区入口。", 0, 2, "rail_patrol", "depot_wreck", "supply_checkpoint"),
-            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "石路巡哨", "清除巡哨队。", 1, 2, "start", "switchyard", "relay_raid", "supply_checkpoint"),
-            new RogueliteMapNode("depot_wreck", RogueliteMapNodeType.Combat, "废弃驿站", "清除驿站守敌。", 1, 1, "start", "switchyard"),
+            new RogueliteMapNode("rail_patrol", RogueliteMapNodeType.Combat, "普通战斗 04 · 石路巡哨", "清除巡哨队。", 1, 2, "start", "switchyard", "relay_raid", "supply_checkpoint"),
+            new RogueliteMapNode("depot_wreck", RogueliteMapNodeType.Combat, "普通战斗 05 · 废弃驿站", "清除驿站守敌。", 1, 1, "start", "switchyard"),
             new RogueliteMapNode("supply_checkpoint", RogueliteMapNodeType.Shop, "行商补给点", "补给与零件交易。", 1, 3, "start", "rail_patrol", "field_workshop"),
             new RogueliteMapNode("switchyard", RogueliteMapNodeType.Event, "分岔石桥", "桥边贴着几份临时委托，也有人在等答复。", 2, 1, "depot_wreck", "rail_patrol", "signal_hub", "relay_event"),
-            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "野外导能柱", "破坏被敌军占用的导能柱。", 2, 2, "rail_patrol", "relay_event", "med_bay", "field_workshop"),
+            new RogueliteMapNode("relay_raid", RogueliteMapNodeType.Combat, "普通战斗 06 · 野外导能柱", "破坏被敌军占用的导能柱。", 2, 2, "rail_patrol", "relay_event", "med_bay", "field_workshop"),
             new RogueliteMapNode("field_workshop", RogueliteMapNodeType.Workshop, "随军工坊", "可以在这里修整装备，重新收拾行囊。", 2, 3, "supply_checkpoint", "relay_raid", "med_bay", "records_archive"),
-            new RogueliteMapNode("signal_hub", RogueliteMapNodeType.Combat, "传讯石庭", "清除石庭守军。", 3, 1, "switchyard", "relay_event", "elite_foundry"),
+            new RogueliteMapNode("signal_hub", RogueliteMapNodeType.Combat, "普通战斗 07 · 传讯石庭", "清除石庭守军。", 3, 1, "switchyard", "relay_event", "elite_foundry"),
             new RogueliteMapNode("relay_event", RogueliteMapNodeType.Event, "导能柱记录", "查阅现场记录。", 3, 2, "switchyard", "relay_raid", "signal_hub", "med_bay", "gatehouse"),
             new RogueliteMapNode("med_bay", RogueliteMapNodeType.Medical, "行军医帐", "治疗与餐食服务。", 3, 3, "relay_raid", "field_workshop", "relay_event", "records_archive", "sealed_market"),
-            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "刻阵工坊", "划线教官带着维护队守在里面，准备考验来访者。", 4, 1, "signal_hub", "gatehouse", "transmission_tower"),
-            new RogueliteMapNode("gatehouse", RogueliteMapNodeType.Combat, "石闸关口", "打开通往古塔的道路。", 4, 2, "relay_event", "elite_foundry", "sealed_market", "aether_refinery"),
+            new RogueliteMapNode("elite_foundry", RogueliteMapNodeType.Elite, "精英战斗 02 · 刻阵工坊", "划线教官带着维护队守在里面，准备考验来访者。", 4, 1, "signal_hub", "gatehouse", "transmission_tower"),
+            new RogueliteMapNode("gatehouse", RogueliteMapNodeType.Combat, "普通战斗 08 · 石闸关口", "打开通往古塔的道路。", 4, 2, "relay_event", "elite_foundry", "sealed_market", "aether_refinery"),
             new RogueliteMapNode("sealed_market", RogueliteMapNodeType.Shop, "封存商行", "商人既收金币，也愿意换取学院贡献。", 4, 3, "med_bay", "gatehouse", "records_archive", "aether_refinery", "safety_room"),
             new RogueliteMapNode("records_archive", RogueliteMapNodeType.Event, "档案整理", "帮助管理员整理积压的学院记录。", 4, 4, "field_workshop", "med_bay", "sealed_market", "safety_room"),
-            new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "传讯塔楼", "沿相连道路前往塔楼，处理塔内的异常。", 5, 1, "elite_foundry", "aether_refinery", "core_approach"),
+            new RogueliteMapNode("transmission_tower", RogueliteMapNodeType.Combat, "普通战斗 09 · 传讯塔楼", "沿相连道路前往塔楼，处理塔内的异常。", 5, 1, "elite_foundry", "aether_refinery", "core_approach"),
             new RogueliteMapNode("aether_refinery", RogueliteMapNodeType.Event, "以太校准室", "校准师愿意用报酬换取一双帮忙的手。", 5, 2, "gatehouse", "sealed_market", "transmission_tower", "safety_room", "core_vault"),
             new RogueliteMapNode("safety_room", RogueliteMapNodeType.Event, "守夜值班记录", "值班生准备了补给和情报，也可能请你出手帮忙。", 5, 3, "sealed_market", "records_archive", "aether_refinery", "core_vault"),
-            new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "塔前石庭", "高年级守卫把住了古塔前庭。", 6, 1, "transmission_tower", "core_vault", "core_finale"),
+            new RogueliteMapNode("core_approach", RogueliteMapNodeType.Elite, "精英战斗 03 · 塔前石庭", "高年级守卫把住了古塔前庭。", 6, 1, "transmission_tower", "core_vault", "core_finale"),
             new RogueliteMapNode("core_vault", RogueliteMapNodeType.Event, "学院封存库", "管理员允许你从封存柜里带走一件东西。", 6, 2, "aether_refinery", "safety_room", "core_approach", "core_finale"),
-            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "古塔核心", "击败拦在必经之路上的塔之守卫。", 7, 1, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
+            new RogueliteMapNode("core_finale", RogueliteMapNodeType.Finale, "Boss战斗 01 · 古塔核心", "击败拦在必经之路上的塔之守卫。", 7, 1, "core_approach", "core_vault", "seal_bridge", "tower_foyer"),
             new RogueliteMapNode("academy_gate", RogueliteMapNodeType.Event, "学院正门公告", "公告板上贴着新生委托和几张手绘地图。", 0, 0, "tutorial_hall", "dorm_drill"),
             new RogueliteMapNode("tutorial_hall", RogueliteMapNodeType.Combat, "新生演练厅", "处理公开演练中的失控傀儡。", 0, 1, "academy_gate", "start", "dorm_watch"),
             new RogueliteMapNode("dorm_watch", RogueliteMapNodeType.Combat, "宿舍夜间巡查", "清理夜间异常并保护宿舍区。", 0, 3, "tutorial_hall", "market_lane"),
@@ -308,6 +308,7 @@ namespace OCC.Combat
     public sealed class RogueliteMapRun
     {
         private readonly HashSet<string> visited = new HashSet<string>(StringComparer.Ordinal) { "start" };
+        private readonly List<string> routeHistory = new List<string> { "start" };
         private readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
         private readonly List<string> claimedRewards = new List<string>();
         private readonly List<string> ownedFireSpells = new List<string>();
@@ -402,6 +403,7 @@ namespace OCC.Combat
                     .Concat(visited).Distinct(StringComparer.Ordinal).ToArray()
                 : visited;
         public IReadOnlyCollection<string> VisitedNodes => visited;
+        public IReadOnlyList<string> RouteHistoryNodeIds => routeHistory;
         public IReadOnlyCollection<string> CompletedNodes => IsTutorialPhase
             ? FirstRunExperience.Nodes.Where(node => (node.Flags & FirstRunNodeFlags.Completed) != 0).Select(node => node.Id).ToArray()
             : completed;
@@ -680,6 +682,8 @@ namespace OCC.Combat
             };
             run.visited.Clear();
             run.visited.Add(FirstRunExperienceCatalog.OriginNodeId);
+            run.routeHistory.Clear();
+            run.routeHistory.Add(FirstRunExperienceCatalog.OriginNodeId);
             run.completed.Clear();
             run.claimedRewards.Clear();
             run.encounterAssignments.Clear();
@@ -744,6 +748,7 @@ namespace OCC.Combat
             {
                 FirstRunExperience.TravelTo(nodeId);
                 visited.Add(nodeId);
+                routeHistory.Add(nodeId);
                 SyncFirstRunProjection();
                 return;
             }
@@ -752,7 +757,7 @@ namespace OCC.Combat
                 if (!IsAcademyLayerNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
                     ? "Academy finale requires " + AcademyMapTuning.BossMinimumProgress + " completed academy nodes."
                     : "Node is not adjacent or is unavailable in the current stage.");
-                CurrentNodeId = nodeId; visited.Add(nodeId);
+                CurrentNodeId = nodeId; visited.Add(nodeId); routeHistory.Add(nodeId);
                 if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
                 RogueliteMapNode selected = MapNode(nodeId);
                 if (IsServiceNodeType(selected.Type) && !IsServiceNodeSettled(nodeId)) BeginLayerServiceSession(nodeId, selected.Type);
@@ -761,7 +766,7 @@ namespace OCC.Combat
             if (!IsNodeAvailable(nodeId)) throw new InvalidOperationException(IsAcademyFinaleGateLocked(RogueliteMapCatalog.Node(nodeId))
                 ? "Academy finale requires " + AcademyMapTuning.BossMinimumProgress + " completed nodes."
                 : "Node is not adjacent or is unavailable in the current stage.");
-            CurrentNodeId = nodeId; visited.Add(nodeId);
+            CurrentNodeId = nodeId; visited.Add(nodeId); routeHistory.Add(nodeId);
         }
 
         /// <summary>
@@ -774,7 +779,7 @@ namespace OCC.Combat
             if (!RogueliteAcademyLayerCatalog.IsLayerNode(nodeId)) throw new InvalidOperationException("Node is outside the academy layer: " + nodeId);
             if (!completed.Contains(nodeId)) throw new InvalidOperationException("Only cleared academy nodes can be revisited: " + nodeId);
             if (!IsAdjacentToCurrent(nodeId)) throw new InvalidOperationException("Revisit target is not adjacent to the current node: " + nodeId);
-            CurrentNodeId = nodeId; visited.Add(nodeId);
+            CurrentNodeId = nodeId; visited.Add(nodeId); routeHistory.Add(nodeId);
             if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
         }
         public void CompleteCurrentCombat()
@@ -1411,6 +1416,7 @@ namespace OCC.Combat
             completed.Clear();
             completed.Add(FirstRunExperienceCatalog.ShopNodeId);
             CurrentNodeId = RogueliteAcademyLayerCatalog.EntryNodeIds[0];
+            routeHistory.Add(CurrentNodeId);
             visited.Clear();
             visited.Add(FirstRunExperienceCatalog.ShopNodeId);
             visited.Add(CurrentNodeId);
@@ -1499,6 +1505,7 @@ namespace OCC.Combat
             dto.AwaitingReward = AwaitingReward; dto.PendingContentChoiceId = PendingContentChoiceId ?? string.Empty;
             dto.PendingContentCombatMissionId = PendingContentCombatMissionId ?? string.Empty;
             Replace(dto.VisitedNodeIds, visited.OrderBy(id => id, StringComparer.Ordinal));
+            Replace(dto.RouteHistoryNodeIds, routeHistory);
             Replace(dto.CompletedNodeIds, completed.OrderBy(id => id, StringComparer.Ordinal));
             Replace(dto.ClaimedContentIds, claimedRewards);
             bool keepsAssignments = IsInAcademyLayer || !IsFirstRunExperience;
@@ -1531,6 +1538,10 @@ namespace OCC.Combat
                 PendingContentCombatMissionId = dto.PendingContentCombatMissionId, HasCombatSnapshot = true
             };
             run.rogueRunDto = dto;
+            run.routeHistory.Clear();
+            if (dto.RouteHistoryNodeIds.Count > 0)
+                run.routeHistory.AddRange(dto.RouteHistoryNodeIds.Select(AcademyMapSaveMigration.NodeId));
+            else run.routeHistory.Add(run.CurrentNodeId);
             if (dto.FirstRunExperience != null)
             {
                 run.FirstRunExperience = dto.FirstRunExperience;

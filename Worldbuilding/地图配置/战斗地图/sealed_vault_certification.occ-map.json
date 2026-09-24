@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "sealed_vault_certification",
+  "displayName": "精英战斗 06 · 封存库权限核验",
+  "width": 7,
+  "height": 6,
+  "objectiveSummary": "击倒老库管、提灯巡查与替身偶。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "floorTheme": "AetherMarked",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "relay_raid",
+    "signal_hub"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "legacy_storekeeper",
+      "x": 5,
+      "y": 3
+    },
+    {
+      "archetypeId": "lantern_revealer",
+      "x": 6,
+      "y": 1
+    },
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 4,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 6,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "WardGenerator",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 0,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 4,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 4,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "货架短墙与消防积水构成的库房通道",
+    "publicRisk": "老库管会退掉新场地，提灯巡查沿直线施加破势。",
+    "counterplayWindow": "利用货架短墙切断旧脉冲，或抢在登记生效前从积水侧推进。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

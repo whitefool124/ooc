@@ -140,7 +140,7 @@ namespace OCC.Combat.Presentation
             GUIStyle subtitle = WhiteText(new GUIStyle(GUI.skin.label) { fontSize = 16, alignment = TextAnchor.MiddleCenter, wordWrap = true });
             GUIStyle button = WhiteText(new GUIStyle(GUI.skin.button));
             GUI.Label(new Rect(panel.x + 24f, panel.y + 24f, panel.width - 48f, 48f), "战斗测试场", title);
-            GUI.Label(new Rect(panel.x + 60f, panel.y + 76f, panel.width - 120f, 42f), "单击项目直接进入战斗。进入后立即满配开始：8 个术式槽与 4 个战术栏法宝均已填满。", subtitle);
+            GUI.Label(new Rect(panel.x + 60f, panel.y + 76f, panel.width - 120f, 42f), "单击项目直接进入战斗。每次随机生成偏向一种流派的 8 个术式与 4 件法宝。", subtitle);
 
             int normalCount = System.Array.FindAll(scenarios, scenario => !scenario.IsHighPressure && !scenario.IsSystemTest && !scenario.IsSkillTest).Length;
             int highPressureCount = System.Array.FindAll(scenarios, scenario => scenario.IsHighPressure).Length;
@@ -195,7 +195,7 @@ namespace OCC.Combat.Presentation
             }
 
             CombatTestArenaScenario selected = CombatTestArenaScenarioCatalog.Get(selectedScenarioId);
-            if (GUI.Button(new Rect(panel.x + panel.width - 286f, panel.y + panel.height - 70f, 244f, 42f), "满配进入「" + selected.ShortName + "」", button))
+            if (GUI.Button(new Rect(panel.x + panel.width - 286f, panel.y + panel.height - 70f, 244f, 42f), "随机满配进入「" + selected.ShortName + "」", button))
                 StartArena(selected.Id);
         }
 

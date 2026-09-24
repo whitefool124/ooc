@@ -72,11 +72,13 @@ namespace OCC.Combat
                 return destination == enemy.Position ? CombatCommand.EndTurn(enemy.Id) : CombatCommand.Move(enemy.Id, destination);
             }
 
-            // 换装后两套招式都可用：贴身后用拆架重锤，够不到就压上；塔压的直线结算在回合开始完成。
+            // 阶段一以后每回合只选择一个公开攻击意图，塔压不再在回合开始白送一次。
             SkillDefinition maul = enemy.SkillOne;
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             if (maul != null && distance <= maul.Range && enemy.Mana >= maul.ManaCost && enemy.IsSkillReady(maul))
                 return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
+            if (CanTowerPressHit(state, enemy, hero))
+                return CombatCommand.UseSkill(enemy.Id, 1, enemy.Id);
             if (distance <= (enemy.MainHand?.Range ?? 1)) return CombatCommand.Attack(enemy.Id, hero.Id);
             return CombatCommand.Move(enemy.Id, StepToward(state, enemy.Position, hero.Position));
         }
@@ -91,7 +93,7 @@ namespace OCC.Combat
             string phaseRule = phase == 0
                 ? "阶段〇：走流程，向前一步并放行一组塔内机关；此阶段无法被打倒。"
                 : phase == 1
-                    ? "阶段一：换装后使用" + (enemy.SkillOne?.DisplayName ?? "拆架重锤") + "；每回合开始还会结算一次" + (enemy.SkillTwo?.DisplayName ?? "塔压") + "的直线。"
+                    ? "阶段一：每回合只选择拆架重锤或塔压其中一项公开攻击意图。"
                     : "阶段二：继续" + (enemy.SkillOne?.DisplayName ?? "拆架重锤") + "与" + (enemy.SkillTwo?.DisplayName ?? "塔压") + "，并与塔完成接口校准，每次出手带动全部机关。";
             string maintenance = released == 0
                 ? "维护链尚未放行，本回合开始不获得维护护盾。"
@@ -117,13 +119,41 @@ namespace OCC.Combat
             }
             int amount = ReleasedMechanismCount(state) * MaintenanceShieldPerMechanism;
             if (amount > 0) state.TryGrantRogueliteShield(unit.Id, "academy-core-maintenance", amount);
-            if (phase >= 1)
-            {
-                // 并链附带的换装效果：全部攻击冷却 −1（最低 1 回合），换装当回合生效一次。
-                if (!phaseOneCooldownReduced) { unit.ReduceCooldowns(1); phaseOneCooldownReduced = true; }
-                ResolveChainPull(state, unit);
-                ResolveTowerPress(state, unit);
-            }
+            if (phase >= 1) ResolveChainPull(state, unit);
+        }
+
+        /// <summary>生命跨过三成时立即公开并链强化；重复结算与存读档都不会叠加。</summary>
+        internal void RefreshPhase(CombatState state)
+        {
+            if (phaseTwoEntered) return;
+            UnitState core = state.Units.Values.FirstOrDefault(unit => unit.EnemyArchetypeId == "core_overseer" && unit.IsAlive);
+            if (core == null || core.Health * 10 > core.MaxHealth * 3) return;
+            phaseTwoEntered = true;
+            core.ApplyStatus(StatusType.Strength, int.MaxValue, 2, "academy-core-phase-two");
+            core.ApplyStatus(StatusType.SpellPower, int.MaxValue, 2, "academy-core-phase-two");
+            core.ReduceCooldowns(1);
+            state.AddLog("塔之守卫进入阶段二：力量 +2、法强 +2；攻击冷却缩短 1 回合。");
+        }
+
+        internal CombatEffectExecution ResolveTowerPressCommand(CombatState state, UnitState core)
+        {
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null || !CanTowerPressHit(state, core, hero))
+                throw new InvalidOperationException("塔压攻击线当前无法命中目标。");
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, core.Id, CombatEffect.SpendActionPoints(1));
+            ResolveTowerPress(state, core);
+            core.SetCooldown(core.SkillTwo);
+            state.EvaluateOutcome();
+            return execution;
+        }
+
+        private bool CanTowerPressHit(CombatState state, UnitState core, UnitState hero)
+        {
+            if (core.SkillTwo == null || !core.IsSkillReady(core.SkillTwo)) return false;
+            bool aligned = core.Position.X == hero.Position.X || core.Position.Y == hero.Position.Y;
+            int length = Math.Min(6, 4 + ReleasedMechanismCount(state));
+            return aligned && core.Position.ManhattanDistance(hero.Position) <= length &&
+                state.HasLineOfSight(core.Position, hero.Position);
         }
 
         /// <summary>塔压：沿核心到主角的正交直线结算，长度与伤害随已放行机关成长（上限 6 格／8 点）。</summary>
@@ -243,12 +273,12 @@ namespace OCC.Combat
         private int chainUses;
         private GridPosition? chainLinkedPosition;
 
-        /// <summary>护障墙：升起标定结构并返回公开文案。</summary>
+        /// <summary>护障墙：生成临时重掩体并返回公开文案。</summary>
         private static string BarrierWallMessage(CombatState state, GridPosition mechanism) =>
-            "护障维护放行：升起 " + BuildBarrierWalls(state, mechanism) + " 面护障墙（耐久 " + TileState.StakedDurability +
+            "护障维护放行：升起 " + BuildBarrierWalls(state, mechanism) + " 面临时重掩体（耐久 " + TileState.TemporaryHeavyCoverDurability +
             "，阻挡移动与攻击线），维护链开始为核心供盾，核心回合开始获得 " + MaintenanceShieldPerMechanism + " 护盾。";
 
-        /// <summary>护障墙：在机关正交相邻的空格夯起标定结构，耐久 12 并阻挡攻击线。</summary>
+        /// <summary>护障墙：在机关正交相邻的空格生成临时重掩体，耐久 12 并阻挡攻击线。</summary>
         public const int BarrierWallCount = 2;
 
         private static int BuildBarrierWalls(CombatState state, GridPosition mechanism)
@@ -262,11 +292,18 @@ namespace OCC.Combat
                     !state.Map.GetTile(position).HasEffectLayer && state.Map.GetTile(position).Cover == CoverType.None)
                 .Take(BarrierWallCount).ToArray();
             foreach (GridPosition slot in slots)
-                state.Map.SetTile(slot, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability });
+                state.Map.SetTile(slot, new TileState { Cover = CoverType.Heavy, Durability = TileState.TemporaryHeavyCoverDurability });
             return slots.Length;
         }
 
         /// <summary>并链：阶段二每次出手时，场上存活的已放行机关各同时结算一次。</summary>
+        internal void ObserveCommand(CombatState state, UnitState unit, CombatCommand command)
+        {
+            if (command.Type != CombatCommandType.Attack && command.Type != CombatCommandType.Cast &&
+                command.Type != CombatCommandType.UseSkill) return;
+            ObserveCommand(state, unit);
+        }
+
         internal void ObserveCommand(CombatState state, UnitState unit)
         {
             if (unit?.EnemyArchetypeId != "core_overseer" || PhaseFor(state, unit) != 2) return;
@@ -396,13 +433,13 @@ namespace OCC.Combat
 
         /// <summary>阶段〇这一步的方向：核心下一次放行机关时沿用，便于并链阶段复算同一方向。</summary>
         private GridPosition? pendingDirection;
-        /// <summary>换装当回合的"全部攻击冷却 −1"是否已经结算（并链附带效果）。</summary>
-        private bool phaseOneCooldownReduced;
+        /// <summary>阶段二永久强化是否已施加。</summary>
+        private bool phaseTwoEntered;
 
         public AcademyCoreBossRuntime Clone()
         {
             AcademyCoreBossRuntime clone = new AcademyCoreBossRuntime { coreTurns = coreTurns, pendingDirection = pendingDirection,
-                phaseOneCooldownReduced = phaseOneCooldownReduced, chainLinkedPosition = chainLinkedPosition, chainUses = chainUses };
+                phaseTwoEntered = phaseTwoEntered, chainLinkedPosition = chainLinkedPosition, chainUses = chainUses };
             foreach (KeyValuePair<int, GridPosition> pair in mechanismDirections) clone.mechanismDirections[pair.Key] = pair.Value;
             return clone;
         }

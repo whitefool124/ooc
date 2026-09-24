@@ -172,9 +172,21 @@ namespace OCC.Combat.Presentation
             HashSet<GridPosition> intentDestinations = CollectIntentDestinations(state.Units.Values
                 .Where(unit => unit.IsAlive && !unit.IsHero)
                 .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
+            HashSet<GridPosition> intentRoute = CollectIntentRoute(state.Units.Values
+                .Where(unit => unit.IsAlive && !unit.IsHero)
+                .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
+            UnitState inspectedEnemy = hasHoverPosition && hoverPointerInside
+                ? state.Units.Values.FirstOrDefault(unit => unit.IsAlive && !unit.IsHero && unit.Position == hoverPosition)
+                : null;
+            if (inspectedEnemy == null) inspectedEnemy = state.GetUnit(host.SelectedTargetId);
+            EnemyIntentPresentation inspectedIntent = inspectedEnemy != null && !inspectedEnemy.IsHero
+                ? host.PresentBattlefieldCell(inspectedEnemy.Position)?.Intent : null;
+            HashSet<GridPosition> attackRange = new HashSet<GridPosition>(inspectedIntent?.AttackRange ?? Array.Empty<GridPosition>());
+            HashSet<GridPosition> affectedCells = new HashSet<GridPosition>(inspectedIntent?.AffectedCells ?? Array.Empty<GridPosition>());
             foreach (KeyValuePair<GridPosition, CellView> pair in cells)
                 RefreshCell(pair.Value, host.PresentBattlefieldCell(pair.Key), host.BattlefieldViewport,
-                    intentDestinations.Contains(pair.Key));
+                    intentDestinations.Contains(pair.Key), intentRoute.Contains(pair.Key),
+                    attackRange.Contains(pair.Key), affectedCells.Contains(pair.Key));
             RefreshUnitOrder();
             UpdateHoverReveal();
         }
@@ -334,6 +346,9 @@ namespace OCC.Combat.Presentation
                 Move = Layer("可达步数", rect),
                 Attack = Layer("攻击范围", rect),
                 Skill = Layer("技能范围", rect),
+                EnemyAttackRange = Layer("敌方可攻击范围", rect),
+                EnemyAffectedArea = Layer("敌方本次生效范围", rect),
+                IntentRoute = Layer("敌方移动路线", rect),
                 IntentDestination = Layer("移动意图目标", rect),
                 IntentDot = CenteredLayer("移动意图强调点", rect),
                 // Native prop canvases may overhang one cell. A board-wide layer keeps later
@@ -425,7 +440,7 @@ namespace OCC.Combat.Presentation
         }
 
         private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport,
-            bool isIntentDestination)
+            bool isIntentDestination, bool isIntentRoute, bool isEnemyAttackRange, bool isEnemyAffected)
         {
             if (model == null || viewport == null)
             { cell.Root.SetActive(false); cell.OverlayRect.gameObject.SetActive(false); cell.Unit.gameObject.SetActive(false);
@@ -466,6 +481,12 @@ namespace OCC.Combat.Presentation
             cell.MoveMotion.Refresh(model.MoveOverlayTexture, model.MoveOverlayAlpha);
             cell.AttackMotion.Refresh(model.AttackOverlayTexture, model.AttackOverlayAlpha);
             cell.SkillMotion.Refresh(model.SkillOverlayTexture, model.SkillOverlayAlpha);
+            Set(cell.EnemyAttackRange, isEnemyAttackRange ? model.SelectionOverlayTexture : null,
+                new Color(1f, .48f, .3f, .4f));
+            Set(cell.EnemyAffectedArea, isEnemyAffected ? model.SelectionOverlayTexture : null,
+                new Color(1f, .17f, .12f, .82f));
+            Set(cell.IntentRoute, isIntentRoute ? model.SelectionOverlayTexture : null,
+                FormalUiTheme.WithAlpha(BattlefieldMarkerLadder.EnemyIntentDestinationTint, .22f));
             // 落点 = 橙色方框（中性白框贴图，可着成真橙）+ 居中的橙色强调点。
             // 原来的 move_range 四角边框像素是青色（R≈0），乘任何暖色都只会变脏，无法做成橙色边框。
             Set(cell.IntentDestination, isIntentDestination ? model.SelectionOverlayTexture : null,
@@ -1472,6 +1493,17 @@ namespace OCC.Combat.Presentation
             return destinations;
         }
 
+        public static HashSet<GridPosition> CollectIntentRoute(IEnumerable<EnemyIntentPresentation> intents)
+        {
+            var route = new HashSet<GridPosition>();
+            if (intents == null) return route;
+            foreach (EnemyIntentPresentation intent in intents)
+                if (intent != null)
+                    foreach (GridPosition position in intent.Route.Skip(1).Take(Math.Max(0, intent.Route.Count - 2)))
+                        route.Add(position);
+            return route;
+        }
+
         private void HideTooltip()
         {
             hoverCard?.Hide();
@@ -1655,6 +1687,9 @@ namespace OCC.Combat.Presentation
             public CombatRangeOverlayMotion AttackMotion;
             public CombatRangeOverlayMotion SkillMotion;
             public RawImage IntentDestination;
+            public RawImage IntentRoute;
+            public RawImage EnemyAttackRange;
+            public RawImage EnemyAffectedArea;
             public RawImage IntentDot;
             public RawImage Selection;
             public RawImage Object;

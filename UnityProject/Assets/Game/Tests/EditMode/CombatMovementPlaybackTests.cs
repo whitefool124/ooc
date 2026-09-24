@@ -88,10 +88,10 @@ namespace OCC.Combat.Tests
                     Vector2.zero, null, "", Color.white, null, unit, CombatUnitVitalsPresentation.From(unit, null, false),
                     null, null, null, "", travel);
                 var refresh = typeof(FormalBattlefieldView).GetMethod("RefreshCell", Private);
-                refresh.Invoke(view, new object[] { cell, Model(Vector2.zero), viewport, false });
+                refresh.Invoke(view, new object[] { cell, Model(Vector2.zero), viewport, false, false, false, false });
                 Vector2 bodyBefore = Field<RawImage>("Unit").rectTransform.anchoredPosition;
                 Vector2 hudBefore = Field<RectTransform>("OverlayRect").anchoredPosition;
-                refresh.Invoke(view, new object[] { cell, Model(new Vector2(-32, 16)), viewport, false });
+                refresh.Invoke(view, new object[] { cell, Model(new Vector2(-32, 16)), viewport, false, false, false, false });
                 Vector2 expected = new Vector2(-32, -16) * (size / 64f);
                 Assert.That(Field<RawImage>("Unit").rectTransform.anchoredPosition - bodyBefore, Is.EqualTo(expected));
                 Assert.That(Field<RectTransform>("OverlayRect").anchoredPosition - hudBefore, Is.EqualTo(expected));

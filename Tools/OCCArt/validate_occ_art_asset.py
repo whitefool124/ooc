@@ -114,7 +114,7 @@ def validate_image(
     get_pixels = getattr(image, "get_flattened_data", image.getdata)
     pixels = list(get_pixels())
     alpha_values = {pixel[3] for pixel in pixels}
-    if not alpha_values.issubset({0, 255}):
+    if role.get("alpha_policy") != "transparent_soft_alpha" and not alpha_values.issubset({0, 255}):
         errors.append("alpha is not hard 0/255")
     if role.get("alpha_policy") == "fully_opaque_hard_alpha" and alpha_values != {255}:
         errors.append("role requires every pixel to be fully opaque")

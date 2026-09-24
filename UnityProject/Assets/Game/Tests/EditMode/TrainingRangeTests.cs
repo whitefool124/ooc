@@ -27,12 +27,13 @@ namespace OCC.Combat.Tests
         {
             TrainingRangeSession session = new TrainingRangeSession();
             ArtifactDefinition[] activeArtifacts = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).ToArray();
-            Assert.That(session.Abilities.Count, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + activeArtifacts.Length));
-            Assert.That(session.PageCount, Is.EqualTo(11));
-            Assert.That(session.Abilities.Take(60).Select(ability => ability.Id), Is.EqualTo(FireSpellCatalog.All.Select(spell => spell.Id)));
-            Assert.That(session.Abilities.Skip(60).Take(RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
+            int fireCount = FireSpellCatalog.All.Count;
+            Assert.That(session.Abilities.Count, Is.EqualTo(fireCount + RogueliteSkillCatalog.All.Count + activeArtifacts.Length));
+            Assert.That(session.PageCount, Is.EqualTo((session.Abilities.Count + TrainingRangeSession.PageSize - 1) / TrainingRangeSession.PageSize));
+            Assert.That(session.Abilities.Take(fireCount).Select(ability => ability.Id), Is.EqualTo(FireSpellCatalog.All.Select(spell => spell.Id)));
+            Assert.That(session.Abilities.Skip(fireCount).Take(RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
                 Is.EqualTo(RogueliteSkillCatalog.All.Select(skill => skill.Id)));
-            Assert.That(session.Abilities.Skip(60 + RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
+            Assert.That(session.Abilities.Skip(fireCount + RogueliteSkillCatalog.All.Count).Select(ability => ability.Id),
                 Is.EqualTo(activeArtifacts.Select(artifact => artifact.Id)));
             Assert.That(session.Abilities, Has.All.Matches<TrainingRangeAbilityEntry>(ability =>
                 !string.IsNullOrWhiteSpace(ability.Family) && !string.IsNullOrWhiteSpace(ability.Targeting)));
@@ -48,8 +49,8 @@ namespace OCC.Combat.Tests
             TrainingRangeSession session = new TrainingRangeSession();
             TrainingRangeAuditReport audit = session.RunFullAudit();
             Assert.That(audit.IsSuccess, Is.True, string.Join(Environment.NewLine, audit.Failures));
-            Assert.That(audit.Passed, Is.EqualTo(60 + RogueliteSkillCatalog.All.Count + ArtifactCatalog.All.Count(value => ArtifactCatalog.IsCurrentlyUsable(value.Id))));
-            Assert.That(audit.IllegalPreviewPassed, Is.EqualTo(60));
+            Assert.That(audit.Passed, Is.EqualTo(FireSpellCatalog.All.Count + RogueliteSkillCatalog.All.Count + ArtifactCatalog.All.Count(value => ArtifactCatalog.IsCurrentlyUsable(value.Id))));
+            Assert.That(audit.IllegalPreviewPassed, Is.EqualTo(FireSpellCatalog.All.Count));
         }
 
         [Test]
@@ -62,8 +63,9 @@ namespace OCC.Combat.Tests
             Assert.That(session.LastPreview.CanCommit, Is.True, session.LastPreview.Summary);
             Assert.That(prepared.Combat.GetUnit("range_normal").HasStatus(StatusType.Burning), Is.True);
             Assert.That(session.ExecuteCurrent().Steps, Is.Not.Empty);
+            int previousPage = session.CurrentPage;
             session.ShiftPage(1);
-            Assert.That(session.CurrentPage, Is.EqualTo(6));
+            Assert.That(session.CurrentPage, Is.EqualTo((previousPage + 1) % session.PageCount));
             Assert.That(session.CurrentCase, Is.Null);
         }
 

@@ -180,8 +180,11 @@ namespace OCC.Combat.Presentation
         {
             CombatTestArenaScenario scenario = Get(id);
             int seed = unchecked(Environment.TickCount ^ scenario.Id.GetHashCode() ^ ++randomizedBuildSequence * 486187739);
-            return Build(id, RollLoadout(new Random(seed)));
+            return BuildRandomized(id, seed);
         }
+
+        public static CombatSceneSessionBuild BuildRandomized(string id, int seed)
+            => Build(id, RollLoadout(new Random(seed)));
 
         private static CombatSceneSessionBuild Build(string id, ArenaLoadout randomizedLoadout)
         {
@@ -228,7 +231,7 @@ namespace OCC.Combat.Presentation
             state.AttachRogueEquipmentRuntime(equipment);
 
             string summary = randomizedLoadout == null ? scenario.SelectionSummary :
-                scenario.SelectionSummary + "\n随机构筑：" + randomizedLoadout.Label + "（6 张同流派术式、2 张通用补位；3 件同流派法宝、1 件通用补位）";
+                scenario.SelectionSummary + "\n随机构筑：" + randomizedLoadout.Label + "（6 张同流派术式、2 张跨流派术式；3 件倾向法宝、1 件全池法宝）";
             MissionPreparation preparation = new MissionPreparation().Configure(scenario.Id,
                 scenario.Level.ObjectiveSummary, summary);
             return new CombatSceneSessionBuild(state, preparation, scenario.Level);
@@ -237,36 +240,39 @@ namespace OCC.Combat.Presentation
         private static ArenaLoadout RollLoadout(Random random)
         {
             ArenaBuild build = (ArenaBuild)random.Next(3);
-            string[] coreSpells;
-            string[] supportSpells;
-            string[] coreArtifacts;
-            string label;
+            string[] preferredArtifacts;
+            string label = build == ArenaBuild.Breach ? SpellBuildTagCatalog.Breach :
+                build == ArenaBuild.Dash ? SpellBuildTagCatalog.Dash : SpellBuildTagCatalog.Fireground;
             switch (build)
             {
                 case ArenaBuild.Breach:
-                    label = "地块破坏回流";
-                    coreSpells = new[] { "F-P-R19", "F-P-U04", "F-P-R10", "F-P-M06", "F-P-U03", "F-P-M08", "F-P-R06", "F-P-R09", "F-P-U18" };
-                    supportSpells = new[] { "F-P-U07", "F-P-U09", "F-P-U11", "F-P-M15" };
-                    coreArtifacts = new[] { "F-T01", "G-T08", "G-T17", "G-T07", "G-T09" };
+                    preferredArtifacts = new[] { "F-T01", "G-T08", "G-T17", "G-T07", "G-T09" };
                     break;
                 case ArenaBuild.Dash:
-                    label = "突进穿刺";
-                    coreSpells = new[] { "F-P-M01", "F-P-M02", "F-P-M03", "F-P-M04", "F-P-M05", "F-P-M08", "F-P-M09", "F-P-M15", "F-P-M18", "F-P-M19" };
-                    supportSpells = new[] { "F-P-U07", "F-P-U09", "F-P-U11", "F-P-R03" };
-                    coreArtifacts = new[] { "G-T02", "G-T09", "G-T13", "G-T15", "G-T18" };
+                    preferredArtifacts = new[] { "G-T02", "G-T09", "G-T13", "G-T15", "G-T18" };
                     break;
                 default:
-                    label = "燃烧火场";
-                    coreSpells = new[] { "F-P-R01", "F-P-R03", "F-P-R04", "F-P-R05", "F-P-R07", "F-P-R08", "F-P-R11", "F-P-R12", "F-P-R13", "F-P-R14", "F-P-R15", "F-P-R16", "F-P-R17", "F-P-R18", "F-P-R20" };
-                    supportSpells = new[] { "F-P-U08", "F-P-U11", "F-P-U07", "F-P-U09" };
-                    coreArtifacts = new[] { "F-T01", "G-T05", "G-T11", "G-T18", "G-T09" };
+                    preferredArtifacts = new[] { "F-T01", "G-T05", "G-T11", "G-T18", "G-T09" };
                     break;
             }
 
-            string[] artifacts = TakeRandom(coreArtifacts, 3, random).ToArray();
-            string[] utility = new[] { "G-T01", "G-T03", "G-T09", "G-T18" }.Where(id => !artifacts.Contains(id)).ToArray();
-            return new ArenaLoadout(label, TakeRandom(coreSpells, 6, random).Concat(TakeRandom(supportSpells, 2, random)),
-                artifacts.Concat(TakeRandom(utility, 1, random)));
+            string[] coreSpells = FireSpellCatalog.All.Where(spell => SpellBuildTagCatalog.For(spell.Id) == label)
+                .Select(spell => spell.Id).ToArray();
+            string[] supportSpells = FireSpellCatalog.All.Where(spell => SpellBuildTagCatalog.For(spell.Id) != label)
+                .Select(spell => spell.Id).ToArray();
+            string[] spells = TakeRandom(coreSpells, 6, random).Concat(TakeRandom(supportSpells, 2, random)).ToArray();
+            bool hasShieldStarter = spells.Contains("F-P-U07");
+            bool hasFiregroundStarter = spells.Select(FireSpellCatalog.Get)
+                .Any(spell => spell.Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground));
+            string[] artifactPool = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id))
+                .Select(artifact => artifact.Id)
+                .Where(id => (id != "G-T06" && id != "G-T16" || hasShieldStarter) &&
+                             (id != "G-T11" || hasFiregroundStarter))
+                .ToArray();
+            string[] favored = preferredArtifacts.Where(id => artifactPool.Contains(id)).ToArray();
+            string[] artifacts = TakeRandom(favored, 3, random).ToArray();
+            string wildcard = TakeRandom(artifactPool.Where(id => !artifacts.Contains(id)), 1, random).Single();
+            return new ArenaLoadout(label, spells, artifacts.Concat(new[] { wildcard }));
         }
 
         private static IEnumerable<string> TakeRandom(IEnumerable<string> source, int count, Random random)
@@ -453,7 +459,7 @@ namespace OCC.Combat.Presentation
             HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 B3 C3 D3 E3 F3 G3 B4 C4 D4 E4 F4 G4 B5 C5 D5 E5 F5 G5 C6 D6 E6 F6 G6");
             FirstRegionLevelDefinition level = Level("arena_s01_reaction", "S01｜警戒火线反应",
                 "击倒背弩生与侧锋。收窄后警戒射界覆盖比例更高，钻死区收益更显著。",
-                new GridPosition(1, 3), new[] { E("rune_arbalist", 6, 2), E("raider", 5, 3) },
+                new GridPosition(1, 3), new[] { E("rune_arbalist", 6, 3), E("raider", 5, 3) },
                 new[] { L(2, 3), L(2, 1), L(2, 5), H(4, 2), H(4, 4), L(6, 1), L(6, 5) }, walkable,
                 "中央诱导友伤，上下切线，相邻钻入死区", "高风险移动格直接显示警戒结果；紧凑场地下死区距离更短。 ");
             return new CombatTestArenaScenario("arena_s01_reaction", "警戒火线", "S01｜警戒火线反应",

@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "signal_hub",
+  "displayName": "普通战斗 07 · 传讯石庭",
+  "objectiveSummary": "清除传讯石庭守军",
+  "objectiveType": "Elimination",
+  "tier": 2,
+  "width": 6,
+  "height": 6,
+  "complexMechanics": false,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [
+    "depot_wreck"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "barrier_mender",
+      "x": 4,
+      "y": 1
+    },
+    {
+      "archetypeId": "lantern_revealer",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "archetypeId": "shieldguard",
+      "x": 4,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 4,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "三角维护网与北侧石台",
+    "publicRisk": "切任一支援点都会留下另外两条公开维护关系。",
+    "counterplayWindow": "外围保持连通，可在看见显影与护障意图后换边。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:34:20.772Z"
+}

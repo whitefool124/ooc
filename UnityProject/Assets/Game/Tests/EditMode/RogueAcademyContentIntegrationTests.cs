@@ -23,7 +23,7 @@ namespace OCC.Combat.Tests
             RogueAcademyContentService service = new RogueAcademyContentService();
             Assert.That(service.Equipment.Count, Is.EqualTo(33)); Assert.That(service.Affixes.Count, Is.EqualTo(13));
             Assert.That(service.Equipment.Count(value => value.UpgradeNodes.Count > 0), Is.EqualTo(8));
-            Assert.That(service.AllEligibleSpellIds.Count, Is.EqualTo(60)); Assert.That(service.AllEligibleSpellIds.Distinct().Count(), Is.EqualTo(60));
+            Assert.That(service.AllEligibleSpellIds.Count, Is.EqualTo(80)); Assert.That(service.AllEligibleSpellIds.Distinct().Count(), Is.EqualTo(80));
             Assert.That(service.Equipment.All(value => !value.HasDurability && value.Armor == 0 && value.BlockChance == 0), Is.True);
             Assert.That(service.Equipment.Any(value => value.DefinitionId.Contains("rifle") || value.DefinitionId.Contains("gun")), Is.False);
         }

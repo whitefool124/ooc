@@ -150,9 +150,9 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> Semantics = new[]
         {
-            new FormalArtEntry("semantic.action", "action", "Art/FormalResourceIcons32/action_point"),
-            new FormalArtEntry("semantic.aether", "aether", "Art/FormalResourceIcons32/mana"),
-            new FormalArtEntry("semantic.notice", "notice", "Art/FormalResourceIcons32/notice")
+            new FormalArtEntry("semantic.action", "action", "Art/FormalResourceIcons12/action_point"),
+            new FormalArtEntry("semantic.aether", "aether", "Art/FormalResourceIcons12/mana"),
+            new FormalArtEntry("semantic.notice", "notice", "Art/FormalResourceIcons12/notice")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Elements = new[]
@@ -169,21 +169,21 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> ResourceMetrics = new[]
         {
-            new FormalArtEntry("resource.health", "health", "Art/FormalResourceIcons32/health"),
-            new FormalArtEntry("resource.mana", "mana", "Art/FormalResourceIcons32/mana"),
-            new FormalArtEntry("resource.gold", "gold", "Art/FormalResourceIcons32/gold"),
-            new FormalArtEntry("resource.contribution", "contribution", "Art/FormalResourceIcons32/contribution"),
-            new FormalArtEntry("resource.stage_time", "stage_time", "Art/FormalResourceIcons32/stage_time"),
-            new FormalArtEntry("resource.explored", "explored", "Art/FormalResourceIcons32/explored"),
-            new FormalArtEntry("resource.risk", "risk", "Art/FormalResourceIcons32/risk"),
-            new FormalArtEntry("resource.weight", "weight", "Art/FormalResourceIcons32/weight"),
-            new FormalArtEntry("resource.aether_load", "aether_load", "Art/FormalResourceIcons32/aether_load"),
-            new FormalArtEntry("resource.charges", "charges", "Art/FormalResourceIcons32/charges"),
-            new FormalArtEntry("resource.action_point", "action_point", "Art/FormalResourceIcons32/action_point"),
-            new FormalArtEntry("resource.notice", "notice", "Art/FormalResourceIcons32/notice"),
-            new FormalArtEntry("resource.operational_aether", "operational_aether", "Art/FormalResourceIcons32/operational_aether"),
-            new FormalArtEntry("resource.parts", "parts", "Art/FormalResourceIcons32/parts"),
-            new FormalArtEntry("resource.shield", "shield", "Art/FormalResourceIcons32/shield")
+            new FormalArtEntry("resource.health", "health", "Art/FormalResourceIcons12/health"),
+            new FormalArtEntry("resource.mana", "mana", "Art/FormalResourceIcons12/mana"),
+            new FormalArtEntry("resource.gold", "gold", "Art/FormalResourceIcons12/gold"),
+            new FormalArtEntry("resource.contribution", "contribution", "Art/FormalResourceIcons12/contribution"),
+            new FormalArtEntry("resource.stage_time", "stage_time", "Art/FormalResourceIcons12/stage_time"),
+            new FormalArtEntry("resource.explored", "explored", "Art/FormalResourceIcons12/explored"),
+            new FormalArtEntry("resource.risk", "risk", "Art/FormalResourceIcons12/risk"),
+            new FormalArtEntry("resource.weight", "weight", "Art/FormalResourceIcons12/weight"),
+            new FormalArtEntry("resource.aether_load", "aether_load", "Art/FormalResourceIcons12/aether_load"),
+            new FormalArtEntry("resource.charges", "charges", "Art/FormalResourceIcons12/charges"),
+            new FormalArtEntry("resource.action_point", "action_point", "Art/FormalResourceIcons12/action_point"),
+            new FormalArtEntry("resource.notice", "notice", "Art/FormalResourceIcons12/notice"),
+            new FormalArtEntry("resource.operational_aether", "operational_aether", "Art/FormalResourceIcons12/operational_aether"),
+            new FormalArtEntry("resource.parts", "parts", "Art/FormalResourceIcons12/parts"),
+            new FormalArtEntry("resource.shield", "shield", "Art/FormalResourceIcons12/shield")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> EquipmentSlots = new[]

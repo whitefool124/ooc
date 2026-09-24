@@ -1,0 +1,330 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "testmap01",
+  "displayName": "普通战斗 14 · 地图示例1",
+  "objectiveSummary": "击倒全部敌人",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 7,
+  "height": 7,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 1,
+    "y": 1
+  },
+  "enemies": [
+    {
+      "archetypeId": "breach_ram",
+      "x": 3,
+      "y": 5
+    }
+  ],
+  "terrain": [
+    {
+      "x": 2,
+      "y": 5,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 4,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 4,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 6,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 2,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 1,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 2,
+      "kind": "Water",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "kind": "Water",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "",
+    "publicRisk": "",
+    "counterplayWindow": ""
+  },
+  "notes": "",
+  "updatedAt": "2026-09-22T02:24:43.582Z"
+}

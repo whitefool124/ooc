@@ -68,7 +68,7 @@ namespace OCC.Combat.Tests
             Assert.That(FormalArtRegistry.MapRegions.Count, Is.EqualTo(6));
             Assert.That(FormalArtRegistry.MapDecor.Count, Is.EqualTo(3));
             Assert.That(FormalArtRegistry.RuntimeSkills.Count, Is.EqualTo(27));
-            Assert.That(FormalArtRegistry.FireSpells.Count, Is.EqualTo(60));
+            Assert.That(FormalArtRegistry.FireSpells.Count, Is.EqualTo(80));
             Assert.That(FormalArtRegistry.Items.Count, Is.EqualTo(54));
             Assert.That(FormalArtRegistry.Vfx.Count, Is.EqualTo(39));
             Assert.Throws<System.Collections.Generic.KeyNotFoundException>(() => FormalArtRegistry.VfxPath("unknown_vfx"));

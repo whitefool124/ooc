@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "rail_patrol",
+  "displayName": "普通战斗 04 · 石路巡哨",
+  "objectiveSummary": "清除石路巡哨队",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 6,
+  "height": 5,
+  "complexMechanics": false,
+  "floorTheme": "StoneRoad",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 2,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "shieldguard",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "archetypeId": "pyromancer",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "archetypeId": "raider",
+      "x": 5,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "kind": "HeavyCover",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "短石路交叉线与底边门墩",
+    "publicRisk": "压中会进入两翼交叉影响区。",
+    "counterplayWindow": "左右翼均可回到底边换线，中央盾位不封死两侧。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:31:33.755Z"
+}

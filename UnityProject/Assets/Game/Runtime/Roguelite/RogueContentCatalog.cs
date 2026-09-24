@@ -201,7 +201,7 @@ namespace OCC.Combat.Roguelite
             Unique(catalog.Affixes.Select(value => value.AffixId), "affix", result);
             Unique(catalog.TacticalItems.Select(value => value.DefinitionId), "tactical item", result);
             if (catalog.Spells.Count(value => value.IsBasic) != 4) result.Add("Exactly four basic spells are required.");
-            if (catalog.Spells.Count(value => value.RewardEligible) != 60) result.Add("Exactly sixty reward-eligible fire spells are required.");
+            if (catalog.Spells.Count(value => value.RewardEligible) != 80) result.Add("Exactly eighty reward-eligible fire spells are required.");
             foreach (SpellDefinition spell in catalog.Spells)
             {
                 if (string.IsNullOrWhiteSpace(spell.DefinitionId) || string.IsNullOrWhiteSpace(spell.DisplayName) || spell.Rules.Count == 0) result.Add("Invalid spell definition: " + spell.DefinitionId);

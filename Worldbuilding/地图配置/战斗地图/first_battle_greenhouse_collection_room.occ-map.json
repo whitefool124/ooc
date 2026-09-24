@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "first_battle_greenhouse_collection_room",
+  "displayName": "普通战斗 02 · 温室藏品间",
+  "objectiveSummary": "击倒替身偶与侧锋生；中央备件箱可搜刮苗床回流芯。",
+  "objectiveType": "Elimination",
+  "tier": 2,
+  "width": 7,
+  "height": 6,
+  "complexMechanics": true,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [
+    "rain_lantern_court"
+  ],
+  "heroSpawn": {
+    "x": 1,
+    "y": 3
+  },
+  "enemies": [
+    {
+      "archetypeId": "raider",
+      "x": 6,
+      "y": 1
+    },
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 6,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LampVine",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "AetherCrystal",
+      "x": 5,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "AetherCrystal",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 6,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 5,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 5,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "中央藤圈宝箱、东侧双晶簇、南侧普通长路",
+    "publicRisk": "侧锋与替身偶分守两枚晶簇，藤圈遮断中央攻击线。",
+    "counterplayWindow": "可跃进入藤搜刮、等待敌人贴晶后引爆，或沿南侧干路稳健推进。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:30:07.128Z"
+}

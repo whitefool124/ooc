@@ -419,9 +419,9 @@ namespace OCC.Combat.Tests
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
             hero.ApplyStatus(StatusType.Burning, 2);
-            hero.ApplyStatus(StatusType.Slow, 1);
+            hero.ApplyStatus(StatusType.Agility, 1, -1);
             hero.ApplyStatus(StatusType.Bound, 1);
-            hero.ApplyStatus(StatusType.ArmorBreak, 3);
+            hero.ApplyStatus(StatusType.BreakStance, 3);
             CombatState state = new CombatState(new GridMap(2, 2), new[] { hero });
 
             GameObject hudObject = new GameObject("status-entry-hud", typeof(FormalCombatHud));
@@ -444,7 +444,8 @@ namespace OCC.Combat.Tests
                     string label = (string)rowType.GetField("Label").GetValue(row);
                     string body = (string)rowType.GetField("Body").GetValue(row);
                     Assert.That(label, Is.Not.Empty);
-                    Assert.That(body, Does.Contain("剩余"), "each entry carries its own duration detail");
+                    Assert.That(body.Contains("剩余") || body.Contains("下一次"), Is.True,
+                        "each entry states its remaining duration or the fixed next-turn expiry");
                     labels.Add(label);
                 }
                 Assert.That(labels.Distinct().Count(), Is.EqualTo(4), "entries must be distinguishable");

@@ -1,113 +1,212 @@
 {
   "schemaVersion": "occ-battle-map-v1",
   "id": "core_finale",
-  "displayName": "古塔核心",
+  "displayName": "Boss战斗 01 · 古塔核心",
+  "width": 8,
+  "height": 6,
   "objectiveSummary": "击败拦在必经之路上的塔之守卫",
   "objectiveType": "Elimination",
   "tier": 5,
-  "width": 12,
-  "height": 9,
   "floorTheme": "AetherMarked",
   "isElite": false,
   "isBoss": true,
+  "complexMechanics": true,
   "prerequisites": [
     "core_approach"
   ],
   "heroSpawn": {
     "x": 0,
-    "y": 4
+    "y": 3
   },
   "enemies": [
     {
       "archetypeId": "core_overseer",
-      "x": 6,
-      "y": 4
+      "x": 4,
+      "y": 3
     }
   ],
   "terrain": [
     {
-      "x": 3,
-      "y": 3,
       "kind": "LightCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 3,
-      "y": 6,
-      "kind": "LightCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 9,
-      "y": 4,
-      "kind": "LightCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 9,
-      "y": 6,
-      "kind": "LightCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 5,
-      "y": 3,
-      "kind": "HeavyCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 7,
-      "y": 3,
-      "kind": "HeavyCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 7,
-      "y": 5,
-      "kind": "HeavyCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 5,
-      "y": 5,
-      "kind": "HeavyCover",
-      "mechanismKind": 0
-    },
-    {
-      "x": 9,
+      "x": 2,
       "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 6,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
       "kind": "TowerMechanism",
+      "x": 6,
+      "y": 1,
       "mechanismKind": 1
     },
     {
-      "x": 3,
-      "y": 1,
       "kind": "TowerMechanism",
+      "x": 2,
+      "y": 1,
       "mechanismKind": 2
     },
     {
-      "x": 6,
-      "y": 7,
       "kind": "TowerMechanism",
+      "x": 4,
+      "y": 5,
       "mechanismKind": 3
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 7,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 7,
+      "y": 5,
+      "mechanismKind": 0
     }
   ],
   "blockedPositions": [],
+  "changeAnnotations": [
+    {
+      "id": "phase0_turn1_ward",
+      "type": "phase",
+      "label": "第1回合放行护障维护",
+      "timing": "阶段〇·第1自身回合",
+      "trigger": "塔之守卫回合开始",
+      "result": "放行护障维护；核心开始按存活维护链获得护盾",
+      "duration": "机关持续到被摧毁",
+      "source": "core_overseer",
+      "positions": [
+        {
+          "x": 6,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "ward_temp_heavy_cover",
+      "type": "temporary",
+      "label": "护障维护生成临时重掩体",
+      "timing": "第1回合机关放行时",
+      "trigger": "护障维护成功放行",
+      "result": "在机关正交相邻合法空格生成最多2面耐久12的重掩体",
+      "duration": "直到被摧毁",
+      "source": "core_overseer",
+      "positions": [
+        {
+          "x": 6,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "phase0_turn2_reveal",
+      "type": "phase",
+      "label": "第2回合放行显影巡查",
+      "timing": "阶段〇·第2自身回合",
+      "trigger": "塔之守卫回合开始",
+      "result": "从机关朝主角方向生成5格光带并清除线上护盾",
+      "duration": "机关持续到被摧毁；光带随方向刷新",
+      "source": "core_overseer",
+      "positions": [
+        {
+          "x": 2,
+          "y": 1
+        }
+      ]
+    },
+    {
+      "id": "phase0_turn3_press",
+      "type": "phase",
+      "label": "第3回合放行冲压隔离",
+      "timing": "阶段〇·第3自身回合",
+      "trigger": "塔之守卫回合开始",
+      "result": "公开4格冲压线；核心回合结束时线上单位受到6点以太伤害",
+      "duration": "机关持续到被摧毁",
+      "source": "core_overseer",
+      "positions": [
+        {
+          "x": 4,
+          "y": 5
+        }
+      ]
+    },
+    {
+      "id": "phase2_chain",
+      "type": "phase",
+      "label": "阶段二并链",
+      "timing": "生命不高于30%",
+      "trigger": "塔之守卫每次出手",
+      "result": "所有存活且已放行机关同时结算一次",
+      "duration": "直到战斗结束或机关被摧毁",
+      "source": "core_overseer",
+      "positions": [
+        {
+          "x": 6,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 4,
+          "y": 5
+        }
+      ]
+    }
+  ],
   "spaceContract": {
-    "grammar": "中心核心与三道机关门槛",
-    "routeAnchors": [
-      {
-        "x": 2,
-        "y": 2
-      },
-      {
-        "x": 2,
-        "y": 6
-      }
-    ],
-    "publicRisk": "塔之守卫居中；三组塔内机关在三个阶段内逐组放行，放行前不提供任何效果。",
-    "counterplayWindow": "三组机关是塔之守卫的施术介质，耐久公开、可以先拆；拆掉已放行的机关即切断对应加成。"
+    "grammar": "中心核心、三道机关与四角塔墙",
+    "publicRisk": "核心居中，三组机关按阶段逐组放行。",
+    "counterplayWindow": "机关耐久与阶段公开，可先拆已放行机关切断对应加成。"
   },
-  "notes": "从当前 Unity FirstRegionLevelCatalog 同步的编辑器示例。",
-  "updatedAt": "2026-09-21T10:35:02.400Z"
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
 }

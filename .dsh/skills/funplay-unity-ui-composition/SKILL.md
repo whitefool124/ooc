@@ -3,11 +3,18 @@ name: funplay-unity-ui-composition
 description: Build and revise responsive Unity uGUI mobile interfaces, including portrait and landscape layouts, safe areas, prefabs, auto layout, scrolling, text, input, animation, and performance validation.
 ---
 <!-- Funplay Unity MCP managed project skills -->
-<!-- Funplay Unity MCP skill version: unity-ui-composition@1.0.4 -->
+<!-- Funplay Unity MCP skill version: unity-ui-composition@1.0.6 -->
 
 # Unity UI Composition
 
 Use this built-in skill when creating, assembling, adapting, reviewing, or fixing Canvas-based Unity UI, especially mobile screen or popup prefabs that must work across aspect ratios, notches, tablets, localization, and runtime state changes.
+
+## MCP-First Unity UI Operations
+
+- Do not use computer use (desktop mouse/keyboard automation) to operate Unity unless necessary. When assembling, modifying, inspecting or validating UI, prefer Unity MCP whenever it can complete the step, including hierarchy/component/prefab reads and edits, compilation/Play state, clicks/scrolling, screenshots and recordings.
+- Check the connected project's tools/list and, when available, `get_tool_capabilities`. A tool missing from exposure, compilation/domain reload or a temporary disconnection is not evidence of a missing capability: check exposure/readiness and recover status first. Respect custom allowlists; do not widen exposure or use another interaction method to bypass restrictions.
+- Prefer specialized MCP tools; for project-specific gaps they do not cover, use a permitted, guarded `execute_code` call through Unity Editor APIs when it can perform the step reliably. Computer use is a fallback only for a confirmed MCP capability gap, or an explicit user request: explain the uncovered step before using it, limit it to that step, and return to MCP readback/validation when available. If recovery fails, report the connection blocker rather than silently switching methods or repeating uncertain mutations.
+- This routing applies to operating Unity, not ordinary source-file editing or viewing supplied design references and already-captured images/videos with appropriate file or media tools.
 
 ## Operating Loop
 
@@ -16,6 +23,7 @@ Use this built-in skill when creating, assembling, adapting, reviewing, or fixin
    - Inspect the existing hierarchy, anchors, pivots, offsets, layout controllers, sibling order, Canvas sorting, serialized references, animation targets, and Prefab overrides.
    - Inspect representative screens and prefabs to determine whether `UnityEngine.UI.Text` or `TextMeshProUGUI` is the project's prevailing text component, and inspect existing visual-effect components and material presets before introducing a new UI effect.
    - Treat screenshots and design coordinates as visual intent, not as permission to replace a working hierarchy.
+   - When design images are supplied, follow Design References And Clarification below to map screens and states, resolve material uncertainty, and validate the actual result against each requested reference.
 2. Classify each region.
    - Mark art as full-bleed or safe-area content.
    - Mark placement as fixed to an edge or corner, stretched between regions, content-sized, repeated-layout content, scrollable content, modal, or world-space UI.
@@ -26,9 +34,18 @@ Use this built-in skill when creating, assembling, adapting, reviewing, or fixin
    - Author reusable user-facing screens, panels, and controls as prefabs with their hierarchy and component references wired in the Editor, then instantiate and bind data at runtime. Do not move a stable UI hierarchy into procedural runtime construction merely for implementation convenience.
    - Use Unity MCP or Unity Editor APIs for `.prefab`, `.unity`, and `.asset` changes; never patch Unity YAML as text.
 4. Read back and validate.
-   - Read exact hierarchy, anchors, offsets, sizes, sprites, text settings, raycast state, sorting, and references back from Unity.
+   - Read exact hierarchy, anchors, offsets, sizes, sprites (including borders for Sliced Images), text settings, raycast state, sorting, and references back from Unity.
    - Test layout, input, safe area, localization, animation interruption, close and reopen state, and runtime data changes.
    - Capture screenshots at representative aspect ratios for static layout; use a short `record_game_view` clip when correctness depends on an animation or interaction sequence. Use a real device build for performance and platform behavior before claiming device validation.
+
+## Design References And Clarification
+
+- For one or more design images, map each reference to its intended screen, popup, state, or responsive variant before editing. Do not merge incompatible variants or assume that upload order establishes version priority. Inspect every requested reference at a readable scale and look for matching project sprites, fonts, materials, and existing controls before assuming a detail is unavailable.
+- Keep a compact per-screen checklist of visible details that matter: composition, alignment, spacing, sizes, text and line breaks, typography and effects, colors, icons, borders and corners, layering, and shown control states. Distinguish what the image actually shows from inferred behavior. Do not omit decorative details, reuse an approximate asset, or simplify a control merely because the rough layout already looks similar.
+- When revising existing UI, preserve prefab structure, serialized references, and working behavior, not known visual mismatches. A clearly requested design change calls for scoped visual edits; the old UI looking different is not itself a reason to ask. If matching the design would conflict with an explicit preservation requirement or require changing existing behavior, explain the conflict and ask before that affected change.
+- If reference and asset inspection still leave a material ambiguity, proactively ask a focused question before committing to that interpretation: identify the image, screen and region, state what cannot be determined, and offer plausible alternatives and their impact when useful. Examples include unreadable copy, conflicting versions, unclear page or state mapping, or missing exact artwork; request a clearer crop or source asset when that would resolve it. Do not silently invent text, omit an element, or substitute an approximation. Continue independent, clearly specified work while awaiting an answer; use project conventions for low-risk reversible details and disclose assumptions that affect the visible result rather than asking about every pixel.
+- Validate every requested screen and state with actual Unity captures at the reference aspect ratio and comparable content, then check responsive variants separately. Inspect the captures, compare each region against its reference (side-by-side or with aligned overlays when useful), correct the differences, and recapture. Compilation success, component readback, or one correct page does not establish visual fidelity for the other pages. Do not stretch or crop the comparison to hide a mismatch.
+- Before reporting completion, distinguish verified matches, user-approved deviations, unresolved differences, and unverified screens or states. Include any missing assets, unanswered visual decisions, or capture limitations. Do not claim full fidelity while known unapproved mismatches remain; ask the user to resolve remaining design choices instead of declaring an approximation complete.
 
 ## Component Selection
 
@@ -42,7 +59,7 @@ Use this built-in skill when creating, assembling, adapting, reviewing, or fixin
 | `LayoutElement` | Declaring minimum, preferred, flexible, or ignored layout behavior | Use it to override an Image, text, or nested group's layout contribution and to make selected siblings flexible | Adding it without selecting the properties that should override layout input |
 | `ContentSizeFitter` | Making the current RectTransform follow its content on one or two axes | Prefer a single required axis; set the pivot to control growth direction; allow deferred layout unless immediate measurement is truly required | Putting it on every child controlled by a parent Layout Group or writing the same driven size manually |
 | `AspectRatioFitter` | Preserving aspect for an isolated preview, card art, or media surface | Use Fit In Parent for letterboxing or Envelope Parent for cover behavior | Treating it as general safe-area or screen-aspect adaptation, or combining it with another controller on the same axis |
-| `Image` | Sprite UI, icons, frames, progress fills, and nine-sliced controls | Use Simple for fixed art, Sliced for resizable bordered panels and buttons, Tiled for repeatable patterns, and Filled for progress or radial values | Stretching bordered art as Simple, leaving decorative graphics as Raycast Target, or using a unique material without need |
+| `Image` | Sprite UI, icons, frames, progress fills, and nine-sliced controls | Use Simple for fixed art, Sliced for resizable panels and buttons only after verifying suitable Sprite borders, Tiled for repeatable patterns, and Filled for progress or radial values | Sliced with all-zero borders, stretching bordered art as Simple, leaving decorative graphics as Raycast Target, or using a unique material without need |
 | `RawImage` | Arbitrary Texture, RenderTexture, camera, video, downloaded, or generated texture content | Preserve the source aspect and manage texture lifetime explicitly | Using RawImage for ordinary Sprite UI that should atlas and batch with other Images |
 | `UnityEngine.UI.Text` | Text in an established legacy uGUI project or screen family | Use it only after inspection shows it is the prevailing project convention; match the existing Font, material, alignment, line spacing, overflow, and localization behavior | Introducing it into a new project, mixing it casually into a TMP-based screen, or converting existing labels without checking layout and serialized references |
 | `TextMeshProUGUI` | Text in an established TMP project and the default for a new project with no existing text convention | Match the project's font assets and material presets; set wrapping, alignment, overflow, fallback fonts, and localization limits; constrain Auto Size to a narrow range; when the design explicitly shows a text effect, use TMP's own component and shader-material controls | Replacing an established `Text` component merely to modernize, continuous Auto Size on rapidly changing text, or shipping without required CJK and symbol glyphs |
@@ -55,6 +72,14 @@ Use this built-in skill when creating, assembling, adapting, reviewing, or fixin
 | `CanvasGroup` | Fading and enabling or disabling a whole panel | Change alpha, interactable, and blocksRaycasts together according to visible state; decide whether parent groups apply | Setting alpha to zero while leaving an invisible panel interactive or raycast-blocking |
 | `Button` and other `Selectable` controls | Click, toggle, slider, dropdown, and navigation behavior | Put the main Raycast Target on the interactive root, set Target Graphic and navigation, and add and remove runtime listeners symmetrically | Multiple child Raycast Targets for one control, duplicate listeners, or visual-only disabled states |
 | `EventSystem` and `GraphicRaycaster` | Routing pointer, touch, submit, cancel, and navigation events | Keep one EventSystem and one active matching input module; use `InputSystemUIInputModule` with the Input System; enable raycast only where required | A second EventSystem in additive scenes or physics blocking checks when they are unnecessary |
+
+## Sliced Images And Sprite Borders
+
+- Before setting `Image.type = Image.Type.Sliced`, inspect the Sprite actually displayed, including `overrideSprite` when present, and read its `Sprite.border`. An all-zero border does not produce nine-slicing; selecting Sliced alone is insufficient. Do not leave `This Image doesn't have a border.` unresolved and claim that the frame is correctly sliced.
+- Choose border insets from the source artwork in pixels, preserving its rounded corners, outlines, and other non-stretchable edge details while leaving a usable stretchable center. `Vector4` order is **left, bottom, right, top** (`x, y, z, w`). Do not invent arbitrary nonzero values just to suppress the warning. Zero on some sides can be intentional for one-axis stretching; not every design needs four positive insets.
+- Configure Border in Sprite Editor and Apply, or use the matching Sprite import API: for Single mode, set `TextureImporter.spriteBorder` and call `SaveAndReimport`; for Multiple mode, edit only the intended sub-sprite's border metadata, preserving its rect, name, IDs, and other slices. For atlased sprites, edit the source Sprite metadata, not the packed atlas texture or atlas padding.
+- Check other consumers before changing a shared Sprite's border. Reuse a suitable existing bordered Sprite when possible; if the art is unsuitable or cannot safely be changed, report the limitation and choose an appropriate Image type or asset within the task scope. Do not replace the whole prefab or silently alter unrelated UI to resolve a border warning.
+- After Apply or reimport, reacquire the displayed Sprite and read back `Sprite.border` and `Image.type`; an importer assignment alone is not verification. Resize at the intended minimum and representative target sizes and aspect ratios, then inspect the result: corners retain their shape, edge thickness is consistent, and the center has no seams or clipping. `pixelsPerUnitMultiplier` changes border sizing, not the slicing insets, and cannot replace missing borders.
 
 ## Canvas And Layering
 
@@ -124,7 +149,7 @@ safeAreaRoot.offsetMax = Vector2.zero;
 
 ## Images, Text, Scrolling, And Input
 
-- Use Sprite borders and Image Type Sliced for scalable button and panel frames. Keep ornamental children non-raycastable.
+- For scalable button and panel frames, follow Sliced Images And Sprite Borders above before using Image Type Sliced. Keep ornamental children non-raycastable.
 - Use Sprite Atlas for compatible UI sprites, platform-specific texture overrides, sensible maximum sizes, and no mipmaps for ordinary screen-space UI unless a measured use case needs them.
 - Treat large full-screen images separately from small control atlases. Verify memory, compression artifacts, overdraw, and crop behavior on target hardware.
 - Before adding a label, inspect representative UI prefabs and scenes rather than inferring the text system from package availability. Preserve the component type on existing labels and use the text component that is most common in the relevant project or screen family. If the project is new and has no established convention, default to `TextMeshProUGUI`.
@@ -172,14 +197,26 @@ safeAreaRoot.offsetMax = Vector2.zero;
 - [Auto Layout](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/UIAutoLayout.html), [LayoutElement](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-LayoutElement.html), and [ContentSizeFitter](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-ContentSizeFitter.html)
 - [ScrollRect](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-ScrollRect.html), [RectMask2D](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-RectMask2D.html), and [Mask](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-Mask.html)
 - [Image](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-Image.html), [CanvasGroup](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/class-CanvasGroup.html), and [Selectable navigation](https://docs.unity.cn/Packages/com.unity.ugui%402.0/manual/script-SelectableNavigation.html)
+- [Image.Type.Sliced and its border prerequisite](https://docs.unity3d.com/2018.4/Documentation/ScriptReference/UI.Image.Type.Sliced.html), [Sprite.border component order](https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Sprite-border.html), and [TextureImporter.spriteBorder](https://docs.unity3d.com/2022.3/Documentation/ScriptReference/TextureImporter-spriteBorder.html)
 - [TextMeshPro UI text and Auto Size](https://docs.unity.cn/Packages/com.unity.textmeshpro%403.2/manual/TMPObjectUIText.html) and [fallback fonts](https://docs.unity.cn/Packages/com.unity.textmeshpro%404.0/manual/FontAssetsFallback.html)
 - [Screen.safeArea](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Screen-safeArea.html), [relative RectTransform bounds](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RectTransformUtility.CalculateRelativeRectTransformBounds.html), and [Device Simulator](https://docs.unity3d.com/6000.0/Documentation/Manual/device-simulator-introduction.html)
 - [Sprite Atlas](https://docs.unity3d.com/6000.0/Documentation/Manual/sprite/atlas/create-sprite-atlas.html), [platform texture overrides](https://docs.unity3d.com/6000.0/Documentation/Manual/class-TextureImporter-type-specific.html), and [official uGUI optimization guide](https://learn.unity.com/course/introduction-to-ui-in-unity/tutorial/optimizing-unity-ui)
 
 
+## Structured UI Workflows
+
+- Short MCP tasks briefly wait for completion (wait_seconds defaults to 2; zero returns immediately). For longer tasks use `get_task(data.task.task_id, wait_seconds=20, after_revision=<last revision>)`; it waits for completion or a meaningful state change. Honor poll_after_ms on unchanged responses instead of making the model poll every second. wait_complete is not proof of success: inspect native status, errors and ready/complete/restoration fields. A read_timeout carries only the snapshot_at observation. Cancellation of the HTTP wait does not cancel the task. On lost preparation/preview responses recover through kind + the original request_key; do not replay mutations. Recording and Test Runner starts return immediately, as do preparation/preview starts without a recovery key.
+- Inspect before modifying: use `find_game_objects` with component/property filters and projections, `inspect_ui_sprites` for Image/effective Sprite/importer/border/local-ID associations, and `find_project_types` for exact type and assembly names. Check ambiguity, partial errors, scan completeness and pagination; an incomplete scan is not proof of absence. Component setters distinguish live in-memory readback from saved/reimported prefab values.
+- Run `audit_ui` on relevant live roots or saved prefabs/scenes; small scans can finish in one call, otherwise read status and finding pages through `get_task`. It checks missing borders, missing/required references, transparent raycast blockers, text/clipping and layout conflicts without fixing or saving assets. Review measured evidence and contextual warnings; suppress intentional exceptions only with an explicit project reason. Do not invent border values or infer design fidelity from a clean audit.
+- Before creating new UI, read `get_ui_defaults`. `create_project_ui` can reuse templates and retain their prefab connection, label bindings, font/material and authored geometry. Explicit overrides take precedence; existing template component types are not converted. `configure_ui_defaults` changes project-scoped authoring preferences, so use it only when that shared convention is intended. Tied/incomplete convention scans or missing TMP resources require a deliberate choice/action, never a silent legacy fallback. This is Edit Mode authoring: save the intended scene/prefab explicitly and preserve existing UI when revising it.
+- When preview management is exposed (Full by default), use `start_ui_preview_session` with verified prefab_paths and/or a project scene_template, optionally enter_play_mode and target width/height. It needs saved clean original scenes and no open Prefab Stage; do not save/discard unrelated user work merely to satisfy this precondition. Retain session_id and data.task.task_id; use `get_task` until ready. Business data and initialization remain project-specific; entering the scene may run lifecycle code.
+- End the matching session with `end_ui_preview_session`, then inspect scenes_restored, view_restored, selection_restored, assets_cleaned and warnings. Do not claim full restoration from a success envelope. Changed scene setup, dirty preview or modified temporary scene requires inspection; discard_preview_changes applies only to the owned preview scene and must reflect an intended discard. Network/save-game effects and source asset edits are not rolled back. Preserve user-created files and changed window choices; report recovery still needed.
+- Use screenshot `geometry`, not an unrelated `Screen` size: render size and returned image size can differ. Pass coordinate_space=image_pixels, origin=top_left and a fresh capture_id to click/drag/scroll or `raycast_at_point` when measuring a screenshot. `get_object_screen_bounds` and `get_visual_coordinates` share the mapping. Expired IDs or changed mode/view/scene/camera viewport/render dimensions require a fresh capture, not clamping or guessing. Geometry validity does not prove animated content stayed unchanged.
+
+
 ## Metadata
 
 - Original skill id: `unity-ui-composition`
-- Skill version: `1.0.4`
+- Skill version: `1.0.6`
 - Platform: `dsh`
 - Source repository: `https://github.com/FunplayAI/funplay-unity-mcp`

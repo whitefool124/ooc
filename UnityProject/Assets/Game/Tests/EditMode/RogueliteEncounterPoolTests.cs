@@ -33,14 +33,14 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void WeakLayouts_AreFormalTwelveByNineAndCoverW1ThroughW4()
+        public void WeakLayouts_UseDefaultCompactAreaAndCoverW1ThroughW4()
         {
             string[] signatures = RogueliteEncounterCatalog.WeakPool.Select(value => value.Layout.Signature).Distinct().OrderBy(value => value).ToArray();
             Assert.That(signatures, Is.EqualTo(new[] { "W1", "W2", "W3", "W4" }));
             foreach (RogueliteEncounterDefinition package in RogueliteEncounterCatalog.WeakPool)
             {
-                Assert.That(package.Layout.Width, Is.EqualTo(12), package.VariantKey);
-                Assert.That(package.Layout.Height, Is.EqualTo(9), package.VariantKey);
+                Assert.That(package.Layout.Width * package.Layout.Height, Is.InRange(25, 36), package.VariantKey);
+                Assert.That(package.Layout.Terrain.Any(value => value.Kind == LevelTerrainKind.PermanentWall), Is.True, package.VariantKey);
                 Assert.That(package.Layout.EnemySpawns.Count, Is.EqualTo(2), package.VariantKey);
                 Assert.That(package.MaximumOpeningThreatOverlap, Is.LessThanOrEqualTo(1), package.VariantKey);
                 Assert.That(package.Layout.Terrain.Any(value => value.Kind == LevelTerrainKind.AetherObjective), Is.False, package.VariantKey);
@@ -117,7 +117,7 @@ namespace OCC.Combat.Tests
         {
             RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.Package("weak_arbalist_calibration");
             FirstRegionLevelDefinition source = FirstRegionLevelCatalog.For(encounter.LevelId);
-            Assert.That(source.BlockedPositions, Does.Contain(new GridPosition(4, 7)));
+            Assert.That(source.Terrain.Any(tile => tile.Kind == LevelTerrainKind.PermanentWall), Is.True);
 
             FirstRegionLevelDefinition bound = CombatSceneSessionBuilder.BindEncounterToLevel(source, encounter);
             FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(bound);
@@ -125,7 +125,8 @@ namespace OCC.Combat.Tests
             Assert.That(bound.Width, Is.EqualTo(encounter.Layout.Width));
             Assert.That(bound.Height, Is.EqualTo(encounter.Layout.Height));
             Assert.That(bound.BlockedPositions, Is.EquivalentTo(encounter.Layout.BlockedPositions));
-            Assert.That(bound.HeroSpawn, Is.EqualTo(new GridPosition(4, 7)));
+            Assert.That(bound.Terrain, Is.EquivalentTo(encounter.Layout.Terrain));
+            Assert.That(bound.HeroSpawn, Is.EqualTo(encounter.Layout.HeroSpawn));
             Assert.That(build.State.Map.IsBlocked(bound.HeroSpawn), Is.False);
         }
 

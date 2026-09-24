@@ -4,7 +4,7 @@
   "title": "OCC Battle Map",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "id", "displayName", "objectiveSummary", "objectiveType", "tier", "width", "height", "floorTheme", "isElite", "isBoss", "prerequisites", "heroSpawn", "enemies", "terrain", "blockedPositions", "spaceContract"],
+  "required": ["schemaVersion", "id", "displayName", "objectiveSummary", "objectiveType", "tier", "width", "height", "complexMechanics", "floorTheme", "isElite", "isBoss", "prerequisites", "heroSpawn", "enemies", "terrain", "blockedPositions", "changeAnnotations", "spaceContract"],
   "properties": {
     "schemaVersion": { "const": "occ-battle-map-v1" },
     "id": { "type": "string", "pattern": "^[a-z0-9_$-]+$" },
@@ -12,8 +12,9 @@
     "objectiveSummary": { "type": "string" },
     "objectiveType": { "enum": ["Elimination", "Destruction"] },
     "tier": { "type": "integer", "minimum": 1 },
-    "width": { "type": "integer", "minimum": 4, "maximum": 32 },
-    "height": { "type": "integer", "minimum": 4, "maximum": 24 },
+    "width": { "type": "integer", "minimum": 4, "maximum": 12 },
+    "height": { "type": "integer", "minimum": 4, "maximum": 10 },
+    "complexMechanics": { "type": "boolean", "description": "40 格及以上正式地图必须为 true；25–36 格为默认范围。" },
     "floorTheme": { "enum": ["StoneRoad", "Courtyard", "Ruins", "AetherMarked"] },
     "isElite": { "type": "boolean" },
     "isBoss": { "type": "boolean" },
@@ -22,6 +23,7 @@
     "enemies": { "type": "array", "items": { "$ref": "#/$defs/enemy" } },
     "terrain": { "type": "array", "items": { "$ref": "#/$defs/terrain" } },
     "blockedPositions": { "type": "array", "items": { "$ref": "#/$defs/position" } },
+    "changeAnnotations": { "type": "array", "items": { "$ref": "#/$defs/changeAnnotation" } },
     "spaceContract": { "$ref": "#/$defs/spaceContract" },
     "notes": { "type": "string" },
     "updatedAt": { "type": "string" }
@@ -51,17 +53,32 @@
       "properties": {
         "x": { "type": "integer", "minimum": 0 },
         "y": { "type": "integer", "minimum": 0 },
-        "kind": { "enum": ["LightCover", "HeavyCover", "PermanentWall", "AetherObjective", "Water", "LampVine", "AetherCrystal", "TowerMechanism", "StakedStructure", "OverloadDevice", "CertifierStand", "WardGenerator", "LoosePaper", "Trace", "BindingMark"] },
+        "kind": { "enum": ["LightCover", "HeavyCover", "PermanentWall", "AetherObjective", "Water", "LampVine", "AetherCrystal", "LootChest", "TowerMechanism", "OverloadDevice", "WardGenerator", "LoosePaper", "Trace", "BindingMark"] },
         "mechanismKind": { "type": "integer", "minimum": 0, "maximum": 3 }
+      }
+    },
+    "changeAnnotation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "label", "timing", "trigger", "result", "duration", "source", "positions"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+        "type": { "enum": ["phase", "temporary"] },
+        "label": { "type": "string", "minLength": 1 },
+        "timing": { "type": "string", "minLength": 1 },
+        "trigger": { "type": "string", "minLength": 1 },
+        "result": { "type": "string", "minLength": 1 },
+        "duration": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "positions": { "type": "array", "items": { "$ref": "#/$defs/position" }, "uniqueItems": true }
       }
     },
     "spaceContract": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["grammar", "routeAnchors", "publicRisk", "counterplayWindow"],
+      "required": ["grammar", "publicRisk", "counterplayWindow"],
       "properties": {
         "grammar": { "type": "string" },
-        "routeAnchors": { "type": "array", "items": { "$ref": "#/$defs/position" } },
         "publicRisk": { "type": "string" },
         "counterplayWindow": { "type": "string" }
       }

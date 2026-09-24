@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "core_approach",
+  "displayName": "精英战斗 03 · 塔前石庭",
+  "width": 6,
+  "height": 6,
+  "objectiveSummary": "清除古塔前庭守军",
+  "objectiveType": "Elimination",
+  "tier": 4,
+  "floorTheme": "Courtyard",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": false,
+  "prerequisites": [
+    "transmission_tower",
+    "elite_foundry"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "elite_vanguard",
+      "x": 2,
+      "y": 3
+    },
+    {
+      "archetypeId": "rune_arbalist",
+      "x": 5,
+      "y": 1
+    },
+    {
+      "archetypeId": "stone_snare",
+      "x": 5,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [
+    {
+      "id": "vanguard_temp_heavy_cover",
+      "type": "temporary",
+      "label": "划线教官生成临时重掩体",
+      "timing": "划线教官回合开始",
+      "trigger": "场上没有可倚靠的完整重掩体且本场生成次数未满",
+      "result": "在划线教官正交相邻合法空格生成耐久12的重掩体",
+      "duration": "直到被摧毁；每场最多2次",
+      "source": "elite_vanguard",
+      "positions": []
+    }
+  ],
+  "spaceContract": {
+    "grammar": "对角封线与中央缺口",
+    "publicRisk": "背弩与约束控制相反对角，教官惩罚直穿。",
+    "counterplayWindow": "外围路线较慢，中心两侧缺口允许在意图公开后换线。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

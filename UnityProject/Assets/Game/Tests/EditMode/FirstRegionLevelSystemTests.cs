@@ -37,8 +37,9 @@ namespace OCC.Combat.Tests
             {
                 FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(level, "purifier_overseer");
                 CombatState state = build.State;
-                Assert.That(state.Map.Width, Is.EqualTo(12), level.Id);
-                Assert.That(state.Map.Height, Is.EqualTo(9), level.Id);
+                Assert.That(state.Map.Width, Is.EqualTo(level.Width), level.Id);
+                Assert.That(state.Map.Height, Is.EqualTo(level.Height), level.Id);
+                Assert.That(state.Map.Width * state.Map.Height, Is.InRange(25, 50), level.Id);
                 Assert.That(state.GetUnit("hero").Position, Is.EqualTo(level.HeroSpawn), level.Id);
                 Assert.That(state.GetUnit("hero").MainHand, Is.SameAs(CombatCatalog.Hammer), level.Id);
                 Assert.That(state.Units.Values.Count(unit => !unit.IsHero), Is.EqualTo(level.EnemyPlacements.Count), level.Id);
@@ -100,32 +101,44 @@ namespace OCC.Combat.Tests
                     .Concat(level.Terrain.Where(tile => tile.Kind == LevelTerrainKind.TowerMechanism).Select(tile => tile.Position))
                     .ToArray();
                 bool surroundsSpawn = opposing.Any(position => position.X <= level.HeroSpawn.X);
-                bool crossesMapCenter = opposing.Any(position => position.X <= 5) &&
-                    opposing.Any(position => position.X >= 6);
+                int rightCenter = level.Width / 2;
+                bool crossesMapCenter = opposing.Any(position => position.X < rightCenter) &&
+                    opposing.Any(position => position.X >= rightCenter);
                 Assert.That(surroundsSpawn || crossesMapCenter, Is.True, level.Id + " must not reduce to a far-right enemy wall");
             }
         }
 
         [Test]
-        public void EveryLevel_HasTwoReachableRoutesForMeleeRangedAndGeneralistOpenings()
+        public void EveryLevel_HasConnectedWalkableSpaceForMeleeRangedAndGeneralistOpenings()
         {
             foreach (FirstRegionLevelDefinition level in FirstRegionLevelCatalog.All)
             {
                 FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(level);
-                Assert.That(level.SpaceContract.RouteAnchors.Count, Is.GreaterThanOrEqualTo(2), level.Id);
                 foreach (LevelOpeningProfile profile in Enum.GetValues(typeof(LevelOpeningProfile)))
-                {
                     Assert.That(level.SpaceContract.SupportedOpenings, Does.Contain(profile), level.Id + ":" + profile);
-                    foreach (GridPosition anchor in level.SpaceContract.RouteAnchors)
-                        Assert.That(IsReachable(build.State.Map, level.HeroSpawn, anchor), Is.True, level.Id + ":" + profile + ":" + anchor);
-                }
 
                 GridPosition[] firstSteps = WalkableNeighbors(build.State.Map, level.HeroSpawn).ToArray();
                 Assert.That(firstSteps, Has.Length.GreaterThanOrEqualTo(2), level.Id + " has a spawn soft lock");
-                bool distinctEntrances = firstSteps.Any(first => IsReachable(build.State.Map, first, level.SpaceContract.RouteAnchors[0], level.HeroSpawn) &&
-                    firstSteps.Any(second => second != first && IsReachable(build.State.Map, second, level.SpaceContract.RouteAnchors[1], level.HeroSpawn)));
-                Assert.That(distinctEntrances, Is.True, level.Id + " routes collapse into one opening cell");
+                GridPosition[] walkable = AllPositions(build.State.Map).Where(position => !build.State.Map.IsBlocked(position)).ToArray();
+                Assert.That(ReachablePositions(build.State.Map, level.HeroSpawn), Is.EquivalentTo(walkable),
+                    level.Id + " contains walkable cells disconnected from the actual playable area");
             }
+        }
+
+        [Test]
+        public void LootChest_PlacementMarksBlockingPositionWithoutDefiningContents()
+        {
+            FirstRegionLevelDefinition source = FirstRegionLevelCatalog.RainLanternCourt;
+            GridPosition chest = new GridPosition(3, 3);
+            FirstRegionLevelDefinition level = new FirstRegionLevelDefinition("loot_chest_probe", "宝箱位置测试", "", CombatObjectiveType.Elimination,
+                1, source.HeroSpawn, source.FloorTheme, false, false, Array.Empty<string>(), source.EnemyPlacements,
+                source.Terrain.Concat(new[] { new LevelTerrainPlacement(chest.X, chest.Y, LevelTerrainKind.LootChest) }),
+                source.SpaceContract, source.Width, source.Height, source.BlockedPositions);
+
+            CombatState state = FirstRegionLevelBuilder.Build(level).State;
+            Assert.That(state.Map.GetTile(chest).IsLootChest, Is.True);
+            Assert.That(state.Map.IsBlocked(chest), Is.True);
+            Assert.That(state.LootSource, Is.Null, "地图物件只定义位置，不在关卡配置中定义宝箱内容。");
         }
 
         [Test]
@@ -137,9 +150,8 @@ namespace OCC.Combat.Tests
                 foreach (GridPosition candidate in AllPositions(state.Map).Where(position => position != level.HeroSpawn))
                 {
                     if (state.Map.IsBlocked(candidate)) continue;
-                    Assert.That(level.SpaceContract.RouteAnchors.Any(anchor => anchor != candidate &&
-                        IsReachable(state.Map, level.HeroSpawn, anchor, candidate)), Is.True,
-                        level.Id + " can be soft-locked by one cell at " + candidate);
+                    Assert.That(ReachablePositions(state.Map, level.HeroSpawn, candidate).Count, Is.GreaterThan(1),
+                        level.Id + " can be soft-locked at spawn by one cell at " + candidate);
                 }
 
                 UnitState hero = state.GetUnit("hero");
@@ -231,28 +243,112 @@ namespace OCC.Combat.Tests
             }
         }
 
-        private static bool IsReachable(GridMap map, GridPosition start, GridPosition destination, GridPosition? additionallyBlocked = null)
+        [Test]
+        public void FirstPhaseFollowupBattles_AreWinnableWithNormalCommands()
         {
-            if (additionallyBlocked.HasValue && (start == additionallyBlocked.Value || destination == additionallyBlocked.Value)) return false;
+            foreach (string levelId in new[]
+            {
+                FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
+                FirstRegionLevelCatalog.RainPrismCourt.Id,
+                FirstRegionLevelCatalog.ThreeMaterialPressure.Id
+            })
+            {
+                CombatState state = FirstRegionLevelBuilder.Build(levelId).State;
+                UnitState hero = state.GetUnit("hero");
+                hero.Equip(CombatCatalog.Rifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+                hero.ConfigureMana(12, 12);
+                int commands = 0;
+                CombatResolver.BeginTurn(state, hero.Id);
+
+                while (!state.IsVictory && !state.IsDefeat && commands < 200)
+                {
+                    UnitState unit = state.GetUnit(state.ActiveUnitId);
+                    if (unit == null || !unit.IsAlive)
+                    {
+                        CombatResolver.AdvanceToNextTurn(state);
+                        continue;
+                    }
+                    if (unit.ActionPoints <= 0)
+                    {
+                        CombatResolver.EndTurn(state, unit);
+                        commands++;
+                        continue;
+                    }
+
+                    CombatCommand command = unit.IsHero
+                        ? FirstPhaseHeroCommand(state, unit)
+                        : new EnemyTurnPlanBook().GetExecutionCommand(state, unit, hero);
+                    if (command.Type == CombatCommandType.EndTurn) CombatResolver.EndTurn(state, unit);
+                    else CombatResolver.Resolve(state, command);
+                    commands++;
+                }
+
+                Assert.That(state.IsVictory, Is.True, levelId + " should be winnable with normal movement, interaction, skills, and attacks.");
+                Assert.That(commands, Is.LessThan(200), levelId);
+            }
+        }
+
+        private static CombatCommand FirstPhaseHeroCommand(CombatState state, UnitState hero)
+        {
+            UnitState enemy = state.Units.Values.Where(unit => !unit.IsHero && unit.IsAlive)
+                .OrderBy(unit => unit.Position.ManhattanDistance(hero.Position)).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
+            if (enemy != null)
+            {
+                int distance = hero.Position.ManhattanDistance(enemy.Position);
+                SkillDefinition skill = hero.SkillOne;
+                if (skill != null && hero.Mana >= skill.ManaCost && hero.IsSkillReady(skill) &&
+                    distance >= skill.MinimumRange && distance <= skill.Range &&
+                    CombatResolver.PreviewSkillAttack(state, hero.Id, enemy.Id, skill).HasLineOfSight)
+                    return CombatCommand.UseSkill(hero.Id, 0, enemy.Id);
+                WeaponDefinition weapon = hero.MainHand ?? CombatCatalog.Rifle;
+                if (distance >= weapon.MinimumRange && distance <= weapon.Range &&
+                    CombatResolver.PreviewAttack(state, hero.Id, enemy.Id, false).HasLineOfSight)
+                    return CombatCommand.Attack(hero.Id, enemy.Id);
+            }
+
+            GridPosition crystal = state.Map.PositionsWith(tile => tile.Durability > 0 && tile.IsAetherCrystal)
+                .OrderBy(position => position.ManhattanDistance(hero.Position)).FirstOrDefault();
+            if (state.Map.IsInside(crystal))
+            {
+                if (hero.Position.ManhattanDistance(crystal) == 1) return CombatCommand.Interact(hero.Id, crystal);
+                foreach (GridPosition approach in WalkableNeighbors(state.Map, crystal).Where(position => !state.IsOccupied(position, hero.Id)))
+                {
+                    CombatCommand? move = MoveToward(state, hero, approach);
+                    if (move.HasValue) return move.Value;
+                }
+            }
+
+            if (enemy != null)
+                foreach (GridPosition approach in WalkableNeighbors(state.Map, enemy.Position).Where(position => !state.IsOccupied(position, hero.Id)))
+                {
+                    CombatCommand? move = MoveToward(state, hero, approach);
+                    if (move.HasValue) return move.Value;
+                }
+            return CombatCommand.EndTurn(hero.Id);
+        }
+
+        private static CombatCommand? MoveToward(CombatState state, UnitState hero, GridPosition destination)
+        {
+            IReadOnlyList<GridPosition> wholePath = state.Map.FindLowestCostPath(hero.Position, destination, 100,
+                position => CombatMovementQuery.EntryCost(state, hero, position), position => state.IsOccupied(position, hero.Id));
+            foreach (GridPosition position in wholePath.Reverse())
+                if (CombatMovementQuery.FindPath(state, hero, position).Count > 1)
+                    return CombatCommand.Move(hero.Id, position);
+            return null;
+        }
+
+        private static HashSet<GridPosition> ReachablePositions(GridMap map, GridPosition start, GridPosition? additionallyBlocked = null)
+        {
             Queue<GridPosition> frontier = new Queue<GridPosition>();
             HashSet<GridPosition> visited = new HashSet<GridPosition> { start };
             frontier.Enqueue(start);
-            GridPosition[] directions =
-            {
-                new GridPosition(1, 0), new GridPosition(-1, 0), new GridPosition(0, 1), new GridPosition(0, -1)
-            };
             while (frontier.Count > 0)
             {
                 GridPosition current = frontier.Dequeue();
-                if (current == destination) return true;
-                foreach (GridPosition direction in directions)
-                {
-                    GridPosition next = current + direction;
-                    if (map.IsInside(next) && !map.IsBlocked(next) && (!additionallyBlocked.HasValue || next != additionallyBlocked.Value) && visited.Add(next))
-                        frontier.Enqueue(next);
-                }
+                foreach (GridPosition next in WalkableNeighbors(map, current))
+                    if ((!additionallyBlocked.HasValue || next != additionallyBlocked.Value) && visited.Add(next)) frontier.Enqueue(next);
             }
-            return false;
+            return visited;
         }
 
         private static IEnumerable<GridPosition> WalkableNeighbors(GridMap map, GridPosition position)

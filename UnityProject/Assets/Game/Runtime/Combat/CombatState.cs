@@ -5,6 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum CombatRuleset { LegacyStory, Roguelite }
+    public enum ForcedMoveResult { Moved, Blocked, ObjectCollision }
 
     public sealed class CombatState
     {
@@ -101,9 +102,79 @@ namespace OCC.Combat
             }
             return RogueSpells?.FireBattle.ResolveEntry(unit, previousPosition) ?? 0;
         }
+
+        /// <summary>统一推拉结算；全段不可完成时留在位移前格，撞玩法物块则双方结算4点伤害。</summary>
+        public ForcedMoveResult ResolveForcedMove(UnitState unit, GridPosition direction, int distance, string sourceId)
+        {
+            if (unit == null || !unit.IsAlive || distance <= 0 || unit.HasStatus(StatusType.Invulnerable)) return ForcedMoveResult.Blocked;
+            int dx = Math.Sign(direction.X), dy = Math.Sign(direction.Y);
+            if (dx != 0 && dy != 0)
+            {
+                if (Math.Abs(direction.X) >= Math.Abs(direction.Y)) dy = 0;
+                else dx = 0;
+            }
+            if (dx == 0 && dy == 0) return ForcedMoveResult.Blocked;
+
+            int reduction = PassiveEffects.ConsumeForcedMoveReduction(unit.Id);
+            if (reduction > 0)
+            {
+                distance = Math.Max(0, distance - reduction);
+                AddLog(unit.DisplayName + "的缓冲护幕抵消 " + reduction + " 格强制位移。");
+                if (distance == 0) return ForcedMoveResult.Blocked;
+            }
+
+            GridPosition origin = unit.Position;
+            GridPosition cursor = origin;
+            for (int step = 0; step < distance; step++)
+            {
+                GridPosition next = cursor + new GridPosition(dx, dy);
+                if (!Map.IsInside(next) || IsOccupied(next, unit.Id)) return ForcedMoveResult.Blocked;
+                if (Map.IsBlocked(next))
+                {
+                    TileState obstacle = Map.GetTile(next);
+                    if (obstacle.BlocksMovement && !string.IsNullOrEmpty(obstacle.ObjectName()))
+                    {
+                        ResolveForcedMoveObjectCollision(unit, next, sourceId);
+                        return ForcedMoveResult.ObjectCollision;
+                    }
+                    return ForcedMoveResult.Blocked;
+                }
+                cursor = next;
+            }
+
+            unit.MoveTo(cursor);
+            ResolveDisplacementLanding(unit, origin);
+            return ForcedMoveResult.Moved;
+        }
+
+        private void ResolveForcedMoveObjectCollision(UnitState unit, GridPosition obstaclePosition, string sourceId)
+        {
+            const int damageAmount = 4;
+            string damageSource = string.IsNullOrWhiteSpace(sourceId) ? "forced-move-collision" : sourceId + "-collision";
+            Roguelite.DamagePacket packet = new Roguelite.DamagePacket(damageSource, string.Empty, unit.Id,
+                damageSource, new[] { new Roguelite.DamageComponent(Roguelite.DamageComponentKind.Physical, damageAmount) });
+            Roguelite.DamageResolution damage = Roguelite.RogueDamageResolver.Resolve(packet, unit.Shield, unit.Health);
+            unit.AbsorbShield(damage.ShieldAbsorbed);
+            RecordRogueliteShieldAbsorption(unit.Id, damageSource, damage.ShieldAbsorbed);
+            unit.TakeDamage(damage.HealthDamage);
+
+            TileState obstacle = Map.GetTile(obstaclePosition);
+            string obstacleName = obstacle.ObjectName();
+            int durabilityBefore = obstacle.Durability;
+            if (durabilityBefore > 0)
+            {
+                obstacle.Durability = Math.Max(0, durabilityBefore - damageAmount);
+                ResolveAetherCrystalDamage(obstaclePosition, durabilityBefore);
+            }
+            AddLog(unit.DisplayName + "强制位移撞上" + obstacleName + "：单位受到 4 点伤害" +
+                (durabilityBefore > 0 ? "，物块耐久 -" + Math.Min(damageAmount, durabilityBefore) : string.Empty) + "，并留在原格。");
+            EvaluateOutcome();
+        }
         internal void BeginRogueliteTurn(UnitState unit)
         {
-            if (Ruleset != CombatRuleset.Roguelite || unit == null) return;
+            if (unit == null) return;
+            if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
+            if (Ruleset != CombatRuleset.Roguelite) return;
             foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokeExpiresAt > 0 && tile.SmokeExpiresAt <= CurrentTime).ToArray())
                 Map.GetTile(position).SmokeExpiresAt = 0;
             // 主角回合开始即公共回合开始：此时公开风况并让风搬动场地上的松散材料。
@@ -114,7 +185,6 @@ namespace OCC.Combat
             unit.ClearShield();
             int turn = rogueTurnSequences.TryGetValue(unit.Id, out int current) ? current + 1 : 1;
             rogueTurnSequences[unit.Id] = turn;
-            if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
 
             if (unit.EnemyArchetypeId == "shieldguard")
                 TryGrantRogueliteShield(unit.Id, "shieldguard-turn-brace", 2);
@@ -129,14 +199,17 @@ namespace OCC.Combat
         }
         internal void EndRogueliteTurn(UnitState unit)
         {
-            if (Ruleset != CombatRuleset.Roguelite || unit == null) return;
-            GrantCoverShield(unit);
-            RogueSpells?.EndOwnTurn(unit.Id);
-            RainLanternCourt?.EndTurn(unit);
-            AcademyFieldEnemy?.EndTurn(this, unit);
-            AcademyCoreBoss?.EndTurn(this, unit);
-            ThreeMaterialPressure?.EndTurn(unit);
-            PassiveEffects.ExpireOwnTurnEnd(unit.Id);
+            if (unit == null) return;
+            if (Ruleset == CombatRuleset.Roguelite)
+            {
+                GrantCoverShield(unit);
+                RogueSpells?.EndOwnTurn(unit.Id);
+                RainLanternCourt?.EndTurn(unit);
+                AcademyFieldEnemy?.EndTurn(this, unit);
+                AcademyCoreBoss?.EndTurn(this, unit);
+                ThreeMaterialPressure?.EndTurn(unit);
+                PassiveEffects.ExpireOwnTurnEnd(unit.Id);
+            }
             if (rogueBreakStanceSeenThisTurn.Remove(unit.Id)) unit.ClearStatus(StatusType.BreakStance);
         }
         /// <summary>单位踏入约束纹：留在原格，本回合不能主动移动。</summary>
@@ -146,24 +219,6 @@ namespace OCC.Combat
             if (!Map.GetTile(unit.Position).IsBindingMark) return;
             unit.ApplyStatus(StatusType.Bound, 1);
             AddLog(unit.DisplayName + "踏入约束纹，留在原格，本回合不能主动移动。");
-        }
-
-        /// <summary>检定台读数：单位进入正交邻接时公开邻接单位的耐久与护盾，敌我同规则读取。</summary>
-        internal void PublishCertifierReadout(UnitState unit)
-        {
-            if (unit == null || !Map.IsInside(unit.Position)) return;
-            GridPosition[] around = Adjacent(unit.Position);
-            GridPosition[] stands = around.Where(position => Map.IsInside(position) &&
-                Map.GetTile(position).IsCertifierStand && !Map.GetTile(position).IsDestroyed).ToArray();
-            if (stands.Length == 0) return;
-            // 读数为公开信息：读取检定台正交邻接格上的全部单位，敌我同规则。
-            GridPosition[] readable = stands.SelectMany(Adjacent).Where(Map.IsInside).Distinct().ToArray();
-            UnitState[] readings = units.Values
-                .Where(value => value.IsAlive && readable.Contains(value.Position)).OrderBy(value => value.Id).ToArray();
-            if (readings.Length == 0) { AddLog("检定台读数：邻接格没有可读取的单位。"); return; }
-            foreach (UnitState reading in readings)
-                AddLog("检定台读数：" + reading.DisplayName + " 耐久 " + reading.Health + "/" + reading.MaxHealth +
-                    "，护盾 " + reading.Shield + "。");
         }
 
         private static GridPosition[] Adjacent(GridPosition position) => new[]
@@ -258,10 +313,13 @@ namespace OCC.Combat
             int turn = rogueTurnSequences.TryGetValue(unit.Id, out int current) ? current : 0;
             string key = unit.Id + "|" + sourceId;
             if (rogueShieldSourceTurns.TryGetValue(key, out int claimed) && claimed == turn) return false;
-            rogueShieldSourceTurns[key] = turn; unit.GrantShield(amount);
-            AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(sourceId, amount,
+            rogueShieldSourceTurns[key] = turn;
+            int shieldBefore = unit.Shield;
+            unit.GrantShield(amount);
+            int granted = unit.Shield - shieldBefore;
+            AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(sourceId, granted,
                 Roguelite.ShieldEventKind.Granted, turn));
-            AddLog(unit.DisplayName + "从" + sourceId + "获得 " + amount + " 护盾。");
+            AddLog(unit.DisplayName + "从" + sourceId + "获得 " + granted + " 护盾。");
             return true;
         }
         internal void RecordRogueliteShieldAbsorption(string unitId, string sourceId, int amount)
@@ -271,14 +329,13 @@ namespace OCC.Combat
                 string.IsNullOrWhiteSpace(sourceId) ? "damage" : sourceId, amount,
                 Roguelite.ShieldEventKind.Absorbed, RogueTurn(unitId)));
         }
-        public void ApplyRogueliteBreakStance(string unitId)
+        public void ApplyRogueliteBreakStance(string unitId, string sourceId = null)
         {
-            if (Ruleset != CombatRuleset.Roguelite) throw new InvalidOperationException("Break stance is only valid in roguelite combat.");
             UnitState unit = GetUnit(unitId) ?? throw new InvalidOperationException("Unit does not exist.");
-            if (unit.Shield > 0)
+            if (unit.Shield > 0 && Ruleset == CombatRuleset.Roguelite)
                 AddRogueShieldEvent(new Roguelite.ShieldSourceRecord("break_stance", unit.Shield,
                     Roguelite.ShieldEventKind.Wasted, RogueTurn(unit.Id)));
-            unit.ClearShield(); unit.ApplyStatus(StatusType.BreakStance, 1); rogueBreakStanceSeenThisTurn.Remove(unit.Id);
+            unit.ClearShield(); unit.ApplyStatus(StatusType.BreakStance, 1, 0, sourceId); rogueBreakStanceSeenThisTurn.Remove(unit.Id);
             AddLog(unit.DisplayName + "进入破势：当前护盾清除，至下一次自己回合结束前无法获得护盾。");
         }
         private int RogueTurn(string unitId) => rogueTurnSequences.TryGetValue(unitId, out int turn) ? turn : 0;
@@ -432,6 +489,7 @@ namespace OCC.Combat
         public void AddLog(string message) { EventLog.Insert(0, message); if (EventLog.Count > 8) EventLog.RemoveAt(8); }
         internal void EvaluateOutcome()
         {
+            AcademyCoreBoss?.RefreshPhase(this);
             IsDefeat = !units.Values.Any(unit => unit.IsHero && unit.IsAlive) ||
                 Objectives != null && Objectives.Any(objective => objective.IsFailed(this));
             IsVictory = !IsDefeat && Objectives != null && Objectives.Count > 0 && Objectives.All(objective => objective.IsComplete(this));

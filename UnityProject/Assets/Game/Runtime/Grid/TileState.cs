@@ -8,8 +8,8 @@
         public const int LightDurability = 8;
         public const int StandardDurability = 16;
         public const int HeavyDurability = 24;
-        /// <summary>标定结构耐久：现场夯筑的临时墙低于重掩体（技能数据表 SK-CORE-02）。</summary>
-        public const int StakedDurability = 12;
+        /// <summary>技能现场生成的临时重掩体耐久，低于地图预设重掩体（技能数据表 SK-CORE-02）。</summary>
+        public const int TemporaryHeavyCoverDurability = 12;
         /// <summary>试制件耐久（敌人技能数据表 SK-SUP-13）。</summary>
         public const int PrototypeDurability = 8;
 
@@ -21,6 +21,8 @@
         public bool IsWater { get; set; }
         public bool IsLampVine { get; set; }
         public bool IsAetherCrystal { get; set; }
+        /// <summary>地图配置中的宝箱位置；内容仍由遭遇与奖励系统提供。</summary>
+        public bool IsLootChest { get; set; }
         public bool IsDecoy { get; set; }
         public bool IsCrystalShard { get; set; }
         public bool IsPermanentWall { get; set; }
@@ -38,12 +40,8 @@
         public bool HasPaperScreen { get; set; }
         /// <summary>约束纹：效果层。进入该格的单位本回合留在原地；被浅水、火场、烟尘覆盖即失效。</summary>
         public bool IsBindingMark { get; set; }
-        /// <summary>标定结构：现场立起的临时墙。机制由 Cover=Heavy 承载，本标记只用于区分"临时搭建"。</summary>
-        public bool IsStakedStructure { get; set; }
         /// <summary>过载装置：被摧毁时对正交邻格结算一次不分敌我的过载伤害。</summary>
         public bool IsOverloadDevice { get; set; }
-        /// <summary>检定台：为附近单位提供公开读数。</summary>
-        public bool IsCertifierStand { get; set; }
         /// <summary>护罩发生器：为配置声明范围内的单位提供结构护盾；装置被摧毁时护盾立即消失。</summary>
         public bool IsWardGenerator { get; set; }
         /// <summary>封存塔内机关。属于通用场地装置，不是敌人单位；被摧毁即切断塔之守卫的施术介质。</summary>
@@ -55,22 +53,22 @@
         /// <summary>是否为任一效果层。每格至多一个，后生成者覆盖先在者。</summary>
         public bool HasEffectLayer => IsWater || IsScorched || SmokeExpiresAt > 0 || IsLoosePaper || HasTrace || IsBindingMark || HasPaperScreen;
         /// <summary>是否为任一可破坏装置（含机关）。</summary>
-        public bool IsDeviceLike => IsDevice || IsOverloadDevice || IsCertifierStand || IsWardGenerator || IsTowerMechanism;
+        public bool IsDeviceLike => IsDevice || IsOverloadDevice || IsWardGenerator || IsTowerMechanism;
         public bool IsDestroyed => !IsPermanentWall && Durability <= 0 && (Cover != CoverType.None || IsObjective || IsDevice
-            || IsLampVine || IsDecoy || IsScorched || IsOverloadDevice || IsCertifierStand || IsWardGenerator || IsTowerMechanism);
-        public bool BlocksMovement => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0)
+            || IsLampVine || IsDecoy || IsScorched || IsOverloadDevice || IsWardGenerator || IsTowerMechanism);
+        public bool BlocksMovement => IsPermanentWall || IsLootChest || (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0)
             || (IsDecoy && Durability > 0)
-            || ((IsOverloadDevice || IsCertifierStand || IsWardGenerator) && Durability > 0)
+            || ((IsOverloadDevice || IsWardGenerator) && Durability > 0)
             || (IsTowerMechanism && Durability > 0);
         public bool BlocksLineOfSight => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsLampVine && Durability > 0);
         public int DamageReduction => IsDestroyed ? 0 : Cover == CoverType.Light ? 1 : Cover == CoverType.Heavy ? 2 : 0;
         public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, IsObjective = IsObjective, IsDevice = IsDevice,
-            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
+            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsLootChest = IsLootChest, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
             IsPermanentWall = IsPermanentWall,
             IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt,
             IsLoosePaper = IsLoosePaper, IsPaperSoaked = IsPaperSoaked, HasTrace = HasTrace, IsDeepTrace = IsDeepTrace, IsBindingMark = IsBindingMark,
             HasPaperScreen = HasPaperScreen,
-            IsStakedStructure = IsStakedStructure, IsOverloadDevice = IsOverloadDevice, IsCertifierStand = IsCertifierStand,
+            IsOverloadDevice = IsOverloadDevice,
             IsWardGenerator = IsWardGenerator,
             IsTowerMechanism = IsTowerMechanism, IsReleased = IsReleased, MechanismKind = MechanismKind };
         /// <summary>清除本格的全部效果层。调用方随后设置新的效果层，即可满足"后生成者覆盖先在者"。</summary>
@@ -99,13 +97,13 @@
         {
             if (IsTowerMechanism) return "塔内机关";
             if (IsOverloadDevice) return "过载装置";
-            if (IsCertifierStand) return "检定台";
             if (IsWardGenerator) return "护罩发生器";
             if (IsObjective) return "任务目标";
             if (IsLampVine) return "灯藤";
             if (IsAetherCrystal) return "蓄能晶簇";
+            if (IsLootChest) return "宝箱";
             if (IsPermanentWall) return "永久重物块";
-            if (Cover == CoverType.Heavy) return IsStakedStructure ? "标定结构" : "重掩体";
+            if (Cover == CoverType.Heavy) return "重掩体";
             if (Cover == CoverType.Light) return "轻掩体";
             if (IsDecoy) return "诱导物";
             return null;

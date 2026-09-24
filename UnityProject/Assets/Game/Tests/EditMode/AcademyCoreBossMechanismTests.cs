@@ -54,6 +54,24 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FourthBossTurn_DoesNotResolveTowerPressBeforeThePublishedAction()
+        {
+            CombatState state = BossState(out UnitState core);
+            UnitState hero = state.GetUnit("hero");
+            for (int turn = 0; turn < 3; turn++) BeginBossTurn(state, core);
+            int health = hero.Health;
+            int shield = hero.Shield;
+            int pressLogs = state.EventLog.Count(line => line.StartsWith("塔压："));
+
+            BeginBossTurn(state, core);
+
+            Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(1));
+            Assert.That(hero.Health, Is.EqualTo(health));
+            Assert.That(hero.Shield, Is.EqualTo(shield));
+            Assert.That(state.EventLog.Count(line => line.StartsWith("塔压：")), Is.EqualTo(pressLogs));
+        }
+
+        [Test]
         public void PhaseTwoChain_ResolvesEverySurvivingReleasedMechanismOnEachAction()
         {
             CombatState state = BossState(out UnitState core);
@@ -64,8 +82,15 @@ namespace OCC.Combat.Tests
             MethodInfo takeDamage = typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             takeDamage.Invoke(core, new object[] { core.Health - (core.MaxHealth * 2 / 10) });
             Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(2), "血量降到三成以下进入阶段二。");
+            typeof(CombatState).GetMethod("EvaluateOutcome", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(state, System.Array.Empty<object>());
+            Assert.That(core.StatusStrength(StatusType.Strength), Is.EqualTo(2));
+            Assert.That(core.StatusStrength(StatusType.SpellPower), Is.EqualTo(2));
+            Assert.That(state.Clone().GetUnit(core.Id).StatusStrength(StatusType.Strength), Is.EqualTo(2),
+                "保存／克隆后阶段二强化不能重复叠加。");
 
-            MethodInfo observe = typeof(AcademyCoreBossRuntime).GetMethod("ObserveCommand", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo observe = typeof(AcademyCoreBossRuntime).GetMethod("ObserveCommand", BindingFlags.Instance | BindingFlags.NonPublic,
+                null, new[] { typeof(CombatState), typeof(UnitState) }, null);
             observe.Invoke(state.AcademyCoreBoss, new object[] { state, core });
 
             Assert.That(state.EventLog.Any(line => line.Contains("并链")), Is.True, string.Join(" | ", state.EventLog));

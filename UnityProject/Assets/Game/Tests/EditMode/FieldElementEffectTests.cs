@@ -5,7 +5,7 @@ using OCC.Combat.Presentation;
 
 namespace OCC.Combat.Tests
 {
-    /// <summary>通用场地库的逐元素效果：风、痕迹、约束纹、检定台、护罩发生器、过载装置。</summary>
+    /// <summary>通用场地库的逐元素效果：风、痕迹、约束纹、护罩发生器、过载装置。</summary>
     public sealed class FieldElementEffectTests
     {
         private static CombatState State(GridPosition? enemyCell = null)
@@ -106,20 +106,6 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void CertifierStand_PublishesAdjacentReadout()
-        {
-            CombatState state = State();
-            MakeDevice(state, 3, 3, TileState.StandardDurability);
-            Set(state, 3, 3, tile => tile.IsCertifierStand = true);
-            CombatResolver.BeginTurn(state, "hero");
-
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(2, 3)));
-
-            Assert.That(state.EventLog.Any(line => line.StartsWith("检定台读数：") && line.Contains("维克多·维恩")), Is.True,
-                string.Join(" | ", state.EventLog));
-        }
-
-        [Test]
         public void WardGenerator_GrantsExtraShieldToAdjacentUnit()
         {
             CombatState state = State();
@@ -189,20 +175,17 @@ namespace OCC.Combat.Tests
             CombatState state = State();
             MakeDevice(state, 2, 2, TileState.StandardDurability);
             Set(state, 2, 2, tile => tile.IsOverloadDevice = true);
-            MakeDevice(state, 3, 2, TileState.StandardDurability);
-            Set(state, 3, 2, tile => tile.IsCertifierStand = true);
             MakeDevice(state, 4, 2, TileState.StandardDurability);
             Set(state, 4, 2, tile => tile.IsWardGenerator = true);
             MakeDevice(state, 5, 2, TileState.HeavyDurability);
             Set(state, 5, 2, tile => tile.IsTowerMechanism = true);
-            MakeDevice(state, 6, 2, TileState.HeavyDurability);
-            Set(state, 6, 2, tile => { tile.IsStakedStructure = true; tile.Cover = CoverType.Heavy; });
+            MakeDevice(state, 6, 2, TileState.TemporaryHeavyCoverDurability);
+            Set(state, 6, 2, tile => tile.Cover = CoverType.Heavy);
 
             Assert.That(Hover(state, 2, 2), Does.Contain("8 点以太伤害"));
-            Assert.That(Hover(state, 3, 2), Does.Contain("读数"));
             Assert.That(Hover(state, 4, 2), Does.Contain("结构护盾"));
             Assert.That(Hover(state, 5, 2), Does.Contain("维护链"));
-            Assert.That(Hover(state, 6, 2), Does.Contain("标定结构"));
+            Assert.That(Hover(state, 6, 2), Does.Contain("重掩体"));
         }
 
         private static string Hover(CombatState state, int x, int y) =>

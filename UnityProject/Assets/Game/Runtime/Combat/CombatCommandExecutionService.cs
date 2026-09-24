@@ -117,7 +117,8 @@ namespace OCC.Combat
                     combined.AddRange(FireSpellEngine.TriggerEnemyEntry(fireBattle, commandUnit.Id));
                     movementTriggers = combined;
                 }
-                fireBattle?.ResolveMarkedDestructions();
+                fireBattle?.ResolveMarkedDestructions(command.Type == CombatCommandType.Attack ||
+                    command.Type == CombatCommandType.UseSkill ? command.UnitId : null);
 
                 IReadOnlyList<CombatMechanicTriggerContext> mechanicContexts = CombatMechanicTriggerContextFactory.ForCommand(
                     command, commandUnit, movementSource, movementPath, execution);

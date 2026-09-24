@@ -72,14 +72,14 @@ namespace OCC.Combat.Tests
 
             FirstRegionLevelBuild vault = FirstRegionLevelBuilder.Build("sealed_vault_certification");
             Assert.That(vault.State.GetUnit("enemy_0").EnemyArchetypeId, Is.EqualTo("legacy_storekeeper"));
-            Assert.That(vault.State.Map.PositionsWith(tile => tile.IsCertifierStand).Count(), Is.EqualTo(2), "两座旧检定台是优先拆除目标。");
+            Assert.That(vault.State.Map.PositionsWith(tile => tile.Cover == CoverType.Heavy).Count(), Is.GreaterThanOrEqualTo(5), "货架短墙保留原有库道形状。");
             Assert.That(vault.State.Map.PositionsWith(tile => tile.IsLoosePaper).Count(), Is.EqualTo(2));
             Assert.That(vault.State.AcademyFieldEnemy, Is.Not.Null);
 
             FirstRegionLevelBuild ring = FirstRegionLevelBuilder.Build("outer_ring_clearance");
             Assert.That(ring.State.GetUnit("enemy_0").EnemyArchetypeId, Is.EqualTo("elite_vanguard"));
             Assert.That(ring.State.Map.PositionsWith(tile => tile.IsWardGenerator).Count(), Is.EqualTo(1));
-            Assert.That(ring.State.Map.PositionsWith(tile => tile.IsCertifierStand).Count(), Is.EqualTo(1));
+            Assert.That(ring.State.Map.PositionsWith(tile => tile.Cover == CoverType.Heavy).Count(), Is.GreaterThanOrEqualTo(5));
             Assert.That(ring.State.AcademyFieldEnemy, Is.Not.Null, "划线教官与提灯巡查的岗位机制由同一运行时结算。");
         }
 

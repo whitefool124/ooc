@@ -1,0 +1,174 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "rain_lantern_court",
+  "displayName": "普通战斗 01 · 雨后灯庭",
+  "objectiveSummary": "让寻迹兽失去行动能力，并让高年级火矢生认输。",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 6,
+  "height": 5,
+  "complexMechanics": false,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 1,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "tether_hound",
+      "x": 4,
+      "y": 3
+    },
+    {
+      "archetypeId": "pyromancer",
+      "x": 5,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 1,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 4,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "雨后石庭、短浅水横带、双列灯藤与西侧安全入口",
+    "publicRisk": "寻迹兽封住近侧，火矢生沿干地与藤列形成公开射线。",
+    "counterplayWindow": "可入藤延迟搜查、借浅水灭火，或沿西侧掩体先处理寻迹兽。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:29:35.937Z"
+}

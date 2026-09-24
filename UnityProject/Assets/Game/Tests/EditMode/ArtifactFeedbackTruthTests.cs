@@ -104,7 +104,7 @@ namespace OCC.Combat.Tests
             var state = State(); var enemy = state.GetUnit("enemy"); enemy.ApplyStatus(StatusType.Bound, 3);
             var execution = ArtifactEngine.Execute(new ArtifactBattleState(state), "hero", ArtifactCatalog.BindingFrame, ArtifactTarget.Unit("enemy", enemy.Position), 2);
             Assert.That(execution.Steps.Count, Is.EqualTo(1)); Assert.That(execution.Steps[0].Applied, Is.Zero);
-            Assert.That(Events(execution), Is.Empty); Assert.That(enemy.StatusDuration(StatusType.Bound), Is.EqualTo(3));
+            Assert.That(Events(execution), Is.Empty); Assert.That(enemy.StatusDuration(StatusType.Bound), Is.EqualTo(4));
         }
 
         [Test]

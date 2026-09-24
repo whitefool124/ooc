@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "weak_layout_w1",
+  "displayName": "普通战斗 10 · 弱遭遇布局 W1",
+  "objectiveSummary": "弱遭遇双敌演练布局",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 6,
+  "height": 5,
+  "complexMechanics": false,
+  "floorTheme": "StoneRoad",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 2,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "raider",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "archetypeId": "shieldguard",
+      "x": 4,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "半开放双翼演练场",
+    "publicRisk": "中央盾位与单侧接近形成公开夹角。",
+    "counterplayWindow": "出生点后方保留换翼退路。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:36:39.494Z"
+}

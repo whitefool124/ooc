@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "outer_ring_clearance",
+  "displayName": "精英战斗 08 · 高塔外环清障",
+  "width": 7,
+  "height": 6,
+  "objectiveSummary": "击倒划线教官、提灯巡查与背弩生。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "floorTheme": "AetherMarked",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "relay_raid",
+    "signal_hub"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 3
+  },
+  "enemies": [
+    {
+      "archetypeId": "elite_vanguard",
+      "x": 4,
+      "y": 3
+    },
+    {
+      "archetypeId": "lantern_revealer",
+      "x": 6,
+      "y": 4
+    },
+    {
+      "archetypeId": "rune_arbalist",
+      "x": 6,
+      "y": 1
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "WardGenerator",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 1,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 5,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 6,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [
+    {
+      "id": "vanguard_temp_heavy_cover",
+      "type": "temporary",
+      "label": "划线教官生成临时重掩体",
+      "timing": "划线教官回合开始",
+      "trigger": "场上没有可倚靠的完整重掩体且本场生成次数未满",
+      "result": "在划线教官正交相邻合法空格生成耐久12的重掩体",
+      "duration": "直到被摧毁；每场最多2次",
+      "source": "elite_vanguard",
+      "positions": []
+    }
+  ],
+  "spaceContract": {
+    "grammar": "外环直廊、中央物块堆与两处重掩体",
+    "publicRisk": "背弩重矢与显影沿同一廊道叠加。",
+    "counterplayWindow": "借永久重物块遮断直线，或先拆重掩体再压上。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

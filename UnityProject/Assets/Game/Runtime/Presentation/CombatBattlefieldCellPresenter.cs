@@ -83,9 +83,20 @@ namespace OCC.Combat.Presentation
                     UnitState source = state.GetUnit("hero");
                     bool friendlyCell = affected != null && source != null && affected.Id != source.Id && affected.IsHero == source.IsHero &&
                         fireSpell.Rules.Any(rule => rule.AffectAllies);
-                    skillMarker = friendlyCell ? BattlefieldCellMarker.SkillRisk : BattlefieldCellMarker.SkillCommitted;
+                    skillMarker = friendlyCell || selectedPreview.ReactionCells.Contains(position)
+                        ? BattlefieldCellMarker.SkillRisk : BattlefieldCellMarker.SkillCommitted;
                 }
+                if (selectedPreview?.CanCommit == true &&
+                    (selectedPreview.ProjectedDestroyedObjects.Contains(position) ||
+                     selectedPreview.ProjectedPushedUnits.Values.Contains(position)))
+                    skillMarker = BattlefieldCellMarker.SkillRisk;
             }
+            if (fireBattle?.OptionalMoves.Any(offer => offer.SourceUnitId == "hero" && offer.Destination == position) == true)
+                skillMarker = BattlefieldCellMarker.SkillSelectable;
+            bool pendingBlast = fireBattle != null && fireBattle.PendingEffects.Any(effect =>
+                effect.Spell.TriggerWindow == FireTriggerWindow.CurrentTurnEnd &&
+                effect.MarkedCell.ManhattanDistance(position) <= 1);
+            if (pendingBlast) skillMarker = BattlefieldCellMarker.SkillRisk;
             Texture2D move = OverlayFor(moveMarker);
             Texture2D attack = OverlayFor(attackMarker);
             Texture2D skill = OverlayFor(skillMarker);
@@ -219,6 +230,11 @@ namespace OCC.Combat.Presentation
                 objectLabel = string.Empty;
                 objectLabelColor = new Color(.38f, .82f, .94f, .92f);
             }
+            if (fireBattle?.IsFractured(position) == true)
+            {
+                objectLabel = "裂痕";
+                objectLabelColor = new Color(1f, .67f, .39f, .96f);
+            }
 
             bool legacyLootHere = state.Loot != null && state.Loot.Position == position;
             bool searchableLootHere = state.LootSource != null && state.LootSource.Position == position;
@@ -232,16 +248,29 @@ namespace OCC.Combat.Presentation
             Texture2D selectionOverlay = selected ? OverlayFor(BattlefieldCellMarker.Focus) : null;
             string surfaceHover = BuildSurfaceHover(level, position);
             string terrainEffectHover = BuildTerrainEffectHover(state, fireBattle, tile, position);
+            if (pendingBlast) terrainEffectHover = JoinHoverSections(terrainEffectHover,
+                "公开爆破区：本回合结束时受到 12 点伤害；物块耐久伤害翻倍。可在引爆前撤离");
             string objectHover = BuildObjectHover(state, tile, position);
             string reactionHover = pressureReaction?.WillTrigger == true
                 ? "警戒反应\n" + pressureReaction.Summary : string.Empty;
             string terrainHover = JoinHoverSections(surfaceHover, terrainEffectHover, objectHover, reactionHover);
             string hover = unit == null ? terrainHover : unit.IsHero
-                ? CombatInformationPresenter.BuildHeroDetails(unit)
+                ? CombatInformationPresenter.BuildHeroDetails(unit) +
+                  (fireBattle?.HasFractureShieldArmed(unit.Id) == true
+                      ? "\n回流护持：下次自身回合开始前，己方首次摧毁裂痕物块时额外获得 4 护盾。" : string.Empty) +
+                  (fireBattle?.PendingEffects.FirstOrDefault(effect => effect.SourceUnitId == unit.Id &&
+                      effect.Spell.Id == "F-P-M26") is FirePendingEffect counter
+                      ? counter.Stage == 0 ? "\n迎锋架势：等待下一次突进完成。" :
+                        "\n迎锋架势：首次受到相邻主动攻击后反击 12 点武器伤害；到下次自身回合开始失效。"
+                      : string.Empty) +
+                  (fireBattle?.PendingEffects.Any(effect => effect.SourceUnitId == unit.Id && effect.Spell.Id == "F-P-M24") == true
+                      ? "\n余势回身：等待下一次突进完成后选择后撤。" : string.Empty) +
+                  (fireBattle?.PendingEffects.Any(effect => effect.SourceUnitId == unit.Id && effect.Spell.Id == "F-P-U26") == true
+                      ? "\n碎障回身：等待自身下一次摧毁物件。" : string.Empty)
                 : CombatInformationPresenter.BuildEnemyHoverDetails(state, unit, intent) +
                   FixedEncounterEnemyRuleText(state, unit) +
                   (forecast == null ? string.Empty : "\n预计伤害：" + forecast.PlayerSummary);
-            string actionHover = BuildActionHover(state, selection, position, unit, forecast, fireSpell, firePreview,
+            string actionHover = BuildActionHover(state, fireBattle, selection, position, unit, forecast, fireSpell, firePreview,
                 pressureReaction, move != null, attack != null);
             if (!string.IsNullOrWhiteSpace(actionHover))
                 hover = string.IsNullOrWhiteSpace(hover) ? actionHover : actionHover + "\n\n" + hover;
@@ -335,11 +364,13 @@ namespace OCC.Combat.Presentation
                 ? oneBased - 1 : -1;
         }
 
-        private static string BuildActionHover(CombatState state, CombatSelectionController selection, GridPosition position,
+        private static string BuildActionHover(CombatState state, FireBattleState fireBattle, CombatSelectionController selection, GridPosition position,
             UnitState unit, CombatTargetDamageForecast forecast, FireSpellDefinition spell, FireSpellPreview spellPreview,
             PressureReactionPreview pressureReaction, bool canMove, bool canAttack)
         {
             if (selection == null || state == null) return string.Empty;
+            FireOptionalMoveOffer optional = fireBattle?.OptionalMoves.FirstOrDefault(offer => offer.SourceUnitId == "hero" && offer.Destination == position);
+            if (optional != null) return "可选移动\n点击：" + optional.Spell.DisplayName + "的免费落点；其他操作则放弃";
             // While the right-click menu owns the input, the committed action is not what the player is
             // looking at, so the cell must not advertise it as "当前操作".
             if (selection.HasMenuPreview) return string.Empty;
@@ -365,6 +396,31 @@ namespace OCC.Combat.Presentation
                 + "\n影响：" + spellPreview.Cells.Count + " 格"
                 + (spellPreview.FriendlyFireRisk ? "，可能波及友军" : string.Empty)
                 + "\n效果：" + effect;
+            if (spellPreview.ProjectedDestroyedObjects.Count > 0)
+                preview += "\n预计摧毁：" + string.Join("、", spellPreview.ProjectedDestroyedObjects
+                    .Select(cell => "(" + cell.X + "," + cell.Y + ")"));
+            if (spell.Id == "F-P-U23" && spellPreview.Cells.Count > 0)
+            {
+                GridPosition hit = spellPreview.Cells[spellPreview.Cells.Count - 1];
+                preview += spellPreview.ProjectedDestroyedObjects.Contains(hit)
+                    ? "\n预计落点：目标前格→打穿后进入 (" + hit.X + "," + hit.Y + ")"
+                    : "\n预计落点：目标前一格（未打穿则停留）";
+            }
+            if (spell.Id == "F-P-R25" && spellPreview.Cells.Count >= 3)
+            {
+                GridPosition anchor = spellPreview.Cells[0], cover = spellPreview.Cells[1];
+                preview += "\n折射：锚点 (" + anchor.X + "," + anchor.Y + ")，重掩体 (" + cover.X + "," + cover.Y + ")";
+                preview += "\n射线：" + string.Join("→", spellPreview.Cells.Skip(2)
+                    .Select(cell => "(" + cell.X + "," + cell.Y + ")"));
+            }
+            if (spellPreview.ReactionCells.Count > 0)
+                preview += "\n敌方反应覆盖：" + string.Join("、", spellPreview.ReactionCells
+                    .Select(cell => "(" + cell.X + "," + cell.Y + ")"));
+            if (spellPreview.ProjectedPushedUnits.Count > 0)
+                preview += "\n最终推位：" + string.Join("；", spellPreview.ProjectedPushedUnits
+                    .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+                    .Select(pair => (state.GetUnit(pair.Key)?.DisplayName ?? pair.Key) + "→(" +
+                        pair.Value.X + "," + pair.Value.Y + ")"));
             return preview;
         }
 
@@ -389,6 +445,8 @@ namespace OCC.Combat.Presentation
                 effects.Add("浅水使主角进入消耗 2 移动距离、寻迹兽消耗 1，并在进入时移除燃烧");
             if (fireBattle?.HasFireground(position) == true)
                 effects.Add("燃烧地面会在进入或停留时触发火焰伤害");
+            if (fireBattle?.IsFractured(position) == true)
+                effects.Add("裂痕：该物块被摧毁时，施加者回流 2 魔力与 4 护盾；到施加者下一次自身回合结束移除");
             if (tile.SmokeExpiresAt > state.CurrentTime)
                 effects.Add("烟幕可进入，但会截断双方穿过、射入或射出的远程攻击线，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
             if (tile.IsScorched)

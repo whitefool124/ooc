@@ -61,7 +61,7 @@ namespace OCC.Combat.Tests
                 CombatEffect.RestoreShield(hero.Id, 2),
                 CombatEffect.RestoreMana(hero.Id, 1),
                 CombatEffect.ClearStatus(hero.Id, StatusType.Burning),
-                CombatEffect.ApplyStatus(hero.Id, StatusType.Slow, 2),
+                CombatEffect.ApplyStatus(hero.Id, StatusType.Agility, 2, -1),
                 CombatEffect.Move(new GridPosition(1, 1)),
                 CombatEffect.DamageObject(objectPosition, 3),
                 CombatEffect.DelayInitiative(4));
@@ -75,7 +75,7 @@ namespace OCC.Combat.Tests
             }));
             Assert.That(hero.Position, Is.EqualTo(new GridPosition(1, 1)));
             Assert.That(hero.HasStatus(StatusType.Burning), Is.False);
-            Assert.That(hero.StatusDuration(StatusType.Slow), Is.EqualTo(2));
+            Assert.That(hero.StatusStrength(StatusType.Agility), Is.EqualTo(-1));
             Assert.That(state.Map.GetTile(objectPosition).Durability, Is.EqualTo(2));
         }
 

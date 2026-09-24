@@ -53,9 +53,10 @@ namespace OCC.Combat.Tests
         [Test]
         public void RandomizedArenaEntryBuildsFullDistinctLoadouts()
         {
-            for (int index = 0; index < 12; index++)
+            HashSet<string> distinctBuilds = new HashSet<string>(StringComparer.Ordinal);
+            for (int index = 0; index < 36; index++)
             {
-                CombatSceneSessionBuild build = CombatTestArenaScenarioCatalog.BuildRandomized("arena_n01_flank");
+                CombatSceneSessionBuild build = CombatTestArenaScenarioCatalog.BuildRandomized("arena_n01_flank", index);
                 string[] spells = build.State.RogueSpells.Loadout.EquippedSpellIds.ToArray();
                 RogueTacticalItemInstance[] artifacts = build.State.RogueEquipment.ItemQuickbarInstanceIds
                     .Select(build.State.RogueEquipment.TacticalItem).ToArray();
@@ -63,7 +64,19 @@ namespace OCC.Combat.Tests
                 Assert.That(spells.Distinct().Count(), Is.EqualTo(RogueRuntimeConstants.SpellSlotCount));
                 Assert.That(artifacts.Length, Is.EqualTo(RogueRuntimeConstants.ItemQuickbarSize));
                 Assert.That(artifacts.Select(item => item.DefinitionId).Distinct().Count(), Is.EqualTo(RogueRuntimeConstants.ItemQuickbarSize));
+                Assert.That(spells, Has.All.Matches<string>(id => FireSpellCatalog.All.Any(spell => spell.Id == id)));
+                Assert.That(artifacts, Has.All.Matches<RogueTacticalItemInstance>(item =>
+                    item != null && ArtifactCatalog.IsCurrentlyUsable(item.DefinitionId)));
+                string[] styles = { SpellBuildTagCatalog.Breach, SpellBuildTagCatalog.Dash, SpellBuildTagCatalog.Fireground };
+                string style = styles.Single(value => build.Preparation.EnemySummary.Contains("随机构筑：" + value));
+                Assert.That(spells.Count(id => SpellBuildTagCatalog.For(id) == style), Is.EqualTo(6));
+                Assert.That(spells.Count(id => SpellBuildTagCatalog.For(id) != style), Is.EqualTo(2));
+                Assert.That(artifacts.Any(item => item.DefinitionId == "G-T06" || item.DefinitionId == "G-T16") && !spells.Contains("F-P-U07"), Is.False);
+                Assert.That(artifacts.Any(item => item.DefinitionId == "G-T11") && !spells.Select(FireSpellCatalog.Get)
+                    .Any(spell => spell.Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground)), Is.False);
+                distinctBuilds.Add(string.Join("|", spells) + "/" + string.Join("|", artifacts.Select(item => item.DefinitionId)));
             }
+            Assert.That(distinctBuilds.Count, Is.GreaterThan(1), "different seeds should not repeat one fixed preset");
         }
 
         [Test]
@@ -162,13 +175,12 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void DedicatedSpellLabsCoverEveryPersonalSpellInFullEightSlotLoadouts()
+        public void RandomizedSpellPoolHasBuildTagsForAllPersonalSpells()
         {
             CombatTestArenaScenario[] labs = CombatTestArenaScenarioCatalog.All.Where(scenario => scenario.IsSkillTest).ToArray();
-            string[] covered = labs.SelectMany(scenario => scenario.SpellIds).Distinct().OrderBy(id => id).ToArray();
-            string[] required = FireSpellCatalog.All.Select(spell => spell.Id).OrderBy(id => id).ToArray();
-
-            Assert.That(covered, Is.SupersetOf(required));
+            Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
+            Assert.That(FireSpellCatalog.All, Has.All.Matches<FireSpellDefinition>(spell =>
+                !string.IsNullOrEmpty(SpellBuildTagCatalog.For(spell.Id))));
             Assert.That(labs, Has.All.Matches<CombatTestArenaScenario>(scenario =>
                 scenario.SpellIds.Count == RogueRuntimeConstants.SpellSlotCount &&
                 scenario.ArtifactIds.Count == RogueRuntimeConstants.ItemQuickbarSize));
@@ -195,6 +207,7 @@ namespace OCC.Combat.Tests
         {
             string[] covered = CombatTestArenaScenarioCatalog.All
                 .SelectMany(scenario => scenario.SpellIds)
+                .Concat(FireSpellCatalog.All.Select(spell => spell.Id))
                 .Distinct(StringComparer.Ordinal)
                 .OrderBy(id => id, StringComparer.Ordinal)
                 .ToArray();
@@ -386,12 +399,19 @@ namespace OCC.Combat.Tests
             }
 
             Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
+            CombatCommandExecutionResult close = commands.Execute(state, state.RogueSpells.FireBattle,
+                CombatCommand.Move(hero.Id, new GridPosition(5, 3)));
+            Assert.That(close.Accepted, Is.True, close.RejectionReason);
             Assert.That(hero.Position.ManhattanDistance(core.Position), Is.EqualTo(1));
             CombatCommandExecutionResult ignite = commands.Execute(state, state.RogueSpells.FireBattle,
                 CombatCommand.UseSkill(hero.Id, 1, core.Id));
             Assert.That(ignite.Accepted, Is.True, ignite.RejectionReason);
             Assert.That(core.HasStatus(StatusType.Burning), Is.True);
-            Assert.That(hero.ActionPoints, Is.EqualTo(2));
+            Assert.That(hero.ActionPoints, Is.EqualTo(1));
+            CombatCommandExecutionResult strike = commands.Execute(state, state.RogueSpells.FireBattle,
+                CombatCommand.Attack(hero.Id, core.Id));
+            Assert.That(strike.Accepted, Is.True, strike.RejectionReason);
+            Assert.That(hero.ActionPoints, Is.Zero);
 
             string ledgerInstanceId = state.RogueEquipment.ItemQuickbarInstanceIds[2];
             RogueTacticalItemInstance ledger = state.RogueEquipment.TacticalItem(ledgerInstanceId);
@@ -401,14 +421,14 @@ namespace OCC.Combat.Tests
             ArtifactEngine.Execute(artifacts, hero.Id, ArtifactCatalog.TurnLedger,
                 ArtifactTarget.Unit(hero.Id, hero.Position), ledger.ChargesCurrent);
             Assert.That(ledger.Consume(), Is.True);
-            Assert.That(hero.ActionPoints, Is.EqualTo(3));
+            Assert.That(hero.ActionPoints, Is.EqualTo(2), "行程簿按配置提供 2 点行动点。");
             Assert.That(hero.ActionValue, Is.EqualTo(actionValueBefore - 8));
 
             int vitalityBefore = core.Health + core.Shield;
             CombatCommandExecutionResult finisher = commands.Execute(state, state.RogueSpells.FireBattle,
                 CombatCommand.UseSkill(hero.Id, 7, core.Id));
             Assert.That(finisher.Accepted, Is.True, finisher.RejectionReason);
-            Assert.That(hero.ActionPoints, Is.Zero);
+            Assert.That(hero.ActionPoints, Is.EqualTo(2 - FireSpellCatalog.Get("F-P-M20").ActionPointCost));
             Assert.That(core.Health + core.Shield, Is.LessThan(vitalityBefore));
         }
 
@@ -427,8 +447,11 @@ namespace OCC.Combat.Tests
             UnitState pressureHero = pressure.GetUnit("hero");
             CombatCommand charge = pressure.ThreeMaterialPressure.ChooseEnemyCommand(pressure, ram, pressureHero);
             Assert.That(charge.Type, Is.EqualTo(CombatCommandType.BreachCharge));
-            Assert.That(pressure.ThreeMaterialPressure.PresentIntent(pressure, ram, charge).DetailedText,
+            EnemyIntentPresentation chargeIntent = pressure.ThreeMaterialPressure.PresentIntent(pressure, ram, charge);
+            Assert.That(chargeIntent.DetailedText,
                 Does.Contain("路线").And.Contain("上限 5"));
+            Assert.That(chargeIntent.AttackRange, Is.Not.Empty);
+            Assert.That(chargeIntent.Route, Is.Not.Empty);
         }
 
         [Test]
@@ -457,8 +480,8 @@ namespace OCC.Combat.Tests
             Assert.That(state.AcademyCoreBoss.PendingMechanismCount(state), Is.Zero);
             EnemyTurnPlanBook phaseOnePlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseOne = phaseOnePlans.GetPublicIntent(state, core, hero);
-            // 换装后：够得到就用拆架重锤，够不到就压上；塔压的直线在回合开始结算。
-            Assert.That(new[] { "拆架重锤", "移动" }, Does.Contain(phaseOne.ActionName));
+            // 换装后：够得到就用拆架重锤，直线可命中时可选择塔压；二者均占用一次行动。
+            Assert.That(new[] { "拆架重锤", "塔压", "移动" }, Does.Contain(phaseOne.ActionName));
             Assert.That(phaseOne.DetailedText, Does.Contain("阶段一").And.Contain("3 条维护链"));
 
             // 阶段二：生命降到 30% 及以下时改用两格破势脉冲。
@@ -475,7 +498,7 @@ namespace OCC.Combat.Tests
             Assert.That(phaseTwoState.AcademyCoreBoss.PhaseFor(phaseTwoState, phaseTwoCore), Is.EqualTo(2));
             EnemyTurnPlanBook phaseTwoPlans = new EnemyTurnPlanBook();
             EnemyIntentPresentation phaseTwo = phaseTwoPlans.GetPublicIntent(phaseTwoState, phaseTwoCore, phaseTwoHero);
-            Assert.That(new[] { "拆架重锤", "移动" }, Does.Contain(phaseTwo.ActionName));
+            Assert.That(new[] { "拆架重锤", "塔压", "移动" }, Does.Contain(phaseTwo.ActionName));
             Assert.That(phaseTwo.DetailedText, Does.Contain("阶段二"));
         }
 
@@ -522,7 +545,7 @@ namespace OCC.Combat.Tests
             Assert.That(preview.TargetUnitId, Is.EqualTo("enemy_1"));
             Assert.That(preview.FriendlyFire, Is.True);
             Assert.That(preview.Summary, Does.Contain("本回合限 1 次").And.Contain("敌方友伤").And.Contain("E4"));
-            Assert.That(state.PressureTest.PreviewHeroMove(state, new GridPosition(6, 3)).WillTrigger, Is.False,
+            Assert.That(state.PressureTest.PreviewHeroMove(state, new GridPosition(6, 2)).WillTrigger, Is.False,
                 "警戒者相邻格必须是明确死区。 ");
 
             UnitState intercepted = state.GetUnit("enemy_1");

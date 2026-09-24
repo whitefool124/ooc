@@ -118,10 +118,26 @@ namespace OCC.Combat
             GridPosition forced = first.Position + direction;
             bool canPush = state.Map.IsInside(forced) && !state.Map.IsBlocked(forced) &&
                 !state.IsOccupied(forced, first.Id) && state.ArtifactBattle?.CanPreventForcedMove(first.Id) != true;
+            TileState forcedTile = state.Map.IsInside(forced) ? state.Map.GetTile(forced) : null;
+            bool hitsObject = state.ArtifactBattle?.CanPreventForcedMove(first.Id) != true &&
+                forcedTile?.BlocksMovement == true && !string.IsNullOrEmpty(forcedTile.ObjectName());
+            if (hitsObject)
+            {
+                DamageResolution collision = RogueDamageResolver.Resolve(new DamagePacket(
+                    "pressure-reaction-collision-preview", source.Id, first.Id, "forced-move-collision",
+                    new[] { new DamageComponent(DamageComponentKind.Physical, 4) }),
+                    Math.Max(0, first.Shield - damage.ShieldAbsorbed),
+                    Math.Max(0, first.Health - damage.HealthDamage));
+                damage = new DamageResolution(damage.RawTotal + collision.RawTotal, 0, 0,
+                    damage.AfterReduction + collision.AfterReduction, first.Shield,
+                    damage.ShieldAbsorbed + collision.ShieldAbsorbed, first.Health,
+                    damage.HealthDamage + collision.HealthDamage,
+                    first.Health - damage.HealthDamage - collision.HealthDamage <= 0);
+            }
             bool friendlyFire = !first.IsHero;
             string summary = "移动结束将触发" + source.DisplayName + "的警戒反应（本回合限 1 次）：" +
                 first.DisplayName + "预计护盾 -" + damage.ShieldAbsorbed + "、生命 -" + damage.HealthDamage +
-                (canPush ? "，推至 " + Cell(forced) : "，击退受阻") +
+                (canPush ? "，推至 " + Cell(forced) : hitsObject ? "，撞击" + forcedTile.ObjectName() + "并使其耐久 -4" : "，击退受阻") +
                 (friendlyFire ? "；射线先命中敌人，构成敌方友伤" : string.Empty) + "。";
             return PressureReactionPreview.Create(source.Id, first, destination, forced, damage,
                 friendlyFire, canPush, summary);
@@ -144,12 +160,23 @@ namespace OCC.Combat
             var effects = new List<CombatEffect>();
             if (damage.ShieldAbsorbed > 0) effects.Add(CombatEffect.AbsorbShield(target.Id, damage.ShieldAbsorbed));
             if (damage.HealthDamage > 0) effects.Add(CombatEffect.DamageHealth(target.Id, damage.HealthDamage));
-            if (preview.WillPush && target.Health - damage.HealthDamage > 0 &&
-                state.ArtifactBattle?.TryPreventForcedMove(target.Id) != true)
-                effects.Add(CombatEffect.Move(target.Id, preview.ForcedDestination));
             CombatEffectExecution execution = effects.Count == 0
                 ? CombatEffectExecution.Empty
                 : CombatEffectExecutor.Execute(state, source.Id, effects.ToArray());
+            if (target.IsAlive && state.ArtifactBattle?.TryPreventForcedMove(target.Id) != true)
+            {
+                GridPosition beforePush = target.Position;
+                ForcedMoveResult push = state.ResolveForcedMove(target,
+                    StepDirection(source.Position, target.Position), 1, "pressure-reaction");
+                if (push == ForcedMoveResult.Moved)
+                {
+                    CombatEffect move = CombatEffect.Move(target.Id, target.Position);
+                    var moveResult = new CombatEffectResult(execution.Results.Count, move, source.Id,
+                        target.Id, 0, 0, 0, beforePush, target.Position);
+                    execution = CombatEffectExecution.Combine(execution,
+                        new CombatEffectExecution(new[] { moveResult }));
+                }
+            }
             state.AddLog("警戒反应触发：" + target.DisplayName + "受到 " + ReactionDamage + " 点物理冲击" +
                 (preview.FriendlyFire ? "（敌方友伤）" : string.Empty) + "。 ");
             state.EvaluateOutcome();

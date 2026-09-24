@@ -1,0 +1,56 @@
+{
+  "status": "PASS_LOSSLESS_TARGET",
+  "source_size": [
+    2172,
+    724
+  ],
+  "inferred_subject_pixel_pitch": 23,
+  "inferred_subject_grid_phase": [
+    14,
+    8
+  ],
+  "subject_lattice_confidence": 1.2299,
+  "subject_lattice_confidence_min": 1.2,
+  "subject_lattice_is_stable": true,
+  "ground_field_manual_pitch": null,
+  "ground_field_manual_pitch_review_required": false,
+  "background_checker_used_for_scale": false,
+  "subject_bounds_on_logical_grid": [
+    0,
+    0,
+    92,
+    25
+  ],
+  "subject_logical_size": [
+    92,
+    25
+  ],
+  "target_canvas": [
+    96,
+    32
+  ],
+  "normalization_mode": "intact_subject_canvas",
+  "ground_window_bounds_on_logical_grid": null,
+  "ground_window_selection": "deterministic_center",
+  "preview": "ArtSource\\archive_ui_formal_2026-09-23\\primary_scroll_02_preview.png",
+  "safe_border": 0,
+  "decoded_visible_colours_before_cleanup": 248,
+  "decoded_visible_colours_after_cleanup": 16,
+  "palette_max": 16,
+  "all_decoded_colours_are_observed_source_samples": true,
+  "alpha_shape_preserved_pixel_for_pixel": true,
+  "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+  "ground_window_equals_decoded_source_pixels_pixel_for_pixel": null,
+  "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+  "macro_pixel_decoding_performed": true,
+  "geometric_resize_or_interpolation_performed": false,
+  "new_colours_introduced": false,
+  "logical_pixels_removed": 0,
+  "background_artifact_cells_removed": 0,
+  "alpha_components_before_cleanup": 1,
+  "alpha_components_after_cleanup": 1,
+  "dithering": false,
+  "structural_detail_loss_allowed": false,
+  "promotion_limit": null,
+  "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+}

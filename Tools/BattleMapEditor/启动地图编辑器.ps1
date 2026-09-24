@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $editorRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$editorPort = 4178
+$editorPort = 4179
 $editorUrl = "http://127.0.0.1:$editorPort"
 $alreadyRunning = $false
 try {

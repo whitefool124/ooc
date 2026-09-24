@@ -10,20 +10,32 @@ namespace OCC.Combat.Tests
     public sealed class FireSpellCatalogTests
     {
         [Test]
-        public void Catalog_IsV03WithBalancedRarityAndTwentyMeleeUniversalAndRangedEntries()
+        public void CurrentCardCopy_DoesNotGrantUndeclaredPursuitDamageOrFiregroundStatuses()
+        {
+            Assert.That(FireSpellCatalog.Get("F-P-M05").Rules.Select(rule => rule.Kind),
+                Is.EquivalentTo(new[] { FireRuleKind.MoveSource }));
+            Assert.That(FireSpellCatalog.Get("F-P-R13").Rules.Select(rule => rule.Kind),
+                Is.EquivalentTo(new[] { FireRuleKind.CreateFireground }));
+            Assert.That(FireSpellCatalog.Get("F-P-R20").Rules.Select(rule => rule.Kind),
+                Is.EquivalentTo(new[] { FireRuleKind.Damage, FireRuleKind.CreateFireground }));
+        }
+
+        [Test]
+        public void Catalog_ContainsOnlyReviewedImplementedEntriesDuringTheEightySpellMigration()
         {
             string[] expected = new[] { "M", "U", "R" }.SelectMany(prefix =>
-                Enumerable.Range(1, 20).Select(index => $"F-P-{prefix}{index:00}")).ToArray();
-            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.3-rarity"));
-            Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(60));
+                Enumerable.Range(1, 20).Select(index => $"F-P-{prefix}{index:00}").Concat(prefix == "M"
+                    ? new[] { "F-P-M21", "F-P-M22", "F-P-M23", "F-P-M24", "F-P-M25", "F-P-M26" } : prefix == "U" ? new[] { "F-P-U21", "F-P-U22", "F-P-U23", "F-P-U24", "F-P-U25", "F-P-U26", "F-P-U27", "F-P-U28" } : new[] { "F-P-R21", "F-P-R22", "F-P-R23", "F-P-R24", "F-P-R25", "F-P-R26" })).ToArray();
+            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.4-reviewed-migration"));
+            Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id), Is.EqualTo(expected));
-            Assert.That(FireSpellCatalog.All.Select(spell => spell.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(60));
-            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.MeleeOnly), Is.EqualTo(20));
-            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.WeaponUniversal), Is.EqualTo(20));
-            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.RangedSpell), Is.EqualTo(20));
-            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Common), Is.EqualTo(30));
-            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Uncommon), Is.EqualTo(21));
-            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Rare), Is.EqualTo(9));
+            Assert.That(FireSpellCatalog.All.Select(spell => spell.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(80));
+            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.MeleeOnly), Is.EqualTo(26));
+            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.WeaponUniversal), Is.EqualTo(28));
+            Assert.That(FireSpellCatalog.All.Count(spell => spell.CombatAffinity == FireCombatAffinity.RangedSpell), Is.EqualTo(26));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Common), Is.EqualTo(40));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Uncommon), Is.EqualTo(28));
+            Assert.That(FireSpellCatalog.PersonalSpellCount(FireSpellRarity.Rare), Is.EqualTo(12));
             Assert.That(FireSpellCatalog.All, Has.All.Matches<FireSpellDefinition>(spell =>
                 !string.IsNullOrWhiteSpace(spell.DisplayName) && spell.ActionPointCost >= 0 && spell.ManaCost >= 0 &&
                 spell.Rules.Count > 0 && spell.PresentationModules.Count > 0 &&
@@ -134,24 +146,462 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FiregroundSpells_CarryTheirDeclaredPerSourceDamage()
+        public void FiregroundSpells_UseSharedBaseDamageAndResolveBothSidesStatusesDynamically()
         {
-            // 总案 3.5.6.1／3.5.1.2 与技能配置表：火场按来源配置伤害，取 8 或 12。
-            Assert.That(FireSpellCatalog.Get("F-P-R13").Rules.Single(rule => rule.Kind == FireRuleKind.CreateFireground).Amount, Is.EqualTo(12));
-            Assert.That(FireSpellCatalog.Get("F-P-R20").Rules.Single(rule => rule.Kind == FireRuleKind.CreateFireground).Amount, Is.EqualTo(12));
-            foreach (string id in new[] { "F-P-M03", "F-P-R11", "F-P-R12", "F-P-R14", "F-P-R15", "F-P-U17", "F-P-U19" })
+            // 总案 3.5.6.1／3.5.1.2：所有火场共用8点基础伤害，双方状态在触发时动态结算。
+            foreach (string id in new[] { "F-P-M03", "F-P-R11", "F-P-R12", "F-P-R13", "F-P-R14", "F-P-R15", "F-P-R20", "F-P-U17", "F-P-U19" })
                 Assert.That(FireSpellCatalog.Get(id).Rules.Where(rule => rule.Kind == FireRuleKind.CreateFireground).All(rule => rule.Amount == 8), Is.True, id);
 
-            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            GridMap map = new GridMap(6, 4);
+            UnitState enemySource = new UnitState("enemy-source", false, new GridPosition(0, 0));
+            UnitState targetA = new UnitState("target-a", true, new GridPosition(2, 1));
+            UnitState targetB = new UnitState("target-b", true, new GridPosition(4, 1));
+            enemySource.ApplyStatus(StatusType.FiregroundBoost, 3, 2);
+            targetA.ApplyStatus(StatusType.FiregroundVulnerable, 3, 3);
+            CombatState combat = new CombatState(map, new[] { enemySource, targetA, targetB }, Array.Empty<CombatObjective>());
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
             FireBattleState battle = new FireBattleState(combat);
-            GridPosition cell = new GridPosition(5, 4);
-            battle.CreateOrRefreshFireground(cell, 12, 3, "F-P-R13", "hero");
-            Assert.That(battle.Firegrounds[cell].Damage, Is.EqualTo(12));
-            // 重复生成同级火场时以新来源覆盖伤害，并刷新完整持续回合。
-            battle.CreateOrRefreshFireground(cell, 8, 2, "F-P-R12", "hero");
-            Assert.That(battle.Firegrounds[cell].Damage, Is.EqualTo(8));
-            Assert.That(battle.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+            GridPosition cellA = targetA.Position;
+            GridPosition cellB = targetB.Position;
+            battle.CreateOrRefreshFireground(cellA, 12, 3, "F-P-R13", enemySource.Id);
+            battle.CreateOrRefreshFireground(cellB, 8, 3, "F-P-R12", enemySource.Id);
+            Assert.That(battle.Firegrounds[cellA].Damage, Is.EqualTo(FiregroundState.BaseDamage));
+            Assert.That(battle.Firegrounds[cellB].Damage, Is.EqualTo(FiregroundState.BaseDamage));
+
+            Assert.That(battle.ResolveEntry(targetA, new GridPosition(1, 1)), Is.EqualTo(13));
+            Assert.That(battle.ResolveEntry(targetB, new GridPosition(3, 1)), Is.EqualTo(10));
+        }
+
+        [Test]
+        public void FirstHitFracture_StopsAtFrontObject_RefluxesOnce_AndExpiresAtCastersNextTurnEnd()
+        {
+            GridMap map = new GridMap(6, 2);
+            GridPosition coverCell = new GridPosition(2, 0);
+            map.SetTile(coverCell, new TileState { Cover = CoverType.Light, Durability = 12 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Rifle, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R21");
+            FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell,
+                FireSpellTarget.At(new GridPosition(4, 0), CardinalDirection.East));
+            Assert.That(preview.CanCommit, Is.True, string.Join("；", preview.Failures));
+            Assert.That(preview.Cells.Last(), Is.EqualTo(coverCell));
+            Assert.That(preview.UnitIds, Is.Empty, "前方物块必须拦住后方单位");
+
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.At(new GridPosition(4, 0), CardinalDirection.East));
+            Assert.That(map.GetTile(coverCell).Durability, Is.EqualTo(6), "裂痕不额外造成 8 点伤害");
+            Assert.That(battle.IsFractured(coverCell), Is.True);
+            int mana = hero.Mana, shield = hero.Shield;
+            map.GetTile(coverCell).Durability = 0;
+            battle.ResolveMarkedDestructions();
+            battle.ResolveMarkedDestructions();
+            Assert.That(hero.Mana, Is.EqualTo(mana + 2));
+            Assert.That(hero.Shield, Is.EqualTo(shield + 4));
+            Assert.That(battle.IsFractured(coverCell), Is.False);
+
+            map.GetTile(coverCell).Durability = 12;
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U21"),
+                FireSpellTarget.At(new GridPosition(4, 0), CardinalDirection.East));
+            battle.EndUnitTurn(hero.Id);
+            Assert.That(battle.IsFractured(coverCell), Is.True);
+            battle.EndUnitTurn(hero.Id);
+            Assert.That(battle.IsFractured(coverCell), Is.False);
+        }
+
+        [Test]
+        public void FractureShield_RequiresAlliedDestruction_TriggersOnce_AndExpiresNextTurn()
+        {
+            GridMap map = new GridMap(6, 2);
+            GridPosition coverCell = new GridPosition(2, 0);
+            map.SetTile(coverCell, new TileState { Cover = CoverType.Light, Durability = 12 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Rifle, null, null);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U21"),
+                FireSpellTarget.At(new GridPosition(3, 0), CardinalDirection.East));
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-R24"),
+                FireSpellTarget.Unit(hero.Id));
+            Assert.That(battle.HasFractureShieldArmed(hero.Id), Is.True);
+            int shield = hero.Shield;
+            map.GetTile(coverCell).Durability = 0;
+            battle.ResolveMarkedDestructions();
+            Assert.That(hero.Shield, Is.EqualTo(shield + 4), "环境自毁仅触发标准回流");
+            Assert.That(battle.HasFractureShieldArmed(hero.Id), Is.True);
+            GridMap alliedMap = new GridMap(6, 2);
+            alliedMap.SetTile(coverCell, new TileState { Cover = CoverType.Light, Durability = 12 });
+            UnitState alliedHero = new UnitState("alliedHero", true, new GridPosition(0, 0));
+            UnitState alliedEnemy = new UnitState("alliedEnemy", false, new GridPosition(4, 0));
+            alliedHero.ConfigureVitality(99); alliedHero.ConfigureMana(99); alliedHero.Equip(CombatCatalog.Rifle, null, null);
+            CombatState alliedCombat = new CombatState(alliedMap, new[] { alliedHero, alliedEnemy }, Array.Empty<CombatObjective>());
+            alliedCombat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(alliedCombat, alliedHero.Id);
+            FireBattleState alliedBattle = new FireBattleState(alliedCombat);
+            FireSpellEngine.Execute(alliedBattle, alliedHero.Id, FireSpellCatalog.Get("F-P-U21"),
+                FireSpellTarget.At(new GridPosition(3, 0), CardinalDirection.East));
+            FireSpellEngine.Execute(alliedBattle, alliedHero.Id, FireSpellCatalog.Get("F-P-R24"),
+                FireSpellTarget.Unit(alliedHero.Id));
+            alliedMap.GetTile(coverCell).Durability = 0;
+            alliedBattle.ResolveMarkedDestructions(alliedHero.Id);
+            alliedBattle.ResolveMarkedDestructions(alliedHero.Id);
+            Assert.That(alliedHero.Shield, Is.EqualTo(8), "标准回流 4 加护持 4，只结算一次");
+            Assert.That(alliedBattle.HasFractureShieldArmed(alliedHero.Id), Is.False);
+            battle.BeginUnitTurn(hero.Id);
+            Assert.That(battle.HasFractureShieldArmed(hero.Id), Is.False);
+        }
+
+        [Test]
+        public void CounterStance_WaitsForCompletedCharge_ThenCountersOneAdjacentAttack()
+        {
+            GridMap map = new GridMap(5, 2);
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99); enemy.Equip(CombatCatalog.Hammer, null, null);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-M26"), FireSpellTarget.Unit(hero.Id));
+            Assert.That(battle.PendingEffects.Single(effect => effect.Spell.Id == "F-P-M26").Stage, Is.Zero);
+            Assert.That(FireSpellEngine.TriggerIncomingAdjacentAttack(battle, enemy.Id, hero.Id), Is.Empty);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-M02"),
+                FireSpellTarget.At(new GridPosition(1, 0), CardinalDirection.East));
+            Assert.That(battle.PendingEffects.Single(effect => effect.Spell.Id == "F-P-M26").Stage, Is.EqualTo(1));
+            int before = enemy.Health;
+            IReadOnlyList<FireSpellExecution> first = FireSpellEngine.TriggerIncomingAdjacentAttack(battle, enemy.Id, hero.Id);
+            Assert.That(first.Single().Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Applied > 0), Is.True);
+            Assert.That(enemy.Health, Is.LessThan(before));
+            Assert.That(FireSpellEngine.TriggerIncomingAdjacentAttack(battle, enemy.Id, hero.Id), Is.Empty);
+        }
+
+        [Test]
+        public void DestroyedObjectJournal_RecordsSourceOnce_Clones_AndResetsAtNextHeroTurn()
+        {
+            GridMap map = new GridMap(4, 2);
+            GridPosition cell = new GridPosition(2, 0);
+            map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 8 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            FireBattleState battle = new FireBattleState(combat);
+            map.GetTile(cell).Durability = 0;
+            battle.ResolveMarkedDestructions(hero.Id);
+            battle.ResolveMarkedDestructions(hero.Id);
+            Assert.That(battle.DestroyedObjectsThisHeroTurn.Count, Is.EqualTo(1));
+            Assert.That(battle.DestroyedObjectsThisHeroTurn[0].Cell, Is.EqualTo(cell));
+            Assert.That(battle.DestroyedObjectsThisHeroTurn[0].DestroyerUnitId, Is.EqualTo(hero.Id));
+            Assert.That(battle.Clone().DestroyedObjectsThisHeroTurn.Count, Is.EqualTo(1));
+            battle.BeginUnitTurn(hero.Id);
+            Assert.That(battle.DestroyedObjectsThisHeroTurn, Is.Empty);
+        }
+
+        [Test]
+        public void SalvageCover_RequiresAlliedFreshMaterial_AndSpendsItOnlyOnce()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U22");
+            FireBattleState battle = prepared.Battle;
+            GridPosition destination = prepared.RecommendedCell;
+            Assert.That(prepared.Preview().CanCommit, Is.True);
+            FireSpellExecution result = (FireSpellExecution)prepared.Execute().NativeResult;
+            Assert.That(result.Steps.Any(step => step.Kind == FireRuleKind.CreateLightCover && step.Cell == destination), Is.True);
+            Assert.That(battle.Combat.Map.GetTile(destination).Cover, Is.EqualTo(CoverType.Light));
+            Assert.That(battle.Combat.Map.GetTile(destination).Durability, Is.EqualTo(8));
+            Assert.That(battle.DestroyedObjectsThisHeroTurn.Single().MaterialSpent, Is.True);
+            GridPosition neighbor = destination + new GridPosition(1, 0);
+            Assert.That(FireSpellEngine.Preview(battle, "hero", FireSpellCatalog.Get("F-P-U22"), FireSpellTarget.At(neighbor, CardinalDirection.East)).CanCommit, Is.False);
+
+            FireSpellTrainingRangeCase enemyMaterial = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U22");
+            enemyMaterial.Battle.DestroyedObjectsThisHeroTurn.Single().SpendMaterial();
+            Assert.That(enemyMaterial.Preview().CanCommit, Is.False);
+        }
+
+        [Test]
+        public void BreachPierce_RequiresThisTurnBreach_AndHitsAdjacentEnemyOnce()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U24");
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U24");
+            Assert.That(prepared.Preview().CanCommit, Is.True, prepared.Preview().Summary);
+            Assert.That(FireSpellEngine.Preview(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(prepared.RecommendedCell, CardinalDirection.South)).UnitIds, Does.Contain("range_normal"));
+            FireSpellExecution result = (FireSpellExecution)prepared.Execute().NativeResult;
+            Assert.That(result.Steps.Count(step => step.Kind == FireRuleKind.WeaponDamage && step.TargetId == "range_normal"), Is.EqualTo(1));
+            Assert.That(prepared.Combat.GetUnit("hero").Position, Is.EqualTo(prepared.RecommendedCell));
+
+            FireSpellTrainingRangeCase noBreach = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U24");
+            noBreach.Battle.BeginUnitTurn("hero");
+            Assert.That(FireSpellEngine.Preview(noBreach.Battle, "hero", spell,
+                FireSpellTarget.At(noBreach.RecommendedCell, CardinalDirection.South)).CanCommit, Is.False);
+        }
+
+        [Test]
+        public void BreachEntry_StopsBeforeFirstObject_ThenEntersOnlyWhenDestroyed()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U23");
+            GridPosition objectCell = prepared.RecommendedCell;
+            FireSpellPreview preview = FireSpellEngine.Preview(prepared.Battle, "hero", FireSpellCatalog.Get("F-P-U23"),
+                FireSpellTarget.At(objectCell, CardinalDirection.East));
+            Assert.That(preview.CanCommit, Is.True, string.Join(";", preview.Failures));
+            Assert.That(preview.ProjectedDestroyedObjects, Does.Contain(objectCell));
+            FireSpellExecution result = (FireSpellExecution)prepared.Execute().NativeResult;
+            Assert.That(result.Steps.Any(step => step.Kind == FireRuleKind.AdvanceIntoBreach && step.Applied == 1), Is.True);
+            Assert.That(prepared.Combat.GetUnit("hero").Position, Is.EqualTo(objectCell));
+
+            FireSpellTrainingRangeCase sturdy = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U23");
+            sturdy.Combat.Map.GetTile(sturdy.RecommendedCell).Durability = 20;
+            FireSpellExecution second = (FireSpellExecution)sturdy.Execute().NativeResult;
+            Assert.That(second.Steps.Any(step => step.Kind == FireRuleKind.AdvanceIntoBreach && step.Applied == 0), Is.True);
+            Assert.That(sturdy.Combat.GetUnit("hero").Position.ManhattanDistance(sturdy.RecommendedCell), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SteadyBreath_ClearsExactlyTheChosenDebuff_OrTheSolePresentOne()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireBattleState battle = ((FireSpellTrainingRangeCase)provider.Prepare("F-P-U28")).Battle;
+            UnitState hero = battle.Combat.GetUnit("hero");
+            hero.ApplyStatus(StatusType.Agility, 2, -1);
+            FireBattleState shiftChoice = battle.Clone();
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U28");
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id, CardinalDirection.East));
+            Assert.That(hero.HasStatus(StatusType.Bound), Is.False);
+            Assert.That(hero.StatusStrength(StatusType.Agility), Is.LessThan(0));
+
+            UnitState shiftedHero = shiftChoice.Combat.GetUnit("hero");
+            FireSpellEngine.Execute(shiftChoice, shiftedHero.Id, spell, FireSpellTarget.Unit(shiftedHero.Id, CardinalDirection.West));
+            Assert.That(shiftedHero.HasStatus(StatusType.Bound), Is.True);
+            Assert.That(shiftedHero.StatusStrength(StatusType.Agility), Is.Zero);
+
+            FireBattleState noStatus = ((FireSpellTrainingRangeCase)provider.Prepare("F-P-U28")).Battle;
+            CombatEffectExecutor.Execute(noStatus.Combat, "hero", CombatEffect.ClearStatus("hero", StatusType.Bound));
+            Assert.That(FireSpellEngine.Preview(noStatus, "hero", spell, FireSpellTarget.Unit("hero")).CanCommit, Is.False);
+        }
+
+        [Test]
+        public void FoldedDash_PreviewsBothBends_AndMovesThroughTheChosenLegalRoute()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-M21");
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M21");
+            GridPosition endpoint = prepared.RecommendedCell;
+            FireSpellPreview horizontal = FireSpellEngine.Preview(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(endpoint, CardinalDirection.East));
+            FireSpellPreview vertical = FireSpellEngine.Preview(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(endpoint, CardinalDirection.North));
+            Assert.That(horizontal.CanCommit && vertical.CanCommit, Is.True);
+            Assert.That(horizontal.Cells[0], Is.Not.EqualTo(vertical.Cells[0]));
+            Assert.That(horizontal.ReactionCells, Is.Not.Empty);
+            prepared.Combat.Map.SetTile(horizontal.Cells[0], new TileState { Cover = CoverType.Heavy, Durability = 24 });
+            Assert.That(FireSpellEngine.Preview(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(endpoint, CardinalDirection.East)).CanCommit, Is.False);
+            FireSpellExecution result = FireSpellEngine.Execute(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(endpoint, CardinalDirection.North));
+            Assert.That(result.Steps.Count(step => step.Kind == FireRuleKind.MoveSource && step.Detail == "folded_step"), Is.EqualTo(2));
+            Assert.That(prepared.Combat.GetUnit("hero").Position, Is.EqualTo(endpoint));
+        }
+
+        [Test]
+        public void StraightCharge_ResolvesIntermediateWaterBeforeTheFinalLanding()
+        {
+            GridMap map = new GridMap(5, 2);
+            map.SetTile(new GridPosition(1, 0), new TileState { IsWater = true });
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(3, 0));
+            hero.ConfigureVitality(99); hero.ConfigureMana(99); hero.Equip(CombatCatalog.Hammer, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            hero.ApplyStatus(StatusType.Burning, 2, 8);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-M02"),
+                FireSpellTarget.At(new GridPosition(2, 0), CardinalDirection.East));
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(2, 0)));
+            Assert.That(hero.HasStatus(StatusType.Burning), Is.False);
+        }
+
+        [Test]
+        public void MomentumRetreat_OffersOneActualPathStepOnlyAfterChargeFinishes()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-M24");
+            FireBattleState battle = prepared.Battle;
+            UnitState hero = prepared.Combat.GetUnit("hero");
+            GridPosition origin = hero.Position;
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-M24"), FireSpellTarget.Unit(hero.Id));
+            Assert.That(battle.OptionalMoves, Is.Empty);
+            MoveUnitTo(prepared.Combat, prepared.Combat.GetUnit("range_normal"), origin + new GridPosition(2, 0));
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-M02"),
+                FireSpellTarget.At(origin + new GridPosition(1, 0), CardinalDirection.East));
+            Assert.That(battle.OptionalMoves.Select(offer => offer.Destination), Is.EquivalentTo(new[] { origin }));
+            int ap = hero.ActionPoints;
+            FireSpellEngine.ExecuteOptionalMove(battle, hero.Id, origin);
+            Assert.That(hero.Position, Is.EqualTo(origin));
+            Assert.That(hero.ActionPoints, Is.EqualTo(ap));
+            Assert.That(battle.OptionalMoves, Is.Empty);
+        }
+
+        [Test]
+        public void ShatterReturn_OffersOnlyOwnNearbyDestroyedObject_AndCanBeDeclined()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U26");
+            FireBattleState battle = prepared.Battle;
+            UnitState hero = prepared.Combat.GetUnit("hero");
+            GridPosition cell = hero.Position + new GridPosition(0, -1);
+            prepared.Combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 8 });
+            battle.ResolveMarkedDestructions();
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U26"), FireSpellTarget.Unit(hero.Id));
+            prepared.Combat.Map.GetTile(cell).Durability = 0;
+            battle.ResolveMarkedDestructions("range_ally");
+            Assert.That(battle.OptionalMoves, Is.Empty, "友方摧毁不触发自身附着");
+
+            FireSpellTrainingRangeCase own = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U26");
+            FireBattleState ownBattle = own.Battle;
+            UnitState ownHero = own.Combat.GetUnit("hero");
+            GridPosition ownCell = ownHero.Position + new GridPosition(0, -1);
+            own.Combat.Map.SetTile(ownCell, new TileState { Cover = CoverType.Light, Durability = 8 });
+            ownBattle.ResolveMarkedDestructions();
+            FireSpellEngine.Execute(ownBattle, ownHero.Id, FireSpellCatalog.Get("F-P-U26"), FireSpellTarget.Unit(ownHero.Id));
+            own.Combat.Map.GetTile(ownCell).Durability = 0;
+            ownBattle.ResolveMarkedDestructions(ownHero.Id);
+            Assert.That(ownBattle.OptionalMoves.Select(offer => offer.Destination), Does.Contain(ownCell));
+            ownBattle.DeclineOptionalMoves();
+            Assert.That(ownBattle.OptionalMoves, Is.Empty);
+        }
+
+        [Test]
+        public void CoverRefraction_PreviewsTheCoverAndOtherSideFirstHit_AndStopsAtSecondCover()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)provider.Prepare("F-P-R25");
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R25");
+            GridPosition anchor = prepared.RecommendedCell;
+            FireSpellPreview preview = FireSpellEngine.Preview(prepared.Battle, "hero", spell,
+                FireSpellTarget.At(anchor, CardinalDirection.South));
+            Assert.That(preview.CanCommit, Is.True, string.Join(";", preview.Failures));
+            Assert.That(preview.Cells, Is.EqualTo(new[] { anchor, new GridPosition(3, 1), new GridPosition(3, 0) }));
+            Assert.That(preview.Destructibles.Contains(new GridPosition(3, 1)), Is.False);
+            int beforeHealth = prepared.Combat.GetUnit("range_normal").Health;
+            FireSpellEngine.Execute(prepared.Battle, "hero", spell, FireSpellTarget.At(anchor, CardinalDirection.South));
+            Assert.That(prepared.Combat.GetUnit("range_normal").Health, Is.LessThan(beforeHealth));
+
+            FireSpellTrainingRangeCase blocked = (FireSpellTrainingRangeCase)provider.Prepare("F-P-R25");
+            MoveUnitTo(blocked.Combat, blocked.Combat.GetUnit("range_normal"), new GridPosition(4, 0));
+            blocked.Combat.Map.SetTile(new GridPosition(3, 0), new TileState { Cover = CoverType.Heavy, Durability = 24 });
+            FireSpellPreview secondCover = FireSpellEngine.Preview(blocked.Battle, "hero", spell,
+                FireSpellTarget.At(anchor, CardinalDirection.South));
+            Assert.That(secondCover.CanCommit, Is.True);
+            Assert.That(secondCover.Cells.Last(), Is.EqualTo(new GridPosition(3, 0)));
+            FireSpellEngine.Execute(blocked.Battle, "hero", spell, FireSpellTarget.At(anchor, CardinalDirection.South));
+            Assert.That(blocked.Combat.Map.GetTile(new GridPosition(3, 0)).Durability, Is.LessThan(24));
+
+            FireSpellTrainingRangeCase permanent = (FireSpellTrainingRangeCase)provider.Prepare("F-P-R25");
+            permanent.Combat.Map.GetTile(new GridPosition(3, 1)).IsPermanentWall = true;
+            Assert.That(FireSpellEngine.Preview(permanent.Battle, "hero", spell,
+                FireSpellTarget.At(anchor, CardinalDirection.South)).CanCommit, Is.False);
+        }
+
+        [Test]
+        public void ReviewedPathAndBreachAdditions_ResolveTheirAdvertisedBattleGeometry()
+        {
+            FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
+            FireSpellTrainingRangeCase hop = (FireSpellTrainingRangeCase)provider.Prepare("F-P-M22");
+            GridPosition hopDestination = hop.RecommendedCell;
+            Assert.That(hop.Preview().CanCommit, Is.True);
+            Assert.That(hop.Execute().NativeResult, Is.Not.Null);
+            Assert.That(hop.Combat.GetUnit("hero").Position, Is.EqualTo(hopDestination),
+                "越障跃步必须越过中间单位并落在后方空格。");
+
+            FireSpellTrainingRangeCase dash = (FireSpellTrainingRangeCase)provider.Prepare("F-P-M23");
+            FireSpellExecution dashResult = (FireSpellExecution)dash.Execute().NativeResult;
+            Assert.That(dashResult.Steps.Any(step => step.Kind == FireRuleKind.MoveSource && step.Applied > 0), Is.True);
+            Assert.That(dashResult.Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.TargetId == "range_normal"), Is.True);
+
+            FireSpellTrainingRangeCase shove = (FireSpellTrainingRangeCase)provider.Prepare("F-P-M25");
+            FireSpellExecution shoveResult = (FireSpellExecution)shove.Execute().NativeResult;
+            Assert.That(shoveResult.Steps.Any(step => step.Kind == FireRuleKind.PushAllUnits && step.TargetId == "range_normal" && step.Applied == 1), Is.True);
+
+            FireSpellTrainingRangeCase wedge = (FireSpellTrainingRangeCase)provider.Prepare("F-P-U25");
+            wedge.Combat.Map.SetTile(new GridPosition(2, 2), new TileState { Cover = CoverType.Light, Durability = 30 });
+            wedge.Execute();
+            Assert.That(wedge.Combat.Map.GetTile(new GridPosition(2, 2)).Durability, Is.EqualTo(14),
+                "震楔落步在落点相邻格对物件造成双倍耐久伤害。");
+
+            FireSpellTrainingRangeCase cone = (FireSpellTrainingRangeCase)provider.Prepare("F-P-R22");
+            cone.Combat.Map.SetTile(new GridPosition(5, 4), new TileState { Cover = CoverType.Light, Durability = 30 });
+            cone.Execute();
+            Assert.That(cone.Combat.Map.GetTile(new GridPosition(5, 4)).Durability, Is.EqualTo(14),
+                "楔形震裂在锥形内对物件造成双倍耐久伤害。");
+        }
+
+        [Test]
+        public void BufferVeil_ReducesExactlyTheNextForcedMoveAndIsVisibleUntilConsumed()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U27");
+            prepared.Execute();
+            UnitState hero = prepared.Combat.GetUnit("hero");
+            Assert.That(hero.Shield, Is.GreaterThanOrEqualTo(8));
+            Assert.That(prepared.Combat.PassiveEffects.StatusBarEntriesFor(hero.Id)
+                .Any(entry => entry.DisplayName == "缓冲护幕"), Is.True);
+            GridPosition before = hero.Position;
+
+            Assert.That(prepared.Combat.ResolveForcedMove(hero, new GridPosition(-1, 0), 2, "test"), Is.EqualTo(ForcedMoveResult.Moved));
+            Assert.That(hero.Position, Is.EqualTo(before + new GridPosition(-1, 0)));
+            Assert.That(prepared.Combat.PassiveEffects.StatusBarEntriesFor(hero.Id)
+                .Any(entry => entry.DisplayName == "缓冲护幕"), Is.False);
+        }
+
+        [Test]
+        public void CollapsingWave_PreviewsDestroyedObjectAndFinalSinglePushBeforeCommit()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-R23");
+            UnitState enemy = prepared.Combat.GetUnit("range_normal");
+            MoveUnitTo(prepared.Combat, enemy, new GridPosition(5, 5));
+            GridPosition objectCell = new GridPosition(5, 4);
+            FireSpellTarget target = FireSpellTarget.At(objectCell, CardinalDirection.East);
+            FireSpellPreview preview = FireSpellEngine.Preview(prepared.Battle, "hero", FireSpellCatalog.Get("F-P-R23"), target);
+            Assert.That(preview.CanCommit, Is.True, string.Join("；", preview.Failures));
+            Assert.That(preview.ProjectedDestroyedObjects, Does.Contain(objectCell));
+            Assert.That(preview.ProjectedPushedUnits[enemy.Id], Is.EqualTo(new GridPosition(5, 6)));
+            Assert.That(enemy.Position, Is.EqualTo(new GridPosition(5, 5)), "预览不能改变真实战局。");
+            FireSpellExecution result = FireSpellEngine.Execute(prepared.Battle, "hero", FireSpellCatalog.Get("F-P-R23"), target);
+            Assert.That(prepared.Combat.Map.GetTile(objectCell).IsDestroyed, Is.True);
+            Assert.That(enemy.Position, Is.EqualTo(preview.ProjectedPushedUnits[enemy.Id]));
+            Assert.That(result.Steps.Count(step => step.Kind == FireRuleKind.PushFromDestroyedObjects && step.TargetId == enemy.Id), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SeveredLineBlast_StaysPublicAndResolvesAtFixedCellsEvenAfterCasterFalls()
+        {
+            FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-R26");
+            GridPosition center = prepared.RecommendedCell;
+            UnitState enemy = prepared.Combat.GetUnit("range_normal");
+            MoveUnitTo(prepared.Combat, enemy, center + new GridPosition(0, 1));
+            int healthBefore = enemy.Health;
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R26");
+            FireSpellTarget target = FireSpellTarget.At(center, CardinalDirection.East);
+            FireSpellPreview preview = FireSpellEngine.Preview(prepared.Battle, "hero", spell, target);
+            Assert.That(preview.CanCommit, Is.True, string.Join("；", preview.Failures));
+            Assert.That(preview.Cells, Does.Contain(enemy.Position));
+            FireSpellEngine.Execute(prepared.Battle, "hero", spell, target);
+            Assert.That(enemy.Health, Is.EqualTo(healthBefore), "施放时仅放置公开标记。");
+            Assert.That(prepared.Battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id && effect.MarkedCell == center), Is.True);
+            UnitState hero = prepared.Combat.GetUnit("hero");
+            CombatEffectExecutor.Execute(prepared.Combat, hero.Id, CombatEffect.DamageHealth(hero.Id, hero.Health));
+            IReadOnlyList<FireSpellExecution> explosions = FireSpellEngine.TriggerCurrentTurnEnd(prepared.Battle, "hero");
+            Assert.That(explosions.Count, Is.EqualTo(1));
+            Assert.That(enemy.Health, Is.LessThan(healthBefore));
+            Assert.That(prepared.Combat.Map.GetTile(center).IsDestroyed, Is.True);
+            Assert.That(prepared.Battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
         }
 
         [Test]
@@ -373,7 +823,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void CorePierce_RequiresAndConsumesBurningForItsRareShieldBreakFinisher()
+        public void CorePierce_HitsAdjacentEnemyWithoutConsumingBurning()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
@@ -384,7 +834,7 @@ namespace OCC.Combat.Tests
             hero.Equip(CombatCatalog.Hammer, null, null);
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-M07");
 
-            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id)).CanCommit, Is.False);
+            Assert.That(FireSpellEngine.Preview(battle, hero.Id, spell, FireSpellTarget.Unit(enemy.Id)).CanCommit, Is.True);
             enemy.ApplyStatus(StatusType.Burning, 2, 8);
             combat.TryGrantRogueliteShield(enemy.Id, "core-pierce-test", 16);
             int vitalityBefore = enemy.Health + enemy.Shield;
@@ -394,11 +844,11 @@ namespace OCC.Combat.Tests
             Assert.That(execution.Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Requested == 20), Is.True);
             Assert.That(execution.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Requested == 8), Is.True);
             Assert.That(enemy.HasStatus(StatusType.BreakStance), Is.True);
-            Assert.That(enemy.HasStatus(StatusType.Burning), Is.False);
+            Assert.That(enemy.HasStatus(StatusType.Burning), Is.True);
             Assert.That(enemy.Shield, Is.Zero);
             Assert.That(enemy.Health + enemy.Shield, Is.LessThan(vitalityBefore));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
-                Does.StartWith("只能攻击相邻的燃烧敌人").And.Contain("然后消耗燃烧"));
+                Does.StartWith("对相邻敌人").And.Contain("施加破势"));
         }
 
         [Test]
@@ -709,15 +1159,12 @@ namespace OCC.Combat.Tests
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U16");
             FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id));
 
-            Assert.That(FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, near.Id), Is.Empty);
-            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.True);
-
-            IReadOnlyList<FireSpellExecution> result = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, far.Id);
+            IReadOnlyList<FireSpellExecution> result = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, near.Id);
 
             Assert.That(result.Single().Steps.Any(step => step.Kind == FireRuleKind.WeaponDamage && step.Requested == 12), Is.True);
             Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
-                Does.Contain("当前武器最大射程").And.Contain("较近距离攻击不会消耗"));
+                Does.Contain("下一次武器攻击").And.Contain("+12"));
         }
 
         [Test]
@@ -963,6 +1410,8 @@ namespace OCC.Combat.Tests
             ally.ConfigureVitality(99); offAxis.ConfigureVitality(99);
             CombatState combat = new CombatState(map, new[] { hero, target, far, ally, offAxis }, Array.Empty<CombatObjective>());
             combat.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(combat, hero.Id);
+            GridPosition objectCell = new GridPosition(5, 2);
+            combat.Map.SetTile(objectCell, new TileState { Cover = CoverType.Light, Durability = 30 });
             FireBattleState battle = new FireBattleState(combat);
             FireSpellDefinition line = FireSpellCatalog.Get("F-P-R06");
 
@@ -978,6 +1427,8 @@ namespace OCC.Combat.Tests
             FireSpellEngine.Execute(battle, hero.Id, line, FireSpellTarget.Unit(target.Id, CardinalDirection.East));
             Assert.That(far.Health + far.Shield, Is.LessThan(farBefore));
             Assert.That(ally.Health + ally.Shield, Is.LessThan(allyBefore));
+            Assert.That(combat.Map.GetTile(objectCell).Durability, Is.EqualTo(22),
+                "审核版焰线对物件造成正常的8点耐久伤害，不再误用破障双倍。");
 
             CombatState offAxisCombat = new CombatState(new GridMap(8, 5), new[]
             {
@@ -1252,12 +1703,12 @@ namespace OCC.Combat.Tests
             CombatState wakeCombat = TrainingRangeScenarioFactory.CreateStandard();
             wakeCombat.ConfigureRuleset(CombatRuleset.Roguelite);
             UnitState wakeHero = wakeCombat.GetUnit("hero");
-            wakeHero.ConfigureMana(99); wakeHero.ApplyStatus(StatusType.Slow, 2);
+            wakeHero.ConfigureMana(99); wakeHero.ApplyStatus(StatusType.Agility, 2, -1);
             CombatResolver.BeginTurn(wakeCombat, wakeHero.Id);
             Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
             FireSpellEngine.Execute(new FireBattleState(wakeCombat), wakeHero.Id, FireSpellCatalog.Get("F-P-U09"),
                 FireSpellTarget.Unit(wakeHero.Id));
-            Assert.That(wakeHero.HasStatus(StatusType.Slow), Is.False);
+            Assert.That(wakeHero.HasStatus(StatusType.Agility), Is.False);
             Assert.That(wakeHero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroBaseMovementRange));
 
             CombatState recycleCombat = TrainingRangeScenarioFactory.CreateStandard();
@@ -1417,10 +1868,10 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void RewardPool_MakesAllSixtyReachableAndCanFilterForCurrentWeapon()
+        public void RewardPool_MakesAllImplementedPersonalSpellsReachableAndCanFilterForCurrentWeapon()
         {
             HashSet<string> reachable = new HashSet<string>(StringComparer.Ordinal);
-            for (int seed = 0; seed < 4000 && reachable.Count < 60; seed++)
+            for (int seed = 0; seed < 4000 && reachable.Count < FireSpellCatalog.All.Count; seed++)
             {
                 foreach (FireSpellDefinition spell in FireSpellRewardPool.RollPersonalChoices(seed, seed % 17, RogueliteMapNodeType.Combat, Array.Empty<string>())) reachable.Add(spell.Id);
                 foreach (FireSpellDefinition spell in FireSpellRewardPool.RollPersonalChoices(seed, seed % 17, RogueliteMapNodeType.Elite, Array.Empty<string>())) reachable.Add(spell.Id);

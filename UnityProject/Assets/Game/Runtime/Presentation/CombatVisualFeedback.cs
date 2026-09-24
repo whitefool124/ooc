@@ -568,7 +568,7 @@ namespace OCC.Combat.Presentation
                     manaCache[targetUnit.Id] = targetUnit.Mana;
                 if (feedback.Kind == CombatFeedbackKind.Movement)
                     positionCache[targetUnit.Id] = targetUnit.Position;
-                if (feedback.Kind == CombatFeedbackKind.Burning || feedback.Kind == CombatFeedbackKind.Bound || feedback.Kind == CombatFeedbackKind.Slow || feedback.Kind == CombatFeedbackKind.ArmorBreak ||
+                if (feedback.Kind == CombatFeedbackKind.Burning || feedback.Kind == CombatFeedbackKind.Bound || feedback.Kind == CombatFeedbackKind.BreakStance || feedback.Kind == CombatFeedbackKind.Attribute ||
                     feedback.Kind == CombatFeedbackKind.StatusCleared)
                     statusCache[targetUnit.Id] = targetUnit.Statuses.ToDictionary(entry => entry.Key, entry => entry.Value);
                 if (feedback.Kind == CombatFeedbackKind.Damage || feedback.Kind == CombatFeedbackKind.ShieldAbsorb)
@@ -789,6 +789,8 @@ namespace OCC.Combat.Presentation
                 case CombatFeedbackKind.Damage: return "hit";
                 case CombatFeedbackKind.ShieldAbsorb: return "shield_absorb";
                 case CombatFeedbackKind.ArmorBreak: return "armor_break";
+                case CombatFeedbackKind.BreakStance: return "armor_break";
+                case CombatFeedbackKind.Attribute: return null;
                 case CombatFeedbackKind.Burning: return "burning";
                 case CombatFeedbackKind.Bound: return "bound";
                 case CombatFeedbackKind.Slow: return "slow";

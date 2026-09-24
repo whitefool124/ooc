@@ -492,15 +492,15 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<RogueliteMapNode> MapNodes = new[]
         {
             new RogueliteMapNode("O", RogueliteMapNodeType.Start, "学生基础配置", "确认维克多的首次体验固定配置。", 0, 2, "B1"),
-            new RogueliteMapNode("B1", RogueliteMapNodeType.Combat, "雨后灯庭", "学院实地对抗课程：击倒寻迹兽与高年级火矢生。", 1, 2, "O", "B2", "EV1", "EV2"),
+            new RogueliteMapNode("B1", RogueliteMapNodeType.Combat, "普通战斗 01 · 雨后灯庭", "学院实地对抗课程：击倒寻迹兽与高年级火矢生。", 1, 2, "O", "B2", "EV1", "EV2"),
             new RogueliteMapNode("EV1", RogueliteMapNodeType.Event, "受阻的温室传令", "领取轻装传令衣与承力合金。", 1, 1, "B1"),
             new RogueliteMapNode("EV2", RogueliteMapNodeType.Event, "温室勤务签领", "领取导位罗盘、学院食材与勤务报酬。", 1, 3, "B1"),
-            new RogueliteMapNode("B2", RogueliteMapNodeType.Combat, "温室藏品间", "击倒替身偶与侧锋生，并可搜刮中央备件箱。", 2, 2, "B1", "B3", "W", "EV3"),
+            new RogueliteMapNode("B2", RogueliteMapNodeType.Combat, "普通战斗 02 · 温室藏品间", "击倒替身偶与侧锋生，并可搜刮中央备件箱。", 2, 2, "B1", "B3", "W", "EV3"),
             new RogueliteMapNode("W", RogueliteMapNodeType.Workshop, "工坊", "一次锻造与一次术式专精。", 2, 1, "B2"),
             new RogueliteMapNode("EV3", RogueliteMapNodeType.Event, "折光庭校验签领", "领取增幅刻墨，并在学院贡献与截击铃之间选择。", 2, 3, "B2"),
-            new RogueliteMapNode("B3", RogueliteMapNodeType.Combat, "雨痕晶庭", "击倒替身偶与火矢生；可破晶搜刮学院储能芯。", 3, 2, "B2", "X", "M"),
+            new RogueliteMapNode("B3", RogueliteMapNodeType.Combat, "普通战斗 03 · 雨痕晶庭", "击倒替身偶与火矢生；可破晶搜刮学院储能芯。", 3, 2, "B2", "X", "M"),
             new RogueliteMapNode("M", RogueliteMapNodeType.Medical, "医务室", "健康确认、治疗与固定餐食。", 3, 3, "B3"),
-            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "三材承压场", "击倒楔角；失败不会开放商店。", 3, 1, "B3", "S"),
+            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "精英战斗 01 · 三材承压场", "击倒楔角；失败不会开放商店。", 3, 1, "B3", "S"),
             new RogueliteMapNode("S", RogueliteMapNodeType.Shop, "精英后商店", "首次展开即完成固定教学段。", 4, 1, "X")
         };
 

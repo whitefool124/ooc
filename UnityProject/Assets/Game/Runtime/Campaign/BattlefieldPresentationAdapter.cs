@@ -167,7 +167,7 @@ namespace OCC.Combat
                 UnitState target = state.GetUnit(selectedTargetId);
                 if (target == null || !target.IsAlive || target.IsHero) failure = "这个目标不能攻击，请换一个敌人";
                 else if (Distance(hero.Position, target.Position) < hero.MainHand.MinimumRange) failure = "目标位于武器近身死区";
-                else if (Distance(hero.Position, target.Position) > hero.MainHand.Range) failure = "目标超出武器射程";
+                else if (Distance(hero.Position, target.Position) > hero.EffectiveRange(hero.MainHand.Range)) failure = "目标超出武器射程";
                 else if (!state.HasLineOfSight(hero.Position, target.Position)) failure = "重掩体或烟幕挡住了视线";
             }
             if (string.IsNullOrEmpty(failure) && (action == "技能1" || action == "技能2") && !string.IsNullOrEmpty(selectedTargetId))
@@ -277,7 +277,7 @@ namespace OCC.Combat
             {
                 if (target == null || target.IsHero) return "当前格没有可攻击目标";
                 if (distance < hero.MainHand.MinimumRange) return "目标位于武器近身死区";
-                if (distance > hero.MainHand.Range) return "目标超出武器射程";
+                if (distance > hero.EffectiveRange(hero.MainHand.Range)) return "目标超出武器射程";
                 if (!state.HasLineOfSight(hero.Position, position)) return "重掩体或烟幕挡住了视线";
             }
             else if (action == "技能1" || action == "技能2")
@@ -369,7 +369,7 @@ namespace OCC.Combat
                 int budget = state == null || hero == null ? UnitState.HeroBaseMovementRange : CombatMovementQuery.Budget(state, hero);
                 return "选择 " + budget + " 格内可通行空格";
             }
-            if (action == "攻击") return "选择 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range) + "内可见敌人";
+            if (action == "攻击") return "选择 " + RangeText(hero.MainHand.MinimumRange, hero.EffectiveRange(hero.MainHand.Range)) + "内可见敌人";
             if (action == "技能1" || action == "技能2")
             {
                 SkillDefinition skill = action == "技能1" ? hero.SkillOne : hero.SkillTwo;
@@ -435,7 +435,7 @@ namespace OCC.Combat
         {
             int distance = Distance(hero.Position, position);
             if (distance < skill.MinimumRange) return "目标位于技能近身死区";
-            if (distance > skill.Range) return "目标超出技能射程";
+            if (distance > hero.EffectiveRange(skill.Range)) return "目标超出技能射程";
             if (skill.TargetRule == SkillTargetRule.GridCell && state.Map.IsBlocked(position)) return "目标格被阻挡";
             if (skill.TargetRule == SkillTargetRule.GridCell && state.IsOccupied(position, hero.Id)) return "目标格已被占据";
             if (skill.TargetRule == SkillTargetRule.Destructible) return "目标格没有可破坏物件";
@@ -451,7 +451,7 @@ namespace OCC.Combat
             int distance = Distance(hero.Position, position);
             if (skill.TargetRule == SkillTargetRule.Self) return position == hero.Position;
             if (distance < skill.MinimumRange) return false;
-            if (distance > skill.Range) return false;
+            if (distance > hero.EffectiveRange(skill.Range)) return false;
             if (skill.TargetRule == SkillTargetRule.GridCell) return distance > 0 && !state.Map.IsBlocked(position) && !state.IsOccupied(position, hero.Id);
             if (skill.TargetRule == SkillTargetRule.Destructible)
             {
@@ -474,7 +474,7 @@ namespace OCC.Combat
             if (state == null || state.ActiveUnitId != "hero") return false;
             UnitState hero = state.GetUnit("hero");
             int distance = Distance(hero.Position, position);
-            return distance >= Math.Max(1, hero.MainHand.MinimumRange) && distance <= hero.MainHand.Range && state.HasLineOfSight(hero.Position, position);
+            return distance >= Math.Max(1, hero.MainHand.MinimumRange) && distance <= hero.EffectiveRange(hero.MainHand.Range) && state.HasLineOfSight(hero.Position, position);
         }
 
         private static string RangeText(int minimum, int maximum) => minimum > 0 ? minimum + "–" + maximum + " 格" : maximum + " 格";
@@ -494,7 +494,9 @@ namespace OCC.Combat
     /// <summary>Pure presentation state: it never changes gameplay grid coordinates.</summary>
     public sealed class BattlefieldViewport
     {
-        public const float EdgeOverscrollCells = .75f;
+        // 64px transparent props can extend one native cell above their logical 32px cell;
+        // keep enough pan margin for their complete top/right silhouette inside the viewport mask.
+        public const float EdgeOverscrollCells = 1.125f;
         private readonly BattlefieldRect viewport;
         private readonly int mapWidth;
         private readonly int mapHeight;

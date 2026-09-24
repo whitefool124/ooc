@@ -63,7 +63,8 @@ namespace OCC.Combat
         public static CombatEffect RestoreShield(string targetUnitId, int amount, string sourceContentId = null) =>
             new CombatEffect(CombatEffectKind.RestoreShield, targetUnitId, amount, default, 0, default, sourceContentId);
         public static CombatEffect RestoreMana(string targetUnitId, int amount) => new CombatEffect(CombatEffectKind.RestoreMana, targetUnitId, amount, default, 0, default);
-        public static CombatEffect ApplyStatus(string targetUnitId, StatusType status, int duration) => new CombatEffect(CombatEffectKind.ApplyStatus, targetUnitId, 0, status, duration, default);
+        public static CombatEffect ApplyStatus(string targetUnitId, StatusType status, int duration, int strength = 0) =>
+            new CombatEffect(CombatEffectKind.ApplyStatus, targetUnitId, strength, status, duration, default);
         public static CombatEffect ClearStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.ClearStatus, targetUnitId, 0, status, 0, default);
         public static CombatEffect TriggerStatus(string targetUnitId, StatusType status) => new CombatEffect(CombatEffectKind.TriggerStatus, targetUnitId, 0, status, 0, default);
         public static CombatEffect ReduceStatusDuration(string targetUnitId, StatusType status, int amount = 1) => new CombatEffect(CombatEffectKind.ReduceStatusDuration, targetUnitId, amount, status, 0, default);
@@ -83,14 +84,17 @@ namespace OCC.Combat
         public int AppliedAmount { get; }
         public int ValueBefore { get; }
         public int ValueAfter { get; }
+        public int StatusStrengthBefore { get; }
+        public int StatusStrengthAfter { get; }
         public StatusType Status { get; }
         public CombatStatusLifecyclePhase StatusPhase { get; }
         public int Duration { get; }
         public GridPosition PositionBefore { get; }
         public GridPosition PositionAfter { get; }
-        public bool Changed => ValueBefore != ValueAfter || PositionBefore != PositionAfter;
+        public bool Changed => ValueBefore != ValueAfter || StatusStrengthBefore != StatusStrengthAfter || PositionBefore != PositionAfter;
 
-        internal CombatEffectResult(int sequence, CombatEffect effect, string sourceUnitId, string targetUnitId, int appliedAmount, int valueBefore, int valueAfter, GridPosition positionBefore, GridPosition positionAfter)
+        internal CombatEffectResult(int sequence, CombatEffect effect, string sourceUnitId, string targetUnitId, int appliedAmount, int valueBefore, int valueAfter, GridPosition positionBefore, GridPosition positionAfter,
+            int statusStrengthBefore = 0, int statusStrengthAfter = 0)
         {
             Sequence = sequence;
             Kind = effect.Kind;
@@ -100,19 +104,23 @@ namespace OCC.Combat
             AppliedAmount = appliedAmount;
             ValueBefore = valueBefore;
             ValueAfter = valueAfter;
+            StatusStrengthBefore = statusStrengthBefore;
+            StatusStrengthAfter = statusStrengthAfter;
             Status = effect.Status;
-            StatusPhase = ResolveStatusPhase(effect.Kind, valueBefore, valueAfter);
+            StatusPhase = ResolveStatusPhase(effect.Kind, valueBefore, valueAfter,
+                statusStrengthBefore, statusStrengthAfter);
             Duration = effect.Duration;
             PositionBefore = positionBefore;
             PositionAfter = positionAfter;
         }
 
-        private static CombatStatusLifecyclePhase ResolveStatusPhase(CombatEffectKind kind, int before, int after)
+        private static CombatStatusLifecyclePhase ResolveStatusPhase(CombatEffectKind kind, int before, int after,
+            int strengthBefore, int strengthAfter)
         {
             if (kind == CombatEffectKind.ApplyStatus)
             {
                 if (before <= 0 && after > 0) return CombatStatusLifecyclePhase.Applied;
-                if (after > before) return CombatStatusLifecyclePhase.Refreshed;
+                if (after > before || strengthBefore != strengthAfter) return CombatStatusLifecyclePhase.Refreshed;
                 return CombatStatusLifecyclePhase.Preserved;
             }
             if (kind == CombatEffectKind.ClearStatus) return CombatStatusLifecyclePhase.Cleared;
@@ -167,7 +175,7 @@ namespace OCC.Combat
                 CombatEffect effect = effects[index];
                 if (!Enum.IsDefined(typeof(CombatEffectKind), effect.Kind))
                     throw new ArgumentOutOfRangeException(nameof(effects), effect.Kind, "Unsupported combat effect.");
-                if (effect.Amount < 0 || effect.Duration < 0)
+                if ((effect.Amount < 0 && effect.Kind != CombatEffectKind.ApplyStatus) || effect.Duration < 0)
                     throw new InvalidOperationException("Combat effect amounts cannot be negative.");
                 if (!string.IsNullOrEmpty(effect.TargetUnitId) && state.GetUnit(effect.TargetUnitId) == null)
                     throw new InvalidOperationException("Effect target does not exist.");
@@ -201,6 +209,7 @@ namespace OCC.Combat
             int before;
             int after;
             int applied;
+            int statusStrengthBefore = 0, statusStrengthAfter = 0;
             GridPosition positionBefore = target.Position;
             GridPosition positionAfter = positionBefore;
 
@@ -239,13 +248,14 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.RestoreShield:
                     before = target.Shield;
+                    int grantedShield = Math.Max(0, effect.Amount + (source.Id == target.Id ? 0 : source.StatusStrength(StatusType.ShieldGrant)));
                     if (state.Ruleset == CombatRuleset.Roguelite)
                     {
                         string sourceContentId = string.IsNullOrWhiteSpace(effect.SourceContentId)
                             ? source.Id + ":shield" : effect.SourceContentId;
-                        state.TryGrantRogueliteShield(target.Id, sourceContentId, effect.Amount);
+                        state.TryGrantRogueliteShield(target.Id, sourceContentId, grantedShield);
                     }
-                    else target.RestoreShield(effect.Amount);
+                    else target.RestoreShield(grantedShield);
                     after = target.Shield;
                     applied = after - before;
                     break;
@@ -257,12 +267,19 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.ApplyStatus:
                     before = target.StatusDuration(effect.Status);
+                    statusStrengthBefore = target.StatusStrength(effect.Status);
                     if (target.IsAlive)
                     {
-                        if (state.Ruleset == CombatRuleset.Roguelite && effect.Status == StatusType.BreakStance) state.ApplyRogueliteBreakStance(target.Id);
-                        else target.ApplyStatus(effect.Status, effect.Duration);
+                        int control = effect.Status == StatusType.Bound || effect.Status == StatusType.Agility ||
+                            effect.Status == StatusType.Marked ? source.StatusStrength(StatusType.Control) : 0;
+                        int duration = effect.Duration == int.MaxValue ? int.MaxValue :
+                            (int)Math.Max(int.MinValue, Math.Min(int.MaxValue, (long)effect.Duration + control));
+                        duration = Math.Max(1, duration);
+                        if (effect.Status == StatusType.BreakStance) state.ApplyRogueliteBreakStance(target.Id, source.Id);
+                        else target.ApplyStatus(effect.Status, duration, effect.Amount, source.Id);
                     }
                     after = target.StatusDuration(effect.Status);
+                    statusStrengthAfter = target.StatusStrength(effect.Status);
                     applied = after - before;
                     break;
                 case CombatEffectKind.ClearStatus:
@@ -273,6 +290,7 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.TriggerStatus:
                     before = target.StatusDuration(effect.Status);
+                    target.RecordStatusTrigger(effect.Status);
                     after = before;
                     applied = 0;
                     break;
@@ -309,7 +327,8 @@ namespace OCC.Combat
                     throw new ArgumentOutOfRangeException(nameof(effect), effect.Kind, "Unsupported combat effect.");
             }
 
-            return new CombatEffectResult(sequence, effect, source.Id, target.Id, applied, before, after, positionBefore, positionAfter);
+            return new CombatEffectResult(sequence, effect, source.Id, target.Id, applied, before, after,
+                positionBefore, positionAfter, statusStrengthBefore, statusStrengthAfter);
         }
     }
 }

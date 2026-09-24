@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
@@ -392,6 +393,7 @@ namespace OCC.Combat.Presentation
         public bool HasMapRogueliteSave => mapSaves.HasSave;
         public bool HasFirstExperienceSave => FirstExperiencePrototypeController.HasAnySaveRecord();
         public MapSaveUiPresentation MapSavePresentation => mapSaves.Presentation;
+        public bool IsMapRunSaved => mapSaves.LastSaveSucceeded;
         public string SettingsSaveDetail => lastSettingsSaveSucceeded ? "设置已保存" : "设置已临时生效，但保存失败";
 
         private bool PrepareMapSlotForReplacement()
@@ -618,6 +620,11 @@ namespace OCC.Combat.Presentation
         {
             if (mapRun != null && !SaveMapRun()) return;
             ReturnToDeveloperMenu();
+        }
+        public void RetryCompleteMapRunSave()
+        {
+            if (mapRun == null || !mapRun.IsComplete || mapRun.AwaitingReward) return;
+            if (SaveMapRun()) MarkPresentation(UiPresentationArea.Flow);
         }
         private bool SaveMapRun()
         {
@@ -1061,7 +1068,7 @@ namespace OCC.Combat.Presentation
         private FireSpellPreview BuildFireSpellPreviewAt(FireSpellDefinition spell, GridPosition position)
         {
             UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
-            CardinalDirection direction = DirectionToward(state.GetUnit("hero").Position, position);
+            CardinalDirection direction = FireSpellAimDirection(spell.Id, position);
             FireSpellTarget target = unit == null ? FireSpellTarget.At(position, direction) : FireSpellTarget.Unit(unit.Id, direction);
             return FireSpellEngine.Preview(fireBattle, "hero", spell, target);
         }
@@ -1166,7 +1173,19 @@ namespace OCC.Combat.Presentation
         public bool IsInteractionModalOpen => IsCombatActionPlaying || battlefieldContextMenuOpen ||
             (entrySequence != null && entrySequence.IsBlockingInput) ||
             (interactionLayer != null && interactionLayer.IsConfirmationOpen) ||
-            (inventoryPanel != null && inventoryPanel.IsOpen);
+            (inventoryPanel != null && inventoryPanel.IsOpen) || IsEncyclopediaOpen;
+        public bool IsEncyclopediaOpen => presentation?.RogueliteUi?.IsEncyclopediaOpen == true;
+        public void OpenEncyclopedia()
+        {
+            if (IsCombatActionPlaying || entrySequence != null && entrySequence.IsBlockingInput) return;
+            InitializeRuntime();
+            if (GetComponent<FirstExperiencePrototypeController>()?.enabled == true)
+            {
+                startupPresentation?.DismissImmediately();
+                presentation?.RogueliteUi?.SetFrontEndSuppressed(true);
+            }
+            presentation?.RogueliteUi?.OpenEncyclopedia();
+        }
         public void ToggleDeveloperConsole()
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -1762,6 +1781,27 @@ namespace OCC.Combat.Presentation
         private void HandleCellClick(GridPosition p)
         {
             selection.EndKeyboardTargeting();
+            if (fireBattle?.OptionalMoves.Any(offer => offer.SourceUnitId == "hero" && offer.Destination == p) == true)
+            {
+                try
+                {
+                    using var optionalPresentation = visualFeedback?.BeginResolvedAction("hero", fireBattle);
+                    FireSpellExecution optionalMove = FireSpellEngine.ExecuteOptionalMove(fireBattle, "hero", p);
+                    state.AddLog(optionalMove.Preview.Spell.DisplayName + "：已选择移动至破口落点。");
+                    selection.ClearTarget(); enemyPlans.Invalidate(); MarkPresentation(UiPresentationArea.Combat);
+                    visualFeedback?.NotifyFireSpell(optionalMove);
+                    PublishFireExecutions(optionalMove.MovementTriggers);
+                    PublishCombatEffects(optionalMove.PressureReaction);
+                    optionalPresentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
+                }
+                catch (InvalidOperationException error)
+                {
+                    fireBattle.DeclineOptionalMoves();
+                    state.AddLog(error.Message); MarkPresentation(UiPresentationArea.Combat);
+                }
+                return;
+            }
+            fireBattle?.DeclineOptionalMoves();
             UnitState clickedUnit = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == p);
             UnitState enemy = clickedUnit != null && !clickedUnit.IsHero ? clickedUnit : null;
             ArtifactDefinition artifact = CurrentArmedArtifact ?? CurrentTrainingRangeArtifact;
@@ -1775,8 +1815,13 @@ namespace OCC.Combat.Presentation
             {
                 OCC.Combat.Roguelite.SpellDefinition rogue = state.RogueSpells.DefinitionAtSlot(fireSlot);
                 if (rogue == null) { state.AddLog("术式槽为空。"); MarkPresentation(UiPresentationArea.Combat); return; }
-                CombatCommand command = rogue.Targeting == "self" ? CombatCommand.UseSkill("hero", fireSlot, "hero") :
-                    clickedUnit != null ? CombatCommand.UseSkill("hero", fireSlot, clickedUnit.Id) : CombatCommand.UseSkillAt("hero", fireSlot, p, DirectionToward(state.GetUnit("hero").Position, p));
+                bool chooseSlow = rogue.DefinitionId == "F-P-U28" &&
+                    IsShiftHeld();
+                CombatCommand command = rogue.DefinitionId == "F-P-U28"
+                    ? CombatCommand.UseSkillAt("hero", fireSlot, state.GetUnit("hero").Position,
+                        chooseSlow ? CardinalDirection.West : CardinalDirection.East)
+                    : rogue.Targeting == "self" ? CombatCommand.UseSkill("hero", fireSlot, "hero") :
+                    clickedUnit != null ? CombatCommand.UseSkill("hero", fireSlot, clickedUnit.Id) : CombatCommand.UseSkillAt("hero", fireSlot, p, FireSpellAimDirection(rogue.DefinitionId, p));
                 TryCommand(command); return;
             }
             FireSpellDefinition fireSpell = fireSlot < 0 ? null : FireSpellInSlot(fireSlot);
@@ -1861,7 +1906,7 @@ namespace OCC.Combat.Presentation
                 MarkPresentation(UiPresentationArea.Combat);
                 return;
             }
-            CardinalDirection direction = DirectionToward(state.GetUnit("hero").Position, position);
+            CardinalDirection direction = FireSpellAimDirection(spell.Id, position);
             FireSpellTarget target = clickedUnit == null ? FireSpellTarget.At(position, direction) : FireSpellTarget.Unit(clickedUnit.Id, direction);
             FireSpellPreview preview = FireSpellEngine.Preview(fireBattle, "hero", spell, target);
             selection.SetKnownTarget(clickedUnit?.Id);
@@ -1902,6 +1947,7 @@ namespace OCC.Combat.Presentation
         private void TryCommand(CombatCommand command, bool explicitHeroEndTurn = false)
         {
             if (IsCombatActionPlaying) return;
+            fireBattle?.DeclineOptionalMoves();
             using var presentation = command.Type == CombatCommandType.Move ? null :
                 visualFeedback?.BeginResolvedAction(command.UnitId, fireBattle, command.Type == CombatCommandType.Attack,
                     state.GetUnit(command.TargetUnitId)?.Position ?? command.Destination);
@@ -1971,6 +2017,39 @@ namespace OCC.Combat.Presentation
         private bool IsInAttackRange(GridPosition p) => battlefield.IsInAttackRange(state, p);
         private static int Distance(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.Distance(a, b);
         private static GridPosition StepToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.StepToward(a, b);
+        private CardinalDirection FireSpellAimDirection(string spellId, GridPosition position)
+        {
+            CardinalDirection direction = DirectionToward(state.GetUnit("hero").Position, position);
+            bool shifted = IsShiftHeld();
+            if (spellId == "F-P-U28") return shifted ? CardinalDirection.West : CardinalDirection.East;
+            if (spellId == "F-P-M21" && shifted)
+                return direction == CardinalDirection.East || direction == CardinalDirection.West
+                    ? CardinalDirection.North : CardinalDirection.East;
+            if (spellId == "F-P-R25")
+            {
+                int turns = shifted ? 1 : IsControlHeld() ? 2 : IsAltHeld() ? 3 : 0;
+                for (int i = 0; i < turns; i++)
+                    direction = direction == CardinalDirection.North ? CardinalDirection.East :
+                        direction == CardinalDirection.East ? CardinalDirection.South :
+                        direction == CardinalDirection.South ? CardinalDirection.West : CardinalDirection.North;
+            }
+            return direction;
+        }
+        private static bool IsShiftHeld()
+        {
+            Keyboard keyboard = Keyboard.current;
+            return keyboard != null && (keyboard.leftShiftKey.isPressed || keyboard.rightShiftKey.isPressed);
+        }
+        private static bool IsControlHeld()
+        {
+            Keyboard keyboard = Keyboard.current;
+            return keyboard != null && (keyboard.leftCtrlKey.isPressed || keyboard.rightCtrlKey.isPressed);
+        }
+        private static bool IsAltHeld()
+        {
+            Keyboard keyboard = Keyboard.current;
+            return keyboard != null && (keyboard.leftAltKey.isPressed || keyboard.rightAltKey.isPressed);
+        }
         private static CardinalDirection DirectionToward(GridPosition a, GridPosition b) => BattlefieldPresentationAdapter.DirectionToward(a, b);
     }
 }

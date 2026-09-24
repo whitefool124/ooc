@@ -52,7 +52,7 @@ namespace OCC.Combat.Tests
             Assert.That(hero.ActionPoints, Is.EqualTo(3));
             Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroBaseMovementRange));
 
-            hero.ApplyStatus(StatusType.Slow, 2);
+            hero.ApplyStatus(StatusType.Agility, 2, -1);
             CombatResolver.BeginTurn(state, hero.Id);
             Assert.That(hero.ActionPoints, Is.EqualTo(3));
             Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
@@ -346,6 +346,40 @@ namespace OCC.Combat.Tests
             CombatResolver.BeginTurn(restarted, "hero");
             CombatResolver.Resolve(restarted, CombatCommand.Interact("hero", target));
             Assert.That(restarted.IsVictory, Is.EqualTo(state.IsVictory));
+        }
+
+        [Test]
+        public void ForcedMoveIntoDurableObject_DamagesShieldedUnitAndObjectAndKeepsOrigin()
+        {
+            GridMap map = new GridMap(4, 3);
+            GridPosition obstacle = new GridPosition(2, 1);
+            map.SetTile(obstacle, new TileState { Cover = CoverType.Heavy, Durability = 8 });
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            CombatState state = new CombatState(map, new[] { hero });
+
+            ForcedMoveResult result = state.ResolveForcedMove(hero, new GridPosition(1, 0), 1, "test-push");
+
+            Assert.That(result, Is.EqualTo(ForcedMoveResult.ObjectCollision));
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(1, 1)));
+            Assert.That(hero.Shield, Is.Zero, "The initial 2 shield absorbs the first half of the 4 collision damage.");
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth - 2));
+            Assert.That(map.GetTile(obstacle).Durability, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void ForcedMoveBlockedByUnit_CancelsWithoutObjectCollisionDamage()
+        {
+            GridMap map = new GridMap(4, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
+            UnitState blocker = new UnitState("blocker", false, new GridPosition(2, 1));
+            CombatState state = new CombatState(map, new[] { hero, blocker });
+
+            ForcedMoveResult result = state.ResolveForcedMove(hero, new GridPosition(1, 0), 1, "test-push");
+
+            Assert.That(result, Is.EqualTo(ForcedMoveResult.Blocked));
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(1, 1)));
+            Assert.That(hero.Shield, Is.EqualTo(2));
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth));
         }
 
         private static CombatState CreateHeroState(params GridPosition[] blockedPositions) =>

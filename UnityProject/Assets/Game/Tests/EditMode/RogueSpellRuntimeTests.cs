@@ -56,11 +56,11 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void M2AllSixtyFireSpells_AreRewardEligibleAndHaveRogueInterpretableRules()
+        public void AllReviewedFireSpells_AreRewardEligibleAndHaveRogueInterpretableRules()
         {
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
             SpellDefinition[] fire = catalog.Spells.Where(value => value.RewardEligible).ToArray();
-            Assert.That(fire.Length, Is.EqualTo(60));
+            Assert.That(fire.Length, Is.EqualTo(FireSpellCatalog.All.Count));
             foreach (SpellDefinition spell in fire)
             {
                 RogueValidationResult validation = RogueSpellRuleInterpreter.Validate(spell);

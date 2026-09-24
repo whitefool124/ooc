@@ -414,7 +414,7 @@ namespace OCC.Combat
             tile.ClearEffectLayers();
             if (device)
             {
-                tile.IsDevice = false; tile.IsOverloadDevice = false; tile.IsCertifierStand = false;
+                tile.IsDevice = false; tile.IsOverloadDevice = false;
                 tile.IsWardGenerator = false; tile.IsTowerMechanism = false; tile.IsAetherCrystal = false; tile.Durability = 0;
             }
             state.Map.SetTile(position, tile);
@@ -466,7 +466,7 @@ namespace OCC.Combat
         /// <summary>借障：每次获得的护盾与每场次数。</summary>
         public const int BorrowShield = 4;
         public const int BorrowUses = 2;
-        /// <summary>夯墙：每场最多夯起的标定结构数量。</summary>
+        /// <summary>夯墙：每场最多生成的临时重掩体数量。</summary>
         public const int WallBuildLimit = 2;
         /// <summary>刻印：约束纹持续的主角回合数。</summary>
         public const int MarkRounds = 3;
@@ -488,7 +488,7 @@ namespace OCC.Combat
             }
         }
 
-        /// <summary>划线教官：先执行"拆你所倚"，再守位取盾，没有结构可倚时夯起标定结构。</summary>
+        /// <summary>划线教官：先执行"拆你所倚"，再守位取盾，没有结构可倚时夯起临时重掩体。</summary>
         private void ResolveVanguard(CombatState state, UnitState vanguard, UnitState hero)
         {
             if (coverToBreak.HasValue)
@@ -513,10 +513,10 @@ namespace OCC.Combat
                 state.AddLog("划线教官守位：贴着结构，回合开始获得 " + PositionGuardShield + " 护盾。");
                 return;
             }
-            if (wallBuilds < WallBuildLimit) BuildStakedWall(state, vanguard);
+            if (wallBuilds < WallBuildLimit) BuildTemporaryHeavyCover(state, vanguard);
         }
 
-        private void BuildStakedWall(CombatState state, UnitState unit)
+        private void BuildTemporaryHeavyCover(CombatState state, UnitState unit)
         {
             GridPosition[] slots = Adjacent(unit.Position)
                 .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position) &&
@@ -524,9 +524,9 @@ namespace OCC.Combat
                 .ToArray();
             if (slots.Length == 0) return;
             GridPosition pick = slots.OrderBy(position => position.Y).ThenBy(position => position.X).First();
-            state.Map.SetTile(pick, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability });
+            state.Map.SetTile(pick, new TileState { Cover = CoverType.Heavy, Durability = TileState.TemporaryHeavyCoverDurability });
             wallBuilds++;
-            state.AddLog("划线教官夯墙：在 (" + pick.X + "," + pick.Y + ") 夯起标定结构（耐久 " + TileState.StakedDurability + "）。");
+            state.AddLog("划线教官夯墙：在 (" + pick.X + "," + pick.Y + ") 生成临时重掩体（耐久 " + TileState.TemporaryHeavyCoverDurability + "）。");
         }
 
         /// <summary>拴索助教：在主角所在格刻下约束纹；主角上一回合移动过则先前移一格。</summary>
@@ -585,8 +585,7 @@ namespace OCC.Combat
             }
         }
 
-        private static bool IsStructure(TileState tile) =>
-            (tile.Cover == CoverType.Heavy || tile.IsStakedStructure) && !tile.IsDestroyed;
+        private static bool IsStructure(TileState tile) => tile.Cover == CoverType.Heavy && !tile.IsDestroyed;
 
         private void ExpireMarks(CombatState state)
         {
@@ -772,10 +771,12 @@ namespace OCC.Combat
         {
             if (librarian.Position.ManhattanDistance(hero.Position) > 3) return false;
             GridPosition direction = DirectionToward(librarian.Position, hero.Position);
-            GridPosition destination = hero.Position + direction;
-            if (!state.Map.IsInside(destination) || state.Map.IsBlocked(destination) || state.IsOccupied(destination, hero.Id)) return false;
-            CombatEffectExecutor.Execute(state, librarian.Id, CombatEffect.Move(hero.Id, destination));
-            state.AddLog("小铃推风：把" + hero.DisplayName + "推开 1 格。");
+            if (state.ArtifactBattle?.TryPreventForcedMove(hero.Id) == true) return false;
+            ForcedMoveResult result = state.ResolveForcedMove(hero, direction, 1, "wind-librarian-push");
+            if (result == ForcedMoveResult.Blocked) return false;
+            state.AddLog(result == ForcedMoveResult.Moved
+                ? "小铃推风：把" + hero.DisplayName + "推开 1 格。"
+                : "小铃推风：" + hero.DisplayName + "撞上物块并留在原格。");
             return true;
         }
 

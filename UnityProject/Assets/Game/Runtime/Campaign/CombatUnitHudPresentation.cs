@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace OCC.Combat
 {
@@ -69,8 +70,12 @@ namespace OCC.Combat
         public string DisplayName { get; }
         public int Duration { get; }
         public int Strength { get; }
-        public string Detail { get; }
-        public string ValueText => Duration.ToString();
+        private readonly string detail;
+        public string SourceText { get; private set; }
+        public int TriggerCount { get; private set; }
+        public string Detail => detail + "\n来源：" + SourceText + "；已触发 " + TriggerCount + " 次";
+        public string ValueText => UnitState.IsAttributeStatus(Status) ? (Strength >= 0 ? "+" : "") + Strength :
+            Duration == int.MaxValue ? "本场" : Duration.ToString();
 
         private CombatStatusPresentation(StatusType status, string runtimeId, string displayName, int duration,
             int strength, string detail)
@@ -79,11 +84,21 @@ namespace OCC.Combat
             RuntimeId = runtimeId;
             DisplayName = displayName;
             Duration = Math.Max(0, duration);
-            Strength = Math.Max(0, strength);
-            Detail = detail;
+            Strength = strength;
+            this.detail = detail;
         }
 
-        public static CombatStatusPresentation From(UnitState unit, StatusType status)
+        public static CombatStatusPresentation From(UnitState unit, StatusType status, CombatState state = null)
+        {
+            CombatStatusPresentation presentation = Build(unit, status);
+            string sourceId = unit.StatusSource(status);
+            presentation.SourceText = string.IsNullOrEmpty(sourceId) ? "未记录" : string.Join("、",
+                sourceId.Split('、').Select(id => state?.GetUnit(id)?.DisplayName ?? id));
+            presentation.TriggerCount = unit.StatusTriggerCount(status);
+            return presentation;
+        }
+
+        private static CombatStatusPresentation Build(UnitState unit, StatusType status)
         {
             if (unit == null) throw new ArgumentNullException(nameof(unit));
             int duration = unit.StatusDuration(status);
@@ -91,16 +106,17 @@ namespace OCC.Combat
             switch (status)
             {
                 case StatusType.Burning:
+                    strength = unit.StatusStrength(status, CombatStatusLifecycle.BurningDamagePerTurn);
                     return new CombatStatusPresentation(status, "burning", "燃烧", duration, strength,
-                        "自身回合结束时失去 " + CombatStatusLifecycle.BurningDamagePerTurn + " 点生命，无视护盾。剩余 " + duration + " 回合。");
+                        "自身回合结束时失去 " + strength + " 点生命，无视护盾；下次触发：自身回合结束。剩余 " + duration + " 次触发。重复施加只刷新持续量，不叠加强度。");
                 case StatusType.Slow:
                     return new CombatStatusPresentation(status, "slow", "迟缓", duration, strength,
-                        "速度降低 3。剩余 " + duration + " 回合。");
+                        "速度降低 3，下一次自身行动的移动步数降低。下次计时：自身回合开始。剩余 " + duration + " 回合。");
                 case StatusType.Bound:
                     // 束缚在目标自身回合开始衰减：构造值比"实际受缚回合数"多 1，展示时按生效回合数给出。
                     int boundRounds = Math.Max(1, duration - 1);
                     return new CombatStatusPresentation(status, "bound", "束缚", boundRounds, strength,
-                        "无法移动。剩余 " + boundRounds + " 回合。");
+                        "无法主动移动；目标自身回合开始扣减。剩余 " + boundRounds + " 个可受限回合。");
                 case StatusType.ArmorBreak:
                     int armorLoss = unit.StatusStrength(status, 2);
                     return new CombatStatusPresentation(status, "armor_break", "破甲", duration, armorLoss,
@@ -111,15 +127,45 @@ namespace OCC.Combat
                 case StatusType.Revealed:
                     return new CombatStatusPresentation(status, "revealed", "显露", duration, strength,
                         "已被侦测。剩余 " + duration + " 回合。");
+                case StatusType.BreakStance:
+                    return new CombatStatusPresentation(status, "break_stance", "破势", duration, strength,
+                        "施加时立即清空护盾；到下一次自身回合结束前不能获得护盾。不降低护甲。");
                 case StatusType.FiregroundBoost:
                     return new CombatStatusPresentation(status, "fireground_boost", "火势", duration, strength,
-                        "你的火场伤害 +" + strength + "。剩余 " + duration + " 回合。");
+                        "火场来源伤害 +" + strength + "。剩余 " + duration + " 回合。");
                 case StatusType.FiregroundVulnerable:
                     return new CombatStatusPresentation(status, "fireground_vulnerable", "助燃", duration, strength,
                         "受到的火场伤害 +" + strength + "。剩余 " + duration + " 回合。");
+                case StatusType.Agility: return Attribute(status, "agility", "敏捷", "有效步数", strength, duration, "格");
+                case StatusType.Strength: return Attribute(status, "strength", "力量", "物理伤害", strength, duration, "点");
+                case StatusType.SpellPower: return Attribute(status, "spell_power", "法强", "奥术、火焰与以太伤害", strength, duration, "点");
+                case StatusType.Speed: return Attribute(status, "speed", "速度", "行动条速度", strength, duration, "点");
+                case StatusType.Range: return Attribute(status, "range", "射程", "攻击与术式射程", strength, duration, "格");
+                case StatusType.DamageTaken: return Attribute(status, "damage_taken", "承伤", "受到的伤害", strength, duration, "点");
+                case StatusType.ShieldEfficiency: return Attribute(status, "shield_efficiency", "护盾效能", "自身每次获得护盾", strength, duration, "点");
+                case StatusType.ShieldGrant: return Attribute(status, "shield_grant", "护盾授予", "给予他人的护盾", strength, duration, "点");
+                case StatusType.Control: return Attribute(status, "control", "控制", "施加的束缚、敏捷与标记时长", strength, duration, "回合");
+                case StatusType.Marked:
+                    return new CombatStatusPresentation(status, "marked", "标记", duration, strength,
+                        "藏身无效，可被标记效果读取。剩余 " + duration + " 个自身回合；到期或净化移除。");
+                case StatusType.Prepared:
+                    return new CombatStatusPresentation(status, "prepared", "架设", duration, strength,
+                        "允许使用要求架设的攻击；攻击后、移动后或主动解除时移除。");
+                case StatusType.Invulnerable:
+                    return new CombatStatusPresentation(status, "invulnerable", "霸体", duration, strength,
+                        "持续期间不会被打倒、推离或阻挡。剩余 " + duration + " 个自身回合。");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, "Unknown combat status.");
             }
+        }
+
+        private static CombatStatusPresentation Attribute(StatusType status, string id, string name,
+            string affected, int strength, int duration, string unitName)
+        {
+            string signed = (strength >= 0 ? "+" : string.Empty) + strength;
+            string timing = duration == int.MaxValue ? "持续至本场战斗结束" : "剩余 " + duration + " 个自身回合，回合结束扣减";
+            return new CombatStatusPresentation(status, id, name, duration, strength,
+                affected + " " + signed + " " + unitName + "；" + timing + "。同名数值相加。");
         }
     }
 }

@@ -51,11 +51,15 @@ namespace OCC.Combat
             GridPosition end = path[path.Count - 1];
             string collision = CollisionSummary(state, enemy, end, command.Destination);
             int spent = PathCost(state, path);
+            GridPosition[] chargeCells = path.Skip(1).ToArray();
+            GridPosition[] hitCells = chargeCells.TakeWhile(cell => !state.Map.IsBlocked(cell))
+                .Where(cell => state.Units.Values.Any(unit => unit.IsAlive && unit.Id != enemy.Id && unit.Position == cell))
+                .Take(1).ToArray();
             return new EnemyIntentPresentation("first-x:charge:" + Cell(command.Destination) + ":" + string.Join("-", path),
                 "贯场冲压", "锁定 " + Cell(command.Destination),
                 "路线 " + string.Join("→", path.Select(Cell)) + "；预算已用 " + spent + "，上限 5；" + collision +
                 (state.Map.GetTile(end).IsWater ? "；浅水冷却，不进入卸压" : "；干地结束，清盾并进入卸压"),
-                "move", true, end, 8);
+                "move", true, end, 8, path.ToArray(), chargeCells, hitCells);
         }
 
         public CombatEffectExecution ResolveCharge(CombatState state, UnitState ram, GridPosition lockedTarget)
@@ -168,9 +172,7 @@ namespace OCC.Combat
         {
             if (state.ArtifactBattle?.TryPreventForcedMove(target.Id) == true) return;
             GridPosition direction = new GridPosition(collision.X - previous.X, collision.Y - previous.Y);
-            GridPosition destination = target.Position + direction;
-            if (state.Map.IsInside(destination) && !state.Map.IsBlocked(destination) && !state.IsOccupied(destination, target.Id))
-                target.MoveTo(destination);
+            state.ResolveForcedMove(target, direction, 1, "breach-ram-charge");
         }
 
         private static string Cell(GridPosition position) => ((char)('A' + position.X)).ToString() + (position.Y + 1);

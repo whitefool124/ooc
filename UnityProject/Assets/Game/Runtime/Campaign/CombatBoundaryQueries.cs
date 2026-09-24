@@ -19,14 +19,14 @@ namespace OCC.Combat
         {
             if (state == null || enemy == null || hero == null) return null;
             CombatCommand command = GetOrCreate(state, enemy, hero);
-            if (state.RainLanternCourt != null) return state.RainLanternCourt.PresentIntent(state, enemy, command);
-            if (state.GreenhouseCollectionRoom != null) return state.GreenhouseCollectionRoom.PresentIntent(state, enemy, command);
-            if (state.ThreeMaterialPressure != null) return state.ThreeMaterialPressure.PresentIntent(state, enemy, command);
-            if (state.AcademyCoreBoss != null) return state.AcademyCoreBoss.PresentIntent(state, enemy, command);
-            if (state.AcademyFieldEnemy != null && AcademyFieldEnemyRuntime.Handles(enemy))
-                return state.AcademyFieldEnemy.PresentIntent(state, enemy, command);
-            if (state.PressureTest != null) return state.PressureTest.PresentIntent(state, enemy, command);
-            return CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+            EnemyIntentPresentation intent = state.RainLanternCourt != null ? state.RainLanternCourt.PresentIntent(state, enemy, command)
+                : state.GreenhouseCollectionRoom != null ? state.GreenhouseCollectionRoom.PresentIntent(state, enemy, command)
+                : state.ThreeMaterialPressure != null ? state.ThreeMaterialPressure.PresentIntent(state, enemy, command)
+                : state.AcademyCoreBoss != null ? state.AcademyCoreBoss.PresentIntent(state, enemy, command)
+                : state.AcademyFieldEnemy != null && AcademyFieldEnemyRuntime.Handles(enemy) ? state.AcademyFieldEnemy.PresentIntent(state, enemy, command)
+                : state.PressureTest != null ? state.PressureTest.PresentIntent(state, enemy, command)
+                : CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+            return intent?.WithMovementPreview(state, enemy, command).WithAttackPreview(state, enemy, command);
         }
         public CombatCommand GetExecutionCommand(CombatState state, UnitState enemy, UnitState hero) => GetOrCreate(state, enemy, hero);
         public void Invalidate() => commands.Clear();

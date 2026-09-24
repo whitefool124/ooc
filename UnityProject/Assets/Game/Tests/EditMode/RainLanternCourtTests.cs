@@ -11,18 +11,18 @@ namespace OCC.Combat.Tests
         public void FrozenLayout_UsesExactCoordinatesAndCombatants()
         {
             FirstRegionLevelDefinition level = FirstRegionLevelCatalog.For(RainLanternCourtRuntime.LevelId);
-            Assert.That(level.Width, Is.EqualTo(8));
-            Assert.That(level.Height, Is.EqualTo(7));
-            Assert.That(level.Width * level.Height, Is.EqualTo(56), "初始体验战场应从 108 格压缩到约一半。");
-            Assert.That(level.HeroSpawn, Is.EqualTo(new GridPosition(1, 5)));
+            Assert.That(level.Width, Is.EqualTo(6));
+            Assert.That(level.Height, Is.EqualTo(5));
+            Assert.That(level.Width * level.Height, Is.EqualTo(30), "首场教学应使用 25–36 格的默认紧凑战场。");
+            Assert.That(level.HeroSpawn, Is.EqualTo(new GridPosition(1, 4)));
             Assert.That(level.EnemyPlacements.Select(value => value.ArchetypeId),
                 Is.EqualTo(new[] { "tether_hound", "pyromancer" }));
             Assert.That(level.EnemyPlacements.Select(value => value.Position),
-                Is.EqualTo(new[] { new GridPosition(5, 4), new GridPosition(6, 1) }));
+                Is.EqualTo(new[] { new GridPosition(4, 3), new GridPosition(5, 0) }));
             Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.Water), Is.EqualTo(3));
-            Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.LampVine), Is.EqualTo(8));
+            Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.LampVine), Is.EqualTo(6));
             Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.LightCover), Is.EqualTo(3));
-            Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.HeavyCover), Is.EqualTo(10));
+            Assert.That(level.Terrain.Count(value => value.Kind == LevelTerrainKind.PermanentWall), Is.EqualTo(10));
             Assert.That(FirstRegionLevelCatalog.Validate(), Is.Empty);
         }
 
@@ -48,7 +48,7 @@ namespace OCC.Combat.Tests
             Assert.That(state.RainLanternCourt, Is.Not.Null);
             Assert.That(state.Units.Values.Single(value => value.EnemyArchetypeId == "tether_hound").MaxHealth, Is.EqualTo(12));
             Assert.That(state.Units.Values.Single(value => value.EnemyArchetypeId == "pyromancer").MaxHealth, Is.EqualTo(16));
-            Assert.That(state.Map.GetTile(new GridPosition(2, 4)).IsWater, Is.True);
+            Assert.That(state.Map.GetTile(new GridPosition(2, 3)).IsWater, Is.True);
             Assert.That(state.Map.GetTile(new GridPosition(3, 0)).IsLampVine, Is.True);
             Assert.That(state.Map.HasLineOfSight(new GridPosition(3, 2), new GridPosition(2, 2)), Is.True);
             Assert.That(state.Map.HasLineOfSight(new GridPosition(3, 2), new GridPosition(1, 2)), Is.False);
@@ -63,9 +63,9 @@ namespace OCC.Combat.Tests
             hero.ApplyStatus(StatusType.Burning, 2);
             CombatResolver.BeginTurn(state, hero.Id);
 
-            CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(2, 4)));
+            CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(2, 3)));
 
-            Assert.That(hero.Position, Is.EqualTo(new GridPosition(2, 4)));
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(2, 3)));
             Assert.That(hero.HasStatus(StatusType.Burning), Is.False);
             Assert.That(hero.Shield, Is.EqualTo(2));
             Assert.That(state.EventLog.Any(value => value.Contains("就地接线")), Is.True);
@@ -84,7 +84,7 @@ namespace OCC.Combat.Tests
             Assert.That(hero.Shield, Is.EqualTo(4));
             Assert.That(state.RainLanternCourt.MovementBudget(hero), Is.EqualTo(hero.MovementRangeThisTurn + 2));
             Assert.Throws<System.InvalidOperationException>(() => state.RainLanternCourt.CastBorrowedCover(state, hero));
-            CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(1, 4)));
+            CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(1, 3)));
             Assert.That(state.RainLanternCourt.MovementBudget(hero), Is.EqualTo(hero.MovementRangeThisTurn));
         }
 
@@ -107,7 +107,7 @@ namespace OCC.Combat.Tests
             Assert.That(hero.Health, Is.EqualTo(health));
             CombatCommand followUp = state.RainLanternCourt.ChooseEnemyCommand(state, pyro, hero);
             Assert.That(followUp.Type, Is.EqualTo(CombatCommandType.Move));
-            Assert.That(followUp.Destination, Is.EqualTo(new GridPosition(6, 3)));
+            Assert.That(followUp.Destination, Is.EqualTo(new GridPosition(5, 2)));
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace OCC.Combat.Tests
             }));
             foreach (var route in RainLanternCourtRuntime.VerificationRoutes)
             {
-                Assert.That(route.Value.First(), Is.EqualTo(new GridPosition(1, 5)), route.Key);
+                Assert.That(route.Value.First(), Is.EqualTo(new GridPosition(1, 4)), route.Key);
                 for (int index = 1; index < route.Value.Count; index++)
                 {
                     var path = state.Map.FindLowestCostPath(route.Value[index - 1], route.Value[index], UnitState.HeroBaseMovementRange,

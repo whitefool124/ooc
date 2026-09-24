@@ -14,11 +14,16 @@ namespace OCC.Combat
         public bool HasDestination { get; }
         public GridPosition Destination { get; }
         public int ExpectedDamage { get; }
+        public IReadOnlyList<GridPosition> Route { get; }
+        public IReadOnlyList<GridPosition> AttackRange { get; }
+        public IReadOnlyList<GridPosition> AffectedCells { get; }
         public string CompactText => ActionName + " → " + TargetSummary;
         public string DetailedText => CompactText + "\n" + ResultSummary;
 
         internal EnemyIntentPresentation(string signature, string actionName, string targetSummary, string resultSummary,
-            string iconId, bool hasDestination, GridPosition destination, int expectedDamage)
+            string iconId, bool hasDestination, GridPosition destination, int expectedDamage,
+            IReadOnlyList<GridPosition> route = null, IReadOnlyList<GridPosition> attackRange = null,
+            IReadOnlyList<GridPosition> affectedCells = null)
         {
             Signature = signature ?? string.Empty;
             ActionName = actionName ?? string.Empty;
@@ -28,6 +33,63 @@ namespace OCC.Combat
             HasDestination = hasDestination;
             Destination = destination;
             ExpectedDamage = Math.Max(0, expectedDamage);
+            Route = route ?? Array.Empty<GridPosition>();
+            AttackRange = attackRange ?? Array.Empty<GridPosition>();
+            AffectedCells = affectedCells ?? Array.Empty<GridPosition>();
+        }
+
+        public EnemyIntentPresentation WithMovementPreview(CombatState state, UnitState enemy, CombatCommand command)
+        {
+            if (command.Type != CombatCommandType.Move) return this;
+            IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, enemy, command.Destination);
+            string detail = path.Count < 2 ? "当前路径不可达；行动时将重新选取公开意图" :
+                "路径 " + string.Join(" → ", path.Select(Cell)) + "（" + path.Skip(1).Sum(position => CombatMovementQuery.EntryCost(state, enemy, position)) +
+                "/" + CombatMovementQuery.Budget(state, enemy) + " 步）";
+            if (path.Skip(1).Any(position => state.Map.GetTile(position).IsWater) && enemy.HasStatus(StatusType.Burning))
+                detail += "；经过浅水会移除燃烧";
+            if (path.Count > 1 && state.Map.GetTile(command.Destination).IsBindingMark)
+                detail += "；落入约束纹后本回合不能再主动移动";
+            return new EnemyIntentPresentation(Signature, ActionName, TargetSummary, ResultSummary + "\n" + detail,
+                IconId, true, command.Destination, ExpectedDamage, path.ToArray());
+        }
+
+        private static string Cell(GridPosition position) => "(" + position.X + "," + position.Y + ")";
+
+        public EnemyIntentPresentation WithAttackPreview(CombatState state, UnitState enemy, CombatCommand command)
+        {
+            if (state == null || enemy == null ||
+                command.Type != CombatCommandType.Attack && command.Type != CombatCommandType.UseSkill) return this;
+            SkillDefinition skill = command.Type == CombatCommandType.UseSkill
+                ? command.SlotIndex == 0 ? enemy.SkillOne : enemy.SkillTwo : null;
+            WeaponDefinition weapon = command.Type == CombatCommandType.Attack ? enemy.MainHand : null;
+            if (skill == null && weapon == null) return this;
+            if (skill?.TargetRule == SkillTargetRule.Self)
+                return new EnemyIntentPresentation(Signature, ActionName, TargetSummary,
+                    ResultSummary + "\n本次作用格 " + Cell(enemy.Position), IconId, HasDestination,
+                    Destination, ExpectedDamage, Route, Array.Empty<GridPosition>(), new[] { enemy.Position });
+            int minimum = skill?.MinimumRange ?? weapon.MinimumRange;
+            int maximum = enemy.EffectiveRange(skill?.Range ?? weapon.Range);
+            bool ignoresLine = skill?.HasModifier(SkillModifierType.IgnoreLineOfSight) == true;
+            var range = new List<GridPosition>();
+            for (int y = 0; y < state.Map.Height; y++) for (int x = 0; x < state.Map.Width; x++)
+            {
+                GridPosition cell = new GridPosition(x, y);
+                int distance = enemy.Position.ManhattanDistance(cell);
+                if (distance < Math.Max(1, minimum) || distance > maximum) continue;
+                if (distance > 1 && !ignoresLine && !state.HasLineOfSight(enemy.Position, cell)) continue;
+                range.Add(cell);
+            }
+            UnitState target = string.IsNullOrEmpty(command.TargetUnitId) ? null : state.GetUnit(command.TargetUnitId);
+            GridPosition center = target?.Position ?? command.Destination;
+            int radius = skill?.Delivery == SkillDeliveryMethod.Area ? skill.ModifierValue(SkillModifierType.Radius) : 0;
+            GridPosition[] affected = range.Contains(center)
+                ? radius > 0 ? state.Map.PositionsWith(_ => true).Where(cell => cell.ManhattanDistance(center) <= radius).ToArray()
+                    : new[] { center }
+                : Array.Empty<GridPosition>();
+            string detail = "\n可选范围 " + range.Count + " 格（" + minimum + "–" + maximum + " 格，按当前攻击线）" +
+                "；本次生效 " + (affected.Length == 0 ? "无合法落点" : string.Join("、", affected.Select(Cell)));
+            return new EnemyIntentPresentation(Signature, ActionName, TargetSummary, ResultSummary + detail,
+                IconId, HasDestination, Destination, ExpectedDamage, Route, range, affected);
         }
     }
 
@@ -249,11 +311,10 @@ namespace OCC.Combat
         public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy, bool roguelite = false)
         {
             if (enemy == null) throw new ArgumentNullException(nameof(enemy));
-            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + RangeText(enemy.MainHand.MinimumRange, enemy.MainHand.Range);
+            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + RangeText(enemy.MainHand.MinimumRange, enemy.EffectiveRange(enemy.MainHand.Range));
             string skills = "战法：" + string.Join("；", new[] { enemy.SkillOne, enemy.SkillTwo }.Where(skill => skill != null)
                 .Select(skill => skill.DisplayName + "——" + SkillResult(skill) + (enemy.Cooldown(skill) > 0 ? "；还需等待 " + enemy.Cooldown(skill) + " 回合" : string.Empty)));
-            string statuses = enemy.Statuses.Count == 0 ? "状态：无" : "状态：" + string.Join("；", enemy.Statuses.OrderBy(pair => pair.Key)
-                .Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
+            string statuses = StatusSummary(enemy, "无");
             return new EnemyInformationPresentation(enemy.DisplayName,
                 "生命当前 " + enemy.Health + "　上限 " + enemy.MaxHealth + "\n护盾当前 " + enemy.Shield + "　上限 " + enemy.MaxShield,
                 roguelite ? "普通盾 " + enemy.Shield + "　速度 " + enemy.EffectiveSpeed : "护甲 " + enemy.EffectiveArmor + "　格挡 " + enemy.Block + "　速度 " + enemy.EffectiveSpeed,
@@ -349,8 +410,12 @@ namespace OCC.Combat
         {
             if (state == null || enemy == null || enemy.IsHero) return string.Empty;
             EnemyInformationPresentation profile = BuildEnemyInformation(enemy, state.Ruleset == CombatRuleset.Roguelite);
+            string statusDetails = enemy.Statuses.Count == 0 ? string.Empty : "\n状态详情：\n" + string.Join("\n",
+                enemy.Statuses.OrderBy(pair => pair.Key).Select(pair =>
+                    CombatStatusPresentation.From(enemy, pair.Key, state).DisplayName + "：" +
+                    CombatStatusPresentation.From(enemy, pair.Key, state).Detail));
             return string.Join("\n", profile.Defenses, profile.Weapon, "特点：" + EnemyRoleSummary(enemy.EnemyArchetypeId),
-                profile.Skills, profile.Statuses, "当前意图：" + (intent?.DetailedText ?? "尚未显露"));
+                profile.Skills, profile.Statuses + statusDetails, "当前意图：" + (intent?.DetailedText ?? "尚未显露"));
         }
 
         private static string EnemyRoleSummary(string archetypeId)
@@ -374,8 +439,8 @@ namespace OCC.Combat
         public static string BuildHeroDetails(UnitState hero)
         {
             if (hero == null) return "英雄状态尚未就绪。";
-            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + "\n伤害 " + hero.MainHand.Damage + "　射程 " + RangeText(hero.MainHand.MinimumRange, hero.MainHand.Range);
-            string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
+            string weapon = hero.MainHand == null ? "主手：无" : "主手：" + hero.MainHand.DisplayName + "\n伤害 " + hero.MainHand.Damage + "　射程 " + RangeText(hero.MainHand.MinimumRange, hero.EffectiveRange(hero.MainHand.Range));
+            string statuses = StatusSummary(hero, "正常");
             return string.Join("\n",
                 "生命当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n护盾当前 " + hero.Shield + "　上限 " + hero.MaxShield + "\n以太当前 " + hero.Mana + "　上限 " + hero.MaxMana,
                 "行动点 " + hero.ActionPoints + "　护甲 " + hero.EffectiveArmor + "　格挡 " + hero.Block + "　速度 " + hero.EffectiveSpeed,
@@ -449,7 +514,10 @@ namespace OCC.Combat
                     case SkillEffectType.ApplyStatus:
                         // 束缚在目标自身回合开始衰减，构造值比生效回合数多 1，公开文本按生效回合数给出。
                         int shownRounds = effect.Status == StatusType.Bound ? Math.Max(1, effect.Duration - 1) : effect.Duration;
-                        return "施加" + StatusLabel(effect.Status) + " " + shownRounds + " 回合";
+                        if (effect.Status == StatusType.BreakStance) return "清空护盾并施加破势，至目标下次自身回合结束禁盾";
+                        string value = UnitState.IsAttributeStatus(effect.Status)
+                            ? (effect.Amount >= 0 ? "+" : string.Empty) + effect.Amount + "，" : string.Empty;
+                        return "施加" + StatusLabel(effect.Status) + value + shownRounds + " 回合";
                     case SkillEffectType.ClearStatus: return "清除" + StatusLabel(effect.Status);
                     case SkillEffectType.MoveSource: return "移动 " + effect.Amount + " 格";
                     case SkillEffectType.DamageObject: return "对物件造成 " + effect.Amount + " 点耐久伤害";
@@ -464,7 +532,7 @@ namespace OCC.Combat
         public static string BuildRogueliteHeroDetails(CombatState state, UnitState hero)
         {
             if (hero == null) return "英雄状态尚未就绪。";
-            string statuses = hero.Statuses.Count == 0 ? "状态：正常" : "状态：" + string.Join("；", hero.Statuses.OrderBy(pair => pair.Key).Select(pair => StatusLabel(pair.Key) + " " + pair.Value));
+            string statuses = StatusSummary(hero, "正常");
             List<string> lines = new List<string>
             {
                 "生命当前 " + hero.Health + "　上限 " + hero.MaxHealth + "\n普通盾 " + hero.Shield + "　个人魔力当前 " + hero.Mana + "　上限 " + hero.MaxMana,
@@ -505,10 +573,34 @@ namespace OCC.Combat
                 case StatusType.Bound: return "束缚";
                 case StatusType.Slow: return "迟缓";
                 case StatusType.ArmorBreak: return "破甲";
+                case StatusType.BreakStance: return "破势";
+                case StatusType.Agility: return "敏捷";
+                case StatusType.Strength: return "力量";
+                case StatusType.SpellPower: return "法强";
+                case StatusType.Speed: return "速度";
+                case StatusType.Range: return "射程";
+                case StatusType.DamageTaken: return "承伤";
+                case StatusType.ShieldEfficiency: return "护盾效能";
+                case StatusType.ShieldGrant: return "护盾授予";
+                case StatusType.Control: return "控制";
+                case StatusType.Marked: return "标记";
+                case StatusType.Prepared: return "架设";
+                case StatusType.Invulnerable: return "霸体";
                 case StatusType.FiregroundBoost: return "火势";
                 case StatusType.FiregroundVulnerable: return "助燃";
                 default: return status.ToString();
             }
+        }
+
+        private static string StatusSummary(UnitState unit, string empty)
+        {
+            if (unit.Statuses.Count == 0) return "状态：" + empty;
+            return "状态：" + string.Join("；", unit.Statuses.OrderBy(pair => pair.Key).Select(pair =>
+            {
+                CombatStatusPresentation status = CombatStatusPresentation.From(unit, pair.Key);
+                return status.DisplayName + " " + status.ValueText +
+                    (UnitState.IsAttributeStatus(pair.Key) && pair.Value != int.MaxValue ? "（剩余" + pair.Value + "回合）" : string.Empty);
+            }));
         }
 
         private static string ItemCategoryLabel(ItemCategory category)

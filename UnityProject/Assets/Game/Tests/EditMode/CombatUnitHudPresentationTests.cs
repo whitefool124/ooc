@@ -133,20 +133,21 @@ namespace OCC.Combat.Tests
         {
             UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
             enemy.ApplyStatus(StatusType.Burning, 3);
-            enemy.ApplyStatus(StatusType.ArmorBreak, 2, 4);
+            enemy.ApplyStatus(StatusType.DamageTaken, 2, 4);
 
             CombatStatusPresentation burning = CombatStatusPresentation.From(enemy, StatusType.Burning);
-            CombatStatusPresentation armorBreak = CombatStatusPresentation.From(enemy, StatusType.ArmorBreak);
+            CombatStatusPresentation damageTaken = CombatStatusPresentation.From(enemy, StatusType.DamageTaken);
 
             Assert.That(burning.ValueText, Is.EqualTo("3"));
             Assert.That(burning.Detail, Does.Contain("自身回合结束时失去 4 点生命"));
             Assert.That(burning.Detail, Does.Contain("无视护盾"));
-            Assert.That(armorBreak.Detail, Does.Contain("护甲降低 4"));
-            Assert.That(armorBreak.Detail, Does.Contain("剩余 2 回合"));
+            Assert.That(damageTaken.ValueText, Is.EqualTo("+4"));
+            Assert.That(damageTaken.Detail, Does.Contain("受到的伤害 +4"));
+            Assert.That(damageTaken.Detail, Does.Contain("剩余 2 个自身回合"));
         }
 
-        [TestCase(StatusType.Dazzled, "dazzled", "目眩")]
-        [TestCase(StatusType.Revealed, "revealed", "显露")]
+        [TestCase(StatusType.Marked, "marked", "标记")]
+        [TestCase(StatusType.Prepared, "prepared", "架设")]
         public void StatusPresentation_CoversArtifactStatuses(StatusType status, string runtimeId, string name)
         {
             UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
@@ -156,7 +157,22 @@ namespace OCC.Combat.Tests
 
             Assert.That(presentation.RuntimeId, Is.EqualTo(runtimeId));
             Assert.That(presentation.DisplayName, Is.EqualTo(name));
-            Assert.That(presentation.Detail, Does.Contain("剩余 2 回合"));
+            Assert.That(presentation.Detail, Does.Contain(status == StatusType.Marked ? "剩余 2 个自身回合" : "攻击后、移动后"));
+        }
+
+        [Test]
+        public void BreakStancePresentation_ExplainsShieldLockInsteadOfArmorLoss()
+        {
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            enemy.ApplyStatus(StatusType.BreakStance, 1, 0, "hero");
+
+            CombatStatusPresentation presentation = CombatStatusPresentation.From(enemy, StatusType.BreakStance);
+
+            Assert.That(presentation.DisplayName, Is.EqualTo("破势"));
+            Assert.That(presentation.Detail, Does.Contain("清空护盾"));
+            Assert.That(presentation.Detail, Does.Contain("不能获得护盾"));
+            Assert.That(presentation.Detail, Does.Not.Contain("护甲降低"));
+            Assert.That(presentation.SourceText, Is.EqualTo("hero"));
         }
     }
 }

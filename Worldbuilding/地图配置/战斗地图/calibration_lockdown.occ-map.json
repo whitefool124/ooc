@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "calibration_lockdown",
+  "displayName": "精英战斗 04 · 失控校准室封锁",
+  "width": 7,
+  "height": 6,
+  "objectiveSummary": "击倒试制员、背弩生与拴索助教。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "floorTheme": "Ruins",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "rail_patrol",
+    "depot_wreck"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 3
+  },
+  "enemies": [
+    {
+      "archetypeId": "prototype_hand",
+      "x": 4,
+      "y": 3
+    },
+    {
+      "archetypeId": "rune_arbalist",
+      "x": 6,
+      "y": 1
+    },
+    {
+      "archetypeId": "stone_snare",
+      "x": 6,
+      "y": 4
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "WardGenerator",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "OverloadDevice",
+      "x": 1,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 4,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 4,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [
+    {
+      "id": "prototype_temp_devices",
+      "type": "temporary",
+      "label": "试制员布放临时装置",
+      "timing": "试制员回合开始",
+      "trigger": "试制箱仍有库存且存在正交相邻合法空格",
+      "result": "依次布放耐久8的护罩发生器或过载装置",
+      "duration": "直到被摧毁或引爆；受库存限制",
+      "source": "prototype_hand",
+      "positions": []
+    }
+  ],
+  "spaceContract": {
+    "grammar": "设备间短走廊、冷却沟与双装置区",
+    "publicRisk": "试制件逐段堵路，背弩射线覆盖主廊。",
+    "counterplayWindow": "可先拆试制件、反用过载区，或从外侧短路绕行。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

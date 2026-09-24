@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "weak_layout_w2",
+  "displayName": "普通战斗 11 · 弱遭遇布局 W2",
+  "objectiveSummary": "弱遭遇双敌折角布局",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 6,
+  "height": 5,
+  "complexMechanics": false,
+  "floorTheme": "Courtyard",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 1,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "rune_arbalist",
+      "x": 5,
+      "y": 0
+    },
+    {
+      "archetypeId": "raider",
+      "x": 5,
+      "y": 3
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "回廊折角与双出口",
+    "publicRisk": "远端射线与下方通道接近同时公开。",
+    "counterplayWindow": "折角墙后可换线并切断远射。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:36:55.288Z"
+}

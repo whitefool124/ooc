@@ -47,8 +47,18 @@ namespace OCC.Combat.Presentation
                 else if (result.Kind == CombatEffectKind.RestoreMana && result.AppliedAmount > 0)
                     sink.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ManaRestore,
                         result.PositionAfter, result.AppliedAmount));
-                else if (result.Kind == CombatEffectKind.ApplyStatus && result.AppliedAmount > 0)
-                    sink.NotifyStatusApplied(result.PositionAfter, result.Status, result.ValueAfter);
+                else if (result.Kind == CombatEffectKind.ApplyStatus && (result.Changed || result.Status == StatusType.BreakStance))
+                {
+                    if (UnitState.IsAttributeStatus(result.Status))
+                    {
+                        UnitState target = state.GetUnit(result.TargetUnitId);
+                        CombatStatusPresentation status = CombatStatusPresentation.From(target, result.Status, state);
+                        sink.Publish(new CombatFeedbackEvent(CombatFeedbackKind.Attribute, sourcePosition,
+                            result.PositionAfter, targetUnitId: result.TargetUnitId,
+                            message: status.DisplayName + status.ValueText));
+                    }
+                    else sink.NotifyStatusApplied(result.PositionAfter, result.Status, result.ValueAfter);
+                }
                 else if (result.Kind == CombatEffectKind.ClearStatus && result.AppliedAmount > 0)
                     sink.Publish(new CombatFeedbackEvent(CombatFeedbackKind.StatusCleared, result.PositionAfter));
                 else if (result.Kind == CombatEffectKind.DamageObject && result.AppliedAmount > 0)

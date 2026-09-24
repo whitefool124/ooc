@@ -1,0 +1,102 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "weak_layout_w3",
+  "displayName": "普通战斗 12 · 弱遭遇布局 W3",
+  "width": 6,
+  "height": 5,
+  "objectiveSummary": "弱遭遇双敌环形布局",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "floorTheme": "Ruins",
+  "isElite": false,
+  "isBoss": false,
+  "complexMechanics": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 2,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "tether_hound",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "archetypeId": "shieldguard",
+      "x": 4,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 5,
+      "y": 0,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "六块结构围出的短环路",
+    "publicRisk": "双敌分守环路两侧。",
+    "counterplayWindow": "环路上下均连通，可主动拆开接触顺序。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

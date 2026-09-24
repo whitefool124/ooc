@@ -1,0 +1,107 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "depot_wreck",
+  "displayName": "普通战斗 05 · 废弃驿站",
+  "objectiveSummary": "清除占据驿站的敌人",
+  "objectiveType": "Elimination",
+  "tier": 1,
+  "width": 6,
+  "height": 5,
+  "complexMechanics": false,
+  "floorTheme": "Ruins",
+  "isElite": false,
+  "isBoss": false,
+  "prerequisites": [],
+  "heroSpawn": {
+    "x": 2,
+    "y": 2
+  },
+  "enemies": [
+    {
+      "archetypeId": "tether_hound",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 5,
+      "y": 4
+    },
+    {
+      "archetypeId": "stone_snare",
+      "x": 5,
+      "y": 0
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LightCover",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "三口收束的小驿站废墟",
+    "publicRisk": "三股追击从不同方向抵达，中线停留会叠加控制。",
+    "counterplayWindow": "上下宽口都能拆开三名敌人的接触节奏。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T07:31:49.921Z"
+}

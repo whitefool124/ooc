@@ -174,6 +174,24 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void RouteHistory_PreservesTutorialOrderAndAcademyHandoffAcrossSave()
+        {
+            RogueliteMapRun run = ReadyForShop(4213);
+            run.CompleteFirstRunExperience();
+            string[] expected = run.RouteHistoryNodeIds.ToArray();
+
+            Assert.That(expected.Take(3), Is.EqualTo(new[] { FirstRunExperienceCatalog.OriginNodeId, "B1", "EV1" }));
+            Assert.That(expected.Last(), Is.EqualTo(RogueliteAcademyLayerCatalog.EntryNodeIds[0]));
+
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            RogueliteMapRun restored = RogueliteMapRun.FromRogue11(
+                Rogue11Serializer.Deserialize(store.Values[RogueliteSaveGateway.MapRunKey]));
+            Assert.That(restored.RouteHistoryNodeIds, Is.EqualTo(expected));
+        }
+
+        [Test]
         public void ServiceNodeSettlement_RoundTripsAndOldSaveMigratesToEmptySet()
         {
             RogueliteMapRun run = ReadyForShop(4210);
@@ -192,7 +210,7 @@ namespace OCC.Combat.Tests
                 RogueliteMapRunValidator.Validate(restored).Summary);
 
             string[] fields = current.Split('|');
-            string legacy = string.Join("|", fields.Take(fields.Length - 1));
+            string legacy = string.Join("|", fields.Take(fields.Length - 2));
             RogueRunDto migrated = Rogue11Serializer.Deserialize(legacy);
             Assert.That(migrated.SettledServiceNodeIds, Is.Empty);
         }

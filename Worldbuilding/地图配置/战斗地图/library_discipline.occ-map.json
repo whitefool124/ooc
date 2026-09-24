@@ -1,0 +1,134 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "library_discipline",
+  "displayName": "精英战斗 07 · 图书馆纠察",
+  "width": 7,
+  "height": 6,
+  "objectiveSummary": "击倒小铃、补盾助教与替身偶。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "floorTheme": "Courtyard",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "rail_patrol",
+    "relay_raid"
+  ],
+  "heroSpawn": {
+    "x": 1,
+    "y": 3
+  },
+  "enemies": [
+    {
+      "archetypeId": "wind_librarian",
+      "x": 6,
+      "y": 1
+    },
+    {
+      "archetypeId": "barrier_mender",
+      "x": 6,
+      "y": 4
+    },
+    {
+      "archetypeId": "sigil_mauler",
+      "x": 6,
+      "y": 3
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "LightCover",
+      "x": 0,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 1,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 1,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 5,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "BindingMark",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 3,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "书架双廊、阅览桌与散页堆",
+    "publicRisk": "页幕和书架会截断攻击线，补盾助教依附长桌。",
+    "counterplayWindow": "烧掉或打湿散页，再从另一条走廊压上。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

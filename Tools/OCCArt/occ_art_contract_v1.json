@@ -287,7 +287,7 @@
     "single_line_slot_height_min": 40,
     "two_line_slot_height_min": 72,
     "title_slot_height_min": 72,
-    "frame_thickness_reference": 6,
+    "frame_thickness_reference": 1,
     "framed_text_inner_clearance_min": 6,
     "fully_framed_single_line_height_min": 48,
     "context_menu_two_line_row_height_min": 76,
@@ -327,7 +327,7 @@
     ],
     "combat_spell_cost_value_background_forbidden": true,
     "combat_spell_standard_button_skin_forbidden": true,
-    "combat_spell_thin_frame_reference": 2,
+    "combat_spell_thin_frame_reference": 1,
     "combat_spell_resource_block_color": "deep_cool_charcoal",
     "combat_spell_empty_resource_block_neutral_gray_forbidden": true,
     "spell_cost_visual_height_min": 32,
@@ -392,6 +392,46 @@
     }
   },
   "roles": {
+    "ui_archive_memo_note_highres_1370x790": {
+      "delivery_size": [1370, 790],
+      "logical_cells": null,
+      "palette_max": 1000000,
+      "transparent_border_min": 0,
+      "unity_ppu": 500,
+      "alpha_policy": "transparent_soft_alpha",
+      "nine_slice_border": [130, 80, 100, 150],
+      "application_scope": "secondary_archive_information_panels_only",
+      "battlefield_pixel_grid": false
+    },
+    "ui_archive_page_panel_highres_1536x1024": {
+      "delivery_size": [1536, 1024],
+      "logical_cells": null,
+      "palette_max": 1000000,
+      "transparent_border_min": 16,
+      "unity_ppu": 500,
+      "alpha_policy": "transparent_soft_alpha",
+      "nine_slice_border": [150, 200, 140, 160],
+      "application_scope": "large_archive_panels_only",
+      "battlefield_pixel_grid": false
+    },
+    "ui_archive_primary_scroll_96x32": {
+      "delivery_size": [96, 32],
+      "logical_cells": null,
+      "palette_max": 16,
+      "transparent_border_min": 0,
+      "unity_ppu": 100,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [1, 2, 3, 4]
+    },
+    "ui_archive_nav_tab_128x32": {
+      "delivery_size": [128, 32],
+      "logical_cells": null,
+      "palette_max": 16,
+      "transparent_border_min": 0,
+      "unity_ppu": 100,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [1, 2, 3, 4]
+    },
     "resource_icon_12": {
       "delivery_size": [
         12,
@@ -1190,7 +1230,7 @@
         "### A.2.2 统一像素资产生产流程",
         "网格置信度低于1.2",
         "有方向的地图外沿地块使用**32×40**画布",
-        "2px 细框",
+        "卷轴",
         "## A.17 战场格标记强度阶梯",
         "可以选择0.72",
         "结构性不可投递0.42",

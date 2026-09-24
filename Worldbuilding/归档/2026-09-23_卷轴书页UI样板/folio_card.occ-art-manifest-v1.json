@@ -1,0 +1,52 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "archive_folio_card_sample_v2",
+  "role": "ui_archive_folio_card",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent folio-card source, round 2",
+    "source_path": "Worldbuilding/归档/2026-09-23_卷轴书页UI样板/raw/folio_card_source_v2.png",
+    "source_sha256": "6D275B9EBFC882A97687C6C41901FFDAC9D6FF0420393B225A2F87D334644299"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-09-23_卷轴书页UI样板/normalized/folio_card_v2_32x40.png",
+    "output_sha256": "D723E2775D9262288C2D4900C3300B107777D71DD6E7896616EBF4D04EBF73D2",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": ["warm_ivory", "dark_brown", "aged_brass"]
+  },
+  "display": {
+    "canonical_integer_scale": 3,
+    "canonical_at": [1920, 1080],
+    "screen_px_per_native_px_at_canonical": 3,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "32x40 lossless canvas for a 25x37 folio subject; border corners and page edges preserved by nine-slice"
+  },
+  "application": {
+    "runtime_draw_rect": "encyclopedia spell-card backing, 480x470",
+    "default_integer_scale": 3,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": null, "four_x": null, "six_x": null,
+    "grayscale": null, "checker": null, "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING", "reviewer": "", "date": "",
+    "silhouette": "PENDING", "material": "PENDING", "perspective": "PENDING",
+    "style": "PENDING", "application": "PENDING", "illumination": "PENDING",
+    "notes": "First source rejected for unstable grid. Round 2 passed at confidence 1.2422; await in-game review."
+  },
+  "unity_import": {
+    "filter_mode": "Point", "mesh_type": "Full Rect", "compression": "None",
+    "mipmaps": false, "wrap_mode": "Clamp", "atlas_padding": 0,
+    "atlas_rotation": false, "atlas_tight_packing": false, "atlas_extrude": 0,
+    "guid": "", "sprite_border": [5, 6, 4, 5]
+  }
+}

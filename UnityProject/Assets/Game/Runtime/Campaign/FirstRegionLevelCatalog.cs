@@ -5,8 +5,8 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum FirstRegionFloorTheme { StoneRoad, Courtyard, Ruins, AetherMarked }
-    public enum LevelTerrainKind { LightCover, HeavyCover, PermanentWall, AetherObjective, Water, LampVine, AetherCrystal, TowerMechanism,
-        StakedStructure, OverloadDevice, CertifierStand, WardGenerator, LoosePaper, Trace, BindingMark }
+    public enum LevelTerrainKind { LightCover, HeavyCover, PermanentWall, AetherObjective, Water, LampVine, AetherCrystal, LootChest, TowerMechanism,
+        OverloadDevice, WardGenerator, LoosePaper, Trace, BindingMark }
     public enum LevelOpeningProfile { Melee, Ranged, Generalist }
 
     public sealed class LevelTerrainPlacement
@@ -30,15 +30,13 @@ namespace OCC.Combat
     public sealed class LevelSpaceContract
     {
         public string Grammar { get; }
-        public IReadOnlyList<GridPosition> RouteAnchors { get; }
         public string PublicRisk { get; }
         public string CounterplayWindow { get; }
         public IReadOnlyList<LevelOpeningProfile> SupportedOpenings { get; }
 
-        public LevelSpaceContract(string grammar, IEnumerable<GridPosition> routeAnchors, string publicRisk, string counterplayWindow)
+        public LevelSpaceContract(string grammar, string publicRisk, string counterplayWindow)
         {
             Grammar = grammar ?? throw new ArgumentNullException(nameof(grammar));
-            RouteAnchors = (routeAnchors ?? throw new ArgumentNullException(nameof(routeAnchors))).ToArray();
             PublicRisk = publicRisk ?? string.Empty;
             CounterplayWindow = counterplayWindow ?? string.Empty;
             SupportedOpenings = new[] { LevelOpeningProfile.Melee, LevelOpeningProfile.Ranged, LevelOpeningProfile.Generalist };
@@ -115,9 +113,7 @@ namespace OCC.Combat
         /// <summary>通用场地库条目：按元素种类直接落一格。</summary>
         private static LevelTerrainPlacement T(int x, int y, LevelTerrainKind kind) => new LevelTerrainPlacement(x, y, kind);
         private static LevelEnemyPlacement E(string id, int x, int y) => new LevelEnemyPlacement(id, x, y);
-        private static LevelSpaceContract S(string grammar, GridPosition routeA, GridPosition routeB, string risk, string counterplay) =>
-            new LevelSpaceContract(grammar, new[] { routeA, routeB }, risk, counterplay);
-
+#if false // Historical hand-authored layouts retained temporarily for diff traceability; generated JSON catalog below is authoritative.
         public static readonly FirstRegionLevelDefinition RainLanternCourt =
             new FirstRegionLevelDefinition(RainLanternCourtRuntime.LevelId, "雨后灯庭", "让寻迹兽失去行动能力，并让高年级火矢生认输。", CombatObjectiveType.Elimination, 1,
                 new GridPosition(1, 5), FirstRegionFloorTheme.Courtyard, false, false, Array.Empty<string>(),
@@ -245,7 +241,7 @@ namespace OCC.Combat
                 new[]
                 {
                     H(4, 1), H(4, 2), H(4, 5), H(4, 6), H(7, 1), H(7, 2), H(7, 5), H(7, 6),
-                    T(5, 4, LevelTerrainKind.StakedStructure), T(6, 3, LevelTerrainKind.CertifierStand),
+                    H(5, 4), H(6, 3),
                     T(2, 2, LevelTerrainKind.WardGenerator), T(2, 6, LevelTerrainKind.OverloadDevice),
                     W(3, 3), W(3, 4)
                 },
@@ -261,13 +257,13 @@ namespace OCC.Combat
                 {
                     W(2, 5), W(3, 5), W(4, 5),
                     V(7, 2), V(8, 2), V(7, 3), V(8, 3),
-                    H(9, 3), H(9, 4), T(2, 3, LevelTerrainKind.StakedStructure), T(4, 1, LevelTerrainKind.StakedStructure),
+                    H(9, 3), H(9, 4), H(2, 3), H(4, 1),
                     T(6, 6, LevelTerrainKind.LoosePaper), T(7, 6, LevelTerrainKind.LoosePaper),
-                    T(5, 7, LevelTerrainKind.CertifierStand)
+                    H(5, 7)
                 },
                 S("断崖坡面、坡面积水带、双列灯藤、导能柱基座", new GridPosition(1, 4), new GridPosition(4, 8),
-                    "灯台值守的光柱封住中廊，只有重掩体与基座之后才留暗段；老寻沿主角留下的气味痕提速，补盾助教贴着标定结构续盾。",
-                    "走坡面积水冲掉气味痕，或借重掩体与基座的暗段绕开光柱，再先拆补盾助教依赖的标定结构。"),
+                    "灯台值守的光柱封住中廊，只有重掩体与基座之后才留暗段；老寻沿主角留下的气味痕提速，补盾助教贴着重掩体续盾。",
+                    "走坡面积水冲掉气味痕，或借重掩体与基座的暗段绕开光柱，再先拆补盾助教依赖的重掩体。"),
                 blockedPositions: CliffEdge()),
             new FirstRegionLevelDefinition("sealed_vault_certification", "封存库权限核验",
                 "击倒老库管、提灯巡查与替身偶；他退你的场地吃你的行动点。", CombatObjectiveType.Elimination, 3,
@@ -276,14 +272,14 @@ namespace OCC.Combat
                 new[]
                 {
                     H(5, 1), H(5, 2), H(5, 6), H(5, 7), H(7, 3), H(7, 4), H(7, 5),
-                    T(4, 2, LevelTerrainKind.CertifierStand), T(8, 2, LevelTerrainKind.CertifierStand),
+                    H(4, 2), H(8, 2),
                     T(6, 4, LevelTerrainKind.WardGenerator),
                     T(3, 3, LevelTerrainKind.LoosePaper), T(3, 4, LevelTerrainKind.LoosePaper),
                     W(2, 2), W(2, 3)
                 },
-                S("旧检定台与读数桩之间的库房通道、货架与消防积水", new GridPosition(1, 4), new GridPosition(3, 7),
+                S("货架短墙与消防积水构成的库房通道", new GridPosition(1, 4), new GridPosition(3, 7),
                     "老库管会退掉你刚放下的东西，旧脉冲沿通道一次扫到多人；提灯巡查沿直线显影并施加破势，替身偶贴身穿插。",
-                    "先拆两座检定台再动手，或在登记生效前抢输出；积水能洗掉场地效果，货架把通道切成可以换线的两段。"),
+                    "利用货架短墙切断旧脉冲，或在登记生效前抢输出；积水能洗掉场地效果，货架把通道切成可以换线的两段。"),
                 blockedPositions: VaultFrame()),
             new FirstRegionLevelDefinition("library_discipline", "图书馆纠察",
                 "击倒小铃、补盾助教与替身偶；现场纠察逾期与喧哗。", CombatObjectiveType.Elimination, 3,
@@ -292,7 +288,7 @@ namespace OCC.Combat
                 new[]
                 {
                     H(3, 1), H(3, 2), H(6, 1), H(6, 2), H(3, 6), H(3, 7), H(6, 6), H(6, 7),
-                    T(4, 4, LevelTerrainKind.StakedStructure), T(6, 4, LevelTerrainKind.StakedStructure),
+                    H(4, 4), H(6, 4),
                     T(2, 2, LevelTerrainKind.LoosePaper), T(2, 6, LevelTerrainKind.LoosePaper),
                     T(5, 1, LevelTerrainKind.LoosePaper), T(5, 7, LevelTerrainKind.LoosePaper),
                     T(8, 4, LevelTerrainKind.BindingMark)
@@ -307,15 +303,23 @@ namespace OCC.Combat
                 new[]
                 {
                     H(4, 4), H(6, 4), H(5, 1), H(5, 7),
-                    T(3, 4, LevelTerrainKind.StakedStructure), T(7, 3, LevelTerrainKind.StakedStructure),
+                    H(3, 4), H(7, 3),
                     T(6, 6, LevelTerrainKind.LoosePaper), T(6, 2, LevelTerrainKind.LoosePaper),
-                    W(4, 7), T(5, 4, LevelTerrainKind.CertifierStand), T(3, 1, LevelTerrainKind.WardGenerator)
+                    W(4, 7), H(5, 4), T(3, 1, LevelTerrainKind.WardGenerator)
                 },
-                S("高塔外环直线廊道、中央物块堆、两处标定结构", new GridPosition(1, 6), new GridPosition(4, 8),
+                S("高塔外环直线廊道、中央物块堆、两处重掩体", new GridPosition(1, 6), new GridPosition(4, 8),
                     "外环是直线，背弩生重矢与提灯巡查的显影沿同一条廊道叠加；划线教官会现场改掩体，物块堆一旦被拆就没有换线空间。",
-                    "借重掩体遮断显影线，或先拆标定结构与护罩发生器再压上；中央物块堆可以拆出一条新路。"),
+                    "借重掩体遮断显影线，或先拆重掩体与护罩发生器再压上；中央物块堆可以拆出一条新路。"),
                 blockedPositions: RingWalls()),
         };
+#endif
+
+        public static readonly FirstRegionLevelDefinition RainLanternCourt = GeneratedBattleMapCatalog.For(RainLanternCourtRuntime.LevelId);
+        public static readonly FirstRegionLevelDefinition GreenhouseCollectionRoom = GeneratedBattleMapCatalog.For("first_battle_greenhouse_collection_room");
+        public static readonly FirstRegionLevelDefinition RainPrismCourt = GeneratedBattleMapCatalog.For("first_b3_rain_prism_court");
+        public static readonly FirstRegionLevelDefinition ThreeMaterialPressure = GeneratedBattleMapCatalog.For("first_elite_three_material_pressure");
+        public static readonly IReadOnlyList<FirstRegionLevelDefinition> All = GeneratedBattleMapCatalog.CoreLevels;
+        public static readonly IReadOnlyList<FirstRegionLevelDefinition> NewEliteLevels = GeneratedBattleMapCatalog.EliteLevels;
 
         private static readonly IReadOnlyDictionary<string, FirstRegionLevelDefinition> byId =
             All.Concat(new[] { RainLanternCourt, GreenhouseCollectionRoom, RainPrismCourt, ThreeMaterialPressure })
@@ -334,19 +338,14 @@ namespace OCC.Combat
             List<string> errors = new List<string>();
             foreach (FirstRegionLevelDefinition level in All.Concat(new[] { RainLanternCourt, GreenhouseCollectionRoom, RainPrismCourt, ThreeMaterialPressure }).Concat(NewEliteLevels))
             {
-                bool compactFirstRun = level.Id == RainLanternCourtRuntime.LevelId || level.Id == GreenhouseCollectionRoom.Id ||
-                    level.Id == RainPrismCourt.Id || level.Id == ThreeMaterialPressure.Id;
-                int expectedWidth = compactFirstRun ? 8 : 12;
-                int expectedHeight = compactFirstRun ? 7 : 9;
-                if (level.Width != expectedWidth || level.Height != expectedHeight)
-                    errors.Add(level.Id + ": map must be " + expectedWidth + "x" + expectedHeight);
+                int area = level.Width * level.Height;
+                if (area < 25 || area > 50)
+                    errors.Add(level.Id + ": map area must be 25-50 cells, got " + area);
                 if (!Inside(level, level.HeroSpawn)) errors.Add(level.Id + ": hero spawn outside map");
                 int minimumEnemies = level.IsBoss || level.Id == ThreeMaterialPressure.Id ? 1 :
                     level.Id == RainLanternCourtRuntime.LevelId || level.Id == GreenhouseCollectionRoom.Id || level.Id == RainPrismCourt.Id ? 2 : 3;
                 if (level.EnemyPlacements.Count < minimumEnemies) errors.Add(level.Id + ": too few enemies");
                 if (string.IsNullOrWhiteSpace(level.SpaceContract.Grammar)) errors.Add(level.Id + ": missing space grammar");
-                if (level.SpaceContract.RouteAnchors.Count < 2 || level.SpaceContract.RouteAnchors.Distinct().Count() < 2)
-                    errors.Add(level.Id + ": fewer than two route anchors");
                 if (string.IsNullOrWhiteSpace(level.SpaceContract.PublicRisk) || string.IsNullOrWhiteSpace(level.SpaceContract.CounterplayWindow))
                     errors.Add(level.Id + ": incomplete public space contract");
                 if (level.SpaceContract.SupportedOpenings.Distinct().Count() != Enum.GetValues(typeof(LevelOpeningProfile)).Length)
@@ -361,23 +360,20 @@ namespace OCC.Combat
                         try { EnemyArchetypes.Get(enemy.ArchetypeId); } catch (KeyNotFoundException) { errors.Add(level.Id + ": unknown enemy " + enemy.ArchetypeId); }
                     }
                 }
+                HashSet<GridPosition> blockingTerrain = new HashSet<GridPosition>();
                 foreach (LevelTerrainPlacement terrain in level.Terrain)
                 {
                     if (!Inside(level, terrain.Position)) errors.Add(level.Id + ": terrain outside map");
-                    if (!occupied.Add(terrain.Position)) errors.Add(level.Id + ": occupied cell repeated " + terrain.Position);
+                    bool blocksPlacement = terrain.Kind != LevelTerrainKind.Water && terrain.Kind != LevelTerrainKind.LampVine &&
+                        terrain.Kind != LevelTerrainKind.LoosePaper && terrain.Kind != LevelTerrainKind.Trace &&
+                        terrain.Kind != LevelTerrainKind.BindingMark;
+                    if (blocksPlacement && (!blockingTerrain.Add(terrain.Position) || !occupied.Add(terrain.Position)))
+                        errors.Add(level.Id + ": occupied cell repeated " + terrain.Position);
                 }
                 foreach (GridPosition blocked in level.BlockedPositions)
                 {
                     if (!Inside(level, blocked)) errors.Add(level.Id + ": permanent blocker outside map");
                     if (!occupied.Add(blocked)) errors.Add(level.Id + ": permanent blocker overlaps occupied cell " + blocked);
-                }
-                foreach (GridPosition routeAnchor in level.SpaceContract.RouteAnchors)
-                {
-                    if (!Inside(level, routeAnchor)) errors.Add(level.Id + ": route anchor outside map");
-                    if (occupied.Contains(routeAnchor)) errors.Add(level.Id + ": route anchor is occupied " + routeAnchor);
-                    if (level.Terrain.Any(terrain => terrain.Position == routeAnchor &&
-                        (terrain.Kind == LevelTerrainKind.HeavyCover || terrain.Kind == LevelTerrainKind.PermanentWall)))
-                        errors.Add(level.Id + ": route anchor is blocked by terrain " + routeAnchor);
                 }
                 int objectiveCount = level.Terrain.Count(tile => tile.Kind == LevelTerrainKind.AetherObjective);
                 if (level.ObjectiveType == CombatObjectiveType.Destruction && objectiveCount == 0) errors.Add(level.Id + ": destruction objective has no target");
@@ -453,10 +449,9 @@ namespace OCC.Combat
                     case LevelTerrainKind.Water: map.SetTile(placement.Position, new TileState { IsWater = true }); break;
                     case LevelTerrainKind.LampVine: map.SetTile(placement.Position, new TileState { IsLampVine = true, Durability = TileState.FragileDurability }); break;
                     case LevelTerrainKind.AetherCrystal: map.SetTile(placement.Position, new TileState { IsDevice = true, IsAetherCrystal = true, Durability = TileState.StandardDurability }); break;
+                    case LevelTerrainKind.LootChest: map.SetTile(placement.Position, new TileState { IsLootChest = true }); break;
                     case LevelTerrainKind.TowerMechanism: map.SetTile(placement.Position, new TileState { IsDevice = true, IsTowerMechanism = true, MechanismKind = placement.MechanismKind, Durability = TileState.HeavyDurability }); break;
-                    case LevelTerrainKind.StakedStructure: map.SetTile(placement.Position, new TileState { Cover = CoverType.Heavy, IsStakedStructure = true, Durability = TileState.StakedDurability }); break;
                     case LevelTerrainKind.OverloadDevice: map.SetTile(placement.Position, new TileState { IsDevice = true, IsOverloadDevice = true, Durability = TileState.StandardDurability }); break;
-                    case LevelTerrainKind.CertifierStand: map.SetTile(placement.Position, new TileState { IsDevice = true, IsCertifierStand = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.WardGenerator: map.SetTile(placement.Position, new TileState { IsDevice = true, IsWardGenerator = true, Durability = TileState.StandardDurability }); break;
                     case LevelTerrainKind.LoosePaper: map.SetTile(placement.Position, new TileState { IsLoosePaper = true }); break;
                     case LevelTerrainKind.Trace: map.SetTile(placement.Position, new TileState { HasTrace = true }); break;
@@ -500,11 +495,11 @@ namespace OCC.Combat
             if (level.Id == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id)
             {
                 state.AttachGreenhouseCollectionRoom(new GreenhouseCollectionRoomRuntime());
-                state.SetLootSource(new LootSourceState("FIRST-B2-CENTRAL-CHEST", new GridPosition(4, 3),
+                state.SetLootSource(new LootSourceState("FIRST-B2-CENTRAL-CHEST", LootChestPosition(map, new GridPosition(4, 3)),
                     new[] { new ItemInstance("FIRST-B2-ACA-EQ-CR04", "ACA-EQ-CR04", 0) }));
             }
             if (level.Id == FirstRegionLevelCatalog.RainPrismCourt.Id)
-                state.SetLootSource(new LootSourceState("FIRST-B3-CHEST", new GridPosition(6, 3),
+                state.SetLootSource(new LootSourceState("FIRST-B3-CHEST", LootChestPosition(map, new GridPosition(6, 2)),
                     new[] { new ItemInstance("FIRST-B3-ACA-EQ-CR01", "ACA-EQ-CR01", 0) }));
             if (level.Id == FirstRegionLevelCatalog.ThreeMaterialPressure.Id)
             {
@@ -518,5 +513,8 @@ namespace OCC.Combat
                 state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
             return new FirstRegionLevelBuild(level, state);
         }
+
+        private static GridPosition LootChestPosition(GridMap map, GridPosition fallback) =>
+            map.PositionsWith(tile => tile.IsLootChest).DefaultIfEmpty(fallback).First();
     }
 }

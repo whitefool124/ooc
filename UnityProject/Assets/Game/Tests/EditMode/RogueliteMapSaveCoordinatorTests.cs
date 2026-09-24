@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using OCC.Combat.Presentation;
 
 namespace OCC.Combat.Tests
 {
@@ -85,6 +87,66 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FirstBattleNormalCommands_VictorySettlementPersistsAndReloads()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapStartResult created = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Melee, 911);
+            created.Run.AcknowledgeFirstRunOrigin();
+            created.Run.SelectNode("B1");
+
+            CombatSceneSessionBuild build = new CombatSceneSessionBuilder().Build(
+                created.Run, null, Array.Empty<CombatSceneMarker>());
+            int commandCount = WinRainLanternCourtWithNormalCommands(build.State);
+
+            Assert.That(build.State.IsVictory, Is.True);
+            Assert.That(commandCount, Is.LessThan(100));
+            CombatOutcomeSettlement settlement = new CombatOutcomeSettlementCoordinator().Process(
+                CombatFlowPhase.Victory, build.State, created.Run, null);
+            Assert.That(settlement.Persistence, Is.EqualTo(CombatOutcomePersistence.MapRun));
+            Assert.That(coordinator.Save(created.Run), Is.True);
+
+            RogueliteMapStartResult loaded = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 999);
+            Assert.That(loaded.Success, Is.True);
+            Assert.That(loaded.Run.CompletedNodes, Does.Contain("B1"));
+            Assert.That(loaded.Run.AwaitingReward, Is.True);
+            Assert.That(loaded.Run.CurrentFirstRunRewardIds, Is.Not.Empty);
+        }
+
+        [Test]
+        public void FirstBattleNormalDefeat_LeavesThePreBattleSaveRestartable()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapStartResult created = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Melee, 912);
+            created.Run.AcknowledgeFirstRunOrigin();
+            created.Run.SelectNode("B1");
+            Assert.That(coordinator.Save(created.Run), Is.True, "战斗开始前先写入可重试快照。");
+
+            CombatSceneSessionBuild build = new CombatSceneSessionBuilder().Build(
+                created.Run, null, Array.Empty<CombatSceneMarker>());
+            int commandCount = LoseRainLanternCourtByEndingHeroTurns(build.State);
+
+            Assert.That(build.State.IsDefeat, Is.True);
+            Assert.That(commandCount, Is.LessThan(300));
+            CombatOutcomeSettlement settlement = new CombatOutcomeSettlementCoordinator().Process(
+                CombatFlowPhase.Defeat, build.State, created.Run, null);
+            Assert.That(settlement.Persistence, Is.EqualTo(CombatOutcomePersistence.None));
+            Assert.That(created.Run.CompletedNodes, Does.Not.Contain("B1"));
+            Assert.That(created.Run.AwaitingReward, Is.False);
+
+            RogueliteMapStartResult loaded = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 999);
+            Assert.That(loaded.Success, Is.True);
+            Assert.That(loaded.Run.CurrentNodeId, Is.EqualTo("B1"));
+            Assert.That(loaded.Run.CompletedNodes, Does.Not.Contain("B1"));
+            Assert.That(loaded.Run.AwaitingReward, Is.False);
+        }
+
+        [Test]
         public void ReplacingAValidRun_ResetsAllRunScopedResourcesInsteadOfReusingTheActiveDto()
         {
             MemoryStore store = new MemoryStore();
@@ -127,6 +189,108 @@ namespace OCC.Combat.Tests
 
         private static RogueliteMapSaveCoordinator Coordinator(MemoryStore store) =>
             new RogueliteMapSaveCoordinator(new RogueliteSaveGateway(store));
+
+        private static int WinRainLanternCourtWithNormalCommands(CombatState state)
+        {
+            UnitState hero = state.GetUnit("hero");
+            bool borrowedCoverCast = false;
+            int commands = 0;
+            CombatResolver.BeginTurn(state, hero.Id);
+            while (!state.IsVictory && !state.IsDefeat && commands < 100)
+            {
+                UnitState unit = state.GetUnit(state.ActiveUnitId);
+                if (unit == null || !unit.IsAlive)
+                {
+                    CombatResolver.AdvanceToNextTurn(state);
+                    continue;
+                }
+                if (unit.ActionPoints <= 0)
+                {
+                    CombatResolver.EndTurn(state, unit);
+                    commands++;
+                    continue;
+                }
+                if (!unit.IsHero)
+                {
+                    CombatCommand enemyCommand = new EnemyTurnPlanBook().GetExecutionCommand(state, unit, hero);
+                    if (enemyCommand.Type == CombatCommandType.EndTurn) CombatResolver.EndTurn(state, unit);
+                    else CombatResolver.Resolve(state, enemyCommand);
+                    commands++;
+                    continue;
+                }
+
+                if (!borrowedCoverCast)
+                {
+                    int slot = Enumerable.Range(0, Roguelite.RogueRuntimeConstants.SpellSlotCount)
+                        .First(index => state.RogueSpells.DefinitionAtSlot(index)?.DefinitionId ==
+                            RainLanternCourtRuntime.OriginSpellId);
+                    CombatResolver.Resolve(state, CombatCommand.UseSkill(unit.Id, slot, string.Empty));
+                    borrowedCoverCast = true;
+                    commands++;
+                    continue;
+                }
+
+                UnitState target = state.Units.Values.Where(value => value.IsAlive && !value.IsHero)
+                    .OrderBy(value => value.Position.ManhattanDistance(unit.Position))
+                    .ThenBy(value => value.Id, StringComparer.Ordinal).FirstOrDefault();
+                if (target == null) break;
+                int distance = unit.Position.ManhattanDistance(target.Position);
+                CombatCommand command;
+                WeaponDefinition weapon = unit.MainHand;
+                if (distance >= weapon.MinimumRange && distance <= weapon.Range &&
+                    CombatResolver.PreviewAttack(state, unit.Id, target.Id, false).HasLineOfSight)
+                    command = CombatCommand.Attack(unit.Id, target.Id);
+                else
+                {
+                    IReadOnlyList<GridPosition> path = new[]
+                        {
+                            new GridPosition(0, 1), new GridPosition(1, 0),
+                            new GridPosition(0, -1), new GridPosition(-1, 0)
+                        }
+                        .Select(offset => target.Position + offset)
+                        .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) &&
+                            !state.IsOccupied(position, unit.Id))
+                        .OrderBy(position => position.ManhattanDistance(unit.Position))
+                        .Select(position => CombatMovementQuery.FindPath(state, unit, position))
+                        .FirstOrDefault(candidate => candidate.Count > 1);
+                    command = path == null ? CombatCommand.EndTurn(unit.Id) :
+                        CombatCommand.Move(unit.Id, path[path.Count - 1]);
+                }
+                if (command.Type == CombatCommandType.EndTurn) CombatResolver.EndTurn(state, unit);
+                else CombatResolver.Resolve(state, command);
+                commands++;
+            }
+            return commands;
+        }
+
+        private static int LoseRainLanternCourtByEndingHeroTurns(CombatState state)
+        {
+            UnitState hero = state.GetUnit("hero");
+            int commands = 0;
+            CombatResolver.BeginTurn(state, hero.Id);
+            while (!state.IsVictory && !state.IsDefeat && commands < 300)
+            {
+                UnitState unit = state.GetUnit(state.ActiveUnitId);
+                if (unit == null || !unit.IsAlive)
+                {
+                    CombatResolver.AdvanceToNextTurn(state);
+                    continue;
+                }
+                if (unit.IsHero)
+                {
+                    CombatResolver.EndTurn(state, unit);
+                    commands++;
+                    continue;
+                }
+
+                CombatCommand command = new EnemyTurnPlanBook().GetExecutionCommand(state, unit, hero);
+                if (command.Type != CombatCommandType.EndTurn) CombatResolver.Resolve(state, command);
+                if (!state.IsVictory && !state.IsDefeat && state.ActiveUnitId == unit.Id)
+                    CombatResolver.EndTurn(state, unit);
+                commands++;
+            }
+            return commands;
+        }
 
         private sealed class MemoryStore : IRogueliteSaveStore
         {

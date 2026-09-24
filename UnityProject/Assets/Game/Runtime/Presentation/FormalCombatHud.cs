@@ -18,7 +18,7 @@ namespace OCC.Combat.Presentation
         /// here rather than inline so the three zones can be checked for overlap.
         /// </summary>
         public static readonly Rect HeaderResourceZone = new Rect(16f, 10f, 540f, 36f);
-        public static readonly Rect HeaderActionsZone = new Rect(1472f, 4f, 384f, 48f);
+        public static readonly Rect HeaderActionsZone = new Rect(1340f, 4f, 516f, 48f);
         public const float HeaderPanelWidth = 1872f;
         private const float HeaderActionWidth = 120f;
         private const float HeaderActionGap = 12f;
@@ -325,25 +325,32 @@ namespace OCC.Combat.Presentation
                 BindTooltip(button.gameObject, () => BuildActionTooltip("技能" + (captured + 1)));
             }
             endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1676, -30), new Vector2(204, 140), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
+            ArchiveUiStyle.PaperPanel(endTurnButton.gameObject, ArchiveUiStyle.LightPaper, true);
+            endTurnButton.transform.Find("文字").GetComponent<Text>().color = ArchiveUiStyle.Ink;
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
             BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束回合", "剩余行动点会清空，然后轮到敌方。", line));
-            // The three header actions share one evenly spaced row at the panel's right end.
+            // Four header actions share one evenly spaced row at the panel's right end.
             float actionX = HeaderActionsZone.x;
             float actionY = -HeaderActionsZone.y;
             Vector2 actionSize = new Vector2(HeaderActionWidth, HeaderActionsZone.height);
             float actionStep = HeaderActionWidth + HeaderActionGap;
-            Button inventoryButton = Button(top.transform, "打开背包", new Vector2(actionX, actionY), actionSize, "背包",
+            Button encyclopediaButton = Button(top.transform, "打开百科", new Vector2(actionX, actionY), actionSize, "百科",
+                FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(encyclopediaButton);
+            encyclopediaButton.onClick.AddListener(bootstrap.OpenEncyclopedia);
+            BindTooltip(encyclopediaButton.gameObject, () => new FormalTooltipContent("战斗百科", "查看当前正式术式、装备、法宝和战斗规则。查阅不消耗行动点。", FormalUiTheme.Cyan));
+            Button inventoryButton = Button(top.transform, "打开背包", new Vector2(actionX + actionStep, actionY), actionSize, "背包",
                 FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(inventoryButton);
             inventoryButton.onClick.AddListener(() => bootstrap.OpenCombatInventoryPanel());
             BindTooltip(inventoryButton.gameObject, () => new FormalTooltipContent("战斗背包",
                 "按 B 打开。消耗本回合的背包开启次数，整理装备或取用战术物品。", FormalUiTheme.Cyan));
-            restartButton = Button(top.transform, "战术重开", new Vector2(actionX + actionStep, actionY), actionSize, "重开",
+            restartButton = Button(top.transform, "战术重开", new Vector2(actionX + actionStep * 2f, actionY), actionSize, "重开",
                 FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
             ConfigureCompactFrame(restartButton);
             restartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
             BindTooltip(restartButton.gameObject, () => new FormalTooltipContent("重新开始", "这场战斗会从头开始，用掉的道具也会恢复。", FormalUiTheme.Amber));
-            leaveButton = Button(top.transform, "离开战斗", new Vector2(actionX + actionStep * 2f, actionY), actionSize, "离开",
+            leaveButton = Button(top.transform, "离开战斗", new Vector2(actionX + actionStep * 3f, actionY), actionSize, "离开",
                 FormalUiTheme.Danger, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Dangerous);
             ConfigureCompactFrame(leaveButton);
             leaveButton.transform.Find("文字").GetComponent<Text>().color = FormalUiTheme.OnInk;
@@ -407,7 +414,7 @@ namespace OCC.Combat.Presentation
             surface.type = Image.Type.Simple;
             Image skin = FormalUiKit.SkinOverlay(surface);
             if (skin != null) skin.gameObject.SetActive(false);
-            FormalUiKit.ThinFrame(button.transform, button.GetComponent<RectTransform>().sizeDelta, FormalUiTheme.Rule);
+            ArchiveUiStyle.TrimTab(button);
         }
 
         private static void ConfigureOutlinedPanel(GameObject target, Color background, Color stroke)
@@ -418,7 +425,7 @@ namespace OCC.Combat.Presentation
             surface.color = background;
             Image skin = FormalUiKit.SkinOverlay(surface);
             if (skin != null) skin.gameObject.SetActive(false);
-            FormalUiKit.ThinFrame(target.transform, target.GetComponent<RectTransform>().sizeDelta, stroke);
+            ArchiveUiStyle.TrimPanel(target);
         }
 
         private static void ConfigureCommandRow(Button button, bool hasIcon)
@@ -1384,12 +1391,13 @@ namespace OCC.Combat.Presentation
             {
                 if (heroStatusRows.Count >= HeroStatusEntryCount) break;
                 CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(pair.Key));
+                CombatStatusPresentation status = CombatStatusPresentation.From(hero, pair.Key, state);
                 heroStatusRows.Add(new HeroStatusRow
                 {
-                    Label = semantic.ShortLabel + " " + pair.Value,
+                    Label = status.DisplayName + " " + status.ValueText,
                     Icon = StatusIcon(semantic.Key),
                     Accent = ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color parsed) ? parsed : FormalUiTheme.Cyan,
-                    Body = semantic.HudLabel + "\n剩余 " + pair.Value + " 回合\n" + StatusEntryDetail(pair.Key)
+                    Body = status.DisplayName + "\n" + status.Detail
                 });
             }
 
@@ -1456,20 +1464,6 @@ namespace OCC.Combat.Presentation
             string body = string.IsNullOrEmpty(entry.Detail) ? string.Empty : entry.Detail + "\n";
             body += "来源　" + PassiveSourceLabel(entry) + "　" + entry.TimingText;
             return new FormalTooltipContent(entry.DisplayName, "被动详情", body, FormalUiTheme.Amber);
-        }
-
-        /// <summary>Plain-language explanation for one status, keyed by type.</summary>
-        private static string StatusEntryDetail(StatusType type)
-        {
-            switch (type)
-            {
-                case StatusType.Burning: return "每回合开始时受到持续伤害。";
-                case StatusType.Bound: return "无法移动，只能原地行动。";
-                case StatusType.Slow: return "移动范围降低。";
-                case StatusType.ArmorBreak:
-                case StatusType.BreakStance: return "护甲被削弱，受到的伤害提高。";
-                default: return "持续中的状态效果。";
-            }
         }
 
         private static Texture TimelinePortrait(UnitState unit)

@@ -27,16 +27,17 @@ namespace OCC.Combat
             {
                 UnitState repairTarget = state.Units.Values.Where(unit => unit.IsAlive && unit.IsHero == enemy.IsHero && unit.MaxShield > unit.Shield &&
                         (state.Ruleset != CombatRuleset.Roguelite || !unit.HasStatus(StatusType.BreakStance)) &&
-                        enemy.Position.ManhattanDistance(unit.Position) <= skill.Range && HasLineOfSight(state, enemy, unit, skill))
+                        enemy.Position.ManhattanDistance(unit.Position) <= enemy.EffectiveRange(skill.Range) && HasLineOfSight(state, enemy, unit, skill))
                     .OrderByDescending(unit => unit.MaxShield - unit.Shield).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
                 if (repairTarget != null) return CombatCommand.UseSkill(enemy.Id, 0, repairTarget.Id);
                 return ChooseWeaponOrMove(state, enemy, hero);
             }
             StatusType? desiredStatus = DesiredStatus(enemy.EnemyArchetypeId);
-            if (state.Ruleset == CombatRuleset.Roguelite && desiredStatus == StatusType.ArmorBreak) desiredStatus = StatusType.BreakStance;
             if (desiredStatus.HasValue)
             {
-                if (!hero.HasStatus(desiredStatus.Value) && CanTarget(state, enemy, hero, skill))
+                bool shouldApply = desiredStatus.Value == StatusType.Agility
+                    ? hero.StatusStrength(StatusType.Agility) >= 0 : !hero.HasStatus(desiredStatus.Value);
+                if (shouldApply && CanTarget(state, enemy, hero, skill))
                     return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
                 return ChooseWeaponOrMove(state, enemy, hero);
             }
@@ -50,7 +51,7 @@ namespace OCC.Combat
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             SkillDefinition skill = enemy.SkillOne;
             if (skill != null && (skill.TargetRule == SkillTargetRule.EnemyUnit || skill.TargetRule == SkillTargetRule.AnyUnit) &&
-                distance >= skill.MinimumRange && distance <= skill.Range && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill))
+                distance >= skill.MinimumRange && distance <= enemy.EffectiveRange(skill.Range) && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill))
                 return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             return ChooseWeaponOrMove(enemy, hero);
         }
@@ -59,7 +60,7 @@ namespace OCC.Combat
         {
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
-            if (distance >= weapon.MinimumRange && distance <= weapon.Range) return CombatCommand.Attack(enemy.Id, hero.Id);
+            if (distance >= weapon.MinimumRange && distance <= enemy.EffectiveRange(weapon.Range)) return CombatCommand.Attack(enemy.Id, hero.Id);
             if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
             GridPosition step = new GridPosition(enemy.Position.X + Math.Sign(hero.Position.X - enemy.Position.X), enemy.Position.Y);
             if (step == enemy.Position) step = new GridPosition(enemy.Position.X, enemy.Position.Y + Math.Sign(hero.Position.Y - enemy.Position.Y));
@@ -70,7 +71,7 @@ namespace OCC.Combat
         {
             WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
             int distance = enemy.Position.ManhattanDistance(hero.Position);
-            if (distance >= weapon.MinimumRange && distance <= weapon.Range && (weapon.Range <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
+            if (distance >= weapon.MinimumRange && distance <= enemy.EffectiveRange(weapon.Range) && (weapon.Range <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
                 return CombatCommand.Attack(enemy.Id, hero.Id);
             if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
 
@@ -89,7 +90,7 @@ namespace OCC.Combat
 
             IReadOnlyList<GridPosition> route = paths
                 .Where(path => path[path.Count - 1].ManhattanDistance(hero.Position) >= weapon.MinimumRange &&
-                    path[path.Count - 1].ManhattanDistance(hero.Position) <= weapon.Range &&
+                    path[path.Count - 1].ManhattanDistance(hero.Position) <= enemy.EffectiveRange(weapon.Range) &&
                     (weapon.Range <= 1 || state.HasLineOfSight(path[path.Count - 1], hero.Position)))
                 .OrderBy(path => path.Count)
                 .ThenBy(path => path[path.Count - 1].Y)
@@ -123,19 +124,19 @@ namespace OCC.Combat
         private static bool CanCast(UnitState source, SkillDefinition skill) => skill != null && source.Mana >= skill.ManaCost && source.IsSkillReady(skill);
         private static bool CanTarget(CombatState state, UnitState source, UnitState target, SkillDefinition skill) => CanCast(source, skill) &&
             source.Position.ManhattanDistance(target.Position) >= skill.MinimumRange &&
-            source.Position.ManhattanDistance(target.Position) <= skill.Range && HasLineOfSight(state, source, target, skill);
+            source.Position.ManhattanDistance(target.Position) <= source.EffectiveRange(skill.Range) && HasLineOfSight(state, source, target, skill);
         private static bool HasLineOfSight(CombatState state, UnitState source, UnitState target, SkillDefinition skill) => skill.Range <= 1 ||
             skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(source.Position, target.Position);
         private static StatusType? DesiredStatus(string archetypeId)
         {
             switch (archetypeId)
             {
-                case "shieldguard": return StatusType.Slow;
+                case "shieldguard": return StatusType.Agility;
                 case "pyromancer": return StatusType.Burning;
                 case "raider": return StatusType.Bound;
                 case "elite_vanguard":
                 case "sigil_mauler":
-                case "lantern_revealer": return StatusType.ArmorBreak;
+                case "lantern_revealer": return StatusType.BreakStance;
                 case "tether_hound":
                 case "stone_snare": return StatusType.Bound;
                 default: return null;

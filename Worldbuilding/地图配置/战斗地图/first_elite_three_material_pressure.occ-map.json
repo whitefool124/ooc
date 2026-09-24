@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "first_elite_three_material_pressure",
+  "displayName": "精英战斗 01 · 三材承压场",
+  "width": 8,
+  "height": 6,
+  "objectiveSummary": "击倒楔角。",
+  "objectiveType": "Elimination",
+  "tier": 4,
+  "floorTheme": "Courtyard",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "first_b3_rain_prism_court"
+  ],
+  "heroSpawn": {
+    "x": 1,
+    "y": 3
+  },
+  "enemies": [
+    {
+      "archetypeId": "breach_ram",
+      "x": 6,
+      "y": 3
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 5,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 5,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "AetherCrystal",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 5,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 7,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 7,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "冷却沟、双灯藤带、中央稳压晶簇与两侧干路",
+    "publicRisk": "楔角公开锁定冲压线，并会撞击晶簇、单位或灯藤。",
+    "counterplayWindow": "可诱导撞晶、藏入灯藤、用浅水缩短冲压，或走南侧干路等待卸压。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

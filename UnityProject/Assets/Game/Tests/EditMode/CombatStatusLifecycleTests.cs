@@ -11,35 +11,34 @@ namespace OCC.Combat.Tests
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
             hero.ApplyStatus(StatusType.Burning, 2);
-            hero.ApplyStatus(StatusType.Slow, 2);
+            hero.ApplyStatus(StatusType.Agility, 1, -1);
             hero.ApplyStatus(StatusType.Bound, 1);
-            hero.ApplyStatus(StatusType.ArmorBreak, 2);
 
             CombatEffectExecution execution = CombatResolver.BeginTurn(state, hero.Id);
 
             Assert.That(execution.Results.Select(result => result.Kind), Is.EqualTo(new[]
             {
-                CombatEffectKind.TriggerStatus,
-                CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration,
-                CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration,
                 CombatEffectKind.TriggerStatus, CombatEffectKind.ReduceStatusDuration
             }));
             Assert.That(execution.Results.Where(result => result.Kind == CombatEffectKind.TriggerStatus).Select(result => result.Status),
-                Is.EqualTo(new[] { StatusType.Burning, StatusType.Slow, StatusType.Bound, StatusType.ArmorBreak }));
-            // 燃烧的伤害与持续量按数据表口径在自身回合结束结算，回合开始只做公开触发标记。
+                Is.EqualTo(new[] { StatusType.Bound }));
+            // 燃烧只在自身回合结束触发，回合开始不增加触发次数。
             Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth));
             Assert.That(hero.StatusDuration(StatusType.Burning), Is.EqualTo(2));
+            Assert.That(hero.StatusTriggerCount(StatusType.Burning), Is.Zero);
             Assert.That(hero.Shield, Is.EqualTo(2), "Burning preserves the existing direct-health rule.");
-            Assert.That(hero.StatusDuration(StatusType.Slow), Is.EqualTo(1));
-            Assert.That(hero.HasStatus(StatusType.Bound), Is.False);
-            Assert.That(hero.StatusDuration(StatusType.ArmorBreak), Is.EqualTo(1));
-            Assert.That(hero.EffectiveSpeed, Is.EqualTo(7));
-            Assert.That(hero.EffectiveArmor, Is.EqualTo(0));
+            Assert.That(hero.StatusDuration(StatusType.Agility), Is.EqualTo(1));
+            Assert.That(hero.HasStatus(StatusType.Bound), Is.True);
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
+            Assert.That(hero.EffectiveSpeed, Is.EqualTo(10));
+            Assert.That(hero.EffectiveArmor, Is.EqualTo(1));
 
             CombatResolver.EndTurn(state, hero);
             Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth - CombatStatusLifecycle.BurningDamagePerTurn),
                 "回合结束时结算 4 点燃烧伤害。");
             Assert.That(hero.StatusDuration(StatusType.Burning), Is.EqualTo(1), "回合结束扣一次持续量。");
+            Assert.That(hero.StatusTriggerCount(StatusType.Burning), Is.EqualTo(1));
+            Assert.That(hero.HasStatus(StatusType.Agility), Is.False);
         }
 
         [Test]
@@ -54,24 +53,26 @@ namespace OCC.Combat.Tests
 
             Assert.That(applied.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Applied));
             Assert.That(preserved.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Preserved));
-            Assert.That(preserved.ValueBefore, Is.EqualTo(2));
-            Assert.That(preserved.ValueAfter, Is.EqualTo(2));
+            Assert.That(preserved.ValueBefore, Is.EqualTo(3));
+            Assert.That(preserved.ValueAfter, Is.EqualTo(3));
             Assert.That(refreshed.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Refreshed));
-            Assert.That(refreshed.ValueAfter, Is.EqualTo(4));
+            Assert.That(refreshed.ValueAfter, Is.EqualTo(5));
         }
 
         [Test]
-        public void DurationOneBound_ExpiresBeforeActionsAndNoLongerBlocksMovement()
+        public void DurationOneBound_BlocksTheNextOwnActionThenExpires()
         {
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
             hero.ApplyStatus(StatusType.Bound, 1);
 
-            CombatEffectExecution lifecycle = CombatResolver.BeginTurn(state, hero.Id);
+            CombatResolver.BeginTurn(state, hero.Id);
+            Assert.That(hero.HasStatus(StatusType.Bound), Is.True);
+            Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state,
+                CombatCommand.Move(hero.Id, new GridPosition(1, 0))));
+            CombatResolver.EndTurn(state, hero);
             CombatEffectExecution movement = CombatResolver.Resolve(state, CombatCommand.Move(hero.Id, new GridPosition(1, 0)));
 
-            CombatEffectResult expiry = lifecycle.Results.Single(result => result.Kind == CombatEffectKind.ReduceStatusDuration);
-            Assert.That(expiry.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Expired));
             Assert.That(hero.HasStatus(StatusType.Bound), Is.False);
             Assert.That(movement.Results.Last().Kind, Is.EqualTo(CombatEffectKind.Move));
             Assert.That(hero.Position, Is.EqualTo(new GridPosition(1, 0)));
@@ -97,11 +98,62 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void BurningUsesInstanceStrengthAndSourceSurvivesClone()
+        {
+            CombatState state = CreateHeroState();
+            UnitState hero = state.GetUnit("hero");
+            hero.ApplyStatus(StatusType.Burning, 2, 8, "training-flame");
+            CombatState copy = state.Clone();
+
+            Assert.That(copy.GetUnit("hero").StatusSource(StatusType.Burning), Is.EqualTo("training-flame"));
+            Assert.That(copy.GetUnit("hero").StatusAppliedOrder(StatusType.Burning), Is.EqualTo(hero.StatusAppliedOrder(StatusType.Burning)));
+            Assert.That(CombatStatusPresentation.From(copy.GetUnit("hero"), StatusType.Burning).Detail,
+                Does.Contain("失去 8 点生命"));
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatResolver.EndTurn(state, hero);
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth - 8));
+        }
+
+        [Test]
+        public void AttributeInstances_AddValuesAndExpireIndependentlyAtOwnTurnEnd()
+        {
+            CombatState state = CreateHeroState();
+            UnitState hero = state.GetUnit("hero");
+            hero.ApplyStatus(StatusType.Agility, 1, -2, "snare");
+            hero.ApplyStatus(StatusType.Agility, 2, 1, "rally");
+            Assert.That(hero.StatusStrength(StatusType.Agility), Is.EqualTo(-1));
+            Assert.That(hero.StatusSource(StatusType.Agility), Does.Contain("snare"));
+            Assert.That(hero.StatusSource(StatusType.Agility), Does.Contain("rally"));
+            CombatResolver.BeginTurn(state, hero.Id);
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(2));
+            CombatResolver.EndTurn(state, hero);
+            Assert.That(hero.StatusStrength(StatusType.Agility), Is.EqualTo(1));
+            Assert.That(hero.StatusDuration(StatusType.Agility), Is.EqualTo(1));
+            Assert.That(state.Clone().GetUnit(hero.Id).StatusSource(StatusType.Agility), Is.EqualTo("rally"));
+        }
+
+        [Test]
+        public void AttributeFeedback_ReportsChangedValueEvenWhenDurationIsUnchanged()
+        {
+            CombatState state = CreateHeroState();
+            CombatEffectResult first = CombatEffectExecutor.Execute(state, "hero",
+                CombatEffect.ApplyStatus("hero", StatusType.Strength, 2, 1)).Results.Single();
+            CombatEffectResult second = CombatEffectExecutor.Execute(state, "hero",
+                CombatEffect.ApplyStatus("hero", StatusType.Strength, 2, 2)).Results.Single();
+
+            Assert.That(first.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Applied));
+            Assert.That(second.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Refreshed));
+            Assert.That(second.StatusStrengthBefore, Is.EqualTo(1));
+            Assert.That(second.StatusStrengthAfter, Is.EqualTo(3));
+            Assert.That(second.Changed, Is.True);
+        }
+
+        [Test]
         public void SameTurnStart_ProducesIdenticalLifecycleSignature()
         {
             CombatState first = CreateHeroState();
             first.GetUnit("hero").ApplyStatus(StatusType.Burning, 2);
-            first.GetUnit("hero").ApplyStatus(StatusType.Slow, 2);
+            first.GetUnit("hero").ApplyStatus(StatusType.Agility, 2, -1);
             CombatState second = first.Clone();
 
             CombatEffectExecution firstExecution = CombatResolver.BeginTurn(first, "hero");
@@ -116,9 +168,9 @@ namespace OCC.Combat.Tests
         {
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
-            hero.ApplyStatus(StatusType.ArmorBreak, 3);
+            hero.ApplyStatus(StatusType.BreakStance, 3);
 
-            CombatEffectResult result = CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.ClearStatus(hero.Id, StatusType.ArmorBreak)).Results.Single();
+            CombatEffectResult result = CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.ClearStatus(hero.Id, StatusType.BreakStance)).Results.Single();
 
             Assert.That(result.StatusPhase, Is.EqualTo(CombatStatusLifecyclePhase.Cleared));
             Assert.That(result.ValueBefore, Is.EqualTo(3));

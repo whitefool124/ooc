@@ -35,7 +35,7 @@ namespace OCC.Combat.Tests
             Assert.That(keeper.DisplayName, Is.EqualTo("老库管"));
             Assert.That(keeper.IsElite, Is.True);
             Assert.That(keeper.MaxHealth, Is.EqualTo(18));
-            Assert.That(keeper.Weapon.DisplayName, Is.EqualTo("旧检定台"));
+            Assert.That(keeper.Weapon.DisplayName, Is.EqualTo("旧式检定器"));
             Assert.That(keeper.PrimarySkill.DisplayName, Is.EqualTo("旧脉冲"));
             Assert.That(keeper.HasSecondarySkill, Is.False);
 

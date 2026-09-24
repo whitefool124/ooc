@@ -42,7 +42,8 @@ namespace OCC.Combat
         NextTurnActionPoints,
         NextTurnMovementRange,
         NextTurnMana,
-        NextTurnShield
+        NextTurnShield,
+        ForcedMoveReduction
     }
 
     public enum CombatOngoingEffectExpiry
@@ -224,6 +225,22 @@ namespace OCC.Combat
                 CombatOngoingEffectExpiry.NextOwnTurnStart, amount, DamageType.Physical);
         }
 
+        public void ArmForcedMoveReduction(string unitId, string sourceContentId, string displayName, int amount)
+        {
+            AddOrReplace("fire:" + sourceContentId + ":forced-move", unitId, displayName,
+                "下次自身回合开始前首次受到的强制位移距离减少 " + amount + " 格。",
+                CombatPassiveSourceKind.ActiveSpell, sourceContentId, CombatOngoingEffectKind.ForcedMoveReduction,
+                CombatOngoingEffectExpiry.NextOwnTurnStart, amount, DamageType.Physical);
+        }
+
+        public int ConsumeForcedMoveReduction(string unitId)
+        {
+            CombatOngoingEffectInstance[] effects = ongoingEffects.Where(value => value.OwnerUnitId == unitId &&
+                value.Kind == CombatOngoingEffectKind.ForcedMoveReduction).ToArray();
+            foreach (CombatOngoingEffectInstance effect in effects) ongoingEffects.Remove(effect);
+            return effects.Select(value => value.Amount).DefaultIfEmpty(0).Max();
+        }
+
         public IReadOnlyList<CombatDamageBonus> ConsumeNextWeaponDamage(string unitId)
         {
             CombatOngoingEffectInstance[] consumed = ongoingEffects
@@ -242,6 +259,12 @@ namespace OCC.Combat
                 .OrderBy(value => value.CreatedSequence).ThenBy(value => value.InstanceId, StringComparer.Ordinal).ToArray();
             foreach (CombatOngoingEffectInstance effect in due)
             {
+                if (effect.Kind == CombatOngoingEffectKind.ForcedMoveReduction)
+                {
+                    ongoingEffects.Remove(effect);
+                    state.AddLog(effect.DisplayName + "：强制位移缓冲已到期。");
+                    continue;
+                }
                 switch (effect.Kind)
                 {
                     case CombatOngoingEffectKind.NextTurnActionPoints:
@@ -310,6 +333,7 @@ namespace OCC.Combat
         private static string Timing(CombatOngoingEffectInstance effect)
         {
             if (effect.Kind == CombatOngoingEffectKind.NextWeaponHitDamage) return "下次武器命中";
+            if (effect.Kind == CombatOngoingEffectKind.ForcedMoveReduction) return "下次自身回合开始前首次受推位";
             return "下次自己回合开始";
         }
 

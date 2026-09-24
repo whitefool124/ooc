@@ -93,7 +93,11 @@ namespace OCC.Combat.Roguelite
                 Combat.TryGrantRogueliteShield(unitId, "PASSIVE-ELITE-03", 3 - unit.Shield);
         }
 
-        public void EndOwnTurn(string unitId) { }
+        public void EndOwnTurn(string unitId)
+        {
+            FireSpellEngine.TriggerCurrentTurnEnd(FireBattle, unitId);
+            FireBattle.EndUnitTurn(unitId);
+        }
 
         public void AfterMove(string unitId, IReadOnlyList<GridPosition> path)
         {
@@ -184,7 +188,7 @@ namespace OCC.Combat.Roguelite
             if (source.ActionPoints < spell.ActionPointCost || source.Mana < spell.ManaCost) throw new InvalidOperationException("Insufficient action points or personal mana.");
 
             RogueSpellExecution execution = spell.IsBasic ? ExecuteBasic(spell, source, command) : ExecuteFire(spell, source, command);
-            FireBattle.ResolveMarkedDestructions();
+            FireBattle.ResolveMarkedDestructions(source.Id);
             bool dealtPersonalFireDamage = execution.FireEffects != null
                 ? execution.FireEffects.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0)
                 : spell.DefinitionId == "BASE-FIRE-RANGED" && execution.CombatEffects.Results.Any(result =>
@@ -226,14 +230,15 @@ namespace OCC.Combat.Roguelite
                 TileState targetTile = Combat.Map.GetTile(targetCell);
                 bool objectTarget = target == null && targetTile.Durability > 0 && (targetTile.Cover != CoverType.None || targetTile.IsDevice || targetTile.IsObjective || targetTile.IsLampVine);
                 int distance = source.Position.ManhattanDistance(targetCell);
-                if ((!objectTarget && (target == null || source.IsHero == target.IsHero)) || distance > spell.Range ||
-                    (spell.Range > 1 && !Combat.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
-                int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsSpecialized(spell.DefinitionId) ? 2 : 0));
+                if ((!objectTarget && (target == null || source.IsHero == target.IsHero)) || distance > source.EffectiveRange(spell.Range) ||
+                    (distance > 1 && !Combat.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
+                int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsSpecialized(spell.DefinitionId) ? 2 : 0), DamageType.Fire);
                 if (objectTarget) effects.Add(CombatEffect.DamageObject(targetCell, raw));
                 else
                 {
                     DamageResolution damage = RogueDamageResolver.Resolve(new DamagePacket("basic-" + spell.DefinitionId, source.Id, target.Id, spell.DefinitionId,
-                        new[] { new DamageComponent(DamageComponentKind.Fire, raw) }), target.Shield, target.Health);
+                        new[] { new DamageComponent(DamageComponentKind.Fire,
+                            Math.Max(0, raw + target.StatusStrength(StatusType.DamageTaken))) }), target.Shield, target.Health);
                     effects.Add(CombatEffect.AbsorbShield(target.Id, damage.ShieldAbsorbed)); effects.Add(CombatEffect.DamageHealth(target.Id, damage.HealthDamage));
                 }
             }

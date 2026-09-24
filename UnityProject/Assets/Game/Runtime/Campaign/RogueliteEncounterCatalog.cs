@@ -96,27 +96,27 @@ namespace OCC.Combat
         public static readonly RogueliteEncounterDefinition FirstBattleRainLanternCourt =
             new RogueliteEncounterDefinition(RainLanternCourtRuntime.EncounterId, RainLanternCourtRuntime.LevelId,
                 RogueliteEncounterTier.Weak, "雨后石庭、积水横带、双列灯藤",
-                "主角从 B8 入场；寻迹兽在 H7，高年级火矢生在 I2。灯藤搜索与烧藤顺序完全固定。",
+                "主角从 B5 入场；寻迹兽在 E4，高年级火矢生在 F1。灯藤搜索与烧藤顺序完全固定。",
                 "公开教学战", "奖励内容仍锁定", 1, "tether_hound", "pyromancer");
 
         public static readonly RogueliteEncounterDefinition SecondBattleGreenhouseCollectionRoom =
             new RogueliteEncounterDefinition("first_b2_greenhouse_collection_room", FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
                 RogueliteEncounterTier.Weak, "中央藤圈宝箱、南北双晶簇、南侧普通长路",
-                "主角从 B5 入场；侧锋在 J3，替身偶在 J7，分别贴近北、南晶簇接近。",
+                "主角从 B4 入场；侧锋在 G2，替身偶在 G5，分别贴近北、南晶簇接近。",
                 "晶簇爆裂会伤害正交邻格并生成五格碎晶", "第二组固定三选一", 1,
                 "raider", "sigil_mauler");
 
         public static readonly RogueliteEncounterDefinition ThirdBattleRainPrismCourt =
             new RogueliteEncounterDefinition("first_b3_rain_prism_court", FirstRegionLevelCatalog.RainPrismCourt.Id,
                 RogueliteEncounterTier.Weak, "冷却沟、封门晶簇、南侧干路",
-                "主角从 B5 入场；替身偶在 F5，火矢生在 G2；器材匣位于 H5。",
+                "主角从 B3 入场；替身偶在 E3，火矢生在 F1；器材匣位于 G3。",
                 "燃烧、浅水熄灭与封门晶簇", "第三组固定三选一", 1,
                 "sigil_mauler", "pyromancer");
 
         public static readonly RogueliteEncounterDefinition FirstEliteThreeMaterialPressure =
             new RogueliteEncounterDefinition("first_elite_three_material_pressure", FirstRegionLevelCatalog.ThreeMaterialPressure.Id,
                 RogueliteEncounterTier.Elite, "冷却沟、双灯藤带、中央稳压晶簇",
-                "主角从 B5 入场；楔角在 H5，首条冲压公开锁定 B5 并先撞击 G5 晶簇。",
+                "主角从 B4 入场；楔角在 G4，首条冲压公开锁定 B4 并先撞击 F4 晶簇。",
                 "公开锁线、冲压碰撞与干地卸压", "首次固定精英奖励包", 1,
                 "breach_ram");
 
@@ -140,18 +140,10 @@ namespace OCC.Combat
 
         private static LevelTerrainPlacement L(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.LightCover);
         private static LevelTerrainPlacement H(int x, int y) => new LevelTerrainPlacement(x, y, LevelTerrainKind.HeavyCover);
-        private static RogueliteEncounterLayout W1() => new RogueliteEncounterLayout("W1",
-            new GridPosition(5, 7), new[] { new GridPosition(3, 1), new GridPosition(8, 1) },
-            new[] { L(4, 2), L(7, 2), H(5, 4), L(2, 5), L(9, 5) });
-        private static RogueliteEncounterLayout W2() => new RogueliteEncounterLayout("W2",
-            new GridPosition(4, 7), new[] { new GridPosition(10, 0), new GridPosition(10, 6) },
-            new[] { H(6, 1), H(6, 2), L(9, 2), H(2, 3), H(3, 3), H(4, 3), H(5, 3), H(6, 3), L(3, 5), H(6, 5), H(6, 6) });
-        private static RogueliteEncounterLayout W3() => new RogueliteEncounterLayout("W3",
-            new GridPosition(5, 7), new[] { new GridPosition(3, 1), new GridPosition(8, 1) },
-            new[] { H(4, 2), H(5, 2), H(6, 2), H(7, 2), H(3, 3), H(4, 3), H(5, 3), H(6, 3), H(7, 3), H(8, 3), H(3, 4), H(4, 4), H(5, 4), H(6, 4), H(7, 4), H(8, 4), H(3, 5), H(4, 5), H(5, 5), H(6, 5), H(7, 5), H(8, 5), L(2, 6), L(9, 6) });
-        private static RogueliteEncounterLayout W4() => new RogueliteEncounterLayout("W4",
-            new GridPosition(2, 7), new[] { new GridPosition(9, 0), new GridPosition(10, 6) },
-            new[] { L(7, 1), H(3, 2), H(4, 2), H(3, 3), H(4, 3), L(7, 3), L(4, 5), H(7, 5), H(8, 5), H(7, 6), H(8, 6), L(4, 7) });
+        private static RogueliteEncounterLayout W1() => GeneratedBattleMapCatalog.WeakLayout("W1");
+        private static RogueliteEncounterLayout W2() => GeneratedBattleMapCatalog.WeakLayout("W2");
+        private static RogueliteEncounterLayout W3() => GeneratedBattleMapCatalog.WeakLayout("W3");
+        private static RogueliteEncounterLayout W4() => GeneratedBattleMapCatalog.WeakLayout("W4");
 
         public static readonly IReadOnlyList<RogueliteEncounterDefinition> Packages = new[]
         {
@@ -184,7 +176,7 @@ namespace OCC.Combat
             EliteReserve("outer_ring_clearance_a", "outer_ring_clearance", "高塔外环的直线廊道与物块堆", "划线教官现场改掩体，提灯巡查沿直线显影，背弩生封住长线", "elite_vanguard", "lantern_revealer", "rune_arbalist"),
             Elite("calibration_lockdown_a", "calibration_lockdown", "设备间的校准台走廊", "试制员逐件布放装置，背弩生封住长线，拴索助教刻印地面", "prototype_hand", "rune_arbalist", "stone_snare"),
             EliteReserve("calibration_lockdown_b", "calibration_lockdown", "校准台走廊，装置侧", "试制件先铺在靠核心一侧，长线与刻印从另一侧压上", "prototype_hand", "rune_arbalist", "stone_snare"),
-            EliteReserve("sealed_vault_certification_a", "sealed_vault_certification", "旧检定台与读数桩之间的库房通道", "老库管投影直线并退件，提灯巡查沿直线显影，替身偶贴身破势", "legacy_storekeeper", "lantern_revealer", "sigil_mauler"),
+            EliteReserve("sealed_vault_certification_a", "sealed_vault_certification", "货架短墙与消防积水构成的库房通道", "老库管投影直线并退件，提灯巡查沿直线显影，替身偶贴身破势", "legacy_storekeeper", "lantern_revealer", "sigil_mauler"),
             new RogueliteEncounterDefinition("boss_academy_sealed_core", "core_finale", RogueliteEncounterTier.Boss,
                 "中心核心与三道机关门槛", "固定塔之守卫居中；三组塔内机关在阶段〇逐组放行，拆掉已放行的机关即切断其施术介质",
                 "终考", "终考奖励", 2,

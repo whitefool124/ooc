@@ -91,6 +91,13 @@ namespace OCC.Combat.Presentation
             statuses[StatusType.FiregroundVulnerable] = statuses[StatusType.Burning];
             statuses[StatusType.Dazzled] = RequiredTexture(FormalArtRegistry.StatusPath("dazzled"));
             statuses[StatusType.Revealed] = RequiredTexture(FormalArtRegistry.StatusPath("revealed"));
+            statuses[StatusType.Marked] = statuses[StatusType.Revealed];
+            statuses[StatusType.Prepared] = statuses[StatusType.Bound];
+            statuses[StatusType.Invulnerable] = statuses[StatusType.BreakStance];
+            foreach (StatusType status in new[] { StatusType.Agility, StatusType.Strength, StatusType.SpellPower,
+                StatusType.Speed, StatusType.Range, StatusType.DamageTaken, StatusType.ShieldEfficiency,
+                StatusType.ShieldGrant, StatusType.Control })
+                statuses[status] = statuses[StatusType.Revealed];
             for (int frame = 0; frame < firegroundFrames.Length; frame++)
             {
                 firegroundFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_burning_ground/frame_{frame:00}");

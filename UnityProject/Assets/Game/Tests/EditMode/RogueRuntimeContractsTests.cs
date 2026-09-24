@@ -13,8 +13,8 @@ namespace OCC.Combat.Tests
         {
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
 
-            Assert.That(catalog.Spells.Count, Is.EqualTo(67));
-            Assert.That(catalog.Spells.Count(value => value.RewardEligible), Is.EqualTo(60));
+            Assert.That(catalog.Spells.Count, Is.EqualTo(87));
+            Assert.That(catalog.Spells.Count(value => value.RewardEligible), Is.EqualTo(80));
             Assert.That(catalog.Spells.Count(value => value.IsBasic), Is.EqualTo(4));
             Assert.That(catalog.Spells.Count(value => value.Role == "passive"), Is.EqualTo(3));
             Assert.That(catalog.Equipment.Count, Is.EqualTo(33));
@@ -33,7 +33,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(result.IsValid, Is.True, string.Join("\n", result.Errors));
             Assert.That(catalog.Spells.Where(value => value.IsBasic), Has.All.Matches<SpellDefinition>(value => !value.RewardEligible));
-            Assert.That(catalog.Spells.Where(value => value.RewardEligible).Select(value => value.DefinitionId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(60));
+            Assert.That(catalog.Spells.Where(value => value.RewardEligible).Select(value => value.DefinitionId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(80));
             Assert.That(catalog.Equipment, Has.All.Matches<EquipmentDefinition>(value => !value.HasDurability && value.Armor == 0 && value.BlockChance == 0));
             Assert.That(catalog.Equipment.Single(value => value.DefinitionId == "ACA-EQ-CH01").TurnStartShield, Is.EqualTo(2));
         }
@@ -70,6 +70,7 @@ namespace OCC.Combat.Tests
             dto.CurrentMana = 9;
             dto.Gold = 8;
             dto.StageContribution = 2;
+            dto.RouteHistoryNodeIds.AddRange(new[] { "start", "B1", "EV1" });
             dto.EquipmentInstances.Add(new EquipmentInstanceDto("eq-1", "ACA-EQ-CH01", RogueEquipmentSlot.Chest, EquipmentRarity.Common, 0));
 
             string encoded = Rogue11Serializer.Serialize(dto);
@@ -83,6 +84,7 @@ namespace OCC.Combat.Tests
             Assert.That(restored.ItemQuickbarInstanceIds.Length, Is.EqualTo(4));
             Assert.That(restored.EquipmentSlotInstanceIds.Count, Is.EqualTo(9));
             Assert.That(restored.EquipmentInstances.Single().DefinitionId, Is.EqualTo("ACA-EQ-CH01"));
+            Assert.That(restored.RouteHistoryNodeIds, Is.EqualTo(dto.RouteHistoryNodeIds));
         }
     }
 }

@@ -35,8 +35,7 @@ namespace OCC.Combat.Tests
 
         [TestCase(StatusType.Burning, CombatFeedbackKind.Burning, "燃烧 2　持续燃烧")]
         [TestCase(StatusType.Bound, CombatFeedbackKind.Bound, "束缚 2　无法移动")]
-        [TestCase(StatusType.Slow, CombatFeedbackKind.Slow, "迟缓 2　速度降低")]
-        [TestCase(StatusType.ArmorBreak, CombatFeedbackKind.ArmorBreak, "破甲 2　护甲削弱")]
+        [TestCase(StatusType.BreakStance, CombatFeedbackKind.BreakStance, "破势 2　清盾禁盾")]
         public void Statuses_MapToOneSemantic(StatusType status, CombatFeedbackKind expectedKind, string expectedHudText)
         {
             Assert.That(CombatFeedbackCatalog.ForStatus(status), Is.EqualTo(expectedKind));
@@ -44,12 +43,20 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void NumericStatusFeedback_UsesItsNameAndSignedStrength()
+        {
+            Assert.That(CombatFeedbackCatalog.ForStatus(StatusType.Agility), Is.EqualTo(CombatFeedbackKind.Attribute));
+            Assert.That(CombatFeedbackCatalog.StatusHudText(StatusType.Agility, 2, -1),
+                Is.EqualTo("敏捷-1　剩余 2 回合"));
+        }
+
+        [Test]
         public void FeedbackEvent_FormatsNumericMeaningDeterministically()
         {
             GridPosition target = new GridPosition(3, 4);
-            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.Damage, target, 5).FloatingText, Is.EqualTo("-5 伤害"));
-            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb, target, 3).FloatingText, Is.EqualTo("护盾吸收 -3"));
-            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.Healing, target, 4).FloatingText, Is.EqualTo("修复 +4"));
+            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.Damage, target, 5).FloatingText, Is.EqualTo("-5"));
+            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb, target, 3).FloatingText, Is.EqualTo("盾 -3"));
+            Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.Healing, target, 4).FloatingText, Is.EqualTo("+4"));
             Assert.That(new CombatFeedbackEvent(CombatFeedbackKind.Burning, target, duration: 2).FloatingText, Is.EqualTo("燃烧 2"));
         }
 
@@ -114,8 +121,8 @@ namespace OCC.Combat.Tests
         [Test]
         public void StatusDiff_ReportsRemovalOnceWithoutTreatingDurationDecayAsRemoval()
         {
-            var previous = new Dictionary<StatusType, int> { [StatusType.Burning] = 2, [StatusType.Slow] = 1 };
-            var decayed = new Dictionary<StatusType, int> { [StatusType.Burning] = 1, [StatusType.Slow] = 1 };
+            var previous = new Dictionary<StatusType, int> { [StatusType.Burning] = 2, [StatusType.Agility] = 1 };
+            var decayed = new Dictionary<StatusType, int> { [StatusType.Burning] = 1, [StatusType.Agility] = 1 };
             var removed = new Dictionary<StatusType, int> { [StatusType.Burning] = 1 };
 
             Assert.That(CombatStatusFeedback.HasRemoval(previous, decayed), Is.False);

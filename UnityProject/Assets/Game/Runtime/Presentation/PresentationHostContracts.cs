@@ -64,6 +64,7 @@ namespace OCC.Combat.Presentation
         void SelectHudAction(string action);
         bool TrySelectSpellShortcut(int slot);
         void OpenCombatInventoryPanel();
+        void OpenEncyclopedia();
         bool TryOpenCombatInventory();
         void ActivateInventoryQuickbar(int slot);
         void EndHeroTurn();
@@ -86,6 +87,7 @@ namespace OCC.Combat.Presentation
         CombatFlowPhase CurrentFlowPhase { get; }
         MissionPreparation CurrentPreparation { get; }
         MapSaveUiPresentation MapSavePresentation { get; }
+        bool IsMapRunSaved { get; }
         UiPresentationVersions UiPresentationVersions { get; }
         UiVisualEventStream UiVisualEvents { get; }
         string SettingsSaveDetail { get; }
@@ -119,6 +121,7 @@ namespace OCC.Combat.Presentation
         void OpenFirstExperienceFrontEnd(bool continueSave);
         void ReplayOpeningCg();
         void RequestReturnToLanding();
+        void RetryCompleteMapRunSave();
         void RequestStartMapRoguelite(bool continueSave);
         void RequestStartMapRoguelite(bool continueSave, string starterId);
         void ReturnToMapRun();
@@ -230,6 +233,7 @@ namespace OCC.Combat.Presentation
     public interface IBattlefieldViewHost
     {
         CombatState CurrentState { get; }
+        string SelectedTargetId { get; }
         BattlefieldViewport BattlefieldViewport { get; }
         bool IsBattlefieldVisible { get; }
         bool IsInteractionModalOpen { get; }

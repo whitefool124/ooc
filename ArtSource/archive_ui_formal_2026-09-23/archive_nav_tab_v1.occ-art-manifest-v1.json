@@ -1,0 +1,76 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "archive_nav_tab_v1",
+  "role": "ui_archive_nav_tab_128x32",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation source; see production_brief.md and decode QA JSON",
+    "source_path": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_01_raw.png",
+    "source_sha256": "055AD1E7E188F36E7D7E3F5190E1566525D80B46033D91663E9E1130BB772FF6"
+  },
+  "delivery": {
+    "output_path": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_01_palette_candidate.png",
+    "output_sha256": "314C2191309ECA298ECC3D88DC267CC816ABE1916C2243D79ADB433F0C67DA00",
+    "native_output_path": null,
+    "native_ppu": 100,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 2,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 2,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Archive UI nine-sliced control; no battlefield 32 PPU sizing constraint"
+  },
+  "application": {
+    "runtime_draw_rect": "home secondary navigation, 330–336 x 78",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_one_x.png",
+    "four_x": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_four_x.png",
+    "grayscale": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_grayscale.png",
+    "checker": "ArtSource/archive_ui_formal_2026-09-23/nav_tab_checker.png",
+    "application_contact": "ArtSource/archive_ui_formal_2026-09-23/application_contact_home_1920x1080.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "用户（聊天确认）",
+    "date": "2026-09-23",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PENDING",
+    "notes": "Automatic subject-lattice decode passed at confidence 1.2761. Four anomalous red texels were merged to the existing dark-brown medoid by correct_nav_source_artifact.py. Human aesthetic review pending."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "484595a33fbcf174489403759cf2c8b0",
+    "sprite_border": [
+      20,
+      9,
+      12,
+      9
+    ]
+  }
+}

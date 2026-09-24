@@ -151,7 +151,7 @@ namespace OCC.Combat.Tests
             Assert.That(first.Type, Is.EqualTo(CombatCommandType.UseSkill));
             CombatResolver.BeginTurn(state, enemy.Id);
             CombatResolver.Resolve(state, first);
-            Assert.That(hero.HasStatus(StatusType.ArmorBreak), Is.True);
+            Assert.That(hero.HasStatus(StatusType.BreakStance), Is.True);
 
             CombatCommand second = EnemyTactics.Choose(state, enemy, hero);
             Assert.That(second.Type, Is.EqualTo(CombatCommandType.Attack));
@@ -234,17 +234,17 @@ namespace OCC.Combat.Tests
             Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.Attack));
         }
 
-        [TestCase("shieldguard", StatusType.Slow, 1)]
+        [TestCase("shieldguard", StatusType.Agility, 1)]
         [TestCase("pyromancer", StatusType.Burning, 4)]
         [TestCase("raider", StatusType.Bound, 1)]
-        [TestCase("elite_vanguard", StatusType.ArmorBreak, 1)]
+        [TestCase("elite_vanguard", StatusType.BreakStance, 1)]
         [TestCase("stone_snare", StatusType.Bound, 3)]
-        [TestCase("lantern_revealer", StatusType.ArmorBreak, 3)]
+        [TestCase("lantern_revealer", StatusType.BreakStance, 3)]
         public void StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(string archetypeId, StatusType status, int distance)
         {
             CombatState state = CreateState(archetypeId, new GridPosition(distance, 0), out UnitState enemy, out UnitState hero);
             Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.UseSkill));
-            hero.ApplyStatus(status, 2);
+            hero.ApplyStatus(status, 2, status == StatusType.Agility ? -1 : 0);
             Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.Not.EqualTo(CombatCommandType.UseSkill));
         }
 

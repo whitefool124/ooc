@@ -1,0 +1,54 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.resource.risk",
+  "role": "resource_icon_8",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "manual_pixel_authoring",
+    "source_descriptor": "User-authorized direct native-grid authoring for the Risk resource semantic. No generated source, geometric resize, interpolation, dithering, or opaque backing tile.",
+    "source_path": "ArtSource/resource_icons_8_handdrawn_2026-09-22/risk.png",
+    "source_sha256": "2b0dbcaaa8febbaa9df2a15c66b95e4f9bd1e343e16f475938325b028f50fe22"
+  },
+  "delivery": {
+    "output_path": "ArtSource/resource_icons_8_handdrawn_2026-09-22/risk.png",
+    "output_sha256": "2b0dbcaaa8febbaa9df2a15c66b95e4f9bd1e343e16f475938325b028f50fe22",
+    "native_output_path": null,
+    "logical_cells": null,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "runtime_draw_rect": "Native 8x8 transparent resource glyph displayed only at 2x, 3x, or 4x integer scale.",
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "ArtSource/resource_icons_8_handdrawn_2026-09-22/evidence/risk/risk_1x.png",
+    "four_x": "ArtSource/resource_icons_8_handdrawn_2026-09-22/evidence/risk/risk_4x.png",
+    "grayscale": "ArtSource/resource_icons_8_handdrawn_2026-09-22/evidence/risk/risk_grayscale.png",
+    "checker": "ArtSource/resource_icons_8_handdrawn_2026-09-22/evidence/risk/risk_checker.png",
+    "application_contact": "ArtSource/resource_icons_8_handdrawn_2026-09-22/evidence/resource_icons_8_application_mock.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "notes": "Review at native 1x, 16x checker contact, and the 32px runtime mock. Unity import and runtime replacement remain blocked until aesthetic approval."
+  },
+  "unity_import": null,
+  "pixel_grid_qa": {
+    "authoring_mode": "direct_native_grid",
+    "target_canvas": [
+      8,
+      8
+    ],
+    "geometric_resize_or_interpolation_performed": false,
+    "new_colours_introduced_after_authoring": false
+  }
+}

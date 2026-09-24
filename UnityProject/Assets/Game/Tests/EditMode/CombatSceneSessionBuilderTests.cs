@@ -72,7 +72,7 @@ namespace OCC.Combat.Tests
                 run, null, Array.Empty<CombatSceneMarker>());
             Assert.That(battleThree.Level.Id, Is.EqualTo(FirstRegionLevelCatalog.RainPrismCourt.Id));
             Assert.That(battleThree.State.RogueSpells, Is.Not.Null);
-            Assert.That(battleThree.State.Map.GetTile(new GridPosition(5, 3)).Durability, Is.EqualTo(16));
+            Assert.That(battleThree.State.Map.GetTile(new GridPosition(5, 2)).Durability, Is.EqualTo(16));
 
             run.CompleteCurrentCombat(); run.ClaimReward("ACA-EQ-MH03");
             run.SelectNode("M"); run.CompleteFirstRunHealthCheck();

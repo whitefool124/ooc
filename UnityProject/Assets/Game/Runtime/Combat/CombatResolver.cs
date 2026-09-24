@@ -13,10 +13,11 @@ namespace OCC.Combat
 
         public static int ActionPointsFor(UnitState unit, int configuredActionPoints) => configuredActionPoints;
 
-        public static int OutgoingDamageFor(UnitState attacker, int configuredDamage)
+        public static int OutgoingDamageFor(UnitState attacker, int configuredDamage, DamageType type = DamageType.Physical)
         {
-            int damage = Math.Max(0, configuredDamage);
-            return damage;
+            int modifier = attacker == null ? 0 : attacker.StatusStrength(type == DamageType.Physical
+                ? StatusType.Strength : StatusType.SpellPower);
+            return Math.Max(0, configuredDamage + modifier);
         }
     }
 
@@ -48,7 +49,7 @@ namespace OCC.Combat
             int armorPierce = isCast ? 0 : source.ArmorPierce;
             DamageType damageType = isCast ? CombatCatalog.FireBolt.DamageType : source.DamageType;
             DamageParts parts = CalculateDamage(state, attacker, defender, damage, damageType, armorPierce);
-            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.HasLineOfSight(attacker.Position, defender.Position));
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, damage, damageType), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, state.HasLineOfSight(attacker.Position, defender.Position));
         }
 
         public static AttackPreview PreviewSkillAttack(CombatState state, string attackerId, string targetId, SkillDefinition skill)
@@ -57,15 +58,15 @@ namespace OCC.Combat
             UnitState attacker = GetUnit(state, attackerId);
             UnitState defender = GetUnit(state, targetId);
             DamageParts parts = CalculateDamage(state, attacker, defender, skill.Damage, skill.DamageType, skill.ModifierValue(SkillModifierType.ArmorPierce));
-            bool lineOfSight = skill.Range <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(attacker.Position, defender.Position);
-            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
+            bool lineOfSight = attacker.EffectiveRange(skill.Range) <= 1 || skill.HasModifier(SkillModifierType.IgnoreLineOfSight) || state.HasLineOfSight(attacker.Position, defender.Position);
+            return new AttackPreview(CombatDebugTuning.OutgoingDamageFor(attacker, skill.Damage, skill.DamageType), parts.Cover, parts.Shield, parts.Armor, parts.Block, parts.Final, lineOfSight);
         }
 
         public static CombatEffectExecution BeginTurn(CombatState state, string unitId)
         {
             UnitState unit = GetUnit(state, unitId);
             unit.SetActionValue(Math.Max(CombatActionTimeline.ReadyThreshold, unit.ActionValue));
-            bool slowedAtTurnStart = unit.HasStatus(StatusType.Slow);
+            int agilityAtTurnStart = unit.StatusStrength(StatusType.Agility);
             state.SetActiveUnit(unitId);
             state.RecordTurnStart();
             state.BeginRogueliteTurn(unit);
@@ -73,7 +74,7 @@ namespace OCC.Combat
             LogStatusLifecycle(state, unit, execution);
             state.EvaluateOutcome();
             if (!unit.IsAlive) { if (!state.IsVictory && !state.IsDefeat) AdvanceToNextTurn(state); return execution; }
-            unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, HeroActionPointsPerTurn), slowedAtTurnStart);
+            unit.BeginTurn(CombatDebugTuning.ActionPointsFor(unit, HeroActionPointsPerTurn), agilityAtTurnStart);
             state.PassiveEffects.ResolveOwnTurnStart(state, unit);
             state.RogueSpells?.BeginOwnTurn(unitId);
             state.AddLog($"{unit.DisplayName} \u5f00\u59cb\u884c\u52a8\uff08{unit.ActionPoints} \u884c\u52a8\u70b9\uff09\u3002");
@@ -106,7 +107,9 @@ namespace OCC.Combat
                 case CombatCommandType.UseSkill:
                     execution = unit.IsHero && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
                         ? state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects
-                        : ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
+                        : state.AcademyCoreBoss != null && unit.EnemyArchetypeId == "core_overseer" && command.SlotIndex == 1
+                            ? state.AcademyCoreBoss.ResolveTowerPressCommand(state, unit)
+                            : ResolveSkill(state, unit, command.SlotIndex == 0 ? unit.SkillOne : unit.SkillTwo, command);
                     break;
                 case CombatCommandType.UseQuickbar: execution = UseQuickbar(state, unit, command.SlotIndex); break;
                 case CombatCommandType.SearchLoot: execution = SearchLoot(state, unit); break;
@@ -124,7 +127,7 @@ namespace OCC.Combat
                 default: throw new ArgumentOutOfRangeException(nameof(command), command.Type, "Unsupported combat command.");
             }
             ExhaustEnemyActionPoints(state, unit);
-            state.AcademyCoreBoss?.ObserveCommand(state, unit);
+            state.AcademyCoreBoss?.ObserveCommand(state, unit, command);
             if (unit.IsHero) state.AcademyFieldEnemy?.ObserveHeroCommand(state, command);
             return execution;
         }
@@ -186,6 +189,7 @@ namespace OCC.Combat
             CombatEffectExecution execution = ResolveDamageAction(state, attacker, targetId, weapon.DisplayName,
                 weapon.DamageType, reducedBaseDamage, weapon.MinimumRange, weapon.Range, weapon.ArmorPierce,
                 weapon.InitiativeDelay, weapon.ManaCost, null, 0);
+            attacker.ClearStatus(StatusType.Prepared);
             state.RogueSpells?.AfterWeaponHit(attacker.Id, state.GetUnit(targetId));
             ExhaustEnemyActionPoints(state, attacker);
             return execution;
@@ -243,8 +247,8 @@ namespace OCC.Combat
             UnitState primary = GetUnit(state, command.TargetUnitId);
             if (!primary.IsAlive || !MatchesTargetRule(attacker, primary, skill.TargetRule)) throw new InvalidOperationException("\u6280\u80fd\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
             if (Manhattan(attacker.Position, primary.Position) < skill.MinimumRange) throw new InvalidOperationException("目标位于技能近身死区。");
-            if (Manhattan(attacker.Position, primary.Position) > skill.Range) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
-            if (skill.Range > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.HasLineOfSight(attacker.Position, primary.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了技能投递。");
+            if (Manhattan(attacker.Position, primary.Position) > attacker.EffectiveRange(skill.Range)) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
+            if (attacker.Position.ManhattanDistance(primary.Position) > 1 && !skill.HasModifier(SkillModifierType.IgnoreLineOfSight) && !state.HasLineOfSight(attacker.Position, primary.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了技能投递。");
             if (skill.Delivery != SkillDeliveryMethod.Area) return new List<UnitState> { primary };
 
             int radius = skill.ModifierValue(SkillModifierType.Radius);
@@ -261,7 +265,7 @@ namespace OCC.Combat
         {
             if (!state.Map.IsInside(destination)) throw new InvalidOperationException("\u6280\u80fd\u76ee\u6807\u683c\u8d85\u51fa\u5730\u56fe\u3002");
             if (Manhattan(attacker.Position, destination) < skill.MinimumRange) throw new InvalidOperationException("目标格位于技能近身死区。");
-            if (Manhattan(attacker.Position, destination) > skill.Range) throw new InvalidOperationException("\u76ee\u6807\u683c\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
+            if (Manhattan(attacker.Position, destination) > attacker.EffectiveRange(skill.Range)) throw new InvalidOperationException("\u76ee\u6807\u683c\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
             if (skill.TargetRule == SkillTargetRule.GridCell)
             {
                 if (state.Map.IsBlocked(destination)) throw new InvalidOperationException("\u76ee\u6807\u683c\u88ab\u963b\u6321\u3002");
@@ -293,7 +297,7 @@ namespace OCC.Combat
                 case SkillEffectType.RestoreMana: effects.Add(CombatEffect.RestoreMana(recipient.Id, definition.Amount)); break;
                 case SkillEffectType.ApplyStatus:
                     if (recipient.IsAlive) effects.Add(CombatEffect.ApplyStatus(recipient.Id,
-                        state.Ruleset == CombatRuleset.Roguelite && definition.Status == StatusType.ArmorBreak ? StatusType.BreakStance : definition.Status, definition.Duration));
+                        definition.Status, definition.Duration, definition.Amount));
                     break;
                 case SkillEffectType.ClearStatus: effects.Add(CombatEffect.ClearStatus(recipient.Id, definition.Status)); break;
                 case SkillEffectType.MoveSource: effects.Add(CombatEffect.Move(command.Destination)); break;
@@ -308,7 +312,9 @@ namespace OCC.Combat
             int healing = Applied(execution, CombatEffectKind.RestoreHealth);
             int shield = Applied(execution, CombatEffectKind.RestoreShield);
             int mana = Applied(execution, CombatEffectKind.RestoreMana);
-            string status = string.Join("\u3001", execution.Results.Where(result => result.Kind == CombatEffectKind.ApplyStatus).Select(result => StatusName(result.Status) + StatusPhaseName(result.StatusPhase) + result.ValueAfter));
+            string status = string.Join("\u3001", execution.Results.Where(result => result.Kind == CombatEffectKind.ApplyStatus).Select(result =>
+                StatusName(result.Status) + StatusPhaseName(result.StatusPhase) +
+                (UnitState.IsAttributeStatus(result.Status) ? Signed(result.StatusStrengthAfter) : result.ValueAfter.ToString())));
             string cleared = string.Join("\u3001", execution.Results.Where(result => result.Kind == CombatEffectKind.ClearStatus && result.AppliedAmount > 0).Select(result => "\u6e05\u9664" + StatusName(result.Status)));
             List<string> summary = new List<string>();
             if (damage > 0) summary.Add(damage + " \u4f24\u5bb3");
@@ -327,8 +333,8 @@ namespace OCC.Combat
             UnitState defender = GetUnit(state, targetId);
             if (!defender.IsAlive) throw new InvalidOperationException("\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
             if (Manhattan(attacker.Position, defender.Position) < minimumRange) throw new InvalidOperationException("目标位于武器近身死区。");
-            if (Manhattan(attacker.Position, defender.Position) > range) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u5c04\u7a0b\u3002");
-            if (range > 1 && !state.HasLineOfSight(attacker.Position, defender.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了射线。");
+            if (Manhattan(attacker.Position, defender.Position) > attacker.EffectiveRange(range)) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u5c04\u7a0b\u3002");
+            if (Manhattan(attacker.Position, defender.Position) > 1 && !state.HasLineOfSight(attacker.Position, defender.Position)) throw new InvalidOperationException("重掩体或烟幕阻挡了射线。");
             if (range > 1 && defender.IsHero)
             {
                 DamageParts incoming = CalculateDamage(state, attacker, defender, baseDamage, damageType, armorPierce);
@@ -341,14 +347,15 @@ namespace OCC.Combat
             effects.Add(CombatEffect.AbsorbShield(defender.Id, parts.Shield));
             effects.Add(CombatEffect.DamageHealth(defender.Id, parts.Final));
             if (status.HasValue && defender.Health > parts.Final) effects.Add(CombatEffect.ApplyStatus(defender.Id,
-                state.Ruleset == CombatRuleset.Roguelite && status.Value == StatusType.ArmorBreak ? StatusType.BreakStance : status.Value, statusDuration));
+                status.Value, statusDuration));
             if (initiativeDelay > 0) effects.Add(CombatEffect.DelayInitiative(initiativeDelay));
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, attacker.Id, effects.ToArray());
             int shieldAbsorbed = Applied(execution, CombatEffectKind.AbsorbShield);
             int healthDamage = Applied(execution, CombatEffectKind.DamageHealth);
             CombatEffectResult? statusResult = execution.Results.Where(result => result.Kind == CombatEffectKind.ApplyStatus).Select(result => (CombatEffectResult?)result).FirstOrDefault();
             string statusText = statusResult.HasValue
-                ? $"\uff0c{StatusName(statusResult.Value.Status)}{StatusPhaseName(statusResult.Value.StatusPhase)} {statusResult.Value.ValueAfter}"
+                ? $"\uff0c{StatusName(statusResult.Value.Status)}{StatusPhaseName(statusResult.Value.StatusPhase)} " +
+                    (UnitState.IsAttributeStatus(statusResult.Value.Status) ? Signed(statusResult.Value.StatusStrengthAfter) : statusResult.Value.ValueAfter.ToString())
                 : string.Empty;
             state.AddLog($"{attacker.DisplayName}\u4f7f\u7528{sourceName}\u547d\u4e2d{defender.DisplayName}\uff1a{healthDamage} \u4f24\u5bb3\uff08\u76fe {shieldAbsorbed}\uff0c\u7532 {parts.Armor}\uff0c\u6321 {parts.Block}\uff09{statusText}\u3002");
             state.EvaluateOutcome();
@@ -471,7 +478,8 @@ namespace OCC.Combat
 
         private static DamageParts CalculateDamage(CombatState state, UnitState attacker, UnitState defender, int baseDamage, DamageType damageType, int armorPierce)
         {
-            baseDamage = CombatDebugTuning.OutgoingDamageFor(attacker, baseDamage);
+            baseDamage = CombatDebugTuning.OutgoingDamageFor(attacker, baseDamage, damageType);
+            baseDamage = Math.Max(0, baseDamage + defender.StatusStrength(StatusType.DamageTaken));
             if (state.Ruleset == CombatRuleset.Roguelite)
             {
                 DamageComponentKind kind = damageType == DamageType.Fire ? DamageComponentKind.Fire
@@ -502,6 +510,7 @@ namespace OCC.Combat
             state.RainLanternCourt?.AfterMove(state, unit, path);
             state.GreenhouseCollectionRoom?.AfterMove(state, unit, path);
             state.RogueSpells?.AfterMove(unit.Id, path);
+            unit.ClearStatus(StatusType.Prepared);
             if (path.Skip(1).Any(position => state.Map.GetTile(position).IsWater) && unit.HasStatus(StatusType.Burning))
             {
                 unit.ClearStatus(StatusType.Burning);
@@ -509,7 +518,6 @@ namespace OCC.Combat
             }
             state.RogueEquipment?.AfterMove(unit.Id);
             state.ResolveBindingMarkEntry(unit);
-            state.PublishCertifierReadout(unit);
             if (!unit.IsHero && state.ArtifactBattle != null)
             {
                 ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);
@@ -539,9 +547,15 @@ namespace OCC.Combat
         private static UnitState GetActiveUnit(CombatState state, string unitId)
         { UnitState unit = GetUnit(state, unitId); if (state.ActiveUnitId != unitId) throw new InvalidOperationException("\u53ea\u6709\u5f53\u524d\u884c\u52a8\u5355\u4f4d\u53ef\u4ee5\u6267\u884c\u52a8\u4f5c\u3002"); return unit; }
         private static int Manhattan(GridPosition a, GridPosition b) => Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
-        private static string StatusName(StatusType type) => type == StatusType.Burning ? "\u71c3\u70e7" : type == StatusType.Slow ? "\u7f13\u6162" : type == StatusType.Bound ? "\u675f\u7f1a" : type == StatusType.FiregroundBoost ? "\u706b\u52bf" : type == StatusType.FiregroundVulnerable ? "\u52a9\u71c3" : "\u7834\u7532";
+        private static string StatusName(StatusType type) => type == StatusType.Burning ? "燃烧" :
+            type == StatusType.Bound ? "束缚" : type == StatusType.BreakStance ? "破势" :
+            type == StatusType.Agility ? "敏捷" : type == StatusType.Strength ? "力量" :
+            type == StatusType.SpellPower ? "法强" : type == StatusType.Speed ? "速度" :
+            type == StatusType.Range ? "射程" : type == StatusType.DamageTaken ? "承伤" :
+            type == StatusType.FiregroundBoost ? "火势" : type == StatusType.FiregroundVulnerable ? "助燃" : type.ToString();
         private static string StatusPhaseName(CombatStatusLifecyclePhase phase) =>
             phase == CombatStatusLifecyclePhase.Refreshed ? "\u5237\u65b0\u81f3" :
             phase == CombatStatusLifecyclePhase.Preserved ? "\u7ef4\u6301" : "\u65bd\u52a0";
+        private static string Signed(int value) => value >= 0 ? "+" + value : value.ToString();
     }
 }

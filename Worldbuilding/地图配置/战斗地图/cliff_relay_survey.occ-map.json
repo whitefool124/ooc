@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "occ-battle-map-v1",
+  "id": "cliff_relay_survey",
+  "displayName": "精英战斗 05 · 断崖导能柱考察",
+  "width": 7,
+  "height": 6,
+  "objectiveSummary": "击倒老寻、灯台值守与补盾助教。",
+  "objectiveType": "Elimination",
+  "tier": 3,
+  "floorTheme": "Ruins",
+  "isElite": true,
+  "isBoss": false,
+  "complexMechanics": true,
+  "prerequisites": [
+    "rail_patrol",
+    "depot_wreck"
+  ],
+  "heroSpawn": {
+    "x": 0,
+    "y": 4
+  },
+  "enemies": [
+    {
+      "archetypeId": "elder_tracker_hound",
+      "x": 4,
+      "y": 4
+    },
+    {
+      "archetypeId": "signal_keeper",
+      "x": 6,
+      "y": 3
+    },
+    {
+      "archetypeId": "barrier_mender",
+      "x": 6,
+      "y": 1
+    }
+  ],
+  "terrain": [
+    {
+      "kind": "Water",
+      "x": 1,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 2,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "Water",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 5,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 4,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LampVine",
+      "x": 5,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 5,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 1,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 3,
+      "y": 1,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 3,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LoosePaper",
+      "x": 4,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "HeavyCover",
+      "x": 2,
+      "y": 4,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 0,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 1,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 2,
+      "y": 0,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "PermanentWall",
+      "x": 6,
+      "y": 5,
+      "mechanismKind": 0
+    }
+  ],
+  "blockedPositions": [],
+  "changeAnnotations": [],
+  "spaceContract": {
+    "grammar": "断崖坡面、积水带、灯藤暗段与基座",
+    "publicRisk": "光柱封住中廊，老寻沿痕提速。",
+    "counterplayWindow": "走积水清痕，或借重物块与基座留下的暗段换线。"
+  },
+  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
+  "updatedAt": "2026-09-22T06:44:27.628Z"
+}

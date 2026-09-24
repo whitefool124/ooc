@@ -99,7 +99,7 @@ namespace OCC.Combat.Roguelite
                 if (!(trio[2].Turns > trio[1].Turns && trio[0].KeyInteractions > trio[1].KeyInteractions)) errors.Add(seed + ":tradeoff");
                 if (trio.Any(value => value.FireRewardCandidateIds.Distinct().Count() != value.FireRewardCandidateIds.Count)) errors.Add(seed + ":reward_duplicate");
             }
-            if (content.AllEligibleSpellIds.Count != 60) errors.Add("fire_eligibility"); return errors;
+            if (content.AllEligibleSpellIds.Count != 80) errors.Add("fire_eligibility"); return errors;
         }
     }
 }
