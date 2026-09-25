@@ -105,7 +105,47 @@ namespace OCC.Combat
                 case CombatCommandType.Attack: execution = ResolveWeaponAttack(state, unit, command.TargetUnitId, 0); break;
                 case CombatCommandType.Cast: execution = ResolveSkill(state, unit, CombatCatalog.FireBolt, command); break;
                 case CombatCommandType.UseSkill:
-                    execution = unit.IsHero && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
+                    execution = !unit.IsHero && state.AcademyEnemyArea != null &&
+                        (command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex || command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex)
+                        ? state.AcademyEnemyArea.Resolve(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.BindingMarkSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveBindingMark(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.LanternSweepSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveLanternSweep(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.SpotlightSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveSpotlightCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            (command.SlotIndex == AcademyFieldEnemyRuntime.PrototypeDeploySkillIndex ||
+                                command.SlotIndex == AcademyFieldEnemyRuntime.PrototypeDetonateSkillIndex)
+                        ? state.AcademyFieldEnemy.ResolvePrototypeCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.WindChangeSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveWindChangeCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            (command.SlotIndex == AcademyFieldEnemyRuntime.StorekeeperPulseSkillIndex ||
+                                command.SlotIndex == AcademyFieldEnemyRuntime.StorekeeperRetireSkillIndex ||
+                                command.SlotIndex == AcademyFieldEnemyRuntime.StorekeeperRegisterSkillIndex)
+                        ? state.AcademyFieldEnemy.ResolveStorekeeperCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            (command.SlotIndex == AcademyFieldEnemyRuntime.WindScreenSkillIndex ||
+                                command.SlotIndex == AcademyFieldEnemyRuntime.WindScrollSkillIndex ||
+                                command.SlotIndex == AcademyFieldEnemyRuntime.WindPushSkillIndex)
+                        ? state.AcademyFieldEnemy.ResolveLibrarianCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.ArbalistArmSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveArbalistArm(state, unit, command)
+                        : !unit.IsHero && state.AcademyFieldEnemy != null &&
+                            command.SlotIndex == AcademyFieldEnemyRuntime.VanguardDismantleSkillIndex
+                        ? state.AcademyFieldEnemy.ResolveVanguardDismantle(state, unit, command)
+                        : !unit.IsHero && state.AcademyCoreBoss != null &&
+                            command.SlotIndex == AcademyCoreBossRuntime.ChainPullSkillIndex
+                        ? state.AcademyCoreBoss.ResolveChainPullCommand(state, unit, command)
+                        : !unit.IsHero && state.AcademyEnemyGrowth != null && command.SlotIndex == AcademyEnemyGrowthRuntime.CommandSkillIndex
+                        ? state.AcademyEnemyGrowth.Resolve(state, unit, command)
+                        : unit.IsHero && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
                         ? state.RogueSpells.ExecuteSlot(command.SlotIndex, command).CombatEffects
                         : state.AcademyCoreBoss != null && unit.EnemyArchetypeId == "core_overseer" && command.SlotIndex == 1
                             ? state.AcademyCoreBoss.ResolveTowerPressCommand(state, unit)
@@ -143,7 +183,8 @@ namespace OCC.Combat
             bool equippedBackpack = state.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null &&
                 state.RogueEquipment.Equipped.TryGetValue(Roguelite.EquipmentSlot.Backpack, out string backpackId) &&
                 !string.IsNullOrEmpty(backpackId);
-            bool free = state.InventoryOpenCount == 0 && equippedBackpack;
+            bool free = state.InventoryOpenCount == 0 && equippedBackpack &&
+                state.RogueEquipment.FirstForgeBackpackOpenFree;
             if (!free && unit.ActionPoints < BasicActionPointCost) throw new InvalidOperationException("Insufficient action points.");
             state.RecordInventoryOpened();
             return free ? CombatEffectExecution.Empty :
@@ -184,12 +225,22 @@ namespace OCC.Combat
         {
             WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
             int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
-                ? weapon.Damage
+                ? weapon.Damage + (attacker.IsHero ? state.RogueEquipment?.ForgeWeaponDamageBonus ?? 0 : 0)
                 : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
-            CombatEffectExecution execution = ResolveDamageAction(state, attacker, targetId, weapon.DisplayName,
-                weapon.DamageType, reducedBaseDamage, weapon.MinimumRange, weapon.Range, weapon.ArmorPierce,
-                weapon.InitiativeDelay, weapon.ManaCost, null, 0);
+            bool calibratedHeavy = state.GreenhouseCollectionRoom?.BeginCalibratedHeavyAttack(state, attacker) == true;
+            CombatEffectExecution execution;
+            try
+            {
+                execution = ResolveDamageAction(state, attacker, targetId, weapon.DisplayName,
+                    weapon.DamageType, reducedBaseDamage, weapon.MinimumRange, weapon.Range, weapon.ArmorPierce,
+                    weapon.InitiativeDelay, weapon.ManaCost, null, 0);
+            }
+            finally
+            {
+                if (calibratedHeavy) state.GreenhouseCollectionRoom.EndCalibratedHeavyAttack(attacker);
+            }
             attacker.ClearStatus(StatusType.Prepared);
+            state.RogueEquipment?.AfterWeaponHit(state, attacker.Id);
             state.RogueSpells?.AfterWeaponHit(attacker.Id, state.GetUnit(targetId));
             ExhaustEnemyActionPoints(state, attacker);
             return execution;
@@ -203,6 +254,9 @@ namespace OCC.Combat
             if (issues.Count > 0) throw new InvalidOperationException($"{skill.DisplayName}\u7684\u7ec4\u5408\u65e0\u6548\uff1a{issues[0].Code}\u3002");
 
             List<UnitState> targets = ResolveSkillTargets(state, attacker, skill, command);
+            if (skill.Id == EnemyAbilityCatalog.WardMend.Id &&
+                (targets.Count != 1 || !AcademyEnemyAreaRuntime.SharesStructure(state, attacker, targets[0])))
+                throw new InvalidOperationException("贴墙续盾需要施术者与目标依附同一片相连结构。");
             if (skill.Damage > 0 && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
             {
                 foreach (UnitState target in targets.Where(target => attacker.Position.ManhattanDistance(target.Position) > 1))
@@ -233,6 +287,63 @@ namespace OCC.Combat
             state.EvaluateOutcome();
             ExhaustEnemyActionPoints(state, attacker);
             return execution;
+        }
+
+        internal static CombatEffectExecution ResolveConfiguredEnemySkill(CombatState state, UnitState enemy,
+            SkillDefinition skill, CombatCommand command) => ResolveSkill(state, enemy, skill, command);
+
+        internal static CombatEffectExecution ResolveConfiguredEnemyArea(CombatState state, UnitState enemy,
+            SkillDefinition skill, GridPosition center, IReadOnlyCollection<GridPosition> affectedCells)
+        {
+            if (skill == null || skill.Delivery != SkillDeliveryMethod.Area ||
+                affectedCells == null || !enemy.IsSkillReady(skill) || SkillCatalogValidator.Validate(new[] { skill }).Count > 0)
+                throw new InvalidOperationException("The academy area skill is unavailable.");
+            UnitState[] targets = state.Units.Values.Where(unit => unit.IsAlive &&
+                affectedCells.Contains(unit.Position))
+                .OrderBy(unit => unit.Id, StringComparer.Ordinal).ToArray();
+            if (skill.Damage > 0 && state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+                foreach (UnitState target in targets.Where(target => enemy.Position.ManhattanDistance(target.Position) > 1))
+                    FireSpellEngine.ReduceIncomingDamage(state.RogueSpells.FireBattle, target.Id, enemy.Id, skill.Damage);
+            List<CombatEffect> effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(BasicActionPointCost) };
+            CombatCommand command = CombatCommand.UseSkillAt(enemy.Id, AcademyEnemyAreaRuntime.ResolveSkillIndex, center, default);
+            foreach (UnitState target in targets)
+                foreach (SkillEffectDefinition definition in skill.Effects)
+                {
+                    if (skill.Id == "SK-AOE-RAIDER" && definition.Type == SkillEffectType.ApplyStatus &&
+                        target.Position != center) continue;
+                    AppendSkillEffect(state, enemy, target, skill, definition, command, effects);
+                }
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, enemy.Id, effects.ToArray());
+            enemy.SetCooldown(skill);
+            LogSkillExecution(state, enemy, skill, result);
+            state.EvaluateOutcome();
+            ExhaustEnemyActionPoints(state, enemy);
+            return result;
+        }
+
+        internal static int PreviewLanternSweepDamage(CombatState state, UnitState attacker, UnitState target)
+        {
+            UnitState unshielded = target.Clone();
+            unshielded.ClearShield();
+            return CalculateDamage(state, attacker, unshielded, 1, DamageType.Arcane, 0).Final;
+        }
+
+        internal static CombatEffectExecution ResolveLanternSweep(CombatState state, UnitState enemy,
+            IReadOnlyCollection<GridPosition> affectedCells)
+        {
+            if (state == null || enemy == null || affectedCells == null)
+                throw new InvalidOperationException("转灯范围不可用。");
+            var effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(enemy.ActionPoints) };
+            foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive && affectedCells.Contains(unit.Position))
+                .OrderBy(unit => unit.Id, StringComparer.Ordinal))
+            {
+                effects.Add(CombatEffect.AbsorbShield(target.Id, target.Shield));
+                effects.Add(CombatEffect.DamageHealth(target.Id, PreviewLanternSweepDamage(state, enemy, target)));
+                effects.Add(CombatEffect.ApplyStatus(target.Id, StatusType.Marked, 1));
+            }
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, enemy.Id, effects.ToArray());
+            state.EvaluateOutcome();
+            return result;
         }
 
         private static List<UnitState> ResolveSkillTargets(CombatState state, UnitState attacker, SkillDefinition skill, CombatCommand command)
@@ -505,7 +616,12 @@ namespace OCC.Combat
             if (state.IsOccupied(command.Destination, unit.Id)) throw new InvalidOperationException("\u76ee\u6807\u683c\u5df2\u88ab\u5355\u4f4d\u5360\u636e\u3002");
             IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, unit, command.Destination);
             if (path.Count == 0) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u884c\u79fb\u52a8\u8def\u5f84\u6216\u8d85\u51fa\u79fb\u52a8\u8303\u56f4\u3002");
-            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(command.Destination));
+            path = CombatMovementQuery.StopAtBindingMark(state, path);
+            GridPosition destination = path[path.Count - 1];
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id,
+                CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(destination));
+            // The binding mark triggers on entry, before a later trace can replace its effect layer.
+            state.ResolveBindingMarkEntry(unit);
             state.AcademyFieldEnemy?.AfterMove(state, unit, path);
             state.RainLanternCourt?.AfterMove(state, unit, path);
             state.GreenhouseCollectionRoom?.AfterMove(state, unit, path);
@@ -517,7 +633,6 @@ namespace OCC.Combat
                 state.AddLog(unit.DisplayName + "进入浅水，燃烧已移除。");
             }
             state.RogueEquipment?.AfterMove(unit.Id);
-            state.ResolveBindingMarkEntry(unit);
             if (!unit.IsHero && state.ArtifactBattle != null)
             {
                 ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);

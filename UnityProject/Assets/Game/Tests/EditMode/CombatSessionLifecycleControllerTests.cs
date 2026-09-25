@@ -1,10 +1,37 @@
+using System;
+using System.Reflection;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
+using UnityEngine;
 
 namespace OCC.Combat.Tests
 {
     public sealed class CombatSessionLifecycleControllerTests
     {
+        [Test]
+        public void ReturnToMapRun_DoesNotBypassAnUnsavedMapTransaction()
+        {
+            GameObject host = new GameObject("unsaved-map-return-test");
+            try
+            {
+                CombatPrototypeBootstrap bootstrap = host.AddComponent<CombatPrototypeBootstrap>();
+                RogueliteFlowCoordinator flow = (RogueliteFlowCoordinator)typeof(CombatPrototypeBootstrap)
+                    .GetField("rogueliteFlow", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(bootstrap);
+                RogueliteMapSaveCoordinator saves = (RogueliteMapSaveCoordinator)typeof(CombatPrototypeBootstrap)
+                    .GetField("mapSaves", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(bootstrap);
+                flow.BeginMapRun(RogueliteMapRun.CreateFirstRunV1(7647));
+                flow.SetMapMenuOpen(false);
+                Assert.That(saves.Save(null), Is.False);
+
+                bootstrap.ReturnToMapRun();
+
+                Assert.That(flow.IsMapMenuOpen, Is.False);
+                Assert.That(flow.MapRun, Is.Not.Null);
+                Assert.That(bootstrap.IsMapRunSaved, Is.False);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(host); }
+        }
+
         [Test]
         public void Begin_ActivatesHeroTurnAndResetsSessionScopedCoordinators()
         {
@@ -42,6 +69,35 @@ namespace OCC.Combat.Tests
             Assert.That(restarted.State, Is.Not.SameAs(state));
             Assert.That(restarted.State.GetUnit("hero").Position, Is.EqualTo(new GridPosition(0, 0)));
             Assert.That(restarted.State.GetUnit("hero").ActionPoints, Is.EqualTo(CombatResolver.HeroActionPointsPerTurn));
+        }
+
+        [Test]
+        public void Restart_RestoresRogueliteSpellsAndEquipmentBoundToTheNewCombat()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(1973);
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            CombatSceneSessionBuild build = new CombatSceneSessionBuilder().Build(
+                run, null, Array.Empty<CombatSceneMarker>());
+            CombatFlowController flow = new CombatFlowController();
+            flow.Configure(build.Preparation, build.State);
+            flow.OpenBriefing();
+            CombatSessionLifecycleController controller = new CombatSessionLifecycleController();
+            EnemyTurnCoordinator enemyTurn = new EnemyTurnCoordinator();
+            CombatOutcomeSettlementCoordinator outcome = new CombatOutcomeSettlementCoordinator();
+            controller.Begin(flow, enemyTurn, outcome);
+
+            CombatSessionActivation restarted = controller.Restart(flow, enemyTurn, outcome);
+
+            Assert.That(restarted.State.RogueSpells, Is.Not.Null);
+            Assert.That(restarted.State.RogueSpells.Combat, Is.SameAs(restarted.State));
+            Assert.That(restarted.State.RogueSpells.FireBattle.Combat, Is.SameAs(restarted.State));
+            Assert.That(restarted.State.RogueSpells.Loadout.EquippedSpellIds,
+                Is.EqualTo(build.State.RogueSpells.Loadout.EquippedSpellIds));
+            Assert.That(restarted.State.RogueEquipment, Is.Not.Null);
+            Assert.That(restarted.State.RogueEquipment, Is.Not.SameAs(build.State.RogueEquipment));
+            Assert.That(restarted.State.RogueEquipment.Equipped,
+                Is.EquivalentTo(build.State.RogueEquipment.Equipped));
         }
 
         [Test]

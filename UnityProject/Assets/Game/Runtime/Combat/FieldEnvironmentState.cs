@@ -96,14 +96,15 @@ namespace OCC.Combat
             foreach (FieldLightLaneState lane in replacements) if (lane != null) lanes.Add(lane);
         }
 
-        /// <summary>光带的实际照明格：逐格推进，遇到阻挡攻击线的物块即停在暗段之前。</summary>
-        public IReadOnlyList<GridPosition> LitCells(GridMap map, FieldLightLaneState lane)
+        /// <summary>光带的实际照明格：逐格推进，遇到阻挡攻击线的物块或有效烟尘即停在暗段之前。</summary>
+        public IReadOnlyList<GridPosition> LitCells(GridMap map, FieldLightLaneState lane, int currentTime)
         {
             List<GridPosition> lit = new List<GridPosition>();
             if (map == null || lane == null) return lit;
             foreach (GridPosition cell in lane.Cells())
             {
-                if (!map.IsInside(cell) || map.GetTile(cell).BlocksLineOfSight) break;
+                if (!map.IsInside(cell) || map.GetTile(cell).BlocksLineOfSight ||
+                    map.GetTile(cell).SmokeExpiresAt > currentTime) break;
                 lit.Add(cell);
             }
             return lit;

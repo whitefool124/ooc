@@ -71,7 +71,8 @@
       "kind": "WardGenerator",
       "x": 4,
       "y": 3,
-      "mechanismKind": 0
+      "mechanismKind": 0,
+      "durability": 16
     },
     {
       "kind": "LoosePaper",

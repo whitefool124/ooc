@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Roguelite;
+using RogueEquipmentSlot = OCC.Combat.Roguelite.EquipmentSlot;
 
 namespace OCC.Combat.Tests
 {
@@ -53,6 +54,27 @@ namespace OCC.Combat.Tests
             Assert.That(before - enemy.Health, Is.EqualTo(8));
             runtime.ExecuteSlot(2, CombatCommand.UseSkill("hero", 2, "hero"));
             Assert.That(hero.Shield, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void ForgedCircuitCastingUnit_DiscountsOnlyFirstSuccessfulSpell()
+        {
+            CombatState combat = BuildCombat(out UnitState hero, out UnitState enemy);
+            RogueRunDto dto = RogueRunDto.CreateNew("circuit-spell", 91);
+            dto.EquipmentInstances.Add(new EquipmentInstanceDto("casting", "ACA-EQ-CR01",
+                RogueEquipmentSlot.CastingUnit, EquipmentRarity.Uncommon, 0)
+            { ForgeMaterialId = "FORGE-CIRCUIT" });
+            dto.EquipmentSlotInstanceIds[RogueEquipmentSlot.CastingUnit] = "casting";
+            combat.AttachRogueEquipmentRuntime(RogueEquipmentRuntime.FromDto(dto));
+            RogueSpellCombatRuntime runtime = new RogueSpellCombatRuntime(combat, RogueSpellLoadout.CreateStarter().CreateCombatSnapshot());
+            combat.AttachRogueSpellRuntime(runtime);
+            CombatResolver.BeginTurn(combat, "hero");
+
+            int mana = hero.Mana;
+            runtime.ExecuteSlot(1, CombatCommand.UseSkill("hero", 1, enemy.Id));
+            Assert.That(hero.Mana, Is.EqualTo(mana - 1));
+            runtime.ExecuteSlot(2, CombatCommand.UseSkill("hero", 2, hero.Id));
+            Assert.That(hero.Mana, Is.EqualTo(mana - 3));
         }
 
         [Test]

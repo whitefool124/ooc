@@ -107,7 +107,8 @@
       "kind": "BindingMark",
       "x": 5,
       "y": 3,
-      "mechanismKind": 0
+      "mechanismKind": 0,
+      "duration": 3
     },
     {
       "kind": "PermanentWall",

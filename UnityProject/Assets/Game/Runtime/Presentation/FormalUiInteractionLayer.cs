@@ -238,6 +238,9 @@ namespace OCC.Combat.Presentation
                 case UiConfirmationKind.TacticalRestart: return "这场战斗会从头开始";
                 case UiConfirmationKind.LeaveCombat: return "这场战斗不会留下收获";
                 case UiConfirmationKind.AbandonReward: return "本次奖励将不会获得";
+                case UiConfirmationKind.LeaveProtectedRun: return "旧档与安全副本继续保留";
+                case UiConfirmationKind.EnterAcademyFinale: return "终考开始后无法返回普通路线";
+                case UiConfirmationKind.DiscardInventoryItem: return "丢弃后无法找回这件物品";
                 default: return "再确认一次";
             }
         }

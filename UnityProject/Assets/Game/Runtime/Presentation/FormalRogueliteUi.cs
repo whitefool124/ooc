@@ -37,6 +37,8 @@ namespace OCC.Combat.Presentation
         private string selectedRogueInventoryId;
         private string selectedWorkshopEquipmentId;
         private string selectedWorkshopSpellId;
+        private string selectedWorkshopForgeMaterialId = AcademyBattleRewardCatalog.ForgeLoad;
+        private string selectedWorkshopSpecMaterialId = AcademyBattleRewardCatalog.SpecAmplify;
         private LoadoutSection loadoutSection = LoadoutSection.Equipment;
         private bool workshopForgeTab = true;
         private int selectedLoadoutSpellIndex;
@@ -129,7 +131,10 @@ namespace OCC.Combat.Presentation
                 pendingFocusKey = navigation.DefaultFocusKey;
                 Invalidate();
             }
-            if (!bootstrap.IsInteractionModalOpen && RuntimeUiEventSystem.CancelPressedThisFrame()) HandleBack();
+            if (bootstrap.CurrentMapRun?.DeparturePending == true && overlay != UiOverlay.Loadout)
+                SetOverlay(UiOverlay.Loadout);
+            bool pendingMapSave = bootstrap.IsMapMenuOpen && bootstrap.CurrentMapRun != null && !bootstrap.IsMapRunSaved;
+            if (!pendingMapSave && !bootstrap.IsInteractionModalOpen && RuntimeUiEventSystem.CancelPressedThisFrame()) HandleBack();
             if (!pageDirty) return;
             pageDirty = false;
             Rebuild();
@@ -164,7 +169,9 @@ namespace OCC.Combat.Presentation
                 bootstrap.CurrentFlowPhase == CombatFlowPhase.Briefing ? "briefing" : bootstrap.IsMapMenuOpen && bootstrap.CurrentMapRun != null ? "map" : "landing";
             FormalUiEffects.ApplyBackdrop(background, backdropId);
             FormalUiEffects.AddPageDecorations(content.transform, backdropId, bootstrap.UiPreferences.AnimationIntensity);
-            if (overlay == UiOverlay.Settings) DrawSettings();
+            if (bootstrap.IsMapMenuOpen && bootstrap.CurrentMapRun != null && !bootstrap.IsMapRunSaved)
+                DrawMapSaveFailure();
+            else if (overlay == UiOverlay.Settings) DrawSettings();
             else if (overlay == UiOverlay.Archive) DrawArchive();
             else if (overlay == UiOverlay.Encyclopedia) DrawEncyclopedia();
             else if (overlay == UiOverlay.Loadout) DrawLoadout();
@@ -298,6 +305,14 @@ namespace OCC.Combat.Presentation
             mapViewportController.Initialize(mapPanel.GetComponent<RectTransform>(), mapCanvasRect, canvas);
             Vector2 currentPosition = NodePosition(run, run.MapNode(run.CurrentNodeId));
             mapViewportController.SetView(run.IsInAcademyLayer ? new Vector2(-currentPosition.x, 0f) : Vector2.zero, 0);
+            if (run.IsInAcademyLayer && run.CurrentNodeId != RogueliteAcademyLayerCatalog.FinaleNodeId &&
+                run.IsNodeAvailable(RogueliteAcademyLayerCatalog.FinaleNodeId))
+            {
+                string label = run.IsTransitionPending ? "前往封存塔终考" : "申请提前终考";
+                string reason = run.IsTransitionPending ? "学院时序已满，普通路线关闭" : "先看首领情报；确认挑战后无法返回普通路线";
+                ActionButton(label, reason, mapPanel.transform, new Vector2(1464, -16), new Vector2(384, 72), amber, true,
+                    () => { selectedNodeId = RogueliteAcademyLayerCatalog.FinaleNodeId; OpenSelectedNodeRoom(); });
+            }
         }
 
         /// <summary>
@@ -348,7 +363,7 @@ namespace OCC.Combat.Presentation
             appearedMapNodesLayerPhase = run.IsInAcademyLayer;
             Vector2 origin = MapRevealOrigin(run);
             DrawTutorialRegion(parent, run);
-            if (run.IsInAcademyLayer) DrawShopOriginLandmark(parent, run);
+            if (run.IsInAcademyLayer && run.IsFirstRunExperience) DrawShopOriginLandmark(parent, run);
             foreach (RogueliteMapNode node in run.MapNodes)
             {
                 if (!IsMapNodeRevealed(run, node)) continue;
@@ -368,7 +383,7 @@ namespace OCC.Combat.Presentation
         /// <summary>显现波纹的起点：学院层是商店，其余阶段是当前位置。</summary>
         private static Vector2 MapRevealOrigin(RogueliteMapRun run)
         {
-            if (run.IsInAcademyLayer) return NodePosition(FirstRunExperienceCatalog.MapNode(FirstRunExperienceCatalog.ShopNodeId));
+            if (run.IsInAcademyLayer && run.IsFirstRunExperience) return NodePosition(FirstRunExperienceCatalog.MapNode(FirstRunExperienceCatalog.ShopNodeId));
             return NodePosition(run.MapNode(run.CurrentNodeId));
         }
 
@@ -474,7 +489,7 @@ namespace OCC.Combat.Presentation
                 new Vector2(viewportWidth - 496, -722), new Vector2(472, 128), FormalUiTheme.Panel);
             string title = identified ? node.DisplayName : "还看不清";
             string type = identified ? TypeLabel(node.Type) : "未知地点";
-            string time = identified && run.UsesRogue11 ? (AcademyMapTuning.TimeCost(node.Type) == 0 ? "不耗时" : "耗时 " + AcademyMapTuning.TimeCost(node.Type)) : string.Empty;
+            string time = identified && run.UsesRogue11 ? (AcademyMapTuning.TimeCost(node) == 0 ? "不耗时" : "耗时 " + AcademyMapTuning.TimeCost(node)) : string.Empty;
             Label("名称", title, card.transform, new Vector2(18, -14), new Vector2(300, 38), 26, text, TextAnchor.MiddleLeft);
             Label("摘要", type + (string.IsNullOrEmpty(time) ? string.Empty : "　" + time) + "　" + RogueliteMapVisualPresentation.StateLabel(state),
                 card.transform, new Vector2(18, -54), new Vector2(320, 28), 16, identified ? cyan : muted, TextAnchor.MiddleLeft);
@@ -668,10 +683,24 @@ namespace OCC.Combat.Presentation
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(run.RogueRunState);
             RogueEquipmentInstance[] equipment = runtime.AllInstances
                 .Where(item => IsFirstRunForgeSlot(runtime.DefinitionFor(item.InstanceId).Slot)).ToArray();
+            if (!run.IsTutorialPhase)
+            {
+                if (run.AcademyMaterialCount(selectedWorkshopForgeMaterialId) == 0)
+                    selectedWorkshopForgeMaterialId = run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad) > 0
+                        ? AcademyBattleRewardCatalog.ForgeLoad : AcademyBattleRewardCatalog.ForgeCircuit;
+                if (run.AcademyMaterialCount(selectedWorkshopSpecMaterialId) == 0)
+                    selectedWorkshopSpecMaterialId = run.AcademyMaterialCount(AcademyBattleRewardCatalog.SpecAmplify) > 0
+                        ? AcademyBattleRewardCatalog.SpecAmplify : AcademyBattleRewardCatalog.SpecEfficient;
+            }
+            string forgeMaterialId = run.IsTutorialPhase ? AcademyBattleRewardCatalog.ForgeLoad :
+                workshop.ForgeCompleted ? workshop.ForgedMaterialId : selectedWorkshopForgeMaterialId;
+            string specMaterialId = run.IsTutorialPhase ? AcademyBattleRewardCatalog.SpecAmplify :
+                workshop.SpecializationCompleted ? workshop.SpecializedMaterialId : selectedWorkshopSpecMaterialId;
+            string materialId = workshopForgeTab ? forgeMaterialId : specMaterialId;
             // 只有总案 4.2.2.1 登记了专精的术式才是合法目标：其余术式没有定义增幅结果，
             // 允许选择会让玩家白耗一份增幅刻墨（总案 6.2.7 要求非法时禁用并显示原因）。
             string[] spells = run.RogueRunState.MasteredSpellIds.Where(id =>
-                RogueSpellCombatRuntime.SupportsSpecialization(id) &&
+                RogueSpellCombatRuntime.SupportsSpecialization(id, specMaterialId) &&
                 RogueContentCatalog.CreateAcademyV01().Spells.Any(spell => spell.DefinitionId == id && spell.Role != "passive"))
                 .Distinct(StringComparer.Ordinal).ToArray();
 
@@ -679,15 +708,18 @@ namespace OCC.Combat.Presentation
             bool completed = forge ? workshop.ForgeCompleted : workshop.SpecializationCompleted;
             string targetId = forge ? selectedWorkshopEquipmentId : selectedWorkshopSpellId;
             if (completed) targetId = forge ? workshop.ForgedTargetId : workshop.SpecializedTargetId;
+            if (!forge && !completed && !spells.Contains(targetId)) targetId = string.Empty;
             string targetName = forge ? EquipmentName(runtime, targetId) : SpellName(targetId);
-            int material = forge ? run.FirstRunExperience.ForgeMaterialCount : run.FirstRunExperience.SpecializationMaterialCount;
-            string materialName = forge ? "承力合金" : "增幅刻墨";
+            int material = run.AcademyMaterialCount(materialId);
+            string materialName = materialId == AcademyBattleRewardCatalog.ForgeCircuit ? "导能晶片" :
+                materialId == AcademyBattleRewardCatalog.SpecEfficient ? "节流刻墨" :
+                forge ? "承力合金" : "增幅刻墨";
             string materialIcon = forge ? FormalArtRegistry.ResourceMetricPath("parts") : FormalArtRegistry.ResourceMetricPath("operational_aether");
-            string preview = forge ? ForgePreview(runtime, targetId) : SpecializationPreview(targetId);
-            int materialTotal = run.FirstRunExperience.ForgeMaterialCount + run.FirstRunExperience.SpecializationMaterialCount;
+            string preview = forge ? ForgePreview(runtime, targetId, materialId) : SpecializationPreview(targetId, materialId);
+            int materialTotal = run.ForgeMaterialCount + run.SpecializationMaterialCount;
 
             DrawServiceTopBar(shell.TopBar.gameObject, run, "校准工坊｜确定性强化",
-                (run.IsTutorialPhase ? "精英门槛　" : "节点额度　") + "锻造 " + (workshop.ForgeCompleted ? "1/1" : "0/1") + "　专精 " + (workshop.SpecializationCompleted ? "1/1" : "0/1"));
+                (run.IsTutorialPhase ? "可选整备　" : "节点额度　") + "锻造 " + (workshop.ForgeCompleted ? "1/1" : "0/1") + "　专精 " + (workshop.SpecializationCompleted ? "1/1" : "0/1"));
 
             // 页签与库存块至少 64 高：FormalUiKit.Label 会把文字槽压进父框内，
             // 小于 36 的文字槽连一行 24 号像素字都放不下，会整行不显示。
@@ -706,7 +738,13 @@ namespace OCC.Combat.Presentation
             Label("强化台标题", "强化台", bench.transform, new Vector2(24, -16), new Vector2(320, 36), 24, text, TextAnchor.MiddleLeft);
             DrawWorkshopTargetSlot(bench.transform, new Vector2(24, -68), new Vector2(352, 256), forge, runtime,
                 targetId, targetName, completed);
-            DrawWorkshopMaterialSlot(bench.transform, new Vector2(400, -68), new Vector2(352, 256), materialName, materialIcon, material);
+            DrawWorkshopMaterialSlot(bench.transform, new Vector2(400, -68), new Vector2(352, 256), materialName,
+                materialIcon, material, !run.IsTutorialPhase && !completed,
+                forge ? run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad) : run.AcademyMaterialCount(AcademyBattleRewardCatalog.SpecAmplify),
+                forge ? run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeCircuit) : run.AcademyMaterialCount(AcademyBattleRewardCatalog.SpecEfficient),
+                materialId == (forge ? AcademyBattleRewardCatalog.ForgeCircuit : AcademyBattleRewardCatalog.SpecEfficient),
+                () => { if (forge) selectedWorkshopForgeMaterialId = AcademyBattleRewardCatalog.ForgeLoad; else selectedWorkshopSpecMaterialId = AcademyBattleRewardCatalog.SpecAmplify; Invalidate(false); },
+                () => { if (forge) selectedWorkshopForgeMaterialId = AcademyBattleRewardCatalog.ForgeCircuit; else selectedWorkshopSpecMaterialId = AcademyBattleRewardCatalog.SpecEfficient; Invalidate(false); });
 
             GameObject previewPanel = Panel("强化预览", parent, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(856, -170), new Vector2(1016, 356), FormalUiTheme.Surface);
@@ -736,7 +774,7 @@ namespace OCC.Combat.Presentation
                 ? (forge ? "先选一件装备" : "先选一项术式") : material > 0 ? "消耗 1 份" + materialName + "并保存" : "缺少 1 份" + materialName;
             ActionButton(completed ? "本轮已安装" : "确认安装", confirmDetail, previewPanel.transform,
                 new Vector2(24, -290), new Vector2(320, 60), completed ? safe : amber, canConfirm,
-                () => { if (forge) bootstrap.CompleteFirstRunForge(selectedWorkshopEquipmentId); else bootstrap.CompleteFirstRunSpecialization(selectedWorkshopSpellId); },
+                () => { if (forge) bootstrap.CompleteFirstRunForge(selectedWorkshopEquipmentId, materialId); else bootstrap.CompleteFirstRunSpecialization(selectedWorkshopSpellId, materialId); },
                 focusKey: "按钮_确认安装");
             Label("不可更换提示", "确认后本轮不可撤回或更换。", previewPanel.transform,
                 new Vector2(360, -300), new Vector2(628, 40), 16, muted, TextAnchor.MiddleLeft);
@@ -751,7 +789,7 @@ namespace OCC.Combat.Presentation
                 new Vector2(900, -30), new Vector2(900, 40), 17, muted, TextAnchor.MiddleRight);
             if (forge)
             {
-                for (int index = 0; index < equipment.Length && index < 4; index++) DrawWorkshopEquipmentCard(stock.transform, index, runtime, equipment[index], workshop);
+                for (int index = 0; index < equipment.Length && index < 4; index++) DrawWorkshopEquipmentCard(stock.transform, index, runtime, equipment[index], workshop, forgeMaterialId);
                 if (equipment.Length == 0)
                     Label("空库存", "现在没有可锻造的装备。先在地图与奖励里拿一件。", stock.transform,
                         new Vector2(24, -96), new Vector2(1700, 60), 20, muted, TextAnchor.MiddleLeft);
@@ -759,7 +797,7 @@ namespace OCC.Combat.Presentation
             else
             {
                 for (int index = 0; index < spells.Length && index < 4; index++)
-                    DrawWorkshopSpellCard(stock.transform, index, spells[index], workshop.SpecializationCompleted, workshop.SpecializedTargetId);
+                    DrawWorkshopSpellCard(stock.transform, index, spells[index], workshop.SpecializationCompleted, workshop.SpecializedTargetId, specMaterialId);
                 if (spells.Length == 0)
                     Label("空库存", "现在没有可专精的术式。", stock.transform,
                         new Vector2(24, -96), new Vector2(1700, 60), 20, muted, TextAnchor.MiddleLeft);
@@ -805,7 +843,9 @@ namespace OCC.Combat.Presentation
                 new Vector2(24, -196), new Vector2(size.x - 48, 32), 17, completed ? safe : cyan, TextAnchor.MiddleLeft);
         }
 
-        private void DrawWorkshopMaterialSlot(Transform parent, Vector2 position, Vector2 size, string materialName, string iconPath, int material)
+        private void DrawWorkshopMaterialSlot(Transform parent, Vector2 position, Vector2 size, string materialName,
+            string iconPath, int material, bool chooseMaterial, int firstCount, int secondCount,
+            bool secondSelected, Action selectFirst, Action selectSecond)
         {
             GameObject slot = Panel("强化材料位", parent, new Vector2(0, 1), new Vector2(0, 1), position, size,
                 material > 0 ? Color.Lerp(FormalUiTheme.Surface, amber, .18f) : FormalUiTheme.Surface);
@@ -814,7 +854,16 @@ namespace OCC.Combat.Presentation
             Label("材料名称", materialName, slot.transform, new Vector2(24, -104), new Vector2(size.x - 48, 42), 24, text, TextAnchor.UpperLeft);
             Label("材料数量", "当前 " + material + " 份", slot.transform, new Vector2(24, -152), new Vector2(size.x - 48, 34), 20,
                 material > 0 ? safe : danger, TextAnchor.MiddleLeft);
-            Label("材料提示", material > 0 ? "本次消耗 1 份，剩余 " + (material - 1) + " 份。" : "材料不足，先去拿一份再回来。", slot.transform,
+            if (chooseMaterial)
+            {
+                ActionButton("主体材料 " + firstCount, string.Empty, slot.transform,
+                    new Vector2(16, -202), new Vector2(154, 42), secondSelected ? FormalUiTheme.SurfaceRaised : amber,
+                    firstCount > 0, selectFirst, focusKey: "工坊_主体材料");
+                ActionButton("回路／节流 " + secondCount, string.Empty, slot.transform,
+                    new Vector2(180, -202), new Vector2(154, 42), secondSelected ? amber : FormalUiTheme.SurfaceRaised,
+                    secondCount > 0, selectSecond, focusKey: "工坊_次材料");
+            }
+            else Label("材料提示", material > 0 ? "本次消耗 1 份，剩余 " + (material - 1) + " 份。" : "材料不足，先去拿一份再回来。", slot.transform,
                 new Vector2(24, -196), new Vector2(size.x - 48, 52), 16, muted, TextAnchor.UpperLeft);
         }
 
@@ -827,7 +876,7 @@ namespace OCC.Combat.Presentation
         }
 
         private void DrawWorkshopEquipmentCard(Transform parent, int index, RogueEquipmentRuntime runtime,
-            RogueEquipmentInstance item, FirstRunWorkshopSnapshot workshop)
+            RogueEquipmentInstance item, FirstRunWorkshopSnapshot workshop, string materialId)
         {
             EquipmentDefinition definition = runtime.DefinitionFor(item.InstanceId);
             bool selected = item.InstanceId == (workshop.ForgeCompleted ? workshop.ForgedTargetId : selectedWorkshopEquipmentId);
@@ -837,7 +886,7 @@ namespace OCC.Combat.Presentation
                 "\n占格 " + definition.Width + "×" + definition.Height + "　重量 " + definition.BaseWeight +
                 "　强化位 " + (workshop.ForgeCompleted ? "已用" : "空") +
                 "\n效果\n" + (string.IsNullOrWhiteSpace(effects) ? "无额外效果" : effects) +
-                "\n锻造结果\n" + ForgePreview(runtime, item.InstanceId);
+                "\n锻造结果\n" + ForgePreview(runtime, item.InstanceId, materialId);
             GameObject card = DrawWorkshopCard(parent, index, definition.DisplayName, definition.DefinitionId,
                 EquipmentSlotLabel(definition.Slot) + "　" + RarityLabel(item.Rarity),
                 "占格 " + definition.Width + "×" + definition.Height + "　重量 " + definition.BaseWeight +
@@ -850,7 +899,7 @@ namespace OCC.Combat.Presentation
                 new[] { EquipmentSlotLabel(definition.Slot), RarityLabel(item.Rarity), "占格 " + definition.Width + "×" + definition.Height });
         }
 
-        private void DrawWorkshopSpellCard(Transform parent, int index, string spellId, bool specializationCompleted, string specializedTargetId)
+        private void DrawWorkshopSpellCard(Transform parent, int index, string spellId, bool specializationCompleted, string specializedTargetId, string materialId)
         {
             SpellDefinition spell = RogueContentCatalog.CreateAcademyV01().Spells.FirstOrDefault(value => value.DefinitionId == spellId);
             if (spell == null) return;
@@ -860,10 +909,10 @@ namespace OCC.Combat.Presentation
             GameObject card = DrawWorkshopCard(parent, index, spell.DisplayName, spell.DefinitionId,
                 "个人术式　" + spell.Element + "　" + spell.Role,
                 spell.ActionPointCost + " AP　魔力 " + spell.ManaCost + "　冷却 " + spell.CooldownOwnTurns,
-                string.IsNullOrWhiteSpace(rules) ? SpecializationPreview(spellId) : rules,
+                string.IsNullOrWhiteSpace(rules) ? SpecializationPreview(spellId, materialId) : rules,
                 selected: selected, completed: completed,
                 onPick: () => { selectedWorkshopSpellId = spellId; Invalidate(false); });
-            BindContentHover(card, "术式专精目标", spell.DisplayName, SpellTooltipBody(spell) + "\n专精结果\n" + SpecializationPreview(spellId),
+            BindContentHover(card, "术式专精目标", spell.DisplayName, SpellTooltipBody(spell) + "\n专精结果\n" + SpecializationPreview(spellId, materialId),
                 selected ? amber : cyan, RogueSpellIconPath(spell.DefinitionId),
                 new[] { spell.Role, spell.ActionPointCost + " AP", "魔力 " + spell.ManaCost });
         }
@@ -920,7 +969,7 @@ namespace OCC.Combat.Presentation
             MedicalMetricRow(identity.transform, new Vector2(28, -238), "生命（上限 50）", run.CurrentHealth.ToString(), FormalUiTheme.Health);
             MedicalMetricRow(identity.transform, new Vector2(28, -314), "魔力（上限 12）", run.CurrentMana.ToString(), FormalUiTheme.Magic);
             MedicalMetricRow(identity.transform, new Vector2(28, -390), "金・贡・食",
-                run.Gold + "・" + run.StageContribution + "・" + run.FirstRunExperience.AcademyFoodCount, amber);
+                run.Gold + "・" + run.StageContribution + "・" + run.AcademyFoodCount, amber);
             Label("身份说明", "治疗与餐食都是可选服务，结果分别保存。\n离开医务室不会退还已经用掉的次数。", identity.transform,
                 new Vector2(28, -504), new Vector2(444, 120), 17, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
 
@@ -928,7 +977,7 @@ namespace OCC.Combat.Presentation
             DrawMedicalServiceRow(parent, new Vector2(580, -240), new Vector2(1292, 140), FormalArtRegistry.SemanticPath("notice"),
                 "免费健康确认",
                 medical.HealthCheckCompleted ? "已完成：只记录当前状态，不恢复生命。" : "只记录当前状态，不恢复生命。",
-                medical.HealthCheckCompleted ? "精英门槛项已满足。" : "完成健康确认后，才开放治疗与餐食。",
+                medical.HealthCheckCompleted ? "健康确认已完成；精英挑战不要求整备。" : "完成健康确认后，才开放治疗与餐食；精英挑战不受影响。",
                 medical.HealthCheckCompleted ? "已完成" : "可以确认", medical.HealthCheckCompleted ? safe : cyan,
                 !medical.HealthCheckCompleted, bootstrap.CompleteFirstRunHealthCheck);
 
@@ -1012,10 +1061,10 @@ namespace OCC.Combat.Presentation
                 new Vector2(32, -14), new Vector2(900, 50), 28, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             ShopMetric(top.transform, new Vector2(940, -10), "金币", run.Gold.ToString(), FormalArtRegistry.ResourceMetricPath("gold"), amber);
             ShopMetric(top.transform, new Vector2(1250, -10), "贡献", run.StageContribution.ToString(), FormalArtRegistry.ResourceMetricPath("contribution"), safe);
-            ShopMetric(top.transform, new Vector2(1560, -10), "食材", run.FirstRunExperience.AcademyFoodCount.ToString(), FormalArtRegistry.ResourceMetricPath("operational_aether"), cyan);
+            ShopMetric(top.transform, new Vector2(1560, -10), "食材", run.AcademyFoodCount.ToString(), FormalArtRegistry.ResourceMetricPath("operational_aether"), cyan);
 
             Label("页面标题", "本次可用货品", parent, new Vector2(64, -112), new Vector2(1200, 62), 46, text, TextAnchor.MiddleLeft);
-            Label("页面说明", "每件商品在这个节点限购 1 件；购买结果在离开商店时一并保存。", parent,
+            Label("页面说明", "每件商品在这个节点限购 1 件；每次购买成功后立即保存。", parent,
                 new Vector2(64, -174), new Vector2(1500, 36), 18, muted, TextAnchor.MiddleLeft);
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
             for (int i = 0; i < shop.Offers.Count; i++)
@@ -1072,14 +1121,19 @@ namespace OCC.Combat.Presentation
                     iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
                 return;
             }
-            Header("学院单轮总结", run.FirstRunExperience?.RoundSettled == true ? "塔之守卫已击倒 · 本轮完成" : "本轮已结束");
+            string resultLabel = run.RunEndReason == "death" || run.FirstRunExperience?.RunSealed == true ? "主角战败 · 本轮结束" :
+                run.RunEndReason == "abandon" ? "主动放弃 · 本轮结束" : "塔之守卫已击倒 · 本轮完成";
+            Header("学院单轮总结", resultLabel);
             GameObject card = Panel("单轮结算卡", content.transform, new Vector2(.5f, .5f),
                 new Vector2(.5f, .5f), Vector2.zero, new Vector2(1680, 850), panel);
             ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.Paper, true);
-            Label("结果", run.FirstRunExperience?.RoundSettled == true ? "学院阶段完成" : "学院阶段结束",
+            Label("结果", run.RunEndReason == "death" || run.FirstRunExperience?.RunSealed == true ? "战败" : run.RunEndReason == "abandon" ? "主动放弃" : "学院阶段完成",
                 card.transform, new Vector2(52, -40), new Vector2(760, 62), 40, safe, TextAnchor.MiddleLeft);
             Label("单轮标识", "模式：学院肉鸽　种子：" + run.Seed + "　版本：" + (run.RogueRunState?.SaveVersion ?? "旧存档"),
                 card.transform, new Vector2(54, -114), new Vector2(1510, 40), 20, muted, TextAnchor.MiddleLeft);
+            if (!string.IsNullOrEmpty(run.RunEndReason))
+                Label("结束位置", "结束位置：" + (SummaryNode(run, run.CurrentNodeId)?.DisplayName ?? run.CurrentNodeId),
+                    card.transform, new Vector2(810, -72), new Vector2(790, 40), 20, muted, TextAnchor.MiddleLeft);
             Line(card.transform, new Vector2(52, -166), new Vector2(1576, 2), ArchiveUiStyle.Rule);
 
             IEnumerable<string> routeIds = run.RouteHistoryNodeIds;
@@ -1119,6 +1173,24 @@ namespace OCC.Combat.Presentation
             ActionButton("确认结束本轮", "总结已保存；返回以太主界面", card.transform,
                 new Vector2(1044, -728), new Vector2(570, 80), cyan, true,
                 bootstrap.RequestReturnToLanding, iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
+        }
+
+        private void DrawMapSaveFailure()
+        {
+            bool protectedSlot = bootstrap.IsMapRunWriteProtected;
+            Header("学院记录", protectedSlot ? "档案已保护" : "保存尚未完成");
+            GameObject card = Panel("地图保存失败卡", content.transform, new Vector2(.5f, .5f),
+                new Vector2(.5f, .5f), Vector2.zero, new Vector2(1080, 400), panel);
+            ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.Paper, true);
+            Label("原因", protectedSlot
+                    ? "写入校验失败，档案已启用保护。本次未保存进度无法继续；旧档和安全副本已保留。返回档案入口后可选择其他档案，或确认覆盖此档。"
+                    : "本次操作仍保留在当前游戏中，但尚未写入档案。请重试保存；保存成功前不能继续操作或离开。",
+                card.transform, new Vector2(48, -60), new Vector2(980, 150), 26, danger, TextAnchor.UpperLeft);
+            ActionButton(protectedSlot ? "返回档案入口" : "重试保存",
+                protectedSlot ? "返回前需确认舍弃本次未保存进度" : "不会重复结算节点、交易或奖励", card.transform,
+                new Vector2(550, -270), new Vector2(480, 84), cyan, true,
+                () => { if (protectedSlot) bootstrap.RequestLeaveProtectedMapRun(); else bootstrap.RetryCompleteMapRunSave(); },
+                iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
         }
 
         private static RogueliteMapNode SummaryNode(RogueliteMapRun run, string id)
@@ -1168,10 +1240,21 @@ namespace OCC.Combat.Presentation
             return spell?.DisplayName ?? id;
         }
 
-        private static string ForgePreview(RogueEquipmentRuntime runtime, string instanceId)
+        private static string ForgePreview(RogueEquipmentRuntime runtime, string instanceId,
+            string materialId = AcademyBattleRewardCatalog.ForgeLoad)
         {
             EquipmentDefinition definition = string.IsNullOrEmpty(instanceId) ? null : runtime.DefinitionFor(instanceId);
             if (definition == null) return "请选择一件可锻造装备。";
+            if (materialId == AcademyBattleRewardCatalog.ForgeCircuit)
+            {
+                switch (definition.Slot)
+                {
+                    case OCC.Combat.Roguelite.EquipmentSlot.Weapon: return "每个自己回合第一次武器命中后获得 2 护盾";
+                    case OCC.Combat.Roguelite.EquipmentSlot.Backpack: return "每场战斗第一次打开背包不消耗行动点";
+                    case OCC.Combat.Roguelite.EquipmentSlot.CastingUnit: return "每场战斗第一次施放术式时魔力成本 -1";
+                    default: return "每场战斗第一次受到负面状态时，持续时间 -1 回合";
+                }
+            }
             switch (definition.Slot)
             {
                 case OCC.Combat.Roguelite.EquipmentSlot.Weapon: return "基础武器伤害 +2";
@@ -1181,8 +1264,20 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private static string SpecializationPreview(string spellId)
+        private static string SpecializationPreview(string spellId,
+            string materialId = AcademyBattleRewardCatalog.SpecAmplify)
         {
+            if (materialId == AcademyBattleRewardCatalog.SpecEfficient)
+            {
+                switch (spellId)
+                {
+                    case "BASE-FIRE-MELEE": return "魔力 1 → 0";
+                    case "BASE-FIRE-RANGED": case "BASE-AETHER-SHIELD": case "F-P-R01": return "魔力 2 → 1";
+                    case "BASE-MANA-RECOVER": return "冷却 1 → 0";
+                    case "F-P-M01": case "F-P-M06": case "F-P-U01": return "魔力 3 → 2";
+                    default: return "此术式未开放节流专精";
+                }
+            }
             switch (spellId)
             {
                 case "BASE-FIRE-MELEE": return "伤害 8 → 10";
@@ -1211,7 +1306,7 @@ namespace OCC.Combat.Presentation
             => id == "MEAL-POWER" ? "接下来 3 场战斗武器直接伤害 +2" : id == "MEAL-AETHER" ? "接下来 3 场个人魔力上限 +2，入场回满" : "接下来 3 场开战获得 6 护盾";
 
         private static bool MealAffordable(RogueliteMapRun run, string id)
-            => id == "MEAL-POWER" ? run.Gold >= 3 : id == "MEAL-AETHER" ? run.StageContribution >= 1 : run.FirstRunExperience.AcademyFoodCount >= 1;
+            => id == "MEAL-POWER" ? run.Gold >= 3 : id == "MEAL-AETHER" ? run.StageContribution >= 1 : run.AcademyFoodCount >= 1;
 
         private static string MealCostShortage(RogueliteMapRun run, string id)
             => id == "MEAL-POWER" ? "还差 " + Math.Max(0, 3 - run.Gold) + " 金币" :
@@ -1299,12 +1394,14 @@ namespace OCC.Combat.Presentation
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
             ActionButton("学院整备", "调整装备与术式", shell.Footer, new Vector2(1276, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
                 () => SetOverlay(UiOverlay.Loadout), iconPath: FormalArtRegistry.NavigationPath("archive"));
-            string enterLabel = confirmOrigin ? "确认配置并出发" : "出发";
-            string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
+            bool finaleApplication = run.IsInAcademyLayer && node.Type == RogueliteMapNodeType.Finale && !current;
+            string enterLabel = confirmOrigin ? "确认配置并出发" : finaleApplication ? "确认终考申请" : "出发";
+            string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" : finaleApplication
+                ? "不可逆：确认后不能返回普通路线" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
             GameObject start = ActionButton(enterLabel, enterReason, shell.Footer, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
                 () => { if (confirmOrigin) bootstrap.AcknowledgeFirstRunOrigin(); bootstrap.StartMapNodeCombat(node.Id); },
                 focusKey: "按钮_进入战斗", iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
-            BindHover(start, enterLabel, confirmOrigin || !canEnter ? enterReason : "立刻前往场地。", canStart ? accent : muted);
+            BindHover(start, enterLabel, confirmOrigin || !canEnter || finaleApplication ? enterReason : "立刻前往场地。", canStart ? accent : muted);
         }
 
         private void DrawCombatActionDossier(Transform parent, RogueliteMapRun run, RogueliteMapNode node, bool current, Color accent)
@@ -1568,7 +1665,7 @@ namespace OCC.Combat.Presentation
             Color accent = state == RogueliteMapNodeVisualState.Current || state == RogueliteMapNodeVisualState.Available ? cyan :
                 state == RogueliteMapNodeVisualState.Cleared ? safe : state == RogueliteMapNodeVisualState.Locked ? muted : state == RogueliteMapNodeVisualState.Known || state == RogueliteMapNodeVisualState.Visited ? amber : muted;
             string focusKey = RogueliteMapVisualPresentation.FocusKey(node.Id);
-            string time = identified && run.UsesRogue11 ? (AcademyMapTuning.TimeCost(node.Type) == 0 ? "　零时" : "　+" + AcademyMapTuning.TimeCost(node.Type) + "时") : string.Empty;
+            string time = identified && run.UsesRogue11 ? (AcademyMapTuning.TimeCost(node) == 0 ? "　零时" : "　+" + AcademyMapTuning.TimeCost(node) + "时") : string.Empty;
             GameObject buttonObject = FormalMapNodeButton(parent, NodePosition(run, node), node.Type, state, accent, () =>
             {
                 selectedNodeId = node.Id;
@@ -1770,7 +1867,7 @@ namespace OCC.Combat.Presentation
             bool cleared = run.CompletedNodes.Contains(node.Id);
             if (!identified) return;
 
-            int timeCost = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node).TimeCost : AcademyMapTuning.TimeCost(node.Type);
+            int timeCost = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node).TimeCost : AcademyMapTuning.TimeCost(node);
             Label("节点耗时", timeCost == 0 ? "耗时：不花时间" : "耗时：" + timeCost, parent,
                 new Vector2(252, -164), new Vector2(164, 26), 16, cyan, TextAnchor.MiddleRight);
 
@@ -1797,7 +1894,9 @@ namespace OCC.Combat.Presentation
 
             bool resumeCurrentCombat = current && RogueliteUiPreferences.CanOpenCombatBriefing(run, node);
             bool canTravel = resumeCurrentCombat || RogueliteUiPreferences.CanTravelTo(run, node);
-            string action = cleared ? "再去看看" : resumeCurrentCombat ? "回到战斗" : node.IsCombat ? "出发前看一眼" : "前往这里";
+            string action = cleared ? "再去看看" : resumeCurrentCombat ? "回到战斗" :
+                run.IsInAcademyLayer && node.Type == RogueliteMapNodeType.Finale ? "查看终考并申请" :
+                node.IsCombat ? "出发前看一眼" : "前往这里";
             string detail = canTravel ? string.Empty : "先选择一个相邻地点";
             if (!canTravel) detail = RogueliteMapVisualPresentation.RestrictionText(run, node);
             string travelTooltip = cleared ? "回访不再触发战斗或奖励。" : "抵达后仍可沿路线返回。";
@@ -1915,7 +2014,8 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun ?? bootstrap.ArchivedMapRun;
             if (run == null || !run.UsesRogue11) { SetOverlay(UiOverlay.None); return; }
-            Header("角色与整备", "换好装备和术式，再去下一站");
+            Header(run.DeparturePending ? "出发整备" : "角色与整备",
+                run.DeparturePending ? "确认装备、术式、战术栏和背包后保存出发" : "换好装备和术式，再去下一站");
             FormalRogueliteLoadoutShellView shell = FormalRogueliteLoadoutShellView.Create(content.transform);
             GameObject card = shell.Card.gameObject;
             ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, true);
@@ -1942,8 +2042,10 @@ namespace OCC.Combat.Presentation
                 DrawSpellLoadout(shell.Body, dto, spells);
 
             Line(shell.Footer, new Vector2(16, -878), new Vector2(1832, 2), FormalUiTheme.Rule);
-            ActionButton("返回地图", string.Empty, shell.Footer, new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
-                () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
+            ActionButton(run.DeparturePending ? "确认出发" : "返回地图", string.Empty, shell.Footer,
+                new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
+                () => { if (!run.DeparturePending || bootstrap.ConfirmAcademyDeparture()) SetOverlay(UiOverlay.None); },
+                iconPath: FormalArtRegistry.NavigationPath(run.DeparturePending ? "confirm" : "back"));
         }
 
         private void DrawLoadoutNavigation(Transform parent, RogueEquipmentRuntime runtime, RogueRunDto dto)
@@ -2101,7 +2203,7 @@ namespace OCC.Combat.Presentation
                 RogueLoadoutDragHandler drag = itemButton.AddComponent<RogueLoadoutDragHandler>();
                 drag.Configure(eventData => BeginLoadoutDrag(item, itemButton, eventData), UpdateLoadoutDrag,
                     EndLoadoutDrag, RotateLoadoutDragPreview);
-                BindContentHover(itemButton, item.IsEquipment ? "装备" : "战术道具", item.DisplayName,
+                BindContentHover(itemButton, item.IsMaterial ? "工坊材料" : item.IsEquipment ? "装备" : "战术道具", item.DisplayName,
                     RogueInventoryDetailBody(runtime, item.InstanceId, false), selected ? amber : item.IsEquipment ? cyan : safe,
                     RogueInventoryIconPath(item));
             }
@@ -2141,7 +2243,7 @@ namespace OCC.Combat.Presentation
                 RogueLoadoutDragHandler drag = itemButton.AddComponent<RogueLoadoutDragHandler>();
                 drag.Configure(eventData => BeginLoadoutDrag(item, itemButton, eventData), UpdateLoadoutDrag,
                     EndLoadoutDrag, RotateLoadoutDragPreview);
-                BindContentHover(itemButton, item.IsEquipment ? "装备" : "战术道具", item.DisplayName,
+                BindContentHover(itemButton, item.IsMaterial ? "工坊材料" : item.IsEquipment ? "装备" : "战术道具", item.DisplayName,
                     RogueInventoryDetailBody(runtime, item.InstanceId, false), selected ? amber : item.IsEquipment ? cyan : safe, RogueInventoryIconPath(item));
             }
             if (items.Count == 0)
@@ -2180,18 +2282,25 @@ namespace OCC.Combat.Presentation
         {
             RogueEquipmentInstance equipment = runtime.EquipmentItem(selectedRogueInventoryId);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(selectedRogueInventoryId);
+            string materialId = runtime.MaterialIdFor(selectedRogueInventoryId);
             string name = equipment != null ? runtime.DefinitionFor(equipment.InstanceId).DisplayName :
-                tactical != null ? runtime.TacticalDefinitionFor(tactical.InstanceId).DisplayName : "尚未选择物品";
+                tactical != null ? runtime.TacticalDefinitionFor(tactical.InstanceId).DisplayName :
+                materialId == "FORGE-LOAD" ? "承力合金" : materialId == "FORGE-CIRCUIT" ? "导能晶片" :
+                materialId == "SPEC-AMPLIFY" ? "增幅刻墨" : materialId == "SPEC-EFFICIENT" ? "节流刻墨" : "尚未选择物品";
             Label("当前选择标题", "当前选择", parent, position, new Vector2(180, 34), 18, amber, TextAnchor.MiddleLeft);
             Label("当前选择名称", name, parent, position + new Vector2(0, -38), new Vector2(590, 40), 24, text, TextAnchor.MiddleLeft);
             string fullDetail = equipment != null ? RogueEquipmentDetailBody(runtime, equipment.InstanceId, false) :
-                tactical != null ? RogueInventoryDetailBody(runtime, tactical.InstanceId, false) : "在背包或装备槽中选择一件物品。";
+                tactical != null ? RogueInventoryDetailBody(runtime, tactical.InstanceId, false) :
+                !string.IsNullOrEmpty(materialId) ? RogueInventoryDetailBody(runtime, selectedRogueInventoryId, false) : "在背包或装备槽中选择一件物品。";
             Label("当前选择完整详情", fullDetail, parent, position + new Vector2(0, -78), new Vector2(590, 96), 14, muted, TextAnchor.UpperLeft);
-            if (equipment == null && tactical == null) return;
+            if (equipment == null && tactical == null && string.IsNullOrEmpty(materialId)) return;
             bool inBackpack = runtime.Backpack.ContainsKey(selectedRogueInventoryId);
-            if (inBackpack)
+            if (inBackpack && string.IsNullOrEmpty(materialId))
                 ActionButton("旋转", "R", parent, position + new Vector2(0, -180), new Vector2(280, 52), cyan, true,
                     () => bootstrap.RotateRogueBackpackItem(selectedRogueInventoryId), iconPath: FormalArtRegistry.ItemPath("inventory_rotate"));
+            if (inBackpack)
+                ActionButton("丢弃", "需要确认", parent, position + new Vector2(0, -242), new Vector2(280, 52), danger, true,
+                    () => bootstrap.RequestDiscardRogueBackpackItem(selectedRogueInventoryId));
             if (equipment != null)
             {
                 EquipmentDefinition definition = runtime.DefinitionFor(equipment.InstanceId);
@@ -2382,7 +2491,7 @@ namespace OCC.Combat.Presentation
                 FormalUiTheme.WithAlpha(cyan, .42f));
             FormalUiKit.FocusFrame(loadoutDragGhost.transform);
             loadoutDragGhost.GetComponent<Image>().raycastTarget = false;
-            loadoutInteractionMessage = "拖拽中　R 键或右键旋转　松开左键放置";
+            loadoutInteractionMessage = item.IsMaterial ? "拖拽材料到空格；材料不可旋转" : "拖拽中　R 键或右键旋转　松开左键放置";
             UpdateLoadoutDrag(eventData);
         }
 
@@ -2418,6 +2527,7 @@ namespace OCC.Combat.Presentation
         private void RotateLoadoutDragPreview()
         {
             if (string.IsNullOrEmpty(loadoutDragId)) return;
+            if (!string.IsNullOrEmpty(loadoutDragRuntime?.MaterialIdFor(loadoutDragId))) return;
             loadoutDragRotated = !loadoutDragRotated;
             loadoutInteractionMessage = loadoutDragRotated ? "已经横过来了，松开左键放下" : "已经竖回来了，松开左键放下";
             UpdateLoadoutDragPreview();
@@ -2437,7 +2547,8 @@ namespace OCC.Combat.Presentation
                 loadoutInteractionMessage = "松开以装入战术栏 " + (quickbarSlot + 1);
                 return;
             }
-            if (!loadoutDragEquippedSlot.HasValue && TryEquipmentSlotAtPointer(loadoutLastPointer, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
+            if (!loadoutDragEquippedSlot.HasValue && string.IsNullOrEmpty(loadoutDragRuntime.MaterialIdFor(loadoutDragId)) &&
+                TryEquipmentSlotAtPointer(loadoutLastPointer, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
             {
                 bool compatible = loadoutDragRuntime.CanEquipOrReplace(loadoutDragId, targetSlot);
                 Image overlay = loadoutEquipmentDropOverlays[targetSlot];
@@ -2482,7 +2593,8 @@ namespace OCC.Combat.Presentation
                 succeeded = bootstrap.AssignRogueQuickbar(loadoutDragId, quickbarSlot);
                 loadoutInteractionMessage = succeeded ? "已装入战术栏 " + (quickbarSlot + 1) : "无法装入战术栏，物品保持原位";
             }
-            else if (!loadoutDragEquippedSlot.HasValue && TryEquipmentSlotAtPointer(eventData.position, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
+            else if (!loadoutDragEquippedSlot.HasValue && string.IsNullOrEmpty(loadoutDragRuntime.MaterialIdFor(loadoutDragId)) &&
+                TryEquipmentSlotAtPointer(eventData.position, out OCC.Combat.Roguelite.EquipmentSlot targetSlot))
             {
                 submitted = true;
                 succeeded = bootstrap.EquipOrReplaceRogueEquipment(loadoutDragId, targetSlot);
@@ -2557,6 +2669,8 @@ namespace OCC.Combat.Presentation
 
         private static RogueLoadoutGridPoint LoadoutFootprint(RogueEquipmentRuntime runtime, string instanceId, bool rotated)
         {
+            if (!string.IsNullOrEmpty(runtime.MaterialIdFor(instanceId)))
+                return RogueLoadoutScreenGridPresentation.FootprintFromRuntime(new RogueLoadoutGridPoint(1, 1));
             EquipmentDefinition equipment = runtime.DefinitionFor(instanceId);
             TacticalItemDefinition tactical = runtime.TacticalDefinitionFor(instanceId);
             RogueLoadoutGridPoint runtimeFootprint = RogueLoadoutDragPresentation.Footprint(
@@ -2601,6 +2715,18 @@ namespace OCC.Combat.Presentation
             ArchiveUiStyle.PaperContent(panel);
             RogueEquipmentInstance equipment = runtime.EquipmentItem(selectedRogueInventoryId);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(selectedRogueInventoryId);
+            string materialId = runtime.MaterialIdFor(selectedRogueInventoryId);
+            if (!string.IsNullOrEmpty(materialId))
+            {
+                string materialName = materialId == "FORGE-LOAD" ? "承力合金" : materialId == "FORGE-CIRCUIT" ? "导能晶片" :
+                    materialId == "SPEC-AMPLIFY" ? "增幅刻墨" : "节流刻墨";
+                Label("材料名称", materialName, panel.transform, new Vector2(32, -30), new Vector2(540, 52), 28, amber, TextAnchor.MiddleLeft);
+                Label("材料说明", RogueInventoryDetailBody(runtime, selectedRogueInventoryId, false), panel.transform,
+                    new Vector2(32, -104), new Vector2(540, 112), 18, muted, TextAnchor.UpperLeft);
+                ActionButton("丢弃材料", "需要确认", panel.transform, new Vector2(32, -424), new Vector2(248, 64), danger, true,
+                    () => bootstrap.RequestDiscardRogueBackpackItem(selectedRogueInventoryId));
+                return;
+            }
             if (equipment == null && tactical == null)
             {
                 Label("空详情", "选择一件物品", panel.transform, new Vector2(32, -30), new Vector2(540, 52), 28, muted, TextAnchor.MiddleLeft);
@@ -2655,8 +2781,11 @@ namespace OCC.Combat.Presentation
                     () => { if (equippedNow) bootstrap.UnequipRogueEquipment(equippedSlot); else bootstrap.EquipRogueEquipment(equipment.InstanceId, PreferredEquipSlot(runtime, definition)); },
                     iconPath: FormalArtRegistry.EquipmentIconPath(definition.DefinitionId));
             }
+            if (inBackpack)
+                ActionButton("丢弃", "需要确认", panel.transform, new Vector2(32, -500), new Vector2(248, 52), danger, true,
+                    () => bootstrap.RequestDiscardRogueBackpackItem(selectedRogueInventoryId));
             Label("注意", equipment != null ? "不会损坏　整理界面内可以换装" : "可以把战术道具放进数字快捷位",
-                panel.transform, new Vector2(32, -522), new Vector2(548, 54), 16, muted, TextAnchor.MiddleLeft);
+                panel.transform, new Vector2(300, -500), new Vector2(280, 54), 16, muted, TextAnchor.MiddleLeft);
         }
 
         private void TryEquipSelected(RogueEquipmentRuntime runtime, OCC.Combat.Roguelite.EquipmentSlot slot)
@@ -2726,6 +2855,13 @@ namespace OCC.Combat.Presentation
 
         public static string RogueInventoryDetailBody(RogueEquipmentRuntime runtime, string instanceId, bool includeName)
         {
+            string materialId = runtime.MaterialIdFor(instanceId);
+            if (!string.IsNullOrEmpty(materialId))
+            {
+                string name = materialId == "FORGE-LOAD" ? "承力合金" : materialId == "FORGE-CIRCUIT" ? "导能晶片" :
+                    materialId == "SPEC-AMPLIFY" ? "增幅刻墨" : "节流刻墨";
+                return (includeName ? name + "\n" : string.Empty) + "工坊材料　占格 1×1\n在校准工坊选择目标后消耗。";
+            }
             RogueEquipmentInstance equipment = runtime.EquipmentItem(instanceId);
             if (equipment != null) return RogueEquipmentDetailBody(runtime, instanceId, includeName);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(instanceId); TacticalItemDefinition definition = runtime.TacticalDefinitionFor(instanceId);
@@ -2821,7 +2957,8 @@ namespace OCC.Combat.Presentation
         }
 
         private static string RogueInventoryIconPath(RogueInventoryItemPresentation item)
-            => item.IsEquipment ? FormalArtRegistry.EquipmentFootprintPath(item.DefinitionId) : FormalArtRegistry.ItemPath(item.DefinitionId);
+            => item.IsMaterial ? FormalArtRegistry.ResourceMetricPath(item.DefinitionId.StartsWith("FORGE-", StringComparison.Ordinal) ? "parts" : "operational_aether") :
+                item.IsEquipment ? FormalArtRegistry.EquipmentFootprintPath(item.DefinitionId) : FormalArtRegistry.ItemPath(item.DefinitionId);
 
         private static string EquipmentIconPath(OCC.Combat.Roguelite.EquipmentSlot slot)
             => FormalArtRegistry.EquipmentSlotPath(slot.ToString());
@@ -2956,6 +3093,7 @@ namespace OCC.Combat.Presentation
         private static string OnOff(bool value) => value ? "开启" : "关闭";
         private void SetOverlay(UiOverlay value)
         {
+            if (bootstrap?.CurrentMapRun?.DeparturePending == true && value != UiOverlay.Loadout) return;
             if (overlay == UiOverlay.Loadout && value != UiOverlay.Loadout) ClearLoadoutDrag();
             if (value == UiOverlay.None)
             {
@@ -3170,7 +3308,7 @@ namespace OCC.Combat.Presentation
             iconRect.sizeDelta = Vector2.one * artSize;
             if (item.IsEquipment && item.Rotated) iconRect.localEulerAngles = new Vector3(0, 0, -90);
             Image icon = iconObject.AddComponent<Image>(); icon.sprite = sprite; icon.preserveAspect = true; icon.raycastTarget = false;
-            if (!item.IsEquipment)
+            if (!item.IsEquipment && !item.IsMaterial)
                 Label("次数", "×" + item.ChargesCurrent, result.transform, new Vector2(4, -size.y + 22), new Vector2(size.x - 8, 18), 12, safe, TextAnchor.MiddleRight);
             FormalUiKit.ConfigureButtonFeedback(button, FormalUiButtonPalette.ForAccent(background.color, accent),
                 () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback, string.Empty);

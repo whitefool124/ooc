@@ -49,6 +49,7 @@ namespace OCC.Combat
         public bool HasStory => Has(StoryKey);
         public bool HasShortRun => Has(ShortRunKey);
         public bool HasMapRun => Has(MapRunKey);
+        public bool IsMapRunWriteProtected => Has(WriteLockKey(MapRunKey));
 
         public bool TryLoadStory(out RogueliteStoryPackage package) => TryLoad(StoryKey, RogueliteStoryPackage.FromJson, null, null, out package);
         public bool TryLoadShortRun(out ShortRogueliteRun run) => TryLoad(ShortRunKey, ShortRogueliteRun.FromJson, null, null, out run);
@@ -120,10 +121,76 @@ namespace OCC.Combat
             try { value = Rogue11Serializer.Serialize(run); }
             catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
             bool saved = SaveVerified(MapRunKey, value, Rogue11Serializer.Deserialize,
-                dto => RogueliteMapRunValidator.Validate(RogueliteMapRun.FromRogue11(dto)), null);
+                dto => RogueliteMapRunValidator.Validate(RogueliteMapRun.FromRogue11(
+                    Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(dto)))), null);
             if (saved) activeRunDto = run; return saved;
         }
         public bool SaveUiPreferences(RogueliteUiPreferences preferences) => SaveVerified(UiPreferencesKey, preferences?.ToDataString(), RogueliteUiPreferences.FromDataString, null, null);
+
+        public bool TryRecoverProtectedMapRun(out RogueliteMapRun run)
+        {
+            run = null;
+            if (!IsMapRunWriteProtected)
+            {
+                LastError = MapRunKey + ": no protected record to recover";
+                return false;
+            }
+            string original;
+            try { original = store.GetString(MapRunKey, string.Empty); }
+            catch (Exception exception) { LastError = Describe(MapRunKey, exception); return false; }
+            if (!original.StartsWith(RogueRuntimeConstants.SaveVersion + "|", StringComparison.Ordinal))
+            {
+                LastLoadStatus = RogueliteSaveLoadStatus.InvalidSemantics;
+                LastError = MapRunKey + ": protected record requires explicit replacement or legacy migration";
+                return false;
+            }
+            if (!TryLoadMapRun(out run)) return false;
+            try
+            {
+                store.DeleteKey(WriteLockKey(MapRunKey));
+                store.Flush();
+                if (store.HasKey(WriteLockKey(MapRunKey)) ||
+                    !string.Equals(store.GetString(MapRunKey, string.Empty), original, StringComparison.Ordinal))
+                    throw new InvalidOperationException("Protected record changed during recovery.");
+                return true;
+            }
+            catch (Exception exception)
+            {
+                run = null;
+                LastError = Describe(MapRunKey, exception);
+                try { store.SetString(WriteLockKey(MapRunKey), "protected-v1"); store.Flush(); }
+                catch (Exception restoreException) { LastError += "; protection restore failed: " + restoreException.Message; }
+                return false;
+            }
+        }
+
+        /// <summary>Allows an explicitly confirmed replacement while retaining the invalid
+        /// original until the new value has passed write and readback verification.</summary>
+        public bool TryPrepareInvalidMapRunForReplacement()
+        {
+            if (LastLoadStatus != RogueliteSaveLoadStatus.CorruptData &&
+                LastLoadStatus != RogueliteSaveLoadStatus.InvalidSemantics) return false;
+            string original;
+            try
+            {
+                if (!store.HasKey(MapRunKey) || !store.HasKey(WriteLockKey(MapRunKey)) ||
+                    !store.HasKey(CorruptBackupKey(MapRunKey))) return false;
+                original = store.GetString(MapRunKey, string.Empty);
+                store.DeleteKey(WriteLockKey(MapRunKey));
+                store.Flush();
+                if (store.HasKey(WriteLockKey(MapRunKey)) ||
+                    !string.Equals(store.GetString(MapRunKey, string.Empty), original, StringComparison.Ordinal))
+                    throw new InvalidOperationException("Original record changed during replacement preparation.");
+                return true;
+            }
+            catch (Exception exception)
+            {
+                LastError = Describe(MapRunKey, exception);
+                try { store.SetString(WriteLockKey(MapRunKey), "protected-v1"); store.Flush(); }
+                catch (Exception restoreException) { LastError += "; protection restore failed: " + restoreException.Message; }
+                return false;
+            }
+        }
 
         public bool DeleteStory() => Delete(StoryKey);
         public bool DeleteShortRun() => Delete(ShortRunKey);
@@ -225,11 +292,11 @@ namespace OCC.Combat
                 return false;
             }
 
-            bool writeCompleted = false;
+            bool writeAttempted = false;
             try
             {
+                writeAttempted = true;
                 store.SetString(key, value);
-                writeCompleted = true;
                 store.Flush();
                 string readback = store.GetString(key, string.Empty);
                 if (!string.Equals(readback, value, StringComparison.Ordinal)) throw new InvalidOperationException("Save readback did not match the serialized value.");
@@ -239,7 +306,9 @@ namespace OCC.Combat
             catch (Exception exception)
             {
                 LastError = Describe(key, exception);
-                if (writeCompleted)
+                // A store can mutate the slot and then throw from SetString or Flush.
+                // Inspect it even when SetString did not return successfully.
+                if (writeAttempted && SlotMayDifferFromOriginal(key, hadOriginal, original))
                 {
                     string failedReadback = SafeRead(key, value);
                     ProtectFailedValue(key, failedReadback);
@@ -300,6 +369,20 @@ namespace OCC.Combat
             catch (Exception restoreException)
             {
                 LastError += "；rollback failed: " + restoreException.GetType().Name + " - " + restoreException.Message;
+            }
+        }
+
+        private bool SlotMayDifferFromOriginal(string key, bool hadOriginal, string original)
+        {
+            try
+            {
+                if (store.HasKey(key) != hadOriginal) return true;
+                return hadOriginal && !string.Equals(store.GetString(key, string.Empty), original, StringComparison.Ordinal);
+            }
+            catch
+            {
+                // An unreadable slot cannot be assumed safe after an attempted write.
+                return true;
             }
         }
 

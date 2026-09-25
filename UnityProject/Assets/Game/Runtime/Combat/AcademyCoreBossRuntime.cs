@@ -23,8 +23,12 @@ namespace OCC.Combat
         /// <summary>冲压隔离放行后的冲压线长度与回合结束伤害。</summary>
         public const int PressLineLength = 4;
         public const int PressLineDamage = 6;
+        private static int TowerPressDamage(CombatState state, UnitState core) =>
+            Math.Max(0, Math.Min(10, Math.Min(8, 5 + state.AcademyCoreBoss.ReleasedMechanismCount(state)) +
+                core.StatusStrength(StatusType.SpellPower)));
         /// <summary>并链阶段每次出手时，每组存活机关额外提供的维护护盾。</summary>
         public const int ChainMaintenanceShield = 2;
+        public const int ChainPullSkillIndex = 19;
 
         private int coreTurns;
         private readonly Dictionary<int, GridPosition> mechanismDirections = new Dictionary<int, GridPosition>();
@@ -75,16 +79,56 @@ namespace OCC.Combat
             // 阶段一以后每回合只选择一个公开攻击意图，塔压不再在回合开始白送一次。
             SkillDefinition maul = enemy.SkillOne;
             int distance = enemy.Position.ManhattanDistance(hero.Position);
-            if (maul != null && distance <= maul.Range && enemy.Mana >= maul.ManaCost && enemy.IsSkillReady(maul))
+            if (maul != null && distance >= maul.MinimumRange && distance <= enemy.EffectiveRange(maul.Range) &&
+                enemy.Mana >= maul.ManaCost && enemy.IsSkillReady(maul))
                 return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             if (CanTowerPressHit(state, enemy, hero))
                 return CombatCommand.UseSkill(enemy.Id, 1, enemy.Id);
-            if (distance <= (enemy.MainHand?.Range ?? 1)) return CombatCommand.Attack(enemy.Id, hero.Id);
-            return CombatCommand.Move(enemy.Id, StepToward(state, enemy.Position, hero.Position));
+            if (TryChainPullTarget(state, enemy, out GridPosition mechanism, out _))
+                return CombatCommand.UseSkillAt(enemy.Id, ChainPullSkillIndex, mechanism, default);
+            return CombatCommand.EndTurn(enemy.Id);
         }
 
         public EnemyIntentPresentation PresentIntent(CombatState state, UnitState enemy, CombatCommand command)
         {
+            if (enemy?.EnemyArchetypeId == "core_overseer" && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == ChainPullSkillIndex &&
+                TryChainPullTarget(state, enemy, out GridPosition mechanism, out GridPosition target))
+                return new EnemyIntentPresentation("SK-BOSS-07:" + enemy.Id + ":" + mechanism.X + "," + mechanism.Y,
+                    "引链", "已放行机关 " + Cell(mechanism),
+                    "把最近一组已放行机关拉到核心正交相邻格 " + Cell(target) + "；占用本回合行动，本场最多3次。",
+                    "control", true, target, 0, affectedCells: new[] { mechanism, target });
+            if (enemy?.EnemyArchetypeId == "core_overseer" && command.Type == CombatCommandType.UseSkill &&
+                (command.SlotIndex == 0 || command.SlotIndex == 1))
+            {
+                UnitState hero = state.GetUnit("hero");
+                if (hero != null)
+                {
+                    string mechanismResult = MechanismActionSummary(state, enemy, out GridPosition[] mechanismCells);
+                    if (command.SlotIndex == 1)
+                    {
+                        GridPosition[] line = LineCells(state, enemy.Position,
+                            DirectionToward(enemy.Position, hero.Position),
+                            Math.Min(6, 4 + ReleasedMechanismCount(state)));
+                        int damage = TowerPressDamage(state, enemy);
+                        return new EnemyIntentPresentation("SK-BOSS-06:" + enemy.Id + ":" + hero.Position.X + "," + hero.Position.Y,
+                            "塔压", "朝主角的正交直线", "直线内每个单位受到 " + damage +
+                            " 点以太伤害；遮挡截断。" + mechanismResult,
+                            "attack", true, hero.Position, damage, attackRange: line,
+                            affectedCells: line.Concat(mechanismCells).Distinct().ToArray());
+                    }
+                    EnemyIntentPresentation maul = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+                    GridPosition[] adjacent = new[]
+                    {
+                        enemy.Position + new GridPosition(0, 1), enemy.Position + new GridPosition(1, 0),
+                        enemy.Position + new GridPosition(0, -1), enemy.Position + new GridPosition(-1, 0)
+                    }.Where(state.Map.IsInside).ToArray();
+                    return new EnemyIntentPresentation("SK-BOSS-05:" + enemy.Id + ":" + hero.Position.X + "," + hero.Position.Y,
+                        maul.ActionName, maul.TargetSummary, maul.ResultSummary + mechanismResult,
+                        maul.IconId, true, hero.Position, maul.ExpectedDamage, attackRange: adjacent,
+                        affectedCells: new[] { hero.Position }.Concat(mechanismCells).Distinct().ToArray());
+                }
+            }
             EnemyIntentPresentation basic = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
             if (enemy?.EnemyArchetypeId != "core_overseer") return basic;
             int phase = PhaseFor(state, enemy);
@@ -119,7 +163,52 @@ namespace OCC.Combat
             }
             int amount = ReleasedMechanismCount(state) * MaintenanceShieldPerMechanism;
             if (amount > 0) state.TryGrantRogueliteShield(unit.Id, "academy-core-maintenance", amount);
-            if (phase >= 1) ResolveChainPull(state, unit);
+        }
+
+        private string MechanismActionSummary(CombatState state, UnitState core, out GridPosition[] affected)
+        {
+            var cells = new List<GridPosition>();
+            var effects = new List<string>();
+            foreach (GridPosition position in state.Map.PositionsWith(tile => tile.IsTowerMechanism &&
+                tile.IsReleased && !tile.IsDestroyed))
+            {
+                int kind = state.Map.GetTile(position).MechanismKind;
+                GridPosition direction = mechanismDirections.TryGetValue(kind, out GridPosition stored)
+                    ? stored : DirectionToward(position, state.GetUnit("hero")?.Position ?? position);
+                if (kind == MechanismPress)
+                {
+                    GridPosition[] line = LineCells(state, position, direction, PressLineLength);
+                    cells.AddRange(line);
+                    effects.Add("回合结束时冲压线 " + string.Join("、", line.Select(Cell)) +
+                        " 上单位各受 " + PressLineDamage + " 点以太伤害");
+                    if (PhaseFor(state, core) == 2)
+                        effects.Add("并链时该冲压线额外结算一次");
+                }
+                else if (PhaseFor(state, core) == 2 && kind == MechanismReveal)
+                {
+                    GridPosition[] line = LineCells(state, position, direction, RevealLaneLength, true);
+                    cells.AddRange(line);
+                    effects.Add("并链显影线 " + string.Join("、", line.Select(Cell)) + " 清除护盾");
+                }
+                else if (PhaseFor(state, core) == 2 && kind == MechanismWard)
+                    effects.Add("并链护障为核心授予 " + ChainMaintenanceShield + " 点护盾");
+            }
+            affected = cells.Distinct().ToArray();
+            return effects.Count == 0 ? string.Empty : "；" + string.Join("；", effects) + "。";
+        }
+
+        private static GridPosition[] LineCells(CombatState state, GridPosition origin, GridPosition direction,
+            int length, bool stopAtSmoke = false)
+        {
+            var cells = new List<GridPosition>();
+            for (int step = 1; step <= length; step++)
+            {
+                GridPosition cell = origin + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight ||
+                    stopAtSmoke && state.Map.GetTile(cell).SmokeExpiresAt > state.CurrentTime) break;
+                cells.Add(cell);
+            }
+            return cells.ToArray();
         }
 
         /// <summary>生命跨过三成时立即公开并链强化；重复结算与存读档都不会叠加。</summary>
@@ -140,7 +229,8 @@ namespace OCC.Combat
             UnitState hero = state.GetUnit("hero");
             if (hero == null || !CanTowerPressHit(state, core, hero))
                 throw new InvalidOperationException("塔压攻击线当前无法命中目标。");
-            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, core.Id, CombatEffect.SpendActionPoints(1));
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, core.Id,
+                CombatEffect.SpendActionPoints(core.ActionPoints));
             ResolveTowerPress(state, core);
             core.SetCooldown(core.SkillTwo);
             state.EvaluateOutcome();
@@ -163,7 +253,7 @@ namespace OCC.Combat
             if (hero == null || !hero.IsAlive) return;
             int released = state.Map.PositionsWith(tile => tile.IsTowerMechanism && tile.IsReleased && !tile.IsDestroyed).Count();
             int length = Math.Min(6, 4 + released);
-            int damage = Math.Min(8, 5 + released);
+            int damage = TowerPressDamage(state, core);
             GridPosition direction = DirectionToward(core.Position, hero.Position);
             int hits = 0;
             for (int step = 1; step <= length; step++)
@@ -222,56 +312,62 @@ namespace OCC.Combat
                 state.AddLog(BarrierWallMessage(state, position));
         }
 
-        /// <summary>引链：把最近的一组已放行机关拉到核心正交相邻格，并让它代核心承受一次伤害。</summary>
-        private void ResolveChainPull(CombatState state, UnitState core)
+        /// <summary>引链只在没有合法攻击意图时作为独立行动，搬动最近的已放行机关。</summary>
+        private bool TryChainPullTarget(CombatState state, UnitState core, out GridPosition mechanism, out GridPosition target)
         {
-            GridPosition[] released = state.Map
-                .PositionsWith(tile => tile.IsTowerMechanism && tile.IsReleased && !tile.IsDestroyed).ToArray();
-            if (released.Length == 0) return;
-            GridPosition linked = released.OrderBy(position => position.ManhattanDistance(core.Position))
-                .ThenBy(position => position.Y).ThenBy(position => position.X).First();
-            if (linked.ManhattanDistance(core.Position) > 1)
-            {
-                GridPosition[] slots =
+            mechanism = default;
+            target = default;
+            if (state == null || core == null || chainUses >= ChainUses) return false;
+            GridPosition? linked = state.Map
+                .PositionsWith(tile => tile.IsTowerMechanism && tile.IsReleased && !tile.IsDestroyed)
+                .Where(position => position.ManhattanDistance(core.Position) > 1)
+                .OrderBy(position => position.ManhattanDistance(core.Position))
+                .ThenBy(position => position.Y).ThenBy(position => position.X)
+                .Select(position => (GridPosition?)position).FirstOrDefault();
+            if (!linked.HasValue) return false;
+            GridPosition? free = new[]
                 {
                     core.Position + new GridPosition(0, 1), core.Position + new GridPosition(1, 0),
                     core.Position + new GridPosition(0, -1), core.Position + new GridPosition(-1, 0)
-                };
-                GridPosition? free = null;
-                foreach (GridPosition slot in slots)
-                    if (state.Map.IsInside(slot) && !state.Map.IsBlocked(slot) && !state.IsOccupied(slot)) { free = slot; break; }
-                if (free.HasValue)
-                {
-                    TileState moved = state.Map.GetTile(linked).Clone();
-                    TileState emptied = state.Map.GetTile(linked).Clone();
-                    emptied.IsDevice = false; emptied.IsTowerMechanism = false; emptied.IsReleased = false;
-                    emptied.MechanismKind = 0; emptied.Durability = 0;
-                    state.Map.SetTile(linked, emptied);
-                    state.Map.SetTile(free.Value, moved);
-                    linked = free.Value;
-                    state.AddLog("引链：把一组已放行机关拉到核心身边。");
                 }
-            }
-            if (core.DamageAbsorptions == 0 && chainLinkedPosition.HasValue)
-            {
-                GridPosition spent = chainLinkedPosition.Value;
-                chainLinkedPosition = null;
-                if (state.Map.IsInside(spent) && state.Map.GetTile(spent).IsTowerMechanism)
-                {
-                    TileState broken = state.Map.GetTile(spent).Clone();
-                    broken.Durability = 0;
-                    state.Map.SetTile(spent, broken);
-                    state.AddLog("引链：机关替核心承受了一次伤害并被摧毁。");
-                }
-            }
-            // 承伤转移暂不自动挂载：它必须占用核心的一次行动（节奏代价），否则会白送三刀。
-            // 当前只实现"把机关拉到身边"；承伤转移等待与核心行动绑定的实现方式确定后再接入。
+                .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) &&
+                    !state.IsOccupied(position) && !state.Map.GetTile(position).HasEffectLayer)
+                .Select(position => (GridPosition?)position).FirstOrDefault();
+            if (!free.HasValue) return false;
+            mechanism = linked.Value;
+            target = free.Value;
+            return true;
+        }
+
+        internal CombatEffectExecution ResolveChainPullCommand(CombatState state, UnitState core, CombatCommand command)
+        {
+            if (state == null || core?.EnemyArchetypeId != "core_overseer" ||
+                command.UnitId != core.Id || command.SlotIndex != ChainPullSkillIndex ||
+                PhaseFor(state, core) == 0 ||
+                !TryChainPullTarget(state, core, out GridPosition source, out GridPosition target) ||
+                command.Destination != source)
+                throw new InvalidOperationException("引链意图当前不可用。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, core.Id,
+                CombatEffect.SpendActionPoints(core.ActionPoints));
+            TileState moved = state.Map.GetTile(source).Clone();
+            TileState emptied = state.Map.GetTile(source).Clone();
+            emptied.IsDevice = false;
+            emptied.IsTowerMechanism = false;
+            emptied.IsReleased = false;
+            emptied.MechanismKind = 0;
+            emptied.Durability = 0;
+            state.Map.SetTile(source, emptied);
+            state.Map.SetTile(target, moved);
+            chainUses++;
+            state.AddLog("塔之守卫引链：已放行机关从 " + Cell(source) + " 移至 " + Cell(target) +
+                "，本场剩余 " + (ChainUses - chainUses) + " 次。");
+            return result;
         }
 
         /// <summary>引链每场可用次数（技能数据表 SK-BOSS-07）。</summary>
         public const int ChainUses = 3;
         private int chainUses;
-        private GridPosition? chainLinkedPosition;
+        private static string Cell(GridPosition position) => "(" + position.X + "," + position.Y + ")";
 
         /// <summary>护障墙：生成临时重掩体并返回公开文案。</summary>
         private static string BarrierWallMessage(CombatState state, GridPosition mechanism) =>
@@ -300,7 +396,7 @@ namespace OCC.Combat
         internal void ObserveCommand(CombatState state, UnitState unit, CombatCommand command)
         {
             if (command.Type != CombatCommandType.Attack && command.Type != CombatCommandType.Cast &&
-                command.Type != CombatCommandType.UseSkill) return;
+                (command.Type != CombatCommandType.UseSkill || command.SlotIndex != 0 && command.SlotIndex != 1)) return;
             ObserveCommand(state, unit);
         }
 
@@ -347,14 +443,12 @@ namespace OCC.Combat
             }
         }
 
-        /// <summary>沿光带清除护盾；光带被阻挡攻击线的物块截断，暗段内不受影响。</summary>
+        /// <summary>沿光带清除护盾；阻挡攻击线的物块与有效烟尘都截断光带。</summary>
         private static int ClearShieldsOnLane(CombatState state, GridPosition origin, GridPosition direction, int length, string sourceId)
         {
             int cleared = 0;
-            for (int step = 1; step <= length; step++)
+            foreach (GridPosition cell in LineCells(state, origin, direction, length, true))
             {
-                GridPosition cell = origin + new GridPosition(direction.X * step, direction.Y * step);
-                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight) break;
                 foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive && unit.Position == cell).ToArray())
                 {
                     if (target.Shield <= 0) continue;
@@ -439,7 +533,7 @@ namespace OCC.Combat
         public AcademyCoreBossRuntime Clone()
         {
             AcademyCoreBossRuntime clone = new AcademyCoreBossRuntime { coreTurns = coreTurns, pendingDirection = pendingDirection,
-                phaseTwoEntered = phaseTwoEntered, chainLinkedPosition = chainLinkedPosition, chainUses = chainUses };
+                phaseTwoEntered = phaseTwoEntered, chainUses = chainUses };
             foreach (KeyValuePair<int, GridPosition> pair in mechanismDirections) clone.mechanismDirections[pair.Key] = pair.Value;
             return clone;
         }

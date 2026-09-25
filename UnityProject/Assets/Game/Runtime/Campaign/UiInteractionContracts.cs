@@ -36,7 +36,10 @@ namespace OCC.Combat
         ReplaceExistingRun,
         TacticalRestart,
         LeaveCombat,
-        AbandonReward
+        AbandonReward,
+        LeaveProtectedRun,
+        EnterAcademyFinale,
+        DiscardInventoryItem
     }
 
     public enum UiFeedbackKind

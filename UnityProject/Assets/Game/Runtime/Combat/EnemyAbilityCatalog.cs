@@ -8,40 +8,44 @@ namespace OCC.Combat
         public static readonly WeaponDefinition TetherHoundBite = new WeaponDefinition("tether_hound_bite", "导能撕咬", DamageType.Physical, 3, 1);
         public static readonly WeaponDefinition HeavyCrossbow = new WeaponDefinition("heavy_crossbow", "绞盘重弩", DamageType.Physical, 3, 4, minimumRange: 2);
         public static readonly WeaponDefinition BreachRam = new WeaponDefinition("breach_ram", "楔角撞击", DamageType.Physical, 4, 1);
+        public static readonly SkillDefinition PyromancerFireArrow = new SkillDefinition(
+            "enemy_pyromancer_fire_arrow", "火矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 0, 1,
+            CombatFeedbackKind.Burning,
+            new[] { SkillEffectDefinition.Damage(5, DamageType.Fire), SkillEffectDefinition.ApplyStatus(StatusType.Burning, 2, 4) });
         public static readonly SkillDefinition ShieldRam = new SkillDefinition(
-            "enemy_shield_ram", "铭盾冲撞", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
+            "enemy_shield_ram", "铭盾冲撞", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 2,
             CombatFeedbackKind.Attribute,
             new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Agility, 1, -1) });
         public static readonly SkillDefinition HookingStrike = new SkillDefinition(
-            "enemy_hooking_strike", "钩刃牵制", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
+            "enemy_hooking_strike", "钩刃牵制", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 2,
             CombatFeedbackKind.Bound,
             new[] { SkillEffectDefinition.Damage(3, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 2) });
         public static readonly SkillDefinition VanguardCrush = new SkillDefinition(
-            "enemy_vanguard_crush", "拆架", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 2, 2,
+            "enemy_vanguard_crush", "拆架", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 2,
             CombatFeedbackKind.BreakStance,
             new[] { SkillEffectDefinition.Damage(4, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.BreakStance, 1) });
         public static readonly SkillDefinition SunderingSigil = new SkillDefinition(
-            "enemy_sundering_sigil", "贴压", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 2,
+            "enemy_sundering_sigil", "贴压", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 0,
             CombatFeedbackKind.BreakStance,
             new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.BreakStance, 1) });
         public static readonly SkillDefinition WardMend = new SkillDefinition(
-            "enemy_ward_mend", "贴墙续盾", SkillTargetRule.AllyUnit, SkillDeliveryMethod.Direct, 4, 2, 1,
+            "enemy_ward_mend", "贴墙续盾", SkillTargetRule.AllyUnit, SkillDeliveryMethod.Direct, 4, 0, 1,
             CombatFeedbackKind.ShieldRestore,
             new[] { SkillEffectDefinition.RestoreShield(4) });
         public static readonly SkillDefinition TetherPounce = new SkillDefinition(
-            "enemy_tether_pounce", "撕咬", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 1, 1,
+            "enemy_tether_pounce", "撕咬", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 0,
             CombatFeedbackKind.Bound,
-            new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 2) });
+            new[] { SkillEffectDefinition.Damage(3, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 2) });
         public static readonly SkillDefinition StoneSnare = new SkillDefinition(
-            "enemy_stone_snare", "石索", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 3, 2, 2,
+            "enemy_stone_snare", "石索", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 3, 0, 2,
             CombatFeedbackKind.Bound,
             new[] { SkillEffectDefinition.Damage(1, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 3) });
         public static readonly SkillDefinition RevealingLantern = new SkillDefinition(
-            "enemy_revealing_lantern", "转灯", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 4, 1, 2,
+            "enemy_revealing_lantern", "转灯", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 4, 0, 1,
             CombatFeedbackKind.BreakStance,
             new[] { SkillEffectDefinition.Damage(1, DamageType.Arcane), SkillEffectDefinition.ApplyStatus(StatusType.BreakStance, 1) });
         public static readonly SkillDefinition WindlassBolt = new SkillDefinition(
-            "enemy_windlass_bolt", "重矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 1, 1,
+            "enemy_windlass_bolt", "重矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 0, 1,
             CombatFeedbackKind.Damage,
             new[] { SkillEffectDefinition.Damage(5, DamageType.Physical) }, minimumRange: 2);
         public static readonly WeaponDefinition TrackerBite = new WeaponDefinition("tracker_bite", "近战撕咬", DamageType.Physical, 3, 1);
@@ -86,13 +90,13 @@ namespace OCC.Combat
             new[] { SkillEffectDefinition.Damage(8, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.BreakStance, 1) });
         /// <summary>塔压：直线长度与伤害随已放行机关成长（4→6 格、5→8 点）；作为核心一次公开攻击行动结算。</summary>
         public static readonly SkillDefinition BossTowerPress = new SkillDefinition(
-            "enemy_tower_press", "塔压", SkillTargetRule.Self, SkillDeliveryMethod.Direct, 0, 0, 0,
+            "enemy_tower_press", "塔压", SkillTargetRule.Self, SkillDeliveryMethod.Direct, 0, 0, 1,
             CombatFeedbackKind.Damage,
             new[] { SkillEffectDefinition.Damage(5, DamageType.Arcane) });
 
         public static readonly IReadOnlyList<SkillDefinition> All = new[]
         {
-            ShieldRam, CombatCatalog.FireBolt, HookingStrike, VanguardCrush,
+            ShieldRam, PyromancerFireArrow, HookingStrike, VanguardCrush,
             SunderingSigil, WardMend, TetherPounce, StoneSnare, RevealingLantern, WindlassBolt,
             BossSunderMaul, BossTowerPress, TrackerSnap, TrackerMaul, SpotlightMirror, WindScrollEdge,
             LegacyPulse, PrototypeDeploy

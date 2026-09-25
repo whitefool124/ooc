@@ -103,6 +103,8 @@ namespace OCC.Combat
         public bool SpecializationCompleted { get; internal set; }
         public string ForgedTargetId { get; internal set; } = string.Empty;
         public string SpecializedTargetId { get; internal set; } = string.Empty;
+        public string ForgedMaterialId { get; internal set; } = "FORGE-LOAD";
+        public string SpecializedMaterialId { get; internal set; } = "SPEC-AMPLIFY";
     }
 
     public sealed class FirstRunMedicalSnapshot
@@ -438,8 +440,7 @@ namespace OCC.Combat
                 case "EV3": return RewardClaimedFor("B2");
                 case "B3": return Completed("EV3");
                 case "M": return RewardClaimedFor("B3");
-                // 工坊与医务室是可选服务，不应成为精英战的隐藏必修门槛。
-                // 第三场战斗及其奖励结算完毕后，就允许从当前已开放路线进入精英战。
+                // 工坊与医务室是可选整备，不是精英战的必修门槛。
                 case "X": return RewardClaimedFor("B3");
                 case "S": return Completed("X") && Outcome == FirstRunOutcome.EliteVictory && (EliteRewardClaimed || EliteRewardAbandoned);
                 default: return false;

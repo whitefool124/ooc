@@ -6,7 +6,7 @@ namespace OCC.Combat
 {
     public enum FirstRegionFloorTheme { StoneRoad, Courtyard, Ruins, AetherMarked }
     public enum LevelTerrainKind { LightCover, HeavyCover, PermanentWall, AetherObjective, Water, LampVine, AetherCrystal, LootChest, TowerMechanism,
-        OverloadDevice, WardGenerator, LoosePaper, Trace, BindingMark }
+        OverloadDevice, WardGenerator, LoosePaper, Trace, BindingMark, PressureCrystal, Fireground, Smoke }
     public enum LevelOpeningProfile { Melee, Ranged, Generalist }
 
     public sealed class LevelTerrainPlacement
@@ -15,8 +15,13 @@ namespace OCC.Combat
         public LevelTerrainKind Kind { get; }
         /// <summary>机关种类：1 护障维护 / 2 显影巡查 / 3 冲压隔离。非机关为 0。</summary>
         public int MechanismKind { get; }
-        public LevelTerrainPlacement(int x, int y, LevelTerrainKind kind, int mechanismKind = 0)
-        { Position = new GridPosition(x, y); Kind = kind; MechanismKind = mechanismKind; }
+        /// <summary>预置火场、痕迹与约束纹按主角回合计数，烟尘按行动时序计数；其他地形不使用。</summary>
+        public int Duration { get; }
+        /// <summary>地图预置过载装置与护罩发生器的来源配置耐久。</summary>
+        public int Durability { get; }
+        public LevelTerrainPlacement(int x, int y, LevelTerrainKind kind, int mechanismKind = 0,
+            int duration = 0, int durability = 0)
+        { Position = new GridPosition(x, y); Kind = kind; MechanismKind = mechanismKind; Duration = duration; Durability = durability; }
     }
 
     public sealed class LevelEnemyPlacement
@@ -224,7 +229,7 @@ namespace OCC.Combat
                 new[] { E("elite_vanguard", 5, 4), E("rune_arbalist", 10, 1), E("stone_snare", 9, 7) },
                 new[] { L(1, 3), L(5, 7), L(9, 4), H(3, 1), H(4, 2), H(7, 5), H(8, 6), H(2, 6), H(3, 5), H(4, 4), H(6, 2), H(7, 1) },
                 S("对角封线", new GridPosition(1, 4), new GridPosition(4, 8), "背弩生与约束控制相反对角，中心划线教官惩罚直穿。", "外围低暴露路线较慢，中心两侧缺口允许在束缚公开后换线。")),
-            new FirstRegionLevelDefinition("core_finale", "古塔核心", "击败拦在必经之路上的塔之守卫", CombatObjectiveType.Elimination, 5,
+            new FirstRegionLevelDefinition("core_finale", "Boss战斗 01 · 古塔核心", "击败拦在必经之路上的塔之守卫", CombatObjectiveType.Elimination, 5,
                 new GridPosition(0, 4), FirstRegionFloorTheme.AetherMarked, false, true, new[] { "core_approach" },
                 new[] { E(RegionBossToken, 6, 4) },
                 new[] { L(3, 3), L(3, 6), L(9, 4), L(9, 6), H(5, 3), H(7, 3), H(7, 5), H(5, 5),
@@ -291,7 +296,7 @@ namespace OCC.Combat
                     H(4, 4), H(6, 4),
                     T(2, 2, LevelTerrainKind.LoosePaper), T(2, 6, LevelTerrainKind.LoosePaper),
                     T(5, 1, LevelTerrainKind.LoosePaper), T(5, 7, LevelTerrainKind.LoosePaper),
-                    T(8, 4, LevelTerrainKind.BindingMark)
+                    new LevelTerrainPlacement(8, 4, LevelTerrainKind.BindingMark, 0, 3)
                 },
                 S("高书架切出的走廊、阅览长桌、散页堆", new GridPosition(1, 2), new GridPosition(1, 6),
                     "书架把场地切成走廊，穿过页幕与书架的攻击线都会失效；补盾助教贴着长桌续盾，小铃用散页立幕与打风刃。",
@@ -366,7 +371,14 @@ namespace OCC.Combat
                     if (!Inside(level, terrain.Position)) errors.Add(level.Id + ": terrain outside map");
                     bool blocksPlacement = terrain.Kind != LevelTerrainKind.Water && terrain.Kind != LevelTerrainKind.LampVine &&
                         terrain.Kind != LevelTerrainKind.LoosePaper && terrain.Kind != LevelTerrainKind.Trace &&
-                        terrain.Kind != LevelTerrainKind.BindingMark;
+                        terrain.Kind != LevelTerrainKind.BindingMark && terrain.Kind != LevelTerrainKind.Fireground &&
+                        terrain.Kind != LevelTerrainKind.Smoke;
+                    if ((terrain.Kind == LevelTerrainKind.Fireground || terrain.Kind == LevelTerrainKind.Smoke ||
+                        terrain.Kind == LevelTerrainKind.Trace || terrain.Kind == LevelTerrainKind.BindingMark) && terrain.Duration <= 0)
+                        errors.Add(level.Id + ": timed terrain requires positive duration " + terrain.Position);
+                    if ((terrain.Kind == LevelTerrainKind.OverloadDevice || terrain.Kind == LevelTerrainKind.WardGenerator) &&
+                        terrain.Durability <= 0)
+                        errors.Add(level.Id + ": device requires positive durability " + terrain.Position);
                     if (blocksPlacement && (!blockingTerrain.Add(terrain.Position) || !occupied.Add(terrain.Position)))
                         errors.Add(level.Id + ": occupied cell repeated " + terrain.Position);
                 }
@@ -449,10 +461,17 @@ namespace OCC.Combat
                     case LevelTerrainKind.Water: map.SetTile(placement.Position, new TileState { IsWater = true }); break;
                     case LevelTerrainKind.LampVine: map.SetTile(placement.Position, new TileState { IsLampVine = true, Durability = TileState.FragileDurability }); break;
                     case LevelTerrainKind.AetherCrystal: map.SetTile(placement.Position, new TileState { IsDevice = true, IsAetherCrystal = true, Durability = TileState.StandardDurability }); break;
+                    case LevelTerrainKind.PressureCrystal: map.SetTile(placement.Position, new TileState { IsDevice = true, IsAetherCrystal = true, IsPressureCrystal = true, Durability = TileState.HeavyDurability }); break;
                     case LevelTerrainKind.LootChest: map.SetTile(placement.Position, new TileState { IsLootChest = true }); break;
                     case LevelTerrainKind.TowerMechanism: map.SetTile(placement.Position, new TileState { IsDevice = true, IsTowerMechanism = true, MechanismKind = placement.MechanismKind, Durability = TileState.HeavyDurability }); break;
-                    case LevelTerrainKind.OverloadDevice: map.SetTile(placement.Position, new TileState { IsDevice = true, IsOverloadDevice = true, Durability = TileState.StandardDurability }); break;
-                    case LevelTerrainKind.WardGenerator: map.SetTile(placement.Position, new TileState { IsDevice = true, IsWardGenerator = true, Durability = TileState.StandardDurability }); break;
+                    case LevelTerrainKind.OverloadDevice:
+                        if (placement.Durability <= 0) throw new InvalidOperationException("Overload device needs configured durability.");
+                        map.SetTile(placement.Position, new TileState { IsDevice = true, IsOverloadDevice = true, Durability = placement.Durability });
+                        break;
+                    case LevelTerrainKind.WardGenerator:
+                        if (placement.Durability <= 0) throw new InvalidOperationException("Ward generator needs configured durability.");
+                        map.SetTile(placement.Position, new TileState { IsDevice = true, IsWardGenerator = true, Durability = placement.Durability });
+                        break;
                     case LevelTerrainKind.LoosePaper: map.SetTile(placement.Position, new TileState { IsLoosePaper = true }); break;
                     case LevelTerrainKind.Trace: map.SetTile(placement.Position, new TileState { HasTrace = true }); break;
                     case LevelTerrainKind.BindingMark: map.SetTile(placement.Position, new TileState { IsBindingMark = true }); break;
@@ -503,7 +522,6 @@ namespace OCC.Combat
                     new[] { new ItemInstance("FIRST-B3-ACA-EQ-CR01", "ACA-EQ-CR01", 0) }));
             if (level.Id == FirstRegionLevelCatalog.ThreeMaterialPressure.Id)
             {
-                state.Map.GetTile(new GridPosition(5, 3)).Durability = TileState.HeavyDurability;
                 state.AttachThreeMaterialPressure(new ThreeMaterialPressureRuntime());
             }
             // 场上只要有通用场地敌人（老寻／灯台值守／小铃），就接上公开条件反应运行时。
@@ -512,6 +530,46 @@ namespace OCC.Combat
             if (level.IsBoss && state.Units.Values.Any(unit => unit.EnemyArchetypeId == "core_overseer"))
                 state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
             return new FirstRegionLevelBuild(level, state);
+        }
+
+        /// <summary>术式运行时挂接后，按地图配置放置有持续时间的场地效果。</summary>
+        public static void ApplyTimedTerrain(FirstRegionLevelDefinition level, CombatState state)
+        {
+            if (level == null) throw new ArgumentNullException(nameof(level));
+            if (state == null) throw new ArgumentNullException(nameof(state));
+            foreach (LevelTerrainPlacement placement in level.Terrain)
+            {
+                if (placement.Kind != LevelTerrainKind.Fireground && placement.Kind != LevelTerrainKind.Smoke &&
+                    placement.Kind != LevelTerrainKind.Trace && placement.Kind != LevelTerrainKind.BindingMark) continue;
+                if (placement.Duration <= 0 || !state.Map.IsInside(placement.Position))
+                    throw new InvalidOperationException("Invalid timed terrain at " + placement.Position);
+                if (placement.Kind == LevelTerrainKind.Trace || placement.Kind == LevelTerrainKind.BindingMark)
+                {
+                    if (state.AcademyEnemyArea == null)
+                        throw new InvalidOperationException("Preplaced trace or binding mark requires the academy area runtime.");
+                    TileState tile = state.Map.GetTile(placement.Position).Clone();
+                    string sourceId = "map:" + level.Id + ":" + placement.Kind + ":" + placement.Position.X + "," + placement.Position.Y;
+                    tile.EffectSourceId = sourceId;
+                    state.Map.SetTile(placement.Position, tile);
+                    state.AcademyEnemyArea.RegisterMapField(placement.Position,
+                        placement.Kind == LevelTerrainKind.BindingMark, placement.Duration, sourceId);
+                }
+                else if (placement.Kind == LevelTerrainKind.Fireground)
+                {
+                    if (state.RogueSpells?.FireBattle == null)
+                        throw new InvalidOperationException("Preplaced fireground requires the roguelite fire runtime.");
+                    state.RogueSpells.FireBattle.CreateOrRefreshFireground(placement.Position,
+                        FiregroundState.BaseDamage, placement.Duration, "map:" + level.Id);
+                }
+                else
+                {
+                    TileState tile = state.Map.GetTile(placement.Position).Clone();
+                    state.RogueSpells?.FireBattle.ClearEffectLayer(placement.Position);
+                    tile.ClearEffectLayers();
+                    tile.SmokeExpiresAt = state.CurrentTime + placement.Duration;
+                    state.Map.SetTile(placement.Position, tile);
+                }
+            }
         }
 
         private static GridPosition LootChestPosition(GridMap map, GridPosition fallback) =>

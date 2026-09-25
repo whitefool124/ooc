@@ -75,18 +75,16 @@ namespace OCC.Combat.Tests
         {
             CombatState state = Create(0);
             var adapter = new BattlefieldPresentationAdapter();
-            var target = new GridPosition(1, 1);
+            var target = new GridPosition(3, 2);
             Assert.That(adapter.IsInMoveRange(state, target), Is.False);
             state.RainLanternCourt.CastBorrowedCover(state, state.GetUnit("hero"));
-            Assert.That(adapter.IsInMoveRange(state, target), Is.True, "Six dry steps become legal with the existing +2 budget.");
-            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(1, 4)));
-            Assert.That(adapter.IsInMoveRange(state, new GridPosition(1, 0)), Is.False, "Consumed bonus cannot linger.");
-            var vineTarget = new GridPosition(3, 4);
-            state.Map.SetTile(new GridPosition(2, 4), new TileState { IsLampVine = true });
-            state.Map.SetTile(new GridPosition(3, 4), new TileState { IsLampVine = true });
-            Assert.That(adapter.IsInMoveRange(state, vineTarget), Is.False);
-            for (int x = 2; x <= 3; x++) state.Map.SetTile(new GridPosition(x, 4), new TileState());
-            Assert.That(adapter.IsInMoveRange(state, vineTarget), Is.True);
+            Assert.That(adapter.IsInMoveRange(state, target), Is.True, "The +2 budget reaches the current vine corridor.");
+            CombatResolver.Resolve(state, CombatCommand.Move("hero", new GridPosition(2, 4)));
+            Assert.That(adapter.IsInMoveRange(state, target), Is.False, "Consumed bonus cannot linger.");
+            Assert.That(state.Map.GetTile(target).IsLampVine, Is.True);
+            state.Map.SetTile(new GridPosition(3, 2), new TileState());
+            state.Map.SetTile(new GridPosition(2, 3), new TileState());
+            Assert.That(adapter.IsInMoveRange(state, target), Is.True);
         }
 
         [Test]
@@ -94,7 +92,7 @@ namespace OCC.Combat.Tests
         {
             var cache = new CombatMovementRangeCache();
             CombatState state = Create(0);
-            var target = new GridPosition(1, 4);
+            var target = new GridPosition(1, 3);
             for (int n = 0; n < 10; n++) Assert.That(cache.Contains(state, state.GetUnit("hero"), target), Is.True);
             Assert.That(cache.RebuildCount, Is.EqualTo(1));
             state = Create(0);

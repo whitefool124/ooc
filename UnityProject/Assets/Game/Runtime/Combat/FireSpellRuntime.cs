@@ -166,17 +166,13 @@ namespace OCC.Combat
             foreach (string key in cooldowns.Keys.Where(key => key.StartsWith(prefix, StringComparison.Ordinal)).ToArray())
             { int next = cooldowns[key] - 1; if (next <= 0) cooldowns.Remove(key); else cooldowns[key] = next; }
             UnitState unit = Combat.GetUnit(unitId);
-            // OCC is a single-protagonist combat. A field effect measured in
-            // "turns" advances once per protagonist turn, not once per unit;
-            // otherwise adding enemies silently shortens the same fireground.
             if (unit != null && unit.IsHero)
-            {
                 destroyedObjectsThisHeroTurn.Clear();
-                foreach (GridPosition position in firegrounds.Keys.ToArray())
-                {
-                    firegrounds[position].Tick();
-                    if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
-                }
+            // Fireground duration uses public turns: every unit action advances it.
+            foreach (GridPosition position in firegrounds.Keys.ToArray())
+            {
+                firegrounds[position].Tick();
+                if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
             }
             RemoveExpiredEnvironment(Combat.CurrentTime);
             if (unit != null && firegrounds.TryGetValue(unit.Position, out FiregroundState ground))
@@ -213,57 +209,54 @@ namespace OCC.Combat
         }
         public void CreateOrRefreshFireground(GridPosition position, int damage, int duration, string sourceSpellId, string sourceUnitId = null)
         {
-            TileState tile = Combat.Map.GetTile(position);
+            TileState tile = Combat.Map.GetTile(position).Clone();
             // 效果层每格至多一个：后生成者覆盖先在者，这里先清空其余效果层。
             // 火场与浅水互为覆盖关系，不生成隐藏的第三种蒸汽状态。
             tile.ClearEffectLayers();
+            Combat.Map.SetTile(position, tile);
             if (firegrounds.TryGetValue(position, out FiregroundState current)) current.Refresh(damage, duration, sourceSpellId, sourceUnitId);
             else firegrounds[position] = new FiregroundState(damage, duration, sourceSpellId, sourceUnitId);
         }
         public void CreateOrRefreshShallowWater(GridPosition position)
         {
-            TileState tile = Combat.Map.GetTile(position);
+            TileState tile = Combat.Map.GetTile(position).Clone();
             firegrounds.Remove(position);
             tile.ClearEffectLayers();
             tile.IsWater = true;
+            Combat.Map.SetTile(position, tile);
         }
         /// <summary>生成散页。散页是通用可燃材料，覆盖本格其余效果层。</summary>
         public void CreateOrRefreshLoosePaper(GridPosition position)
         {
-            TileState tile = Combat.Map.GetTile(position);
+            TileState tile = Combat.Map.GetTile(position).Clone();
             firegrounds.Remove(position);
             tile.ClearEffectLayers();
             tile.IsLoosePaper = true;
+            Combat.Map.SetTile(position, tile);
         }
         /// <summary>生成痕迹。追踪类单位可读取；被浅水、火场或强风清除。</summary>
         public void CreateOrRefreshTrace(GridPosition position)
         {
-            TileState tile = Combat.Map.GetTile(position);
+            TileState tile = Combat.Map.GetTile(position).Clone();
             firegrounds.Remove(position);
             tile.ClearEffectLayers();
             tile.HasTrace = true;
+            Combat.Map.SetTile(position, tile);
         }
         /// <summary>生成约束纹。进入该格的单位本回合留在原地。</summary>
         public void CreateOrRefreshBindingMark(GridPosition position)
         {
-            TileState tile = Combat.Map.GetTile(position);
+            TileState tile = Combat.Map.GetTile(position).Clone();
             firegrounds.Remove(position);
             tile.ClearEffectLayers();
             tile.IsBindingMark = true;
+            Combat.Map.SetTile(position, tile);
         }
-        /// <summary>用浅水把散页打湿：散页保留但暂时不可燃。</summary>
-        public bool SoakPaper(GridPosition position)
-        {
-            TileState tile = Combat.Map.GetTile(position);
-            if (!tile.IsLoosePaper) return false;
-            tile.IsPaperSoaked = true;
-            return true;
-        }
-        /// <summary>点燃散页：未被打湿的散页转为火场。返回是否真的点燃。</summary>
+        /// <summary>点燃散页：散页转为火场。返回是否真的点燃。</summary>
         public bool IgniteLoosePaper(GridPosition position, int damage, int duration, string sourceSpellId, string sourceUnitId = null)
         {
             TileState tile = Combat.Map.GetTile(position);
-            if (!tile.IsLoosePaper || tile.IsPaperSoaked) return false;
+            if (!tile.IsLoosePaper) return false;
             CreateOrRefreshFireground(position, damage, duration, sourceSpellId, sourceUnitId);
             return true;
         }
@@ -271,7 +264,9 @@ namespace OCC.Combat
         public void ClearEffectLayer(GridPosition position)
         {
             firegrounds.Remove(position);
-            Combat.Map.GetTile(position).ClearEffectLayers();
+            TileState tile = Combat.Map.GetTile(position).Clone();
+            tile.ClearEffectLayers();
+            Combat.Map.SetTile(position, tile);
         }
         public void ExtendFireground(GridPosition position, int minimumDamage, int duration, string sourceSpellId, string sourceUnitId = null)
         {
@@ -414,9 +409,11 @@ namespace OCC.Combat
             }
         }
         public void EndDeviceAction(GridPosition position) => overloadedDevices.Remove(position);
-        public FireBattleState Clone()
+        public FireBattleState Clone() => Clone(Combat.Clone());
+
+        internal FireBattleState Clone(CombatState combat)
         {
-            FireBattleState clone = new FireBattleState(Combat.Clone());
+            FireBattleState clone = new FireBattleState(combat);
             foreach (var pair in firegrounds) clone.firegrounds[pair.Key] = pair.Value.Clone();
             foreach (var pair in cooldowns) clone.cooldowns[pair.Key] = pair.Value;
             foreach (GridPosition position in overloadedDevices) clone.overloadedDevices.Add(position);
@@ -718,6 +715,8 @@ namespace OCC.Combat
             FireSpellPreview preview = Preview(battle, sourceUnitId, spell, target);
             if (!preview.CanCommit) throw new InvalidOperationException(string.Join("；", preview.Failures));
             UnitState source = battle.Combat.GetUnit(sourceUnitId);
+            Dictionary<string, int> heroEnemyVitals = source?.IsHero == true
+                ? AcademyFieldEnemyRuntime.CaptureEnemyVitals(battle.Combat) : null;
             GridPosition sourceOrigin = source.Position;
             UnitState primary = string.IsNullOrEmpty(target.UnitId) ? null : battle.Combat.GetUnit(target.UnitId);
             GridPosition center = primary?.Position ?? (spell.TargetKind == FireTargetKind.Self ? source.Position : target.Cell);
@@ -753,6 +752,8 @@ namespace OCC.Combat
             if (spell.InitiativeDelay > 0) source.ChangeActionValue(-spell.InitiativeDelay);
             battle.ResolveMarkedDestructions(source.Id);
             battle.Combat.EvaluateOutcome();
+            if (heroEnemyVitals != null)
+                battle.Combat.AcademyFieldEnemy?.ObserveHeroDamage(battle.Combat, heroEnemyVitals);
             return new FireSpellExecution(preview, steps, source.Id, sourceOrigin);
         }
 
@@ -1351,7 +1352,7 @@ namespace OCC.Combat
 
         // 总案 3.5.6.2／3.6.1：术式伤害在结算单位的同时，让作用几何内的可破坏物扣减同值耐久；
         // 带破障标记的术式使物块耐久伤害翻倍。条件伤害（例："燃烧单位"）不作用于物块，因为物块无法满足单位状态条件。
-        private static void ApplyDamageToObjects(FireBattleState battle, FireSpellDefinition spell, FireSpellRule rule,
+        private static void ApplyDamageToObjects(FireBattleState battle, UnitState source, FireSpellDefinition spell, FireSpellRule rule,
             IEnumerable<GridPosition> cells, List<FireSpellResultStep> steps)
         {
             if (rule.Kind != FireRuleKind.Damage && rule.Kind != FireRuleKind.WeaponDamage) return;
@@ -1364,7 +1365,7 @@ namespace OCC.Combat
                 int before = tile.Durability;
                 if (before <= 0) continue;
                 tile.Durability = Math.Max(0, before - amount);
-                battle.Combat.ResolveAetherCrystalDamage(cell, before);
+                battle.Combat.ResolveAetherCrystalDamage(cell, before, source.Id);
                 Add(steps, spell, FireRuleKind.DamageDurability, null, cell, amount, before - tile.Durability, "durability");
             }
         }
@@ -1469,7 +1470,7 @@ namespace OCC.Combat
                         rule.Kind == FireRuleKind.WeaponDamage ? DamageType.Physical : DamageType.Fire), applied,
                         rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");
                 }
-                ApplyDamageToObjects(battle, spell, rule, cellArray, steps);
+                ApplyDamageToObjects(battle, source, spell, rule, cellArray, steps);
             }
             else if (rule.Kind == FireRuleKind.ApplyBurning || rule.Kind == FireRuleKind.ExtendBurning || rule.Kind == FireRuleKind.ApplyArmorBreak || rule.Kind == FireRuleKind.ApplyBreakStance || rule.Kind == FireRuleKind.ApplyFiregroundBoost || rule.Kind == FireRuleKind.ApplyFiregroundVulnerability)
             {
@@ -1499,7 +1500,7 @@ namespace OCC.Combat
             }
             else if (rule.Kind == FireRuleKind.DamageDurability || rule.Kind == FireRuleKind.DestroyLightCover)
             {
-                foreach (GridPosition cell in cellArray) { TileState tile = battle.Combat.Map.GetTile(cell); if (!MatchesObject(tile, rule.DestructibleMask)) continue; int before = tile.Durability; int amount = rule.Kind == FireRuleKind.DestroyLightCover ? before : (tile.Cover == CoverType.Heavy && rule.AlternateAmount > 0 ? rule.AlternateAmount : rule.Amount); tile.Durability = Math.Max(0, before - amount); battle.Combat.ResolveAetherCrystalDamage(cell, before); Add(steps, spell, rule.Kind, null, cell, amount, before - tile.Durability, "durability"); }
+                foreach (GridPosition cell in cellArray) { TileState tile = battle.Combat.Map.GetTile(cell); if (!MatchesObject(tile, rule.DestructibleMask)) continue; int before = tile.Durability; int amount = rule.Kind == FireRuleKind.DestroyLightCover ? before : (tile.Cover == CoverType.Heavy && rule.AlternateAmount > 0 ? rule.AlternateAmount : rule.Amount); tile.Durability = Math.Max(0, before - amount); battle.Combat.ResolveAetherCrystalDamage(cell, before, source.Id); Add(steps, spell, rule.Kind, null, cell, amount, before - tile.Durability, "durability"); }
             }
             else if (rule.Kind == FireRuleKind.ApplyFracture)
             {
@@ -1562,9 +1563,9 @@ namespace OCC.Combat
                 if (material == null) return;
                 material.SpendMaterial();
                 TileState tile = battle.Combat.Map.GetTile(center).Clone();
-                tile.Cover = CoverType.Light; tile.Durability = rule.Amount;
+                tile.Cover = CoverType.Light; tile.Durability = rule.Amount; tile.StructureOwnerUnitId = null;
                 tile.IsObjective = false; tile.IsDevice = false; tile.IsLampVine = false;
-                tile.IsAetherCrystal = false; tile.IsDecoy = false; tile.IsOverloadDevice = false;
+                tile.IsAetherCrystal = false; tile.IsPressureCrystal = false; tile.IsDecoy = false; tile.IsOverloadDevice = false;
                 tile.IsWardGenerator = false; tile.IsTowerMechanism = false;
                 battle.Combat.Map.SetTile(center, tile);
                 Add(steps, spell, rule.Kind, null, center, rule.Amount, rule.Amount, "light_cover_from_material_" + material.Sequence);

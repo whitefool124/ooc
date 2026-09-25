@@ -25,9 +25,7 @@ namespace OCC.Combat
             SkillDefinition skill = enemy.SkillOne;
             if (enemy.EnemyArchetypeId == "barrier_mender" && CanCast(enemy, skill))
             {
-                UnitState repairTarget = state.Units.Values.Where(unit => unit.IsAlive && unit.IsHero == enemy.IsHero && unit.MaxShield > unit.Shield &&
-                        (state.Ruleset != CombatRuleset.Roguelite || !unit.HasStatus(StatusType.BreakStance)) &&
-                        enemy.Position.ManhattanDistance(unit.Position) <= enemy.EffectiveRange(skill.Range) && HasLineOfSight(state, enemy, unit, skill))
+                UnitState repairTarget = state.Units.Values.Where(unit => CanMend(state, enemy, unit))
                     .OrderByDescending(unit => unit.MaxShield - unit.Shield).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
                 if (repairTarget != null) return CombatCommand.UseSkill(enemy.Id, 0, repairTarget.Id);
                 return ChooseWeaponOrMove(state, enemy, hero);
@@ -43,6 +41,17 @@ namespace OCC.Combat
             }
             if (CanTarget(state, enemy, hero, skill)) return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
             return ChooseWeaponOrMove(state, enemy, hero);
+        }
+
+        internal static bool CanMend(CombatState state, UnitState enemy, UnitState ally)
+        {
+            SkillDefinition skill = enemy?.SkillOne;
+            return state != null && enemy != null && ally?.IsAlive == true &&
+                enemy.EnemyArchetypeId == "barrier_mender" && CanCast(enemy, skill) &&
+                ally.IsHero == enemy.IsHero && ally.MaxShield > ally.Shield &&
+                (state.Ruleset != CombatRuleset.Roguelite || !ally.HasStatus(StatusType.BreakStance)) &&
+                enemy.Position.ManhattanDistance(ally.Position) <= enemy.EffectiveRange(skill.Range) &&
+                AcademyEnemyAreaRuntime.SharesStructure(state, enemy, ally);
         }
 
         public static CombatCommand Choose(UnitState enemy, UnitState hero)
@@ -183,7 +192,7 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<EnemyArchetype> All = new[]
         {
             new EnemyArchetype("shieldguard", "盾术生", 2, 2, 2, 7, CombatCatalog.Shield, maxHealth: 16, artId: "shieldguard", primarySkill: EnemyAbilityCatalog.ShieldRam, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("pyromancer", "火矢生", 0, 1, 0, 9, CombatCatalog.Wand, maxHealth: 16, artId: "pyromancer", primarySkill: CombatCatalog.FireBolt, resolutionKind: EnemyResolutionKind.Student),
+            new EnemyArchetype("pyromancer", "火矢生", 0, 1, 0, 9, CombatCatalog.Wand, maxHealth: 16, artId: "pyromancer", primarySkill: EnemyAbilityCatalog.PyromancerFireArrow, resolutionKind: EnemyResolutionKind.Student),
             new EnemyArchetype("raider", "侧锋生", 0, 0, 1, 11, CombatCatalog.Hammer, maxHealth: 16, artId: "raider", primarySkill: EnemyAbilityCatalog.HookingStrike, resolutionKind: EnemyResolutionKind.Student),
             new EnemyArchetype("elite_vanguard", "划线教官", 2, 4, 2, 10, CombatCatalog.Hammer, true, 24, "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("core_overseer", "塔之守卫", 3, 4, 2, 8, CombatCatalog.Hammer, true, 36, "elite",

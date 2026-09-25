@@ -31,7 +31,7 @@ namespace OCC.Combat
             if (run == null) throw new ArgumentNullException(nameof(run));
             return new RogueliteMapResources(run.Parts, run.Aether, run.Supplies,
                 run.ScoutingBeacons, run.UsesRogue11, run.Gold, run.StageContribution, run.StageTime,
-                run.CurrentHealth, run.FirstRunExperience?.AcademyFoodCount ?? 0);
+                run.CurrentHealth, run.AcademyFoodCount);
         }
     }
 
@@ -149,16 +149,22 @@ namespace OCC.Combat
         }
 
         public RogueliteMapInteractionResult CompleteFirstRunForge(RogueliteMapRun run, string targetId)
+            => CompleteFirstRunForge(run, targetId, AcademyBattleRewardCatalog.ForgeLoad);
+
+        public RogueliteMapInteractionResult CompleteFirstRunForge(RogueliteMapRun run, string targetId, string materialId)
         {
             RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
-            run.CompleteFirstRunForge(targetId);
+            run.CompleteFirstRunForge(targetId, materialId);
             return Result(run, targetId, run.CurrentNodeId, false, false, before);
         }
 
         public RogueliteMapInteractionResult CompleteFirstRunSpecialization(RogueliteMapRun run, string targetId)
+            => CompleteFirstRunSpecialization(run, targetId, AcademyBattleRewardCatalog.SpecAmplify);
+
+        public RogueliteMapInteractionResult CompleteFirstRunSpecialization(RogueliteMapRun run, string targetId, string materialId)
         {
             RequireRun(run); RogueliteMapResources before = RogueliteMapResources.Capture(run);
-            run.CompleteFirstRunSpecialization(targetId);
+            run.CompleteFirstRunSpecialization(targetId, materialId);
             return Result(run, targetId, run.CurrentNodeId, false, false, before);
         }
 

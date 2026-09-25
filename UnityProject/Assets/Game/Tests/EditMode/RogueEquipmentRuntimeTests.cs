@@ -32,6 +32,31 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void AcademyMaterials_OccupyBackpackGridAndPersistManualPositions()
+        {
+            RogueRunDto dto = RogueRunDto.CreateNew("materials", 72);
+            RogueEquipmentRuntime.CreateStarter(72).WriteToDto(dto);
+            dto.ForgeMaterialCount = 1;
+            dto.SpecializationMaterialCount = 1;
+            dto.MaterialStockRows.Add("FORGE-CIRCUIT=1");
+            dto.MaterialStockRows.Add("SPEC-EFFICIENT=1");
+
+            RogueEquipmentRuntime runtime = RogueEquipmentRuntime.FromDto(dto);
+            string[] materialIds = runtime.Backpack.Keys.Where(id => !string.IsNullOrEmpty(runtime.MaterialIdFor(id))).ToArray();
+            Assert.That(materialIds.Length, Is.EqualTo(2));
+            Assert.That(materialIds.Select(id => runtime.MaterialIdFor(id)),
+                Is.EquivalentTo(new[] { "FORGE-CIRCUIT", "SPEC-EFFICIENT" }));
+            Assert.That(runtime.MoveBackpack(materialIds[0], 5, 9, false), Is.True);
+            Assert.That(runtime.MoveBackpack(materialIds[0], 4, 9, true), Is.False);
+            Assert.That(runtime.Backpack.Values.Select(value => (value.X, value.Y)).Distinct().Count(), Is.EqualTo(2));
+            runtime.WriteToDto(dto);
+            Assert.That(dto.MaterialPlacementRows, Contains.Item(materialIds[0] + ",5,9"));
+            RogueRunDto loaded = Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(dto));
+            RogueEquipmentRuntime restored = RogueEquipmentRuntime.FromDto(loaded);
+            Assert.That((restored.Backpack[materialIds[0]].X, restored.Backpack[materialIds[0]].Y), Is.EqualTo((5, 9)));
+        }
+
+        [Test]
         public void BackpackCapacity_UnequipFailsAtomicallyUntilContentsFitDefaultGrid()
         {
             RogueEquipmentRuntime runtime = RogueEquipmentRuntime.CreateStarter(73);

@@ -24,6 +24,42 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FormalFrontEnd_CreatesAnAcknowledgedOriginInTheFirstVerifiedWrite()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+
+            RogueliteMapStartResult created = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Universal, 314, acknowledgeOriginOnCreate: true);
+
+            Assert.That(created.Success, Is.True);
+            Assert.That(created.Run.FirstRunExperience.Origin.Acknowledged, Is.True);
+            RogueliteMapStartResult loaded = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 0);
+            Assert.That(loaded.Success, Is.True);
+            Assert.That(loaded.Run.FirstRunExperience.Origin.Acknowledged, Is.True);
+            Assert.That(loaded.Run.Seed, Is.EqualTo(314));
+        }
+
+        [Test]
+        public void ReplacementWriteFailure_KeepsThePreviousValidRun()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 312).Success, Is.True);
+            string original = store.Values[RogueliteSaveGateway.MapRunKey];
+            Assert.That(coordinator.PrepareSlotForReplacement(), Is.True);
+            store.FailWrites = true;
+
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 313).Success, Is.False);
+            Assert.That(coordinator.LastSaveSucceeded, Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
+            store.FailWrites = false;
+            Assert.That(coordinator.TryStart(true, FireRogueliteStarterCatalog.Universal, 999).Run.Seed, Is.EqualTo(312));
+            Assert.That(coordinator.LastSaveSucceeded, Is.True);
+        }
+
+        [Test]
         public void ContinueMissing_DoesNotCreateOrOverwriteData()
         {
             MemoryStore store = new MemoryStore();
@@ -87,6 +123,78 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void PendingFirstRunReward_FailedWriteCanRetryWithoutResolvingTheReward()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapRun run = coordinator.TryStart(false,
+                FireRogueliteStarterCatalog.Universal, 308).Run;
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            Assert.That(coordinator.Save(run), Is.True);
+
+            run.CompleteCurrentCombat();
+            string[] choices = run.CurrentRewards.Select(reward => reward.Id).ToArray();
+            store.FailWrites = true;
+            Assert.That(coordinator.Save(run), Is.False);
+            Assert.That(coordinator.LastSaveSucceeded, Is.False);
+            Assert.That(run.AwaitingReward, Is.True);
+            Assert.That(run.CurrentRewards.Select(reward => reward.Id), Is.EqualTo(choices));
+
+            store.FailWrites = false;
+            Assert.That(coordinator.Save(run), Is.True);
+            Assert.That(coordinator.LastSaveSucceeded, Is.True);
+            RogueliteMapRun restored = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 999).Run;
+            Assert.That(restored.AwaitingReward, Is.True);
+            Assert.That(restored.CurrentRewards.Select(reward => reward.Id), Is.EqualTo(choices));
+            Assert.That(restored.ClaimedRewards, Is.Empty);
+        }
+
+        [Test]
+        public void CombatWriteFailure_RetryAndContinueReplayTheSameTurnWithoutRestarting()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 7646).Run;
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            run.BeginCombatJournal();
+            Assert.That(coordinator.Save(run), Is.True);
+            string beforeAction = store.Values[RogueliteSaveGateway.MapRunKey];
+
+            CombatSceneSessionBuilder builder = new CombatSceneSessionBuilder();
+            CombatState live = builder.Build(run, null, Array.Empty<CombatSceneMarker>()).State;
+            CombatResolver.AdvanceToNextTurn(live);
+            CombatCommand endTurn = CombatCommand.EndTurn("hero");
+            Assert.That(new CombatCommandExecutionService().Execute(
+                live, new FireBattleState(live), endTurn, true).Accepted, Is.True);
+            run.AppendCombatJournal(CombatJournalEntry.Accepted(endTurn));
+
+            store.FailWrites = true;
+            Assert.That(coordinator.Save(run), Is.False);
+            Assert.That(coordinator.LastSaveSucceeded, Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(beforeAction));
+            store.FailWrites = false;
+            Assert.That(coordinator.Save(run), Is.True);
+
+            RogueliteMapRun reloaded = coordinator.TryStart(true,
+                FireRogueliteStarterCatalog.Universal, 999).Run;
+            Assert.That(reloaded.HasActiveCombat, Is.True);
+            Assert.That(reloaded.CombatJournalRows.Count, Is.EqualTo(1));
+            CombatState restored = builder.Build(reloaded, null, Array.Empty<CombatSceneMarker>()).State;
+            CombatResolver.AdvanceToNextTurn(restored);
+            CombatJournalReplayer.ReplayAfterActivation(restored, reloaded.CombatJournalRows);
+
+            Assert.That(restored.ActiveUnitId, Is.EqualTo(live.ActiveUnitId));
+            Assert.That(restored.TurnSequence, Is.EqualTo(live.TurnSequence));
+            Assert.That(restored.GetUnit("hero").ActionPoints, Is.EqualTo(live.GetUnit("hero").ActionPoints));
+            Assert.That(restored.GetUnit("hero").Health, Is.EqualTo(live.GetUnit("hero").Health));
+            Assert.That(reloaded.CompletedNodes, Does.Not.Contain("B1"));
+            Assert.That(reloaded.AwaitingReward, Is.False);
+        }
+
+        [Test]
         public void FirstBattleNormalCommands_VictorySettlementPersistsAndReloads()
         {
             MemoryStore store = new MemoryStore();
@@ -146,6 +254,30 @@ namespace OCC.Combat.Tests
             Assert.That(loaded.Run.AwaitingReward, Is.False);
         }
 
+        [TestCase(false, "death", 0)]
+        [TestCase(true, "abandon", UnitState.HeroBaseHealth)]
+        public void FirstBattleFailure_OnlyClosesAfterConfirmedSettlement(bool abandoned, string reason, int health)
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Melee, 913).Run;
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            Assert.That(coordinator.Save(run), Is.True);
+
+            run.CloseAsFailure(abandoned);
+            Assert.That(run.IsComplete, Is.True);
+            Assert.That(run.CompletedNodes, Does.Not.Contain("B1"));
+            Assert.That(coordinator.Save(run), Is.True);
+
+            RogueliteMapStartResult loaded = coordinator.TryStart(true, FireRogueliteStarterCatalog.Universal, 999);
+            Assert.That(loaded.Success, Is.True);
+            Assert.That(loaded.Run.RunEndReason, Is.EqualTo(reason));
+            Assert.That(loaded.Run.CurrentHealth, Is.EqualTo(health));
+            Assert.That(loaded.Run.IsComplete, Is.True);
+            Assert.That(loaded.Run.AwaitingReward, Is.False);
+        }
+
         [Test]
         public void ReplacingAValidRun_ResetsAllRunScopedResourcesInsteadOfReusingTheActiveDto()
         {
@@ -184,7 +316,38 @@ namespace OCC.Combat.Tests
             Assert.That(coordinator.TryStart(true, FireRogueliteStarterCatalog.Universal, 304).Success, Is.False);
 
             Assert.That(coordinator.PrepareSlotForReplacement(), Is.True);
-            Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.MapRunKey), Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo("broken"));
+            Assert.That(store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)],
+                Is.EqualTo("broken"));
+
+            store.FailWrites = true;
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305).Success, Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo("broken"));
+            store.FailWrites = false;
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305).Success, Is.True);
+        }
+
+        [Test]
+        public void ProtectedValidSlot_CannotContinueAndRequiresExplicitReplacement()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 310).Success, Is.True);
+            string original = store.Values[RogueliteSaveGateway.MapRunKey];
+            store.Values[RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)] = "protected-v1";
+            store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)] = "failed-write";
+
+            RogueliteMapStartResult continued = coordinator.TryStart(true, FireRogueliteStarterCatalog.Universal, 999);
+            Assert.That(continued.Success, Is.False);
+            Assert.That(continued.FailureMessage, Does.Contain("写入保护"));
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
+            Assert.That(coordinator.IsWriteProtected, Is.True);
+
+            Assert.That(coordinator.PrepareSlotForReplacement(), Is.True);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
+            Assert.That(coordinator.IsWriteProtected, Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)], Is.EqualTo("failed-write"));
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 311).Success, Is.True);
         }
 
         private static RogueliteMapSaveCoordinator Coordinator(MemoryStore store) =>

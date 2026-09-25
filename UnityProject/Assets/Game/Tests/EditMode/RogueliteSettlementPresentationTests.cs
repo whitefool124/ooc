@@ -13,6 +13,7 @@ namespace OCC.Combat.Tests
         private sealed class Host : ISettlementPresentationHost
         {
             public RogueliteMapRun CurrentMapRun { get; set; }
+            public bool IsMapRunSaved => true;
             public RogueliteUiPreferences UiPreferences { get; } = new RogueliteUiPreferences().Configure(1f, 0f, false, true, false, false, true);
             public UiPresentationVersions UiPresentationVersions { get; } = new UiPresentationVersions();
             public UiActionFeedback LastFeedback { get; private set; }
@@ -32,6 +33,11 @@ namespace OCC.Combat.Tests
             public void RequestAbandonMapReward()
             {
                 CurrentMapRun.AbandonCurrentReward(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+
+            public void ConfirmMapResourceReceipt()
+            {
+                CurrentMapRun.ConfirmResourceReceipt(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
             }
 
             public void OpenRewardInventory() { }

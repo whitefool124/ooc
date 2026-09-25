@@ -78,8 +78,19 @@ namespace OCC.Combat
             {
                 if (state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null) fireBattle = state.RogueSpells.FireBattle;
                 UnitState commandUnit = state.GetUnit(command.UnitId);
-                SkillDefinition commandSkill = command.Type == CombatCommandType.UseSkill && commandUnit != null
-                    ? (command.SlotIndex == 0 ? commandUnit.SkillOne : commandUnit.SkillTwo) : null;
+                Dictionary<string, int> heroEnemyVitals = commandUnit?.IsHero == true
+                    ? AcademyFieldEnemyRuntime.CaptureEnemyVitals(state) : null;
+                SkillDefinition commandSkill = null;
+                if (command.Type == CombatCommandType.UseSkill && commandUnit != null)
+                {
+                    if (command.SlotIndex == AcademyEnemyGrowthRuntime.CommandSkillIndex && state.AcademyEnemyGrowth != null)
+                        commandSkill = AcademyEnemyGrowthRuntime.For(commandUnit.EnemyArchetypeId);
+                    else if ((command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex ||
+                            command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex) && state.AcademyEnemyArea != null)
+                        commandSkill = AcademyEnemyAreaRuntime.For(commandUnit.EnemyArchetypeId);
+                    else commandSkill = command.SlotIndex == 0 ? commandUnit.SkillOne :
+                        command.SlotIndex == 1 ? commandUnit.SkillTwo : null;
+                }
                 SkillDefinition deliveredSkill = state.Ruleset != CombatRuleset.Roguelite ? commandSkill : null;
                 GridPosition deliverySource = commandUnit?.Position ?? command.Destination;
                 GridPosition movementSource = deliverySource;
@@ -119,6 +130,8 @@ namespace OCC.Combat
                 }
                 fireBattle?.ResolveMarkedDestructions(command.Type == CombatCommandType.Attack ||
                     command.Type == CombatCommandType.UseSkill ? command.UnitId : null);
+                if (heroEnemyVitals != null)
+                    state.AcademyFieldEnemy?.ObserveHeroDamage(state, heroEnemyVitals);
 
                 IReadOnlyList<CombatMechanicTriggerContext> mechanicContexts = CombatMechanicTriggerContextFactory.ForCommand(
                     command, commandUnit, movementSource, movementPath, execution);

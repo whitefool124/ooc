@@ -133,17 +133,19 @@ namespace OCC.Combat.Roguelite
             {
                 NodeId = node.Id; TimeCost = 0; ProjectedStageTime = run.StageTime; ExpectedManaRecovery = 0;
                 FirstRunEncounterSnapshot slot = run.FirstRunExperience.EncounterForNode(node.Id);
-                bool formalFirstBattle = node.Id == "B1";
-                EncounterLabel = formalFirstBattle ? "首次固定战" : node.Type == RogueliteMapNodeType.Elite ? "精英战槽" : node.IsCombat ? "普通战槽" : string.Empty;
-                EnemySummary = formalFirstBattle ? "寻迹兽、火矢生" : slot == null ? string.Empty : slot.EnemyScriptId;
-                SpatialRisk = formalFirstBattle ? "积水提高主角移动消耗；灯藤阻挡视线，寻迹兽会嗅探搜索，火矢生会依次烧藤。" : slot == null ? string.Empty : string.Join(" + ", slot.MechanicSlotIds);
-                RiskLabel = formalFirstBattle ? "公开教学战" : node.IsCombat ? "内容待设计" : "系统节点";
-                RewardLabel = slot == null ? "固定首次体验服务" : slot.DropSlotId;
-                FailureConsequence = formalFirstBattle ? "主角生命归零按肉鸽战败；对手失去行动能力后由教员非致命叫停。" :
-                    node.Type == RogueliteMapNodeType.Elite ? "精英战失败会封存本次首次体验，且不会开放商店。" : "阶段 A 仅提供遭遇接口，正式敌人与数值尚未接入。";
+                EncounterLabel = node.Type == RogueliteMapNodeType.Elite ? "精英战" : node.IsCombat ? "学院实战" : string.Empty;
+                EnemySummary = node.Id == "B1" ? "寻迹兽、火矢生" : node.Id == "B2" ? "检验偶、侧锋生" :
+                    node.Id == "B3" ? "检验偶、火矢生" : node.Id == "X" ? "楔角" : string.Empty;
+                SpatialRisk = node.Id == "B1" ? "积水拖慢移动；灯藤阻挡视线，寻迹兽会嗅探搜索。" :
+                    node.Id == "B2" ? "灯藤遮蔽侧锋生；中央宝箱与晶体引爆可改变路线。" :
+                    node.Id == "B3" ? "破晶可开器材匣；浅水能熄灭火场，南侧保留干路。" :
+                    node.Id == "X" ? "楔角公开锁线；晶体、灯藤和浅水都可用于反制。" : string.Empty;
+                RiskLabel = node.Type == RogueliteMapNodeType.Elite ? "危险" : node.IsCombat ? "公开实战" : "学院设施";
+                RewardLabel = slot == null ? "学院服务" : node.Id == "X" ? "固定精英奖励与商店" : "战后术式三选一";
+                FailureConsequence = node.IsCombat ? "主角生命归零会结束本轮；可以从本场开战前重试。" : string.Empty;
                 return;
             }
-            NodeId = node.Id; TimeCost = AcademyMapTuning.TimeCost(node.Type); ProjectedStageTime = run.StageTime + TimeCost;
+            NodeId = node.Id; TimeCost = AcademyMapTuning.TimeCost(node); ProjectedStageTime = run.StageTime + TimeCost;
             ExpectedManaRecovery = Math.Min(RogueRuntimeConstants.MaximumPersonalMana - run.CurrentMana, TimeCost);
             CrossesConsolidation = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.ConsolidationProgress);
             CrossesWarning = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionWarningProgress);
@@ -156,8 +158,11 @@ namespace OCC.Combat.Roguelite
                 node.Type == RogueliteMapNodeType.Combat ? "棘手" : node.Type == RogueliteMapNodeType.Event ? "先听听看" : "可以放心前往");
             RewardLabel = encounter?.RewardTier ?? (node.Type == RogueliteMapNodeType.Finale ? "终考奖励" : node.Type == RogueliteMapNodeType.Elite ? "稀有奖励" :
                 node.Type == RogueliteMapNodeType.Combat ? "金币、学院贡献和一件奖励" : "这里能找到的东西");
-            FailureConsequence = node.IsCombat ? "输了也会有人把你带回学院，但花掉的时间、生命和道具不会返还。你只能拿到一半金币与学院贡献，也不能挑选奖励。" :
-                node.Type == RogueliteMapNodeType.Event ? "做出选择后就不能反悔；如果要动手，输了也会损失时间、生命和用掉的道具。" : "这里没有战斗，也不会花时间。";
+            FailureConsequence = run.IsInAcademyLayer
+                ? node.IsCombat ? "主角生命归零会进入失败结算；可从本场开战前重试，未取得的胜利奖励不会发放。" :
+                    node.Type == RogueliteMapNodeType.Event ? "选择一经结算不可反悔；战斗选项失败不扣基础资源。" : "这里没有战斗。"
+                : node.IsCombat ? "输了也会有人把你带回学院，但花掉的时间、生命和道具不会返还。你只能拿到一半金币与学院贡献，也不能挑选奖励。" :
+                    node.Type == RogueliteMapNodeType.Event ? "做出选择后就不能反悔；如果要动手，输了也会损失时间、生命和用掉的道具。" : "这里没有战斗，也不会花时间。";
         }
 
         private static bool Crosses(int before, int after, int threshold) => before < threshold && after >= threshold;
@@ -245,6 +250,7 @@ namespace OCC.Combat.Roguelite
         public string DefinitionId { get; }
         public string DisplayName { get; }
         public bool IsEquipment { get; }
+        public bool IsMaterial { get; }
         public EquipmentSlot? Slot { get; }
         public EquipmentRarity? Rarity { get; }
         public int X { get; }
@@ -255,7 +261,7 @@ namespace OCC.Combat.Roguelite
         public int ChargesCurrent { get; }
         public int ChargesMaximum { get; }
         public int QuickbarSlot { get; }
-        public string CompactBadge => IsEquipment ? Rarity.ToString() : "余 " + ChargesCurrent + "　共 " + ChargesMaximum;
+        public string CompactBadge => IsMaterial ? "材料" : IsEquipment ? Rarity.ToString() : "余 " + ChargesCurrent + "　共 " + ChargesMaximum;
 
         public RogueInventoryItemPresentation(RogueEquipmentRuntime runtime, string instanceId)
         {
@@ -265,6 +271,7 @@ namespace OCC.Combat.Roguelite
             RogueEquipmentInstance equipment = runtime.EquipmentItem(instanceId);
             RogueTacticalItemInstance tactical = runtime.TacticalItem(instanceId);
             IsEquipment = equipment != null;
+            IsMaterial = !string.IsNullOrEmpty(runtime.MaterialIdFor(instanceId));
             if (equipment != null)
             {
                 EquipmentDefinition definition = runtime.DefinitionFor(instanceId);
@@ -276,6 +283,13 @@ namespace OCC.Combat.Roguelite
                 TacticalItemDefinition definition = runtime.TacticalDefinitionFor(instanceId);
                 DefinitionId = tactical.DefinitionId; DisplayName = definition.DisplayName; Width = placement.Rotated ? definition.Height : definition.Width;
                 Height = placement.Rotated ? definition.Width : definition.Height; ChargesCurrent = tactical.ChargesCurrent; ChargesMaximum = tactical.ChargesMaximum;
+            }
+            else if (IsMaterial)
+            {
+                DefinitionId = runtime.MaterialIdFor(instanceId);
+                DisplayName = DefinitionId == "FORGE-LOAD" ? "承力合金" : DefinitionId == "FORGE-CIRCUIT" ? "导能晶片" :
+                    DefinitionId == "SPEC-AMPLIFY" ? "增幅刻墨" : "节流刻墨";
+                Width = 1; Height = 1;
             }
             else throw new ArgumentException("Unknown backpack item.", nameof(instanceId));
             QuickbarSlot = Array.IndexOf(runtime.ItemQuickbarInstanceIds, instanceId);

@@ -53,8 +53,14 @@ namespace OCC.Combat.Presentation
         string SelectedAction { get; }
         string SelectedTargetId { get; }
         bool IsCombatOutcomeVisible { get; }
+        bool IsMapRunAbandonPending { get; }
+        bool IsMapRunSaved { get; }
+        bool IsMapRunWriteProtected { get; }
         bool IsDeveloperCombatActive { get; }
         bool IsInteractionModalOpen { get; }
+        bool IsOpeningDialogueVisible { get; }
+        string OpeningDialogueSpeaker { get; }
+        string OpeningDialogueLine { get; }
         bool IsKeyboardTargeting { get; }
         GridPosition KeyboardTargetPosition { get; }
         int TrainingRangeArtifactUsesRemaining { get; }
@@ -74,8 +80,11 @@ namespace OCC.Combat.Presentation
         void CancelKeyboardTargeting();
         void CancelCombatSelectionOrRequestLeave();
         void RequestLeaveCombat();
+        void RequestReturnToLanding();
+        void CompleteOpeningCombatDialogue();
         void RequestTacticalRestart();
         void ReturnToDeveloperMenu();
+        void ReturnFromCombatOutcome();
         void FocusBattlefieldOnUnit(string unitId);
         void SetTimelineHoveredUnit(string unitId);
     }
@@ -88,6 +97,7 @@ namespace OCC.Combat.Presentation
         MissionPreparation CurrentPreparation { get; }
         MapSaveUiPresentation MapSavePresentation { get; }
         bool IsMapRunSaved { get; }
+        bool IsMapRunWriteProtected { get; }
         UiPresentationVersions UiPresentationVersions { get; }
         UiVisualEventStream UiVisualEvents { get; }
         string SettingsSaveDetail { get; }
@@ -96,12 +106,15 @@ namespace OCC.Combat.Presentation
         bool HasFirstExperienceSave { get; }
         void AcknowledgeFirstRunOrigin();
         void CompleteFirstRunForge(string targetId);
+        void CompleteFirstRunForge(string targetId, string materialId);
         void CompleteFirstRunSpecialization(string targetId);
+        void CompleteFirstRunSpecialization(string targetId, string materialId);
         void CompleteFirstRunHealthCheck();
         void UseFirstRunHeal();
         void ChooseFirstRunMeal(string mealId);
         void PurchaseFirstRunOffer(string offerId);
         void CompleteFirstRunExperience();
+        bool ConfirmAcademyDeparture();
         void CompleteCurrentServiceNode();
         void SelectMapNode(string nodeId);
         void StartMapNodeCombat(string nodeId);
@@ -111,6 +124,7 @@ namespace OCC.Combat.Presentation
         void CalibrateMapAether();
         bool MoveRogueBackpackItem(string instanceId, int x, int y, bool rotated);
         bool RotateRogueBackpackItem(string instanceId);
+        void RequestDiscardRogueBackpackItem(string instanceId);
         bool EquipRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot);
         bool EquipOrReplaceRogueEquipment(string instanceId, OCC.Combat.Roguelite.EquipmentSlot slot);
         bool UnequipRogueEquipment(OCC.Combat.Roguelite.EquipmentSlot slot);
@@ -122,6 +136,7 @@ namespace OCC.Combat.Presentation
         void ReplayOpeningCg();
         void RequestReturnToLanding();
         void RetryCompleteMapRunSave();
+        void RequestLeaveProtectedMapRun();
         void RequestStartMapRoguelite(bool continueSave);
         void RequestStartMapRoguelite(bool continueSave, string starterId);
         void ReturnToMapRun();
@@ -145,9 +160,11 @@ namespace OCC.Combat.Presentation
     public interface ISettlementPresentationHost : IUiPreferenceHost, IUiFeedbackHost
     {
         RogueliteMapRun CurrentMapRun { get; }
+        bool IsMapRunSaved { get; }
         UiPresentationVersions UiPresentationVersions { get; }
         void ClaimMapFireSpell(string spellId);
         void ClaimMapReward(string rewardId);
+        void ConfirmMapResourceReceipt();
         void RequestAbandonMapReward();
         void OpenRewardInventory();
         void PublishUiVisual(UiVisualEvent visualEvent);

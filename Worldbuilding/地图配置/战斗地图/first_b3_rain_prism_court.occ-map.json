@@ -74,6 +74,12 @@
       "mechanismKind": 0
     },
     {
+      "kind": "LootChest",
+      "x": 6,
+      "y": 2,
+      "mechanismKind": 0
+    },
+    {
       "kind": "LightCover",
       "x": 1,
       "y": 0,
@@ -176,6 +182,18 @@
       "mechanismKind": 0
     },
     {
+      "x": 6,
+      "y": 1,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
+      "x": 6,
+      "y": 3,
+      "kind": "PermanentWall",
+      "mechanismKind": 0
+    },
+    {
       "x": 1,
       "y": 1,
       "kind": "LightCover",
@@ -191,10 +209,10 @@
   "blockedPositions": [],
   "changeAnnotations": [],
   "spaceContract": {
-    "grammar": "纵向冷却沟、封门晶簇与南侧干路",
+    "grammar": "纵向冷却沟、封门晶簇与北侧普通路线",
     "publicRisk": "火矢生从干地施加燃烧，封门晶簇与永久重物块围出器材匣。",
     "counterplayWindow": "可破晶开匣并爆伤替身偶、退入浅水熄火，或放弃搜刮走北侧普通路线。"
   },
-  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
-  "updatedAt": "2026-09-22T07:31:03.735Z"
+  "notes": "2026-09-24 保留原墙体布局，补G2/G4永久墙及G3器材匣；普通绕行经北侧B2/C2/D2。",
+  "updatedAt": "2026-09-24T15:00:30.000Z"
 }

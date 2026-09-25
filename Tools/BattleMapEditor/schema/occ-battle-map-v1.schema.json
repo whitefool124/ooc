@@ -53,8 +53,10 @@
       "properties": {
         "x": { "type": "integer", "minimum": 0 },
         "y": { "type": "integer", "minimum": 0 },
-        "kind": { "enum": ["LightCover", "HeavyCover", "PermanentWall", "AetherObjective", "Water", "LampVine", "AetherCrystal", "LootChest", "TowerMechanism", "OverloadDevice", "WardGenerator", "LoosePaper", "Trace", "BindingMark"] },
-        "mechanismKind": { "type": "integer", "minimum": 0, "maximum": 3 }
+        "kind": { "enum": ["LightCover", "HeavyCover", "PermanentWall", "AetherObjective", "Water", "LampVine", "AetherCrystal", "PressureCrystal", "LootChest", "TowerMechanism", "OverloadDevice", "WardGenerator", "LoosePaper", "Trace", "BindingMark", "Fireground", "Smoke"] },
+        "mechanismKind": { "type": "integer", "minimum": 0, "maximum": 3 },
+        "duration": { "type": "integer", "minimum": 0 },
+        "durability": { "type": "integer", "minimum": 0 }
       }
     },
     "changeAnnotation": {

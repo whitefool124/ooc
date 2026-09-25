@@ -13,6 +13,7 @@ namespace OCC.Combat.Roguelite
         public List<string> MutableAffixIds { get; } = new List<string>();
         public List<string> UpgradeBranchIds { get; } = new List<string>();
         public int ReforgeCount { get; internal set; }
+        public string ForgeMaterialId { get; internal set; } = string.Empty;
         public string SourceStage { get; }
         public string SourceType { get; }
         public int AcquiredOrder { get; }
@@ -50,7 +51,10 @@ namespace OCC.Combat.Roguelite
         private readonly RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();
         private readonly Dictionary<string, RogueEquipmentInstance> equipment = new Dictionary<string, RogueEquipmentInstance>(StringComparer.Ordinal);
         private readonly Dictionary<string, RogueTacticalItemInstance> tactical = new Dictionary<string, RogueTacticalItemInstance>(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> materials = new Dictionary<string, string>(StringComparer.Ordinal);
         private readonly Dictionary<string, RogueBackpackPlacement> backpack = new Dictionary<string, RogueBackpackPlacement>(StringComparer.Ordinal);
+        private bool forgeWeaponShieldAvailable;
+        private bool forgeSpellDiscountConsumed;
         private readonly Dictionary<EquipmentSlot, string> equipped = EquipmentSlotRules.ActiveSlots.ToDictionary(value => value, value => string.Empty);
         private readonly string[] quickbar = new string[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly HashSet<string> firstMoveAvailable = new HashSet<string>(StringComparer.Ordinal);
@@ -66,6 +70,24 @@ namespace OCC.Combat.Roguelite
         public IReadOnlyList<RogueTacticalItemInstance> AllTacticalItems => tactical.Values.OrderBy(value => value.AcquiredOrder).ToArray();
         public RogueEquipmentInstance EquipmentItem(string instanceId) => string.IsNullOrEmpty(instanceId) || !equipment.TryGetValue(instanceId, out RogueEquipmentInstance value) ? null : value;
         public RogueTacticalItemInstance TacticalItem(string instanceId) => string.IsNullOrEmpty(instanceId) || !tactical.TryGetValue(instanceId, out RogueTacticalItemInstance value) ? null : value;
+        public string MaterialIdFor(string instanceId) => !string.IsNullOrEmpty(instanceId) && materials.TryGetValue(instanceId, out string value) ? value : string.Empty;
+        public bool CanFitMaterials(int count)
+        {
+            if (count < 0) return false;
+            List<string> previews = new List<string>();
+            for (int index = 0; index < count; index++)
+            {
+                string id = "material:preview:" + index;
+                if (!AddFirstFit(id))
+                {
+                    foreach (string previous in previews) backpack.Remove(previous);
+                    return false;
+                }
+                previews.Add(id);
+            }
+            foreach (string previous in previews) backpack.Remove(previous);
+            return true;
+        }
         public EquipmentDefinition DefinitionFor(string instanceId) => equipment.TryGetValue(instanceId, out RogueEquipmentInstance value) ? Definition(value) : null;
         public TacticalItemDefinition TacticalDefinitionFor(string instanceId) => tactical.TryGetValue(instanceId, out RogueTacticalItemInstance value) ? catalog.TacticalItems.Single(item => item.DefinitionId == value.DefinitionId) : null;
 
@@ -73,6 +95,37 @@ namespace OCC.Combat.Roguelite
         {
             this.seed = seed;
             for (int index = 0; index < quickbar.Length; index++) quickbar[index] = string.Empty;
+        }
+
+        internal RogueEquipmentRuntime Clone(CombatState combat)
+        {
+            RogueEquipmentRuntime clone = new RogueEquipmentRuntime(seed);
+            foreach (RogueEquipmentInstance source in equipment.Values)
+            {
+                RogueEquipmentInstance item = new RogueEquipmentInstance(source.InstanceId, source.DefinitionId,
+                    source.Rarity, source.PowerBand, source.SourceStage, source.SourceType, source.AcquiredOrder)
+                { ReforgeCount = source.ReforgeCount, ForgeMaterialId = source.ForgeMaterialId };
+                item.MutableAffixIds.AddRange(source.MutableAffixIds);
+                item.UpgradeBranchIds.AddRange(source.UpgradeBranchIds);
+                clone.equipment.Add(item.InstanceId, item);
+            }
+            foreach (RogueTacticalItemInstance source in tactical.Values)
+            {
+                RogueTacticalItemInstance item = new RogueTacticalItemInstance(source.InstanceId, source.DefinitionId,
+                    source.ChargesMaximum, source.AcquiredOrder, source.SourceType);
+                item.RestoreCharges(source.ChargesCurrent);
+                clone.tactical.Add(item.InstanceId, item);
+            }
+            foreach (var pair in materials) clone.materials.Add(pair.Key, pair.Value);
+            foreach (var pair in backpack) clone.backpack.Add(pair.Key, pair.Value);
+            foreach (var pair in equipped) clone.equipped[pair.Key] = pair.Value;
+            Array.Copy(quickbar, clone.quickbar, quickbar.Length);
+            foreach (string id in firstMoveAvailable) clone.firstMoveAvailable.Add(id);
+            foreach (string id in firstPaidSpellReturned) clone.firstPaidSpellReturned.Add(id);
+            clone.forgeWeaponShieldAvailable = forgeWeaponShieldAvailable;
+            clone.forgeSpellDiscountConsumed = forgeSpellDiscountConsumed;
+            clone.attachedCombat = combat;
+            return clone;
         }
 
         public static RogueEquipmentRuntime CreateStarter(int seed)
@@ -88,12 +141,18 @@ namespace OCC.Combat.Roguelite
         public static RogueEquipmentRuntime FromDto(RogueRunDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
-            if (dto.EquipmentInstances.Count == 0 && dto.TacticalItemInstances.Count == 0) return CreateStarter(dto.Seed);
+            if (dto.EquipmentInstances.Count == 0 && dto.TacticalItemInstances.Count == 0)
+            {
+                RogueEquipmentRuntime starter = CreateStarter(dto.Seed);
+                starter.AddMaterialStock(dto);
+                return starter;
+            }
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(dto.Seed);
             foreach (EquipmentInstanceDto saved in dto.EquipmentInstances.OrderBy(value => value.AcquiredOrder))
             {
                 RogueEquipmentInstance instance = runtime.CreateInstance(saved.InstanceId, saved.DefinitionId, saved.Rarity, saved.AcquiredOrder, saved.SourceType);
-                instance.MutableAffixIds.AddRange(saved.MutableAffixIds); instance.UpgradeBranchIds.AddRange(saved.UpgradeBranchIds); instance.ReforgeCount = saved.ReforgeCount;
+                instance.MutableAffixIds.AddRange(saved.MutableAffixIds); instance.UpgradeBranchIds.AddRange(saved.UpgradeBranchIds);
+                instance.ReforgeCount = saved.ReforgeCount; instance.ForgeMaterialId = saved.ForgeMaterialId;
             }
 
             HashSet<string> equippedIds = runtime.RestoreEquippedSlots(dto.EquipmentSlotInstanceIds);
@@ -110,6 +169,7 @@ namespace OCC.Combat.Roguelite
                 runtime.backpack[item.InstanceId] = new RogueBackpackPlacement(saved.X, saved.Y, saved.Rotated);
             }
             runtime.NormalizeBackpackPlacementsAfterLoad();
+            runtime.AddMaterialStock(dto);
             for (int index = 0; index < runtime.quickbar.Length; index++) runtime.AssignQuickbar(index, dto.ItemQuickbarInstanceIds[index]);
             return runtime;
         }
@@ -123,7 +183,8 @@ namespace OCC.Combat.Roguelite
                 KeyValuePair<EquipmentSlot, string> equippedPair = equipped.FirstOrDefault(value => value.Value == instance.InstanceId);
                 EquipmentSlot slot = string.IsNullOrEmpty(equippedPair.Value) ? EquipmentSlot.None : equippedPair.Key;
                 EquipmentInstanceDto saved = new EquipmentInstanceDto(instance.InstanceId, instance.DefinitionId, slot, instance.Rarity, instance.PowerBand)
-                { ReforgeCount = instance.ReforgeCount, SourceStage = instance.SourceStage, SourceType = instance.SourceType, AcquiredOrder = instance.AcquiredOrder };
+                { ReforgeCount = instance.ReforgeCount, ForgeMaterialId = instance.ForgeMaterialId,
+                    SourceStage = instance.SourceStage, SourceType = instance.SourceType, AcquiredOrder = instance.AcquiredOrder };
                 if (backpack.TryGetValue(instance.InstanceId, out RogueBackpackPlacement placement)) { saved.BackpackX = placement.X; saved.BackpackY = placement.Y; saved.BackpackRotated = placement.Rotated; }
                 saved.MutableAffixIds.AddRange(instance.MutableAffixIds); saved.UpgradeBranchIds.AddRange(instance.UpgradeBranchIds); dto.EquipmentInstances.Add(saved);
             }
@@ -134,6 +195,10 @@ namespace OCC.Combat.Roguelite
                 dto.TacticalItemInstances.Add(new TacticalItemInstanceDto { InstanceId = item.InstanceId, DefinitionId = item.DefinitionId, X = placement.X, Y = placement.Y,
                     Rotated = placement.Rotated, ChargesCurrent = item.ChargesCurrent, ChargesMaximum = item.ChargesMaximum, SourceStage = "academy", SourceType = item.SourceType });
             }
+            dto.MaterialPlacementRows.Clear();
+            foreach (string instanceId in materials.Keys.OrderBy(value => value, StringComparer.Ordinal))
+                if (backpack.TryGetValue(instanceId, out RogueBackpackPlacement placement))
+                    dto.MaterialPlacementRows.Add(instanceId + "," + placement.X + "," + placement.Y);
             Array.Copy(quickbar, dto.ItemQuickbarInstanceIds, quickbar.Length);
         }
 
@@ -174,7 +239,7 @@ namespace OCC.Combat.Roguelite
 
         public bool CanMoveBackpack(string instanceId, int x, int y, bool rotated)
         {
-            if (!backpack.ContainsKey(instanceId)) return false;
+            if (!backpack.ContainsKey(instanceId) || materials.ContainsKey(instanceId) && rotated) return false;
             Size(instanceId, rotated, out int width, out int height);
             return Fits(instanceId, x, y, rotated, width, height, instanceId);
         }
@@ -183,6 +248,17 @@ namespace OCC.Combat.Roguelite
         {
             if (!backpack.TryGetValue(instanceId, out RogueBackpackPlacement placement)) return false;
             return MoveBackpack(instanceId, placement.X, placement.Y, !placement.Rotated);
+        }
+
+        public bool DiscardBackpackItem(string instanceId)
+        {
+            if (!backpack.ContainsKey(instanceId) || materials.ContainsKey(instanceId)) return false;
+            backpack.Remove(instanceId);
+            if (equipment.Remove(instanceId)) return true;
+            if (!tactical.Remove(instanceId)) return false;
+            for (int index = 0; index < quickbar.Length; index++)
+                if (quickbar[index] == instanceId) quickbar[index] = string.Empty;
+            return true;
         }
 
         public bool Equip(string instanceId, EquipmentSlot slot)
@@ -279,6 +355,28 @@ namespace OCC.Combat.Roguelite
         {
             attachedCombat = combat ?? throw new ArgumentNullException(nameof(combat));
             RefreshEquipmentPassives();
+            int statusGuards = new[] { EquipmentSlot.Head, EquipmentSlot.Chest, EquipmentSlot.Feet }
+                .Count(slot => HasForgedEquipped(slot, "FORGE-CIRCUIT"));
+            if (statusGuards > 0) attachedCombat.GetUnit("hero")?.ConfigureFirstNegativeStatusReduction(statusGuards);
+        }
+
+        private bool HasForgedEquipped(EquipmentSlot slot, string materialId) =>
+            equipped.TryGetValue(slot, out string id) && !string.IsNullOrEmpty(id) &&
+            equipment.TryGetValue(id, out RogueEquipmentInstance instance) && instance.ForgeMaterialId == materialId;
+
+        public int ForgeWeaponDamageBonus => HasForgedEquipped(EquipmentSlot.Weapon, "FORGE-LOAD") ? 2 : 0;
+        public int ForgeManaCapacityBonus => HasForgedEquipped(EquipmentSlot.CastingUnit, "FORGE-LOAD") ? 1 : 0;
+        public bool FirstForgeSpellDiscountAvailable => HasForgedEquipped(EquipmentSlot.CastingUnit, "FORGE-CIRCUIT") &&
+            !forgeSpellDiscountConsumed;
+        public void ConsumeFirstForgeSpellDiscount() { if (FirstForgeSpellDiscountAvailable) forgeSpellDiscountConsumed = true; }
+        public bool FirstForgeBackpackOpenFree => HasForgedEquipped(EquipmentSlot.Backpack, "FORGE-CIRCUIT");
+
+        public void AfterWeaponHit(CombatState combat, string unitId)
+        {
+            if (unitId != "hero" || !forgeWeaponShieldAvailable ||
+                !HasForgedEquipped(EquipmentSlot.Weapon, "FORGE-CIRCUIT")) return;
+            forgeWeaponShieldAvailable = false;
+            combat.TryGrantRogueliteShield(unitId, "forge-weapon-circuit", 2);
         }
 
         private void NotifyLoadoutChanged()
@@ -378,12 +476,16 @@ namespace OCC.Combat.Roguelite
         public void OnTurnStart(CombatState combat, string unitId)
         {
             firstMoveAvailable.Add(unitId);
+            if (unitId == "hero") forgeWeaponShieldAvailable = true;
             foreach (EquipmentSlot slot in EquipmentSlotRules.ActiveSlots)
             {
                 string instanceId = equipped[slot];
                 if (string.IsNullOrEmpty(instanceId)) continue;
                 RogueEquipmentInstance instance = equipment[instanceId]; EquipmentDefinition definition = Definition(instance);
                 if (definition.TurnStartShield > 0) combat.TryGrantRogueliteShield(unitId, instance.InstanceId + ":fixed", definition.TurnStartShield);
+                if (unitId == "hero" && instance.ForgeMaterialId == "FORGE-LOAD" &&
+                    (slot == EquipmentSlot.Head || slot == EquipmentSlot.Chest || slot == EquipmentSlot.Feet))
+                    combat.TryGrantRogueliteShield(unitId, instance.InstanceId + ":forge-load", 2);
                 foreach (string affixId in instance.MutableAffixIds)
                 {
                     AffixDefinition affix = catalog.Affixes.Single(value => value.AffixId == affixId);
@@ -508,7 +610,8 @@ namespace OCC.Combat.Roguelite
             EquipmentDefinition definition = DefinitionFor(instanceId);
             if (definition == null || definition.Slot != EquipmentSlot.Backpack)
                 throw new InvalidOperationException("Backpack capacity requires a backpack equipment definition: " + instanceId);
-            return (definition.BackpackColumns, definition.BackpackRows);
+            return (definition.BackpackColumns, definition.BackpackRows +
+                (equipment[instanceId].ForgeMaterialId == "FORGE-LOAD" ? 1 : 0));
         }
         private bool AllPlacementsLegal(int columns, int rows, string ignoredInstanceId = null)
         {
@@ -537,6 +640,38 @@ namespace OCC.Combat.Roguelite
                 if (!AddFirstFit(instanceId))
                     throw new InvalidOperationException("Saved backpack contents do not fit the current capacity: " + instanceId);
         }
+        private void AddMaterialStock(RogueRunDto dto)
+        {
+            string[] ids = { "FORGE-LOAD", "FORGE-CIRCUIT", "SPEC-AMPLIFY", "SPEC-EFFICIENT" };
+            Dictionary<string, RogueBackpackPlacement> savedPlacements = dto.MaterialPlacementRows
+                .Select(row => row.Split(','))
+                .ToDictionary(parts => parts[0], parts => new RogueBackpackPlacement(int.Parse(parts[1]), int.Parse(parts[2]), false), StringComparer.Ordinal);
+            int forgeTyped = dto.MaterialStockRows.Where(row => row.StartsWith("FORGE-", StringComparison.Ordinal))
+                .Sum(row => int.Parse(row.Substring(row.IndexOf('=') + 1)));
+            int specTyped = dto.MaterialStockRows.Where(row => row.StartsWith("SPEC-", StringComparison.Ordinal))
+                .Sum(row => int.Parse(row.Substring(row.IndexOf('=') + 1)));
+            List<string> materialIds = new List<string>();
+            foreach (string materialId in ids)
+            {
+                string row = dto.MaterialStockRows.FirstOrDefault(value => value.StartsWith(materialId + "=", StringComparison.Ordinal));
+                int count = row == null ? 0 : int.Parse(row.Substring(materialId.Length + 1));
+                if (materialId == "FORGE-LOAD") count += Math.Max(0, dto.ForgeMaterialCount - forgeTyped) + (dto.FirstRunExperience?.ForgeMaterialCount ?? 0);
+                if (materialId == "SPEC-AMPLIFY") count += Math.Max(0, dto.SpecializationMaterialCount - specTyped) + (dto.FirstRunExperience?.SpecializationMaterialCount ?? 0);
+                for (int index = 0; index < count; index++)
+                {
+                    string instanceId = "material:" + materialId + ":" + index;
+                    materials.Add(instanceId, materialId);
+                    materialIds.Add(instanceId);
+                }
+            }
+            foreach (string instanceId in materialIds)
+                if (savedPlacements.TryGetValue(instanceId, out RogueBackpackPlacement placement) &&
+                    Fits(instanceId, placement.X, placement.Y, false, 1, 1, null))
+                    backpack.Add(instanceId, placement);
+            foreach (string instanceId in materialIds)
+                if (!backpack.ContainsKey(instanceId) && !AddFirstFit(instanceId))
+                    throw new InvalidOperationException("Backpack has no room for workshop material: " + materials[instanceId]);
+        }
         private int InstanceAcquiredOrder(string instanceId)
         {
             if (equipment.TryGetValue(instanceId, out RogueEquipmentInstance equipmentItem)) return equipmentItem.AcquiredOrder;
@@ -544,6 +679,7 @@ namespace OCC.Combat.Roguelite
         }
         private void Size(string instanceId, bool rotated, out int width, out int height)
         {
+            if (instanceId.StartsWith("material:", StringComparison.Ordinal)) { width = 1; height = 1; return; }
             if (equipment.TryGetValue(instanceId, out RogueEquipmentInstance item)) { EquipmentDefinition definition = Definition(item); width = rotated ? definition.Height : definition.Width; height = rotated ? definition.Width : definition.Height; return; }
             TacticalItemDefinition tacticalDefinition = catalog.TacticalItems.Single(value => value.DefinitionId == tactical[instanceId].DefinitionId);
             width = rotated ? tacticalDefinition.Height : tacticalDefinition.Width; height = rotated ? tacticalDefinition.Width : tacticalDefinition.Height;

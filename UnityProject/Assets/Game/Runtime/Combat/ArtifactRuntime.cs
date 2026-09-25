@@ -237,7 +237,7 @@ namespace OCC.Combat
                 if (artifact.RequiresLineOfSight && !combat.HasLineOfSight(source.Position, target.Cell)) failures.Add("目标被重掩体或烟幕遮挡");
             }
             ValidateTarget(battle, source, artifact, target, primary, failures);
-            GridPosition[] cells = Selection(combat.Map, target.Cell, artifact.Shape).ToArray();
+            GridPosition[] cells = Selection(combat.Map, source == null ? target.Cell : source.Position, target.Cell, artifact.Shape).ToArray();
             string[] units = combat.Units.Values.Where(unit => unit.IsAlive && cells.Contains(unit.Position)).OrderBy(unit => unit.Id, StringComparer.Ordinal).Select(unit => unit.Id).ToArray();
             bool friendly = source != null && artifact.Effects.Any(effect => effect.AffectAllies) && units.Any(id => combat.GetUnit(id).IsHero == source.IsHero && id != source.Id);
             string signature = artifact.Id + "|" + sourceId + "|" + target.UnitId + "|" + target.SecondaryUnitId + "|" + target.Cell + "|" + string.Join(",", cells) + "|" + string.Join(",", failures);
@@ -264,6 +264,8 @@ namespace OCC.Combat
         {
             ArtifactPreview preview = Preview(battle, sourceId, artifact, target, remainingUses); if (!preview.CanCommit) throw new InvalidOperationException(string.Join("；", preview.Failures));
             UnitState source = battle.Combat.GetUnit(sourceId), primary = string.IsNullOrEmpty(target.UnitId) ? battle.Combat.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == target.Cell) : battle.Combat.GetUnit(target.UnitId);
+            Dictionary<string, int> heroEnemyVitals = source?.IsHero == true
+                ? AcademyFieldEnemyRuntime.CaptureEnemyVitals(battle.Combat) : null;
             UnitState secondary = string.IsNullOrEmpty(target.SecondaryUnitId) ? null : battle.Combat.GetUnit(target.SecondaryUnitId);
             GridPosition sourcePosition = source.Position;
             source.SpendActionPoint(artifact.ActionPointCost); if (artifact.ManaCost > 0) source.SpendMana(artifact.ManaCost);
@@ -275,7 +277,10 @@ namespace OCC.Combat
                 { ApplyCellEffect(battle, source, artifact, target.Cell, preview.Cells, effect, steps, ref sequence); continue; }
                 foreach (UnitState unit in targets) ApplyUnitEffect(battle, source, unit, primary, secondary, effect, target.Cell, steps, ref sequence);
             }
-            battle.Combat.AddLog(artifact.DisplayName + "已经生效。"); battle.Combat.EvaluateOutcome(); return new ArtifactExecution(steps, source.Id, sourcePosition);
+            battle.Combat.AddLog(artifact.DisplayName + "已经生效。"); battle.Combat.EvaluateOutcome();
+            if (heroEnemyVitals != null)
+                battle.Combat.AcademyFieldEnemy?.ObserveHeroDamage(battle.Combat, heroEnemyVitals);
+            return new ArtifactExecution(steps, source.Id, sourcePosition);
         }
 
         private static void ValidateTarget(ArtifactBattleState battle, UnitState source, ArtifactDefinition artifact, ArtifactTarget target, UnitState primary, List<string> failures)
@@ -297,7 +302,7 @@ namespace OCC.Combat
             }
             if (source == null) return;
             IReadOnlyList<GridPosition> cells = combat.Map.IsInside(target.Cell)
-                ? Selection(combat.Map, target.Cell, artifact.Shape).ToArray()
+                ? Selection(combat.Map, source.Position, target.Cell, artifact.Shape).ToArray()
                 : Array.Empty<GridPosition>();
             if (artifact.Effects.Any(effect => effect.Kind == ArtifactEffectKind.RestoreMana) && source.Mana >= source.MaxMana)
                 failures.Add("个人魔力已满");
@@ -320,8 +325,24 @@ namespace OCC.Combat
                 failures.Add("范围内至少需要一个单位");
         }
 
-        private static IEnumerable<GridPosition> Selection(GridMap map, GridPosition center, ArtifactSelectionShape shape)
+        private static IEnumerable<GridPosition> Selection(GridMap map, GridPosition origin, GridPosition center, ArtifactSelectionShape shape)
         {
+            if (shape == ArtifactSelectionShape.Line)
+            {
+                int x = origin.X, y = origin.Y;
+                int dx = Math.Abs(center.X - x), dy = Math.Abs(center.Y - y);
+                int stepX = x < center.X ? 1 : -1, stepY = y < center.Y ? 1 : -1;
+                int error = dx - dy;
+                while (x != center.X || y != center.Y)
+                {
+                    int doubled = error * 2;
+                    if (doubled > -dy) { error -= dy; x += stepX; }
+                    if (doubled < dx) { error += dx; y += stepY; }
+                    GridPosition position = new GridPosition(x, y);
+                    if (map.IsInside(position)) yield return position;
+                }
+                yield break;
+            }
             yield return center; if (shape == ArtifactSelectionShape.Single) yield break;
             GridPosition[] offsets = { new GridPosition(1, 0), new GridPosition(-1, 0), new GridPosition(0, 1), new GridPosition(0, -1) };
             foreach (GridPosition offset in offsets) { GridPosition value = new GridPosition(center.X + offset.X, center.Y + offset.Y); if (map.IsInside(value)) yield return value; }
@@ -405,8 +426,8 @@ namespace OCC.Combat
             foreach (GridPosition position in effect.Scope == ArtifactEffectScope.Selection ? selection : new[] { cell })
             {
                 TileState tile = battle.Combat.Map.GetTile(position); int applied = 0; int durabilityBefore = tile.Durability;
-                if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
-                else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.Durability = effect.Amount; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
+                if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.Durability = effect.Amount; tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
+                else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.Durability = effect.Amount; tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DamageObject) { tile.Durability = Math.Max(0, tile.Durability - effect.Amount); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DestroyLightCover && tile.Cover == CoverType.Light) { applied = tile.Durability; tile.Durability = 0; }
                 else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.CreateOrRefreshFireground(position, effect.Amount, effect.Duration, artifact.Id, source.Id); applied = effect.Amount; }
@@ -429,7 +450,7 @@ namespace OCC.Combat
                     battle.Combat.Map.SetTile(position, tile); battle.Decoys[position] = effect.Amount; applied = effect.Amount;
                 }
                 if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)
-                    battle.Combat.ResolveAetherCrystalDamage(position, durabilityBefore);
+                    battle.Combat.ResolveAetherCrystalDamage(position, durabilityBefore, source.Id);
                 var feedback = new List<CombatFeedbackEvent>();
                 if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)
                 {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Tests
 {
@@ -76,6 +77,86 @@ namespace OCC.Combat.Tests
 
             Assert.That(Tile(state, 3, 3).HasTrace, Is.False);
             Assert.That(Tile(state, 5, 5).HasTrace, Is.False);
+        }
+
+        [Test]
+        public void TimedMapTerrain_UsesConfiguredDurationAndEffectLayerReplacement()
+        {
+            FirstRegionLevelDefinition source = FirstRegionLevelCatalog.RainLanternCourt;
+            GridPosition fire = new GridPosition(2, 3);
+            GridPosition smoke = source.HeroSpawn;
+            var level = new FirstRegionLevelDefinition("timed_effect_probe", source.DisplayName,
+                source.ObjectiveSummary, source.ObjectiveType, source.Tier, source.HeroSpawn,
+                source.FloorTheme, false, false, source.PrerequisiteLevelIds, source.EnemyPlacements,
+                source.Terrain.Concat(new[]
+                {
+                    new LevelTerrainPlacement(fire.X, fire.Y, LevelTerrainKind.Fireground, 0, 3),
+                    new LevelTerrainPlacement(smoke.X, smoke.Y, LevelTerrainKind.Smoke, 0, 4)
+                }), source.SpaceContract, source.Width, source.Height, source.BlockedPositions);
+            CombatState state = FirstRegionLevelBuilder.Build(level).State;
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+
+            FirstRegionLevelBuilder.ApplyTimedTerrain(level, state);
+
+            Assert.That(state.RogueSpells.FireBattle.HasFireground(fire), Is.True);
+            Assert.That(state.RogueSpells.FireBattle.Firegrounds[fire].RemainingTurns, Is.EqualTo(3));
+            Assert.That(state.RogueSpells.FireBattle.Firegrounds[fire].SourceSpellId, Is.EqualTo("map:timed_effect_probe"));
+            Assert.That(state.Map.GetTile(fire).IsWater, Is.False, "预置火场覆盖同格浅水");
+            Assert.That(state.Map.GetTile(smoke).SmokeExpiresAt, Is.EqualTo(4));
+        }
+
+        [Test]
+        public void Fireground_TicksAtEveryUnitTurnBeforeStandingDamage()
+        {
+            CombatState state = State();
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            GridPosition cell = new GridPosition(4, 3);
+            state.RogueSpells.FireBattle.CreateOrRefreshFireground(cell, 8, 3, "test-fire");
+
+            CombatResolver.BeginTurn(state, "hero");
+            Assert.That(state.RogueSpells.FireBattle.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+            CombatResolver.BeginTurn(state, "enemy_0");
+            Assert.That(state.RogueSpells.FireBattle.Firegrounds[cell].RemainingTurns, Is.EqualTo(1));
+            CombatResolver.BeginTurn(state, "hero");
+            Assert.That(state.RogueSpells.FireBattle.HasFireground(cell), Is.False);
+        }
+
+        [Test]
+        public void ShallowWater_ReplacesPaperWithoutWetPaperState()
+        {
+            CombatState state = State();
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            GridPosition cell = new GridPosition(4, 3);
+            var fire = state.RogueSpells.FireBattle;
+            fire.CreateOrRefreshLoosePaper(cell);
+            fire.CreateOrRefreshShallowWater(cell);
+            Assert.That(Tile(state, cell.X, cell.Y).IsWater, Is.True);
+            Assert.That(Tile(state, cell.X, cell.Y).IsLoosePaper, Is.False);
+            Assert.That(fire.IgniteLoosePaper(cell, 8, 2, "test-fire"), Is.False);
+
+            fire.CreateOrRefreshLoosePaper(cell);
+            Assert.That(Tile(state, cell.X, cell.Y).IsWater, Is.False);
+            Assert.That(fire.IgniteLoosePaper(cell, 8, 2, "test-fire"), Is.True);
+        }
+
+        [Test]
+        public void StrongWind_DispersesSmokeBeforeLooseMaterialMoves()
+        {
+            CombatState state = State();
+            Set(state, 4, 3, tile => tile.SmokeExpiresAt = 99);
+            Set(state, 2, 5, tile => tile.IsCrystalShard = true);
+            Assert.That(state.Environment.Wind.TryChange(FieldWindState.East, 3), Is.True);
+
+            CombatResolver.BeginTurn(state, "hero");
+
+            Assert.That(Tile(state, 4, 3).SmokeExpiresAt, Is.EqualTo(0));
+            Assert.That(Tile(state, 5, 3).SmokeExpiresAt, Is.EqualTo(0));
+            Assert.That(Tile(state, 3, 5).IsCrystalShard, Is.True, "强风仍逐格搬动碎晶");
+            Assert.That(state.EventLog.Any(line => line.Contains("强风吹散") && line.Contains("烟尘")), Is.True);
         }
 
         [Test]

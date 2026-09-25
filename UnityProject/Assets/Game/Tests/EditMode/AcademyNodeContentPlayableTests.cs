@@ -19,18 +19,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void AcademyEventPool_HasSixteenStablePlayableDefinitions()
+        public void AcademyEventPool_HasSixteenOptionalEventsAndTheFixedT02Definition()
         {
-            Assert.That(AcademyNodeContentCatalog.Events.Count, Is.EqualTo(16));
-            Assert.That(AcademyNodeContentCatalog.Events.Select(value => value.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(16));
+            Assert.That(AcademyNodeContentCatalog.Events.Count, Is.EqualTo(17));
+            Assert.That(AcademyNodeContentCatalog.Events.Select(value => value.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(17));
             foreach (AcademyEventDefinition definition in AcademyNodeContentCatalog.Events)
             {
-                Assert.That(definition.Id, Does.Match("^EV(0[1-9]|1[0-6])$"));
+                Assert.That(definition.Id, Does.Match("^(EV(0[1-9]|1[0-6])|T02)$"));
                 Assert.That(definition.DisplayName, Is.Not.Empty);
-                Assert.That(definition.Choices.Count, Is.EqualTo(2), definition.Id);
-                Assert.That(definition.Choices.Select(value => value.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(2), definition.Id);
+                int expectedChoices = definition.Id == "T02" ? 1 : 2;
+                Assert.That(definition.Choices.Count, Is.EqualTo(expectedChoices), definition.Id);
+                Assert.That(definition.Choices.Select(value => value.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(expectedChoices), definition.Id);
+                if (definition.Id == "T02") continue;
                 Assert.That(definition.Choices.All(value => value.Preview.Contains("用时 1") || value.RequiresCombat), Is.True, definition.Id);
-                Assert.That(definition.Choices.Where(value => value.RequiresCombat).All(value => value.Preview.Contains("输")), Is.True, definition.Id);
+                Assert.That(definition.Choices.Where(value => value.RequiresCombat).All(value =>
+                    value.Preview.Contains("输") || value.Preview.Contains("失败")), Is.True, definition.Id);
             }
         }
 
@@ -76,10 +79,10 @@ namespace OCC.Combat.Tests
             Assert.That(summary, Does.Contain("5金"));
             Assert.That(summary, Does.Contain("险地冷凝器"));
 
-            RogueliteNodeContentChoice combat = AcademyNodeContentCatalog.Event("EV16").Choices.Single(value => value.RequiresCombat);
+            RogueliteNodeContentChoice combat = AcademyNodeContentCatalog.Event("EV01").Choices.Single(value => value.RequiresCombat);
             string combatSummary = RogueliteEconomyPresentation.NodeChoiceSummary(run, combat, RogueliteEconomyPresentation.ForNodeChoice(run, combat));
             Assert.That(combatSummary, Does.Contain("胜利"));
-            Assert.That(combatSummary, Does.Contain("3金 + 2学院贡献"));
+            Assert.That(combatSummary, Does.Contain("1金"));
 
             RogueliteNodeContentChoice mixedVersion = AcademyNodeContentCatalog.FunctionChoices(RogueliteMapCatalog.Node("supply_checkpoint"))
                 .Single(value => value.Id == "medical_cache");

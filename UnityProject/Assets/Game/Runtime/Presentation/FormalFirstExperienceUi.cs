@@ -32,7 +32,8 @@ namespace OCC.Combat.Presentation
             if (!visible) return;
             string next = flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
                 flow.ResolutionIndex + "|" + Mathf.RoundToInt(flow.PendingVolume * 100f) + "|" + flow.PendingFullscreen + "|" +
-                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave;
+                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
+                flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
             if (next != signature) Rebuild();
             if (!flow.IsEncyclopediaOpen && Keyboard.current?.escapeKey.wasPressedThisFrame == true) flow.GoBack();
         }
@@ -55,13 +56,15 @@ namespace OCC.Combat.Presentation
                 case FirstExperiencePrototypeController.FlowStage.SaveConfirmation: BuildConfirmation(); break;
                 case FirstExperiencePrototypeController.FlowStage.Configuration: BuildConfiguration(); break;
                 case FirstExperiencePrototypeController.FlowStage.AcademyIntro: BuildAcademyIntro(); break;
+                case FirstExperiencePrototypeController.FlowStage.RunCreation: BuildRunCreation(); break;
                 default: BuildHandoff(); break;
             }
             LinkNavigation();
             if (buttons.Count > 0) RuntimeUiEventSystem.Select(buttons[0].gameObject);
             signature = flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
                 flow.ResolutionIndex + "|" + Mathf.RoundToInt(flow.PendingVolume * 100f) + "|" + flow.PendingFullscreen + "|" +
-                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave;
+                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
+                flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
         }
 
         private static void BuildBackground(Transform parent, FirstExperiencePrototypeController.FlowStage stage)
@@ -154,7 +157,11 @@ namespace OCC.Combat.Presentation
 
         private void BuildSlots()
         {
-            Header(flow.IsSelectingContinue ? "选择继续档案" : "选择新档案位置", flow.IsSelectingContinue ? "只显示可继续的卷宗。" : "已有卷宗会在下一步要求确认覆盖。");
+            Header(flow.IsSelectingContinue ? "选择继续档案" : "选择新档案位置",
+                flow.IsSelectingContinue ? "只显示可继续的卷宗。" : "已有卷宗会在下一步要求确认覆盖。");
+            if (!string.IsNullOrEmpty(flow.HandoffError))
+                Label("档案提示", flow.HandoffError, page.transform, new Vector2(140, -226), new Vector2(1640, 64),
+                    22, FormalUiTheme.Danger, TextAnchor.UpperLeft);
             for (int slot = 0; slot < 3; slot++)
             {
                 int captured = slot; bool exists = flow.SlotExists(slot);
@@ -163,8 +170,13 @@ namespace OCC.Combat.Presentation
                 Label("编号", "档案 0" + (slot + 1), card.transform, new Vector2(52, -34), new Vector2(410, 52), 24, ArchiveUiStyle.Brass, TextAnchor.MiddleLeft);
                 FormalUiKit.Line(card.transform, new Vector2(32, -94), new Vector2(436, 1), ArchiveUiStyle.Rule, "档案分隔");
                 Label("摘要", exists ? flow.SlotDisplaySummary(slot) : "空白卷宗\n尚未建立学生档案", card.transform, new Vector2(32, -114), new Vector2(430, 130), 24, exists ? ArchiveUiStyle.Ink : ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-                Button choose = AddButton("选择档案" + slot, flow.IsSelectingContinue ? "继续" : exists ? "覆盖此档案" : "在此建立", card.transform, new Vector2(32, -282), new Vector2(436, 72), () => flow.ChooseSlot(captured));
+                bool protectedSlot = flow.IsSelectingContinue && flow.IsSlotWriteProtected(slot);
+                Button choose = AddButton("选择档案" + slot, flow.IsSelectingContinue ? "继续" : exists ? "覆盖此档案" : "在此建立", card.transform,
+                    new Vector2(32, protectedSlot ? -242 : -282), new Vector2(436, protectedSlot ? 58 : 72), () => flow.ChooseSlot(captured));
                 choose.interactable = !flow.IsSelectingContinue || exists;
+                if (protectedSlot)
+                    AddButton("恢复档案" + slot, "验证并恢复旧档", card.transform, new Vector2(32, -312), new Vector2(436, 58),
+                        () => flow.RecoverProtectedSlot(captured), FormalUiTheme.Cyan);
             }
             AddButton("返回", "返回以太主界面", page.transform, new Vector2(140, -850), new Vector2(360, 80), flow.GoBack);
         }
@@ -237,7 +249,7 @@ namespace OCC.Combat.Presentation
             GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(112, -254), new Vector2(1020, 610), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .95f));
             ArchiveUiStyle.PaperPanel(module, ArchiveUiStyle.LightPaper, true);
             Label("目标", "完成学院实地调查", module.transform, new Vector2(52, -52), new Vector2(900, 72), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("路径", "三场普通战  →  三个事件  →  工坊加工  →  健康确认  →  精英挑战", module.transform, new Vector2(52, -162), new Vector2(900, 126), 24, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            Label("路径", "三场普通战  →  三个事件  →  可选工坊／医务室  →  精英挑战", module.transform, new Vector2(52, -162), new Vector2(900, 126), 24, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
             string[] labels = { "01 观察场地", "02 整理行囊", "03 完成节点" };
             for (int i = 0; i < 3; i++)
             {
@@ -249,9 +261,28 @@ namespace OCC.Combat.Presentation
                 () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
         }
 
+        private void BuildRunCreation()
+        {
+            Header("开始新一轮学院旅程", "教程已完成；当前没有进行中的单轮。");
+            GameObject card = CenterPanel(new Vector2(1120, 520));
+            Label("内容", "确认后生成新的学院地图、节点连线、遭遇与初始资源，并写入当前档案。\n随后可在出发整备中调整装备、术式、战术栏和背包。", card.transform,
+                new Vector2(64, -90), new Vector2(990, 170), 28, ArchiveUiStyle.Ink, TextAnchor.UpperLeft);
+            if (!string.IsNullOrEmpty(flow.HandoffError))
+                Label("保存提示", flow.HandoffError, card.transform,
+                    new Vector2(64, -270), new Vector2(990, 80), 22, FormalUiTheme.Danger, TextAnchor.UpperLeft);
+            AddButton("取消新一轮", "返回以太主界面", card.transform,
+                new Vector2(64, -410), new Vector2(410, 74), flow.GoBack);
+            AddButton("确认新一轮", "生成并进入出发整备", card.transform,
+                new Vector2(610, -410), new Vector2(440, 74), flow.ConfirmSubsequentRound, FormalUiTheme.Cyan);
+        }
+
         private void BuildHandoff()
         {
-            Header("进入学院地图", string.IsNullOrEmpty(flow.HandoffError) ? "正在连接地图、档案与真实战斗运行态。" : flow.HandoffError);
+            Header("进入学院地图", "正在连接地图、档案与真实战斗运行态。");
+            if (!string.IsNullOrEmpty(flow.HandoffError))
+                Label("进入失败说明", flow.HandoffError, page.transform, new Vector2(170, -280), new Vector2(1580, 140),
+                    26, FormalUiTheme.Danger, TextAnchor.UpperLeft);
+            AddButton("返回入口", "返回以太主界面", page.transform, new Vector2(140, -850), new Vector2(360, 80), flow.ShowLanding);
             AddButton("重试进入地图", "重试进入地图", page.transform, new Vector2(1310, -850), new Vector2(470, 86), flow.EnterAcademy, FormalUiTheme.Cyan);
         }
 

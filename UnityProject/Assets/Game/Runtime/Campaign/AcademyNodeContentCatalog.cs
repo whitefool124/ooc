@@ -39,8 +39,8 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<AcademyEventDefinition> Events = new[]
         {
             E("EV01", "新生实战委托", "中庭",
-                C("EV01_defence", "领取防御训练器材", "花 1 学院贡献，带走折盾匣；用时 1。回来时会恢复生命和魔力。", reward:"G-T01", contributionCost:1),
-                C("EV01_drill", "参加追加演练", "与两名陪练交手。赢了得 4 金币；输了只得 1 金币。", combat:true, goldGain:1)),
+                C("EV01_defence", "领取防御训练器材", "花 1 学院贡献，带走折盾匣；用时 1。", reward:"G-T01", contributionCost:1),
+                C("EV01_drill", "参加侧锋对练", "击倒盾术生与侧锋生即胜；胜利额外获得 1 金币，失败不扣基础资源。", combat:true, goldGain:1)),
             E("EV02", "档案室异常索引", "教学",
                 C("EV02_index", "购买索引抄本", "花 1 学院贡献，换得 3 金币；用时 1。", contributionCost:1, goldGain:3),
                 C("EV02_leave", "登记后离开", "不花东西，得到 1 学院贡献；用时 1。", contributionGain:1)),
@@ -61,7 +61,7 @@ namespace OCC.Combat
                 C("EV07_detour", "绕路测绘", "不花东西，得到 2 金币；用时 1。", goldGain:2)),
             E("EV08", "高塔值守记录", "封存",
                 C("EV08_read", "查阅维护记录", "花 1 学院贡献，得到 3 金币；用时 1。", contributionCost:1, goldGain:3),
-                C("EV08_elite", "接受高年级考核", "与高年级生交手。赢了得冒险封签；输了拿不到。", reward:"G-T19", combat:true)),
+                C("EV08_recover", "恢复回路", "免费恢复至多 3 点个人魔力；魔力已满时不可选；用时 1。", manaGain:3)),
             E("EV09", "医务室临时征集", "中庭",
                 C("EV09_treatment", "接受治疗", "花 3 金币，恢复 6 生命；用时 1。", goldCost:3, healthGain:6),
                 C("EV09_escort", "帮忙护送", "护送途中会遇到对手。赢了得复元编架；输了拿不到。", reward:"G-T06", combat:true)),
@@ -85,7 +85,9 @@ namespace OCC.Combat
                 C("EV15_objective", "亲自校准导能柱", "破坏失控的导能柱就算完成。赢了得险地冷凝器；输了拿不到。", reward:"G-T11", combat:true)),
             E("EV16", "维护链替班", "封存",
                 C("EV16_support", "请人准备护具", "花 2 学院贡献，带走折盾匣；用时 1。", reward:"G-T01", contributionCost:2),
-                C("EV16_assessment", "接受维护队考核", "完成维护队考核，胜利获得 3 金币与 2 学院贡献；输了且存活时只得一半。", combat:true))
+                C("EV16_assessment", "接受维护队考核", "完成维护队考核，胜利获得 3 金币与 2 学院贡献；输了且存活时只得一半。", combat:true)),
+            E("T02", "封存管理员匣", "封存",
+                C("vault_fire_cache", "领取冒险封签", "获得冒险封签；不是首领门槛或通行凭证。", reward:"G-T19"))
         };
 
         private static AcademyEventDefinition E(string id, string name, string region, params RogueliteNodeContentChoice[] choices)
@@ -138,7 +140,8 @@ namespace OCC.Combat
             RogueliteMapNode[] nodes = RogueliteMapCatalog.Nodes.Where(value => value.Type == RogueliteMapNodeType.Event &&
                     value.Id != "core_vault" && value.Id != "tower_lift")
                 .OrderBy(value => StableKey(seed, "node|" + value.Id)).ToArray();
-            List<AcademyEventDefinition> remaining = Events.OrderBy(value => StableKey(seed, "event|" + value.Id)).ToList();
+            List<AcademyEventDefinition> remaining = Events.Where(value => value.Id != "T02")
+                .OrderBy(value => StableKey(seed, "event|" + value.Id)).ToList();
             List<AcademyEventAssignment> assignments = new List<AcademyEventAssignment>();
             foreach (RogueliteMapNode node in nodes)
             {

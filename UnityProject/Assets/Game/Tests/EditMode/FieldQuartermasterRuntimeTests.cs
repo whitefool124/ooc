@@ -110,6 +110,65 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void AcademyStorekeeper_PulseUsesPublicCommandAndOnlyResolvesOnExecution()
+        {
+            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(4, 3), out UnitState storekeeper);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            state.AttachAcademyEnemyGrowth(new AcademyEnemyGrowthRuntime());
+            UnitState hero = state.GetUnit("hero");
+            CombatResolver.BeginTurn(state, storekeeper.Id);
+            Assert.That(hero.Health, Is.EqualTo(hero.MaxHealth));
+
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, storekeeper, hero);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.StorekeeperPulseSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, storekeeper, hero).ActionName, Is.EqualTo("旧脉冲"));
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(hero.Health, Is.LessThan(hero.MaxHealth));
+            Assert.That(storekeeper.ActionPoints, Is.Zero);
+        }
+
+        [Test]
+        public void AcademyStorekeeper_BlockedPulsePublishesRegisterInstead()
+        {
+            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(4, 3), out UnitState storekeeper);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            state.AttachAcademyEnemyGrowth(new AcademyEnemyGrowthRuntime());
+            Set(state, 3, 3, tile => { tile.Cover = CoverType.Heavy; tile.Durability = TileState.HeavyDurability; });
+            CombatResolver.BeginTurn(state, storekeeper.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, storekeeper, state.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.StorekeeperRegisterSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, storekeeper, state.GetUnit("hero")).ActionName, Is.EqualTo("登记"));
+            Assert.That(state.AcademyFieldEnemy.InspectionMarkCount, Is.Zero);
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.AcademyFieldEnemy.InspectionMarkCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void AcademyStorekeeper_RetiresFiregroundThroughPublicAction()
+        {
+            CombatState state = State("legacy_storekeeper", new GridPosition(1, 3), new GridPosition(9, 5), out UnitState storekeeper);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            state.AttachRogueSpellRuntime(new OCC.Combat.Roguelite.RogueSpellCombatRuntime(state,
+                OCC.Combat.Roguelite.RogueSpellLoadout.Restore(new[] { "BASE-FIRE-MELEE" },
+                    new[] { "BASE-FIRE-MELEE", "", "", "", "", "", "", "" }, true)));
+            GridPosition fireCell = new GridPosition(5, 3);
+            state.RogueSpells.FireBattle.CreateOrRefreshFireground(fireCell, 2, 2, "test-fire", "hero");
+            CombatResolver.BeginTurn(state, storekeeper.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, storekeeper, state.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.StorekeeperRetireSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, storekeeper, state.GetUnit("hero")).ActionName, Is.EqualTo("退件"));
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.RogueSpells.FireBattle.HasFireground(fireCell), Is.False);
+        }
+
+        [Test]
         public void PrototypeHand_DeploysUpToFourPiecesStartingWithAWardGenerator()
         {
             CombatState state = State("prototype_hand", new GridPosition(5, 3), new GridPosition(9, 3), out _);

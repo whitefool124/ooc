@@ -11,6 +11,7 @@ namespace OCC.Combat.Tests
             public int FlushCount;
             public int SetCount;
             public bool ThrowOnGet;
+            public bool ThrowAfterNextMapSet;
             public bool CorruptMapReadbackAfterNextSet;
             private bool corruptMapReadback;
             public bool HasKey(string key) => Values.ContainsKey(key);
@@ -23,6 +24,11 @@ namespace OCC.Combat.Tests
             public void SetString(string key, string value)
             {
                 SetCount++; Values[key] = value;
+                if (key == RogueliteSaveGateway.MapRunKey && ThrowAfterNextMapSet)
+                {
+                    ThrowAfterNextMapSet = false;
+                    throw new System.InvalidOperationException("write failed after changing the slot");
+                }
                 if (key == RogueliteSaveGateway.MapRunKey && CorruptMapReadbackAfterNextSet)
                 {
                     CorruptMapReadbackAfterNextSet = false; corruptMapReadback = true;
@@ -131,6 +137,38 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void ProtectedValidRecord_CanBeVerifiedAndRecoveredWithoutReplacingIt()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(gateway.SaveMapRun(new RogueliteMapRun(93)), Is.True);
+            string original = store.Values[RogueliteSaveGateway.MapRunKey];
+            store.Values[RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)] = "protected-v1";
+            store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)] = "failed-write";
+
+            Assert.That(gateway.TryRecoverProtectedMapRun(out RogueliteMapRun recovered), Is.True, gateway.LastError);
+            Assert.That(recovered.Seed, Is.EqualTo(93));
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
+            Assert.That(gateway.IsMapRunWriteProtected, Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)], Is.EqualTo("failed-write"));
+        }
+
+        [Test]
+        public void ProtectedCorruptRecord_CannotBeUnlockedByRecovery()
+        {
+            MemoryStore store = new MemoryStore();
+            store.Values[RogueliteSaveGateway.MapRunKey] = "broken";
+            store.Values[RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)] = "protected-v1";
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+
+            Assert.That(gateway.TryRecoverProtectedMapRun(out RogueliteMapRun recovered), Is.False);
+            Assert.That(recovered, Is.Null);
+            Assert.That(gateway.LastLoadStatus, Is.EqualTo(RogueliteSaveLoadStatus.InvalidSemantics));
+            Assert.That(gateway.IsMapRunWriteProtected, Is.True);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo("broken"));
+        }
+
+        [Test]
         public void DeletedLegacyCurrency_IsNotCopiedIntoRogue11Write()
         {
             MemoryStore store = new MemoryStore();
@@ -157,6 +195,21 @@ namespace OCC.Combat.Tests
             Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)), Is.True);
             Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)), Is.True);
             Assert.That(new RogueliteSaveGateway(store).SaveMapRun(new RogueliteMapRun(96)), Is.False);
+        }
+
+        [Test]
+        public void PostWriteException_RestoresOriginalAndProtectsTheChangedValue()
+        {
+            MemoryStore store = new MemoryStore();
+            string original = new RogueliteMapRun(98).ToJson();
+            store.Values[RogueliteSaveGateway.MapRunKey] = original;
+            store.ThrowAfterNextMapSet = true;
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+
+            Assert.That(gateway.SaveMapRun(new RogueliteMapRun(99)), Is.False);
+            Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
+            Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)), Is.True);
+            Assert.That(store.Values.ContainsKey(RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)), Is.True);
         }
 
         [Test]

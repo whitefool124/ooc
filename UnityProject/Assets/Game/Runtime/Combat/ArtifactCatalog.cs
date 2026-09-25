@@ -5,7 +5,7 @@ using System.Linq;
 namespace OCC.Combat
 {
     public enum ArtifactTargetRule { Self, Enemy, AllyOrSelf, AnyUnit, AnyCell, EmptyCell, Destructible, Device, TwoAllies }
-    public enum ArtifactSelectionShape { Single, Cross, RadiusOne }
+    public enum ArtifactSelectionShape { Single, Cross, RadiusOne, Line }
     public enum ArtifactEffectKind
     {
         Damage, LoseHealth, RestoreHealth, RestoreShield, RestoreMana, ConsumeShield, ApplyStatus, ClearNegativeStatuses,
@@ -91,7 +91,7 @@ namespace OCC.Combat
             PublicCost = publicCost; TargetSummary = targetSummary; EffectSummary = effectSummary;
             RiskSummary = riskSummary; BuildUse = buildUse; ActionSemantic = actionSemantic;
             VfxSemantic = vfxSemantic; ContentSources = contentSources;
-            IconPath = "Art/FormalArtifactIcons32/" + slug;
+            IconPath = id == "F-S01" ? "Art/FormalItemIcons32/fire_scroll" : "Art/FormalArtifactIcons32/" + slug;
             Effects = (effects ?? throw new ArgumentNullException(nameof(effects))).ToArray();
             if (Effects.Count == 0) throw new ArgumentException("Artifact requires at least one effect.", nameof(effects));
             Spell = compatibilitySpell;
@@ -146,6 +146,15 @@ namespace OCC.Combat
             RarePools, new[] { E(ArtifactEffectKind.Damage, 16, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
                 E(ArtifactEffectKind.DestroyLightCover, scope: ArtifactEffectScope.Selection),
                 E(ArtifactEffectKind.CreateFireground, 8, 3, ArtifactEffectScope.Selection) }, 2, 1, 2, spell: DemolitionCompatibilitySpell);
+
+        public static readonly ArtifactDefinition FirelineScroll = A("F-S01", "fire_scroll", "火线卷轴",
+            ItemRarity.Uncommon, 1, 1, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Line,
+            "学院封装工坊", "火", "1 行动点；使用后消耗卷轴", "4 格内空地；沿路径成线",
+            "路径上的单位受到 8 点火焰伤害，并生成持续 2 回合的火场", "伤及路径上的友方单位",
+            "一次性封装火术式", "展开卷轴并投放", "火线与燃烧地格", ArtifactContentSource.None,
+            new[] { E(ArtifactEffectKind.Damage, 8, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
+                E(ArtifactEffectKind.CreateFireground, 8, 2, ArtifactEffectScope.Selection) }, 2, 1, 1,
+            spell: ItemAbilityCatalog.FirelineScroll);
 
         public static readonly ArtifactDefinition AegisFold = A("G-T01", "aegis_fold", "折盾匣", ItemRarity.Uncommon, 3, 0, 3,
             ArtifactTargetRule.AllyOrSelf, ArtifactSelectionShape.Single, "持证护具工坊", "通用", "不消耗行动点，消耗 1 次",
@@ -232,7 +241,7 @@ namespace OCC.Combat
             NullVeil, FortuneSeal
         };
 
-        public static ArtifactDefinition Get(string id) => All.FirstOrDefault(value => value.Id == id) ??
+        public static ArtifactDefinition Get(string id) => id == FirelineScroll.Id ? FirelineScroll : All.FirstOrDefault(value => value.Id == id) ??
             throw new InvalidOperationException("Unknown artifact definition: " + id);
         public static bool IsCurrentlyUsable(string id) => !string.IsNullOrEmpty(id) && !RetiredContentIds.Contains(id);
     }

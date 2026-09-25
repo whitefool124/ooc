@@ -101,7 +101,8 @@
       "kind": "WardGenerator",
       "x": 1,
       "y": 1,
-      "mechanismKind": 0
+      "mechanismKind": 0,
+      "durability": 16
     },
     {
       "kind": "PermanentWall",

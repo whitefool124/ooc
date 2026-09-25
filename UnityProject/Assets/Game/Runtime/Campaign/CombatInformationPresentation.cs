@@ -41,16 +41,18 @@ namespace OCC.Combat
         public EnemyIntentPresentation WithMovementPreview(CombatState state, UnitState enemy, CombatCommand command)
         {
             if (command.Type != CombatCommandType.Move) return this;
-            IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, enemy, command.Destination);
+            IReadOnlyList<GridPosition> path = CombatMovementQuery.StopAtBindingMark(state,
+                CombatMovementQuery.FindPath(state, enemy, command.Destination));
+            GridPosition destination = path.Count > 0 ? path[path.Count - 1] : command.Destination;
             string detail = path.Count < 2 ? "当前路径不可达；行动时将重新选取公开意图" :
                 "路径 " + string.Join(" → ", path.Select(Cell)) + "（" + path.Skip(1).Sum(position => CombatMovementQuery.EntryCost(state, enemy, position)) +
                 "/" + CombatMovementQuery.Budget(state, enemy) + " 步）";
             if (path.Skip(1).Any(position => state.Map.GetTile(position).IsWater) && enemy.HasStatus(StatusType.Burning))
                 detail += "；经过浅水会移除燃烧";
-            if (path.Count > 1 && state.Map.GetTile(command.Destination).IsBindingMark)
-                detail += "；落入约束纹后本回合不能再主动移动";
+            if (path.Count > 1 && state.Map.GetTile(destination).IsBindingMark)
+                detail += "；踏入约束纹后停止在该格，本回合不能再主动移动";
             return new EnemyIntentPresentation(Signature, ActionName, TargetSummary, ResultSummary + "\n" + detail,
-                IconId, true, command.Destination, ExpectedDamage, path.ToArray());
+                IconId, true, destination, ExpectedDamage, path.ToArray());
         }
 
         private static string Cell(GridPosition position) => "(" + position.X + "," + position.Y + ")";
@@ -60,7 +62,7 @@ namespace OCC.Combat
             if (state == null || enemy == null ||
                 command.Type != CombatCommandType.Attack && command.Type != CombatCommandType.UseSkill) return this;
             SkillDefinition skill = command.Type == CombatCommandType.UseSkill
-                ? command.SlotIndex == 0 ? enemy.SkillOne : enemy.SkillTwo : null;
+                ? command.SlotIndex == 0 ? enemy.SkillOne : command.SlotIndex == 1 ? enemy.SkillTwo : null : null;
             WeaponDefinition weapon = command.Type == CombatCommandType.Attack ? enemy.MainHand : null;
             if (skill == null && weapon == null) return this;
             if (skill?.TargetRule == SkillTargetRule.Self)
@@ -482,8 +484,17 @@ namespace OCC.Combat
             if (state == null || execution == null) return string.Empty;
             UnitState source = state.GetUnit(command.UnitId);
             UnitState target = string.IsNullOrEmpty(command.TargetUnitId) ? null : state.GetUnit(command.TargetUnitId);
+            string configuredSkill = command.SlotIndex == AcademyEnemyGrowthRuntime.CommandSkillIndex && state.AcademyEnemyGrowth != null
+                ? AcademyEnemyGrowthRuntime.For(source?.EnemyArchetypeId)?.DisplayName
+                : command.SlotIndex == AcademyFieldEnemyRuntime.BindingMarkSkillIndex &&
+                    source?.EnemyArchetypeId == "stone_snare" ? "刻印"
+                : command.SlotIndex == AcademyFieldEnemyRuntime.LanternSweepSkillIndex &&
+                    source?.EnemyArchetypeId == "lantern_revealer" ? "转灯"
+                : (command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex || command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex) &&
+                    state.AcademyEnemyArea != null
+                    ? AcademyEnemyAreaRuntime.For(source?.EnemyArchetypeId)?.DisplayName : null;
             string action = command.Type == CombatCommandType.Attack ? source?.MainHand?.DisplayName ?? "攻击" :
-                command.Type == CombatCommandType.UseSkill ? ((command.SlotIndex == 0 ? source?.SkillOne : source?.SkillTwo)?.DisplayName ?? "技能") :
+                command.Type == CombatCommandType.UseSkill ? (configuredSkill ?? (command.SlotIndex == 0 ? source?.SkillOne : source?.SkillTwo)?.DisplayName ?? "技能") :
                 command.Type == CombatCommandType.Move ? "移动" : command.Type == CombatCommandType.Interact ? "互动" : command.Type.ToString();
             List<string> changes = new List<string>();
             foreach (CombatEffectResult result in execution.Results.OrderBy(result => result.Sequence))

@@ -39,6 +39,10 @@ namespace OCC.Combat
             SlotIndex = slotIndex;
         }
 
+        public static CombatCommand Restore(CombatCommandType type, string unitId, GridPosition destination,
+            CardinalDirection aimDirection, string targetUnitId, int slotIndex) =>
+            new CombatCommand(type, unitId, destination, aimDirection, targetUnitId, slotIndex);
+
         public static CombatCommand Move(string unitId, GridPosition destination) =>
             new CombatCommand(CombatCommandType.Move, unitId, destination, default);
 

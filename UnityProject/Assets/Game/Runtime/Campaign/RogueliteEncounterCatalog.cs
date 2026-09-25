@@ -220,8 +220,6 @@ namespace OCC.Combat
         public static RogueliteEncounterDefinition For(RogueliteMapRun run, string nodeId)
         {
             if (run != null && run.TryGetEncounter(nodeId, out RogueliteEncounterDefinition encounter)) return encounter;
-            if (run != null && run.IsInAcademyLayer && nodeId != null)
-                throw new InvalidOperationException("No registered academy-layer encounter package for map node: " + nodeId);
             if (run?.IsFirstRunExperience == true && nodeId == "B1")
                 return FirstBattleRainLanternCourt.BindToNode(nodeId);
             if (run?.IsFirstRunExperience == true && nodeId == "B2")
@@ -233,7 +231,11 @@ namespace OCC.Combat
             if (run != null && run.HasPendingContentCombat && nodeId == run.PendingContentCombatMissionId && nodeId == "relay_event")
             {
                 string eventId = run.CurrentEventId;
-                if (eventId == "EV08" || eventId == "EV13" || eventId == "EV16")
+                if (eventId == "EV01")
+                    return Packages.Single(value => value.VariantKey == "weak_flank_drill").BindToNode(nodeId);
+                if (eventId == "EV09")
+                    return Packages.Single(value => value.VariantKey == "weak_barrier_demo").BindToNode(nodeId);
+                if (eventId == "EV13" || eventId == "EV16")
                     return new RogueliteEncounterDefinition("event_maintenance_elite", "elite_foundry", RogueliteEncounterTier.Elite,
                         "狭窄的维护通道", "两条路分别通向划线教官和补盾助教", "危险",
                         "稀有奖励", 3, "elite_vanguard", "barrier_mender", "sigil_mauler").BindToNode(nodeId);
@@ -249,6 +251,8 @@ namespace OCC.Combat
                     "半开放演练场", "两名陪练分守前方两侧，起步位置很安全", "轻松",
                     "基础奖励", 1, "shieldguard", "raider").BindToNode(nodeId);
             }
+            if (run != null && run.IsInAcademyLayer && nodeId != null)
+                throw new InvalidOperationException("No registered academy-layer encounter package for map node: " + nodeId);
             if (run != null) throw new InvalidOperationException("No registered encounter package for map node: " + nodeId);
             return For(nodeId);
         }

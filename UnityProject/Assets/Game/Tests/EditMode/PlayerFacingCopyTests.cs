@@ -8,6 +8,20 @@ namespace OCC.Combat.Tests
     public sealed class PlayerFacingCopyTests
     {
         [Test]
+        public void FixedTutorialBattles_HaveAuthoredOpeningDialogueOnly()
+        {
+            string[] nodeIds = { "B1", "B2", "B3", "X" };
+            string[] speakers = { "火矢生", "侧锋生", "火矢生", "楔角维护记录" };
+            for (int i = 0; i < nodeIds.Length; i++)
+            {
+                Assert.That(FirstRunCombatOpeningDialogue.TryGet(nodeIds[i], out string speaker, out string line), Is.True);
+                Assert.That(speaker, Is.EqualTo(speakers[i]));
+                Assert.That(line, Is.Not.Empty);
+            }
+            Assert.That(FirstRunCombatOpeningDialogue.TryGet("N01", out _, out _), Is.False);
+        }
+
+        [Test]
         public void AcademyTimeCopy_StatesCostAndResultWithoutInternalTerms()
         {
             Assert.That(PlayerFacingCopy.AcademyTimeCost(0, 8), Is.EqualTo("不花时间"));

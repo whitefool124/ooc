@@ -57,6 +57,12 @@
     },
     {
       "kind": "LampVine",
+      "x": 3,
+      "y": 3,
+      "mechanismKind": 0
+    },
+    {
+      "kind": "LootChest",
       "x": 4,
       "y": 3,
       "mechanismKind": 0
@@ -130,12 +136,6 @@
     {
       "x": 6,
       "y": 0,
-      "kind": "PermanentWall",
-      "mechanismKind": 0
-    },
-    {
-      "x": 6,
-      "y": 3,
       "kind": "PermanentWall",
       "mechanismKind": 0
     },
@@ -191,10 +191,10 @@
   "blockedPositions": [],
   "changeAnnotations": [],
   "spaceContract": {
-    "grammar": "中央藤圈宝箱、东侧双晶簇、南侧普通长路",
+    "grammar": "中央藤圈宝箱、东侧双晶簇、南侧普通路线",
     "publicRisk": "侧锋与替身偶分守两枚晶簇，藤圈遮断中央攻击线。",
-    "counterplayWindow": "可跃进入藤搜刮、等待敌人贴晶后引爆，或沿南侧干路稳健推进。"
+    "counterplayWindow": "可跃进入藤搜刮、等待敌人贴晶后引爆，或不搜刮不引爆、以常规移动穿过南侧灯藤。"
   },
-  "notes": "2026-09-22 按 25–50 格战场合同重置；永久重物块用于塑造有效战区。",
-  "updatedAt": "2026-09-22T07:30:07.128Z"
+  "notes": "2026-09-25 保留G5替身偶出生点，开放G4通道；永久墙共15格。",
+  "updatedAt": "2026-09-25T02:40:00.000Z"
 }

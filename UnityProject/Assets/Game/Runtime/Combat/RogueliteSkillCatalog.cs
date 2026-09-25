@@ -35,11 +35,16 @@ namespace OCC.Combat
             if (string.IsNullOrWhiteSpace(skill.DisplayName)) Add(skill, issues, "missing_name", "A readable display name is required.");
             if (skill.MinimumRange < 0 || skill.Range < 0 || skill.ManaCost < 0 || skill.Cooldown < 0) Add(skill, issues, "negative_cost", "Range, mana and cooldown cannot be negative.");
             if (skill.MinimumRange > skill.Range) Add(skill, issues, "invalid_range_band", "Minimum range cannot exceed maximum range.");
-            if (skill.Effects == null || skill.Effects.Count == 0) { Add(skill, issues, "empty_effects", "At least one effect is required."); return; }
+            // Terrain construction is resolved by its authored area runtime; it has no unit effect packet.
+            if (skill.Effects == null || skill.Effects.Count == 0 &&
+                !(skill.TargetRule == SkillTargetRule.GridCell && skill.Delivery == SkillDeliveryMethod.Area))
+            { Add(skill, issues, "empty_effects", "At least one effect is required except for grid area terrain intents."); return; }
             if (skill.TargetRule == SkillTargetRule.Self && skill.Range != 0) Add(skill, issues, "self_range", "Self skills must use range 0.");
             if (skill.Delivery == SkillDeliveryMethod.Area && skill.ModifierValue(SkillModifierType.Radius) <= 0) Add(skill, issues, "area_radius", "Area delivery requires a positive radius.");
             if (skill.TargetRule == SkillTargetRule.Destructible && !skill.Effects.Any(effect => effect.Type == SkillEffectType.DamageObject)) Add(skill, issues, "destructible_effect", "Destructible skills require object damage.");
-            if (skill.TargetRule == SkillTargetRule.GridCell && !skill.Effects.Any(effect => effect.Type == SkillEffectType.MoveSource)) Add(skill, issues, "grid_effect", "Grid skills require a movement effect in the current contract.");
+            if (skill.TargetRule == SkillTargetRule.GridCell && skill.Delivery != SkillDeliveryMethod.Area &&
+                !skill.Effects.Any(effect => effect.Type == SkillEffectType.MoveSource))
+                Add(skill, issues, "grid_effect", "Direct grid skills require a movement effect in the current contract.");
             if (skill.Effects.Count(effect => effect.Type == SkillEffectType.Damage) > 1) Add(skill, issues, "multiple_damage", "The validation slice supports one deterministic damage packet per target.");
             foreach (SkillEffectDefinition effect in skill.Effects)
             {

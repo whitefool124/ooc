@@ -177,6 +177,9 @@ namespace OCC.Combat.Roguelite
             foreach (ArtifactDefinition artifact in ArtifactCatalog.All)
                 yield return new TacticalItemDefinition(artifact.Id, artifact.DisplayName, artifact.Width,
                     artifact.Height, artifact.MaximumUses, artifact.Weight);
+            yield return new TacticalItemDefinition(ArtifactCatalog.FirelineScroll.Id, ArtifactCatalog.FirelineScroll.DisplayName,
+                ArtifactCatalog.FirelineScroll.Width, ArtifactCatalog.FirelineScroll.Height,
+                ArtifactCatalog.FirelineScroll.MaximumUses, ArtifactCatalog.FirelineScroll.ActionPointCost);
         }
     }
 

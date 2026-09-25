@@ -67,11 +67,14 @@ namespace OCC.Combat.Roguelite
         private readonly HashSet<string> momentumTriggeredThisTurn = new HashSet<string>(StringComparer.Ordinal);
         private readonly RogueContentCatalog catalog;
         private readonly string specializedSpellId;
+        private readonly string specializationMaterialId;
+        private readonly Dictionary<string, string> academySpecializations = new Dictionary<string, string>(StringComparer.Ordinal);
         public CombatState Combat { get; }
         public RogueSpellLoadout Loadout { get; }
-        public FireBattleState FireBattle { get; }
+        public FireBattleState FireBattle { get; private set; }
 
-        public RogueSpellCombatRuntime(CombatState combat, RogueSpellLoadout combatSnapshot, string specializedSpellId = "")
+        public RogueSpellCombatRuntime(CombatState combat, RogueSpellLoadout combatSnapshot, string specializedSpellId = "",
+            string specializationMaterialId = "SPEC-AMPLIFY", IReadOnlyDictionary<string, string> additionalSpecializations = null)
         {
             Combat = combat ?? throw new ArgumentNullException(nameof(combat));
             if (combat.Ruleset != CombatRuleset.Roguelite) throw new InvalidOperationException("Rogue spell runtime requires roguelite rules.");
@@ -79,7 +82,24 @@ namespace OCC.Combat.Roguelite
             if (!Loadout.IsCombatLocked) throw new InvalidOperationException("Combat requires a locked spell snapshot.");
             catalog = RogueContentCatalog.CreateAcademyV01(); FireBattle = new FireBattleState(combat);
             this.specializedSpellId = specializedSpellId ?? string.Empty;
+            this.specializationMaterialId = specializationMaterialId ?? "SPEC-AMPLIFY";
+            if (!string.IsNullOrEmpty(this.specializedSpellId)) academySpecializations[this.specializedSpellId] = this.specializationMaterialId;
+            if (additionalSpecializations != null)
+                foreach (KeyValuePair<string, string> entry in additionalSpecializations)
+                    academySpecializations[entry.Key] = entry.Value;
             RegisterPassiveDefinitions();
+        }
+
+        internal RogueSpellCombatRuntime Clone(CombatState combat)
+        {
+            RogueSpellCombatRuntime clone = new RogueSpellCombatRuntime(combat, Loadout.CreateCombatSnapshot(),
+                specializedSpellId, specializationMaterialId, academySpecializations);
+            foreach (var pair in ownTurnSequences) clone.ownTurnSequences[pair.Key] = pair.Value;
+            foreach (var pair in availableAtTurn) clone.availableAtTurn[pair.Key] = pair.Value;
+            foreach (string id in temperingTriggeredThisTurn) clone.temperingTriggeredThisTurn.Add(id);
+            foreach (string id in momentumTriggeredThisTurn) clone.momentumTriggeredThisTurn.Add(id);
+            clone.FireBattle = FireBattle.Clone(combat);
+            return clone;
         }
 
         public void BeginOwnTurn(string unitId)
@@ -185,9 +205,12 @@ namespace OCC.Combat.Roguelite
                 : catalog.Spells.Single(value => value.DefinitionId == spellId);
             if (spell.Role == "passive") throw new InvalidOperationException("被动术式不能主动施放。");
             UnitState source = Combat.GetUnit(command.UnitId) ?? throw new InvalidOperationException("Source unit does not exist.");
-            if (source.ActionPoints < spell.ActionPointCost || source.Mana < spell.ManaCost) throw new InvalidOperationException("Insufficient action points or personal mana.");
+            int manaCost = EffectiveManaCost(spell, source.Id);
+            if (source.ActionPoints < spell.ActionPointCost || source.Mana < manaCost) throw new InvalidOperationException("Insufficient action points or personal mana.");
 
             RogueSpellExecution execution = spell.IsBasic ? ExecuteBasic(spell, source, command) : ExecuteFire(spell, source, command);
+            if (command.UnitId == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true)
+                Combat.RogueEquipment.ConsumeFirstForgeSpellDiscount();
             FireBattle.ResolveMarkedDestructions(source.Id);
             bool dealtPersonalFireDamage = execution.FireEffects != null
                 ? execution.FireEffects.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0)
@@ -199,10 +222,11 @@ namespace OCC.Combat.Roguelite
                 source.RestoreMana(1);
                 Combat.AddLog("回火导流恢复 1 点个人魔力。");
             }
-            if (spell.CooldownOwnTurns > 0)
+            int cooldown = EffectiveCooldown(spell);
+            if (cooldown > 0)
             {
                 int turn = ownTurnSequences.TryGetValue(source.Id, out int value) ? value : 0;
-                availableAtTurn[source.Id + "|" + spellId] = turn + spell.CooldownOwnTurns + 1;
+                availableAtTurn[source.Id + "|" + spellId] = turn + cooldown + 1;
             }
             return execution;
         }
@@ -215,12 +239,13 @@ namespace OCC.Combat.Roguelite
                 return new RogueSpellExecution(Combat.RainLanternCourt.CastBorrowedCover(Combat, source));
             }
             List<CombatEffect> effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(spell.ActionPointCost) };
-            if (spell.ManaCost > 0) effects.Add(CombatEffect.SpendMana(spell.ManaCost));
-            if (spell.DefinitionId == "BASE-MANA-RECOVER") effects.Add(CombatEffect.RestoreMana(source.Id, IsSpecialized(spell.DefinitionId) ? 3 : 2));
+            int manaCost = EffectiveManaCost(spell, source.Id);
+            if (manaCost > 0) effects.Add(CombatEffect.SpendMana(manaCost));
+            if (spell.DefinitionId == "BASE-MANA-RECOVER") effects.Add(CombatEffect.RestoreMana(source.Id, IsAmplified(spell.DefinitionId) ? 3 : 2));
             if (spell.DefinitionId == "BASE-AETHER-SHIELD")
             {
                 CombatEffectExecution cost = CombatEffectExecutor.Execute(Combat, source.Id, effects.ToArray());
-                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsSpecialized(spell.DefinitionId) ? 8 : 6);
+                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsAmplified(spell.DefinitionId) ? 8 : 6);
                 return new RogueSpellExecution(cost);
             }
             if (spell.DefinitionId == "BASE-FIRE-MELEE" || spell.DefinitionId == "BASE-FIRE-RANGED")
@@ -232,7 +257,7 @@ namespace OCC.Combat.Roguelite
                 int distance = source.Position.ManhattanDistance(targetCell);
                 if ((!objectTarget && (target == null || source.IsHero == target.IsHero)) || distance > source.EffectiveRange(spell.Range) ||
                     (distance > 1 && !Combat.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
-                int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsSpecialized(spell.DefinitionId) ? 2 : 0), DamageType.Fire);
+                int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsAmplified(spell.DefinitionId) ? 2 : 0), DamageType.Fire);
                 if (objectTarget) effects.Add(CombatEffect.DamageObject(targetCell, raw));
                 else
                 {
@@ -248,13 +273,30 @@ namespace OCC.Combat.Roguelite
         private RogueSpellExecution ExecuteFire(SpellDefinition spell, UnitState source, CombatCommand command)
         {
             FireSpellDefinition old = Specialized(FireSpellCatalog.Get(spell.DefinitionId));
+            if (source.Id == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true)
+                old = new FireSpellDefinition(old, old.Rules, old.MinimumRange, old.Range, old.ShapeLength,
+                    Math.Max(0, old.ManaCost - 1), old.Cooldown);
             FireSpellTarget target = !string.IsNullOrEmpty(command.TargetUnitId)
                 ? FireSpellTarget.Unit(command.TargetUnitId, command.AimDirection)
                 : FireSpellTarget.At(command.Destination, command.AimDirection);
             return new RogueSpellExecution(CombatEffectExecution.Empty, FireSpellEngine.Execute(FireBattle, source.Id, old, target));
         }
 
-        private bool IsSpecialized(string spellId) => string.Equals(specializedSpellId, spellId, StringComparison.Ordinal);
+        private bool IsAmplified(string spellId) => academySpecializations.TryGetValue(spellId, out string material) && material == "SPEC-AMPLIFY";
+        private bool IsThrottled(string spellId) => academySpecializations.TryGetValue(spellId, out string material) && material == "SPEC-EFFICIENT";
+        private int EffectiveManaCost(SpellDefinition spell, string unitId)
+        {
+            int cost = IsThrottled(spell.DefinitionId) && spell.DefinitionId != "BASE-MANA-RECOVER"
+                ? Math.Max(0, spell.ManaCost - 1) : spell.ManaCost;
+            return unitId == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true
+                ? Math.Max(0, cost - 1) : cost;
+        }
+        private int EffectiveCooldown(SpellDefinition spell) => IsThrottled(spell.DefinitionId) &&
+            spell.DefinitionId == "BASE-MANA-RECOVER" ? Math.Max(0, spell.CooldownOwnTurns - 1) : spell.CooldownOwnTurns;
+
+        public static bool SupportsSpecialization(string spellId, string materialId) =>
+            materialId == "SPEC-EFFICIENT" ? SupportsThrottleSpecialization(spellId) :
+            materialId == "SPEC-AMPLIFY" && SupportsSpecialization(spellId);
 
         // 总案 4.2.2.1 的专精表只登记这 12 项。工坊的合法目标、运行时强化共用这一处定义，
         // 避免出现"卡面写了增幅、运行时没有效果"的空结果（例：炉温护持）。
@@ -281,7 +323,8 @@ namespace OCC.Combat.Roguelite
         }
 
         private FireSpellDefinition Specialized(FireSpellDefinition spell) =>
-            IsSpecialized(spell.Id) ? ApplyAmplifySpecialization(spell) : spell;
+            IsAmplified(spell.Id) ? ApplyAmplifySpecialization(spell) :
+            IsThrottled(spell.Id) ? ApplyThrottleSpecialization(spell) : spell;
 
         // 增幅刻墨的固定结果，逐条对应总案 4.2.2.1 与 OCC_锻造与专精数据表_v1.0.csv。
         public static FireSpellDefinition ApplyAmplifySpecialization(FireSpellDefinition spell)

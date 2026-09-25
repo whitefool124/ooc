@@ -228,6 +228,10 @@ namespace OCC.Combat
             if (run.IsAcademyFinaleGateLocked(node))
                 return "还不能参加终考：再完成 " + Math.Max(0, AcademyMapTuning.BossMinimumProgress - run.CompletedAcademyNodeCount) +
                     " 个地点";
+            if (run.IsInAcademyLayer && run.IsTransitionPending && node.Type != RogueliteMapNodeType.Finale)
+                return "学院时序已到 24，普通路线关闭；请前往封存塔终考";
+            if (run.IsInAcademyLayer && run.CurrentNodeId == RogueliteAcademyLayerCatalog.FinaleNodeId)
+                return "已经进入终考，不能返回普通路线";
             return "这里离得太远，请先走到相邻地点";
         }
 
@@ -275,6 +279,8 @@ namespace OCC.Combat
             {
                 if (run.Gold < choice.GoldCost) return Blocked("金币不足", "需要 " + choice.GoldCost + " 金币；当前 " + run.Gold);
                 if (run.StageContribution < choice.ContributionCost) return Blocked("学院贡献不足", "需要 " + choice.ContributionCost + " 学院贡献；当前 " + run.StageContribution);
+                if (choice.Id == "EV08_recover" && run.CurrentMana >= OCC.Combat.Roguelite.RogueRuntimeConstants.MaximumPersonalMana)
+                    return Blocked("魔力已满", "个人魔力已经达到上限");
                 if (choice.HealthGain < 0 && run.CurrentHealth + choice.HealthGain <= 0) return Blocked("生命不足", "该选择会使生命归零");
                 if (!string.IsNullOrEmpty(choice.RewardId) && run.ClaimedRewards.Contains(choice.RewardId)) return Blocked("已经拿过", "这里没有第二件了");
                 if (!CanAcceptRogueContent(run, choice.RewardId)) return Blocked("行囊装不下", "先整理出一块能放下这件东西的位置");
@@ -311,7 +317,6 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(rewardName)) outcomes.Add(rewardName);
             if (choice.RequiresCombat)
             {
-                if (run?.UsesRogue11 == true) outcomes.Add("3金 + 2学院贡献");
                 outcomes.Insert(0, outcomes.Count == 0 ? "进入战斗" : "胜利");
             }
             if (outcomes.Count == 0) outcomes.Add("完成这里的事情");
@@ -327,9 +332,17 @@ namespace OCC.Combat
                 return Blocked("行囊放不下", "先整理出一块能放下这件装备的位置");
             if (run.UsesRogue11 && reward.Kind == RogueliteRewardKind.TacticalItem && !CanAcceptRogueContent(run, reward.Id))
                 return Blocked("行囊放不下", "先整理出一块能放下这件战术道具的位置");
-            if (reward.Kind != RogueliteRewardKind.Item && run.ClaimedRewards.Contains(reward.Id)) return Blocked("已经拿过了", "这件奖励已经带走");
+            if (reward.Kind == RogueliteRewardKind.Resource && !run.CanAcceptAcademyResource(reward.ResourceId))
+                return Blocked("行囊放不下", "先整理出能放下本次物资的位置");
+            if (run.IsInAcademyLayer && !run.CanAcceptAcademyReward(reward))
+                return Blocked("行囊放不下", "先整理出奖励与固定材料需要的位置");
+            if (reward.Kind != RogueliteRewardKind.Item && reward.Kind != RogueliteRewardKind.TacticalItem &&
+                reward.Kind != RogueliteRewardKind.Resource && run.ClaimedRewards.Contains(reward.Id))
+                return Blocked("已经拿过了", "这件奖励已经带走");
             if (FireSpellCatalog.All.Any(spell => spell.Id == reward.Id) && run.OwnedFireSpellIds.Contains(reward.Id)) return Blocked("已经学会了", "术式册里已经有这道术式");
-            return new UiOperationAvailability(true, "可以带走", reward.Kind == RogueliteRewardKind.Item || reward.Kind == RogueliteRewardKind.Equipment || reward.Kind == RogueliteRewardKind.TacticalItem ? "会放进行囊" : "会收进术式册");
+            return new UiOperationAvailability(true, "可以带走", reward.Kind == RogueliteRewardKind.Resource ?
+                reward.ResourceId == AcademyBattleRewardCatalog.ScrollPack ? "会放进行囊" : "材料占用行囊格" :
+                reward.Kind == RogueliteRewardKind.Item || reward.Kind == RogueliteRewardKind.Equipment || reward.Kind == RogueliteRewardKind.TacticalItem ? "会放进行囊" : "会收进术式册");
         }
 
         public static UiOperationAvailability ForEquipment(RogueliteMapRun run, RogueliteReward reward)
@@ -350,6 +363,8 @@ namespace OCC.Combat
             if (reward.Kind == RogueliteRewardKind.Weapon) return WeaponComparison(run.EquippedWeapon, reward.Weapon);
             if (reward.Kind == RogueliteRewardKind.Item) return CanAccept(run, reward.Item) ? "行囊里放得下" : "行囊已经装不下了";
             if (reward.Kind == RogueliteRewardKind.Equipment) return "领取后放进行囊，可在战斗外装备";
+            if (reward.Kind == RogueliteRewardKind.Resource) return reward.ResourceId == AcademyBattleRewardCatalog.ScrollPack ?
+                "领取后放进行囊" : "领取后计入本轮材料";
             return "领取后收进术式册，不会立刻换上";
         }
 
@@ -479,7 +494,8 @@ namespace OCC.Combat
             Visible = run.AwaitingReward;
             Level = run.Level;
             Experience = run.Experience;
-            RewardKey = string.Join("|", run.CurrentFireSpellChoices.Select(spell => spell.Id).Concat(run.CurrentRewards.Select(reward => reward.Id)));
+            RewardKey = string.Join("|", run.CurrentFireSpellChoices.Select(spell => spell.Id).Concat(run.CurrentRewards.Select(reward => reward.Id))) +
+                "|receipt:" + (run.RogueRunState?.PendingResourceReceipt ?? string.Empty);
         }
 
         public static SettlementPresentationModel From(RogueliteMapRun run) => run == null ? default : new SettlementPresentationModel(run);

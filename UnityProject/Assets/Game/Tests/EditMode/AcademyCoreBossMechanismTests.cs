@@ -22,6 +22,81 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void ChainPull_IsPublishedAndUsesTheBossAction()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            hero.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+            UnitState core = new UnitState("enemy_0", false, new GridPosition(3, 3));
+            EnemyArchetypes.Get("core_overseer").Apply(core);
+            CombatState state = new CombatState(new GridMap(7, 7), new[] { hero, core });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
+            typeof(AcademyCoreBossRuntime).GetField("coreTurns", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(state.AcademyCoreBoss, 3);
+            GridPosition mechanism = new GridPosition(5, 3);
+            TileState tile = state.Map.GetTile(mechanism).Clone();
+            tile.IsDevice = true;
+            tile.IsTowerMechanism = true;
+            tile.IsReleased = true;
+            tile.MechanismKind = 1;
+            tile.Durability = 8;
+            state.Map.SetTile(mechanism, tile);
+            CombatResolver.BeginTurn(state, core.Id);
+            Assert.That(state.Map.GetTile(mechanism).IsTowerMechanism, Is.True,
+                "回合开始不能自动引链。");
+
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, core, hero);
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyCoreBossRuntime.ChainPullSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, core, hero).ActionName, Is.EqualTo("引链"));
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.Map.GetTile(mechanism).IsTowerMechanism, Is.False);
+            Assert.That(state.Map.GetTile(new GridPosition(3, 4)).IsTowerMechanism, Is.True);
+            Assert.That(core.ActionPoints, Is.Zero);
+        }
+
+        [Test]
+        public void PhaseTwoTowerPress_PreviewsAndDealsTenAetherDamageWithThreeLinks()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(3, 1));
+            hero.Equip(CombatCatalog.Hammer, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
+            UnitState core = new UnitState("enemy_0", false, new GridPosition(3, 3));
+            EnemyArchetypes.Get("core_overseer").Apply(core);
+            CombatState state = new CombatState(new GridMap(7, 7), new[] { hero, core });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
+            typeof(AcademyCoreBossRuntime).GetField("coreTurns", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(state.AcademyCoreBoss, 3);
+            typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                .Invoke(core, new object[] { core.Health - 8 });
+            core.ApplyStatus(StatusType.SpellPower, int.MaxValue, 2, "phase-two-test");
+            for (int kind = 1; kind <= 3; kind++)
+            {
+                GridPosition cell = new GridPosition(6, kind - 1);
+                TileState tile = state.Map.GetTile(cell).Clone();
+                tile.IsDevice = true;
+                tile.IsTowerMechanism = true;
+                tile.IsReleased = true;
+                tile.MechanismKind = kind;
+                tile.Durability = 8;
+                state.Map.SetTile(cell, tile);
+            }
+            CombatResolver.BeginTurn(state, core.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, core, hero);
+            EnemyIntentPresentation intent = plans.GetPublicIntent(state, core, hero);
+            Assert.That(command.SlotIndex, Is.EqualTo(1));
+            Assert.That(intent.ActionName, Is.EqualTo("塔压"));
+            Assert.That(intent.ExpectedDamage, Is.EqualTo(10));
+            Assert.That(intent.AffectedCells, Does.Contain(hero.Position));
+            Assert.That(intent.ResultSummary, Does.Contain("并链"));
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.EventLog.Any(line => line.Contains("塔压：") && line.Contains("每格 10 点")), Is.True);
+            Assert.That(core.ActionPoints, Is.Zero);
+        }
+
+        [Test]
         public void FirstRelease_RaisesTheRevealLaneAndClearsShieldsOnIt()
         {
             CombatState state = BossState(out UnitState core);
@@ -77,7 +152,7 @@ namespace OCC.Combat.Tests
             CombatState state = BossState(out UnitState core);
             for (int turn = 0; turn < 4; turn++) BeginBossTurn(state, core);
             Assert.That(state.AcademyCoreBoss.PhaseFor(state, core), Is.EqualTo(1));
-            // 引链会把伤害转给机关；先把承伤次数用尽，测试才能把核心打到阶段二。
+            // 直接清除其他来源的承伤次数，以便只核对阶段二的血量门槛。
             typeof(UnitState).GetProperty("DamageAbsorptions").SetValue(core, 0);
             MethodInfo takeDamage = typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             takeDamage.Invoke(core, new object[] { core.Health - (core.MaxHealth * 2 / 10) });

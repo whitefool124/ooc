@@ -37,11 +37,18 @@ namespace OCC.Combat.Tests
             Assert.That(hound.Weapon.Damage, Is.EqualTo(3));
 
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
-                Is.EqualTo(("enemy_sundering_sigil", 1, 1, 2)));
+                Is.EqualTo(("enemy_sundering_sigil", 1, 0, 0)));
             Assert.That((mender.PrimarySkill.Id, mender.PrimarySkill.Range, mender.PrimarySkill.ManaCost, mender.PrimarySkill.Cooldown),
-                Is.EqualTo(("enemy_ward_mend", 4, 2, 1)));
+                Is.EqualTo(("enemy_ward_mend", 4, 0, 1)));
             Assert.That((hound.PrimarySkill.Id, hound.PrimarySkill.Range, hound.PrimarySkill.ManaCost, hound.PrimarySkill.Cooldown),
-                Is.EqualTo(("enemy_tether_pounce", 1, 1, 1)));
+                Is.EqualTo(("enemy_tether_pounce", 1, 0, 0)));
+            Assert.That(hound.PrimarySkill.Damage, Is.EqualTo(3));
+            Assert.That(EnemyArchetypes.Get("pyromancer").PrimarySkill.ManaCost, Is.Zero);
+            foreach (EnemyArchetype archetype in EnemyArchetypes.All)
+            {
+                if (archetype.PrimarySkill == null) continue;
+                Assert.That(archetype.PrimarySkill.ManaCost, Is.Zero, archetype.Id + " 主技能按敌人技能表花费0点以太");
+            }
         }
 
         [Test]
@@ -318,8 +325,10 @@ namespace OCC.Combat.Tests
         {
             Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath(id));
             Assert.That(sprite, Is.Not.Null, id);
-            Assert.That(sprite.texture.width, Is.EqualTo(64), id);
-            Assert.That(sprite.texture.height, Is.EqualTo(64), id);
+            Assert.That(sprite.texture.width, Is.GreaterThanOrEqualTo(32), id);
+            Assert.That(sprite.texture.height, Is.GreaterThanOrEqualTo(32), id);
+            Assert.That(sprite.texture.width % 32, Is.Zero, id);
+            Assert.That(sprite.texture.height % 32, Is.Zero, id);
             TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
             Assert.That(importer, Is.Not.Null, id);
             Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite), id);

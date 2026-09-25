@@ -146,11 +146,11 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsAetherCrystal)
             {
-                bool pressureCrystal = state.ThreeMaterialPressure != null;
+                bool pressureCrystal = tile.IsPressureCrystal;
                 bool damagedCrystal = tile.Durability <= (pressureCrystal ? 16 : 8);
                 string crystalKey = pressureCrystal ? "academy_pressure_crystal_" : "academy_aether_crystal_";
                 objectTexture = assets.Academy(crystalKey + (damagedCrystal ? "damaged" : "intact"));
-                objectLabel = pressureCrystal ? "稳压晶簇" : "晶簇";
+                objectLabel = tile.ObjectName();
                 objectLabelColor = new Color(.42f, .88f, 1f, .96f);
             }
             else if (tile.IsCrystalShard)
@@ -448,11 +448,11 @@ namespace OCC.Combat.Presentation
             if (fireBattle?.IsFractured(position) == true)
                 effects.Add("裂痕：该物块被摧毁时，施加者回流 2 魔力与 4 护盾；到施加者下一次自身回合结束移除");
             if (tile.SmokeExpiresAt > state.CurrentTime)
-                effects.Add("烟幕可进入，但会截断双方穿过、射入或射出的远程攻击线，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
+                effects.Add("烟尘可进入，但会截断双方穿过、射入或射出的远程攻击线与显影光带，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
             if (tile.IsScorched)
                 effects.Add("灯藤焦痕仅作视觉记录，不造成伤害、遮挡或状态");
             if (tile.IsLoosePaper)
-                effects.Add("散页使进入消耗 2 移动距离，被浅水打湿后暂时不可燃，被点燃即转为燃烧地格，并可被风逐格搬动");
+                effects.Add("散页使进入消耗 2 移动距离；被浅水覆盖即移除，被点燃即转为燃烧地格，并可被风逐格搬动");
             if (tile.HasTrace)
                 effects.Add("痕迹记录经过的单位，供追踪类单位读取；被浅水、燃烧地格或强风作用时立即移除");
             if (tile.IsBindingMark)
@@ -467,7 +467,7 @@ namespace OCC.Combat.Presentation
             if (tile.IsLampVine)
                 objects.Add("灯藤可进入，进入消耗 2 移动距离并阻挡双方视线，藤内只能攻击相邻目标，可作用物块的火焰会烧去一格");
             else if (tile.IsAetherCrystal)
-                objects.Add("蓄能晶簇不可进入且不阻挡攻击线，耐久 " + tile.Durability + "，摧毁后对正交四格造成 8 点以太伤害并生成五格碎晶");
+                objects.Add(tile.ObjectName() + "不可进入且不阻挡攻击线，耐久 " + tile.Durability + "，摧毁后对正交四格造成 8 点以太伤害并生成五格碎晶");
             else if (tile.IsCrystalShard)
                 objects.Add("碎晶可进入，进入消耗 2 移动距离，不阻挡攻击线且不持续造成伤害");
             else if (tile.IsObjective)
@@ -538,7 +538,7 @@ namespace OCC.Combat.Presentation
             if (state.RainLanternCourt != null && unit.EnemyArchetypeId == "pyromancer")
                 return "\n固定规则：能合法使用火矢时优先攻击；否则每回合最多一次，依次烧去 F3、F4、F5 的灯藤。";
             if (state.GreenhouseCollectionRoom != null && unit.EnemyArchetypeId == "sigil_mauler")
-                return "\n固定规则：无法攻击主角时接近最近完整晶簇并公开贴晶校准；所贴晶簇被毁后正面追击。借晶强化量未冻结，当前按基础重击结算。";
+                return "\n固定规则：无法攻击主角时接近最近完整晶簇并公开贴晶校准；下一次重击获得力量+2，出手后移除。若出手前所贴晶簇被毁，强化失效并正面追击。";
             if (state.GreenhouseCollectionRoom != null && unit.EnemyArchetypeId == "raider")
                 return "\n固定规则：相邻时优先钩刃牵制，否则限位钩刃；不相邻时从灯藤侧翼接近，藤内隐藏，能出藤贴邻时才显形。";
             if (state.PressureTest?.HasReaction == true && unit.Id == "enemy_0")

@@ -27,15 +27,24 @@ namespace OCC.Combat
         public static bool TrySettlePendingReward(RogueliteMapRun run, RogueliteDeveloperAdvanceReport report)
         {
             if (run == null || !run.AwaitingReward) return false;
-            string rewardId = run.CurrentRewards.Select(value => value.Id).FirstOrDefault(id => !run.ClaimedRewards.Contains(id));
-            if (string.IsNullOrEmpty(rewardId))
+            for (int step = 0; step < 3 && run.AwaitingReward; step++)
             {
-                run.AbandonCurrentReward();
-                report?.Steps.Add("放弃悬空奖励 @" + run.CurrentNodeId);
-                return true;
+                if (run.PendingResourceReceipt != null)
+                {
+                    run.ConfirmResourceReceipt();
+                    report?.Steps.Add("确认资源收据 @" + run.CurrentNodeId);
+                    continue;
+                }
+                string rewardId = run.CurrentRewards.Select(value => value.Id).FirstOrDefault(id => !run.ClaimedRewards.Contains(id));
+                if (string.IsNullOrEmpty(rewardId))
+                {
+                    run.AbandonCurrentReward();
+                    report?.Steps.Add("放弃悬空奖励 @" + run.CurrentNodeId);
+                    continue;
+                }
+                run.ClaimReward(rewardId);
+                report?.Steps.Add("领取奖励 " + rewardId + " @" + run.CurrentNodeId);
             }
-            run.ClaimReward(rewardId);
-            report?.Steps.Add("领取奖励 " + rewardId + " @" + run.CurrentNodeId);
             return true;
         }
 
@@ -104,7 +113,7 @@ namespace OCC.Combat
         }
 
         /// <summary>
-        /// 连续推进到首领：每步只走一格真实相邻节点；终考门槛一开就直接收束到最后一段，
+        /// 连续推进到首领：普通节点相邻推进；终考门槛开放后使用阶段转换，
         /// 然后停在首领战入口，由“一键过关”结算。
         /// </summary>
         public static RogueliteDeveloperAdvanceReport AdvanceToFinale(RogueliteMapRun run, int maximumSteps = 64)
@@ -123,7 +132,7 @@ namespace OCC.Combat
                 }
                 if (run.CanChallengeAcademyFinale)
                 {
-                    report.Steps.AddRange(TravelTo(run, RogueliteAcademyLayerCatalog.FinaleNodeId));
+                    run.SelectNode(RogueliteAcademyLayerCatalog.FinaleNodeId);
                     report.Steps.Add("进入终考 @" + RogueliteAcademyLayerCatalog.FinaleNodeId);
                     report.ReachedFinale = run.CurrentNodeId == RogueliteAcademyLayerCatalog.FinaleNodeId;
                     report.StoppedAt = run.CurrentNodeId;
@@ -146,7 +155,7 @@ namespace OCC.Combat
                     }
                     else
                     {
-                        run.SelectNode(next.Id);
+                        report.Steps.AddRange(TravelTo(run, next.Id));
                         if (!TryResolveCurrentNode(run, report)) report.Steps.Add("跳过 " + next.Id);
                         report.NodesResolved++;
                     }
@@ -162,7 +171,7 @@ namespace OCC.Combat
             report.StopReason = "达到单次推进步数上限";
             if (run.CanChallengeAcademyFinale)
             {
-                report.Steps.AddRange(TravelTo(run, RogueliteAcademyLayerCatalog.FinaleNodeId));
+                run.SelectNode(RogueliteAcademyLayerCatalog.FinaleNodeId);
                 report.Steps.Add("进入终考 @" + RogueliteAcademyLayerCatalog.FinaleNodeId);
                 report.ReachedFinale = run.CurrentNodeId == RogueliteAcademyLayerCatalog.FinaleNodeId;
                 report.StoppedAt = run.CurrentNodeId;
@@ -177,9 +186,10 @@ namespace OCC.Combat
         /// </summary>
         public static RogueliteMapNode NextNodeTowardsFinale(RogueliteMapRun run)
         {
-            Dictionary<string, int> distance = DistancesToFinale();
-            return run.AvailableNodes
-                .Where(node => node.Type != RogueliteMapNodeType.Finale && !run.CompletedNodes.Contains(node.Id))
+            Dictionary<string, int> distance = DistancesToFinale(run);
+            return run.MapNodes
+                .Where(node => node.Type != RogueliteMapNodeType.Finale && !run.CompletedNodes.Contains(node.Id) &&
+                    PathTo(run, node.Id).Count > 1)
                 .OrderBy(node => distance.TryGetValue(node.Id, out int value) ? value : int.MaxValue)
                 .ThenBy(node => node.IsCombat ? 0 : 1)
                 .ThenBy(node => node.Id, StringComparer.Ordinal)
@@ -187,7 +197,7 @@ namespace OCC.Combat
         }
 
         /// <summary>在完整学院层图上算每个节点到终点的最短距离（忽略完成状态）。</summary>
-        private static Dictionary<string, int> DistancesToFinale()
+        private static Dictionary<string, int> DistancesToFinale(RogueliteMapRun run)
         {
             Dictionary<string, int> distance = new Dictionary<string, int>(StringComparer.Ordinal)
             {
@@ -198,9 +208,9 @@ namespace OCC.Combat
             while (open.Count > 0)
             {
                 string current = open.Dequeue();
-                foreach (string next in RogueliteMapCatalog.Node(current).NextIds)
+                foreach (string next in run.MapNode(current).NextIds)
                 {
-                    if (!RogueliteAcademyLayerCatalog.IsAcademyLayerNode(next)) continue;
+                    if (!run.MapNodes.Any(node => node.Id == next)) continue;
                     if (distance.ContainsKey(next)) continue;
                     distance[next] = distance[current] + 1;
                     open.Enqueue(next);
@@ -247,13 +257,13 @@ namespace OCC.Combat
             {
                 string current = open.Dequeue();
                 if (current == targetNodeId) break;
-                foreach (string candidate in RogueliteMapCatalog.Node(current).NextIds)
+                foreach (string candidate in run.MapNode(current).NextIds)
                 {
                     if (previous.ContainsKey(candidate)) continue;
-                    if (!RogueliteAcademyLayerCatalog.IsAcademyLayerNode(candidate)) continue;
+                    if (!run.MapNodes.Any(node => node.Id == candidate)) continue;
                     // 中间步必须是现在真的能走进去的：已经清理过（可以回走），或当前合法的推进目标。
                     // 目标节点允许作为终点直接踏入，终考开门后就是这种情况。
-                    if (candidate != targetNodeId && !run.CompletedNodes.Contains(candidate) && !run.IsAcademyLayerNodeAvailable(candidate)) continue;
+                    if (candidate != targetNodeId && !run.CompletedNodes.Contains(candidate)) continue;
                     previous[candidate] = current;
                     open.Enqueue(candidate);
                 }

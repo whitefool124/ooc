@@ -136,14 +136,19 @@ namespace OCC.Combat.Presentation
         private Text healthValue;
         private Text shieldValue;
         private Text manaValue;
+        private Text environmentReadout;
         private Button endTurnButton;
         private Button restartButton;
+        private Button pauseButton;
         private Button leaveButton;
         private Button outcomeRestartButton;
         private Button outcomeBackButton;
         private GameObject outcomeOverlay;
         private Text outcomeTitle;
         private Text outcomeDetail;
+        private GameObject openingDialogueOverlay;
+        private Text openingDialogueSpeaker;
+        private Text openingDialogueLine;
         private Text[] quickbarLabels = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly Text[] quickbarKeys = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private Image[] quickbarIcons = new Image[RogueRuntimeConstants.ItemQuickbarSize];
@@ -183,6 +188,16 @@ namespace OCC.Combat.Presentation
             if (root == null || bootstrap == null) return;
             bool visible = bootstrap.IsDeveloperCombatActive || bootstrap.IsCombatOutcomeVisible;
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
+            if (openingDialogueOverlay != null)
+            {
+                bool showDialogue = visible && bootstrap.IsOpeningDialogueVisible;
+                if (openingDialogueOverlay.activeSelf != showDialogue) openingDialogueOverlay.SetActive(showDialogue);
+                if (showDialogue)
+                {
+                    openingDialogueSpeaker.text = bootstrap.OpeningDialogueSpeaker;
+                    openingDialogueLine.text = bootstrap.OpeningDialogueLine;
+                }
+            }
             if (!visible || bootstrap.CurrentState == null)
             {
                 if (wasVisible)
@@ -193,6 +208,11 @@ namespace OCC.Combat.Presentation
                 wasVisible = false;
                 hasPresentedModel = false;
                 return;
+            }
+            if (environmentReadout != null)
+            {
+                string environment = BuildEnvironmentReadout(bootstrap.CurrentState);
+                if (environmentReadout.text != environment) environmentReadout.text = environment;
             }
             if (combatEntryQueued)
             {
@@ -257,6 +277,9 @@ namespace OCC.Combat.Presentation
             GameObject top = shell.Header.gameObject;
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
             BuildHeaderResources(top.transform);
+            environmentReadout = Label("环境公开读数", top.transform, new Vector2(450, -12),
+                new Vector2(750, 44), 20, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            environmentReadout.raycastTarget = false;
 
             GameObject side = shell.RightConsole.gameObject;
             Image sideSurface = side.GetComponent<Image>();
@@ -334,6 +357,11 @@ namespace OCC.Combat.Presentation
             float actionY = -HeaderActionsZone.y;
             Vector2 actionSize = new Vector2(HeaderActionWidth, HeaderActionsZone.height);
             float actionStep = HeaderActionWidth + HeaderActionGap;
+            pauseButton = Button(top.transform, "暂离并保存", new Vector2(actionX - actionStep, actionY), actionSize, "暂离",
+                FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(pauseButton);
+            pauseButton.onClick.AddListener(bootstrap.RequestReturnToLanding);
+            BindTooltip(pauseButton.gameObject, () => new FormalTooltipContent("暂离并保存", "保留本轮和本场已提交的战斗指令；下次继续游戏会回到战斗。", FormalUiTheme.Cyan));
             Button encyclopediaButton = Button(top.transform, "打开百科", new Vector2(actionX, actionY), actionSize, "百科",
                 FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(encyclopediaButton);
@@ -355,7 +383,7 @@ namespace OCC.Combat.Presentation
             ConfigureCompactFrame(leaveButton);
             leaveButton.transform.Find("文字").GetComponent<Text>().color = FormalUiTheme.OnInk;
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
-            BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("离开战斗", "回到地图。这场战斗的收获和损失都不会保留。", FormalUiTheme.Danger));
+            BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("主动放弃", "确认后进入本轮失败结算；若只想稍后继续，请使用“暂离”。", FormalUiTheme.Danger));
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
@@ -376,6 +404,33 @@ namespace OCC.Combat.Presentation
                 BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }
             CreateOutcomeOverlay();
+            CreateOpeningDialogueOverlay();
+        }
+
+        private void CreateOpeningDialogueOverlay()
+        {
+            openingDialogueOverlay = Panel("学院开战对话遮罩", canvas.transform, Vector2.zero, Vector2.one,
+                Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, .6f));
+            Image shade = openingDialogueOverlay.GetComponent<Image>();
+            shade.sprite = null;
+            shade.type = Image.Type.Simple;
+            shade.color = new Color(0f, 0f, 0f, .6f);
+            shade.raycastTarget = true;
+            GameObject card = Panel("学院开战对话", openingDialogueOverlay.transform,
+                new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero,
+                new Vector2(1080f, 250f), FormalUiTheme.Surface);
+            card.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
+            openingDialogueSpeaker = Label("对话来源", card.transform, new Vector2(32f, -24f),
+                new Vector2(800f, 38f), 26, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            openingDialogueLine = Label("开战台词", card.transform, new Vector2(32f, -76f),
+                new Vector2(1016f, 76f), 28, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            Button continueButton = Button(card.transform, "继续战斗", new Vector2(748f, -178f),
+                new Vector2(140f, 48f), "继续", FormalUiTheme.Interactive);
+            Button skipButton = Button(card.transform, "跳过对话", new Vector2(908f, -178f),
+                new Vector2(140f, 48f), "跳过", FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+            continueButton.onClick.AddListener(bootstrap.CompleteOpeningCombatDialogue);
+            skipButton.onClick.AddListener(bootstrap.CompleteOpeningCombatDialogue);
+            openingDialogueOverlay.SetActive(false);
         }
 
         private void LoadActionIcons()
@@ -804,8 +859,8 @@ namespace OCC.Combat.Presentation
                     quickbarIcons[i].gameObject.SetActive(tactical != null);
                     if (tactical != null)
                     {
-                        quickbarIcons[i].sprite = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(tactical.DefinitionId));
-                        if (quickbarIcons[i].sprite == null) throw new KeyNotFoundException("Missing rogue tactical icon: " + tactical.DefinitionId);
+                        Sprite icon = Resources.Load<Sprite>(FormalArtRegistry.ItemPath(tactical.DefinitionId));
+                        SetQuickbarVisual(i, icon, tacticalDefinition?.DisplayName ?? tactical.DefinitionId);
                     }
                     continue;
                 }
@@ -814,8 +869,7 @@ namespace OCC.Combat.Presentation
                 RefreshQuickbarReadout(i, definition != null, item?.RemainingUses ?? 0);
                 quickbarIcons[i].gameObject.SetActive(definition != null);
                 if (definition == null) continue;
-                quickbarIcons[i].sprite = Resources.Load<Sprite>(definition.IconPath);
-                if (quickbarIcons[i].sprite == null) throw new KeyNotFoundException("Missing formal quickbar icon: " + definition.Id);
+                SetQuickbarVisual(i, Resources.Load<Sprite>(definition.IconPath), definition.DisplayName);
             }
             bool outcome = bootstrap.IsCombatOutcomeVisible;
             outcomeOverlay.SetActive(outcome);
@@ -824,9 +878,19 @@ namespace OCC.Combat.Presentation
             if (outcome)
             {
                 CombatOutcomePresentation summary = bootstrap.CurrentOutcomePresentation;
-                outcomeTitle.text = summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
-                outcomeDetail.text = summary?.CompactDetailText ?? "请选择下一步。";
-                outcomeBackButton.GetComponentInChildren<Text>().text = bootstrap.CurrentMapRun != null ? "返回地图" : "返回入口";
+                bool abandoned = bootstrap.IsMapRunAbandonPending;
+                bool failedRun = bootstrap.CurrentMapRun != null && (abandoned || bootstrap.CurrentState.IsDefeat);
+                bool savingFailure = bootstrap.CurrentMapRun != null && !bootstrap.IsMapRunSaved;
+                bool protectedSlot = savingFailure && bootstrap.IsMapRunWriteProtected;
+                outcomeTitle.text = protectedSlot ? "档案已保护 · 返回入口" : savingFailure ? "保存失败 · 请重试" : abandoned ? "主动放弃 · 本轮结算" : failedRun ? "战败 · 本轮结算" :
+                    summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
+                outcomeDetail.text = protectedSlot ? "写入校验失败，旧档和安全副本已保留；确认后可舍弃本次未保存进度并返回档案入口。" :
+                    savingFailure ? "结算保存失败。当前结果仍在内存中，请重试保存，不要退出游戏。" :
+                    failedRun ? "可从本场开战前重试；确认返回入口后保存并关闭本轮。" :
+                    summary?.CompactDetailText ?? "请选择下一步。";
+                outcomeBackButton.GetComponentInChildren<Text>().text = protectedSlot ? "返回档案入口" : savingFailure ? "重试保存" : failedRun ? "结算并返回入口" :
+                    bootstrap.CurrentMapRun != null ? "返回地图" : "返回入口";
+                outcomeRestartButton.gameObject.SetActive(!savingFailure && (failedRun || bootstrap.CurrentMapRun == null));
             }
             foreach (KeyValuePair<string, Button> pair in actionButtons)
             {
@@ -1040,6 +1104,15 @@ namespace OCC.Combat.Presentation
             return FormalUiTheme.WithAlpha(FormalUiTheme.Magic, empty ? .06f : .14f);
         }
 
+        private void SetQuickbarVisual(int slot, Sprite sprite, string displayName)
+        {
+            quickbarIcons[slot].sprite = sprite;
+            quickbarIcons[slot].gameObject.SetActive(sprite != null);
+            Text fallback = quickbarLabels[slot];
+            fallback.text = sprite == null ? CompactSpellName(displayName) : string.Empty;
+            fallback.gameObject.SetActive(sprite == null);
+        }
+
         private static void ConfigurePopulatedSpellCard(Button button)
         {
             if (button == null) return;
@@ -1179,10 +1252,10 @@ namespace OCC.Combat.Presentation
             outcomeRestartButton = Button(outcomeOverlay.transform, "结果重开", new Vector2(60, -180), new Vector2(280, 64), "重新挑战", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             outcomeRestartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
             outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -180), new Vector2(280, 64), "返回入口", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
-            outcomeBackButton.onClick.AddListener(bootstrap.ReturnToDeveloperMenu);
+            outcomeBackButton.onClick.AddListener(bootstrap.ReturnFromCombatOutcome);
             BindTooltip(outcomeOverlay, BuildOutcomeTooltip);
             BindTooltip(outcomeRestartButton.gameObject, () => new FormalTooltipContent("重新挑战", "这场战斗会从头开始。", line));
-            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("返回入口", "返回地图，并从进入本场战斗前继续。", FormalUiTheme.Amber));
+            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("确认结算", "战败或放弃时保存并结束本轮；胜利时返回地图处理奖励。", FormalUiTheme.Amber));
             outcomeOverlay.SetActive(false);
         }
 
@@ -1768,8 +1841,19 @@ namespace OCC.Combat.Presentation
 
         private static string ActionPointText(int current) => current + "／" + CombatResolver.HeroActionPointsPerTurn;
 
+        private static string BuildEnvironmentReadout(CombatState state)
+        {
+            if (state?.Environment == null) return string.Empty;
+            FieldWindState wind = state.Environment.Wind;
+            int lit = state.Environment.LightLanes
+                .SelectMany(lane => state.Environment.LitCells(state.Map, lane, state.CurrentTime)).Distinct().Count();
+            return "风向：" + FieldWindState.DirectionName(wind.Direction) + "｜风级：" + wind.Level +
+                "｜剩余换风：" + wind.ChangesRemaining + "｜照明：" + lit + "格";
+        }
+
         private void RefreshAvailability(CombatState state, UnitState hero)
         {
+            if (pauseButton != null) pauseButton.gameObject.SetActive(bootstrap.CurrentMapRun != null && bootstrap.IsDeveloperCombatActive);
             bool playing = (bootstrap as ICombatActionPresentationHost)?.IsCombatActionPlaying == true;
             bool heroTurn = !playing && state.ActiveUnitId == "hero" && hero.IsAlive;
             foreach (KeyValuePair<string, Button> pair in actionButtons)

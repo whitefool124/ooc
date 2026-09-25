@@ -22,6 +22,20 @@ namespace OCC.Combat
         public const int RegisterRange = 4;
         /// <summary>旧脉冲冷却回合数（技能数据表 SK-SUP-17）。</summary>
         public const int PulseCooldown = 2;
+        public const int BindingMarkSkillIndex = 5;
+        public const int LanternSweepSkillIndex = 6;
+        public const int SpotlightSkillIndex = 7;
+        public const int PrototypeDeploySkillIndex = 8;
+        public const int PrototypeDetonateSkillIndex = 9;
+        public const int WindChangeSkillIndex = 10;
+        public const int StorekeeperPulseSkillIndex = 11;
+        public const int StorekeeperRetireSkillIndex = 12;
+        public const int StorekeeperRegisterSkillIndex = 13;
+        public const int WindScreenSkillIndex = 14;
+        public const int WindScrollSkillIndex = 15;
+        public const int WindPushSkillIndex = 16;
+        public const int ArbalistArmSkillIndex = 17;
+        public const int VanguardDismantleSkillIndex = 18;
 
         /// <summary>气味痕持续的主角回合数。</summary>
         public const int TraceRounds = 3;
@@ -38,11 +52,18 @@ namespace OCC.Combat
         private int rotateUses;
         private int windChanges;
         private int pulseCooldown;
+        private int registerCooldown;
         private readonly HashSet<string> inspectionMarks = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<GridPosition> knownFieldCells = new HashSet<GridPosition>();
         private readonly HashSet<GridPosition> knownDeviceCells = new HashSet<GridPosition>();
         private readonly Dictionary<GridPosition, int> traceAge = new Dictionary<GridPosition, int>();
+        private int snareReactionRound = -1;
         private readonly Dictionary<string, GridPosition> spotlightDirection = new Dictionary<string, GridPosition>(StringComparer.Ordinal);
+        private readonly HashSet<string> spotlightArmed = new HashSet<string>(StringComparer.Ordinal);
+        private readonly HashSet<string> arbalistArmed = new HashSet<string>(StringComparer.Ordinal);
+        private readonly Dictionary<string, int> vanguardDismantleCooldown = new Dictionary<string, int>(StringComparer.Ordinal);
+        private readonly Dictionary<string, GridPosition> vanguardCoverResponses = new Dictionary<string, GridPosition>(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> menderPriorityTargets = new Dictionary<string, string>(StringComparer.Ordinal);
 
         /// <summary>已经完成的主角回合数，用于痕迹计时。</summary>
         public int HeroRounds => heroRounds;
@@ -92,28 +113,359 @@ namespace OCC.Combat
         /// <summary>守塔之外的场地敌人是否接管该单位的行动。</summary>
         public static bool Handles(UnitState unit) =>
             IsTracker(unit) || IsKeeper(unit) || IsLibrarian(unit) || IsStorekeeper(unit) || IsPrototypeHand(unit) ||
+            unit.EnemyArchetypeId == "rune_arbalist" ||
             unit.EnemyArchetypeId == "elite_vanguard" || unit.EnemyArchetypeId == "stone_snare" ||
             unit.EnemyArchetypeId == "lantern_revealer" || unit.EnemyArchetypeId == "barrier_mender";
 
         public CombatCommand ChooseEnemyCommand(CombatState state, UnitState enemy, UnitState hero)
         {
             if (enemy == null || hero == null || state == null) return CombatCommand.EndTurn(enemy?.Id ?? string.Empty);
+            if (enemy.EnemyArchetypeId == "rune_arbalist" && state.AcademyEnemyArea != null)
+                return ChooseArbalistCommand(state, enemy, hero);
             if (IsTracker(enemy)) return ChooseTrackerCommand(state, enemy, hero);
             if (IsKeeper(enemy)) return ChooseKeeperCommand(state, enemy, hero);
             if (IsLibrarian(enemy)) return ChooseLibrarianCommand(state, enemy, hero);
+            if (IsPrototypeHand(enemy) && state.AcademyEnemyArea != null)
+                return ChoosePrototypeCommand(state, enemy, hero);
+            if (IsStorekeeper(enemy) && state.AcademyEnemyArea != null)
+                return ChooseStorekeeperCommand(state, enemy, hero);
+            if (enemy.EnemyArchetypeId == "elite_vanguard" && state.AcademyEnemyArea != null)
+                return ChooseVanguardCommand(state, enemy, hero);
             if (IsStorekeeper(enemy) || IsPrototypeHand(enemy)) return ChooseFieldActionOnlyCommand(state, enemy, hero);
+            if (enemy.EnemyArchetypeId == "stone_snare" && state.AcademyEnemyArea != null)
+                return ChooseSnareCommand(state, enemy, hero);
+            if (enemy.EnemyArchetypeId == "lantern_revealer" && state.AcademyEnemyArea != null)
+                return ChooseLanternCommand(state, enemy, hero);
+            if (enemy.EnemyArchetypeId == "barrier_mender" &&
+                menderPriorityTargets.TryGetValue(enemy.Id, out string priorityId) &&
+                EnemyTactics.CanMend(state, enemy, state.GetUnit(priorityId)))
+                return CombatCommand.UseSkill(enemy.Id, 0, priorityId);
             return EnemyTactics.Choose(state, enemy, hero);
         }
 
-        /// <summary>小铃：每回合只做一件事——她的场地动作在回合开始时结算，之后就用引风短杖或走位。</summary>
-        private static CombatCommand ChooseLibrarianCommand(CombatState state, UnitState enemy, UnitState hero)
+        /// <summary>一次主角命令前记录敌方生命与护盾，供受击友军续盾应对判定。</summary>
+        public static Dictionary<string, int> CaptureEnemyVitals(CombatState state) =>
+            state == null || state.AcademyFieldEnemy == null || !HasLiving(state, "barrier_mender")
+                ? new Dictionary<string, int>(StringComparer.Ordinal)
+                : state.Units.Values.Where(unit => unit.IsAlive && !unit.IsHero)
+                    .ToDictionary(unit => unit.Id, unit => unit.Health + unit.Shield, StringComparer.Ordinal);
+
+        public void ObserveHeroDamage(CombatState state, IReadOnlyDictionary<string, int> before)
+        {
+            if (state == null || before == null || before.Count == 0) return;
+            UnitState damaged = state.Units.Values.Where(unit => !unit.IsHero &&
+                    before.TryGetValue(unit.Id, out int oldValue) && oldValue > unit.Health + unit.Shield)
+                .OrderByDescending(unit => before[unit.Id] - unit.Health - unit.Shield)
+                .ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
+            if (damaged == null) return;
+            bool recorded = false;
+            foreach (UnitState mender in state.Units.Values.Where(unit => unit.IsAlive &&
+                unit.EnemyArchetypeId == "barrier_mender" && unit.Id != damaged.Id))
+            {
+                if (menderPriorityTargets.TryGetValue(mender.Id, out string existing) && existing == damaged.Id) continue;
+                menderPriorityTargets[mender.Id] = damaged.Id;
+                recorded = true;
+            }
+            if (recorded)
+                state.AddLog("补盾助教应对·优先为受击友军续盾：下个自身回合优先支援" + damaged.DisplayName + "。");
+        }
+
+        internal bool IsPriorityMend(string menderId, string targetId) =>
+            !string.IsNullOrEmpty(menderId) && !string.IsNullOrEmpty(targetId) &&
+            menderPriorityTargets.TryGetValue(menderId, out string priorityId) && priorityId == targetId;
+
+        private static CombatCommand ChooseLanternCommand(CombatState state, UnitState lantern, UnitState hero)
+        {
+            GridPosition direction = DirectionToward(lantern.Position, hero.Position);
+            GridPosition center = lantern.Position + direction;
+            return LanternCells(state, lantern.Position, direction, LanternLaneLength).Length > 0
+                ? CombatCommand.UseSkillAt(lantern.Id, LanternSweepSkillIndex, center, default)
+                : CombatCommand.EndTurn(lantern.Id);
+        }
+
+        private static GridPosition[] LanternCells(CombatState state, GridPosition origin, GridPosition direction, int length)
+        {
+            var cells = new List<GridPosition>();
+            for (int step = 1; step <= length; step++)
+            {
+                GridPosition cell = origin + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight ||
+                    state.Map.GetTile(cell).SmokeExpiresAt > state.CurrentTime) break;
+                cells.Add(cell);
+            }
+            return cells.ToArray();
+        }
+
+        internal CombatEffectExecution ResolveLanternSweep(CombatState state, UnitState lantern, CombatCommand command)
+        {
+            if (state == null || lantern == null || lantern.EnemyArchetypeId != "lantern_revealer" ||
+                command.UnitId != lantern.Id || command.SlotIndex != LanternSweepSkillIndex)
+                throw new InvalidOperationException("转灯意图不可用。");
+            GridPosition direction = new GridPosition(command.Destination.X - lantern.Position.X,
+                command.Destination.Y - lantern.Position.Y);
+            if (Math.Abs(direction.X) + Math.Abs(direction.Y) != 1)
+                throw new InvalidOperationException("转灯只能选择正交方向。");
+            GridPosition[] cells = LanternCells(state, lantern.Position, direction, LanternLaneLength);
+            if (cells.Length == 0) throw new InvalidOperationException("转灯方向已被遮挡。");
+            CombatEffectExecution result = CombatResolver.ResolveLanternSweep(state, lantern, cells);
+            state.Environment.ReplaceLightLanes(lantern.Id,
+                new[] { new FieldLightLaneState(lantern.Id, lantern.Position, direction, LanternLaneLength) });
+            state.AddLog("提灯巡查转灯：公开直线 " + LanternLaneLength + " 格，遮挡后形成暗段。");
+            return result;
+        }
+
+        private static CombatCommand ChooseSnareCommand(CombatState state, UnitState enemy, UnitState hero)
+        {
+            CombatCommand primary = EnemyTactics.Choose(state, enemy, hero);
+            if (primary.Type == CombatCommandType.UseSkill && primary.SlotIndex == 0) return primary;
+            GridPosition? cell = state.Map.PositionsWith(_ => true)
+                .Where(position => IsLegalBindingMarkCell(state, enemy, position))
+                .OrderBy(position => position.ManhattanDistance(hero.Position))
+                .ThenBy(position => position.Y).ThenBy(position => position.X)
+                .Select(position => (GridPosition?)position).FirstOrDefault();
+            return cell.HasValue ? CombatCommand.UseSkillAt(enemy.Id, BindingMarkSkillIndex, cell.Value, default)
+                : CombatCommand.EndTurn(enemy.Id);
+        }
+
+        private static bool IsLegalBindingMarkCell(CombatState state, UnitState enemy, GridPosition cell) =>
+            state.Map.IsInside(cell) && enemy.Position.ManhattanDistance(cell) <= 3 &&
+            !state.Map.IsBlocked(cell) && !state.IsOccupied(cell) &&
+            !state.Map.GetTile(cell).HasEffectLayer && state.Map.GetTile(cell).Cover == CoverType.None &&
+            !state.Map.GetTile(cell).IsDeviceLike && !state.Map.GetTile(cell).IsObjective &&
+            state.HasLineOfSight(enemy.Position, cell);
+
+        /// <summary>移动确认前与实际结算共用的绕行补刻判定。</summary>
+        public GridPosition? PreviewSnareRouteResponse(CombatState state, IReadOnlyList<GridPosition> path)
+        {
+            if (state == null || path == null || path.Count < 2 || snareReactionRound == heroRounds) return null;
+            if (path.Skip(1).Any(position => state.Map.GetTile(position).IsBindingMark)) return null;
+            GridPosition[] marks = state.Map.PositionsWith(tile => tile.IsBindingMark).ToArray();
+            if (!path.Skip(1).Any(position => marks.Any(mark => mark.ManhattanDistance(position) == 1))) return null;
+            GridPosition end = path[path.Count - 1];
+            GridPosition before = path[path.Count - 2];
+            GridPosition next = end + new GridPosition(end.X - before.X, end.Y - before.Y);
+            return state.Units.Values.Where(unit => unit.IsAlive && unit.EnemyArchetypeId == "stone_snare" &&
+                    !unit.HasStatus(StatusType.Bound))
+                .OrderBy(unit => unit.Id, StringComparer.Ordinal)
+                .Any(unit => IsLegalBindingMarkCell(state, unit, next) ||
+                    next == path[0] && IsLegalBindingMarkCellIgnoringHero(state, unit, next))
+                ? next : (GridPosition?)null;
+        }
+
+        private static bool IsLegalBindingMarkCellIgnoringHero(CombatState state, UnitState enemy, GridPosition cell) =>
+            state.Map.IsInside(cell) && enemy.Position.ManhattanDistance(cell) <= 3 &&
+            !state.Map.IsBlocked(cell) && !state.IsOccupied(cell, "hero") &&
+            !state.Map.GetTile(cell).HasEffectLayer && state.Map.GetTile(cell).Cover == CoverType.None &&
+            !state.Map.GetTile(cell).IsDeviceLike && !state.Map.GetTile(cell).IsObjective &&
+            state.HasLineOfSight(enemy.Position, cell);
+
+        internal CombatEffectExecution ResolveBindingMark(CombatState state, UnitState enemy, CombatCommand command)
+        {
+            if (state == null || enemy == null || enemy.EnemyArchetypeId != "stone_snare" ||
+                command.UnitId != enemy.Id || command.SlotIndex != BindingMarkSkillIndex ||
+                !IsLegalBindingMarkCell(state, enemy, command.Destination))
+                throw new InvalidOperationException("刻印目标必须是三格内可见的空格。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, enemy.Id,
+                CombatEffect.SpendActionPoints(enemy.ActionPoints));
+            TileState marked = state.Map.GetTile(command.Destination).Clone();
+            marked.IsBindingMark = true;
+            marked.EffectSourceId = "skill:SK-SUP-08";
+            state.Map.SetTile(command.Destination, marked);
+            markAge[command.Destination] = heroRounds;
+            markSource[command.Destination] = marked.EffectSourceId;
+            state.AddLog("拴索助教刻印：(" + command.Destination.X + "," + command.Destination.Y +
+                ") 生成约束纹，持续3个主角回合。");
+            return result;
+        }
+
+        /// <summary>学院层小铃的场地手段均作为公开的一次行动。</summary>
+        private CombatCommand ChooseLibrarianCommand(CombatState state, UnitState enemy, UnitState hero)
         {
             if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
+            if (state.AcademyEnemyArea != null)
+            {
+                if ((state.Environment.Wind.Level == 0 || Firegrounds(state).Length > 0) &&
+                    windChanges < WindChanges &&
+                    state.Environment.Wind.ChangesRemaining > 0)
+                    return CombatCommand.UseSkillAt(enemy.Id, WindChangeSkillIndex,
+                        enemy.Position + BlowDirection(state, enemy, hero), default);
+                GridPosition direction = DirectionToward(enemy.Position, hero.Position);
+                if (state.Map.PositionsWith(tile => tile.IsLoosePaper).Count() >= ScreenCost &&
+                    PaperScreenLine(state, enemy.Position, direction).Length == ScreenLength)
+                    return CombatCommand.UseSkillAt(enemy.Id, WindScreenSkillIndex,
+                        enemy.Position + direction, default);
+                if (state.Map.PositionsWith(tile => tile.IsLoosePaper).Any() &&
+                    enemy.Position.ManhattanDistance(hero.Position) <= EnemyAbilityCatalog.WindScrollEdge.Range)
+                    return CombatCommand.UseSkillAt(enemy.Id, WindScrollSkillIndex, hero.Position, default);
+                GridPosition pushCell = hero.Position + direction;
+                if (enemy.Position.ManhattanDistance(hero.Position) <= 3 && state.Map.IsInside(pushCell) &&
+                    !state.Map.IsBlocked(pushCell) && !state.IsOccupied(pushCell))
+                    return CombatCommand.UseSkillAt(enemy.Id, WindPushSkillIndex, hero.Position, default);
+                return CombatCommand.EndTurn(enemy.Id);
+            }
             int weaponRange = enemy.MainHand?.Range ?? 1;
             if (enemy.Position.ManhattanDistance(hero.Position) <= weaponRange &&
                 (weaponRange <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
                 return CombatCommand.Attack(enemy.Id, hero.Id);
             return EnemyTactics.Choose(state, enemy, hero);
+        }
+
+        private static GridPosition[] PaperScreenLine(CombatState state, GridPosition origin, GridPosition direction)
+        {
+            var cells = new List<GridPosition>();
+            for (int step = 1; step <= ScreenLength; step++)
+            {
+                GridPosition cell = origin + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight ||
+                    state.Map.GetTile(cell).IsDeviceLike || state.Map.GetTile(cell).IsObjective) break;
+                cells.Add(cell);
+            }
+            return cells.ToArray();
+        }
+
+        private CombatCommand ChooseArbalistCommand(CombatState state, UnitState arbalist, UnitState hero)
+        {
+            if (arbalist.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(arbalist.Id);
+            if (!arbalistArmed.Contains(arbalist.Id))
+                return CombatCommand.UseSkill(arbalist.Id, ArbalistArmSkillIndex, arbalist.Id);
+            int distance = arbalist.Position.ManhattanDistance(hero.Position);
+            SkillDefinition bolt = EnemyAbilityCatalog.WindlassBolt;
+            if (distance >= bolt.MinimumRange && distance <= bolt.Range &&
+                state.HasLineOfSight(arbalist.Position, hero.Position))
+                return arbalist.IsSkillReady(bolt) && arbalist.Mana >= bolt.ManaCost
+                    ? CombatCommand.UseSkill(arbalist.Id, 0, hero.Id)
+                    : CombatCommand.EndTurn(arbalist.Id);
+            GridPosition? retreat = Adjacent(arbalist.Position)
+                .Where(cell => state.Map.IsInside(cell) && !state.Map.IsBlocked(cell) &&
+                    !state.IsOccupied(cell) && cell.ManhattanDistance(hero.Position) > distance)
+                .OrderByDescending(cell => cell.ManhattanDistance(hero.Position))
+                .ThenBy(cell => cell.Y).ThenBy(cell => cell.X)
+                .Cast<GridPosition?>().FirstOrDefault();
+            return retreat.HasValue ? CombatCommand.Move(arbalist.Id, retreat.Value)
+                : CombatCommand.EndTurn(arbalist.Id);
+        }
+
+        internal CombatEffectExecution ResolveArbalistArm(CombatState state, UnitState arbalist, CombatCommand command)
+        {
+            if (state == null || arbalist?.EnemyArchetypeId != "rune_arbalist" ||
+                state.AcademyEnemyArea == null || command.UnitId != arbalist.Id ||
+                command.SlotIndex != ArbalistArmSkillIndex || command.TargetUnitId != arbalist.Id ||
+                arbalistArmed.Contains(arbalist.Id))
+                throw new InvalidOperationException("背弩生架弩意图不可用。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, arbalist.Id,
+                CombatEffect.SpendActionPoints(arbalist.ActionPoints));
+            arbalistArmed.Add(arbalist.Id);
+            state.AddLog("背弩生架弩：占用整个回合，下一自身回合才能发射重矢。");
+            return result;
+        }
+
+        private CombatCommand ChooseVanguardCommand(CombatState state, UnitState vanguard, UnitState hero)
+        {
+            if (vanguard.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(vanguard.Id);
+            if (vanguardCoverResponses.TryGetValue(vanguard.Id, out GridPosition response) &&
+                state.Map.IsInside(response) && response.ManhattanDistance(vanguard.Position) == 1 &&
+                (IsStructure(state.Map.GetTile(response)) &&
+                    state.Map.GetTile(response).StructureOwnerUnitId == vanguard.Id ||
+                    CanRebuildVanguardWall(state, vanguard, response)))
+                return CombatCommand.UseSkillAt(vanguard.Id, VanguardDismantleSkillIndex, response, default);
+            if (vanguardDismantleCooldown.TryGetValue(vanguard.Id, out int cooldown) && cooldown > 0)
+                return CombatCommand.EndTurn(vanguard.Id);
+            GridPosition? wall = Adjacent(vanguard.Position)
+                .Where(state.Map.IsInside)
+                .Where(cell => IsStructure(state.Map.GetTile(cell)) &&
+                    cell.ManhattanDistance(hero.Position) <= 1)
+                .OrderBy(cell => cell.Y).ThenBy(cell => cell.X)
+                .Cast<GridPosition?>().FirstOrDefault();
+            return wall.HasValue
+                ? CombatCommand.UseSkillAt(vanguard.Id, VanguardDismantleSkillIndex, wall.Value, default)
+                : CombatCommand.EndTurn(vanguard.Id);
+        }
+
+        private static bool CanRebuildVanguardWall(CombatState state, UnitState vanguard, GridPosition position)
+        {
+            if (!state.Map.IsInside(position) || position.ManhattanDistance(vanguard.Position) != 1 ||
+                state.IsOccupied(position)) return false;
+            TileState wall = state.Map.GetTile(position);
+            return wall.Cover == CoverType.Heavy && wall.IsDestroyed &&
+                wall.StructureOwnerUnitId == vanguard.Id;
+        }
+
+        internal CombatEffectExecution ResolveVanguardDismantle(CombatState state, UnitState vanguard, CombatCommand command)
+        {
+            bool response = state != null && vanguard != null &&
+                vanguardCoverResponses.TryGetValue(vanguard.Id, out GridPosition responseCell) &&
+                responseCell == command.Destination;
+            bool rebuild = response && CanRebuildVanguardWall(state, vanguard, command.Destination);
+            if (state == null || vanguard?.EnemyArchetypeId != "elite_vanguard" ||
+                state.AcademyEnemyArea == null || command.UnitId != vanguard.Id ||
+                command.SlotIndex != VanguardDismantleSkillIndex ||
+                !state.Map.IsInside(command.Destination) ||
+                command.Destination.ManhattanDistance(vanguard.Position) != 1 ||
+                !rebuild && !IsStructure(state.Map.GetTile(command.Destination)) ||
+                !response && vanguardDismantleCooldown.TryGetValue(vanguard.Id, out int cooldown) && cooldown > 0)
+                throw new InvalidOperationException("划线教官拆架目标不可用。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, vanguard.Id,
+                CombatEffect.SpendActionPoints(vanguard.ActionPoints));
+            if (rebuild)
+            {
+                TileState rebuilt = state.Map.GetTile(command.Destination).Clone();
+                rebuilt.Durability = TileState.HeavyDurability;
+                state.Map.SetTile(command.Destination, rebuilt);
+                vanguardCoverResponses.Remove(vanguard.Id);
+                vanguardDismantleCooldown[vanguard.Id] = 2;
+                state.AddLog("划线教官应对：在 (" + command.Destination.X + "," + command.Destination.Y +
+                    ") 原位重筑加厚墙，耐久 " + TileState.HeavyDurability + "。");
+                return result;
+            }
+            TileState wall = state.Map.GetTile(command.Destination).Clone();
+            int durability = wall.Durability;
+            wall.Durability = 0;
+            state.Map.SetTile(command.Destination, wall);
+            state.ResolveAetherCrystalDamage(command.Destination, durability, vanguard.Id);
+            if (vanguardCoverResponses.TryGetValue(vanguard.Id, out GridPosition targetCell) &&
+                targetCell == command.Destination) vanguardCoverResponses.Remove(vanguard.Id);
+            foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive &&
+                unit.Position.ManhattanDistance(command.Destination) <= 1))
+            {
+                target.ClearShield();
+                state.ApplyRogueliteBreakStance(target.Id);
+            }
+            vanguardDismantleCooldown[vanguard.Id] = 2;
+            state.AddLog("划线教官拆架：拆除 (" + command.Destination.X + "," + command.Destination.Y +
+                ") 的重掩体；贴墙单位护盾清空并破势。");
+            return result;
+        }
+
+        internal CombatEffectExecution ResolveLibrarianCommand(CombatState state, UnitState librarian, CombatCommand command)
+        {
+            UnitState hero = state?.GetUnit("hero");
+            if (state == null || !IsLibrarian(librarian) || hero == null || !hero.IsAlive ||
+                command.UnitId != librarian.Id || librarian.HasStatus(StatusType.Bound) ||
+                state.AcademyEnemyArea == null)
+                throw new InvalidOperationException("小铃的场地行动不可用。");
+            GridPosition direction = DirectionToward(librarian.Position, hero.Position);
+            bool legal = command.SlotIndex == WindScreenSkillIndex
+                ? command.Destination == librarian.Position + direction &&
+                    PaperScreenLine(state, librarian.Position, direction).Length == ScreenLength &&
+                    state.Map.PositionsWith(tile => tile.IsLoosePaper).Count() >= ScreenCost
+                : command.SlotIndex == WindScrollSkillIndex
+                    ? command.Destination == hero.Position &&
+                        librarian.Position.ManhattanDistance(hero.Position) <= EnemyAbilityCatalog.WindScrollEdge.Range &&
+                        state.Map.PositionsWith(tile => tile.IsLoosePaper).Any()
+                    : command.SlotIndex == WindPushSkillIndex && command.Destination == hero.Position &&
+                        librarian.Position.ManhattanDistance(hero.Position) <= 3 &&
+                        state.Map.IsInside(hero.Position + direction) &&
+                        !state.Map.IsBlocked(hero.Position + direction) && !state.IsOccupied(hero.Position + direction);
+            if (!legal) throw new InvalidOperationException("小铃的场地目标已不可用。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, librarian.Id,
+                CombatEffect.SpendActionPoints(librarian.ActionPoints));
+            bool applied = command.SlotIndex == WindScreenSkillIndex
+                ? TryRaisePaperScreen(state, librarian, hero)
+                : command.SlotIndex == WindScrollSkillIndex
+                    ? TryWindEdge(state, librarian, hero)
+                    : TryPushUnit(state, librarian, hero);
+            if (!applied) throw new InvalidOperationException("小铃的场地行动未能结算。");
+            return result;
         }
 
         /// <summary>老库管与试制员：场地动作在回合开始时结算，之后只用普通攻击或走位。</summary>
@@ -138,20 +490,266 @@ namespace OCC.Combat
             return EnemyTactics.Choose(state, enemy, hero);
         }
 
-        /// <summary>灯台值守：转镜（光柱）在自身回合开始由运行时结算，因此这里只用灯镜攻击或走位。
-        /// 注意：`转镜` 条目是 Self 语义的公开描述，若走技能管道会对自身结算伤害，禁止在此施放。</summary>
+        /// <summary>转镜占用一次行动，光柱在本次自身回合结束时结算。</summary>
         private static CombatCommand ChooseKeeperCommand(CombatState state, UnitState enemy, UnitState hero)
         {
-            int distance = enemy.Position.ManhattanDistance(hero.Position);
-            int weaponRange = enemy.MainHand?.Range ?? 1;
-            if (distance <= weaponRange && (weaponRange <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
-                return CombatCommand.Attack(enemy.Id, hero.Id);
-            return EnemyTactics.Choose(state, enemy, hero);
+            GridPosition direction = DirectionToward(enemy.Position, hero.Position);
+            GridPosition center = enemy.Position + direction;
+            return SpotlightCells(state, enemy.Position, direction).Length > 0
+                ? CombatCommand.UseSkillAt(enemy.Id, SpotlightSkillIndex, center, default)
+                : CombatCommand.EndTurn(enemy.Id);
+        }
+
+        internal static GridPosition[] SpotlightCells(CombatState state, GridPosition origin, GridPosition direction) =>
+            LanternCells(state, origin, direction, SpotlightLength);
+
+        internal CombatEffectExecution ResolveSpotlightCommand(CombatState state, UnitState keeper, CombatCommand command)
+        {
+            if (state == null || !IsKeeper(keeper) || command.UnitId != keeper.Id ||
+                command.SlotIndex != SpotlightSkillIndex)
+                throw new InvalidOperationException("转镜意图不可用。");
+            GridPosition direction = new GridPosition(command.Destination.X - keeper.Position.X,
+                command.Destination.Y - keeper.Position.Y);
+            if (Math.Abs(direction.X) + Math.Abs(direction.Y) != 1 ||
+                SpotlightCells(state, keeper.Position, direction).Length == 0)
+                throw new InvalidOperationException("转镜方向已被遮挡。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, keeper.Id,
+                CombatEffect.SpendActionPoints(keeper.ActionPoints));
+            SetSpotlight(state, keeper, direction);
+            spotlightArmed.Add(keeper.Id);
+            return result;
+        }
+
+        internal void ArmSpotlight(CombatState state, UnitState keeper, GridPosition direction)
+        {
+            SetSpotlight(state, keeper, direction);
+            spotlightArmed.Add(keeper.Id);
+        }
+
+        private CombatCommand ChoosePrototypeCommand(CombatState state, UnitState hand, UnitState hero)
+        {
+            GridPosition? target = Adjacent(hero.Position).Where(state.Map.IsInside)
+                .Where(cell => state.Map.GetTile(cell).IsOverloadDevice)
+                .OrderBy(cell => cell.Y).ThenBy(cell => cell.X)
+                .Select(cell => (GridPosition?)cell).FirstOrDefault();
+            if (target.HasValue)
+                return CombatCommand.UseSkillAt(hand.Id, PrototypeDetonateSkillIndex, target.Value, default);
+            GridPosition? deploy = PrototypeDeployCell(state, hand, hero);
+            return deploy.HasValue
+                ? CombatCommand.UseSkillAt(hand.Id, PrototypeDeploySkillIndex, deploy.Value, default)
+                : CombatCommand.EndTurn(hand.Id);
+        }
+
+        private GridPosition? PrototypeDeployCell(CombatState state, UnitState hand, UnitState hero)
+        {
+            if (PrototypeRemaining <= 0) return null;
+            bool wantWard = !Adjacent(hand.Position).Any(cell => state.Map.IsInside(cell) &&
+                state.Map.GetTile(cell).IsWardGenerator);
+            IEnumerable<GridPosition> slots = Adjacent(hand.Position)
+                .Where(cell => state.Map.IsInside(cell) && !state.Map.IsBlocked(cell) && !state.IsOccupied(cell) &&
+                    !state.Map.GetTile(cell).IsDeviceLike && !state.Map.GetTile(cell).HasEffectLayer &&
+                    state.Map.GetTile(cell).Cover == CoverType.None && !state.Map.GetTile(cell).IsObjective);
+            return (wantWard ? slots.OrderBy(cell => cell.ManhattanDistance(hero.Position))
+                    : slots.OrderByDescending(cell => cell.ManhattanDistance(hero.Position)))
+                .ThenBy(cell => cell.Y).ThenBy(cell => cell.X)
+                .Select(cell => (GridPosition?)cell).FirstOrDefault();
+        }
+
+        internal CombatEffectExecution ResolvePrototypeCommand(CombatState state, UnitState hand, CombatCommand command)
+        {
+            if (state == null || !IsPrototypeHand(hand) || command.UnitId != hand.Id)
+                throw new InvalidOperationException("试制员意图不可用。");
+            UnitState hero = state.GetUnit("hero");
+            if (hero == null || !hero.IsAlive)
+                throw new InvalidOperationException("试制员目标不可用。");
+            if (command.SlotIndex == PrototypeDeploySkillIndex)
+            {
+                GridPosition? pick = PrototypeDeployCell(state, hand, hero);
+                if (!pick.HasValue || pick.Value != command.Destination)
+                    throw new InvalidOperationException("布放目标不是当前合法空格。");
+                CombatEffectExecution result = CombatEffectExecutor.Execute(state, hand.Id,
+                    CombatEffect.SpendActionPoints(hand.ActionPoints));
+                bool wantWard = !Adjacent(hand.Position).Any(cell => state.Map.IsInside(cell) &&
+                    state.Map.GetTile(cell).IsWardGenerator);
+                TileState tile = state.Map.GetTile(pick.Value).Clone();
+                tile.IsDevice = true;
+                tile.Durability = TileState.PrototypeDurability;
+                tile.IsWardGenerator = wantWard;
+                tile.IsOverloadDevice = !wantWard;
+                state.Map.SetTile(pick.Value, tile);
+                PrototypePlaced++;
+                SnapshotDevices(DeviceCells(state));
+                state.AddLog("试制员布放：在 (" + pick.Value.X + "," + pick.Value.Y + ") 放下" +
+                    (wantWard ? "护罩发生器" : "过载装置") + "，试制箱剩余 " + PrototypeRemaining + " 件。");
+                return result;
+            }
+            if (command.SlotIndex == PrototypeDetonateSkillIndex && state.Map.IsInside(command.Destination) &&
+                command.Destination.ManhattanDistance(hero.Position) == 1 &&
+                state.Map.GetTile(command.Destination).IsOverloadDevice)
+            {
+                CombatEffectExecution result = CombatEffectExecutor.Execute(state, hand.Id,
+                    CombatEffect.SpendActionPoints(hand.ActionPoints));
+                DetonatePrototypeDevice(state, command.Destination);
+                return result;
+            }
+            throw new InvalidOperationException("引爆目标必须是主角相邻的过载装置。");
+        }
+
+        internal CombatEffectExecution ResolveWindChangeCommand(CombatState state, UnitState librarian,
+            CombatCommand command)
+        {
+            if (state == null || !IsLibrarian(librarian) || command.UnitId != librarian.Id ||
+                command.SlotIndex != WindChangeSkillIndex || windChanges >= WindChanges ||
+                state.Environment.Wind.ChangesRemaining <= 0)
+                throw new InvalidOperationException("换风意图不可用。");
+            GridPosition direction = new GridPosition(command.Destination.X - librarian.Position.X,
+                command.Destination.Y - librarian.Position.Y);
+            if (Math.Abs(direction.X) + Math.Abs(direction.Y) != 1)
+                throw new InvalidOperationException("换风只支持正交方向。");
+            int level = Math.Min(3, 1 + windChanges);
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, librarian.Id,
+                CombatEffect.SpendActionPoints(librarian.ActionPoints));
+            if (!state.Environment.Wind.TryChange(direction, level))
+                throw new InvalidOperationException("当前无法改变风向。");
+            windChanges++;
+            state.AddLog("小铃换风：风向" + FieldWindState.DirectionName(direction) + "｜风级 " + level +
+                "，剩余改变 " + state.Environment.Wind.ChangesRemaining + " 次。");
+            return result;
+        }
+
+        internal void DetonatePrototypeDevice(CombatState state, GridPosition position)
+        {
+            int before = state.Map.GetTile(position).Durability;
+            TileState tile = state.Map.GetTile(position).Clone();
+            tile.Durability = 0;
+            state.Map.SetTile(position, tile);
+            state.ResolveOverloadDeviceDamage(position, before);
+            SnapshotDevices(DeviceCells(state));
         }
 
         public EnemyIntentPresentation PresentIntent(CombatState state, UnitState enemy, CombatCommand command)
         {
+            if (enemy?.EnemyArchetypeId == "rune_arbalist" && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == ArbalistArmSkillIndex)
+                return new EnemyIntentPresentation("SK-SUP-04:" + enemy.Id, "架弩", "自身",
+                    "占用整个回合完成重弩架设；本回合无法攻击。", "defend", false, default, 0,
+                    affectedCells: new[] { enemy.Position });
+            if (enemy?.EnemyArchetypeId == "elite_vanguard" && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == VanguardDismantleSkillIndex)
+            {
+                bool rebuild = vanguardCoverResponses.TryGetValue(enemy.Id, out GridPosition responseCell) &&
+                    responseCell == command.Destination && CanRebuildVanguardWall(state, enemy, command.Destination);
+                GridPosition[] cells = new[] { command.Destination }.Concat(Adjacent(command.Destination))
+                    .Where(state.Map.IsInside).ToArray();
+                bool response = vanguardCoverResponses.TryGetValue(enemy.Id, out GridPosition target) && target == command.Destination;
+                return new EnemyIntentPresentation((response ? "SK-CORE-05:" : "SK-CORE-03:") + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    rebuild ? "原位重筑" : response ? "拆你所倚" : "拆架", "正交相邻重掩体",
+                    rebuild ? "在被拆墙的空置原格重筑24耐久加厚墙，不造成伤害。" :
+                        "拆除目标墙段；贴墙单位护盾清空并施加破势，不造成伤害。",
+                    "control", true, command.Destination, 0, affectedCells: rebuild ? new[] { command.Destination } : cells);
+            }
+            if (enemy?.EnemyArchetypeId == "stone_snare" && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == BindingMarkSkillIndex)
+                return new EnemyIntentPresentation("SK-SUP-08:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "刻印", "三格内空格 (" + command.Destination.X + "," + command.Destination.Y + ")",
+                    "在标出格生成约束纹，持续3个主角回合；进入者本回合留在原格。", "control", true,
+                    command.Destination, 0, affectedCells: new[] { command.Destination });
+            if (enemy?.EnemyArchetypeId == "lantern_revealer" && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == LanternSweepSkillIndex)
+            {
+                GridPosition direction = new GridPosition(command.Destination.X - enemy.Position.X,
+                    command.Destination.Y - enemy.Position.Y);
+                GridPosition[] cells = LanternCells(state, enemy.Position, direction, LanternLaneLength);
+                string targets = string.Join("、", state.Units.Values.Where(unit => unit.IsAlive && cells.Contains(unit.Position))
+                    .OrderBy(unit => unit.Id, StringComparer.Ordinal)
+                    .Select(unit => unit.DisplayName + "预计生命伤害" + CombatResolver.PreviewLanternSweepDamage(state, enemy, unit)));
+                return new EnemyIntentPresentation("SK-SUP-11:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "转灯", "正交直线4格", "光带内单位护盾清空、受到1点基础奥术伤害并标记1回合；遮挡处不生效" +
+                    (targets.Length == 0 ? string.Empty : "；目标：" + targets), "attack", true,
+                    command.Destination, 1, attackRange: cells, affectedCells: cells);
+            }
+            if (IsKeeper(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == SpotlightSkillIndex)
+            {
+                GridPosition direction = new GridPosition(command.Destination.X - enemy.Position.X,
+                    command.Destination.Y - enemy.Position.Y);
+                GridPosition[] cells = SpotlightCells(state, enemy.Position, direction);
+                return new EnemyIntentPresentation("SK-SUP-21:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "转镜", "正交直线6格", "本回合转出光柱；回合结束时照明格内单位各受5点以太伤害；遮挡后为暗段。" +
+                    "反应：主角结束移动后若离开照明格，可转向，剩余 " + RotateUsesRemaining + " 次。", "attack", true,
+                    command.Destination, SpotlightDamage, attackRange: cells, affectedCells: cells);
+            }
+            if (IsPrototypeHand(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == PrototypeDeploySkillIndex)
+                return new EnemyIntentPresentation("SK-SUP-13:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "布放", "正交相邻空格", "本回合布放1件试制件；当前试制箱剩余 " + PrototypeRemaining + " 件。",
+                    "defend", true, command.Destination, 0, affectedCells: new[] { command.Destination });
+            if (IsPrototypeHand(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == PrototypeDetonateSkillIndex)
+            {
+                GridPosition[] cells = Adjacent(command.Destination).Where(state.Map.IsInside).ToArray();
+                return new EnemyIntentPresentation("SK-SUP-14:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "引爆", "主角相邻过载装置", "装置正交邻格单位各受8点以太伤害，敌我一致。",
+                    "attack", true, command.Destination, 8, attackRange: cells, affectedCells: cells);
+            }
+            if (IsLibrarian(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == WindChangeSkillIndex)
+            {
+                GridPosition direction = new GridPosition(command.Destination.X - enemy.Position.X,
+                    command.Destination.Y - enemy.Position.Y);
+                return new EnemyIntentPresentation("SK-CORE-06:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "换风", "全场风向与风级", "本回合改为" + FieldWindState.DirectionName(direction) + "风，风级 " +
+                    Math.Min(3, 1 + windChanges) + "；只搬动散页、碎晶与烟尘。", "control", true,
+                    command.Destination, 0);
+            }
+            if (IsLibrarian(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == WindScreenSkillIndex)
+            {
+                GridPosition direction = new GridPosition(command.Destination.X - enemy.Position.X,
+                    command.Destination.Y - enemy.Position.Y);
+                GridPosition[] cells = PaperScreenLine(state, enemy.Position, direction);
+                return new EnemyIntentPresentation("SK-CORE-07:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "扬页", "前方直线3格", "消耗3格散页生成页幕，持续到下个自身回合开始；页幕截断攻击线。",
+                    "control", true, command.Destination, 0, affectedCells: cells);
+            }
+            if (IsLibrarian(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == WindScrollSkillIndex)
+                return new EnemyIntentPresentation("SK-CORE-08:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "卷页", "4格内主角", "消耗离主角最近的1格散页，造成4点以太伤害。",
+                    "attack", true, command.Destination, WindEdgeDamage,
+                    affectedCells: new[] { command.Destination });
+            if (IsLibrarian(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == WindPushSkillIndex)
+                return new EnemyIntentPresentation("SK-CORE-10:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "推风", "3格内主角", "沿主轴推开主角1格。",
+                    "control", true, command.Destination, 0,
+                    affectedCells: new[] { command.Destination, command.Destination + DirectionToward(enemy.Position, command.Destination) });
+            if (IsStorekeeper(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == StorekeeperPulseSkillIndex)
+            {
+                GridPosition[] cells = PulseCells(state, enemy, state.GetUnit("hero"));
+                return new EnemyIntentPresentation("SK-SUP-17:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "旧脉冲", "正交直线4格", "直线上单位各受5点以太伤害、护盾清空并施加破势；遮挡截断。",
+                    "attack", true, command.Destination, PulseDamage, attackRange: cells, affectedCells: cells);
+            }
+            if (IsStorekeeper(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == StorekeeperRetireSkillIndex)
+                return new EnemyIntentPresentation("SK-SUP-18:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "退件", "5格内场地效果或装置", "清除标记格上的一个场地效果或装置。",
+                    "control", true, command.Destination, 0, affectedCells: new[] { command.Destination });
+            if (IsStorekeeper(enemy) && command.Type == CombatCommandType.UseSkill &&
+                command.SlotIndex == StorekeeperRegisterSkillIndex)
+                return new EnemyIntentPresentation("SK-SUP-19:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
+                    "登记", "4格内主角", "挂待检定标记，下一次获得的护盾被优先清除。",
+                    "control", true, command.Destination, 0, affectedCells: new[] { command.Destination });
             EnemyIntentPresentation basic = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+            if (enemy?.EnemyArchetypeId == "barrier_mender" && command.Type == CombatCommandType.UseSkill &&
+                menderPriorityTargets.TryGetValue(enemy.Id, out string responseId) && responseId == command.TargetUnitId)
+                return new EnemyIntentPresentation("SK-SUP-03:" + enemy.Id + ":" + responseId,
+                    "优先续盾", basic.TargetSummary,
+                    "主角本回合伤到该友军；补盾助教下个自身回合优先为其续盾。" + basic.ResultSummary,
+                    basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage,
+                    basic.Route, basic.AttackRange, basic.AffectedCells);
             if (state == null || !Handles(enemy)) return basic;
             if (IsTracker(enemy))
             {
@@ -162,7 +760,9 @@ namespace OCC.Combat
                     ? "扑咬：目标位于气味痕上时改为 6 点伤害并束缚 1 回合。"
                     : "场上暂无气味痕，扑咬只结算 3 点伤害。";
                 return new EnemyIntentPresentation(basic.Signature,
-                    basic.ActionName, basic.TargetSummary, rule + " " + bite + " " + basic.ResultSummary,
+                    command.Type == CombatCommandType.Move && state.Map.IsInside(command.Destination) &&
+                        state.Map.GetTile(command.Destination).HasTrace ? "循味" : basic.ActionName,
+                    basic.TargetSummary, rule + " " + bite + " " + basic.ResultSummary,
                     basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
             }
             if (IsStorekeeper(enemy))
@@ -219,10 +819,25 @@ namespace OCC.Combat
                 SurveyDwell(state, unit);
                 return;
             }
-            if (IsKeeper(unit)) RefreshSpotlight(state, unit, state.GetUnit("hero"));
-            if (IsLibrarian(unit)) ResolveLibrarianTurn(state, unit, state.GetUnit("hero"));
-            if (IsStorekeeper(unit)) ResolveStorekeeperTurn(state, unit, state.GetUnit("hero"));
-            if (IsPrototypeHand(unit)) ResolvePrototypeTurn(state, unit, state.GetUnit("hero"));
+            if (IsLibrarian(unit))
+            {
+                if (state.AcademyEnemyArea != null) ClearPaperScreens(state);
+                else ResolveLibrarianTurn(state, unit, state.GetUnit("hero"));
+            }
+            if (IsStorekeeper(unit))
+            {
+                if (state.AcademyEnemyArea == null) ResolveStorekeeperTurn(state, unit, state.GetUnit("hero"));
+                else
+                {
+                    if (pulseCooldown > 0) pulseCooldown--;
+                    if (registerCooldown > 0) registerCooldown--;
+                }
+            }
+            if (unit.EnemyArchetypeId == "elite_vanguard" &&
+                vanguardDismantleCooldown.TryGetValue(unit.Id, out int dismantleCooldown) && dismantleCooldown > 0)
+                vanguardDismantleCooldown[unit.Id] = dismantleCooldown - 1;
+            if (IsPrototypeHand(unit) && state.AcademyEnemyArea == null)
+                ResolvePrototypeTurn(state, unit, state.GetUnit("hero"));
             if (unit.EnemyArchetypeId == "elite_vanguard" || unit.EnemyArchetypeId == "stone_snare" ||
                 unit.EnemyArchetypeId == "lantern_revealer" || unit.EnemyArchetypeId == "barrier_mender")
                 ResolveStaffTurn(state, unit, state.GetUnit("hero"));
@@ -230,22 +845,48 @@ namespace OCC.Combat
 
         internal void EndTurn(CombatState state, UnitState unit)
         {
-            if (state == null || !IsKeeper(unit)) return;
+            if (unit?.EnemyArchetypeId == "barrier_mender") menderPriorityTargets.Remove(unit.Id);
+            if (state != null && IsStorekeeper(unit) && state.AcademyEnemyArea != null)
+                SnapshotField(state);
+            if (state == null || !IsKeeper(unit) || !spotlightArmed.Remove(unit.Id)) return;
             ResolveSpotlightDamage(state, unit);
         }
 
         /// <summary>主角每次移动都在路径上留下气味痕；痕迹加深由停留判定。</summary>
         internal void AfterMove(CombatState state, UnitState unit, IReadOnlyList<GridPosition> path)
         {
+            if (state?.AcademyEnemyArea != null && unit?.EnemyArchetypeId == "rune_arbalist" &&
+                path != null && path.Count > 1)
+            {
+                arbalistArmed.Remove(unit.Id);
+                state.AddLog("背弩生退距：更换架设点，下回合须重新架弩。");
+            }
             if (state == null || unit?.IsHero != true || path == null || path.Count == 0) return;
+            GridPosition? snareResponse = PreviewSnareRouteResponse(state, path);
+            if (snareResponse.HasValue)
+            {
+                TileState responseMark = state.Map.GetTile(snareResponse.Value).Clone();
+                responseMark.IsBindingMark = true;
+                responseMark.EffectSourceId = "skill:SK-SUP-10";
+                state.Map.SetTile(snareResponse.Value, responseMark);
+                markAge[snareResponse.Value] = heroRounds;
+                markSource[snareResponse.Value] = responseMark.EffectSourceId;
+                snareReactionRound = heroRounds;
+                state.AddLog("拴索助教应对·绕行时前移约束纹：在 (" + snareResponse.Value.X + "," +
+                    snareResponse.Value.Y + ") 补刻，持续3个主角回合，本回合已使用。");
+            }
             if (!HasLiving(state, TrackerId)) return;
+            if (state.Environment.Wind.Level >= 3) return;
             int marked = 0;
             foreach (GridPosition position in path)
             {
                 if (!state.Map.IsInside(position)) continue;
                 TileState tile = state.Map.GetTile(position).Clone();
+                if (tile.IsWater || tile.IsScorched) continue;
                 if (!tile.HasTrace) marked++;
+                if (tile.HasEffectLayer && !tile.HasTrace) tile.ClearEffectLayers();
                 tile.HasTrace = true;
+                tile.EffectSourceId = "skill:SK-CORE-12";
                 state.Map.SetTile(position, tile);
                 traceAge[position] = heroRounds;
             }
@@ -265,9 +906,10 @@ namespace OCC.Combat
         {
             foreach (UnitState keeper in state.Units.Values.Where(IsKeeper).Where(unit => unit.IsAlive).OrderBy(unit => unit.Id, StringComparer.Ordinal))
             {
+                if (state.AcademyEnemyArea?.HasPending(keeper.Id) == true) continue;
                 FieldLightLaneState lane = LaneOf(state, keeper);
                 if (lane == null) continue;
-                if (state.Environment.LitCells(state.Map, lane).Contains(hero.Position)) continue;
+                if (state.Environment.LitCells(state.Map, lane, state.CurrentTime).Contains(hero.Position)) continue;
                 GridPosition direction = DirectionToward(keeper.Position, hero.Position);
                 if (direction == lane.Direction) continue;
                 state.Environment.ReplaceLightLanes(keeper.Id, new[] { new FieldLightLaneState(keeper.Id, keeper.Position, direction, SpotlightLength) });
@@ -282,15 +924,19 @@ namespace OCC.Combat
         private void SurveyDwell(CombatState state, UnitState hero)
         {
             if (!HasLiving(state, TrackerId)) return;
+            if (state.Environment.Wind.Level >= 3) return;
             if (!lastHeroCell.HasValue || lastHeroCell.Value != hero.Position)
             {
                 lastHeroCell = hero.Position;
                 return;
             }
             TileState tile = state.Map.GetTile(hero.Position).Clone();
+            if (tile.IsWater || tile.IsScorched) return;
             if (tile.IsDeepTrace) return;
+            if (tile.HasEffectLayer && !tile.HasTrace) tile.ClearEffectLayers();
             tile.HasTrace = true;
             tile.IsDeepTrace = true;
+            tile.EffectSourceId = "skill:SK-CORE-12";
             state.Map.SetTile(hero.Position, tile);
             traceAge[hero.Position] = heroRounds;
             state.AddLog("主角在同格停留超过一个自身回合，该格气味痕加深，老寻可循味直扑。");
@@ -304,24 +950,23 @@ namespace OCC.Combat
             {
                 if (!state.Map.IsInside(position)) { traceAge.Remove(position); continue; }
                 TileState tile = state.Map.GetTile(position);
-                if (!tile.HasTrace) { traceAge.Remove(position); continue; }
+                if (!tile.HasTrace || tile.EffectSourceId != "skill:SK-CORE-12")
+                { traceAge.Remove(position); continue; }
                 if (tile.IsDeepTrace) continue;
                 if (heroRounds - traceAge[position] < TraceRounds) continue;
                 TileState cleared = tile.Clone();
                 cleared.HasTrace = false;
+                cleared.EffectSourceId = null;
                 state.Map.SetTile(position, cleared);
                 traceAge.Remove(position);
             }
         }
 
-        private void RefreshSpotlight(CombatState state, UnitState keeper, UnitState hero)
+        private void SetSpotlight(CombatState state, UnitState keeper, GridPosition direction)
         {
-            GridPosition direction = spotlightDirection.TryGetValue(keeper.Id, out GridPosition current)
-                ? current : FieldWindState.East;
-            if (hero != null && hero.IsAlive) direction = DirectionToward(keeper.Position, hero.Position);
             spotlightDirection[keeper.Id] = direction;
             state.Environment.ReplaceLightLanes(keeper.Id, new[] { new FieldLightLaneState(keeper.Id, keeper.Position, direction, SpotlightLength) });
-            IReadOnlyList<GridPosition> lit = state.Environment.LitCells(state.Map, LaneOf(state, keeper));
+            IReadOnlyList<GridPosition> lit = state.Environment.LitCells(state.Map, LaneOf(state, keeper), state.CurrentTime);
             state.AddLog("灯台值守把灯镜转向" + FieldWindState.DirectionName(direction) + "，照亮 " + lit.Count + " 格，遮断处留下暗段。");
         }
 
@@ -329,7 +974,7 @@ namespace OCC.Combat
         {
             FieldLightLaneState lane = LaneOf(state, keeper);
             if (lane == null) return;
-            GridPosition[] lit = state.Environment.LitCells(state.Map, lane).ToArray();
+            GridPosition[] lit = state.Environment.LitCells(state.Map, lane, state.CurrentTime).ToArray();
             UnitState[] targets = state.Units.Values
                 .Where(unit => unit.IsAlive && lit.Contains(unit.Position)).OrderBy(unit => unit.Id, StringComparer.Ordinal).ToArray();
             if (targets.Length == 0) return;
@@ -353,6 +998,82 @@ namespace OCC.Combat
         /// <summary>旧脉冲的直线长度与伤害。</summary>
         public const int PulseLength = 4;
         public const int PulseDamage = 5;
+
+        private CombatCommand ChooseStorekeeperCommand(CombatState state, UnitState storekeeper, UnitState hero)
+        {
+            if (!hero.IsAlive || storekeeper.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(storekeeper.Id);
+            GridPosition? fresh = FieldCells(state).Where(position => !knownFieldCells.Contains(position))
+                .Where(position => position.ManhattanDistance(storekeeper.Position) <= RetireRange)
+                .Cast<GridPosition?>().FirstOrDefault();
+            if (fresh.HasValue)
+                return CombatCommand.UseSkillAt(storekeeper.Id, StorekeeperRetireSkillIndex, fresh.Value, default);
+            if (pulseCooldown == 0 && PulseCells(state, storekeeper, hero).Contains(hero.Position))
+                return CombatCommand.UseSkillAt(storekeeper.Id, StorekeeperPulseSkillIndex, hero.Position, default);
+            GridPosition? nearest = FieldCells(state)
+                .Where(position => position.ManhattanDistance(storekeeper.Position) <= RetireRange)
+                .OrderBy(position => position.ManhattanDistance(hero.Position))
+                .ThenBy(position => position.Y).ThenBy(position => position.X)
+                .Cast<GridPosition?>().FirstOrDefault();
+            if (nearest.HasValue)
+                return CombatCommand.UseSkillAt(storekeeper.Id, StorekeeperRetireSkillIndex, nearest.Value, default);
+            return registerCooldown == 0 && !inspectionMarks.Contains(hero.Id) &&
+                storekeeper.Position.ManhattanDistance(hero.Position) <= RegisterRange
+                ? CombatCommand.UseSkillAt(storekeeper.Id, StorekeeperRegisterSkillIndex, hero.Position, default)
+                : CombatCommand.EndTurn(storekeeper.Id);
+        }
+
+        private static GridPosition[] PulseCells(CombatState state, UnitState storekeeper, UnitState hero)
+        {
+            if (storekeeper.Position.X != hero.Position.X && storekeeper.Position.Y != hero.Position.Y)
+                return Array.Empty<GridPosition>();
+            if (storekeeper.Position.ManhattanDistance(hero.Position) > PulseLength)
+                return Array.Empty<GridPosition>();
+            GridPosition direction = DirectionToward(storekeeper.Position, hero.Position);
+            var cells = new List<GridPosition>();
+            for (int step = 1; step <= PulseLength; step++)
+            {
+                GridPosition cell = storekeeper.Position + new GridPosition(direction.X * step, direction.Y * step);
+                if (!state.Map.IsInside(cell) || state.Map.GetTile(cell).BlocksLineOfSight) break;
+                cells.Add(cell);
+            }
+            return cells.ToArray();
+        }
+
+        internal CombatEffectExecution ResolveStorekeeperCommand(CombatState state, UnitState storekeeper, CombatCommand command)
+        {
+            UnitState hero = state.GetUnit("hero");
+            if (storekeeper == null || !IsStorekeeper(storekeeper) || hero == null ||
+                state.AcademyEnemyArea == null || command.UnitId != storekeeper.Id ||
+                storekeeper.HasStatus(StatusType.Bound))
+                throw new InvalidOperationException("老库管行动不可用。");
+            bool legal = command.SlotIndex == StorekeeperPulseSkillIndex
+                ? pulseCooldown == 0 && command.Destination == hero.Position &&
+                    PulseCells(state, storekeeper, hero).Contains(hero.Position)
+                : command.SlotIndex == StorekeeperRetireSkillIndex
+                    ? state.Map.IsInside(command.Destination) &&
+                        command.Destination.ManhattanDistance(storekeeper.Position) <= RetireRange &&
+                        FieldCells(state).Contains(command.Destination)
+                    : command.SlotIndex == StorekeeperRegisterSkillIndex && registerCooldown == 0 &&
+                        command.Destination == hero.Position && !inspectionMarks.Contains(hero.Id) &&
+                        storekeeper.Position.ManhattanDistance(hero.Position) <= RegisterRange;
+            if (!legal) throw new InvalidOperationException("老库管行动目标已不可用。");
+            CombatEffectExecution result = CombatEffectExecutor.Execute(state, storekeeper.Id,
+                CombatEffect.SpendActionPoints(storekeeper.ActionPoints));
+            if (command.SlotIndex == StorekeeperPulseSkillIndex)
+            {
+                TryLegacyPulse(state, storekeeper, hero);
+                pulseCooldown = PulseCooldown;
+            }
+            else if (command.SlotIndex == StorekeeperRetireSkillIndex)
+                Retire(state, storekeeper, command.Destination, "退件");
+            else
+            {
+                TryRegister(state, storekeeper, hero);
+                registerCooldown = PulseCooldown;
+            }
+            SnapshotField(state);
+            return result;
+        }
 
         /// <summary>
         /// 老库管每自身回合只做一件事，按公开优先级选取：
@@ -409,13 +1130,16 @@ namespace OCC.Combat
         private bool Retire(CombatState state, UnitState storekeeper, GridPosition position, string reason)
         {
             TileState tile = state.Map.GetTile(position).Clone();
-            string name = tile.ObjectName() ?? tile.EffectLayerName() ?? "场地元素";
+            bool fireground = state.RogueSpells?.FireBattle?.HasFireground(position) == true;
+            string name = tile.ObjectName() ?? tile.EffectLayerName() ?? (fireground ? "火场" : "场地元素");
             bool device = tile.IsDeviceLike;
+            state.RogueSpells?.FireBattle?.ClearEffectLayer(position);
             tile.ClearEffectLayers();
             if (device)
             {
                 tile.IsDevice = false; tile.IsOverloadDevice = false;
-                tile.IsWardGenerator = false; tile.IsTowerMechanism = false; tile.IsAetherCrystal = false; tile.Durability = 0;
+                tile.IsWardGenerator = false; tile.IsTowerMechanism = false; tile.IsAetherCrystal = false;
+                tile.IsPressureCrystal = false; tile.Durability = 0;
             }
             state.Map.SetTile(position, tile);
             state.AddLog("老库管" + reason + "：清除 (" + position.X + "," + position.Y + ") 的" + name + "。");
@@ -448,7 +1172,8 @@ namespace OCC.Combat
 
         /// <summary>场上全部场地效果与装置格（退件的可用目标）。</summary>
         private static GridPosition[] FieldCells(CombatState state) => state.Map
-            .PositionsWith(tile => tile.HasEffectLayer || tile.IsDeviceLike).ToArray();
+            .PositionsWith(tile => tile.HasEffectLayer || tile.IsDeviceLike)
+            .Concat(Firegrounds(state)).Distinct().ToArray();
 
         /// <summary>记录当前场地效果与装置的分布，用于下一回合识别"主角本回合新生成的东西"。</summary>
         private void SnapshotField(CombatState state)
@@ -471,9 +1196,10 @@ namespace OCC.Combat
         /// <summary>刻印：约束纹持续的主角回合数。</summary>
         public const int MarkRounds = 3;
 
-        private int borrowUses;
+        private readonly Dictionary<string, int> borrowUses = new Dictionary<string, int>(StringComparer.Ordinal);
         private int wallBuilds;
         private readonly Dictionary<GridPosition, int> markAge = new Dictionary<GridPosition, int>();
+        private readonly Dictionary<GridPosition, string> markSource = new Dictionary<GridPosition, string>();
         private GridPosition? coverToBreak;
 
         private void ResolveStaffTurn(CombatState state, UnitState unit, UnitState hero)
@@ -482,16 +1208,22 @@ namespace OCC.Combat
             switch (unit.EnemyArchetypeId)
             {
                 case "elite_vanguard": ResolveVanguard(state, unit, hero); break;
-                case "stone_snare": ResolveSnare(state, unit, hero); break;
-                case "lantern_revealer": ResolveLantern(state, unit, hero); break;
-                case "barrier_mender": ResolveMender(state, unit, hero); break;
+                case "stone_snare":
+                    if (state.AcademyEnemyArea == null) ResolveSnare(state, unit, hero);
+                    break;
+                case "lantern_revealer":
+                    if (state.AcademyEnemyArea == null) ResolveLantern(state, unit, hero);
+                    break;
+                case "barrier_mender":
+                    // 借墙由掩体被拆除时触发，回合开始没有额外授盾动作。
+                    break;
             }
         }
 
-        /// <summary>划线教官：先执行"拆你所倚"，再守位取盾，没有结构可倚时夯起临时重掩体。</summary>
+        /// <summary>守位是回合被动；学院范围意图负责夯墙，避免回合开始自动筑墙后再行动。</summary>
         private void ResolveVanguard(CombatState state, UnitState vanguard, UnitState hero)
         {
-            if (coverToBreak.HasValue)
+            if (state.AcademyEnemyArea == null && coverToBreak.HasValue)
             {
                 GridPosition target = coverToBreak.Value;
                 coverToBreak = null;
@@ -503,17 +1235,20 @@ namespace OCC.Combat
                         TileState broken = cover.Clone();
                         broken.Durability = 0;
                         state.Map.SetTile(target, broken);
+                        state.ResolveAetherCrystalDamage(target, cover.Durability, vanguard.Id);
                         state.AddLog("划线教官拆你所倚：拆掉主角上一回合取盾所倚的掩体。");
                     }
                 }
             }
-            if (Adjacent(vanguard.Position).Any(position => state.Map.IsInside(position) && IsStructure(state.Map.GetTile(position))))
+            if (Adjacent(vanguard.Position).Any(position => state.Map.IsInside(position) &&
+                IsStructure(state.Map.GetTile(position)) && state.Map.GetTile(position).StructureOwnerUnitId == vanguard.Id))
             {
                 state.TryGrantRogueliteShield(vanguard.Id, "vanguard-position-guard", PositionGuardShield);
                 state.AddLog("划线教官守位：贴着结构，回合开始获得 " + PositionGuardShield + " 护盾。");
                 return;
             }
-            if (wallBuilds < WallBuildLimit) BuildTemporaryHeavyCover(state, vanguard);
+            if (state.AcademyEnemyArea == null && wallBuilds < WallBuildLimit)
+                BuildTemporaryHeavyCover(state, vanguard);
         }
 
         private void BuildTemporaryHeavyCover(CombatState state, UnitState unit)
@@ -524,7 +1259,8 @@ namespace OCC.Combat
                 .ToArray();
             if (slots.Length == 0) return;
             GridPosition pick = slots.OrderBy(position => position.Y).ThenBy(position => position.X).First();
-            state.Map.SetTile(pick, new TileState { Cover = CoverType.Heavy, Durability = TileState.TemporaryHeavyCoverDurability });
+            state.Map.SetTile(pick, new TileState { Cover = CoverType.Heavy,
+                Durability = TileState.TemporaryHeavyCoverDurability, StructureOwnerUnitId = unit.Id });
             wallBuilds++;
             state.AddLog("划线教官夯墙：在 (" + pick.X + "," + pick.Y + ") 生成临时重掩体（耐久 " + TileState.TemporaryHeavyCoverDurability + "）。");
         }
@@ -540,8 +1276,10 @@ namespace OCC.Combat
                 {
                     marked.ClearEffectLayers();
                     marked.IsBindingMark = true;
+                    marked.EffectSourceId = "skill:SK-SUP-08";
                     state.Map.SetTile(hero.Position, marked);
                     markAge[hero.Position] = heroRounds;
+                    markSource[hero.Position] = marked.EffectSourceId;
                     state.AddLog("拴索助教刻印：在主角所在格刻下约束纹，持续 " + MarkRounds + " 个主角回合。");
                 }
             }
@@ -572,16 +1310,28 @@ namespace OCC.Combat
                 " 格光带，清除 " + cleared + " 个单位的护盾，被遮断处留下暗段。");
         }
 
-        /// <summary>补盾助教：贴着同一片结构才能续盾；否则每场最多两次借障给自己 +4 护盾。</summary>
-        private void ResolveMender(CombatState state, UnitState mender, UnitState hero)
+        /// <summary>借墙：掩体被拆除时，每名补盾助教每场最多两次获得护盾。</summary>
+        internal void OnCoverDestroyed(CombatState state, GridPosition position, string sourceUnitId)
         {
-            bool onStructure = Adjacent(mender.Position).Any(position => state.Map.IsInside(position) && IsStructure(state.Map.GetTile(position)));
-            if (onStructure) return;
-            if (borrowUses >= BorrowUses) return;
-            if (state.TryGrantRogueliteShield(mender.Id, "mender-borrow", BorrowShield))
+            if (state?.Ruleset != CombatRuleset.Roguelite) return;
+            UnitState breaker = state.GetUnit(sourceUnitId);
+            TileState destroyed = state.Map.GetTile(position);
+            UnitState owner = state.GetUnit(destroyed.StructureOwnerUnitId);
+            if (state.AcademyEnemyArea != null && breaker?.IsHero == true &&
+                owner?.IsAlive == true && owner.EnemyArchetypeId == "elite_vanguard")
             {
-                borrowUses++;
-                state.AddLog("补盾助教借障：脱离结构，借障给自己 " + BorrowShield + " 护盾（剩余 " + (BorrowUses - borrowUses) + " 次）。");
+                vanguardCoverResponses[owner.Id] = position;
+                state.AddLog("划线教官应对：玩家拆除了其自筑墙段，下回合优先处理该位置。");
+            }
+            foreach (UnitState mender in state.Units.Values.Where(unit => unit.IsAlive && unit.EnemyArchetypeId == "barrier_mender")
+                .OrderBy(unit => unit.Id, StringComparer.Ordinal))
+            {
+                int used = borrowUses.TryGetValue(mender.Id, out int current) ? current : 0;
+                if (used >= BorrowUses) continue;
+                if (!state.TryGrantRogueliteShield(mender.Id, "mender-borrow:" + position.X + "," + position.Y + ":" + used, BorrowShield)) continue;
+                borrowUses[mender.Id] = used + 1;
+                state.AddLog("补盾助教借墙：掩体被拆除，获得 " + BorrowShield + " 护盾（本场剩余 " +
+                    (BorrowUses - used - 1) + " 次）。");
             }
         }
 
@@ -591,14 +1341,18 @@ namespace OCC.Combat
         {
             foreach (GridPosition position in markAge.Keys.ToArray())
             {
-                if (!state.Map.IsInside(position)) { markAge.Remove(position); continue; }
+                if (!state.Map.IsInside(position)) { markAge.Remove(position); markSource.Remove(position); continue; }
                 TileState tile = state.Map.GetTile(position);
-                if (!tile.IsBindingMark) { markAge.Remove(position); continue; }
+                if (!tile.IsBindingMark || !markSource.TryGetValue(position, out string source) ||
+                    tile.EffectSourceId != source)
+                { markAge.Remove(position); markSource.Remove(position); continue; }
                 if (heroRounds - markAge[position] < MarkRounds) continue;
                 TileState cleared = tile.Clone();
                 cleared.IsBindingMark = false;
+                cleared.EffectSourceId = null;
                 state.Map.SetTile(position, cleared);
                 markAge.Remove(position);
+                markSource.Remove(position);
             }
         }
 
@@ -606,6 +1360,19 @@ namespace OCC.Combat
         internal void NoteHeroCoverAnchor(CombatState state, UnitState hero)
         {
             if (state == null || hero == null) return;
+            if (state.AcademyEnemyArea != null)
+            {
+                foreach (GridPosition position in Adjacent(hero.Position).Where(state.Map.IsInside)
+                    .OrderBy(cell => cell.Y).ThenBy(cell => cell.X))
+                {
+                    TileState wall = state.Map.GetTile(position);
+                    UnitState owner = state.GetUnit(wall.StructureOwnerUnitId);
+                    if (!IsStructure(wall) || owner?.IsAlive != true || owner.EnemyArchetypeId != "elite_vanguard") continue;
+                    vanguardCoverResponses[owner.Id] = position;
+                    state.AddLog("划线教官应对：玩家借其自筑墙获得护盾，下回合优先处理该墙段。");
+                }
+                return;
+            }
             TileState standing = state.Map.GetTile(hero.Position);
             if (IsStructure(standing)) { coverToBreak = hero.Position; return; }
             foreach (GridPosition position in Adjacent(hero.Position))
@@ -656,7 +1423,7 @@ namespace OCC.Combat
             TileState tile = state.Map.GetTile(target).Clone();
             tile.Durability = 0;
             state.Map.SetTile(target, tile);
-            state.ResolveAetherCrystalDamage(target, before);
+            state.ResolveOverloadDeviceDamage(target, before);
             SnapshotDevices(DeviceCells(state));
             return true;
         }
@@ -667,7 +1434,8 @@ namespace OCC.Combat
             bool wantWard = !Adjacent(hand.Position).Any(position => state.Map.IsInside(position) && state.Map.GetTile(position).IsWardGenerator);
             GridPosition[] slots = Adjacent(hand.Position)
                 .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position) &&
-                    !state.Map.GetTile(position).IsDeviceLike && !state.Map.GetTile(position).HasEffectLayer)
+                    !state.Map.GetTile(position).IsDeviceLike && !state.Map.GetTile(position).HasEffectLayer &&
+                    state.Map.GetTile(position).Cover == CoverType.None && !state.Map.GetTile(position).IsObjective)
                 .ToArray();
             if (slots.Length == 0) return false;
             GridPosition pick = wantWard
@@ -771,7 +1539,11 @@ namespace OCC.Combat
         {
             if (librarian.Position.ManhattanDistance(hero.Position) > 3) return false;
             GridPosition direction = DirectionToward(librarian.Position, hero.Position);
-            if (state.ArtifactBattle?.TryPreventForcedMove(hero.Id) == true) return false;
+            if (state.ArtifactBattle?.TryPreventForcedMove(hero.Id) == true)
+            {
+                state.AddLog("小铃推风被定锚效果抵消。");
+                return true;
+            }
             ForcedMoveResult result = state.ResolveForcedMove(hero, direction, 1, "wind-librarian-push");
             if (result == ForcedMoveResult.Blocked) return false;
             state.AddLog(result == ForcedMoveResult.Moved
@@ -790,7 +1562,6 @@ namespace OCC.Combat
                 .ThenBy(position => position.Y).ThenBy(position => position.X).First();
             TileState tile = state.Map.GetTile(spent).Clone();
             tile.IsLoosePaper = false;
-            tile.IsPaperSoaked = false;
             state.Map.SetTile(spent, tile);
             DealFieldDamage(state, librarian.Id, "wind-librarian-scroll-edge", hero, WindEdgeDamage, Roguelite.DamageComponentKind.Aether);
             state.AddLog("小铃卷页：消耗 (" + spent.X + "," + spent.Y + ") 的散页打出风刃，" + hero.DisplayName + "受到 " +
@@ -817,7 +1588,6 @@ namespace OCC.Combat
             {
                 TileState tile = state.Map.GetTile(cell).Clone();
                 tile.IsLoosePaper = false;
-                tile.IsPaperSoaked = false;
                 state.Map.SetTile(cell, tile);
             }
             foreach (GridPosition cell in line)
@@ -883,14 +1653,24 @@ namespace OCC.Combat
 
         public AcademyFieldEnemyRuntime Clone()
         {
-            AcademyFieldEnemyRuntime clone = new AcademyFieldEnemyRuntime { heroRounds = heroRounds, rotateUses = rotateUses, lastHeroCell = lastHeroCell, windChanges = windChanges, PrototypePlaced = PrototypePlaced, pulseCooldown = pulseCooldown,
-                borrowUses = borrowUses, wallBuilds = wallBuilds, coverToBreak = coverToBreak };
+            AcademyFieldEnemyRuntime clone = new AcademyFieldEnemyRuntime { heroRounds = heroRounds, rotateUses = rotateUses, lastHeroCell = lastHeroCell, windChanges = windChanges, PrototypePlaced = PrototypePlaced, pulseCooldown = pulseCooldown, registerCooldown = registerCooldown,
+                wallBuilds = wallBuilds, coverToBreak = coverToBreak, snareReactionRound = snareReactionRound };
+            foreach (KeyValuePair<string, int> pair in borrowUses) clone.borrowUses.Add(pair.Key, pair.Value);
             foreach (KeyValuePair<GridPosition, int> pair in markAge) clone.markAge[pair.Key] = pair.Value;
+            foreach (KeyValuePair<GridPosition, string> pair in markSource) clone.markSource[pair.Key] = pair.Value;
             foreach (string mark in inspectionMarks) clone.inspectionMarks.Add(mark);
             foreach (GridPosition cell in knownFieldCells) clone.knownFieldCells.Add(cell);
             foreach (GridPosition cell in knownDeviceCells) clone.knownDeviceCells.Add(cell);
             foreach (KeyValuePair<GridPosition, int> pair in traceAge) clone.traceAge[pair.Key] = pair.Value;
             foreach (KeyValuePair<string, GridPosition> pair in spotlightDirection) clone.spotlightDirection[pair.Key] = pair.Value;
+            foreach (string id in spotlightArmed) clone.spotlightArmed.Add(id);
+            foreach (string id in arbalistArmed) clone.arbalistArmed.Add(id);
+            foreach (KeyValuePair<string, int> pair in vanguardDismantleCooldown)
+                clone.vanguardDismantleCooldown.Add(pair.Key, pair.Value);
+            foreach (KeyValuePair<string, GridPosition> pair in vanguardCoverResponses)
+                clone.vanguardCoverResponses.Add(pair.Key, pair.Value);
+            foreach (KeyValuePair<string, string> pair in menderPriorityTargets)
+                clone.menderPriorityTargets.Add(pair.Key, pair.Value);
             return clone;
         }
     }

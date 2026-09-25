@@ -440,7 +440,7 @@ namespace OCC.Combat.Presentation
         private static CombatTestArenaScenario CreateAcademyCoreBoss()
         {
             HashSet<GridPosition> walkable = Cells("C2 D2 E2 F2 G2 H2 B3 C3 D3 E3 F3 G3 H3 I3 J3 B4 C4 D4 E4 F4 G4 H4 B5 C5 D5 E5 F5 G5 H5 B6 C6 D6 E6 F6 G6 H6 C7 D7 E7 F7 G7 H7");
-            FirstRegionLevelDefinition level = Level("arena_b01_core", "B01｜学院封存塔核心",
+            FirstRegionLevelDefinition level = Level("arena_b01_core", "B01｜Boss战斗 01 · 古塔核心",
                 "击倒拦在必经之路上的塔之守卫。三组塔内机关在阶段〇逐组放行，放行前不提供任何效果；拆掉已放行的机关即切断维护链。",
                 new GridPosition(1, 3), new[] { E("core_overseer", 5, 3) },
                 new[] { L(2, 3), L(3, 5), L(8, 1), L(8, 5), H(4, 2), H(6, 2), H(4, 4), H(6, 4), C(7, 3),
@@ -449,7 +449,7 @@ namespace OCC.Combat.Presentation
                     M(FirstRegionLevelCatalog.TowerMechanismPress, 8, 6) }, walkable,
                 "中心核心，三道机关门槛，双缺口换序", "收窄后两侧外廊更短；三组机关耐久公开，可先拆以切断维护链。 ",
                 false, true, 11, 8);
-            return new CombatTestArenaScenario("arena_b01_core", "封存塔核心", "B01｜学院封存塔核心",
+            return new CombatTestArenaScenario("arena_b01_core", "古塔核心", "B01｜Boss战斗 01 · 古塔核心",
                 "42 格可走区；收窄后往返距离更短，拆链顺序窗口更紧。", level, FinisherSpells,
                 new[] { "G-T08", "G-T09", "G-T12", "G-T16" }, true);
         }

@@ -96,6 +96,11 @@ namespace OCC.Combat.Presentation
             if (mapRun != null)
             {
                 state.ConfigureRuleset(CombatRuleset.Roguelite);
+                if (mapRun.IsInAcademyLayerPhase)
+                {
+                    state.AttachAcademyEnemyGrowth(new AcademyEnemyGrowthRuntime());
+                    state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+                }
                 RogueAcademyContentService academyContent = new RogueAcademyContentService();
                 foreach (UnitState enemy in state.Units.Values.Where(unit => !unit.IsHero)) academyContent.ApplyEnemyBaseline(state, enemy);
                 string[] mastered = new[] { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER" }
@@ -103,9 +108,13 @@ namespace OCC.Combat.Presentation
                 if (mapRun.IsFirstRunExperience && encounterId == "B1")
                     mastered = mastered.Concat(new[] { RainLanternCourtRuntime.OriginSpellId }).Distinct(StringComparer.Ordinal).ToArray();
                 RogueSpellLoadout loadout = RogueSpellLoadout.Restore(mastered, mapRun.RogueEquippedSpellIds, true);
-                string specializedSpellId = mapRun.IsFirstRunExperience && mapRun.FirstRunExperience.Workshop.SpecializationCompleted
-                    ? mapRun.FirstRunExperience.Workshop.SpecializedTargetId : string.Empty;
-                state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout, specializedSpellId));
+                var specializations = mapRun.CompletedWorkshopBuilds
+                    .Where(value => value.SpecializationCompleted && !string.IsNullOrEmpty(value.SpecializedTargetId))
+                    .GroupBy(value => value.SpecializedTargetId, StringComparer.Ordinal)
+                    .ToDictionary(group => group.Key, group => group.Last().SpecializedMaterialId, StringComparer.Ordinal);
+                state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout,
+                    additionalSpecializations: specializations));
+                if (currentLevel != null) FirstRegionLevelBuilder.ApplyTimedTerrain(currentLevel, state);
                 state.AttachRogueEquipmentRuntime(mapRun.RogueRunState == null ? RogueEquipmentRuntime.CreateStarter(mapRun.Seed) : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState));
             }
             if (mapRun == null || !mapRun.UsesRogue11) ConfigureCombatInventory(state, mapRun, developerRun);

@@ -42,13 +42,8 @@ namespace OCC.Combat
             if (phase == CombatFlowPhase.Defeat)
             {
                 IsHandled = true;
-                UnitState hero = combat?.GetUnit("hero");
-                if (mapRun != null && hero != null && hero.IsAlive)
-                {
-                    mapRun.CaptureCombatInventory(combat);
-                    mapRun.FailCurrentCombatSurvived();
-                    return new CombatOutcomeSettlement(true, false, CombatOutcomePersistence.MapRun, true);
-                }
+                // A failed encounter is resolved by the F61 retry/close choice, not as a
+                // completed map node. Keep the verified pre-battle save intact for retry.
                 return new CombatOutcomeSettlement(true, false);
             }
 
@@ -57,6 +52,7 @@ namespace OCC.Combat
             {
                 IsHandled = true;
                 RogueliteCombatSettlement.TrySettleVictory(mapRun, combat);
+                mapRun.ClearCombatJournal();
                 return new CombatOutcomeSettlement(true, true, CombatOutcomePersistence.MapRun, true);
             }
 

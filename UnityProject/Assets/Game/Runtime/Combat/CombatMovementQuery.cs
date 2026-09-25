@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OCC.Combat
 {
@@ -16,6 +17,15 @@ namespace OCC.Combat
                 ? state.Map.FindLowestCostPath(unit.Position, destination, Budget(state, unit),
                     position => EntryCost(state, unit, position), position => state.IsOccupied(position, unit.Id))
                 : state.RainLanternCourt.FindPath(state, unit, destination);
+
+        public static IReadOnlyList<GridPosition> StopAtBindingMark(CombatState state, IReadOnlyList<GridPosition> path)
+        {
+            if (state == null || path == null) return Array.Empty<GridPosition>();
+            for (int step = 1; step < path.Count; step++)
+                if (state.Map.GetTile(path[step]).IsBindingMark)
+                    return path.Take(step + 1).ToArray();
+            return path;
+        }
 
         public static int EntryCost(CombatState state, UnitState unit, GridPosition position)
         {

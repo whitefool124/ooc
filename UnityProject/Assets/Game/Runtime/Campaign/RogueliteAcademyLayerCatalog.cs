@@ -47,6 +47,33 @@ namespace OCC.Combat
         private static readonly IReadOnlyDictionary<string, RogueliteMapNode> ServiceNodeById =
             ServiceNodes.ToDictionary(node => node.Id, StringComparer.Ordinal);
 
+        // 学院层的内容编号已重映射；旧全图目录的标题不能继续充当本层标题。
+        // 名称与 OCC_学院节点内容数据表_v1.0.csv 的活动条目一致，节点 ID 和连线保持存档兼容。
+        private static readonly IReadOnlyDictionary<string, string> LayerDisplayNames =
+            new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["academy_gate"] = "新生实战委托",
+                ["tutorial_hall"] = "中庭侧锋对练",
+                ["dorm_watch"] = "宿舍外寻迹测试",
+                ["market_lane"] = "市集通道封锁演练",
+                ["dorm_drill"] = "实训场综合对抗",
+                ["field_infirmary"] = "医务室临时征集",
+                ["lecture_annex"] = "药材铺误入演练",
+                ["study_vault"] = "郊外导能柱值守演练",
+                ["archive_wing"] = "材料库承压事故",
+                ["sparring_ring"] = "图书室导能演算",
+                ["workshop_yard"] = "试制器具压力演练",
+                ["clinic_hall"] = "旧道综合巡查",
+                ["supply_depot"] = "刻阵工坊高阶考核",
+                ["wilds_path"] = "测绘队路线复核",
+                ["observatory_path"] = "失控校准室封锁",
+                ["wilds_camp"] = "断崖导能柱考察",
+                ["seal_bridge"] = "旧校舍封门检查",
+                ["tower_foyer"] = "刻阵工坊高阶考核",
+                ["core_finale"] = "Boss战斗 01 · 古塔核心",
+                ["layer_medical"] = "医务室"
+            };
+
         /// <summary>
         /// 第一阶段学院层的完整活动节点集。旧郊道节点仍留在全图目录供旧存档解析，
         /// 但不再计入本层、可达性或当前节点验证。
@@ -61,10 +88,23 @@ namespace OCC.Combat
         {
             node = null;
             if (string.IsNullOrEmpty(nodeId)) return false;
-            if (ServiceNodeById.TryGetValue(nodeId, out node)) return true;
+            if (ServiceNodeById.TryGetValue(nodeId, out node))
+            {
+                node = WithLayerDisplayName(node);
+                return true;
+            }
             if (!LayerNodeIdSet.Contains(nodeId)) return false;
             node = RogueliteMapCatalog.Nodes.FirstOrDefault(value => value.Id == nodeId);
+            node = WithLayerDisplayName(node);
             return node != null;
+        }
+
+        private static RogueliteMapNode WithLayerDisplayName(RogueliteMapNode node)
+        {
+            if (node == null || !LayerDisplayNames.TryGetValue(node.Id, out string displayName) ||
+                node.DisplayName == displayName) return node;
+            return new RogueliteMapNode(node.Id, node.Type, displayName, node.Summary,
+                node.GridX, node.GridY, node.NextIds.ToArray());
         }
 
         public static bool IsServiceNode(string nodeId) => nodeId != null && ServiceNodeById.ContainsKey(nodeId);
@@ -193,7 +233,7 @@ namespace OCC.Combat
                 { "EV01", "EV01" },
                 { "EV09", "EV09" },
                 { "EV08", "EV08" },
-                { "T02", "EV16" }
+                { "T02", "T02" }
             };
 
         private static string ResolveEventId(AcademyNodeContentMapping mapping)

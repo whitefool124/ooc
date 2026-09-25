@@ -215,6 +215,37 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void BattleTwoAi_CalibratedHeavyUsesTwoStrengthOnceAndG4IsOpen()
+        {
+            CombatState state = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom).State;
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            UnitState hero = state.GetUnit("hero");
+            UnitState mauler = state.Units.Values.Single(value => value.EnemyArchetypeId == "sigil_mauler");
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+
+            Assert.That(state.Map.IsBlocked(new GridPosition(6, 3)), Is.False);
+            Assert.That(plans.GetExecutionCommand(state, mauler, hero).Type, Is.EqualTo(CombatCommandType.EndTurn));
+            plans.Invalidate();
+            CombatCommand approach = plans.GetExecutionCommand(state, mauler, hero);
+            Assert.That(approach.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(approach.Destination, Is.Not.EqualTo(new GridPosition(6, 4)));
+
+            CombatEffectExecutor.Execute(state, mauler.Id, CombatEffect.Move(new GridPosition(6, 3)));
+            CombatEffectExecutor.Execute(state, hero.Id, CombatEffect.Move(new GridPosition(5, 3)));
+            plans.Invalidate();
+            CombatCommand heavy = plans.GetExecutionCommand(state, mauler, hero);
+            Assert.That(heavy.Type, Is.EqualTo(CombatCommandType.Attack));
+            int baseDamage = CombatInformationPresenter.BuildEnemyIntent(state, mauler, heavy).ExpectedDamage;
+            Assert.That(plans.GetPublicIntent(state, mauler, hero).ExpectedDamage, Is.EqualTo(baseDamage + 2));
+
+            CombatResolver.BeginTurn(state, mauler.Id);
+            int before = hero.Health + hero.Shield;
+            CombatResolver.Resolve(state, heavy);
+            Assert.That(before - hero.Health - hero.Shield, Is.EqualTo(baseDamage + 2));
+            Assert.That(mauler.StatusStrength(StatusType.Strength), Is.Zero);
+        }
+
+        [Test]
         public void EliteUnlocksAfterBattleThreeWithoutOptionalServiceCompletion()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(9005);
@@ -347,6 +378,10 @@ namespace OCC.Combat.Tests
             Assert.That(ram.Position, Is.EqualTo(new GridPosition(6, 3)));
             Assert.That(ram.Shield, Is.Zero);
             Assert.That(elite.ThreeMaterialPressure.IsVented, Is.True);
+            Assert.That(ram.ActionPoints, Is.Zero, "冲压是楔角本回合唯一的行动。");
+            CombatResolver.BeginTurn(elite, ram.Id);
+            Assert.That(elite.ThreeMaterialPressure.ChooseEnemyCommand(elite, ram, hero).Type,
+                Is.EqualTo(CombatCommandType.EndTurn), "冲压冷却期间不回退通用攻击或追击。");
         }
 
         [Test]

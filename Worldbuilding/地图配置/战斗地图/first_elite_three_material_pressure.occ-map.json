@@ -87,7 +87,7 @@
       "mechanismKind": 0
     },
     {
-      "kind": "AetherCrystal",
+      "kind": "PressureCrystal",
       "x": 5,
       "y": 3,
       "mechanismKind": 0

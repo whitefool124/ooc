@@ -68,6 +68,88 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void AcademyLibrarian_ChangesWindAsItsOneAction()
+        {
+            CombatState state = State(new GridPosition(1, 5), new GridPosition(6, 5), out UnitState librarian);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            CombatResolver.BeginTurn(state, librarian.Id);
+            Assert.That(state.Environment.Wind.Level, Is.Zero, "学院层回合开始不自动换风。");
+            CombatCommand command = state.AcademyFieldEnemy.ChooseEnemyCommand(state, librarian, state.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.WindChangeSkillIndex));
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.Environment.Wind.Level, Is.EqualTo(1));
+            Assert.That(state.Environment.Wind.Direction, Is.EqualTo(FieldWindState.East));
+            Assert.That(librarian.ActionPoints, Is.Zero);
+        }
+
+        [Test]
+        public void AcademyLibrarian_PrioritizesChangingWindWhenFireIsPresent()
+        {
+            CombatState state = State(new GridPosition(1, 5), new GridPosition(6, 5), out UnitState librarian);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            state.RogueSpells.FireBattle.CreateOrRefreshFireground(new GridPosition(3, 5), 2, 2, "test-fire");
+            state.Environment.Wind.TryChange(FieldWindState.West, 1);
+            CombatResolver.BeginTurn(state, librarian.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, librarian, state.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.WindChangeSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, librarian, state.GetUnit("hero")).ActionName, Is.EqualTo("换风"));
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(state.Environment.Wind.Direction, Is.EqualTo(FieldWindState.East));
+            Assert.That(librarian.ActionPoints, Is.Zero);
+        }
+
+        [Test]
+        public void AcademyLibrarian_RaisesPublicPaperScreenAsOneAction()
+        {
+            CombatState state = State(new GridPosition(1, 3), new GridPosition(6, 3), out UnitState librarian);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            state.Environment.Wind.TryChange(FieldWindState.East, 1);
+            Set(state, 0, 0, tile => tile.IsLoosePaper = true);
+            Set(state, 0, 1, tile => tile.IsLoosePaper = true);
+            Set(state, 0, 2, tile => tile.IsLoosePaper = true);
+            CombatResolver.BeginTurn(state, librarian.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(state, librarian, state.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.WindScreenSkillIndex));
+            Assert.That(plans.GetPublicIntent(state, librarian, state.GetUnit("hero")).ActionName, Is.EqualTo("扬页"));
+            Assert.That(Tile(state, 2, 3).HasPaperScreen, Is.False);
+
+            CombatResolver.Resolve(state, command);
+            Assert.That(Tile(state, 2, 3).HasPaperScreen, Is.True);
+            Assert.That(librarian.ActionPoints, Is.Zero);
+        }
+
+        [Test]
+        public void AcademyLibrarian_UsesScrollOrPushAsPublicAction()
+        {
+            CombatState scroll = State(new GridPosition(1, 3), new GridPosition(3, 3), out UnitState librarian);
+            scroll.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            scroll.Environment.Wind.TryChange(FieldWindState.East, 1);
+            Set(scroll, 0, 0, tile => tile.IsLoosePaper = true);
+            CombatResolver.BeginTurn(scroll, librarian.Id);
+            var plans = new EnemyTurnPlanBook();
+            CombatCommand command = plans.GetExecutionCommand(scroll, librarian, scroll.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.WindScrollSkillIndex));
+            Assert.That(plans.GetPublicIntent(scroll, librarian, scroll.GetUnit("hero")).ActionName, Is.EqualTo("卷页"));
+            int health = scroll.GetUnit("hero").Health;
+            CombatResolver.Resolve(scroll, command);
+            Assert.That(scroll.GetUnit("hero").Health, Is.LessThan(health));
+
+            CombatState push = State(new GridPosition(1, 3), new GridPosition(3, 3), out UnitState pusher);
+            push.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            push.Environment.Wind.TryChange(FieldWindState.East, 1);
+            CombatResolver.BeginTurn(push, pusher.Id);
+            plans = new EnemyTurnPlanBook();
+            command = plans.GetExecutionCommand(push, pusher, push.GetUnit("hero"));
+            Assert.That(command.SlotIndex, Is.EqualTo(AcademyFieldEnemyRuntime.WindPushSkillIndex));
+            Assert.That(plans.GetPublicIntent(push, pusher, push.GetUnit("hero")).ActionName, Is.EqualTo("推风"));
+            CombatResolver.Resolve(push, command);
+            Assert.That(push.GetUnit("hero").Position, Is.EqualTo(new GridPosition(4, 3)));
+        }
+
+        [Test]
         public void Librarian_SpendsLoosePaperOnTheWindEdge()
         {
             CombatState state = State(new GridPosition(3, 3), new GridPosition(5, 3), out _);

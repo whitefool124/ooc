@@ -8,6 +8,8 @@ namespace OCC.Combat
     public sealed class GreenhouseCollectionRoomRuntime
     {
         public const string LevelId = "greenhouse_collection_room";
+        public const int CalibratedStrength = 2;
+        private const string CalibratedStrengthSource = "first-b2-crystal-heavy";
 
         private GridPosition calibratedCrystal;
         private bool hasCalibratedCrystal;
@@ -41,23 +43,44 @@ namespace OCC.Combat
             if (enemy.EnemyArchetypeId == "sigil_mauler" && command.Type == CombatCommandType.EndTurn &&
                 hasCalibratedCrystal && IsIntactCrystal(state, calibratedCrystal))
                 return new EnemyIntentPresentation("first-b2:mauler:calibrate:" + calibratedCrystal,
-                    "贴晶校准", Cell(calibratedCrystal), "邻接完整晶簇，准备借晶强化下一次重击。强化数值尚未冻结，当前不追加伤害。",
+                    "贴晶校准", Cell(calibratedCrystal), "邻接完整晶簇；下一次重击获得力量+2。晶簇在出手前被毁则强化失效。",
                     "defend", true, calibratedCrystal, 0);
             if (enemy.EnemyArchetypeId == "sigil_mauler" && command.Type == CombatCommandType.Move)
                 return new EnemyIntentPresentation("first-b2:mauler:approach:" + command.Destination,
-                    "贴晶校准", Cell(command.Destination), "接近最近的完整晶簇；邻接后准备下一次重击。",
+                    hasCalibratedCrystal ? "借晶逼近" : "贴晶校准", Cell(command.Destination),
+                    hasCalibratedCrystal ? "保持贴晶校准，接近主角以打出力量+2的重击。" : "接近最近的完整晶簇；邻接后准备下一次重击。",
                     "move", true, command.Destination, 0);
-            if (enemy.EnemyArchetypeId == "sigil_mauler" && calibratedHeavyPlanned && command.Type == CombatCommandType.Attack)
+            if (enemy.EnemyArchetypeId == "sigil_mauler" && calibratedHeavyPlanned &&
+                IsIntactCrystal(state, calibratedCrystal) && command.Type == CombatCommandType.Attack)
+            {
+                CombatState preview = state.Clone();
+                preview.GetUnit(enemy.Id).ApplyStatus(StatusType.Strength, 1, CalibratedStrength, CalibratedStrengthSource);
                 return new EnemyIntentPresentation("first-b2:mauler:heavy:" + enemy.Id,
-                    "借晶重击（占位数值）", state.GetUnit(command.TargetUnitId)?.DisplayName ?? "主角",
-                    "已完成贴晶校准；强化量未冻结，本次仍按现有 6 点基础重击结算。",
-                    "attack", false, default, CombatInformationPresenter.BuildEnemyIntent(state, enemy, command).ExpectedDamage);
+                    "借晶重击", state.GetUnit(command.TargetUnitId)?.DisplayName ?? "主角",
+                    "已完成贴晶校准；本次重击获得力量+2，出手后移除。",
+                    "attack", false, default, CombatInformationPresenter.BuildEnemyIntent(preview, preview.GetUnit(enemy.Id), command).ExpectedDamage);
+            }
             if (enemy.EnemyArchetypeId == "raider" && command.Type == CombatCommandType.Move)
                 return new EnemyIntentPresentation("first-b2:raider:flank:" + command.Destination,
                     raiderHidden ? "藤内潜行" : "侧翼入藤", Cell(command.Destination),
                     raiderHidden ? "留在灯藤中；只有本次移动能出藤并贴邻主角时才会显形。" : "前往能通向主角侧面的灯藤入口。",
                     "move", true, command.Destination, 0);
             return CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
+        }
+
+        internal bool BeginCalibratedHeavyAttack(CombatState state, UnitState attacker)
+        {
+            if (attacker?.EnemyArchetypeId != "sigil_mauler" || !calibratedHeavyPlanned ||
+                !IsIntactCrystal(state, calibratedCrystal)) return false;
+            attacker.ApplyStatus(StatusType.Strength, 1, CalibratedStrength, CalibratedStrengthSource);
+            state.AddLog(attacker.DisplayName + "借晶重击：本次力量+2。");
+            return true;
+        }
+
+        internal void EndCalibratedHeavyAttack(UnitState attacker)
+        {
+            attacker?.ClearAttributeStatusFromSource(StatusType.Strength, CalibratedStrengthSource);
+            calibratedHeavyPlanned = false;
         }
 
         internal void AfterMove(CombatState state, UnitState unit, IReadOnlyList<GridPosition> path)
@@ -109,6 +132,8 @@ namespace OCC.Combat
                 hasCalibratedCrystal = false;
                 return MoveToward(state, enemy, OpenNeighborTargets(state, hero.Position, enemy.Id));
             }
+            if (hasCalibratedCrystal)
+                return MoveToward(state, enemy, OpenNeighborTargets(state, hero.Position, enemy.Id));
 
             GridPosition? target = state.Map.PositionsWith(tile => tile.IsAetherCrystal && !tile.IsDestroyed)
                 .OrderBy(position => enemy.Position.ManhattanDistance(position))

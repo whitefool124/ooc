@@ -33,7 +33,11 @@ namespace OCC.Combat
             .Concat(ItemCatalog.All.Select(item => item.Id))
             .Concat(RogueContent.Spells.Select(item => item.DefinitionId))
             .Concat(RogueContent.Equipment.Select(item => item.DefinitionId))
-            .Concat(RogueContent.TacticalItems.Select(item => item.DefinitionId)), StringComparer.Ordinal);
+            .Concat(RogueContent.TacticalItems.Select(item => item.DefinitionId))
+            .Concat(new[] { AcademyBattleRewardCatalog.ForgeLoad, AcademyBattleRewardCatalog.ForgeCircuit,
+                AcademyBattleRewardCatalog.SpecAmplify, AcademyBattleRewardCatalog.SpecEfficient,
+                AcademyBattleRewardCatalog.ForgePair, AcademyBattleRewardCatalog.SpecPair,
+                AcademyBattleRewardCatalog.MixedPair, AcademyBattleRewardCatalog.ScrollPack }), StringComparer.Ordinal);
         private static readonly HashSet<string> FireSpellIds = new HashSet<string>(FireSpellCatalog.All.Select(spell => spell.Id), StringComparer.Ordinal);
         private static readonly HashSet<string> StarterIds = new HashSet<string>(FireRogueliteStarterCatalog.All, StringComparer.Ordinal);
 
@@ -93,6 +97,20 @@ namespace OCC.Combat
             RogueliteMapRunValidationResult result = new RogueliteMapRunValidationResult();
             if (run == null) { result.Add("run.null"); return result; }
 
+            if (run.HasActiveCombat)
+            {
+                if (run.IsComplete || run.AwaitingReward ||
+                    run.RogueRunState.ActiveCombatNodeId != run.CurrentNodeId)
+                    result.Add("combat.journal_state");
+                try
+                {
+                    if (!run.MapNode(run.CurrentNodeId).IsCombat && !run.HasPendingContentCombat)
+                        result.Add("combat.journal_node");
+                }
+                catch (KeyNotFoundException) { result.Add("combat.journal_node"); }
+            }
+            else if (run.CombatJournalRows.Count > 0) result.Add("combat.journal_without_active_node");
+
             if (run.IsTutorialPhase)
             {
                 ValidateFirstRun(run, result);
@@ -116,9 +134,9 @@ namespace OCC.Combat
                 result.Add("resources.out_of_range");
             if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth) result.Add("combat.health_out_of_range");
             if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
-            if (run.CurrentMana < 0 || run.CurrentMana > 12) result.Add("combat.mana_out_of_range");
+            if (run.CurrentMana < 0 || run.CurrentMana > run.RogueManaCapacity) result.Add("combat.mana_out_of_range");
             if (!run.HasCombatSnapshot && (run.CurrentHealth != UnitState.HeroBaseHealth || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
-            if (run.HasCombatSnapshot && run.CurrentHealth <= 0) result.Add("combat.defeated_snapshot");
+            if (run.HasCombatSnapshot && run.CurrentHealth <= 0 && run.RunEndReason != "death") result.Add("combat.defeated_snapshot");
 
             bool weaponValid = string.IsNullOrEmpty(run.EquippedWeaponId) || RogueliteMapCatalog.Rewards.Any(reward => reward.Id == run.EquippedWeaponId && reward.Kind == RogueliteRewardKind.Weapon);
             if (!weaponValid) result.Add("build.weapon_unknown");
@@ -208,19 +226,27 @@ namespace OCC.Combat
             if (state.Shop.Opened && ((!state.EliteRewardClaimed && !state.EliteRewardAbandoned) || state.Outcome != FirstRunOutcome.EliteVictory)) result.Add("first_run.shop_gate");
             if (state.RunSealed != (state.Outcome == FirstRunOutcome.EliteDefeat) || state.RunSealed && state.Shop.Opened) result.Add("first_run.terminal_state");
             if (run.EncounterAssignments.Count != 0 || run.NodeContentAssignments.Count != 0) result.Add("first_run.legacy_assignments");
-            if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth || run.CurrentMana < 0 || run.CurrentMana > 12 || run.CurrentShield < 0 || run.CurrentShield > 6)
+            if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth || run.CurrentMana < 0 || run.CurrentMana > run.RogueManaCapacity || run.CurrentShield < 0 || run.CurrentShield > 6)
                 result.Add("combat.snapshot_out_of_range");
-            if (state.RunSealed ? run.CurrentHealth != 0 : run.CurrentHealth <= 0) result.Add("first_run.health_state");
+            if (state.RunSealed || run.RunEndReason == "death" ? run.CurrentHealth != 0 : run.CurrentHealth <= 0) result.Add("first_run.health_state");
         }
 
         // 随机层：固定段已经收束，节点集换成学院层，内容接口按“节点绑定”工作。
         private static void ValidateAcademyLayer(RogueliteMapRun run, RogueliteMapRunValidationResult result)
         {
             FirstRunExperienceState state = run.FirstRunExperience;
-            if (state == null) { result.Add("academy_layer.state_missing"); return; }
-            if (!state.Shop.Opened || state.Outcome != FirstRunOutcome.EliteVictory ||
-                (!state.EliteRewardClaimed && !state.EliteRewardAbandoned)) result.Add("academy_layer.handoff_incomplete");
-            if (state.RunSealed) result.Add("academy_layer.sealed");
+            if (state == null)
+            {
+                if (run.RogueRunState?.RunProgramId != RogueliteRunProgram.EvergreenAcademy.ToString() ||
+                    run.RogueRunState.GeneratedAcademyMapRows.Count == 0)
+                    result.Add("academy_layer.state_missing");
+            }
+            else
+            {
+                if (!state.Shop.Opened || state.Outcome != FirstRunOutcome.EliteVictory ||
+                    (!state.EliteRewardClaimed && !state.EliteRewardAbandoned)) result.Add("academy_layer.handoff_incomplete");
+                if (state.RunSealed) result.Add("academy_layer.sealed");
+            }
 
             if (!RogueliteAcademyLayerCatalog.IsLayerNode(run.CurrentNodeId)) result.Add("academy_layer.current_node_unknown");
             if (!run.VisitedNodes.Contains(run.CurrentNodeId)) result.Add("academy_layer.visited_inconsistent");
@@ -231,16 +257,17 @@ namespace OCC.Combat
                 result.Add("academy_layer.service_settlement_duplicate");
             if (run.SettledServiceNodeIds.Any(id => !RogueliteAcademyLayerCatalog.IsServiceNode(id)))
                 result.Add("academy_layer.service_settlement_unknown");
-            if (run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId) && !state.RoundSettled &&
+            if (run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId) && state?.RoundSettled != true &&
+                run.RunEndReason != "victory" &&
                 run.CurrentNodeId != RogueliteAcademyLayerCatalog.FinaleNodeId)
                 result.Add("academy_layer.finale_without_settlement");
 
             if (!string.Equals(run.RegionBossId, "core_overseer", StringComparison.Ordinal)) result.Add("academy_layer.region_boss_unknown");
             if (run.CurrentHealth < 0 || run.CurrentHealth > UnitState.HeroBaseHealth) result.Add("combat.health_out_of_range");
             if (run.CurrentShield < 0 || run.CurrentShield > 6) result.Add("combat.shield_out_of_range");
-            if (run.CurrentMana < 0 || run.CurrentMana > 12) result.Add("combat.mana_out_of_range");
+            if (run.CurrentMana < 0 || run.CurrentMana > run.RogueManaCapacity) result.Add("combat.mana_out_of_range");
             if (!run.HasCombatSnapshot && (run.CurrentHealth != UnitState.HeroBaseHealth || run.CurrentShield != 2 || run.CurrentMana != 12)) result.Add("combat.snapshot_inconsistent");
-            if (run.HasCombatSnapshot && run.CurrentHealth <= 0) result.Add("combat.defeated_snapshot");
+            if (run.HasCombatSnapshot && run.CurrentHealth <= 0 && run.RunEndReason != "death") result.Add("combat.defeated_snapshot");
 
             ValidateAcademyEncounters(run, result);
             ValidateAcademyNodeContents(run, result);
@@ -248,16 +275,17 @@ namespace OCC.Combat
 
             if (run.IsComplete)
             {
-                if (!state.RoundSettled) result.Add("academy_layer.complete_without_settlement");
+                if (state?.RoundSettled != true && string.IsNullOrEmpty(run.RunEndReason)) result.Add("academy_layer.complete_without_settlement");
                 if (run.AwaitingReward) result.Add("academy_layer.complete_with_reward");
             }
-            if (state.RoundSettled && !run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId))
+            if ((state?.RoundSettled == true || run.RunEndReason == "victory") &&
+                !run.CompletedNodes.Contains(RogueliteAcademyLayerCatalog.FinaleNodeId))
                 result.Add("academy_layer.settled_without_finale");
         }
 
         private static void ValidateAcademyEncounters(RogueliteMapRun run, RogueliteMapRunValidationResult result)
         {
-            string[] combatNodes = RogueliteAcademyLayerCatalog.EncounterNodeIds.ToArray();
+            string[] combatNodes = run.AcademyLayerNodes.Where(node => node.IsCombat).Select(node => node.Id).ToArray();
             if (run.EncounterAssignments.Count != combatNodes.Length ||
                 combatNodes.Any(id => !run.EncounterAssignments.ContainsKey(id)))
             { result.Add("academy_layer.encounter_coverage"); return; }
@@ -284,11 +312,12 @@ namespace OCC.Combat
                     result.Add("academy_layer.encounter_enemy_unknown");
             }
 
-            foreach (RogueliteEncounterDefinition left in definitions)
-            foreach (RogueliteEncounterDefinition right in definitions.Where(value =>
-                string.CompareOrdinal(value.NodeId, left.NodeId) > 0 && IsAcademyLayerAdjacent(left.NodeId, value.NodeId)))
-                if (left.VariantKey == right.VariantKey || left.LevelId == right.LevelId || left.SpatialGrammar == right.SpatialGrammar)
-                    result.Add("academy_layer.encounter_adjacent_repeat");
+            if (run.RogueRunState.GeneratedAcademyMapRows.Count == 0)
+                foreach (RogueliteEncounterDefinition left in definitions)
+                foreach (RogueliteEncounterDefinition right in definitions.Where(value =>
+                    string.CompareOrdinal(value.NodeId, left.NodeId) > 0 && IsAcademyLayerAdjacent(run, left.NodeId, value.NodeId)))
+                    if (left.VariantKey == right.VariantKey || left.LevelId == right.LevelId || left.SpatialGrammar == right.SpatialGrammar)
+                        result.Add("academy_layer.encounter_adjacent_repeat");
 
             RogueliteEncounterDefinition boss = definitions.SingleOrDefault(value => value.Tier == RogueliteEncounterTier.Boss);
             if (boss == null || boss.VariantKey != RogueliteEncounterCatalog.FixedBoss.VariantKey ||
@@ -297,10 +326,11 @@ namespace OCC.Combat
                 result.Add("academy_layer.finale_without_gate");
         }
 
-        private static bool IsAcademyLayerAdjacent(string a, string b)
+        private static bool IsAcademyLayerAdjacent(RogueliteMapRun run, string a, string b)
         {
-            if (!TryLayerNode(a, out RogueliteMapNode left)) return false;
-            if (!TryLayerNode(b, out RogueliteMapNode right)) return false;
+            RogueliteMapNode left = run.AcademyLayerNodes.FirstOrDefault(node => node.Id == a);
+            RogueliteMapNode right = run.AcademyLayerNodes.FirstOrDefault(node => node.Id == b);
+            if (left == null || right == null) return false;
             return left.NextIds.Contains(b) || right.NextIds.Contains(a);
         }
 
@@ -316,7 +346,8 @@ namespace OCC.Combat
 
         private static void ValidateAcademyNodeContents(RogueliteMapRun run, RogueliteMapRunValidationResult result)
         {
-            string[] eventNodes = RogueliteAcademyLayerCatalog.EventNodeIds.ToArray();
+            string[] eventNodes = run.AcademyLayerNodes.Where(node => node.Type == RogueliteMapNodeType.Event)
+                .Select(node => node.Id).ToArray();
             if (run.NodeContentAssignments.Count != eventNodes.Length ||
                 eventNodes.Any(id => !run.NodeContentAssignments.ContainsKey(id)))
             { result.Add("academy_layer.content_coverage"); return; }
@@ -337,6 +368,19 @@ namespace OCC.Combat
             if (!NodeIds.Contains(run.CurrentNodeId)) return;
             RogueliteMapNode node = RogueliteMapCatalog.Node(run.CurrentNodeId);
             bool hasRoguePending = run.UsesRogue11 && run.RogueRunState != null && run.RogueRunState.PendingRewardIds != null && run.RogueRunState.PendingRewardIds.Count > 0;
+            AcademyResourceReceipt receipt = run.PendingResourceReceipt;
+            if (receipt != null && (!run.IsInAcademyLayer || !run.AwaitingReward || node.Type != RogueliteMapNodeType.Event ||
+                !run.CompletedNodes.Contains(node.Id) || receipt.NodeId != node.Id || hasRoguePending ||
+                run.RogueRunState.RolledRewardChoiceIds.Count > 0 ||
+                !run.CurrentContentChoices.Any(choice => choice.Id == receipt.ChoiceId && string.IsNullOrEmpty(choice.RewardId))))
+                result.Add("rewards.resource_receipt_inconsistent");
+            if (run.UsesRogue11 && run.RogueRunState != null && run.RogueRunState.RolledRewardChoiceIds.Count > 0)
+            {
+                if (!run.AwaitingReward || !node.IsCombat || !run.CompletedNodes.Contains(node.Id) || hasRoguePending)
+                    result.Add("rewards.rolled_choice_inconsistent");
+                foreach (string id in run.RogueRunState.RolledRewardChoiceIds)
+                    if (!RewardIds.Contains(id)) result.Add("rewards.rolled_choice_invalid");
+            }
             if (hasRoguePending)
             {
                 if (!run.AwaitingReward || !run.CompletedNodes.Contains(node.Id)) result.Add("rewards.pending_queue_inconsistent");
@@ -348,7 +392,7 @@ namespace OCC.Combat
                     if (run.ClaimedRewards.Contains(id)) result.Add("rewards.pending_already_claimed");
                 }
             }
-            else if (run.AwaitingReward && run.PendingFireSpellReselections.Count == 0 && (!run.CompletedNodes.Contains(node.Id) || (!node.IsCombat && node.Type != RogueliteMapNodeType.Treasure)))
+            else if (run.AwaitingReward && receipt == null && run.PendingFireSpellReselections.Count == 0 && (!run.CompletedNodes.Contains(node.Id) || (!node.IsCombat && node.Type != RogueliteMapNodeType.Treasure)))
                 result.Add("rewards.awaiting_inconsistent");
             if (run.HasDeferredNodeReward && run.PendingFireSpellReselections.Count == 0) result.Add("rewards.deferred_inconsistent");
             if (run.HasPendingContentCombat)

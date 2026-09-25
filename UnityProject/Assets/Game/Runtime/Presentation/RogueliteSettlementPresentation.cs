@@ -51,6 +51,12 @@ namespace OCC.Combat.Presentation
         public void RefreshNow()
         {
             RogueliteMapRun run = bootstrap == null ? null : bootstrap.CurrentMapRun;
+            if (bootstrap != null && !bootstrap.IsMapRunSaved)
+            {
+                hasPresentedModel = false;
+                Hide();
+                return;
+            }
             SettlementPresentationModel nextModel = SettlementPresentationModel.From(run);
             if (hasPresentedModel && presentedModel.Equals(nextModel)) return;
             presentedModel = nextModel;
@@ -103,23 +109,40 @@ namespace OCC.Combat.Presentation
             RectTransform cardRect = shell.Card;
 
             bool firstEliteReward = run.IsTutorialPhase && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory && !run.FirstRunExperience.EliteRewardClaimed;
-            AddLabel(shell.Header, "标题", "战斗胜利", new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            AddLabel(shell.Header, "副标题", firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            AcademyResourceReceipt receipt = run.PendingResourceReceipt;
+            AddLabel(shell.Header, "标题", receipt == null ? "战斗胜利" : "事件结算 · " + run.MapNode(receipt.NodeId).DisplayName, new Vector2(54, -48), new Vector2(1280, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            AddLabel(shell.Header, "副标题", receipt != null ? "本次选项与资源变化已保存；确认收据后继续。" : firstEliteReward ? "选择一项被动术式；固定奖励会作为同一整包领取。" :
+                run.PendingRewardStepId == "followup" ? "主奖励已选定；再选一项后一同收进背包。" : "挑一件带走。", new Vector2(56, -112), new Vector2(1260, 34), 20, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
             AddLabel(shell.Header, "等级", "等级 " + run.Level + "　经验 " + run.Experience, new Vector2(56, -166), new Vector2(1260, 34), FormalUiTheme.HeadingFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             FormalUiKit.Line(shell.Header, new Vector2(56, -204), new Vector2(1260, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Muted, .72f), "分隔");
 
             List<RogueliteReward> choices = run.CurrentFireSpellChoices.Select(AsReward).ToList();
             choices.AddRange(run.CurrentRewards.Take(3 - choices.Count));
             for (int i = 0; i < choices.Count; i++) AddRewardCard(shell.Rewards, choices[i], i, run);
+            if (receipt != null)
+            {
+                RogueliteNodeContentChoice chosen = run.CurrentContentChoices.FirstOrDefault(value => value.Id == receipt.ChoiceId);
+                AddLabel(shell.Rewards, "收据选项", "已选择　" + (chosen?.DisplayName ?? receipt.ChoiceId),
+                    new Vector2(56, -282), new Vector2(1260, 48), 28, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                AddLabel(shell.Rewards, "收据描述", chosen?.Preview ?? "事件结果已记录。",
+                    new Vector2(56, -350), new Vector2(1260, 96), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.UpperLeft);
+            }
             RogueliteMapNode settlementNode = run.MapNodes.FirstOrDefault(value => value.Id == run.CurrentNodeId);
             bool eventSettlement = settlementNode != null && settlementNode.Type == RogueliteMapNodeType.Event;
-            int fixedGold = run.UsesRogue11 ? eventSettlement ? 1 : 3 : 0;
-            int fixedContribution = run.UsesRogue11 ? eventSettlement ? 1 : 2 : 0;
-            string fixedText = firstEliteReward
-                ? "固定获得　低压回路护额 ×1　定锚支架 ×1（4次）　金币 " + (run.UsesRogue11 ? 6 : 0)
-                : run.UsesRogue11 ? "固定所得　金币 +" + fixedGold + "　学院贡献 +" + fixedContribution : "固定所得　结算资源已写入行程";
+            string fixedText = receipt != null ? "本次变化　" + ResourceReceiptText(receipt) : firstEliteReward
+                ? "固定获得　低压回路护额 ×1　定锚支架 ×1（4次）　金币 6"
+                : run.IsTutorialPhase ? "固定所得　战斗结果已记录；无额外固定货币"
+                : run.UsesRogue11 && eventSettlement ? "固定所得　事件指定奖励待领取；资源依所选事件结算"
+                : run.UsesRogue11 ? "固定所得　金币 +" + (settlementNode?.Type == RogueliteMapNodeType.Finale ? 10 : settlementNode?.Type == RogueliteMapNodeType.Elite ? 6 : 3) +
+                    "　学院贡献 +" + (settlementNode?.Type == RogueliteMapNodeType.Finale ? 3 : settlementNode?.Type == RogueliteMapNodeType.Elite ? 2 : 1)
+                : "固定所得　结算资源已写入行程";
+            if (run.RogueRunState?.PendingFixedMaterialIds.Count > 0)
+                fixedText += "　待收集 " + string.Join("、", run.RogueRunState.PendingFixedMaterialIds.Select(id =>
+                    id == AcademyBattleRewardCatalog.ForgeLoad ? "承力合金" :
+                    id == AcademyBattleRewardCatalog.ForgeCircuit ? "导能晶片" :
+                    id == AcademyBattleRewardCatalog.SpecAmplify ? "增幅刻墨" : "节流刻墨"));
             AddLabel(shell.Rewards, "固定获得", fixedText, new Vector2(56, -552), new Vector2(1260, 34), 18, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            if (choices.Count == 0)
+            if (choices.Count == 0 && receipt == null)
             {
                 FormalUiEffects.AddEmptyIllustration(shell.Rewards, "empty_reward_crate", new Vector2(710, -384), 128f);
                 AddLabel(shell.Rewards, "空奖励说明", run.UsesRogue11 ? "本次为资源结算，固定所得已写入行程。" : "这次没有可领取的物品。返回地图继续前进。", new Vector2(430, -476), new Vector2(560, 40),
@@ -137,10 +160,10 @@ namespace OCC.Combat.Presentation
                 AddLabel(shell.Footer, "空间提示", "奖励会保留在这里；腾出空间后返回即可领取。", new Vector2(356, -584), new Vector2(650, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             }
 
-            AddLabel(shell.Footer, "说明", "点击想要的奖励。也可以明确放弃本次全部奖励。", new Vector2(56, -592), new Vector2(900, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            Button abandon = FormalUiKit.Button("放弃奖励", "放弃奖励", shell.Footer, new Vector2(1030, -584), new Vector2(286, 56), FormalUiTheme.Interactive);
-            abandon.onClick.AddListener(bootstrap.RequestAbandonMapReward);
-            FormalUiKit.ConfigureButtonFeedback(abandon, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Dangerous),
+            AddLabel(shell.Footer, "说明", receipt == null ? "点击想要的奖励。也可以明确放弃本次全部奖励。" : "已结算 1 项／待确认收据 1 项；确认不会再次发放资源。", new Vector2(56, -592), new Vector2(900, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            Button finish = FormalUiKit.Button(receipt == null ? "放弃奖励" : "确认收据", receipt == null ? "放弃奖励" : "确认并返回地图", shell.Footer, new Vector2(1030, -584), new Vector2(286, 56), FormalUiTheme.Interactive);
+            finish.onClick.AddListener(receipt == null ? bootstrap.RequestAbandonMapReward : bootstrap.ConfirmMapResourceReceipt);
+            FormalUiKit.ConfigureButtonFeedback(finish, FormalUiTheme.ButtonPalette(receipt == null ? FormalUiButtonTone.Dangerous : FormalUiButtonTone.Primary),
                 () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);
             CanvasGroup group = card.AddComponent<CanvasGroup>();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity);
@@ -160,6 +183,22 @@ namespace OCC.Combat.Presentation
 
             RewardCardInput firstAvailable = rewardCards.FirstOrDefault(item => item.Button != null && item.Button.interactable);
             if (firstAvailable != null) RuntimeUiEventSystem.Select(firstAvailable.Button.gameObject);
+            else if (receipt != null) RuntimeUiEventSystem.Select(finish.gameObject);
+        }
+
+        private static string ResourceReceiptText(AcademyResourceReceipt receipt)
+        {
+            List<string> changes = new List<string>();
+            void Add(string label, int value)
+            {
+                if (value != 0) changes.Add(label + " " + (value > 0 ? "+" : string.Empty) + value);
+            }
+            Add("金币", receipt.GoldChange);
+            Add("学院贡献", receipt.ContributionChange);
+            Add("生命", receipt.HealthChange);
+            Add("个人魔力", receipt.ManaChange);
+            Add("学院时序", receipt.TimeChange);
+            return changes.Count == 0 ? "无资源变化" : string.Join("　", changes);
         }
 
         private void AddRewardCard(Transform parent, RogueliteReward reward, int index, RogueliteMapRun run)
@@ -175,7 +214,8 @@ namespace OCC.Combat.Presentation
             bool itemReward = reward.Kind == RogueliteRewardKind.Item;
             bool equipmentReward = reward.Kind == RogueliteRewardKind.Equipment;
             bool tacticalReward = reward.Kind == RogueliteRewardKind.TacticalItem;
-            string rewardCategory = weapon ? "武器" : equipmentReward ? "装备" : tacticalReward ? "战术道具" : itemReward ?
+            bool resourceReward = reward.Kind == RogueliteRewardKind.Resource;
+            string rewardCategory = resourceReward ? "附加回收" : weapon ? "武器" : equipmentReward ? "装备" : tacticalReward ? "战术道具" : itemReward ?
                 (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "物品") : "个人术式";
             FireSpellDefinition fireSpell = FireSpellCatalog.All.FirstOrDefault(spell => spell.Id == reward.Id);
             ArtifactDefinition artifact = itemReward ? ArtifactCatalog.All.FirstOrDefault(candidate => candidate.Id == reward.Id) : null;
@@ -215,7 +255,8 @@ namespace OCC.Combat.Presentation
             AddLabel(card.transform, "序号", "0" + (index + 1), new Vector2(24, -16), new Vector2(56, 40), 18, accent, TextAnchor.MiddleLeft);
             string iconRuntimeId = itemReward ? reward.Item.Id : reward.Id;
             bool passiveReward = reward.RogueSpell?.Role == "passive";
-            string rewardIconPath = itemReward ? reward.Item.IconPath : equipmentReward ? FormalArtRegistry.EquipmentIconPath(reward.Equipment.DefinitionId) : tacticalReward ? FormalArtRegistry.SemanticPath("notice") :
+            string rewardIconPath = resourceReward ? reward.ResourceId == AcademyBattleRewardCatalog.ScrollPack ? ItemCatalog.FirelineScroll.IconPath : FormalArtRegistry.SemanticPath("notice") :
+                itemReward ? reward.Item.IconPath : equipmentReward ? FormalArtRegistry.EquipmentIconPath(reward.Equipment.DefinitionId) : tacticalReward ? FormalArtRegistry.SemanticPath("notice") :
                 passiveReward ? FormalArtRegistry.SemanticPath("notice") : fireSpell == null ? FormalArtRegistry.ItemPath(weapon ? reward.Id : reward.Id + "_reward") : fireSpell.IconPath;
             Sprite rewardSprite = Resources.Load<Sprite>(rewardIconPath);
             if (rewardSprite == null) throw new KeyNotFoundException("Missing formal reward icon: " + iconRuntimeId);
@@ -223,17 +264,17 @@ namespace OCC.Combat.Presentation
             RectTransform iconRect = iconObject.AddComponent<RectTransform>(); iconRect.anchorMin = iconRect.anchorMax = new Vector2(0, 1);
             iconRect.pivot = new Vector2(0, 1); iconRect.anchoredPosition = new Vector2(326, -16); iconRect.sizeDelta = new Vector2(64, 64);
             Image rewardIcon = iconObject.AddComponent<Image>(); rewardIcon.sprite = rewardSprite; rewardIcon.preserveAspect = true; rewardIcon.raycastTarget = false;
-            string typeLabel = weapon ? "武器" : equipmentReward ? "装备" : tacticalReward ? "战术道具" : itemReward ? (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "卷轴") : fireSpell == null ? "个人术式" : "个人术式　" + FireSpellRarityLabel(fireSpell.Rarity);
+            string typeLabel = resourceReward ? "物资" : weapon ? "武器" : equipmentReward ? "装备" : tacticalReward ? "战术道具" : itemReward ? (reward.Item.Category == ItemCategory.Artifact ? "法宝" : "卷轴") : fireSpell == null ? "个人术式" : "个人术式　" + FireSpellRarityLabel(fireSpell.Rarity);
             AddLabel(card.transform, "类型", typeLabel, new Vector2(84, -16), new Vector2(226, 40), 19, accent, TextAnchor.MiddleLeft);
             AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(24, -60), new Vector2(286, 40), 29, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            string stat = equipmentReward ? EquipmentSlotLabel(reward.Equipment.Slot) + "　" + HandednessLabel(reward.Equipment.Handedness) + "　重量 " + reward.Equipment.BaseWeight + "　以太负荷 " + reward.Equipment.BaseAetherLoad : tacticalReward ? reward.TacticalItem.Width + "×" + reward.TacticalItem.Height + "　完整次数 " + reward.TacticalItem.MaximumCharges + "　行动消耗 " + reward.TacticalItem.ActionPointCost : itemReward ? reward.Item.Width + "×" + reward.Item.Height + "　" + reward.Item.MaximumUses + " 次　重量 " + reward.Item.Weight : weapon
+            string stat = resourceReward ? reward.BuildPath : equipmentReward ? EquipmentSlotLabel(reward.Equipment.Slot) + "　" + HandednessLabel(reward.Equipment.Handedness) + "　重量 " + reward.Equipment.BaseWeight + "　以太负荷 " + reward.Equipment.BaseAetherLoad : tacticalReward ? reward.TacticalItem.Width + "×" + reward.TacticalItem.Height + "　完整次数 " + reward.TacticalItem.MaximumCharges + "　行动消耗 " + reward.TacticalItem.ActionPointCost : itemReward ? reward.Item.Width + "×" + reward.Item.Height + "　" + reward.Item.MaximumUses + " 次　重量 " + reward.Item.Weight : weapon
                 ? "伤害 " + reward.Weapon.Damage + "   射程 " + reward.Weapon.Range + "   穿甲 " + reward.Weapon.ArmorPierce
                 : reward.RogueSpell != null ? reward.RogueSpell.ActionPointCost + " 行动点　" + reward.RogueSpell.ManaCost + " 个人魔力　射程 " + reward.RogueSpell.Range : "伤害 " + reward.Spell.Damage + "　射程 " + reward.Spell.Range;
             float statX = 24f;
-            if (!weapon && !equipmentReward)
+            if (!weapon && !equipmentReward && !resourceReward)
             {
                 int actionCost = fireSpell?.ActionPointCost ?? artifact?.ActionPointCost ?? reward.RogueSpell?.ActionPointCost ?? 1;
-                int aetherCost = fireSpell?.ManaCost ?? reward.RogueSpell?.ManaCost ?? (artifact == null ? reward.Spell.ManaCost : 0);
+                int aetherCost = fireSpell?.ManaCost ?? reward.RogueSpell?.ManaCost ?? reward.Spell?.ManaCost ?? 0;
                 FormalUiKit.SemanticChip("action", actionCost.ToString(), card.transform, new Vector2(24, -104), tooltip);
                 statX = 84f;
                 if (aetherCost > 0)
@@ -251,7 +292,7 @@ namespace OCC.Combat.Presentation
                 stat = "每次 " + perUseCost + "　共 " + artifact.MaximumUses + " 次　" + artifact.Width + "×" + artifact.Height;
             }
             AddLabel(card.transform, "数值", stat, new Vector2(statX, -104), new Vector2(384 - statX, 40), FormalUiTheme.BodyFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            string effect = weapon ? "带回工坊后可以换成主手武器\n" + RogueliteEconomyPresentation.RewardComparison(run, reward) : equipmentReward || tacticalReward ? "放进行囊；可在战斗外整理" : itemReward ? "放进行囊" : "收进术式册；可在战斗外装入术式栏";
+            string effect = resourceReward ? reward.BuildPath : weapon ? "带回工坊后可以换成主手武器\n" + RogueliteEconomyPresentation.RewardComparison(run, reward) : equipmentReward || tacticalReward ? "放进行囊；可在战斗外整理" : itemReward ? "放进行囊" : "收进术式册；可在战斗外装入术式栏";
             if (fireSpell != null) effect = FireSpellPlayerSummary(fireSpell);
             if (artifact != null) effect = artifact.EffectSummary + "\n来源：" + artifact.Provenance + "\n目标：" + artifact.TargetSummary;
             AddLabel(card.transform, "完整效果", effect, new Vector2(24, -146), new Vector2(360, 92), 15, FormalUiTheme.Text, TextAnchor.UpperLeft);
@@ -265,7 +306,29 @@ namespace OCC.Combat.Presentation
             }
             string availabilityText = string.IsNullOrWhiteSpace(availability.Reason) || availability.Reason == availability.Status
                 ? availability.Status : availability.Status + "，" + availability.Reason;
-            AddLabel(card.transform, "选择", availabilityText, new Vector2(24, -306), new Vector2(360, 40), artifact != null ? 15 : 17, availability.CanExecute ? accent : FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+            bool canDismantle = run.CanDismantleReward(reward);
+            bool canFitDismantled = canDismantle && run.CanAcceptAcademyReward(reward, true);
+            AddLabel(card.transform, "选择", availabilityText, new Vector2(24, canDismantle ? -292 : -306),
+                new Vector2(360, canDismantle ? 26 : 40), artifact != null ? 15 : 17,
+                availability.CanExecute ? accent : FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+            if (canDismantle)
+            {
+                GameObject dismantleObject = CreateObject("拆解_" + reward.Id, card.transform);
+                RectTransform dismantleRect = dismantleObject.AddComponent<RectTransform>();
+                dismantleRect.anchorMin = dismantleRect.anchorMax = new Vector2(0, 1);
+                dismantleRect.pivot = new Vector2(0, 1);
+                dismantleRect.anchoredPosition = new Vector2(100, -326);
+                dismantleRect.sizeDelta = new Vector2(210, 28);
+                Image dismantleImage = dismantleObject.AddComponent<Image>();
+                dismantleImage.color = FormalUiTheme.SurfaceRaised;
+                Button dismantleButton = dismantleObject.AddComponent<Button>();
+                dismantleButton.targetGraphic = dismantleImage;
+                dismantleButton.interactable = canFitDismantled;
+                dismantleButton.onClick.AddListener(() => TryClaim("dismantle:" + reward.Id));
+                AddLabel(dismantleObject.transform, "拆解文案", reward.Kind == RogueliteRewardKind.Equipment
+                    ? "拆解为锻造材料×1" : "拆解为专精材料×1", new Vector2(6, -1), new Vector2(198, 26),
+                    15, FormalUiTheme.Amber, TextAnchor.MiddleCenter);
+            }
             // 自适应：标称布局原样保留，只有某行文字真的装不下时才把它和下面的内容一起下移。
             AdaptRewardRow(rect, card.transform, "数值", 40f);
             AdaptRewardRow(rect, card.transform, "完整效果", 92f);
@@ -279,7 +342,7 @@ namespace OCC.Combat.Presentation
             IReadOnlyList<string> cardTags = fireSpell != null ? CombatSpellTags.For(fireSpell)
                 : artifact != null ? CombatSpellTags.For(artifact)
                 : reward.RogueSpell != null ? CombatSpellTags.For(reward.RogueSpell)
-                : CombatSpellTags.ForItem(reward.Item);
+                : reward.Item != null ? CombatSpellTags.ForItem(reward.Item) : System.Array.Empty<string>();
             bool hasTags = cardTags != null && cardTags.Count > 0;
             tooltipTrigger.Configure(tooltip, () => hasTags
                 ? new FormalTooltipContent(rewardCategory, reward.DisplayName, tooltipBody, accent, rewardIconPath, cardTags)
@@ -523,8 +586,13 @@ namespace OCC.Combat.Presentation
         {
             if (claimPending || bootstrap == null || string.IsNullOrWhiteSpace(rewardId)) return;
             RogueliteMapRun run = bootstrap.CurrentMapRun;
-            RewardCardInput selected = rewardCards.FirstOrDefault(card => card.RewardId == rewardId);
-            UiOperationAvailability availability = RogueliteEconomyPresentation.ForReward(run, selected?.Reward);
+            bool dismantle = rewardId.StartsWith("dismantle:", System.StringComparison.Ordinal);
+            string choiceId = dismantle ? rewardId.Substring("dismantle:".Length) : rewardId;
+            RewardCardInput selected = rewardCards.FirstOrDefault(card => card.RewardId == choiceId);
+            UiOperationAvailability availability = dismantle
+                ? new UiOperationAvailability(run != null && run.CanDismantleReward(selected?.Reward) &&
+                    run.CanAcceptAcademyReward(selected?.Reward, true), "拆解", "先整理出材料需要的行囊格")
+                : RogueliteEconomyPresentation.ForReward(run, selected?.Reward);
             if (!availability.CanExecute)
             {
                 bootstrap.ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, availability.Reason));

@@ -42,6 +42,8 @@ namespace OCC.Combat
         public AcademyCoreBossRuntime AcademyCoreBoss { get; private set; }
         /// <summary>通用场地敌人的公开条件反应（老寻、灯台值守）。</summary>
         public AcademyFieldEnemyRuntime AcademyFieldEnemy { get; private set; }
+        public AcademyEnemyGrowthRuntime AcademyEnemyGrowth { get; private set; }
+        public AcademyEnemyAreaRuntime AcademyEnemyArea { get; private set; }
         /// <summary>全场环境状态：风与光带。不占格，随战斗创建并在克隆时一并复制。</summary>
         public FieldEnvironmentState Environment { get; private set; } = new FieldEnvironmentState();
         public CombatPressureTestRuntime PressureTest { get; private set; }
@@ -204,6 +206,7 @@ namespace OCC.Combat
             {
                 GrantCoverShield(unit);
                 RogueSpells?.EndOwnTurn(unit.Id);
+                if (unit.IsHero) AcademyEnemyArea?.HeroTurnEnded(this);
                 RainLanternCourt?.EndTurn(unit);
                 AcademyFieldEnemy?.EndTurn(this, unit);
                 AcademyCoreBoss?.EndTurn(this, unit);
@@ -237,13 +240,24 @@ namespace OCC.Combat
             if (wind.Level <= 0) return;
 
             if (wind.Level >= 3)
+            {
                 foreach (GridPosition position in Map.PositionsWith(tile => tile.HasTrace).ToArray())
                 {
                     TileState cleared = Map.GetTile(position).Clone();
                     cleared.HasTrace = false;
+                    cleared.IsDeepTrace = false;
+                    cleared.EffectSourceId = null;
                     Map.SetTile(position, cleared);
                     AddLog("强风吹散了 (" + position.X + "," + position.Y + ") 的痕迹。");
                 }
+                foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokeExpiresAt > CurrentTime).ToArray())
+                {
+                    TileState cleared = Map.GetTile(position).Clone();
+                    cleared.SmokeExpiresAt = 0;
+                    Map.SetTile(position, cleared);
+                    AddLog("强风吹散了 (" + position.X + "," + position.Y + ") 的烟尘。");
+                }
+            }
 
             // 逆风向处理：先推动下风处的材料，同一份材料不会被连续推动多格。
             List<GridPosition> sources = Map.PositionsWith(IsLooseMaterial).ToList();
@@ -256,7 +270,7 @@ namespace OCC.Combat
                 if (!Map.IsInside(to) || Map.IsBlocked(to) || IsOccupied(to)) continue;
                 TileState source = Map.GetTile(from).Clone(), target = Map.GetTile(to).Clone();
                 if (IsLooseMaterial(target) || target.HasEffectLayer) continue;
-                if (source.IsLoosePaper) { target.IsLoosePaper = true; target.IsPaperSoaked = source.IsPaperSoaked; source.IsLoosePaper = false; source.IsPaperSoaked = false; }
+                if (source.IsLoosePaper) { target.IsLoosePaper = true; source.IsLoosePaper = false; }
                 if (source.IsCrystalShard) { target.IsCrystalShard = true; source.IsCrystalShard = false; }
                 if (source.SmokeExpiresAt > 0) { target.SmokeExpiresAt = source.SmokeExpiresAt; source.SmokeExpiresAt = 0; }
                 Map.SetTile(from, source);
@@ -286,7 +300,10 @@ namespace OCC.Combat
             };
             if (adjacent.Any(position => Map.IsInside(position) && Map.GetTile(position).Cover == CoverType.Heavy && !Map.GetTile(position).IsDestroyed))
                 coverShield = Math.Max(coverShield, 4);
+            int shieldBefore = unit.Shield;
             if (coverShield > 0) TryGrantRogueliteShield(unit.Id, coverShield == 4 ? "cover-heavy" : "cover-light", coverShield);
+            if (unit.IsHero && unit.Shield > shieldBefore && AcademyEnemyArea != null)
+                AcademyFieldEnemy?.NoteHeroCoverAnchor(this, unit);
             // 护罩发生器：为邻接单位额外提供结构护盾，来源独立、可与掩体护盾叠加；装置被摧毁即不再提供。
             bool wardAdjacent = adjacent.Any(position => Map.IsInside(position) &&
                 Map.GetTile(position).IsWardGenerator && !Map.GetTile(position).IsDestroyed);
@@ -339,6 +356,7 @@ namespace OCC.Combat
             AddLog(unit.DisplayName + "进入破势：当前护盾清除，至下一次自己回合结束前无法获得护盾。");
         }
         private int RogueTurn(string unitId) => rogueTurnSequences.TryGetValue(unitId, out int turn) ? turn : 0;
+        public int OwnTurnCount(string unitId) => RogueTurn(unitId);
         private void AddRogueShieldEvent(Roguelite.ShieldSourceRecord record)
         {
             rogueShieldEvents.Insert(0, record);
@@ -386,19 +404,31 @@ namespace OCC.Combat
         { AcademyCoreBoss = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachAcademyFieldEnemy(AcademyFieldEnemyRuntime runtime)
         { AcademyFieldEnemy = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachAcademyEnemyGrowth(AcademyEnemyGrowthRuntime runtime)
+        { AcademyEnemyGrowth = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public void AttachAcademyEnemyArea(AcademyEnemyAreaRuntime runtime)
+        { AcademyEnemyArea = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachPressureTest(CombatPressureTestRuntime runtime)
         { PressureTest = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         internal void RecordInventoryOpened() { InventoryOpenCount++; }
         public void SetLootSource(LootSourceState loot) => LootSource = loot;
         /// <summary>解析物件被摧毁后的结果。当前覆盖蓄能晶簇爆裂与过载装置引爆。</summary>
-        public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore)
+        public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore, string sourceUnitId = null)
         {
+            if (Map.IsInside(position) && durabilityBefore > 0)
+            {
+                TileState changed = Map.GetTile(position);
+                if (changed.Cover != CoverType.None && changed.IsDestroyed)
+                    AcademyFieldEnemy?.OnCoverDestroyed(this, position, sourceUnitId);
+            }
             if (ResolveOverloadDeviceDamage(position, durabilityBefore)) return true;
             if (!Map.IsInside(position)) return false;
             TileState crystal = Map.GetTile(position);
             if (!crystal.IsAetherCrystal || durabilityBefore <= 0 || crystal.Durability > 0) return false;
 
+            string crystalName = crystal.ObjectName();
             crystal.IsAetherCrystal = false;
+            crystal.IsPressureCrystal = false;
             crystal.IsDevice = false;
             GridPosition[] blast =
             {
@@ -423,7 +453,7 @@ namespace OCC.Combat
                 RecordRogueliteShieldAbsorption(unit.Id, "b2-crystal-burst", damage.ShieldAbsorbed);
                 unit.TakeDamage(damage.HealthDamage);
             }
-            AddLog("蓄能晶簇爆裂，正交四格受到 8 点以太伤害并留下五格碎晶。");
+            AddLog(crystalName + "爆裂，正交四格受到 8 点以太伤害并留下五格碎晶。");
             EvaluateOutcome();
             return true;
         }
@@ -437,6 +467,7 @@ namespace OCC.Combat
 
             TileState clearedDevice = device.Clone();
             clearedDevice.IsOverloadDevice = false;
+            clearedDevice.IsDevice = false;
             Map.SetTile(position, clearedDevice);
             GridPosition[] blast =
             {
@@ -518,14 +549,20 @@ namespace OCC.Combat
             foreach (KeyValuePair<string, int> pair in rogueShieldSourceTurns) clone.rogueShieldSourceTurns[pair.Key] = pair.Value;
             foreach (string unitId in rogueBreakStanceSeenThisTurn) clone.rogueBreakStanceSeenThisTurn.Add(unitId);
             clone.rogueShieldEvents.AddRange(rogueShieldEvents);
-            clone.PassiveEffects = PassiveEffects.Clone();
             if (RainLanternCourt != null) clone.RainLanternCourt = RainLanternCourt.Clone(clone.Map);
             if (GreenhouseCollectionRoom != null) clone.GreenhouseCollectionRoom = GreenhouseCollectionRoom.Clone();
             if (ThreeMaterialPressure != null) clone.ThreeMaterialPressure = ThreeMaterialPressure.Clone();
             if (AcademyCoreBoss != null) clone.AcademyCoreBoss = AcademyCoreBoss.Clone();
             if (AcademyFieldEnemy != null) clone.AcademyFieldEnemy = AcademyFieldEnemy.Clone();
+            if (AcademyEnemyGrowth != null) clone.AcademyEnemyGrowth = AcademyEnemyGrowth.Clone();
+            if (AcademyEnemyArea != null) clone.AcademyEnemyArea = AcademyEnemyArea.Clone();
             clone.Environment = Environment.Clone();
             if (PressureTest != null) clone.PressureTest = PressureTest.Clone();
+            if (RogueSpells != null) clone.RogueSpells = RogueSpells.Clone(clone);
+            if (RogueEquipment != null) clone.RogueEquipment = RogueEquipment.Clone(clone);
+            // Runtime constructors may register definitions; the source's passive state
+            // (including per-turn limits and armed effects) remains authoritative.
+            clone.PassiveEffects = PassiveEffects.Clone();
             clone.EventLog.AddRange(EventLog); return clone;
         }
     }

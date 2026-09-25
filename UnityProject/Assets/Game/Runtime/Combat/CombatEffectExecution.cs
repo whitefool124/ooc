@@ -313,7 +313,7 @@ namespace OCC.Combat
                     tile.Durability = Math.Max(0, tile.Durability - effect.Amount);
                     after = tile.Durability;
                     applied = before - after;
-                    state.ResolveAetherCrystalDamage(effect.Destination, before);
+                    state.ResolveAetherCrystalDamage(effect.Destination, before, source.Id);
                     positionBefore = effect.Destination;
                     positionAfter = effect.Destination;
                     break;

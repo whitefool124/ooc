@@ -142,6 +142,109 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void FirstElite_PressureCrystalUsesHeavyDurabilityAndSharedBurst()
+        {
+            FirstRegionLevelDefinition elite = FirstRegionLevelCatalog.ThreeMaterialPressure;
+            GridPosition position = elite.Terrain.Single(tile => tile.Kind == LevelTerrainKind.PressureCrystal).Position;
+            CombatState state = FirstRegionLevelBuilder.Build(elite).State;
+            TileState crystal = state.Map.GetTile(position);
+            Assert.That(crystal.IsAetherCrystal && crystal.IsPressureCrystal, Is.True);
+            Assert.That(crystal.Durability, Is.EqualTo(24));
+            Assert.That(crystal.ObjectName(), Is.EqualTo("精英稳压晶簇"));
+            Assert.That(crystal.BlocksMovement, Is.True);
+
+            crystal.Durability = 0;
+            Assert.That(state.ResolveAetherCrystalDamage(position, 24), Is.True);
+            Assert.That(crystal.IsAetherCrystal || crystal.IsPressureCrystal, Is.False);
+            Assert.That(state.Map.GetTile(position).IsCrystalShard, Is.True);
+            Assert.That(state.Map.GetTile(position + new GridPosition(1, 0)).IsCrystalShard, Is.True);
+
+            GridPosition ordinaryPosition = FirstRegionLevelCatalog.GreenhouseCollectionRoom.Terrain
+                .First(tile => tile.Kind == LevelTerrainKind.AetherCrystal).Position;
+            TileState ordinary = FirstRegionLevelBuilder.Build(FirstRegionLevelCatalog.GreenhouseCollectionRoom)
+                .State.Map.GetTile(ordinaryPosition);
+            Assert.That(ordinary.Durability, Is.EqualTo(16));
+            Assert.That(ordinary.IsPressureCrystal, Is.False);
+            Assert.That(ordinary.ObjectName(), Is.EqualTo("蓄能晶簇"));
+        }
+
+        [Test]
+        public void MapDevices_UseTheirConfiguredDurability()
+        {
+            FirstRegionLevelDefinition source = GeneratedBattleMapCatalog.For("calibration_lockdown");
+            Assert.That(source.Terrain.Where(tile => tile.Kind == LevelTerrainKind.OverloadDevice ||
+                tile.Kind == LevelTerrainKind.WardGenerator).All(tile => tile.Durability == 16), Is.True);
+            LevelTerrainPlacement[] customized = source.Terrain.Select(tile =>
+                tile.Kind == LevelTerrainKind.WardGenerator
+                    ? new LevelTerrainPlacement(tile.Position.X, tile.Position.Y, tile.Kind, 0, 0, 11)
+                    : tile.Kind == LevelTerrainKind.OverloadDevice
+                        ? new LevelTerrainPlacement(tile.Position.X, tile.Position.Y, tile.Kind, 0, 0, 7)
+                        : tile).ToArray();
+            var level = new FirstRegionLevelDefinition(source.Id, source.DisplayName, source.ObjectiveSummary,
+                source.ObjectiveType, source.Tier, source.HeroSpawn, source.FloorTheme, source.IsElite,
+                source.IsBoss, source.PrerequisiteLevelIds, source.EnemyPlacements, customized,
+                source.SpaceContract, source.Width, source.Height, source.BlockedPositions);
+            CombatState state = FirstRegionLevelBuilder.Build(level).State;
+
+            Assert.That(state.Map.GetTile(new GridPosition(1, 1)).Durability, Is.EqualTo(11));
+            Assert.That(state.Map.GetTile(new GridPosition(1, 4)).Durability, Is.EqualTo(7));
+        }
+
+        [Test]
+        public void MapTraceAndBindingMark_ExpireByTheirConfiguredHeroTurnDurations()
+        {
+            FirstRegionLevelDefinition source = GeneratedBattleMapCatalog.For("library_discipline");
+            LevelTerrainPlacement mark = source.Terrain.Single(tile => tile.Kind == LevelTerrainKind.BindingMark);
+            Assert.That(mark.Duration, Is.EqualTo(3));
+            CombatState baseState = FirstRegionLevelBuilder.Build(source).State;
+            GridPosition trace = baseState.Map.PositionsWith(tile => !tile.HasEffectLayer && !tile.BlocksMovement)
+                .First(cell => cell != source.HeroSpawn &&
+                    source.EnemyPlacements.All(enemy => enemy.Position != cell));
+            var level = new FirstRegionLevelDefinition(source.Id, source.DisplayName, source.ObjectiveSummary,
+                source.ObjectiveType, source.Tier, source.HeroSpawn, source.FloorTheme, source.IsElite,
+                source.IsBoss, source.PrerequisiteLevelIds, source.EnemyPlacements,
+                source.Terrain.Concat(new[] { new LevelTerrainPlacement(trace.X, trace.Y, LevelTerrainKind.Trace, 0, 2) }),
+                source.SpaceContract, source.Width, source.Height, source.BlockedPositions);
+            CombatState state = FirstRegionLevelBuilder.Build(level).State;
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            FirstRegionLevelBuilder.ApplyTimedTerrain(level, state);
+
+            Assert.That(state.Map.GetTile(mark.Position).IsBindingMark, Is.True);
+            Assert.That(state.Map.GetTile(trace).HasTrace, Is.True);
+            state.AcademyEnemyArea.HeroTurnEnded(state);
+            Assert.That(state.Map.GetTile(mark.Position).IsBindingMark, Is.True);
+            Assert.That(state.Map.GetTile(trace).HasTrace, Is.True);
+            CombatState clone = state.Clone();
+            clone.AcademyEnemyArea.HeroTurnEnded(clone);
+            Assert.That(clone.Map.GetTile(trace).HasTrace, Is.False);
+            Assert.That(clone.Map.GetTile(mark.Position).IsBindingMark, Is.True);
+            clone.AcademyEnemyArea.HeroTurnEnded(clone);
+            Assert.That(clone.Map.GetTile(mark.Position).IsBindingMark, Is.False);
+        }
+
+        [Test]
+        public void MapBindingMarkExpiry_DoesNotClearAnotherSourcesReplacement()
+        {
+            FirstRegionLevelDefinition level = GeneratedBattleMapCatalog.For("library_discipline");
+            GridPosition cell = level.Terrain.Single(tile => tile.Kind == LevelTerrainKind.BindingMark).Position;
+            CombatState state = FirstRegionLevelBuilder.Build(level).State;
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachAcademyEnemyArea(new AcademyEnemyAreaRuntime());
+            FirstRegionLevelBuilder.ApplyTimedTerrain(level, state);
+            TileState replaced = state.Map.GetTile(cell).Clone();
+            replaced.ClearEffectLayers();
+            replaced.IsBindingMark = true;
+            replaced.EffectSourceId = "skill:SK-SUP-08";
+            state.Map.SetTile(cell, replaced);
+
+            for (int turn = 0; turn < 3; turn++) state.AcademyEnemyArea.HeroTurnEnded(state);
+
+            Assert.That(state.Map.GetTile(cell).IsBindingMark, Is.True);
+            Assert.That(state.Map.GetTile(cell).EffectSourceId, Is.EqualTo("skill:SK-SUP-08"));
+        }
+
+        [Test]
         public void EveryLevel_HasNoSingleCellSoftLockOrUnavoidableSpawnCrossfire()
         {
             foreach (FirstRegionLevelDefinition level in FirstRegionLevelCatalog.All)

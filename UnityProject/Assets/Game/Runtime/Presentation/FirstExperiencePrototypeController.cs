@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Video;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
 {
@@ -59,6 +60,7 @@ namespace OCC.Combat.Presentation
         private bool openingStarted, videoPrepared;
         private bool selectingContinue, pendingOverwrite, settingsFromLanding, eliteArmed;
         private int selectedSlot = -1, pendingResolution;
+        private bool pendingNewRunCreation;
         private float pendingVolume;
         private bool pendingFullscreen;
         private Texture2D panel, card, accent, done;
@@ -310,15 +312,18 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < 3; i++)
             {
                 bool exists = PlayerPrefs.HasKey(SlotKey(i));
-                Rect r = new Rect(150 + i * 570, 300, 480, 300);
+                Rect r = new Rect(150 + i * 570, 300, 480, 350);
                 GUI.DrawTexture(r, exists ? done : card);
                 GUI.Label(new Rect(r.x + 28, r.y + 28, 420, 55), "存档位 " + (i + 1), headingStyle);
                 GUI.Label(new Rect(r.x + 28, r.y + 105, 420, 75), exists ? SlotSummary(i) : "空存档位", bodyStyle);
                 GUI.enabled = !selectingContinue || exists;
                 int slot = i;
                 Button(new Rect(r.x + 28, r.y + 205, 424, 68), selectingContinue ? "继续" : exists ? "选择并覆盖" : "选择并创建", () => SelectSlot(slot));
+                if (selectingContinue && IsSlotWriteProtected(slot))
+                    Button(new Rect(r.x + 28, r.y + 278, 424, 58), "验证并恢复旧档", () => RecoverProtectedSlot(slot));
                 GUI.enabled = true;
             }
+            if (!string.IsNullOrEmpty(handoffError)) GUI.Label(new Rect(150, 720, 1600, 88), handoffError, bodyStyle);
             Button(new Rect(150, 820, 360, 90), "返回以太主界面", () => data.stage = FlowStage.Landing);
         }
 
@@ -345,7 +350,7 @@ namespace OCC.Combat.Presentation
         private void DrawAcademyIntro()
         {
             Background("学院阶段　入学实操");
-            GUI.Label(new Rect(170, 280, 1250, 220), "完成三场普通战、三个事件、工坊加工和健康确认后，才能进入不可逆的精英挑战。\n\n本段可跳过；首次地图仅开放战斗1。", bodyStyle);
+            GUI.Label(new Rect(170, 280, 1250, 220), "完成三场普通战、三个事件与对应奖励后，可以直接挑战精英。工坊加工、健康确认、治疗与餐食是可选整备。\n\n本段可跳过；首次地图仅开放战斗1。", bodyStyle);
             Button(new Rect(1290, 820, 480, 100), "进入首次地图", () => EnterAcademyMap(false));
         }
 
@@ -407,7 +412,7 @@ namespace OCC.Combat.Presentation
                 case FlowStage.EliteReward: Panel("精英奖励", "领取后开放并首次进入商店。", "领取并打开商店", FlowStage.Shop); break;
                 case FlowStage.Shop: Shop(); break;
                 case FlowStage.Complete: Panel("固定引导完成", "完成标记已写入；下一步进入常规单轮创建。", "继续", FlowStage.RunCreation); break;
-                case FlowStage.RunCreation: CustomPanel("常规单轮创建", "固定短图不再生成。正式版本将在这里写入模式、种子、版本、40节点内容和初始资源。", "返回以太主界面", ReturnToLanding); break;
+                case FlowStage.RunCreation: CustomPanel("常规单轮创建", "确认后按本轮种子生成学院地图、节点连线和初始资源，并保存本轮状态。", "确认新一轮", ConfirmSubsequentRound); break;
             }
         }
 
@@ -445,7 +450,7 @@ namespace OCC.Combat.Presentation
         private void Event3Workshop()
         {
             Heading("事件3 与工坊");
-            Body("事件3开放战斗3；锻造与专精可在战斗3前后完成，但都是精英门槛。\n\n事件3：" + Mark(data.event3Done) + "\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized));
+            Body("事件3开放战斗3；锻造与专精可在战斗3前后自愿完成，不阻挡精英挑战。\n\n事件3：" + Mark(data.event3Done) + "\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized));
             GUI.enabled = !data.event3Done; Small(350, "完成事件3", () => { data.event3Done = true; Save(); });
             GUI.enabled = !data.forged; Small(450, "确认一次锻造", () => { data.forged = true; Save(); });
             GUI.enabled = !data.specialized; Small(550, "确认一次专精", () => { data.specialized = true; Save(); });
@@ -456,14 +461,14 @@ namespace OCC.Combat.Presentation
 
         private void Medical()
         {
-            Heading("医务室与精英门槛");
-            Body("锻造、专精、健康确认全部完成后才能查看精英。\n\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized) + "\n健康：" + Mark(data.healthChecked));
+            Heading("医务室与精英前整备");
+            Body("三项整备均可跳过；第三组奖励结算后即可查看精英。\n\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized) + "\n健康：" + Mark(data.healthChecked));
             GUI.enabled = !data.healthChecked; Small(405, "完成免费健康确认", () => { data.healthChecked = true; Save(); });
             GUI.enabled = !data.healed; Small(500, "可选：治疗", () => { data.healed = true; Save(); });
             GUI.enabled = !data.mealBought; Small(595, "可选：购买餐食", () => { data.mealBought = true; Save(); });
             GUI.enabled = true;
             if (!data.forged || !data.specialized) Small(700, "返回工坊补全加工", () => SetStage(FlowStage.Event3Workshop));
-            GUI.enabled = data.healthChecked && data.forged && data.specialized; Primary("查看精英挑战", () => SetStage(FlowStage.ElitePreview));
+            Primary("查看精英挑战", () => SetStage(FlowStage.ElitePreview));
             GUI.enabled = true;
         }
 
@@ -528,19 +533,50 @@ namespace OCC.Combat.Presentation
         private static string Mark(bool value) => value ? "已完成" : "未完成";
         private static string SlotKey(int slot) => SavePrefix + slot;
 
-        public bool SlotExists(int slot) => slot >= 0 && slot < 3 && PlayerPrefs.HasKey(SlotKey(slot));
+        public bool SlotExists(int slot) => slot >= 0 && slot < 3 &&
+            (PlayerPrefs.HasKey(SlotKey(slot)) || FirstExperienceSaveRouting.HasMapRun(slot));
+        public bool IsSlotWriteProtected(int slot) => slot >= 0 && slot < 3 &&
+            PlayerPrefs.HasKey(FirstExperienceSaveRouting.ResolveMapKey(
+                RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey), slot));
         public string SlotDisplaySummary(int slot) => SlotSummary(slot);
 
         public static bool HasAnySaveRecord()
         {
-            for (int i = 0; i < 3; i++) if (PlayerPrefs.HasKey(SlotKey(i))) return true;
+            for (int i = 0; i < 3; i++)
+                if (PlayerPrefs.HasKey(SlotKey(i)) || FirstExperienceSaveRouting.HasMapRun(i)) return true;
             return false;
         }
 
         private string SlotSummary(int slot)
         {
-            SaveData loaded = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(slot), ""));
-            return loaded == null ? "存档不可读" : "进度：" + loaded.stage + (loaded.fixedExperienceComplete ? "\n固定引导已完成" : "\n固定引导进行中");
+            try
+            {
+                if (IsSlotWriteProtected(slot)) return "写入保护中\n可验证恢复旧档";
+                string mapKey = FirstExperienceSaveRouting.ResolveMapKey(RogueliteSaveGateway.MapRunKey, slot);
+                if (PlayerPrefs.HasKey(mapKey))
+                {
+                    string raw = PlayerPrefs.GetString(mapKey, string.Empty);
+                    if (!raw.StartsWith(RogueRuntimeConstants.SaveVersion + "|", StringComparison.Ordinal))
+                        return "旧版学院记录\n继续时检查兼容性";
+                    RogueliteMapRun run = RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(raw));
+                    if (!RogueliteMapRunValidator.Validate(run).IsValid)
+                        return "学院记录需修复\n原记录仍保留";
+                    string area = run.IsTutorialPhase ? "固定教程" : "学院地图";
+                    string progress = run.IsComplete ? "本轮已结算" : run.HasActiveCombat ? "战斗进行中" :
+                        run.AwaitingReward ? "待领取奖励" : "可继续";
+                    return area + "\n" + progress;
+                }
+                SaveData loaded = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(slot), ""));
+                if (loaded == null) return "档案暂不可读\n原记录仍保留";
+                if (loaded.stage == FlowStage.Configuration) return "维克多档案\n待确认基础配置";
+                if (loaded.stage == FlowStage.AcademyIntro || loaded.stage == FlowStage.Map)
+                    return "学院出发准备中";
+                return loaded.fixedExperienceComplete ? "固定教程已完成" : "固定教程进行中";
+            }
+            catch (Exception)
+            {
+                return "档案暂不可读\n原记录仍保留";
+            }
         }
 
         private void PlayBranding() { StopOpening(); data.stage = FlowStage.Branding; brandIndex = -1; AdvanceBrand(); }
@@ -594,32 +630,55 @@ namespace OCC.Combat.Presentation
             if (settingsFromLanding) { settingsFromLanding = false; data.stage = FlowStage.Landing; } else ContinueAfterSettings();
         }
 
-        private void BeginSaveSelection(bool forContinue) { selectingContinue = forContinue; selectedSlot = -1; data.stage = FlowStage.SaveSelection; }
+        private void BeginSaveSelection(bool forContinue) { selectingContinue = forContinue; selectedSlot = -1; handoffError = string.Empty; data.stage = FlowStage.SaveSelection; }
         private void SelectSlot(int slot)
         {
             selectedSlot = slot;
             if (selectingContinue) { ContinueSlot(slot); return; }
-            pendingOverwrite = PlayerPrefs.HasKey(SlotKey(slot)); data.stage = FlowStage.SaveConfirmation;
+            pendingOverwrite = SlotExists(slot); data.stage = FlowStage.SaveConfirmation;
         }
         private void ConfirmCreateSlot()
         {
             data = new SaveData { slot = selectedSlot, stage = FlowStage.Configuration };
+            pendingNewRunCreation = true;
         }
         private void ContinueSlot(int slot)
         {
-            SaveData loaded = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(slot), ""));
-            if (loaded == null)
+            bool hasMapRun = FirstExperienceSaveRouting.HasMapRun(slot);
+            if (IsSlotWriteProtected(slot))
             {
-                // Keep the player in slot selection and explain why continue
-                // did not proceed; a silent return looked like a dead button.
                 selectedSlot = slot;
-                handoffError = "该存档无法读取，数据仍保留。请选择其他槽位，或返回后重新开始。";
+                handoffError = "该档案已启用写入保护。请先点击“验证并恢复旧档”；原记录与安全副本不会被覆盖。";
                 data.stage = FlowStage.SaveSelection;
                 return;
             }
+            SaveData loaded;
+            try { loaded = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(slot), "")); }
+            catch (Exception) { loaded = null; }
+            if (loaded == null)
+            {
+                if (hasMapRun) loaded = new SaveData { slot = slot, stage = FlowStage.Map };
+                else
+                {
+                    selectedSlot = slot;
+                    handoffError = "该存档无法读取，数据仍保留。请选择其他槽位，或返回后重新开始。";
+                    data.stage = FlowStage.SaveSelection;
+                    return;
+                }
+            }
             handoffError = string.Empty;
-            data = loaded; selectedSlot = slot; data.slot = slot;
-            if (IsRuntimeStage(data.stage)) EnterAcademyMap(FirstExperienceSaveRouting.HasMapRun(slot));
+            data = loaded; selectedSlot = slot; data.slot = slot; pendingNewRunCreation = false;
+            if (hasMapRun)
+            {
+                FirstExperienceSaveRouting.SelectSlot(slot);
+                RogueliteSaveGateway gateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
+                if (gateway.TryLoadMapRun(out RogueliteMapRun existing) && existing.IsComplete && existing.IsInAcademyLayer)
+                {
+                    data.stage = FlowStage.RunCreation;
+                    return;
+                }
+            }
+            if (hasMapRun || IsRuntimeStage(data.stage)) EnterAcademyMap(hasMapRun);
         }
         public void StartNewRun() => BeginSaveSelection(false);
         public void ContinueRun() => BeginSaveSelection(true);
@@ -630,6 +689,7 @@ namespace OCC.Combat.Presentation
             pendingOverwrite = false;
             settingsFromLanding = false;
             selectedSlot = -1;
+            pendingNewRunCreation = false;
             data.stage = FlowStage.Landing;
             enabled = true;
         }
@@ -639,12 +699,39 @@ namespace OCC.Combat.Presentation
         public void CycleResolution() => pendingResolution = (pendingResolution + 1) % Resolutions.Length;
         public void ChooseSlot(int slot) => SelectSlot(slot);
         public void ConfirmSelectedSlot() => ConfirmCreateSlot();
+        public void RecoverProtectedSlot(int slot)
+        {
+            if (!SlotExists(slot) || !IsSlotWriteProtected(slot)) return;
+            FirstExperienceSaveRouting.SelectSlot(slot);
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(new PlayerPrefsRogueliteSaveStore());
+            if (!gateway.TryRecoverProtectedMapRun(out _))
+            {
+                handoffError = "旧档验证失败，写入保护未解除；原记录与安全副本仍保留。请选择其他档案或确认覆盖。";
+                data.stage = FlowStage.SaveSelection;
+                return;
+            }
+            ContinueSlot(slot);
+        }
         public void ConfirmConfiguration()
         {
-            FirstExperienceSaveRouting.DeleteMapRun(selectedSlot);
             data.slot = selectedSlot;
             data.stage = FlowStage.AcademyIntro;
             Save();
+        }
+        public void ConfirmSubsequentRound()
+        {
+            if (data.stage != FlowStage.RunCreation || combatBootstrap == null) return;
+            FirstExperienceSaveRouting.SelectSlot(data.slot);
+            if (!combatBootstrap.EnterSubsequentAcademyRoundFromOpening())
+            {
+                handoffError = "新一轮未能安全写入；原结算档案仍保留。请重试或返回。";
+                return;
+            }
+            data.fixedExperienceComplete = true;
+            data.stage = FlowStage.Map;
+            Save();
+            handoffError = string.Empty;
+            enabled = false;
         }
         public void EnterAcademy() => EnterAcademyMap(false);
         public void GoBack()
@@ -657,6 +744,7 @@ namespace OCC.Combat.Presentation
                 case FlowStage.SaveSelection: data.stage = FlowStage.Landing; break;
                 case FlowStage.SaveConfirmation: data.stage = FlowStage.SaveSelection; break;
                 case FlowStage.Configuration: data.stage = FlowStage.SaveSelection; break;
+                case FlowStage.RunCreation: data.stage = FlowStage.Landing; break;
                 default: break;
             }
         }
@@ -668,14 +756,15 @@ namespace OCC.Combat.Presentation
                 Debug.LogError("首次体验无法进入学院地图：主场景 CombatPrototypeBootstrap 未绑定。");
                 return;
             }
-            data.stage = FlowStage.Map;
-            Save();
             FirstExperienceSaveRouting.SelectSlot(data.slot);
             if (!combatBootstrap.EnterFirstExperienceFromOpening(continueSave))
             {
                 handoffError = "真实首次体验运行态未能创建或读取。当前槽位数据仍保留，请返回入口或重试。";
                 return;
             }
+            data.stage = FlowStage.Map;
+            pendingNewRunCreation = false;
+            Save();
             handoffError = string.Empty;
             enabled = false;
         }
@@ -702,10 +791,13 @@ namespace OCC.Combat.Presentation
         }
         private void CompleteFixedExperience() { data.fixedExperienceComplete = true; SetStage(FlowStage.Complete); }
         private void SetStage(FlowStage stage) { data.stage = stage; data.battleActions = 0; Save(); }
-        private void ReturnToLanding() { StopOpening(); data.stage = FlowStage.Landing; }
+        private void ReturnToLanding() => ShowLanding();
         private void Save()
         {
             if (data.slot < 0 || data.slot > 2) return;
+            // Creating a replacement must not overwrite the old slot metadata before the
+            // matching map-run write has been verified.
+            if (pendingNewRunCreation) return;
             PlayerPrefs.SetString(SlotKey(data.slot), JsonUtility.ToJson(data)); PlayerPrefs.Save();
         }
 

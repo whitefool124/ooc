@@ -19,6 +19,7 @@ namespace OCC.Combat
         private readonly Dictionary<StatusType, int> statusAppliedOrders = new Dictionary<StatusType, int>();
         private readonly List<AttributeStatusInstance> attributeStatuses = new List<AttributeStatusInstance>();
         private int nextStatusOrder;
+        private int firstNegativeStatusReductionRemaining;
         private readonly Dictionary<string, int> cooldowns = new Dictionary<string, int>(StringComparer.Ordinal);
 
         public string Id { get; }
@@ -120,6 +121,8 @@ namespace OCC.Combat
             if (maxMana < 0) throw new ArgumentOutOfRangeException(nameof(maxMana));
             MaxMana = maxMana; Mana = currentMana < 0 ? maxMana : Math.Min(maxMana, Math.Max(0, currentMana));
         }
+        internal void ConfigureFirstNegativeStatusReduction(int count) =>
+            firstNegativeStatusReductionRemaining = Math.Max(0, count);
 
         internal void BeginTurn(int actionPoints, int agilityAtTurnStart = 0)
         { ActionPoints = actionPoints; MovementRangeThisTurn = Math.Max(0, NaturalMovementRange + agilityAtTurnStart); }
@@ -158,6 +161,11 @@ namespace OCC.Combat
         public void ApplyStatus(StatusType type, int duration, int strength, string sourceId)
         {
             if (duration <= 0) return;
+            if (firstNegativeStatusReductionRemaining > 0 && duration != int.MaxValue && IsNegativeStatus(type, strength))
+            {
+                duration = Math.Max(1, duration - firstNegativeStatusReductionRemaining);
+                firstNegativeStatusReductionRemaining = 0;
+            }
             // 束缚在目标回合开始扣减；保留本次应受限回合，避免“1 回合”在行动前直接失效。
             if (type == StatusType.Bound && duration < int.MaxValue) duration++;
             if (IsAttributeStatus(type))
@@ -177,6 +185,13 @@ namespace OCC.Combat
             if (!string.IsNullOrWhiteSpace(sourceId) && (stronger || !statusSources.ContainsKey(type)))
                 statusSources[type] = sourceId;
         }
+        private static bool IsNegativeStatus(StatusType type, int strength) =>
+            type == StatusType.Burning || type == StatusType.Slow || type == StatusType.Bound ||
+            type == StatusType.ArmorBreak || type == StatusType.Dazzled || type == StatusType.BreakStance ||
+            type == StatusType.FiregroundVulnerable ||
+            (type == StatusType.Agility || type == StatusType.Strength || type == StatusType.SpellPower ||
+             type == StatusType.Speed || type == StatusType.Range || type == StatusType.ShieldEfficiency ||
+             type == StatusType.ShieldGrant || type == StatusType.Control) && strength < 0;
         internal void RecordStatusTrigger(StatusType type)
         {
             if (IsAttributeStatus(type))
@@ -191,6 +206,11 @@ namespace OCC.Combat
             if (IsAttributeStatus(type)) { attributeStatuses.RemoveAll(instance => instance.Type == type); return; }
             statuses.Remove(type); statusStrengths.Remove(type); statusSources.Remove(type);
             statusTriggerCounts.Remove(type); statusAppliedOrders.Remove(type);
+        }
+        internal void ClearAttributeStatusFromSource(StatusType type, string sourceId)
+        {
+            if (!IsAttributeStatus(type) || string.IsNullOrEmpty(sourceId)) return;
+            attributeStatuses.RemoveAll(instance => instance.Type == type && instance.SourceId == sourceId);
         }
         internal void SetStatusDuration(StatusType type, int duration)
         {
@@ -231,6 +251,7 @@ namespace OCC.Combat
             UnitState clone = new UnitState(Id, IsHero, Position) { DisplayName = DisplayName, EnemyArchetypeId = EnemyArchetypeId, Armor = Armor, Shield = Shield, MaxShield = MaxShield, Block = Block, Speed = Speed, MainHand = MainHand, SkillOne = SkillOne, SkillTwo = SkillTwo };
             clone.Health = Health; clone.Mana = Mana; clone.ActionPoints = ActionPoints; clone.ActionValue = ActionValue; clone.MovementRangeThisTurn = MovementRangeThisTurn;
             clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored; clone.DamageAbsorptions = DamageAbsorptions;
+            clone.firstNegativeStatusReductionRemaining = firstNegativeStatusReductionRemaining;
             foreach (KeyValuePair<StatusType, int> entry in statuses) clone.statuses[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, int> entry in statusStrengths) clone.statusStrengths[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, string> entry in statusSources) clone.statusSources[entry.Key] = entry.Value;

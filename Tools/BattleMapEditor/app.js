@@ -19,6 +19,7 @@ const tokens = [
   { id: "AetherObjective", label: "任务目标", group: "物件", layer: "objects", glyph: "目", color: "#d49844" },
   { id: "LampVine", label: "灯藤", group: "物件", layer: "objects", glyph: "藤", color: "#4a9a73" },
   { id: "AetherCrystal", label: "蓄能晶簇", group: "物件", layer: "objects", glyph: "晶", color: "#7a8fd4" },
+  { id: "PressureCrystal", label: "精英稳压晶簇", group: "物件", layer: "objects", glyph: "稳", color: "#659ebf" },
   { id: "LootChest", label: "宝箱", group: "物件", layer: "objects", glyph: "箱", color: "#c98b4e" },
   { id: "TowerMechanism", label: "塔内机关", group: "物件", layer: "objects", glyph: "机", color: "#b27ad1" },
   { id: "OverloadDevice", label: "过载装置", group: "物件", layer: "objects", glyph: "载", color: "#d06254" },
@@ -26,10 +27,13 @@ const tokens = [
   { id: "Water", label: "浅水", group: "效果层", layer: "effects", glyph: "水", color: "#337fa1" },
   { id: "LoosePaper", label: "散页", group: "效果层", layer: "effects", glyph: "页", color: "#c6ad72" },
   { id: "Trace", label: "痕迹", group: "效果层", layer: "effects", glyph: "迹", color: "#aa7b57" },
-  { id: "BindingMark", label: "约束纹", group: "效果层", layer: "effects", glyph: "缚", color: "#ad6bc4" }
+  { id: "BindingMark", label: "约束纹", group: "效果层", layer: "effects", glyph: "缚", color: "#ad6bc4" },
+  { id: "Fireground", label: "燃烧地格", group: "效果层", layer: "effects", glyph: "火", color: "#d46b42" },
+  { id: "Smoke", label: "烟尘", group: "效果层", layer: "effects", glyph: "烟", color: "#9098a2" }
 ];
 
 const tokenById = Object.fromEntries(tokens.map(token => [token.id, token]));
+const defaultDeviceDurability = 16;
 const enemyName = Object.fromEntries(enemyCatalog.map(enemy => [enemy.id, enemy.name]));
 const objectKinds = new Set(tokens.filter(token => token.layer === "objects").map(token => token.id));
 const effectKinds = new Set(tokens.filter(token => token.layer === "effects").map(token => token.id));
@@ -37,10 +41,10 @@ const storageKey = "occ-battle-map-library-v1";
 const lastMapKey = "occ-battle-map-last-v3";
 const elementIdByKind = {
   LightCover:"block_light_cover", HeavyCover:"block_heavy_cover", PermanentWall:"block_permanent_heavy",
-    Water:"field_water_shallow", LampVine:"block_lamp_vine", AetherCrystal:"block_aether_crystal", LootChest:"block_loot_chest",
+    Water:"field_water_shallow", LampVine:"block_lamp_vine", AetherCrystal:"block_aether_crystal", PressureCrystal:"block_aether_crystal_heavy", LootChest:"block_loot_chest",
   TowerMechanism:"block_tower_mechanism", OverloadDevice:"block_overload_device",
   WardGenerator:"block_ward_generator", LoosePaper:"field_loose_paper",
-  Trace:"field_trace", BindingMark:"field_binding_mark"
+  Trace:"field_trace", BindingMark:"field_binding_mark", Fireground:"field_burning", Smoke:"field_smoke"
 };
 
 const initialMap = {
@@ -383,7 +387,9 @@ function applyTool(x, y) {
     const existing = mapData.terrain.find(item => item.x === x && item.y === y && sameLayer.has(item.kind));
     if (!existing || existing.kind !== activeTool) {
       mapData.terrain = mapData.terrain.filter(item => item.x !== x || item.y !== y || !sameLayer.has(item.kind));
-      mapData.terrain.push({ x, y, kind: activeTool, mechanismKind: activeTool === "TowerMechanism" ? 1 : 0 });
+      mapData.terrain.push({ x, y, kind: activeTool, mechanismKind: activeTool === "TowerMechanism" ? 1 : 0,
+        ...(["Fireground", "Smoke", "Trace", "BindingMark"].includes(activeTool) ? { duration: 0 } : {}),
+        ...(["OverloadDevice", "WardGenerator"].includes(activeTool) ? { durability: defaultDeviceDurability } : {}) });
       changed = true;
     }
   }
@@ -457,6 +463,8 @@ function renderCellInspector() {
     ${details ? `<section class="inspector-section"><h3>配置状态、能力与数值</h3><div class="definition-stack">${details}</div></section>` : ""}
     ${enemy ? `<section class="inspector-section"><label class="field"><span>敌人类型</span><select id="inspector-enemy">${enemyCatalog.map(item => `<option value="${item.id}" ${item.id === enemy.archetypeId ? "selected" : ""}>${escapeHtml(item.name)} · ${item.id}</option>`).join("")}</select></label></section>` : ""}
     ${terrain.some(item => item.kind === "TowerMechanism") ? `<section class="inspector-section"><label class="field"><span>机关类型</span><select id="mechanism-kind"><option value="1">1 · 护障维护</option><option value="2">2 · 显影巡查</option><option value="3">3 · 冲压隔离</option></select></label></section>` : ""}
+    ${terrain.filter(item => ["Fireground", "Smoke", "Trace", "BindingMark"].includes(item.kind)).map(item => `<section class="inspector-section"><label class="field"><span>${escapeHtml(tokenById[item.kind]?.label || item.kind)}持续时间（正整数）</span><input id="effect-duration" type="number" min="1" step="1" value="${Number(item.duration) || 0}"></label></section>`).join("")}
+    ${terrain.filter(item => ["OverloadDevice", "WardGenerator"].includes(item.kind)).map(item => `<section class="inspector-section"><label class="field"><span>${escapeHtml(tokenById[item.kind]?.label || item.kind)}耐久（正整数）</span><input id="device-durability" type="number" min="1" step="1" value="${Number(item.durability) || 0}"></label></section>`).join("")}
     <section class="inspector-section"><button id="clear-cell" class="danger-button">清空这个格子</button></section>`;
   container.querySelectorAll("[data-remove]").forEach(button => button.addEventListener("click", () => removeSelectedItem(button.dataset.remove)));
   $("#clear-cell")?.addEventListener("click", () => { pushHistory(); clearCell(x, y); });
@@ -468,6 +476,14 @@ function renderCellInspector() {
     $("#mechanism-kind").value = String(mechanism.mechanismKind || 1);
     $("#mechanism-kind").addEventListener("change", event => { pushHistory(); mechanism.mechanismKind = +event.target.value; markDirty(); renderAll(); });
   }
+  const timedEffect = terrain.find(item => ["Fireground", "Smoke"].includes(item.kind));
+  $("#effect-duration")?.addEventListener("change", event => {
+    pushHistory(); timedEffect.duration = Number(event.target.value) || 0; markDirty(); renderAll();
+  });
+  const configuredDevice = terrain.find(item => ["OverloadDevice", "WardGenerator"].includes(item.kind));
+  $("#device-durability")?.addEventListener("change", event => {
+    pushHistory(); configuredDevice.durability = Number(event.target.value) || 0; markDirty(); renderAll();
+  });
 }
 
 function changeDetail(change) {
@@ -484,12 +500,11 @@ function detailRows(rows) {
 
 function terrainDetail(item) {
   const token = tokenById[item.kind];
-  const elementId = item.kind === "AetherCrystal" && mapData.id === "first_elite_three_material_pressure"
-    ? "block_aether_crystal_heavy" : elementIdByKind[item.kind];
+  const elementId = elementIdByKind[item.kind];
   const definition = configCatalog.elements.find(entry => entry.id === elementId);
   if (!definition) return `<article class="definition-card"><header><strong>${escapeHtml(token?.label || item.kind)}</strong><small>${escapeHtml(item.kind)}</small></header><p>当前地形尚未映射到地图元素配置表。</p></article>`;
   return `<article class="definition-card"><header><strong>${escapeHtml(definition.name)}</strong><small>${escapeHtml(definition.id)} · ${escapeHtml(definition.type)}</small></header>
-    <div class="definition-grid">${detailRows([["标签",definition.tags],["移动消耗",definition.moveCost],["阻挡移动",definition.blocksMovement],["阻挡攻击线",definition.blocksLineOfSight],["耐久",definition.durability],["持续",definition.duration],["触发",definition.trigger],["变化后",definition.after]])}</div>
+    <div class="definition-grid">${detailRows([["标签",definition.tags],["移动消耗",definition.moveCost],["阻挡移动",definition.blocksMovement],["阻挡攻击线",definition.blocksLineOfSight],["耐久",item.durability || definition.durability],["地图预置持续值",item.duration],["持续规则",definition.duration],["触发",definition.trigger],["变化后",definition.after]])}</div>
     <p><b>效果：</b>${escapeHtml(definition.effect || "无")}</p><p><b>边与覆盖：</b>${escapeHtml(definition.rule || "无")}</p></article>`;
 }
 
@@ -599,10 +614,14 @@ function validateMap() {
     positions.add(key);
     if (posEqual(enemy, mapData.heroSpawn)) issues.push({ level: "error", text: `主角和敌人在坐标 (${key}) 重叠。` });
   });
-  const blockingKinds = new Set(["HeavyCover", "PermanentWall", "AetherCrystal", "TowerMechanism", "OverloadDevice", "WardGenerator"]);
+  const blockingKinds = new Set(["HeavyCover", "PermanentWall", "AetherCrystal", "PressureCrystal", "TowerMechanism", "OverloadDevice", "WardGenerator"]);
   mapData.terrain.forEach(item => {
     if (!inBounds(item)) issues.push({ level: "error", text: `${item.kind} 位于地图边界外 (${item.x},${item.y})。` });
     if (blockingKinds.has(item.kind) && (posEqual(item, mapData.heroSpawn) || mapData.enemies.some(enemy => posEqual(enemy, item)))) issues.push({ level: "error", text: `阻挡物 ${item.kind} 与单位重叠于 (${item.x},${item.y})。` });
+    if (["Fireground", "Smoke", "Trace", "BindingMark"].includes(item.kind) && (!Number.isInteger(item.duration) || item.duration <= 0))
+      issues.push({ level: "error", text: `${item.kind} 在 (${item.x},${item.y}) 缺少正整数持续时间。` });
+    if (["OverloadDevice", "WardGenerator"].includes(item.kind) && (!Number.isInteger(item.durability) || item.durability <= 0))
+      issues.push({ level: "error", text: `${item.kind} 在 (${item.x},${item.y}) 缺少正整数耐久。` });
   });
   const changeIds = new Set();
   mapData.changeAnnotations.forEach(change => {
@@ -783,6 +802,9 @@ function toCSharp() {
     if (item.kind === "Water") return `W(${args})`;
     if (item.kind === "LampVine") return `V(${args})`;
     if (item.kind === "AetherCrystal") return `C(${args})`;
+    if (item.kind === "PressureCrystal") return `T(${args}, LevelTerrainKind.PressureCrystal)`;
+    if (["Fireground", "Smoke", "Trace", "BindingMark"].includes(item.kind)) return `new LevelTerrainPlacement(${args}, LevelTerrainKind.${item.kind}, 0, ${item.duration || 0})`;
+    if (["OverloadDevice", "WardGenerator"].includes(item.kind)) return `new LevelTerrainPlacement(${args}, LevelTerrainKind.${item.kind}, 0, 0, ${item.durability || 0})`;
     if (item.kind === "TowerMechanism") return `M(${item.mechanismKind || 1}, ${args})`;
     return `T(${args}, LevelTerrainKind.${item.kind})`;
   }).join(",\n                    ");
