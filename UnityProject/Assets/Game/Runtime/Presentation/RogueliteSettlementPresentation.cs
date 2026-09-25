@@ -476,7 +476,7 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.RestoreMovement: effect = "恢复 " + rule.Amount + " 步"; break;
                 case FireRuleKind.AddMovement: effect = "本轮额外移动 " + rule.Amount + " 格"; break;
                 case FireRuleKind.MoveSource: effect = "移至目标格"; break;
-                case FireRuleKind.MoveAfterAttack: effect = "攻击后可移动 " + rule.Amount + " 格"; break;
+                case FireRuleKind.MoveAfterAttack: effect = "攻击后向远离目标的方向后退 " + rule.Amount + " 格"; break;
                 case FireRuleKind.SwapUnits: effect = "与目标交换位置"; break;
                 case FireRuleKind.Push: effect = "将目标推开 " + rule.Amount + " 格"; break;
                 case FireRuleKind.PushAllUnits: effect = "将范围内单位推开 " + rule.Amount + " 格"; break;
@@ -485,8 +485,9 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.CreateLightCover: effect = "在目标格生成耐久 " + rule.Amount + " 的轻掩体"; break;
                 case FireRuleKind.AdvanceIntoBreach: effect = "打开缺口后继续前进 " + rule.Amount + " 格"; break;
                 case FireRuleKind.ClearBoundOrSlow: effect = "清除自身的束缚或迟缓"; break;
-                case FireRuleKind.OfferRetreat: effect = "下次突进后可撤退 " + rule.Amount + " 格"; break;
-                case FireRuleKind.OfferBreachMove: effect = "下次摧毁物块后可沿新缺口移动 " + rule.Amount + " 格"; break;
+                case FireRuleKind.OfferRetreat: effect = "下次突进后沿原路退回 " + rule.Amount + " 格"; break;
+                case FireRuleKind.OfferBreachMove: effect = "下次亲手摧毁物块后移入空出的格子"; break;
+                case FireRuleKind.ArmAllyNextAttack: effect = "攻击燃烧敌人后，友方下一次攻击额外造成 " + rule.Amount + " 点火焰伤害"; break;
                 case FireRuleKind.ApplyMeltBarrierMark: effect = "施加持续 " + rule.Duration + " 回合的熔障标记"; break;
                 case FireRuleKind.ApplyFracture: effect = "施加裂痕"; break;
                 case FireRuleKind.ArmFractureShield: effect = "下次己方摧毁裂痕物块时额外获得 4 护盾"; break;

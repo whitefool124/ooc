@@ -214,19 +214,20 @@ namespace OCC.Combat
         }
 
         public static CombatEffectExecution ResolveWeaponAttack(CombatState state, string attackerId, string targetId,
-            int flatIncomingDamageReduction = 0)
+            int flatIncomingDamageReduction = 0, int baseDamageBonus = 0)
         {
             UnitState attacker = GetActiveUnit(state, attackerId);
-            return ResolveWeaponAttack(state, attacker, targetId, flatIncomingDamageReduction);
+            return ResolveWeaponAttack(state, attacker, targetId, flatIncomingDamageReduction, baseDamageBonus);
         }
 
         private static CombatEffectExecution ResolveWeaponAttack(CombatState state, UnitState attacker, string targetId,
-            int flatIncomingDamageReduction)
+            int flatIncomingDamageReduction, int baseDamageBonus = 0)
         {
             WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
             int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
                 ? weapon.Damage + (attacker.IsHero ? state.RogueEquipment?.ForgeWeaponDamageBonus ?? 0 : 0)
                 : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
+            reducedBaseDamage += Math.Max(0, baseDamageBonus);
             bool calibratedHeavy = state.GreenhouseCollectionRoom?.BeginCalibratedHeavyAttack(state, attacker) == true;
             CombatEffectExecution execution;
             try

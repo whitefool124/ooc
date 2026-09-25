@@ -85,7 +85,7 @@ namespace OCC.Combat.Tests
                 GridPosition origin = hero.Position;
                 if (spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack || spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack)
                 {
-                    if (spell.Id == "F-P-U20") enemy.ApplyStatus(StatusType.Burning, 2, 8);
+                    if (spell.Id == "F-P-U19" || spell.Id == "F-P-U20") enemy.ApplyStatus(StatusType.Burning, 2, 8);
                     if (spell.Id == "F-P-U04")
                     {
                         GridPosition cell = new GridPosition(4, 3); battle.Combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 24 });
@@ -152,8 +152,9 @@ namespace OCC.Combat.Tests
         public void FiregroundSpells_UseSharedBaseDamageAndResolveBothSidesStatusesDynamically()
         {
             // 总案 3.5.6.1／3.5.1.2：所有火场共用8点基础伤害，双方状态在触发时动态结算。
-            foreach (string id in new[] { "F-P-M03", "F-P-R11", "F-P-R12", "F-P-R13", "F-P-R14", "F-P-R15", "F-P-R20", "F-P-U17", "F-P-U19" })
+            foreach (string id in new[] { "F-P-M03", "F-P-R11", "F-P-R12", "F-P-R13", "F-P-R14", "F-P-R15", "F-P-R20", "F-P-U17" })
                 Assert.That(FireSpellCatalog.Get(id).Rules.Where(rule => rule.Kind == FireRuleKind.CreateFireground).All(rule => rule.Amount == 8), Is.True, id);
+            Assert.That(FireSpellCatalog.Get("F-P-U19").Rules.Any(rule => rule.Kind == FireRuleKind.CreateFireground), Is.False);
 
             GridMap map = new GridMap(6, 4);
             UnitState enemySource = new UnitState("enemy-source", false, new GridPosition(0, 0));
@@ -392,6 +393,27 @@ namespace OCC.Combat.Tests
             FireSpellExecution second = (FireSpellExecution)sturdy.Execute().NativeResult;
             Assert.That(second.Steps.Any(step => step.Kind == FireRuleKind.AdvanceIntoBreach && step.Applied == 0), Is.True);
             Assert.That(sturdy.Combat.GetUnit("hero").Position.ManhattanDistance(sturdy.RecommendedCell), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void BreachEntry_DamagesTheFirstAllyNamedByTheCard()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState ally = new UnitState("ally", true, new GridPosition(2, 0));
+            hero.ConfigureMana(99);
+            hero.Equip(CombatCatalog.Rifle, null, null);
+            CombatState combat = new CombatState(new GridMap(5, 2),
+                new[] { hero, ally }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            int before = ally.Health + ally.Shield;
+
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U23"),
+                FireSpellTarget.At(ally.Position, CardinalDirection.East));
+
+            Assert.That(hero.Position, Is.EqualTo(new GridPosition(1, 0)));
+            Assert.That(ally.Health + ally.Shield, Is.EqualTo(before - 12));
         }
 
         [Test]
@@ -662,36 +684,126 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FirelineCoordination_IsSingleHeroUsableAndOnlyTriggersOnItsMarkedBurningEnemy()
+        public void FirelineCoordination_ArmsOnlyAfterBurningHit_ThenBuffsOneAllyAttack()
         {
-            CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState ally = new UnitState("ally", true, new GridPosition(0, 1));
+            UnitState burning = new UnitState("burning", false, new GridPosition(2, 0));
+            UnitState other = new UnitState("other", false, new GridPosition(2, 1));
+            hero.ConfigureMana(99);
+            hero.Equip(CombatCatalog.Rifle, null, null);
+            ally.Equip(CombatCatalog.Rifle, null, null);
+            burning.ApplyStatus(StatusType.Burning, 3, 8);
+            CombatState combat = new CombatState(new GridMap(5, 3),
+                new[] { hero, ally, burning, other }, Array.Empty<CombatObjective>());
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
-            CombatResolver.BeginTurn(combat, "hero");
-            UnitState hero = combat.GetUnit("hero");
-            UnitState marked = combat.GetUnit("range_normal");
-            UnitState other = combat.GetUnit("range_shield");
-            marked.ApplyStatus(StatusType.Burning, 3, 8);
+            CombatResolver.BeginTurn(combat, hero.Id);
             FireBattleState battle = new FireBattleState(combat);
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U19");
-            GridPosition markedOrigin = marked.Position;
 
             FireSpellPreview preview = FireSpellEngine.Preview(battle, hero.Id, spell,
-                FireSpellTarget.Unit(marked.Id, CardinalDirection.East));
+                FireSpellTarget.Unit(hero.Id));
             Assert.That(preview.CanCommit, Is.True);
-            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(marked.Id, CardinalDirection.East));
+            FireSpellEngine.Execute(battle, hero.Id, spell, FireSpellTarget.Unit(hero.Id));
 
             Assert.That(FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, other.Id), Is.Empty,
-                "An attack against another enemy must not spend the marked follow-up.");
-            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.True);
+                "未燃烧目标不能触发协同。");
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id && effect.Stage == 0), Is.True);
 
-            IReadOnlyList<FireSpellExecution> triggers = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, marked.Id);
+            IReadOnlyList<FireSpellExecution> armed = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, burning.Id);
+            Assert.That(armed.Count, Is.EqualTo(1));
+            Assert.That(armed[0].Steps.Any(step => step.Kind == FireRuleKind.ArmAllyNextAttack), Is.True);
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id && effect.Stage == 2), Is.True);
+            Assert.That(battle.Firegrounds, Is.Empty);
+            Assert.That(FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, burning.Id), Is.Empty,
+                "施术者自己不能消费友方攻击加成。");
 
+            int before = other.Health + other.Shield;
+            IReadOnlyList<FireSpellExecution> triggers = FireSpellEngine.TriggerWeaponAttack(battle, ally.Id, other.Id);
             Assert.That(triggers.Count, Is.EqualTo(1));
-            Assert.That(triggers[0].Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0), Is.True);
-            Assert.That(triggers[0].Steps.Any(step => step.Kind == FireRuleKind.Push && step.Applied == 1), Is.True);
-            Assert.That(marked.Position, Is.EqualTo(new GridPosition(markedOrigin.X + 1, markedOrigin.Y)));
-            Assert.That(battle.HasFireground(markedOrigin), Is.True);
+            Assert.That(triggers[0].Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied == 8), Is.True);
+            Assert.That(other.Health + other.Shield, Is.EqualTo(before - 8));
             Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == spell.Id), Is.False);
+        }
+
+        [Test]
+        public void FirelineCoordination_AlsoBuffsTheNextAllySpellAttack()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState ally = new UnitState("ally", true, new GridPosition(0, 1));
+            UnitState burning = new UnitState("burning", false, new GridPosition(2, 0));
+            UnitState other = new UnitState("other", false, new GridPosition(2, 1));
+            hero.ConfigureMana(99);
+            ally.ConfigureMana(99);
+            other.ConfigureVitality(99);
+            hero.Equip(CombatCatalog.Rifle, null, null);
+            burning.ApplyStatus(StatusType.Burning, 3, 8);
+            CombatState combat = new CombatState(new GridMap(5, 3),
+                new[] { hero, ally, burning, other }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U19"), FireSpellTarget.Unit(hero.Id));
+            FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, burning.Id);
+            CombatResolver.BeginTurn(combat, ally.Id);
+            int before = other.Health + other.Shield;
+
+            FireSpellExecution result = FireSpellEngine.Execute(battle, ally.Id, FireSpellCatalog.Get("F-P-R01"),
+                FireSpellTarget.Unit(other.Id));
+
+            Assert.That(result.Steps.Any(step => step.SpellId == "F-P-U19" && step.Detail == "ally_followup_spell" && step.Applied == 8), Is.True,
+                string.Join(";", result.Steps.Select(step => step.SpellId + ":" + step.Kind + ":" + step.TargetId + ":" + step.Applied + ":" + step.Detail)));
+            Assert.That(other.Health + other.Shield, Is.EqualTo(before - 20));
+            Assert.That(battle.PendingEffects.Any(effect => effect.Spell.Id == "F-P-U19"), Is.False);
+        }
+
+        [Test]
+        public void PressureCharge_AddsTwelveToOneWeaponHit()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            hero.ConfigureMana(99);
+            hero.Equip(CombatCatalog.Rifle, null, null);
+            enemy.ConfigureVitality(99);
+            CombatState combat = new CombatState(new GridMap(4, 2),
+                new[] { hero, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U16"), FireSpellTarget.Unit(hero.Id));
+            int before = enemy.Health + enemy.Shield;
+
+            FireWeaponAttackResolution attack = FireSpellEngine.ResolveWeaponAttack(battle, hero.Id, enemy.Id);
+
+            Assert.That(enemy.Health + enemy.Shield, Is.EqualTo(before - 16),
+                "步枪基础4和术式加成12应在同一次武器攻击中结算。");
+            Assert.That(attack.TriggerExecutions.Any(execution => execution.Steps.Any(step =>
+                step.Detail == "included_in_base_weapon_damage")), Is.True);
+        }
+
+        [Test]
+        public void BurstingCore_AddsFourToTheHitAndFourToAdjacentAlly()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState ally = new UnitState("ally", true, new GridPosition(2, 1));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            hero.ConfigureMana(99);
+            hero.Equip(CombatCatalog.Rifle, null, null);
+            CombatState combat = new CombatState(new GridMap(5, 3),
+                new[] { hero, ally, enemy }, Array.Empty<CombatObjective>());
+            combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(combat, hero.Id);
+            FireBattleState battle = new FireBattleState(combat);
+            FireSpellEngine.Execute(battle, hero.Id, FireSpellCatalog.Get("F-P-U05"), FireSpellTarget.Unit(hero.Id));
+            int enemyBefore = enemy.Health + enemy.Shield;
+            int allyBefore = ally.Health + ally.Shield;
+
+            IReadOnlyList<FireSpellExecution> triggers = FireSpellEngine.TriggerWeaponAttack(battle, hero.Id, enemy.Id);
+
+            Assert.That(triggers.Single().Steps.Count(step => step.Kind == FireRuleKind.Damage && step.Applied == 4),
+                Is.GreaterThanOrEqualTo(2));
+            Assert.That(enemy.Health + enemy.Shield, Is.EqualTo(enemyBefore - 4));
+            Assert.That(ally.Health + ally.Shield, Is.EqualTo(allyBefore - 4));
         }
 
         private static void AssertTriggerOrigin(IReadOnlyList<FireSpellExecution> executions,
@@ -1554,7 +1666,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void RangedFinishers_RestrictDetonationToEnemiesAndLeaveFireUnderLivingTargets()
+        public void RangedFinishers_RestrictDetonationToEnemiesAndCreateFireOnlyOnEmptyCells()
         {
             GridMap detonationMap = new GridMap(6, 5);
             UnitState hero = new UnitState("hero", true, new GridPosition(1, 2));
@@ -1580,8 +1692,9 @@ namespace OCC.Combat.Tests
             FireSpellEngine.Execute(boundaryBattle, hero.Id, FireSpellCatalog.Get("F-P-R20"), FireSpellTarget.Unit(enemy.Id));
 
             Assert.That(enemy.IsAlive, Is.True);
-            Assert.That(boundaryBattle.HasFireground(enemy.Position), Is.True, "存活的中心目标脚下仍应留下公开火场。 ");
-            Assert.That(boundaryBattle.HasFireground(ally.Position), Is.True, "占用格不会阻止场地效果生成。 ");
+            Assert.That(boundaryBattle.HasFireground(enemy.Position), Is.False, "卡面要求只在空格生成火场。");
+            Assert.That(boundaryBattle.HasFireground(ally.Position), Is.False, "友方占用格也不是空格。");
+            Assert.That(boundaryBattle.HasFireground(new GridPosition(3, 2)), Is.True);
             Assert.That(boundaryBattle.HasFireground(new GridPosition(4, 3)), Is.False, "重物块不是可燃地面。 ");
         }
 

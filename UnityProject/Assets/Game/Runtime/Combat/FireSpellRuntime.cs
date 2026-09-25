@@ -619,10 +619,17 @@ namespace OCC.Combat
             WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
             int reducedDamage = ReduceIncomingDamage(battle, targetUnitId, attackerUnitId, weapon.Damage);
             int reduction = Math.Max(0, weapon.Damage - reducedDamage);
+            int baseDamageBonus = battle.PendingEffects.Where(effect => effect.SourceUnitId == attackerUnitId &&
+                    effect.Spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack &&
+                    FireSpellCatalog.IsWeaponCompatible(effect.Spell, weapon))
+                .SelectMany(effect => effect.Spell.Rules.Where(rule => rule.Kind == FireRuleKind.WeaponDamage &&
+                    rule.Timing == FireRuleTiming.OnTrigger))
+                .Sum(rule => rule.Amount);
             CombatEffectExecution weaponExecution = CombatResolver.ResolveWeaponAttack(battle.Combat, attackerUnitId,
-                targetUnitId, reduction);
+                targetUnitId, reduction, baseDamageBonus);
             List<FireSpellExecution> triggers = new List<FireSpellExecution>();
-            triggers.AddRange(TriggerWeaponAttack(battle, attackerUnitId, targetUnitId, followUpCell, followUpDirection));
+            triggers.AddRange(TriggerWeaponAttack(battle, attackerUnitId, targetUnitId, followUpCell, followUpDirection,
+                baseDamageBonus > 0));
             triggers.AddRange(TriggerIncomingAdjacentAttack(battle, attackerUnitId, targetUnitId));
             battle.Combat.EvaluateOutcome();
             return new FireWeaponAttackResolution(weaponExecution, triggers, reduction);
@@ -765,6 +772,7 @@ namespace OCC.Combat
             battle.SetCooldown(source.Id, spell.Id, spell.Cooldown);
             if (spell.InitiativeDelay > 0) source.ChangeActionValue(-spell.InitiativeDelay);
             battle.ResolveMarkedDestructions(source.Id);
+            ApplyAllyFollowupAfterSpell(battle, source, steps);
             battle.Combat.EvaluateOutcome();
             if (heroEnemyVitals != null)
                 battle.Combat.AcademyFieldEnemy?.ObserveHeroDamage(battle.Combat, heroEnemyVitals);
@@ -825,7 +833,8 @@ namespace OCC.Combat
         }
 
         public static IReadOnlyList<FireSpellExecution> TriggerWeaponAttack(FireBattleState battle, string sourceUnitId,
-            string targetUnitId, GridPosition? followUpCell = null, CardinalDirection followUpDirection = CardinalDirection.East)
+            string targetUnitId, GridPosition? followUpCell = null, CardinalDirection followUpDirection = CardinalDirection.East,
+            bool baseWeaponDamageBonusApplied = false)
         {
             if (battle == null) throw new ArgumentNullException(nameof(battle));
             UnitState source = battle.Combat.GetUnit(sourceUnitId) ?? throw new InvalidOperationException("Source unit does not exist.");
@@ -836,37 +845,63 @@ namespace OCC.Combat
             if (source.MainHand.Range > 1 && !battle.Combat.HasLineOfSight(source.Position, target.Position)) throw new InvalidOperationException("Weapon line of sight is blocked.");
 
             List<FireSpellExecution> executions = new List<FireSpellExecution>();
-            FirePendingEffect[] matches = battle.PendingEffects.Where(effect => effect.SourceUnitId == sourceUnitId &&
-                (effect.Spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack ||
-                 effect.Spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack)).ToArray();
+            FirePendingEffect[] matches = battle.PendingEffects.Where(effect =>
+                (effect.SourceUnitId == sourceUnitId && effect.Stage == 0 &&
+                 (effect.Spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack ||
+                  effect.Spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack)) ||
+                (effect.Stage == 2 && effect.Spell.TriggerWindow == FireTriggerWindow.AfterNextWeaponAttack &&
+                 effect.SourceUnitId != sourceUnitId &&
+                 battle.Combat.GetUnit(effect.SourceUnitId)?.IsHero == source.IsHero)).ToArray();
             foreach (FirePendingEffect effect in matches)
             {
                 if (!FireSpellCatalog.IsWeaponCompatible(effect.Spell, source.MainHand)) continue;
                 bool requiresMarkedTarget = effect.Stage > 0 || effect.Spell.TargetKind == FireTargetKind.BurningEnemy;
                 if (requiresMarkedTarget && !string.IsNullOrEmpty(effect.MarkedUnitId) && effect.MarkedUnitId != targetUnitId) continue;
-                FireSpellRule[] gatedBenefits = effect.Spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnTrigger &&
+                FireSpellRule[] gatedBenefits = (effect.Stage == 2 ? Array.Empty<FireSpellRule>() : effect.Spell.Rules).Where(rule => rule.Timing == FireRuleTiming.OnTrigger &&
                     rule.Condition != FireCondition.Always && rule.Kind != FireRuleKind.ConsumeBurning &&
                     rule.Kind != FireRuleKind.ConsumeFireground).ToArray();
                 if (gatedBenefits.Length > 0 && !gatedBenefits.Any(rule =>
                     ConditionMet(battle, source, target, target.Position, rule.Condition))) continue;
                 GridPosition sourceOrigin = source.Position;
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
-                if (effect.Stage > 0)
+                if (effect.Stage == 2)
                 {
-                    int requested = CombatDebugTuning.OutgoingDamageFor(source, 8, DamageType.Fire);
+                    int bonus = effect.Spell.Rules.First(rule => rule.Kind == FireRuleKind.ArmAllyNextAttack).Amount;
+                    int requested = CombatDebugTuning.OutgoingDamageFor(source, bonus, DamageType.Fire);
                     int applied = FireBattleState.ApplyRawFireDamage(target, requested, battle.Combat);
                     Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, requested, applied, "ally_followup");
                 }
                 else
                 {
                     ApplyTriggeredRules(battle, effect, source, target, target.Position, new[] { target.Position }, new[] { target }, steps,
-                        followUpCell, followUpDirection);
+                        followUpCell, followUpDirection, baseWeaponDamageBonusApplied);
                 }
                 battle.Consume(effect);
                 Add(steps, effect.Spell, FireRuleKind.ConsumeTrigger, source.Id, target.Position, 1, 1, "weapon_attack_committed");
                 executions.Add(new FireSpellExecution(TriggerPreview(effect.Spell, target.Position, target.Id), steps, source.Id, sourceOrigin, true));
             }
             return executions;
+        }
+
+        private static void ApplyAllyFollowupAfterSpell(FireBattleState battle, UnitState attacker,
+            List<FireSpellResultStep> steps)
+        {
+            FireSpellResultStep hit = steps.FirstOrDefault(step =>
+                (step.Kind == FireRuleKind.Damage || step.Kind == FireRuleKind.WeaponDamage) &&
+                !string.IsNullOrEmpty(step.TargetId) &&
+                battle.Combat.GetUnit(step.TargetId)?.IsHero != attacker.IsHero);
+            if (string.IsNullOrEmpty(hit.TargetId)) return;
+            FirePendingEffect effect = battle.PendingEffects.FirstOrDefault(value => value.Stage == 2 &&
+                value.SourceUnitId != attacker.Id &&
+                battle.Combat.GetUnit(value.SourceUnitId)?.IsHero == attacker.IsHero);
+            if (effect == null) return;
+            UnitState target = battle.Combat.GetUnit(hit.TargetId);
+            if (target == null) return;
+            int bonus = effect.Spell.Rules.First(rule => rule.Kind == FireRuleKind.ArmAllyNextAttack).Amount;
+            int requested = CombatDebugTuning.OutgoingDamageFor(attacker, bonus, DamageType.Fire);
+            int applied = FireBattleState.ApplyRawFireDamage(target, requested, battle.Combat);
+            Add(steps, effect.Spell, FireRuleKind.Damage, target.Id, target.Position, requested, applied, "ally_followup_spell");
+            battle.Consume(effect);
         }
 
         public static IReadOnlyList<FireSpellExecution> TriggerWeaponAttackAt(FireBattleState battle, string sourceUnitId,
@@ -1013,10 +1048,18 @@ namespace OCC.Combat
 
         private static void ApplyTriggeredRules(FireBattleState battle, FirePendingEffect effect, UnitState source,
             UnitState primary, GridPosition center, IReadOnlyList<GridPosition> cells, IReadOnlyList<UnitState> units,
-            List<FireSpellResultStep> steps, GridPosition? followUpCell, CardinalDirection followUpDirection)
+            List<FireSpellResultStep> steps, GridPosition? followUpCell, CardinalDirection followUpDirection,
+            bool baseWeaponDamageBonusApplied = false)
         {
             foreach (FireSpellRule rule in effect.Spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnTrigger))
             {
+                if (baseWeaponDamageBonusApplied && rule.Kind == FireRuleKind.WeaponDamage &&
+                    effect.Spell.TriggerWindow == FireTriggerWindow.NextLegalWeaponAttack)
+                {
+                    Add(steps, effect.Spell, rule.Kind, primary?.Id, center, rule.Amount, 0,
+                        "included_in_base_weapon_damage");
+                    continue;
+                }
                 if (rule.Kind == FireRuleKind.MoveAfterAttack)
                 {
                     GridPosition destination = followUpCell ?? (primary == null ? source.Position :
@@ -1303,6 +1346,8 @@ namespace OCC.Combat
             if (scope == FireRuleScope.SourceCell) return new[] { source };
             if (scope == FireRuleScope.FirstUnitInSelection)
                 return selected.Where(cell => combat.IsOccupied(cell)).Take(1);
+            if (scope == FireRuleScope.EmptySelection)
+                return selected.Where(cell => !combat.IsOccupied(cell));
             if (scope == FireRuleScope.ReflectedFirstHit)
                 return selected.Count >= 3 ? new[] { selected[selected.Count - 1] } : Array.Empty<GridPosition>();
             if (scope == FireRuleScope.Destination || scope == FireRuleScope.Primary) return new[] { center };
@@ -1388,7 +1433,15 @@ namespace OCC.Combat
             FireSpellRule rule, IEnumerable<GridPosition> cells, IEnumerable<UnitState> units, CardinalDirection aimDirection, List<FireSpellResultStep> steps)
         {
             GridPosition[] cellArray = cells.Distinct().Where(battle.Combat.Map.IsInside).ToArray(); UnitState[] unitArray = units.ToArray();
-            if (rule.Kind == FireRuleKind.MoveSource)
+            if (rule.Kind == FireRuleKind.ArmAllyNextAttack)
+            {
+                if (primary != null && ConditionMet(battle, source, primary, primary.Position, rule.Condition))
+                {
+                    battle.Arm(new FirePendingEffect(spell, source.Id, null, source.Position, aimDirection, 2));
+                    Add(steps, spell, rule.Kind, source.Id, source.Position, rule.Amount, rule.Amount, "ally_next_attack");
+                }
+            }
+            else if (rule.Kind == FireRuleKind.MoveSource)
             {
                 GridPosition before = source.Position;
                 if (spell.Shape == FireSelectionShape.FoldedPath)
