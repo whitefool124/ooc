@@ -1347,6 +1347,8 @@ namespace OCC.Combat.Presentation
                 ? string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName))
                 : preview?.EnemySummary ?? "敌情待确认";
             string terrain = preview == null ? encounter.SpatialGrammar + "；" + encounter.SpawnRelationship : preview.SpatialRisk;
+            string fieldBriefing = "将遭遇" + enemies + "。场地情况：" + terrain;
+            int timeCost = preview?.TimeCost ?? AcademyMapTuning.TimeCost(node);
             bool confirmOrigin = run.IsTutorialPhase && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
             bool canStart = canEnter || confirmOrigin;
 
@@ -1367,10 +1369,6 @@ namespace OCC.Combat.Presentation
             Label("任务类别", category, dossier.transform, new Vector2(32, -32), new Vector2(420, 30), 17, amber, TextAnchor.MiddleLeft);
             Label("任务名称", node.DisplayName, dossier.transform, new Vector2(32, -86), new Vector2(410, 128), 46, ArchiveUiStyle.Ink, TextAnchor.UpperLeft);
             Label("任务档案", node.Summary, dossier.transform, new Vector2(32, -250), new Vector2(420, 154), 21, ArchiveUiStyle.Ink, TextAnchor.UpperLeft);
-            GameObject cost = Panel("耗时", dossier.transform, new Vector2(0, 0), new Vector2(0, 0), new Vector2(34, 108), new Vector2(432, 60), FormalUiTheme.Panel);
-            ArchiveUiStyle.PaperContent(cost);
-            Label("标签", "耗时", cost.transform, new Vector2(58, -14), new Vector2(120, 28), 17, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
-            Label("数值", preview == null || preview.IsZeroTime ? "不耗时" : "+" + preview.TimeCost, cost.transform, new Vector2(264, -12), new Vector2(136, 32), 22, ArchiveUiStyle.Ink, TextAnchor.MiddleRight);
 
             Label("公开标题", "任务公开信息", shell.Body, new Vector2(580, -296), new Vector2(900, 58), 46, text, TextAnchor.MiddleLeft);
             GameObject objectivePanel = Panel("Pixso行动目标", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -380), new Vector2(1292, 104), Color.Lerp(FormalUiTheme.Surface, cyan, .14f));
@@ -1379,16 +1377,11 @@ namespace OCC.Combat.Presentation
             Icon("目标图标", FormalArtRegistry.ResourceMetricPath("risk"), objectivePanel.transform, new Vector2(26, -26), new Vector2(52, 52));
             Label("目标", objective, objectivePanel.transform, new Vector2(92, -16), new Vector2(1160, 70), 28, text, TextAnchor.MiddleLeft);
 
-            GameObject enemy = Panel("Pixso敌情", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -508), new Vector2(632, 250), FormalUiTheme.Surface);
-            ArchiveUiStyle.PaperContent(enemy);
-            Label("标签", "敌情", enemy.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
-            Label("内容", enemies, enemy.transform, new Vector2(24, -70), new Vector2(568, 72), 28, text, TextAnchor.UpperLeft);
-            GameObject field = Panel("Pixso场地", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1240, -508), new Vector2(632, 250), FormalUiTheme.Surface);
+            GameObject field = Panel("场地与敌情简介", shell.Body, new Vector2(0, 1), new Vector2(0, 1), new Vector2(580, -508), new Vector2(1292, 190), FormalUiTheme.Surface);
             ArchiveUiStyle.PaperContent(field);
             Line(shell.Body, new Vector2(580, -494), new Vector2(1292, 1), ArchiveUiStyle.Rule);
-            Line(shell.Body, new Vector2(1226, -512), new Vector2(1, 240), ArchiveUiStyle.Rule);
-            Label("标签", "场地", field.transform, new Vector2(24, -24), new Vector2(190, 28), 17, amber, TextAnchor.MiddleLeft);
-            Label("内容", terrain, field.transform, new Vector2(24, -70), new Vector2(568, 98), 28, text, TextAnchor.UpperLeft);
+            Label("简介标题", "场地与敌情", field.transform, new Vector2(24, -20), new Vector2(400, 32), 20, amber, TextAnchor.MiddleLeft);
+            Label("简介", fieldBriefing, field.transform, new Vector2(24, -66), new Vector2(1244, 104), 26, text, TextAnchor.UpperLeft);
 
             ActionButton("先不去", PlayerFacingCopy.ReturnToMapFree, shell.Footer, new Vector2(1000, -782), new Vector2(260, 68), FormalUiTheme.Panel, true,
                 () => SetOverlay(UiOverlay.None), iconPath: FormalArtRegistry.NavigationPath("back"));
@@ -1398,6 +1391,8 @@ namespace OCC.Combat.Presentation
             string enterLabel = confirmOrigin ? "确认配置并出发" : finaleApplication ? "确认终考申请" : "出发";
             string enterReason = confirmOrigin ? "学生背景\n就地接线　维克多护幕" : finaleApplication
                 ? "不可逆：确认后不能返回普通路线" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
+            Label("本次战斗时序", "本次战斗消耗 " + timeCost + " 时序", shell.Footer,
+                new Vector2(1552, -738), new Vector2(320, 34), 20, ArchiveUiStyle.QuietInk, TextAnchor.MiddleCenter);
             GameObject start = ActionButton(enterLabel, enterReason, shell.Footer, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
                 () => { if (confirmOrigin) bootstrap.AcknowledgeFirstRunOrigin(); bootstrap.StartMapNodeCombat(node.Id); },
                 focusKey: "按钮_进入战斗", iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
