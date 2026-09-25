@@ -356,7 +356,7 @@ namespace OCC.Combat.Tests
         private static int WinRainLanternCourtWithNormalCommands(CombatState state)
         {
             UnitState hero = state.GetUnit("hero");
-            bool borrowedCoverCast = false;
+            bool victorShieldCast = false;
             int commands = 0;
             CombatResolver.BeginTurn(state, hero.Id);
             while (!state.IsVictory && !state.IsDefeat && commands < 100)
@@ -382,13 +382,13 @@ namespace OCC.Combat.Tests
                     continue;
                 }
 
-                if (!borrowedCoverCast)
+                if (!victorShieldCast)
                 {
                     int slot = Enumerable.Range(0, Roguelite.RogueRuntimeConstants.SpellSlotCount)
                         .First(index => state.RogueSpells.DefinitionAtSlot(index)?.DefinitionId ==
-                            RainLanternCourtRuntime.OriginSpellId);
+                            "BASE-AETHER-SHIELD");
                     CombatResolver.Resolve(state, CombatCommand.UseSkill(unit.Id, slot, string.Empty));
-                    borrowedCoverCast = true;
+                    victorShieldCast = true;
                     commands++;
                     continue;
                 }

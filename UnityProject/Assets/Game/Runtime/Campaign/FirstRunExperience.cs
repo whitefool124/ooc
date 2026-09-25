@@ -144,7 +144,7 @@ namespace OCC.Combat
     {
         public string StoryId { get; internal set; } = FirstRunExperienceCatalog.OriginStoryId;
         public string TalentId { get; internal set; } = FirstRunExperienceCatalog.OriginTalentId;
-        public string SpellId { get; internal set; } = FirstRunExperienceCatalog.OriginSpellId;
+        public string SpellId { get; internal set; } = "BASE-AETHER-SHIELD";
         public bool Acknowledged { get; internal set; }
     }
 

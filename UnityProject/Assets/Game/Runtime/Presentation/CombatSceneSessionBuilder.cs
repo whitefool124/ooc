@@ -105,8 +105,6 @@ namespace OCC.Combat.Presentation
                 foreach (UnitState enemy in state.Units.Values.Where(unit => !unit.IsHero)) academyContent.ApplyEnemyBaseline(state, enemy);
                 string[] mastered = new[] { "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER" }
                     .Concat(mapRun.OwnedFireSpellIds).Distinct(StringComparer.Ordinal).ToArray();
-                if (mapRun.IsFirstRunExperience && encounterId == "B1")
-                    mastered = mastered.Concat(new[] { RainLanternCourtRuntime.OriginSpellId }).Distinct(StringComparer.Ordinal).ToArray();
                 RogueSpellLoadout loadout = RogueSpellLoadout.Restore(mastered, mapRun.RogueEquippedSpellIds, true);
                 var specializations = mapRun.CompletedWorkshopBuilds
                     .Where(value => value.SpecializationCompleted && !string.IsNullOrEmpty(value.SpecializedTargetId))

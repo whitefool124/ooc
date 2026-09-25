@@ -420,7 +420,7 @@ namespace OCC.Combat.Presentation
             {
                 case "BASE-FIRE-MELEE": return "对单位或物件造成 8 点火焰伤害";
                 case "BASE-FIRE-RANGED": return "对单位或物件造成 6 点火焰伤害";
-                case "BASE-AETHER-SHIELD": return "自身获得 6 点普通盾";
+                case "BASE-AETHER-SHIELD": return "自身获得 8 点普通盾";
                 case "BASE-MANA-RECOVER": return "恢复 2 点个人魔力，最多恢复至 12";
                 default: return "依照术式说明生效";
             }

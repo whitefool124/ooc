@@ -600,7 +600,7 @@ namespace OCC.Combat.Presentation
                 FormalUiEffects.AddChapterDivider(parent, "teaching_record", new Vector2(824, -160), 2f);
                 OriginFeatureCard(parent, "学生背景", "公开考核与工读入学", "普通学生，从学院公开课程开始。", FormalArtRegistry.NodeTypePath("start"), new Vector2(44, -202), 336f, cyan);
                 OriginFeatureCard(parent, "固定天赋", "就地接线", "首次移动停在掩体旁：护盾 +2、魔力 +1。", FormalArtRegistry.ResourceMetricPath("shield"), new Vector2(400, -202), 336f, safe);
-                OriginFeatureCard(parent, "专属术式", "借障导流", "1 行动点 + 1 魔力；掩体旁护盾 +4，下次移动 +2。", FormalArtRegistry.ResourceMetricPath("mana"), new Vector2(756, -202), 336f, amber);
+                OriginFeatureCard(parent, "专属术式", "维克多护幕", "1 行动点 + 2 魔力；自身获得 8 点普通护盾。", FormalArtRegistry.ResourceMetricPath("shield"), new Vector2(756, -202), 336f, amber);
                 ActionButton("确认并解锁第一战", "确认后回到地图，第一战会替你选中。", parent, new Vector2(224, -414), new Vector2(720, 118), cyan, true,
                     ConfirmFirstRunOrigin, iconPath: FormalArtRegistry.NavigationPath("confirm"), emphasized: true);
                 ActionButton("回到地图", PlayerFacingCopy.ReturnToMapFree, parent, new Vector2(224, -616), new Vector2(720, 88), amber, true,
@@ -1282,7 +1282,7 @@ namespace OCC.Combat.Presentation
             {
                 case "BASE-FIRE-MELEE": return "伤害 8 → 10";
                 case "BASE-FIRE-RANGED": return "伤害 6 → 8";
-                case "BASE-AETHER-SHIELD": return "护盾 6 → 8";
+                case "BASE-AETHER-SHIELD": return "护盾 8 → 10";
                 case "BASE-MANA-RECOVER": return "恢复魔力 2 → 3";
                 case "F-P-M01": return "追加火伤 8 → 10";
                 case "F-P-M03": return "跃进命中武器伤害 8 → 10；起点火场不变";
@@ -1396,7 +1396,7 @@ namespace OCC.Combat.Presentation
                 () => SetOverlay(UiOverlay.Loadout), iconPath: FormalArtRegistry.NavigationPath("archive"));
             bool finaleApplication = run.IsInAcademyLayer && node.Type == RogueliteMapNodeType.Finale && !current;
             string enterLabel = confirmOrigin ? "确认配置并出发" : finaleApplication ? "确认终考申请" : "出发";
-            string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" : finaleApplication
+            string enterReason = confirmOrigin ? "学生背景\n就地接线　维克多护幕" : finaleApplication
                 ? "不可逆：确认后不能返回普通路线" : canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
             GameObject start = ActionButton(enterLabel, enterReason, shell.Footer, new Vector2(1552, -782), new Vector2(320, 68), canStart ? accent : muted, canStart,
                 () => { if (confirmOrigin) bootstrap.AcknowledgeFirstRunOrigin(); bootstrap.StartMapNodeCombat(node.Id); },
@@ -1464,7 +1464,7 @@ namespace OCC.Combat.Presentation
             bool confirmOrigin = run.IsTutorialPhase && node.Id == "B1" && !run.FirstRunExperience.Origin.Acknowledged;
             bool canStart = contentReady && (canEnter || confirmOrigin);
             string enterLabel = confirmOrigin ? "确认配置并出发" : "出发";
-            string enterReason = confirmOrigin ? "学生背景\n就地接线　借障导流" :
+            string enterReason = confirmOrigin ? "学生背景\n就地接线　维克多护幕" :
                 canEnter ? "准备好就出发" : RogueliteMapVisualPresentation.RestrictionText(run, node);
             GameObject start = ActionButton(enterLabel, enterReason, parent, new Vector2(44, -516), new Vector2(672, 126), canStart ? accent : muted, canStart,
                 () =>

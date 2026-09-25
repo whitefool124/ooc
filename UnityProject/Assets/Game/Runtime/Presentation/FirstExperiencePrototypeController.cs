@@ -343,14 +343,14 @@ namespace OCC.Combat.Presentation
             GUI.Label(new Rect(150, 190, 1500, 90), "三项固定在同一页展示，不做三选一。", bodyStyle);
             DrawCard(new Rect(150, 330, 480, 310), "公开考核与工读入学", "学生背景");
             DrawCard(new Rect(720, 330, 480, 310), "就地接线", "固定天赋");
-            DrawCard(new Rect(1290, 330, 480, 310), "借障导流", "固定专属术式");
+            DrawCard(new Rect(1290, 330, 480, 310), "维克多护幕", "固定专属术式");
             Button(new Rect(1290, 820, 480, 100), "确认基础配置", () => SetStage(FlowStage.AcademyIntro));
         }
 
         private void DrawAcademyIntro()
         {
-            Background("学院阶段　入学实操");
-            GUI.Label(new Rect(170, 280, 1250, 220), "完成三场普通战、三个事件与对应奖励后，可以直接挑战精英。工坊加工、健康确认、治疗与餐食是可选整备。\n\n本段可跳过；首次地图仅开放战斗1。", bodyStyle);
+            Background("学院阶段　入学");
+            GUI.Label(new Rect(170, 280, 1500, 220), "学院教授可测量、可维护的以太术，学生从基础课程和实地训练开始学习。\n\n维克多出身雾桥村的普通佃农家庭，通过公开考核，以工读生身份入学。", bodyStyle);
             Button(new Rect(1290, 820, 480, 100), "进入首次地图", () => EnterAcademyMap(false));
         }
 

@@ -27,7 +27,7 @@ namespace OCC.Combat.Roguelite
         {
             yield return Basic("BASE-FIRE-MELEE", "灼触", "melee_attack", 1, 1, 0, "adjacent_hittable", 1, "damage:fire:8");
             yield return Basic("BASE-FIRE-RANGED", "火花", "ranged_attack", 1, 2, 0, "visible_hittable", 4, "damage:fire:6");
-            yield return Basic("BASE-AETHER-SHIELD", "以太护幕", "defense", 1, 2, 1, "self", 0, "grant_shield:6");
+            yield return Basic("BASE-AETHER-SHIELD", "维克多护幕", "defense", 1, 2, 1, "self", 0, "grant_shield:8");
             yield return Basic("BASE-MANA-RECOVER", "回路调息", "resource", 1, 0, 1, "self", 0, "restore_mana:2:max12");
             yield return Passive("PASSIVE-ELITE-01", "回火导流", "fire", "first_personal_fire_damage_restore_mana:1");
             yield return Passive("PASSIVE-ELITE-02", "动势点火", "fire", "move_3_then_weapon_fire_damage:4");

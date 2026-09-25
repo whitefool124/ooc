@@ -921,9 +921,6 @@ namespace OCC.Combat
             run.encounterAssignments.Clear();
             run.nodeContentAssignments.Clear();
             run.rogueRunDto = OCC.Combat.Roguelite.RogueRunDto.CreateNew("first-run-" + seed, seed);
-            run.rogueEquippedSpellIds[4] = FirstRunExperienceCatalog.OriginSpellId;
-            run.rogueRunDto.MasteredSpellIds.Add(FirstRunExperienceCatalog.OriginSpellId);
-            run.rogueRunDto.EquippedSpellIds[4] = FirstRunExperienceCatalog.OriginSpellId;
             run.rogueRunDto.RunProgramId = RogueliteRunProgram.FirstRunV1.ToString();
             run.rogueRunDto.FirstRunExperience = run.FirstRunExperience;
             run.SyncFirstRunProjection();
@@ -2106,12 +2103,10 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(FirstRunExperience.EliteSelectedPassiveId) &&
                 !rogueRunDto.MasteredSpellIds.Contains(FirstRunExperience.EliteSelectedPassiveId))
                 rogueRunDto.MasteredSpellIds.Add(FirstRunExperience.EliteSelectedPassiveId);
-            // 教程段的战场能力与固定术式必须留在掌握列表里，才能带进随机层战斗。
+            // 教程段获得的战场术式必须留在掌握列表里，才能带进随机层战斗。
             foreach (string spellId in ownedFireSpells)
                 if (FireSpellCatalog.All.Any(spell => spell.Id == spellId) && !rogueRunDto.MasteredSpellIds.Contains(spellId))
                     rogueRunDto.MasteredSpellIds.Add(spellId);
-            if (!rogueRunDto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
-                rogueRunDto.MasteredSpellIds.Add(FirstRunExperienceCatalog.OriginSpellId);
             rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth));
             rogueRunDto.CurrentMana = Math.Max(0, Math.Min(RogueManaCapacity, rogueRunDto.CurrentMana));
             CurrentHealth = rogueRunDto.CurrentHealth;
@@ -2189,9 +2184,6 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(migrationReportId)) dto.MigrationReportId = migrationReportId;
             if (IsFirstRunExperience)
             {
-                if (!dto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
-                    dto.MasteredSpellIds.Add(FirstRunExperienceCatalog.OriginSpellId);
-                dto.EquippedSpellIds[4] = FirstRunExperienceCatalog.OriginSpellId;
                 dto.RunProgramId = RogueliteRunProgram.FirstRunV1.ToString();
                 dto.FirstRunExperience = FirstRunExperience;
             }
@@ -2200,6 +2192,12 @@ namespace OCC.Combat
         public static RogueliteMapRun FromRogue11(OCC.Combat.Roguelite.RogueRunDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
+            dto.MasteredSpellIds.RemoveAll(id => id == FirstRunExperienceCatalog.OriginSpellId);
+            for (int index = 0; index < dto.EquippedSpellIds.Length; index++)
+                if (dto.EquippedSpellIds[index] == FirstRunExperienceCatalog.OriginSpellId)
+                    dto.EquippedSpellIds[index] = string.Empty;
+            if (dto.FirstRunExperience?.Origin.SpellId == FirstRunExperienceCatalog.OriginSpellId)
+                dto.FirstRunExperience.Origin.SpellId = "BASE-AETHER-SHIELD";
             RogueliteMapRun run = new RogueliteMapRun(dto.Seed)
             {
                 CurrentNodeId = AcademyMapSaveMigration.NodeId(dto.CurrentNodeId), RegionBossId = "core_overseer", StarterId = dto.StarterId,
@@ -2303,9 +2301,9 @@ namespace OCC.Combat
                 string id = dto.EquippedSpellIds[4 + index]; run.equippedFireSpells[index] = run.ownedFireSpells.Contains(id) ? id : string.Empty;
                 run.rogueEquippedSpellIds[4 + index] = run.equippedFireSpells[index];
             }
-            if (run.IsFirstRunExperience && dto.MasteredSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId) &&
-                dto.EquippedSpellIds.Contains(FirstRunExperienceCatalog.OriginSpellId))
-                run.rogueEquippedSpellIds[4] = FirstRunExperienceCatalog.OriginSpellId;
+            for (int index = 0; index < run.rogueEquippedSpellIds.Length; index++)
+                if (run.rogueEquippedSpellIds[index] == FirstRunExperienceCatalog.OriginSpellId)
+                    run.rogueEquippedSpellIds[index] = string.Empty;
             if (run.IsInAcademyLayer)
             {
                 // 随机层的节点绑定必须整体覆盖构造函数里的默认分配，避免残留旧郊道的绑定。

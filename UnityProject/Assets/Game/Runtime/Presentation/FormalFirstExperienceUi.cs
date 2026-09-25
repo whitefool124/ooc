@@ -219,8 +219,8 @@ namespace OCC.Combat.Presentation
             GameObject fixedConfig = FormalUiKit.AnchoredPanel("首次体验固定配置", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(80, -758), new Vector2(1050, 212), FormalUiTheme.SurfaceRaised);
             ArchiveUiStyle.PaperPanel(fixedConfig, ArchiveUiStyle.Paper, true);
             Label("配置标题", "首次体验固定配置", fixedConfig.transform, new Vector2(28, -18), new Vector2(980, 36), 24, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            string[] titles = { "学生背景", "就地接线", "借障导流" };
-            string[] details = { "公开考核与工读入学", "邻接掩体后回盾回魔", "借掩体获得护盾与移动" };
+            string[] titles = { "学生背景", "就地接线", "维克多护幕" };
+            string[] details = { "公开考核与工读入学", "邻接掩体后回盾回魔", "自身获得 8 点普通护盾" };
             for (int i = 0; i < 3; i++)
             {
                 float x = 28 + i * 334;
@@ -245,19 +245,15 @@ namespace OCC.Combat.Presentation
 
         private void BuildAcademyIntro()
         {
-            Header("学院阶段　入学实操", "每份档案首次进入时展示一次。");
-            GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(112, -254), new Vector2(1020, 610), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .95f));
+            Header("学院阶段　入学", "维克多的学院生活从这里开始。");
+            GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(310, -250), new Vector2(1300, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .95f));
             ArchiveUiStyle.PaperPanel(module, ArchiveUiStyle.LightPaper, true);
-            Label("目标", "完成学院实地调查", module.transform, new Vector2(52, -52), new Vector2(900, 72), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("路径", "三场普通战  →  三个事件  →  可选工坊／医务室  →  精英挑战", module.transform, new Vector2(52, -162), new Vector2(900, 126), 24, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-            string[] labels = { "01 观察场地", "02 整理行囊", "03 完成节点" };
-            for (int i = 0; i < 3; i++)
-            {
-                GameObject card = FormalUiKit.AnchoredPanel("入学步骤" + i, page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1190, -254 - i * 176), new Vector2(610, 142), FormalUiTheme.SurfaceRaised);
-                ArchiveUiStyle.NotePanel(card);
-                Label("步骤", labels[i], card.transform, new Vector2(46, -28), new Vector2(536, 64), 24, i == 0 ? FormalUiTheme.Cyan : FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            }
-            ArchiveUiStyle.ScrollButton(AddButton("进入首次地图", "进入学院地图", page.transform, new Vector2(1310, -850), new Vector2(470, 86), flow.EnterAcademy, FormalUiTheme.Cyan),
+            Label("标题", "维克多的入学档案", module.transform, new Vector2(60, -50), new Vector2(1160, 74), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            Label("背景", "学院教授可测量、可维护的以太术，学生从基础课程和实地训练开始学习。", module.transform,
+                new Vector2(60, -160), new Vector2(1160, 92), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            Label("入学", "维克多出身雾桥村的普通佃农家庭。完成教会基础教育后，他通过学院公开考核，以工读生身份入学。", module.transform,
+                new Vector2(60, -290), new Vector2(1160, 122), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            ArchiveUiStyle.ScrollButton(AddButton("进入首次地图", "进入学院地图", page.transform, new Vector2(710, -790), new Vector2(500, 88), flow.EnterAcademy, FormalUiTheme.Cyan),
                 () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
         }
 

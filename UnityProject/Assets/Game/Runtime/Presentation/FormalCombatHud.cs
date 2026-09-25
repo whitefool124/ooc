@@ -387,19 +387,19 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
-                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(16 + (i % 2) * 164, -24 - (i / 2) * 62), new Vector2(156, 54), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(8 + (i % 2) * 176, -10 - (i / 2) * 80), new Vector2(168, 72), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
                 quickbarButtons[i] = quick;
                 quickbarLabels[i] = quick.GetComponentInChildren<Text>();
                 quickbarLabels[i].gameObject.SetActive(false);
                 ConfigureCompactFrame(quick);
                 quickbarEmptyStates[i] = Panel("空槽内凹", quick.transform, new Vector2(0, 1), new Vector2(0, 1),
-                    new Vector2(12, -10), new Vector2(132, 34), Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Surface, .24f));
+                    new Vector2(12, -10), new Vector2(144, 52), Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Surface, .24f));
                 quickbarEmptyStates[i].GetComponent<Image>().raycastTarget = false;
-                FormalUiKit.ThinFrame(quickbarEmptyStates[i].transform, new Vector2(132, 34), Color.Lerp(muted, FormalUiTheme.Rule, .5f));
-                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(62, -11));
-                quickbarIcons[i].rectTransform.sizeDelta = new Vector2(32, 32);
+                FormalUiKit.ThinFrame(quickbarEmptyStates[i].transform, new Vector2(144, 52), Color.Lerp(muted, FormalUiTheme.Rule, .5f));
+                quickbarIcons[i] = FormalUiKit.IconSlot("快捷栏正式图标", quick.transform, null, new Vector2(52, 0));
+                quickbarIcons[i].rectTransform.sizeDelta = new Vector2(64, 64);
                 quickbarKeys[i] = FormalUiKit.Label("槽位", (i + 1).ToString(), quick.transform,
-                    new Vector2(130, -2), new Vector2(18, 24), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleCenter);
+                    new Vector2(142, -2), new Vector2(18, 24), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleCenter);
                 quick.onClick.AddListener(() => bootstrap.ActivateInventoryQuickbar(slot));
                 BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }

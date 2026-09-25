@@ -120,7 +120,11 @@ namespace OCC.Combat.Tests
             Assert.That(RogueliteEncounterCatalog.For(run, "B2").VariantKey,
                 Is.EqualTo(RogueliteEncounterCatalog.SecondBattleGreenhouseCollectionRoom.VariantKey));
             Assert.That(run.IsNodeAvailable("B2"), Is.False);
-            Assert.That(run.RogueEquippedSpellIds[4], Is.EqualTo(RainLanternCourtRuntime.OriginSpellId));
+            Assert.That(run.RogueEquippedSpellIds.Take(4), Is.EqualTo(new[]
+            {
+                "BASE-FIRE-MELEE", "BASE-FIRE-RANGED", "BASE-AETHER-SHIELD", "BASE-MANA-RECOVER"
+            }));
+            Assert.That(run.RogueEquippedSpellIds[4], Is.Empty);
         }
 
         [Test]

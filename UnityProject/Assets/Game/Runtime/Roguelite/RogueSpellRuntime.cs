@@ -245,7 +245,7 @@ namespace OCC.Combat.Roguelite
             if (spell.DefinitionId == "BASE-AETHER-SHIELD")
             {
                 CombatEffectExecution cost = CombatEffectExecutor.Execute(Combat, source.Id, effects.ToArray());
-                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsAmplified(spell.DefinitionId) ? 8 : 6);
+                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsAmplified(spell.DefinitionId) ? 10 : 8);
                 return new RogueSpellExecution(cost);
             }
             if (spell.DefinitionId == "BASE-FIRE-MELEE" || spell.DefinitionId == "BASE-FIRE-RANGED")
@@ -382,7 +382,7 @@ namespace OCC.Combat.Roguelite
                 rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing);
 
         // 节流刻墨（总案 4.2.2.1）：在已生效的基础费用上再降 1 点魔力（最低 0）；回路调息的节流降的是冷却（1→0）。
-        // 基础四式不在个人术式 60 张的下调范围内，因此灼触／火花／以太护幕的节流结果与专精表逐条一致。
+        // 基础四式不在个人术式 80 张的下调范围内，因此灼触／火花／维克多护幕的节流结果与专精表逐条一致。
         public static bool SupportsThrottleSpecialization(string spellId)
         {
             switch (spellId)

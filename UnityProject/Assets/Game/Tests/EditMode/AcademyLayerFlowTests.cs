@@ -43,7 +43,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(run.Gold, Is.EqualTo(goldBefore));
             Assert.That(run.RogueRunState.MasteredSpellIds, Is.SupersetOf(masteredBefore));
-            Assert.That(run.RogueRunState.MasteredSpellIds, Contains.Item(FirstRunExperienceCatalog.OriginSpellId));
+            Assert.That(run.RogueRunState.MasteredSpellIds, Contains.Item("BASE-AETHER-SHIELD"));
+            Assert.That(run.RogueRunState.MasteredSpellIds, Does.Not.Contain(FirstRunExperienceCatalog.OriginSpellId));
             Assert.That(run.RogueRunState.MasteredSpellIds, Contains.Item("PASSIVE-ELITE-01"));
             Assert.That(run.RogueRunState.EquipmentInstances.Count, Is.EqualTo(equipmentBefore));
             Assert.That(run.RogueRunState.TacticalItemInstances.Count, Is.EqualTo(tacticalBefore));
