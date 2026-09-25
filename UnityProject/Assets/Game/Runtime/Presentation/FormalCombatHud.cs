@@ -146,9 +146,6 @@ namespace OCC.Combat.Presentation
         private GameObject outcomeOverlay;
         private Text outcomeTitle;
         private Text outcomeDetail;
-        private GameObject openingDialogueOverlay;
-        private Text openingDialogueSpeaker;
-        private Text openingDialogueLine;
         private Text[] quickbarLabels = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly Text[] quickbarKeys = new Text[RogueRuntimeConstants.ItemQuickbarSize];
         private Image[] quickbarIcons = new Image[RogueRuntimeConstants.ItemQuickbarSize];
@@ -188,16 +185,6 @@ namespace OCC.Combat.Presentation
             if (root == null || bootstrap == null) return;
             bool visible = bootstrap.IsDeveloperCombatActive || bootstrap.IsCombatOutcomeVisible;
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
-            if (openingDialogueOverlay != null)
-            {
-                bool showDialogue = visible && bootstrap.IsOpeningDialogueVisible;
-                if (openingDialogueOverlay.activeSelf != showDialogue) openingDialogueOverlay.SetActive(showDialogue);
-                if (showDialogue)
-                {
-                    openingDialogueSpeaker.text = bootstrap.OpeningDialogueSpeaker;
-                    openingDialogueLine.text = bootstrap.OpeningDialogueLine;
-                }
-            }
             if (!visible || bootstrap.CurrentState == null)
             {
                 if (wasVisible)
@@ -404,33 +391,6 @@ namespace OCC.Combat.Presentation
                 BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }
             CreateOutcomeOverlay();
-            CreateOpeningDialogueOverlay();
-        }
-
-        private void CreateOpeningDialogueOverlay()
-        {
-            openingDialogueOverlay = Panel("学院开战对话遮罩", canvas.transform, Vector2.zero, Vector2.one,
-                Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, .6f));
-            Image shade = openingDialogueOverlay.GetComponent<Image>();
-            shade.sprite = null;
-            shade.type = Image.Type.Simple;
-            shade.color = new Color(0f, 0f, 0f, .6f);
-            shade.raycastTarget = true;
-            GameObject card = Panel("学院开战对话", openingDialogueOverlay.transform,
-                new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero,
-                new Vector2(1080f, 250f), FormalUiTheme.Surface);
-            card.GetComponent<RectTransform>().pivot = new Vector2(.5f, .5f);
-            openingDialogueSpeaker = Label("对话来源", card.transform, new Vector2(32f, -24f),
-                new Vector2(800f, 38f), 26, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
-            openingDialogueLine = Label("开战台词", card.transform, new Vector2(32f, -76f),
-                new Vector2(1016f, 76f), 28, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
-            Button continueButton = Button(card.transform, "继续战斗", new Vector2(748f, -178f),
-                new Vector2(140f, 48f), "继续", FormalUiTheme.Interactive);
-            Button skipButton = Button(card.transform, "跳过对话", new Vector2(908f, -178f),
-                new Vector2(140f, 48f), "跳过", FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
-            continueButton.onClick.AddListener(bootstrap.CompleteOpeningCombatDialogue);
-            skipButton.onClick.AddListener(bootstrap.CompleteOpeningCombatDialogue);
-            openingDialogueOverlay.SetActive(false);
         }
 
         private void LoadActionIcons()

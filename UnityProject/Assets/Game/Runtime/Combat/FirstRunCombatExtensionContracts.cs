@@ -70,18 +70,4 @@ namespace OCC.Combat
         }
     }
 
-    public static class FirstRunCombatOpeningDialogue
-    {
-        public static bool TryGet(string nodeId, out string speaker, out string line)
-        {
-            switch (nodeId)
-            {
-                case "B1": speaker = "火矢生"; line = "火线已经标出。庭院里还有浅水和灯藤，选好路线再靠近。"; return true;
-                case "B2": speaker = "侧锋生"; line = "藤圈和晶簇都在场上。替身偶贴上晶簇时，记得看它身上的变化。"; return true;
-                case "B3": speaker = "火矢生"; line = "冷却沟还在供水。破开晶簇能拿到器材，也可以从南侧绕过去。"; return true;
-                case "X": speaker = "楔角维护记录"; line = "承压校验启动。冲压路线已公开。"; return true;
-                default: speaker = string.Empty; line = string.Empty; return false;
-            }
-        }
-    }
 }

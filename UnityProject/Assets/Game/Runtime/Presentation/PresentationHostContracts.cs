@@ -58,9 +58,6 @@ namespace OCC.Combat.Presentation
         bool IsMapRunWriteProtected { get; }
         bool IsDeveloperCombatActive { get; }
         bool IsInteractionModalOpen { get; }
-        bool IsOpeningDialogueVisible { get; }
-        string OpeningDialogueSpeaker { get; }
-        string OpeningDialogueLine { get; }
         bool IsKeyboardTargeting { get; }
         GridPosition KeyboardTargetPosition { get; }
         int TrainingRangeArtifactUsesRemaining { get; }
@@ -81,7 +78,6 @@ namespace OCC.Combat.Presentation
         void CancelCombatSelectionOrRequestLeave();
         void RequestLeaveCombat();
         void RequestReturnToLanding();
-        void CompleteOpeningCombatDialogue();
         void RequestTacticalRestart();
         void ReturnToDeveloperMenu();
         void ReturnFromCombatOutcome();

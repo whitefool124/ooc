@@ -77,9 +77,6 @@ namespace OCC.Combat.Presentation
         private readonly UiVisualEventStream uiVisualEvents = new UiVisualEventStream();
         private readonly UiPresentationVersions uiPresentationVersions = new UiPresentationVersions();
         private int displayedHeroTurnSequence = -1;
-        private bool openingDialogueVisible;
-        private string openingDialogueSpeaker = string.Empty;
-        private string openingDialogueLine = string.Empty;
 
         private void OnEnable()
         {
@@ -299,7 +296,6 @@ namespace OCC.Combat.Presentation
         }
         private void ApplyCombatSessionActivation(CombatSessionActivation activation, bool playEntrySequence = true)
         {
-            openingDialogueVisible = false;
             state = activation.State;
             fireBattle = activation.FireBattle;
             FocusHeroInBattlefield();
@@ -318,7 +314,6 @@ namespace OCC.Combat.Presentation
                 MarkPresentation(UiPresentationArea.Flow);
                 return;
             }
-            OpenFirstRunOpeningDialogue();
             PresentHeroTurnBannerIfNeeded();
         }
         public void ReturnToDeveloperMenu()
@@ -403,15 +398,6 @@ namespace OCC.Combat.Presentation
                     artifactBattle = replay.ArtifactBattle;
                     if (!string.IsNullOrEmpty(replay.ObservedUnitId)) combatSession.ObserveActiveUnit(replay.ObservedUnitId);
                     developerFlow.RefreshOutcome();
-                    // A journal entry can only be written after the opening dialogue has
-                    // been dismissed. Do not replay that modal over an already-progressed turn.
-                    if (start.Run.CombatJournalRows.Count > 0 ||
-                        developerFlow.Phase != CombatFlowPhase.Active || state.IsVictory || state.IsDefeat)
-                    {
-                        openingDialogueVisible = false;
-                        openingDialogueSpeaker = string.Empty;
-                        openingDialogueLine = string.Empty;
-                    }
                     mapMenuOpen = false;
                     MarkPresentation(UiPresentationArea.Combat);
                     MarkPresentation(UiPresentationArea.Flow);
@@ -424,7 +410,7 @@ namespace OCC.Combat.Presentation
                     // Keep the save on disk, but never leave its half-replayed combat selectable.
                     rogueliteFlow.Reset();
                     state = null; currentLevel = null; developerFlow = null; battlefieldViewport = null;
-                    fireBattle = null; artifactBattle = null; openingDialogueVisible = false;
+                    fireBattle = null; artifactBattle = null;
                     selection.Reset(); outcomeSettlement.Reset(); combatSession.ResetObservation();
                     ResetEnemyTurnSequence(); visualFeedback?.ResetBattleFeedback();
                     RefreshSceneHud(); MarkPresentation(UiPresentationArea.Combat);
@@ -1354,28 +1340,6 @@ namespace OCC.Combat.Presentation
             // The cinematic parked the camera on the hero; make the interactive pose explicit
             // so the first player command starts from a legal, clamped view.
             FocusHeroInBattlefield();
-            OpenFirstRunOpeningDialogue();
-            MarkPresentation(UiPresentationArea.Combat);
-        }
-        private void OpenFirstRunOpeningDialogue()
-        {
-            openingDialogueVisible = mapRun?.IsTutorialPhase == true &&
-                developerFlow?.Phase == CombatFlowPhase.Active &&
-                FirstRunCombatOpeningDialogue.TryGet(mapRun.CurrentNodeId, out openingDialogueSpeaker, out openingDialogueLine);
-            if (!openingDialogueVisible)
-            {
-                openingDialogueSpeaker = string.Empty;
-                openingDialogueLine = string.Empty;
-            }
-            MarkPresentation(UiPresentationArea.Combat);
-        }
-        public bool IsOpeningDialogueVisible => openingDialogueVisible;
-        public string OpeningDialogueSpeaker => openingDialogueSpeaker;
-        public string OpeningDialogueLine => openingDialogueLine;
-        public void CompleteOpeningCombatDialogue()
-        {
-            if (!openingDialogueVisible) return;
-            openingDialogueVisible = false;
             MarkPresentation(UiPresentationArea.Combat);
             PresentHeroTurnBannerIfNeeded();
         }
@@ -1410,7 +1374,7 @@ namespace OCC.Combat.Presentation
         public bool IsCombatActionPlaying => visualFeedback?.IsActionPlaying == true;
         public int CombatActionPresentationVersion => visualFeedback?.ActionPresentationVersion ?? 0;
         public UnitState PresentCombatUnit(UnitState unit) => visualFeedback?.PresentedUnit(unit) ?? unit;
-        public bool IsInteractionModalOpen => openingDialogueVisible || IsCombatActionPlaying || battlefieldContextMenuOpen ||
+        public bool IsInteractionModalOpen => IsCombatActionPlaying || battlefieldContextMenuOpen ||
             (entrySequence != null && entrySequence.IsBlockingInput) ||
             (interactionLayer != null && interactionLayer.IsConfirmationOpen) ||
             (inventoryPanel != null && inventoryPanel.IsOpen) || IsEncyclopediaOpen;
@@ -1853,7 +1817,7 @@ namespace OCC.Combat.Presentation
             if (mapRun != null && !IsMapRunSaved) return;
             // The entry cinematic drives the camera and owns the opening beat; hold the
             // simulation, the hero-follow panner and the turn banner until it hands control back.
-            if (entrySequence != null && entrySequence.IsBlockingInput || openingDialogueVisible) return;
+            if (entrySequence != null && entrySequence.IsBlockingInput) return;
             if (followHeroMovement) FollowHeroAtSafeEdge();
             if (IsCombatActionPlaying) return;
             if (!trainingRangeActive)
@@ -1878,7 +1842,7 @@ namespace OCC.Combat.Presentation
 
         private void PresentHeroTurnBannerIfNeeded()
         {
-            if (openingDialogueVisible || developerFlow?.Phase != CombatFlowPhase.Active || state == null || state.ActiveUnitId != "hero" ||
+            if (developerFlow?.Phase != CombatFlowPhase.Active || state == null || state.ActiveUnitId != "hero" ||
                 state.TurnSequence <= 0 || state.TurnSequence == displayedHeroTurnSequence) return;
             UnitState hero = state.GetUnit("hero");
             if (hero == null) return;
@@ -2183,7 +2147,7 @@ namespace OCC.Combat.Presentation
         }
         private void TryArtifactCell(ArtifactDefinition artifact, UnitState clickedUnit, GridPosition position)
         {
-            if (openingDialogueVisible || IsCombatActionPlaying || mapRun != null && !IsMapRunSaved) return;
+            if (IsCombatActionPlaying || mapRun != null && !IsMapRunSaved) return;
             EnsureArtifactBattle();
             if (!BuildArtifactTarget(artifact, position, out ArtifactTarget target)) return;
             GridPosition source = state.GetUnit("hero").Position;
