@@ -905,11 +905,12 @@ namespace OCC.Combat
 
         public static RogueliteMapRun CreateFirstRunV1(int seed)
         {
-            RogueliteMapRun run = new RogueliteMapRun(seed, FireRogueliteStarterCatalog.Universal)
+            RogueliteMapRun run = new RogueliteMapRun(seed)
             {
                 FirstRunExperience = FirstRunExperienceCatalog.CreatePhaseA(),
                 CurrentNodeId = FirstRunExperienceCatalog.OriginNodeId,
                 RegionBossId = string.Empty,
+                StarterId = FireRogueliteStarterCatalog.Universal,
                 AwaitingReward = false
             };
             run.visited.Clear();
@@ -2192,6 +2193,18 @@ namespace OCC.Combat
         public static RogueliteMapRun FromRogue11(OCC.Combat.Roguelite.RogueRunDto dto)
         {
             if (dto == null) throw new ArgumentNullException(nameof(dto));
+            // Earlier first-run saves inherited two spells from the generic Universal starter.
+            // Before B1 is completed, neither spell can have been earned as a reward.
+            // Preserve an in-progress fight if its journal contains any player command.
+            if (dto.FirstRunExperience != null &&
+                dto.CombatJournalRows.All(row => row != null && row.StartsWith("2;2;", StringComparison.Ordinal)) &&
+                !dto.FirstRunExperience.Nodes.Any(node => node.Id == "B1" && (node.Flags & FirstRunNodeFlags.Completed) != 0) &&
+                dto.EquippedSpellIds[4] == "F-P-U01" && dto.EquippedSpellIds[5] == "F-P-U02")
+            {
+                dto.EquippedSpellIds[4] = string.Empty;
+                dto.EquippedSpellIds[5] = string.Empty;
+                dto.MasteredSpellIds.RemoveAll(id => id == "F-P-U01" || id == "F-P-U02");
+            }
             dto.MasteredSpellIds.RemoveAll(id => id == FirstRunExperienceCatalog.OriginSpellId);
             for (int index = 0; index < dto.EquippedSpellIds.Length; index++)
                 if (dto.EquippedSpellIds[index] == FirstRunExperienceCatalog.OriginSpellId)

@@ -743,7 +743,10 @@ namespace OCC.Combat.Presentation
             FireSpellDefinition fireOne = bootstrap.FireSpellInSlot(0), fireTwo = bootstrap.FireSpellInSlot(1);
             ArtifactDefinition artifactOne = bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact;
             bool rogue = state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null;
-            for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++) actionButtons["技能" + (slot + 1)].gameObject.SetActive(true);
+            string[] equippedSpells = rogue ? state.RogueSpells.Loadout.EquippedSpellIds : null;
+            for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++)
+                actionButtons["技能" + (slot + 1)].gameObject.SetActive(
+                    run?.IsTutorialPhase != true || !rogue || !string.IsNullOrEmpty(equippedSpells[slot]));
             if (rogue)
                 for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++) RefreshRogueSpellButton("技能" + (slot + 1), state.RogueSpells, slot);
             else
