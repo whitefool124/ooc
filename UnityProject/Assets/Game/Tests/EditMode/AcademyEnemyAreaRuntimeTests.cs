@@ -277,8 +277,8 @@ namespace OCC.Combat.Tests
             Assert.That(centerTarget.HasStatus(StatusType.Bound), Is.EqualTo(archetypeId == "raider"));
             if (archetypeId == "shieldguard")
             {
-                Assert.That(hero.StatusStrength(StatusType.Agility), Is.EqualTo(-1));
-                Assert.That(centerTarget.StatusStrength(StatusType.Agility), Is.EqualTo(-1));
+                Assert.That(hero.HasStatus(StatusType.Slow), Is.True);
+                Assert.That(centerTarget.HasStatus(StatusType.Slow), Is.True);
             }
         }
 

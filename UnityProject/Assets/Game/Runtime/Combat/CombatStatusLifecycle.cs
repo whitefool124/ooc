@@ -43,7 +43,7 @@ namespace OCC.Combat
                     unit.StatusStrength(StatusType.Burning, BurningDamagePerTurn) + unit.StatusStrength(StatusType.DamageTaken))));
                 effects.Add(CombatEffect.ReduceStatusDuration(unit.Id, StatusType.Burning));
             }
-            foreach (StatusType status in new[] { StatusType.Agility, StatusType.Strength, StatusType.SpellPower,
+            foreach (StatusType status in new[] { StatusType.Slow, StatusType.Agility, StatusType.Strength, StatusType.SpellPower,
                 StatusType.Speed, StatusType.Range, StatusType.DamageTaken, StatusType.ShieldEfficiency,
                 StatusType.ShieldGrant, StatusType.Control, StatusType.Marked, StatusType.Prepared,
                 StatusType.Invulnerable })

@@ -108,20 +108,43 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void Fireground_TicksAtEveryUnitTurnBeforeStandingDamage()
+        public void Fireground_TicksOnlyOnItsSourceTurn()
         {
             CombatState state = State();
             state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
                 RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
             GridPosition cell = new GridPosition(4, 3);
-            state.RogueSpells.FireBattle.CreateOrRefreshFireground(cell, 8, 3, "test-fire");
+            state.RogueSpells.FireBattle.CreateOrRefreshFireground(cell, 8, 3, "test-fire", "hero");
 
             CombatResolver.BeginTurn(state, "hero");
             Assert.That(state.RogueSpells.FireBattle.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
             CombatResolver.BeginTurn(state, "enemy_0");
+            Assert.That(state.RogueSpells.FireBattle.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+            CombatResolver.BeginTurn(state, "hero");
             Assert.That(state.RogueSpells.FireBattle.Firegrounds[cell].RemainingTurns, Is.EqualTo(1));
             CombatResolver.BeginTurn(state, "hero");
             Assert.That(state.RogueSpells.FireBattle.HasFireground(cell), Is.False);
+        }
+
+        [Test]
+        public void EnemyFireground_UsesEnemyTurns()
+        {
+            CombatState state = State();
+            state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state,
+                RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            GridPosition cell = new GridPosition(4, 3);
+            var fire = state.RogueSpells.FireBattle;
+            fire.CreateOrRefreshFireground(cell, 8, 3, "enemy-fire", "enemy_0");
+
+            fire.BeginUnitTurn("hero");
+            Assert.That(fire.Firegrounds[cell].RemainingTurns, Is.EqualTo(3));
+            fire.BeginUnitTurn("enemy_0");
+            Assert.That(fire.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+
+            fire.BeginUnitTurn("hero");
+            Assert.That(fire.Firegrounds[cell].RemainingTurns, Is.EqualTo(2));
+            fire.BeginUnitTurn("enemy_0");
+            Assert.That(fire.Firegrounds[cell].RemainingTurns, Is.EqualTo(1));
         }
 
         [Test]

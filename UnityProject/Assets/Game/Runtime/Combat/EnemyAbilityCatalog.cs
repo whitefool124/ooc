@@ -15,7 +15,7 @@ namespace OCC.Combat
         public static readonly SkillDefinition ShieldRam = new SkillDefinition(
             "enemy_shield_ram", "铭盾冲撞", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 2,
             CombatFeedbackKind.Attribute,
-            new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Agility, 1, -1) });
+            new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Slow, 1) });
         public static readonly SkillDefinition HookingStrike = new SkillDefinition(
             "enemy_hooking_strike", "钩刃牵制", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Direct, 1, 0, 2,
             CombatFeedbackKind.Bound,

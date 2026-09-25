@@ -339,7 +339,7 @@ namespace OCC.Combat
             {
                 if (rule.Condition == FireCondition.SourceBurning) hero.ApplyStatus(StatusType.Burning, 2, 8);
                 if (rule.Condition == FireCondition.SourceBound) hero.ApplyStatus(StatusType.Bound, 2);
-                if (rule.Condition == FireCondition.SourceSlowed) hero.ApplyStatus(StatusType.Agility, 2, -1);
+                if (rule.Condition == FireCondition.SourceSlowed) hero.ApplyStatus(StatusType.Slow, 2);
                 if (rule.Kind == FireRuleKind.ClearOneSelfStatus) hero.ApplyStatus(StatusType.Burning, 2, 8);
                 if (rule.Kind == FireRuleKind.ClearBoundOrSlow) hero.ApplyStatus(StatusType.Bound, 2);
             }

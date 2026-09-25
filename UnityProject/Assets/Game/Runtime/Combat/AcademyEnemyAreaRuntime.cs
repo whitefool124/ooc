@@ -18,7 +18,7 @@ namespace OCC.Combat
                 new[] { new SkillModifierDefinition(SkillModifierType.Radius, 1) }),
             ["shieldguard"] = new SkillDefinition("SK-AOE-SHIELDGUARD", "盾面横扫", SkillTargetRule.AnyUnit,
                 SkillDeliveryMethod.Area, 1, 0, 2, CombatFeedbackKind.Attribute,
-                new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Agility, 1, -1) },
+                new[] { SkillEffectDefinition.Damage(2, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Slow, 1) },
                 new[] { new SkillModifierDefinition(SkillModifierType.Radius, 1) }),
             ["pyromancer"] = new SkillDefinition("SK-AOE-PYROMANCER", "爆炎散射", SkillTargetRule.AnyUnit,
                 SkillDeliveryMethod.Area, 5, 0, 2, CombatFeedbackKind.Burning,

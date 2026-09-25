@@ -9,7 +9,7 @@ namespace OCC.Combat
         public const int BaseMovementRange = 5;
         public const int HeroBaseMovementRange = 3;
         public const int SlowedMovementRange = 3;
-        public const int HeroSlowedMovementRange = 2;
+        public const int HeroSlowedMovementRange = 3;
         public const int HeroBaseHealth = 50;
 
         private readonly Dictionary<StatusType, int> statuses = new Dictionary<StatusType, int>();
@@ -125,7 +125,11 @@ namespace OCC.Combat
             firstNegativeStatusReductionRemaining = Math.Max(0, count);
 
         internal void BeginTurn(int actionPoints, int agilityAtTurnStart = 0)
-        { ActionPoints = actionPoints; MovementRangeThisTurn = Math.Max(0, NaturalMovementRange + agilityAtTurnStart); }
+        {
+            ActionPoints = actionPoints;
+            MovementRangeThisTurn = Math.Max(0, NaturalMovementRange + agilityAtTurnStart);
+            if (HasStatus(StatusType.Slow)) MovementRangeThisTurn = Math.Min(MovementRangeThisTurn, SlowedMovementRange);
+        }
         internal void GrantActionPoints(int amount) { if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount)); ActionPoints = Math.Min(3, ActionPoints + amount); }
         internal void GrantBonusActionPoints(int amount) { if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount)); ActionPoints += amount; }
         internal void SetMovementRangeForTurn(int range) => MovementRangeThisTurn = Math.Max(MovementRangeThisTurn, range);

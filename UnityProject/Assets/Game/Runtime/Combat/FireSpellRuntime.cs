@@ -168,11 +168,18 @@ namespace OCC.Combat
             UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && unit.IsHero)
                 destroyedObjectsThisHeroTurn.Clear();
-            // Fireground duration uses public turns: every unit action advances it.
+            // Fireground duration advances on its source's own turns. Map fire and
+            // fire left by a dead source use the hero's turns so they can expire.
             foreach (GridPosition position in firegrounds.Keys.ToArray())
             {
-                firegrounds[position].Tick();
-                if (firegrounds[position].RemainingTurns <= 0) firegrounds.Remove(position);
+                FiregroundState activeGround = firegrounds[position];
+                UnitState source = string.IsNullOrEmpty(activeGround.SourceUnitId) ? null : Combat.GetUnit(activeGround.SourceUnitId);
+                bool sourceCanAct = source != null && source.IsAlive;
+                if ((sourceCanAct && activeGround.SourceUnitId == unitId) || (!sourceCanAct && unit != null && unit.IsHero))
+                {
+                    activeGround.Tick();
+                    if (activeGround.RemainingTurns <= 0) firegrounds.Remove(position);
+                }
             }
             RemoveExpiredEnvironment(Combat.CurrentTime);
             if (unit != null && firegrounds.TryGetValue(unit.Position, out FiregroundState ground))
@@ -298,6 +305,8 @@ namespace OCC.Combat
                 if (effect.Spell.Rules.Any(rule => rule.Kind == FireRuleKind.OfferRetreat))
                 {
                     TryOfferMove(effect.Spell, unitId, retreatCell, 1);
+                    if (optionalMoves.Any(offer => offer.SourceUnitId == unitId && offer.Destination == retreatCell))
+                        FireSpellEngine.ExecuteOptionalMove(this, unitId, retreatCell);
                     continue;
                 }
                 pendingEffects.Add(new FirePendingEffect(effect.Spell, effect.SourceUnitId, effect.MarkedUnitId,
@@ -404,8 +413,14 @@ namespace OCC.Combat
                          value.SourceUnitId == destroyerUnitId).ToArray())
             {
                 pendingEffects.Remove(effect);
-                foreach (DestroyedObjectRecord record in newlyDestroyed.Where(record => record.DestroyerUnitId == effect.SourceUnitId))
-                    TryOfferMove(effect.Spell, effect.SourceUnitId, record.Cell, 3);
+                DestroyedObjectRecord record = newlyDestroyed.Where(value => value.DestroyerUnitId == effect.SourceUnitId)
+                    .OrderBy(value => value.Sequence).FirstOrDefault();
+                if (record != null)
+                {
+                    TryOfferMove(effect.Spell, effect.SourceUnitId, record.Cell, int.MaxValue);
+                    if (optionalMoves.Any(offer => offer.SourceUnitId == effect.SourceUnitId && offer.Destination == record.Cell))
+                        FireSpellEngine.ExecuteOptionalMove(this, effect.SourceUnitId, record.Cell);
+                }
             }
         }
         public void EndDeviceAction(GridPosition position) => overloadedDevices.Remove(position);
@@ -629,8 +644,8 @@ namespace OCC.Combat
             if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ClearOneSelfStatus) &&
                 !new[] { StatusType.Burning, StatusType.Agility, StatusType.Bound, StatusType.BreakStance }.Any(source.HasStatus)) failures.Add("没有可清除的自身状态");
             if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.ClearBoundOrSlow) &&
-                !source.HasStatus(StatusType.Bound) && source.StatusStrength(StatusType.Agility) >= 0)
-                failures.Add("自身没有束缚或敏捷负值");
+                !source.HasStatus(StatusType.Bound) && !source.HasStatus(StatusType.Slow))
+                failures.Add("自身没有束缚或迟缓");
             if (!FireSpellCatalog.IsWeaponCompatible(spell, source.MainHand)) failures.Add("武器要求不符");
             if (spell.TargetKind == FireTargetKind.Self && string.IsNullOrEmpty(target.UnitId) && target.Cell != source.Position)
                 failures.Add("只能选择自身");
@@ -650,9 +665,8 @@ namespace OCC.Combat
                 !cells.Any(cell => battle.Combat.IsOccupied(cell) || MatchesObject(battle.Combat.Map.GetTile(cell), FireDestructibleMask.All)))
                 failures.Add("直线内没有可命中的单位或物件");
             if (spell.Shape == FireSelectionShape.ReflectionRay &&
-                (cells.Count < 3 || !battle.Combat.IsOccupied(cells[cells.Count - 1]) &&
-                 !MatchesObject(battle.Combat.Map.GetTile(cells[cells.Count - 1]), FireDestructibleMask.All)))
-                failures.Add("折射线两格内没有可命中的单位或物件");
+                (cells.Count < 3 || !battle.Combat.IsOccupied(cells[cells.Count - 1])))
+                failures.Add("折射线两格内没有可命中的单位");
             if (primary != null && spell.TargetKind == FireTargetKind.Unit && spell.Shape != FireSelectionShape.Single &&
                 !cells.Contains(primary.Position)) failures.Add("所选单位不在作用范围内");
             HashSet<GridPosition> previewUnitCells = new HashSet<GridPosition>(cells);
@@ -1074,7 +1088,7 @@ namespace OCC.Combat
             if (RequiresOnCastCondition(spell, FireCondition.TargetBurningAndOnFireground) && (target == null || !target.HasStatus(StatusType.Burning) || !battle.HasFireground(cell))) failures.Add("需要燃烧单位同时站在燃烧地格");
             if (RequiresOnCastCondition(spell, FireCondition.SourceBurning) && !source.HasStatus(StatusType.Burning)) failures.Add("自身未燃烧");
             if (RequiresOnCastCondition(spell, FireCondition.SourceBound) && !source.HasStatus(StatusType.Bound)) failures.Add("自身未被束缚");
-            if (RequiresOnCastCondition(spell, FireCondition.SourceSlowed) && source.StatusStrength(StatusType.Agility) >= 0) failures.Add("自身敏捷未降低");
+            if (RequiresOnCastCondition(spell, FireCondition.SourceSlowed) && !source.HasStatus(StatusType.Slow)) failures.Add("自身没有迟缓");
             if (spell.Rules.Any(rule => rule.Kind == FireRuleKind.MoveSource) && source.HasStatus(StatusType.Bound)) failures.Add("束缚时不能移动");
             int selfLoss = spell.Rules.Where(rule => rule.Kind == FireRuleKind.LoseHealth && rule.Scope == FireRuleScope.Source)
                 .Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
@@ -1089,15 +1103,13 @@ namespace OCC.Combat
             {
                 int distance = source.Position.ManhattanDistance(cell);
                 bool axial = source.Position.X == cell.X || source.Position.Y == cell.Y;
-                if (!axial || distance != 2) failures.Add("越障跃步必须沿直线越过恰好一格");
-                else
+                if (distance == 2 && axial)
                 {
                     GridPosition middle = new GridPosition((source.Position.X + cell.X) / 2, (source.Position.Y + cell.Y) / 2);
                     TileState obstacle = battle.Combat.Map.GetTile(middle);
-                    bool validObstacle = battle.Combat.IsOccupied(middle, source.Id) ||
-                        obstacle.Cover == CoverType.Light && obstacle.Durability > 0;
-                    if (!validObstacle || obstacle.Cover == CoverType.Heavy || obstacle.BlocksLineOfSight && obstacle.Cover != CoverType.Light)
-                        failures.Add("中间格必须恰好是一个单位或轻掩体，不能越过重掩体与永久墙");
+                    if (obstacle.Cover == CoverType.Heavy || obstacle.IsPermanentWall ||
+                        obstacle.BlocksMovement && obstacle.Cover != CoverType.Light && !battle.Combat.IsOccupied(middle, source.Id))
+                        failures.Add("越障跃步不能越过重掩体、永久墙或其他不可越过的障碍");
                 }
             }
             if (spell.TargetKind == FireTargetKind.BurningCell && spell.Shape == FireSelectionShape.Path &&
@@ -1289,6 +1301,8 @@ namespace OCC.Combat
         private static IEnumerable<GridPosition> CellsForScope(FireRuleScope scope, IReadOnlyList<GridPosition> selected, GridPosition source, GridPosition center, CardinalDirection direction, CombatState combat)
         {
             if (scope == FireRuleScope.SourceCell) return new[] { source };
+            if (scope == FireRuleScope.FirstUnitInSelection)
+                return selected.Where(cell => combat.IsOccupied(cell)).Take(1);
             if (scope == FireRuleScope.ReflectedFirstHit)
                 return selected.Count >= 3 ? new[] { selected[selected.Count - 1] } : Array.Empty<GridPosition>();
             if (scope == FireRuleScope.Destination || scope == FireRuleScope.Primary) return new[] { center };
@@ -1325,7 +1339,7 @@ namespace OCC.Combat
                 case FireCondition.SourceBurning: return source.HasStatus(StatusType.Burning);
                 case FireCondition.SourceNotBurning: return !source.HasStatus(StatusType.Burning);
                 case FireCondition.SourceBound: return source.HasStatus(StatusType.Bound);
-                case FireCondition.SourceSlowed: return source.StatusStrength(StatusType.Agility) < 0;
+                case FireCondition.SourceSlowed: return source.HasStatus(StatusType.Slow);
                 case FireCondition.SourceNotArmorBroken: return !source.HasStatus(StatusType.BreakStance);
                 case FireCondition.TargetAtWeaponMaxRange:
                     return target != null && source.MainHand != null &&
@@ -1542,10 +1556,10 @@ namespace OCC.Combat
             else if (rule.Kind == FireRuleKind.ClearBoundOrSlow)
             {
                 bool bound = source.HasStatus(StatusType.Bound);
-                bool slowed = source.StatusStrength(StatusType.Agility) < 0;
+                bool slowed = source.HasStatus(StatusType.Slow);
                 StatusType selected = bound && slowed
-                    ? aimDirection == CardinalDirection.West ? StatusType.Agility : StatusType.Bound
-                    : bound ? StatusType.Bound : StatusType.Agility;
+                    ? aimDirection == CardinalDirection.West ? StatusType.Slow : StatusType.Bound
+                    : bound ? StatusType.Bound : StatusType.Slow;
                 if (bound || slowed)
                 {
                     source.ClearStatus(selected);
