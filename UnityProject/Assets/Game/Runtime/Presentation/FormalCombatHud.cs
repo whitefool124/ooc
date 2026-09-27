@@ -882,7 +882,7 @@ namespace OCC.Combat.Presentation
             ConfigurePopulatedSpellCard(button);
             SetCostChips(button, 1, skill.ManaCost);
             int cooldown = hero.Cooldown(skill);
-            SetNoticeChip(button, cooldown > 0, cooldown);
+            SetNoticeChip(button, false);
         }
 
         private void RefreshFireSpellButton(string key, FireSpellDefinition spell, UnitState hero)
@@ -904,7 +904,7 @@ namespace OCC.Combat.Presentation
             ConfigurePopulatedSpellCard(button);
             SetCostChips(button, spell.ActionPointCost, spell.ManaCost);
             int cooldown = bootstrap.CurrentFireBattle == null ? 0 : bootstrap.CurrentFireBattle.Cooldown(hero.Id, spell.Id);
-            SetNoticeChip(button, cooldown > 0, cooldown);
+            SetNoticeChip(button, false);
         }
 
         private void RefreshArtifactButton(string key, ArtifactDefinition artifact)
@@ -939,7 +939,7 @@ namespace OCC.Combat.Presentation
                 icon.sprite = Resources.Load<Sprite>(RogueSpellIconPath(spell.DefinitionId));
                 icon.color = spell.Element == "fire" ? FormalUiTheme.Amber : FormalUiTheme.Magic;
             }
-            SetCostChips(button, spell.ActionPointCost, spell.ManaCost); SetNoticeChip(button, cooldown > 0, cooldown);
+            SetCostChips(button, spell.ActionPointCost, spell.ManaCost); SetNoticeChip(button, false);
         }
 
         private static string RogueSpellIconPath(string definitionId)
@@ -1236,8 +1236,7 @@ namespace OCC.Combat.Presentation
                 if (rogueSpell == null && !string.IsNullOrWhiteSpace(label)) title = label.Split('\n')[0];
             }
             string body = rogueSpell == null ? CombatInformationPresenter.BuildActionDetails(preview) :
-                (preview == null ? string.Empty : preview.CanSubmit ? "当前　可用\n" : "当前　不可用\n" + preview.FailureReason + "\n") +
-                FormalRogueliteUi.SpellTooltipBody(rogueSpell);
+                "当前　" + RogueSpellAvailabilityText(rogueSpell, preview) + "\n" + FormalRogueliteUi.SpellTooltipBody(rogueSpell);
             string category = rogueSpell != null ? "个人术式" : SkillSlot(action) >= 0 ? "术式与法宝" : "战斗指令";
             string iconPath = rogueSpell == null ? string.Empty : FormalRogueliteUi.RogueSpellIconPath(rogueSpell.DefinitionId);
             if (rogueSpell == null && rogueSlot >= 0)
@@ -1650,6 +1649,22 @@ namespace OCC.Combat.Presentation
             return prefab.Fill;
         }
 
+        private string RogueSpellAvailabilityText(SpellDefinition spell, CombatActionPreview preview)
+        {
+            CombatState state = bootstrap?.CurrentState;
+            UnitState hero = state?.GetUnit("hero");
+            if (hero == null || state.RogueSpells == null) return "状态未就绪";
+            if (string.Equals(spell.Role, "passive", StringComparison.Ordinal)) return "被动已生效，无需施放";
+            if (state.ActiveUnitId != hero.Id) return "等待自身行动";
+            int cooldown = state.RogueSpells.CooldownRemaining(spell.DefinitionId);
+            if (cooldown > 0) return "冷却中，还需 " + cooldown + " 个自身回合";
+            if (hero.ActionPoints < spell.ActionPointCost)
+                return "行动点不足，需要 " + spell.ActionPointCost + " 点";
+            if (hero.Mana < spell.ManaCost)
+                return "个人魔力不足，需要 " + spell.ManaCost + " 点";
+            return preview == null ? "状态未就绪" : preview.CanSubmit ? "可用" : "不可用：" + preview.FailureReason;
+        }
+
         // The game state always retains the real action value. While an action is previewed,
         // this method instead animates the same row toward its projected value; cancelling the
         // preview animates it back without mutating combat state.
@@ -1843,7 +1858,13 @@ namespace OCC.Combat.Presentation
                 Text spellLabel = parsedSlot < 0 ? null : pair.Value.transform.Find("文字")?.GetComponent<Text>();
                 if (available && spellLabel != null && spellLabel.text == "空槽") { available = false; reason = "术式槽为空"; }
                 pair.Value.GetComponent<UiButtonFeedback>()?.SetAvailability(available, reason);
-                ApplySpellAvailabilityVisual(pair.Value, available, reason, pair.Key == bootstrap.SelectedAction);
+                int actionCost = rogueSpell?.ActionPointCost ?? fire?.ActionPointCost ?? artifact?.ActionPointCost ??
+                    (skill == null ? 0 : CombatResolver.BasicActionPointCost);
+                int manaCost = rogueSpell?.ManaCost ?? fire?.ManaCost ?? artifact?.ManaCost ?? skill?.ManaCost ?? 0;
+                int cooldownRemaining = rogueSpell != null ? state.RogueSpells.CooldownRemaining(rogueSpell.DefinitionId) :
+                    fire != null ? bootstrap.CurrentFireBattle?.Cooldown(hero.Id, fire.Id) ?? 0 : skill == null ? 0 : hero.Cooldown(skill);
+                ApplySpellAvailabilityVisual(pair.Value, available, reason, pair.Key == bootstrap.SelectedAction,
+                    hero.ActionPoints < actionCost, hero.Mana < manaCost, cooldownRemaining);
             }
             endTurnButton?.GetComponent<UiButtonFeedback>()?.SetAvailability(heroTurn, heroTurn ? string.Empty : "等待敌方行动");
         }
@@ -1851,28 +1872,54 @@ namespace OCC.Combat.Presentation
         private static int SkillSlot(string action)
         { return action != null && action.StartsWith("技能", StringComparison.Ordinal) && int.TryParse(action.Substring(2), out int oneBased) && oneBased >= 1 && oneBased <= RogueRuntimeConstants.SpellSlotCount ? oneBased - 1 : -1; }
 
-        private static void ApplySpellAvailabilityVisual(Button button, bool available, string reason, bool selected)
+        private static void ApplySpellAvailabilityVisual(Button button, bool available, string reason, bool selected,
+            bool actionShortage, bool manaShortage, int cooldownRemaining)
         {
             if (button == null || !button.name.StartsWith("技能", StringComparison.Ordinal)) return;
-            bool shortage = !string.IsNullOrEmpty(reason) && reason.Contains("不足", StringComparison.Ordinal);
-            bool cooldown = !string.IsNullOrEmpty(reason) && reason.Contains("冷却", StringComparison.Ordinal);
+            bool shortage = actionShortage || manaShortage;
             bool empty = !string.IsNullOrEmpty(reason) && reason.Contains("空", StringComparison.Ordinal);
             Text label = button.transform.Find("文字")?.GetComponent<Text>();
-            if (label != null) label.color = available || selected ? FormalUiTheme.Text : FormalUiTheme.Muted;
+            if (label != null) label.color = shortage ? FormalUiTheme.Muted : available || selected ? FormalUiTheme.Text : FormalUiTheme.Muted;
+            Image icon = button.transform.Find("正式图标")?.GetComponent<Image>();
+            if (icon != null && shortage) icon.color = Color.Lerp(icon.color, FormalUiTheme.Muted, .68f);
             Image resourceBlock = button.transform.Find("术式资源块")?.GetComponent<Image>();
             if (resourceBlock != null)
             {
                 Color baseColor = SpellResourceBlockColor(empty);
-                resourceBlock.color = shortage ? Color.Lerp(baseColor, FormalUiTheme.Danger, .26f) :
-                    cooldown ? Color.Lerp(baseColor, FormalUiTheme.Amber, .22f) : baseColor;
+                resourceBlock.color = shortage ? Color.Lerp(baseColor, FormalUiTheme.Ink, .48f) : baseColor;
             }
 
             Text actionValue = button.transform.Find("语义_action/数值")?.GetComponent<Text>();
             Text aetherValue = button.transform.Find("语义_aether/数值")?.GetComponent<Text>();
-            if (actionValue != null)
-                actionValue.color = !available && reason.StartsWith("行动点不足", StringComparison.Ordinal) ? FormalUiTheme.Danger : FormalUiTheme.OnInk;
-            if (aetherValue != null)
-                aetherValue.color = !available && shortage && !reason.StartsWith("行动点不足", StringComparison.Ordinal) ? FormalUiTheme.Danger : FormalUiTheme.OnInk;
+            if (actionValue != null) actionValue.color = actionShortage ? FormalUiTheme.Danger : FormalUiTheme.OnInk;
+            if (aetherValue != null) aetherValue.color = manaShortage ? FormalUiTheme.Danger : FormalUiTheme.OnInk;
+            SetSpellCooldownOverlay(button, cooldownRemaining);
+        }
+
+        private static void SetSpellCooldownOverlay(Button button, int remaining)
+        {
+            Transform overlay = button.transform.Find("冷却遮罩");
+            if (remaining <= 0)
+            {
+                if (overlay != null) overlay.gameObject.SetActive(false);
+                return;
+            }
+            if (overlay == null)
+            {
+                overlay = FormalUiKit.FlatPanel("冷却遮罩", button.transform, new Vector2(0f, 1f), new Vector2(0f, 1f),
+                    new Vector2(6f, 0f), new Vector2(64f, 64f), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .88f)).transform;
+                overlay.GetComponent<Image>().raycastTarget = false;
+                Text caption = FormalUiKit.Label("冷却标题", "冷却", overlay, new Vector2(0f, -4f),
+                    new Vector2(64f, 24f), 16, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
+                caption.raycastTarget = false;
+                Text countdown = FormalUiKit.Label("冷却读数", string.Empty, overlay, new Vector2(0f, -28f),
+                    new Vector2(64f, 30f), 24, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
+                countdown.raycastTarget = false;
+            }
+            overlay.gameObject.SetActive(true);
+            overlay.SetAsLastSibling();
+            Text value = overlay.Find("冷却读数")?.GetComponent<Text>();
+            if (value != null) value.text = remaining.ToString();
         }
 
         private static string CompactHud(string value, int maximumLength)

@@ -366,7 +366,7 @@ namespace OCC.Combat.Tests
                 Assert.That(frameRight.anchoredPosition, Is.EqualTo(new Vector2(314f, 0f)));
                 Assert.That(frameRight.sizeDelta, Is.EqualTo(new Vector2(2f, 76f)));
                 Assert.That(frameTop.GetComponent<Image>().color, Is.EqualTo(FormalUiTheme.Rule));
-                Assert.That(resourceBlock.GetComponent<Image>().color.a, Is.EqualTo(1f));
+                Assert.That(resourceBlock.GetComponent<Image>().color.a, Is.InRange(.1f, .2f));
                 Assert.That(resourceBlock.GetComponent<Image>().color.b, Is.GreaterThan(resourceBlock.GetComponent<Image>().color.r));
                 Assert.That(actionCost.anchoredPosition, Is.EqualTo(new Vector2(252f, -6f)));
                 Assert.That(aetherCost.anchoredPosition, Is.EqualTo(new Vector2(252f, -38f)));
@@ -401,11 +401,26 @@ namespace OCC.Combat.Tests
                 Assert.That(name.rectTransform.sizeDelta, Is.EqualTo(new Vector2(170f, 64f)));
                 Assert.That(notice.gameObject.activeSelf, Is.False);
                 typeof(FormalCombatHud).GetMethod("ApplySpellAvailabilityVisual", BindingFlags.Static | BindingFlags.NonPublic)
-                    ?.Invoke(null, new object[] { button, false, "术式槽为空", false });
+                    ?.Invoke(null, new object[] { button, false, "术式槽为空", false, false, false, 0 });
                 Color emptyResourceColor = resourceBlock.GetComponent<Image>().color;
                 Assert.That(emptyResourceColor, Is.Not.EqualTo(FormalUiTheme.Muted));
-                Assert.That(emptyResourceColor.a, Is.EqualTo(1f));
+                Assert.That(emptyResourceColor.a, Is.LessThan(.1f));
                 Assert.That(emptyResourceColor.b, Is.GreaterThan(emptyResourceColor.r));
+
+                MethodInfo availability = typeof(FormalCombatHud).GetMethod("ApplySpellAvailabilityVisual", BindingFlags.Static | BindingFlags.NonPublic);
+                availability?.Invoke(null, new object[] { button, false, "行动点不足", false, true, true, 0 });
+                Assert.That(actionCost.Find("数值").GetComponent<Text>().color, Is.EqualTo(FormalUiTheme.Danger));
+                Assert.That(aetherCost.Find("数值").GetComponent<Text>().color, Is.EqualTo(FormalUiTheme.Danger));
+                Assert.That(name.color, Is.EqualTo(FormalUiTheme.Muted));
+                availability?.Invoke(null, new object[] { button, false, "术式冷却中", false, false, false, 2 });
+                Transform cooldown = button.transform.Find("冷却遮罩");
+                Assert.That(cooldown, Is.Not.Null);
+                Assert.That(cooldown.Find("冷却标题").GetComponent<Text>().text, Is.EqualTo("冷却"));
+                Assert.That(cooldown.Find("冷却读数").GetComponent<Text>().text, Is.EqualTo("2"));
+                Assert.That(cooldown.gameObject.activeSelf, Is.True);
+                Assert.That(actionCost.Find("数值").GetComponent<Text>().color, Is.EqualTo(FormalUiTheme.OnInk));
+                availability?.Invoke(null, new object[] { button, true, string.Empty, false, false, false, 0 });
+                Assert.That(cooldown.gameObject.activeSelf, Is.False);
             }
             finally
             {
