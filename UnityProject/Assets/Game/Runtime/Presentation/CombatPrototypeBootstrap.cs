@@ -1338,10 +1338,13 @@ namespace OCC.Combat.Presentation
         }
         private FireSpellPreview BuildFireSpellPreviewAt(FireSpellDefinition spell, GridPosition position)
         {
+            return FireSpellEngine.Preview(fireBattle, "hero", spell, FireSpellTargetAt(spell, position));
+        }
+        private FireSpellTarget FireSpellTargetAt(FireSpellDefinition spell, GridPosition position)
+        {
             UnitState unit = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
             CardinalDirection direction = FireSpellAimDirection(spell.Id, position);
-            FireSpellTarget target = unit == null ? FireSpellTarget.At(position, direction) : FireSpellTarget.Unit(unit.Id, direction);
-            return FireSpellEngine.Preview(fireBattle, "hero", spell, target);
+            return unit == null ? FireSpellTarget.At(position, direction) : FireSpellTarget.Unit(unit.Id, direction);
         }
         public void SetSelectedTargetForUi(string unitId)
         {
@@ -2109,11 +2112,41 @@ namespace OCC.Combat.Presentation
 
         public CombatTargetDamageForecast TargetDamageForecast(UnitState enemy)
         {
-            int slot = RogueSkillSlot(selection.Action);
+            string action = selection.HasMenuPreview ? selection.MenuPreviewAction : selection.Action;
+            GridPosition? previewCenter = selection.HasMenuPreview ? selection.MenuPreviewPosition
+                : selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
+            if (enemy == null || !previewCenter.HasValue || state?.ActiveUnitId != "hero") return null;
+            int slot = RogueSkillSlot(action);
             FireSpellDefinition fireSpell = slot < 0 ? null : FireSpellInSlot(slot);
+            if (fireSpell != null)
+            {
+                if (fireBattle == null) return null;
+                FireSpellPreview preview = BuildFireSpellPreviewAt(fireSpell, previewCenter.Value);
+                if (!preview.CanCommit || !preview.UnitIds.Contains(enemy.Id) ||
+                    !fireSpell.Rules.Any(rule => rule.Kind == FireRuleKind.Damage ||
+                        rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.Push)) return null;
+                try
+                {
+                    return CombatTargetDamageForecaster.FireSpell(fireBattle, "hero", fireSpell,
+                        FireSpellTargetAt(fireSpell, previewCenter.Value), enemy.Id);
+                }
+                catch (InvalidOperationException) { return null; }
+            }
+            OCC.Combat.Roguelite.SpellDefinition basicSpell = slot < 0 ? null : state.RogueSpells?.DefinitionAtSlot(slot);
+            if (basicSpell?.DefinitionId == "BASE-FIRE-RANGED" || basicSpell?.DefinitionId == "BASE-FIRE-MELEE")
+            {
+                if (previewCenter.Value != enemy.Position) return null;
+                try
+                {
+                    return CombatTargetDamageForecaster.Skill(state,
+                        CombatCommand.UseSkill("hero", slot, enemy.Id), enemy.Id);
+                }
+                catch (InvalidOperationException) { return null; }
+            }
+            if (action == "攻击" && previewCenter.Value != enemy.Position) return null;
             ArtifactDefinition artifact = slot == 0 ? (CurrentArmedArtifact ?? CurrentTrainingRangeArtifact) : null;
             CombatTargetForecastResult result = targetForecasts.Evaluate(
-                battlefield, state, fireBattle, selection.Action, enemy, fireSpell, artifact, CurrentArmedUses);
+                battlefield, state, fireBattle, action, enemy, fireSpell, artifact, CurrentArmedUses);
             fireBattle = result.FireBattle;
             return result.Forecast;
         }

@@ -496,6 +496,75 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void SelectingSpell_DoesNotForecastAnInspectedEnemyUntilItsEffectIsPreviewed()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            CombatState state = new CombatState(new GridMap(5, 1), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R02");
+            FireSpellPreview effect = new FireSpellPreview(spell, System.Array.Empty<string>(),
+                new[] { enemy.Position }, new[] { enemy.Id }, System.Array.Empty<GridPosition>(), false, false);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能1");
+            selection.SetKnownTarget(enemy.Id);
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+            int forecastCalls = 0;
+            CombatTargetDamageForecast Forecast(UnitState unit) { forecastCalls++; return null; }
+
+            BattlefieldCellPresentation selected = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, enemy.Position, _ => spell, (_, __) => effect, Forecast, _ => null);
+            Assert.That(selected.SkillMarker, Is.Not.EqualTo(BattlefieldCellMarker.None));
+            Assert.That(selected.IsPlayerEffectCell, Is.False);
+            Assert.That(forecastCalls, Is.Zero);
+
+            selection.SetPreviewPosition(enemy.Position);
+            BattlefieldCellPresentation previewed = presenter.Build(state, null, new FireBattleState(state),
+                selection, false, null, enemy.Position, _ => spell, (_, __) => effect, Forecast, _ => null);
+            Assert.That(previewed.IsPlayerEffectCell, Is.True);
+            Assert.That(previewed.IsPreviewedUnit, Is.True);
+            Assert.That(forecastCalls, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void SelectingSpark_KeepsItsRangeWithoutPreviewingAnInspectedEnemy()
+        {
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            hero.ConfigureMana(12, 12);
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(2, 0));
+            CombatState state = new CombatState(new GridMap(5, 1), new[] { hero, enemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.AttachRogueSpellRuntime(new OCC.Combat.Roguelite.RogueSpellCombatRuntime(state,
+                OCC.Combat.Roguelite.RogueSpellLoadout.CreateStarter().CreateCombatSnapshot()));
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatSelectionController selection = new CombatSelectionController();
+            selection.SelectAction("技能2");
+            selection.SetKnownTarget(enemy.Id);
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+            int forecastCalls = 0;
+            CombatTargetDamageForecast Forecast(UnitState unit) { forecastCalls++; return null; }
+
+            BattlefieldCellPresentation selected = presenter.Build(state, null, state.RogueSpells.FireBattle,
+                selection, false, null, enemy.Position, _ => null, (_, __) => null, Forecast, _ => null);
+            Assert.That(selected.SkillMarker, Is.EqualTo(BattlefieldCellMarker.SkillSelectable));
+            Assert.That(selected.IsPlayerEffectCell, Is.False);
+            Assert.That(forecastCalls, Is.Zero);
+
+            selection.SetPreviewPosition(enemy.Position);
+            BattlefieldCellPresentation previewed = presenter.Build(state, null, state.RogueSpells.FireBattle,
+                selection, false, null, enemy.Position, _ => null, (_, __) => null, Forecast, _ => null);
+            Assert.That(previewed.IsPlayerEffectCell, Is.True);
+            Assert.That(previewed.IsPreviewedUnit, Is.True);
+            Assert.That(forecastCalls, Is.EqualTo(1));
+        }
+
+        [Test]
         public void MinimumRangeSpell_MarksTheDeadZoneButNeverTheCasterCell()
         {
             CombatFormalVisualAssets assets = new CombatFormalVisualAssets();

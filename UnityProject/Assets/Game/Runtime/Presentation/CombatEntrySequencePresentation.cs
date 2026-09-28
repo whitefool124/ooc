@@ -35,7 +35,6 @@ namespace OCC.Combat.Presentation
         // that hitch from swallowing the whole hold-and-fade in one step.
         private const float MaxFrameStepSeconds = .05f;
         private const float RevealZoomScale = 1.15f;
-        private const float RevealFrameSize = 232f;
         private const float OverlaySortingOffset = -10f;
         private const float StartNoticeHoldSeconds = 1.3f;
         // The goal box sits just under the combat header and inside the board's left edge.
@@ -72,10 +71,14 @@ namespace OCC.Combat.Presentation
         private GameObject revealCard;
         private CanvasGroup revealCardGroup;
         private RawImage revealPortrait;
+        private RectTransform revealPortraitRect;
         private Text revealName;
         private Text revealDetail;
         private GameObject revealFrame;
+        private RectTransform revealFrameRect;
+        private readonly RectTransform[] revealFrameEdges = new RectTransform[4];
         private CanvasGroup revealFrameGroup;
+        private UnitState revealedEnemy;
 
         private GameObject startNotice;
         private CanvasGroup startNoticeGroup;
@@ -175,9 +178,9 @@ namespace OCC.Combat.Presentation
 
             foreach (UnitState enemy in targets)
             {
-                sequence.AppendCallback(() => ShowRevealCard(enemy, motion));
                 sequence.Append(PoseTween(poseX, poseY, poseZoom, enemy.Position.X, enemy.Position.Y, revealZoom,
                     TourApproachSeconds, FormalUiMotionTokens.StandardEase));
+                sequence.AppendCallback(() => ShowRevealCard(enemy, motion));
                 poseX = enemy.Position.X; poseY = enemy.Position.Y; poseZoom = revealZoom;
                 sequence.AppendInterval(TourHoldSeconds);
                 sequence.AppendCallback(() => HideRevealCard(motion));
@@ -249,11 +252,37 @@ namespace OCC.Combat.Presentation
             else SkipToStart();
         }
 
+        private void LateUpdate()
+        {
+            if (revealedEnemy == null || revealFrame == null || !revealFrame.activeSelf ||
+                host?.BattlefieldViewport == null) return;
+            BattlefieldRect cell = host.BattlefieldViewport.CellRect(revealedEnemy.Position);
+            float pixel = cell.Width / 32f;
+            float size = cell.Width + pixel * 2f;
+            revealFrameRect.anchoredPosition = new Vector2(
+                cell.X + cell.Width * .5f, -(cell.Y + cell.Height * .5f));
+            revealFrameRect.sizeDelta = new Vector2(size, size);
+            SetRevealFrameEdge(0, Vector2.zero, new Vector2(size, pixel));
+            SetRevealFrameEdge(1, new Vector2(0f, -size + pixel), new Vector2(size, pixel));
+            SetRevealFrameEdge(2, Vector2.zero, new Vector2(pixel, size));
+            SetRevealFrameEdge(3, new Vector2(size - pixel, 0f), new Vector2(pixel, size));
+        }
+
+        private void SetRevealFrameEdge(int index, Vector2 position, Vector2 size)
+        {
+            revealFrameEdges[index].anchoredPosition = position;
+            revealFrameEdges[index].sizeDelta = size;
+        }
+
         private UiMotionProfile Motion()
             => UiMotionProfile.FromIntensity(host == null ? 1f : host.UiPreferences.AnimationIntensity);
 
-        private static float ClampZoom(float value) => Mathf.Max(BattlefieldPresentationAdapter.MinimumCellSize,
-            Mathf.Min(BattlefieldPresentationAdapter.MaximumCellSize, value));
+        private static float ClampZoom(float value)
+        {
+            float step = BattlefieldPresentationAdapter.CellSizeStep;
+            return Mathf.Clamp(Mathf.Round(value / step) * step,
+                BattlefieldPresentationAdapter.MinimumCellSize, BattlefieldPresentationAdapter.MaximumCellSize);
+        }
 
         /// <summary>Enemies are toured from the far edge inward, matching how the board reads.</summary>
         private static IReadOnlyList<UnitState> TourTargets(CombatState state) => state.Units.Values
@@ -473,10 +502,10 @@ namespace OCC.Combat.Presentation
             revealCardGroup = revealCard.AddComponent<CanvasGroup>();
 
             GameObject portraitObject = FormalUiKit.Create("敌方立绘", revealCard.transform);
-            RectTransform portraitRect = portraitObject.AddComponent<RectTransform>();
-            portraitRect.anchorMin = portraitRect.anchorMax = portraitRect.pivot = new Vector2(0f, 1f);
-            portraitRect.anchoredPosition = new Vector2(14f, -14f);
-            portraitRect.sizeDelta = new Vector2(128f, 128f);
+            revealPortraitRect = portraitObject.AddComponent<RectTransform>();
+            revealPortraitRect.anchorMin = revealPortraitRect.anchorMax = revealPortraitRect.pivot = new Vector2(0f, 1f);
+            revealPortraitRect.anchoredPosition = new Vector2(14f, -14f);
+            revealPortraitRect.sizeDelta = new Vector2(128f, 128f);
             revealPortrait = portraitObject.AddComponent<RawImage>();
             revealPortrait.raycastTarget = false;
 
@@ -490,21 +519,24 @@ namespace OCC.Combat.Presentation
 
         private GameObject BuildRevealFrame(Transform parent)
         {
-            // The camera centers the toured cell in the viewport, so a fixed frame at the
-            // viewport center always lands on the enemy being introduced.
+            // Follow the enemy's actual displayed cell: edge clamping can keep the camera from
+            // centering that cell within the viewport.
             GameObject frame = FormalUiKit.Create("敌方锁定框", parent);
-            RectTransform rect = frame.AddComponent<RectTransform>();
-            rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(.5f, .5f);
-            rect.anchoredPosition = new Vector2(BoardViewportX + BoardViewportWidth * .5f,
+            revealFrameRect = frame.AddComponent<RectTransform>();
+            revealFrameRect.anchorMin = revealFrameRect.anchorMax = new Vector2(0f, 1f);
+            revealFrameRect.pivot = new Vector2(.5f, .5f);
+            revealFrameRect.anchoredPosition = new Vector2(BoardViewportX + BoardViewportWidth * .5f,
                 -(BoardViewportY + BoardViewportHeight * .5f));
-            rect.sizeDelta = new Vector2(RevealFrameSize, RevealFrameSize);
+            revealFrameRect.sizeDelta = new Vector2(1f, 1f);
             CanvasGroup group = frame.AddComponent<CanvasGroup>();
             group.alpha = 0f;
             revealFrameGroup = group;
-            // A focus reticle, so it uses the battle accent rather than a status colour.
-            FormalUiKit.ThinFrame(frame.transform, new Vector2(RevealFrameSize, RevealFrameSize),
-                FormalUiTheme.Cyan, "锁定框");
+            string[] edgeNames = { "锁定框_上", "锁定框_下", "锁定框_左", "锁定框_右" };
+            for (int i = 0; i < edgeNames.Length; i++)
+            {
+                FormalUiKit.Line(frame.transform, Vector2.zero, Vector2.one, Color.white, edgeNames[i]);
+                revealFrameEdges[i] = frame.transform.Find(edgeNames[i]).GetComponent<RectTransform>();
+            }
             frame.SetActive(false);
             return frame;
         }
@@ -634,10 +666,20 @@ namespace OCC.Combat.Presentation
         private void ShowRevealCard(UnitState enemy, UiMotionProfile motion)
         {
             if (enemy == null || revealCard == null) return;
+            revealedEnemy = enemy;
             Texture2D portrait = host?.UnitPortrait(enemy);
             revealPortrait.texture = portrait;
             if (portrait != null) portrait.filterMode = FilterMode.Point;
             revealPortrait.uvRect = new Rect(0f, 0f, 1f, 1f);
+            if (portrait != null)
+            {
+                float scale = Mathf.Min(128f / portrait.width, 128f / portrait.height);
+                float width = Mathf.Round(portrait.width * scale);
+                float height = Mathf.Round(portrait.height * scale);
+                revealPortraitRect.sizeDelta = new Vector2(width, height);
+                revealPortraitRect.anchoredPosition = new Vector2(14f + (128f - width) * .5f,
+                    -14f - (128f - height) * .5f);
+            }
             revealName.text = string.IsNullOrEmpty(enemy.DisplayName) ? enemy.Id : enemy.DisplayName;
             revealDetail.text = "生命 " + enemy.Health + " / " + enemy.MaxHealth +
                 "　护盾 " + enemy.Shield + "\n" + EnemyResolutionSemantics.Forecast(enemy);
@@ -662,6 +704,7 @@ namespace OCC.Combat.Presentation
         private void HideRevealCard(UiMotionProfile motion)
         {
             if (revealCard == null) return;
+            revealedEnemy = null;
             revealCardGroup.DOKill();
             revealFrameGroup.DOKill();
             if (motion.IsImmediate)

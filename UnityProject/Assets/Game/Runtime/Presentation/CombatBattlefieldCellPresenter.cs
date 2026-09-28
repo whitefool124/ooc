@@ -67,13 +67,34 @@ namespace OCC.Combat.Presentation
             else if (SupportsRangeEnvelope(fireSpell) && IsInsideDeclaredReach(firePreview))
                 // A spell with no legal target yet still has to answer "how far does this reach".
                 skillMarker = BattlefieldCellMarker.SkillRangeEnvelope;
+            OCC.Combat.Roguelite.SpellDefinition basicSpell = fireSpell == null && fireSlot >= 0 &&
+                state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null
+                ? state.RogueSpells.DefinitionAtSlot(fireSlot) : null;
+            bool basicAttack = basicSpell?.DefinitionId == "BASE-FIRE-RANGED" ||
+                basicSpell?.DefinitionId == "BASE-FIRE-MELEE";
+            bool basicTarget = false;
+            bool basicUnitTarget = false;
+            bool basicObjectTarget = false;
+            if (basicAttack)
+            {
+                UnitState hero = state.GetUnit("hero");
+                UnitState occupant = state.Units.Values.FirstOrDefault(candidate =>
+                    candidate.IsAlive && candidate.Position == position);
+                int distance = hero.Position.ManhattanDistance(position);
+                bool inReach = distance >= 1 && distance <= hero.EffectiveRange(basicSpell.Range) &&
+                    (distance == 1 || state.HasLineOfSight(hero.Position, position));
+                basicUnitTarget = occupant != null && !occupant.IsHero;
+                basicObjectTarget = tile.Durability > 0 &&
+                    (tile.Cover != CoverType.None || tile.IsDevice || tile.IsObjective || tile.IsLampVine);
+                basicTarget = inReach && (basicUnitTarget || basicObjectTarget);
+                bool canCast = state.ActiveUnitId == hero.Id && hero.ActionPoints >= basicSpell.ActionPointCost &&
+                    hero.Mana >= basicSpell.ManaCost && state.RogueSpells.IsReady(basicSpell.DefinitionId);
+                if (inReach) skillMarker = basicTarget && canCast
+                    ? BattlefieldCellMarker.SkillSelectable : BattlefieldCellMarker.SkillRangeEnvelope;
+                basicTarget &= canCast;
+            }
             GridPosition? previewCenter = menuPreview ? (GridPosition?)selection.MenuPreviewPosition
                 : selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
-            if (!previewCenter.HasValue && fireSpell != null && !string.IsNullOrEmpty(selection.TargetId))
-            {
-                UnitState selectedTarget = state.GetUnit(selection.TargetId);
-                if (selectedTarget != null) previewCenter = selectedTarget.Position;
-            }
             bool isPlayerEffectCell = false;
             bool isPreviewedUnit = false;
             bool isPreviewedObject = false;
@@ -103,6 +124,13 @@ namespace OCC.Combat.Presentation
                     (selectedPreview.ProjectedDestroyedObjects.Contains(position) ||
                      selectedPreview.ProjectedPushedUnits.Values.Contains(position)))
                     skillMarker = BattlefieldCellMarker.SkillRisk;
+            }
+            if (basicAttack && basicTarget && previewCenter.HasValue && previewCenter.Value == position)
+            {
+                skillMarker = BattlefieldCellMarker.SkillCommitted;
+                isPlayerEffectCell = true;
+                isPreviewedUnit = basicUnitTarget;
+                isPreviewedObject = basicObjectTarget;
             }
             if (fireBattle?.OptionalMoves.Any(offer => offer.SourceUnitId == "hero" && offer.Destination == position) == true)
                 skillMarker = BattlefieldCellMarker.SkillSelectable;
@@ -136,7 +164,8 @@ namespace OCC.Combat.Presentation
                 }
             }
 
-            CombatTargetDamageForecast forecast = unit != null && !unit.IsHero ? damageForecast(unit) : null;
+            CombatTargetDamageForecast forecast = unit != null && !unit.IsHero && isPreviewedUnit
+                ? damageForecast(unit) : null;
             CombatUnitVitalsPresentation vitals = unit == null ? null : CombatUnitVitalsPresentation.From(unit, forecast,
                 state.Ruleset == CombatRuleset.Roguelite);
             List<BattlefieldStatusVisual> statuses = unit == null ? new List<BattlefieldStatusVisual>() :
