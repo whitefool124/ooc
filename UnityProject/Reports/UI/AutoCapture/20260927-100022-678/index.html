@@ -1,0 +1,11 @@
+﻿<!doctype html><html lang='zh'><meta charset='utf-8'><title>OCC UI 截图</title><style>body{background:#111821;color:#e5e8ed;font:16px sans-serif;margin:32px}section{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px}article{background:#202b37;padding:16px;border-radius:8px}img{width:100%;height:auto}small{color:#aab8c8}textarea{display:block;width:98%;height:72px}select,textarea,button{font:inherit;margin:8px 0}nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}nav a{color:#d9e8f8;background:#314458;padding:7px 10px;border-radius:5px;text-decoration:none}nav a:hover{background:#42627f}article{scroll-margin-top:18px}</style><h1>OCC UI 截图评估</h1><p>截图为运行时 Game View 原图。点击下方页面名直达截图，点击截图查看原图。每个 PNG 旁的 JSON 记录分类、场景、状态和实际分辨率。评估记录保存在本浏览器，可导出 JSON。</p><button onclick='exportReview()'>导出评估 JSON</button><nav><a href='#map_reward'>战利品清点与领取</a></nav><section><article id='map_reward'><h2>战利品清点与领取</h2><small>学院/战利品 · map_reward</small><p><a href='map_reward.png'><img src='map_reward.png'></a></p><label>改进优先级 <select data-id='map_reward' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_reward' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_reward",
+    "category": "学院/战利品",
+    "label": "战利品清点与领取",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T10:00:28.5406765Z"
+}</pre></details></article></section><script>const key='occ-ui-review:'+location.pathname;document.querySelectorAll('[data-id]').forEach(e=>{let k=e.dataset.id+':'+e.dataset.field;e.value=localStorage.getItem(key+k)||'';e.addEventListener('input',()=>localStorage.setItem(key+k,e.value))});function exportReview(){let rows={};document.querySelectorAll('[data-id]').forEach(e=>{let id=e.dataset.id;(rows[id]??={})[e.dataset.field]=e.value});let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(rows,null,2)],{type:'application/json'}));a.download='review.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}</script></html>

@@ -1,0 +1,11 @@
+{
+    "id": "map_overview",
+    "category": "学院/地图",
+    "label": "学院地图",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T09:51:16.6249141Z"
+}

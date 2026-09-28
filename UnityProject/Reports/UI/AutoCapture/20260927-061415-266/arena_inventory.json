@@ -1,0 +1,11 @@
+{
+    "id": "arena_inventory",
+    "category": "战斗/整理",
+    "label": "战斗中整理",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:20.2912178Z"
+}

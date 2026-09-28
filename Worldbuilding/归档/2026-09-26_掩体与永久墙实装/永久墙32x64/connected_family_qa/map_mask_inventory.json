@@ -1,0 +1,93 @@
+{
+  "uses": {
+    "ES_A": [
+      "rain_lantern_court:A1"
+    ],
+    "EW_B": [
+      "rain_lantern_court:B1",
+      "first_battle_greenhouse_collection_room:D1",
+      "first_battle_greenhouse_collection_room:F1",
+      "first_battle_greenhouse_collection_room:C6",
+      "first_battle_greenhouse_collection_room:E6",
+      "first_b3_rain_prism_court:B5",
+      "first_b3_rain_prism_court:D5",
+      "first_b3_rain_prism_court:F5"
+    ],
+    "W_A": [
+      "rain_lantern_court:C1",
+      "first_battle_greenhouse_collection_room:G1"
+    ],
+    "NS_B": [
+      "rain_lantern_court:A2",
+      "rain_lantern_court:A4",
+      "first_b3_rain_prism_court:A2",
+      "first_b3_rain_prism_court:H3",
+      "first_b3_rain_prism_court:A4"
+    ],
+    "NS_A": [
+      "rain_lantern_court:A3",
+      "first_b3_rain_prism_court:A3"
+    ],
+    "N_A": [
+      "rain_lantern_court:A5",
+      "first_battle_greenhouse_collection_room:B2"
+    ],
+    "E_B": [
+      "rain_lantern_court:D5",
+      "first_battle_greenhouse_collection_room:A6",
+      "first_b3_rain_prism_court:G2"
+    ],
+    "EW_A": [
+      "rain_lantern_court:E5",
+      "first_battle_greenhouse_collection_room:C1",
+      "first_battle_greenhouse_collection_room:E1",
+      "first_battle_greenhouse_collection_room:B6",
+      "first_battle_greenhouse_collection_room:D6",
+      "first_battle_greenhouse_collection_room:F6",
+      "first_b3_rain_prism_court:C5",
+      "first_b3_rain_prism_court:E5"
+    ],
+    "W_B": [
+      "rain_lantern_court:F5",
+      "first_battle_greenhouse_collection_room:G6"
+    ],
+    "E_A": [
+      "first_battle_greenhouse_collection_room:A1"
+    ],
+    "ESW_B": [
+      "first_battle_greenhouse_collection_room:B1"
+    ],
+    "S_A": [
+      "first_b3_rain_prism_court:A1"
+    ],
+    "S_B": [
+      "first_b3_rain_prism_court:H1"
+    ],
+    "NSW_A": [
+      "first_b3_rain_prism_court:H2",
+      "first_b3_rain_prism_court:H4"
+    ],
+    "ES_B": [
+      "first_b3_rain_prism_court:G4"
+    ],
+    "NE_A": [
+      "first_b3_rain_prism_court:A5"
+    ],
+    "NEW_A": [
+      "first_b3_rain_prism_court:G5"
+    ],
+    "NW_B": [
+      "first_b3_rain_prism_court:H5"
+    ],
+    "island_A": [
+      "first_elite_three_material_pressure:A1",
+      "first_elite_three_material_pressure:H6"
+    ],
+    "island_B": [
+      "first_elite_three_material_pressure:H1",
+      "first_elite_three_material_pressure:A6"
+    ]
+  },
+  "connected_pairs": 39,
+  "mismatched_edge_pixels": 0
+}

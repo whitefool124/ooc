@@ -1,0 +1,431 @@
+﻿<!doctype html><html lang='zh'><meta charset='utf-8'><title>OCC UI 截图</title><style>body{background:#111821;color:#e5e8ed;font:16px sans-serif;margin:32px}section{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));gap:20px}article{background:#202b37;padding:16px;border-radius:8px}img{width:100%;height:auto}small{color:#aab8c8}textarea{display:block;width:98%;height:72px}select,textarea,button{font:inherit;margin:8px 0}nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}nav a{color:#d9e8f8;background:#314458;padding:7px 10px;border-radius:5px;text-decoration:none}nav a:hover{background:#42627f}article{scroll-margin-top:18px}</style><h1>OCC UI 截图评估</h1><p>截图为运行时 Game View 原图。点击下方页面名直达截图，点击截图查看原图。每个 PNG 旁的 JSON 记录分类、场景、状态和实际分辨率。评估记录保存在本浏览器，可导出 JSON。</p><button onclick='exportReview()'>导出评估 JSON</button><nav><a href='#front_branding'>品牌开场</a><a href='#front_first_settings'>首启设置</a><a href='#front_opening'>世界观开场</a><a href='#front_landing'>以太主界面</a><a href='#front_settings'>辅助设置</a><a href='#front_slots'>新建档案选位</a><a href='#front_confirm_new'>建立档案确认</a><a href='#front_confirm_overwrite'>覆盖档案确认</a><a href='#front_character'>角色选择与固定配置</a><a href='#front_academy_intro'>学院介绍</a><a href='#front_new_round'>新一轮学院旅程</a><a href='#front_encyclopedia'>战斗百科</a><a href='#map_departure'>出发整备：装备与背包</a><a href='#map_overview'>学院地图</a><a href='#map_first_overview'>首次教程地图</a><a href='#map_loadout'>整备：装备与背包</a><a href='#map_spells'>整备：术式编组</a><a href='#map_settings'>学院辅助设置</a><a href='#map_archive'>行程与行囊</a><a href='#room_origin'>固定基础配置节点</a><a href='#room_combat'>战斗节点出发准备</a><a href='#room_elite'>精英节点出发准备</a><a href='#room_boss'>首领节点出发准备</a><a href='#room_event'>事件节点</a><a href='#room_workshop'>工坊</a><a href='#room_medical'>医务室</a><a href='#room_shop'>商店</a><a href='#map_reward'>战利品清点与领取</a><a href='#map_reward_inventory'>待领奖励去向处理</a><a href='#map_reward_abandon_confirmation'>放弃奖励确认</a><a href='#map_finale_confirmation'>首领门槛确认</a><a href='#map_save_failure'>保存失败与重试</a><a href='#map_version_protected'>档案保护与返回</a><a href='#map_round_victory'>单轮胜利结算</a><a href='#map_round_failure'>单轮失败结算</a><a href='#arena_selector'>测试场选择</a><a href='#arena_battle'>固定场景战斗</a><a href='#arena_inventory'>战斗中整理</a><a href='#arena_loot'>现场搜刮</a><a href='#arena_confirmation'>离开战斗确认</a><a href='#arena_restart_confirmation'>重开战斗确认</a><a href='#arena_victory'>战斗胜利结果</a><a href='#arena_defeat'>战斗失败结果</a></nav><section><article id='front_branding'><h2>品牌开场</h2><small>启动/品牌 · front_branding</small><p><a href='front_branding.png'><img src='front_branding.png'></a></p><label>改进优先级 <select data-id='front_branding' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_branding' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_branding",
+    "category": "启动/品牌",
+    "label": "品牌开场",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:19.8424733Z"
+}</pre></details></article><article id='front_first_settings'><h2>首启设置</h2><small>启动/设置 · front_first_settings</small><p><a href='front_first_settings.png'><img src='front_first_settings.png'></a></p><label>改进优先级 <select data-id='front_first_settings' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_first_settings' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_first_settings",
+    "category": "启动/设置",
+    "label": "首启设置",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:24.3135812Z"
+}</pre></details></article><article id='front_opening'><h2>世界观开场</h2><small>启动/世界观 · front_opening</small><p><a href='front_opening.png'><img src='front_opening.png'></a></p><label>改进优先级 <select data-id='front_opening' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_opening' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_opening",
+    "category": "启动/世界观",
+    "label": "世界观开场",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:28.7644069Z"
+}</pre></details></article><article id='front_landing'><h2>以太主界面</h2><small>主流程/入口 · front_landing</small><p><a href='front_landing.png'><img src='front_landing.png'></a></p><label>改进优先级 <select data-id='front_landing' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_landing' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_landing",
+    "category": "主流程/入口",
+    "label": "以太主界面",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:33.2673479Z"
+}</pre></details></article><article id='front_settings'><h2>辅助设置</h2><small>主流程/设置 · front_settings</small><p><a href='front_settings.png'><img src='front_settings.png'></a></p><label>改进优先级 <select data-id='front_settings' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_settings' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_settings",
+    "category": "主流程/设置",
+    "label": "辅助设置",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:37.4860502Z"
+}</pre></details></article><article id='front_slots'><h2>新建档案选位</h2><small>主流程/存档 · front_slots</small><p><a href='front_slots.png'><img src='front_slots.png'></a></p><label>改进优先级 <select data-id='front_slots' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_slots' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_slots",
+    "category": "主流程/存档",
+    "label": "新建档案选位",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:41.8386892Z"
+}</pre></details></article><article id='front_confirm_new'><h2>建立档案确认</h2><small>主流程/确认 · front_confirm_new</small><p><a href='front_confirm_new.png'><img src='front_confirm_new.png'></a></p><label>改进优先级 <select data-id='front_confirm_new' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_confirm_new' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_confirm_new",
+    "category": "主流程/确认",
+    "label": "建立档案确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:46.2781258Z"
+}</pre></details></article><article id='front_confirm_overwrite'><h2>覆盖档案确认</h2><small>主流程/确认 · front_confirm_overwrite</small><p><a href='front_confirm_overwrite.png'><img src='front_confirm_overwrite.png'></a></p><label>改进优先级 <select data-id='front_confirm_overwrite' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_confirm_overwrite' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_confirm_overwrite",
+    "category": "主流程/确认",
+    "label": "覆盖档案确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:50.7705988Z"
+}</pre></details></article><article id='front_character'><h2>角色选择与固定配置</h2><small>主流程/角色 · front_character</small><p><a href='front_character.png'><img src='front_character.png'></a></p><label>改进优先级 <select data-id='front_character' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_character' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_character",
+    "category": "主流程/角色",
+    "label": "角色选择与固定配置",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:55.1948339Z"
+}</pre></details></article><article id='front_academy_intro'><h2>学院介绍</h2><small>主流程/教程 · front_academy_intro</small><p><a href='front_academy_intro.png'><img src='front_academy_intro.png'></a></p><label>改进优先级 <select data-id='front_academy_intro' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_academy_intro' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_academy_intro",
+    "category": "主流程/教程",
+    "label": "学院介绍",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:14:59.6434757Z"
+}</pre></details></article><article id='front_new_round'><h2>新一轮学院旅程</h2><small>主流程/轮次 · front_new_round</small><p><a href='front_new_round.png'><img src='front_new_round.png'></a></p><label>改进优先级 <select data-id='front_new_round' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_new_round' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_new_round",
+    "category": "主流程/轮次",
+    "label": "新一轮学院旅程",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:04.1672870Z"
+}</pre></details></article><article id='front_encyclopedia'><h2>战斗百科</h2><small>主流程/百科 · front_encyclopedia</small><p><a href='front_encyclopedia.png'><img src='front_encyclopedia.png'></a></p><label>改进优先级 <select data-id='front_encyclopedia' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='front_encyclopedia' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "front_encyclopedia",
+    "category": "主流程/百科",
+    "label": "战斗百科",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:12.0620025Z"
+}</pre></details></article><article id='map_departure'><h2>出发整备：装备与背包</h2><small>学院/出发整备 · map_departure</small><p><a href='map_departure.png'><img src='map_departure.png'></a></p><label>改进优先级 <select data-id='map_departure' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_departure' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_departure",
+    "category": "学院/出发整备",
+    "label": "出发整备：装备与背包",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:17.2707445Z"
+}</pre></details></article><article id='map_overview'><h2>学院地图</h2><small>学院/地图 · map_overview</small><p><a href='map_overview.png'><img src='map_overview.png'></a></p><label>改进优先级 <select data-id='map_overview' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_overview' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_overview",
+    "category": "学院/地图",
+    "label": "学院地图",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:22.1535224Z"
+}</pre></details></article><article id='map_first_overview'><h2>首次教程地图</h2><small>学院/地图 · map_first_overview</small><p><a href='map_first_overview.png'><img src='map_first_overview.png'></a></p><label>改进优先级 <select data-id='map_first_overview' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_first_overview' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_first_overview",
+    "category": "学院/地图",
+    "label": "首次教程地图",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:27.0892158Z"
+}</pre></details></article><article id='map_loadout'><h2>整备：装备与背包</h2><small>学院/整备 · map_loadout</small><p><a href='map_loadout.png'><img src='map_loadout.png'></a></p><label>改进优先级 <select data-id='map_loadout' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_loadout' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_loadout",
+    "category": "学院/整备",
+    "label": "整备：装备与背包",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:32.0684236Z"
+}</pre></details></article><article id='map_spells'><h2>整备：术式编组</h2><small>学院/整备 · map_spells</small><p><a href='map_spells.png'><img src='map_spells.png'></a></p><label>改进优先级 <select data-id='map_spells' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_spells' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_spells",
+    "category": "学院/整备",
+    "label": "整备：术式编组",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:36.9113322Z"
+}</pre></details></article><article id='map_settings'><h2>学院辅助设置</h2><small>学院/设置 · map_settings</small><p><a href='map_settings.png'><img src='map_settings.png'></a></p><label>改进优先级 <select data-id='map_settings' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_settings' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_settings",
+    "category": "学院/设置",
+    "label": "学院辅助设置",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:41.7446212Z"
+}</pre></details></article><article id='map_archive'><h2>行程与行囊</h2><small>学院/档案 · map_archive</small><p><a href='map_archive.png'><img src='map_archive.png'></a></p><label>改进优先级 <select data-id='map_archive' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_archive' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_archive",
+    "category": "学院/档案",
+    "label": "行程与行囊",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:46.4647789Z"
+}</pre></details></article><article id='room_origin'><h2>固定基础配置节点</h2><small>学院/节点 · room_origin</small><p><a href='room_origin.png'><img src='room_origin.png'></a></p><label>改进优先级 <select data-id='room_origin' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_origin' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_origin",
+    "category": "学院/节点",
+    "label": "固定基础配置节点",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:51.3981776Z"
+}</pre></details></article><article id='room_combat'><h2>战斗节点出发准备</h2><small>学院/节点 · room_combat</small><p><a href='room_combat.png'><img src='room_combat.png'></a></p><label>改进优先级 <select data-id='room_combat' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_combat' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_combat",
+    "category": "学院/节点",
+    "label": "战斗节点出发准备",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:15:56.3498995Z"
+}</pre></details></article><article id='room_elite'><h2>精英节点出发准备</h2><small>学院/节点 · room_elite</small><p><a href='room_elite.png'><img src='room_elite.png'></a></p><label>改进优先级 <select data-id='room_elite' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_elite' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_elite",
+    "category": "学院/节点",
+    "label": "精英节点出发准备",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:01.1495991Z"
+}</pre></details></article><article id='room_boss'><h2>首领节点出发准备</h2><small>学院/节点 · room_boss</small><p><a href='room_boss.png'><img src='room_boss.png'></a></p><label>改进优先级 <select data-id='room_boss' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_boss' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_boss",
+    "category": "学院/节点",
+    "label": "首领节点出发准备",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:05.9636624Z"
+}</pre></details></article><article id='room_event'><h2>事件节点</h2><small>学院/事件 · room_event</small><p><a href='room_event.png'><img src='room_event.png'></a></p><label>改进优先级 <select data-id='room_event' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_event' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_event",
+    "category": "学院/事件",
+    "label": "事件节点",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:10.8076704Z"
+}</pre></details></article><article id='room_workshop'><h2>工坊</h2><small>学院/服务 · room_workshop</small><p><a href='room_workshop.png'><img src='room_workshop.png'></a></p><label>改进优先级 <select data-id='room_workshop' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_workshop' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_workshop",
+    "category": "学院/服务",
+    "label": "工坊",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:15.6158330Z"
+}</pre></details></article><article id='room_medical'><h2>医务室</h2><small>学院/服务 · room_medical</small><p><a href='room_medical.png'><img src='room_medical.png'></a></p><label>改进优先级 <select data-id='room_medical' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_medical' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_medical",
+    "category": "学院/服务",
+    "label": "医务室",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:20.3543008Z"
+}</pre></details></article><article id='room_shop'><h2>商店</h2><small>学院/服务 · room_shop</small><p><a href='room_shop.png'><img src='room_shop.png'></a></p><label>改进优先级 <select data-id='room_shop' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='room_shop' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "room_shop",
+    "category": "学院/服务",
+    "label": "商店",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:25.2207166Z"
+}</pre></details></article><article id='map_reward'><h2>战利品清点与领取</h2><small>学院/战利品 · map_reward</small><p><a href='map_reward.png'><img src='map_reward.png'></a></p><label>改进优先级 <select data-id='map_reward' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_reward' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_reward",
+    "category": "学院/战利品",
+    "label": "战利品清点与领取",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:30.1567807Z"
+}</pre></details></article><article id='map_reward_inventory'><h2>待领奖励去向处理</h2><small>学院/战利品 · map_reward_inventory</small><p><a href='map_reward_inventory.png'><img src='map_reward_inventory.png'></a></p><label>改进优先级 <select data-id='map_reward_inventory' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_reward_inventory' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_reward_inventory",
+    "category": "学院/战利品",
+    "label": "待领奖励去向处理",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:35.0766110Z"
+}</pre></details></article><article id='map_reward_abandon_confirmation'><h2>放弃奖励确认</h2><small>学院/确认 · map_reward_abandon_confirmation</small><p><a href='map_reward_abandon_confirmation.png'><img src='map_reward_abandon_confirmation.png'></a></p><label>改进优先级 <select data-id='map_reward_abandon_confirmation' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_reward_abandon_confirmation' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_reward_abandon_confirmation",
+    "category": "学院/确认",
+    "label": "放弃奖励确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:39.8444443Z"
+}</pre></details></article><article id='map_finale_confirmation'><h2>首领门槛确认</h2><small>学院/确认 · map_finale_confirmation</small><p><a href='map_finale_confirmation.png'><img src='map_finale_confirmation.png'></a></p><label>改进优先级 <select data-id='map_finale_confirmation' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_finale_confirmation' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_finale_confirmation",
+    "category": "学院/确认",
+    "label": "首领门槛确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:44.5034872Z"
+}</pre></details></article><article id='map_save_failure'><h2>保存失败与重试</h2><small>学院/异常 · map_save_failure</small><p><a href='map_save_failure.png'><img src='map_save_failure.png'></a></p><label>改进优先级 <select data-id='map_save_failure' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_save_failure' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_save_failure",
+    "category": "学院/异常",
+    "label": "保存失败与重试",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:49.1857986Z"
+}</pre></details></article><article id='map_version_protected'><h2>档案保护与返回</h2><small>学院/异常 · map_version_protected</small><p><a href='map_version_protected.png'><img src='map_version_protected.png'></a></p><label>改进优先级 <select data-id='map_version_protected' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_version_protected' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_version_protected",
+    "category": "学院/异常",
+    "label": "档案保护与返回",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:53.8010559Z"
+}</pre></details></article><article id='map_round_victory'><h2>单轮胜利结算</h2><small>学院/结算 · map_round_victory</small><p><a href='map_round_victory.png'><img src='map_round_victory.png'></a></p><label>改进优先级 <select data-id='map_round_victory' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_round_victory' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_round_victory",
+    "category": "学院/结算",
+    "label": "单轮胜利结算",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:58.4570767Z"
+}</pre></details></article><article id='map_round_failure'><h2>单轮失败结算</h2><small>学院/结算 · map_round_failure</small><p><a href='map_round_failure.png'><img src='map_round_failure.png'></a></p><label>改进优先级 <select data-id='map_round_failure' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='map_round_failure' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "map_round_failure",
+    "category": "学院/结算",
+    "label": "单轮失败结算",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:03.1082903Z"
+}</pre></details></article><article id='arena_selector'><h2>测试场选择</h2><small>战斗/测试入口 · arena_selector</small><p><a href='arena_selector.png'><img src='arena_selector.png'></a></p><label>改进优先级 <select data-id='arena_selector' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_selector' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_selector",
+    "category": "战斗/测试入口",
+    "label": "测试场选择",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:07.9929759Z"
+}</pre></details></article><article id='arena_battle'><h2>固定场景战斗</h2><small>战斗/战场 · arena_battle</small><p><a href='arena_battle.png'><img src='arena_battle.png'></a></p><label>改进优先级 <select data-id='arena_battle' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_battle' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_battle",
+    "category": "战斗/战场",
+    "label": "固定场景战斗",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:14.1342969Z"
+}</pre></details></article><article id='arena_inventory'><h2>战斗中整理</h2><small>战斗/整理 · arena_inventory</small><p><a href='arena_inventory.png'><img src='arena_inventory.png'></a></p><label>改进优先级 <select data-id='arena_inventory' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_inventory' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_inventory",
+    "category": "战斗/整理",
+    "label": "战斗中整理",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:20.2912178Z"
+}</pre></details></article><article id='arena_loot'><h2>现场搜刮</h2><small>战斗/搜刮 · arena_loot</small><p><a href='arena_loot.png'><img src='arena_loot.png'></a></p><label>改进优先级 <select data-id='arena_loot' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_loot' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_loot",
+    "category": "战斗/搜刮",
+    "label": "现场搜刮",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:26.9357162Z"
+}</pre></details></article><article id='arena_confirmation'><h2>离开战斗确认</h2><small>战斗/确认 · arena_confirmation</small><p><a href='arena_confirmation.png'><img src='arena_confirmation.png'></a></p><label>改进优先级 <select data-id='arena_confirmation' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_confirmation' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_confirmation",
+    "category": "战斗/确认",
+    "label": "离开战斗确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:32.7112084Z"
+}</pre></details></article><article id='arena_restart_confirmation'><h2>重开战斗确认</h2><small>战斗/确认 · arena_restart_confirmation</small><p><a href='arena_restart_confirmation.png'><img src='arena_restart_confirmation.png'></a></p><label>改进优先级 <select data-id='arena_restart_confirmation' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_restart_confirmation' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_restart_confirmation",
+    "category": "战斗/确认",
+    "label": "重开战斗确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:38.3319039Z"
+}</pre></details></article><article id='arena_victory'><h2>战斗胜利结果</h2><small>战斗/结果 · arena_victory</small><p><a href='arena_victory.png'><img src='arena_victory.png'></a></p><label>改进优先级 <select data-id='arena_victory' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_victory' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_victory",
+    "category": "战斗/结果",
+    "label": "战斗胜利结果",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:43.9785497Z"
+}</pre></details></article><article id='arena_defeat'><h2>战斗失败结果</h2><small>战斗/结果 · arena_defeat</small><p><a href='arena_defeat.png'><img src='arena_defeat.png'></a></p><label>改进优先级 <select data-id='arena_defeat' data-field='priority'><option value=''>未评估</option><option>P0 阻断</option><option>P1 错误或严重遮挡</option><option>P2 可读性或布局</option><option>P3 打磨</option><option>通过</option></select></label><textarea data-id='arena_defeat' data-field='note' placeholder='记录具体位置、问题和预期改进'></textarea><details><summary>采集记录</summary><pre>{
+    "id": "arena_defeat",
+    "category": "战斗/结果",
+    "label": "战斗失败结果",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:17:49.7923254Z"
+}</pre></details></article></section><script>const key='occ-ui-review:'+location.pathname;document.querySelectorAll('[data-id]').forEach(e=>{let k=e.dataset.id+':'+e.dataset.field;e.value=localStorage.getItem(key+k)||'';e.addEventListener('input',()=>localStorage.setItem(key+k,e.value))});function exportReview(){let rows={};document.querySelectorAll('[data-id]').forEach(e=>{let id=e.dataset.id;(rows[id]??={})[e.dataset.field]=e.value});let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(rows,null,2)],{type:'application/json'}));a.download='review.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}</script></html>

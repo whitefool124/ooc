@@ -43,17 +43,13 @@ namespace OCC.Combat.Presentation
 
         private static readonly string[] LightCoverIds =
         {
-            "academy_prop_wicker_basket", "academy_prop_book_crate", "academy_prop_scroll_case",
-            "academy_prop_tool_satchel", "academy_prop_folding_stool", "academy_prop_clay_jar",
-            "academy_prop_coal_scuttle", "academy_prop_rope_coil", "academy_prop_practice_shields",
-            "academy_prop_stone_planter", "academy_prop_fire_bucket_stand"
+            "academy_light_planter_cover_intact", "academy_light_book_crate_intact",
+            "academy_light_training_pad_intact", "academy_light_wood_bench_intact"
         };
 
         private static readonly string[] HeavyCoverIds =
         {
-            "academy_prop_specimen_cage", "academy_prop_iron_locker",
-            "academy_prop_reagent_cabinet", "academy_prop_field_lectern", "academy_prop_gear_cabinet",
-            "academy_prop_warding_post"
+            "academy_heavy_training_barricade_intact"
         };
 
         private static readonly AcademyStructurePlacement NorthDais =

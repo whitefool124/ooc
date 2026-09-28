@@ -1,0 +1,102 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ_academy_permanent_wall_low42_ew_a_v1",
+  "role": "permanent_wall_32x64",
+  "status": "REVIEW_READY",
+  "adjacency_mask": "EW",
+  "texture_variant": "A",
+  "provenance": {
+    "source_channel": "manual_pixel_authoring",
+    "source_descriptor": "Approved isolated 42px mother and independent built-in warm-stone reference; connected masks authored on native grid under permanent-wall exception, no generated-source crop or resize.",
+    "source_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/author_connected_family.py",
+    "source_sha256": "e7a273cabf13ea48e613309c188f516ca082d189d1a232e72d5fc776cc678f90",
+    "generated_reference_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_masonry_material_reference_source.png",
+    "generated_reference_sha256": "43149cb9e707ee56426049a787432262ca4937d783e9158bf7b1dab522e7b341"
+  },
+  "delivery": {
+    "output_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family/academy_permanent_wall_ew_a_32x64.png",
+    "output_sha256": "4a301b1633485814e22fbc3286124f1938a7ddaf81c7a98d51da6cebc4fd5b88",
+    "native_output_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family/academy_permanent_wall_ew_a_32x64.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "structural",
+    "logical_cell": [
+      1,
+      1
+    ],
+    "native_anchor": [
+      16,
+      63
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 63
+    },
+    "depth_sort_baseline": 63,
+    "allowed_occlusion_direction": [
+      "front"
+    ],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "ground_cell",
+    "combined_room_shell": false
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 transparent visual canvas, 42px visible wall, bottom centred on one 32x32 blocking cell",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "texture_variant_selection": "A when (x+y)%2==0 else B",
+    "actual_first_stage_uses": [
+      "rain_lantern_court:E5",
+      "first_battle_greenhouse_collection_room:C1",
+      "first_battle_greenhouse_collection_room:E1",
+      "first_battle_greenhouse_collection_room:B6",
+      "first_battle_greenhouse_collection_room:D6",
+      "first_battle_greenhouse_collection_room:F6",
+      "first_b3_rain_prism_court:C5",
+      "first_b3_rain_prism_court:E5"
+    ]
+  },
+  "evidence": {
+    "one_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family/academy_permanent_wall_ew_a_32x64.png",
+    "four_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/ew_a_4x.png",
+    "six_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/ew_a_6x.png",
+    "grayscale": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/ew_a_grayscale.png",
+    "checker": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/ew_a_checker.png",
+    "application_contact_1x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/first_b3_rain_prism_court_wall_contact_1x.png",
+    "application_contact": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/connected_family_qa/first_b3_rain_prism_court_wall_contact_6x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "Isolated master approved by user; connected family aesthetics and runtime contact still pending."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "stable_guid": "15ad621916636584984581660a40f035",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

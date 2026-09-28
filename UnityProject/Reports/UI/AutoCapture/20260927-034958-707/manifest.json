@@ -1,0 +1,301 @@
+﻿{
+    "captures": [
+        {
+            "id": "front_branding",
+            "category": "启动/品牌",
+            "label": "品牌开场",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:01.9309247Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_first_settings",
+            "category": "启动/设置",
+            "label": "首启设置",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:05.4031027Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_opening",
+            "category": "启动/世界观",
+            "label": "世界观开场",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:08.8048817Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_landing",
+            "category": "主流程/入口",
+            "label": "以太主界面",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:12.3899261Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_settings",
+            "category": "主流程/设置",
+            "label": "辅助设置",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:15.6823401Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_slots",
+            "category": "主流程/存档",
+            "label": "新建档案选位",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:18.9563144Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_confirm_new",
+            "category": "主流程/确认",
+            "label": "建立档案确认",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:22.1758635Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_confirm_overwrite",
+            "category": "主流程/确认",
+            "label": "覆盖档案确认",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:25.3858307Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_character",
+            "category": "主流程/角色",
+            "label": "角色选择与固定配置",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:28.8116130Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_academy_intro",
+            "category": "主流程/教程",
+            "label": "学院介绍",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:32.2927207Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_new_round",
+            "category": "主流程/轮次",
+            "label": "新一轮学院旅程",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:35.4998748Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_encyclopedia",
+            "category": "主流程/百科",
+            "label": "战斗百科",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:39.8353902Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_departure",
+            "category": "学院/出发整备",
+            "label": "出发整备：装备与背包",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:43.7736104Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_overview",
+            "category": "学院/地图",
+            "label": "学院地图",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:47.6032376Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_loadout",
+            "category": "学院/整备",
+            "label": "整备：装备与背包",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:51.3204789Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_spells",
+            "category": "学院/整备",
+            "label": "整备：术式编组",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:55.1601974Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_settings",
+            "category": "学院/设置",
+            "label": "学院辅助设置",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:50:58.9560246Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "map_archive",
+            "category": "学院/档案",
+            "label": "行程与行囊",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:02.6242235Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_origin",
+            "category": "学院/节点",
+            "label": "固定基础配置节点",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:06.4416351Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_combat",
+            "category": "学院/节点",
+            "label": "战斗节点出发准备",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:10.2060375Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_event",
+            "category": "学院/事件",
+            "label": "事件节点",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:14.1853718Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_workshop",
+            "category": "学院/服务",
+            "label": "工坊",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:18.0453127Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_medical",
+            "category": "学院/服务",
+            "label": "医务室",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:21.7467194Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "room_shop",
+            "category": "学院/服务",
+            "label": "商店",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:51:25.4487473Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "arena_selector",
+            "category": "战斗/测试入口",
+            "label": "测试场选择",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:51:29.1654214Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "arena_battle",
+            "category": "战斗/战场",
+            "label": "固定场景战斗",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:51:34.0399948Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "arena_inventory",
+            "category": "战斗/整理",
+            "label": "战斗中整理",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:51:38.9495783Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}

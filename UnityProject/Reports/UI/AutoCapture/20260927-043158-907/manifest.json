@@ -1,0 +1,15 @@
+﻿{
+    "captures": [
+        {
+            "id": "map_version_protected",
+            "category": "学院/异常",
+            "label": "档案保护与返回",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T04:32:02.4732099Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}

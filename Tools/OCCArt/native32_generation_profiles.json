@@ -63,6 +63,7 @@
     "retry_strategy": "change_only_the_failed_visual_dimension",
     "source_policy": "new independent Image output for every retry",
     "manual_redraw_forbidden": true,
+    "academy_permanent_wall_exception": "independent built-in generated material/massing reference plus user-authorized manual native-grid 32x64 canvas wall-mask authoring with a bottom-anchored 42px-tall stepped silhouette and no transparent holes; every variant retains its own manifest and full QA; no other role inherits this exception",
     "automatic_retry_triggers": [
       "subject_lattice_confidence_below_1_2",
       "mixed_subject_pixel_scale",
@@ -116,18 +117,18 @@
       "lighting": "no scene lighting; the face is darker than the tile top by material form only; see lighting_policy",
       "reject_if": ["lighting or cast shadow baked in", "face tone lighter than the tile top", "isolated single-pixel noise", "a second decorative perimeter"]
     },
-    "permanent_wall_32x32": {
-      "view": "orthographic top-down pseudo-2.5D: one solid pillar block filling its whole gameplay cell, with a square top surface and a front face turned toward the bottom of the screen, the left and right sides slightly inset so it reads as a standing column",
-      "canvas": "fixed_32x32, fully opaque, filling the cell edge to edge, no overhang in any direction",
+    "permanent_wall_32x64": {
+      "view": "shared oblique top-down screen-axis low masonry wall family: exposed north edge shows an ivory warm-stone top, exposed south edge shows a related warm-grey front foot, connected body suppresses repeated top bands; isolated cell reads as a solid pier; visible wall height 42 native pixels, about 1.3 logical cell heights",
+      "canvas": "fixed_32x64 transparent hard-alpha canvas; visible silhouette bounds x0..31/y22..63, 42px tall, bottom-centre anchored to the owning 32x32 cell and overhanging 10px north only; inset stepped top/end corners permitted, no transparent holes inside the masonry body",
       "native_ppu": 32,
       "logical_cells": [1, 1],
       "palette_max": 6,
-      "content_variables": ["theme_material_story", "masonry_blocking_story", "wear_level"],
-      "reading": "a stage-appropriate solid wall block whose material follows the current region; in the academy stage it should read as clear Japanese-fantasy magical-academy architecture with a legible top and darker front face, while remaining solid and thick enough to read as indestructible terrain",
+      "content_variables": ["theme_material_story", "masonry_blocking_story", "N_E_S_W_adjacency_mask"],
+      "reading": "a solid Academy architectural boundary that remains legible as impassable and indestructible terrain across isolated cells, horizontal and vertical runs, ends, corners, and narrow passages",
       "must_not_show": ["cracks", "chips", "rubble", "damage", "destructible cover treatment"],
-      "tiling": "all four edges are edge-to-edge and match, so four identical blocks tile with no gap and no seam; a run of them reads as a continuous wall",
+      "tiling": "select a preauthored 32x64 structural mask by same-kind-wall N/E/S/W adjacency, then its A/B stone-texture variant by (x+y) parity; no runtime rotation or mirroring; visible-body contact edges match, with top lip only on exposed north and front foot only on exposed south; wall rows draw north-to-south for consistent overhang",
       "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
-      "reject_if": ["baked scene lighting or floor shadow", "damage or breakable-cover reading", "transparent gaps inside the cell", "edges that do not join", "a low wall strip that does not fill the cell", "microtexture", "dither", "gradient"]
+      "reject_if": ["baked scene lighting or floor shadow", "damage or breakable-cover reading", "transparent holes inside the visible masonry silhouette", "edges that do not join", "visible wall bounds not 42px tall", "top plane repeated on every tile of a vertical run", "dark teal front panel", "microtexture", "dither", "gradient"]
     },
     "directional_edge_32x40": {
       "view": "one 32x32 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
@@ -154,6 +155,7 @@
       "canvas": "fixed_16x16",
       "native_ppu": 16,
       "palette_max": 6,
+      "production_route": "generated_reference_plus_manual_pixel_authoring_user_authorized_2026_09_24",
       "stretch_policy": "only the quiet central strip may stretch; the 1 px contour and end caps remain fixed",
       "material_story": "compact descendant of the 32 px academy dossier gauge: charcoal contour, pale stone frame, one structural highlight, dark recessed track; sealed red or steel silver semantic fill",
       "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",

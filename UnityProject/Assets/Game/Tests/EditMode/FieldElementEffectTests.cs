@@ -17,6 +17,7 @@ namespace OCC.Combat.Tests
             EnemyArchetypes.Get("shieldguard").Apply(enemy);
             CombatState state = new CombatState(new GridMap(9, 7), new[] { hero, enemy });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.EnableWindMechanic();
             return state;
         }
 

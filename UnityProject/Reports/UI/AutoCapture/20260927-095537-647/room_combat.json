@@ -1,0 +1,11 @@
+{
+    "id": "room_combat",
+    "category": "学院/节点",
+    "label": "战斗节点出发准备",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T09:57:15.5222102Z"
+}

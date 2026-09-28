@@ -1,0 +1,15 @@
+﻿{
+    "captures": [
+        {
+            "id": "room_medical",
+            "category": "学院/服务",
+            "label": "医务室",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T10:33:41.2550052Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}

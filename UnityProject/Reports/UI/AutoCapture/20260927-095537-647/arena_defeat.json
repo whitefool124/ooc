@@ -1,0 +1,11 @@
+{
+    "id": "arena_defeat",
+    "category": "战斗/结果",
+    "label": "战斗失败结果",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T09:59:14.8824300Z"
+}

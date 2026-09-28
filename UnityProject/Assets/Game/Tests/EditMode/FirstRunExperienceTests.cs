@@ -261,6 +261,11 @@ namespace OCC.Combat.Tests
             Assert.That(run.FirstRunExperience.Medical.HealthCheckCompleted, Is.False);
             Assert.That(run.IsNodeAvailable("X"), Is.True);
 
+            run.SelectNode("M");
+            run.ChooseFirstRunMeal("MEAL-POWER");
+            Assert.That(run.FirstRunExperience.Medical.MealUsed, Is.True);
+            Assert.That(run.FirstRunExperience.Medical.HealthCheckCompleted, Is.False);
+
             run.SelectNode("X");
             Assert.That(run.CurrentNodeId, Is.EqualTo("X"));
         }

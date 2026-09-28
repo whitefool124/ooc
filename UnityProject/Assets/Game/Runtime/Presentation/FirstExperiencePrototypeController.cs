@@ -462,8 +462,7 @@ namespace OCC.Combat.Presentation
         private void Medical()
         {
             Heading("医务室与精英前整备");
-            Body("三项整备均可跳过；第三组奖励结算后即可查看精英。\n\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized) + "\n健康：" + Mark(data.healthChecked));
-            GUI.enabled = !data.healthChecked; Small(405, "完成免费健康确认", () => { data.healthChecked = true; Save(); });
+            Body("治疗与餐食都可跳过；第三组奖励结算后即可挑战精英。\n\n锻造：" + Mark(data.forged) + "\n专精：" + Mark(data.specialized));
             GUI.enabled = !data.healed; Small(500, "可选：治疗", () => { data.healed = true; Save(); });
             GUI.enabled = !data.mealBought; Small(595, "可选：购买餐食", () => { data.mealBought = true; Save(); });
             GUI.enabled = true;
@@ -475,7 +474,7 @@ namespace OCC.Combat.Presentation
         private void ElitePreview()
         {
             Heading("精英挑战预览");
-            Body("目标、敌情和构筑已公开。进入后不可返回本轮地图；失败不开放商店。\n\n" + (eliteArmed ? "已阅读风险，请再次确认。" : "尚未确认不可逆风险。"));
+            Body("目标、敌情和构筑已公开。进入后不可返回本轮地图。\n\n" + (eliteArmed ? "已阅读风险，请再次确认。" : "尚未确认不可逆风险。"));
             if (!eliteArmed) Primary("阅读并接受风险", () => eliteArmed = true);
             else Primary("确认不可逆挑战", () => { eliteArmed = false; BeginBattle(FlowStage.Elite); });
         }
@@ -675,6 +674,7 @@ namespace OCC.Combat.Presentation
                 if (gateway.TryLoadMapRun(out RogueliteMapRun existing) && existing.IsComplete && existing.IsInAcademyLayer)
                 {
                     data.stage = FlowStage.RunCreation;
+                    ConfirmSubsequentRound();
                     return;
                 }
             }
@@ -693,6 +693,20 @@ namespace OCC.Combat.Presentation
             data.stage = FlowStage.Landing;
             enabled = true;
         }
+#if UNITY_EDITOR
+        // Visual-review fixture only. No PlayerPrefs key or gameplay save is changed.
+        public void PreviewUiCaptureStage(FlowStage stage, bool overwrite = false)
+        {
+            StopOpening();
+            data = new SaveData { stage = stage, slot = -1 };
+            selectedSlot = 0;
+            pendingOverwrite = overwrite;
+            settingsFromLanding = stage == FlowStage.FirstSettings && overwrite;
+            selectingContinue = false;
+            pendingNewRunCreation = false;
+            enabled = true;
+        }
+#endif
         public void ReplayWorldOpening() => PlayWorldOpening();
         public void OpenSettings() => OpenSettingsFromLanding();
         public void ApplyPendingSettings() => ApplySettings();

@@ -283,6 +283,14 @@ namespace OCC.Combat.Presentation
             return entries;
         }
 
+        internal static bool TryGetSharedContentCard(string category, string name, out FormalTooltipContent card)
+        {
+            EncyclopediaEntry entry = BuildEncyclopediaEntries().FirstOrDefault(value =>
+                value.Category == category && value.Name == name);
+            card = entry == null ? default : entry.Card;
+            return entry != null;
+        }
+
         private static void AddRule(List<EncyclopediaEntry> entries, string category, string name, string body)
         {
             FormalTooltipContent card = new FormalTooltipContent(category, string.Empty, name, category,

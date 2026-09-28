@@ -1,0 +1,11 @@
+{
+    "id": "map_save_failure",
+    "category": "学院/异常",
+    "label": "保存失败与重试",
+    "status": "failed",
+    "detail": "In-memory map preview did not become visible",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 0,
+    "height": 0,
+    "utc": "2026-09-27T04:29:42.6865682Z"
+}

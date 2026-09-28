@@ -130,7 +130,7 @@ namespace OCC.Combat.Presentation
             bool searchingLoot = rogue && state.LootSource != null && !state.LootSource.IsComplete;
             GUI.Label(new Rect(100, 72, 880, 42), searchingLoot ? "现场搜刮" : rogue ? "学院整备" : "背包与搜索");
             Fill(new Rect(92, 106, 1460, 34), FormalUiTheme.WithAlpha(Panel, .98f));
-            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), rogue ? "B 键或 Esc 关闭　←↑↓→ 选择　R 旋转　1–4 关联　拖拽整理" : "B 键或 Esc 关闭　方向键选择　R 旋转　1–4 关联快捷栏　F 搜索或拿取　鼠标拖拽"); GUI.color = Color.white;
+            GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), "拖动整理　R 旋转　1–4 关联快捷栏"); GUI.color = Color.white;
             if (ClickButton(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
 
             if (rogue) { DrawRogueLootInventory(state); DrawSemanticTooltip(); return; }
@@ -277,7 +277,9 @@ namespace OCC.Combat.Presentation
             {
                 EquipmentDefinition definition = runtime.DefinitionFor(selectedId); name = definition.DisplayName; icon = FormalArtRegistry.EquipmentIconPath(definition.DefinitionId);
                 type = EquipmentSlotName(definition.Slot) + "　" + equipment.Rarity; metrics = definition.Width + "×" + definition.Height + "   ⚖ " + definition.BaseWeight + "   ◆ " + definition.BaseAetherLoad;
-                effects = string.Join("\n", definition.FixedEffectIds.Concat(equipment.MutableAffixIds).Concat(equipment.UpgradeBranchIds).Take(7));
+                effects = string.Join("\n", definition.FixedEffectIds.Select(FormalRogueliteUi.PlayerEquipmentEffect)
+                    .Concat(equipment.MutableAffixIds.Count > 0 ? new[] { "附加效果 " + equipment.MutableAffixIds.Count + " 项" } : System.Array.Empty<string>())
+                    .Concat(equipment.UpgradeBranchIds.Count > 0 ? new[] { "锻造强化 " + equipment.UpgradeBranchIds.Count + " 项" } : System.Array.Empty<string>()).Take(7));
             }
             else
             {

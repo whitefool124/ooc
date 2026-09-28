@@ -136,7 +136,6 @@ namespace OCC.Combat.Presentation
         private Text healthValue;
         private Text shieldValue;
         private Text manaValue;
-        private Text environmentReadout;
         private Button endTurnButton;
         private Button restartButton;
         private Button pauseButton;
@@ -195,11 +194,6 @@ namespace OCC.Combat.Presentation
                 wasVisible = false;
                 hasPresentedModel = false;
                 return;
-            }
-            if (environmentReadout != null)
-            {
-                string environment = BuildEnvironmentReadout(bootstrap.CurrentState);
-                if (environmentReadout.text != environment) environmentReadout.text = environment;
             }
             if (combatEntryQueued)
             {
@@ -264,9 +258,6 @@ namespace OCC.Combat.Presentation
             GameObject top = shell.Header.gameObject;
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
             BuildHeaderResources(top.transform);
-            environmentReadout = Label("环境公开读数", top.transform, new Vector2(450, -12),
-                new Vector2(750, 44), 20, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
-            environmentReadout.raycastTarget = false;
 
             GameObject side = shell.RightConsole.gameObject;
             Image sideSurface = side.GetComponent<Image>();
@@ -322,7 +313,8 @@ namespace OCC.Combat.Presentation
 
             GameObject bottom = shell.Commands.gameObject;
             GameObject spellGroup = Panel("术式组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(8, -2), new Vector2(1292, 196), panel);
-            GameObject itemGroup = Panel("战术栏", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1308, -14), new Vector2(360, 172), panel);
+            GameObject itemGroup = Panel("战术栏", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1308, -2), new Vector2(360, 196), panel);
+            GameObject endTurnGroup = Panel("结束回合组", bottom.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1676, -2), new Vector2(204, 196), panel);
             for (int slot = 0; slot < RogueRuntimeConstants.SpellSlotCount; slot++)
             {
                 string action = "技能" + (slot + 1); int captured = slot;
@@ -334,7 +326,7 @@ namespace OCC.Combat.Presentation
                 button.onClick.AddListener(() => bootstrap.SelectHudAction(action)); actionButtons.Add(action, button);
                 BindTooltip(button.gameObject, () => BuildActionTooltip("技能" + (captured + 1)));
             }
-            endTurnButton = Button(bottom.transform, "结束行动", new Vector2(1676, -30), new Vector2(204, 140), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
+            endTurnButton = Button(endTurnGroup.transform, "结束行动", new Vector2(0, -18), new Vector2(204, 160), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             ArchiveUiStyle.PaperPanel(endTurnButton.gameObject, ArchiveUiStyle.LightPaper, true);
             endTurnButton.transform.Find("文字").GetComponent<Text>().color = ArchiveUiStyle.Ink;
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
@@ -374,7 +366,7 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
-                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(8 + (i % 2) * 176, -10 - (i / 2) * 80), new Vector2(168, 72), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+                Button quick = Button(itemGroup.transform, "快捷栏" + i, new Vector2(8 + (i % 2) * 176, -18 - (i / 2) * 82), new Vector2(168, 74), "", FormalUiTheme.Surface, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
                 quickbarButtons[i] = quick;
                 quickbarLabels[i] = quick.GetComponentInChildren<Text>();
                 quickbarLabels[i].gameObject.SetActive(false);
@@ -845,12 +837,12 @@ namespace OCC.Combat.Presentation
                 bool failedRun = bootstrap.CurrentMapRun != null && (abandoned || bootstrap.CurrentState.IsDefeat);
                 bool savingFailure = bootstrap.CurrentMapRun != null && !bootstrap.IsMapRunSaved;
                 bool protectedSlot = savingFailure && bootstrap.IsMapRunWriteProtected;
-                outcomeTitle.text = protectedSlot ? "档案已保护 · 返回入口" : savingFailure ? "保存失败 · 请重试" : abandoned ? "主动放弃 · 本轮结算" : failedRun ? "战败 · 本轮结算" :
+                outcomeTitle.text = protectedSlot ? "档案已保护" : savingFailure ? "保存失败" : abandoned ? "主动放弃" : failedRun ? "战败" :
                     summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
                 outcomeDetail.text = protectedSlot ? "写入校验失败，旧档和安全副本已保留；确认后可舍弃本次未保存进度并返回档案入口。" :
                     savingFailure ? "结算保存失败。当前结果仍在内存中，请重试保存，不要退出游戏。" :
                     failedRun ? "可从本场开战前重试；确认返回入口后保存并关闭本轮。" :
-                    summary?.CompactDetailText ?? "请选择下一步。";
+                    summary == null ? "请选择下一步" : summary.Reason + "\n" + summary.Consequence;
                 outcomeBackButton.GetComponentInChildren<Text>().text = protectedSlot ? "返回档案入口" : savingFailure ? "重试保存" : failedRun ? "结算并返回入口" :
                     bootstrap.CurrentMapRun != null ? "返回地图" : "返回入口";
                 outcomeRestartButton.gameObject.SetActive(!savingFailure && (failedRun || bootstrap.CurrentMapRun == null));
@@ -1211,14 +1203,11 @@ namespace OCC.Combat.Presentation
         {
             outcomeOverlay = FormalUiKit.LayoutPanel("战斗结果", root.transform, "combat.outcome", FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
             outcomeTitle = Label("结果标题", outcomeOverlay.transform, new Vector2(40, -34), new Vector2(640, 58), 36, text, TextAnchor.MiddleCenter);
-            outcomeDetail = Label("结果说明", outcomeOverlay.transform, new Vector2(40, -102), new Vector2(640, 100), 16, muted, TextAnchor.UpperCenter);
-            outcomeRestartButton = Button(outcomeOverlay.transform, "结果重开", new Vector2(60, -180), new Vector2(280, 64), "重新挑战", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
+            outcomeDetail = Label("结果说明", outcomeOverlay.transform, new Vector2(40, -112), new Vector2(640, 120), 20, muted, TextAnchor.UpperCenter);
+            outcomeRestartButton = Button(outcomeOverlay.transform, "结果重开", new Vector2(60, -280), new Vector2(280, 64), "重新挑战", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             outcomeRestartButton.onClick.AddListener(bootstrap.RequestTacticalRestart);
-            outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -180), new Vector2(280, 64), "返回入口", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
+            outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -280), new Vector2(280, 64), "返回入口", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
             outcomeBackButton.onClick.AddListener(bootstrap.ReturnFromCombatOutcome);
-            BindTooltip(outcomeOverlay, BuildOutcomeTooltip);
-            BindTooltip(outcomeRestartButton.gameObject, () => new FormalTooltipContent("重新挑战", "这场战斗会从头开始。", line));
-            BindTooltip(outcomeBackButton.gameObject, () => new FormalTooltipContent("确认结算", "战败或放弃时保存并结束本轮；胜利时返回地图处理奖励。", FormalUiTheme.Amber));
             outcomeOverlay.SetActive(false);
         }
 
@@ -1818,16 +1807,6 @@ namespace OCC.Combat.Presentation
         }
 
         private static string ActionPointText(int current) => current + "／" + CombatResolver.HeroActionPointsPerTurn;
-
-        private static string BuildEnvironmentReadout(CombatState state)
-        {
-            if (state?.Environment == null) return string.Empty;
-            FieldWindState wind = state.Environment.Wind;
-            int lit = state.Environment.LightLanes
-                .SelectMany(lane => state.Environment.LitCells(state.Map, lane, state.CurrentTime)).Distinct().Count();
-            return "风向：" + FieldWindState.DirectionName(wind.Direction) + "｜风级：" + wind.Level +
-                "｜剩余换风：" + wind.ChangesRemaining + "｜照明：" + lit + "格";
-        }
 
         private void RefreshAvailability(CombatState state, UnitState hero)
         {

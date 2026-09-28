@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC 战场范围语言 · 交互样板</title>
+  <style>
+    :root { --ink:#e8e6df; --muted:#a4abae; --paper:#171d22; --paper2:#222b30; --line:#3d474a; --cyan:#66d6dd; --cyan-dim:#285960; --amber:#f3b25c; --red:#ef6257; --cell:clamp(42px,5.8vw,68px); }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); background:#101518; font-family:"Microsoft YaHei","Noto Sans SC",sans-serif; }
+    button { font:inherit; cursor:pointer; }
+    .shell { max-width:1536px; min-height:100vh; margin:auto; padding:20px 24px 26px; display:grid; grid-template-columns:minmax(0,1fr) 342px; grid-template-rows:auto 1fr auto; gap:14px 18px; }
+    .top { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #445052; padding:0 0 14px; gap:16px; }
+    .brand { font-size:12px; font-weight:800; letter-spacing:.3em; color:var(--amber); }
+    h1 { font-size:23px; margin:4px 0 0; font-weight:600; letter-spacing:.04em; }
+    .top-note { color:var(--muted); font-size:13px; text-align:right; line-height:1.6; }
+    .arena-shell { min-width:0; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 53% 42%,#26312f 0,#1a2326 58%,#11191c 100%); border:1px solid #3b494a; overflow:auto; padding:38px 26px; position:relative; }
+    .arena-shell::before { content:"战场预览 / 学院演练庭"; position:absolute; top:13px; left:18px; color:#9ca7a4; font-size:11px; letter-spacing:.16em; }
+    .board-wrap { position:relative; padding:4px; background:#26302e; box-shadow:0 0 0 1px #6c7569,0 18px 40px #0008; flex:none; }
+    .board { display:grid; grid-template-columns:repeat(12,var(--cell)); grid-template-rows:repeat(8,var(--cell)); position:relative; }
+    .cell { width:var(--cell); height:var(--cell); position:relative; background:#d3cfbb url("assets/ground.png") 0 0/300% 300%; image-rendering:pixelated; isolation:isolate; cursor:crosshair; }
+    .cell:nth-child(3n) { filter:brightness(.94); }
+    .cell.water { background:#5f7778; box-shadow:inset 0 0 0 2px #8db3b266; }
+    .cell.water::after { content:"≈"; position:absolute; color:#c7edeb; font-size:30px; left:38%; top:16%; opacity:.5; }
+    .cell.wall { background:#555b56 url("assets/cover.png") center/100% 100%; image-rendering:pixelated; }
+    .cell.wall::after { content:""; position:absolute; inset:0; background:#0004; }
+    .cell .coord { position:absolute; top:3px; left:4px; z-index:15; color:#25302c88; font:9px monospace; opacity:0; }
+    .cell:hover .coord { opacity:1; }
+    .cell .potential, .cell .actual, .cell .player-range, .cell .effect-preview, .cell .region-edge, .cell .landing, .cell .focus, .cell .route-step, .cell .hero-step { position:absolute; pointer-events:none; }
+    /* Every range uses the same square footprint. Colour and fill carry the meaning. */
+    .potential { z-index:2; inset:2px; border:2px solid #a46a24; background:#e9b85a25; opacity:0; transition:opacity .16s; }
+    .cell.is-potential .potential { opacity:.78; }
+    .cell.is-potential.is-hover-source .potential { opacity:1; border-color:#e6ad55; }
+    .actual { z-index:3; inset:0; opacity:0; background:#c0443b85; }
+    .cell.is-actual .actual { opacity:1; }
+    .player-range { z-index:4; inset:3px; border:2px solid #348e97; background:#50c6d12e; opacity:0; }
+    .cell.is-player-range .player-range { opacity:1; }
+    .board:not(.offense-mode) .cell.is-potential.is-player-range .potential { z-index:5; inset:0; border:3px solid #bd762b; background:transparent; opacity:1; }
+    .board:not(.offense-mode) .cell.is-potential.is-player-range .player-range { inset:6px; border-color:#278e9a; background:#50c6d154; }
+    .board.offense-mode .player-range { border-color:#2e7654; background:#205b423d; }
+    .board.offense-mode .cell.is-attack-target .player-range { border-width:3px; border-color:#438e67; background:#286e4d66; }
+    .effect-preview { z-index:5; inset:0; background:#286c4eaa; opacity:0; }
+    .cell.is-effect-preview .effect-preview { opacity:1; }
+    .cell.is-effect-preview .player-range { opacity:0; }
+    .region-edge { inset:0; border:3px solid transparent; opacity:0; }
+    .red-edge { z-index:6; color:#e75449; opacity:1; }
+    .green-edge { z-index:7; color:#418960; }
+    .cell.is-effect-preview .green-edge { opacity:1; }
+    .region-edge.edge-top { border-top-color:currentColor; }
+    .region-edge.edge-right { border-right-color:currentColor; }
+    .region-edge.edge-bottom { border-bottom-color:currentColor; }
+    .region-edge.edge-left { border-left-color:currentColor; }
+    .landing { z-index:8; inset:3px; opacity:0; background-color:#f0a64b36; background-image:
+      linear-gradient(#a4571e,#a4571e),linear-gradient(#a4571e,#a4571e),
+      linear-gradient(#a4571e,#a4571e),linear-gradient(#a4571e,#a4571e),
+      linear-gradient(#a4571e,#a4571e),linear-gradient(#a4571e,#a4571e),
+      linear-gradient(#a4571e,#a4571e),linear-gradient(#a4571e,#a4571e);
+      background-position:left top,left top,right top,right top,left bottom,left bottom,right bottom,right bottom;
+      background-size:15px 4px,4px 15px,15px 4px,4px 15px,15px 4px,4px 15px,15px 4px,4px 15px;
+      background-repeat:no-repeat; box-shadow:inset 0 0 0 1px #784820aa; }
+    .landing::after { content:""; position:absolute; width:13px; height:13px; left:50%; top:50%; transform:translate(-50%,-50%); background:#ffc16b; box-shadow:0 0 0 2px #713b1a; }
+    .cell.is-landing .landing { opacity:1; }
+    .focus { z-index:9; inset:3px; border:3px solid #d9ffff; background:#45c7d045; box-shadow:inset 0 0 0 3px #196c76; opacity:0; }
+    .cell.is-focus .focus { opacity:1; }
+    .cell.is-focus .player-range { opacity:0; }
+    .object-impact { position:absolute; z-index:9; inset:7px; border:2px solid #fff; box-shadow:0 0 0 1px #263d35,0 0 8px #fff9; opacity:0; pointer-events:none; }
+    .cell.is-affected-object .object-impact { opacity:1; }
+    .cell.is-affected-unit .unit { filter:drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff) drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff) drop-shadow(0 5px 2px #000b); }
+    .cell.is-affected-unit .unit-ring { border-color:#fff; box-shadow:0 0 0 1px #263d35,0 0 7px #fff9; }
+    .route-step, .hero-step { z-index:5; top:50%; left:50%; width:14px; height:14px; transform:translate(-50%,-50%); opacity:0; }
+    .route-step { background:#eda14b; border:2px solid #5b3217; }
+    .hero-step { background:#92ebf0; border:2px solid #1a6972; }
+    .cell.is-route .route-step, .cell.is-hero-route .hero-step { opacity:1; }
+    .unit { position:absolute; z-index:10; width:100%; height:100%; object-fit:contain; object-position:center bottom; image-rendering:pixelated; transform:scale(1.18) translateY(-6%); pointer-events:none; filter:drop-shadow(0 5px 2px #000b); }
+    .unit-ring { position:absolute; z-index:9; width:43%; height:15%; left:29%; bottom:11%; border-radius:50%; background:#101717a6; border:2px solid #bc5d50; pointer-events:none; }
+    .unit-ring.hero { border-color:var(--cyan); }
+    .cell.is-hover-source .unit-ring { box-shadow:0 0 0 3px #ffd37a,0 0 13px #ffd37a; }
+    .unit-tag { position:absolute; z-index:11; top:-13px; left:50%; transform:translateX(-50%); white-space:nowrap; background:#1b2222ed; border:1px solid #886b58; color:#f4e7d1; padding:2px 5px; font-size:10px; pointer-events:none; }
+    .unit-tag.hero { border-color:#48939d; }
+    aside { display:flex; flex-direction:column; gap:12px; }
+    .panel { background:linear-gradient(145deg,#222b2d,#192124); border:1px solid #475356; padding:16px; box-shadow:0 8px 22px #0003; }
+    .eyebrow { font-size:10px; letter-spacing:.2em; color:#a4b5b4; margin-bottom:8px; }
+    .panel h2 { font-size:17px; margin:0 0 10px; font-weight:600; }
+    .modes { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+    .mode { border:1px solid #526164; color:#dce2dd; background:#2d393b; padding:10px 8px; font-weight:600; }
+    .mode:hover { background:#384d50; }
+    .mode.active { color:#081c20; background:#86dce0; border-color:#bafaff; box-shadow:inset 0 -3px 0 #36858b; }
+    .legend { display:grid; grid-template-columns:22px 1fr; gap:9px 10px; align-items:center; font-size:12px; line-height:1.4; color:#d1d8d3; }
+    .legend-swatch { width:19px; height:19px; }
+    .legend-swatch.actual { position:static; inset:auto; opacity:1; background:#bd534a; }
+    .legend-swatch.possible { border:2px solid #ae7934; background:#e9b85a33; }
+    .legend-swatch.ours { border:2px solid #348e97; background:#50c6d14d; }
+    .legend-swatch.offense { border:2px solid #2e7654; background:#205b4270; }
+    .legend-swatch.effect { border:2px solid #418960; background:#286c4eaa; }
+    .legend-swatch.destination { position:relative; border:2px solid #a4571e; background:#f0a64b36; }
+    .legend-swatch.destination::after { content:""; position:absolute; width:5px; height:5px; left:50%; top:50%; transform:translate(-50%,-50%); background:#f8bd68; }
+    .intent { border-top:1px solid #465252; padding:10px 0; display:grid; grid-template-columns:26px 1fr; gap:9px; cursor:pointer; }
+    .intent:last-child { padding-bottom:0; }
+    .intent:hover,.intent.selected { background:#e7c08916; }
+    .intent-num { width:22px; height:22px; border-radius:50%; display:grid; place-items:center; color:#231b16; background:#e8a663; font-size:12px; font-weight:800; }
+    .intent strong { font-size:13px; }
+    .intent small { display:block; color:#aeb8b7; margin-top:3px; font-size:11px; line-height:1.4; }
+    .readout { min-height:94px; border-left:3px solid var(--cyan); background:#0e181a; padding:10px 12px; line-height:1.55; font-size:12px; color:#c9d4d2; }
+    .readout strong { display:block; color:#e5fcfb; margin-bottom:3px; font-size:14px; }
+    .bottom { grid-column:1/-1; display:flex; gap:20px; align-items:center; justify-content:space-between; border-top:1px solid #3f4d4e; padding-top:13px; color:#afbbba; font-size:12px; }
+    .bottom b { color:#fff1d8; }
+    @media(max-width:1100px) { .shell { grid-template-columns:1fr; } aside { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); } .bottom { grid-column:1; } }
+    @media(max-width:680px) { .shell { padding:10px; } aside { display:flex; } .top-note { display:none; } .arena-shell { justify-content:flex-start; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top"><div><div class="brand">OCC / BATTLEFIELD LANGUAGE STUDY</div><h1>战斗范围与意图显示 · 网页样板</h1></div><div class="top-note">红色敌方生效　/　琥珀可能变招<br>冷青移动　/　绿色攻击施法　/　橙色敌人落点</div></header>
+    <section class="arena-shell" aria-label="战场交互预览"><div class="board-wrap"><div id="board" class="board"></div></div></section>
+    <aside>
+      <section class="panel"><div class="eyebrow">VIEW STATE</div><h2>显示状态</h2><div class="modes"><button class="mode active" data-mode="default">默认观察</button><button class="mode" data-mode="move">移动模式</button><button class="mode" data-mode="attack">攻击模式</button><button class="mode" data-mode="spell">术式模式</button></div><p style="color:#9caead;font-size:11px;line-height:1.5;margin:11px 0 0">悬停敌人查看可攻击范围；悬停移动落点或攻击、术式目标，查看对应预览。</p></section>
+      <section class="panel"><div class="eyebrow">MARKER KEY</div><h2>统一方格标记</h2><div class="legend"><span class="legend-swatch actual"></span><span>红色实格：敌方本次实际生效，始终可见</span><span class="legend-swatch possible"></span><span>琥珀空格：可攻击／可能变招范围</span><span class="legend-swatch ours"></span><span>冷青内格：主角移动可达</span><span class="legend-swatch offense"></span><span>绿色内格：攻击／施法可选</span><span class="legend-swatch effect"></span><span>绿色实格：本次作用范围预览</span><span class="legend-swatch destination"></span><span>橙色四角定位：敌人本次移动落点</span></div></section>
+      <section class="panel"><div class="eyebrow">PUBLIC INTENT</div><h2>已公开的敌方行动</h2><div class="intent" data-enemy="arbalist"><div class="intent-num">1</div><div><strong>背弩生 · 穿射</strong><small>锁定同排，红格为本次生效；目标格预计 6 伤。</small></div></div><div class="intent" data-enemy="pyromancer"><div class="intent-num">2</div><div><strong>火矢生 · 焰区</strong><small>中心及相邻格本次生效；进入范围可能改变后续意图。</small></div></div><div class="intent" data-enemy="raider"><div class="intent-num">3</div><div><strong>侧锋 · 进逼</strong><small>沿橙色小方格移动至四角标记落点，本次不攻击。</small></div></div></section>
+      <section class="panel"><div class="eyebrow">HOVER READOUT</div><div id="readout" class="readout"><strong>观察战场</strong>红色区域默认常驻。切到移动模式后，所有敌人的琥珀可攻击范围才会展开。</div></section>
+    </aside>
+    <footer class="bottom"><div><b>交互视觉样板</b> · 演示数据用于评估显示语言，不代表实际关卡数值或 AI 结算。</div><div>12 × 8　/　玩家视角</div></footer>
+  </main>
+  <script>
+    const W=12,H=8;
+    const hero={x:7,y:2};
+    const enemies={arbalist:{x:2,y:2,name:'背弩生',img:'arbalist.png',n:1},pyromancer:{x:9,y:5,name:'火矢生',img:'pyromancer.png',n:2},raider:{x:10,y:1,name:'侧锋',img:'raider.png',n:3}};
+    const walls=new Set(['4,1','4,4','4,3','5,6','6,6','8,6']);
+    const water=new Set(['1,5','2,5','3,5','1,6','2,6','3,6']);
+    const actual={arbalist:[[3,2],[4,2],[5,2],[6,2],[7,2]],pyromancer:[[7,5],[8,5],[9,5],[8,4],[8,6]],raider:[]};
+    const potential={
+      arbalist:[[1,2],[3,2],[4,2],[5,2],[6,2],[7,2],[8,2],[9,2],[2,1],[2,3]],
+      pyromancer:[[7,3],[8,3],[9,3],[10,3],[6,4],[7,4],[8,4],[9,4],[10,4],[11,4],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],[7,6],[8,6],[9,6],[10,6]],
+      raider:[[7,1],[8,1],[9,1],[10,2],[9,2],[8,2],[7,2],[8,3],[9,3],[10,3]]
+    };
+    const enemyAt=(x,y)=>Object.keys(enemies).find(k=>enemies[k].x===x&&enemies[k].y===y);
+    const key=(x,y)=>`${x},${y}`;
+    const includes=(list,x,y)=>list.some(p=>p[0]===x&&p[1]===y);
+    function edgeClassNames(region,x,y){return [['top',x,y-1],['right',x+1,y],['bottom',x,y+1],['left',x-1,y]]
+      .filter(([,nx,ny])=>!includes(region,nx,ny)).map(([side])=>`edge-${side}`).join(' ')}
+    const board=document.querySelector('#board'),readout=document.querySelector('#readout');
+    const cells=new Map(); let mode='default',selectedEnemy=null,hoverEnemy=null,hoverCell=null,selectedMove=null,selectedActionCell=null;
+    function build(){for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+      const c=document.createElement('div'); c.className='cell'; c.dataset.x=x;c.dataset.y=y;
+      c.style.backgroundPosition=`${(x%3)*50}% ${(y%3)*50}%`;
+      if(walls.has(key(x,y)))c.classList.add('wall'); if(water.has(key(x,y)))c.classList.add('water');
+      const redEdges=Object.entries(actual).filter(([,region])=>includes(region,x,y))
+        .map(([source,region])=>`<span class="region-edge red-edge ${edgeClassNames(region,x,y)}" data-source="${source}"></span>`).join('');
+      c.innerHTML='<span class="potential"></span><span class="actual"></span><span class="player-range"></span><span class="effect-preview"></span>'+
+        redEdges+'<span class="region-edge green-edge"></span><span class="route-step"></span><span class="hero-step"></span><span class="landing"></span><span class="focus"></span><span class="object-impact"></span><span class="coord">'+String.fromCharCode(65+x)+(y+1)+'</span>';
+      let enemy=enemyAt(x,y),unit=enemy?enemies[enemy]:x===hero.x&&y===hero.y?{name:'主角',img:'hero.png',hero:true}:null;
+      if(unit)c.insertAdjacentHTML('beforeend',`<span class="unit-ring ${unit.hero?'hero':''}"></span><img class="unit" src="assets/${unit.img}" alt=""><span class="unit-tag ${unit.hero?'hero':''}">${unit.name}</span>`);
+      c.addEventListener('mouseenter',()=>{hoverCell={x,y};hoverEnemy=enemy||null;render()});
+      c.addEventListener('mouseleave',()=>{hoverCell=null;hoverEnemy=null;render()});
+      c.addEventListener('click',()=>{if(enemy)selectedEnemy=selectedEnemy===enemy?null:enemy;
+        if(mode==='move'&&!walls.has(key(x,y)))selectedMove={x,y};
+        if((mode==='attack'&&enemy&&attackReach(x,y))||(mode==='spell'&&spellReach(x,y)))selectedActionCell={x,y};
+        render()});
+      board.append(c);cells.set(key(x,y),c);
+    }}
+    function playerReach(x,y){const d=Math.abs(hero.x-x)+Math.abs(hero.y-y);return d>0&&d<=3&&!walls.has(key(x,y))&&!enemyAt(x,y)}
+    function attackReach(x,y){const d=Math.abs(hero.x-x)+Math.abs(hero.y-y);return d>0&&d<=4&&!walls.has(key(x,y))}
+    function spellReach(x,y){const d=Math.abs(hero.x-x)+Math.abs(hero.y-y);return d>0&&d<=3&&!walls.has(key(x,y))}
+    function effectCells(anchor){
+      if(!anchor)return [];
+      if(mode==='attack')return enemyAt(anchor.x,anchor.y)&&attackReach(anchor.x,anchor.y)?[[anchor.x,anchor.y]]:[];
+      if(mode==='spell'&&spellReach(anchor.x,anchor.y))return [[anchor.x,anchor.y],[anchor.x+1,anchor.y],[anchor.x-1,anchor.y],[anchor.x,anchor.y+1],[anchor.x,anchor.y-1]]
+        .filter(([x,y])=>x>=0&&x<W&&y>=0&&y<H);
+      return [];
+    }
+    function previewPath(target){
+      if(!target||!playerReach(target.x,target.y))return [];
+      const path=[];let x=hero.x,y=hero.y;
+      while(x!==target.x){x+=Math.sign(target.x-x);path.push([x,y])}
+      while(y!==target.y){y+=Math.sign(target.y-y);path.push([x,y])}
+      return path;
+    }
+    function render(){const inspect=hoverEnemy||selectedEnemy;
+      const move=mode==='move'?(hoverCell||selectedMove):null;
+      const heroRoute=previewPath(move);
+      const anchor=(mode==='attack'||mode==='spell')?(hoverCell||selectedActionCell):null;
+      const affected=effectCells(anchor);
+      board.classList.toggle('offense-mode',mode==='attack'||mode==='spell');
+      for(const [k,c] of cells){const x=+c.dataset.x,y=+c.dataset.y;
+        const isActual=Object.values(actual).some(a=>includes(a,x,y));
+        const isPotential=mode==='move'?Object.values(potential).some(a=>includes(a,x,y)):inspect&&includes(potential[inspect],x,y);
+        c.classList.toggle('is-actual',isActual);
+        c.classList.toggle('is-potential',!!isPotential&&!walls.has(k));
+        c.classList.toggle('is-hover-source',!!inspect&&enemyAt(x,y)===inspect);
+        c.classList.toggle('is-player-range',mode==='move'?playerReach(x,y):mode==='attack'?attackReach(x,y):mode==='spell'?spellReach(x,y):false);
+        c.classList.toggle('is-attack-target',(mode==='attack'||mode==='spell')&&!!enemyAt(x,y));
+        c.classList.toggle('is-effect-preview',includes(affected,x,y));
+        c.classList.toggle('is-affected-unit',includes(affected,x,y)&&(!!enemyAt(x,y)||(x===hero.x&&y===hero.y)));
+        c.classList.toggle('is-affected-object',includes(affected,x,y)&&walls.has(k));
+        c.querySelector('.green-edge').className=`region-edge green-edge ${includes(affected,x,y)?edgeClassNames(affected,x,y):''}`;
+        c.classList.toggle('is-landing',x===8&&y===3);c.classList.toggle('is-route',includes([[9,1],[9,2]],x,y));
+        c.classList.toggle('is-hero-route',includes(heroRoute,x,y));
+        c.classList.toggle('is-focus',mode==='move'&&!!(hoverCell||selectedMove)&&x===(hoverCell||selectedMove).x&&y===(hoverCell||selectedMove).y);
+      }
+      document.querySelectorAll('.intent').forEach(el=>el.classList.toggle('selected',el.dataset.enemy===inspect));
+      if(move){let sources=Object.keys(potential).filter(e=>includes(potential[e],move.x,move.y)).map(e=>enemies[e].name);
+        let hit=Object.keys(actual).filter(e=>includes(actual[e],move.x,move.y)).map(e=>enemies[e].name);
+        readout.innerHTML=`<strong>移动终点 ${String.fromCharCode(65+move.x)}${move.y+1}</strong>${walls.has(key(move.x,move.y))?'不可到达：这里有重掩体。':`当前生效：${hit.length?hit.join('、'):'无'}<br>进入后可能变招：${sources.length?sources.join('、'):'无'}<br><span style="color:#8cdfdf">冷青小方格标记本次预览路线。</span>`}`;
+      }else if(affected.length){
+        const hitUnits=affected.map(([x,y])=>enemyAt(x,y)?enemies[enemyAt(x,y)].name:x===hero.x&&y===hero.y?'主角':null).filter(Boolean);
+        const hitObjects=affected.filter(([x,y])=>walls.has(key(x,y))).length;
+        readout.innerHTML=`<strong>${mode==='attack'?'攻击':'术式'} · 本次作用范围</strong>墨绿实格覆盖 ${affected.length} 格；单位：${hitUnits.length?hitUnits.join('、'):'无'}；掩体：${hitObjects} 个。范围内的单位与物块以白色描边提示。`;
+      }else if(inspect){readout.innerHTML=`<strong>${enemies[inspect].name} · 可攻击范围</strong>琥珀空格只显示这名敌人的潜在覆盖；红色实格仍显示所有敌人本次确定的生效区。`}
+      else readout.innerHTML=`<strong>${mode==='default'?'观察战场':mode==='move'?'移动选点':mode==='attack'?'攻击选点':'术式选点'}</strong>${mode==='default'?'红色实格默认常驻。切到移动模式后，所有敌人的琥珀可攻击范围才会展开。':mode==='move'?'琥珀空格显示敌人可攻击范围；冷青内格是主角可到达格。两者重合时，琥珀保留外框，冷青收在内圈。':'绿色内格表示可选择范围；悬停合法目标后，绿色实格显示本次生效范围。'}`;
+    }
+    document.querySelectorAll('.mode').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;selectedMove=null;selectedActionCell=null;document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('active',x===b));render()}));
+    document.querySelectorAll('.intent').forEach(e=>{e.addEventListener('mouseenter',()=>{hoverEnemy=e.dataset.enemy;render()});e.addEventListener('mouseleave',()=>{hoverEnemy=null;render()});e.addEventListener('click',()=>{selectedEnemy=selectedEnemy===e.dataset.enemy?null:e.dataset.enemy;render()})});
+    window.addEventListener('resize',render);build();render();
+  </script>
+</body>
+</html>

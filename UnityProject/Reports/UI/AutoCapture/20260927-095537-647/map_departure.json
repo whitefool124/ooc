@@ -1,0 +1,11 @@
+{
+    "id": "map_departure",
+    "category": "学院/出发整备",
+    "label": "出发整备：装备与背包",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T09:56:35.9027462Z"
+}

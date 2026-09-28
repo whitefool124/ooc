@@ -180,45 +180,25 @@ namespace OCC.Combat.Presentation
             }
             else if (tile.IsPermanentWall)
             {
-                // Temporary: full-cell pillar placeholder until the permanent_wall_32x32
-                // generation result lands. Swap this id back to the generated asset then.
-                objectTexture = assets.Academy("academy_permanent_pillar_placeholder");
-                objectLabel = "永久墙";
-                objectLabelColor = new Color(.72f, .78f, .86f, .96f);
+                objectTexture = assets.Academy(PermanentWallVisualId(state, position));
             }
             else if (tile.Cover == CoverType.Light)
             {
                 string family = (position.X + position.Y) % 2 == 0 ? "academy_light_stone_bench_" : "academy_light_planter_";
                 string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 4 ? "damaged" : "intact";
-                if (CombatTestArenaEntry.IsDedicatedTestArena && stateKey == "intact")
-                {
-                    objectTexture = assets.Academy("academy_test_book_crate_intact_64");
-                    objectTextureLow = assets.Academy("academy_test_book_crate_intact_32");
-                }
-                else
-                {
                 string variant = stateKey == "intact"
                     ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Light)
                     : null;
                 objectTexture = assets.Academy(variant ?? family + stateKey);
-                }
             }
             else if (tile.Cover == CoverType.Heavy)
             {
                 string family = (position.X + position.Y) % 2 == 0 ? "academy_heavy_archive_stack_" : "academy_heavy_masonry_screen_";
                 string stateKey = tile.IsDestroyed ? "rubble" : tile.Durability < 7 ? "damaged" : "intact";
-                if (CombatTestArenaEntry.IsDedicatedTestArena && stateKey == "intact")
-                {
-                    objectTexture = assets.Academy("academy_test_heavy_cover_intact_64");
-                    objectTextureLow = assets.Academy("academy_test_heavy_cover_intact_32");
-                }
-                else
-                {
-                    string variant = stateKey == "intact"
-                        ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Heavy)
-                        : null;
-                    objectTexture = assets.Academy(variant ?? family + stateKey);
-                }
+                string variant = stateKey == "intact"
+                    ? AcademyBattlefieldLayoutCatalog.CoverVariant(level?.Id, position, CoverType.Heavy)
+                    : stateKey == "rubble" ? "academy_heavy_training_barricade_rubble" : null;
+                objectTexture = assets.Academy(variant ?? family + stateKey);
             }
             else if (trainingRangeActive && tile.IsDevice)
             {
@@ -294,12 +274,29 @@ namespace OCC.Combat.Presentation
                 BattlefieldMarkerLadder.Alpha(moveMarker), attack, BattlefieldMarkerLadder.Alpha(attackMarker),
                 skill, selectionOverlay, unitTexture, uv, unitTint, unitOffset, objectTexture, objectLabel,
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover, travelOffset,
-                tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
+                tile.IsPermanentWall ? 42 : tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
                 surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow,
                 BattlefieldMarkerLadder.Alpha(skillMarker));
         }
 
         private const string OutOfRangeFailure = "超出射程";
+
+        private static string PermanentWallVisualId(CombatState state, GridPosition position)
+        {
+            string mask = string.Empty;
+            if (HasPermanentWall(state, position.X, position.Y - 1)) mask += "n";
+            if (HasPermanentWall(state, position.X + 1, position.Y)) mask += "e";
+            if (HasPermanentWall(state, position.X, position.Y + 1)) mask += "s";
+            if (HasPermanentWall(state, position.X - 1, position.Y)) mask += "w";
+            if (mask.Length == 0) mask = "island";
+            return "academy_permanent_wall_" + mask + ((position.X + position.Y) % 2 == 0 ? "_a" : "_b");
+        }
+
+        private static bool HasPermanentWall(CombatState state, int x, int y)
+        {
+            var neighbor = new GridPosition(x, y);
+            return state.Map.IsInside(neighbor) && state.Map.GetTile(neighbor).IsPermanentWall;
+        }
         private const string DeadZoneFailure = "目标位于近身死区";
         private const string SightLineFailure = "视线受阻";
 

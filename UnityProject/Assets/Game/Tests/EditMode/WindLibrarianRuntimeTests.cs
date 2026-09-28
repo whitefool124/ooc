@@ -14,6 +14,7 @@ namespace OCC.Combat.Tests
             EnemyArchetypes.Get("wind_librarian").Apply(librarian);
             CombatState state = new CombatState(new GridMap(9, 7), new[] { hero, librarian });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.EnableWindMechanic();
             state.AttachAcademyFieldEnemy(new AcademyFieldEnemyRuntime());
             state.AttachRogueSpellRuntime(new OCC.Combat.Roguelite.RogueSpellCombatRuntime(state,
                 OCC.Combat.Roguelite.RogueSpellLoadout.Restore(new[] { "BASE-FIRE-MELEE" }, new[] { "BASE-FIRE-MELEE", "", "", "", "", "", "", "" }, true)));
@@ -29,6 +30,20 @@ namespace OCC.Combat.Tests
         }
 
         private static TileState Tile(CombatState state, int x, int y) => state.Map.GetTile(new GridPosition(x, y));
+
+        [Test]
+        public void OnlyLibrarianEncounterEnablesWindMechanic()
+        {
+            CombatState library = FirstRegionLevelBuilder.Build("library_discipline").State;
+            CombatState ordinary = FirstRegionLevelBuilder.Build("rain_lantern_court").State;
+
+            Assert.That(library.WindMechanicEnabled, Is.True);
+            Assert.That(library.Clone().WindMechanicEnabled, Is.True);
+            Assert.That(ordinary.WindMechanicEnabled, Is.False);
+            ordinary.ConfigureRuleset(CombatRuleset.Roguelite);
+            CombatResolver.BeginTurn(ordinary, "hero");
+            Assert.That(ordinary.EventLog.Any(line => line.Contains("风况")), Is.False);
+        }
 
         [Test]
         public void Librarian_IsAnEliteWithOnlyItsDeclaredAbility()

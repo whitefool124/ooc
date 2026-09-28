@@ -1,0 +1,70 @@
+﻿{
+    "captures": [
+        {
+            "id": "front_landing",
+            "category": "主流程/入口",
+            "label": "以太主界面",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:05:50.3838377Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_settings",
+            "category": "主流程/设置",
+            "label": "辅助设置",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:05:53.8133871Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_slots",
+            "category": "主流程/存档",
+            "label": "新建档案选位",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:05:57.2237524Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "front_encyclopedia",
+            "category": "主流程/百科",
+            "label": "战斗百科",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T03:06:01.8503433Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "arena_battle",
+            "category": "战斗/战场",
+            "label": "固定场景战斗",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:06:06.9425328Z",
+            "width": 1920,
+            "height": 1080
+        },
+        {
+            "id": "arena_inventory",
+            "category": "战斗/整理",
+            "label": "战斗中整理",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:06:12.1319638Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+﻿{
+    "captures": [
+        {
+            "id": "map_finale_confirmation",
+            "category": "学院/确认",
+            "label": "首领门槛确认",
+            "status": "failed",
+            "detail": "Academy finale gate did not open",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T04:19:11.1931084Z",
+            "width": 0,
+            "height": 0
+        }
+    ]
+}

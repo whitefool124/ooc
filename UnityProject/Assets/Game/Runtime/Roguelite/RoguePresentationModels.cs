@@ -139,7 +139,7 @@ namespace OCC.Combat.Roguelite
                 SpatialRisk = node.Id == "B1" ? "积水拖慢移动；灯藤阻挡视线，寻迹兽会嗅探搜索。" :
                     node.Id == "B2" ? "灯藤遮蔽侧锋生；中央宝箱与晶体引爆可改变路线。" :
                     node.Id == "B3" ? "破晶可开器材匣；浅水能熄灭火场，南侧保留干路。" :
-                    node.Id == "X" ? "楔角公开锁线；晶体、灯藤和浅水都可用于反制。" : string.Empty;
+                    node.Id == "X" ? "晶体、灯藤和浅水都可用于反制。" : string.Empty;
                 RiskLabel = node.Type == RogueliteMapNodeType.Elite ? "危险" : node.IsCombat ? "公开实战" : "学院设施";
                 RewardLabel = slot == null ? "学院服务" : node.Id == "X" ? "固定精英奖励与商店" : "战后术式三选一";
                 FailureConsequence = node.IsCombat ? "主角生命归零会结束本轮；可以从本场开战前重试。" : string.Empty;

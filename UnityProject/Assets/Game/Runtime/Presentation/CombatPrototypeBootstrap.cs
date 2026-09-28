@@ -452,8 +452,76 @@ namespace OCC.Combat.Presentation
         public bool HasMapRogueliteSave => mapSaves.HasSave;
         public bool HasFirstExperienceSave => FirstExperiencePrototypeController.HasAnySaveRecord();
         public MapSaveUiPresentation MapSavePresentation => mapSaves.Presentation;
-        public bool IsMapRunSaved => mapSaves.LastSaveSucceeded;
-        public bool IsMapRunWriteProtected => mapSaves.IsWriteProtected;
+        public bool IsMapRunSaved =>
+#if UNITY_EDITOR
+            (mapSaves.LastSaveSucceeded || uiCapturePreview) && !uiCapturePreviewSaveFailure
+#else
+            mapSaves.LastSaveSucceeded
+#endif
+            ;
+#if UNITY_EDITOR
+        private bool uiCapturePreview;
+        private bool uiCapturePreviewSaveFailure;
+        private bool uiCapturePreviewProtected;
+
+        // Builds a disposable in-memory journey for screenshot routes. It never selects a
+        // player slot, reads a saved run, or writes map progress to PlayerPrefs.
+        public string PreviewUiCaptureRun(bool academy, string nodeId, bool departure = false, string special = null)
+        {
+            if (!Application.isPlaying) return "UI capture requires Play Mode";
+            InitializeRuntime();
+            FirstExperiencePrototypeController opening = GetComponent<FirstExperiencePrototypeController>();
+            if (opening != null) opening.enabled = false;
+            startupPresentation?.DismissImmediately();
+            uiCapturePreview = true;
+            uiCapturePreviewSaveFailure = false;
+            uiCapturePreviewProtected = false;
+            RogueliteMapRun run = academy
+                ? RogueliteMapRun.CreateSubsequentAcademyRun(7021)
+                : RogueliteMapRun.CreateFirstRunV1(7021);
+            if (academy && !departure) run.ConfirmAcademyDeparture();
+            if (!academy && nodeId != FirstRunExperienceCatalog.OriginNodeId)
+                run.AcknowledgeFirstRunOrigin();
+            if (!string.IsNullOrEmpty(nodeId)) run.PreviewUiCaptureNode(nodeId);
+            if (special == "reward") run.CompleteCurrentCombat();
+            else if (special == "victory") run.PreviewUiCaptureVictory();
+            else if (special == "failure") run.CloseAsFailure(false);
+            else if (special == "finale_gate") run.PreviewUiCaptureFinaleGate();
+            rogueliteFlow.BeginMapRun(run);
+            presentation?.RogueliteUi?.SetFrontEndSuppressed(false);
+            MarkPresentation(UiPresentationArea.Flow);
+            MarkPresentation(UiPresentationArea.MapStructure);
+            return presentation?.RogueliteUi == null ? "Formal Roguelite UI missing" : null;
+        }
+
+        public string PreviewUiCapturePage(string page, string nodeId = null)
+            => presentation?.RogueliteUi == null ? "Formal Roguelite UI missing" :
+                presentation.RogueliteUi.PreviewUiCapturePage(page, nodeId);
+
+        public string PreviewUiCaptureRewardInventory()
+        {
+            if (mapRun == null || !mapRun.AwaitingReward) return "Pending reward missing";
+            settlementPresentation?.HideForInventory();
+            presentation?.RogueliteUi?.OpenLoadoutForReward();
+            return presentation?.RogueliteUi == null ? "Formal Roguelite UI missing" : null;
+        }
+
+        public string PreviewUiCaptureSaveFailure(bool protectedSlot)
+        {
+            if (mapRun == null) return "Map preview missing";
+            uiCapturePreviewSaveFailure = true;
+            uiCapturePreviewProtected = protectedSlot;
+            presentation?.RogueliteUi?.PreviewUiCapturePage("map");
+            MarkPresentation(UiPresentationArea.Flow);
+            MarkPresentation(UiPresentationArea.MapStructure);
+            return null;
+        }
+#endif
+        public bool IsMapRunWriteProtected => mapSaves.IsWriteProtected
+#if UNITY_EDITOR
+            || uiCapturePreviewProtected
+#endif
+            ;
         public string SettingsSaveDetail => lastSettingsSaveSucceeded ? "设置已保存" : "设置已临时生效，但保存失败";
 
         private bool PrepareMapSlotForReplacement()
@@ -809,6 +877,9 @@ namespace OCC.Combat.Presentation
         }
         private bool SaveMapRun()
         {
+#if UNITY_EDITOR
+            if (uiCapturePreview) return true;
+#endif
             bool saved = mapSaves.Save(mapRun);
             if (!saved)
             {

@@ -1,0 +1,123 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ_academy_light_book_crate_intact_native32_v1",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent low academy book-carrying crate; native32 template, diagnosed retry",
+    "source_path": "Artifacts/OCC_学院掩体资产概念_20260924/source/light_book_crate_r2_source.png",
+    "source_sha256": "ad27c69a104c3325e1ab941191251f03e9ec57aeaa9b1b04800dfc9d22344e47"
+  },
+  "delivery": {
+    "output_path": "Artifacts/OCC_学院掩体资产概念_20260924/processed/academy_light_book_crate_intact_32x32.png",
+    "output_sha256": "ecb2514718fdeb4c348307705af45c91a369b56cc4d6256b366b9a5a139155ba",
+    "native_output_path": "Artifacts/OCC_学院掩体资产概念_20260924/processed/academy_light_book_crate_intact_32x32.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "floor_standing",
+    "logical_cell": [
+      1,
+      1
+    ],
+    "native_anchor": [
+      16,
+      30
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 30
+    },
+    "depth_sort_baseline": 30,
+    "allowed_occlusion_direction": [
+      "front"
+    ],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "ground_cell",
+    "combined_room_shell": false
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true
+  },
+  "application": {
+    "runtime_draw_rect": "one logical 32x32 battlefield cell; floor-standing low academy book-carrying crate",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "pixel_grid_qa": {
+    "report_path": "Artifacts/OCC_学院掩体资产概念_20260924/qa/light_book_crate_r2_decode.json",
+    "subject_lattice_confidence": 4.1158,
+    "subject_logical_size": [
+      19,
+      16
+    ],
+    "geometric_resize_or_interpolation_performed": false,
+    "outermost_existing_opaque_pixels_replaced_with_black": true
+  },
+  "evidence": {
+    "one_x": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_1x.png",
+    "four_x": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_4x.png",
+    "six_x": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_6x.png",
+    "grayscale": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_grayscale.png",
+    "checker": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_checker.png",
+    "application_contact_1x": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_ground_contact_1x.png",
+    "application_contact": "Artifacts/OCC_学院掩体资产概念_20260924/qa/book_crate_ground_contact_6x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "placement_semantics": "PENDING",
+    "support_and_contact": "PENDING",
+    "material_palette_family": "PENDING",
+    "walkability_and_occlusion": "PENDING",
+    "notes": "Technical review sample only; user shape review and runtime contact pending."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "stable_guid": "de064c54db0deb04489c7b9192fbfeba",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "",
+      "tier": 6,
+      "offset": [
+        0,
+        0
+      ],
+      "pass": false
+    }
+  }
+}

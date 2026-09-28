@@ -1,0 +1,11 @@
+{
+    "id": "front_new_round",
+    "category": "主流程/轮次",
+    "label": "新一轮学院旅程",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T04:34:05.6982269Z"
+}

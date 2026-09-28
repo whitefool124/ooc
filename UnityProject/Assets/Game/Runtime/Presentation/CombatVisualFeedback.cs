@@ -255,21 +255,6 @@ namespace OCC.Combat.Presentation
             string outcome = victory ? "victory" : "defeat";
             if (lastOutcome == outcome) return;
             lastOutcome = outcome;
-            EnsureCanvas();
-            GameObject card = new GameObject("战斗结果反馈"); card.transform.SetParent(canvas.transform, false);
-            RectTransform rect = card.AddComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f); rect.sizeDelta = new Vector2(520, 100);
-            Text label = card.AddComponent<Text>(); label.font = FormalUiKit.Font; label.fontSize = FormalUiTheme.TitleFontSize; label.fontStyle = FontStyle.Normal; label.alignment = TextAnchor.MiddleCenter; label.text = victory ? "战斗胜利" : "战斗失败"; label.color = victory ? FormalUiTheme.Cyan : FormalUiTheme.Danger; label.resizeTextForBestFit = false; label.raycastTarget = false;
-            CanvasGroup group = card.AddComponent<CanvasGroup>(); group.alpha = 0f; rect.localScale = Vector3.one;
-            if (!AnimationsEnabled)
-            {
-                group.alpha = 1f;
-                rect.localScale = Vector3.one;
-                DOVirtual.DelayedCall(.9f, () => { if (card != null) DestroyFeedbackObject(card); }).SetUpdate(true).SetTarget(card);
-                return;
-            }
-            Sequence sequence = DOTween.Sequence().SetUpdate(true).SetTarget(card);
-            sequence.Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, .16f));
-            sequence.AppendInterval(.7f).Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .22f)).OnComplete(() => DestroyFeedbackObject(card));
         }
 
         public void ResetBattleFeedback()

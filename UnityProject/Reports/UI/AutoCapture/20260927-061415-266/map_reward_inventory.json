@@ -1,0 +1,11 @@
+{
+    "id": "map_reward_inventory",
+    "category": "学院/战利品",
+    "label": "待领奖励去向处理",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T06:16:35.0766110Z"
+}

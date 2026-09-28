@@ -1,0 +1,107 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ_academy_permanent_wall_isolated_low42_master_v1",
+  "role": "permanent_wall_32x64",
+  "status": "REVIEW_READY",
+  "adjacency_mask": "island",
+  "texture_variant": "A",
+  "provenance": {
+    "source_channel": "manual_pixel_authoring",
+    "source_descriptor": "User-authorized permanent-wall exception: independent built-in image reference guides warm stone material; final isolated wall authored pixel-by-pixel on native 32x64 grid without cropping or scaling the reference.",
+    "source_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/author_isolated_master.py",
+    "source_sha256": "da11cf9cd7f66ca876ed0e8e47aa0db8893ed92f17139c1f06661a4cd8a18d06",
+    "generated_reference_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_masonry_material_reference_source.png",
+    "generated_reference_sha256": "43149cb9e707ee56426049a787432262ca4937d783e9158bf7b1dab522e7b341"
+  },
+  "delivery": {
+    "output_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/academy_permanent_wall_isolated_master_32x64.png",
+    "output_sha256": "80cf0e209170b32799ee9a16009497d699659f6bfb6cb47ad7e49f2f068f3c67",
+    "native_output_path": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/academy_permanent_wall_isolated_master_32x64.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 6,
+    "required_color_families": []
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "structural",
+    "logical_cell": [
+      1,
+      1
+    ],
+    "native_anchor": [
+      16,
+      63
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 63
+    },
+    "depth_sort_baseline": 63,
+    "allowed_occlusion_direction": [
+      "front"
+    ],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "ground_cell",
+    "combined_room_shell": false
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true
+  },
+  "application": {
+    "runtime_draw_rect": "one 32x64 visual canvas anchored at bottom centre of one 32x32 logical wall cell; north overhang 10 native px",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "texture_variant_selection": "A when (x+y)%2==0 else B, using zero-based map coordinates",
+    "actual_first_stage_uses": [
+      "first_elite_three_material_pressure:A1"
+    ]
+  },
+  "evidence": {
+    "one_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/academy_permanent_wall_isolated_master_32x64.png",
+    "four_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_4x.png",
+    "six_x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_6x.png",
+    "grayscale": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_grayscale.png",
+    "checker": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_checker_4x.png",
+    "application_contact_1x": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_contact_1x.png",
+    "application_contact": "Artifacts/OCC_学院掩体资产概念_20260924/formal_low_wall_batch_20260926/isolated_master_contact_6x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "User approved this isolated mother as the basis for connected-family production on 2026-09-26. Formal family aesthetic and Unity runtime review remain separate gates."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "stable_guid": "",
+    "importer_verified": false,
+    "runtime_verified": false
+  }
+}

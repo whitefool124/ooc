@@ -927,6 +927,31 @@ namespace OCC.Combat
             run.SyncFirstRunProjection();
             return run;
         }
+#if UNITY_EDITOR
+        // Direct page preview only; the instance is never persisted.
+        public void PreviewUiCaptureNode(string nodeId)
+        {
+            if (MapNodes.All(node => node.Id != nodeId)) throw new ArgumentException("Unknown preview node: " + nodeId);
+            CurrentNodeId = nodeId;
+            visited.Add(nodeId);
+            if (IsTutorialPhase)
+            {
+                FirstRunExperience.CurrentNodeId = nodeId;
+                FirstRunExperience.RecomputeNodeFlags();
+                SyncFirstRunProjection();
+            }
+            else if (rogueRunDto != null) rogueRunDto.CurrentNodeId = nodeId;
+        }
+
+        public void PreviewUiCaptureVictory() => SettleAcademyRound();
+
+        public void PreviewUiCaptureFinaleGate()
+        {
+            if (!IsInAcademyLayer || rogueRunDto == null) throw new InvalidOperationException("Academy preview missing");
+            rogueRunDto.StageTime = AcademyMapTuning.TransitionProgress;
+            completed.Add(CurrentNodeId);
+        }
+#endif
         public static RogueliteMapRun CreateSubsequentAcademyRun(int seed)
         {
             RogueliteMapRun run = new RogueliteMapRun(seed, FireRogueliteStarterCatalog.Universal)
@@ -1752,7 +1777,7 @@ namespace OCC.Combat
             if (!IsTutorialPhase)
             {
                 layerMedical = CurrentMedicalService;
-                if (!layerMedical.HealthCheckCompleted || layerMedical.HealUsed)
+                if (layerMedical.HealUsed)
                     throw new InvalidOperationException("Academy-layer treatment is unavailable.");
             }
             if (rogueRunDto.StageContribution < 1) throw new InvalidOperationException("Insufficient stage contribution.");
@@ -1777,7 +1802,7 @@ namespace OCC.Combat
             if (!IsTutorialPhase)
             {
                 layerMedical = CurrentMedicalService;
-                if (!layerMedical.HealthCheckCompleted || layerMedical.MealUsed || !layerMedical.MealCandidateIds.Contains(mealId))
+                if (layerMedical.MealUsed || !layerMedical.MealCandidateIds.Contains(mealId))
                     throw new InvalidOperationException("Academy-layer meal is unavailable.");
             }
             if (mealId == "MEAL-POWER")

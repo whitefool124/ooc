@@ -1,0 +1,11 @@
+{
+    "id": "front_confirm_new",
+    "category": "主流程/确认",
+    "label": "建立档案确认",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatPrototype.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T04:33:50.3350064Z"
+}

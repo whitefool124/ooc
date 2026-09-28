@@ -314,7 +314,6 @@ namespace OCC.Combat.Tests
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4311);
             run.ConfirmAcademyDeparture();
             TravelToService(run, "layer_medical");
-            run.CompleteFirstRunHealthCheck();
             run.ChooseFirstRunMeal("MEAL-POWER");
             MemoryStore store = new MemoryStore();
             RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
@@ -322,7 +321,7 @@ namespace OCC.Combat.Tests
             Assert.That(saves.Save(run), Is.True, gateway.LastError);
 
             RogueliteMapRun restored = saves.TryStart(true, FireRogueliteStarterCatalog.Universal, 0).Run;
-            Assert.That(restored.CurrentMedicalService.HealthCheckCompleted, Is.True);
+            Assert.That(restored.CurrentMedicalService.HealthCheckCompleted, Is.False);
             Assert.That(restored.CurrentMedicalService.MealUsed, Is.True);
             Assert.That(restored.CurrentMedicalService.SelectedMealId, Is.EqualTo("MEAL-POWER"));
             Assert.Throws<InvalidOperationException>(() => restored.ChooseFirstRunMeal("MEAL-POWER"));

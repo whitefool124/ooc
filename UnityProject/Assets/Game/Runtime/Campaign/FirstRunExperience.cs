@@ -228,6 +228,7 @@ namespace OCC.Combat
             IReadOnlyList<string> path = FindTravelPath(nodeId);
             if (path.Count == 0) throw new InvalidOperationException("First-run node is locked or has no unlocked route.");
             CurrentNodeId = nodeId;
+            if (nodeId == "M") SetCompleted("M");
             if (nodeId == FirstRunExperienceCatalog.ShopNodeId)
             {
                 Shop.Opened = true;
@@ -346,7 +347,7 @@ namespace OCC.Combat
         public void MarkHealUsed()
         {
             RequireCurrent("M");
-            if (!Medical.HealthCheckCompleted || Medical.HealUsed) throw new InvalidOperationException("First-run treatment is unavailable.");
+            if (Medical.HealUsed) throw new InvalidOperationException("First-run treatment is unavailable.");
             Medical.HealUsed = true;
             RecomputeNodeFlags();
         }
@@ -354,7 +355,7 @@ namespace OCC.Combat
         public void ChooseMeal(string mealId)
         {
             RequireCurrent("M");
-            if (!Medical.HealthCheckCompleted || Medical.MealUsed || !Medical.MealCandidateIds.Contains(mealId))
+            if (Medical.MealUsed || !Medical.MealCandidateIds.Contains(mealId))
                 throw new InvalidOperationException("First-run meal is unavailable.");
             Medical.MealUsed = true;
             Medical.SelectedMealId = mealId;
@@ -415,7 +416,7 @@ namespace OCC.Combat
             FirstRunNodeSnapshot workshop = Nodes.SingleOrDefault(value => value.Id == "W");
             if (workshop != null && Workshop.ForgeCompleted && Workshop.SpecializationCompleted) workshop.Flags |= FirstRunNodeFlags.Used;
             FirstRunNodeSnapshot medical = Nodes.SingleOrDefault(value => value.Id == "M");
-            if (medical != null && Medical.HealthCheckCompleted && Medical.HealUsed && Medical.MealUsed) medical.Flags |= FirstRunNodeFlags.Used;
+            if (medical != null && Medical.HealUsed && Medical.MealUsed) medical.Flags |= FirstRunNodeFlags.Used;
             FirstRunNodeSnapshot shop = Nodes.SingleOrDefault(value => value.Id == FirstRunExperienceCatalog.ShopNodeId);
             if (shop != null && Shop.Offers.Count > 0 && Shop.Offers.All(value => value.Sold)) shop.Flags |= FirstRunNodeFlags.SoldOut;
         }
@@ -453,7 +454,6 @@ namespace OCC.Combat
             if (id == "B1" || id == "B2" || id == "B3" || id == "S") return true;
             if (id == "EV1" || id == "EV2" || id == "EV3") return true;
             if (id == "W") return !Workshop.ForgeCompleted || !Workshop.SpecializationCompleted;
-            if (id == "M") return !Medical.HealthCheckCompleted;
             if (id == "X") return true;
             return false;
         }
@@ -500,8 +500,8 @@ namespace OCC.Combat
             new RogueliteMapNode("W", RogueliteMapNodeType.Workshop, "工坊", "一次锻造与一次术式专精。", 2, 1, "B2"),
             new RogueliteMapNode("EV3", RogueliteMapNodeType.Event, "折光庭校验签领", "领取增幅刻墨，并在学院贡献与截击铃之间选择。", 2, 3, "B2"),
             new RogueliteMapNode("B3", RogueliteMapNodeType.Combat, "普通战斗 03 · 雨痕晶庭", "击倒替身偶与火矢生；可破晶搜刮学院储能芯。", 3, 2, "B2", "X", "M"),
-            new RogueliteMapNode("M", RogueliteMapNodeType.Medical, "医务室", "健康确认、治疗与固定餐食。", 3, 3, "B3"),
-            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "精英战斗 01 · 三材承压场", "击倒楔角；失败不会开放商店。", 3, 1, "B3", "S"),
+            new RogueliteMapNode("M", RogueliteMapNodeType.Medical, "医务室", "治疗与固定餐食。", 3, 3, "B3"),
+            new RogueliteMapNode("X", RogueliteMapNodeType.Elite, "精英战斗 01 · 三材承压场", "击倒楔角。", 3, 1, "B3", "S"),
             new RogueliteMapNode("S", RogueliteMapNodeType.Shop, "精英后商店", "首次展开即完成固定教学段。", 4, 1, "X")
         };
 

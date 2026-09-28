@@ -1,0 +1,90 @@
+<h1>第二轮调整后截图</h1>
+<p>已根据上一轮意见调整。请在下方对应截图旁继续写修改意见。</p>
+<h2>启动</h2>
+<h3>品牌开场</h3>
+<img path="@./front_branding.png"/>
+<h3>首启设置</h3>
+<img path="@./front_first_settings.png"/>
+<h3>世界观开场</h3>
+<img path="@./front_opening.png"/>
+<h2>主流程</h2>
+<h3>以太主界面</h3>
+<img path="@./front_landing.png"/>
+<h3>辅助设置</h3>
+<img path="@./front_settings.png"/>
+<h3>新建档案选位</h3>
+<img path="@./front_slots.png"/>
+<h3>建立档案确认</h3>
+<img path="@./front_confirm_new.png"/>
+<h3>覆盖档案确认</h3>
+<img path="@./front_confirm_overwrite.png"/>
+<h3>角色选择与固定配置</h3>
+<img path="@./front_character.png"/>
+<h3>学院介绍</h3>
+<img path="@./front_academy_intro.png"/>
+<h3>战斗百科</h3>
+<img path="@./front_encyclopedia.png"/>
+<h2>学院</h2>
+<h3>出发整备：装备与背包</h3>
+<img path="@./map_departure.png"/>
+<h3>学院地图</h3>
+<img path="@./map_overview.png"/>
+<h3>首次教程地图</h3>
+<img path="@./map_first_overview.png"/>
+<h3>整备：装备与背包</h3>
+<img path="@./map_loadout.png"/>
+<h3>整备：术式编组</h3>
+<img path="@./map_spells.png"/>
+<h3>学院辅助设置</h3>
+<img path="@./map_settings.png"/>
+<h3>行程与行囊</h3>
+<img path="@./map_archive.png"/>
+<h3>固定基础配置节点</h3>
+<img path="@./room_origin.png"/>
+<h3>战斗节点出发准备</h3>
+<img path="@./room_combat.png"/>
+<h3>精英节点出发准备</h3>
+<img path="@./room_elite.png"/>
+<h3>首领节点出发准备</h3>
+<img path="@./room_boss.png"/>
+<h3>事件节点</h3>
+<img path="@./room_event.png"/>
+<h3>工坊</h3>
+<img path="@./room_workshop.png"/>
+<h3>医务室</h3>
+<img path="@./room_medical.png"/>
+<h3>商店</h3>
+<img path="@./room_shop.png"/>
+<h3>战利品清点与领取</h3>
+<img path="@./map_reward.png"/>
+<h3>待领奖励去向处理</h3>
+<img path="@./map_reward_inventory.png"/>
+<h3>放弃奖励确认</h3>
+<img path="@./map_reward_abandon_confirmation.png"/>
+<h3>首领门槛确认</h3>
+<img path="@./map_finale_confirmation.png"/>
+<h3>保存失败与重试</h3>
+<img path="@./map_save_failure.png"/>
+<h3>档案保护与返回</h3>
+<img path="@./map_version_protected.png"/>
+<h3>单轮胜利结算</h3>
+<img path="@./map_round_victory.png"/>
+<h3>单轮失败结算</h3>
+<img path="@./map_round_failure.png"/>
+<h2>战斗</h2>
+<h3>测试场选择</h3>
+<img path="@./arena_selector.png"/>
+<h3>固定场景战斗</h3>
+<img path="@./arena_battle.png"/>
+<h3>战斗中整理</h3>
+<img path="@./arena_inventory.png"/>
+<h3>现场搜刮</h3>
+<img path="@./arena_loot.png"/>
+<h3>离开战斗确认</h3>
+<img path="@./arena_confirmation.png"/>
+<h3>重开战斗确认</h3>
+<img path="@./arena_restart_confirmation.png"/>
+<h3>战斗胜利结果</h3>
+<img path="@./arena_victory.png"/>
+<h3>战斗失败结果</h3>
+<img path="@./arena_defeat.png"/>

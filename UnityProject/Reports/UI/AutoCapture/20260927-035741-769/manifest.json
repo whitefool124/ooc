@@ -1,0 +1,15 @@
+﻿{
+    "captures": [
+        {
+            "id": "arena_victory",
+            "category": "战斗/结果",
+            "label": "战斗胜利结果",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatTestArena.unity",
+            "utc": "2026-09-27T03:57:46.3572256Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}

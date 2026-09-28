@@ -510,6 +510,8 @@ namespace OCC.Combat
                 ? (CombatObjective)new DestructionObjective(map.PositionsWith(tile => tile.IsObjective), level.Id + "_objective")
                 : new EliminationObjective(level.Id + "_objective");
             CombatState state = new CombatState(map, units, new[] { objective });
+            if (level.Id == "library_discipline" && resolvedIds.Contains("wind_librarian"))
+                state.EnableWindMechanic();
             if (level.Id == RainLanternCourtRuntime.LevelId) state.AttachRainLanternCourt(new RainLanternCourtRuntime());
             if (level.Id == FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id)
             {

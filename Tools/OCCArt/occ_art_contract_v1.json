@@ -188,6 +188,7 @@
     "canvas_routing": "fixed-size roles keep their contract dimensions; an opaque battlefield ground material field may use the recorded lossless 32x32 ground window after stable decoding, or a human-declared observed macro-pixel pitch when regular repetition makes generic confidence ambiguous; the latter stays REVIEW_READY until explicit human pixel-scale, material and application review; units and transparent battlefield props use 32 PPU and the smallest fitting 32-multiple canvas",
     "required_evidence": ["one_x", "four_x", "grayscale", "checker", "application_contact"],
     "promotion": "machine PASS then human review for FORMAL_CANDIDATE; stable GUID, importer and runtime review for FORMAL",
+    "academy_permanent_wall_hybrid_exception": "2026-09-24 user-authorized, 2026-09-25 height update: independent built-in image generation supplies warm-stone material and massing references only; actual 32x64 canvas N/E/S/W wall tiles have a 42px-tall stepped visible silhouette anchored at the bottom, with no transparent holes in the masonry body, and are authored pixel by pixel on the native grid with both generated reference and manual source recorded. This exception does not relax palette, seam, evidence, human-review or Unity import gates and does not apply to other roles.",
     "stability_baseline": {
       "batch_id": "academy_maintenance_mixed_v1",
       "assets": 6,
@@ -736,10 +737,10 @@
         "large_area_12x9_runtime_at_6x"
       ]
     },
-    "permanent_wall_32x32": {
+    "permanent_wall_32x64": {
       "delivery_size": [
         32,
-        32
+        64
       ],
       "logical_cells": [
         1,
@@ -748,21 +749,34 @@
       "native_ppu": 32,
       "palette_max": 6,
       "transparent_border_min": 0,
-      "alpha_policy": "fully_opaque_hard_alpha",
+      "alpha_policy": "transparent_hard_alpha",
       "unity_ppu": 32,
-      "production_status": "new_battlefield_wall_baseline_2026_09_16",
-      "role_purpose": "indestructible terrain: one solid pillar block that fills its whole gameplay cell, so a run of adjacent cells reads as a continuous wall",
-      "canvas_rule": "32x32, fully opaque, filling the cell edge to edge: a square top surface with a front face turned toward the bottom of the screen, and the left and right sides slightly inset so the block reads as a standing column rather than a flat floor tile",
-      "tiling_rule": "all four edges are edge-to-edge and match, so identical neighbouring blocks join with no gap and no seam; there is no overhang in any direction",
+      "production_status": "height_and_reference_approved_art_unapproved_2026_09_25",
+      "production_route": "generated_warm_stone_reference_plus_manual_native_pixel_authoring_user_authorized_2026_09_24",
+      "role_purpose": "indestructible terrain: each solid 1x1 gameplay cell blocks passage and attack lines; its appearance is selected by adjacent same-kind wall cells",
+      "canvas_rule": "each variant uses a 32x64 transparent hard-alpha canvas; the visible silhouette has bounds x=0..31,y=22..63 (42px tall), with stepped inset top and end corners permitted but no transparent holes in the masonry body; anchored at (16,63) to one gameplay cell and overhanging 10px north; no east, west or south overhang; an isolated cell reads as a solid Academy masonry pier",
+      "visible_body_bounds_xyxy": [0, 22, 32, 64],
+      "anchor_xy": [16, 63],
+      "north_visual_overhang_px": 10,
+      "tiling_rule": "select a preauthored structural mask from four orthogonal same-kind-wall neighbours N,E,S,W, then choose its A/B stone-texture variant by (x+y) parity; top lip only on exposed north edge, south-facing foot only on exposed south edge, and side ends/corners only where exposed; connected visible-body edges match in material value and low-contrast masonry seams; render wall rows north-to-south so the 10px overhang occludes consistently; no per-row repeated top band in vertical runs; no runtime rotation or mirroring",
+      "adjacency_selection": {
+        "neighbour_kind": "PermanentWall",
+        "directions": ["N", "E", "S", "W"],
+        "mask_weights": {"N": 1, "E": 2, "S": 4, "W": 8},
+        "texture_variants_per_mask": ["A", "B"],
+        "texture_variant_selector": "A when (x+y)%2==0 else B, using zero-based map coordinates; deterministic across reloads",
+        "mapping_rule": "each mask occurring in an active map requires two reviewed preauthored 32x64 variants with identical 32x42 body silhouette, exposed lip, foot and contact-edge pixels; the full family covers masks 0 through 15 before claiming universal map support; gameplay state stays identical across masks"
+      },
       "damage_policy": "none: solid permanent masonry with no cracks, chips, rubble or breakable-cover treatment, because the gameplay meaning is that this terrain cannot be destroyed",
-      "reading_rule": "a solid stage-appropriate wall block with a legible top and darker front face; in the academy stage, material and shape follow the current region's Japanese-fantasy magical-academy language rather than one fixed stone family",
+      "reading_rule": "a solid stage-appropriate wall family: isolated pier, horizontal wall, vertical body, ends and corners; Academy uses ivory warm limestone exposed top and related warm grey masonry front, without dark teal panels",
       "illumination": "no scene lighting: no light pool, no cast shadow on the floor, no glow, no vignette; the only shading is the fixed upper-left form shading (lit top surface, darker front face)",
       "surface_detail_policy": "large deliberate masonry clusters; limited palette; no dither, no microtexture, no isolated single-pixel noise",
       "requires_six_x_evidence": true,
       "runtime_review_sequence": [
         "single_pillar_1x_6x",
-        "four_identical_pillars_tiled_contact",
-        "pillar_run_beside_ground_squares_contact",
+        "horizontal_and_vertical_connected_runs_contact",
+        "isolated_pier_ends_corners_and_narrow_passage_contact",
+        "connected_wall_beside_ground_squares_contact",
         "large_area_12x9_runtime_at_6x"
       ]
     },

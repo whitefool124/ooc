@@ -1,0 +1,11 @@
+{
+    "id": "arena_selector",
+    "category": "战斗/测试入口",
+    "label": "测试场选择",
+    "status": "captured",
+    "detail": "",
+    "scene": "Assets/Scenes/CombatTestArena.unity",
+    "width": 1920,
+    "height": 1080,
+    "utc": "2026-09-27T04:35:52.6497305Z"
+}

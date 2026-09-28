@@ -46,6 +46,7 @@ namespace OCC.Combat
         public AcademyEnemyAreaRuntime AcademyEnemyArea { get; private set; }
         /// <summary>全场环境状态：风与光带。不占格，随战斗创建并在克隆时一并复制。</summary>
         public FieldEnvironmentState Environment { get; private set; } = new FieldEnvironmentState();
+        public bool WindMechanicEnabled { get; private set; }
         public CombatPressureTestRuntime PressureTest { get; private set; }
         public IReadOnlyList<Roguelite.ShieldSourceRecord> RogueShieldEvents => rogueShieldEvents;
         public int InventoryOpenCount { get; private set; }
@@ -104,6 +105,7 @@ namespace OCC.Combat
             }
             return RogueSpells?.FireBattle.ResolveEntry(unit, previousPosition) ?? 0;
         }
+        public void EnableWindMechanic() => WindMechanicEnabled = true;
 
         /// <summary>统一推拉结算；全段不可完成时留在位移前格，撞玩法物块则双方结算4点伤害。</summary>
         public ForcedMoveResult ResolveForcedMove(UnitState unit, GridPosition direction, int distance, string sourceId)
@@ -235,6 +237,7 @@ namespace OCC.Combat
         /// <summary>公共回合开始的环境结算：公开风况，并按风向逐格搬动松散材料、吹散痕迹。</summary>
         private void AdvanceFieldEnvironment()
         {
+            if (!WindMechanicEnabled) return;
             FieldWindState wind = Environment.Wind;
             AddLog("风况：" + wind.PreviewText() + "。");
             if (wind.Level <= 0) return;
@@ -542,7 +545,7 @@ namespace OCC.Combat
         public CombatState Clone()
         {
             CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
-            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.TurnSequence = TurnSequence; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount;
+            clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.TurnSequence = TurnSequence; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount; clone.WindMechanicEnabled = WindMechanicEnabled;
             clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
             foreach (KeyValuePair<string, int> pair in rogueTurnSequences) clone.rogueTurnSequences[pair.Key] = pair.Value;

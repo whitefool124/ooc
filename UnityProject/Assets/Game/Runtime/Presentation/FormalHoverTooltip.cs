@@ -262,10 +262,46 @@ namespace OCC.Combat.Presentation
             return view;
         }
 
+        // The same prefab can be fixed in a shop or reward grid. Its content fields,
+        // typography and frame then stay identical to the battle hover card.
+        public static RectTransform CreatePinned(Transform parent, FormalTooltipContent content, Vector2 position)
+        {
+            if (parent == null) throw new ArgumentNullException(nameof(parent));
+            Canvas hostCanvas = parent.GetComponentInParent<Canvas>();
+            if (hostCanvas == null) throw new InvalidOperationException("A pinned content card needs a Canvas parent.");
+            FormalHoverTooltip prefab = Resources.Load<FormalHoverTooltip>(ResourcePath);
+            if (prefab == null) throw new InvalidOperationException("Missing formal hover tooltip prefab at Resources/" + ResourcePath + ".prefab");
+            FormalHoverTooltip view = Instantiate(prefab, parent, false);
+            view.name = "通用内容卡_" + content.Title;
+            view.Initialize(hostCanvas);
+            view.Show(view, content, Vector2.zero);
+            RectTransform root = view.transform as RectTransform;
+            root.anchorMin = root.anchorMax = root.pivot = new Vector2(0f, 1f);
+            root.anchoredPosition = position;
+            root.sizeDelta = view.panel.sizeDelta;
+            view.panel.anchorMin = view.panel.anchorMax = view.panel.pivot = new Vector2(0f, 1f);
+            view.panel.anchoredPosition = Vector2.zero;
+            return root;
+        }
+
         public void Initialize(Canvas hostCanvas)
         {
             canvas = hostCanvas != null ? hostCanvas : throw new ArgumentNullException(nameof(hostCanvas));
-            if (panel != null) return;
+            if (panel != null)
+            {
+                // The prefab still carries a sliced elevated-panel skin under the
+                // one-pixel outline. Hide it for both floating and pinned cards.
+                Transform legacySkin = panel.Find("正式皮肤");
+                if (legacySkin != null) legacySkin.gameObject.SetActive(false);
+                Image existingBackground = panel.GetComponent<Image>();
+                if (existingBackground != null)
+                {
+                    existingBackground.sprite = null;
+                    existingBackground.type = Image.Type.Simple;
+                    existingBackground.color = FormalUiTheme.SurfaceRaised;
+                }
+                return;
+            }
 
             GameObject layerObject = FormalUiKit.Create("悬浮信息层", canvas.transform);
             layer = layerObject.AddComponent<RectTransform>();

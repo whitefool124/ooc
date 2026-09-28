@@ -1,0 +1,15 @@
+﻿{
+    "captures": [
+        {
+            "id": "map_finale_confirmation",
+            "category": "学院/确认",
+            "label": "首领门槛确认",
+            "status": "captured",
+            "detail": "",
+            "scene": "Assets/Scenes/CombatPrototype.unity",
+            "utc": "2026-09-27T04:21:19.6851166Z",
+            "width": 1920,
+            "height": 1080
+        }
+    ]
+}
