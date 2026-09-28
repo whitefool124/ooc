@@ -43,6 +43,28 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void Viewport_CinematicPose_CentresAnEdgeUnitAndReturnsToBoundedFocusWithoutASnap()
+        {
+            BattlefieldViewport viewport = new BattlefieldPresentationAdapter().CreateViewport(12, 9);
+            GridPosition edgeEnemy = new GridPosition(11, 8);
+            const float revealZoom = 224f;
+
+            viewport.ApplyCinematicPose(revealZoom, edgeEnemy.X, edgeEnemy.Y);
+            BattlefieldRect cell = viewport.CellRect(edgeEnemy);
+            BattlefieldRect view = viewport.ViewportRect;
+            Assert.That(cell.X + cell.Width * .5f, Is.EqualTo(view.X + view.Width * .5f).Within(.01f));
+            Assert.That(cell.Y + cell.Height * .5f, Is.EqualTo(view.Y + view.Height * .5f).Within(.01f));
+
+            GridPosition hero = new GridPosition(0, 0);
+            (float gridX, float gridY) = viewport.ClampedFocusPoint(hero, 192f);
+            viewport.ApplyCinematicPose(192f, gridX, gridY);
+            BattlefieldRect returnPose = viewport.BoardRect;
+            viewport.Focus(hero);
+            Assert.That(viewport.BoardRect.X, Is.EqualTo(returnPose.X).Within(.01f));
+            Assert.That(viewport.BoardRect.Y, Is.EqualTo(returnPose.Y).Within(.01f));
+        }
+
+        [Test]
         public void Viewport_OpensAtTheClosestIntegerTierThatFitsTheWholeBoard()
         {
             // 定案后开战档不再随盘面缩小：任何盘面都至少 192（6 倍），装不下就靠平移查看。

@@ -563,8 +563,8 @@ namespace OCC.Combat
         /// Sets a continuous camera pose for the combat-entry sequence.  Unlike
         /// <see cref="Focus"/> it accepts a fractional grid point and an arbitrary zoom so a
         /// tween can drive it, and it deliberately skips the interactive zoom-tier snapping.
-        /// The board is still clamped to the viewport, so a cinematic can never park the camera
-        /// on an illegal view and then snap when normal interaction resumes.
+        /// Entry reveals may travel beyond the board edge to put an outer-row unit at the
+        /// viewport centre. Interactive pan and focus keep their normal bounds.
         /// </summary>
         public void ApplyCinematicPose(float zoom, float gridX, float gridY)
         {
@@ -572,7 +572,24 @@ namespace OCC.Combat
                 Math.Min(BattlefieldPresentationAdapter.MaximumCellSize, zoom));
             boardX = viewport.X + viewport.Width * .5f - (gridX + .5f) * cellSize;
             boardY = viewport.Y + viewport.Height * .5f - (mapHeight - gridY - .5f) * cellSize;
-            ClampToViewport();
+            boardX = 2f * (float)Math.Round(boardX / 2f);
+            boardY = 2f * (float)Math.Round(boardY / 2f);
+        }
+
+        /// <summary>The fractional point a free cinematic pose must reach to match bounded Focus exactly.</summary>
+        public (float GridX, float GridY) ClampedFocusPoint(GridPosition position, float zoom)
+        {
+            float size = (float)Math.Max(BattlefieldPresentationAdapter.MinimumCellSize,
+                Math.Min(BattlefieldPresentationAdapter.MaximumCellSize, zoom));
+            float overscroll = size * EdgeOverscrollCells;
+            float desiredX = viewport.X + viewport.Width * .5f - (position.X + .5f) * size;
+            float desiredY = viewport.Y + viewport.Height * .5f - (mapHeight - position.Y - .5f) * size;
+            float clampedX = 2f * (float)Math.Round(ClampAxis(desiredX, mapWidth * size,
+                viewport.X, viewport.Width, overscroll) / 2f);
+            float clampedY = 2f * (float)Math.Round(ClampAxis(desiredY, mapHeight * size,
+                viewport.Y, viewport.Height, overscroll) / 2f);
+            return ((viewport.X + viewport.Width * .5f - clampedX) / size - .5f,
+                mapHeight - .5f - (viewport.Y + viewport.Height * .5f - clampedY) / size);
         }
 
         public bool IsNearSafeEdge(GridPosition position, float safeInsetCells = 2f)

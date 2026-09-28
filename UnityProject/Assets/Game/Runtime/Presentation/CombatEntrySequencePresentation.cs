@@ -142,7 +142,7 @@ namespace OCC.Combat.Presentation
                 // Reduced-motion path: no veil, no tour. The player still gets the goal and the
                 // start notice, so the flow never becomes skippable by accident.
                 SetVeilAlpha(0f);
-                ApplyPose(defaultCellSize, hero.Position.X, hero.Position.Y);
+                host.BattlefieldViewport.Focus(hero.Position);
                 DockObjective(motion);
                 BeginStartNotice(motion);
                 return true;
@@ -187,7 +187,8 @@ namespace OCC.Combat.Presentation
                 sequence.AppendInterval(TourExitSeconds);
             }
 
-            sequence.Append(PoseTween(poseX, poseY, poseZoom, hero.Position.X, hero.Position.Y, defaultCellSize,
+            (float returnX, float returnY) = host.BattlefieldViewport.ClampedFocusPoint(hero.Position, defaultCellSize);
+            sequence.Append(PoseTween(poseX, poseY, poseZoom, returnX, returnY, defaultCellSize,
                 ReturnToHeroSeconds, FormalUiMotionTokens.StandardEase));
             sequence.AppendCallback(() =>
             {
@@ -211,7 +212,6 @@ namespace OCC.Combat.Presentation
                 host.CurrentState.Map.Width, host.CurrentState.Map.Height);
             CancelVeilIntro();
             SetVeilAlpha(0f);
-            ApplyPose(defaultCellSize, hero.Position.X, hero.Position.Y);
             host.BattlefieldViewport.Focus(hero.Position);
             HideRevealCard(motion);
             DockObjective(motion);
