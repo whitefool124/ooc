@@ -25,9 +25,11 @@ namespace OCC.Combat
         ApplyFiregroundBoost, ApplyFiregroundVulnerability,
         // 破障：只作为术式标记，不单独产生结算；带此标记的伤害使作用几何内的物块耐久伤害翻倍（总案 3.5.6.1／3.5.6.2）。
         BreakBarrier, CreateLightCover, AdvanceIntoBreach, ClearBoundOrSlow, OfferRetreat, OfferBreachMove,
-        ArmAllyNextAttack
+        ArmAllyNextAttack, ApplyStatus, ChangeActionValue, Pull, TransferBurning,
+        MoveFireground, ReturnAlongCharge, DamageChargeAdjacent, MoveToBreach, PushAtBreach,
+        MoveBeyondTarget, ExpandFireground
     }
-    public enum FireRuleScope { Primary, Selection, EnemySelection, AllySelection, OrthogonalNeighbors, PathAdjacentEnemies, Source, SourceCell, Destination, CoveredCells, ReflectedFirstHit, FirstUnitInSelection, EmptySelection }
+    public enum FireRuleScope { Primary, Selection, EnemySelection, AllySelection, OrthogonalNeighbors, PathAdjacentEnemies, Source, SourceCell, Destination, CoveredCells, ReflectedFirstHit, FirstUnitInSelection, EmptySelection, LandingCross }
     public enum FireCondition
     {
         Always, TargetBurning, TargetOnFireground, TargetBurningAndOnFireground, TargetArmorBroken,
@@ -154,7 +156,7 @@ namespace OCC.Combat
 
     public static class FireSpellCatalog
     {
-        public const string Version = "fire-personal-spells-v0.4-reviewed-migration";
+        public const string Version = "fire-personal-spells-v0.5-three-builds";
 
         // IDs stay stable for saves. 总案 3.5.6.5：稀有度按三条主构筑分配（地块破坏回流／突进穿刺／燃烧火场
         // 各 10 普通／7 罕见／3 稀有，合计 30/21/9），因此不再按 M／U／R 分线均分。
@@ -190,13 +192,93 @@ namespace OCC.Combat
 
         // 总案 3.5.6.5：允许 0 行动点／0 魔力／0 冷却的术式，但必须消耗已存在的燃烧或火场，
         // 不能自行建立资源、恢复行动点或反复产生无条件收益。首批为「焦甲吸热」「热源回收」「地火抽爆」。
-        private static readonly HashSet<string> ZeroTempoIds = new HashSet<string>(StringComparer.Ordinal)
+        private static readonly IReadOnlyDictionary<string, int[]> ApprovedCosts = new Dictionary<string, int[]>(StringComparer.Ordinal)
         {
-            "F-P-M17", "F-P-U11", "F-P-R17"
+                { "F-P-M01", new[] { 1, 2, 1 } },
+                { "F-P-M02", new[] { 1, 2, 1 } },
+                { "F-P-M03", new[] { 2, 3, 2 } },
+                { "F-P-M04", new[] { 1, 1, 1 } },
+                { "F-P-M05", new[] { 1, 2, 2 } },
+                { "F-P-M06", new[] { 1, 2, 1 } },
+                { "F-P-M07", new[] { 2, 5, 3 } },
+                { "F-P-M08", new[] { 2, 3, 2 } },
+                { "F-P-M09", new[] { 2, 4, 2 } },
+                { "F-P-M10", new[] { 1, 2, 1 } },
+                { "F-P-M11", new[] { 1, 2, 2 } },
+                { "F-P-M12", new[] { 1, 2, 2 } },
+                { "F-P-M13", new[] { 1, 3, 3 } },
+                { "F-P-M14", new[] { 1, 2, 2 } },
+                { "F-P-M15", new[] { 1, 2, 1 } },
+                { "F-P-M16", new[] { 1, 2, 1 } },
+                { "F-P-M17", new[] { 0, 0, 0 } },
+                { "F-P-M18", new[] { 1, 1, 1 } },
+                { "F-P-M19", new[] { 2, 5, 4 } },
+                { "F-P-M20", new[] { 2, 5, 4 } },
+                { "F-P-M21", new[] { 1, 2, 2 } },
+                { "F-P-M22", new[] { 1, 4, 2 } },
+                { "F-P-M23", new[] { 2, 4, 2 } },
+                { "F-P-M24", new[] { 1, 1, 1 } },
+                { "F-P-M25", new[] { 1, 3, 2 } },
+                { "F-P-M26", new[] { 1, 3, 3 } },
+                { "F-P-R01", new[] { 1, 1, 0 } },
+                { "F-P-R02", new[] { 1, 1, 0 } },
+                { "F-P-R03", new[] { 1, 2, 0 } },
+                { "F-P-R04", new[] { 1, 1, 1 } },
+                { "F-P-R05", new[] { 2, 3, 1 } },
+                { "F-P-R06", new[] { 2, 3, 2 } },
+                { "F-P-R07", new[] { 1, 2, 0 } },
+                { "F-P-R08", new[] { 2, 3, 2 } },
+                { "F-P-R09", new[] { 1, 3, 1 } },
+                { "F-P-R10", new[] { 1, 3, 3 } },
+                { "F-P-R11", new[] { 2, 4, 2 } },
+                { "F-P-R12", new[] { 1, 2, 1 } },
+                { "F-P-R13", new[] { 1, 4, 3 } },
+                { "F-P-R14", new[] { 2, 6, 4 } },
+                { "F-P-R15", new[] { 2, 4, 4 } },
+                { "F-P-R16", new[] { 2, 5, 2 } },
+                { "F-P-R17", new[] { 0, 0, 0 } },
+                { "F-P-R18", new[] { 2, 3, 2 } },
+                { "F-P-R19", new[] { 2, 4, 2 } },
+                { "F-P-R20", new[] { 2, 6, 4 } },
+                { "F-P-R21", new[] { 1, 3, 1 } },
+                { "F-P-R22", new[] { 2, 4, 2 } },
+                { "F-P-R23", new[] { 1, 2, 2 } },
+                { "F-P-R24", new[] { 1, 3, 2 } },
+                { "F-P-R25", new[] { 1, 2, 1 } },
+                { "F-P-R26", new[] { 2, 5, 3 } },
+                { "F-P-U01", new[] { 1, 2, 2 } },
+                { "F-P-U02", new[] { 1, 2, 1 } },
+                { "F-P-U03", new[] { 1, 3, 2 } },
+                { "F-P-U04", new[] { 1, 1, 2 } },
+                { "F-P-U05", new[] { 2, 3, 2 } },
+                { "F-P-U06", new[] { 1, 1, 1 } },
+                { "F-P-U07", new[] { 1, 2, 2 } },
+                { "F-P-U08", new[] { 2, 3, 2 } },
+                { "F-P-U09", new[] { 1, 1, 1 } },
+                { "F-P-U10", new[] { 1, 2, 2 } },
+                { "F-P-U11", new[] { 0, 0, 0 } },
+                { "F-P-U12", new[] { 1, 2, 2 } },
+                { "F-P-U13", new[] { 1, 1, 2 } },
+                { "F-P-U14", new[] { 1, 1, 1 } },
+                { "F-P-U15", new[] { 1, 1, 1 } },
+                { "F-P-U16", new[] { 1, 3, 2 } },
+                { "F-P-U17", new[] { 1, 3, 3 } },
+                { "F-P-U18", new[] { 1, 2, 2 } },
+                { "F-P-U19", new[] { 1, 2, 2 } },
+                { "F-P-U20", new[] { 1, 3, 3 } },
+                { "F-P-U21", new[] { 1, 2, 2 } },
+                { "F-P-U22", new[] { 1, 2, 2 } },
+                { "F-P-U23", new[] { 2, 3, 2 } },
+                { "F-P-U24", new[] { 1, 2, 2 } },
+                { "F-P-U25", new[] { 2, 4, 3 } },
+                { "F-P-U26", new[] { 1, 2, 2 } },
+                { "F-P-U27", new[] { 1, 3, 2 } },
+                { "F-P-U28", new[] { 1, 1, 2 } },
         };
 
         public static int BalancedActionPointCost(string id, FireSpellRarity rarity, int authoredCost)
         {
+            if (ApprovedCosts.TryGetValue(id, out int[] approved)) return approved[0];
             if (ZeroTempoIds.Contains(id)) return 0;
             // Terminal spells remain a commitment, but no longer consume a whole three-action turn.
             return rarity == FireSpellRarity.Rare && authoredCost >= 3 ? 2 : authoredCost;
@@ -205,13 +287,14 @@ namespace OCC.Combat
         // 总案 3.5.6.5：普通与罕见术式的魔力成本统一下调 1 点，最低分别为 0 与 1；稀有不下调。
         public static int BalancedManaCost(string id, FireSpellRarity rarity, int authoredCost)
         {
+            if (ApprovedCosts.TryGetValue(id, out int[] approved)) return approved[1];
             if (ZeroTempoIds.Contains(id)) return 0;
             if (authoredCost <= 0) return 0;
             return rarity == FireSpellRarity.Common ? Math.Max(0, authoredCost - 1) :
                 rarity == FireSpellRarity.Uncommon ? Math.Max(1, authoredCost - 1) : authoredCost;
         }
 
-        public static int BalancedCooldown(string id, int authoredCooldown) => ZeroTempoIds.Contains(id) ? 0 : authoredCooldown;
+        public static int BalancedCooldown(string id, int authoredCooldown) => ApprovedCosts.TryGetValue(id, out int[] approved) ? approved[2] : ZeroTempoIds.Contains(id) ? 0 : authoredCooldown;
 
         private static FireSpellRule R(FireRuleKind kind, int amount = 0, int duration = 0,
             FireRuleScope scope = FireRuleScope.Primary, FireCondition condition = FireCondition.Always,
@@ -352,6 +435,85 @@ namespace OCC.Combat
             S("F-P-R24","回流护持",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.SelfStance,NW,Now,Cast,1,4,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.ArmFractureShield,4,scope:FireRuleScope.Source)},"shield_restore"),
             S("F-P-R25","借障折射",FireSpellRarity.Uncommon,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,1,0,3,FireTargetKind.EmptyCell,FireSelectionShape.ReflectionRay,2,true,true,new[]{R(FireRuleKind.Damage,10,scope:FireRuleScope.ReflectedFirstHit,allies:true,objects:FireDestructibleMask.None)},"fire_projectile","object_damage"),
             S("F-P-R26","断线爆破",FireSpellRarity.Rare,FireSpellGroup.Ranged,X,FireDeliveryMode.TargetMarking,NW,FireTriggerWindow.CurrentTurnEnd,FireConsumptionRule.OnTrigger,2,5,3,0,4,FireTargetKind.Cell,FireSelectionShape.CenterAndOrthogonal,1,true,false,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,12,scope:FireRuleScope.Selection,allies:true,timing:FireRuleTiming.OnTrigger)},"fire_cross_blast","object_damage")
+        }.Select(ApplyApprovedRevision).ToArray();
+
+        private static FireSpellDefinition Revised(FireSpellDefinition old, FireSpellRule[] rules,
+            FireTargetKind? target = null, FireSelectionShape? shape = null, int? range = null, int? length = null,
+            FireTriggerWindow? window = null, FireDeliveryMode? delivery = null, FireWeaponRequirement? weapon = null,
+            int? delay = null, bool? lineOfSight = null, bool? heavyCoverTruncates = null)
+            => new FireSpellDefinition(old.Id, old.DisplayName, old.Rarity, old.Group, old.CombatAffinity,
+                delivery ?? old.DeliveryMode, weapon ?? old.WeaponRequirement, window ?? FireTriggerWindow.Immediate,
+                FireConsumptionRule.OnCast, old.ActionPointCost, old.ManaCost, old.Cooldown, delay ?? 0,
+                old.MinimumRange, range ?? old.Range, target ?? old.TargetKind, shape ?? old.Shape,
+                length ?? old.ShapeLength, lineOfSight ?? old.RequiresLineOfSight,
+                heavyCoverTruncates ?? old.HeavyCoverTruncates, rules, old.PresentationModules.ToArray());
+
+        private static FireSpellDefinition ApplyApprovedRevision(FireSpellDefinition old)
+        {
+            switch (old.Id)
+            {
+                case "F-P-M01": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 3, 1, FireRuleScope.Source, status: StatusType.Agility) }, window: Now);
+                case "F-P-M03": return Revised(old, new[] { R(FireRuleKind.CreateFireground, 8, 2, FireRuleScope.SourceCell), R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination) });
+                case "F-P-M05": return Revised(old, new[] { R(FireRuleKind.MoveBeyondTarget, 1, scope: FireRuleScope.Source) }, window: Now, delivery: FireDeliveryMode.Movement);
+                case "F-P-M06": return Revised(old, new[] { R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Line, range: 2, length: 2, delivery: FireDeliveryMode.ContactConduction, weapon: NW);
+                case "F-P-M07": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 20) }, target: FireTargetKind.Enemy, shape: FireSelectionShape.Path, range: 3, length: 3);
+                case "F-P-M08": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);
+                case "F-P-M09": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.WeaponDamage, 16, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell);
+                case "F-P-M10": return Revised(old, new[] { R(FireRuleKind.WeaponDamage, 12), R(FireRuleKind.Push, 1) });
+                case "F-P-M11": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source), R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.OrthogonalNeighbors, allies: true) }, window: Now);
+                case "F-P-M12": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 16, scope: FireRuleScope.Source) }, window: Now);
+                case "F-P-M13": return Revised(old, new[] { R(FireRuleKind.WeaponDamage, 12, timing: FireRuleTiming.OnTrigger) }, window: FireTriggerWindow.FirstAdjacentAttack);
+                case "F-P-M15": return Revised(old, new[] { R(FireRuleKind.Damage, 8), R(FireRuleKind.Push, 1) });
+                case "F-P-M19": return Revised(old, new[] { R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 28) });
+                case "F-P-M20": return Revised(old, new[] { R(FireRuleKind.DamageChargeAdjacent, 20) }, target: FireTargetKind.Enemy);
+                case "F-P-M24": return Revised(old, new[] { R(FireRuleKind.ReturnAlongCharge, 2, scope: FireRuleScope.Source) }, target: FireTargetKind.Cell, range: 2, window: Now);
+                case "F-P-M26": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source) }, target: FireTargetKind.EmptyCell, shape: FireSelectionShape.Path, range: 2, length: 2, window: Now, delivery: FireDeliveryMode.Movement);
+                case "F-P-U01": return Revised(old, new[] { R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination) });
+                case "F-P-U03": return Revised(old, new[] { R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Cone, range: 2, length: 2, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U04": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell);
+                case "F-P-U05": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Square3, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U08": return Revised(old, new[] { R(FireRuleKind.ClearStatus, scope: FireRuleScope.Source, status: StatusType.Burning), R(FireRuleKind.RestoreShield, 12, scope: FireRuleScope.Source) });
+                case "F-P-U09": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 2, 2, FireRuleScope.Source, status: StatusType.Agility) });
+                case "F-P-U10": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 4, 2, FireRuleScope.Source, status: StatusType.ShieldEfficiency) }, window: Now);
+                case "F-P-U12": return Revised(old, new[] { R(FireRuleKind.ConsumeBurning, consume: FireSourceConsumption.BurningOnly), R(FireRuleKind.RestoreShield, 12, scope: FireRuleScope.Source) }, target: FireTargetKind.AdjacentBurningEnemy, range: 1, window: Now, delivery: FireDeliveryMode.ContactConduction, weapon: NW);
+                case "F-P-U13": return Revised(old, new[] { R(FireRuleKind.ConsumeBurning, consume: FireSourceConsumption.BurningOnly), R(FireRuleKind.RestoreMana, 3, scope: FireRuleScope.Source) }, target: FireTargetKind.BurningEnemy, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U14": return Revised(old, new[] { R(FireRuleKind.Pull, 2) }, target: FireTargetKind.Enemy, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U15": return Revised(old, new[] { R(FireRuleKind.SetBurningDuration, duration: 2) }, target: FireTargetKind.BurningEnemy, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U16": return Revised(old, new[] { R(FireRuleKind.ChangeActionValue, 8, scope: FireRuleScope.Source) }, window: Now);
+                case "F-P-U19": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 4, 2, status: StatusType.FiregroundBoost) }, target: FireTargetKind.AllyOrSelf, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U20": return Revised(old, new[] { R(FireRuleKind.DamageChargeAdjacent, 12) }, target: FireTargetKind.Self, window: Now, delivery: FireDeliveryMode.BodyEnhancement, weapon: NW);
+                case "F-P-U21": return Revised(old, new[] { R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) });
+                case "F-P-U23": return Revised(old, new[] { R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 12, scope: FireRuleScope.Selection, allies: true) });
+                case "F-P-U25": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 8, scope: FireRuleScope.LandingCross, allies: true) }, shape: FireSelectionShape.Path);
+                case "F-P-U26": return Revised(old, new[] { R(FireRuleKind.MoveToBreach, 1, scope: FireRuleScope.Source) }, target: FireTargetKind.Cell, range: 99, window: Now);
+                case "F-P-U27": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, -4, 1, FireRuleScope.Source, status: StatusType.DamageTaken) });
+                case "F-P-R02": return Revised(old, new[] { R(FireRuleKind.Damage, 8), R(FireRuleKind.Pull, 1) });
+                case "F-P-R03": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 4, 2, status: StatusType.FiregroundVulnerable) });
+                case "F-P-R05": return Revised(old, new[] { R(FireRuleKind.Damage, 16), R(FireRuleKind.ApplyBurning, 8, 2) });
+                case "F-P-R09": return Revised(old, new[] { R(FireRuleKind.Damage, 12), R(FireRuleKind.ChangeActionValue, -8) }, delay: 0);
+                case "F-P-R10": return Revised(old, new[] { R(FireRuleKind.Damage, 12), R(FireRuleKind.ApplyBreakStance) }, delay: 0);
+                case "F-P-R06": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);
+                case "F-P-R07": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);
+                case "F-P-R12": return Revised(old, new[] { R(FireRuleKind.MoveFireground) }, target: FireTargetKind.EmptyCell, shape: FireSelectionShape.Single, range: 5);
+                case "F-P-R13": return Revised(old, new[] { R(FireRuleKind.ExpandFireground, 8, 2) }, target: FireTargetKind.EmptyCell, range: 5);
+                case "F-P-R15": return Revised(old, new[] { R(FireRuleKind.Damage, 12, scope: FireRuleScope.OrthogonalNeighbors, allies: true), R(FireRuleKind.ConsumeFireground, consume: FireSourceConsumption.GroundOnly) }, target: FireTargetKind.BurningCell, shape: FireSelectionShape.Single, range: 4);
+                case "F-P-R16": return Revised(old, new[] { R(FireRuleKind.Damage, 12, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ConsumeBurning, consume: FireSourceConsumption.BurningOnly) }, shape: FireSelectionShape.CenterAndOrthogonal);
+                case "F-P-R18": return Revised(old, new[] { R(FireRuleKind.PushAllUnits, 2, scope: FireRuleScope.Selection, condition: FireCondition.TargetBurning, allies: true) }, target: FireTargetKind.Cell);
+                case "F-P-R20": return Revised(old, new[] { R(FireRuleKind.Damage, 20, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.CreateFireground, 8, 3, scope: FireRuleScope.EmptySelection) }, target: FireTargetKind.Cell, delay: 0);
+                case "F-P-R21": return Revised(old, new[] { R(FireRuleKind.Damage, 6, scope: FireRuleScope.FirstUnitInSelection, allies: true, objects: FireDestructibleMask.None), R(FireRuleKind.DamageDurability, 6, scope: FireRuleScope.Selection), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) });
+                case "F-P-R22": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);
+                case "F-P-R23": return Revised(old, new[] { R(FireRuleKind.PushAtBreach, 1, scope: FireRuleScope.OrthogonalNeighbors, allies: true) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Single, range: 4);
+                case "F-P-R24": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source) });
+                case "F-P-R26": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 12, scope: FireRuleScope.Selection, allies: true) }, shape: FireSelectionShape.CenterAndOrthogonal, window: Now);
+                case "F-P-U02": return Revised(old, new[] { R(FireRuleKind.TransferBurning) }, target: FireTargetKind.Enemy, range: 4, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
+                case "F-P-U06": return Revised(old, new[] { R(FireRuleKind.Push, 1), R(FireRuleKind.MoveBeyondTarget, 0, scope: FireRuleScope.Source) }, target: FireTargetKind.AdjacentEnemy, range: 1, window: Now, delivery: FireDeliveryMode.Movement, weapon: NW);
+                default: return old;
+            }
+        }
+
+        private static readonly HashSet<string> ZeroTempoIds = new HashSet<string>(StringComparer.Ordinal)
+        {
+            "F-P-M17", "F-P-U11", "F-P-R17"
         };
 
         public static FireSpellDefinition Get(string id) => All.FirstOrDefault(spell => string.Equals(spell.Id, id, StringComparison.Ordinal))

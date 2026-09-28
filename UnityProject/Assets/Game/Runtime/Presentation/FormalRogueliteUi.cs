@@ -1272,9 +1272,10 @@ namespace OCC.Combat.Presentation
                 switch (spellId)
                 {
                     case "BASE-FIRE-MELEE": return "魔力 1 → 0";
-                    case "BASE-FIRE-RANGED": case "BASE-AETHER-SHIELD": case "F-P-R01": return "魔力 2 → 1";
+                    case "BASE-FIRE-RANGED": case "BASE-AETHER-SHIELD": return "魔力 2 → 1";
+                    case "F-P-R01": return "魔力 1 → 0";
                     case "BASE-MANA-RECOVER": return "冷却 1 → 0";
-                    case "F-P-M01": case "F-P-M06": case "F-P-U01": return "魔力 3 → 2";
+                    case "F-P-M01": case "F-P-M06": case "F-P-U01": return "魔力 2 → 1";
                     default: return "此术式未开放节流专精";
                 }
             }
@@ -1284,11 +1285,11 @@ namespace OCC.Combat.Presentation
                 case "BASE-FIRE-RANGED": return "伤害 6 → 8";
                 case "BASE-AETHER-SHIELD": return "护盾 8 → 10";
                 case "BASE-MANA-RECOVER": return "恢复魔力 2 → 3";
-                case "F-P-M01": return "追加火伤 8 → 10";
-                case "F-P-M03": return "跃进命中武器伤害 8 → 10；起点火场不变";
-                case "F-P-M06": return "下次近战命中额外造成 2 点火焰伤害";
-                case "F-P-U01": return "最大突进距离 3 → 4 格；行动力奖励不变";
-                case "F-P-U04": return "伤害 8 → 10；标记奖励不变";
+                case "F-P-M01": return "敏捷 +3 → +4";
+                case "F-P-M03": return "起点火场持续 2 → 3 个自身回合";
+                case "F-P-M06": return "伤害 8 → 10；裂痕不变";
+                case "F-P-U01": return "最大突进距离 3 → 4 格";
+                case "F-P-U04": return "伤害 8 → 10；破障不变";
                 case "F-P-U18": return "落地冲击伤害 8 → 10；推位距离不变";
                 case "F-P-R01": return "伤害 12 → 14";
                 case "F-P-R19": return "中心伤害 16 → 20；邻格 8 点伤害不变";

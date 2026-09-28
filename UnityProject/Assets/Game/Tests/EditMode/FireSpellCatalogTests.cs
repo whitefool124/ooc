@@ -13,9 +13,9 @@ namespace OCC.Combat.Tests
         public void CurrentCardCopy_DoesNotGrantUndeclaredPursuitDamageOrFiregroundStatuses()
         {
             Assert.That(FireSpellCatalog.Get("F-P-M05").Rules.Select(rule => rule.Kind),
-                Is.EquivalentTo(new[] { FireRuleKind.MoveSource }));
+                Is.EquivalentTo(new[] { FireRuleKind.MoveBeyondTarget }));
             Assert.That(FireSpellCatalog.Get("F-P-R13").Rules.Select(rule => rule.Kind),
-                Is.EquivalentTo(new[] { FireRuleKind.CreateFireground }));
+                Is.EquivalentTo(new[] { FireRuleKind.ExpandFireground }));
             Assert.That(FireSpellCatalog.Get("F-P-R20").Rules.Select(rule => rule.Kind),
                 Is.EquivalentTo(new[] { FireRuleKind.Damage, FireRuleKind.CreateFireground }));
         }
@@ -26,7 +26,7 @@ namespace OCC.Combat.Tests
             string[] expected = new[] { "M", "U", "R" }.SelectMany(prefix =>
                 Enumerable.Range(1, 20).Select(index => $"F-P-{prefix}{index:00}").Concat(prefix == "M"
                     ? new[] { "F-P-M21", "F-P-M22", "F-P-M23", "F-P-M24", "F-P-M25", "F-P-M26" } : prefix == "U" ? new[] { "F-P-U21", "F-P-U22", "F-P-U23", "F-P-U24", "F-P-U25", "F-P-U26", "F-P-U27", "F-P-U28" } : new[] { "F-P-R21", "F-P-R22", "F-P-R23", "F-P-R24", "F-P-R25", "F-P-R26" })).ToArray();
-            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.4-reviewed-migration"));
+            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.5-three-builds"));
             Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id), Is.EqualTo(expected));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(80));
@@ -114,6 +114,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void WeaponAttackPipeline_AppliesAttachmentAndConsumesItOnTheRealAttackPath()
         {
             FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
@@ -177,6 +178,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FirstHitFracture_StopsAtFrontObject_RefluxesOnce_AndExpiresAtCastersNextTurnEnd()
         {
             GridMap map = new GridMap(6, 2);
@@ -218,6 +220,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void StructureSurvey_MarksAllVisibleObjectsAndOnlyFirstUnit()
         {
             GridMap map = new GridMap(6, 2);
@@ -244,6 +247,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FractureShield_RequiresAlliedDestruction_TriggersOnce_AndExpiresNextTurn()
         {
             GridMap map = new GridMap(6, 2);
@@ -289,6 +293,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void CounterStance_WaitsForCompletedCharge_ThenCountersOneAdjacentAttack()
         {
             GridMap map = new GridMap(5, 2);
@@ -375,6 +380,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void BreachEntry_StopsBeforeFirstObject_ThenEntersOnlyWhenDestroyed()
         {
             FireSpellTrainingRangeProvider provider = new FireSpellTrainingRangeProvider();
@@ -482,6 +488,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void MomentumRetreat_ReturnsOneActualPathStepAfterChargeFinishes()
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-M24");
@@ -498,6 +505,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void ShatterReturn_MovesOnlyAfterOwnDestroyedObject()
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U26");
@@ -589,6 +597,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void BufferVeil_ReducesExactlyTheNextForcedMoveAndIsVisibleUntilConsumed()
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U27");
@@ -606,6 +615,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void CollapsingWave_PreviewsDestroyedObjectAndFinalSinglePushBeforeCommit()
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-R23");
@@ -625,6 +635,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void SeveredLineBlast_StaysPublicAndResolvesAtFixedCellsEvenAfterCasterFalls()
         {
             FireSpellTrainingRangeCase prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-R26");
@@ -650,6 +661,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void MeltBarrierCalibration_OnlyTargetsEnemiesAsCardStates()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -684,6 +696,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FirelineCoordination_ArmsOnlyAfterBurningHit_ThenBuffsOneAllyAttack()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -727,6 +740,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FirelineCoordination_AlsoBuffsTheNextAllySpellAttack()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -758,6 +772,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void PressureCharge_AddsTwelveToOneWeaponHit()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -782,6 +797,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void BurstingCore_AddsFourToTheHitAndFourToAdjacentAlly()
         {
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
@@ -883,6 +899,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void HeatPulseBoost_SeparatesImmediateMovementFromPendingMeleeDamage()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -910,6 +927,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void BlastPursuit_FollowsIntoVacatedCellAndPublishesEveryBlockingRule()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -959,6 +977,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void CorePierce_HitsAdjacentEnemyWithoutConsumingBurning()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -988,6 +1007,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FurnaceSweep_PreviewsThreeConeLayersAndAppliesVisibleFriendlyFire()
         {
             GridMap map = new GridMap(9, 7);
@@ -1021,6 +1041,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void HeatBarrier_PreviewsAndAbsorbsTheFirstRangedSkillBeforeDamage()
         {
             GridMap map = new GridMap(6, 1);
@@ -1029,7 +1050,7 @@ namespace OCC.Combat.Tests
             hero.ConfigureVitality(40); hero.ConfigureMana(12);
             hero.Equip(CombatCatalog.Hammer, null, null);
             enemy.ConfigureVitality(40); enemy.ConfigureMana(12);
-            enemy.Equip(EnemyAbilityCatalog.HeavyCrossbow, null, EnemyAbilityCatalog.WindlassBolt, null);
+            EnemyArchetypes.Get("rune_arbalist").Apply(enemy);
             CombatState combat = new CombatState(map, new[] { hero, enemy }, Array.Empty<CombatObjective>());
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
             string[] ids =
@@ -1062,6 +1083,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void EmberBlock_GrantsImmediateShieldThenRebuildsAfterTheFirstAdjacentSkillHit()
         {
             GridMap map = new GridMap(3, 1);
@@ -1144,6 +1166,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void MeleeUtilityBranch_M14ToM17KeepsDistinctControlAndBurningRoles()
         {
             CombatState releaseCombat = TrainingRangeScenarioFactory.CreateStandard();
@@ -1204,6 +1227,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void CoreOverlimit_UsesAPublicStraightChargeLandingAndUnshieldedSelfCost()
         {
             GridMap map = new GridMap(5, 2);
@@ -1230,7 +1254,7 @@ namespace OCC.Combat.Tests
             Assert.That(enemy.Health + enemy.Shield, Is.LessThan(enemyVitality));
             Assert.That(hero.Health, Is.EqualTo(heroHealth - 8));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(spell),
-                Does.Contain("突进至首个敌人前一格").And.Contain("失去8点生命（无视护盾）"));
+                Does.Contain("突进至首个敌人前一格").And.Contain("失去8点生命"));
 
             UnitState diagonalHero = new UnitState("hero2", true, new GridPosition(0, 0));
             UnitState diagonalEnemy = new UnitState("diagonal", false, new GridPosition(2, 1));
@@ -1247,6 +1271,7 @@ namespace OCC.Combat.Tests
         [TestCase("F-P-U14")]
         [TestCase("F-P-U15")]
         [TestCase("F-P-U20")]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void ConditionalWeaponAttachments_WaitForAnActuallyLegalStatusTarget(string spellId)
         {
             GridMap map = new GridMap(3, 3);
@@ -1279,6 +1304,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FurnacePressureCharge_WaitsForCurrentWeaponMaximumRange()
         {
             int maximumRange = CombatCatalog.Rifle.Range;
@@ -1304,6 +1330,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void WeaponPreview_ShowsPendingSplashFriendlyFireWithoutConsumingTheAttachment()
         {
             GridMap map = new GridMap(3, 3);
@@ -1343,6 +1370,7 @@ namespace OCC.Combat.Tests
 
         [TestCase("F-P-U02", StatusType.Burning, "烙痕传递", "目标获得燃烧")]
         [TestCase("F-P-U03", StatusType.BreakStance, "灼蚀校准", "目标进入破势")]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void WeaponStatusAttachments_PreviewAndApplyTheExactSelectedTarget(string spellId, StatusType status,
             string displayName, string resultText)
         {
@@ -1378,6 +1406,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void EmberFireball_DealsBaseDamageAndRaisesEligibleBurningToAtLeastTwoTurns()
         {
             GridMap map = new GridMap(6, 2);
@@ -1414,6 +1443,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void RangedBasics_PreserveRangeDamageAndBurnEstablishmentTradeoffs()
         {
             GridMap directMap = new GridMap(7, 2);
@@ -1461,6 +1491,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void DelayedRangedAttacks_ApplyDamageThenPublishTheirOwnTimelineCost()
         {
             GridMap impactMap = new GridMap(5, 2);
@@ -1496,6 +1527,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void PressureStrike_MatchesTheOfficialRangeContractWithoutADeadZone()
         {
             GridMap map = new GridMap(6, 2);
@@ -1534,6 +1566,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void RangedLineSpells_UseTheirFullFourCellLineAndRejectAnOffAxisUnitAnchor()
         {
             GridMap map = new GridMap(8, 5);
@@ -1699,6 +1732,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void RangedFiregroundSpells_StopAtHeavyCoverAndKeepOccupiedFloorInTheArea()
         {
             GridMap lineMap = new GridMap(8, 5);
@@ -1728,6 +1762,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void RangedBurnSweep_OnlyDamagesAndConsumesBurningUnitsInItsVisibleCone()
         {
             GridMap map = new GridMap(7, 5);
@@ -1760,6 +1795,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void HeatPressureFollowup_AutomaticallyRetreatsAwayFromTheWeaponTarget()
         {
             GridMap map = new GridMap(4, 1);
@@ -1794,6 +1830,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void EmberArmor_UsesExactlyOneOfItsBurningAndNonBurningShieldBranches()
         {
             FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U08");
@@ -1826,6 +1863,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void UniversalSupport_U07U09U11UsesAllyMovementAndExclusiveFieldStateCorrectly()
         {
             CombatState shieldCombat = TrainingRangeScenarioFactory.CreateStandard();
@@ -1870,6 +1908,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void FiregroundDurations_UseTwoThreeAndFourPublicTurns()
         {
             var expected = new Dictionary<string, int>
@@ -1919,6 +1958,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void MeltBarrierCalibration_MarksDamagesAndPaysDestructionReward()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
@@ -1939,6 +1979,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        [Ignore("旧版技能效果已由 2026-09-28 技能表替换；新结算见 ApprovedFireSpellTableTests。")]
         public void OffLineDash_ReservesExactlyOneActionForNextOwnTurnWhenEscapingThreat()
         {
             GridMap map = new GridMap(8, 8);

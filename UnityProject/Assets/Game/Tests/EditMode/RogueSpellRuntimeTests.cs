@@ -94,16 +94,16 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void M2FrozenCorrections_ArePresentInAuthoritativeFireCatalog()
+        public void ApprovedSpellCorrections_ArePresentInAuthoritativeFireCatalog()
         {
-            Assert.That(FireSpellCatalog.Get("F-P-M19").Rules.Single(value => value.Kind == FireRuleKind.LoseHealth).Amount, Is.EqualTo(8));
+            Assert.That(FireSpellCatalog.Get("F-P-M19").Rules.Single(value => value.Kind == FireRuleKind.WeaponDamage).Amount, Is.EqualTo(28));
             Assert.That(FireSpellCatalog.Get("F-P-U11").ManaCost, Is.Zero);
             Assert.That(FireSpellCatalog.Get("F-P-U13").ManaCost, Is.EqualTo(1));
             Assert.That(FireSpellCatalog.Get("F-P-U13").Rules.Single(value => value.Kind == FireRuleKind.RestoreMana).Amount, Is.EqualTo(3));
-            Assert.That(FireSpellCatalog.Get("F-P-U14").Rules.Single(value => value.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(12));
-            Assert.That(FireSpellCatalog.Get("F-P-U15").Rules.Any(value => value.Kind == FireRuleKind.Damage && value.Amount == 4), Is.True);
+            Assert.That(FireSpellCatalog.Get("F-P-U14").Rules.Single(value => value.Kind == FireRuleKind.Pull).Amount, Is.EqualTo(2));
+            Assert.That(FireSpellCatalog.Get("F-P-U15").Rules.Single(value => value.Kind == FireRuleKind.SetBurningDuration).Duration, Is.EqualTo(2));
             Assert.That(FireSpellCatalog.Get("F-P-U18").Rules.Any(value => value.Kind == FireRuleKind.RepairWeapon), Is.False);
-            Assert.That(FireSpellCatalog.Get("F-P-U20").ActionPointCost, Is.EqualTo(2));
+            Assert.That(FireSpellCatalog.Get("F-P-U20").ActionPointCost, Is.EqualTo(1));
             Assert.That(FireSpellCatalog.Get("F-P-R08").Rarity, Is.EqualTo(FireSpellRarity.Uncommon));
         }
 
@@ -189,8 +189,10 @@ namespace OCC.Combat.Tests
             leap.AttachRogueSpellRuntime(leapRuntime);
             CombatResolver.BeginTurn(leap, leapHero.Id);
             before = leapEnemy.Health;
+            GridPosition leapOrigin = leapHero.Position;
             leapRuntime.ExecuteSlot(4, CombatCommand.UseSkillAt(leapHero.Id, 4, new GridPosition(4, 4), CardinalDirection.East));
-            Assert.That(before - leapEnemy.Health, Is.EqualTo(10));
+            Assert.That(leapEnemy.Health, Is.EqualTo(before));
+            Assert.That(leapRuntime.FireBattle.Firegrounds[leapOrigin].RemainingTurns, Is.EqualTo(3));
 
             CombatState breach = TrainingRangeScenarioFactory.CreateStandard();
             breach.ConfigureRuleset(CombatRuleset.Roguelite);
@@ -217,10 +219,13 @@ namespace OCC.Combat.Tests
             Assert.That(RogueSpellCombatRuntime.SupportsSpecialization("F-P-R02"), Is.False);
 
             FireSpellDefinition m01 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-M01"));
-            Assert.That(m01.Rules.Where(rule => rule.Kind == FireRuleKind.Damage && rule.Timing == FireRuleTiming.OnTrigger).Max(rule => rule.Amount), Is.EqualTo(10));
+            Assert.That(m01.Rules.Single(rule => rule.Kind == FireRuleKind.ApplyStatus && rule.Status == StatusType.Agility).Amount, Is.EqualTo(4));
+
+            FireSpellDefinition m03 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-M03"));
+            Assert.That(m03.Rules.Single(rule => rule.Kind == FireRuleKind.CreateFireground).Duration, Is.EqualTo(3));
 
             FireSpellDefinition m06 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-M06"));
-            Assert.That(m06.Rules.Any(rule => rule.Kind == FireRuleKind.Damage && rule.Amount == 2 && rule.Timing == FireRuleTiming.OnTrigger), Is.True);
+            Assert.That(m06.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(10));
 
             FireSpellDefinition r01 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-R01"));
             Assert.That(r01.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(14));

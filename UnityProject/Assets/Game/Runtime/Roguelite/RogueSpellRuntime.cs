@@ -336,24 +336,22 @@ namespace OCC.Combat.Roguelite
                 switch (spell.Id)
                 {
                     case "F-P-M01":
-                        // 追加火伤 8 → 10；移动加值不变。
-                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Timing == FireRuleTiming.OnTrigger && rule.Amount == 8
-                            ? Copy(rule, 10) : rule);
+                        // 敏捷 +3 → +4，持续窗口不变。
+                        rules.Add(rule.Kind == FireRuleKind.ApplyStatus && rule.Status == StatusType.Agility && rule.Amount == 3
+                            ? Copy(rule, 4) : rule);
                         break;
                     case "F-P-M03":
-                        // 路径邻接单位与物件伤害 8 → 10；起点火场仍为 8 点。
-                        rules.Add((rule.Kind == FireRuleKind.WeaponDamage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
-                            ? Copy(rule, 10) : rule);
+                        // 起点火场持续 2 → 3 个来源自身回合，基础伤害不变。
+                        rules.Add(rule.Kind == FireRuleKind.CreateFireground && rule.Duration == 2
+                            ? CopyDuration(rule, 3) : rule);
                         break;
                     case "F-P-M06":
-                        // 下次近战命中额外造成 2 点火焰伤害。
-                        rules.Add(rule);
-                        if (rule.Kind == FireRuleKind.ApplyBreakStance && rule.Timing == FireRuleTiming.OnTrigger)
-                            rules.Add(new FireSpellRule(FireRuleKind.Damage, 2, timing: FireRuleTiming.OnTrigger));
+                        // 伤害 8 → 10，裂痕不变。
+                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Amount == 8 ? Copy(rule, 10) : rule);
                         break;
                     case "F-P-U04":
                     case "F-P-U18":
-                        // 单位与物件伤害 8 → 10；标记奖励与推位距离不变。
+                        // 单位与物件伤害 8 → 10；破障与推位距离不变。
                         rules.Add((rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
                             ? Copy(rule, 10) : rule);
                         break;
@@ -379,6 +377,10 @@ namespace OCC.Combat.Roguelite
 
         private static FireSpellRule Copy(FireSpellRule rule, int amount) =>
             new FireSpellRule(rule.Kind, amount, rule.Duration, rule.Scope, rule.Condition, rule.AlternateAmount,
+                rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing);
+
+        private static FireSpellRule CopyDuration(FireSpellRule rule, int duration) =>
+            new FireSpellRule(rule.Kind, rule.Amount, duration, rule.Scope, rule.Condition, rule.AlternateAmount,
                 rule.AffectAllies, rule.Status, rule.Consumption, rule.DestructibleMask, rule.Timing);
 
         // 节流刻墨（总案 4.2.2.1）：在已生效的基础费用上再降 1 点魔力（最低 0）；回路调息的节流降的是冷却（1→0）。

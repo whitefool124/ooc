@@ -443,6 +443,45 @@ namespace OCC.Combat
             }
             if (spell.Id == "F-P-R25")
                 combat.Map.SetTile(new GridPosition(3, 1), new TileState { Cover = CoverType.Heavy, Durability = 24 });
+            if (spell.Id == "F-P-M07") enemy.MoveTo(new GridPosition(5, 4));
+            if (spell.Id == "F-P-M09")
+            {
+                cell = new GridPosition(3, 3);
+                combat.Map.SetTile(cell, new TileState { Cover = CoverType.Light, Durability = 24 });
+                target = FireSpellTarget.At(cell, CardinalDirection.North);
+            }
+            if (spell.Id == "F-P-U02")
+            {
+                UnitState burningSource = combat.GetUnit("range_shield");
+                burningSource.MoveTo(new GridPosition(5, 4));
+                burningSource.ApplyStatus(StatusType.Burning, 2, 8);
+            }
+            if (spell.Id == "F-P-R12" || spell.Id == "F-P-R13")
+                battle.CreateOrRefreshFireground(new GridPosition(cell.X, cell.Y + 1), 8, 3, "training-fixture", hero.Id);
+            if (spell.Id == "F-P-R18") enemy.ApplyStatus(StatusType.Burning, 2, 8);
+            if (spell.Id == "F-P-M24")
+            {
+                battle.RecordChargeStep(hero.Id, hero.Position);
+                hero.MoveTo(new GridPosition(3, 3)); battle.RecordChargeStep(hero.Id, hero.Position);
+                hero.MoveTo(new GridPosition(3, 2)); battle.RecordChargeStep(hero.Id, hero.Position);
+                cell = new GridPosition(3, 4);
+                target = FireSpellTarget.At(cell, CardinalDirection.South);
+            }
+            if (spell.Id == "F-P-U20")
+            {
+                enemy.MoveTo(new GridPosition(5, 4));
+                battle.RecordChargeStep(hero.Id, hero.Position);
+                hero.MoveTo(new GridPosition(4, 4)); battle.RecordChargeStep(hero.Id, hero.Position);
+            }
+            if (spell.Id == "F-P-R23" || spell.Id == "F-P-U26" || spell.Id == "F-P-R24")
+            {
+                GridPosition breach = spell.Id == "F-P-R24" ? new GridPosition(5, 4) : cell;
+                combat.Map.SetTile(breach, new TileState { Cover = CoverType.Light, Durability = 8 });
+                battle.ResolveMarkedDestructions();
+                if (spell.Id == "F-P-R24") battle.MarkFracture(hero.Id, breach);
+                combat.Map.GetTile(breach).Durability = 0;
+                battle.ResolveMarkedDestructions(hero.Id);
+            }
 
             TrainingRangeAbilityEntry entry = Abilities.Single(ability => ability.Id == abilityId);
             return new FireSpellTrainingRangeCase(entry, battle, target, cell, unitId);
