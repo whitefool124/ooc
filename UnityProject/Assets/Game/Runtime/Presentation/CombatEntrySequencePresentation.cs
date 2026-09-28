@@ -227,6 +227,8 @@ namespace OCC.Combat.Presentation
             blocking = false;
             noticeVisible = false;
             if (startNoticeGroup != null) startNoticeGroup.DOKill();
+            if (revealFrameGroup != null) revealFrameGroup.DOKill();
+            RestoreRevealFrameParent();
             if (root != null) root.SetActive(false);
             // The docked goal lingers open for a beat, then tucks itself away.
             chipCollapseAt = Time.unscaledTime + ObjectiveCollapseDelaySeconds;
@@ -256,11 +258,12 @@ namespace OCC.Combat.Presentation
         {
             if (revealedEnemy == null || revealFrame == null || !revealFrame.activeSelf ||
                 host?.BattlefieldViewport == null) return;
-            BattlefieldRect cell = host.BattlefieldViewport.CellRect(revealedEnemy.Position);
-            float pixel = cell.Width / 32f;
-            float size = cell.Width + pixel * 2f;
+            float cellSize = host.BattlefieldViewport.CellSize;
+            float pixel = cellSize / 32f;
+            float size = cellSize + pixel * 2f;
             revealFrameRect.anchoredPosition = new Vector2(
-                cell.X + cell.Width * .5f, -(cell.Y + cell.Height * .5f));
+                (revealedEnemy.Position.X + .5f) * cellSize,
+                -(host.CurrentState.Map.Height - revealedEnemy.Position.Y - .5f) * cellSize);
             revealFrameRect.sizeDelta = new Vector2(size, size);
             SetRevealFrameEdge(0, Vector2.zero, new Vector2(size, pixel));
             SetRevealFrameEdge(1, new Vector2(0f, -size + pixel), new Vector2(size, pixel));
@@ -272,6 +275,14 @@ namespace OCC.Combat.Presentation
         {
             revealFrameEdges[index].anchoredPosition = position;
             revealFrameEdges[index].sizeDelta = size;
+        }
+
+        private void RestoreRevealFrameParent()
+        {
+            if (revealFrame == null) return;
+            revealFrame.SetActive(false);
+            if (root != null && revealFrame.transform.parent != root.transform)
+                revealFrameRect.SetParent(root.transform, false);
         }
 
         private UiMotionProfile Motion()
@@ -666,6 +677,10 @@ namespace OCC.Combat.Presentation
         private void ShowRevealCard(UnitState enemy, UiMotionProfile motion)
         {
             if (enemy == null || revealCard == null) return;
+            RectTransform underlay = host?.BattlefieldEntryFocusUnderlay;
+            if (underlay == null) return;
+            revealFrameRect.SetParent(underlay, false);
+            revealFrameRect.SetAsFirstSibling();
             revealedEnemy = enemy;
             Texture2D portrait = host?.UnitPortrait(enemy);
             revealPortrait.texture = portrait;
@@ -712,7 +727,7 @@ namespace OCC.Combat.Presentation
                 revealCardGroup.alpha = 0f;
                 revealFrameGroup.alpha = 0f;
                 revealCard.SetActive(false);
-                revealFrame.SetActive(false);
+                RestoreRevealFrameParent();
                 return;
             }
             DOTween.To(() => revealCardGroup.alpha, value => revealCardGroup.alpha = value, 0f, motion.QuickDuration)
@@ -720,7 +735,7 @@ namespace OCC.Combat.Presentation
                 .OnComplete(() => { if (revealCard != null) revealCard.SetActive(false); });
             DOTween.To(() => revealFrameGroup.alpha, value => revealFrameGroup.alpha = value, 0f, motion.QuickDuration)
                 .SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true).SetTarget(revealFrameGroup)
-                .OnComplete(() => { if (revealFrame != null) revealFrame.SetActive(false); });
+                .OnComplete(RestoreRevealFrameParent);
         }
 
         /// <summary>
@@ -767,6 +782,7 @@ namespace OCC.Combat.Presentation
         private void OnDestroy()
         {
             DOTween.Kill(this);
+            RestoreRevealFrameParent();
             // CanvasRoot returns a scene-authored anchor when one exists; that anchor has a
             // parent and must survive. Only a canvas we created ourselves is childless.
             if (canvas != null && canvas.transform.parent == null) Destroy(canvas.gameObject);

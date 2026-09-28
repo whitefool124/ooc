@@ -944,6 +944,7 @@ namespace OCC.Combat.Presentation
         public void DeleteRogueliteSave() => saveGateway.DeleteStory();
         public bool HasRogueliteSave => saveGateway.HasStory;
         public CombatState CurrentState => state;
+        public RectTransform BattlefieldEntryFocusUnderlay => battlefieldView?.EntryFocusUnderlay;
         public BattlefieldViewport BattlefieldViewport
         {
             get

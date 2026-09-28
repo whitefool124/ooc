@@ -227,6 +227,7 @@ namespace OCC.Combat.Presentation
     {
         CombatState CurrentState { get; }
         BattlefieldViewport BattlefieldViewport { get; }
+        RectTransform BattlefieldEntryFocusUnderlay { get; }
         bool IsDeveloperCombatActive { get; }
         /// <summary>Player-facing mission goal, shown in full at entry and docked afterwards.</summary>
         string CombatObjectiveSummary { get; }

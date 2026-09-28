@@ -99,6 +99,8 @@ namespace OCC.Combat.Presentation
         private bool combatEntryQueued;
 
         public bool IsVisible => root != null && root.activeSelf;
+        // The entry focus frame belongs behind every unit, but above the battlefield cells.
+        public RectTransform EntryFocusUnderlay => unitLayerRect;
         // Reuse the regions of the currently drawn frame, rather than final simulation positions.
         public void AppendFeedbackObstacles(List<Rect> destination, bool protectBodies = true, string damageOwnerId = null)
         {
