@@ -247,6 +247,7 @@ namespace OCC.Combat.Presentation
     {
         CombatState CurrentState { get; }
         string SelectedTargetId { get; }
+        string SelectedAction { get; }
         BattlefieldViewport BattlefieldViewport { get; }
         bool IsBattlefieldVisible { get; }
         bool IsInteractionModalOpen { get; }

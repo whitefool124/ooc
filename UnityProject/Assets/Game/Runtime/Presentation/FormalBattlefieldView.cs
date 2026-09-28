@@ -75,7 +75,6 @@ namespace OCC.Combat.Presentation
         private float hoverStartedAt;
         private float hoverRevealDelaySeconds = CellHoverRevealDelaySeconds;
         private float lastHoverRevealAt = float.NegativeInfinity;
-        private Texture2D enemyIntentMarkerTexture;
 
         private GameObject contextMenuRoot;
         private RectTransform contextMenuPanel;
@@ -169,24 +168,46 @@ namespace OCC.Combat.Presentation
             UpdateInput();
             RefreshGeometry(host.BattlefieldViewport);
             RefreshStructures(host.CurrentLevelId, host.BattlefieldViewport);
-            HashSet<GridPosition> intentDestinations = CollectIntentDestinations(state.Units.Values
-                .Where(unit => unit.IsAlive && !unit.IsHero)
-                .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
-            HashSet<GridPosition> intentRoute = CollectIntentRoute(state.Units.Values
-                .Where(unit => unit.IsAlive && !unit.IsHero)
-                .Select(unit => host.PresentBattlefieldCell(unit.Position)?.Intent));
+            var presented = cells.Keys.ToDictionary(position => position, host.PresentBattlefieldCell);
+            EnemyIntentPresentation[] intents = state.Units.Values.Where(unit => unit.IsAlive && !unit.IsHero)
+                .Select(unit => presented.TryGetValue(unit.Position, out BattlefieldCellPresentation cell)
+                    ? cell?.Intent : null).Where(intent => intent != null).ToArray();
+            HashSet<GridPosition> intentDestinations = CollectIntentDestinations(intents);
+            HashSet<GridPosition> intentRoute = CollectIntentRoute(intents);
             UnitState inspectedEnemy = hasHoverPosition && hoverPointerInside
                 ? state.Units.Values.FirstOrDefault(unit => unit.IsAlive && !unit.IsHero && unit.Position == hoverPosition)
                 : null;
             if (inspectedEnemy == null) inspectedEnemy = state.GetUnit(host.SelectedTargetId);
-            EnemyIntentPresentation inspectedIntent = inspectedEnemy != null && !inspectedEnemy.IsHero
-                ? host.PresentBattlefieldCell(inspectedEnemy.Position)?.Intent : null;
-            HashSet<GridPosition> attackRange = new HashSet<GridPosition>(inspectedIntent?.AttackRange ?? Array.Empty<GridPosition>());
-            HashSet<GridPosition> affectedCells = new HashSet<GridPosition>(inspectedIntent?.AffectedCells ?? Array.Empty<GridPosition>());
+            EnemyIntentPresentation inspectedIntent = inspectedEnemy != null && !inspectedEnemy.IsHero &&
+                presented.TryGetValue(inspectedEnemy.Position, out BattlefieldCellPresentation inspected)
+                ? inspected?.Intent : null;
+            bool movementMode = host.SelectedAction == "移动" || presented.Values.Any(cell =>
+                cell?.MoveMarker == BattlefieldCellMarker.MovementRange ||
+                cell?.MoveMarker == BattlefieldCellMarker.MovementRisk);
+            HashSet<GridPosition> attackRange = new HashSet<GridPosition>(movementMode
+                ? intents.SelectMany(intent => intent.AttackRange)
+                : inspectedIntent?.AttackRange ?? Array.Empty<GridPosition>());
+            var enemyEdges = new Dictionary<GridPosition, byte>();
+            var affectedCells = new HashSet<GridPosition>();
+            foreach (EnemyIntentPresentation intent in intents)
+            {
+                var sourceCells = new HashSet<GridPosition>(intent.AffectedCells);
+                foreach (GridPosition position in sourceCells)
+                {
+                    if (!cells.ContainsKey(position)) continue;
+                    affectedCells.Add(position);
+                    byte edges = BoundaryEdges(sourceCells, position);
+                    enemyEdges[position] = (byte)((enemyEdges.TryGetValue(position, out byte current) ? current : 0) | edges);
+                }
+            }
+            var playerEffectCells = new HashSet<GridPosition>(presented.Where(pair => pair.Value?.IsPlayerEffectCell == true)
+                .Select(pair => pair.Key));
             foreach (KeyValuePair<GridPosition, CellView> pair in cells)
-                RefreshCell(pair.Value, host.PresentBattlefieldCell(pair.Key), host.BattlefieldViewport,
+                RefreshCell(pair.Value, presented[pair.Key], host.BattlefieldViewport,
                     intentDestinations.Contains(pair.Key), intentRoute.Contains(pair.Key),
-                    attackRange.Contains(pair.Key), affectedCells.Contains(pair.Key));
+                    attackRange.Contains(pair.Key), affectedCells.Contains(pair.Key),
+                    enemyEdges.TryGetValue(pair.Key, out byte redEdges) ? redEdges : (byte)0,
+                    playerEffectCells.Contains(pair.Key) ? BoundaryEdges(playerEffectCells, pair.Key) : (byte)0);
             RefreshUnitOrder();
             UpdateHoverReveal();
         }
@@ -205,9 +226,6 @@ namespace OCC.Combat.Presentation
             boardRect = shell.Board;
             surroundLayerRect = shell.SurroundLayer;
             shell.InputSurface.Initialize(this);
-            enemyIntentMarkerTexture = Resources.Load<Texture2D>(BattlefieldMarkerLadder.EnemyIntentMarkerPath);
-            if (enemyIntentMarkerTexture == null)
-                throw new System.IO.FileNotFoundException("Missing enemy intent marker: " + BattlefieldMarkerLadder.EnemyIntentMarkerPath);
 
             Button home = shell.HomeButton;
             home.GetComponent<RectTransform>().anchoredPosition =
@@ -351,6 +369,7 @@ namespace OCC.Combat.Presentation
                 IntentRoute = Layer("敌方移动路线", rect),
                 IntentDestination = Layer("移动意图目标", rect),
                 IntentDot = CenteredLayer("移动意图强调点", rect),
+                RangeGraphic = FormalUiKit.Create("统一方格范围", rect).AddComponent<CombatBattlefieldRangeGraphic>(),
                 // Native prop canvases may overhang one cell. A board-wide layer keeps later
                 // sibling floors from covering the prop's top and right edges.
                 Object = Layer("地形物件", objectLayerRect),
@@ -371,6 +390,7 @@ namespace OCC.Combat.Presentation
             cell.SkillMotion = cell.Skill.gameObject.AddComponent<CombatRangeOverlayMotion>();
             cell.SkillMotion.Initialize(cell.Skill, rangePhase + 1.4f);
             cell.IntentRect = cell.IntentRoot.AddComponent<RectTransform>();
+            Stretch(cell.RangeGraphic.rectTransform);
             cell.IntentRect.anchorMin = cell.IntentRect.anchorMax = cell.IntentRect.pivot = new Vector2(0f, 1f);
             Image intentBackground = cell.IntentRoot.AddComponent<Image>();
             // The formal intent glyph already owns its outline. Keep the interaction surface but
@@ -440,7 +460,8 @@ namespace OCC.Combat.Presentation
         }
 
         private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport,
-            bool isIntentDestination, bool isIntentRoute, bool isEnemyAttackRange, bool isEnemyAffected)
+            bool isIntentDestination, bool isIntentRoute, bool isEnemyAttackRange, bool isEnemyAffected,
+            byte enemyEdges, byte playerEdges)
         {
             if (model == null || viewport == null)
             { cell.Root.SetActive(false); cell.OverlayRect.gameObject.SetActive(false); cell.Unit.gameObject.SetActive(false);
@@ -478,23 +499,17 @@ namespace OCC.Combat.Presentation
                 Stretch(cell.TerrainBoundary.rectTransform);
             }
             Set(cell.Environment, model.EnvironmentTexture, Color.white);
-            cell.MoveMotion.Refresh(model.MoveOverlayTexture, model.MoveOverlayAlpha);
-            cell.AttackMotion.Refresh(model.AttackOverlayTexture, model.AttackOverlayAlpha);
-            cell.SkillMotion.Refresh(model.SkillOverlayTexture, model.SkillOverlayAlpha);
-            Set(cell.EnemyAttackRange, isEnemyAttackRange ? model.SelectionOverlayTexture : null,
-                new Color(1f, .48f, .3f, .4f));
-            Set(cell.EnemyAffectedArea, isEnemyAffected ? model.SelectionOverlayTexture : null,
-                new Color(1f, .17f, .12f, .82f));
-            Set(cell.IntentRoute, isIntentRoute ? model.SelectionOverlayTexture : null,
-                FormalUiTheme.WithAlpha(BattlefieldMarkerLadder.EnemyIntentDestinationTint, .22f));
-            // 落点 = 橙色方框（中性白框贴图，可着成真橙）+ 居中的橙色强调点。
-            // 原来的 move_range 四角边框像素是青色（R≈0），乘任何暖色都只会变脏，无法做成橙色边框。
-            Set(cell.IntentDestination, isIntentDestination ? model.SelectionOverlayTexture : null,
-                FormalUiTheme.WithAlpha(BattlefieldMarkerLadder.EnemyIntentDestinationTint,
-                    BattlefieldMarkerLadder.EnemyIntentDestinationAlpha));
-            // 中间菱形：橙色已烘焙进贴图，所以用白色着色原样显示（避免乘法把颜色改脏）。
-            Set(cell.IntentDot, isIntentDestination ? enemyIntentMarkerTexture : null,
-                FormalUiTheme.WithAlpha(Color.white, BattlefieldMarkerLadder.EnemyIntentDestinationAlpha));
+            cell.MoveMotion.Refresh(null, 0f);
+            cell.AttackMotion.Refresh(null, 0f);
+            cell.SkillMotion.Refresh(null, 0f);
+            Set(cell.EnemyAttackRange, null, Color.clear);
+            Set(cell.EnemyAffectedArea, null, Color.clear);
+            Set(cell.IntentRoute, null, Color.clear);
+            Set(cell.IntentDestination, null, Color.clear);
+            Set(cell.IntentDot, null, Color.clear);
+            cell.RangeGraphic.Refresh(model.MoveMarker, model.AttackMarker, model.SkillMarker,
+                isEnemyAttackRange, isEnemyAffected, enemyEdges, model.IsPlayerEffectCell,
+                playerEdges, isIntentRoute, isIntentDestination);
             Set(cell.Selection, model.SelectionOverlayTexture, FormalUiTheme.Cyan);
             Texture2D objectTexture = physicalCellSize <= 32.01f && model.ObjectTextureLow != null
                 ? model.ObjectTextureLow : model.ObjectTexture;
@@ -515,6 +530,8 @@ namespace OCC.Combat.Presentation
             SetTopLeft(cell.ObjectLabel.rectTransform, 2f, 12f * cellSize / 128f, cellSize - 4f, 40f);
 
             cell.Unit.gameObject.SetActive(model.UnitTexture != null);
+            cell.PreviewedUnit = model.IsPreviewedUnit;
+            cell.PreviewedObject = model.IsPreviewedObject;
             if (model.UnitTexture != null)
             {
                 if (!cell.VitalsPointerBound)
@@ -614,6 +631,7 @@ namespace OCC.Combat.Presentation
             depthLayers.Sort((a, b) => CombatObjectLayerLayout.CompareDepth(a.Foot, a.IsFront, b.Foot, b.IsFront));
             foreach (DepthLayer layer in depthLayers) layer.Image.transform.SetAsLastSibling();
             RefreshOcclusionContours();
+            RefreshPreviewObjectContours();
             RefreshAnnotations();
         }
 
@@ -656,7 +674,7 @@ namespace OCC.Combat.Presentation
                         occlusionForeground.Add(new CombatOcclusionLayer(BoardImageRect(layer.Image), layer.Image.uvRect,
                             unitHitMasks.Get(texture)));
                 }
-                if (occlusionForeground.Count == 0 || cell.Unit.color.a < .5f)
+                if ((!cell.PreviewedUnit && occlusionForeground.Count == 0) || cell.Unit.color.a < .5f)
                 { if (cell.Contour != null) cell.Contour.gameObject.SetActive(false); continue; }
                 if (cell.Contour == null)
                 {
@@ -664,12 +682,38 @@ namespace OCC.Combat.Presentation
                     cell.Contour = contour.AddComponent<CombatUnitContourGraphic>();
                 }
                 SetTopLeft(cell.Contour.rectTransform, subject.x, subject.y, subject.width, subject.height);
-                Color tint = cell.PresentedIsHero ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
+                Color tint = cell.PreviewedUnit ? Color.white :
+                    cell.PresentedIsHero ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
                 cell.Contour.Refresh(unitHitMasks.Get(cell.Unit.texture as Texture2D), cell.Unit.uvRect, subject,
-                    occlusionForeground, FormalUiTheme.WithAlpha(tint, .90f));
+                    occlusionForeground, FormalUiTheme.WithAlpha(tint, cell.PreviewedUnit ? 1f : .90f),
+                    cell.PreviewedUnit);
                 cell.Contour.transform.SetAsLastSibling();
-                if (cell.Contour.HiddenPixelCount > 0)
+                if (!cell.PreviewedUnit && cell.Contour.HiddenPixelCount > 0)
                 { OccludedUnitCount++; OcclusionPixelCount += cell.Contour.HiddenPixelCount; }
+            }
+        }
+
+        private void RefreshPreviewObjectContours()
+        {
+            foreach (CellView cell in cells.Values)
+            {
+                var texture = cell.Object.texture as Texture2D;
+                if (!cell.PreviewedObject || !cell.Object.gameObject.activeSelf || texture == null)
+                { if (cell.ObjectContour != null) cell.ObjectContour.gameObject.SetActive(false); continue; }
+                if (cell.ObjectContour == null)
+                {
+                    GameObject contour = FormalUiKit.Create("命中物块白色轮廓_" + cell.Root.name, overlayLayerRect);
+                    cell.ObjectContour = contour.AddComponent<CombatUnitContourGraphic>();
+                }
+                float cellSize = cell.Rect.rect.width;
+                var layout = new CombatObjectLayerLayout(cellSize, texture.width, texture.height, 0);
+                Rect local = layout.BackRect;
+                Rect subject = new Rect(cell.Rect.anchoredPosition.x + local.x,
+                    -cell.Rect.anchoredPosition.y + local.y, local.width, local.height);
+                SetTopLeft(cell.ObjectContour.rectTransform, subject.x, subject.y, subject.width, subject.height);
+                cell.ObjectContour.Refresh(unitHitMasks.Get(texture), new Rect(0f, 0f, 1f, 1f),
+                    subject, Array.Empty<CombatOcclusionLayer>(), Color.white, true);
+                cell.ObjectContour.transform.SetAsLastSibling();
             }
         }
 
@@ -1504,6 +1548,17 @@ namespace OCC.Combat.Presentation
             return route;
         }
 
+        public static byte BoundaryEdges(IReadOnlyCollection<GridPosition> region, GridPosition position)
+        {
+            if (region == null || !region.Contains(position)) return 0;
+            byte result = 0;
+            if (!region.Contains(new GridPosition(position.X, position.Y + 1))) result |= CombatBattlefieldRangeGraphic.Top;
+            if (!region.Contains(new GridPosition(position.X + 1, position.Y))) result |= CombatBattlefieldRangeGraphic.Right;
+            if (!region.Contains(new GridPosition(position.X, position.Y - 1))) result |= CombatBattlefieldRangeGraphic.Bottom;
+            if (!region.Contains(new GridPosition(position.X - 1, position.Y))) result |= CombatBattlefieldRangeGraphic.Left;
+            return result;
+        }
+
         private void HideTooltip()
         {
             hoverCard?.Hide();
@@ -1691,6 +1746,7 @@ namespace OCC.Combat.Presentation
             public RawImage EnemyAttackRange;
             public RawImage EnemyAffectedArea;
             public RawImage IntentDot;
+            public CombatBattlefieldRangeGraphic RangeGraphic;
             public RawImage Selection;
             public RawImage Object;
             public RawImage ObjectFront;
@@ -1704,6 +1760,9 @@ namespace OCC.Combat.Presentation
             public bool PresentedIsHero;
             public bool VitalsPointerBound;
             public CombatUnitContourGraphic Contour;
+            public CombatUnitContourGraphic ObjectContour;
+            public bool PreviewedUnit;
+            public bool PreviewedObject;
             public Text ObjectLabel;
             public BarView Health;
             public BarView Mana;

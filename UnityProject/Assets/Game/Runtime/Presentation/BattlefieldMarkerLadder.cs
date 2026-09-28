@@ -13,6 +13,7 @@ namespace OCC.Combat.Presentation
         MovementRisk,
         AttackEnvelope,
         AttackTarget,
+        AttackCommitted,
         SkillSelectable,
         SkillCommitted,
         SkillRisk,
@@ -66,6 +67,7 @@ namespace OCC.Combat.Presentation
                 case BattlefieldCellMarker.MovementRisk: return "high_risk";
                 case BattlefieldCellMarker.AttackEnvelope:
                 case BattlefieldCellMarker.AttackTarget:
+                case BattlefieldCellMarker.AttackCommitted:
                 case BattlefieldCellMarker.SkillSelectable:
                 case BattlefieldCellMarker.SkillCommitted:
                 case BattlefieldCellMarker.SkillRangeEnvelope: return "attack_range";
@@ -87,6 +89,7 @@ namespace OCC.Combat.Presentation
                 case BattlefieldCellMarker.MovementRisk:
                 case BattlefieldCellMarker.SkillRisk: return .96f;
                 case BattlefieldCellMarker.AttackTarget:
+                case BattlefieldCellMarker.AttackCommitted:
                 case BattlefieldCellMarker.SkillCommitted: return .88f;
                 case BattlefieldCellMarker.MovementRange:
                 case BattlefieldCellMarker.SkillSelectable: return .72f;

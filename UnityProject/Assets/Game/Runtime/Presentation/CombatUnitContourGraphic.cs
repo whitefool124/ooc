@@ -18,7 +18,7 @@ namespace OCC.Combat.Presentation
         public int GeometryChangeCount { get; private set; }
 
         public void Refresh(CombatTextureAlphaMask mask, Rect uv, Rect boardRect,
-            IReadOnlyList<CombatOcclusionLayer> foreground, Color tint)
+            IReadOnlyList<CombatOcclusionLayer> foreground, Color tint, bool fullBoundary = false)
         {
             raycastTarget = false;
             color = tint;
@@ -29,7 +29,12 @@ namespace OCC.Combat.Presentation
                 CombatUnitOcclusion.BuildBoundary(mask, uv, boundary);
                 BoundaryBuildCount++;
             }
-            CombatUnitOcclusion.HiddenBoundary(boardRect, mask?.Width ?? 0, mask?.Height ?? 0,
+            if (fullBoundary)
+            {
+                scratch.Clear();
+                scratch.AddRange(boundary);
+            }
+            else CombatUnitOcclusion.HiddenBoundary(boardRect, mask?.Width ?? 0, mask?.Height ?? 0,
                 boundary, foreground, scratch);
             changed |= hidden.Count != scratch.Count;
             if (!changed)

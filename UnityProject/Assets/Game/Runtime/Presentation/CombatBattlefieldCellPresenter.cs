@@ -74,11 +74,24 @@ namespace OCC.Combat.Presentation
                 UnitState selectedTarget = state.GetUnit(selection.TargetId);
                 if (selectedTarget != null) previewCenter = selectedTarget.Position;
             }
+            bool isPlayerEffectCell = false;
+            bool isPreviewedUnit = false;
+            bool isPreviewedObject = false;
+            if (rangeAction == "攻击" && previewCenter.HasValue && previewCenter.Value == position &&
+                battlefield.IsLegalTarget(state, "攻击", position))
+            {
+                attackMarker = BattlefieldCellMarker.AttackCommitted;
+                isPlayerEffectCell = isPreviewedUnit = true;
+            }
             if (fireSpell != null && previewCenter.HasValue)
             {
                 FireSpellPreview selectedPreview = firePreviewAt(fireSpell, previewCenter.Value);
                 if (selectedPreview?.CanCommit == true && selectedPreview.Cells.Contains(position))
                 {
+                    isPlayerEffectCell = true;
+                    isPreviewedUnit = state.Units.Values.Any(candidate => candidate.IsAlive &&
+                        candidate.Position == position && selectedPreview.UnitIds.Contains(candidate.Id));
+                    isPreviewedObject = selectedPreview.Destructibles.Contains(position);
                     UnitState affected = state.Units.Values.FirstOrDefault(candidate => candidate.IsAlive && candidate.Position == position);
                     UnitState source = state.GetUnit("hero");
                     bool friendlyCell = affected != null && source != null && affected.Id != source.Id && affected.IsHero == source.IsHero &&
@@ -276,7 +289,8 @@ namespace OCC.Combat.Presentation
                 objectLabelColor, loot, unit, vitals, statuses, intent, intentTexture, hover, travelOffset,
                 tile.IsPermanentWall ? 42 : tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
                 surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow,
-                BattlefieldMarkerLadder.Alpha(skillMarker));
+                BattlefieldMarkerLadder.Alpha(skillMarker), moveMarker, attackMarker, skillMarker,
+                isPlayerEffectCell, isPreviewedUnit, isPreviewedObject);
         }
 
         private const string OutOfRangeFailure = "超出射程";
