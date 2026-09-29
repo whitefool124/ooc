@@ -349,9 +349,10 @@
     ],
     "battlefield_unit_resource_fill_inset_reference": 1,
     "enemy_intent_badge_top_offset_reference": -22,
-    "enemy_intent_icon_native_size": 16,
-    "enemy_intent_icon_display_size": 48,
-    "enemy_intent_badge_height": 56,
+    "enemy_intent_icon_native_canvas_max": [32, 32],
+    "enemy_intent_icon_integer_scale": 3,
+    "enemy_intent_icon_display_slot": [64, 64],
+    "enemy_intent_badge_height": 64,
     "enemy_intent_badge_background": "transparent",
     "synthetic_styles_forbidden": true,
     "text_shadow_forbidden": true,
@@ -479,6 +480,18 @@
         3,
         4
       ]
+    },
+    "enemy_intent_icon_adaptive": {
+      "delivery_canvas": "tight_subject_plus_one_pixel_border",
+      "maximum_canvas": [32, 32],
+      "canvas_rule": "crop only transparent excess from the losslessly decoded subject and retain exactly one transparent pixel on every side",
+      "palette_max": 4,
+      "transparent_border_min": 1,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "runtime_scales": [3],
+      "display_slot": [64, 64],
+      "subjects": ["short_sword", "staff", "boot", "flag", "sledgehammer"]
     },
     "combat_indicator_16": {
       "delivery_size": [

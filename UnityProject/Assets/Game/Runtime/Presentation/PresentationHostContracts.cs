@@ -248,6 +248,7 @@ namespace OCC.Combat.Presentation
     {
         CombatState CurrentState { get; }
         string SelectedTargetId { get; }
+        void ClearSelectedEnemyInspection();
         string SelectedAction { get; }
         BattlefieldViewport BattlefieldViewport { get; }
         bool IsBattlefieldVisible { get; }

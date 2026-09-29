@@ -138,7 +138,7 @@ namespace OCC.Combat.Presentation
 
             GUIStyle title = WhiteText(new GUIStyle(GUI.skin.label) { font = FormalUiKit.Font, fontSize = 48, alignment = TextAnchor.MiddleCenter });
             GUIStyle subtitle = WhiteText(new GUIStyle(GUI.skin.label) { font = FormalUiKit.Font, fontSize = 24, alignment = TextAnchor.MiddleCenter, wordWrap = true });
-            GUIStyle button = WhiteText(new GUIStyle(GUI.skin.button) { font = FormalUiKit.Font, fontSize = 22 });
+            GUIStyle button = WhiteText(new GUIStyle(GUI.skin.button) { font = FormalUiKit.Font, fontSize = 24 });
             GUI.Label(new Rect(panel.x + 24f, panel.y + 24f, panel.width - 48f, 48f), "战斗演练", title);
             GUI.Label(new Rect(panel.x + 60f, panel.y + 76f, panel.width - 120f, 42f), "选择场地，开始演练", subtitle);
 

@@ -426,8 +426,8 @@ namespace OCC.Combat
             foreach (GridPosition position in effect.Scope == ArtifactEffectScope.Selection ? selection : new[] { cell })
             {
                 TileState tile = battle.Combat.Map.GetTile(position); int applied = 0; int durabilityBefore = tile.Durability;
-                if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.Durability = effect.Amount; tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
-                else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.Durability = effect.Amount; tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
+                if (effect.Kind == ArtifactEffectKind.CreateLightCover) { tile = tile.Clone(); tile.Cover = CoverType.Light; tile.ResetDurability(effect.Amount); tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
+                else if (effect.Kind == ArtifactEffectKind.CreateHeavyCover) { tile = tile.Clone(); tile.Cover = CoverType.Heavy; tile.ResetDurability(effect.Amount); tile.StructureOwnerUnitId = null; battle.Combat.Map.SetTile(position, tile); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DamageObject) { tile.Durability = Math.Max(0, tile.Durability - effect.Amount); applied = effect.Amount; }
                 else if (effect.Kind == ArtifactEffectKind.DestroyLightCover && tile.Cover == CoverType.Light) { applied = tile.Durability; tile.Durability = 0; }
                 else if (effect.Kind == ArtifactEffectKind.CreateFireground) { battle.CreateOrRefreshFireground(position, effect.Amount, effect.Duration, artifact.Id, source.Id); applied = effect.Amount; }
@@ -446,7 +446,7 @@ namespace OCC.Combat
                 }
                 else if (effect.Kind == ArtifactEffectKind.DeployDecoy)
                 {
-                    tile = tile.Clone(); tile.IsDecoy = true; tile.IsDevice = true; tile.Durability = effect.Amount;
+                    tile = tile.Clone(); tile.IsDecoy = true; tile.IsDevice = true; tile.ResetDurability(effect.Amount);
                     battle.Combat.Map.SetTile(position, tile); battle.Decoys[position] = effect.Amount; applied = effect.Amount;
                 }
                 if (effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover)

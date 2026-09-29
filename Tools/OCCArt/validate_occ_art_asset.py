@@ -87,6 +87,8 @@ def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int] |
         return logical_cells[0] * cell_pixels, logical_cells[1] * cell_pixels
     if role.get("delivery_canvas") == "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject":
         return None
+    if role.get("delivery_canvas") == "tight_subject_plus_one_pixel_border":
+        return None
     raise ValueError("role has no delivery size rule")
 
 
@@ -102,8 +104,13 @@ def validate_image(
     expected = expected_size(role, logical_cells)
     if expected is not None and image.size != expected:
         errors.append(f"delivery size {image.size} != expected {expected}")
-    if expected is None and (image.width % 32 or image.height % 32):
-        errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
+    if expected is None:
+        if role.get("delivery_canvas") == "tight_subject_plus_one_pixel_border":
+            bounds = image.getchannel("A").getbbox()
+            if bounds and bounds != (1, 1, image.width - 1, image.height - 1):
+                errors.append(f"tight delivery bounds {bounds} must have exactly 1px transparent border")
+        elif image.width % 32 or image.height % 32:
+            errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
     maximum = role.get("maximum_canvas")
     if isinstance(maximum, list) and len(maximum) == 2:
         if image.width > int(maximum[0]) or image.height > int(maximum[1]):

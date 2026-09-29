@@ -253,7 +253,7 @@ namespace OCC.Combat
                 .Select(unit => unit.DisplayName + (skill.Id == "SK-AOE-MENDER"
                     ? "预计获得" + (2 + enemy.StatusStrength(StatusType.ShieldGrant)) + "点护盾"
                     : skill.Id == "SK-AOE-SIGNAL" ? "位于光柱内，将受到5点以太伤害"
-                    : skill.Id == "SK-AOE-PROTOTYPE" ? "位于装置正交邻格，每件造成8点以太伤害"
+                    : skill.Id == "SK-AOE-PROTOTYPE" ? "位于装置相邻格，每件造成8点以太伤害"
                     : skill.Id == "SK-AOE-WIND" ? "位于引火路径，受到6点火焰伤害"
                     : "预计受到" + (skill.Id == "SK-AOE-REVEALER"
                         ? CombatResolver.PreviewLanternSweepDamage(state, enemy, unit)
@@ -264,14 +264,14 @@ namespace OCC.Combat
                 skill.Id == "SK-AOE-ARBALEST" ? "每个命中单位受3点基础物理伤害" :
                 skill.Id == "SK-AOE-RAIDER" ? "扇形内单位各受2点基础物理伤害；中心格单位额外束缚1回合" :
                 skill.Id == "SK-AOE-SHIELDGUARD" ? "扇形内单位各受2点基础物理伤害并获得敏捷-1，持续1回合" :
-                skill.Id == "SK-AOE-HOUND" ? "正交邻格单位各被束缚1回合" :
-                skill.Id == "SK-AOE-DUMMY" ? "正交邻格单位各受2点基础物理伤害并破势" :
+                skill.Id == "SK-AOE-HOUND" ? "相邻格单位各被束缚1回合" :
+                skill.Id == "SK-AOE-DUMMY" ? "相邻格单位各受2点基础物理伤害并破势" :
                 skill.Id == "SK-AOE-MENDER" ? "同一结构旁的友军各获得2点基础护盾，不造成伤害" :
                 skill.Id == "SK-AOE-SNARE" ? "直线空格生成持续2个主角回合的约束纹；进入者本回合留在原格" :
                 skill.Id == "SK-AOE-REVEALER" ? "两条平行3格光线内单位各受1点基础奥术伤害、护盾清空并标记1回合；遮挡处不生效" :
                 skill.Id == "SK-AOE-SIGNAL" ? "直线6格光柱，遮挡后为暗段；本次自身回合结束时照明格内单位各受5点以太伤害" :
                 skill.Id == "SK-AOE-VANGUARD" ? "在公开直线的空格内生成最多3段耐久12的临时重掩体；不造成伤害" :
-                skill.Id == "SK-AOE-PROTOTYPE" ? "至多引爆2件相邻过载装置；每件对正交邻格单位各造成8点以太伤害，敌我一致；每场最多2次" :
+                skill.Id == "SK-AOE-PROTOTYPE" ? "至多引爆2件相邻过载装置；每件对相邻格单位各造成8点以太伤害，敌我一致；每场最多2次" :
                 skill.Id == "SK-AOE-WIND" ? "沿已公开风向移动火场最多3格；路径单位各受6点火焰伤害，只在终点留下火场" :
                 "4格内单位各被标记1回合，藏身无效";
             return new EnemyIntentPresentation(skill.Id + ":" + enemy.Id + ":" + center.X + "," + center.Y,

@@ -102,7 +102,7 @@ namespace OCC.Combat.Presentation
             Text clearLabel = clear.transform.Find("名称")?.GetComponent<Text>();
             if (clearLabel != null)
             {
-                clearLabel.fontSize = 18;
+                clearLabel.fontSize = FormalUiTheme.BodyFontSize;
                 clearLabel.rectTransform.anchoredPosition = new Vector2(16, -6);
                 clearLabel.rectTransform.sizeDelta = new Vector2(92, 36);
             }
@@ -274,10 +274,10 @@ namespace OCC.Combat.Presentation
             AddRule(entries, "状态与地形", "破障", "术式伤害会影响作用范围内的物块；带有“破障”的伤害会造成双倍耐久伤害。");
             foreach (EnemyArchetype enemy in EnemyArchetypes.All)
             {
-                string attack = enemy.Weapon == null ? "无武器" : enemy.Weapon.DisplayName + "，伤害 " + enemy.Weapon.Damage + "，射程 " + enemy.Weapon.Range;
+                string attack = enemy.Attack == null ? "无固有攻击" : enemy.Attack.DisplayName + "，伤害 " + enemy.Attack.Damage + "，射程 " + enemy.Attack.Range;
                 string ability = enemy.PrimarySkill == null ? "无" : enemy.PrimarySkill.DisplayName;
                 string body = "生命 " + enemy.MaxHealth + "，护盾 " + enemy.Shield + "，速度 " + enemy.Speed +
-                    "。武器：" + attack + "。主要能力：" + ability + "。战斗中的当前意图以公开预览为准。";
+                    "。固有攻击：" + attack + "。主要能力：" + ability + "。战斗中的当前意图以公开预览为准。";
                 AddRule(entries, "敌人与机关", enemy.DisplayName, body);
             }
             return entries;

@@ -167,7 +167,7 @@ namespace OCC.Combat.Presentation
                 ArchiveUiStyle.NotePanel(card);
                 Label("编号", "档案 0" + (slot + 1), card.transform, new Vector2(46, -22), new Vector2(250, 44), 24, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
                 Text status = Label("状态", flow.SlotExists(slot) ? flow.SlotDisplaySummary(slot) : "空白卷宗", card.transform, new Vector2(30, -82), new Vector2(260, 132), 24, flow.SlotExists(slot) ? FormalUiTheme.Safe : ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-                status.fontSize = 30;
+                status.fontSize = FormalUiTheme.BodyFontSize;
             }
         }
 

@@ -53,7 +53,7 @@ namespace OCC.Combat.Tests
             Assert.That(archetype.DisplayName, Is.EqualTo("小铃"));
             Assert.That(archetype.IsElite, Is.True);
             Assert.That(archetype.MaxHealth, Is.EqualTo(16));
-            Assert.That(archetype.Weapon.DisplayName, Is.EqualTo("引风短杖"));
+            Assert.That(archetype.Attack.DisplayName, Is.EqualTo("引风短杖"));
             Assert.That(archetype.PrimarySkill.Id, Is.EqualTo("enemy_wind_scroll_edge"));
             Assert.That(archetype.HasSecondarySkill, Is.False, "其余手段由运行时结算，不显示默认第二技能。");
             UnitState unit = new UnitState("enemy_x", false, new GridPosition(0, 0));

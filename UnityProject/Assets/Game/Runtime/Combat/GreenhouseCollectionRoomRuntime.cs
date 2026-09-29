@@ -121,7 +121,7 @@ namespace OCC.Combat
         private CombatCommand ChooseMauler(CombatState state, UnitState enemy, UnitState hero)
         {
             calibratedHeavyPlanned = false;
-            if (enemy.Position.ManhattanDistance(hero.Position) <= (enemy.MainHand ?? CombatCatalog.Hammer).Range)
+            if (enemy.Position.ManhattanDistance(hero.Position) <= enemy.BasicAttack.Range)
             {
                 calibratedHeavyPlanned = hasCalibratedCrystal && IsIntactCrystal(state, calibratedCrystal);
                 hasCalibratedCrystal = false;

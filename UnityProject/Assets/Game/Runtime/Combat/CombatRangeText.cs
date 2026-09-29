@@ -20,7 +20,7 @@ namespace OCC.Combat
         public const string SelfSelection = "自身";
         public const string DeadZoneNote = "（近身死区）";
         private const string PrimaryTargetCell = "目标格";
-        private const string NeighbourCells = "目标格及正交邻格";
+        private const string NeighbourCells = "目标格及相邻格";
         private const string LandingNeighbours = "落点相邻 1 格";
         private const string SelectedCells = "选中格";
 

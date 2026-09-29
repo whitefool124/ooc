@@ -17,7 +17,7 @@ namespace OCC.Combat.Presentation
 
         public static Rect EnemyIntentBadgeRect(BattlefieldRect cell, int expectedDamage)
         {
-            float width = expectedDamage > 0 ? 92f : 56f;
+            float width = expectedDamage > 0 ? 100f : 64f;
             Rect unit = UnitPresentationRect(cell);
             // This is the same visible-head boundary used by the annotation obstacle pass. Leave
             // its two-reference-pixel padding here so the placement solver keeps this close pose
@@ -25,17 +25,26 @@ namespace OCC.Combat.Presentation
             float unitScale = unit.width / 128f;
             float visibleHead = unit.y + 24f * unitScale;
             return new Rect(cell.X + (cell.Width - width) * .5f,
-                visibleHead - 56f - 2f * unitScale, width, 56f);
+                visibleHead - 64f - 2f * unitScale, width, 64f);
         }
 
         public static Rect EnemyIntentIconLocalRect()
         {
-            return new Rect(4f, 4f, 48f, 48f);
+            return new Rect(0f, 0f, 64f, 64f);
+        }
+
+        public static Rect EnemyIntentTextureLocalRect(int nativeWidth, int nativeHeight)
+        {
+            Rect slot = EnemyIntentIconLocalRect();
+            float width = nativeWidth * 3f;
+            float height = nativeHeight * 3f;
+            return new Rect(slot.x + (slot.width - width) * .5f,
+                slot.y + (slot.height - height) * .5f, width, height);
         }
 
         public static Rect EnemyIntentDamageLocalRect(float badgeWidth)
         {
-            return new Rect(56f, 0f, Mathf.Max(0f, badgeWidth - 60f), 56f);
+            return new Rect(64f, 0f, Mathf.Max(0f, badgeWidth - 68f), 64f);
         }
 
         public static Rect UnitPresentationRect(BattlefieldRect cell)

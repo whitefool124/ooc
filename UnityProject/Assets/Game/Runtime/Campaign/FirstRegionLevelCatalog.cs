@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -149,7 +149,7 @@ namespace OCC.Combat
                 },
                 new LevelSpaceContract("中央藤圈宝箱、南北双晶簇、南侧普通长路",
                     new[] { new GridPosition(2, 3), new GridPosition(4, 5), new GridPosition(6, 6) },
-                    "晶簇被摧毁时伤害正交邻格并生成五格碎晶；灯藤遮断攻击线。",
+                    "晶簇被摧毁时伤害相邻格并生成五格碎晶；灯藤遮断攻击线。",
                     "可跃进抢箱、等待敌人贴晶引爆，或不依赖奖励沿南侧长路推进。"),
                 width: 8, height: 7);
 

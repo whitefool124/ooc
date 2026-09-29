@@ -38,7 +38,9 @@ namespace OCC.Combat
         public int Block { get; set; } = 1;
         public int Speed { get; set; } = 10;
         public int ActionValue { get; private set; }
-        public WeaponDefinition MainHand { get; private set; } = CombatCatalog.Rifle;
+        public WeaponDefinition MainHand { get; private set; }
+        public EnemyAttackDefinition EnemyAttack { get; private set; }
+        public IAttackDefinition BasicAttack => IsHero ? (IAttackDefinition)MainHand : EnemyAttack;
         public WeaponDefinition OffHand => null;
         public SkillDefinition SkillOne { get; private set; } = CombatCatalog.FireBolt;
         public SkillDefinition SkillTwo { get; private set; } = CombatCatalog.FrostBind;
@@ -71,6 +73,8 @@ namespace OCC.Combat
             Id = id; IsHero = isHero; Position = position; DisplayName = id;
             MaxHealth = isHero ? HeroBaseHealth : 12; Health = MaxHealth; MaxMana = isHero ? 6 : 4; Mana = MaxMana;
             MovementRangeThisTurn = NaturalMovementRange;
+            if (isHero) MainHand = CombatCatalog.Rifle;
+            else EnemyAttack = EnemyAttackCatalog.Generic;
         }
 
         public bool HasStatus(StatusType type) => StatusDuration(type) > 0;
@@ -98,11 +102,19 @@ namespace OCC.Combat
         public int Cooldown(SkillDefinition skill) => skill != null && cooldowns.TryGetValue(skill.Id, out int turns) ? turns : 0;
         public void Equip(WeaponDefinition mainHand, WeaponDefinition offHand, SkillDefinition skillOne, SkillDefinition skillTwo)
         {
-            MainHand = mainHand ?? MainHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo;
+            if (IsHero) MainHand = mainHand ?? MainHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo;
         }
         public void Equip(WeaponDefinition weapon, SkillDefinition skillOne, SkillDefinition skillTwo)
-        { MainHand = weapon ?? MainHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo; }
+        { if (IsHero) MainHand = weapon ?? MainHand; SkillOne = skillOne ?? SkillOne; SkillTwo = skillTwo ?? SkillTwo; }
         internal void AssignEnemyArchetype(string archetypeId) => EnemyArchetypeId = archetypeId;
+        internal void ConfigureEnemyAttack(EnemyAttackDefinition attack, SkillDefinition skillOne, SkillDefinition skillTwo)
+        {
+            if (IsHero) throw new InvalidOperationException("Hero cannot use an enemy attack.");
+            EnemyAttack = attack ?? throw new ArgumentNullException(nameof(attack));
+            MainHand = null;
+            SkillOne = skillOne;
+            SkillTwo = skillTwo;
+        }
         /// <summary>清除第二技能槽：用于只有一套公开战法、其余手段由运行时结算的单位。</summary>
         internal void ClearSecondarySkill() => SkillTwo = null;
         /// <summary>把仍在冷却的技能整体减一，最低保留 1 回合。</summary>
@@ -252,7 +264,7 @@ namespace OCC.Combat
         }
         internal UnitState Clone()
         {
-            UnitState clone = new UnitState(Id, IsHero, Position) { DisplayName = DisplayName, EnemyArchetypeId = EnemyArchetypeId, Armor = Armor, Shield = Shield, MaxShield = MaxShield, Block = Block, Speed = Speed, MainHand = MainHand, SkillOne = SkillOne, SkillTwo = SkillTwo };
+            UnitState clone = new UnitState(Id, IsHero, Position) { DisplayName = DisplayName, EnemyArchetypeId = EnemyArchetypeId, Armor = Armor, Shield = Shield, MaxShield = MaxShield, Block = Block, Speed = Speed, MainHand = MainHand, EnemyAttack = EnemyAttack, SkillOne = SkillOne, SkillTwo = SkillTwo };
             clone.Health = Health; clone.Mana = Mana; clone.ActionPoints = ActionPoints; clone.ActionValue = ActionValue; clone.MovementRangeThisTurn = MovementRangeThisTurn;
             clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored; clone.DamageAbsorptions = DamageAbsorptions;
             clone.firstNegativeStatusReductionRemaining = firstNegativeStatusReductionRemaining;

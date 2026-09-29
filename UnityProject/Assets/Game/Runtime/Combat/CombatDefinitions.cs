@@ -49,7 +49,41 @@ namespace OCC.Combat
         public SkillModifierDefinition(SkillModifierType type, int value = 1) { Type = type; Value = value; }
     }
 
-    public sealed class WeaponDefinition
+    public interface IAttackDefinition
+    {
+        string Id { get; }
+        string DisplayName { get; }
+        DamageType DamageType { get; }
+        int Damage { get; }
+        int MinimumRange { get; }
+        int Range { get; }
+        int ArmorPierce { get; }
+        int InitiativeDelay { get; }
+        int ManaCost { get; }
+    }
+
+    public sealed class EnemyAttackDefinition : IAttackDefinition
+    {
+        public string Id { get; }
+        public string DisplayName { get; }
+        public DamageType DamageType { get; }
+        public int Damage { get; }
+        public int MinimumRange { get; }
+        public int Range { get; }
+        public int ArmorPierce { get; }
+        public int InitiativeDelay { get; }
+        public int ManaCost { get; }
+
+        public EnemyAttackDefinition(string id, string displayName, DamageType damageType, int damage, int range,
+            int armorPierce = 0, int initiativeDelay = 0, int manaCost = 0, int minimumRange = 0)
+        {
+            Id = id; DisplayName = displayName; DamageType = damageType; Damage = damage;
+            MinimumRange = minimumRange; Range = range; ArmorPierce = armorPierce;
+            InitiativeDelay = initiativeDelay; ManaCost = manaCost;
+        }
+    }
+
+    public sealed class WeaponDefinition : IAttackDefinition
     {
         public string Id { get; }
         public string DisplayName { get; }

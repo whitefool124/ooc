@@ -146,7 +146,7 @@ namespace OCC.Combat.Tests
             }
         }
 
-        /// <summary>验收用的简单主角策略：能打就打，否则走到目标的正交邻格。</summary>
+        /// <summary>验收用的简单主角策略：能打就打，否则走到目标的相邻格。</summary>
         private static int ThreatPriority(string archetypeId)
         {
             if (archetypeId == "sigil_mauler" || archetypeId == "elite_vanguard" ||

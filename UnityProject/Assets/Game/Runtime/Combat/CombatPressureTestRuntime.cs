@@ -208,7 +208,7 @@ namespace OCC.Combat
                 TileState tile = state.Map.GetTile(target);
                 if (command.Type == CombatCommandType.Interact)
                 {
-                    int damage = enemy.MainHand?.Damage ?? 0;
+                    int damage = enemy.BasicAttack?.Damage ?? 0;
                     return new EnemyIntentPresentation("pressure-protect:break:" + tile.Durability,
                         "拆毁稳压器", Cell(target) + " 保护目标",
                         "耐久 " + tile.Durability + "→" + Math.Max(0, tile.Durability - damage) +
@@ -219,7 +219,7 @@ namespace OCC.Combat
                     return new EnemyIntentPresentation("pressure-protect:approach:" + Cell(command.Destination),
                         "逼近稳压器", Cell(command.Destination),
                         "抵达后继续接近 " + Cell(target) + "；下一次相邻行动将公开造成 " +
-                        (enemy.MainHand?.Damage ?? 0) + " 点耐久伤害。",
+                        (enemy.BasicAttack?.Damage ?? 0) + " 点耐久伤害。",
                         "move", true, command.Destination, 0);
             }
             if (HasReaction && enemy?.Id == reactionSourceUnitId)

@@ -172,9 +172,6 @@ namespace OCC.Combat.Presentation
             if (fire == null) return string.Empty;
             List<string> risks = new List<string>();
             if (fire.Rules.Any(rule => rule.AffectAllies)) risks.Add("范围可能伤及自身或友军，以预览为准");
-            FireSpellRule healthLoss = fire.Rules.FirstOrDefault(rule => rule.Kind == FireRuleKind.LoseHealth);
-            if (healthLoss.Kind == FireRuleKind.LoseHealth && healthLoss.Amount > 0)
-                risks.Add("施术者会无视护盾失去 " + healthLoss.Amount + " 点生命");
             if (fire.InitiativeDelay > 0) risks.Add("施放后自身行动顺序延后 " + fire.InitiativeDelay);
             return string.Join("；", risks);
         }

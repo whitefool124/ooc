@@ -139,11 +139,11 @@ namespace OCC.Combat.Tests
             CombatStatusPresentation damageTaken = CombatStatusPresentation.From(enemy, StatusType.DamageTaken);
 
             Assert.That(burning.ValueText, Is.EqualTo("3"));
-            Assert.That(burning.Detail, Does.Contain("自身回合结束时失去 4 点生命"));
-            Assert.That(burning.Detail, Does.Contain("无视护盾"));
+            Assert.That(burning.HoverDescription, Is.EqualTo("自身回合结束失去 4 点生命。"));
+            Assert.That(burning.HoverDescription, Does.Not.Contain("无视护盾"));
             Assert.That(damageTaken.ValueText, Is.EqualTo("+4"));
-            Assert.That(damageTaken.Detail, Does.Contain("受到的伤害 +4"));
-            Assert.That(damageTaken.Detail, Does.Contain("剩余 2 个自身回合"));
+            Assert.That(damageTaken.HoverDescription, Is.EqualTo("受到的伤害 +4 点。"));
+            Assert.That(damageTaken.HoverDescription, Does.Not.Contain("剩余"));
         }
 
         [TestCase(StatusType.Marked, "marked", "标记")]
@@ -157,7 +157,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(presentation.RuntimeId, Is.EqualTo(runtimeId));
             Assert.That(presentation.DisplayName, Is.EqualTo(name));
-            Assert.That(presentation.Detail, Does.Contain(status == StatusType.Marked ? "剩余 2 个自身回合" : "攻击后、移动后"));
+            Assert.That(presentation.HoverDescription,
+                Is.EqualTo(status == StatusType.Marked ? "藏身失效，可被标记效果读取。" : "可使用架设攻击。"));
         }
 
         [Test]

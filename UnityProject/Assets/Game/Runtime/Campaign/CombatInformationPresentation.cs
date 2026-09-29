@@ -63,7 +63,7 @@ namespace OCC.Combat
                 command.Type != CombatCommandType.Attack && command.Type != CombatCommandType.UseSkill) return this;
             SkillDefinition skill = command.Type == CombatCommandType.UseSkill
                 ? command.SlotIndex == 0 ? enemy.SkillOne : command.SlotIndex == 1 ? enemy.SkillTwo : null : null;
-            WeaponDefinition weapon = command.Type == CombatCommandType.Attack ? enemy.MainHand : null;
+            IAttackDefinition weapon = command.Type == CombatCommandType.Attack ? enemy.BasicAttack : null;
             if (skill == null && weapon == null) return this;
             if (skill?.TargetRule == SkillTargetRule.Self)
                 return new EnemyIntentPresentation(Signature, ActionName, TargetSummary,
@@ -100,14 +100,13 @@ namespace OCC.Combat
         public string Name { get; }
         public string Vitals { get; }
         public string Defenses { get; }
-        public string Weapon { get; }
         public string Skills { get; }
         public string Statuses { get; }
-        public string FullText => string.Join("\n", Name, Vitals, Defenses, Weapon, Skills, Statuses);
+        public string FullText => string.Join("\n", Name, Vitals, Defenses, Skills, Statuses);
 
-        internal EnemyInformationPresentation(string name, string vitals, string defenses, string weapon, string skills, string statuses)
+        internal EnemyInformationPresentation(string name, string vitals, string defenses, string skills, string statuses)
         {
-            Name = name; Vitals = vitals; Defenses = defenses; Weapon = weapon; Skills = skills; Statuses = statuses;
+            Name = name; Vitals = vitals; Defenses = defenses; Skills = skills; Statuses = statuses;
         }
     }
 
@@ -209,7 +208,7 @@ namespace OCC.Combat
                     result += AdjacentCounterSummary(state, enemy, target);
                     break;
                 case CombatCommandType.Attack:
-                    action = enemy.MainHand?.DisplayName ?? "武器攻击";
+                    action = enemy.BasicAttack?.DisplayName ?? "攻击";
                     int attackPreHitShield = target == null ? 0 : PendingPreHitShield(state, enemy, target);
                     CombatState attackPreviewState = PreviewStateWithPreHitShield(state, target, attackPreHitShield);
                     CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(attackPreviewState, enemy.Id, command.TargetUnitId, false);
@@ -228,9 +227,9 @@ namespace OCC.Combat
                         action = "受诱导接近";
                         result = "向诱导灯 " + Cell(lure) + " 接近，抵达 " + Cell(command.Destination);
                     }
-                    else if (enemy.EnemyArchetypeId == "rune_arbalist" && enemy.MainHand != null &&
-                        enemy.Position.ManhattanDistance(state.GetUnit("hero").Position) < enemy.MainHand.MinimumRange &&
-                        command.Destination.ManhattanDistance(state.GetUnit("hero").Position) >= enemy.MainHand.MinimumRange)
+                    else if (enemy.EnemyArchetypeId == "rune_arbalist" && enemy.BasicAttack != null &&
+                        enemy.Position.ManhattanDistance(state.GetUnit("hero").Position) < enemy.BasicAttack.MinimumRange &&
+                        command.Destination.ManhattanDistance(state.GetUnit("hero").Position) >= enemy.BasicAttack.MinimumRange)
                     {
                         action = "背弩生退距";
                         result = "撤到 " + Cell(command.Destination) + "；相邻格是公开近身死区，无法发射绞盘重弩或重矢";
@@ -251,7 +250,7 @@ namespace OCC.Combat
                     TileState interacted = state.Map.GetTile(command.Destination);
                     action = interacted.IsDecoy ? "破坏诱导灯" : "破坏物件";
                     result = interacted.IsDecoy
-                        ? "对 " + Cell(command.Destination) + " 的诱导灯造成 " + (enemy.MainHand?.Damage ?? 0) + " 耐久伤害；当前耐久 " + interacted.Durability
+                        ? "对 " + Cell(command.Destination) + " 的诱导灯造成 " + (enemy.BasicAttack?.Damage ?? 0) + " 耐久伤害；当前耐久 " + interacted.Durability
                         : "影响 " + Cell(command.Destination);
                     iconId = "interact_destroy";
                     break;
@@ -313,14 +312,13 @@ namespace OCC.Combat
         public static EnemyInformationPresentation BuildEnemyInformation(UnitState enemy, bool roguelite = false)
         {
             if (enemy == null) throw new ArgumentNullException(nameof(enemy));
-            string weapon = enemy.MainHand == null ? "武器：无" : "武器：" + enemy.MainHand.DisplayName + "\n伤害 " + enemy.MainHand.Damage + "　射程 " + RangeText(enemy.MainHand.MinimumRange, enemy.EffectiveRange(enemy.MainHand.Range));
             string skills = "战法：" + string.Join("；", new[] { enemy.SkillOne, enemy.SkillTwo }.Where(skill => skill != null)
                 .Select(skill => skill.DisplayName + "——" + SkillResult(skill) + (enemy.Cooldown(skill) > 0 ? "；还需等待 " + enemy.Cooldown(skill) + " 回合" : string.Empty)));
             string statuses = StatusSummary(enemy, "无");
             return new EnemyInformationPresentation(enemy.DisplayName,
                 "生命当前 " + enemy.Health + "　上限 " + enemy.MaxHealth + "\n护盾当前 " + enemy.Shield + "　上限 " + enemy.MaxShield,
                 roguelite ? "普通盾 " + enemy.Shield + "　速度 " + enemy.EffectiveSpeed : "护甲 " + enemy.EffectiveArmor + "　格挡 " + enemy.Block + "　速度 " + enemy.EffectiveSpeed,
-                weapon, skills, statuses);
+                skills, statuses);
         }
 
         public static CombatOutcomePresentation BuildOutcome(CombatState state, bool rogueliteMapCombat)
@@ -395,7 +393,7 @@ namespace OCC.Combat
             if (target != null)
             {
                 EnemyInformationPresentation profile = BuildEnemyInformation(target, roguelite);
-                sections.Add("敌人资料\n" + profile.Name + "\n" + profile.Vitals + "\n" + profile.Weapon);
+                sections.Add("敌人资料\n" + profile.Name + "\n" + profile.Vitals + "\n" + profile.Defenses);
                 if (intent != null) sections.Add("敌人打算\n" + intent.DetailedText);
             }
             return string.Join("\n\n", sections);
@@ -416,11 +414,11 @@ namespace OCC.Combat
                 enemy.Statuses.OrderBy(pair => pair.Key).Select(pair =>
                     CombatStatusPresentation.From(enemy, pair.Key, state).DisplayName + "：" +
                     CombatStatusPresentation.From(enemy, pair.Key, state).Detail));
-            return string.Join("\n", profile.Defenses, profile.Weapon, "特点：" + EnemyRoleSummary(enemy.EnemyArchetypeId),
-                profile.Skills, profile.Statuses + statusDetails, "当前意图：" + (intent?.DetailedText ?? "尚未显露"));
+            return string.Join("\n", profile.Defenses, profile.Statuses + statusDetails,
+                "当前意图：" + (intent?.DetailedText ?? "尚未显露"));
         }
 
-        private static string EnemyRoleSummary(string archetypeId)
+        public static string EnemyRoleSummary(string archetypeId)
         {
             switch (archetypeId)
             {
@@ -493,7 +491,7 @@ namespace OCC.Combat
                 : (command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex || command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex) &&
                     state.AcademyEnemyArea != null
                     ? AcademyEnemyAreaRuntime.For(source?.EnemyArchetypeId)?.DisplayName : null;
-            string action = command.Type == CombatCommandType.Attack ? source?.MainHand?.DisplayName ?? "攻击" :
+            string action = command.Type == CombatCommandType.Attack ? source?.BasicAttack?.DisplayName ?? "攻击" :
                 command.Type == CombatCommandType.UseSkill ? (configuredSkill ?? (command.SlotIndex == 0 ? source?.SkillOne : source?.SkillTwo)?.DisplayName ?? "技能") :
                 command.Type == CombatCommandType.Move ? "移动" : command.Type == CombatCommandType.Interact ? "互动" : command.Type.ToString();
             List<string> changes = new List<string>();

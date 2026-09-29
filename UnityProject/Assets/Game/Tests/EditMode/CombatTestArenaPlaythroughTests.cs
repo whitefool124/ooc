@@ -715,7 +715,7 @@ namespace OCC.Combat.Tests
             ArtifactExecution breach = ArtifactEngine.Execute(artifacts, hero.Id, ArtifactCatalog.BreachWedge,
                 ArtifactTarget.At(northCabinet), wedge.ChargesCurrent);
             Assert.That(wedge.Consume(), Is.True);
-            Assert.That(breach.Steps.Any(step => step.Kind == ArtifactEffectKind.DamageObject && step.Applied >= 16), Is.True);
+            Assert.That(breach.Steps.Any(step => step.Kind == ArtifactEffectKind.DamageObject && step.Applied == 8), Is.True);
             Assert.That(state.Map.GetTile(northCabinet).IsDestroyed, Is.True);
             AssertAccepted(commands.Execute(state, state.RogueSpells.FireBattle,
                 CombatCommand.Move(hero.Id, new GridPosition(5, 2))),

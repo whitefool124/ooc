@@ -595,14 +595,16 @@ namespace OCC.Combat.Presentation
             {
                 titleStyle = new GUIStyle(GUI.skin.label)
                 {
-                    fontSize = 30,
-                    fontStyle = FontStyle.Bold,
+                    font = FormalUiKit.Font,
+                    fontSize = 24,
+                    fontStyle = FontStyle.Normal,
                     alignment = TextAnchor.UpperCenter
                 };
                 titleStyle.normal.textColor = new Color(.45f, .9f, 1f, .96f);
                 hintStyle = new GUIStyle(GUI.skin.label)
                 {
-                    fontSize = 18,
+                    font = FormalUiKit.Font,
+                    fontSize = 24,
                     alignment = TextAnchor.UpperCenter
                 };
                 hintStyle.normal.textColor = new Color(.78f, .72f, 1f, .86f);

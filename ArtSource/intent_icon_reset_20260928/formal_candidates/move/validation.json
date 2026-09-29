@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "combat.intent.move.regenerated",
+  "role": "enemy_intent_icon_adaptive",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      21,
+      21
+    ],
+    "bounds": [
+      1,
+      1,
+      20,
+      20
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 4,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

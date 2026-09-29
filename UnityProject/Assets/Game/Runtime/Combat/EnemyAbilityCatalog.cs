@@ -5,9 +5,9 @@ namespace OCC.Combat
 {
     public static class EnemyAbilityCatalog
     {
-        public static readonly WeaponDefinition TetherHoundBite = new WeaponDefinition("tether_hound_bite", "导能撕咬", DamageType.Physical, 3, 1);
-        public static readonly WeaponDefinition HeavyCrossbow = new WeaponDefinition("heavy_crossbow", "绞盘重弩", DamageType.Physical, 3, 4, minimumRange: 2);
-        public static readonly WeaponDefinition BreachRam = new WeaponDefinition("breach_ram", "楔角撞击", DamageType.Physical, 4, 1);
+        public static readonly EnemyAttackDefinition TetherHoundBite = new EnemyAttackDefinition("tether_hound_bite", "导能撕咬", DamageType.Physical, 3, 1);
+        public static readonly EnemyAttackDefinition HeavyCrossbow = new EnemyAttackDefinition("heavy_crossbow", "绞盘重弩", DamageType.Physical, 3, 4, minimumRange: 2);
+        public static readonly EnemyAttackDefinition BreachRam = new EnemyAttackDefinition("breach_ram", "楔角撞击", DamageType.Physical, 4, 1);
         public static readonly SkillDefinition PyromancerFireArrow = new SkillDefinition(
             "enemy_pyromancer_fire_arrow", "火矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 0, 1,
             CombatFeedbackKind.Burning,
@@ -48,9 +48,9 @@ namespace OCC.Combat
             "enemy_windlass_bolt", "重矢", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 5, 0, 1,
             CombatFeedbackKind.Damage,
             new[] { SkillEffectDefinition.Damage(5, DamageType.Physical) }, minimumRange: 2);
-        public static readonly WeaponDefinition TrackerBite = new WeaponDefinition("tracker_bite", "近战撕咬", DamageType.Physical, 3, 1);
-        public static readonly WeaponDefinition KeeperMirror = new WeaponDefinition("keeper_mirror", "塔上灯镜", DamageType.Arcane, 2, 3);
-        public static readonly WeaponDefinition LibrarianStaff = new WeaponDefinition("librarian_staff", "引风短杖", DamageType.Arcane, 2, 3);
+        public static readonly EnemyAttackDefinition TrackerBite = new EnemyAttackDefinition("tracker_bite", "近战撕咬", DamageType.Physical, 3, 1);
+        public static readonly EnemyAttackDefinition KeeperMirror = new EnemyAttackDefinition("keeper_mirror", "塔上灯镜", DamageType.Arcane, 2, 3);
+        public static readonly EnemyAttackDefinition LibrarianStaff = new EnemyAttackDefinition("librarian_staff", "引风短杖", DamageType.Arcane, 2, 3);
         /// <summary>卷页：消耗一格散页打出风刃。散页的消耗由 AcademyFieldEnemyRuntime 结算。</summary>
         public static readonly SkillDefinition WindScrollEdge = new SkillDefinition(
             "enemy_wind_scroll_edge", "卷页", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 4, 0, 0,
@@ -65,8 +65,8 @@ namespace OCC.Combat
             CombatFeedbackKind.Bound,
             // 束缚在目标自身回合开始衰减；取 2 才能盖住一个完整回合，与"束缚 1 回合"的公开口径一致。
             new[] { SkillEffectDefinition.Damage(6, DamageType.Physical), SkillEffectDefinition.ApplyStatus(StatusType.Bound, 2) });
-        public static readonly WeaponDefinition StorekeeperStand = new WeaponDefinition("storekeeper_stand", "旧式检定器", DamageType.Arcane, 2, 3);
-        public static readonly WeaponDefinition PrototypeTools = new WeaponDefinition("prototype_tools", "工具", DamageType.Physical, 3, 1);
+        public static readonly EnemyAttackDefinition StorekeeperStand = new EnemyAttackDefinition("storekeeper_stand", "旧式检定器", DamageType.Arcane, 2, 3);
+        public static readonly EnemyAttackDefinition PrototypeTools = new EnemyAttackDefinition("prototype_tools", "工具", DamageType.Physical, 3, 1);
         /// <summary>旧脉冲：直线长度、清盾与破势由 AcademyFieldEnemyRuntime 结算；本条目承载公开描述与单体伤害参数。</summary>
         public static readonly SkillDefinition LegacyPulse = new SkillDefinition(
             "enemy_legacy_pulse", "旧脉冲", SkillTargetRule.EnemyUnit, SkillDeliveryMethod.Projectile, 4, 0, 0,

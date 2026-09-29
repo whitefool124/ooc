@@ -470,10 +470,10 @@ namespace OCC.Combat.Presentation
         public static string BuildSurfaceHover(FirstRegionLevelDefinition level, GridPosition position)
         {
             string floor = FloorKey(level, level?.Height ?? 0, position.X, position.Y);
-            if (floor.Contains("_earth_")) return "夯土地坪，可正常通行。";
-            if (floor.Contains("_road_")) return "学院道路，可正常通行。";
-            if (floor.Contains("_ruin_")) return "受损地坪，可正常通行。";
-            return "学院地坪，可正常通行。";
+            if (floor.Contains("_earth_")) return "夯土地坪。";
+            if (floor.Contains("_road_")) return "学院道路。";
+            if (floor.Contains("_ruin_")) return "受损地坪。";
+            return "学院地坪。";
         }
 
         public static string BuildTerrainEffectHover(CombatState state, FireBattleState fireBattle, TileState tile,
@@ -482,21 +482,19 @@ namespace OCC.Combat.Presentation
             if (state == null || tile == null) return string.Empty;
             var effects = new List<string>();
             if (tile.IsWater)
-                effects.Add("浅水使主角进入消耗 2 移动距离、寻迹兽消耗 1，并在进入时移除燃烧");
+                effects.Add("浅水：消耗 2 移动距离");
             if (fireBattle?.HasFireground(position) == true)
-                effects.Add("燃烧地面会在进入或停留时触发火焰伤害");
+                effects.Add("燃烧地面：进入或停留时受火焰伤害");
             if (fireBattle?.IsFractured(position) == true)
-                effects.Add("裂痕：该物块被摧毁时，施加者回流 2 魔力与 4 护盾；到施加者下一次自身回合结束移除");
+                effects.Add("裂痕：摧毁物块时回流 2 魔力、4 护盾");
             if (tile.SmokeExpiresAt > state.CurrentTime)
-                effects.Add("烟尘可进入，但会截断双方穿过、射入或射出的远程攻击线与显影光带，并在第 " + tile.SmokeExpiresAt + " 行动时消散");
-            if (tile.IsScorched)
-                effects.Add("灯藤焦痕仅作视觉记录，不造成伤害、遮挡或状态");
+                effects.Add("烟尘：截断远程攻击线与显影光带");
             if (tile.IsLoosePaper)
-                effects.Add("散页使进入消耗 2 移动距离；被浅水覆盖即移除，被点燃即转为燃烧地格，并可被风逐格搬动");
+                effects.Add("散页：进入消耗 2 移动距离，可被风搬动或点燃");
             if (tile.HasTrace)
-                effects.Add("痕迹记录经过的单位，供追踪类单位读取；被浅水、燃烧地格或强风作用时立即移除");
+                effects.Add("痕迹：供追踪单位读取");
             if (tile.IsBindingMark)
-                effects.Add("约束纹使进入者留在原格且本回合不能主动移动；被浅水、燃烧地格或烟尘覆盖即失效");
+                effects.Add("约束纹：进入者留在原格，本回合不能主动移动");
             return effects.Count == 0 ? string.Empty : string.Join("；", effects) + "。";
         }
 
@@ -505,46 +503,46 @@ namespace OCC.Combat.Presentation
             if (state == null || tile == null) return string.Empty;
             var objects = new List<string>();
             if (tile.IsLampVine)
-                objects.Add("灯藤可进入，进入消耗 2 移动距离并阻挡双方视线，藤内只能攻击相邻目标，可作用物块的火焰会烧去一格");
+                objects.Add("灯藤：进入消耗 2 移动距离，遮挡视线；藤内只能攻击相邻目标");
             else if (tile.IsAetherCrystal)
-                objects.Add(tile.ObjectName() + "不可进入且不阻挡攻击线，耐久 " + tile.Durability + "，摧毁后对正交四格造成 8 点以太伤害并生成五格碎晶");
+                objects.Add(tile.ObjectName() + "：耐久 " + tile.Durability + "；摧毁波及正交四格，造成 8 点以太伤害");
             else if (tile.IsCrystalShard)
-                objects.Add("碎晶可进入，进入消耗 2 移动距离，不阻挡攻击线且不持续造成伤害");
+                objects.Add("碎晶：进入消耗 2 移动距离");
             else if (tile.IsObjective)
             {
                 bool protectedTarget = state.PressureTest?.HasProtection == true &&
                     state.PressureTest.ProtectedPosition == position;
-                objects.Add(tile.IsDestroyed ? (protectedTarget ? "稳压器已损毁，保护目标失败" : "损毁导能柱已经失效") :
-                    protectedTarget ? state.PressureTest.ProtectionSummary(state) + " 可通过拦截、切线、占位、束缚或推拉保护。" :
-                    "导能柱耐久 " + tile.Durability + "，可被互动或指定术式影响");
+                objects.Add(tile.IsDestroyed ? (protectedTarget ? "稳压器已损毁，保护目标失败" : "导能柱已损毁") :
+                    protectedTarget ? "稳压器：耐久 " + tile.Durability + "，损毁即失败" :
+                    "导能柱：耐久 " + tile.Durability + "，可互动或用术式作用");
             }
             else if (tile.IsPermanentWall)
-                objects.Add("永久墙体阻挡移动与视线，不可破坏");
+                objects.Add("永久墙：阻挡移动与视线");
             else if (tile.Cover == CoverType.Light)
-                objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果，可正常通行" :
-                    "轻掩体耐久 " + tile.Durability + "，肉鸽战斗中站立其上会在自身回合结束获得 2 护盾");
+                objects.Add(tile.IsDestroyed ? "轻掩体残骸已失去防护效果" :
+                    "轻掩体：回合结束为站在其上的单位提供 2 点护盾");
             else if (tile.Cover == CoverType.Heavy)
                 objects.Add(tile.IsDestroyed ? "重掩体残骸已失去阻挡和防护效果" :
-                    "重掩体耐久 " + tile.Durability + "，会阻挡移动与视线，肉鸽战斗中与其正交相邻会在自身回合结束获得 4 护盾");
+                    "重掩体：回合结束为相邻单位提供 4 点护盾");
             else if (tile.IsDecoy)
-                objects.Add("诱导灯占据该格，耐久 " + tile.Durability + "；5 格内普通敌人会公开改为接近并破坏它，持续到主角下一回合开始");
+                objects.Add("诱导灯：耐久 " + tile.Durability + "，吸引 5 格内普通敌人");
             else if (tile.IsOverloadDevice)
-                objects.Add(tile.IsDestroyed ? "过载装置已引爆，不再有威胁" :
-                    "过载装置不可进入，耐久 " + tile.Durability + "，被摧毁时对正交四格结算 8 点以太伤害，敌我一致");
+                objects.Add(tile.IsDestroyed ? "过载装置已引爆" :
+                    "过载装置：耐久 " + tile.Durability + "；摧毁时正交四格受到 8 点以太伤害");
             else if (tile.IsWardGenerator)
-                objects.Add(tile.IsDestroyed ? "护罩发生器已损毁，不再提供结构护盾" :
-                    "护罩发生器不可进入，耐久 " + tile.Durability + "，自身回合结束时为正交相邻单位提供 4 点结构护盾，被摧毁即不再提供");
+                objects.Add(tile.IsDestroyed ? "护罩发生器已损毁" :
+                    "护罩发生器：耐久 " + tile.Durability + "；回合结束为相邻单位提供 4 点护盾");
             else if (tile.IsTowerMechanism)
-                objects.Add(tile.IsDestroyed ? "塔内机关已拆除，不再计入维护链" :
-                    "塔内机关不可进入，耐久 " + tile.Durability + "，放行前不提供任何效果，放行后计入维护链，双方均可拆除");
+                objects.Add(tile.IsDestroyed ? "塔内机关已拆除" :
+                    "塔内机关：耐久 " + tile.Durability + "，放行后计入维护链");
             else if (tile.IsDevice)
-                objects.Add(tile.IsDestroyed ? "损毁设备已经失效" :
-                    "战场设备耐久 " + tile.Durability + "，可被互动、破坏或指定术式影响");
+                objects.Add(tile.IsDestroyed ? "战场设备已损毁" :
+                    "战场设备：耐久 " + tile.Durability + "，可互动或破坏");
             if (state.Loot != null && state.Loot.Position == position)
-                objects.Add(state.Loot.IsLooted ? "战利品箱已经清空" : "战利品箱可在相邻位置打开");
+                objects.Add(state.Loot.IsLooted ? "战利品箱已清空" : "战利品箱：相邻位置可打开");
             else if (state.LootSource != null && state.LootSource.Position == position)
-                objects.Add(state.LootSource.State == LootSearchState.Emptied ? "检修备件箱已经清空" :
-                    "中央检修备件箱可在正交邻格消耗 1 AP 搜刮，固定藏有苗床回流芯");
+                objects.Add(state.LootSource.State == LootSearchState.Emptied ? "检修备件箱已清空" :
+                    "检修备件箱：正交相邻可消耗 1 AP 搜刮");
             return objects.Count == 0 ? string.Empty : string.Join("；", objects) + "。";
         }
 

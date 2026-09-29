@@ -123,19 +123,28 @@ namespace OCC.Combat.Tests
             string heavy = CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(heavyPosition), heavyPosition);
 
-            Assert.That(light, Does.StartWith("轻掩体"));
-            Assert.That(light, Does.Contain("耐久 4"));
-            Assert.That(light, Does.Contain("2 护盾"));
-            Assert.That(light.Count(value => value == '。'), Is.EqualTo(1));
-            Assert.That(heavy, Does.StartWith("重掩体"));
-            Assert.That(heavy, Does.Contain("阻挡移动与视线"));
-            Assert.That(heavy, Does.Contain("4 护盾"));
+            Assert.That(light, Is.EqualTo("轻掩体：回合结束为站在其上的单位提供 2 点护盾。"));
+            Assert.That(heavy, Is.EqualTo("重掩体：回合结束为相邻单位提供 4 点护盾。"));
 
             state.Map.GetTile(lightPosition).Durability = 0;
             Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(lightPosition), lightPosition), Does.Contain("已失去防护效果"));
             Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state,
                 state.Map.GetTile(new GridPosition(0, 1)), new GridPosition(0, 1)), Is.Empty);
+        }
+
+        [Test]
+        public void TileDurability_KeepsOriginalMaximumThroughDamageAndClone()
+        {
+            TileState tile = new TileState { Cover = CoverType.Light, Durability = 8 };
+            tile.Durability = 3;
+            TileState copy = tile.Clone();
+
+            Assert.That(tile.MaxDurability, Is.EqualTo(8));
+            Assert.That(copy.Durability, Is.EqualTo(3));
+            Assert.That(copy.MaxDurability, Is.EqualTo(8));
+            copy.ResetDurability(6);
+            Assert.That(copy.MaxDurability, Is.EqualTo(6));
         }
 
         [Test]
@@ -428,7 +437,7 @@ namespace OCC.Combat.Tests
             CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
             assets.LoadRuntime();
             UnitState hero = new UnitState("hero", true, new GridPosition(1, 1));
-            hero.Equip(EnemyAbilityCatalog.HeavyCrossbow, hero.OffHand, hero.SkillOne, hero.SkillTwo);
+            hero.Equip(new WeaponDefinition("test_heavy_crossbow", "绞盘重弩", DamageType.Physical, 3, 4, minimumRange: 2), hero.OffHand, hero.SkillOne, hero.SkillTwo);
             UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 1));
             CombatState state = new CombatState(new GridMap(6, 3), new[] { hero, enemy });
             CombatResolver.BeginTurn(state, hero.Id);

@@ -91,11 +91,11 @@ namespace OCC.Combat
 
         public static readonly IReadOnlyList<FormalArtEntry> Intents = new[]
         {
-            new FormalArtEntry("intent.attack", "attack", "Art/FormalIntentIcons16/attack"),
-            new FormalArtEntry("intent.cast", "cast", "Art/FormalIntentIcons16/cast"),
-            new FormalArtEntry("intent.move", "move", "Art/FormalCommandIcons16/move"),
-            new FormalArtEntry("intent.defend", "defend", "Art/FormalIntentIcons16/defend"),
-            new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalIntentIcons16/interact_destroy")
+            new FormalArtEntry("intent.attack", "attack", "Art/FormalEnemyIntentIcons/attack"),
+            new FormalArtEntry("intent.cast", "cast", "Art/FormalEnemyIntentIcons/cast"),
+            new FormalArtEntry("intent.move", "move", "Art/FormalEnemyIntentIcons/move"),
+            new FormalArtEntry("intent.defend", "defend", "Art/FormalEnemyIntentIcons/defend"),
+            new FormalArtEntry("intent.interact_destroy", "interact_destroy", "Art/FormalEnemyIntentIcons/interact_destroy")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Statuses = new[]

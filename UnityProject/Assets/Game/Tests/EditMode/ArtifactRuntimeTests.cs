@@ -202,7 +202,7 @@ namespace OCC.Combat.Tests
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
             UnitState enemy = new UnitState("enemy", false, new GridPosition(6, 1));
             hero.Equip(CombatCatalog.Rifle, null, null);
-            enemy.Equip(EnemyAbilityCatalog.HeavyCrossbow, null, null);
+            EnemyArchetypes.Get("rune_arbalist").Apply(enemy);
             CombatState combat = new CombatState(map, new[] { hero, enemy });
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatResolver.BeginTurn(combat, hero.Id);
@@ -230,7 +230,7 @@ namespace OCC.Combat.Tests
             GridMap map = new GridMap(7, 3);
             UnitState hero = new UnitState("hero", true, new GridPosition(0, 1));
             UnitState enemy = new UnitState("enemy", false, new GridPosition(4, 1));
-            enemy.Equip(EnemyAbilityCatalog.HeavyCrossbow, null, null);
+            EnemyArchetypes.Get("rune_arbalist").Apply(enemy);
             CombatState combat = new CombatState(map, new[] { hero, enemy });
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
             CombatResolver.BeginTurn(combat, hero.Id);

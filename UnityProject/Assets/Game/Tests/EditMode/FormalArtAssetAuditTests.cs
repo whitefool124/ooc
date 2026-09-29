@@ -72,12 +72,11 @@ namespace OCC.Combat.Tests
             foreach (string path in paths)
             {
                 TextureImporter importer = AssetImporter.GetAtPath(path) as TextureImporter;
-                bool semanticMicroIcon = path.Contains("/FormalCommandIcons16/", StringComparison.Ordinal) ||
-                                         path.Contains("/FormalIntentIcons16/", StringComparison.Ordinal) ||
-                                         path.Contains("/FormalMapStateIcons16/", StringComparison.Ordinal) ||
-                                         path.Contains("/FormalItemSemanticIcons16/", StringComparison.Ordinal) ||
-                                         path.Contains("/FormalEquipmentSlotIcons16/", StringComparison.Ordinal);
-                float expectedPixelsPerUnit = semanticMicroIcon ? 16f : 32f;
+                string folder = path.Substring(0, path.LastIndexOf('/'));
+                bool semanticMicroIcon = folder.EndsWith("16", StringComparison.Ordinal) &&
+                                         !folder.EndsWith("FormalUISkin16", StringComparison.Ordinal);
+                bool resourceMicroIcon = folder.EndsWith("12", StringComparison.Ordinal);
+                float expectedPixelsPerUnit = resourceMicroIcon ? 12f : semanticMicroIcon ? 16f : 32f;
                 if (importer == null || importer.textureType != TextureImporterType.Sprite || importer.filterMode != FilterMode.Point ||
                     importer.wrapMode != TextureWrapMode.Clamp || importer.mipmapEnabled ||
                     Math.Abs(importer.spritePixelsPerUnit - expectedPixelsPerUnit) > .01f)
@@ -271,29 +270,36 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyIntentIcons_AreIndependent16PixelFormalAssets()
+        public void EnemyIntentIcons_AreIndependentAdaptiveFormalAssets()
         {
+            var expectedSizes = new Dictionary<string, Vector2>
+            {
+                ["attack"] = new Vector2(19, 19),
+                ["cast"] = new Vector2(9, 18),
+                ["move"] = new Vector2(21, 21),
+                ["defend"] = new Vector2(12, 16),
+                ["interact_destroy"] = new Vector2(22, 21)
+            };
             foreach (FormalArtEntry entry in FormalArtRegistry.Intents)
             {
                 Sprite sprite = Resources.Load<Sprite>(entry.ResourcePath);
                 Assert.That(sprite, Is.Not.Null, entry.AssetId);
-                Assert.That(sprite.rect.size, Is.EqualTo(new Vector2(16, 16)), entry.AssetId);
+                Assert.That(sprite.rect.size, Is.EqualTo(expectedSizes[entry.RuntimeId]), entry.AssetId);
                 TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
                 Assert.That(importer, Is.Not.Null, entry.AssetId);
                 Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), entry.AssetId);
                 Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), entry.AssetId);
                 Assert.That(importer.mipmapEnabled, Is.False, entry.AssetId);
-                Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(16f), entry.AssetId);
+                Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f), entry.AssetId);
             }
-            Assert.That(FormalArtRegistry.IntentPath("move"), Is.EqualTo(FormalArtRegistry.CommandPath("move")),
-                "movement intent must use the approved arrow instead of the ambiguous legacy footprint pixels");
+            Assert.That(FormalArtRegistry.IntentPath("move"), Is.Not.EqualTo(FormalArtRegistry.CommandPath("move")),
+                "movement intent uses its own boot silhouette");
         }
 
         [Test]
         public void CombatCoreSemanticIcons_UseNative16And32PixelContracts()
         {
             AssertCombatSemanticGroup(FormalArtRegistry.Commands, 16);
-            AssertCombatSemanticGroup(FormalArtRegistry.Intents, 16);
             AssertCombatSemanticGroup(FormalArtRegistry.Statuses, 32);
             AssertCombatSemanticGroup(FormalArtRegistry.Feedback, 32);
         }

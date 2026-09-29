@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -103,7 +103,7 @@ namespace OCC.Combat
             new RogueliteEncounterDefinition("first_b2_greenhouse_collection_room", FirstRegionLevelCatalog.GreenhouseCollectionRoom.Id,
                 RogueliteEncounterTier.Weak, "中央藤圈宝箱、南北双晶簇、南侧普通长路",
                 "主角从 B4 入场；侧锋在 G2，替身偶在 G5，分别贴近北、南晶簇接近。",
-                "晶簇爆裂会伤害正交邻格并生成五格碎晶", "第二组固定三选一", 1,
+                "晶簇爆裂会伤害相邻格并生成五格碎晶", "第二组固定三选一", 1,
                 "raider", "sigil_mauler");
 
         public static readonly RogueliteEncounterDefinition ThirdBattleRainPrismCourt =

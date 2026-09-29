@@ -1218,6 +1218,10 @@ namespace OCC.Combat.Presentation
         public ArtifactBattleState CurrentArtifactBattle => artifactBattle;
         public string SelectedAction => selection.Action;
         public string SelectedTargetId => selection.TargetId;
+        public void ClearSelectedEnemyInspection()
+        {
+            if (selection.ClearTarget()) MarkPresentation(UiPresentationArea.Combat);
+        }
         public bool IsKeyboardTargeting => selection.IsKeyboardTargeting;
         public GridPosition KeyboardTargetPosition => selection.KeyboardPosition;
         public CombatActionPreview CurrentActionPreview => BuildActionPreview(selection.Action);

@@ -35,7 +35,7 @@ namespace OCC.Combat.Tests
             Assert.That(keeper.DisplayName, Is.EqualTo("老库管"));
             Assert.That(keeper.IsElite, Is.True);
             Assert.That(keeper.MaxHealth, Is.EqualTo(18));
-            Assert.That(keeper.Weapon.DisplayName, Is.EqualTo("旧式检定器"));
+            Assert.That(keeper.Attack.DisplayName, Is.EqualTo("旧式检定器"));
             Assert.That(keeper.PrimarySkill.DisplayName, Is.EqualTo("旧脉冲"));
             Assert.That(keeper.HasSecondarySkill, Is.False);
 
@@ -43,7 +43,7 @@ namespace OCC.Combat.Tests
             Assert.That(hand.DisplayName, Is.EqualTo("试制员"));
             Assert.That(hand.IsElite, Is.True);
             Assert.That(hand.MaxHealth, Is.EqualTo(16));
-            Assert.That(hand.Weapon.DisplayName, Is.EqualTo("工具"));
+            Assert.That(hand.Attack.DisplayName, Is.EqualTo("工具"));
             Assert.That(hand.PrimarySkill.DisplayName, Is.EqualTo("布放"));
             Assert.That(hand.HasSecondarySkill, Is.False);
         }

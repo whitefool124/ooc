@@ -31,7 +31,7 @@ namespace OCC.Combat.Presentation
             Matrix4x4 previous = GUI.matrix;
             GUI.matrix = Matrix4x4.TRS(new Vector2((Screen.width - 1920f * scale) * .5f, (Screen.height - 1080f * scale) * .5f), Quaternion.identity, Vector3.one * scale);
             GUI.skin.font = FormalUiKit.Font;
-            GUI.skin.label.fontSize = 18; GUI.skin.button.fontSize = 17; GUI.skin.textArea.fontSize = 16;
+            GUI.skin.label.fontSize = 24; GUI.skin.button.fontSize = 24; GUI.skin.textArea.fontSize = 24;
             if (!open)
             {
                 if (bootstrap.IsTrainingRangeActive) DrawTrainingRangeLauncher();

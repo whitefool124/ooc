@@ -1,4 +1,4 @@
-﻿namespace OCC.Combat
+namespace OCC.Combat
 {
     public enum CoverType { None, Light, Heavy }
 
@@ -15,7 +15,22 @@
 
         public static TileState Empty => new TileState();
         public CoverType Cover { get; set; }
-        public int Durability { get; set; }
+        private int durability;
+        public int Durability
+        {
+            get => durability;
+            set
+            {
+                if (value > durability) MaxDurability = value;
+                durability = value;
+            }
+        }
+        public int MaxDurability { get; private set; }
+        public void ResetDurability(int value)
+        {
+            durability = value;
+            MaxDurability = System.Math.Max(0, value);
+        }
         /// <summary>技能生成的结构所属单位；地图预置掩体没有归属。</summary>
         public string StructureOwnerUnitId { get; set; }
         public bool IsObjective { get; set; }
@@ -43,7 +58,7 @@
         public string EffectSourceId { get; set; }
         /// <summary>约束纹：效果层。进入该格的单位本回合留在原地；被浅水、火场、烟尘覆盖即失效。</summary>
         public bool IsBindingMark { get; set; }
-        /// <summary>过载装置：被摧毁时对正交邻格结算一次不分敌我的过载伤害。</summary>
+        /// <summary>过载装置：被摧毁时对相邻格结算一次不分敌我的过载伤害。</summary>
         public bool IsOverloadDevice { get; set; }
         /// <summary>护罩发生器：为配置声明范围内的单位提供结构护盾；装置被摧毁时护盾立即消失。</summary>
         public bool IsWardGenerator { get; set; }
@@ -65,7 +80,7 @@
             || (IsTowerMechanism && Durability > 0);
         public bool BlocksLineOfSight => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsLampVine && Durability > 0);
         public int DamageReduction => IsDestroyed ? 0 : Cover == CoverType.Light ? 1 : Cover == CoverType.Heavy ? 2 : 0;
-        public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, StructureOwnerUnitId = StructureOwnerUnitId, IsObjective = IsObjective, IsDevice = IsDevice,
+        public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, MaxDurability = MaxDurability, StructureOwnerUnitId = StructureOwnerUnitId, IsObjective = IsObjective, IsDevice = IsDevice,
             IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsPressureCrystal = IsPressureCrystal, IsLootChest = IsLootChest, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
             IsPermanentWall = IsPermanentWall,
             IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt,

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -303,7 +303,7 @@ namespace OCC.Combat
                     return CombatCommand.UseSkillAt(enemy.Id, WindPushSkillIndex, hero.Position, default);
                 return CombatCommand.EndTurn(enemy.Id);
             }
-            int weaponRange = enemy.MainHand?.Range ?? 1;
+            int weaponRange = enemy.BasicAttack?.Range ?? 1;
             if (enemy.Position.ManhattanDistance(hero.Position) <= weaponRange &&
                 (weaponRange <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
                 return CombatCommand.Attack(enemy.Id, hero.Id);
@@ -409,7 +409,7 @@ namespace OCC.Combat
             if (rebuild)
             {
                 TileState rebuilt = state.Map.GetTile(command.Destination).Clone();
-                rebuilt.Durability = TileState.HeavyDurability;
+                rebuilt.ResetDurability(TileState.HeavyDurability);
                 state.Map.SetTile(command.Destination, rebuilt);
                 vanguardCoverResponses.Remove(vanguard.Id);
                 vanguardDismantleCooldown[vanguard.Id] = 2;
@@ -472,7 +472,7 @@ namespace OCC.Combat
         private static CombatCommand ChooseFieldActionOnlyCommand(CombatState state, UnitState enemy, UnitState hero)
         {
             if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
-            int weaponRange = enemy.MainHand?.Range ?? 1;
+            int weaponRange = enemy.BasicAttack?.Range ?? 1;
             if (enemy.Position.ManhattanDistance(hero.Position) <= weaponRange &&
                 (weaponRange <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
                 return CombatCommand.Attack(enemy.Id, hero.Id);
@@ -689,7 +689,7 @@ namespace OCC.Combat
             {
                 GridPosition[] cells = Adjacent(command.Destination).Where(state.Map.IsInside).ToArray();
                 return new EnemyIntentPresentation("SK-SUP-14:" + enemy.Id + ":" + command.Destination.X + "," + command.Destination.Y,
-                    "引爆", "主角相邻过载装置", "装置正交邻格单位各受8点以太伤害，敌我一致。",
+                    "引爆", "主角相邻过载装置", "装置相邻格单位各受8点以太伤害，敌我一致。",
                     "attack", true, command.Destination, 8, attackRange: cells, affectedCells: cells);
             }
             if (IsLibrarian(enemy) && command.Type == CombatCommandType.UseSkill &&

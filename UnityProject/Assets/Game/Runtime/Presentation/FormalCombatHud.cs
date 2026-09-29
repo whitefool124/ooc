@@ -1421,7 +1421,7 @@ namespace OCC.Combat.Presentation
                     Label = status.DisplayName + " " + status.ValueText,
                     Icon = StatusIcon(semantic.Key),
                     Accent = ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color parsed) ? parsed : FormalUiTheme.Cyan,
-                    Body = status.DisplayName + "\n" + status.Detail
+                    Body = status.HoverDescription
                 });
             }
 
@@ -1429,13 +1429,13 @@ namespace OCC.Combat.Presentation
             {
                 if (heroStatusRows.Count >= HeroStatusEntryCount) break;
                 if (entry.Kind != CombatStatusBarEntryKind.OngoingEffect) continue;
-                string body = string.IsNullOrEmpty(entry.Detail) ? string.Empty : entry.Detail + "\n";
+                string body = CombatStatusPresentation.FirstSentence(entry.Detail);
                 heroStatusRows.Add(new HeroStatusRow
                 {
                     Label = CompactHud(entry.DisplayName, HeroEntryNameMaxChars),
                     Icon = null,
                     Accent = FormalUiTheme.Cyan,
-                    Body = "场地效果\n" + body + "持续　" + entry.TimingText
+                    Body = body
                 });
             }
 
@@ -1485,8 +1485,7 @@ namespace OCC.Combat.Presentation
             if (index < 0 || index >= passives.Length)
                 return new FormalTooltipContent("被动", "这里没有被动。", FormalUiTheme.Amber);
             CombatStatusBarEntry entry = passives[index];
-            string body = string.IsNullOrEmpty(entry.Detail) ? string.Empty : entry.Detail + "\n";
-            body += "来源　" + PassiveSourceLabel(entry) + "　" + entry.TimingText;
+            string body = CombatStatusPresentation.FirstSentence(entry.Detail);
             return new FormalTooltipContent(entry.DisplayName, "被动详情", body, FormalUiTheme.Amber);
         }
 
@@ -1497,16 +1496,6 @@ namespace OCC.Combat.Presentation
             if (string.IsNullOrEmpty(artId)) return null;
             try { return Resources.Load<Texture2D>(FormalArtRegistry.UnitPath(artId)); }
             catch (KeyNotFoundException) { return null; }
-        }
-
-        private static string PassiveSourceLabel(CombatStatusBarEntry entry)
-        {
-            string runtimeId = entry?.RuntimeId ?? string.Empty;
-            if (runtimeId.StartsWith("origin:", StringComparison.Ordinal)) return "出身";
-            if (runtimeId.StartsWith("equipment:", StringComparison.Ordinal)) return "装备";
-            if (runtimeId.StartsWith("spell:", StringComparison.Ordinal)) return "术式";
-            if (runtimeId.StartsWith("artifact:", StringComparison.Ordinal)) return "法宝";
-            return "战斗效果";
         }
 
         private void RefreshHistory(CombatState state)

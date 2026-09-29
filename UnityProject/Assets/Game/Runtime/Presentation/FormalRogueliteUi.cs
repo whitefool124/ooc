@@ -586,11 +586,11 @@ namespace OCC.Combat.Presentation
                 new Vector2(16, -16), new Vector2(128, 128));
             typeIcon.color = Color.white;
             Text typeLabel = Label("类型", TypeLabel(node.Type), identity.transform, new Vector2(220, -42), new Vector2(236, 44), 25, accent, TextAnchor.MiddleLeft);
-            typeLabel.fontStyle = FontStyle.Bold;
+            typeLabel.fontStyle = FontStyle.Normal;
             Label("状态", RogueliteMapVisualPresentation.StateLabel(visual), identity.transform, new Vector2(220, -88), new Vector2(236, 42), 22,
                 cleared ? safe : current ? cyan : accent, TextAnchor.MiddleLeft);
             Text nameLabel = Label("节点名称", displayName, identity.transform, new Vector2(36, -200), new Vector2(420, 86), 36, text, TextAnchor.UpperLeft);
-            nameLabel.fontStyle = FontStyle.Bold;
+            nameLabel.fontStyle = FontStyle.Normal;
             Label("地点印象", NodeRoomMaterialCue(node.Type), identity.transform, new Vector2(36, -294), new Vector2(456, 72), 19, muted, TextAnchor.UpperLeft);
             Label("节点说明", node.Summary,
                 identity.transform, new Vector2(36, -380), new Vector2(452, 122), 20, text, TextAnchor.UpperLeft);
@@ -599,7 +599,7 @@ namespace OCC.Combat.Presentation
             {
                 Text resourceHeading = Label("当前资源标题", "当前资源", identity.transform,
                     new Vector2(36, -478), new Vector2(420, 36), 23, accent, TextAnchor.MiddleLeft);
-                resourceHeading.fontStyle = FontStyle.Bold;
+                resourceHeading.fontStyle = FontStyle.Normal;
                 Label("当前生命魔力", "生命 " + run.CurrentHealth + "/" + UnitState.HeroBaseHealth +
                     "　个人魔力 " + run.CurrentMana + "/" + RogueRuntimeConstants.MaximumPersonalMana,
                     identity.transform, new Vector2(36, -526), new Vector2(420, 40), 21, text, TextAnchor.MiddleLeft);
@@ -647,7 +647,7 @@ namespace OCC.Combat.Presentation
             }
 
             Text pageTitle = Label("页面标题", NodeRoomActionTitle(node, current, cleared), parent, new Vector2(44, -32), new Vector2(1000, 58), 38, text, TextAnchor.MiddleLeft);
-            pageTitle.fontStyle = FontStyle.Bold;
+            pageTitle.fontStyle = FontStyle.Normal;
             Label("页面说明", NodeRoomInstruction(node, current, cleared), parent, new Vector2(44, -104), new Vector2(880, 70), 22, muted, TextAnchor.UpperLeft);
             FormalUiEffects.AddChapterMarker(parent, FormalUiAssetPlacement.ChapterMarker(node), new Vector2(1080, -56), 2f);
             FormalUiEffects.AddChapterDivider(parent, FormalUiAssetPlacement.ChapterDivider(node), new Vector2(800, -128), 2f);
@@ -1438,7 +1438,7 @@ namespace OCC.Combat.Presentation
                 string threshold = PlayerFacingCopy.AcademyTimeOutcome(preview.CrossesTransition, preview.CrossesWarning, preview.CrossesConsolidation);
                 Text costHeading = Label("出发结算标题", "出发结算", parent, new Vector2(44, -292),
                     new Vector2(180, 38), 23, accent, TextAnchor.MiddleLeft);
-                costHeading.fontStyle = FontStyle.Bold;
+                costHeading.fontStyle = FontStyle.Normal;
                 Label("出发结算内容", "难度 " + (string.IsNullOrEmpty(preview.EncounterLabel) ? preview.RiskLabel : preview.EncounterLabel) +
                     "　时序 " + (preview.IsZeroTime ? "不花时间" : preview.TimeCost.ToString()) +
                     "　生命不恢复　回来时魔力 +" + preview.ExpectedManaRecovery,
@@ -3276,7 +3276,7 @@ namespace OCC.Combat.Presentation
                     name.rectTransform.sizeDelta = new Vector2(size.x - inset * 2f, 40f);
                     detailLabel.rectTransform.anchoredPosition = new Vector2(inset, -Mathf.Max(48f, (size.y - 72f) * .5f + 40f));
                     detailLabel.rectTransform.sizeDelta = new Vector2(size.x - inset * 2f, 30f);
-                    detailLabel.fontSize = 17;
+                    detailLabel.fontSize = FormalUiTheme.BodyFontSize;
                     detailLabel.alignment = TextAnchor.MiddleCenter;
                 }
                 else
@@ -3292,7 +3292,7 @@ namespace OCC.Combat.Presentation
                 if (size.y <= 56f)
                 {
                     float labelInset = string.IsNullOrEmpty(iconPath) ? 16f : 64f;
-                    name.fontSize = 18;
+                    name.fontSize = FormalUiTheme.BodyFontSize;
                     name.rectTransform.anchoredPosition = new Vector2(labelInset, -Mathf.Max(6f, (size.y - 36f) * .5f));
                     name.rectTransform.sizeDelta = new Vector2(Mathf.Max(0f, size.x - labelInset - 16f), 36f);
                 }

@@ -46,8 +46,11 @@ namespace OCC.Combat.Tests
             string spellBody = CombatHoverDescriptionTable.SpellBody(spell);
             string artifactBody = CombatHoverDescriptionTable.ArtifactBody(ArtifactCatalog.Get("F-T01"), 2, 4);
 
-            Assert.That(spellBody, Does.Contain("造成 24 点武器伤害"));
-            Assert.That(spellBody, Does.Contain("无视护盾失去 8 点生命"));
+            Assert.That(spellBody, Does.Contain("造成24点武器伤害"));
+            Assert.That(spellBody, Does.Contain("失去8点生命"));
+            Assert.That(spellBody.IndexOf("失去8点生命", System.StringComparison.Ordinal),
+                Is.EqualTo(spellBody.LastIndexOf("失去8点生命", System.StringComparison.Ordinal)));
+            Assert.That(spellBody, Does.Not.Contain("无视护盾"));
             Assert.That(artifactBody, Does.Contain(ArtifactCatalog.Get("F-T01").EffectSummary));
             Assert.That(artifactBody, Does.Contain("剩余2　总计4 次"));
 

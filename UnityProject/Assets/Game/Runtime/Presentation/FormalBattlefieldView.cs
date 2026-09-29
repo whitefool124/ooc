@@ -68,6 +68,8 @@ namespace OCC.Combat.Presentation
         private readonly List<RawImage> structures = new List<RawImage>();
         private string structureLevelId;
         private BattlefieldHoverCardView hoverCard;
+        private BarView objectDurability;
+        private BattlefieldEnemyDetailView enemyDetail;
         private GridPosition hoverPosition;
         private bool hasHoverPosition;
         private bool hoverPointerInside;
@@ -99,6 +101,7 @@ namespace OCC.Combat.Presentation
         private bool combatEntryQueued;
 
         public bool IsVisible => root != null && root.activeSelf;
+        public bool IsObjectDurabilityVisible => objectDurability != null && objectDurability.Root.activeSelf;
         // The entry focus frame belongs behind every unit, but above the battlefield cells.
         public RectTransform EntryFocusUnderlay => unitLayerRect;
         // Reuse the regions of the currently drawn frame, rather than final simulation positions.
@@ -149,6 +152,7 @@ namespace OCC.Combat.Presentation
             if (!visible)
             {
                 HideTooltip();
+                enemyDetail?.Hide();
                 HideContextMenu();
                 CancelPendingPrimaryClick();
                 return;
@@ -211,7 +215,9 @@ namespace OCC.Combat.Presentation
                     enemyEdges.TryGetValue(pair.Key, out byte redEdges) ? redEdges : (byte)0,
                     playerEffectCells.Contains(pair.Key) ? BoundaryEdges(playerEffectCells, pair.Key) : (byte)0);
             RefreshUnitOrder();
+            RefreshHoveredObjectDurability(state, presented);
             UpdateHoverReveal();
+            RefreshEnemyDetail(state, presented);
         }
 
         private void EnsureUi()
@@ -245,6 +251,31 @@ namespace OCC.Combat.Presentation
             hoverCard = Instantiate(prefab, root.transform, false);
             hoverCard.name = "地块悬浮信息组合窗";
             hoverCard.Hide();
+
+            BattlefieldEnemyDetailView detailPrefab = Resources.Load<BattlefieldEnemyDetailView>(
+                BattlefieldEnemyDetailView.ResourcePath);
+            if (detailPrefab == null)
+                throw new InvalidOperationException("Missing enemy detail prefab at Resources/" +
+                    BattlefieldEnemyDetailView.ResourcePath + ".prefab");
+            enemyDetail = Instantiate(detailPrefab, root.transform, false);
+            enemyDetail.name = "选中敌人详情";
+            enemyDetail.Initialize(() => host?.ClearSelectedEnemyInspection(), canvas);
+        }
+
+        private void RefreshEnemyDetail(CombatState state,
+            IReadOnlyDictionary<GridPosition, BattlefieldCellPresentation> presented)
+        {
+            if (enemyDetail == null) return;
+            UnitState enemy = string.IsNullOrEmpty(host.SelectedTargetId) ? null : state.GetUnit(host.SelectedTargetId);
+            if (enemy == null || enemy.IsHero || !enemy.IsAlive)
+            {
+                enemyDetail.Hide();
+                return;
+            }
+            presented.TryGetValue(enemy.Position, out BattlefieldCellPresentation cell);
+            enemyDetail.Bind(state, enemy, cell);
+            enemyDetail.transform.SetAsLastSibling();
+            enemyDetail.RaiseTooltip();
         }
 
         private void EnsureCells(int width, int height)
@@ -418,7 +449,10 @@ namespace OCC.Combat.Presentation
                 statusRect.anchorMin = statusRect.anchorMax = statusRect.pivot = new Vector2(0f, 1f);
                 cell.StatusRoots[i] = status;
                 cell.StatusIcons[i] = status.AddComponent<RawImage>();
-                cell.StatusIcons[i].raycastTarget = false;
+                cell.StatusIcons[i].raycastTarget = true;
+                BattlefieldCellPointer statusPointer = status.AddComponent<BattlefieldCellPointer>();
+                statusPointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
+                status.AddComponent<FormalHoverTooltipTrigger>();
                 cell.StatusValues[i] = Label("数值", statusRect);
                 cell.StatusValues[i].fontSize = FormalUiTheme.BodyFontSize;
                 cell.StatusValues[i].fontStyle = FontStyle.Normal;
@@ -763,8 +797,10 @@ namespace OCC.Combat.Presentation
             {
                 RectTransform unit = cell.Unit.rectTransform;
                 float unitScale = unit.sizeDelta.x / 128f;
-                // Conservative visible-body region, excluding the authored transparent top margin.
-                Rect body = new Rect(unit.anchoredPosition.x + 8 * unitScale, -unit.anchoredPosition.y + 24 * unitScale,
+                // The head clearance follows the drawn height. Narrow 32x64 units are rendered
+                // taller than they are wide; using their width pushed the intent a full step up.
+                float unitHeightScale = unit.sizeDelta.y / 128f;
+                Rect body = new Rect(unit.anchoredPosition.x + 8 * unitScale, -unit.anchoredPosition.y + 24 * unitHeightScale,
                     unit.sizeDelta.x - 16 * unitScale, unit.sizeDelta.y - 32 * unitScale);
                 annotationObstacles.Add(body);
                 if (!string.IsNullOrEmpty(cell.PresentedUnitId)) annotationBodies[cell.PresentedUnitId] = body;
@@ -1071,10 +1107,10 @@ namespace OCC.Combat.Presentation
             SetTopLeft(badge.Icon.rectTransform, 0f, 0f, 16f * scale, 16f * scale);
             SetTopLeft(badge.Value.rectTransform, 16f * scale, 0f, 16f * scale, 16f * scale);
             badge.Value.text = shield.Current.ToString();
-            badge.Value.fontSize = Mathf.Max(10, Mathf.RoundToInt(12f * scale));
+            badge.Value.fontSize = FormalUiTheme.PixelAlignedFontSize(Mathf.RoundToInt(12f * scale), false);
         }
 
-        private static void RefreshStatuses(CellView cell, IReadOnlyList<BattlefieldStatusVisual> statuses, BattlefieldRect contract)
+        private void RefreshStatuses(CellView cell, IReadOnlyList<BattlefieldStatusVisual> statuses, BattlefieldRect contract)
         {
             for (int i = 0; i < cell.StatusRoots.Length; i++)
             {
@@ -1087,6 +1123,14 @@ namespace OCC.Combat.Presentation
                 cell.StatusIcons[i].texture = statuses[i].Texture;
                 cell.StatusValues[i].text = statuses[i].Presentation.ValueText;
                 Stretch(cell.StatusValues[i].rectTransform);
+                CombatStatusPresentation description = statuses[i].Presentation;
+                CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(
+                    CombatFeedbackCatalog.ForStatus(description.Status));
+                Color accent = ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color parsed)
+                    ? parsed : FormalUiTheme.Amber;
+                cell.StatusRoots[i].GetComponent<FormalHoverTooltipTrigger>().Configure(enemyDetail.HoverTooltip,
+                    () => new FormalTooltipContent(description.DisplayName + " " + description.ValueText,
+                        description.HoverDescription, accent));
             }
         }
 
@@ -1098,7 +1142,7 @@ namespace OCC.Combat.Presentation
             if (!active) return;
             Rect absolute = CombatUnitHudLayout.EnemyIntentBadgeRect(contract, intent.ExpectedDamage);
             SetTopLeft(cell.IntentRect, absolute.x - contract.X, absolute.y - contract.Y, absolute.width, absolute.height);
-            Rect icon = CombatUnitHudLayout.EnemyIntentIconLocalRect();
+            Rect icon = CombatUnitHudLayout.EnemyIntentTextureLocalRect(texture.width, texture.height);
             SetTopLeft(cell.IntentIcon.rectTransform, icon.x, icon.y, icon.width, icon.height);
             cell.IntentIcon.texture = texture;
             cell.IntentIcon.color = Color.white;
@@ -1516,6 +1560,46 @@ namespace OCC.Combat.Presentation
             lastHoverRevealAt = Time.unscaledTime;
         }
 
+        private void RefreshHoveredObjectDurability(CombatState state,
+            IReadOnlyDictionary<GridPosition, BattlefieldCellPresentation> presented)
+        {
+            CellView cell = null;
+            BattlefieldCellPresentation model = null;
+            bool canShow = hasHoverPosition && hoverPointerInside &&
+                !host.IsInteractionModalOpen && (contextMenuRoot == null || !contextMenuRoot.activeSelf) &&
+                cells.TryGetValue(hoverPosition, out cell) &&
+                presented.TryGetValue(hoverPosition, out model) &&
+                model != null && !string.IsNullOrWhiteSpace(model.ObjectHoverText);
+            TileState tile = canShow ? state.Map.GetTile(hoverPosition) : null;
+            if (tile == null || tile.Durability <= 0 || tile.MaxDurability <= 0)
+            {
+                if (objectDurability != null) objectDurability.Root.SetActive(false);
+                return;
+            }
+
+            if (objectDurability == null)
+            {
+                objectDurability = ColoredBar("物块耐久", overlayLayerRect, null, FormalUiTheme.Amber);
+                objectDurability.Value.color = Color.white;
+                Outline valueOutline = objectDurability.Value.gameObject.GetComponent<Outline>();
+                if (valueOutline == null)
+                    valueOutline = objectDurability.Value.gameObject.AddComponent<Outline>();
+                valueOutline.effectColor = Color.black;
+                valueOutline.effectDistance = new Vector2(1f, -1f);
+                valueOutline.useGraphicAlpha = false;
+            }
+            const float width = 128f;
+            const float height = 16f;
+            float cellSize = host.BattlefieldViewport.CellSize;
+            float x = cell.Rect.anchoredPosition.x + (cellSize - width) * .5f;
+            float y = -cell.Rect.anchoredPosition.y + cellSize - (model.Unit == null ? 8f : 32f);
+            SetTopLeft(objectDurability.Rect, x, y, width, height);
+            objectDurability.Fill.fillAmount = Mathf.Clamp01(tile.Durability / (float)tile.MaxDurability);
+            objectDurability.Value.text = tile.Durability + "/" + tile.MaxDurability;
+            objectDurability.Root.SetActive(true);
+            objectDurability.Root.transform.SetAsLastSibling();
+        }
+
         public static bool ShouldRevealCellHover(float elapsedSeconds, bool hasPosition,
             bool pointerInside, bool alreadyRevealed) =>
             hasPosition && pointerInside && !alreadyRevealed && elapsedSeconds >= CellHoverRevealDelaySeconds;
@@ -1564,6 +1648,7 @@ namespace OCC.Combat.Presentation
         private void HideTooltip()
         {
             hoverCard?.Hide();
+            if (objectDurability != null) objectDurability.Root.SetActive(false);
             hasHoverPosition = false;
             hoverPointerInside = false;
             hoverRevealed = false;
@@ -1637,12 +1722,9 @@ namespace OCC.Combat.Presentation
             Text value = Label("护盾数值", rect);
             value.alignment = TextAnchor.MiddleCenter;
             value.color = new Color(.92f, .94f, .95f, 1f);
-            value.fontStyle = FontStyle.Bold;
+            value.fontStyle = FontStyle.Normal;
             value.horizontalOverflow = HorizontalWrapMode.Overflow;
             value.verticalOverflow = VerticalWrapMode.Overflow;
-            Shadow valueShadow = value.gameObject.AddComponent<Shadow>();
-            valueShadow.effectColor = new Color(.06f, .07f, .08f, 1f);
-            valueShadow.effectDistance = new Vector2(1f, -1f);
             return new ShieldBadgeView { Root = root, Rect = rect, Background = background, Icon = icon, Value = value };
         }
 

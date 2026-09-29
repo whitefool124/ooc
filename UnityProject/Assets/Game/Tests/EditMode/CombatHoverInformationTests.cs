@@ -59,7 +59,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(details, Does.Contain("伤害："));
             Assert.That(details, Does.Contain("敌人资料"));
-            Assert.That(details, Does.Contain(enemy.MainHand.DisplayName));
+            Assert.That(details, Does.Not.Contain("武器："));
             Assert.That(details, Does.Contain("敌人打算"));
             Assert.That(details, Does.Not.Contain("权威"));
             Assert.That(details, Does.Contain(intent.DetailedText));
@@ -183,7 +183,7 @@ namespace OCC.Combat.Tests
 
             string details = CombatInformationPresenter.BuildEnemyHoverDetails(state, enemy, intent);
 
-            Assert.That(details, Does.Contain(enemy.MainHand.DisplayName));
+            Assert.That(details, Does.Not.Contain("武器："));
             Assert.That(details, Does.Contain("战法："));
             Assert.That(details, Does.Contain("当前意图：" + intent.DetailedText));
             Assert.That(details, Does.Contain("特点："));
@@ -226,8 +226,8 @@ namespace OCC.Combat.Tests
             Assert.That(badge.yMin, Is.LessThan(cell.Y));
             Assert.That(badge.yMax, Is.LessThanOrEqualTo(cell.Y + 28.5f));
             Assert.That(badge.yMax, Is.LessThan(healthBarTop));
-            Assert.That(badge.height, Is.EqualTo(56f));
-            Assert.That(badge.width, Is.EqualTo(92f));
+            Assert.That(badge.height, Is.EqualTo(64f));
+            Assert.That(badge.width, Is.EqualTo(100f));
         }
 
         [Test]
@@ -342,6 +342,59 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void BattlefieldHover_OmitsHeroWindowButPreservesTerrainAndKeepsEnemySummaryCompact()
+        {
+            BattlefieldHoverCardView prefab = Resources.Load<BattlefieldHoverCardView>(BattlefieldHoverCardView.ResourcePath);
+            BattlefieldHoverCardView hover = Object.Instantiate(prefab);
+            CombatFormalVisualAssets assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+            UnitState enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            EnemyArchetypes.Get("pyromancer").Apply(enemy);
+            CombatState state = new CombatState(new GridMap(2, 1), new[] { hero, enemy });
+            CombatBattlefieldCellPresenter presenter = new CombatBattlefieldCellPresenter(
+                new BattlefieldPresentationAdapter(), assets);
+            CombatSelectionController selection = new CombatSelectionController();
+            try
+            {
+                hover.Bind(presenter.Build(state, null, new FireBattleState(state), selection, false, null,
+                    hero.Position, _ => null, (_, __) => null, _ => null, _ => null), state);
+                Assert.That(hover.IsUnitWindowVisible, Is.False);
+                Assert.That(hover.IsSurfaceWindowVisible, Is.True);
+
+                hover.Bind(presenter.Build(state, null, new FireBattleState(state), selection, false, null,
+                    enemy.Position, _ => null, (_, __) => null, _ => null, _ => null), state);
+                Assert.That(hover.IsUnitWindowVisible, Is.True);
+                Assert.That(hover.CurrentSize.y, Is.EqualTo(BattlefieldHoverCardView.UnitWindowHeight));
+
+            }
+            finally { Object.DestroyImmediate(hover.gameObject); }
+        }
+
+        [Test]
+        public void EnemyDetailPrefab_HasTopRightCloseButtonAndCompleteBindings()
+        {
+            BattlefieldEnemyDetailView prefab = Resources.Load<BattlefieldEnemyDetailView>(
+                BattlefieldEnemyDetailView.ResourcePath);
+            Assert.That(prefab, Is.Not.Null);
+            Assert.That(prefab.HasRequiredBindings, Is.True);
+            Assert.That(((RectTransform)prefab.transform).anchoredPosition,
+                Is.EqualTo(new Vector2(1424f, -64f)));
+            GameObject canvasObject = new GameObject("EnemyDetailTestCanvas", typeof(Canvas));
+            BattlefieldEnemyDetailView view = Object.Instantiate(prefab, canvasObject.transform, false);
+            try
+            {
+                bool closed = false;
+                view.Initialize(() => closed = true, canvasObject.GetComponent<Canvas>());
+                Button button = view.transform.Find("关闭")?.GetComponent<Button>();
+                Assert.That(button, Is.Not.Null);
+                button.onClick.Invoke();
+                Assert.That(closed, Is.True);
+            }
+            finally { Object.DestroyImmediate(canvasObject); }
+        }
+
+        [Test]
         public void BattlefieldHover_TerrainCategoriesUseOneSentenceAndOmitMissingKinds()
         {
             CombatState state = new CombatState(new GridMap(2, 2), new[]
@@ -349,15 +402,14 @@ namespace OCC.Combat.Tests
             GridPosition position = new GridPosition(1, 0);
             TileState tile = state.Map.GetTile(position);
             Assert.That(CombatBattlefieldCellPresenter.BuildSurfaceHover(null, position),
-                Is.EqualTo("学院地坪，可正常通行。"));
+                Is.EqualTo("学院地坪。"));
             Assert.That(CombatBattlefieldCellPresenter.BuildTerrainEffectHover(state, null, tile, position), Is.Empty);
             Assert.That(CombatBattlefieldCellPresenter.BuildObjectHover(state, tile, position), Is.Empty);
 
             state.Map.SetTile(position, new TileState { IsWater = true });
             tile = state.Map.GetTile(position);
             string effect = CombatBattlefieldCellPresenter.BuildTerrainEffectHover(state, null, tile, position);
-            Assert.That(effect, Does.StartWith("浅水"));
-            Assert.That(effect.Count(value => value == '。'), Is.EqualTo(1));
+            Assert.That(effect, Is.EqualTo("浅水：消耗 2 移动距离。"));
         }
 
         [Test]

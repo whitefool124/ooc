@@ -28,7 +28,7 @@ namespace OCC.Combat
                 UnitState repairTarget = state.Units.Values.Where(unit => CanMend(state, enemy, unit))
                     .OrderByDescending(unit => unit.MaxShield - unit.Shield).ThenBy(unit => unit.Id, StringComparer.Ordinal).FirstOrDefault();
                 if (repairTarget != null) return CombatCommand.UseSkill(enemy.Id, 0, repairTarget.Id);
-                return ChooseWeaponOrMove(state, enemy, hero);
+                return ChooseAttackOrMove(state, enemy, hero);
             }
             StatusType? desiredStatus = DesiredStatus(enemy.EnemyArchetypeId);
             if (desiredStatus.HasValue)
@@ -37,10 +37,10 @@ namespace OCC.Combat
                     ? hero.StatusStrength(StatusType.Agility) >= 0 : !hero.HasStatus(desiredStatus.Value);
                 if (shouldApply && CanTarget(state, enemy, hero, skill))
                     return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
-                return ChooseWeaponOrMove(state, enemy, hero);
+                return ChooseAttackOrMove(state, enemy, hero);
             }
             if (CanTarget(state, enemy, hero, skill)) return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
-            return ChooseWeaponOrMove(state, enemy, hero);
+            return ChooseAttackOrMove(state, enemy, hero);
         }
 
         internal static bool CanMend(CombatState state, UnitState enemy, UnitState ally)
@@ -62,13 +62,13 @@ namespace OCC.Combat
             if (skill != null && (skill.TargetRule == SkillTargetRule.EnemyUnit || skill.TargetRule == SkillTargetRule.AnyUnit) &&
                 distance >= skill.MinimumRange && distance <= enemy.EffectiveRange(skill.Range) && enemy.Mana >= skill.ManaCost && enemy.IsSkillReady(skill))
                 return CombatCommand.UseSkill(enemy.Id, 0, hero.Id);
-            return ChooseWeaponOrMove(enemy, hero);
+            return ChooseAttackOrMove(enemy, hero);
         }
 
-        private static CombatCommand ChooseWeaponOrMove(UnitState enemy, UnitState hero)
+        private static CombatCommand ChooseAttackOrMove(UnitState enemy, UnitState hero)
         {
             int distance = enemy.Position.ManhattanDistance(hero.Position);
-            WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
+            IAttackDefinition weapon = enemy.BasicAttack;
             if (distance >= weapon.MinimumRange && distance <= enemy.EffectiveRange(weapon.Range)) return CombatCommand.Attack(enemy.Id, hero.Id);
             if (enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
             GridPosition step = new GridPosition(enemy.Position.X + Math.Sign(hero.Position.X - enemy.Position.X), enemy.Position.Y);
@@ -76,9 +76,9 @@ namespace OCC.Combat
             return CombatCommand.Move(enemy.Id, step);
         }
 
-        private static CombatCommand ChooseWeaponOrMove(CombatState state, UnitState enemy, UnitState hero)
+        private static CombatCommand ChooseAttackOrMove(CombatState state, UnitState enemy, UnitState hero)
         {
-            WeaponDefinition weapon = enemy.MainHand ?? CombatCatalog.Rifle;
+            IAttackDefinition weapon = enemy.BasicAttack;
             int distance = enemy.Position.ManhattanDistance(hero.Position);
             if (distance >= weapon.MinimumRange && distance <= enemy.EffectiveRange(weapon.Range) && (weapon.Range <= 1 || state.HasLineOfSight(enemy.Position, hero.Position)))
                 return CombatCommand.Attack(enemy.Id, hero.Id);
@@ -161,7 +161,7 @@ namespace OCC.Combat
         public int Shield { get; }
         public int Block { get; }
         public int Speed { get; }
-        public WeaponDefinition Weapon { get; }
+        public EnemyAttackDefinition Attack { get; }
         public bool IsElite { get; }
         public int MaxHealth { get; }
         public string ArtId { get; }
@@ -171,15 +171,15 @@ namespace OCC.Combat
         /// <summary>是否配置了第二技能槽。只有一套公开战法的单位不显示默认技能。</summary>
         public bool HasSecondarySkill { get; }
 
-        public EnemyArchetype(string id, string displayName, int armor, int shield, int block, int speed, WeaponDefinition weapon, bool isElite = false, int maxHealth = 12,
+        public EnemyArchetype(string id, string displayName, int armor, int shield, int block, int speed, EnemyAttackDefinition attack, bool isElite = false, int maxHealth = 12,
             string artId = null, SkillDefinition primarySkill = null, SkillDefinition secondarySkill = null,
             EnemyResolutionKind resolutionKind = EnemyResolutionKind.Generic, bool hasSecondarySkill = false)
-        { Id = id; DisplayName = displayName; Armor = armor; Shield = shield; Block = block; Speed = speed; Weapon = weapon; IsElite = isElite; MaxHealth = maxHealth; ArtId = artId ?? id; PrimarySkill = primarySkill; SecondarySkill = secondarySkill; ResolutionKind = resolutionKind; HasSecondarySkill = hasSecondarySkill; }
+        { Id = id; DisplayName = displayName; Armor = armor; Shield = shield; Block = block; Speed = speed; Attack = attack; IsElite = isElite; MaxHealth = maxHealth; ArtId = artId ?? id; PrimarySkill = primarySkill; SecondarySkill = secondarySkill; ResolutionKind = resolutionKind; HasSecondarySkill = hasSecondarySkill; }
 
         public void Apply(UnitState unit)
         {
             unit.AssignEnemyArchetype(Id); unit.DisplayName = DisplayName; unit.ConfigureVitality(MaxHealth); unit.Armor = Armor; unit.Block = Block; unit.Speed = Speed;
-            unit.Equip(Weapon, CombatCatalog.Shield, PrimarySkill ?? CombatCatalog.FireBolt, SecondarySkill ?? CombatCatalog.FrostBind);
+            unit.ConfigureEnemyAttack(Attack, PrimarySkill, SecondarySkill);
             // Archetype shield values are target totals, not bonuses over UnitState's base shield.
             if (!HasSecondarySkill) unit.ClearSecondarySkill();
             if (unit.Shield > Shield) unit.AbsorbShield(unit.Shield - Shield);
@@ -187,21 +187,29 @@ namespace OCC.Combat
         }
     }
 
+    public static class EnemyAttackCatalog
+    {
+        public static readonly EnemyAttackDefinition ShieldRam = new EnemyAttackDefinition("enemy_shield_strike", "盾牌撞击", DamageType.Physical, 2, 1);
+        public static readonly EnemyAttackDefinition ArcaneShot = new EnemyAttackDefinition("enemy_arcane_shot", "以太射击", DamageType.Arcane, 3, 3);
+        public static readonly EnemyAttackDefinition HeavyBlow = new EnemyAttackDefinition("enemy_heavy_blow", "重击", DamageType.Physical, 6, 1, armorPierce: 2, initiativeDelay: 3);
+        public static readonly EnemyAttackDefinition Generic = new EnemyAttackDefinition("enemy_generic_attack", "攻击", DamageType.Physical, 4, 4);
+    }
+
     public static class EnemyArchetypes
     {
         public static readonly IReadOnlyList<EnemyArchetype> All = new[]
         {
-            new EnemyArchetype("shieldguard", "盾术生", 2, 2, 2, 7, CombatCatalog.Shield, maxHealth: 16, artId: "shieldguard", primarySkill: EnemyAbilityCatalog.ShieldRam, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("pyromancer", "火矢生", 0, 1, 0, 9, CombatCatalog.Wand, maxHealth: 16, artId: "pyromancer", primarySkill: EnemyAbilityCatalog.PyromancerFireArrow, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("raider", "侧锋生", 0, 0, 1, 11, CombatCatalog.Hammer, maxHealth: 16, artId: "raider", primarySkill: EnemyAbilityCatalog.HookingStrike, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("elite_vanguard", "划线教官", 2, 4, 2, 10, CombatCatalog.Hammer, true, 24, "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("core_overseer", "塔之守卫", 3, 4, 2, 8, CombatCatalog.Hammer, true, 36, "elite",
+            new EnemyArchetype("shieldguard", "盾术生", 2, 2, 2, 7, EnemyAttackCatalog.ShieldRam, maxHealth: 16, artId: "shieldguard", primarySkill: EnemyAbilityCatalog.ShieldRam, resolutionKind: EnemyResolutionKind.Student),
+            new EnemyArchetype("pyromancer", "火矢生", 0, 1, 0, 9, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "pyromancer", primarySkill: EnemyAbilityCatalog.PyromancerFireArrow, resolutionKind: EnemyResolutionKind.Student),
+            new EnemyArchetype("raider", "侧锋生", 0, 0, 1, 11, EnemyAttackCatalog.HeavyBlow, maxHealth: 16, artId: "raider", primarySkill: EnemyAbilityCatalog.HookingStrike, resolutionKind: EnemyResolutionKind.Student),
+            new EnemyArchetype("elite_vanguard", "划线教官", 2, 4, 2, 10, EnemyAttackCatalog.HeavyBlow, true, 24, "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
+            new EnemyArchetype("core_overseer", "塔之守卫", 3, 4, 2, 8, EnemyAttackCatalog.HeavyBlow, true, 36, "elite",
                 EnemyAbilityCatalog.BossSunderMaul, EnemyAbilityCatalog.BossTowerPress, EnemyResolutionKind.Witness, hasSecondarySkill: true),
-            new EnemyArchetype("sigil_mauler", "替身偶", 1, 0, 0, 8, CombatCatalog.Hammer, maxHealth: 16, artId: "sigil_mauler", primarySkill: EnemyAbilityCatalog.SunderingSigil, resolutionKind: EnemyResolutionKind.Construct),
-            new EnemyArchetype("barrier_mender", "补盾助教", 0, 4, 0, 7, CombatCatalog.Wand, maxHealth: 16, artId: "barrier_mender", primarySkill: EnemyAbilityCatalog.WardMend, resolutionKind: EnemyResolutionKind.Staff),
+            new EnemyArchetype("sigil_mauler", "替身偶", 1, 0, 0, 8, EnemyAttackCatalog.HeavyBlow, maxHealth: 16, artId: "sigil_mauler", primarySkill: EnemyAbilityCatalog.SunderingSigil, resolutionKind: EnemyResolutionKind.Construct),
+            new EnemyArchetype("barrier_mender", "补盾助教", 0, 4, 0, 7, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "barrier_mender", primarySkill: EnemyAbilityCatalog.WardMend, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("tether_hound", "寻迹兽", 0, 0, 0, 10, EnemyAbilityCatalog.TetherHoundBite, maxHealth: 12, artId: "tether_hound", primarySkill: EnemyAbilityCatalog.TetherPounce, resolutionKind: EnemyResolutionKind.Beast),
-            new EnemyArchetype("stone_snare", "拴索助教", 0, 1, 0, 8, CombatCatalog.Wand, maxHealth: 16, artId: "stone_snare", primarySkill: EnemyAbilityCatalog.StoneSnare, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("lantern_revealer", "提灯巡查", 0, 2, 0, 9, CombatCatalog.Wand, maxHealth: 16, artId: "lantern_revealer", primarySkill: EnemyAbilityCatalog.RevealingLantern, resolutionKind: EnemyResolutionKind.Staff),
+            new EnemyArchetype("stone_snare", "拴索助教", 0, 1, 0, 8, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "stone_snare", primarySkill: EnemyAbilityCatalog.StoneSnare, resolutionKind: EnemyResolutionKind.Staff),
+            new EnemyArchetype("lantern_revealer", "提灯巡查", 0, 2, 0, 9, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "lantern_revealer", primarySkill: EnemyAbilityCatalog.RevealingLantern, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("rune_arbalist", "背弩生", 1, 0, 0, 6, EnemyAbilityCatalog.HeavyCrossbow, maxHealth: 16, artId: "rune_arbalist", primarySkill: EnemyAbilityCatalog.WindlassBolt, resolutionKind: EnemyResolutionKind.Student),
             new EnemyArchetype("breach_ram", "楔角", 0, 8, 0, 9, EnemyAbilityCatalog.BreachRam, true, 36, "sigil_mauler", resolutionKind: EnemyResolutionKind.Construct),
             new EnemyArchetype("elder_tracker_hound", "老寻", 0, 0, 0, 10, EnemyAbilityCatalog.TrackerBite, true, 14, "tether_hound",

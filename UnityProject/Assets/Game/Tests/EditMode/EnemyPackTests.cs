@@ -10,6 +10,23 @@ namespace OCC.Combat.Tests
 {
     public sealed class EnemyPackTests
     {
+        [Test]
+        public void EnemyAttack_IsIntrinsicAndUsesTheSamePreviewAsResolution()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("hound", false, new GridPosition(0, 0));
+            EnemyArchetypes.Get("tether_hound").Apply(enemy);
+            Assert.That(enemy.MainHand, Is.Null);
+            Assert.That(enemy.BasicAttack, Is.SameAs(enemy.EnemyAttack));
+
+            CombatState state = new CombatState(new GridMap(3, 1), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, enemy.Id, hero.Id, false);
+            int healthBefore = hero.Health;
+            FireSpellEngine.ResolveWeaponAttack(new FireBattleState(state), enemy.Id, hero.Id);
+            Assert.That(hero.Health, Is.EqualTo(healthBefore - preview.FinalDamage));
+        }
+
         private static readonly string[] PackIds =
         {
             "shieldguard", "pyromancer", "raider", "elite_vanguard", "sigil_mauler",
@@ -34,7 +51,7 @@ namespace OCC.Combat.Tests
                 Is.EqualTo(("补盾助教", 16, 0, 4, 7)));
             Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
                 Is.EqualTo(("寻迹兽", 12, 0, 0, 10)));
-            Assert.That(hound.Weapon.Damage, Is.EqualTo(3));
+            Assert.That(hound.Attack.Damage, Is.EqualTo(3));
 
             Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
                 Is.EqualTo(("enemy_sundering_sigil", 1, 0, 0)));
@@ -128,7 +145,7 @@ namespace OCC.Combat.Tests
             string[] forbidden = { "rifle", "sniper", "sapper", "engineer", "步枪", "狙击", "工兵", "爆破" };
             string enemySurface = string.Join("|", EnemyArchetypes.All.SelectMany(archetype => new[]
             {
-                archetype.Id, archetype.DisplayName, archetype.Weapon.Id, archetype.Weapon.DisplayName,
+                archetype.Id, archetype.DisplayName, archetype.Attack.Id, archetype.Attack.DisplayName,
                 archetype.PrimarySkill?.Id ?? string.Empty, archetype.PrimarySkill?.DisplayName ?? string.Empty
             })).ToLowerInvariant();
             foreach (string term in forbidden) Assert.That(enemySurface, Does.Not.Contain(term.ToLowerInvariant()), term);

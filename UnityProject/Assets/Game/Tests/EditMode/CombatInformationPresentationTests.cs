@@ -116,7 +116,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(profile.Vitals, Does.Contain("生命当前 " + enemy.Health + "　上限 " + enemy.MaxHealth));
             Assert.That(profile.Defenses, Does.Contain("护甲"));
-            Assert.That(profile.Weapon, Does.Contain(enemy.MainHand.DisplayName));
+            Assert.That(profile.FullText, Does.Not.Contain("武器："));
             Assert.That(profile.Skills, Does.Contain(enemy.SkillOne.DisplayName));
             Assert.That(profile.Statuses, Does.Contain("燃烧"));
         }

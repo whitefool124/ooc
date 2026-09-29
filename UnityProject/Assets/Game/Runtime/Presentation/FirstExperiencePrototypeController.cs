@@ -210,9 +210,9 @@ namespace OCC.Combat.Presentation
             if (titleStyle != null) return;
             Font font = FormalUiKit.Font;
             titleStyle = new GUIStyle(GUI.skin.label) { font = font, fontSize = 48, fontStyle = FontStyle.Normal, normal = { textColor = FormalUiTheme.Text } };
-            headingStyle = new GUIStyle(GUI.skin.label) { font = font, fontSize = 32, fontStyle = FontStyle.Normal, wordWrap = true, normal = { textColor = FormalUiTheme.Cyan } };
+            headingStyle = new GUIStyle(GUI.skin.label) { font = font, fontSize = 24, fontStyle = FontStyle.Normal, wordWrap = true, normal = { textColor = FormalUiTheme.Cyan } };
             bodyStyle = new GUIStyle(GUI.skin.label) { font = font, fontSize = 24, wordWrap = true, richText = true, normal = { textColor = FormalUiTheme.Text } };
-            smallStyle = new GUIStyle(bodyStyle) { fontSize = 20, normal = { textColor = FormalUiTheme.Muted } };
+            smallStyle = new GUIStyle(bodyStyle) { fontSize = 24, normal = { textColor = FormalUiTheme.Muted } };
             buttonStyle = new GUIStyle(GUI.skin.button)
             {
                 font = font, fontSize = 24, fontStyle = FontStyle.Normal, wordWrap = true,

@@ -44,7 +44,7 @@ namespace OCC.Combat
         {
             UnitState attacker = GetUnit(state, attackerId);
             UnitState defender = GetUnit(state, targetId);
-            WeaponDefinition source = isCast ? null : attacker.MainHand;
+            IAttackDefinition source = isCast ? null : attacker.BasicAttack;
             int damage = isCast ? CombatCatalog.FireBolt.Damage : source.Damage;
             int armorPierce = isCast ? 0 : source.ArmorPierce;
             DamageType damageType = isCast ? CombatCatalog.FireBolt.DamageType : source.DamageType;
@@ -223,7 +223,7 @@ namespace OCC.Combat
         private static CombatEffectExecution ResolveWeaponAttack(CombatState state, UnitState attacker, string targetId,
             int flatIncomingDamageReduction, int baseDamageBonus = 0)
         {
-            WeaponDefinition weapon = attacker.MainHand ?? CombatCatalog.Rifle;
+            IAttackDefinition weapon = attacker.BasicAttack ?? throw new InvalidOperationException("Attack data is missing.");
             int reducedBaseDamage = state.Ruleset == CombatRuleset.Roguelite
                 ? weapon.Damage + (attacker.IsHero ? state.RogueEquipment?.ForgeWeaponDamageBonus ?? 0 : 0)
                 : Math.Max(0, weapon.Damage - Math.Max(0, flatIncomingDamageReduction));
@@ -567,7 +567,7 @@ namespace OCC.Combat
             bool destructibleTarget = tile.Durability > 0 && (tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None);
             if (!destructibleTarget && !investigationTarget) throw new InvalidOperationException("\u8be5\u683c\u6ca1\u6709\u53ef\u4ea4\u4e92\u76ee\u6807\u3002");
             CombatEffectExecution execution = destructibleTarget
-                ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, unit.MainHand?.Damage ?? 0))
+                ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, unit.BasicAttack?.Damage ?? 0))
                 : CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             state.ArtifactBattle?.RefreshDecoyAt(target);
             state.MarkInvestigated(target);

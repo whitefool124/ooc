@@ -65,6 +65,13 @@ namespace OCC.Combat
 
     public sealed class CombatStatusPresentation
     {
+        public static string FirstSentence(string detail)
+        {
+            if (string.IsNullOrWhiteSpace(detail)) return string.Empty;
+            string value = detail.Trim();
+            int end = value.IndexOfAny(new[] { '。', '！', '？', '\n' });
+            return end < 0 ? value : value.Substring(0, end + (value[end] == '\n' ? 0 : 1)).Trim();
+        }
         public StatusType Status { get; }
         public string RuntimeId { get; }
         public string DisplayName { get; }
@@ -73,6 +80,7 @@ namespace OCC.Combat
         private readonly string detail;
         public string SourceText { get; private set; }
         public int TriggerCount { get; private set; }
+        public string HoverDescription => detail;
         public string Detail => detail + "\n来源：" + SourceText + "；已触发 " + TriggerCount + " 次";
         public string ValueText => UnitState.IsAttributeStatus(Status) ? (Strength >= 0 ? "+" : "") + Strength :
             Duration == int.MaxValue ? "本场" : Duration.ToString();
@@ -108,34 +116,34 @@ namespace OCC.Combat
                 case StatusType.Burning:
                     strength = unit.StatusStrength(status, CombatStatusLifecycle.BurningDamagePerTurn);
                     return new CombatStatusPresentation(status, "burning", "燃烧", duration, strength,
-                        "自身回合结束时失去 " + strength + " 点生命，无视护盾；下次触发：自身回合结束。剩余 " + duration + " 次触发。重复施加只刷新持续量，不叠加强度。");
+                        "自身回合结束失去 " + strength + " 点生命。");
                 case StatusType.Slow:
                     return new CombatStatusPresentation(status, "slow", "迟缓", duration, strength,
-                        "速度降低 3，下一次自身行动的移动步数降低。下次计时：自身回合开始。剩余 " + duration + " 回合。");
+                        "速度降低 3，移动步数减少。");
                 case StatusType.Bound:
                     // 束缚在目标自身回合开始衰减：构造值比"实际受缚回合数"多 1，展示时按生效回合数给出。
                     int boundRounds = Math.Max(1, duration - 1);
                     return new CombatStatusPresentation(status, "bound", "束缚", boundRounds, strength,
-                        "无法主动移动；目标自身回合开始扣减。剩余 " + boundRounds + " 个可受限回合。");
+                        "无法主动移动。");
                 case StatusType.ArmorBreak:
                     int armorLoss = unit.StatusStrength(status, 2);
                     return new CombatStatusPresentation(status, "armor_break", "破甲", duration, armorLoss,
-                        "护甲降低 " + armorLoss + "。剩余 " + duration + " 回合。");
+                        "护甲降低 " + armorLoss + "。");
                 case StatusType.Dazzled:
                     return new CombatStatusPresentation(status, "dazzled", "目眩", duration, strength,
-                        "受到目眩标记。剩余 " + duration + " 回合。");
+                        "受到目眩影响。");
                 case StatusType.Revealed:
                     return new CombatStatusPresentation(status, "revealed", "显露", duration, strength,
-                        "已被侦测。剩余 " + duration + " 回合。");
+                        "已被侦测。");
                 case StatusType.BreakStance:
                     return new CombatStatusPresentation(status, "break_stance", "破势", duration, strength,
-                        "施加时立即清空护盾；到下一次自身回合结束前不能获得护盾。不降低护甲。");
+                        "清空护盾，下回合结束前不能获得护盾。");
                 case StatusType.FiregroundBoost:
                     return new CombatStatusPresentation(status, "fireground_boost", "火势", duration, strength,
-                        "火场来源伤害 +" + strength + "。剩余 " + duration + " 回合。");
+                        "火场伤害 +" + strength + "。");
                 case StatusType.FiregroundVulnerable:
                     return new CombatStatusPresentation(status, "fireground_vulnerable", "助燃", duration, strength,
-                        "受到的火场伤害 +" + strength + "。剩余 " + duration + " 回合。");
+                        "受到的火场伤害 +" + strength + "。");
                 case StatusType.Agility: return Attribute(status, "agility", "敏捷", "有效步数", strength, duration, "格");
                 case StatusType.Strength: return Attribute(status, "strength", "力量", "物理伤害", strength, duration, "点");
                 case StatusType.SpellPower: return Attribute(status, "spell_power", "法强", "奥术、火焰与以太伤害", strength, duration, "点");
@@ -147,13 +155,13 @@ namespace OCC.Combat
                 case StatusType.Control: return Attribute(status, "control", "控制", "施加的束缚、敏捷与标记时长", strength, duration, "回合");
                 case StatusType.Marked:
                     return new CombatStatusPresentation(status, "marked", "标记", duration, strength,
-                        "藏身无效，可被标记效果读取。剩余 " + duration + " 个自身回合；到期或净化移除。");
+                        "藏身失效，可被标记效果读取。");
                 case StatusType.Prepared:
                     return new CombatStatusPresentation(status, "prepared", "架设", duration, strength,
-                        "允许使用要求架设的攻击；攻击后、移动后或主动解除时移除。");
+                        "可使用架设攻击。");
                 case StatusType.Invulnerable:
                     return new CombatStatusPresentation(status, "invulnerable", "霸体", duration, strength,
-                        "持续期间不会被打倒、推离或阻挡。剩余 " + duration + " 个自身回合。");
+                        "不会被击倒、推离或阻挡。");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, "Unknown combat status.");
             }
@@ -163,9 +171,8 @@ namespace OCC.Combat
             string affected, int strength, int duration, string unitName)
         {
             string signed = (strength >= 0 ? "+" : string.Empty) + strength;
-            string timing = duration == int.MaxValue ? "持续至本场战斗结束" : "剩余 " + duration + " 个自身回合，回合结束扣减";
             return new CombatStatusPresentation(status, id, name, duration, strength,
-                affected + " " + signed + " " + unitName + "；" + timing + "。同名数值相加。");
+                affected + " " + signed + " " + unitName + "。");
         }
     }
 }

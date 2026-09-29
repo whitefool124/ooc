@@ -247,8 +247,11 @@ namespace OCC.Combat.Presentation
         [SerializeField] private Text effectBody;
         [SerializeField] private Text summaryLabel;
         private object owner;
+        private bool constrainToBattlefield;
 
         public bool IsVisible => panel != null && panel.gameObject.activeSelf;
+
+        public void ConstrainToBattlefield() => constrainToBattlefield = true;
 
         public static FormalHoverTooltip Create(Canvas hostCanvas)
         {
@@ -289,10 +292,6 @@ namespace OCC.Combat.Presentation
             canvas = hostCanvas != null ? hostCanvas : throw new ArgumentNullException(nameof(hostCanvas));
             if (panel != null)
             {
-                // The prefab still carries a sliced elevated-panel skin under the
-                // one-pixel outline. Hide it for both floating and pinned cards.
-                Transform legacySkin = panel.Find("正式皮肤");
-                if (legacySkin != null) legacySkin.gameObject.SetActive(false);
                 Image existingBackground = panel.GetComponent<Image>();
                 if (existingBackground != null)
                 {
@@ -452,7 +451,7 @@ namespace OCC.Combat.Presentation
             Text label = FormalUiKit.Label(name, value, parent, position, size, fontSize, color, alignment);
             // FormalUiKit aligns FusionPixel to its native 12 px grid. Reapplying the requested
             // legacy size here produced thin, blurred 14/16/20/26 px rasterization in tooltips.
-            label.fontStyle = FontStyle.Bold;
+            label.fontStyle = FontStyle.Normal;
             label.resizeTextForBestFit = false;
             label.horizontalOverflow = HorizontalWrapMode.Wrap;
             label.verticalOverflow = VerticalWrapMode.Truncate;
@@ -585,8 +584,8 @@ namespace OCC.Combat.Presentation
             TextGenerationSettings settings = new TextGenerationSettings
             {
                 font = FormalUiKit.Font,
-                fontSize = 16,
-                fontStyle = FontStyle.Bold,
+                fontSize = FormalUiTheme.BodyFontSize,
+                fontStyle = FontStyle.Normal,
                 color = Color.white,
                 textAnchor = TextAnchor.UpperLeft,
                 generationExtents = new Vector2(ContentEffectBodyWidth, MaximumHeight),
@@ -629,7 +628,11 @@ namespace OCC.Combat.Presentation
             RectTransform canvasRect = canvas.transform as RectTransform;
             if (canvasRect == null || !RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, canvas.worldCamera, out Vector2 local)) return;
             Vector2 preferred = local + new Vector2(18f, -18f);
-            panel.anchoredPosition = ClampLocalPosition(canvasRect.rect, preferred, panel.sizeDelta, EdgeMargin);
+            Rect bounds = canvasRect.rect;
+            if (constrainToBattlefield)
+                bounds = Rect.MinMaxRect(bounds.xMin, bounds.yMin + bounds.height * .2f,
+                    bounds.xMin + bounds.width * .75f, bounds.yMax);
+            panel.anchoredPosition = ClampLocalPosition(bounds, preferred, panel.sizeDelta, EdgeMargin);
         }
 
         public void Hide(object source)

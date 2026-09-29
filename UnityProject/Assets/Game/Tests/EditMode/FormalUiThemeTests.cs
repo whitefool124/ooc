@@ -519,17 +519,21 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EnemyIntentBadge_DisplaysNative16PixelIconAtExactThreeTimesScaleWithoutBackingTile()
+        public void EnemyIntentBadge_DisplaysAdaptiveNativeIconsAtExactThreeTimesScaleWithoutBackingTile()
         {
             BattlefieldRect cell = new BattlefieldRect(100f, 120f, 128f, 128f);
             Rect badge = CombatUnitHudLayout.EnemyIntentBadgeRect(cell, 7);
             Rect icon = CombatUnitHudLayout.EnemyIntentIconLocalRect();
+            Rect sword = CombatUnitHudLayout.EnemyIntentTextureLocalRect(19, 19);
+            Rect hammer = CombatUnitHudLayout.EnemyIntentTextureLocalRect(22, 21);
             Rect damage = CombatUnitHudLayout.EnemyIntentDamageLocalRect(badge.width);
 
-            Assert.That(badge.size, Is.EqualTo(new Vector2(92f, 56f)));
-            Assert.That(icon, Is.EqualTo(new Rect(4f, 4f, 48f, 48f)));
-            Assert.That(icon.width / 16f, Is.EqualTo(3f));
-            Assert.That(icon.height / 16f, Is.EqualTo(3f));
+            Assert.That(badge.size, Is.EqualTo(new Vector2(100f, 64f)));
+            Assert.That(icon, Is.EqualTo(new Rect(0f, 0f, 64f, 64f)));
+            Assert.That(sword.size, Is.EqualTo(new Vector2(57f, 57f)));
+            Assert.That(hammer.size, Is.EqualTo(new Vector2(66f, 63f)));
+            Assert.That(sword.center, Is.EqualTo(icon.center));
+            Assert.That(hammer.center, Is.EqualTo(icon.center));
             Assert.That(damage.x, Is.GreaterThanOrEqualTo(icon.xMax));
             Assert.That(damage.xMax, Is.LessThanOrEqualTo(badge.width - 4f));
         }
@@ -1085,8 +1089,8 @@ namespace OCC.Combat.Tests
                 System.Collections.Generic.IReadOnlyList<string> tags = CombatSpellTags.For(spell);
                 Assert.That(tags, Is.Not.Empty);
 
-                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
-                    "行动 2", "魔力 3", "冷却 2", "造成 16 点火焰伤害", "对中心与正交邻格的可击打目标造成伤害。",
+                tooltip.Show(new object(), new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与相邻格",
+                    "行动 2", "魔力 3", "冷却 2", "造成 16 点火焰伤害", "对中心与相邻格的可击打目标造成伤害。",
                     FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"), tags), new Vector2(400f, 400f));
 
                 RectTransform panel = canvasObject.GetComponentsInChildren<RectTransform>(true).Single(item => item.gameObject.name == "悬浮详情");
@@ -1144,13 +1148,13 @@ namespace OCC.Combat.Tests
                 tooltip.Initialize(canvasObject.GetComponent<Canvas>());
                 FireSpellDefinition spell = FireSpellCatalog.Get("F-P-R19");
                 const string longSummary =
-                    "对中心与正交邻格的可击打目标造成伤害，主目标另受 16 点耐久伤害；" +
-                    "正交邻格的单位与物件各自承受 8 点伤害与 8 点耐久伤害，友军同样会被波及。" +
+                    "对中心与相邻格的可击打目标造成伤害，主目标另受 16 点耐久伤害；" +
+                    "相邻格的单位与物件各自承受 8 点伤害与 8 点耐久伤害，友军同样会被波及。" +
                     "这条简介刻意写长，用来让面板高度超过最小高度，从而验证各段是按内容伸缩而不是被最小值夹住。";
-                FormalTooltipContent shortContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
+                FormalTooltipContent shortContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与相邻格",
                     "单点", "魔力 3", "冷却 2", "造成 16 点火焰伤害", longSummary,
                     FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
-                FormalTooltipContent longContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与正交邻格",
+                FormalTooltipContent longContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与相邻格",
                     CombatRangeText.SelectionLine(spell), "魔力 3", "冷却 2", "造成 16 点火焰伤害",
                     longSummary, FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
 
