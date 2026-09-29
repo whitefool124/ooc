@@ -19,6 +19,8 @@ namespace OCC.Combat.Tests
             public UiActionFeedback LastFeedback { get; private set; }
             public int LegacyClaims { get; private set; }
             public int RewardClaims { get; private set; }
+            public int FixedClaims { get; private set; }
+            public int LeaveRequests { get; private set; }
 
             public void ClaimMapFireSpell(string spellId)
             {
@@ -28,6 +30,18 @@ namespace OCC.Combat.Tests
             public void ClaimMapReward(string rewardId)
             {
                 RewardClaims++; CurrentMapRun.ClaimReward(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+            public void ClaimMapLootChoice(string rewardId)
+            {
+                RewardClaims++; CurrentMapRun.ClaimLootChoice(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+            public void ClaimMapFixedLoot(string lootId)
+            {
+                FixedClaims++; CurrentMapRun.ClaimFixedLoot(lootId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+            public void RequestLeaveMapLoot()
+            {
+                LeaveRequests++; CurrentMapRun.LeaveLoot(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
             }
 
             public void RequestAbandonMapReward()
@@ -41,6 +55,14 @@ namespace OCC.Combat.Tests
             }
 
             public void OpenRewardInventory() { }
+            public void SelectMapReward(string rewardId)
+            {
+                CurrentMapRun.SelectPendingReward(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
+            public void OpenMapRewardChoices()
+            {
+                CurrentMapRun.OpenPendingRewardChoices(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
 
             public void PublishUiVisual(UiVisualEvent visualEvent) { }
             public void ShowUiFeedback(UiActionFeedback feedback) { LastFeedback = feedback; }
@@ -105,7 +127,7 @@ namespace OCC.Combat.Tests
             try
             {
                 RogueliteSettlementPresentation presentation = root.AddComponent<RogueliteSettlementPresentation>(); presentation.Initialize(host);
-                string[] settlementLabelNames = { "效果", "注意内容" };
+                string[] settlementLabelNames = { "关键效果", "名称", "预计去向" };
                 Text[] labels = Object.FindObjectsByType<Text>(FindObjectsInactive.Include)
                     .Where(text => text.transform.root.name == "肉鸽结算UI" && settlementLabelNames.Contains(text.name)).ToArray();
                 Assert.That(labels, Is.Not.Empty);
@@ -116,7 +138,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void RewardCards_ShowFullDetailsAndKeepSharedContentTooltip()
+        public void RewardRows_ShowIconAndShortEffectBesideBackpack()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("settlement-layout", 621);
             dto.CurrentNodeId = "rail_patrol"; dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
@@ -128,33 +150,120 @@ namespace OCC.Combat.Tests
                 presentation.Initialize(host);
                 RectTransform[] cards = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
                     .Where(rect => rect.name == "reward.first" || rect.name.StartsWith("reward."))
-                    .Where(rect => rect.Find("完整效果") != null).ToArray();
+                    .Where(rect => rect.Find("关键效果") != null).ToArray();
                 Assert.That(cards, Is.Not.Empty);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "随身背包"), Is.True);
                 foreach (RectTransform card in cards)
                 {
-                    Assert.That(card.sizeDelta.x, Is.EqualTo(410f));
-                    Assert.That(card.sizeDelta.y, Is.GreaterThanOrEqualTo(360f));
-                    Assert.That(FormalUiKit.SkinOverlay(card.GetComponent<Image>()), Is.Null);
-                    RectTransform stat = card.Find("数值").GetComponent<RectTransform>();
-                    RectTransform detail = card.Find("完整效果").GetComponent<RectTransform>();
-                    RectTransform choice = card.Find("选择").GetComponent<RectTransform>();
-                    Assert.That(detail.GetComponent<Text>().text, Is.Not.Empty);
+                    Assert.That(card.sizeDelta, Is.EqualTo(new Vector2(986f, 148f)));
+                    Assert.That(card.GetComponentsInChildren<Image>(true)
+                        .Any(image => image.name.StartsWith("战利品图标_") && image.sprite != null), Is.True);
+                    Assert.That(card.Find("关键效果").GetComponent<Text>().text.Length, Is.LessThanOrEqualTo(26));
                     Assert.That(card.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null);
-                    Canvas.ForceUpdateCanvases();
-                    // 数值行按内容自量：标称 40 高，装不下就长高并让下方整体让位。此前固定 40 会被 Truncate 截断。
-                    Assert.That(stat.sizeDelta.y, Is.GreaterThanOrEqualTo(40f));
-                    Assert.That(stat.GetComponent<Text>().preferredHeight, Is.LessThanOrEqualTo(stat.sizeDelta.y + .01f));
-                    float statGrowth = stat.sizeDelta.y - 40f;
-                    Assert.That(detail.anchoredPosition, Is.EqualTo(new Vector2(24f, -146f - statGrowth)));
-                    Assert.That(detail.sizeDelta.y, Is.GreaterThanOrEqualTo(92f));
-                    Assert.That(detail.GetComponent<Text>().preferredHeight, Is.LessThanOrEqualTo(detail.sizeDelta.y + .01f));
-                    Assert.That(-choice.anchoredPosition.y, Is.GreaterThanOrEqualTo(-detail.anchoredPosition.y + detail.rect.height));
-                    Assert.That(choice.anchoredPosition.y - choice.rect.height, Is.GreaterThanOrEqualTo(-card.rect.height));
-                    Assert.That(card.Find("奖励细框_上").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(410f, 2f)));
-                    Assert.That(card.Find("奖励细框_下").GetComponent<RectTransform>().anchoredPosition.y,
-                        Is.EqualTo(-card.rect.height + 2f));
-                    Assert.That(card.Find("奖励细框_右").GetComponent<RectTransform>().anchoredPosition.x, Is.EqualTo(408f));
                 }
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void RandomRewardEnvelope_OpensSavedThreeChoiceScreenWithoutClaiming()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
+            RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
+            Host host = new Host { CurrentMapRun = run };
+            GameObject root = new GameObject("settlement-envelope-test");
+            try
+            {
+                RogueliteSettlementPresentation presentation = root.AddComponent<RogueliteSettlementPresentation>();
+                presentation.Initialize(host);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "战后奖励封套"), Is.True);
+                Assert.That(Object.FindObjectsByType<Text>(FindObjectsInactive.Include)
+                    .Any(label => label.name == "标题" && label.text == "战利品搜刮"), Is.True);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "背包收纳槽"), Is.True);
+                RectTransform lootPane = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Single(rect => rect.name == "待领取战利品");
+                RectTransform backpackPane = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Single(rect => rect.name == "随身背包");
+                RectTransform backpackGrid = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Single(rect => rect.name == "背包收纳槽");
+                Assert.That(backpackPane.sizeDelta.x, Is.GreaterThan(lootPane.sizeDelta.x * .8f));
+                Assert.That(backpackGrid.sizeDelta.x, Is.GreaterThan(650f));
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "入袋预览区"), Is.False);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Count(rect => rect.name.StartsWith("固定战利品_")), Is.GreaterThanOrEqualTo(2));
+                Assert.That(CardIds(presentation), Is.Empty);
+                host.OpenMapRewardChoices();
+                Assert.That(CardIds(presentation), Has.Length.EqualTo(3));
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "三选一窗口"), Is.True);
+                FormalHoverTooltip detail = Object.FindObjectsByType<FormalHoverTooltip>(FindObjectsInactive.Include)
+                    .Single(view => view.transform.parent.name == "肉鸽结算UI");
+                Assert.That(detail.transform.GetSiblingIndex(), Is.EqualTo(detail.transform.parent.childCount - 1),
+                    "The hover card must render above the reveal window.");
+                RectTransform[] revealCards = Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Where(rect => rect.name.StartsWith("揭晓卡牌_")).ToArray();
+                Assert.That(revealCards, Has.Length.EqualTo(3));
+                foreach (RectTransform reveal in revealCards)
+                {
+                    Assert.That(reveal.GetComponent<Image>().raycastTarget, Is.True);
+                    Assert.That(reveal.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null);
+                    Assert.That(reveal.GetComponentsInChildren<RectTransform>(true)
+                        .Single(rect => rect.name.StartsWith("奖励大图标_")).sizeDelta.x, Is.EqualTo(320f));
+                    Assert.That(reveal.Find("关键效果"), Is.Null);
+                }
+                string choiceId = host.CurrentMapRun.CurrentRewards[1].Id;
+                host.SelectMapReward(choiceId);
+                Assert.That(host.CurrentMapRun.SelectedRewardId, Is.EqualTo(choiceId));
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "三选一窗口"), Is.False);
+                Assert.That(Object.FindObjectsByType<Text>(FindObjectsInactive.Include)
+                    .Any(label => label.name == "战利品名称" && label.text == host.CurrentMapRun.CurrentRewards[1].DisplayName), Is.True);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "待入袋物品画像"), Is.False);
+                Assert.That(Object.FindObjectsByType<RectTransform>(FindObjectsInactive.Include)
+                    .Any(rect => rect.name == "预计入袋占格"), Is.True);
+                Assert.That(host.RewardClaims, Is.Zero);
+                InvokeClaim(presentation, choiceId);
+                Assert.That(host.RewardClaims, Is.EqualTo(1));
+                Assert.That(host.CurrentMapRun.PendingRewardStepId, Is.EqualTo("collected"));
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void FixedLootRow_ClaimsOnClickAndLeaveIsTheOnlyBottomRightAction()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
+            RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
+            int goldBefore = run.Gold;
+            Host host = new Host { CurrentMapRun = run };
+            GameObject root = new GameObject("settlement-individual-loot-test");
+            try
+            {
+                RogueliteSettlementPresentation presentation = root.AddComponent<RogueliteSettlementPresentation>();
+                presentation.Initialize(host);
+                Button goldRow = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
+                    .Single(button => button.name == "固定战利品_0");
+                Assert.That(goldRow.targetGraphic.raycastTarget, Is.True,
+                    "The visible loot row must receive pointer hits before its button can claim the reward.");
+                goldRow.onClick.Invoke();
+                Assert.That(host.FixedClaims, Is.EqualTo(1));
+                Assert.That(run.Gold, Is.EqualTo(goldBefore + 10));
+                Assert.That(Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
+                    .Any(button => button.name == "确认领取" || button.name == "放弃奖励"), Is.False);
+                Button leave = Object.FindObjectsByType<Button>(FindObjectsInactive.Include)
+                    .Single(button => button.name == "离开战利品");
+                leave.onClick.Invoke();
+                Assert.That(host.LeaveRequests, Is.EqualTo(1));
+                Assert.That(run.AwaitingReward, Is.False);
             }
             finally { Object.DestroyImmediate(root); DestroyCanvases(); }
         }

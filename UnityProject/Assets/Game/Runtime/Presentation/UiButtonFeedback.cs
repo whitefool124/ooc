@@ -79,6 +79,7 @@ namespace OCC.Combat.Presentation
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!IsPrimaryPointer(eventData)) return;
+            if (button != null && button.interactable) OccSoundEffects.UiButton(SoundLabel());
             pressing = true;
             Apply(false);
         }
@@ -104,9 +105,16 @@ namespace OCC.Combat.Presentation
             if (button != null && !button.interactable) RejectDisabled();
             else
             {
+                OccSoundEffects.UiButton(SoundLabel());
                 PlaySubmitPulse();
                 PlayAcceptedFeedback();
             }
+        }
+
+        private string SoundLabel()
+        {
+            Text label = button == null ? null : button.GetComponentInChildren<Text>(true);
+            return gameObject.name + " " + (label == null ? string.Empty : label.text);
         }
 
         private static bool IsPrimaryPointer(PointerEventData eventData) => eventData != null && eventData.button == PointerEventData.InputButton.Left;
@@ -134,6 +142,7 @@ namespace OCC.Combat.Presentation
 
         private void RejectDisabled()
         {
+            OccSoundEffects.Rejected();
             UiMotionProfile profile = motionProfile == null ? UiMotionProfile.FromIntensity(1f) : motionProfile();
             FormalUiEffects.SpawnLocalFeedback(transform, "rejected", profile.Intensity);
             feedback?.Invoke(new UiActionFeedback(UiFeedbackKind.Rejected,

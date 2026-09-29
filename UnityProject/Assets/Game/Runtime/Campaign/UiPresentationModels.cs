@@ -491,11 +491,16 @@ namespace OCC.Combat
         private SettlementPresentationModel(RogueliteMapRun run)
         {
             Seed = run.Seed;
-            Visible = run.AwaitingReward;
+            Visible = run.AwaitingReward || run.LootPendingExit;
             Level = run.Level;
             Experience = run.Experience;
             RewardKey = string.Join("|", run.CurrentFireSpellChoices.Select(spell => spell.Id).Concat(run.CurrentRewards.Select(reward => reward.Id))) +
-                "|receipt:" + (run.RogueRunState?.PendingResourceReceipt ?? string.Empty);
+                "|receipt:" + (run.RogueRunState?.PendingResourceReceipt ?? string.Empty) +
+                "|opened:" + run.RewardChoicesOpened + "|selected:" + run.SelectedRewardId +
+                "|lootExit:" + run.LootPendingExit + "|fixed:" + (run.RogueRunState?.PendingRewardGold ?? 0) +
+                ":" + (run.RogueRunState?.PendingRewardContribution ?? 0) +
+                ":" + (run.RogueRunState?.PendingFixedMaterialIds.Count ?? 0) +
+                "|claims:" + run.ClaimedRewards.Count;
         }
 
         public static SettlementPresentationModel From(RogueliteMapRun run) => run == null ? default : new SettlementPresentationModel(run);

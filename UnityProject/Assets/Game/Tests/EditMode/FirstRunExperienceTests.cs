@@ -58,11 +58,19 @@ namespace OCC.Combat.Tests
         {
             RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(1906);
             run.AcknowledgeFirstRunOrigin();
+            int battleGold = run.Gold;
+            int battleContribution = run.StageContribution;
             run.SelectNode("B1"); run.CompleteCurrentCombat();
 
+            Assert.That(run.Gold, Is.EqualTo(battleGold));
+            Assert.That(run.StageContribution, Is.EqualTo(battleContribution));
+            Assert.That(run.RogueRunState.PendingRewardGold, Is.EqualTo(3));
+            Assert.That(run.RogueRunState.PendingRewardContribution, Is.EqualTo(1));
             Assert.That(run.CurrentFirstRunRewardIds, Is.EqualTo(new[] { "F-P-M03", "F-P-R19", "F-P-U07" }));
             Assert.That(run.CurrentRewards.Select(value => value.Id), Is.EqualTo(run.CurrentFirstRunRewardIds));
             run.ClaimReward("F-P-R19");
+            Assert.That(run.Gold, Is.EqualTo(battleGold + 3));
+            Assert.That(run.StageContribution, Is.EqualTo(battleContribution + 1));
             Assert.That(run.RogueRunState.MasteredSpellIds, Contains.Item("F-P-R19"));
             Assert.That(run.RogueRunState.EquippedSpellIds, Contains.Item("F-P-R19"));
 

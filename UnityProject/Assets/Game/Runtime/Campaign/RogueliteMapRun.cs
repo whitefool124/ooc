@@ -353,6 +353,9 @@ namespace OCC.Combat
         private readonly List<string> routeHistory = new List<string> { "start" };
         private readonly HashSet<string> completed = new HashSet<string>(StringComparer.Ordinal);
         private readonly List<string> claimedRewards = new List<string>();
+        private string transientSelectedRewardId = string.Empty;
+        private bool transientRewardChoicesOpened;
+        private bool transientLootPendingExit;
         private readonly List<string> ownedFireSpells = new List<string>();
         private readonly string[] equippedFireSpells = new string[2];
         private readonly string[] rogueEquippedSpellIds = new string[8]
@@ -590,6 +593,47 @@ namespace OCC.Combat
             : completed;
         public IReadOnlyList<string> ClaimedRewards => claimedRewards;
         public string PendingRewardStepId => rogueRunDto?.PendingRewardStepId ?? string.Empty;
+        public string SelectedRewardId => rogueRunDto?.SelectedRewardId ?? transientSelectedRewardId;
+        public bool RewardChoicesOpened => rogueRunDto?.RewardChoicesOpened ?? transientRewardChoicesOpened;
+        public bool LootPendingExit => rogueRunDto?.LootPendingExit ?? transientLootPendingExit;
+        public bool HasUnclaimedLoot
+        {
+            get
+            {
+                if (PendingResourceReceipt != null) return false;
+                if (IsTutorialPhase && FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory &&
+                    (AwaitingReward || LootPendingExit))
+                    return AwaitingReward || !claimedRewards.Contains("ACA-EQ-HD02") ||
+                        !claimedRewards.Contains("G-T13") || !claimedRewards.Contains("first-elite:gold") ||
+                        rogueRunDto != null && (rogueRunDto.PendingRewardContribution > 0 ||
+                            rogueRunDto.PendingFixedMaterialIds.Count > 0);
+                if (PendingRewardStepId == "collected")
+                    return rogueRunDto.PendingRewardGold > 0 || rogueRunDto.PendingRewardContribution > 0 ||
+                        rogueRunDto.PendingFixedMaterialIds.Count > 0;
+                return AwaitingReward;
+            }
+        }
+        public void OpenPendingRewardChoices()
+        {
+            if (!AwaitingReward || PendingResourceReceipt != null ||
+                (CurrentRewards.Count != 3 && !(PendingRewardStepId == "followup" && CurrentRewards.Count == 1)))
+                throw new InvalidOperationException("No unopened reward is awaiting resolution.");
+            if (rogueRunDto != null) rogueRunDto.RewardChoicesOpened = true;
+            else transientRewardChoicesOpened = true;
+        }
+        public void SelectPendingReward(string rewardId)
+        {
+            if (!AwaitingReward || PendingResourceReceipt != null)
+                throw new InvalidOperationException("No selectable reward is awaiting resolution.");
+            string choiceId = rewardId != null && rewardId.StartsWith("dismantle:", StringComparison.Ordinal)
+                ? rewardId.Substring("dismantle:".Length) : rewardId;
+            RogueliteReward reward = CurrentRewards.FirstOrDefault(value => value.Id == choiceId);
+            if (reward == null) throw new InvalidOperationException("Reward is not available.");
+            if (rewardId != choiceId && !CanDismantleReward(reward))
+                throw new InvalidOperationException("This reward cannot be dismantled.");
+            if (rogueRunDto != null) rogueRunDto.SelectedRewardId = rewardId;
+            else transientSelectedRewardId = rewardId;
+        }
         public IReadOnlyList<string> OwnedFireSpellIds => ownedFireSpells;
         public IReadOnlyList<string> EquippedFireSpellIds => equippedFireSpells;
         public IReadOnlyList<string> RogueEquippedSpellIds => rogueRunDto?.EquippedSpellIds ?? rogueEquippedSpellIds;
@@ -664,6 +708,7 @@ namespace OCC.Combat
             get
             {
                 if (!AwaitingReward || PendingResourceReceipt != null) return Array.Empty<RogueliteReward>();
+                if (PendingRewardStepId == "collected") return Array.Empty<RogueliteReward>();
                 if (IsTutorialPhase)
                 {
                     OCC.Combat.Roguelite.RogueContentCatalog firstRunCatalog = OCC.Combat.Roguelite.RogueContentCatalog.CreateAcademyV01();
@@ -1041,6 +1086,7 @@ namespace OCC.Combat
             : MapNodes.Where(node => IsNodeAvailable(node.Id)).ToArray();
         public void SelectNode(string nodeId)
         {
+            if (LootPendingExit) throw new InvalidOperationException("Leave the loot screen before travelling.");
             if (IsTutorialPhase)
             {
                 FirstRunExperience.TravelTo(nodeId);
@@ -1088,6 +1134,19 @@ namespace OCC.Combat
             if (IsTutorialPhase)
             {
                 FirstRunExperience.CompleteCombat(CurrentNodeId);
+                if (rogueRunDto != null)
+                {
+                    bool elite = FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory;
+                    rogueRunDto.PendingRewardGold = elite ? 6 : 3;
+                    rogueRunDto.PendingRewardContribution = elite ? 2 : 1;
+                    rogueRunDto.PendingRewardStepId = "main";
+                    if (elite)
+                    {
+                        rogueRunDto.PendingFixedMaterialIds.Clear();
+                        rogueRunDto.PendingFixedMaterialIds.Add((Seed & 1) == 0
+                            ? AcademyBattleRewardCatalog.ForgeLoad : AcademyBattleRewardCatalog.SpecAmplify);
+                    }
+                }
                 SyncFirstRunProjection();
                 return;
             }
@@ -1385,6 +1444,8 @@ namespace OCC.Combat
                 rogueRunDto.PendingRewardGold = 0;
                 rogueRunDto.PendingRewardContribution = 0;
                 rogueRunDto.PendingRewardStepId = string.Empty;
+                rogueRunDto.SelectedRewardId = string.Empty;
+                rogueRunDto.RewardChoicesOpened = false;
             }
             AwaitingReward = offerReward;
             if (AwaitingReward && rogueRunDto != null && rogueRunDto.PendingRewardIds.Count == 0)
@@ -1434,6 +1495,177 @@ namespace OCC.Combat
             if (!FirstRunExperience.RoundSettled) FirstRunExperience.SettleRound();
         }
         internal void SettleAcademyRoundForDeveloper() => SettleAcademyRound();
+        public bool CanAcceptIndividualLootChoice(RogueliteReward reward, bool dismantle = false)
+        {
+            if (reward == null || rogueRunDto == null) return false;
+            OCC.Combat.Roguelite.RogueEquipmentRuntime runtime = OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto);
+            int materials = 0;
+            return PreviewAcademyReward(runtime, reward, dismantle, "__loot_preview__", ref materials) &&
+                runtime.CanFitMaterials(materials);
+        }
+
+        public void ClaimFixedLoot(string lootId)
+        {
+            if ((!AwaitingReward && !LootPendingExit) || rogueRunDto == null || PendingResourceReceipt != null)
+                throw new InvalidOperationException("No fixed loot is awaiting collection.");
+            string snapshot = OCC.Combat.Roguelite.Rogue11Serializer.Serialize(rogueRunDto);
+            string[] priorClaims = claimedRewards.ToArray();
+            try
+            {
+                if (IsTutorialPhase && FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory)
+                {
+                    if (lootId == "elite-head" && !claimedRewards.Contains("ACA-EQ-HD02"))
+                        GrantRogue11Content("ACA-EQ-HD02", "first-run:elite");
+                    else if (lootId == "elite-brace" && !claimedRewards.Contains("G-T13"))
+                        GrantRogue11Content("G-T13", "first-run:elite");
+                    else if (lootId == "elite-material" && rogueRunDto.PendingFixedMaterialIds.Count > 0)
+                    {
+                        if (!OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto).CanFitMaterials(1))
+                            throw new InvalidOperationException("Backpack cannot accept the elite material.");
+                        GrantAcademyMaterial(rogueRunDto.PendingFixedMaterialIds[0], 1);
+                        rogueRunDto.PendingFixedMaterialIds.Clear();
+                    }
+                    else if (lootId == "elite-gold" && !claimedRewards.Contains("first-elite:gold"))
+                    {
+                        rogueRunDto.Gold += rogueRunDto.PendingRewardGold > 0 ? rogueRunDto.PendingRewardGold : 6;
+                        rogueRunDto.PendingRewardGold = 0;
+                        claimedRewards.Add("first-elite:gold");
+                    }
+                    else if (lootId == "elite-contribution" && rogueRunDto.PendingRewardContribution > 0)
+                    {
+                        rogueRunDto.StageContribution += rogueRunDto.PendingRewardContribution;
+                        rogueRunDto.PendingRewardContribution = 0;
+                    }
+                    else throw new InvalidOperationException("Fixed loot was already collected or is unavailable.");
+                }
+                else if (UsesRogue11 && lootId == "gold" && rogueRunDto.PendingRewardGold > 0)
+                {
+                    rogueRunDto.Gold += rogueRunDto.PendingRewardGold;
+                    rogueRunDto.PendingRewardGold = 0;
+                }
+                else if (UsesRogue11 && lootId == "contribution" && rogueRunDto.PendingRewardContribution > 0)
+                {
+                    rogueRunDto.StageContribution += rogueRunDto.PendingRewardContribution;
+                    rogueRunDto.PendingRewardContribution = 0;
+                }
+                else if (IsInAcademyLayer && lootId == "materials" && rogueRunDto.PendingFixedMaterialIds.Count > 0)
+                {
+                    if (!OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto)
+                        .CanFitMaterials(rogueRunDto.PendingFixedMaterialIds.Count))
+                        throw new InvalidOperationException("Backpack cannot accept the fixed materials.");
+                    foreach (string id in rogueRunDto.PendingFixedMaterialIds) GrantAcademyMaterial(id, 1);
+                    rogueRunDto.PendingFixedMaterialIds.Clear();
+                }
+                else throw new InvalidOperationException("Fixed loot was already collected or is unavailable.");
+                rogueRunDto.LootPendingExit = true;
+            }
+            catch
+            {
+                rogueRunDto = OCC.Combat.Roguelite.Rogue11Serializer.Deserialize(snapshot);
+                claimedRewards.Clear(); claimedRewards.AddRange(priorClaims);
+                throw;
+            }
+        }
+
+        public void ClaimLootChoice(string rewardId)
+        {
+            if (!AwaitingReward || string.IsNullOrWhiteSpace(rewardId))
+                throw new InvalidOperationException("No loot choice is awaiting collection.");
+            bool dismantle = rewardId.StartsWith("dismantle:", StringComparison.Ordinal);
+            string choiceId = dismantle ? rewardId.Substring("dismantle:".Length) : rewardId;
+            if (IsTutorialPhase && FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory &&
+                !FirstRunExperience.EliteRewardClaimed)
+            {
+                if (dismantle || !FirstRunExperienceCatalog.ElitePassiveRewardIds.Contains(choiceId))
+                    throw new InvalidOperationException("Elite passive reward is unavailable.");
+                GrantRogue11Content(choiceId, "first-run:elite");
+                FirstRunExperience.ClaimEliteReward(choiceId);
+                SyncFirstRunProjection();
+                rogueRunDto.LootPendingExit = true;
+                return;
+            }
+            if (IsTutorialPhase)
+            {
+                if (dismantle || CurrentRewards.All(value => value.Id != choiceId))
+                    throw new InvalidOperationException("Tutorial reward is unavailable.");
+                GrantRogue11Content(choiceId, "first-run:combat-reward");
+                FirstRunExperience.ClaimReward(choiceId);
+                if (!claimedRewards.Contains(choiceId)) claimedRewards.Add(choiceId);
+                SyncFirstRunProjection();
+                rogueRunDto.PendingRewardStepId = "collected";
+                rogueRunDto.LootPendingExit = true;
+                return;
+            }
+            if (!IsInAcademyLayer || rogueRunDto == null || rogueRunDto.PendingRewardIds.Contains(choiceId))
+            {
+                ClaimReward(rewardId);
+                if (rogueRunDto != null) rogueRunDto.LootPendingExit = true;
+                else transientLootPendingExit = true;
+                return;
+            }
+            RogueliteReward reward = CurrentRewards.FirstOrDefault(value => value.Id == choiceId);
+            if (reward == null || (dismantle && !CanDismantleReward(reward)) ||
+                !CanAcceptIndividualLootChoice(reward, dismantle))
+                throw new InvalidOperationException("This loot cannot be collected yet.");
+            rogueRunDto.AwaitingReward = AwaitingReward;
+            string snapshot = OCC.Combat.Roguelite.Rogue11Serializer.Serialize(rogueRunDto);
+            string[] priorClaims = claimedRewards.ToArray();
+            try
+            {
+                GrantAcademyChosenReward(reward, dismantle);
+                if (!claimedRewards.Contains(choiceId)) claimedRewards.Add(choiceId);
+                rogueRunDto.LootPendingExit = true;
+                rogueRunDto.RolledRewardChoiceIds.Clear();
+                rogueRunDto.SelectedRewardId = string.Empty;
+                if (rogueRunDto.PendingRewardStepId == "main" && rogueRunDto.PendingRewardFollowupIds.Count > 0)
+                {
+                    rogueRunDto.RolledRewardChoiceIds.AddRange(rogueRunDto.PendingRewardFollowupIds);
+                    rogueRunDto.PendingRewardFollowupIds.Clear();
+                    rogueRunDto.PendingRewardStepId = "followup";
+                    rogueRunDto.RewardChoicesOpened = true;
+                }
+                else
+                {
+                    rogueRunDto.PendingRewardStepId = "collected";
+                    rogueRunDto.RewardChoicesOpened = false;
+                }
+            }
+            catch
+            {
+                rogueRunDto = OCC.Combat.Roguelite.Rogue11Serializer.Deserialize(snapshot);
+                claimedRewards.Clear(); claimedRewards.AddRange(priorClaims);
+                throw;
+            }
+        }
+
+        public void LeaveLoot()
+        {
+            if (!AwaitingReward && !LootPendingExit)
+                throw new InvalidOperationException("No loot screen is awaiting departure.");
+            if (PendingResourceReceipt != null) ConfirmResourceReceipt();
+            else if (AwaitingReward && PendingRewardStepId == "collected")
+            {
+                AwaitingReward = false;
+                rogueRunDto.PendingFixedMaterialIds.Clear();
+                rogueRunDto.PendingRewardGold = 0;
+                rogueRunDto.PendingRewardContribution = 0;
+                rogueRunDto.PendingRewardStepId = string.Empty;
+                rogueRunDto.SelectedRewardId = string.Empty;
+                rogueRunDto.RewardChoicesOpened = false;
+            }
+            else if (AwaitingReward) AbandonCurrentReward();
+            if (IsTutorialPhase && rogueRunDto != null)
+            {
+                rogueRunDto.PendingRewardGold = 0;
+                rogueRunDto.PendingRewardContribution = 0;
+                rogueRunDto.PendingFixedMaterialIds.Clear();
+                rogueRunDto.PendingRewardStepId = string.Empty;
+            }
+            if (rogueRunDto != null) rogueRunDto.LootPendingExit = false;
+            transientLootPendingExit = false;
+            SettleAcademyRoundIfFinale();
+        }
+
         public void ClaimReward(string rewardId)
         {
             bool dismantle = rewardId != null && rewardId.StartsWith("dismantle:", StringComparison.Ordinal);
@@ -1456,6 +1688,21 @@ namespace OCC.Combat
                     FirstRunExperience.ClaimReward(rewardId);
                 }
                 if (!claimedRewards.Contains(rewardId)) claimedRewards.Add(rewardId);
+                if (rogueRunDto != null)
+                {
+                    rogueRunDto.Gold += rogueRunDto.PendingRewardGold;
+                    rogueRunDto.StageContribution += rogueRunDto.PendingRewardContribution;
+                    rogueRunDto.PendingRewardGold = 0;
+                    rogueRunDto.PendingRewardContribution = 0;
+                    rogueRunDto.PendingRewardStepId = string.Empty;
+                    if (FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory &&
+                        !claimedRewards.Contains("first-elite:gold"))
+                        claimedRewards.Add("first-elite:gold");
+                }
+                if (rogueRunDto != null) rogueRunDto.SelectedRewardId = string.Empty;
+                if (rogueRunDto != null) rogueRunDto.RewardChoicesOpened = false;
+                transientSelectedRewardId = string.Empty;
+                transientRewardChoicesOpened = false;
                 SyncFirstRunProjection();
                 return;
             }
@@ -1484,6 +1731,8 @@ namespace OCC.Combat
                         }
                     }
                     rogueRunDto.PendingRewardIds.Remove(rewardId);
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = false;
                     claimedRewards.Add(rewardId);
                     AwaitingReward = rogueRunDto.PendingRewardIds.Count > 0;
                     if (!AwaitingReward) SettleAcademyRoundIfFinale();
@@ -1496,6 +1745,8 @@ namespace OCC.Combat
                     rogueRunDto.RolledRewardChoiceIds.AddRange(rogueRunDto.PendingRewardFollowupIds);
                     rogueRunDto.PendingRewardFollowupIds.Clear();
                     rogueRunDto.PendingRewardStepId = "followup";
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = true;
                     return;
                 }
                 rogueRunDto.AwaitingReward = AwaitingReward;
@@ -1525,6 +1776,8 @@ namespace OCC.Combat
                     rogueRunDto.RolledRewardChoiceIds.Clear();
                     rogueRunDto.PendingRewardFollowupIds.Clear();
                     rogueRunDto.PendingRewardStepId = string.Empty;
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = false;
                     SettleAcademyRoundIfFinale();
                 }
                 catch
@@ -1538,6 +1791,8 @@ namespace OCC.Combat
             }
             if (reward.Kind == RogueliteRewardKind.Item) GrantItem(reward.Item.Id);
             claimedRewards.Add(rewardId); AwaitingReward = false;
+            transientSelectedRewardId = string.Empty;
+            transientRewardChoicesOpened = false;
         }
 
         public void AbandonCurrentReward()
@@ -1548,6 +1803,17 @@ namespace OCC.Combat
             if (IsTutorialPhase)
             {
                 FirstRunExperience.AbandonReward();
+                if (rogueRunDto != null)
+                {
+                    rogueRunDto.PendingRewardGold = 0;
+                    rogueRunDto.PendingRewardContribution = 0;
+                    rogueRunDto.PendingFixedMaterialIds.Clear();
+                    rogueRunDto.PendingRewardStepId = string.Empty;
+                }
+                if (rogueRunDto != null) rogueRunDto.SelectedRewardId = string.Empty;
+                if (rogueRunDto != null) rogueRunDto.RewardChoicesOpened = false;
+                transientSelectedRewardId = string.Empty;
+                transientRewardChoicesOpened = false;
                 claimedRewards.Add("abandoned:" + CurrentNodeId);
                 SyncFirstRunProjection();
                 return;
@@ -1559,6 +1825,10 @@ namespace OCC.Combat
             rogueRunDto?.RolledRewardChoiceIds.Clear();
             rogueRunDto?.PendingRewardFollowupIds.Clear();
             rogueRunDto?.PendingFixedMaterialIds.Clear();
+            if (rogueRunDto != null) rogueRunDto.SelectedRewardId = string.Empty;
+            if (rogueRunDto != null) rogueRunDto.RewardChoicesOpened = false;
+            transientSelectedRewardId = string.Empty;
+            transientRewardChoicesOpened = false;
             if (rogueRunDto != null) rogueRunDto.PendingMainRewardId = string.Empty;
             if (rogueRunDto != null) rogueRunDto.PendingRewardGold = 0;
             if (rogueRunDto != null) rogueRunDto.PendingRewardContribution = 0;
@@ -1586,12 +1856,19 @@ namespace OCC.Combat
             string braceId = "item-first-elite-" + Seed + "-" + (rogueRunDto.DeterministicCounter + 1);
             OCC.Combat.Roguelite.RogueTacticalItemInstance brace = runtime.CreateTacticalItem(braceId, "G-T13", order + 1, "first-run:elite");
             if (!runtime.AddTacticalToBackpack(brace)) throw new InvalidOperationException("背包没有足够空间容纳定锚支架。");
+            if (rogueRunDto.PendingFixedMaterialIds.Count > 0 && !runtime.CanFitMaterials(1))
+                throw new InvalidOperationException("背包没有足够空间容纳精英强化材料。");
             runtime.WriteToDto(rogueRunDto);
             rogueRunDto.DeterministicCounter += 2;
             if (!rogueRunDto.MasteredSpellIds.Contains(passiveId)) rogueRunDto.MasteredSpellIds.Add(passiveId);
             int empty = Array.FindIndex(rogueRunDto.EquippedSpellIds, string.IsNullOrEmpty);
             if (empty >= 0) rogueRunDto.EquippedSpellIds[empty] = passiveId;
-            rogueRunDto.Gold += 6;
+            if (rogueRunDto.PendingFixedMaterialIds.Count > 0)
+            {
+                GrantAcademyMaterial(rogueRunDto.PendingFixedMaterialIds[0], 1);
+                rogueRunDto.PendingFixedMaterialIds.Clear();
+                rogueRunDto.PendingRewardStepId = string.Empty;
+            }
             claimedRewards.Add(passiveId);
             claimedRewards.Add("ACA-EQ-HD02");
             claimedRewards.Add("G-T13");

@@ -87,6 +87,7 @@ namespace OCC.Combat.Presentation
 
     public interface IRogueliteUiHost : IUiPreferenceHost, IUiFeedbackHost
     {
+        void CloseRewardInventory();
         RogueliteMapRun CurrentMapRun { get; }
         RogueliteMapRun ArchivedMapRun { get; }
         CombatFlowPhase CurrentFlowPhase { get; }
@@ -160,6 +161,11 @@ namespace OCC.Combat.Presentation
         UiPresentationVersions UiPresentationVersions { get; }
         void ClaimMapFireSpell(string spellId);
         void ClaimMapReward(string rewardId);
+        void ClaimMapLootChoice(string rewardId);
+        void ClaimMapFixedLoot(string lootId);
+        void RequestLeaveMapLoot();
+        void SelectMapReward(string rewardId);
+        void OpenMapRewardChoices();
         void ConfirmMapResourceReceipt();
         void RequestAbandonMapReward();
         void OpenRewardInventory();

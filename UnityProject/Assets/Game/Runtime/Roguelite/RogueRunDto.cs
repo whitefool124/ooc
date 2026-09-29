@@ -74,6 +74,9 @@ namespace OCC.Combat.Roguelite
         public List<string> RolledRewardChoiceIds { get; } = new List<string>();
         public List<string> PendingRewardFollowupIds { get; } = new List<string>();
         public string PendingRewardStepId { get; set; } = string.Empty;
+        public string SelectedRewardId { get; set; } = string.Empty;
+        public bool RewardChoicesOpened { get; set; }
+        public bool LootPendingExit { get; set; }
         public string PendingResourceReceipt { get; set; } = string.Empty;
         public List<string> ReselectionClaimIds { get; } = new List<string>();
         public string MigrationReportId { get; set; } = string.Empty;
@@ -147,13 +150,15 @@ namespace OCC.Combat.Roguelite
                 "|" + B(dto.PendingRewardStepId) + "|" + B(JoinStrings(dto.MaterialStockRows)) +
                 "|" + B(JoinStrings(dto.PendingFixedMaterialIds)) + "|" + B(dto.PendingMainRewardId) +
                 "|" + dto.PendingRewardGold + "|" + dto.PendingRewardContribution +
-                "|" + B(JoinStrings(dto.MaterialPlacementRows));
+                "|" + B(JoinStrings(dto.MaterialPlacementRows)) + "|" + B(dto.SelectedRewardId) +
+                "|" + (dto.RewardChoicesOpened ? "1" : "0") +
+                "|" + (dto.LootPendingExit ? "1" : "0");
         }
 
         public static RogueRunDto Deserialize(string data)
         {
             string[] fields = (data ?? string.Empty).Split('|');
-            if ((fields.Length < 28 || fields.Length > 53) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
+            if ((fields.Length < 28 || fields.Length > 56) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
             RogueRunDto dto = new RogueRunDto
             {
                 RunId = U(fields[1]), Seed = I(fields[2]), StageId = U(fields[3]), StageTime = I(fields[4]), Gold = I(fields[5]),
@@ -205,6 +210,9 @@ namespace OCC.Combat.Roguelite
             if (fields.Length >= 51) dto.PendingRewardGold = I(fields[50]);
             if (fields.Length >= 52) dto.PendingRewardContribution = I(fields[51]);
             if (fields.Length >= 53) dto.MaterialPlacementRows.AddRange(SplitStrings(U(fields[52])));
+            if (fields.Length >= 54) dto.SelectedRewardId = U(fields[53]);
+            if (fields.Length >= 55) dto.RewardChoicesOpened = fields[54] == "1";
+            if (fields.Length >= 56) dto.LootPendingExit = fields[55] == "1";
             OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
             ValidateShape(dto);
             return dto;
@@ -271,7 +279,7 @@ namespace OCC.Combat.Roguelite
                 throw new InvalidOperationException("Invalid rolled reward choices.");
             if (dto.PendingRewardFollowupIds.Count > 3 ||
                 dto.PendingRewardFollowupIds.Distinct(StringComparer.Ordinal).Count() != dto.PendingRewardFollowupIds.Count ||
-                dto.PendingRewardStepId != string.Empty && dto.PendingRewardStepId != "main" && dto.PendingRewardStepId != "followup")
+                dto.PendingRewardStepId != string.Empty && dto.PendingRewardStepId != "main" && dto.PendingRewardStepId != "followup" && dto.PendingRewardStepId != "collected")
                 throw new InvalidOperationException("Invalid academy reward steps.");
             if (!string.IsNullOrEmpty(dto.PendingResourceReceipt))
                 OCC.Combat.AcademyResourceReceipt.Decode(dto.PendingResourceReceipt);
@@ -298,13 +306,16 @@ namespace OCC.Combat.Roguelite
                 id != OCC.Combat.AcademyBattleRewardCatalog.SpecAmplify &&
                 id != OCC.Combat.AcademyBattleRewardCatalog.SpecEfficient))
                 throw new InvalidOperationException("Invalid pending academy materials.");
-            if (dto.PendingFixedMaterialIds.Count > 0 && (!dto.AwaitingReward || string.IsNullOrEmpty(dto.PendingRewardStepId)))
+            if (dto.PendingFixedMaterialIds.Count > 0 &&
+                ((!dto.AwaitingReward && !(dto.FirstRunExperience != null && dto.LootPendingExit)) ||
+                 string.IsNullOrEmpty(dto.PendingRewardStepId)))
                 throw new InvalidOperationException("Pending academy materials require an unresolved reward.");
             if (!string.IsNullOrEmpty(dto.PendingMainRewardId) && (!dto.AwaitingReward || dto.PendingRewardStepId != "followup"))
                 throw new InvalidOperationException("Pending academy main choice requires a followup reward.");
             if (dto.PendingRewardGold < 0 || dto.PendingRewardContribution < 0 ||
                 (dto.PendingRewardGold > 0 || dto.PendingRewardContribution > 0) &&
-                (!dto.AwaitingReward || string.IsNullOrEmpty(dto.PendingRewardStepId)))
+                ((!dto.AwaitingReward && !(dto.FirstRunExperience != null && dto.LootPendingExit)) ||
+                 string.IsNullOrEmpty(dto.PendingRewardStepId)))
                 throw new InvalidOperationException("Invalid pending academy reward currency.");
             if (dto.AcademyFoodCount < 0 || dto.ForgeMaterialCount < 0 || dto.SpecializationMaterialCount < 0 ||
                 (dto.DeparturePending && (dto.FirstRunExperience != null || dto.RunProgramId != OCC.Combat.RogueliteRunProgram.EvergreenAcademy.ToString())))

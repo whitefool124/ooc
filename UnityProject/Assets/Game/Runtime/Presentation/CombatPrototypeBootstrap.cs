@@ -767,6 +767,74 @@ namespace OCC.Combat.Presentation
             PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, rewardId));
             CompleteMapRewardClaim();
         }
+        public void ClaimMapLootChoice(string rewardId)
+        {
+            if (mapRun == null || !IsMapRunSaved) return;
+            RogueliteMapResources before = RogueliteMapResources.Capture(mapRun);
+            mapRun.ClaimLootChoice(rewardId);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            PublishResourceChanges(before, RogueliteMapResources.Capture(mapRun));
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, rewardId));
+            MarkPresentation(UiPresentationArea.Settlement);
+            settlementPresentation?.RefreshNow();
+        }
+        public void ClaimMapFixedLoot(string lootId)
+        {
+            if (mapRun == null || !IsMapRunSaved) return;
+            RogueliteMapResources before = RogueliteMapResources.Capture(mapRun);
+            mapRun.ClaimFixedLoot(lootId);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            PublishResourceChanges(before, RogueliteMapResources.Capture(mapRun));
+            PublishUiVisual(new UiVisualEvent(UiVisualEventKind.RewardClaimed, lootId));
+            MarkPresentation(UiPresentationArea.Settlement);
+            settlementPresentation?.RefreshNow();
+        }
+        public void RequestLeaveMapLoot()
+        {
+            if (mapRun == null || !IsMapRunSaved || (!mapRun.AwaitingReward && !mapRun.LootPendingExit)) return;
+            bool firstWarning = mapRun.HasUnclaimedLoot && PlayerPrefs.GetInt("OCC.LootUnclaimedExitReminderShown", 0) == 0;
+            if (firstWarning)
+            {
+                RequestConfirmation(new UiConfirmationRequest(UiConfirmationKind.AbandonReward,
+                    "还有战利品未领取", "离开后将失去未领取的奖励。确定离开吗？", "离开"),
+                    () => LeaveMapLoot(true));
+                return;
+            }
+            LeaveMapLoot(false);
+        }
+        private void LeaveMapLoot(bool rememberWarning)
+        {
+            try { mapRun.LeaveLoot(); }
+            catch (InvalidOperationException error)
+            {
+                ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, error.Message));
+                return;
+            }
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            if (rememberWarning)
+            {
+                PlayerPrefs.SetInt("OCC.LootUnclaimedExitReminderShown", 1);
+                PlayerPrefs.Save();
+            }
+            ReturnToMapRun();
+            MarkPresentation(UiPresentationArea.Settlement);
+        }
+        public void SelectMapReward(string rewardId)
+        {
+            if (mapRun == null || !IsMapRunSaved) return;
+            mapRun.SelectPendingReward(rewardId);
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            MarkPresentation(UiPresentationArea.Settlement);
+            settlementPresentation?.RefreshNow();
+        }
+        public void OpenMapRewardChoices()
+        {
+            if (mapRun == null || !IsMapRunSaved) return;
+            mapRun.OpenPendingRewardChoices();
+            if (!SaveMapRun()) { RestoreMapRunAfterFailedRewardSave(); return; }
+            MarkPresentation(UiPresentationArea.Settlement);
+            settlementPresentation?.RefreshNow();
+        }
         public void ConfirmMapResourceReceipt()
         {
             if (mapRun?.PendingResourceReceipt == null || !IsMapRunSaved) return;
@@ -793,10 +861,14 @@ namespace OCC.Combat.Presentation
         }
         public void OpenRewardInventory()
         {
-            if (mapRun == null || !mapRun.UsesRogue11) return;
+            if (mapRun == null || !mapRun.UsesRogue11 || !IsMapRunSaved) return;
             ReturnToMapRun();
             settlementPresentation?.HideForInventory();
             presentation?.RogueliteUi?.OpenLoadoutForReward();
+        }
+        public void CloseRewardInventory()
+        {
+            if (mapRun != null && (mapRun.AwaitingReward || mapRun.LootPendingExit)) settlementPresentation?.RefreshNow();
         }
         public void ClaimMapFireSpell(string spellId)
         {
@@ -840,8 +912,11 @@ namespace OCC.Combat.Presentation
                 MarkPresentation(UiPresentationArea.Flow);
                 return;
             }
-            developerFlow.ReturnToDeveloperMenu();
-            state = developerFlow.State;
+            if (developerFlow != null)
+            {
+                developerFlow.ReturnToDeveloperMenu();
+                state = developerFlow.State;
+            }
             rogueliteFlow.ReturnToMap();
             RefreshSceneHud();
             MarkPresentation(UiPresentationArea.Flow);
@@ -2288,6 +2363,11 @@ namespace OCC.Combat.Presentation
             else { execution = ArtifactEngine.Execute(artifactBattle, "hero", artifact, target, uses); trainingRangeArtifactUsesRemaining--; }
             enemyPlans.Invalidate();
             state.AddLog(artifact.DisplayName + "已经生效。");
+            if (artifact.Id == "G-T02") OccSoundEffects.Teleport();
+            else if (artifact.Id == "G-T01" || artifact.Id == "G-T16") OccSoundEffects.ShieldBlock();
+            else if (artifact.Id == "G-T08" || artifact.Id == "G-T17") OccSoundEffects.BreakObject();
+            else if (artifact.Id == "G-T12" || artifact.Id == "G-T19") OccSoundEffects.PaperPlace();
+            else OccSoundEffects.Device();
             selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
             visualFeedback?.NotifyArtifact(artifact, source, preview.Cells, execution);
             presentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
@@ -2325,6 +2405,7 @@ namespace OCC.Combat.Presentation
             }
             if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
             state.AddLog(spell.DisplayName + "已经生效。");
+            OccSoundEffects.Fire();
             selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
             visualFeedback?.NotifyFireSpell(execution);
             presentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
@@ -2355,12 +2436,22 @@ namespace OCC.Combat.Presentation
             fireBattle = result.FireBattle;
             if (!result.Accepted)
             {
+                OccSoundEffects.Rejected();
                 state.AddLog(result.RejectionReason);
                 PublishUiVisual(new UiVisualEvent(UiVisualEventKind.CombatCommandRejected,
                     command.Type.ToString(), message: result.RejectionReason));
                 return;
             }
             if (!string.IsNullOrEmpty(result.ActionResult)) state.AddLog(result.ActionResult);
+            if (command.Type == CombatCommandType.Move) OccSoundEffects.Footstep();
+            else if (command.Type == CombatCommandType.Attack) OccSoundEffects.Strike();
+            else if (result.DeliveredSkill != null)
+            {
+                if (result.DeliveredSkill.DamageType == DamageType.Fire) OccSoundEffects.Fire();
+                else if (result.DeliveredSkill.DamageType == DamageType.Arcane) OccSoundEffects.Arcane();
+                else OccSoundEffects.Magic();
+            }
+            else if (command.Type == CombatCommandType.Interact || command.Type == CombatCommandType.BreachCharge) OccSoundEffects.Device();
             if (trainingRangeActive && result.DeliveredSkill != null) trainingRangeSession?.RecordExternal(result.Execution);
             PublishFireExecutions(result.MovementFireExecutions);
             if (result.HeroMoved) followHeroMovement = true;

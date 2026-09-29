@@ -235,8 +235,13 @@ namespace OCC.Combat.Presentation
                 mapRun?.RestoreLootProgress(state.LootSource);
                 return;
             }
-            GridPosition lootPosition = state.Map.PositionsWith(tile => tile.IsLootChest)
-                .DefaultIfEmpty(new GridPosition(2, 0)).First();
+            GridPosition[] chests = state.Map.PositionsWith(tile => tile.IsLootChest).ToArray();
+            if (chests.Length == 0)
+            {
+                state.SetLoot(null);
+                return;
+            }
+            GridPosition lootPosition = chests[0];
             state.SetLoot(new LootContainer(lootPosition,
                 new InventoryItem("aether_core", "以太核心", 2, 1)));
             string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";

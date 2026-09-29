@@ -97,23 +97,90 @@ namespace OCC.Combat.Tests
         [Test]
         public void AcademyRewardPackages_HaveEveryStageForGeneratedBattles()
         {
+            bool sawOrdinaryDrop = false;
+            bool sawOrdinaryWithoutDrop = false;
             for (int seed = 0; seed < 64; seed++)
                 foreach (RogueliteMapNode node in RogueliteAcademyMapGenerator.Generate(seed).Where(value => value.IsCombat))
                 {
                     AcademyBattleRewardPackage package = AcademyBattleRewardCatalog.Roll(seed, node.Id, Array.Empty<string>());
                     Assert.That(package.MainIds.Count, Is.EqualTo(3), node.Id + " @ " + seed);
                     Assert.That(package.MainIds.Distinct().Count(), Is.EqualTo(3), node.Id + " @ " + seed);
-                    Assert.That(package.FollowupIds.Count, Is.EqualTo(node.Type == RogueliteMapNodeType.Combat &&
-                        (RogueliteAcademyLayerCatalog.Mapping(node.Id).ContentTableId == "N01" ||
-                         RogueliteAcademyLayerCatalog.Mapping(node.Id).ContentTableId == "N02") ? 0 :
-                        node.Type == RogueliteMapNodeType.Finale ? 3 : 2), node.Id + " @ " + seed);
-                    if (node.Type == RogueliteMapNodeType.Finale)
-                        Assert.That(package.FixedMaterialIds.Count, Is.EqualTo(2));
+                    if (node.Type == RogueliteMapNodeType.Combat)
+                    {
+                        Assert.That(package.FollowupIds.Count, Is.InRange(0, 1), node.Id + " @ " + seed);
+                        sawOrdinaryDrop |= package.FollowupIds.Count == 1;
+                        sawOrdinaryWithoutDrop |= package.FollowupIds.Count == 0;
+                    }
+                    else Assert.That(package.FollowupIds.Count,
+                        Is.EqualTo(node.Type == RogueliteMapNodeType.Elite ? 1 : 0), node.Id + " @ " + seed);
+                    Assert.That(package.FixedMaterialIds.Count,
+                        Is.EqualTo(node.Type == RogueliteMapNodeType.Elite ? 1 : 0), node.Id + " @ " + seed);
+                    Assert.That(package.FollowupIds.Intersect(package.MainIds), Is.Empty, node.Id + " @ " + seed);
                 }
+            Assert.That(sawOrdinaryDrop && sawOrdinaryWithoutDrop, Is.True);
         }
 
         [Test]
-        public void BossRewardChoices_PersistIndependentlyUntilRoundSettlement()
+        public void RandomRewardEnvelope_OpeningAndChoiceSurviveSaveWithoutGrantingEarly()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
+            RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
+            int gold = run.Gold;
+            string choiceId = run.CurrentRewards[0].Id;
+            Assert.That(run.RewardChoicesOpened, Is.False);
+            run.OpenPendingRewardChoices();
+            run.SelectPendingReward(choiceId);
+            Assert.That(run.Gold, Is.EqualTo(gold));
+            Assert.That(run.ClaimedRewards, Does.Not.Contain(choiceId));
+
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun loaded), Is.True, gateway.LastError);
+            Assert.That(loaded.RewardChoicesOpened, Is.True);
+            Assert.That(loaded.SelectedRewardId, Is.EqualTo(choiceId));
+            Assert.That(loaded.CurrentRewards.Select(value => value.Id), Does.Contain(choiceId));
+            Assert.That(loaded.Gold, Is.EqualTo(gold));
+        }
+
+        [Test]
+        public void EliteReward_HasFixedMaterialAndOneIndependentSeededDrop()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            run.SelectNode("dorm_watch");
+            run.CompleteCurrentCombat();
+            run.AbandonCurrentReward();
+            run.SelectNode("supply_depot");
+            run.CompleteCurrentCombat();
+            Assert.That(run.CurrentRewards.Count, Is.EqualTo(3));
+            Assert.That(run.RogueRunState.PendingFixedMaterialIds,
+                Is.EqualTo(new[] { AcademyBattleRewardCatalog.ForgeLoad }));
+            Assert.That(run.RogueRunState.PendingRewardFollowupIds.Count, Is.EqualTo(1));
+            string dropId = run.RogueRunState.PendingRewardFollowupIds[0];
+            Assert.That(dropId, Is.Not.EqualTo(AcademyBattleRewardCatalog.ForgeLoad));
+            run.ClaimLootChoice(run.CurrentRewards.First(value => value.RogueSpell != null).Id);
+            Assert.That(run.PendingRewardStepId, Is.EqualTo("followup"));
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun loaded), Is.True, gateway.LastError);
+            Assert.That(loaded.CurrentRewards.Single().Id, Is.EqualTo(dropId));
+            loaded.OpenPendingRewardChoices();
+            loaded.ClaimLootChoice(dropId);
+            loaded.ClaimFixedLoot("gold");
+            loaded.ClaimFixedLoot("contribution");
+            loaded.ClaimFixedLoot("materials");
+            loaded.LeaveLoot();
+            Assert.That(loaded.AwaitingReward, Is.False);
+            Assert.That(loaded.Gold, Is.GreaterThanOrEqualTo(6));
+            Assert.That(loaded.StageContribution, Is.GreaterThanOrEqualTo(2));
+        }
+
+        [Test]
+        public void BossRewardChoice_PersistsUntilRoundSettlement()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
             run.ConfirmAcademyDeparture();
@@ -125,8 +192,7 @@ namespace OCC.Combat.Tests
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             Assert.That(run.AwaitingReward, Is.True);
             Assert.That(run.CurrentRewards.Count, Is.EqualTo(3));
-            Assert.That(run.RogueRunState.PendingFixedMaterialIds,
-                Is.EquivalentTo(new[] { AcademyBattleRewardCatalog.ForgeLoad, AcademyBattleRewardCatalog.SpecAmplify }));
+            Assert.That(run.RogueRunState.PendingFixedMaterialIds, Is.Empty);
             Assert.That(run.ForgeMaterialCount, Is.EqualTo(forgeBeforeBoss));
             Assert.That(run.SpecializationMaterialCount, Is.EqualTo(specBeforeBoss));
             Assert.That(run.Gold, Is.EqualTo(goldBeforeBoss));
@@ -141,19 +207,110 @@ namespace OCC.Combat.Tests
             Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun loaded), Is.True, gateway.LastError);
             Assert.That(loaded.CurrentRewards.Select(value => value.Id), Is.EqualTo(firstChoices));
             loaded.ClaimReward(firstChoices[0]);
-            Assert.That(loaded.PendingRewardStepId, Is.EqualTo("followup"));
-            Assert.That(loaded.CurrentRewards.Count, Is.EqualTo(3));
-            string[] secondChoices = loaded.CurrentRewards.Select(value => value.Id).ToArray();
+            Assert.That(loaded.PendingRewardStepId, Is.Empty);
+            Assert.That(loaded.IsComplete, Is.True);
             Assert.That(saves.Save(loaded), Is.True, gateway.LastError);
             Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun restored), Is.True, gateway.LastError);
-            Assert.That(restored.CurrentRewards.Select(value => value.Id), Is.EqualTo(secondChoices));
-            restored.ClaimReward(secondChoices[0]);
             Assert.That(restored.IsComplete, Is.True);
             Assert.That(restored.AwaitingReward, Is.False);
-            Assert.That(restored.ForgeMaterialCount, Is.GreaterThanOrEqualTo(forgeBeforeBoss + 1));
-            Assert.That(restored.SpecializationMaterialCount, Is.GreaterThanOrEqualTo(specBeforeBoss + 1));
+            Assert.That(restored.ForgeMaterialCount, Is.EqualTo(forgeBeforeBoss));
+            Assert.That(restored.SpecializationMaterialCount, Is.EqualTo(specBeforeBoss));
             Assert.That(restored.Gold, Is.EqualTo(goldBeforeBoss + 10));
             Assert.That(restored.StageContribution, Is.EqualTo(contributionBeforeBoss + 3));
+        }
+
+        [Test]
+        public void LootScreen_ClaimsFixedRowsSeparatelyAndForfeitsOnlyTheRemainderOnLeave()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
+            RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
+            int goldBefore = run.Gold;
+            int contributionBefore = run.StageContribution;
+            run.ClaimFixedLoot("gold");
+            Assert.That(run.Gold, Is.EqualTo(goldBefore + 10));
+            Assert.Throws<InvalidOperationException>(() => run.ClaimFixedLoot("gold"));
+            Assert.That(run.Gold, Is.EqualTo(goldBefore + 10));
+            Assert.That(run.RogueRunState.PendingRewardGold, Is.Zero);
+            Assert.That(run.StageContribution, Is.EqualTo(contributionBefore));
+            Assert.That(run.HasUnclaimedLoot, Is.True);
+
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun loaded), Is.True, gateway.LastError);
+            Assert.That(loaded.Gold, Is.EqualTo(goldBefore + 10));
+            Assert.That(loaded.RogueRunState.PendingRewardContribution, Is.EqualTo(3));
+            Assert.That(loaded.LootPendingExit, Is.True);
+
+            loaded.LeaveLoot();
+            Assert.That(loaded.AwaitingReward, Is.False);
+            Assert.That(loaded.LootPendingExit, Is.False);
+            Assert.That(loaded.Gold, Is.EqualTo(goldBefore + 10));
+            Assert.That(loaded.StageContribution, Is.EqualTo(contributionBefore));
+            Assert.That(loaded.RogueRunState.PendingFixedMaterialIds, Is.Empty);
+        }
+
+        [Test]
+        public void LootScreen_BossChoiceIsCollectedBeforeLeaving()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
+            run.ConfirmAcademyDeparture();
+            Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
+            RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
+            string choiceId = run.CurrentRewards[1].Id;
+            run.ClaimLootChoice(choiceId);
+            Assert.That(run.PendingRewardStepId, Is.EqualTo("collected"));
+            Assert.That(run.ClaimedRewards, Does.Contain(choiceId));
+            Assert.That(run.HasUnclaimedLoot, Is.True);
+            run.LeaveLoot();
+            Assert.That(run.ClaimedRewards, Does.Contain(choiceId));
+            Assert.That(run.AwaitingReward, Is.False);
+            Assert.That(run.IsComplete, Is.True);
+        }
+
+        [Test]
+        public void FirstEliteLoot_FixedItemsAndPassiveAreCollectedIndividually()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(7021);
+            run.AcknowledgeFirstRunOrigin();
+            ResolveBattle(run, "B1");
+            VisitEvent(run, "EV1", 0);
+            VisitEvent(run, "EV2", 0);
+            ResolveBattle(run, "B2");
+            VisitEvent(run, "EV3", 1);
+            ResolveBattle(run, "B3");
+            run.SelectNode("X");
+            int goldBefore = run.Gold;
+            int contributionBefore = run.StageContribution;
+            run.CompleteCurrentCombat();
+            Assert.That(run.Gold, Is.EqualTo(goldBefore));
+            Assert.That(run.StageContribution, Is.EqualTo(contributionBefore));
+            run.ClaimFixedLoot("elite-gold");
+            run.ClaimFixedLoot("elite-contribution");
+            run.ClaimFixedLoot("elite-head");
+            run.ClaimFixedLoot("elite-brace");
+            run.ClaimFixedLoot("elite-material");
+            Assert.That(run.Gold, Is.EqualTo(goldBefore + 6));
+            Assert.That(run.StageContribution, Is.EqualTo(contributionBefore + 2));
+            Assert.That(run.RogueRunState.PendingFixedMaterialIds, Is.Empty);
+            Assert.That(run.RogueRunState.EquipmentInstances.Any(item => item.DefinitionId == "ACA-EQ-HD02"), Is.True);
+            Assert.That(run.RogueRunState.TacticalItemInstances.Any(item => item.DefinitionId == "G-T13"), Is.True);
+            Assert.That(run.FirstRunExperience.EliteRewardClaimed, Is.False);
+            run.ClaimLootChoice("PASSIVE-ELITE-01");
+            Assert.That(run.FirstRunExperience.EliteRewardClaimed, Is.True);
+            Assert.That(run.LootPendingExit, Is.True);
+            Assert.That(run.HasUnclaimedLoot, Is.False);
+            MemoryStore store = new MemoryStore();
+            RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
+            Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
+            Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun loaded), Is.True, gateway.LastError);
+            Assert.That(loaded.LootPendingExit, Is.True);
+            Assert.Throws<InvalidOperationException>(() => loaded.SelectNode("S"));
+            loaded.LeaveLoot();
+            Assert.That(loaded.LootPendingExit, Is.False);
+            Assert.That(loaded.AwaitingReward, Is.False);
         }
 
         [Test]
@@ -167,19 +324,18 @@ namespace OCC.Combat.Tests
             int before = run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad);
             Assert.That(run.CanDismantleReward(equipment), Is.True);
             run.ClaimReward("dismantle:" + equipment.Id);
-            Assert.That(run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad), Is.EqualTo(before));
-            Assert.That(run.PendingRewardStepId, Is.EqualTo("followup"));
+            Assert.That(run.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad), Is.EqualTo(before + 1));
+            Assert.That(run.PendingRewardStepId, Is.Empty);
             MemoryStore store = new MemoryStore();
             RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
             Assert.That(new RogueliteMapSaveCoordinator(gateway).Save(run), Is.True, gateway.LastError);
             Assert.That(gateway.TryLoadMapRun(out RogueliteMapRun restored), Is.True, gateway.LastError);
-            Assert.That(restored.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad), Is.EqualTo(before));
-            restored.ClaimReward(restored.CurrentRewards.First(value => value.RogueSpell != null).Id);
-            Assert.That(restored.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad), Is.GreaterThanOrEqualTo(before + 2));
+            Assert.That(restored.AcademyMaterialCount(AcademyBattleRewardCatalog.ForgeLoad), Is.EqualTo(before + 1));
+            Assert.That(restored.IsComplete, Is.True);
         }
 
         [Test]
-        public void BossFixedMaterials_WaitForBackpackSpaceBeforeFinalClaim()
+        public void BossSpellChoice_DoesNotRequireExtraMaterialSpace()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4314);
             run.ConfirmAcademyDeparture();
@@ -195,18 +351,9 @@ namespace OCC.Combat.Tests
             inventory.WriteToDto(run.RogueRunState);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             RogueliteReward firstSpell = run.CurrentRewards.First(value => value.RogueSpell != null);
+            Assert.That(run.RogueRunState.PendingFixedMaterialIds, Is.Empty);
+            Assert.That(run.CanAcceptAcademyReward(firstSpell), Is.True);
             run.ClaimReward(firstSpell.Id);
-            RogueliteReward finalSpell = run.CurrentRewards.First(value => value.RogueSpell != null);
-            Assert.That(run.CanAcceptAcademyReward(finalSpell), Is.False);
-            Assert.Throws<InvalidOperationException>(() => run.ClaimReward(finalSpell.Id));
-            Assert.That(run.AwaitingReward, Is.True);
-            Assert.That(run.RogueRunState.PendingFixedMaterialIds.Count, Is.EqualTo(2));
-
-            foreach (EquipmentInstanceDto item in run.RogueRunState.EquipmentInstances
-                .Where(value => value.InstanceId.StartsWith("filler-", StringComparison.Ordinal)).Take(2).ToArray())
-                run.RogueRunState.EquipmentInstances.Remove(item);
-            Assert.That(run.CanAcceptAcademyReward(finalSpell), Is.True);
-            run.ClaimReward(finalSpell.Id);
             Assert.That(run.RogueRunState.PendingFixedMaterialIds, Is.Empty);
             Assert.That(run.IsComplete, Is.True);
         }

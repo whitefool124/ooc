@@ -30,6 +30,8 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, int> resourceDeltas = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly Dictionary<string, Text> resourceValues = new Dictionary<string, Text>(StringComparer.Ordinal);
         private UiOverlay overlay;
+        private bool rewardLoadoutOpen;
+        private bool pendingRewardLoadoutOpen;
         private int archiveArtifactIndex;
         private UiScreen currentScreen = UiScreen.Landing;
         private string pendingFocusKey;
@@ -130,6 +132,11 @@ namespace OCC.Combat.Presentation
                 navigation.Navigate(nextScreen, DefaultFocusKey(nextScreen));
                 pendingFocusKey = navigation.DefaultFocusKey;
                 Invalidate();
+            }
+            if (pendingRewardLoadoutOpen && currentScreen == UiScreen.Map)
+            {
+                pendingRewardLoadoutOpen = false;
+                SetOverlay(UiOverlay.Loadout);
             }
             if (bootstrap.CurrentMapRun?.DeparturePending == true && overlay != UiOverlay.Loadout)
                 SetOverlay(UiOverlay.Loadout);
@@ -269,8 +276,14 @@ namespace OCC.Combat.Presentation
         public void OpenLoadoutForReward()
         {
             if (bootstrap?.CurrentMapRun == null || !bootstrap.CurrentMapRun.UsesRogue11) return;
+            rewardLoadoutOpen = true;
+            pendingRewardLoadoutOpen = true;
             loadoutSection = LoadoutSection.Equipment;
-            SetOverlay(UiOverlay.Loadout);
+            if (currentScreen == UiScreen.Map && bootstrap.IsMapMenuOpen)
+            {
+                pendingRewardLoadoutOpen = false;
+                SetOverlay(UiOverlay.Loadout);
+            }
         }
 
         private void DrawMap()
@@ -2001,8 +2014,9 @@ namespace OCC.Combat.Presentation
         {
             RogueliteMapRun run = bootstrap.CurrentMapRun ?? bootstrap.ArchivedMapRun;
             if (run == null || !run.UsesRogue11) { SetOverlay(UiOverlay.None); return; }
-            Header(run.DeparturePending ? "出发整备" : "角色与整备",
-                run.DeparturePending ? "确认装备、术式、战术栏和背包后保存出发" : "换好装备和术式，再去下一站");
+            Header(run.DeparturePending ? "出发整备" : rewardLoadoutOpen ? "待领奖励去向处理" : "角色与整备",
+                run.DeparturePending ? "确认装备、术式、战术栏和背包后保存出发" : rewardLoadoutOpen
+                    ? "整理背包、装备和战术栏，完成后返回战利品清点" : "换好装备和术式，再去下一站");
             FormalRogueliteLoadoutShellView shell = FormalRogueliteLoadoutShellView.Create(content.transform);
             GameObject card = shell.Card.gameObject;
             ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, true);
@@ -2029,7 +2043,7 @@ namespace OCC.Combat.Presentation
                 DrawSpellLoadout(shell.Body, dto, spells);
 
             Line(shell.Footer, new Vector2(16, -878), new Vector2(1832, 2), FormalUiTheme.Rule);
-            ActionButton(run.DeparturePending ? "确认出发" : "返回地图", string.Empty, shell.Footer,
+            ActionButton(run.DeparturePending ? "确认出发" : rewardLoadoutOpen ? "返回战利品" : "返回地图", string.Empty, shell.Footer,
                 new Vector2(1248, -894), new Vector2(600, 64), cyan, true,
                 () => { if (!run.DeparturePending || bootstrap.ConfirmAcademyDeparture()) SetOverlay(UiOverlay.None); },
                 iconPath: FormalArtRegistry.NavigationPath(run.DeparturePending ? "confirm" : "back"));
@@ -3093,6 +3107,7 @@ namespace OCC.Combat.Presentation
         private void SetOverlay(UiOverlay value)
         {
             if (bootstrap?.CurrentMapRun?.DeparturePending == true && value != UiOverlay.Loadout) return;
+            bool returningFromReward = rewardLoadoutOpen && overlay == UiOverlay.Loadout && value == UiOverlay.None;
             if (overlay == UiOverlay.Loadout && value != UiOverlay.Loadout) ClearLoadoutDrag();
             if (value == UiOverlay.None)
             {
@@ -3112,6 +3127,12 @@ namespace OCC.Combat.Presentation
             if (canvas != null) canvas.sortingOrder = value == UiOverlay.Encyclopedia
                 ? UiLayoutContract.InteractionSortingOrder + 11 : UiLayoutContract.RogueliteSortingOrder;
             Invalidate();
+            if (returningFromReward)
+            {
+                rewardLoadoutOpen = false;
+                pendingRewardLoadoutOpen = false;
+                bootstrap.CloseRewardInventory();
+            }
         }
 
         private void VolumeSettingRow(Transform parent, float value)

@@ -34,8 +34,6 @@ namespace OCC.Combat
 
         private static readonly HashSet<string> ForgeNodes = new HashSet<string>(new[]
         { "N07", "N08", "N12", "N14", "N15" }, StringComparer.Ordinal);
-        private static readonly HashSet<string> SpecNodes = new HashSet<string>(new[]
-        { "N09", "N10", "N13", "N17", "N18" }, StringComparer.Ordinal);
 
         public static AcademyBattleRewardPackage Roll(int seed, string nodeId, IEnumerable<string> ownedIds)
         {
@@ -63,34 +61,41 @@ namespace OCC.Combat
                 : artifact.Id;
             main.Add(mobility);
 
-            string[] followup;
-            string[] fixedMaterials = Array.Empty<string>();
-            if (ForgeNodes.Contains(contentId)) followup = new[] { ForgeLoad, ForgeCircuit };
-            else if (SpecNodes.Contains(contentId)) followup = new[] { SpecAmplify, SpecEfficient };
-            else if (node.Type == RogueliteMapNodeType.Elite)
-                followup = contentId == "E01" ? new[] { MixedPair, RecoveryTool } :
-                    contentId == "E02" ? new[] { MixedPair, ScrollPack } : new[] { ScrollPack, RecoveryTool };
-            else if (node.Type == RogueliteMapNodeType.Finale)
-            {
-                List<string> reinforcement = BuildPair(StableKey(seed, nodeId + "|boss-followup"), source,
-                    SpellRarity.Uncommon, EquipmentRarity.Uncommon, (ownedIds ?? Array.Empty<string>()).Concat(main));
-                string[] blocked = (ownedIds ?? Array.Empty<string>()).Concat(main).Concat(reinforcement).ToArray();
-                ArtifactEffectKind[] spatialEffects = { ArtifactEffectKind.MoveSource, ArtifactEffectKind.ForceMoveTarget,
-                    ArtifactEffectKind.CreateLightCover, ArtifactEffectKind.CreateHeavyCover,
-                    ArtifactEffectKind.RestoreShield, ArtifactEffectKind.DeployDecoy };
-                ArtifactDefinition spatial = ArtifactCatalog.All
-                    .Where(value => ArtifactCatalog.IsCurrentlyUsable(value.Id) && !blocked.Contains(value.Id) &&
-                        value.Effects.Any(effect => spatialEffects.Contains(effect.Kind)))
-                    .OrderBy(value => StableKey(seed, nodeId + "|spatial|" + value.Id))
-                    .FirstOrDefault() ?? ArtifactRewardPool.Roll(seed, StableKey(seed, nodeId + "|spatial-fallback"),
-                        node.Type, blocked);
-                followup = reinforcement.Concat(new[] { spatial.Id }).ToArray();
-                fixedMaterials = new[] { ForgeLoad, SpecAmplify };
-            }
-            else followup = Array.Empty<string>();
-            if (main.Count != 3 || followup.Length > 0 && followup.Length != (node.Type == RogueliteMapNodeType.Finale ? 3 : 2))
+            string[] fixedMaterials = node.Type == RogueliteMapNodeType.Elite
+                ? new[] { contentId == "E02" ? SpecAmplify : contentId == "E03" ? ForgeCircuit : ForgeLoad }
+                : Array.Empty<string>();
+            int dropChance = node.Type == RogueliteMapNodeType.Elite ? 100 :
+                node.Type == RogueliteMapNodeType.Finale ? 0 : high ? 40 : 25;
+            string[] followup = StableKey(seed, nodeId + "|drop-check") % 100 < dropChance
+                ? new[] { RollExtraDrop(seed, nodeId, node.Type, source, equipmentRarity,
+                    (ownedIds ?? Array.Empty<string>()).Concat(main).Concat(fixedMaterials)) }
+                : Array.Empty<string>();
+            if (main.Count != 3 || followup.Length > 1)
                 throw new InvalidOperationException("Academy reward pool is incomplete for " + nodeId + ".");
             return new AcademyBattleRewardPackage(main, followup, fixedMaterials);
+        }
+
+        private static string RollExtraDrop(int seed, string nodeId, RogueliteMapNodeType nodeType,
+            string source, EquipmentRarity equipmentRarity, IEnumerable<string> excludedIds)
+        {
+            string[] excluded = excludedIds.ToArray();
+            int category = StableKey(seed, nodeId + "|drop-category") % 3;
+            if (category == 0)
+            {
+                string equipment = BuildPair(StableKey(seed, nodeId + "|drop-equipment"), source,
+                    SpellRarity.Common, equipmentRarity, excluded).Skip(1).FirstOrDefault();
+                if (!string.IsNullOrEmpty(equipment) && !excluded.Contains(equipment)) return equipment;
+            }
+            if (category == 1)
+            {
+                ArtifactDefinition artifact = ArtifactRewardPool.Roll(seed,
+                    StableKey(seed, nodeId + "|drop-artifact"), nodeType, excluded);
+                if (artifact != null && !excluded.Contains(artifact.Id)) return artifact.Id;
+            }
+            string[] materials = { ForgeLoad, ForgeCircuit, SpecAmplify, SpecEfficient };
+            materials = materials.Where(id => !excluded.Contains(id)).ToArray();
+            if (materials.Length == 0) materials = new[] { ForgeLoad, ForgeCircuit, SpecAmplify, SpecEfficient };
+            return materials[StableKey(seed, nodeId + "|drop-material") % materials.Length];
         }
 
         public static RogueliteReward Resource(string id)
