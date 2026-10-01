@@ -36,12 +36,18 @@ if __name__ == '__main__':
             target = (destination/info.filename).resolve()
             if not target.is_relative_to(destination): raise ValueError('Unsafe archive path')
         archive.extractall(destination)
-    for name in ['book_01', 'book_02', 'book_03', 'book_04', 'item_coins_01', 'item_gem_01', 'lock_01', 'metal_01', 'spell_01', 'spell_02', 'spell_fire_01']:
+    for name in ['book_01', 'book_02', 'book_03', 'book_04', 'item_coins_01', 'item_gem_01', 'lock_01', 'metal_01', 'spell_01', 'spell_02', 'spell_fire_01',
+                 'blade_01', 'blade_02', 'blade_03', 'metal_02', 'metal_03', 'wood_01', 'stones_01', 'chain_01', 'spell_fire_02']:
         path = RUNTIME/'SFX/Free'/f'{name}.ogg'
         shutil.copyfile(destination/f'{name}.ogg', path)
         data = path.read_bytes()
         records.append(dict(title='80 CC0 RPG SFX', author='rubberduck', license='CC0-1.0',
             source=BASE+'content/80-cc0-rpg-sfx', archive_member=f'{name}.ogg',
             path=path.relative_to(ROOT).as_posix(), bytes=len(data), sha256=hashlib.sha256(data).hexdigest()))
+    impact = RUNTIME/'SFX/Free/impact_hit.ogg'
+    shutil.copyfile(ROOT/'UnityProject/Assets/Resources/Audio/SFX/Kenney/impact-sounds/impactGeneric_light_000.ogg', impact)
+    records.append(dict(title='Impact Sounds', author='Kenney', license='CC0-1.0', source='https://kenney.nl/assets/impact-sounds',
+        source_license='UnityProject/Assets/Resources/Audio/SFX/Kenney/impact-sounds/License.txt',
+        path=impact.relative_to(ROOT).as_posix(), bytes=impact.stat().st_size, sha256=hashlib.sha256(impact.read_bytes()).hexdigest()))
     (ROOT/'ArtSource/Audio/free_audio_sources.json').write_text(json.dumps(records, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(records, ensure_ascii=False, indent=2))

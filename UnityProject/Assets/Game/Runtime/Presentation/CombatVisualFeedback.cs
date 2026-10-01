@@ -93,8 +93,12 @@ namespace OCC.Combat.Presentation
             if (attack && target.HasValue)
             {
                 UnitState actor = bootstrap.CurrentState.GetUnit(actorId);
-                capture.AddDelivery(() => PlayUnitMotion(actor, UnitMotionKind.Attack, .30f,
-                    GridDirection(capture.Source, target.Value), Vector2.zero));
+                capture.AddDelivery(() =>
+                {
+                    OccSoundEffects.Strike();
+                    PlayUnitMotion(actor, UnitMotionKind.Attack, .30f,
+                        GridDirection(capture.Source, target.Value), Vector2.zero);
+                });
             }
             capture.AbortAction = () => { if (actionCapture == capture) actionCapture = null; };
             capture.CompleteAction = () =>
@@ -505,6 +509,7 @@ namespace OCC.Combat.Presentation
         public void Publish(CombatFeedbackEvent feedback)
         {
             if (actionCapture != null) { actionCapture.AddFeedback(feedback); return; }
+            OccSoundEffects.CombatFeedback(feedback);
             EnsureCanvas();
             CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(feedback.Kind);
             Color color = SemanticColor(semantic);
@@ -564,6 +569,8 @@ namespace OCC.Combat.Presentation
         public void NotifySkillDelivery(SkillDefinition skill, GridPosition source, GridPosition target)
         {
             if (skill == null) return;
+            if (actionCapture != null) actionCapture.AddDelivery(() => OccSoundEffects.Skill(skill));
+            else OccSoundEffects.Skill(skill);
             UnitState sourceUnit = bootstrap.CurrentState?.Units.Values.FirstOrDefault(unit => unit.Position == source);
             if (sourceUnit != null)
             {
@@ -601,12 +608,14 @@ namespace OCC.Combat.Presentation
 
         public void NotifyFireSpell(FireSpellExecution execution)
         {
-            if (execution?.Preview?.Spell == null || !AnimationsEnabled) return;
+            if (execution?.Preview?.Spell == null) return;
             if (actionCapture != null)
             {
                 actionCapture.AddDelivery(() => NotifyFireSpell(execution), FireVfxSequence.From(execution),
                     execution.IsTriggered ? actionCapture.TriggerDelay : 0f); return;
             }
+            OccSoundEffects.Fire();
+            if (!AnimationsEnabled) return;
             UnitState sourceUnit = bootstrap?.CurrentState?.GetUnit(execution.SourceUnitId);
             GridPosition primary = execution.Preview.Cells.FirstOrDefault();
             if (!execution.IsTriggered && sourceUnit != null)

@@ -2423,7 +2423,6 @@ namespace OCC.Combat.Presentation
             }
             if (trainingRangeActive) trainingRangeSession?.RecordExternal(preview, execution);
             state.AddLog(spell.DisplayName + "已经生效。");
-            OccSoundEffects.Fire();
             selection.ClearTarget(); MarkPresentation(UiPresentationArea.Combat);
             visualFeedback?.NotifyFireSpell(execution);
             presentation?.Complete(); RefreshCombatOutcomeAfterPresentation();
@@ -2462,13 +2461,6 @@ namespace OCC.Combat.Presentation
             }
             if (!string.IsNullOrEmpty(result.ActionResult)) state.AddLog(result.ActionResult);
             if (command.Type == CombatCommandType.Move) OccSoundEffects.Footstep();
-            else if (command.Type == CombatCommandType.Attack) OccSoundEffects.Strike();
-            else if (result.DeliveredSkill != null)
-            {
-                if (result.DeliveredSkill.DamageType == DamageType.Fire) OccSoundEffects.Fire();
-                else if (result.DeliveredSkill.DamageType == DamageType.Arcane) OccSoundEffects.Arcane();
-                else OccSoundEffects.Magic();
-            }
             else if (command.Type == CombatCommandType.Interact || command.Type == CombatCommandType.BreachCharge) OccSoundEffects.Device();
             if (trainingRangeActive && result.DeliveredSkill != null) trainingRangeSession?.RecordExternal(result.Execution);
             PublishFireExecutions(result.MovementFireExecutions);

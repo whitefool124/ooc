@@ -22,5 +22,9 @@ for clip in receipt['data']['returnValue']:
         output=output.relative_to(ROOT).as_posix(), gain=gain,
         rms_db_after=20*np.log10(max(rms*gain, 1e-12)), peak_after=peak*gain,
         sha256=hashlib.sha256(output.read_bytes()).hexdigest()))
-(ROOT/'ArtSource/Audio/free_audio_processing.json').write_text(json.dumps(records, indent=2), encoding='utf-8')
+manifest = ROOT/'ArtSource/Audio/free_audio_processing.json'
+existing = json.loads(manifest.read_text(encoding='utf-8-sig')) if manifest.exists() else []
+merged = {record['output']: record for record in existing}
+merged.update({record['output']: record for record in records})
+manifest.write_text(json.dumps(list(merged.values()), indent=2), encoding='utf-8')
 print(f'Normalized {len(records)} SFX; peak <= 0.8, target RMS -22 dBFS')

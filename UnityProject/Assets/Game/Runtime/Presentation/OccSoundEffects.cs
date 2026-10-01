@@ -11,6 +11,7 @@ namespace OCC.Combat.Presentation
         private static readonly Dictionary<string, float> LastPlayed = new Dictionary<string, float>();
         private static int pageVariant;
         private static int magicVariant;
+        private static int strikeVariant;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset()
@@ -18,7 +19,7 @@ namespace OCC.Combat.Presentation
             Clips.Clear();
             LastPlayed.Clear();
             source = null;
-            pageVariant = magicVariant = 0;
+            pageVariant = magicVariant = strikeVariant = 0;
         }
 
         private static void Play(string path, float volume)
@@ -53,15 +54,15 @@ namespace OCC.Combat.Presentation
         internal static void PageClose() => Play("Kenney/rpg-audio/bookClose", .53f);
         internal static void PageFlip() => Free("book_0" + (1 + pageVariant++ % 4), .48f);
         internal static void PaperPlace() => Play("OpenGameArt/paper/paper_01", .60f);
-        internal static void NotePlace() => Cue("archive_confirm", .55f);
+        internal static void NotePlace() => Play("Kenney/rpg-audio/bookPlace1", .42f);
         internal static void ScrollAction() => Play("Kenney/rpg-audio/bookFlip2", .64f);
-        internal static void Button() => Cue("archive_select", .32f);
-        internal static void Rejected() => Cue("archive_reject", .50f);
+        internal static void Button() => Play("Kenney/interface-sounds/click_001", .32f);
+        internal static void Rejected() => Play("Kenney/rpg-audio/bookClose", .28f);
         internal static void Footstep() => Play("Kenney/impact-sounds/footstep_concrete_000", .75f);
-        internal static void Strike() => Play("Kenney/rpg-audio/knifeSlice", .85f);
+        internal static void Strike() => Free("blade_0" + (1 + strikeVariant++ % 3), .60f);
         internal static void MetalImpact() => Play("Kenney/impact-sounds/impactMetal_medium_000", .8f);
-        internal static void ShieldBlock() => Play("OpenGameArt/combat/impact.1", .8f);
-        internal static void BreakObject() => Play("Kenney/impact-sounds/impactWood_heavy_000", .8f);
+        internal static void ShieldBlock() => Free("metal_02", .56f);
+        internal static void BreakObject() => Free("wood_01", .65f);
         internal static void Device() => Free("metal_01", .65f);
         internal static void Magic() => Free("magical_" + (1 + magicVariant++ % 7), .62f);
         internal static void Arcane() => Free("spell_0" + (1 + magicVariant++ % 2), .70f);
@@ -73,6 +74,44 @@ namespace OCC.Combat.Presentation
         internal static void Reward() { Free("item_gem_01", .32f); Cue("archive_reward", .50f); }
         internal static void Complete() => Cue("practicum_complete", .55f);
         internal static void Retry() => Cue("practicum_retry", .50f);
+
+        internal static void Skill(SkillDefinition skill)
+        {
+            if (skill == null) return;
+            if (skill.DamageType == DamageType.Fire) Fire();
+            else if (skill.DamageType == DamageType.Arcane) Arcane();
+            else Magic();
+        }
+
+        // Called only when a captured result is dispatched, alongside its visual impact.
+        internal static void CombatFeedback(CombatFeedbackEvent feedback)
+        {
+            string clip = CombatFeedbackClip(feedback.Kind);
+            if (clip != null) Free(clip, feedback.Kind == CombatFeedbackKind.UnitDefeated ? .48f : .52f);
+        }
+
+        internal static string CombatFeedbackClip(CombatFeedbackKind kind)
+        {
+            switch (kind)
+            {
+                case CombatFeedbackKind.Damage: return "impact_hit";
+                case CombatFeedbackKind.ShieldAbsorb: return "metal_02";
+                case CombatFeedbackKind.ArmorBreak:
+                case CombatFeedbackKind.BreakStance: return "metal_03";
+                case CombatFeedbackKind.Burning: return "spell_fire_02";
+                case CombatFeedbackKind.Bound:
+                case CombatFeedbackKind.Slow: return "chain_01";
+                case CombatFeedbackKind.Healing: return "magical_4";
+                case CombatFeedbackKind.ShieldRestore:
+                case CombatFeedbackKind.ShieldTransferredIn: return "magical_5";
+                case CombatFeedbackKind.ManaRestore: return "magical_6";
+                case CombatFeedbackKind.StatusCleared: return "magical_7";
+                case CombatFeedbackKind.DestructibleDamaged: return "stones_01";
+                case CombatFeedbackKind.DestructibleDestroyed:
+                case CombatFeedbackKind.UnitDefeated: return "wood_01";
+                default: return null;
+            }
+        }
 
         internal static void UiButton(string title)
         {

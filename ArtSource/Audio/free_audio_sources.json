@@ -251,5 +251,95 @@
     "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_fire_01.ogg",
     "bytes": 39482,
     "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_01.ogg",
+    "bytes": 15142,
+    "sha256": "caf7a7cb9b25cda4bd487c1d12d18b74a34bb18c816fd67277cf3c8d7ef32a3a"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_02.ogg",
+    "bytes": 17776,
+    "sha256": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_03.ogg",
+    "bytes": 15184,
+    "sha256": "2cd9e6926f4602a4350e703eeae4df520053e290f358ab692632d651ad368a7c"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_02.ogg",
+    "bytes": 26586,
+    "sha256": "30fcaab83dc3fff5335b78f87f9df305f6f8bd7316e2b46e2a4eaed85ee21768"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_03.ogg",
+    "bytes": 18753,
+    "sha256": "e780e2c2125161ed84fad0501af74bccc19ee9075dc9fac1d7d6f292ab3e81e2"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/wood_01.ogg",
+    "bytes": 13512,
+    "sha256": "55d4527a1f7d8e158eff0921f7a533340ab6be69a7b9b52fdac7a19b9d8e1cb2"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/stones_01.ogg",
+    "bytes": 27110,
+    "sha256": "d11ce95031c2c36ae2a00979620fa95a7a3f5c6d6f2ac86962ed292aa556be8d"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/chain_01.ogg",
+    "bytes": 23007,
+    "sha256": "d376caf0f61384b1d2e0b447f64f06be56d0ee0622ba70dd01cfdd78b3a10687"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_fire_02.ogg",
+    "bytes": 33115,
+    "sha256": "bf1eef4993f0adb4bd3a1c1ec91f8f6e4ddeb32d922671a14561846d5b7cab98"
+  },
+  {
+    "title": "Impact Sounds",
+    "author": "Kenney",
+    "license": "CC0-1.0",
+    "source": "https://kenney.nl/assets/impact-sounds",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/impact_hit.ogg",
+    "bytes": 5827,
+    "sha256": "f0e982611e97512fee5f777986b67e8b435434b601f94992ec044f7e89fb5acb"
   }
 ]

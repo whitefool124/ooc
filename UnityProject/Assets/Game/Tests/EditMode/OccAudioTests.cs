@@ -47,7 +47,7 @@ namespace OCC.Combat.Tests
         [Test] public void SelectedFreeEffectsDecodeAndHaveMatchedLevels()
         {
             var clips = Resources.LoadAll<AudioClip>("Audio/OCC/SFX/FreeProcessed");
-            Assert.AreEqual(18, clips.Length);
+            Assert.AreEqual(28, clips.Length);
             foreach (var clip in clips)
             {
                 clip.LoadAudioData();

@@ -142,5 +142,85 @@
     "rms_db_after": -25.034707799592375,
     "peak_after": 0.8,
     "sha256": "c9008b1f74b1c8dca223a31f94189d213e09b9d2e5f68f52c3a00bc9000f139e"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/blade_01.wav",
+    "gain": 0.9199971923913807,
+    "rms_db_after": -23.36004126001661,
+    "peak_after": 0.8,
+    "sha256": "dd02497968a41bd3ab0474c3ded4afcf9482e2d454a89109bcf397910187d39f"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_02.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/blade_02.wav",
+    "gain": 0.8762668805990106,
+    "rms_db_after": -22.59060722123262,
+    "peak_after": 0.8,
+    "sha256": "2f33da5ca25b5d7bd450dfa99c6a53dc6fc6a49eb7b5c00639a9820ca4db678f"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/blade_03.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/blade_03.wav",
+    "gain": 0.8373602504312273,
+    "rms_db_after": -25.709859492761712,
+    "peak_after": 0.8,
+    "sha256": "95e4f47dc552799bc5f37a1cb5f038f5076243e6e39e8f5f1cfa70c422a3c8ff"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/chain_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/chain_01.wav",
+    "gain": 0.663169707189338,
+    "rms_db_after": -22.0,
+    "peak_after": 0.6247775888257463,
+    "sha256": "bbc396e6f0e9c916b20b98aaee5ba763426da4dd1e5de20791f5979beb9e8c0a"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/impact_hit.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/impact_hit.wav",
+    "gain": 0.8247833521288072,
+    "rms_db_after": -22.0,
+    "peak_after": 0.7146628941953498,
+    "sha256": "d5fa6554b4e9c5e835040be796c0fa40d17c931da10def3fe50954e8a835c19e"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_02.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/metal_02.wav",
+    "gain": 0.8113133888102035,
+    "rms_db_after": -22.0,
+    "peak_after": 0.7295333557523391,
+    "sha256": "ea0bd3401534b680f08056031ba7dd9fefb088799db04330545d47b14236cdba"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_03.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/metal_03.wav",
+    "gain": 0.8000244148075808,
+    "rms_db_after": -22.58771686282892,
+    "peak_after": 0.8,
+    "sha256": "60a9dcbaa899e89f698398415c15bab933a5d6b40e69e73a0733c6bfc99ed1de"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_fire_02.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/spell_fire_02.wav",
+    "gain": 10.871207061901686,
+    "rms_db_after": -22.0,
+    "peak_after": 0.6635258216492728,
+    "sha256": "1fff6c8e34bc466ee7a8a86513f416cadd898ac6fb38b6c314943eb0df859f3a"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/stones_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/stones_01.wav",
+    "gain": 0.8,
+    "rms_db_after": -30.916076440348522,
+    "peak_after": 0.8,
+    "sha256": "ac3e2412201ddf8b5e03587bb13f2eed9c2a81558ded2ee6abce1c72b44a9132"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/wood_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/wood_01.wav",
+    "gain": 0.9182248064730815,
+    "rms_db_after": -28.174356811299106,
+    "peak_after": 0.8,
+    "sha256": "cf7511971b3a35bcecc3b1f3ca843a3bfb2771fe2d18dc1325989d778c44b48b"
   }
 ]
