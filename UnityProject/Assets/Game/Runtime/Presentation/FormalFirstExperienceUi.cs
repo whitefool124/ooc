@@ -33,7 +33,8 @@ namespace OCC.Combat.Presentation
             if (canvas.gameObject.activeSelf != visible) canvas.gameObject.SetActive(visible);
             if (!visible) return;
             string next = flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
-                flow.ResolutionIndex + "|" + flow.PendingFullscreen + "|" +
+                flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
+                flow.IsConfirmingDisplay + "|" + (flow.IsConfirmingDisplay ? flow.DisplayConfirmationSeconds : 0) + "|" +
                 flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
                 flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
             if (next != signature) Rebuild();
@@ -99,6 +100,15 @@ namespace OCC.Combat.Presentation
 
         private void BuildSettings()
         {
+            if (flow.IsConfirmingDisplay)
+            {
+                GameObject confirmation = CenterPanel(new Vector2(1100, 460));
+                Label("确认标题", "保留画面设置？", confirmation.transform, new Vector2(50, -45), new Vector2(1000, 70), 40, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+                Label("倒计时", flow.DisplayConfirmationSeconds + " 秒后自动恢复原设置", confirmation.transform, new Vector2(50, -145), new Vector2(1000, 70), 28, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+                AddButton("恢复画面设置", "恢复原设置", confirmation.transform, new Vector2(80, -290), new Vector2(420, 90), flow.RevertDisplaySettings);
+                AddButton("保留画面设置", "保留设置", confirmation.transform, new Vector2(600, -290), new Vector2(420, 90), flow.ConfirmDisplaySettings);
+                return;
+            }
             GameObject heading = FormalUiKit.AnchoredPanel("设置页眉", page.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(64, -50), new Vector2(1792, 150), ArchiveUiStyle.Paper);
             ArchiveUiStyle.PaperPanel(heading, ArchiveUiStyle.Paper, true);
@@ -108,20 +118,22 @@ namespace OCC.Combat.Presentation
                 new Vector2(44, -94), new Vector2(1580, 42), 24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
 
             GameObject sheet = FormalUiKit.AnchoredPanel("设置档案", page.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f),
-                new Vector2(0, -20), new Vector2(1440, 690), ArchiveUiStyle.LightPaper);
+                new Vector2(0, -70), new Vector2(1440, 790), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperPanel(sheet, ArchiveUiStyle.LightPaper, true);
             Label("卷宗标题", "本机偏好", sheet.transform, new Vector2(52, -20), new Vector2(600, 42), 28,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             FormalUiKit.Line(sheet.transform, new Vector2(52, -70), new Vector2(1336, 1), ArchiveUiStyle.Rule, "标题分隔");
             ArchiveVolumeSliderRow(sheet.transform, 88);
-            ArchiveSettingRow(sheet.transform, 240, "分辨率", flow.ResolutionLabel, "切换", flow.CycleResolution, null, null);
-            ArchiveSettingRow(sheet.transform, 392, "显示模式", flow.PendingFullscreen ? "全屏" : "窗口",
-                "更改", () => flow.PendingFullscreen = !flow.PendingFullscreen, null, null);
-            Button apply = AddButton("应用设置", "应用设置", sheet.transform, new Vector2(962, -548),
+            ArchiveSettingRow(sheet.transform, 218, "分辨率", flow.ResolutionLabel, "切换", flow.CycleResolution, null, null);
+            ArchiveSettingRow(sheet.transform, 320, "显示模式", flow.DisplayModeLabel, "更改", flow.CycleDisplayMode, null, null);
+            ArchiveSettingRow(sheet.transform, 422, "垂直同步", flow.PendingVSync ? "开启" : "关闭", "更改", flow.ToggleVSync, null, null);
+            ArchiveSettingRow(sheet.transform, 524, "帧率上限", flow.FrameRateLabel, "切换", flow.CycleFrameRate, null, null);
+            buttons[buttons.Count - 1].interactable = !flow.PendingVSync;
+            Button apply = AddButton("应用设置", "应用设置", sheet.transform, new Vector2(962, -672),
                 new Vector2(410, 90), flow.ApplyPendingSettings, FormalUiTheme.Cyan);
             ArchiveUiStyle.ScrollButton(apply, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
             if (flow.IsSettingsFromLanding)
-                ArchiveUiStyle.TabButton(AddButton("取消", "返回", sheet.transform, new Vector2(52, -548),
+                ArchiveUiStyle.TabButton(AddButton("取消", "返回", sheet.transform, new Vector2(52, -672),
                     new Vector2(280, 90), flow.GoBack), false,
                     () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
         }
@@ -326,7 +338,7 @@ namespace OCC.Combat.Presentation
             string leftLabel, Action left, string rightLabel, Action right)
         {
             GameObject row = FormalUiKit.Panel("设置行_" + name, parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(52, -y), new Vector2(1336, 126), ArchiveUiStyle.LightPaper);
+                new Vector2(52, -y), new Vector2(1336, 94), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperContent(row);
             Label("名称", name, row.transform, new Vector2(18, -30), new Vector2(330, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
@@ -340,13 +352,13 @@ namespace OCC.Combat.Presentation
                 ArchiveUiStyle.TabButton(AddButton("设置_" + name + "_右", rightLabel, row.transform,
                     new Vector2(1060, -28), new Vector2(236, 70), right), false,
                     () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
-            FormalUiKit.Line(parent, new Vector2(70, -y - 136), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
+            FormalUiKit.Line(parent, new Vector2(70, -y - 100), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
         }
 
         private void ArchiveVolumeSliderRow(Transform parent, float y)
         {
             GameObject row = FormalUiKit.Panel("设置行_主音量", parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(52, -y), new Vector2(1336, 126), ArchiveUiStyle.LightPaper);
+                new Vector2(52, -y), new Vector2(1336, 100), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperContent(row);
             Label("名称", "主音量", row.transform, new Vector2(18, -30), new Vector2(280, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
@@ -380,7 +392,7 @@ namespace OCC.Combat.Presentation
             volumeSlider.SetValueWithoutNotify(flow.PendingVolume);
             volumeSlider.onValueChanged.AddListener(value => { if (flow != null) flow.PendingVolume = value; });
             volumeValue.text = Mathf.RoundToInt(flow.PendingVolume * 100f) + "%";
-            FormalUiKit.Line(parent, new Vector2(70, -y - 136), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
+            FormalUiKit.Line(parent, new Vector2(70, -y - 110), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
         }
 
         private Button AddButton(string name, string title, Transform parent, Vector2 position, Vector2 size, Action action, Color? tone = null)

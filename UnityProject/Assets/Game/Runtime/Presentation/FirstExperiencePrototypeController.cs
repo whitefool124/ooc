@@ -37,8 +37,6 @@ namespace OCC.Combat.Presentation
         private const string SettingsSeenKey = "OCC.FirstExperiencePrototype.deviceSettings.v1";
         private const string OpeningSeenKey = "OCC.FirstExperiencePrototype.worldOpening.v1";
         private const string VolumeKey = "OCC.FirstExperiencePrototype.volume.v1";
-        private const string ResolutionKey = "OCC.FirstExperiencePrototype.resolution.v1";
-        private const string FullscreenKey = "OCC.FirstExperiencePrototype.fullscreen.v1";
         private const float DesignWidth = 1920f, DesignHeight = 1080f;
         private const float BrandDuration = 1f, FadeDuration = 0.2f;
         private static readonly Vector2Int[] Resolutions =
@@ -66,7 +64,8 @@ namespace OCC.Combat.Presentation
         private int selectedSlot = -1, pendingResolution;
         private bool pendingNewRunCreation;
         private float pendingVolume;
-        private bool pendingFullscreen;
+        private PcDisplayPreferences displayPreferences, confirmedDisplayPreferences;
+        private float displayConfirmationDeadline;
         private Texture2D panel, card, accent, done;
         private Texture2D buttonIdle, buttonHover, buttonPressed, cardFrame;
         private Texture2D landingBackdrop, startupBackdrop, settingsBackdrop, archiveBackdrop;
@@ -90,7 +89,12 @@ namespace OCC.Combat.Presentation
         public int ResolutionCount => Resolutions.Length;
         public string ResolutionLabel => Resolutions[pendingResolution].x + " × " + Resolutions[pendingResolution].y;
         public float PendingVolume { get => pendingVolume; set { pendingVolume = Mathf.Clamp01(value); AudioListener.volume = pendingVolume; } }
-        public bool PendingFullscreen { get => pendingFullscreen; set => pendingFullscreen = value; }
+        public bool PendingFullscreen { get => displayPreferences.ModeIndex != 0; set => displayPreferences.ModeIndex = value ? 1 : 0; }
+        public string DisplayModeLabel => displayPreferences.ModeLabel;
+        public bool PendingVSync => displayPreferences.VSync;
+        public string FrameRateLabel => displayPreferences.FrameRateLabel;
+        public bool IsConfirmingDisplay => displayConfirmationDeadline > 0f;
+        public int DisplayConfirmationSeconds => Mathf.Max(0, Mathf.CeilToInt(displayConfirmationDeadline - Time.unscaledTime));
         public string HandoffError => handoffError;
         public float AnimationIntensity => combatBootstrap == null ? 1f : combatBootstrap.UiPreferences.AnimationIntensity;
 
@@ -104,11 +108,12 @@ namespace OCC.Combat.Presentation
         private void Awake()
         {
             Application.runInBackground = true;
-            Application.targetFrameRate = 60;
             data = new SaveData { stage = FlowStage.Branding };
             pendingVolume = PlayerPrefs.GetFloat(VolumeKey, 0.8f);
-            pendingResolution = Mathf.Clamp(PlayerPrefs.GetInt(ResolutionKey, 2), 0, Resolutions.Length - 1);
-            pendingFullscreen = PlayerPrefs.GetInt(FullscreenKey, 0) != 0;
+            displayPreferences = PcDisplayPreferences.Load(Resolutions.Length);
+            pendingResolution = displayPreferences.ResolutionIndex;
+            confirmedDisplayPreferences = displayPreferences.Copy();
+            displayPreferences.Apply(Resolutions[pendingResolution]);
             AudioListener.volume = pendingVolume;
             BuildTextures();
             brandMarks = new[]
@@ -125,6 +130,7 @@ namespace OCC.Combat.Presentation
 
         private void Update()
         {
+            if (IsConfirmingDisplay && Time.unscaledTime >= displayConfirmationDeadline) RevertDisplaySettings();
             if (data.stage == FlowStage.Branding && brandIndex >= 0 && Time.unscaledTime - brandStartedAt >= BrandDuration)
                 AdvanceBrand();
         }
@@ -281,7 +287,7 @@ namespace OCC.Combat.Presentation
             AudioListener.volume = pendingVolume;
             GUI.Label(new Rect(170, 390, 850, 55), "分辨率  " + Resolutions[pendingResolution].x + " × " + Resolutions[pendingResolution].y, headingStyle);
             Button(new Rect(170, 470, 420, 85), "切换分辨率", () => pendingResolution = (pendingResolution + 1) % Resolutions.Length);
-            Button(new Rect(650, 470, 420, 85), pendingFullscreen ? "显示模式：全屏" : "显示模式：窗口", () => pendingFullscreen = !pendingFullscreen);
+            Button(new Rect(650, 470, 420, 85), "显示模式：" + DisplayModeLabel, CycleDisplayMode);
             GUI.Label(new Rect(170, 620, 1100, 90), "应用后保存到本机；以后仍可从以太主界面打开设置。", bodyStyle);
             Button(new Rect(1290, 820, 480, 100), "应用设置", ApplySettings);
         }
@@ -625,13 +631,37 @@ namespace OCC.Combat.Presentation
         private void OpenSettingsFromLanding() { settingsFromLanding = true; data.stage = FlowStage.FirstSettings; }
         private void ApplySettings()
         {
-            Vector2Int r = Resolutions[pendingResolution];
+            if (IsConfirmingDisplay) return;
+            displayPreferences.ResolutionIndex = pendingResolution;
+            displayPreferences.Apply(Resolutions[pendingResolution]);
+            displayConfirmationDeadline = Time.unscaledTime + 15f;
+        }
+
+        public void ConfirmDisplaySettings()
+        {
+            if (!IsConfirmingDisplay) return;
+            displayConfirmationDeadline = 0f;
+            confirmedDisplayPreferences = displayPreferences.Copy();
+            displayPreferences.Save();
             AudioListener.volume = pendingVolume;
-            Screen.SetResolution(r.x, r.y, pendingFullscreen ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
-            PlayerPrefs.SetFloat(VolumeKey, pendingVolume); PlayerPrefs.SetInt(ResolutionKey, pendingResolution);
-            PlayerPrefs.SetInt(FullscreenKey, pendingFullscreen ? 1 : 0); PlayerPrefs.SetInt(SettingsSeenKey, 1); PlayerPrefs.Save();
+            PlayerPrefs.SetFloat(VolumeKey, pendingVolume);
+            PlayerPrefs.SetInt(SettingsSeenKey, 1); PlayerPrefs.Save();
             if (settingsFromLanding) { settingsFromLanding = false; data.stage = FlowStage.Landing; } else ContinueAfterSettings();
         }
+
+        public void RevertDisplaySettings()
+        {
+            displayConfirmationDeadline = 0f;
+            displayPreferences = confirmedDisplayPreferences.Copy();
+            pendingResolution = displayPreferences.ResolutionIndex;
+            displayPreferences.Apply(Resolutions[pendingResolution]);
+            pendingVolume = PlayerPrefs.GetFloat(VolumeKey, 0.8f);
+            AudioListener.volume = pendingVolume;
+        }
+
+        public void CycleDisplayMode() => displayPreferences.ModeIndex = (displayPreferences.ModeIndex + 1) % 3;
+        public void ToggleVSync() => displayPreferences.VSync = !displayPreferences.VSync;
+        public void CycleFrameRate() => displayPreferences.FrameRateIndex = (displayPreferences.FrameRateIndex + 1) % PcDisplayPreferences.FrameRates.Length;
 
         private void BeginSaveSelection(bool forContinue) { selectingContinue = forContinue; selectedSlot = -1; handoffError = string.Empty; data.stage = FlowStage.SaveSelection; }
         private void SelectSlot(int slot)
@@ -754,6 +784,12 @@ namespace OCC.Combat.Presentation
         public void EnterAcademy() => EnterAcademyMap(false);
         public void GoBack()
         {
+            if (CurrentStage == FlowStage.FirstSettings)
+            {
+                bool wasConfirming = IsConfirmingDisplay;
+                RevertDisplaySettings();
+                if (wasConfirming) return;
+            }
             switch (CurrentStage)
             {
                 case FlowStage.FirstSettings:
