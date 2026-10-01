@@ -10,6 +10,7 @@
 - 禁止为本项目创建或使用 Git 附加 worktree、Codex 临时 worktree 或同机其他仓库副本；开始任务前用 `git rev-parse --show-toplevel` 核对当前电脑的主工作树。
 - Unity/Funplay 操作前必须确认 `Application.dataPath` 为当前电脑主工作树下的 `UnityProject/Assets`；路径不一致时停止操作并切换到该电脑的主工作树，不得在错误副本中实现或验证。
 - UI 开发电脑使用 `dev/ui` 分支，范围为界面布局、输入交互和视觉反馈；两台电脑通过 Git 远端提交协作。涉及共用脚本、场景、Prefab 或产品规则时，先明确改动范围，避免同时编辑同一资产。两端 Unity 版本以 `UnityProject/ProjectSettings/ProjectVersion.txt` 为准。
+- UI 开发电脑的试玩包交付到 `D:/occart/Builds/`：默认提供已解压、可直接运行的完整目录，不另外生成 ZIP。确认新目录完整可运行后，清除该交付目录内的旧版本和不再需要的压缩包，仅保留最新版本；不得删除项目源码、存档或验证归档。
 - Unity 工程位于 `UnityProject/`，默认场景是 `Assets/Scenes/CombatPrototype.unity`。
 - 通过 Funplay MCP 检查或修改 Unity；改动脚本后必须重新编译并验证 Console。
 - 不要直接修改 `Library/`、`Logs/`、临时缓存或生成的工程文件。
