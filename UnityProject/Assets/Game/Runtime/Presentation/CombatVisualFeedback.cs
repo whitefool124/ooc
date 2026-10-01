@@ -337,7 +337,8 @@ namespace OCC.Combat.Presentation
             RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
             CanvasGroup group = enemyActionBanner.AddComponent<CanvasGroup>();
             group.alpha = 0f;
-            rect.localScale = new Vector3(.94f, .94f, 1f);
+            rect.localScale = Vector3.one;
+            Vector2 bannerRest = rect.anchoredPosition;
             if (!AnimationsEnabled)
             {
                 group.alpha = 1f;
@@ -352,7 +353,8 @@ namespace OCC.Combat.Presentation
             float stay = Mathf.Max(.4f, visibleSeconds - .32f);
             DOTween.Sequence().SetUpdate(true).SetTarget(enemyActionBanner)
                 .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, .16f))
-                .Join(rect.DOScale(1f, .20f).SetEase(Ease.OutBack))
+                .Join(DOTween.To(() => 12f, value => rect.anchoredPosition = bannerRest +
+                    PixelPresentationMotion.Snap(Vector2.down * value), 0f, .20f).SetEase(Ease.OutCubic))
                 .AppendInterval(stay)
                 .Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .16f))
                 .OnComplete(() =>
@@ -725,10 +727,16 @@ namespace OCC.Combat.Presentation
                     GameObject root = new GameObject("正式VFX", typeof(RectTransform), typeof(Image));
                     root.transform.SetParent(vfxRoot, false); view = root.GetComponent<Image>();
                     view.rectTransform.anchorMin = view.rectTransform.anchorMax = new Vector2(.5f, .5f);
-                    view.preserveAspect = true; view.raycastTarget = false; view.color = new Color(1f, 1f, 1f, .88f);
-                    GameObject particles = new GameObject("Toon粒子叠加", typeof(RectTransform), typeof(CanvasRenderer));
-                    particles.transform.SetParent(view.transform, false);
-                    particles.AddComponent<ToonParticleUiEffect>();
+                    view.preserveAspect = true; view.raycastTarget = false; view.color = Color.white;
+                    for (int trail = 0; trail < 2; trail++)
+                    {
+                        GameObject ghost = new GameObject("像素弹道残影_" + trail, typeof(RectTransform), typeof(Image));
+                        ghost.transform.SetParent(view.transform, false);
+                        Image image = ghost.GetComponent<Image>();
+                        image.raycastTarget = false; image.preserveAspect = true;
+                        image.rectTransform.anchorMin = image.rectTransform.anchorMax = new Vector2(.5f, .5f);
+                        ghost.transform.SetAsFirstSibling();
+                    }
                     activeVfx[sample.Slot] = view;
                 }
                 view.name = "正式VFX_" + sample.Cue.Effect;
@@ -737,9 +745,23 @@ namespace OCC.Combat.Presentation
                 Vector2 position = CurrentGridFeedbackPosition(sample.Cue.Position);
                 if (sample.Cue.Travels)
                     position = Vector2.Lerp(CurrentGridFeedbackPosition(sample.Cue.Origin), position, sample.Progress);
-                view.rectTransform.anchoredPosition = new Vector2(Mathf.Round(position.x / 2f) * 2f, Mathf.Round(position.y / 2f) * 2f);
-                float size = CurrentFeedbackCellSize(); view.rectTransform.sizeDelta = new Vector2(size, size);
-                view.GetComponentInChildren<ToonParticleUiEffect>().PlayIfChanged(sample.Cue.Effect, size);
+                float size = CurrentFeedbackCellSize();
+                float nativePixel = Mathf.Max(1f, size / 32f);
+                view.rectTransform.anchoredPosition = PixelPresentationMotion.Snap(position, nativePixel);
+                view.rectTransform.sizeDelta = new Vector2(size, size);
+                for (int trail = 0; trail < view.transform.childCount; trail++)
+                {
+                    Image ghost = view.transform.GetChild(trail).GetComponent<Image>();
+                    float behind = sample.Progress - (trail + 1) * .12f;
+                    ghost.enabled = sample.Cue.Travels && behind > 0f;
+                    if (!ghost.enabled) continue;
+                    ghost.sprite = frames[Mathf.Clamp(Mathf.FloorToInt(behind * frames.Length), 0, frames.Length - 1)];
+                    ghost.color = new Color(1f, 1f, 1f, trail == 0 ? .375f : .1875f);
+                    Vector2 previous = Vector2.Lerp(CurrentGridFeedbackPosition(sample.Cue.Origin),
+                        CurrentGridFeedbackPosition(sample.Cue.Position), behind);
+                    ghost.rectTransform.anchoredPosition = PixelPresentationMotion.Snap(previous, nativePixel) - view.rectTransform.anchoredPosition;
+                    ghost.rectTransform.sizeDelta = view.rectTransform.sizeDelta;
+                }
             }
             expiredVfx.Clear();
             foreach (var entry in activeVfx)

@@ -13,6 +13,7 @@ namespace OCC.Combat.Presentation
         private Canvas canvas;
         private GameObject page;
         private string signature = string.Empty;
+        private FirstExperiencePrototypeController.FlowStage? animatedStage;
         private Slider volumeSlider;
         private Text volumeValue;
         private Text confirmationCountdown;
@@ -72,6 +73,11 @@ namespace OCC.Combat.Presentation
             LinkNavigation();
             if (buttons.Count > 0) RuntimeUiEventSystem.Select(buttons[0].gameObject);
             signature = PageSignature();
+            if (animatedStage != flow.CurrentStage &&
+                flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Branding &&
+                flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.WorldOpening)
+                PixelPresentationMotion.EnterPage(page.transform, flow.AnimationIntensity);
+            animatedStage = flow.CurrentStage;
         }
 
         private string PageSignature()
@@ -179,6 +185,12 @@ namespace OCC.Combat.Presentation
                 Text label = button.GetComponentInChildren<Text>();
                 if (label != null) label.fontSize = 36;
             }
+            Button quit = AddButton("退出游戏", "退出游戏", left.transform, new Vector2(84, -954),
+                new Vector2(330, 72), flow.QuitToDesktop);
+            ArchiveUiStyle.TabButton(quit, false, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
+            quit.GetComponentInChildren<Text>().fontSize = 30;
+            Label("退出说明", "返回桌面", left.transform, new Vector2(444, -966), new Vector2(500, 48),
+                24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
             for (int slot = 0; slot < 3; slot++)
             {
                 float x = 84 + slot * 360;

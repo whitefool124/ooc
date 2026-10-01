@@ -164,7 +164,7 @@ namespace OCC.Combat.Presentation
                 skinOverlay.type = Image.Type.Sliced;
             }
             RectTransform rect = transform as RectTransform;
-            float pixelOffset = FormalUiTheme.PressedOffset * profile.Intensity;
+            float pixelOffset = Mathf.Round(FormalUiTheme.PressedOffset * profile.Intensity / 2f) * 2f;
             Vector2 position = basePosition + new Vector2(visiblyHovering && !visiblyPressing ? pixelOffset : 0f, visiblyPressing ? -pixelOffset : 0f);
             image.DOKill();
             rect?.DOKill();
@@ -179,7 +179,7 @@ namespace OCC.Combat.Presentation
                 .SetTarget(image).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
             if (rect != null)
                 DOTween.To(() => rect != null ? rect.anchoredPosition : position,
-                        value => { if (rect != null) rect.anchoredPosition = value; }, position, profile.QuickDuration)
+                        value => { if (rect != null) rect.anchoredPosition = basePosition + PixelPresentationMotion.Snap(value - basePosition); }, position, profile.QuickDuration)
                     .SetTarget(rect).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
         }
 

@@ -17,17 +17,21 @@ namespace OCC.Combat.Tests
         [Test]
         public void ArmedAttachment_DoesNotPlayItsFutureImpactBeforeTheWeaponTrigger()
         {
-            var prepared = (FireSpellTrainingRangeCase)new FireSpellTrainingRangeProvider().Prepare("F-P-U05");
-            var armed = (FireSpellExecution)prepared.Execute().NativeResult;
+            // Test resolved presentation semantics independently of the current spell balance:
+            // F-P-U05 is now an immediate explosion in the approved catalog.
+            FireSpellDefinition spell = FireSpellCatalog.Get("F-P-U05");
+            var armed = Execution(spell, Step(spell, FireRuleKind.ArmTrigger, 1));
             string[] before = FireVfxSequence.From(armed).Select(cue => cue.Effect).Distinct().ToArray();
             Assert.That(before, Does.Contain("fire_attachment"));
             Assert.That(before, Does.Not.Contain("fire_impact"));
+            Assert.That(before, Does.Not.Contain("fire_cross_blast"));
             Assert.That(before, Does.Not.Contain("fire_projectile"));
             Assert.That(before, Does.Not.Contain("fire_burning_ground"));
-            FireSpellExecution triggered = FireSpellEngine.TriggerWeaponAttack(prepared.Battle, "hero", "range_normal").Single();
+            var triggered = new FireSpellExecution(armed.Preview,
+                new[] { Step(spell, FireRuleKind.Damage, 4) }, "hero", Source, isTriggered: true);
             string[] after = FireVfxSequence.From(triggered).Select(cue => cue.Effect).ToArray();
             Assert.That(after, Does.Not.Contain("fire_cast"));
-            Assert.That(after, Does.Contain("fire_impact"));
+            Assert.That(after, Does.Contain("fire_cross_blast"));
         }
 
         [Test]
@@ -113,6 +117,11 @@ namespace OCC.Combat.Tests
                 Image projectile = root.GetComponentsInChildren<Image>().Single(view => view.name == "正式VFX_fire_projectile");
                 Assert.That(projectile.sprite, Is.SameAs(Resources.Load<Sprite>(FormalArtRegistry.VfxPath("fire_projectile") + "/frame_03")));
                 Assert.That(projectile.rectTransform.sizeDelta, Is.EqualTo(new Vector2(64f, 64f)));
+                Image[] trails = projectile.GetComponentsInChildren<Image>().Where(image => image != projectile).ToArray();
+                Assert.That(trails.Length, Is.EqualTo(2));
+                Assert.That(trails.All(image => image.enabled && !image.raycastTarget && image.sprite != null), Is.True);
+                Assert.That(projectile.GetComponentInChildren<ToonParticleUiEffect>(), Is.Null,
+                    "Formal pixel combat uses authored frames rather than soft prototype particles.");
                 Vector2 before = projectile.rectTransform.anchoredPosition;
                 host.Pan = 128f; host.Cell = 128f;
                 refresh.Invoke(feedback, new object[] { .22f });

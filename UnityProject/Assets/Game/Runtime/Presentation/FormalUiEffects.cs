@@ -112,8 +112,8 @@ namespace OCC.Combat.Presentation
             float duration = FormalUiEffectsConfig.Data.transitionSeconds * intensity;
             rect.anchoredPosition = new Vector2(-2300f, 0f);
             DOTween.Sequence().SetUpdate(true).SetTarget(result)
-                .Append(DOTween.To(() => rect.anchoredPosition.x, value => rect.anchoredPosition = new Vector2(value, 0f), 0f, duration * .48f).SetEase(Ease.InQuad))
-                .Append(DOTween.To(() => rect.anchoredPosition.x, value => rect.anchoredPosition = new Vector2(value, 0f), 2300f, duration * .52f).SetEase(Ease.OutQuad))
+                .Append(DOTween.To(() => rect.anchoredPosition.x, value => rect.anchoredPosition = PixelPresentationMotion.Snap(new Vector2(value, 0f)), 0f, duration * .48f).SetEase(Ease.InQuad))
+                .Append(DOTween.To(() => rect.anchoredPosition.x, value => rect.anchoredPosition = PixelPresentationMotion.Snap(new Vector2(value, 0f)), 2300f, duration * .52f).SetEase(Ease.OutQuad))
                 .OnComplete(() => Object.Destroy(result));
         }
 

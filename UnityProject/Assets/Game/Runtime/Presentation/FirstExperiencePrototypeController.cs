@@ -32,6 +32,16 @@ namespace OCC.Combat.Presentation
             public bool shopPurchase, fixedExperienceComplete;
         }
 
+        public void QuitToDesktop()
+        {
+            PlayerPrefs.Save();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
+        }
+
         private const string LegacySaveKey = "OCC.FirstExperiencePrototype.v1";
         private const string SavePrefix = "OCC.FirstExperiencePrototype.v2.slot.";
         private const string SettingsSeenKey = "OCC.FirstExperiencePrototype.deviceSettings.v1";
