@@ -1,0 +1,22 @@
+// Read decoded source samples through Unity; normalize with normalize_free_audio.py.
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using Funplay.Editor.Tools.Scripting;
+public class ReadFreeAudio : IFunplayCommand {
+ public void Execute(ExecutionContext ctx) {
+  var records=new List<object>();
+  foreach(var guid in AssetDatabase.FindAssets("t:AudioClip", new[]{"Assets/Resources/Audio/OCC/SFX/Free"})) {
+   string path=AssetDatabase.GUIDToAssetPath(guid);
+   var clip=AssetDatabase.LoadAssetAtPath<AudioClip>(path);
+   if(clip==null) {records.Add(new{missing=path});continue;}
+   var samples=new float[clip.samples*clip.channels];
+   if(!clip.GetData(samples,0)) {records.Add(new{unreadable=path});continue;}
+   var bytes=new byte[samples.Length*4];
+   Buffer.BlockCopy(samples,0,bytes,0,bytes.Length);
+   records.Add(new{path,name=clip.name,clip.channels,clip.frequency,pcm=Convert.ToBase64String(bytes)});
+  }
+  ctx.ReturnValue=records;
+ }
+}

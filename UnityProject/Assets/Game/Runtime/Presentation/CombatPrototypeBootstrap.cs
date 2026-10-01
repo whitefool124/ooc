@@ -81,6 +81,7 @@ namespace OCC.Combat.Presentation
         private void OnEnable()
         {
             if (!Application.isPlaying) return;
+            OccAudioDirector.Attach(this);
             CombatDebugTuning.TemporaryEnemyAssistEnabled = false;
             // The dedicated arena owns its own entry screen. Do not construct
             // the main first-experience landing page behind it: that page is a
@@ -110,6 +111,9 @@ namespace OCC.Combat.Presentation
             chineseFont = FormalUiKit.Font;
             barTexture = Resources.Load<Texture2D>("UI/Bar");
             uiPreferences = saveGateway.LoadUiPreferences();
+            var opening = GetComponent<FirstExperiencePrototypeController>();
+            SyncMasterVolume(opening != null && opening.enabled ? opening.PendingVolume :
+                PlayerPrefs.GetFloat(FirstExperiencePrototypeController.VolumeKey, uiPreferences.MasterVolume));
             ApplyUiPreferences();
             developerPreparation = new MissionPreparation().Configure("relay_test", "完成学院演练并处置任务装置", "盾术生、火矢生、侧锋生、替身偶、寻迹兽");
             presentation = CombatPresentationComposition.Attach(gameObject, this);
@@ -1725,6 +1729,13 @@ namespace OCC.Combat.Presentation
         {
             uiPreferences.Configure(masterVolume, animationIntensity, screenShake, floatingText, highContrast, largeText, keyHints);
             lastSettingsSaveSucceeded = saveGateway.SaveUiPreferences(uiPreferences);
+            if (lastSettingsSaveSucceeded)
+            {
+                PlayerPrefs.SetFloat(FirstExperiencePrototypeController.VolumeKey, uiPreferences.MasterVolume);
+                PlayerPrefs.Save();
+            }
+            var opening = GetComponent<FirstExperiencePrototypeController>();
+            if (opening != null && opening.enabled) opening.PendingVolume = uiPreferences.MasterVolume;
             if (!lastSettingsSaveSucceeded)
                 ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "设置已临时生效，但保存失败。下次启动会恢复原设置。"));
             ApplyUiPreferences();
@@ -1734,6 +1745,13 @@ namespace OCC.Combat.Presentation
         {
             AudioListener.volume = uiPreferences.MasterVolume;
             FormalUiTheme.ConfigureAccessibility(uiPreferences.HighContrast, uiPreferences.LargeText);
+        }
+        internal void SyncMasterVolume(float volume)
+        {
+            if (!initialized) return;
+            uiPreferences.Configure(volume, uiPreferences.AnimationIntensity, uiPreferences.ScreenShake,
+                uiPreferences.FloatingText, uiPreferences.HighContrast, uiPreferences.LargeText, uiPreferences.KeyHints);
+            AudioListener.volume = uiPreferences.MasterVolume;
         }
         public void SelectHudAction(string action)
         {

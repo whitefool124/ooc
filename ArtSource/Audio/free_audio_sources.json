@@ -1,0 +1,255 @@
+[
+  {
+    "title": "JRPG Piano",
+    "author": "Joth",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/jrpg-piano",
+    "download": "https://opengameart.org/sites/default/files/JRPG%20Piano.mp3",
+    "path": "UnityProject/Assets/Resources/Audio/OCC/Music/archive_piano.mp3",
+    "bytes": 501990,
+    "sha256": "87a99f62e901b8365f1b868cd53bc015d2bf9f887e4c8a89a4fad11a36a62c16"
+  },
+  {
+    "title": "Town Theme RPG",
+    "author": "cynicmusic",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/town-theme-rpg",
+    "download": "https://opengameart.org/sites/default/files/TownTheme.mp3",
+    "path": "UnityProject/Assets/Resources/Audio/OCC/Music/academy_town.mp3",
+    "bytes": 1316581,
+    "sha256": "2657861d5107d4a3c01ef81cb6a4d61ddd5e7a054b6da57e658373d79d0c3466"
+  },
+  {
+    "title": "Magic Town",
+    "author": "controllerhead",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-town",
+    "download": "https://opengameart.org/sites/default/files/Magic%20Town_0.mp3",
+    "path": "UnityProject/Assets/Resources/Audio/OCC/Music/magic_town.mp3",
+    "bytes": 1338809,
+    "sha256": "91587673ca1c8df6d82fc197c43daf541ae2c0bc7e31c6adf6ec26f851404dd3"
+  },
+  {
+    "title": "JRPG Trailer / Theme",
+    "author": "Juhani Junkala",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/jrpg-trailer-theme",
+    "download": "https://opengameart.org/sites/default/files/Juhani%20Junkala%20-%20JRPG%20Theme%20%5BLoop%20Ready%5D_0.ogg",
+    "path": "UnityProject/Assets/Resources/Audio/OCC/Music/jrpg_practicum.ogg",
+    "bytes": 4395595,
+    "sha256": "b2df8ff8d3c1caf40772cab4bd85aba4e6ae337a9e5d88430bf989d2c09120fd"
+  },
+  {
+    "title": "Boss Battle Theme",
+    "author": "Cleyton Kauffman",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/boss-battle-theme",
+    "download": "https://opengameart.org/sites/default/files/CleytonRX%20-%20Battle%20RPG%20Theme%20Var_0.ogg",
+    "path": "UnityProject/Assets/Resources/Audio/OCC/Music/boss_exam.ogg",
+    "bytes": 4630302,
+    "sha256": "9a63f74305f5cbce8374a72a027a645c07c97663255aba0b817bc1f70c432ed5"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "download": "https://opengameart.org/sites/default/files/80-CC0-RPG-SFX_0.zip",
+    "path": "ArtSource/Audio/FreeLibrary/80-CC0-RPG-SFX_0.zip",
+    "bytes": 1845114,
+    "sha256": "1c2f06ff4e8563b5b8b745b23cf213c1474142a69bb82bd8f5e10d9b3f7a7bbd"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_1_0.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_1.ogg",
+    "bytes": 59071,
+    "sha256": "119f9061a566c72c1c58444b03f8685b833079ef268dda02fe742eb34d3bc68f"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_2.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_2.ogg",
+    "bytes": 39689,
+    "sha256": "84a70f63f3f21e5ba4a48285b760a663d422ad3feddba2f3cbadd94b76cdc52e"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_3.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_3.ogg",
+    "bytes": 38266,
+    "sha256": "9fac648a1de869cf9ca2f4b3f1cd47f1766a3ee9d2fdec45831234401d7b2392"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_4.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_4.ogg",
+    "bytes": 79091,
+    "sha256": "b7862d109b4013dfb2a389a10f8917203beb0efc458444bc5a1b8ada605cc118"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_5.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_5.ogg",
+    "bytes": 37790,
+    "sha256": "69aaaaed729cacb518005a5d24074196db3c5fffc0ed2cd01ad864fbed4a62be"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_6_0.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_6.ogg",
+    "bytes": 37434,
+    "sha256": "0a18ee3460cf3fd79c3771bbf94c20c26d34b65ab60d0b0e15694ffcad815955"
+  },
+  {
+    "title": "Magic Spell SFX",
+    "author": "JaggedStone",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://opengameart.org/content/magic-spell-sfx",
+    "download": "https://opengameart.org/sites/default/files/magical_7_0.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_7.ogg",
+    "bytes": 76383,
+    "sha256": "2817da4f5df69ff993baffd6594a2f2a069f85ee2a02019f97db2246e350a76b"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "book_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_01.ogg",
+    "bytes": 34237,
+    "sha256": "39b2d652dc8de9d4100ae8a1d23364077fff39bf1c90009b0c0d72af8c47d0d4"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "book_02.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_02.ogg",
+    "bytes": 36858,
+    "sha256": "a3f87cfd37a452231a05ceebf746ae2459849c2e20f7b244e4a9b7dbc1d9e76b"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "book_03.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_03.ogg",
+    "bytes": 60390,
+    "sha256": "f72e4af8172ae98eaa350892072120e79eb87f91448b99aeaaf1febe070fbb2e"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "book_04.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_04.ogg",
+    "bytes": 44092,
+    "sha256": "0696632485ed31406f22e97dd38e7f46826739c0ad792878969a44a6e38a260f"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "item_coins_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/item_coins_01.ogg",
+    "bytes": 18985,
+    "sha256": "4e701b281a4f88768beccbe87af4574d13ac5a4bc5cab6c522f0e79823d6e428"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "item_gem_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/item_gem_01.ogg",
+    "bytes": 14690,
+    "sha256": "8a5d2964febb0c69cc4df2ee5257d173f2cae6960d9534df0001dbf356f27028"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "lock_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/lock_01.ogg",
+    "bytes": 17452,
+    "sha256": "e828ad2a936e34a0212f3309c5ac706c0ded412b9b383a87f10bcfa1d1445271"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "metal_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_01.ogg",
+    "bytes": 25403,
+    "sha256": "433d7adf123f9de425047f6dec3f7b4da510c0fd0208d4893a22be8bd22d9e34"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "spell_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_01.ogg",
+    "bytes": 29121,
+    "sha256": "09821a53c418c5eeeac4fa25bada9d245e822fed302eeeae9ae4151522a45ae5"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "spell_02.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_02.ogg",
+    "bytes": 25118,
+    "sha256": "bf9c48b76921e56aa266172d969a2c08215d6ce0ffae7c3584f23fa05d3f8bd4"
+  },
+  {
+    "title": "80 CC0 RPG SFX",
+    "author": "rubberduck",
+    "license": "CC0-1.0",
+    "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+    "archive_member": "spell_fire_01.ogg",
+    "path": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_fire_01.ogg",
+    "bytes": 39482,
+    "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+  }
+]

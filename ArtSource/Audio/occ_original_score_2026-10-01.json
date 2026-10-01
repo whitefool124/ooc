@@ -1,0 +1,107 @@
+{
+  "authoring": "Original synthesized OCC composition; no external audio samples",
+  "source": "Tools/Audio/compose_occ_score.py",
+  "seed": 413,
+  "assets": [
+    {
+      "file": "ArtSource/Audio/OriginalCandidates/archive_lamplight.wav",
+      "seconds": 101.053,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -5.42,
+      "rms_dbfs": -19.58,
+      "loop_boundary_delta": 0.0,
+      "sha256": "a07a4236a6b475a3ca8d7ca5752aa2bc562073a91939e1020da9facf1f288d1b"
+    },
+    {
+      "file": "ArtSource/Audio/OriginalCandidates/academy_courtyard.wav",
+      "seconds": 65.455,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -6.36,
+      "rms_dbfs": -19.58,
+      "loop_boundary_delta": 0.0,
+      "sha256": "b66aaa870da990d82c7d1de02db124e4263d08159b67b2e57c0b286922b7cde2"
+    },
+    {
+      "file": "ArtSource/Audio/OriginalCandidates/aether_practicum.wav",
+      "seconds": 66.207,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -6.25,
+      "rms_dbfs": -19.58,
+      "loop_boundary_delta": 0.0,
+      "sha256": "94022c7f4eedc01953f276560dcf523c24fb1fa68fcbc48ece1e17070074e465"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/archive_select.wav",
+      "seconds": 0.42,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -7.74,
+      "rms_dbfs": -15.93,
+      "loop_boundary_delta": null,
+      "sha256": "22baa4bc43c7e8bf402a9e4e629c9422af075b82a2969c7568c3fc8866a0a8f5"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/archive_confirm.wav",
+      "seconds": 0.95,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -2.05,
+      "rms_dbfs": -22.96,
+      "loop_boundary_delta": null,
+      "sha256": "f64fe7f99ccbb1fa5799c1e34be9968f34b94c8ce13a1f369772f15aa6ce22ad"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/archive_reject.wav",
+      "seconds": 0.65,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -3.88,
+      "rms_dbfs": -15.93,
+      "loop_boundary_delta": null,
+      "sha256": "e47198cc0d57773583fd11d63a46e6208e2d05b3e1be52a07ed234462f34ec79"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/aether_ready.wav",
+      "seconds": 1.1,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -4.0,
+      "rms_dbfs": -15.92,
+      "loop_boundary_delta": null,
+      "sha256": "ca0b1e601b5f9bd0301c764cb2b7773201a48ea4b761ac14e63e1797b80c64af"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/archive_reward.wav",
+      "seconds": 1.6,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -2.65,
+      "rms_dbfs": -15.92,
+      "loop_boundary_delta": null,
+      "sha256": "75d7311ec36d75212439184a4b3e8f80b4e6efe0f09f7d2c78daf3b4d3bf305e"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/practicum_complete.wav",
+      "seconds": 2.4,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -2.25,
+      "rms_dbfs": -15.92,
+      "loop_boundary_delta": null,
+      "sha256": "0e085c236c4609359ddc9b4045bc715056ba94652cce892bd19e3f7045c32143"
+    },
+    {
+      "file": "UnityProject/Assets/Resources/Audio/OCC/SFX/practicum_retry.wav",
+      "seconds": 2.4,
+      "sample_rate": 32000,
+      "channels": 2,
+      "peak_dbfs": -4.19,
+      "rms_dbfs": -15.92,
+      "loop_boundary_delta": null,
+      "sha256": "91f42105e0f7fc2d9f27fc2dc8a8c982a59f66d4aef1d1328765140a404290e4"
+    }
+  ]
+}

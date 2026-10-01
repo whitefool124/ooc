@@ -36,7 +36,7 @@ namespace OCC.Combat.Presentation
         private const string SavePrefix = "OCC.FirstExperiencePrototype.v2.slot.";
         private const string SettingsSeenKey = "OCC.FirstExperiencePrototype.deviceSettings.v1";
         private const string OpeningSeenKey = "OCC.FirstExperiencePrototype.worldOpening.v1";
-        private const string VolumeKey = "OCC.FirstExperiencePrototype.volume.v1";
+        internal const string VolumeKey = "OCC.FirstExperiencePrototype.volume.v1";
         private const float DesignWidth = 1920f, DesignHeight = 1080f;
         private const float BrandDuration = 1f, FadeDuration = 0.2f;
         private static readonly Vector2Int[] Resolutions =
@@ -88,7 +88,7 @@ namespace OCC.Combat.Presentation
         public int ResolutionIndex => pendingResolution;
         public int ResolutionCount => Resolutions.Length;
         public string ResolutionLabel => Resolutions[pendingResolution].x + " × " + Resolutions[pendingResolution].y;
-        public float PendingVolume { get => pendingVolume; set { pendingVolume = Mathf.Clamp01(value); AudioListener.volume = pendingVolume; } }
+        public float PendingVolume { get => pendingVolume; set { pendingVolume = Mathf.Clamp01(value); AudioListener.volume = pendingVolume; combatBootstrap?.SyncMasterVolume(pendingVolume); } }
         public bool PendingFullscreen { get => displayPreferences.ModeIndex != 0; set => displayPreferences.ModeIndex = value ? 1 : 0; }
         public string DisplayModeLabel => displayPreferences.ModeLabel;
         public bool PendingVSync => displayPreferences.VSync;
@@ -645,6 +645,7 @@ namespace OCC.Combat.Presentation
             displayPreferences.Save();
             AudioListener.volume = pendingVolume;
             PlayerPrefs.SetFloat(VolumeKey, pendingVolume);
+            combatBootstrap?.SyncMasterVolume(pendingVolume);
             PlayerPrefs.SetInt(SettingsSeenKey, 1); PlayerPrefs.Save();
             if (settingsFromLanding) { settingsFromLanding = false; data.stage = FlowStage.Landing; } else ContinueAfterSettings();
         }
@@ -657,6 +658,7 @@ namespace OCC.Combat.Presentation
             displayPreferences.Apply(Resolutions[pendingResolution]);
             pendingVolume = PlayerPrefs.GetFloat(VolumeKey, 0.8f);
             AudioListener.volume = pendingVolume;
+            combatBootstrap?.SyncMasterVolume(pendingVolume);
         }
 
         public void CycleDisplayMode() => displayPreferences.ModeIndex = (displayPreferences.ModeIndex + 1) % 3;

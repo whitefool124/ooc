@@ -1,0 +1,146 @@
+[
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/book_01.wav",
+    "gain": 0.8612109464831302,
+    "rms_db_after": -30.945513823750893,
+    "peak_after": 0.8,
+    "sha256": "6ad30c96df8225428e0b93e9e574fd332b3da6054d882d503c632d63f2890e8f"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_02.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/book_02.wav",
+    "gain": 1.6057825421133232,
+    "rms_db_after": -27.033568467926713,
+    "peak_after": 0.8,
+    "sha256": "1cc4b07bf0df2bdc97303090c66465ab25358a95c1069f588938a95525ec6b8f"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_03.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/book_03.wav",
+    "gain": 1.6277180999689538,
+    "rms_db_after": -25.023176588580736,
+    "peak_after": 0.8,
+    "sha256": "a8b1dac89783e3e4c5a61175b96ed49e4384a746866f80051ef606c9be1e631b"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/book_04.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/book_04.wav",
+    "gain": 1.7617204301075269,
+    "rms_db_after": -28.652416627352775,
+    "peak_after": 0.8,
+    "sha256": "ddcc8b76afb74aada907a8e5094bad70c2c5e74c1e53979a7826068203bbd331"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/item_coins_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/item_coins_01.wav",
+    "gain": 0.8,
+    "rms_db_after": -30.22764092769691,
+    "peak_after": 0.8,
+    "sha256": "94e1dda3544afa2f6b683d40abf254d3d264d16548aadb7f7709f0154a5c55f5"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/item_gem_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/item_gem_01.wav",
+    "gain": 0.8,
+    "rms_db_after": -24.539571422419147,
+    "peak_after": 0.8,
+    "sha256": "aaf643f67f9824db4cedf847172dd4e28d5ff759d87ccb99f39c7ca38da5906c"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/lock_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/lock_01.wav",
+    "gain": 0.8563439174180061,
+    "rms_db_after": -31.46034459879791,
+    "peak_after": 0.8,
+    "sha256": "300555ac3aef700019e878529a854788392d1011a6f1e8a4efc636631b2ef30e"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_1.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_1.wav",
+    "gain": 1.586559237061152,
+    "rms_db_after": -22.0,
+    "peak_after": 0.483162677814735,
+    "sha256": "e4b730ff5d61087c03f9400ea7417284e67f64ba84462e0d92c68edd60fa006a"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_2.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_2.wav",
+    "gain": 1.780960481978535,
+    "rms_db_after": -22.0,
+    "peak_after": 0.3398543058414239,
+    "sha256": "7df6494aee3195b47477550eaac091d49f0b2633efad71be3602d04a8d38b8fa"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_3.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_3.wav",
+    "gain": 0.7074137193673442,
+    "rms_db_after": -22.0,
+    "peak_after": 0.4042456633042456,
+    "sha256": "6690ef9d3ad9254ae5ed774ed82fbe2fa4b9d4d6a17469c081ab186a1daa6333"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_4.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_4.wav",
+    "gain": 2.307496334741281,
+    "rms_db_after": -22.0,
+    "peak_after": 0.40913555007467167,
+    "sha256": "dab6f2ee99b7652fc5169201aefad79a774d50323ba6d51004d7c943998d49aa"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_5.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_5.wav",
+    "gain": 2.6647653859435088,
+    "rms_db_after": -22.0,
+    "peak_after": 0.365055292282117,
+    "sha256": "8b4318164cc28bbebc6e2be79f49da42e0a07552614211354e04c35fe85587d0"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_6.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_6.wav",
+    "gain": 6.566469990925184,
+    "rms_db_after": -22.0,
+    "peak_after": 0.3593042203896745,
+    "sha256": "292995948ccd725bd8d61a6904b6bba9380e70524e7bf7ed02e60d9c4ab2e235"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/magical_7.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/magical_7.wav",
+    "gain": 4.4085624685082605,
+    "rms_db_after": -22.0,
+    "peak_after": 0.4504353986989031,
+    "sha256": "741ba7ebe0d720ad5f11eaee52b0c1169df86b5a9ea5f74dc2c9574cb755f885"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/metal_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/metal_01.wav",
+    "gain": 0.9273196788000991,
+    "rms_db_after": -28.9686555324082,
+    "peak_after": 0.8,
+    "sha256": "fd124f40bcfdd700751fa01ca2a54508c8864b3e44072c59a1147758f52deccd"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/spell_01.wav",
+    "gain": 0.6888884453089615,
+    "rms_db_after": -22.0,
+    "peak_after": 0.6888884453089615,
+    "sha256": "fa5b61fa17ac40981e7b29042dd82e5aef18c7b33ade7c973875b8c805a9257e"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_02.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/spell_02.wav",
+    "gain": 0.8522790818648808,
+    "rms_db_after": -22.17704612303293,
+    "peak_after": 0.8,
+    "sha256": "7fa8a119934842bef1d8667f44f62678be130d70c0bff24c2d13cc379d2ccced"
+  },
+  {
+    "source": "ArtSource/Audio/FreeLibrary/ImportedOriginals/spell_fire_01.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/FreeProcessed/spell_fire_01.wav",
+    "gain": 5.965953573054165,
+    "rms_db_after": -25.034707799592375,
+    "peak_after": 0.8,
+    "sha256": "c9008b1f74b1c8dca223a31f94189d213e09b9d2e5f68f52c3a00bc9000f139e"
+  }
+]
