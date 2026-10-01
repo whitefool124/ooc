@@ -48,6 +48,8 @@ This section is managed by Funplay MCP for Unity. Everything between the begin a
 
 本工程沿用 [仓库工作约定](../AGENTS.md) 和完整会话中的具体授权。以下条款限定上方通用工作流及项目技能在 OCC 中的适用范围，不改变游戏产品决定。
 
+- 托管区的 `Project root` 是原开发电脑的路径。UI 开发电脑的主工程为 `D:/occart/OCC_latest/UnityProject`；连接前以当前电脑的仓库根目录及 `Application.dataPath` 核对，不把另一台电脑的绝对路径用于本机操作。编辑器版本遵循 `ProjectSettings/ProjectVersion.txt`。
+
 - 游戏中的力量来源、时代、制度、组织、地点、人物背景、技术边界和叙事因果以 [OC 世界观唯一参考](../Worldbuilding/OC世界观/README.md) 及其索引为准；OCC 总案负责玩法规则。实现不得从旧策划、归档或发布镜像恢复相冲突的世界设定。
 - Unity 编辑、编译、连接或场景对象任务按需读取 [Unity MCP Workflow](.codex/skills/funplay-unity-mcp-workflow/SKILL.md)；实际 uGUI 制作或审查再读取 [Unity UI Composition](.codex/skills/funplay-unity-ui-composition/SKILL.md)。简单脚本或技能维护不预读整套 UI 流程。
 - 操作前核对主工程 `Application.dataPath`。技能例子中的对象名、Prefab 路径和数值仅是示例，不能当作 OCC 中已存在的事实。

@@ -1,6 +1,13 @@
 # OCC Codex Project
 
-OCC（魔法战争人生战棋肉鸽）的统一工作目录。仓库根目录固定为 `E:/数据库/OCC_Codex`。
+OCC（魔法战争人生战棋肉鸽）的统一仓库。原开发电脑的主工作目录为 `E:/数据库/OCC_Codex`，UI 开发电脑为 `D:/occart/OCC_latest`。
+
+## 两机协作
+
+- 本机 UI 开发分支为 `dev/ui`，跟踪 `origin/dev/ui`，专门调整界面布局、输入交互和视觉反馈。
+- 两端均使用 `UnityProject/ProjectSettings/ProjectVersion.txt` 指定的 Unity 编辑器（当前为 `6000.5.2f1`）。从 Unity Hub 打开各自主工作树下的 `UnityProject/`。
+- 另一台电脑先执行 `git fetch origin`；检查 UI 分支时，已有本地分支用 `git switch dev/ui`，首次使用则执行 `git switch --track origin/dev/ui`。切换前确保工作区干净并关闭该工程的 Unity 编辑器。
+- 日常 UI 改动提交并推送到 `dev/ui`；通过 PR 审查后合并到 `main`。两机避免同时修改同一场景、Prefab 和共享脚本；Unity 的资源与对应 `.meta` 文件一起提交，缓存与本机状态不入库。
 
 ## 目录
 
