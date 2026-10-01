@@ -15,6 +15,7 @@ namespace OCC.Combat.Presentation
         private string signature = string.Empty;
         private Slider volumeSlider;
         private Text volumeValue;
+        private Text confirmationCountdown;
         private readonly List<Button> buttons = new List<Button>();
 
         public bool IsVisible => page != null && page.activeSelf;
@@ -32,12 +33,10 @@ namespace OCC.Combat.Presentation
             bool visible = flow.enabled;
             if (canvas.gameObject.activeSelf != visible) canvas.gameObject.SetActive(visible);
             if (!visible) return;
-            string next = flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
-                flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
-                flow.IsConfirmingDisplay + "|" + (flow.IsConfirmingDisplay ? flow.DisplayConfirmationSeconds : 0) + "|" +
-                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
-                flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
+            string next = PageSignature();
             if (next != signature) Rebuild();
+            if (confirmationCountdown != null)
+                confirmationCountdown.text = flow.DisplayConfirmationSeconds + " 秒后自动恢复原设置";
             if (volumeSlider != null && volumeValue != null)
             {
                 volumeSlider.SetValueWithoutNotify(flow.PendingVolume);
@@ -52,6 +51,7 @@ namespace OCC.Combat.Presentation
             if (page != null) Destroy(page);
             volumeSlider = null;
             volumeValue = null;
+            confirmationCountdown = null;
             buttons.Clear();
             page = FormalUiKit.Create("页面_" + flow.CurrentStage, canvas.transform);
             RectTransform pageRect = page.AddComponent<RectTransform>(); FormalUiKit.Stretch(pageRect);
@@ -71,8 +71,14 @@ namespace OCC.Combat.Presentation
             }
             LinkNavigation();
             if (buttons.Count > 0) RuntimeUiEventSystem.Select(buttons[0].gameObject);
-            signature = flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
-                flow.ResolutionIndex + "|" + flow.PendingFullscreen + "|" +
+            signature = PageSignature();
+        }
+
+        private string PageSignature()
+        {
+            return flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
+                flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
+                flow.IsConfirmingDisplay + "|" +
                 flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
                 flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
         }
@@ -104,7 +110,7 @@ namespace OCC.Combat.Presentation
             {
                 GameObject confirmation = CenterPanel(new Vector2(1100, 460));
                 Label("确认标题", "保留画面设置？", confirmation.transform, new Vector2(50, -45), new Vector2(1000, 70), 40, FormalUiTheme.Text, TextAnchor.MiddleCenter);
-                Label("倒计时", flow.DisplayConfirmationSeconds + " 秒后自动恢复原设置", confirmation.transform, new Vector2(50, -145), new Vector2(1000, 70), 28, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+                confirmationCountdown = Label("倒计时", flow.DisplayConfirmationSeconds + " 秒后自动恢复原设置", confirmation.transform, new Vector2(50, -145), new Vector2(1000, 70), 28, FormalUiTheme.Text, TextAnchor.MiddleCenter);
                 AddButton("恢复画面设置", "恢复原设置", confirmation.transform, new Vector2(80, -290), new Vector2(420, 90), flow.RevertDisplaySettings);
                 AddButton("保留画面设置", "保留设置", confirmation.transform, new Vector2(600, -290), new Vector2(420, 90), flow.ConfirmDisplaySettings);
                 return;

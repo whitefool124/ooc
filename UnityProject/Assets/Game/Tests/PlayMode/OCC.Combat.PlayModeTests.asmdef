@@ -3,7 +3,8 @@
   "rootNamespace": "OCC.Combat.Tests",
   "references": [
     "OCC.Combat.Runtime",
-    "OCC.Combat.Presentation"
+    "OCC.Combat.Presentation",
+    "Unity.InputSystem"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],
