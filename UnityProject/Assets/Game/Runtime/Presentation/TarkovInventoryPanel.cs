@@ -58,8 +58,8 @@ namespace OCC.Combat.Presentation
             // hide this launcher - it has to stand down for the duration itself.
             if (bootstrap.IsCombatEntryBlocking) return;
             HandleHotkey();
-            float scale = Mathf.Min(Screen.width / 1920f, Screen.height / 1080f); Matrix4x4 previous = GUI.matrix;
-            GUI.matrix = Matrix4x4.TRS(new Vector2((Screen.width - 1920f * scale) * .5f, (Screen.height - 1080f * scale) * .5f), Quaternion.identity, Vector3.one * scale);
+            Matrix4x4 previous = GUI.matrix;
+            GUI.matrix = UiResolutionLayout.GuiMatrix(Screen.width, Screen.height);
             GUISkin previousSkin = GUI.skin;
             GUI.depth = -1100; ConfigureFormalSkin(previousSkin);
             if (!open)

@@ -251,7 +251,7 @@ namespace OCC.Combat.Presentation
         {
             if (root != null) return;
             canvas = FormalUiKit.CanvasRoot("正式战斗HUD", UiLayoutContract.CombatSortingOrder);
-            FormalCombatHudShellView shell = FormalCombatHudShellView.Create(canvas.transform);
+            FormalCombatHudShellView shell = FormalCombatHudShellView.Create(FormalUiKit.ContentParent(canvas.transform));
             root = shell.gameObject;
             tooltip = FormalHoverTooltip.Create(canvas);
 

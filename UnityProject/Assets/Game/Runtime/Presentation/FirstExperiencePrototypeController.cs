@@ -43,7 +43,11 @@ namespace OCC.Combat.Presentation
         private const float BrandDuration = 1f, FadeDuration = 0.2f;
         private static readonly Vector2Int[] Resolutions =
         {
-            new Vector2Int(1280, 720), new Vector2Int(1600, 900), new Vector2Int(1920, 1080)
+            // Keep the first three indices stable for existing saved preferences.
+            new Vector2Int(1280, 720), new Vector2Int(1600, 900), new Vector2Int(1920, 1080),
+            new Vector2Int(2560, 1440), new Vector2Int(3840, 2160),
+            new Vector2Int(1920, 1200), new Vector2Int(2560, 1600),
+            new Vector2Int(3440, 1440), new Vector2Int(3840, 1600), new Vector2Int(1366, 768)
         };
         private static readonly string[] RouteLabels =
         {
@@ -238,7 +242,7 @@ namespace OCC.Combat.Presentation
             if (formalUi != null) return;
             EnsureStyles();
             Matrix4x4 old = GUI.matrix;
-            GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(Screen.width / DesignWidth, Screen.height / DesignHeight, 1f));
+            GUI.matrix = UiResolutionLayout.GuiMatrix(Screen.width, Screen.height);
             switch (data.stage)
             {
                 case FlowStage.Branding: DrawBranding(); break;

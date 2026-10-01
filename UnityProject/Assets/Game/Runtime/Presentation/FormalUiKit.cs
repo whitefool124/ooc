@@ -431,6 +431,7 @@ namespace OCC.Combat.Presentation
             scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight);
             scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
             scaler.referencePixelsPerUnit = 32f * OccPixelUiConfig.Data.logicalPixelScale;
+            ReferenceResolutionCanvas.Attach(canvas);
             if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
             RuntimeUiEventSystem.Ensure();
             return canvas;
@@ -439,8 +440,15 @@ namespace OCC.Combat.Presentation
         public static GameObject Create(string name, Transform parent)
         {
             GameObject result = new GameObject(name);
-            result.transform.SetParent(parent, false);
+            result.transform.SetParent(ContentParent(parent), false);
             return result;
+        }
+
+        public static Transform ContentParent(Transform parent)
+        {
+            if (parent == null) return null;
+            ReferenceResolutionCanvas adapter = parent.GetComponent<ReferenceResolutionCanvas>();
+            return adapter != null ? adapter.Content : parent;
         }
 
         public static GameObject Panel(string name, Transform parent, Vector2 anchorMin, Vector2 anchorMax, Vector2 position, Vector2 size, Color color)

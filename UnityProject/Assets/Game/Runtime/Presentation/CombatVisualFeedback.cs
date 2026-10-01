@@ -268,7 +268,7 @@ namespace OCC.Combat.Presentation
             {
                 foreach (Transform child in canvas.GetComponentsInChildren<Transform>(true))
                 { DOTween.Kill(child); DOTween.Kill(child.gameObject); }
-                foreach (Transform child in canvas.transform.Cast<Transform>().ToArray())
+                foreach (Transform child in FormalUiKit.ContentParent(canvas.transform).Cast<Transform>().ToArray())
                     if (child != battlefieldClip) DestroyFeedbackObject(child.gameObject);
                 if (battlefieldClip != null)
                     foreach (Transform child in battlefieldClip.Cast<Transform>().ToArray()) DestroyFeedbackObject(child.gameObject);
@@ -1138,7 +1138,7 @@ namespace OCC.Combat.Presentation
 
         private bool AnimationsEnabled => CombatFeedbackPresentationPolicy.AnimationsEnabled(bootstrap?.UiPreferences.AnimationIntensity ?? 1f);
 
-        private Transform FeedbackParent => battlefieldClip != null ? battlefieldClip : canvas.transform;
+        private Transform FeedbackParent => battlefieldClip != null ? battlefieldClip : FormalUiKit.ContentParent(canvas.transform);
 
         private void EnsureCanvas()
         {
@@ -1154,9 +1154,11 @@ namespace OCC.Combat.Presentation
             CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
             if (scaler == null) scaler = canvas.gameObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize; scaler.referenceResolution = new Vector2(UiLayoutContract.ReferenceWidth, UiLayoutContract.ReferenceHeight); scaler.matchWidthOrHeight = UiLayoutContract.MatchWidthOrHeight;
+            RectTransform content = ReferenceResolutionCanvas.Attach(canvas);
             Transform existingClip = canvas.transform.Find("战术视口反馈裁切");
+            if (existingClip == null) existingClip = content.Find("战术视口反馈裁切");
             GameObject clip = existingClip == null ? new GameObject("战术视口反馈裁切") : existingClip.gameObject;
-            if (existingClip == null) clip.transform.SetParent(canvas.transform, false);
+            clip.transform.SetParent(content, false);
             battlefieldClip = clip.GetComponent<RectTransform>();
             if (battlefieldClip == null) battlefieldClip = clip.AddComponent<RectTransform>();
             battlefieldClip.anchorMin = battlefieldClip.anchorMax = new Vector2(.5f, .5f);

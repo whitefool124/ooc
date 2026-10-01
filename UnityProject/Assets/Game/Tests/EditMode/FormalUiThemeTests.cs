@@ -920,7 +920,7 @@ namespace OCC.Combat.Tests
                 layer.ShowFeedback(new UiActionFeedback(UiFeedbackKind.Rejected,
                     "该操作当前不能执行，请先完成前置选择并确认目标范围后重试"));
                 canvasRoot = GameObject.Find("正式交互层");
-                Transform toast = canvasRoot.transform.Find("短时提示条");
+                Transform toast = FormalUiKit.ContentParent(canvasRoot.transform).Find("短时提示条");
                 Assert.That(toast, Is.Not.Null);
                 CanvasGroup group = toast.GetComponent<CanvasGroup>();
                 Assert.That(group.blocksRaycasts, Is.False);

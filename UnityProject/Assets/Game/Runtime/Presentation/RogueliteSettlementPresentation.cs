@@ -100,7 +100,7 @@ namespace OCC.Combat.Presentation
             claimPending = false;
             presentedSeed = run.Seed;
             bootstrap.PublishUiVisual(new UiVisualEvent(UiVisualEventKind.SettlementOpened, run.Seed.ToString()));
-            FormalRogueliteSettlementShellView shell = FormalRogueliteSettlementShellView.Create(canvas.transform);
+            FormalRogueliteSettlementShellView shell = FormalRogueliteSettlementShellView.Create(FormalUiKit.ContentParent(canvas.transform));
             panel = shell.gameObject;
             Image veil = panel.GetComponent<Image>();
             FormalUiEffects.ApplyBackdrop(veil, "settlement");

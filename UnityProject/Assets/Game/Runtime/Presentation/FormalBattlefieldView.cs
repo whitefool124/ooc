@@ -108,9 +108,10 @@ namespace OCC.Combat.Presentation
         public void AppendFeedbackObstacles(List<Rect> destination, bool protectBodies = true, string damageOwnerId = null)
         {
             if (!IsVisible || canvas == null || boardRect == null || viewportRect == null) return;
-            Vector2 origin = canvas.transform.InverseTransformPoint(boardRect.TransformPoint(Vector3.zero));
-            Vector2 bottomLeft = canvas.transform.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.min));
-            Vector2 topRight = canvas.transform.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.max));
+            Transform content = FormalUiKit.ContentParent(canvas.transform);
+            Vector2 origin = content.InverseTransformPoint(boardRect.TransformPoint(Vector3.zero));
+            Vector2 bottomLeft = content.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.min));
+            Vector2 topRight = content.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.max));
             Rect visible = Rect.MinMaxRect(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y);
             foreach (Rect region in protectBodies ? annotationObstacles : annotationInformation) Append(region);
             if (!protectBodies)
@@ -228,7 +229,7 @@ namespace OCC.Combat.Presentation
             // 一格 = 192 单位 = 32 原生像素 × 6），保证每个原生像素恰好 6 屏幕像素且落在同一栅格上。
             // HUD 等其它画布不挂，避免小屏被整数倍裁切。
             battlefieldScaler = PixelPerfectBattlefieldScaler.Attach(canvas);
-            FormalBattlefieldShellView shell = FormalBattlefieldShellView.Create(canvas.transform);
+            FormalBattlefieldShellView shell = FormalBattlefieldShellView.Create(FormalUiKit.ContentParent(canvas.transform));
             root = shell.gameObject;
             viewportRect = shell.Viewport;
             boardRect = shell.Board;

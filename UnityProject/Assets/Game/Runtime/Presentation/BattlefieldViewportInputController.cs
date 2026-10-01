@@ -90,9 +90,9 @@ namespace OCC.Combat.Presentation
         public static Vector2 ScreenToReferenceUi(Vector2 screenPosition, float screenWidth, float screenHeight,
             float referenceWidth, float referenceHeight)
         {
-            float scale = Mathf.Min(screenWidth / referenceWidth, screenHeight / referenceHeight);
-            Vector2 offset = new Vector2((screenWidth - referenceWidth * scale) * .5f,
-                (screenHeight - referenceHeight * scale) * .5f);
+            float scale = UiResolutionLayout.ScreenScale(screenWidth, screenHeight);
+            Rect content = UiResolutionLayout.ScreenContentRect(screenWidth, screenHeight, referenceWidth, referenceHeight);
+            Vector2 offset = new Vector2(content.x, screenHeight - content.yMax);
             Vector2 topLeft = new Vector2(screenPosition.x, screenHeight - screenPosition.y);
             return scale > 0f ? (topLeft - offset) / scale : topLeft;
         }

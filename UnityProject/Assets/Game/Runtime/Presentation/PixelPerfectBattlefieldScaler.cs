@@ -45,14 +45,14 @@ namespace OCC.Combat.Presentation
         private int _lastWidth;
         private int _lastHeight;
 
-        /// <summary>当前画布缩放系数。≥1 且为整数时才是像素精确档。</summary>
+        /// <summary>设计画布到屏幕的缩放系数；乘以6后才是原生像素倍率。</summary>
         public float ScaleFactor => _scaler != null ? _scaler.scaleFactor : 1f;
 
-        /// <summary>是否处于像素精确档（整数倍且 ≥1）。</summary>
-        public bool IsPixelExact => ScaleFactor >= 1f && Mathf.Abs(ScaleFactor - Mathf.Round(ScaleFactor)) < .0001f;
+        /// <summary>原生像素到屏幕像素的倍率是否为正整数。</summary>
+        public bool IsPixelExact => NativePixelUnits >= 1f && Mathf.Abs(NativePixelUnits - Mathf.Round(NativePixelUnits)) < .0001f;
 
-        /// <summary>当前整数倍率（仅在像素精确档下有意义）。</summary>
-        public int IntegerScale => Mathf.Max(1, Mathf.RoundToInt(ScaleFactor));
+        /// <summary>当前原生像素到屏幕像素的整数倍率。</summary>
+        public int IntegerScale => Mathf.Max(1, Mathf.RoundToInt(NativePixelUnits));
 
         /// <summary>当前 1 个原生像素对应的画布单位数。所有战场内容按它换算尺寸与位置。</summary>
         public float NativePixelUnits => NativePixelUnitsAtReference * ScaleFactor;
@@ -101,13 +101,11 @@ namespace OCC.Combat.Presentation
             _lastWidth = Screen.width;
             _lastHeight = Screen.height;
 
-            // 屏幕装得下参考分辨率时只允许整数倍（像素精确）；
-            // 装不下（小屏）时退回比例缩放，宁可略糊也不裁切内容。
-            float exact = Mathf.Min(Screen.width / (float)ReferenceWidth, Screen.height / (float)ReferenceHeight);
-            float factor = exact >= 1f ? Mathf.Floor(exact) : exact;
+            // 对320×180原生网格取整数倍率：2K为8/6画布倍，4K为12/6画布倍。
+            float factor = UiResolutionLayout.ScreenScale(Screen.width, Screen.height);
 
             _scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
-            _scaler.scaleFactor = Mathf.Max(.1f, factor);
+            _scaler.scaleFactor = factor;
 
             if (_canvas != null)
             {

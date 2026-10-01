@@ -625,7 +625,7 @@ namespace OCC.Combat.Presentation
         public void Move(object source, Vector2 screenPosition)
         {
             if (!ReferenceEquals(owner, source) || !IsVisible) return;
-            RectTransform canvasRect = canvas.transform as RectTransform;
+            RectTransform canvasRect = FormalUiKit.ContentParent(canvas.transform) as RectTransform;
             if (canvasRect == null || !RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, canvas.worldCamera, out Vector2 local)) return;
             Vector2 preferred = local + new Vector2(18f, -18f);
             Rect bounds = canvasRect.rect;
