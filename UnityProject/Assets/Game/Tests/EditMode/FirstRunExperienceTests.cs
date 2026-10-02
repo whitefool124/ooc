@@ -11,6 +11,32 @@ namespace OCC.Combat.Tests
     public sealed class FirstRunExperienceTests
     {
         [Test]
+        public void CollectedTutorialCard_DoesNotBlockNextBattleRewardEnvelope()
+        {
+            RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(906);
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            run.CompleteCurrentCombat();
+            run.OpenPendingRewardChoices();
+            run.SelectPendingReward("F-P-M03");
+            run.ClaimLootChoice("F-P-M03");
+            Assert.That(run.SelectedRewardId, Is.Empty);
+            Assert.That(run.RewardChoicesOpened, Is.False);
+            run.ClaimFixedLoot("gold");
+            run.ClaimFixedLoot("contribution");
+            run.LeaveLoot();
+            run.SelectNode("EV1"); run.ChooseCurrentNodeContent("FIRST-EV1-ACCEPT-DELIVERY");
+            run.SelectNode("EV2"); run.ChooseCurrentNodeContent("FIRST-EV2-GOLD");
+            run.SelectNode("B2"); run.CompleteCurrentCombat();
+            Assert.That(run.SelectedRewardId, Is.Empty);
+            run.OpenPendingRewardChoices();
+            run.SelectPendingReward("F-P-U04");
+            run.ClaimLootChoice("F-P-U04");
+            Assert.That(run.RogueRunState.MasteredSpellIds, Does.Contain("F-P-U04"));
+            Assert.That(run.SelectedRewardId, Is.Empty);
+        }
+
+        [Test]
         public void FirstBattleBeforeOriginConfirmationExplainsPrerequisiteAndCanStartAfterConfirmation()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateFirstRunV1(906);

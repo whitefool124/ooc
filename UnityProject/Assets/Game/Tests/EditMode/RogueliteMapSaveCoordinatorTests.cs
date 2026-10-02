@@ -405,15 +405,14 @@ namespace OCC.Combat.Tests
                     command = CombatCommand.Attack(unit.Id, target.Id);
                 else
                 {
-                    IReadOnlyList<GridPosition> path = new[]
-                        {
-                            new GridPosition(0, 1), new GridPosition(1, 0),
-                            new GridPosition(0, -1), new GridPosition(-1, 0)
-                        }
-                        .Select(offset => target.Position + offset)
-                        .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) &&
-                            !state.IsOccupied(position, unit.Id))
-                        .OrderBy(position => position.ManhattanDistance(unit.Position))
+                    // Approach over legal intermediate destinations when the enemy's
+                    // adjacent cells are outside this move's terrain-cost budget.
+                    IReadOnlyList<GridPosition> path = Enumerable.Range(0, state.Map.Width)
+                        .SelectMany(x => Enumerable.Range(0, state.Map.Height).Select(y => new GridPosition(x, y)))
+                        .Where(position => !state.Map.IsBlocked(position) && !state.IsOccupied(position, unit.Id) &&
+                            position.ManhattanDistance(target.Position) < distance)
+                        .OrderBy(position => position.ManhattanDistance(target.Position))
+                        .ThenBy(position => position.ManhattanDistance(unit.Position))
                         .Select(position => CombatMovementQuery.FindPath(state, unit, position))
                         .FirstOrDefault(candidate => candidate.Count > 1);
                     command = path == null ? CombatCommand.EndTurn(unit.Id) :

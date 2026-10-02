@@ -8,6 +8,20 @@ namespace OCC.Combat.Tests
 {
     public sealed class FormalArtRegistryTests
     {
+        [Test]
+        public void EveryCombatFeedback_HasLoadableFloatingTextIcon()
+        {
+            GameObject root = new GameObject("feedback-icon-regression");
+            try
+            {
+                var feedback = root.AddComponent<CombatVisualFeedback>();
+                var load = typeof(CombatVisualFeedback).GetMethod("SemanticIcon", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                foreach (CombatFeedbackKind kind in Enum.GetValues(typeof(CombatFeedbackKind)))
+                    Assert.That(load.Invoke(feedback, new object[] { CombatFeedbackCatalog.For(kind).Key }), Is.Not.Null, kind.ToString());
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); }
+        }
+
         [TestCase("shieldguard")]
         [TestCase("stone_snare")]
         [TestCase("raider")]

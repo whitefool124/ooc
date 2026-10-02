@@ -101,7 +101,7 @@ namespace OCC.Combat.Presentation
         private bool combatEntryQueued;
 
         public bool IsVisible => root != null && root.activeSelf;
-        public bool IsObjectDurabilityVisible => objectDurability != null && objectDurability.Root.activeSelf;
+        public bool IsObjectDurabilityVisible => objectDurability != null && objectDurability.Root != null && objectDurability.Root.activeSelf;
         // The entry focus frame belongs behind every unit, but above the battlefield cells.
         public RectTransform EntryFocusUnderlay => unitLayerRect;
         // Reuse the regions of the currently drawn frame, rather than final simulation positions.
@@ -1574,11 +1574,11 @@ namespace OCC.Combat.Presentation
             TileState tile = canShow ? state.Map.GetTile(hoverPosition) : null;
             if (tile == null || tile.Durability <= 0 || tile.MaxDurability <= 0)
             {
-                if (objectDurability != null) objectDurability.Root.SetActive(false);
+                if (objectDurability != null && objectDurability.Root != null) objectDurability.Root.SetActive(false);
                 return;
             }
 
-            if (objectDurability == null)
+            if (objectDurability == null || objectDurability.Root == null)
             {
                 objectDurability = ColoredBar("物块耐久", overlayLayerRect, null, FormalUiTheme.Amber);
                 objectDurability.Value.color = Color.white;
@@ -1649,7 +1649,7 @@ namespace OCC.Combat.Presentation
         private void HideTooltip()
         {
             hoverCard?.Hide();
-            if (objectDurability != null) objectDurability.Root.SetActive(false);
+            if (objectDurability != null && objectDurability.Root != null) objectDurability.Root.SetActive(false);
             hasHoverPosition = false;
             hoverPointerInside = false;
             hoverRevealed = false;

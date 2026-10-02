@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[],\"destroyed\":[],\"returnValue\":{\"phase\":\"Victory\",\"level\":\"rail_patrol\",\"action\":\"技能1\",\"playing\":false,\"enemyPhase\":\"Idle\",\"map\":{\"CurrentNodeId\":\"dorm_drill\",\"StageTime\":4,\"AwaitingReward\":true},\"units\":[{\"Id\":\"hero\",\"Health\":42,\"Mana\":0,\"ActionPoints\":0,\"pos\":\"(5, 1)\",\"IsAlive\":true},{\"Id\":\"enemy_0\",\"Health\":0,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(2, 2)\",\"IsAlive\":false},{\"Id\":\"enemy_1\",\"Health\":0,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(0, 0)\",\"IsAlive\":false},{\"Id\":\"enemy_2\",\"Health\":0,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(5, 0)\",\"IsAlive\":false}],\"active\":null,\"buttons\":[{\"name\":\"技能4\",\"interactable\":false},{\"name\":\"打开背包\",\"interactable\":true},{\"name\":\"固定战利品_1\",\"interactable\":true},{\"name\":\"快捷栏2\",\"interactable\":true},{\"name\":\"快捷栏1\",\"interactable\":true},{\"name\":\"行动值翻面\",\"interactable\":true},{\"name\":\"固定战利品_0\",\"interactable\":true},{\"name\":\"结束行动\",\"interactable\":false},{\"name\":\"快捷栏0\",\"interactable\":true},{\"name\":\"整理行囊\",\"interactable\":true},{\"name\":\"技能1\",\"interactable\":false},{\"name\":\"技能3\",\"interactable\":false},{\"name\":\"技能5\",\"interactable\":false},{\"name\":\"结果返回\",\"interactable\":true},{\"name\":\"离开战斗\",\"interactable\":true},{\"name\":\"技能2\",\"interactable\":false},{\"name\":\"战术重开\",\"interactable\":true},{\"name\":\"技能8\",\"interactable\":false},{\"name\":\"打开百科\",\"interactable\":true},{\"name\":\"技能6\",\"interactable\":false},{\"name\":\"英雄概况翻面\",\"interactable\":true},{\"name\":\"快捷栏3\",\"interactable\":true},{\"name\":\"战后奖励封套\",\"interactable\":true},{\"name\":\"技能7\",\"interactable\":false},{\"name\":\"离开战利品\",\"interactable\":true}],\"text\":[\"2\",\"空槽\",\"?\",\"6\",\"3\",\"\",\"状态\",\"护盾\",\"待领取 3 项\",\"一份随机奖励\",\"4\",\"待领取\",\"记录\",\"火花\",\"空槽\",\"03\",\"回路调息\",\"百科\",\"返回地图\",\"行动值\",\"空槽\",\"战利品搜刮\",\"2\",\"1\",\"1\",\"+3\",\"任务目标已完成。\\n回到地图后，就能带走本场收获。\",\"1\",\"42／50\",\"24\",\"背包\",\"42／50\",\"7\",\"1\",\"1\",\"11\",\"0\",\"生命\",\"3\",\"1\",\"1\",\"6\",\"8\",\"整理背包\",\"学院贡献\",\"空槽\",\"冷却\",\"战斗胜利\",\"维克多护幕\",\"金币\",\"19\",\"5\",\"2\",\"0／3\",\"0／12\",\"重开\",\"离开\",\"4\",\"26 / 60\",\"结束回合\\n行动点会清空\",\"灼触\",\"3\",\"离开\",\"+1\",\"个人魔力\"]}}}"
+      }
+    ]
+  }
+}

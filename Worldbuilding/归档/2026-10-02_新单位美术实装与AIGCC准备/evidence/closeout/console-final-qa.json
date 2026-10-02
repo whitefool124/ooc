@@ -1,0 +1,133 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "level": "error",
+      "tail": "10"
+    },
+    "result": {
+      "entries": [
+        {
+          "seq": 15251,
+          "timestampUtc": "2026-10-02T10:26:51.1527595Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15252,
+          "timestampUtc": "2026-10-02T10:26:51.1692116Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15253,
+          "timestampUtc": "2026-10-02T10:26:51.1858569Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15254,
+          "timestampUtc": "2026-10-02T10:26:51.2027148Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15255,
+          "timestampUtc": "2026-10-02T10:26:51.2196037Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15256,
+          "timestampUtc": "2026-10-02T10:26:51.2358791Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15257,
+          "timestampUtc": "2026-10-02T10:26:51.2517967Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15258,
+          "timestampUtc": "2026-10-02T10:26:51.269688Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15259,
+          "timestampUtc": "2026-10-02T10:26:51.2856619Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object.",
+          "stackTrace": "UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nUnityEngine.GameObject.SetActive (System.Boolean value) (at <5bc40c3d370d4c0ba31a7d683af28bc8>:0)\nOCC.Combat.Presentation.FormalBattlefieldView.HideTooltip () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1652)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:155)\n",
+          "seeded": false
+        },
+        {
+          "seq": 15274,
+          "timestampUtc": "2026-10-02T10:38:25.7728233Z",
+          "level": "error",
+          "logType": "Exception",
+          "message": "KeyNotFoundException: Missing formal art mapping for runtime id: break_stance",
+          "stackTrace": "OCC.Combat.FormalArtRegistry.Required (System.Collections.Generic.IReadOnlyList`1[T] entries, System.String runtimeId) (at Assets/Game/Runtime/Combat/FormalArtRegistry.cs:459)\nOCC.Combat.FormalArtRegistry.FeedbackPath (System.String runtimeId) (at Assets/Game/Runtime/Combat/FormalArtRegistry.cs:466)\nOCC.Combat.Presentation.CombatVisualFeedback.SemanticIcon (System.String iconKey) (at Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs:951)\nOCC.Combat.Presentation.CombatVisualFeedback.ShowFloatingText (OCC.Combat.GridPosition position, System.String message, UnityEngine.Color color, System.String iconKey) (at Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs:850)\nOCC.Combat.Presentation.CombatVisualFeedback.Publish (OCC.Combat.CombatFeedbackEvent feedback) (at Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs:528)\nOCC.Combat.Presentation.CombatActionPlayback+<>c__DisplayClass16_1.<Start>b__2 () (at Assets/Game/Runtime/Presentation/CombatActionPlayback.cs:125)\nOCC.Combat.Presentation.CombatActionPlayback.Advance (System.Single now, System.Boolean animationsEnabled) (at Assets/Game/Runtime/Presentation/CombatActionPlayback.cs:136)\nOCC.Combat.Presentation.CombatVisualFeedback.AdvanceActionPlayback () (at Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs:114)\nOCC.Combat.Presentation.CombatVisualFeedback.get_IsActionPlaying () (at Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs:79)\nOCC.Combat.Presentation.CombatPrototypeBootstrap.get_IsCombatActionPlaying () (at Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs:1546)\nOCC.Combat.Presentation.CombatPrototypeBootstrap.get_IsInteractionModalOpen () (at Assets/Game/Runtime/Presentation/CombatPrototypeBootstrap.cs:1549)\nOCC.Combat.Presentation.FormalBattlefieldView.UpdateHoverReveal () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:1538)\nOCC.Combat.Presentation.FormalBattlefieldView.Update () (at Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs:220)\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 15320,
+      "session": "1712fd8bd17449d3990478e17588c5f2",
+      "returned": 10,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 1940,
+        "warn": 44,
+        "log": 16
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-02T11:13:39.6881392Z",
+        "ageMs": 173,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 0,
+        "consoleLogs": 0,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "D:\\occart\\OCC_latest\\UnityProject"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

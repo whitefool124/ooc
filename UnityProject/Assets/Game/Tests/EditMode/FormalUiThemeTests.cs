@@ -11,6 +11,40 @@ namespace OCC.Combat.Tests
 {
     public sealed class FormalUiThemeTests
     {
+        private static void AssertThinBorder(Transform parent)
+        {
+            string[] names = { "细边_上", "细边_下", "细边_左", "细边_右" };
+            foreach (string name in names)
+            {
+                Assert.That(parent.Cast<Transform>().Count(child => child.name == name), Is.EqualTo(1));
+                RectTransform edge = parent.Find(name).GetComponent<RectTransform>();
+                Assert.That(name == "细边_上" || name == "细边_下" ? edge.sizeDelta.y : edge.sizeDelta.x, Is.EqualTo(1f));
+                Assert.That(edge.GetComponent<Image>().raycastTarget, Is.False);
+            }
+        }
+
+        [Test]
+        public void DestroyedBattlefieldOverlay_DurabilityTooltipCanHideSafely()
+        {
+            GameObject root = new GameObject("tooltip-lifecycle-test", typeof(RectTransform));
+            GameObject viewObject = new GameObject("tooltip-lifecycle-view", typeof(FormalBattlefieldView));
+            try
+            {
+                var bar = typeof(FormalBattlefieldView).GetMethod("ColoredBar", BindingFlags.Static | BindingFlags.NonPublic)
+                    .Invoke(null, new object[] { "durability", root.transform, null, Color.white });
+                var view = viewObject.GetComponent<FormalBattlefieldView>();
+                typeof(FormalBattlefieldView).GetField("objectDurability", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(view, bar);
+                Object.DestroyImmediate(root);
+                Assert.DoesNotThrow(() => typeof(FormalBattlefieldView).GetMethod("HideTooltip", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(view, null));
+                Assert.That(view.IsObjectDurabilityVisible, Is.False);
+            }
+            finally
+            {
+                if (root != null) Object.DestroyImmediate(root);
+                Object.DestroyImmediate(viewObject);
+            }
+        }
+
         [TestCase("resource_bar_health_32")]
         [TestCase("resource_bar_shield_32")]
         [TestCase("resource_bar_mana_32")]
@@ -96,20 +130,20 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void PixelFrameTokens_RemainChunkyAtBothReferenceScales()
+        public void PixelFrameTokens_UseCurrentThinBorderAndReadableInsets()
         {
-            Assert.That(FormalUiTheme.FrameThickness, Is.EqualTo(6));
+            Assert.That(FormalUiTheme.FrameThickness, Is.EqualTo(1));
             Assert.That(FormalUiTheme.FrameCornerSize, Is.EqualTo(12));
-            Assert.That(FormalUiTheme.InnerHighlightThickness, Is.EqualTo(2));
+            Assert.That(FormalUiTheme.InnerHighlightThickness, Is.EqualTo(1));
             Assert.That(FormalUiTheme.PressedOffset, Is.EqualTo(4));
             Assert.That(FormalUiTheme.FrameCornerSize, Is.GreaterThanOrEqualTo(FormalUiTheme.FrameThickness * 2));
-            Assert.That(FormalUiTheme.FrameTextSafetyMargin, Is.EqualTo(6));
+            Assert.That(FormalUiTheme.FrameTextSafetyMargin, Is.EqualTo(11));
             Assert.That(FormalUiTheme.FramedContentInset, Is.EqualTo(12));
             Assert.That(FormalUiTheme.FullyFramedSingleLineHeight, Is.GreaterThanOrEqualTo(48));
         }
 
         [Test]
-        public void ApplySkin_BindsAuthoredNineSliceWithoutProceduralFrame()
+        public void ApplySkin_ReusesFourOnePixelEdgesWithoutHeavyFrame()
         {
             GameObject target = new GameObject("pixel-frame", typeof(RectTransform), typeof(Image));
             try
@@ -121,10 +155,9 @@ namespace OCC.Combat.Tests
                 Assert.That(target.GetComponent<Outline>(), Is.Null);
                 Assert.That(image.sprite, Is.Null);
                 Image overlay = target.transform.Find("正式皮肤").GetComponent<Image>();
-                Assert.That(overlay.sprite, Is.SameAs(FormalUiKit.SkinSprite("panel")));
-                Assert.That(overlay.type, Is.EqualTo(Image.Type.Sliced));
-                Assert.That(overlay.fillCenter, Is.False);
-                Assert.That(overlay.sprite.border, Is.EqualTo(new Vector4(4f, 4f, 4f, 4f)));
+                Assert.That(overlay.sprite, Is.Null);
+                Assert.That(overlay.color, Is.EqualTo(Color.clear));
+                AssertThinBorder(target.transform);
                 Assert.That(target.transform.Find("像素框架"), Is.Null);
             }
             finally { Object.DestroyImmediate(target); }
@@ -167,8 +200,14 @@ namespace OCC.Combat.Tests
                     foreach (Text label in row.GetComponentsInChildren<Text>())
                     {
                         label.cachedTextGenerator.Populate(label.text, label.GetGenerationSettings(label.rectTransform.rect.size));
-                        float glyphBottom = label.cachedTextGenerator.verts.Min(vertex => vertex.position.y);
-                        Assert.That(glyphBottom - divider.anchoredPosition.y,
+                        // Empty timeline placeholders have no glyphs. Generator vertices are
+                        // label-local (and include a trailing dummy quad), not row-local.
+                        if (string.IsNullOrEmpty(label.text)) continue;
+                        var vertices = label.cachedTextGenerator.verts;
+                        float glyphBottom = vertices.Take(vertices.Count - 4).Min(vertex =>
+                            row.InverseTransformPoint(label.rectTransform.TransformPoint(vertex.position / label.pixelsPerUnit)).y);
+                        float dividerTop = row.InverseTransformPoint(divider.TransformPoint(new Vector3(0, divider.rect.yMax))).y;
+                        Assert.That(glyphBottom - dividerTop,
                             Is.GreaterThanOrEqualTo(FormalUiTheme.FrameTextSafetyMargin));
                     }
                 }
@@ -459,11 +498,15 @@ namespace OCC.Combat.Tests
                     string label = (string)rowType.GetField("Label").GetValue(row);
                     string body = (string)rowType.GetField("Body").GetValue(row);
                     Assert.That(label, Is.Not.Empty);
-                    Assert.That(body.Contains("剩余") || body.Contains("下一次"), Is.True,
-                        "each entry states its remaining duration or the fixed next-turn expiry");
+                    Assert.That(body, Is.Not.Empty, "each entry explains the status effect");
+                    Assert.That(label.Split(' ').Last(), Is.Not.Empty, "compact rows carry duration or signed strength");
                     labels.Add(label);
                 }
                 Assert.That(labels.Distinct().Count(), Is.EqualTo(4), "entries must be distinguishable");
+                Assert.That(labels, Does.Contain("燃烧 2"));
+                Assert.That(labels, Does.Contain("敏捷 -1"));
+                Assert.That(labels, Does.Contain("束缚 1"));
+                Assert.That(labels, Does.Contain("破势 3"));
             }
             finally { Object.DestroyImmediate(hudObject); }
         }
@@ -582,7 +625,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void PeripheralArtSizes_AreRoundedToWholeNativeMultiples()
+        public void PeripheralArtSizes_KeepNativeMarkersAndRequestedIllustrationSize()
         {
             GameObject root = new GameObject("peripheral-size-root", typeof(RectTransform));
             try
@@ -592,7 +635,7 @@ namespace OCC.Combat.Tests
                 FormalUiEffects.AddEmptyIllustration(root.transform, "empty_inventory_pouch", Vector2.zero, 90f);
                 Assert.That(root.transform.Find("章节分隔横幅_teaching_record").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(256f, 64f)));
                 Assert.That(root.transform.Find("章节角标_reward_brass_tag").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(64f, 64f)));
-                Assert.That(root.transform.Find("空状态插图_empty_inventory_pouch").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(64f, 64f)));
+                Assert.That(root.transform.Find("空状态插图_empty_inventory_pouch").GetComponent<RectTransform>().sizeDelta, Is.EqualTo(new Vector2(90f, 90f)));
             }
             finally { Object.DestroyImmediate(root); }
         }
@@ -671,7 +714,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FocusFrame_UsesAuthoredSemanticNineSlice()
+        public void FocusFrame_UsesCyanOnePixelEdges()
         {
             GameObject root = new GameObject("focus-root", typeof(RectTransform));
             try
@@ -680,8 +723,9 @@ namespace OCC.Combat.Tests
                 Assert.That(focus.sprite, Is.Null);
                 Assert.That(focus.color, Is.EqualTo(Color.clear));
                 Image overlay = focus.transform.Find("正式皮肤").GetComponent<Image>();
-                Assert.That(overlay.sprite, Is.SameAs(FormalUiKit.SkinSprite("focus")));
-                Assert.That(overlay.type, Is.EqualTo(Image.Type.Sliced));
+                Assert.That(overlay.sprite, Is.Null);
+                AssertThinBorder(focus.transform);
+                Assert.That(focus.transform.Find("细边_上").GetComponent<Image>().color, Is.EqualTo(FormalUiTheme.Cyan));
                 Assert.That(focus.transform.Find("像素框架"), Is.Null);
             }
             finally { Object.DestroyImmediate(root); }
@@ -835,13 +879,19 @@ namespace OCC.Combat.Tests
                     () => UiMotionProfile.FromIntensity(0f), null);
                 Image image = FormalUiKit.SkinOverlay(button.targetGraphic as Image);
                 EventSystem events = eventSystemObject.GetComponent<EventSystem>();
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_idle")));
+                Color idle = (button.targetGraphic as Image).color;
+                Assert.That(image.sprite, Is.Null);
+                AssertThinBorder(button.transform);
                 feedback.OnPointerEnter(new PointerEventData(events));
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_hover")));
+                Color hover = (button.targetGraphic as Image).color;
+                Assert.That(hover, Is.Not.EqualTo(idle));
                 feedback.OnPointerDown(new PointerEventData(events) { button = PointerEventData.InputButton.Left });
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_pressed")));
+                Color pressed = (button.targetGraphic as Image).color;
+                Assert.That(pressed, Is.Not.EqualTo(hover));
                 feedback.SetAvailability(false, "暂时不能出发");
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_disabled")));
+                Assert.That(button.interactable, Is.False);
+                Assert.That((button.targetGraphic as Image).color, Is.Not.EqualTo(pressed));
+                Assert.That(image.sprite, Is.Null);
             }
             finally
             {
@@ -1151,11 +1201,12 @@ namespace OCC.Combat.Tests
                     "对中心与相邻格的可击打目标造成伤害，主目标另受 16 点耐久伤害；" +
                     "相邻格的单位与物件各自承受 8 点伤害与 8 点耐久伤害，友军同样会被波及。" +
                     "这条简介刻意写长，用来让面板高度超过最小高度，从而验证各段是按内容伸缩而不是被最小值夹住。";
+                const string measuredEffect = "造成 16 点火焰伤害\n中心耐久伤害 16\n相邻耐久伤害 8\n友军同样会被波及";
                 FormalTooltipContent shortContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与相邻格",
-                    "单点", "魔力 3", "冷却 2", "造成 16 点火焰伤害", longSummary,
+                    "单点", "魔力 3", "冷却 2", measuredEffect, longSummary,
                     FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
                 FormalTooltipContent longContent = new FormalTooltipContent("个人术式", "可用", "熔障爆点", "火系　中心与相邻格",
-                    CombatRangeText.SelectionLine(spell), "魔力 3", "冷却 2", "造成 16 点火焰伤害",
+                    CombatRangeText.SelectionLine(spell), "魔力 3", "冷却 2", measuredEffect,
                     longSummary, FormalUiTheme.Cyan, FormalArtRegistry.CommandPath("skill"));
 
                 RectTransform PanelOf() => canvasObject.GetComponentsInChildren<RectTransform>(true)
@@ -1168,7 +1219,8 @@ namespace OCC.Combat.Tests
                 float baseEffect = -Find("效果内容").anchoredPosition.y;
                 float baseFooter = -Find("页脚分隔线").anchoredPosition.y;
                 float basePanel = PanelOf().sizeDelta.y;
-                Assert.That(basePanel, Is.GreaterThan(388f), "长简介应让面板超过最小高度，否则测不到按内容伸缩");
+                Assert.That(shortContent.Summary.Length, Is.LessThanOrEqualTo(FormalTooltipContent.MaximumSummaryCharacters));
+                Assert.That(basePanel, Is.GreaterThan(388f), "a multiline effect removes the minimum-height clamp from this growth check");
 
                 // 长内容：指标格按内容自量变高，下方各段让位同样的高度，面板随之变高。
                 tooltip.Show(new object(), longContent, new Vector2(400f, 400f));
@@ -1243,7 +1295,7 @@ namespace OCC.Combat.Tests
                 foreach (Text label in card.GetComponentsInChildren<Text>(true))
                 {
                     Assert.That(label.fontSize % FormalUiTheme.NativeFontGrid, Is.Zero, label.name);
-                    Assert.That(label.fontStyle, Is.EqualTo(FontStyle.Bold), label.name);
+                    Assert.That(label.fontStyle, Is.EqualTo(FontStyle.Normal), label.name);
                 }
                 Assert.That(metricA.anchoredPosition, Is.EqualTo(new Vector2(16f, -148f)));
                 Assert.That(metricB.anchoredPosition, Is.EqualTo(new Vector2(150f, -148f)));
@@ -1251,7 +1303,7 @@ namespace OCC.Combat.Tests
                 Assert.That(metricA.sizeDelta, Is.EqualTo(new Vector2(124f, 48f)));
                 Assert.That(divider.anchoredPosition, Is.EqualTo(new Vector2(16f, -208f)));
                 Assert.That(divider.sizeDelta, Is.EqualTo(new Vector2(400f, 2f)));
-                Assert.That(-footerDivider.anchoredPosition.y, Is.GreaterThanOrEqualTo(304f));
+                Assert.That(-footerDivider.anchoredPosition.y, Is.EqualTo(-effect.rectTransform.anchoredPosition.y + effect.rectTransform.sizeDelta.y + 12f));
                 Assert.That(effect.text, Is.EqualTo("造成 8 点物理伤害"));
                 Assert.That(summary.text, Is.EqualTo("用于近距离打击相邻目标的基础火术。"));
                 float summaryBottom = -summary.rectTransform.anchoredPosition.y + summary.rectTransform.sizeDelta.y;
@@ -1309,8 +1361,8 @@ namespace OCC.Combat.Tests
                 Assert.That(panel.sizeDelta.y, Is.InRange(388f, 520f));
                 Assert.That(effectBottom, Is.LessThan(footerTop));
                 Assert.That(summaryBottom, Is.LessThanOrEqualTo(panel.rect.height - 16f));
-                Assert.That(effect.verticalOverflow, Is.EqualTo(VerticalWrapMode.Truncate));
-                Assert.That(summary.verticalOverflow, Is.EqualTo(VerticalWrapMode.Truncate));
+                Assert.That(effect.preferredHeight, Is.LessThanOrEqualTo(effect.rectTransform.rect.height + .01f));
+                Assert.That(summary.preferredHeight, Is.LessThanOrEqualTo(summary.rectTransform.rect.height + .01f));
             }
             finally { Object.DestroyImmediate(canvasObject); }
         }
@@ -1457,7 +1509,7 @@ namespace OCC.Combat.Tests
             FireSpellDefinition fireball = FireSpellCatalog.All.Single(spell => spell.Id == "F-P-R01");
             FireSpellDefinition dash = FireSpellCatalog.All.Single(spell => spell.Id == "F-P-U01");
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(fireball), Does.Contain("12点火焰伤害"));
-            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Contain("下回合获得1点行动点"));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Contain("沿直线突进最多3格"));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Not.Contain("ReserveNextTurnAction"));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Not.Contain("Destination"));
         }

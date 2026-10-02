@@ -950,6 +950,8 @@ namespace OCC.Combat.Presentation
             if (semanticIcons.TryGetValue(iconKey, out Sprite sprite)) return sprite;
             string path = iconKey == "shield_consumed" || iconKey == "shield_transfer_out" ? FormalArtRegistry.FeedbackPath("shield_absorb") :
                 iconKey == "shield_transfer_in" ? FormalArtRegistry.FeedbackPath("shield_restore") :
+                iconKey == "break_stance" ? FormalArtRegistry.FeedbackPath("armor_break") :
+                iconKey == "attribute" ? FormalArtRegistry.CommandPath("skill") :
                 iconKey == "utility_resolved" ? FormalArtRegistry.CommandPath("interact") : FormalArtRegistry.FeedbackPath(iconKey);
             sprite = Resources.Load<Sprite>(path);
             if (sprite == null) throw new KeyNotFoundException("Missing formal feedback icon: " + iconKey);

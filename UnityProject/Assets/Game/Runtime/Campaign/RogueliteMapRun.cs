@@ -2460,6 +2460,14 @@ namespace OCC.Combat
                 rogueRunDto.AwaitingReward = AwaitingReward;
                 rogueRunDto.RunProgramId = RogueliteRunProgram.FirstRunV1.ToString();
                 rogueRunDto.FirstRunExperience = FirstRunExperience;
+                // Collection and restored saves must not carry a previous battle's
+                // selected card into the next reward envelope.
+                string selected = rogueRunDto.SelectedRewardId;
+                if (!AwaitingReward || !string.IsNullOrEmpty(selected) && !CurrentFirstRunRewardIds.Contains(selected))
+                {
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = false;
+                }
             }
         }
         internal OCC.Combat.Roguelite.RogueRunDto ExportRogue11(OCC.Combat.Roguelite.RogueRunDto preserved = null, string migrationReportId = "")

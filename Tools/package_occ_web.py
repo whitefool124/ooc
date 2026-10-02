@@ -65,9 +65,20 @@ credits = Path(__file__).resolve().parent.parent / "ArtSource/Audio/AUDIO_CREDIT
 if credits.is_file():
     shutil.copy2(credits, destination / "AUDIO_CREDITS.md")
 repo = Path(__file__).resolve().parent.parent
+licenses = destination / "Licenses"
+licenses.mkdir()
+for src, name in [
+    (repo / "UnityProject/Assets/Game/Resources/Fonts/Licenses/FusionPixelFont-OFL-1.1.txt", "FusionPixelFont-OFL-1.1.txt"),
+    *[(repo / f"UnityProject/Assets/Resources/Audio/SFX/Kenney/{pack}/License.txt", f"Kenney-{pack}.txt")
+      for pack in ("rpg-audio", "interface-sounds", "impact-sounds")],
+]:
+    if not src.is_file():
+        raise SystemExit(f"Missing required distribution license: {src}")
+    shutil.copy2(src, licenses / name)
 for src, name in [
     (repo / "ArtSource/unit_refresh_20261002/integration.json", "ART_PROVENANCE.json"),
     (repo / "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/参赛材料草稿.md", "参赛材料草稿.md"),
+    (repo / "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/收尾验收与交付.md", "收尾验收与交付.md"),
 ]:
     if src.is_file():
         shutil.copy2(src, destination / name)

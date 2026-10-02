@@ -10,7 +10,7 @@ namespace OCC.Combat.Tests
     public sealed class CombatSceneSessionBuilderTests
     {
         [Test]
-        public void FormalMapRun_BuildsLevelPreparationInventoryAndLoot()
+        public void FormalMapRun_BuildsLevelPreparationInventoryWithoutInventingLoot()
         {
             RogueliteMapRun run = new RogueliteMapRun(501, FireRogueliteStarterCatalog.Ranged);
             run.SelectNode("rail_patrol");
@@ -25,7 +25,9 @@ namespace OCC.Combat.Tests
             Assert.That(build.Preparation.EnemySummary, Does.Contain(EnemyArchetypes.Get(assigned.EnemyArchetypeIds[0]).DisplayName));
             Assert.That(build.State.GetUnit("hero"), Is.Not.Null);
             Assert.That(build.State.ItemQuickbar.Take(2).All(id => !string.IsNullOrEmpty(id)), Is.True);
-            Assert.That(build.State.LootSource.Id, Is.EqualTo("rail_patrol-relay-crate"));
+            Assert.That(build.State.Map.PositionsWith(tile => tile.IsLootChest), Is.Empty);
+            Assert.That(build.State.LootSource, Is.Null, "Unconfigured chests must not be injected into an encounter.");
+            Assert.That(build.State.Loot, Is.Null);
         }
 
         [Test]
@@ -51,6 +53,9 @@ namespace OCC.Combat.Tests
             Assert.That(build.State.RogueEquipment, Is.Not.Null);
             Assert.That(build.State.RogueEquipment.Backpack, Is.Not.Null);
             Assert.That(build.State.RogueEquipment.ItemQuickbarInstanceIds.Length, Is.EqualTo(4));
+            Assert.That(build.State.LootSource, Is.Not.Null);
+            Assert.That(build.State.LootSource.Id, Is.EqualTo("FIRST-B2-CENTRAL-CHEST"));
+            Assert.That(build.State.Map.GetTile(build.State.LootSource.Position).IsLootChest, Is.True);
         }
 
         [Test]
@@ -106,7 +111,9 @@ namespace OCC.Combat.Tests
                 Assert.That(hero.MainHand.Id, Is.EqualTo(StageTwoBuilds.CalibratedRifle.Id));
                 Assert.That(hero.Armor, Is.GreaterThan(0));
                 Assert.That(build.State.ItemQuickbar.Take(3).All(id => !string.IsNullOrEmpty(id)), Is.True);
-                Assert.That(build.State.LootSource.Id, Is.EqualTo("relay-crate"));
+                Assert.That(build.State.Map.PositionsWith(tile => tile.IsLootChest), Is.Empty);
+                Assert.That(build.State.LootSource, Is.Null);
+                Assert.That(build.State.Loot, Is.Null);
             }
             finally
             {

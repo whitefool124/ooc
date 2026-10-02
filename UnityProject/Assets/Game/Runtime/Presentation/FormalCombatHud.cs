@@ -1823,6 +1823,9 @@ namespace OCC.Combat.Presentation
                 int fireSlot = parsedSlot;
                 FireSpellDefinition fire = fireSlot < 0 ? null : bootstrap.FireSpellInSlot(fireSlot);
                 ArtifactDefinition artifact = fireSlot == 0 ? (bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact) : null;
+                // The equipped roguelite slot owns its costs and cooldown. Legacy
+                // hero skills can have different costs despite sharing this button.
+                if (rogueSpell != null) { skill = null; fire = null; artifact = null; }
                 if (available && artifact != null && hero.ActionPoints < artifact.ActionPointCost) { available = false; reason = "行动点不足：需要 " + artifact.ActionPointCost; }
                 if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "术式冷却中，还需 " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) + " 回合"; }
                 if (available && fire != null && hero.Mana < fire.ManaCost) { available = false; reason = "能量不足：需要 " + fire.ManaCost; }
