@@ -290,11 +290,11 @@ namespace OCC.Combat.Presentation
             {
                 string[] previous = mapRun.CombatJournalRows.ToArray();
                 mapRun.ClearCombatJournal();
-                mapRun.BeginCombatJournal();
+                mapRun.BeginCombatJournal(refillMana: false);
                 if (!SaveMapRun())
                 {
                     mapRun.ClearCombatJournal();
-                    mapRun.BeginCombatJournal();
+                    mapRun.BeginCombatJournal(refillMana: false);
                     foreach (string row in previous) mapRun.AppendCombatJournal(CombatJournalEntry.Decode(row));
                     return;
                 }

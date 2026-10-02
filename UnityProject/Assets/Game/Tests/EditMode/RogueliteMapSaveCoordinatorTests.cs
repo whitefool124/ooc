@@ -9,6 +9,35 @@ namespace OCC.Combat.Tests
     public sealed class RogueliteMapSaveCoordinatorTests
     {
         [Test]
+        public void NewBattleRefillsMana_ContinueReplaysSpentManaWithoutRefilling()
+        {
+            MemoryStore store = new MemoryStore();
+            RogueliteMapSaveCoordinator coordinator = Coordinator(store);
+            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 7647).Run;
+            run.AcknowledgeFirstRunOrigin();
+            run.RogueRunState.CurrentMana = 1;
+            run.SelectNode("B1");
+            run.BeginCombatJournal();
+            Assert.That(run.CurrentMana, Is.EqualTo(12));
+            CombatSceneSessionBuilder builder = new CombatSceneSessionBuilder();
+            CombatState live = builder.Build(run, null, Array.Empty<CombatSceneMarker>()).State;
+            CombatResolver.AdvanceToNextTurn(live);
+            CombatCommand cast = CombatCommand.UseSkill("hero", 1, "enemy_0");
+            CombatResolver.Resolve(live, cast);
+            run.AppendCombatJournal(CombatJournalEntry.Accepted(cast));
+            Assert.That(live.GetUnit("hero").Mana, Is.EqualTo(10));
+            Assert.That(coordinator.Save(run), Is.True);
+
+            RogueliteMapRun reloaded = coordinator.TryStart(true, FireRogueliteStarterCatalog.Universal, 0).Run;
+            reloaded.BeginCombatJournal();
+            CombatState restored = builder.Build(reloaded, null, Array.Empty<CombatSceneMarker>()).State;
+            CombatResolver.AdvanceToNextTurn(restored);
+            CombatJournalReplayer.ReplayAfterActivation(restored, reloaded.CombatJournalRows);
+            Assert.That(restored.GetUnit("hero").Mana, Is.EqualTo(10));
+            Assert.That(restored.GetUnit("enemy_0").Health, Is.EqualTo(live.GetUnit("enemy_0").Health));
+        }
+
+        [Test]
         public void NewRun_MustPersistBeforeItCanStart()
         {
             MemoryStore store = new MemoryStore { FailWrites = true };

@@ -9,6 +9,8 @@ from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument("source", type=Path)
 parser.add_argument("destination", type=Path)
+parser.add_argument("--zip", action="store_true", help="Also create a ZIP when explicitly requested")
+parser.add_argument("--competition-materials", action="store_true", help="Include archived competition drafts")
 args = parser.parse_args()
 source, destination = args.source.resolve(), args.destination.resolve()
 if not (source / "index.html").is_file():
@@ -60,7 +62,7 @@ os.chdir(Path(__file__).resolve().parent)
 print("OCC preview: http://127.0.0.1:8088")
 ThreadingHTTPServer(("127.0.0.1",8088),SimpleHTTPRequestHandler).serve_forever()
 ''', encoding="utf-8")
-(destination / "使用说明.txt").write_text("OCC H5 候选试玩版\n部署整个目录到 HTTP/HTTPS 静态站点，入口为 index.html；不能用 file:// 双击运行。\n本地可用 Python 运行 serve.py 后访问 http://127.0.0.1:8088。\n点击开始游戏后允许声音播放；新建存档、选择维克多、学院地图、首战出发。\n鼠标选择格子与术式，滚轮调节战场视野；暂离保存，原地址再次打开可继续。\n浏览器存档按站点保存；清除站点数据、换浏览器或更换站点不会共享原档。\n本包不代表第一阶段已完成完整验收，也尚未上传比赛。\n", encoding="utf-8")
+(destination / "使用说明.txt").write_text("OCC H5 试玩版\n部署整个目录到 HTTP/HTTPS 静态站点，入口为 index.html；不能用 file:// 双击运行。\n本地可用 Python 运行 serve.py 后访问 http://127.0.0.1:8088。\n点击开始游戏后允许声音播放；新建存档、选择维克多、学院地图、首战出发。\n鼠标选择格子与术式，滚轮调节战场视野；暂离保存，原地址再次打开可继续。\n浏览器存档按站点保存；清除站点数据、换浏览器或更换站点不会共享原档。\n验收范围与已知问题以随包交付说明为准。\n", encoding="utf-8")
 credits = Path(__file__).resolve().parent.parent / "ArtSource/Audio/AUDIO_CREDITS.md"
 if credits.is_file():
     shutil.copy2(credits, destination / "AUDIO_CREDITS.md")
@@ -75,21 +77,24 @@ for src, name in [
     if not src.is_file():
         raise SystemExit(f"Missing required distribution license: {src}")
     shutil.copy2(src, licenses / name)
-for src, name in [
-    (repo / "ArtSource/unit_refresh_20261002/integration.json", "ART_PROVENANCE.json"),
+provenance = repo / "ArtSource/unit_refresh_20261002/integration.json"
+if provenance.is_file():
+    shutil.copy2(provenance, destination / "ART_PROVENANCE.json")
+for src, name in ([] if not args.competition_materials else [
     (repo / "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/参赛材料草稿.md", "参赛材料草稿.md"),
     (repo / "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/收尾验收与交付.md", "收尾验收与交付.md"),
-]:
+]):
     if src.is_file():
         shutil.copy2(src, destination / name)
 files = sorted(p for p in destination.rglob("*") if p.is_file())
 (destination / "SHA256SUMS.txt").write_text("\n".join(hashlib.sha256(p.read_bytes()).hexdigest()+"  "+p.relative_to(destination).as_posix() for p in files)+"\n", encoding="utf-8")
 archive = destination.with_suffix(".zip")
-with zipfile.ZipFile(archive, "x", zipfile.ZIP_DEFLATED) as zipped:
-    for path in sorted(destination.rglob("*")):
-        if path.is_file():
-            zipped.write(path, path.relative_to(destination).as_posix())
+if args.zip:
+    with zipfile.ZipFile(archive, "x", zipfile.ZIP_DEFLATED) as zipped:
+        for path in sorted(destination.rglob("*")):
+            if path.is_file():
+                zipped.write(path, path.relative_to(destination).as_posix())
 total = sum(p.stat().st_size for p in destination.rglob("*") if p.is_file())
-summary={"directory":str(destination),"zip":str(archive),"uncompressed_bytes":total,"zip_bytes":archive.stat().st_size,"under_300mb":total<=300000000 and archive.stat().st_size<=300000000}
+summary={"directory":str(destination),"zip":str(archive) if args.zip else None,"uncompressed_bytes":total,"zip_bytes":archive.stat().st_size if args.zip else 0,"under_300mb":total<=300000000 and (not args.zip or archive.stat().st_size<=300000000)}
 destination.with_suffix(".package.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
 print(json.dumps(summary, ensure_ascii=False))

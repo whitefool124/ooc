@@ -60,6 +60,19 @@ namespace OCC.Combat.Presentation
             return source;
         }
 
+        public static Vector2 GeneratedSourcePositionFor(RogueliteMapNode node, int rowCount, bool continueAfterTutorial)
+        {
+            if (node == null) throw new ArgumentNullException(nameof(node));
+            if (rowCount < 5 || rowCount > 9 || node.GridX < 0 || node.GridX >= 8 || node.GridY < 0 || node.GridY >= rowCount)
+                throw new ArgumentOutOfRangeException(nameof(node), "Generated academy node is outside its saved grid.");
+            // Saved generated graphs can have seven rows in the workshop region.
+            // Fit their rows to the atlas instead of indexing the legacy five-row anchors.
+            Vector2 source = new Vector2(positions[0, node.GridX].x,
+                Mathf.Lerp(64f, 800f, node.GridY / (float)(rowCount - 1)));
+            if (continueAfterTutorial) source.x += AcademyLayerSourceOffsetX;
+            return source;
+        }
+
         public static Vector2 LogicalPositionFor(RogueliteMapNode node)
         {
             Vector2 source = AnchorFor(node).SourcePosition;

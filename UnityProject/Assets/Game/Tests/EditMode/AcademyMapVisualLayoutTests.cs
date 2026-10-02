@@ -10,6 +10,24 @@ namespace OCC.Combat.Tests
     public sealed class AcademyMapVisualLayoutTests
     {
         [Test]
+        public void GeneratedGraphs_KeepAllSavedRowsVisibleWithoutOverlappingAnchors()
+        {
+            bool sawSevenRows = false;
+            for (int seed = 0; seed < 100; seed++)
+            {
+                IReadOnlyList<RogueliteMapNode> nodes = RogueliteAcademyMapGenerator.Generate(seed);
+                int rows = Math.Max(5, nodes.Max(node => node.GridY) + 1);
+                sawSevenRows |= rows >= 7;
+                Vector2[] points = nodes.Select(node => AcademyMapVisualLayout.GeneratedSourcePositionFor(node, rows, true)).ToArray();
+                Assert.That(points.Distinct().Count(), Is.EqualTo(nodes.Count), "seed " + seed);
+                Assert.That(points.All(point => point.y >= 64f && point.y <= 800f), Is.True, "seed " + seed);
+                float spacing = points.SelectMany((point, index) => points.Skip(index + 1).Select(other => Vector2.Distance(point, other))).Min();
+                Assert.That(spacing, Is.GreaterThanOrEqualTo(112f), "seed " + seed);
+            }
+            Assert.That(sawSevenRows, Is.True, "覆盖曾导致返回地图失败的第六、第七行。");
+        }
+
+        [Test]
         public void Atlas_HasFortyUniqueAnchorsAndFrozenRegionCounts()
         {
             IReadOnlyList<AcademyMapVisualAnchor> anchors = AcademyMapVisualLayout.Anchors;

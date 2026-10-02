@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[],\"destroyed\":[],\"returnValue\":{\"phase\":\"Victory\",\"level\":\"core_finale\",\"action\":\"技能1\",\"playing\":false,\"enemyPhase\":\"Idle\",\"map\":{\"CurrentNodeId\":\"core_finale\",\"StageTime\":18,\"AwaitingReward\":true},\"units\":[{\"Id\":\"hero\",\"Health\":46,\"Mana\":0,\"ActionPoints\":0,\"pos\":\"(3, 3)\",\"IsAlive\":true},{\"Id\":\"enemy_0\",\"Health\":0,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(4, 3)\",\"IsAlive\":false}],\"active\":null,\"buttons\":[{\"name\":\"技能7\",\"interactable\":false},{\"name\":\"结束行动\",\"interactable\":false},{\"name\":\"离开战利品\",\"interactable\":true},{\"name\":\"技能6\",\"interactable\":false},{\"name\":\"技能5\",\"interactable\":false},{\"name\":\"快捷栏0\",\"interactable\":true},{\"name\":\"快捷栏1\",\"interactable\":true},{\"name\":\"快捷栏3\",\"interactable\":true},{\"name\":\"快捷栏2\",\"interactable\":true},{\"name\":\"行动值翻面\",\"interactable\":true},{\"name\":\"打开百科\",\"interactable\":true},{\"name\":\"技能8\",\"interactable\":false},{\"name\":\"战后奖励封套\",\"interactable\":true},{\"name\":\"结果返回\",\"interactable\":true},{\"name\":\"技能4\",\"interactable\":false},{\"name\":\"打开背包\",\"interactable\":true},{\"name\":\"固定战利品_1\",\"interactable\":true},{\"name\":\"技能2\",\"interactable\":false},{\"name\":\"离开战斗\",\"interactable\":true},{\"name\":\"固定战利品_0\",\"interactable\":true},{\"name\":\"技能1\",\"interactable\":false},{\"name\":\"整理行囊\",\"interactable\":true},{\"name\":\"战术重开\",\"interactable\":true},{\"name\":\"技能3\",\"interactable\":false},{\"name\":\"英雄概况翻面\",\"interactable\":true}],\"text\":[\"空槽\",\"冷却\",\"金币\",\"离开\",\"结束回合\\n行动点会清空\",\"+3\",\"2\",\"46／50\",\"5\",\"战利品搜刮\",\"个人魔力\",\"空槽\",\"战斗胜利\",\"待领取 3 项\",\"1\",\"0／12\",\"46／50\",\"状态\",\"待领取\",\"40\",\"学院贡献\",\"3\",\"0\",\"空槽\",\"0\",\"背包\",\"4\",\"护盾\",\"11\",\"4\",\"回路调息\",\"离开\",\"一份随机奖励\",\"7\",\"8\",\"0／3\",\"\",\"背包\",\"03\",\"返回地图\",\"整理背包\",\"?\",\"4\",\"1\",\"火花\",\"任务目标已完成。\\n回到地图后，就能带走本场收获。\",\"1\",\"灼触\",\"空槽\",\"6\",\"2\",\"1\",\"行动值\",\"1\",\"2\",\"维克多护幕\",\"2\",\"百科\",\"记录\",\"3\",\"2\",\"+10\",\"重开\",\"6\",\"1\"]}}}"
+      }
+    ]
+  }
+}

@@ -43,6 +43,8 @@ namespace OCC.Combat
         public RogueliteEncounterLayout Layout { get; }
         public string ObjectiveSummary => Tier == RogueliteEncounterTier.Weak
             ? "让所有对手认输。教员会在有人重伤前叫停演练。" : string.Empty;
+        public string AcademyObjectiveSummary => Tier == RogueliteEncounterTier.Weak
+            ? ObjectiveSummary : IsBoss ? "击倒塔之守卫。" : "击倒所有对手。";
         public IReadOnlyList<string> EnemyArchetypeIds { get; }
         public bool IsElite => Tier == RogueliteEncounterTier.Elite;
         public bool IsBoss => Tier == RogueliteEncounterTier.Boss;

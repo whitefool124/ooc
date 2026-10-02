@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {},
+    "result": "{\r\n  \"status\": \"completed\",\r\n  \"duration\": 0.57,\r\n  \"summary\": {\r\n    \"total\": 7,\r\n    \"passed\": 7,\r\n    \"failed\": 0,\r\n    \"skipped\": 0,\r\n    \"inconclusive\": 0\r\n  },\r\n  \"results\": [\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.AcademyDestructionBaseMap_WinsByEliminationWithIntactDevices(\\\"relay_raid\\\")\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0337437,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.AcademyDestructionBaseMap_WinsByEliminationWithIntactDevices(\\\"transmission_tower\\\")\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0009096,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.FirstRunBattleThreeAndElite_BuildFormalSessionsThroughTheNormalFlow\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.081882,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.FirstRunBattleTwo_BuildsItsFormalLevelAndKeepsRogueInventoryRuntime\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0093233,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.FormalMapRun_BuildsLevelPreparationInventoryWithoutInventingLoot\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0082937,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.PrototypeMarkerFallback_PreservesSuppliedPreparation\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.001783,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatSceneSessionBuilderTests.ShortRunSecondCombat_AppliesAllPriorChoicesDuringBuild\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0037885,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    }\r\n  ]\r\n}",
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "D:\\occart\\OCC_latest\\UnityProject"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

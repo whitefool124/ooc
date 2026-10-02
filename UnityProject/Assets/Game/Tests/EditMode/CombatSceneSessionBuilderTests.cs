@@ -9,6 +9,29 @@ namespace OCC.Combat.Tests
 {
     public sealed class CombatSceneSessionBuilderTests
     {
+        [TestCase("relay_raid")]
+        [TestCase("transmission_tower")]
+        public void AcademyDestructionBaseMap_WinsByEliminationWithIntactDevices(string levelId)
+        {
+            FirstRegionLevelDefinition level = FirstRegionLevelCatalog.For(levelId);
+            RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.Packages.First(value =>
+                value.LevelId == levelId && value.Tier == RogueliteEncounterTier.Strong);
+            FirstRegionLevelDefinition resolved = CombatSceneSessionBuilder.BindEncounterToLevel(level, encounter, true);
+            CombatState state = FirstRegionLevelBuilder.Build(resolved, "core_overseer").State;
+
+            Assert.That(resolved.ObjectiveType, Is.EqualTo(CombatObjectiveType.Elimination));
+            Assert.That(resolved.ObjectiveSummary, Is.EqualTo("击倒所有对手。"));
+            Assert.That(state.Objectives.Single(), Is.TypeOf<EliminationObjective>());
+            Assert.That(state.Map.PositionsWith(tile => tile.IsObjective && !tile.IsDestroyed), Is.Not.Empty);
+            var takeDamage = typeof(UnitState).GetMethod("TakeDamage", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            foreach (UnitState enemy in state.Units.Values.Where(unit => !unit.IsHero)) takeDamage.Invoke(enemy, new object[] { enemy.Health });
+            state.ConfigureObjectives(state.Objectives.ToArray());
+            Assert.That(state.IsVictory, Is.True, "场地装置不计入随机学院层的击杀目标。");
+
+            Assert.That(CombatSceneSessionBuilder.BindEncounterToLevel(level, encounter).ObjectiveType,
+                Is.EqualTo(level.ObjectiveType), "兼容关卡保持原有目标。");
+        }
+
         [Test]
         public void FormalMapRun_BuildsLevelPreparationInventoryWithoutInventingLoot()
         {

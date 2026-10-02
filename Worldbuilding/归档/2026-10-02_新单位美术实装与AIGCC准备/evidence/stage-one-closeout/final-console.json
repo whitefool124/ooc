@@ -1,0 +1,940 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {},
+    "result": {
+      "entries": [
+        {
+          "seq": 15418,
+          "timestampUtc": "2026-10-02T12:27:09.0639065Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15419,
+          "timestampUtc": "2026-10-02T12:27:09.2888345Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2673 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15420,
+          "timestampUtc": "2026-10-02T12:27:09.2888345Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2673 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15421,
+          "timestampUtc": "2026-10-02T12:27:09.824764Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15422,
+          "timestampUtc": "2026-10-02T12:27:09.8459755Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 8 total, 8 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15423,
+          "timestampUtc": "2026-10-02T12:27:09.84949Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 8 total, 8 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15424,
+          "timestampUtc": "2026-10-02T12:27:10.0571685Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15425,
+          "timestampUtc": "2026-10-02T12:27:14.0428534Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15426,
+          "timestampUtc": "2026-10-02T12:27:14.2683807Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2673 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15427,
+          "timestampUtc": "2026-10-02T12:27:14.2683807Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2673 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15428,
+          "timestampUtc": "2026-10-02T12:27:14.2683807Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2673 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15429,
+          "timestampUtc": "2026-10-02T12:27:17.8859648Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15430,
+          "timestampUtc": "2026-10-02T12:27:17.9011523Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15431,
+          "timestampUtc": "2026-10-02T12:27:17.9011523Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15432,
+          "timestampUtc": "2026-10-02T12:27:17.9021833Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 55 total, 55 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15433,
+          "timestampUtc": "2026-10-02T12:27:18.2221677Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15434,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\CombatTutorialPresenter.cs(258,30): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15435,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PixelPerfectDisplayGuard.cs(26,94): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15436,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PixelPerfectDisplayGuard.cs(26,32): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15437,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(14,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15438,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(28,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15439,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\FormalArtImportPostprocessor.cs(58,17): warning CS0618: 'TextureImporter.spritesheet' is obsolete: 'Support for accessing sprite meta data through spritesheet has been removed. Please use the UnityEditor.U2D.Sprites.ISpriteEditorDataProvider interface instead.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15440,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseVerification.cs(25,25): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15441,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseVerification.cs(37,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15442,
+          "timestampUtc": "2026-10-02T12:33:05.2683213Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseBuilder.cs(38,21): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15444,
+          "timestampUtc": "2026-10-02T12:34:09.6635368Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[PipelineTestRunner] Reattaching result collector after domain reload",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.PipelineTestRunner:CheckForPendingTests () (at ./Packages/com.unity.pipeline/Editor/Testing/PipelineTestRunner.cs:500)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15445,
+          "timestampUtc": "2026-10-02T12:34:11.4187863Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15446,
+          "timestampUtc": "2026-10-02T12:34:11.6369409Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15447,
+          "timestampUtc": "2026-10-02T12:34:11.6369409Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15448,
+          "timestampUtc": "2026-10-02T12:34:12.8521785Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15449,
+          "timestampUtc": "2026-10-02T12:34:12.8738728Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 18 total, 18 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15450,
+          "timestampUtc": "2026-10-02T12:34:12.8783871Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 18 total, 18 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15451,
+          "timestampUtc": "2026-10-02T12:34:12.994896Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15452,
+          "timestampUtc": "2026-10-02T12:35:32.6878343Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\CombatTutorialPresenter.cs(258,30): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15453,
+          "timestampUtc": "2026-10-02T12:35:32.6878343Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PixelPerfectDisplayGuard.cs(26,94): warning CS0618: 'FindObjectsSortMode' is obsolete: 'FindObjectsSortMode has been deprecated. Use the FindObjectsByType overloads that do not take a FindObjectsSortMode parameter.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15454,
+          "timestampUtc": "2026-10-02T12:35:32.6878343Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PixelPerfectDisplayGuard.cs(26,32): warning CS0618: 'Object.FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)' is obsolete: 'FindObjectsByType with FindObjectsSortMode parameter has been deprecated. Use FindObjectsByType<T>() or FindObjectsByType<T>(FindObjectsInactive) instead. InstanceID will be replaced in the future with EntityId and previous sort order cannot be maintained.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15455,
+          "timestampUtc": "2026-10-02T12:35:32.6878343Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(14,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15456,
+          "timestampUtc": "2026-10-02T12:35:32.6878343Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(28,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15457,
+          "timestampUtc": "2026-10-02T12:35:32.6888376Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\FormalArtImportPostprocessor.cs(58,17): warning CS0618: 'TextureImporter.spritesheet' is obsolete: 'Support for accessing sprite meta data through spritesheet has been removed. Please use the UnityEditor.U2D.Sprites.ISpriteEditorDataProvider interface instead.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15458,
+          "timestampUtc": "2026-10-02T12:35:32.6888376Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseVerification.cs(25,25): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15459,
+          "timestampUtc": "2026-10-02T12:35:32.6888376Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseBuilder.cs(38,21): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15460,
+          "timestampUtc": "2026-10-02T12:35:32.6888376Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Editor\\PixelVfxShowcaseVerification.cs(37,17): warning CS0618: 'Object.FindFirstObjectByType<T>()' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15461,
+          "timestampUtc": "2026-10-02T12:36:22.7421301Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[PipelineTestRunner] Reattaching result collector after domain reload",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.PipelineTestRunner:CheckForPendingTests () (at ./Packages/com.unity.pipeline/Editor/Testing/PipelineTestRunner.cs:500)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15462,
+          "timestampUtc": "2026-10-02T12:36:24.7427673Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15463,
+          "timestampUtc": "2026-10-02T12:36:24.9702451Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15464,
+          "timestampUtc": "2026-10-02T12:36:24.9702451Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15465,
+          "timestampUtc": "2026-10-02T12:36:25.5105085Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15466,
+          "timestampUtc": "2026-10-02T12:36:25.5286538Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 8 total, 8 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15467,
+          "timestampUtc": "2026-10-02T12:36:25.5326901Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 8 total, 8 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15468,
+          "timestampUtc": "2026-10-02T12:36:25.7494374Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15469,
+          "timestampUtc": "2026-10-02T12:36:29.7621775Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15470,
+          "timestampUtc": "2026-10-02T12:36:29.9809614Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15471,
+          "timestampUtc": "2026-10-02T12:36:29.9809614Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15472,
+          "timestampUtc": "2026-10-02T12:36:29.9809614Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15473,
+          "timestampUtc": "2026-10-02T12:36:30.5141815Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15474,
+          "timestampUtc": "2026-10-02T12:36:30.5222308Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15475,
+          "timestampUtc": "2026-10-02T12:36:30.5222308Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15476,
+          "timestampUtc": "2026-10-02T12:36:30.5222308Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 6 total, 6 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15477,
+          "timestampUtc": "2026-10-02T12:36:30.7496466Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15478,
+          "timestampUtc": "2026-10-02T12:36:33.8642212Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15479,
+          "timestampUtc": "2026-10-02T12:36:34.0823039Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15480,
+          "timestampUtc": "2026-10-02T12:36:34.0823039Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15481,
+          "timestampUtc": "2026-10-02T12:36:34.0823039Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15482,
+          "timestampUtc": "2026-10-02T12:36:34.0823039Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15483,
+          "timestampUtc": "2026-10-02T12:36:35.1325009Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15484,
+          "timestampUtc": "2026-10-02T12:36:35.142232Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15485,
+          "timestampUtc": "2026-10-02T12:36:35.142232Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15486,
+          "timestampUtc": "2026-10-02T12:36:35.142232Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15487,
+          "timestampUtc": "2026-10-02T12:36:35.142232Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 18 total, 18 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15488,
+          "timestampUtc": "2026-10-02T12:36:35.383261Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15489,
+          "timestampUtc": "2026-10-02T12:36:38.2053333Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15490,
+          "timestampUtc": "2026-10-02T12:36:38.4450256Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15491,
+          "timestampUtc": "2026-10-02T12:36:38.4450256Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15492,
+          "timestampUtc": "2026-10-02T12:36:38.4450256Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15493,
+          "timestampUtc": "2026-10-02T12:36:38.4450256Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15494,
+          "timestampUtc": "2026-10-02T12:36:38.4450256Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15495,
+          "timestampUtc": "2026-10-02T12:36:41.9887642Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15496,
+          "timestampUtc": "2026-10-02T12:36:42.0094221Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15497,
+          "timestampUtc": "2026-10-02T12:36:42.0099262Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15498,
+          "timestampUtc": "2026-10-02T12:36:42.0109321Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15499,
+          "timestampUtc": "2026-10-02T12:36:42.0109321Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15500,
+          "timestampUtc": "2026-10-02T12:36:42.0109321Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 55 total, 55 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15501,
+          "timestampUtc": "2026-10-02T12:36:42.4599315Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15502,
+          "timestampUtc": "2026-10-02T12:36:45.128692Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPrebuildSetup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15503,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15504,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15505,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15506,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15507,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15508,
+          "timestampUtc": "2026-10-02T12:36:45.3531408Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run started: 2674 test(s)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunStarted (UnityEditor.TestTools.TestRunner.Api.ITestAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:54)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15509,
+          "timestampUtc": "2026-10-02T12:36:45.8943912Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Saving results to: C:/Users/pc/AppData/LocalLow/DefaultCompany/My project\\TestResults.xml",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 15510,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15511,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15512,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15513,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15514,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Ignoring duplicate RunFinished (already completed)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:89)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15515,
+          "timestampUtc": "2026-10-02T12:36:45.9014208Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "[TestResultCollector] Run finished: 6 total, 6 passed, 0 failed",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nUnity.Pipeline.Editor.Testing.TestResultCollector:RunFinished (UnityEditor.TestTools.TestRunner.Api.ITestResultAdaptor) (at ./Packages/com.unity.pipeline/Editor/Testing/TestResultCollector.cs:106)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15516,
+          "timestampUtc": "2026-10-02T12:36:46.1281032Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "Executing IPostBuildCleanup for: Unity.PerformanceTesting.Editor.TestRunBuilder.",
+          "stackTrace": "UnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15517,
+          "timestampUtc": "2026-10-02T12:39:22.6262631Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Releasing render texture that is set to be RenderTexture.active!",
+          "stackTrace": "UnityEngine.RenderTexture:Release ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:ReadTextureToTexture2D (UnityEngine.Texture,int,int,bool) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1309)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:TryCapturePlayModeViewPngBytes (object,int,int) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1382)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<CaptureGameView>d__12:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:187)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder:SetResult ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<RefreshGameViewBeforeCaptureAsync>d__27:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:783)\nSystem.Threading.Tasks.TaskCompletionSource`1<bool>:TrySetResult (bool)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<>c__DisplayClass31_0:<WaitForEditorFramesAsync>g__Tick|0 () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:953)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 15518,
+          "timestampUtc": "2026-10-02T12:59:20.8539464Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Releasing render texture that is set to be RenderTexture.active!",
+          "stackTrace": "UnityEngine.RenderTexture:Release ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:ReadTextureToTexture2D (UnityEngine.Texture,int,int,bool) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1309)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:TryCapturePlayModeViewPngBytes (object,int,int) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1382)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<CaptureGameView>d__12:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:187)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder:SetResult ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<RefreshGameViewBeforeCaptureAsync>d__27:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:783)\nSystem.Threading.Tasks.TaskCompletionSource`1<bool>:TrySetResult (bool)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<>c__DisplayClass31_0:<WaitForEditorFramesAsync>g__Tick|0 () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:953)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 15518,
+      "session": "1712fd8bd17449d3990478e17588c5f2",
+      "returned": 100,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 1747,
+        "warn": 103,
+        "log": 150
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-02T13:00:23.0245775Z",
+        "ageMs": 262,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 2,
+        "consoleLogs": 0,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "D:\\occart\\OCC_latest\\UnityProject"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

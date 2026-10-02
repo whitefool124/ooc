@@ -15,9 +15,9 @@ namespace OCC.Combat
         public const int ExpectedBossProgress = 20;
         // 固定段收束后交接到随机层：再完成 10 个随机阶段节点即可提前挑战首领。
         public const int BossMinimumProgress = 10;
+        public const int TransitionProgress = 24;
         public const int ConsolidationProgress = 21;
-        public const int TransitionWarningProgress = 25;
-        public const int TransitionProgress = 28;
+        public const int TransitionWarningProgress = TransitionProgress - 3;
         public const bool EnforceBossGate = true;
         public const bool EnforceTransition = true;
 
@@ -490,6 +490,7 @@ namespace OCC.Combat
             return tactical == null ? null : new RogueliteReward(tactical, "战斗奖励");
         }
         public bool IsInAcademyLayerPhase => IsInAcademyLayer;
+        public bool HasGeneratedAcademyMap => generatedAcademyMapNodes.Count > 0;
         public IReadOnlyList<RogueliteMapNode> AcademyLayerNodes => generatedAcademyMapNodes.Count > 0
             ? generatedAcademyMapNodes : RogueliteAcademyLayerCatalog.LayerNodes;
         public IReadOnlyList<RogueliteMapNode> MapNodes => IsTutorialPhase
@@ -523,7 +524,7 @@ namespace OCC.Combat
             string.IsNullOrEmpty(rogueRunDto?.PendingResourceReceipt) ? null : AcademyResourceReceipt.Decode(rogueRunDto.PendingResourceReceipt);
         public IReadOnlyList<string> CombatJournalRows => rogueRunDto?.CombatJournalRows ?? (IReadOnlyList<string>)Array.Empty<string>();
 
-        public void BeginCombatJournal()
+        public void BeginCombatJournal(bool refillMana = true)
         {
             if (rogueRunDto == null || IsComplete || AwaitingReward ||
                 (!MapNode(CurrentNodeId).IsCombat && !HasPendingContentCombat))
@@ -531,6 +532,7 @@ namespace OCC.Combat
             if (HasActiveCombat && rogueRunDto.ActiveCombatNodeId != CurrentNodeId)
                 throw new InvalidOperationException("Another combat journal is still active.");
             if (HasActiveCombat) return;
+            if (refillMana) CurrentMana = rogueRunDto.CurrentMana = RogueManaCapacity;
             rogueRunDto.ActiveCombatNodeId = CurrentNodeId;
             rogueRunDto.CombatJournalRows.Clear();
         }

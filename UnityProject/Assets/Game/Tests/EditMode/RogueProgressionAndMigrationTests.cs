@@ -53,7 +53,7 @@ namespace OCC.Combat.Tests
             RogueRunDto dto = RogueRunDto.CreateNew("run", 7); dto.CurrentHealth = 9; dto.CurrentMana = 4;
             RogueStageResolution survived = RogueRunProgression.ResolveEncounter(dto, RogueEncounterOutcome.SurvivedFailure);
             Assert.That(survived.TimeAdvanced, Is.True); Assert.That(dto.StageTime, Is.EqualTo(1));
-            Assert.That(dto.CurrentHealth, Is.EqualTo(9)); Assert.That(dto.CurrentMana, Is.EqualTo(5));
+            Assert.That(dto.CurrentHealth, Is.EqualTo(9)); Assert.That(dto.CurrentMana, Is.EqualTo(4));
             Assert.That(typeof(RogueRunDto).GetProperty("CurrentShield"), Is.Null);
             RogueRunProgression.ResolveZeroTimeFunction(dto); Assert.That(dto.StageTime, Is.EqualTo(1));
 

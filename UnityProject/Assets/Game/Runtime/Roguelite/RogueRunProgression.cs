@@ -18,7 +18,7 @@ namespace OCC.Combat.Roguelite
 
     public static class RogueRunProgression
     {
-        public static RogueStageResolution ResolveEncounter(RogueRunDto run, RogueEncounterOutcome outcome, int timeCost = 1, int manaRecoveryPerTime = 1)
+        public static RogueStageResolution ResolveEncounter(RogueRunDto run, RogueEncounterOutcome outcome, int timeCost = 1, int manaRecoveryPerTime = 0)
         {
             if (run == null) throw new ArgumentNullException(nameof(run));
             if (outcome == RogueEncounterOutcome.Defeat || run.CurrentHealth <= 0)
@@ -30,7 +30,8 @@ namespace OCC.Combat.Roguelite
             if (timeCost == 0) return new RogueStageResolution(false, false, 0);
             int manaBefore = run.CurrentMana;
             run.StageTime += timeCost;
-            run.CurrentMana = Math.Min(RogueRuntimeConstants.MaximumPersonalMana, run.CurrentMana + Math.Max(0, manaRecoveryPerTime) * timeCost);
+            if (manaRecoveryPerTime > 0)
+                run.CurrentMana = Math.Min(RogueRuntimeConstants.MaximumPersonalMana, run.CurrentMana + manaRecoveryPerTime * timeCost);
             return new RogueStageResolution(false, true, run.CurrentMana - manaBefore, timeCost);
         }
 

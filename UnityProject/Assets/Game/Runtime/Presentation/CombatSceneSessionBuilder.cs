@@ -41,7 +41,8 @@ namespace OCC.Combat.Presentation
             GridMap map;
             if (FirstRegionLevelCatalog.TryFor(levelId, out FirstRegionLevelDefinition level))
             {
-                FirstRegionLevelDefinition resolvedLevel = encounter == null ? level : BindEncounterToLevel(level, encounter);
+                FirstRegionLevelDefinition resolvedLevel = encounter == null ? level : BindEncounterToLevel(level, encounter,
+                    mapRun != null && mapRun.IsInAcademyLayerPhase);
                 FirstRegionLevelBuild build = FirstRegionLevelBuilder.Build(resolvedLevel, "core_overseer");
                 currentLevel = build.Definition;
                 state = build.State;
@@ -122,7 +123,8 @@ namespace OCC.Combat.Presentation
             return new CombatSceneSessionBuild(state, preparation, currentLevel);
         }
 
-        public static FirstRegionLevelDefinition BindEncounterToLevel(FirstRegionLevelDefinition level, RogueliteEncounterDefinition encounter)
+        public static FirstRegionLevelDefinition BindEncounterToLevel(FirstRegionLevelDefinition level, RogueliteEncounterDefinition encounter,
+            bool academyLayer = false)
         {
             IReadOnlyList<GridPosition> spawnPositions = encounter.Layout?.EnemySpawns ?? level.EnemyPlacements.Select(value => value.Position).ToArray();
             if (encounter.EnemyArchetypeIds.Count > spawnPositions.Count)
@@ -135,8 +137,9 @@ namespace OCC.Combat.Presentation
             RogueliteEncounterLayout layout = encounter.Layout;
             GridPosition heroSpawn = layout?.HeroSpawn ?? level.HeroSpawn;
             IReadOnlyList<LevelTerrainPlacement> terrain = layout?.Terrain ?? level.Terrain;
-            CombatObjectiveType objectiveType = layout == null ? level.ObjectiveType : CombatObjectiveType.Elimination;
-            string objectiveSummary = string.IsNullOrEmpty(encounter.ObjectiveSummary) ? level.ObjectiveSummary : encounter.ObjectiveSummary;
+            CombatObjectiveType objectiveType = academyLayer || layout != null ? CombatObjectiveType.Elimination : level.ObjectiveType;
+            string objectiveSummary = academyLayer ? encounter.AcademyObjectiveSummary
+                : string.IsNullOrEmpty(encounter.ObjectiveSummary) ? level.ObjectiveSummary : encounter.ObjectiveSummary;
             int width = layout?.Width ?? level.Width;
             int height = layout?.Height ?? level.Height;
             IReadOnlyList<GridPosition> blockedPositions = layout?.BlockedPositions ?? level.BlockedPositions;

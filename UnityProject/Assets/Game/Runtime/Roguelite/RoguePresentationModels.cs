@@ -146,7 +146,7 @@ namespace OCC.Combat.Roguelite
                 return;
             }
             NodeId = node.Id; TimeCost = AcademyMapTuning.TimeCost(node); ProjectedStageTime = run.StageTime + TimeCost;
-            ExpectedManaRecovery = Math.Min(RogueRuntimeConstants.MaximumPersonalMana - run.CurrentMana, TimeCost);
+            ExpectedManaRecovery = 0;
             CrossesConsolidation = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.ConsolidationProgress);
             CrossesWarning = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionWarningProgress);
             CrossesTransition = Crosses(run.StageTime, ProjectedStageTime, AcademyMapTuning.TransitionProgress);

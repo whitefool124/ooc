@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {},
+    "result": "{\r\n  \"status\": \"completed\",\r\n  \"duration\": 0.35,\r\n  \"summary\": {\r\n    \"total\": 6,\r\n    \"passed\": 6,\r\n    \"failed\": 0,\r\n    \"skipped\": 0,\r\n    \"inconclusive\": 0\r\n  },\r\n  \"results\": [\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Process_DefeatDoesNotMutateOrPersistMapRun\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0065722,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Process_FirstRunEliteDefeatLeavesRunRestartableAndUnchanged\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0070812,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Process_MapVictorySettlesOnceAndRequestsMapPersistence\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0053228,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Process_ShortAndStoryRunsReturnTheirOwnPersistencePorts\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0011162,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Process_TemplateSandboxPlaysVictoryWithoutCompletingOrSavingStory\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0018573,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    },\r\n    {\r\n      \"FullName\": \"OCC.Combat.Tests.CombatOutcomeSettlementCoordinatorTests.Reset_AllowsTheNextCombatOutcomeToBeHandled\",\r\n      \"Status\": \"Passed\",\r\n      \"Duration\": 0.0001212,\r\n      \"Message\": null,\r\n      \"StackTrace\": null\r\n    }\r\n  ]\r\n}",
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "D:\\occart\\OCC_latest\\UnityProject"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

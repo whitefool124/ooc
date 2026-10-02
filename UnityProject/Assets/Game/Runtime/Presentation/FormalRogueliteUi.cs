@@ -1356,7 +1356,8 @@ namespace OCC.Combat.Presentation
             bool canEnter = (current && RogueliteUiPreferences.CanOpenCombatBriefing(run, node)) || RogueliteUiPreferences.CanTravelTo(run, node);
             RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.For(run, node.Id);
             RogueNodePreviewPresentation preview = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node) : null;
-            string objective = encounter != null && !string.IsNullOrEmpty(encounter.ObjectiveSummary) ? encounter.ObjectiveSummary : node.Summary;
+            string objective = encounter != null && run.IsInAcademyLayerPhase ? encounter.AcademyObjectiveSummary
+                : encounter != null && !string.IsNullOrEmpty(encounter.ObjectiveSummary) ? encounter.ObjectiveSummary : node.Summary;
             string enemies = encounter != null && (preview == null || string.IsNullOrEmpty(preview.EnemySummary))
                 ? string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName))
                 : preview?.EnemySummary ?? "敌情待确认";
@@ -1420,7 +1421,8 @@ namespace OCC.Combat.Presentation
             RogueNodePreviewPresentation preview = run.UsesRogue11 ? new RogueNodePreviewPresentation(run, node) : null;
             string dividerId = FormalUiAssetPlacement.ChapterDivider(node);
             string markerId = FormalUiAssetPlacement.ChapterMarker(node);
-            string objectiveText = encounter != null && !string.IsNullOrEmpty(encounter.ObjectiveSummary) ? encounter.ObjectiveSummary : node.Summary;
+            string objectiveText = encounter != null && run.IsInAcademyLayerPhase ? encounter.AcademyObjectiveSummary
+                : encounter != null && !string.IsNullOrEmpty(encounter.ObjectiveSummary) ? encounter.ObjectiveSummary : node.Summary;
             string enemyText = encounter != null && (preview == null || string.IsNullOrEmpty(preview.EnemySummary))
                 ? string.Join("、", encounter.EnemyArchetypeIds.Select(id => EnemyArchetypes.Get(id).DisplayName))
                 : preview?.EnemySummary ?? "阶段 A 敌人脚本槽";
@@ -1454,7 +1456,7 @@ namespace OCC.Combat.Presentation
                 costHeading.fontStyle = FontStyle.Normal;
                 Label("出发结算内容", "难度 " + (string.IsNullOrEmpty(preview.EncounterLabel) ? preview.RiskLabel : preview.EncounterLabel) +
                     "　时序 " + (preview.IsZeroTime ? "不花时间" : preview.TimeCost.ToString()) +
-                    "　生命不恢复　回来时魔力 +" + preview.ExpectedManaRecovery,
+                    "　生命不恢复　新战斗魔力回满",
                     parent, new Vector2(226, -292), new Vector2(894, 38), 20, text, TextAnchor.MiddleLeft);
                 Label("出发时序结果", threshold, parent, new Vector2(44, -334), new Vector2(1076, 32), 19,
                     preview.CrossesTransition ? danger : preview.CrossesWarning ? amber : safe, TextAnchor.MiddleLeft);
@@ -1983,7 +1985,7 @@ namespace OCC.Combat.Presentation
                 DetailIconMetric(card.transform, "难度", encounterRisk, FormalArtRegistry.ResourceMetricPath("risk"), new Vector2(40, -368), "对手：" + preview.EnemySummary + "\n场地：" + preview.SpatialRisk + "\n" + preview.FailureConsequence, amber, 224, 58);
                 DetailIconMetric(card.transform, "用时", preview.IsZeroTime ? "不花时间" : preview.TimeCost.ToString(), FormalArtRegistry.ResourceMetricPath("stage_time"), new Vector2(284, -368), "回来后，学期进度是 " + preview.ProjectedStageTime, cyan, 224, 58);
                 DetailIconMetric(card.transform, "生命结算", "战损继承", FormalArtRegistry.ResourceMetricPath("health"), new Vector2(528, -368), "节点结算不会自动恢复生命", FormalUiTheme.Health, 224, 58);
-                DetailIconMetric(card.transform, "回来时魔力", "+" + preview.ExpectedManaRecovery, FormalArtRegistry.ResourceMetricPath("mana"), new Vector2(772, -368), "回来时恢复个人魔力", FormalUiTheme.Magic, 224, 58);
+                DetailIconMetric(card.transform, "入场魔力", "回满", FormalArtRegistry.ResourceMetricPath("mana"), new Vector2(772, -368), "新战斗开始时恢复到当前魔力上限；中途续档保留已消耗的魔力。", FormalUiTheme.Magic, 224, 58);
                 DetailIconMetric(card.transform, "之后", threshold, FormalArtRegistry.SemanticPath("notice"), new Vector2(1016, -368), threshold, preview.CrossesTransition ? danger : preview.CrossesWarning ? amber : safe, 224, 58);
                 briefingTooltip = preview.FailureConsequence + "\n赢了可得：" + preview.RewardLabel;
             }
@@ -3507,6 +3509,9 @@ namespace OCC.Combat.Presentation
 
         private static Vector2 NodePosition(RogueliteMapRun run, RogueliteMapNode node)
         {
+            if (run != null && run.IsInAcademyLayer && run.HasGeneratedAcademyMap)
+                return ProjectMapPosition(AcademyMapVisualLayout.GeneratedSourcePositionFor(node,
+                    Math.Max(5, run.MapNodes.Max(value => value.GridY) + 1), true));
             return ProjectMapPosition(AcademyMapVisualLayout.SourcePositionFor(node, run != null && run.IsInAcademyLayer));
         }
 

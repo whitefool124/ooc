@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[],\"destroyed\":[],\"returnValue\":{\"phase\":\"Active\",\"level\":\"rain_lantern_court\",\"action\":\"移动\",\"playing\":false,\"enemyPhase\":\"Idle\",\"map\":{\"CurrentNodeId\":\"B1\",\"StageTime\":0,\"AwaitingReward\":false},\"units\":[{\"Id\":\"hero\",\"Health\":50,\"Mana\":12,\"ActionPoints\":3,\"pos\":\"(1, 4)\",\"IsAlive\":true},{\"Id\":\"enemy_0\",\"Health\":12,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(4, 3)\",\"IsAlive\":true},{\"Id\":\"enemy_1\",\"Health\":16,\"Mana\":4,\"ActionPoints\":0,\"pos\":\"(5, 0)\",\"IsAlive\":true}],\"active\":\"hero\",\"buttons\":[{\"name\":\"结束行动\",\"interactable\":true},{\"name\":\"快捷栏0\",\"interactable\":true},{\"name\":\"快捷栏1\",\"interactable\":true},{\"name\":\"快捷栏3\",\"interactable\":true},{\"name\":\"快捷栏2\",\"interactable\":true},{\"name\":\"行动值翻面\",\"interactable\":true},{\"name\":\"打开百科\",\"interactable\":true},{\"name\":\"暂离并保存\",\"interactable\":true},{\"name\":\"战场归中\",\"interactable\":true},{\"name\":\"技能4\",\"interactable\":true},{\"name\":\"打开背包\",\"interactable\":true},{\"name\":\"技能2\",\"interactable\":true},{\"name\":\"离开战斗\",\"interactable\":true},{\"name\":\"技能1\",\"interactable\":true},{\"name\":\"战术重开\",\"interactable\":true},{\"name\":\"技能3\",\"interactable\":true},{\"name\":\"英雄概况翻面\",\"interactable\":true}],\"text\":[\"\",\"90\",\"离开\",\"结束回合\\n行动点会清空\",\"2\",\"50／50\",\"2\",\"个人魔力\",\"1\",\"12／12\",\"50／50\",\"16/16\",\"状态\",\"8\",\"让所有对手认输。教员会在有人重伤前叫停演练。\",\"3\",\"2\",\"0\",\"100　待行动\",\"背包\",\"110　行动中\",\"护盾\",\"11\",\"4\",\"10\",\"暂离\",\"回路调息\",\"本关目标\",\"3／3\",\"4\",\"1\",\"\",\"火花\",\"1\",\"灼触\",\"24\",\"1\",\"行动值\",\"1\",\"2\",\"维克多护幕\",\"12/12\",\"2\",\"百科\",\"记录\",\"3\",\"2\",\"重开\",\"1\",\"0\",\"9\",\"50/50\",\"1\",\"全场\",\"生命\"]}}}"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[],\"destroyed\":[],\"returnValue\":{\"goal\":\"击倒所有对手。\",\"types\":[\"Elimination\"],\"level\":\"transmission_tower\",\"victory\":false}}}"
+      }
+    ]
+  }
+}
