@@ -38,7 +38,9 @@ namespace OCC.Combat.Presentation
             "academy_floor_anchor_plate", "academy_floor_inspection_window",
             "academy_floor_mortar_inlay", "academy_floor_threshold_studs",
             "academy_floor_safety_marker", "academy_floor_herb_drain",
-            "academy_floor_rain_channel", "academy_floor_conduit_blank"
+            "academy_floor_rain_channel", "academy_floor_conduit_blank",
+            "academy_floor_convergence_scribe", "academy_floor_drain_grate",
+            "academy_floor_maintenance_hatch", "academy_floor_repair_plate"
         };
 
         private static readonly string[] LightCoverIds =
@@ -116,8 +118,27 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        public static AcademyStructurePlacement[] VisualModules(string levelId) =>
-            Structures(levelId).Concat(GroundAttachments(levelId)).ToArray();
+        public static AcademyStructurePlacement[] VisualModules(string levelId)
+        {
+            if (!FirstRegionLevelCatalog.TryFor(levelId, out FirstRegionLevelDefinition level))
+                return Array.Empty<AcademyStructurePlacement>();
+            // Legacy structure coordinates were authored for a 12x9 board. Only draw a
+            // raised module when its entire footprint belongs to the current wall layout.
+            return Structures(levelId).Where(value => FitsDeclaredWall(level, value))
+                .Concat(GroundAttachments(level)).ToArray();
+        }
+
+        private static bool FitsDeclaredWall(FirstRegionLevelDefinition level, AcademyStructurePlacement placement)
+        {
+            if (placement.X < 0 || placement.TopY - placement.HeightCells + 1 < 0 ||
+                placement.X + placement.WidthCells > level.Width ||
+                placement.TopY >= level.Height) return false;
+            for (int y = placement.TopY - placement.HeightCells + 1; y <= placement.TopY; y++)
+            for (int x = placement.X; x < placement.X + placement.WidthCells; x++)
+                if (!level.Terrain.Any(value => value.Position.X == x && value.Position.Y == y &&
+                                                value.Kind == LevelTerrainKind.PermanentWall)) return false;
+            return true;
+        }
 
         public static string CoverVariant(string levelId, GridPosition position, CoverType cover)
         {
@@ -127,21 +148,27 @@ namespace OCC.Combat.Presentation
                 ids[Math.Abs(StableSeed(levelId) + position.X * 7 + position.Y * 11) % ids.Length];
         }
 
-        private static AcademyStructurePlacement[] GroundAttachments(string levelId)
+        private static AcademyStructurePlacement[] GroundAttachments(FirstRegionLevelDefinition level)
         {
-            int seed = Math.Abs(StableSeed(levelId));
-            int offset = seed % 3;
-            return new[]
+            int seed = Math.Abs(StableSeed(level.Id));
+            var available = Enumerable.Range(0, level.Height)
+                .SelectMany(y => Enumerable.Range(0, level.Width).Select(x => new GridPosition(x, y)))
+                .Where(position => !level.Terrain.Any(value => value.Position == position) &&
+                    !level.BlockedPositions.Contains(position) && position != level.HeroSpawn &&
+                    !level.EnemyPlacements.Any(value => value.Position == position))
+                .OrderBy(position => (seed + position.X * 31 + position.Y * 17) % 97)
+                .ToArray();
+            var chosen = new System.Collections.Generic.List<GridPosition>();
+            foreach (GridPosition position in available)
             {
-                new AcademyStructurePlacement(GroundAttachmentIds[seed % GroundAttachmentIds.Length],
-                    1 + offset, 3, 1, 1, isGroundAttachment: true),
-                new AcademyStructurePlacement(GroundAttachmentIds[(seed + 5) % GroundAttachmentIds.Length],
-                    10 - offset, 3, 1, 1, isGroundAttachment: true),
-                new AcademyStructurePlacement(GroundAttachmentIds[(seed + 10) % GroundAttachmentIds.Length],
-                    4 + offset, 1, 1, 1, isGroundAttachment: true),
-                new AcademyStructurePlacement(GroundAttachmentIds[(seed + 15) % GroundAttachmentIds.Length],
-                    7 - offset, 7, 1, 1, isGroundAttachment: true)
-            };
+                if (chosen.Any(value => Math.Abs(value.X - position.X) + Math.Abs(value.Y - position.Y) < 2))
+                    continue;
+                chosen.Add(position);
+                if (chosen.Count == 3) break;
+            }
+            return chosen.Select((position, index) => new AcademyStructurePlacement(
+                GroundAttachmentIds[(seed + index * 5) % GroundAttachmentIds.Length],
+                position.X, position.Y, 1, 1, isGroundAttachment: true)).ToArray();
         }
 
         public static string[] CoverVisualAssetIds() =>
@@ -191,14 +218,13 @@ namespace OCC.Combat.Presentation
                     return surface.Replace("_surface_64", "_edge_s_64");
                 return surface;
             }
-            // Wargroove-like orthographic ground: each cell samples a shared 3x3
-            // macro so the board reads as one plane instead of a wall of cards.
+            // Each logical cell owns one native 32x32 tile with its authored border.
             if (level == null)
-                return "academy_ground_macro_court_3x3";
+                return "academy_block_court_a";
 
             string family = FloorFamily(level.Id, x, y);
-            string variant = StableVariant(level.Id, x, y) % 2 == 0 ? string.Empty : "_b";
-            return "academy_ground_macro_" + family + variant + "_3x3";
+            char variant = (char)('a' + StableVariant(level.Id, x, y));
+            return $"academy_block_{family}_{variant}";
         }
 
         public static string FloorLowAsset(FirstRegionLevelDefinition level, int x, int y)
@@ -256,11 +282,8 @@ namespace OCC.Combat.Presentation
         public static string BoundaryOverlay(FirstRegionLevelDefinition level, int x, int y, out int quarterTurns)
         {
             quarterTurns = 0;
-            // The player-facing perimeter retains the tile's regular top plane and adds
-            // only the lower masonry face below it. The extra pixels are visual-only;
-            // hit testing remains on the original 32 by 32 logical cell.
-            if (!CombatTestArenaEntry.IsDedicatedTestArena && y == 0)
-                return "academy_test_ground_theme_earth_edge_s_64";
+            // The independent native tiles own the visible cell edge. The old test-arena
+            // earth facade has a different material and scale, so it cannot be mixed in.
             return null;
         }
 

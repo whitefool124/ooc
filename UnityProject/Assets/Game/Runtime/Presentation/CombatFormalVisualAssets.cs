@@ -64,7 +64,8 @@ namespace OCC.Combat.Presentation
                 testArenaUnits["raider"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_raider_pixel_candidate_64");
                 testArenaUnits["shieldguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_shieldguard_pixel_candidate_64");
                 testArenaUnits["pyromancer"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_pyromancer_pixel_candidate_64");
-                testArenaUnits["elite_vanguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_elite_vanguard_pixel_candidate_64");
+                testArenaUnits["elite_vanguard"] = units["elite_vanguard"];
+                testArenaUnits["prototype_hand"] = units["prototype_hand"];
             }
             LoadAcademy();
             foreach (FormalArtEntry entry in FormalArtRegistry.Environments)
@@ -109,12 +110,15 @@ namespace OCC.Combat.Presentation
         {
             units["hero"] = RequiredTexture(FormalArtRegistry.UnitPath("hero"));
             string[] requiredEnemyIds = { "sigil_mauler", "barrier_mender", "tether_hound", "shieldguard", "pyromancer", "raider",
-                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer"
+                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer", "prototype_hand"
             };
             foreach (string id in requiredEnemyIds)
-                units[EnemyArchetypes.Get(id).ArtId] = RequiredTexture(FormalArtRegistry.UnitPath(id));
+                units[id] = RequiredTexture(FormalArtRegistry.UnitPath(id));
             foreach (string id in requiredEnemyIds)
             {
+                // The old elite animation belongs to a different silhouette. Keep its new
+                // approved static sprite visible until matching animation frames exist.
+                if (id == "elite_vanguard" || id == "prototype_hand") continue;
                 enemyAnimations[id] = new[]
                 {
                     RequiredTexture($"Art/FormalEnemyAnimations64/{id}/frame_00"),
@@ -154,14 +158,6 @@ namespace OCC.Combat.Presentation
             }
             foreach (string id in new[] { "academy_tactical_road_edge", "academy_tactical_road_corner", "academy_tactical_road_end" })
                 academy[id] = RequiredTexture("Art/FormalAcademyCombat32/" + id);
-            foreach (string family in new[] { "court", "road", "ruin", "earth" })
-            {
-                foreach (string variant in new[] { "", "_b" })
-                {
-                    string id = $"academy_ground_macro_{family}{variant}_3x3";
-                    academy[id] = RequiredTexture("Art/FormalAcademyGroundMacros32/" + id);
-                }
-            }
             foreach (string id in new[] { "academy_curb_edge", "academy_curb_corner", "academy_curb_opposite",
                          "academy_curb_three", "academy_curb_enclosed" })
                 academy[id] = RequiredTexture("Art/FormalAcademyTerrainOverlays32/" + id);

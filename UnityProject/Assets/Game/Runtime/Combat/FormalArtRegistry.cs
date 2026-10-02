@@ -45,7 +45,7 @@ namespace OCC.Combat
             new FormalArtEntry("unit.shieldguard", "shieldguard", "Art/FormalUnits64/shieldguard"),
             new FormalArtEntry("unit.pyromancer", "pyromancer", "Art/FormalUnits64/pyromancer"),
             new FormalArtEntry("unit.raider", "raider", "Art/FormalUnits64/raider"),
-            new FormalArtEntry("unit.elite_vanguard", "elite_vanguard", "Art/FormalUnits64/elite"),
+            new FormalArtEntry("unit.elite_vanguard", "elite_vanguard", "Art/FormalUnits64/elite_vanguard"),
             new FormalArtEntry("unit.core_overseer", "core_overseer", "Art/FormalUnits64/core_overseer"),
             new FormalArtEntry("unit.sigil_mauler", "sigil_mauler", "Art/FormalUnits64/sigil_mauler"),
             new FormalArtEntry("unit.barrier_mender", "barrier_mender", "Art/FormalUnits64/barrier_mender"),
@@ -58,7 +58,7 @@ namespace OCC.Combat
             new FormalArtEntry("unit.signal_keeper", "signal_keeper", "Art/FormalUnits64/lantern_revealer"),
             new FormalArtEntry("unit.wind_librarian", "wind_librarian", "Art/FormalUnits64/pyromancer"),
             new FormalArtEntry("unit.legacy_storekeeper", "legacy_storekeeper", "Art/FormalUnits64/barrier_mender"),
-            new FormalArtEntry("unit.prototype_hand", "prototype_hand", "Art/FormalUnits64/stone_snare")
+            new FormalArtEntry("unit.prototype_hand", "prototype_hand", "Art/FormalUnits64/prototype_hand")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Commands = new[]

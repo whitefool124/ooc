@@ -302,8 +302,7 @@ namespace OCC.Combat.Presentation
             Texture2D floor = assets.Academy(floorKey);
             string floorLowKey = AcademyBattlefieldLayoutCatalog.FloorLowAsset(level, position.X, position.Y);
             Texture2D floorLow = string.IsNullOrEmpty(floorLowKey) ? null : assets.Academy(floorLowKey);
-            Rect floorUv = CombatTestArenaEntry.IsDedicatedTestArena
-                ? new Rect(0f, 0f, 1f, 1f) : FloorUv(position.X, position.Y);
+            Rect floorUv = FloorUv(position.X, position.Y);
             float floorRotation = FloorRotationDegrees(level, position.X, position.Y);
             string boundaryId = AcademyBattlefieldLayoutCatalog.BoundaryOverlay(level, position.X, position.Y,
                 out int boundaryTurns);
@@ -562,10 +561,7 @@ namespace OCC.Combat.Presentation
 
         public static Rect FloorUv(int x, int y)
         {
-            const float slice = 1f / 3f;
-            int column = ((x % 3) + 3) % 3;
-            int row = ((y % 3) + 3) % 3;
-            return new Rect(column * slice, row * slice, slice, slice);
+            return new Rect(0f, 0f, 1f, 1f);
         }
 
         private static string FixedEncounterEnemyRuleText(CombatState state, UnitState unit)
