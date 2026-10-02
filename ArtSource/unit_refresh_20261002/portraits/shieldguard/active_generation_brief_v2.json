@@ -1,0 +1,20 @@
+{
+  "unit": "shieldguard",
+  "identity": "Academy male older student with short dark brown hair, practical brown and ivory training clothes and boots. Carry a compact wooden copper-trimmed training shield and short shield-strike work tool at rest. Ordinary student face and anatomy.",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "battle_use_forbidden": true,
+  "reference_role": "style_and_density_only",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\pipeline_iteration_v2\\hero_portrait_reference_12x.png",
+      "sha256": "79d53e7dd02df2e2f295bcfb1b9570a0278988315c5c2feb156afe334d8a038f"
+    }
+  ],
+  "source_channel": "codex_builtin_imagegen",
+  "initial_source_cap": 3,
+  "generation_call": "generation_call_iteration_v2_r1.json"
+}

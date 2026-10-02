@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 2,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    61,
+    114
+  ],
+  "lattice_confidence": 2.4115,
+  "identity": "Brown-haired older-teen academy crossbow student in ivory/brown training clothes, hand-cranked heavy crossbow held at rest.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: full figure, legible bow limbs, stock and winding handle, intact boots; no firearm or grid alias collapse.",
+  "review_notes": "Human reviewer to confirm winding-crank construction and hand placement. Display portrait only.",
+  "human_review_pending": true
+}

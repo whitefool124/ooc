@@ -1,0 +1,362 @@
+[
+  {
+    "kind": "portraits",
+    "unit": "hero",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/hero/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/hero.png",
+    "sha256": "dd310a3a415f2a9291d4c0e7ca7265fdea02c407b6ce9009233b51687f5b03e4",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/hero.png",
+      "guid": "afa530d73c06e81409817cd392ccc817",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "normal character selection page",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "tether_hound",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/tether_hound/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/tether_hound.png",
+    "sha256": "1e6f93dcb1422275d743b9d931ad31c6cf73114fe05e7ae612b8c601ca5db54a",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/tether_hound.png",
+      "guid": "cc01970cc31174c4d9b075e45f0a2273",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "shieldguard",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/shieldguard.png",
+    "sha256": "a3352624f34c19b89ce1d22d80d2db0f5cf24c6ade7c2c61972805838ea1e2f4",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/shieldguard.png",
+      "guid": "4ddd2c5add79fcb4980fd3f3a406176a",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "raider",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/raider/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/raider.png",
+    "sha256": "f9df91b2fa95b8680105f197361be57d0d40bc94d75e563ab04326eda869e47b",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/raider.png",
+      "guid": "8f29eb54c7c577944842b406117d1416",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "elite_vanguard",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/elite_vanguard/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/elite_vanguard.png",
+    "sha256": "5225683465f39acf147cccd7b6ad1e1e33e5c3235239d5501a5326e4ca2aff2d",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/elite_vanguard.png",
+      "guid": "eb5aff4283b75674f84ca8a5990db831",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "stone_snare",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/stone_snare/revisions/palette_v2/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/stone_snare.png",
+    "sha256": "0a612c35184f31a303ae19ceb213b53670ccda8831a513160ab50413e5c82982",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/stone_snare.png",
+      "guid": "0c3d9b2c6a9017149983aebe8fa06203",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "rune_arbalist",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/rune_arbalist/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/rune_arbalist.png",
+    "sha256": "954c38cab6cc10d13d7adee6678ec5dae507239d1edb63335a65d0f72738ff78",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/rune_arbalist.png",
+      "guid": "8a6b666ae34e7074595171e8e9c2a2ab",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "core_overseer",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/core_overseer/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/core_overseer.png",
+    "sha256": "42d3e7ccde8366158bec182b208727931e8b2adca7bf4c1ce267e406d0a2340c",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/core_overseer.png",
+      "guid": "aa279a66952fdff4da2fa4b1b537ef05",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "elder_tracker_hound",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/elder_tracker_hound/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/elder_tracker_hound.png",
+    "sha256": "3e27ce0eee7326d00cbe7c1b7c849f47ed9d26e5fbffe0d85f788cfde47637f4",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/elder_tracker_hound.png",
+      "guid": "ea07be7dc4acbe347b58c57c57824eb7",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "wind_librarian",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/wind_librarian.png",
+    "sha256": "d2d372a7c598f016571a32ba3c84f3a3bfbb203be68386f4895d40edb7f14f2c",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/wind_librarian.png",
+      "guid": "821d81788ce1f634ea43f7d879dee0a6",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "prototype_hand",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/prototype_hand/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/prototype_hand.png",
+    "sha256": "6f756e9795c89370e0cd24e42b3872613026d0280ae6805c678f688cf94e3856",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/prototype_hand.png",
+      "guid": "e8ee798974ae9564ba4e35a3e644faf7",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "legacy_storekeeper",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/legacy_storekeeper/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/legacy_storekeeper.png",
+    "sha256": "4f4d2304f6437c084192d43e9bba8d0838a85fca89137f02962e896dcaf474af",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/legacy_storekeeper.png",
+      "guid": "adfb6da100755844aae916aa9025edaa",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "portraits",
+    "unit": "signal_keeper",
+    "source_manifest": "ArtSource/unit_refresh_20261002/portraits/signal_keeper/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/signal_keeper.png",
+    "sha256": "3d4713e7c9cfed017025584caabb347bc2cb538e2ec4b85d52e333f6ed1eeecc",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitDisplayPortraits128/signal_keeper.png",
+      "guid": "88b3df952a73fef4ca3248c3d6ab9b9d",
+      "width": 128,
+      "height": 128,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "import readback PASS; per-enemy normal flow review pending",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "battle",
+    "unit": "shieldguard",
+    "source_manifest": "ArtSource/unit_refresh_20261002/battle/shieldguard/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitStatic32x64/shieldguard.png",
+    "sha256": "bcc59ef438286b0a935b094be7875cac4a91d568050a9bb0560a0d137262ec5f",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitStatic32x64/shieldguard.png",
+      "guid": "beb56694b72e66142b850cc48b5e0657",
+      "width": 32,
+      "height": 64,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "static texture and portrait resource-load regression PASS",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "battle",
+    "unit": "stone_snare",
+    "source_manifest": "ArtSource/unit_refresh_20261002/battle/stone_snare/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitStatic32x64/stone_snare.png",
+    "sha256": "28b63eac40c0099ea200b88878ce960606055f0a333b01a6cde6ade5382f9523",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitStatic32x64/stone_snare.png",
+      "guid": "52ba8601ebe7888418df951f92ec605f",
+      "width": 32,
+      "height": 64,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "static texture and portrait resource-load regression PASS",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "battle",
+    "unit": "raider",
+    "source_manifest": "ArtSource/unit_refresh_20261002/battle/raider/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitStatic32x64/raider.png",
+    "sha256": "cb912bfad3164f468ad6c9e6603a025f101d84e5dfc09549934fe247225364b1",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitStatic32x64/raider.png",
+      "guid": "fa3bcd34ce4ef87478b00ffeceee0bdc",
+      "width": 32,
+      "height": 64,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "static texture and portrait resource-load regression PASS",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "battle",
+    "unit": "elite_vanguard",
+    "source_manifest": "ArtSource/unit_refresh_20261002/battle/elite_vanguard/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitStatic32x64/elite_vanguard.png",
+    "sha256": "546a5a76b297266f027a0fda4617446168b0df17992612313f9586e716d291a6",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitStatic32x64/elite_vanguard.png",
+      "guid": "ead2b73e8535ddc40b73387d757c53f2",
+      "width": 32,
+      "height": 64,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "static texture and portrait resource-load regression PASS",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  },
+  {
+    "kind": "battle",
+    "unit": "rune_arbalist",
+    "source_manifest": "ArtSource/unit_refresh_20261002/battle/rune_arbalist/manifest.occ-art-manifest-v1.json",
+    "unity_path": "Assets/Game/Resources/Art/UnitStatic32x64/rune_arbalist.png",
+    "sha256": "41422b165e32b4dac5677e5ae63fda5ff8028c6a82b519e497bf38c99d20058f",
+    "status": "INTEGRATED_QA_PENDING",
+    "unity_import_readback": {
+      "path": "Assets/Game/Resources/Art/UnitStatic32x64/rune_arbalist.png",
+      "guid": "f6d69a8f2f81ffd4ebfbdf0534d96228",
+      "width": 32,
+      "height": 64,
+      "ppu": 32.0,
+      "filter": "Point",
+      "readable": true
+    },
+    "human_review": "PENDING",
+    "runtime_evidence": "static texture and portrait resource-load regression PASS",
+    "verification_report": "Worldbuilding/归档/2026-10-02_新单位美术实装与AIGCC准备/阶段审查与提交准备.md"
+  }
+]

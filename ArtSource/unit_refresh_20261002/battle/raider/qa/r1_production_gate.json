@@ -1,0 +1,10 @@
+{
+  "status": "REJECT_CANDIDATE",
+  "reasons": [
+    "REJECT_SOURCE_EXCEEDS_TARGET",
+    "HUMANOID_WORLD_HEIGHT_OUT_OF_RANGE",
+    "NO_CANDIDATE"
+  ],
+  "metrics": {},
+  "human_identity_style_and_proportion_review_required": true
+}

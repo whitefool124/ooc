@@ -1,0 +1,7 @@
+{
+  "method": "integer",
+  "report": "outputs/battle_reset_20261001/rune_arbalist/qa/r3_decode.json",
+  "candidate_sha256": "41422b165e32b4dac5677e5ae63fda5ff8028c6a82b519e497bf38c99d20058f",
+  "asset_sha256": "41422b165e32b4dac5677e5ae63fda5ff8028c6a82b519e497bf38c99d20058f",
+  "experimental_human_review_required": false
+}

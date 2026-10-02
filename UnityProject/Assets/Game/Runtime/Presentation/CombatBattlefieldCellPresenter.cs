@@ -145,7 +145,7 @@ namespace OCC.Combat.Presentation
             UnitState unit = state.Units.Values.Select(candidate => feedback?.PresentedUnit(candidate) ?? candidate).FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == position);
             if (state.GreenhouseCollectionRoom?.IsRaiderHidden(state, unit) == true) unit = null;
-            Texture2D unitTexture = assets.Unit(unit, feedback?.EnemyAnimationFrame(unit) ?? -1);
+            Texture2D unitTexture = assets.Unit(unit);
             Vector2 unitOffset = Vector2.zero;
             CombatMovementPose travel = feedback != null ? feedback.UnitTravelPose(unit) :
                 new CombatMovementPose(new Vector2(position.X, position.Y));

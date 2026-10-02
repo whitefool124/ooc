@@ -1,0 +1,48 @@
+{
+  "unit_id": "rune_arbalist",
+  "canonical_concept_key": "rune_arbalist_static_reset_key_pose",
+  "role": "tactical_unit_32x64",
+  "canvas": [
+    32,
+    64
+  ],
+  "height_range": [
+    46,
+    58
+  ],
+  "width_max": 30,
+  "native_ppu": 32,
+  "foot_anchor": [
+    16,
+    62
+  ],
+  "source_cap": 3,
+  "palette_max": 24,
+  "identity": "older male academy student with heavy hand-cranked crossbow and winding crank at rest",
+  "palette": "gray violet, ivory, navy; brown wood and copper crank",
+  "prior_dedicated_static_reset_sources_found": 0,
+  "portrait_as_battle_sprite_forbidden": true,
+  "fixed_template": {
+    "canvas": [
+      32,
+      64
+    ],
+    "safe_border": 1,
+    "allowed_subject_bounds": [
+      1,
+      5,
+      31,
+      63
+    ],
+    "center_axis_x": 16,
+    "contact_y": 62,
+    "raw_square_reference_offset_x": 16,
+    "raw_logical_canvas": [
+      64,
+      64
+    ],
+    "reference": "../refs/fire_scale_square_24x.png",
+    "reference_pitch": 24,
+    "immutable_across_retries": true
+  }
+}

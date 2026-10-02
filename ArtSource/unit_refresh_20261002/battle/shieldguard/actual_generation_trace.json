@@ -1,0 +1,24 @@
+[
+  {
+    "round": 1,
+    "source_path": "outputs/battle_reset_20261001/shieldguard/raw/r1_source.png",
+    "source_sha256": "b20a2f899f253c6b1838d861bba9f7921df0375874dd6b81ff4a8abfd5fa5dbf",
+    "prompt_path": "outputs/battle_reset_20261001/shieldguard/prompt_r1.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\battle_reset_20261001\\refs\\fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  },
+  {
+    "round": 2,
+    "source_path": "outputs/battle_reset_20261001/shieldguard/raw/r2_source.png",
+    "source_sha256": "defe8fd7e3af2f56dba435aa09fecae69bbc4c1a7999b362aa9b014b7844226e",
+    "prompt_path": "outputs/battle_reset_20261001/shieldguard/prompt_r2.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\battle_reset_20261001\\refs\\fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  }
+]

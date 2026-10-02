@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 3,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    51,
+    103
+  ],
+  "lattice_confidence": 1.2491,
+  "identity": "Gray-haired veteran instructor in practical ivory/brown workwear, tool belt, heavy disassembly hammer and tamping staff.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: complete boots, hammer and staff; readable gray hair, beard, work vest and tools. No grid alias collapse or visible keyed-color residue.",
+  "review_notes": "Human reviewer to confirm apparent age and marking-peg detail; display portrait only.",
+  "human_review_pending": true
+}

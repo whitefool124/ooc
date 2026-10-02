@@ -1,0 +1,64 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "shieldguard_battle_static_32x64_v1",
+  "role": "tactical_unit_32x64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent static battle reset; approved fire-student world scale; not a portrait conversion",
+    "source_path": "ArtSource/unit_refresh_20261002/battle/shieldguard/raw/r1_source.png",
+    "source_sha256": "b20a2f899f253c6b1838d861bba9f7921df0375874dd6b81ff4a8abfd5fa5dbf"
+  },
+  "delivery": {
+    "output_path": "ArtSource/unit_refresh_20261002/battle/shieldguard/asset/shieldguard_battle_static_32x64_v1.png",
+    "output_sha256": "bcc59ef438286b0a935b094be7875cac4a91d568050a9bb0560a0d137262ec5f",
+    "native_output_path": "ArtSource/unit_refresh_20261002/battle/shieldguard/asset/shieldguard_battle_static_32x64_v1.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "32PPU, same native pixel size as fire-student baseline; no Unity replacement."
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 sprite, one32x32 logical cell, head overhang; offline scale comparison only",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User requested integration of previous new portraits and static tactical sprites on 2026-10-02."
+  },
+  "evidence": {
+    "one_x": "ArtSource/unit_refresh_20261002/battle/shieldguard/qa/1x.png",
+    "four_x": "ArtSource/unit_refresh_20261002/battle/shieldguard/qa/4x.png",
+    "six_x": "ArtSource/unit_refresh_20261002/battle/shieldguard/qa/6x.png",
+    "grayscale": "ArtSource/unit_refresh_20261002/battle/shieldguard/qa/grayscale.png",
+    "checker": "ArtSource/unit_refresh_20261002/battle/shieldguard/qa/checker.png",
+    "application_contact": "ArtSource/unit_refresh_20261002/battle/shieldguard/application/scale_contact_1x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "Static key pose only; human aesthetic and actual runtime verification pending."
+  },
+  "unity_import": null
+}

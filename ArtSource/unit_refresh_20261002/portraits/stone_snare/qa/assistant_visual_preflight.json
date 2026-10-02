@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 1,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    55,
+    116
+  ],
+  "lattice_confidence": 2.0689,
+  "identity": "Earth-control teaching assistant, brown long academy work coat, ivory edging, tool pouch and compact rune-conducting staff.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: full boots and hand staff, intact long coat and tool pouch; clean silhouette with no grid alias collapse.",
+  "review_notes": "Youthful adult face; human review to confirm teaching-assistant age and distinction from students. Display only.",
+  "human_review_pending": true
+}

@@ -1,0 +1,27 @@
+{
+  "asset_id": "wind_librarian_display_portrait_128",
+  "content_id": "wind_librarian",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Human female academy librarian Xiao Ling, quiet mature woman; glasses hanging at neck, work sleeves clipped back, modest ivory/gray-blue practical library work clothes, wooden short wind-guiding staff, no weapon; preserve accepted reference hairstyle and face.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\wind_librarian\\delivery_v2\\asset\\occ_enemy_wind_librarian_native32_v1.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\wind_librarian\\identity_reference_6x.png",
+      "sha256": "69489d6b87c436c985afee0039b183528be4ac7af10c5971b8fe06888ad1f670"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

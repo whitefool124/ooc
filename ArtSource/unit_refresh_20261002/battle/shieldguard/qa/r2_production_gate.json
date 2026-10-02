@@ -1,0 +1,21 @@
+{
+  "status": "REJECT_CANDIDATE",
+  "reasons": [
+    "HUMANOID_WORLD_HEIGHT_OUT_OF_RANGE"
+  ],
+  "metrics": {
+    "canvas": [
+      32,
+      64
+    ],
+    "bounds": [
+      10,
+      31,
+      22,
+      63
+    ],
+    "hard_alpha": true,
+    "magenta_pixels": 0
+  },
+  "human_identity_style_and_proportion_review_required": true
+}

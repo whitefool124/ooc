@@ -1,0 +1,12 @@
+{
+ "status":"PASS_WITH_REVIEW_NOTES",
+ "kind":"ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+ "selected_round":3,
+ "identity":"Complete lean short-furred brown tracking dog, lowered muzzle, four legs, tail and one copper conducting collar; no backpack/harness.",
+ "native_canvas":[128,128],
+ "subject_size":[104,58],
+ "lattice_confidence":1.3562,
+ "native_visual_review":"128px candidate and4x nearest preview directly inspected; readable silhouette and collar, complete anatomy, no enclosed background residue or visible halo in decoded candidate.",
+ "review_notes":"Master-project reviewer should confirm breed styling and collar construction; not a battle sprite and not imported into Unity.",
+ "human_review_pending":true
+}

@@ -1,0 +1,27 @@
+{
+  "asset_id": "rune_arbalist_display_portrait_128",
+  "content_id": "rune_arbalist",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Older male academy student, brown/ivory practical clothes, with recognizably heavy hand-cranked crossbow and its winding crank held at rest; preserve reference character identity, no modern firearm.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_latest\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\rune_arbalist.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\rune_arbalist\\identity_reference_6x.png",
+      "sha256": "42ab1c73ade0c4ceae8ad39ebc88c9f65f1dcebb323403983752c1198743df1d"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

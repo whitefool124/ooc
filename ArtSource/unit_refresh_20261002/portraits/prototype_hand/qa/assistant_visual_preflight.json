@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 1,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    52,
+    117
+  ],
+  "lattice_confidence": 1.7747,
+  "identity": "Young workshop prototype worker, light practical apron with tools, small gray work instrument with muted red tab.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: complete figure and portable tool, readable apron and belt tools, no map device or crate included.",
+  "review_notes": "Human reviewer to confirm handheld workshop-tool design. Display portrait only.",
+  "human_review_pending": true
+}

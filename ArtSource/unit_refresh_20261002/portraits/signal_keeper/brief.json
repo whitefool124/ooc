@@ -1,0 +1,23 @@
+{
+  "asset_id": "signal_keeper_display_portrait_128",
+  "content_id": "signal_keeper",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Human academy observation-tower duty keeper, practical outdoor work coat, compact copper lamp-mirror instrument held at rest, weather hood folded down; distinct optical mirror face, not a fire staff or armored sentry. Tower/buildings are NOT included in portrait.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "No dedicated currently accepted asset; use authoritative identity description, never placeholder reuse.",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

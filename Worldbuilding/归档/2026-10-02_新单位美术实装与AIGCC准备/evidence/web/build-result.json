@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Console logs (1 entries, filter: all, source: cache, text: 'OCC_WEB_BUILD'):\\n[LOG] OCC_WEB_BUILD result=Succeeded; errors=0; warnings=20; size=81172691; output=D:\\\\occart\\\\OCC_latest\\\\UnityProject\\\\Artifacts/Builds\\\\OCC_Web_2026-10-02\\r\\n\"}"
+      }
+    ]
+  }
+}

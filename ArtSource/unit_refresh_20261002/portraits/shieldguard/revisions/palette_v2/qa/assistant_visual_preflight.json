@@ -1,0 +1,13 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 3,
+  "subject_size": [
+    50,
+    115
+  ],
+  "lattice_confidence": 1.4228,
+  "native_visual_review": "Native candidate and4x preview inspected: cobalt torso garment and navy trousers form a clear cool colour family; ivory shirt and warm wood/copper shield remain separate. Full figure, boots, shield and tool intact; no alias collapse.",
+  "review_notes": "Human review pending for shield-strike tool and character continuity; independent colour revision, old v1 retained.",
+  "human_review_pending": true
+}

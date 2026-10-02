@@ -66,7 +66,6 @@ namespace OCC.Combat.Presentation
                 announced?.CompactText, currentIntentDetail,
                 string.Join("|", terms.Select(term => term.Id + term.Count + term.Detail)));
             bool changedEnemy = !string.Equals(boundEnemyId, enemy.Id, StringComparison.Ordinal);
-            UpdatePortrait(cell);
             intentIcon.texture = cell?.IntentTexture;
             intentIcon.color = intentIcon.texture == null ? Color.clear : Color.white;
             if (!changedEnemy && string.Equals(boundSignature, signature, StringComparison.Ordinal))
@@ -74,6 +73,7 @@ namespace OCC.Combat.Presentation
                 RaiseTooltip();
                 return;
             }
+            UpdatePortrait(cell);
             boundEnemyId = enemy.Id;
             boundSignature = signature;
             enemyName.text = enemy.DisplayName;
@@ -116,6 +116,13 @@ namespace OCC.Combat.Presentation
 
         private void UpdatePortrait(BattlefieldCellPresentation cell)
         {
+            Texture2D display = CombatFormalVisualAssets.DisplayPortrait(cell?.Unit);
+            if (display != null)
+            {
+                portrait.texture = display;
+                CombatFormalVisualAssets.FitDisplayPortrait(portrait, 120f, 168f);
+                return;
+            }
             portrait.texture = cell?.UnitTexture;
             portrait.uvRect = cell?.UnitUv ?? new Rect(0f, 0f, 1f, 1f);
             portrait.color = cell?.UnitTint ?? Color.white;

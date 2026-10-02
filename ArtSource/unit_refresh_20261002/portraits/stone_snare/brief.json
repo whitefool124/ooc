@@ -1,0 +1,27 @@
+{
+  "asset_id": "stone_snare_display_portrait_128",
+  "content_id": "stone_snare",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Male earth-control teaching assistant in brown/ivory academy work coat, practical belt and compact conducting hand staff used to mark restraint runes; existing identity, not a medieval wizard.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_latest\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\stone_snare.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\stone_snare\\identity_reference_6x.png",
+      "sha256": "bc90c16128f364e2922675a5165c80970031d157cbdbfa7529fe22d47ad9b6f6"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

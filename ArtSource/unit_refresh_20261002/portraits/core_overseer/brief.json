@@ -1,0 +1,23 @@
+{
+  "asset_id": "core_overseer_display_portrait_128",
+  "content_id": "core_overseer",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "HUMAN elderly male former academy external-ring maintenance worker, plain old charcoal-brown work jacket, gray hair, old tool pouch and modest maintenance staff. Tower guardian is an ordinary-looking retired human, NOT a robot, knight or giant metal armor. No helmet, crystals or core embedded in chest.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_latest\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\core_overseer.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

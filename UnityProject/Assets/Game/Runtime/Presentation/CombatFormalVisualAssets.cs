@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,7 +12,6 @@ namespace OCC.Combat.Presentation
     public sealed class CombatFormalVisualAssets
     {
         private readonly Dictionary<string, Texture2D> units = new Dictionary<string, Texture2D>();
-        private readonly Dictionary<string, Texture2D[]> enemyAnimations = new Dictionary<string, Texture2D[]>();
         private readonly Dictionary<string, Texture2D> academy = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> environments = new Dictionary<string, Texture2D>();
         private readonly Dictionary<string, Texture2D> relay = new Dictionary<string, Texture2D>();
@@ -45,14 +44,49 @@ namespace OCC.Combat.Presentation
             }
             if (unit.IsHero) return TextureFor("hero");
             if (string.IsNullOrEmpty(unit.EnemyArchetypeId)) return null;
-            if (animationFrame >= 0 && enemyAnimations.TryGetValue(unit.EnemyArchetypeId, out Texture2D[] frames))
-                return frames[Mathf.Clamp(animationFrame, 0, frames.Length - 1)];
             Texture2D texture = TextureFor(unit.EnemyArchetypeId);
             if (texture != null) return texture;
             string artId = EnemyArchetypes.Get(unit.EnemyArchetypeId).ArtId;
-            if (animationFrame >= 0 && enemyAnimations.TryGetValue(artId, out frames))
-                return frames[Mathf.Clamp(animationFrame, 0, frames.Length - 1)];
             return TextureFor(artId);
+        }
+
+        // Portraits are separate UI artwork; never use them as battlefield sprites.
+        public static Texture2D DisplayPortrait(UnitState unit)
+        {
+            if (unit == null) return null;
+            string id = unit.IsHero ? "hero" : unit.EnemyArchetypeId;
+            string path = FormalArtRegistry.DisplayPortraitPath(id);
+            return path == null ? null : Resources.Load<Texture2D>(path);
+        }
+
+        public Texture2D Portrait(UnitState unit)
+        {
+            Texture2D portrait = DisplayPortrait(unit);
+            return portrait != null ? portrait : Unit(unit);
+        }
+
+        public static void FitDisplayPortrait(RawImage image, float width, float height)
+        {
+            Texture2D texture = image.texture as Texture2D;
+            if (texture == null) return;
+            Color32[] pixels = texture.GetPixels32();
+            int left = texture.width, bottom = texture.height, right = -1, top = -1;
+            for (int y = 0; y < texture.height; y++)
+            for (int x = 0; x < texture.width; x++)
+            {
+                if (pixels[y * texture.width + x].a == 0) continue;
+                left = Mathf.Min(left, x); right = Mathf.Max(right, x);
+                bottom = Mathf.Min(bottom, y); top = Mathf.Max(top, y);
+            }
+            if (right < left) return;
+            int nativeWidth = right - left + 1, nativeHeight = top - bottom + 1;
+            float scale = Mathf.Max(1f, Mathf.Floor(Mathf.Min(width / nativeWidth, height / nativeHeight)));
+            image.uvRect = new Rect((float)left / texture.width, (float)bottom / texture.height,
+                (float)nativeWidth / texture.width, (float)nativeHeight / texture.height);
+            image.color = Color.white;
+            image.rectTransform.sizeDelta = new Vector2(nativeWidth * scale, nativeHeight * scale);
+            image.rectTransform.anchoredPosition = new Vector2(4f + (width - nativeWidth * scale) * .5f,
+                -4f - (height - nativeHeight * scale) * .5f);
         }
 
         public void LoadRuntime()
@@ -107,20 +141,10 @@ namespace OCC.Combat.Presentation
 
         private void LoadUnits()
         {
-            units["hero"] = RequiredTexture(FormalArtRegistry.UnitPath("hero"));
-            string[] requiredEnemyIds = { "sigil_mauler", "barrier_mender", "tether_hound", "shieldguard", "pyromancer", "raider",
-                "elite_vanguard", "stone_snare", "lantern_revealer", "rune_arbalist", "core_overseer"
-            };
-            foreach (string id in requiredEnemyIds)
-                units[EnemyArchetypes.Get(id).ArtId] = RequiredTexture(FormalArtRegistry.UnitPath(id));
-            foreach (string id in requiredEnemyIds)
-            {
-                enemyAnimations[id] = new[]
-                {
-                    RequiredTexture($"Art/FormalEnemyAnimations64/{id}/frame_00"),
-                    RequiredTexture($"Art/FormalEnemyAnimations64/{id}/frame_05")
-                };
-            }
+            // Runtime ids keep separate artwork even when legacy archetypes share an ArtId.
+            foreach (FormalArtEntry entry in FormalArtRegistry.Units)
+                units[entry.RuntimeId] = RequiredTexture(entry.ResourcePath);
+
         }
 
         private void LoadAcademy()

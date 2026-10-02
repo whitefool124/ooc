@@ -1,0 +1,1 @@
+[{"attempt":1,"prompt":"prompt_r1.txt","result":"connection failed before source returned","source_generated":false},{"attempt":2,"prompt":"prompt_r1.txt","result":"retry same request; pending","source_round_if_returned":1}]

@@ -1086,6 +1086,15 @@
       "generation_template_policy": "canvas, safe border, subject zone, centre axis and contact baseline are locked before the first generation and unchanged by retries",
       "production_status": "new_non_humanoid_battlefield_baseline"
     },
+    "unit_display_portrait_128": {
+      "delivery_size": [128, 128],
+      "logical_cells": null,
+      "palette_max": 40,
+      "transparent_border_min": 2,
+      "unity_ppu": 32,
+      "alpha_policy": "transparent_hard_alpha",
+      "identity_card_required": true
+    },
     "tactical_unit_32x64": {
       "delivery_size": [32, 64],
       "logical_cells": [1, 1],

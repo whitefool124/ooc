@@ -8,6 +8,24 @@ namespace OCC.Combat.Tests
     public sealed class CombatInformationPresentationTests
     {
         [Test]
+        public void ActionResult_UsesEquippedRogueSpellInsteadOfLegacyHeroSkill()
+        {
+            var run = RogueliteMapRun.CreateFirstRunV1(1908);
+            run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");
+            CombatState state = new CombatSceneSessionBuilder().Build(run, null,
+                System.Array.Empty<CombatSceneMarker>()).State;
+            UnitState hero = state.GetUnit("hero");
+            UnitState enemy = state.Units.Values.First(unit => !unit.IsHero);
+            CombatResolver.BeginTurn(state, hero.Id);
+            CombatCommand command = CombatCommand.UseSkill(hero.Id, 1, enemy.Id);
+            var result = new CombatCommandExecutionService().Execute(state, null, command);
+            Assert.That(result.Accepted, Is.True, result.RejectionReason);
+            Assert.That(result.ActionResult, Does.Contain(state.RogueSpells.DefinitionAtSlot(1).DisplayName));
+            Assert.That(result.ActionResult, Does.Not.Contain(hero.SkillTwo.DisplayName));
+        }
+
+        [Test]
         public void GenericRogueliteSpellsUseTheirOwnTargetingTagsWithoutFireCatalogErrors()
         {
             RogueContentCatalog catalog = RogueContentCatalog.CreateAcademyV01();

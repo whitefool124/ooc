@@ -1,0 +1,239 @@
+{
+  "status": "PASS_LOSSLESS_TARGET",
+  "decoder": "experimental_fractional_macro_cell_v1",
+  "source_sha256": "b20a2f899f253c6b1838d861bba9f7921df0375874dd6b81ff4a8abfd5fa5dbf",
+  "inferred_subject_pixel_pitch": 17.25,
+  "inferred_subject_grid_phase": [
+    13.5,
+    11.75
+  ],
+  "subject_lattice_confidence": 6.7115495246340595,
+  "confidence_definition": "best local pitch peak / strongest distinct nonharmonic local peak; same-peak uncertainty excluded",
+  "subject_lattice_confidence_min": 1.2,
+  "edge_coverage": [
+    0.5278662443161011,
+    0.5858883857727051
+  ],
+  "minimum_axis_edge_coverage": 0.5,
+  "runner_up": {
+    "pitch": 35.75,
+    "score": 0.7857987489470273,
+    "phase": [
+      31.25,
+      13.0
+    ],
+    "coverage": [
+      0.24355818331241608,
+      0.12249087542295456
+    ]
+  },
+  "pitch_peaks": [
+    {
+      "pitch": 17.25,
+      "score": 5.2739272199534595,
+      "phase": [
+        13.5,
+        11.75
+      ],
+      "coverage": [
+        0.5278662443161011,
+        0.5858883857727051
+      ]
+    },
+    {
+      "pitch": 34.625,
+      "score": 3.4274561750133095,
+      "phase": [
+        11.5,
+        26.75
+      ],
+      "coverage": [
+        0.28329458832740784,
+        0.28366827964782715
+      ]
+    },
+    {
+      "pitch": 8.625,
+      "score": 1.358342733815864,
+      "phase": [
+        4.5,
+        3.25
+      ],
+      "coverage": [
+        0.5161911845207214,
+        0.5824010968208313
+      ]
+    },
+    {
+      "pitch": 35.75,
+      "score": 0.7857987489470273,
+      "phase": [
+        31.25,
+        13.0
+      ],
+      "coverage": [
+        0.24355818331241608,
+        0.12249087542295456
+      ]
+    },
+    {
+      "pitch": 25.875,
+      "score": 0.781847703172281,
+      "phase": [
+        13.25,
+        12.0
+      ],
+      "coverage": [
+        0.20050343871116638,
+        0.2184687703847885
+      ]
+    },
+    {
+      "pitch": 8.25,
+      "score": 0.6410437552833915,
+      "phase": [
+        3.75,
+        1.0
+      ],
+      "coverage": [
+        0.4398401379585266,
+        0.4509601593017578
+      ]
+    },
+    {
+      "pitch": 10.0,
+      "score": 0.5724850734144545,
+      "phase": [
+        6.5,
+        2.5
+      ],
+      "coverage": [
+        0.4180585443973541,
+        0.44827595353126526
+      ]
+    },
+    {
+      "pitch": 9.25,
+      "score": 0.5632425773847352,
+      "phase": [
+        2.75,
+        8.25
+      ],
+      "coverage": [
+        0.38968926668167114,
+        0.3953973054885864
+      ]
+    },
+    {
+      "pitch": 11.625,
+      "score": 0.5398579674236951,
+      "phase": [
+        8.0,
+        0.0
+      ],
+      "coverage": [
+        0.34234538674354553,
+        0.3016487956047058
+      ]
+    },
+    {
+      "pitch": 16.375,
+      "score": 0.5344178851078202,
+      "phase": [
+        15.25,
+        6.75
+      ],
+      "coverage": [
+        0.26028722524642944,
+        0.24254447221755981
+      ]
+    },
+    {
+      "pitch": 23.625,
+      "score": 0.5192013112147166,
+      "phase": [
+        0.25,
+        15.5
+      ],
+      "coverage": [
+        0.19588971138000488,
+        0.18907704949378967
+      ]
+    },
+    {
+      "pitch": 26.5,
+      "score": 0.4980334740347295,
+      "phase": [
+        1.5,
+        8.0
+      ],
+      "coverage": [
+        0.2582167088985443,
+        0.14408855140209198
+      ]
+    },
+    {
+      "pitch": 15.125,
+      "score": 0.4861881925055003,
+      "phase": [
+        4.0,
+        2.0
+      ],
+      "coverage": [
+        0.2568095326423645,
+        0.2572764456272125
+      ]
+    },
+    {
+      "pitch": 11.0,
+      "score": 0.4734003192082043,
+      "phase": [
+        6.5,
+        7.5
+      ],
+      "coverage": [
+        0.3777323067188263,
+        0.37878134846687317
+      ]
+    },
+    {
+      "pitch": 18.5,
+      "score": 0.466642755418859,
+      "phase": [
+        13.5,
+        17.5
+      ],
+      "coverage": [
+        0.23945730924606323,
+        0.2359781116247177
+      ]
+    },
+    {
+      "pitch": 10.5,
+      "score": 0.4629648063133184,
+      "phase": [
+        6.5,
+        9.0
+      ],
+      "coverage": [
+        0.3463614284992218,
+        0.3596477210521698
+      ]
+    }
+  ],
+  "subject_logical_size": [
+    23,
+    54
+  ],
+  "target_canvas": [
+    32,
+    64
+  ],
+  "all_decoded_colours_are_observed_source_samples": true,
+  "alpha_shape_preserved_pixel_for_pixel": true,
+  "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+  "geometric_resize_or_interpolation_performed": false,
+  "background_artifact_cells_removed": 0,
+  "alpha_components_before_cleanup": 1,
+  "experimental_method_requires_human_review": true
+}

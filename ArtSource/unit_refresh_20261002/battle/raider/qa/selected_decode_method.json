@@ -1,0 +1,7 @@
+{
+  "method": "integer",
+  "report": "outputs/battle_reset_20261001/raider/qa/r2_decode.json",
+  "candidate_sha256": "cb912bfad3164f468ad6c9e6603a025f101d84e5dfc09549934fe247225364b1",
+  "asset_sha256": "cb912bfad3164f468ad6c9e6603a025f101d84e5dfc09549934fe247225364b1",
+  "experimental_human_review_required": false
+}

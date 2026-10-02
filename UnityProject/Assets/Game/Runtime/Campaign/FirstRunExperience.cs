@@ -173,6 +173,10 @@ namespace OCC.Combat
         public List<FirstRunEncounterSnapshot> Encounters { get; } = new List<FirstRunEncounterSnapshot>();
         public List<string> GrantedRelicSlotIds { get; } = new List<string>();
         public Dictionary<string, string> LootProgress { get; } = new Dictionary<string, string>(StringComparer.Ordinal);
+        public HashSet<string> CompletedTutorialIds { get; } = new HashSet<string>(StringComparer.Ordinal);
+        public string PendingTutorialId { get; set; } = string.Empty;
+        public string PendingTutorialAction { get; set; } = string.Empty;
+        public bool TutorialActionReady { get; set; }
         internal bool RequiresRuntimeBackfill { get; set; }
 
         public bool IsTerminal => RunSealed || RoundSettled;
@@ -612,7 +616,8 @@ namespace OCC.Combat
                 Row("M", Bool(state.Medical.HealthCheckCompleted), Bool(state.Medical.HealUsed), Bool(state.Medical.MealUsed), state.Medical.SelectedMealId, List(state.Medical.MealCandidateIds)),
                 Row("S", Bool(state.Shop.Opened)),
                 Row("L", List(state.GrantedRelicSlotIds)),
-                Row("Z", state.EliteSelectedPassiveId)
+                Row("Z", state.EliteSelectedPassiveId),
+                Row("T", List(state.CompletedTutorialIds.OrderBy(id => id, StringComparer.Ordinal)), state.PendingTutorialId, Bool(state.TutorialActionReady), state.PendingTutorialAction)
             };
             lines.AddRange(state.Nodes.OrderBy(value => value.Id, StringComparer.Ordinal).Select(value => Row("N", value.Id, value.Type.ToString(), ((int)value.Flags).ToString(), List(value.NextIds))));
             lines.AddRange(state.RewardGroups.OrderBy(value => value.Id, StringComparer.Ordinal).Select(value => Row("R", value.Id, value.NodeId, value.SelectedId, List(value.CandidateIds), Bool(value.Abandoned))));
@@ -646,6 +651,7 @@ namespace OCC.Combat
                 else if (kind == "M" && f.Length == 6) { state.Medical.HealthCheckCompleted = Boolean(f[1]); state.Medical.HealUsed = Boolean(f[2]); state.Medical.MealUsed = Boolean(f[3]); state.Medical.SelectedMealId = U(f[4]); state.Medical.MealCandidateIds.AddRange(ParseList(f[5])); }
                 else if (kind == "S" && f.Length == 2) state.Shop.Opened = Boolean(f[1]);
                 else if (kind == "L" && f.Length == 2) state.GrantedRelicSlotIds.AddRange(ParseList(f[1]));
+                else if (kind == "T" && f.Length >= 4) { state.CompletedTutorialIds.UnionWith(ParseList(f[1])); state.PendingTutorialId = U(f[2]); state.TutorialActionReady = Boolean(f[3]); state.PendingTutorialAction = f.Length >= 5 ? U(f[4]) : string.Empty; }
                 else if (kind == "Z" && f.Length == 2) state.EliteSelectedPassiveId = U(f[1]);
                 else if (kind == "N" && f.Length == 5) state.Nodes.Add(new FirstRunNodeSnapshot(U(f[1]), Parse<FirstRunNodeType>(f[2]), ParseList(f[4]), (FirstRunNodeFlags)Int(f[3])));
                 else if (kind == "R" && (f.Length == 5 || f.Length == 6)) { FirstRunRewardGroupSnapshot value = new FirstRunRewardGroupSnapshot(U(f[1]), U(f[2]), ParseList(f[4])); value.SelectedId = U(f[3]); if (f.Length == 6) value.Abandoned = Boolean(f[5]); state.RewardGroups.Add(value); }

@@ -1,0 +1,48 @@
+{
+  "unit_id": "elite_vanguard",
+  "canonical_concept_key": "elite_vanguard_static_reset_key_pose",
+  "role": "tactical_unit_32x64",
+  "canvas": [
+    32,
+    64
+  ],
+  "height_range": [
+    46,
+    58
+  ],
+  "width_max": 30,
+  "native_ppu": 32,
+  "foot_anchor": [
+    16,
+    62
+  ],
+  "source_cap": 3,
+  "palette_max": 24,
+  "identity": "50-year-old male line-marking instructor; short gray hair; maintenance protection, tool bags and pegs; short earth-tamping staff and structure-disassembly hammer",
+  "palette": "ochre-yellow, ivory, charcoal; leather and steel material colours",
+  "prior_dedicated_static_reset_sources_found": 0,
+  "portrait_as_battle_sprite_forbidden": true,
+  "fixed_template": {
+    "canvas": [
+      32,
+      64
+    ],
+    "safe_border": 1,
+    "allowed_subject_bounds": [
+      1,
+      5,
+      31,
+      63
+    ],
+    "center_axis_x": 16,
+    "contact_y": 62,
+    "raw_square_reference_offset_x": 16,
+    "raw_logical_canvas": [
+      64,
+      64
+    ],
+    "reference": "../refs/fire_scale_square_24x.png",
+    "reference_pitch": 24,
+    "immutable_across_retries": true
+  }
+}

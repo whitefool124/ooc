@@ -1,0 +1,12 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "identity": "Brown short hair, charcoal repaired jacket, ivory shirt, gloves, boots, student ID and copper heat-tool match Victor's worker-student identity. Tiny copper-tag count and eyebrow scar require human review at 128px.",
+  "style": "Coherent coarse pixel clusters, restrained charcoal/brown/copper material colours, no scenery or baked floor shadow in decoded asset.",
+  "view": "Slight three-quarter standing portrait, both eyes present; intentionally separate from strict-side battle role.",
+  "scale": "128x128 UI-only canvas; complete subject47x117, not used as world-scale battle sprite.",
+  "alpha": "Final hard-alpha subject complete with safety margins. Source halo does not survive official alpha extraction; no structural pixels removed and one alpha component.",
+  "technical": "Subject-inferred pitch12, confidence2.0971; official lossless decode PASS and validator PASS against explicit128px output-only extension.",
+  "human_review": "PENDING",
+  "unity_import": false
+}

@@ -1,0 +1,25 @@
+{
+  "unit_id": "raider",
+  "canonical_concept_key": "raider_static_reset_key_pose",
+  "role": "tactical_unit_32x64",
+  "canvas": [
+    32,
+    64
+  ],
+  "height_range": [
+    46,
+    58
+  ],
+  "width_max": 30,
+  "native_ppu": 32,
+  "foot_anchor": [
+    16,
+    62
+  ],
+  "source_cap": 3,
+  "palette_max": 24,
+  "identity": "academy flank student with tied dark hair, short safety-limited hook blade",
+  "palette": "wine-red jacket, ivory shirt, slate-blue trousers",
+  "prior_dedicated_static_reset_sources_found": 0,
+  "portrait_as_battle_sprite_forbidden": true
+}

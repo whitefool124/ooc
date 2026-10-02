@@ -491,6 +491,9 @@ namespace OCC.Combat
                 : (command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex || command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex) &&
                     state.AcademyEnemyArea != null
                     ? AcademyEnemyAreaRuntime.For(source?.EnemyArchetypeId)?.DisplayName : null;
+            if (command.Type == CombatCommandType.UseSkill && source?.IsHero == true &&
+                state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
+                configuredSkill = state.RogueSpells.DefinitionAtSlot(command.SlotIndex)?.DisplayName;
             string action = command.Type == CombatCommandType.Attack ? source?.BasicAttack?.DisplayName ?? "攻击" :
                 command.Type == CombatCommandType.UseSkill ? (configuredSkill ?? (command.SlotIndex == 0 ? source?.SkillOne : source?.SkillTwo)?.DisplayName ?? "技能") :
                 command.Type == CombatCommandType.Move ? "移动" : command.Type == CombatCommandType.Interact ? "互动" : command.Type.ToString();

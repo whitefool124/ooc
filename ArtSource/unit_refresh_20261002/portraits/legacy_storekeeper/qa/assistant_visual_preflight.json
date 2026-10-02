@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 2,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    47,
+    110
+  ],
+  "lattice_confidence": 2.2022,
+  "identity": "Elderly sealed-store custodian, gray hair, cap and spectacles, worn ivory/brown uniform and dark sleeve protectors, ledger tucked under arm and copper testing instrument.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: elderly face and glasses readable, intact ledger edge, instrument and boots. No alias collapse.",
+  "review_notes": "Human reviewer to confirm ledger edge and instrument construction. Display portrait only.",
+  "human_review_pending": true
+}

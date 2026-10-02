@@ -1,0 +1,7 @@
+{
+  "method": "fractional",
+  "report": "outputs/battle_reset_20261001/shieldguard/qa/r1_fractional_decode.json",
+  "candidate_sha256": "bcc59ef438286b0a935b094be7875cac4a91d568050a9bb0560a0d137262ec5f",
+  "asset_sha256": "bcc59ef438286b0a935b094be7875cac4a91d568050a9bb0560a0d137262ec5f",
+  "experimental_human_review_required": true
+}

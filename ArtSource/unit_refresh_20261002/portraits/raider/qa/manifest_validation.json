@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "raider_display_portrait_128",
+  "role": "unit_display_portrait_128",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      128,
+      128
+    ],
+    "bounds": [
+      40,
+      29,
+      88,
+      126
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 40,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

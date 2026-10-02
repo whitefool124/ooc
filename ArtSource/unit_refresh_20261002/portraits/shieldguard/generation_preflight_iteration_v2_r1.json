@@ -1,0 +1,23 @@
+{
+  "status": "READY_FOR_ONE_CONTROLLED_TRIAL",
+  "reasons": [],
+  "reference_checks": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\pipeline_iteration_v2\\hero_portrait_reference_12x.png",
+      "status": "PASS_REFERENCE_CALIBRATION",
+      "reasons": [],
+      "actual_subject": [
+        48,
+        118
+      ],
+      "known_native_subject": [
+        47,
+        117
+      ],
+      "expected_source_pitch": 12,
+      "actual_source_pitch": 12
+    }
+  ],
+  "delivery_guaranteed": false,
+  "next_step": "Independent built-in image_gen only; then decode and candidate gate plus visual review."
+}

@@ -1,0 +1,27 @@
+{
+  "asset_id": "raider_display_portrait_128",
+  "content_id": "raider",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Fast academy flank student with practical brown/ivory clothes, tied dark hair and a short safety-limited hook blade held low; preserve existing face/clothing identity, no assassin costume.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_latest\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\raider.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\raider\\identity_reference_6x.png",
+      "sha256": "1878d75e43ea38c0b2d9e3d750855dfe383f913901d837c59787c3dac025c2d1"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "round": 1,
+    "source_path": "outputs/battle_reset_20261001/elite_vanguard/raw/r1_source.png",
+    "source_sha256": "3d0d5714622791c3b008a647dc9b24dc989a9188560e5fb2a57c66c988471970",
+    "prompt_path": "outputs/battle_reset_20261001/elite_vanguard/prompt_r1.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:/occart/OCC_ArtProduction_Handoff_20260922/outputs/battle_reset_20261001/refs/fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  }
+]

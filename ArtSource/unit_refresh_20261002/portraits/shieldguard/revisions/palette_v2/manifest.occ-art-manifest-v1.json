@@ -1,0 +1,62 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "shieldguard_display_portrait_128_palette_v2",
+  "role": "unit_display_portrait_128",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "User-requested colour revision; independent new source, cumulative per-unit round retained. Previous v1 candidate preserved.",
+    "source_path": "ArtSource/unit_refresh_20261002/portraits/shieldguard/raw/r3_source.png",
+    "source_sha256": "5671005b18df542976ada37f3feb5e57cad80dcc789703ac4647d0f9df9f6c51",
+    "cumulative_round": 3
+  },
+  "delivery": {
+    "output_path": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/asset/shieldguard_display_portrait_128_palette_v2.png",
+    "output_sha256": "a3352624f34c19b89ce1d22d80d2db0f5cf24c6ade7c2c61972805838ea1e2f4",
+    "native_output_path": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/asset/shieldguard_display_portrait_128_palette_v2.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 40,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "UI portrait canvas, not world metre scale; never used as a battle sprite."
+  },
+  "application": {
+    "runtime_draw_rect": "128x128 display portrait in object archive; offline preview only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User requested integration of previous new portraits and static tactical sprites on 2026-10-02."
+  },
+  "evidence": {
+    "one_x": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/qa/1x.png",
+    "four_x": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/qa/4x.png",
+    "six_x": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/qa/6x.png",
+    "grayscale": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/qa/grayscale.png",
+    "checker": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/qa/checker.png",
+    "application_contact": "ArtSource/unit_refresh_20261002/portraits/shieldguard/revisions/palette_v2/application/archive_slot_1x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": ""
+  },
+  "unity_import": null
+}

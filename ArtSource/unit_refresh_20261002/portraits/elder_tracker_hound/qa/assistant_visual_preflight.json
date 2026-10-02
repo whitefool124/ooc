@@ -1,0 +1,18 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 3,
+  "native_canvas": [
+    128,
+    128
+  ],
+  "subject_size": [
+    117,
+    59
+  ],
+  "lattice_confidence": 2.2891,
+  "identity": "Old lean gray tracker hound with lowered muzzle, healed scar and patched copper binding collar, no body harness.",
+  "native_visual_review": "Native candidate and4x integer preview inspected: complete tail, muzzle and four paws, readable gray coat, scar and neck collar; no alias collapse or animal equipment intrusion.",
+  "review_notes": "Human reviewer to confirm stiff-leg read and welded-collar detail. Display portrait only; species scale checked separately for battle.",
+  "human_review_pending": true
+}

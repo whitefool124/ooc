@@ -1,0 +1,7 @@
+{
+  "method": "integer",
+  "report": "outputs/battle_reset_20261001/elite_vanguard/qa/r1_decode.json",
+  "candidate_sha256": "546a5a76b297266f027a0fda4617446168b0df17992612313f9586e716d291a6",
+  "asset_sha256": "546a5a76b297266f027a0fda4617446168b0df17992612313f9586e716d291a6",
+  "experimental_human_review_required": false
+}

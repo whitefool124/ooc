@@ -1,0 +1,19 @@
+{
+  "prompt": "Use case: stylized-concept. Create ONE NEW INDEPENDENT full-body pixel-art DISPLAY portrait of the academy SHIELD STUDENT. The reference image is for accepted chunky square pixel style and natural older-teen anatomy ONLY; do not copy its brown clothing palette or its staff. Character: male older-teen academy student with short dark brown hair, calm ordinary youthful face, ivory rolled-sleeve shirt, practical waistcoat, trousers, sturdy boots, compact wooden copper-trimmed training shield and short shield-strike work tool held at rest. Preserve this student identity, no knight armor.\nCOLOR REVISION requested by the user: the WAISTCOAT is clearly COBALT BLUE, with medium blue and dark indigo block shadows; blue covers the main torso garment, not just a tiny badge. Trousers are cool dark NAVY. Shirt is warm IVORY. Leather belt and boots are subdued warm brown, shield is honey-colored wood with muted copper trim, tool uses steel gray. These material colors are secondary. Clear warm/cool separation; the blue garment must visibly distinguish this student from the brown-clothed reference. No brown vest, no brown overall color cast, no teal glow. One main dyed-fabric hue, a supporting hue and restrained copper accents.\nFull intact figure and equipment, relaxed three-quarter standing pose, both eyes visible. Full feet, shield rim and short tool contained with transparent margins. Intended native128x128 display canvas. Tall2:3 raw composition, figure occupies about75% of source height. Every face, eye, hair, finger, clothing block and shield component shares ONE coarse square grid like the reference, source tiles about12px square, no smaller detail cells. Broad FLAT color clusters, two or three shades per material, at most16 tones. Dark stepped exterior silhouette. No fine texture, gradients, smoothing, antialiasing, dithering, haze, glow, cast shadow or color halo. Genuine alpha0 outside and in gaps between equipment and limbs. No magenta background, checkerboard, technical grid, text, UI, scenery or frame. One character only. Generate a new independent drawing, never recolor or transform old raw or reference pixels.\n",
+  "transparent_background": true,
+  "referenced_image_paths": [
+    "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\pipeline_iteration_v2\\hero_portrait_reference_12x.png"
+  ],
+  "reference_calibrations": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\pipeline_iteration_v2\\hero_portrait_reference_12x.png",
+      "report": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\pipeline_iteration_v2\\hero_portrait_reference_12x_report.json",
+      "native_subject": [
+        47,
+        117
+      ],
+      "source_pitch": 12
+    }
+  ],
+  "revision_reason": "User2026-09-30: palette is monotonous; cobalt blue garment revision. Continues shieldguard source count, new sourceR2, previous candidate retained."
+}

@@ -667,14 +667,6 @@ namespace OCC.Combat.Presentation
             unitMotions[unit.Id] = new UnitMotion(kind, duration, direction, originOffset, FeedbackTime);
         }
 
-        public int EnemyAnimationFrame(UnitState unit)
-        {
-            if (unit == null || unit.IsHero || !unitMotions.TryGetValue(unit.Id, out UnitMotion motion)) return -1;
-            float elapsed = Time.unscaledTime - motion.StartedAt;
-            if (elapsed < 0f || elapsed >= motion.Duration) return -1;
-            return UnitEndpointAnimationPolicy.FrameIndex(elapsed / Mathf.Max(.01f, motion.Duration));
-        }
-
         public static int VfxPriority(string effect)
         {
             switch (effect)

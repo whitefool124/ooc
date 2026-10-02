@@ -1,0 +1,13 @@
+{
+  "status": "PASS_WITH_REVIEW_NOTES",
+  "kind": "ASSISTANT_PREFLIGHT_NOT_HUMAN_APPROVAL",
+  "selected_round": 2,
+  "subject_size": [
+    54,
+    124
+  ],
+  "lattice_confidence": 1.4151,
+  "native_visual_review": "Native candidate and4x preview inspected: forest-green long coat dominates costume with ivory inner layer, charcoal trousers and material-colored leather/copper. Entire hair, coat, staff and boots contained; no alias collapse.",
+  "review_notes": "Human review pending for teaching-assistant age and continuity. Longer coat read than v1, old v1 retained.",
+  "human_review_pending": true
+}

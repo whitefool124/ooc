@@ -1,0 +1,10 @@
+{
+  "status": "REJECT_CANDIDATE",
+  "reasons": [
+    "REJECT_UNSTABLE_SUBJECT_GRID",
+    "UNSTABLE_SUBJECT_LATTICE",
+    "NO_CANDIDATE"
+  ],
+  "metrics": {},
+  "human_identity_style_and_proportion_review_required": true
+}

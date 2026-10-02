@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"finished; passed=188; failed=3; skipped=0|OCC.Combat.Tests.CombatSceneSessionBuilderTests.FormalMapRun_BuildsLevelPreparationInventoryAndLoot: System.NullReferenceException : Object reference not set to an instance of an object|OCC.Combat.Tests.CombatSceneSessionBuilderTests.ShortRunSecondCombat_AppliesAllPriorChoicesDuringBuild: System.NullReferenceException : Object reference not set to an instance of an object|OCC.Combat.Tests.RogueliteMapSaveCoordinatorTests.FirstBattleNormalCommands_VictorySettlementPersistsAndReloads:   Expected: True\\r\\n  But was:  False\\r\\n\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

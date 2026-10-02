@@ -1,11 +1,34 @@
-﻿using System;
+using System;
 using System.Linq;
 using NUnit.Framework;
+using OCC.Combat.Presentation;
+using UnityEngine;
 
 namespace OCC.Combat.Tests
 {
     public sealed class FormalArtRegistryTests
     {
+        [TestCase("shieldguard")]
+        [TestCase("stone_snare")]
+        [TestCase("raider")]
+        [TestCase("elite_vanguard")]
+        [TestCase("rune_arbalist")]
+        public void StaticRefresh_DoesNotSwapToLegacyActionArtwork(string id)
+        {
+            var assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            var unit = new UnitState("enemy", false, new GridPosition(0, 0));
+            EnemyArchetypes.Get(id).Apply(unit);
+            Texture2D rest = assets.Unit(unit);
+            Assert.That(rest, Is.Not.Null);
+            Assert.That(rest.width, Is.EqualTo(32));
+            Assert.That(rest.height, Is.EqualTo(64));
+            Assert.That(assets.Unit(unit, 0), Is.SameAs(rest));
+            Assert.That(assets.Unit(unit, 1), Is.SameAs(rest));
+            Assert.That(assets.Portrait(unit), Is.Not.SameAs(rest));
+            Assert.That(assets.Portrait(unit).width, Is.EqualTo(128));
+        }
+
         [Test]
         public void Registry_HasUniqueAssetIdsAndDomainRuntimeIds()
         {

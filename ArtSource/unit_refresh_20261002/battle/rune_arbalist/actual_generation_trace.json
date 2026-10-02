@@ -1,0 +1,35 @@
+[
+  {
+    "round": 1,
+    "source_path": "outputs/battle_reset_20261001/rune_arbalist/raw/r1_source.png",
+    "source_sha256": "4d109d39d1807aa1fa053614782c5daf7987bcebfc846657086f85984902c4a6",
+    "prompt_path": "outputs/battle_reset_20261001/rune_arbalist/prompt_r1.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:/occart/OCC_ArtProduction_Handoff_20260922/outputs/battle_reset_20261001/refs/fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  },
+  {
+    "round": 2,
+    "source_path": "outputs/battle_reset_20261001/rune_arbalist/raw/r2_source.png",
+    "source_sha256": "1de5b39d645cef44228e90af81be1897ea56d7498e0bba5cdec7d39304768405",
+    "prompt_path": "outputs/battle_reset_20261001/rune_arbalist/prompt_r2.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:/occart/OCC_ArtProduction_Handoff_20260922/outputs/battle_reset_20261001/refs/fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  },
+  {
+    "round": 3,
+    "source_path": "outputs/battle_reset_20261001/rune_arbalist/raw/r3_source.png",
+    "source_sha256": "b6f3394b02ca12c5b0c66aa04485f1ca9715c29f1c1bc5e90d5fde1969747e12",
+    "prompt_path": "outputs/battle_reset_20261001/rune_arbalist/prompt_r3.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:/occart/OCC_ArtProduction_Handoff_20260922/outputs/battle_reset_20261001/refs/fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "method": "integer",
+  "report": "outputs/battle_reset_20261001/stone_snare/qa/r1_decode.json",
+  "candidate_sha256": "28b63eac40c0099ea200b88878ce960606055f0a333b01a6cde6ade5382f9523",
+  "asset_sha256": "28b63eac40c0099ea200b88878ce960606055f0a333b01a6cde6ade5382f9523",
+  "experimental_human_review_required": false
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "wind_librarian_display_portrait_128",
+  "role": "unit_display_portrait_128",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent display portrait, official inferred-grid decode; output-only user-authorized 128px role extension",
+    "source_path": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/raw/r1_source.png",
+    "source_sha256": "6cd88f6b8169e506a5ee954641dcf4770c42b487bf42caf1f861a0638816edc3"
+  },
+  "delivery": {
+    "output_path": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/asset/wind_librarian_display_portrait_128.png",
+    "output_sha256": "d2d372a7c598f016571a32ba3c84f3a3bfbb203be68386f4895d40edb7f14f2c",
+    "native_output_path": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/asset/wind_librarian_display_portrait_128.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 40,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "UI portrait canvas, not world metre scale; never used as a battle sprite."
+  },
+  "application": {
+    "runtime_draw_rect": "128x128 display portrait in object archive; offline preview only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User requested integration of previous new portraits and static tactical sprites on 2026-10-02."
+  },
+  "evidence": {
+    "one_x": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/qa/1x.png",
+    "four_x": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/qa/4x.png",
+    "six_x": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/qa/6x.png",
+    "grayscale": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/qa/grayscale.png",
+    "checker": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/qa/checker.png",
+    "application_contact": "ArtSource/unit_refresh_20261002/portraits/wind_librarian/application/archive_slot_1x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": ""
+  },
+  "unity_import": null
+}

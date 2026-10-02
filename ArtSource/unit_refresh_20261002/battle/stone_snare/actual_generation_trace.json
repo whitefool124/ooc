@@ -1,0 +1,13 @@
+[
+  {
+    "round": 1,
+    "source_path": "outputs/battle_reset_20261001/stone_snare/raw/r1_source.png",
+    "source_sha256": "4c960ec635fee99b03f2fe3785cf8f2c864f962e4a253dbc8cd24c064aaea3f8",
+    "prompt_path": "outputs/battle_reset_20261001/stone_snare/prompt_r1.txt",
+    "source_channel": "codex_builtin_imagegen",
+    "referenced_image_paths": [
+      "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\battle_reset_20261001\\refs\\fire_scale_square_24x.png"
+    ],
+    "transparent_background": true
+  }
+]

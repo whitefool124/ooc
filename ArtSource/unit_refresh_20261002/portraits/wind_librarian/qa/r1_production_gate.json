@@ -1,0 +1,19 @@
+{
+  "status": "READY_FOR_VISUAL_REVIEW",
+  "reasons": [],
+  "metrics": {
+    "canvas": [
+      128,
+      128
+    ],
+    "bounds": [
+      41,
+      9,
+      86,
+      126
+    ],
+    "hard_alpha": true,
+    "magenta_pixels": 0
+  },
+  "human_identity_style_and_proportion_review_required": true
+}

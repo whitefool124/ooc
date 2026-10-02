@@ -1,0 +1,11 @@
+{
+  "status": "REJECT_GENERATION_INPUTS",
+  "reasons": [
+    "MIXED_REFERENCE_LATTICE_REQUIRES_SEPARATE_REVIEW",
+    "NATIVE_ALPHA_REQUIRED",
+    "REFERENCE_CALIBRATION_MISSING"
+  ],
+  "reference_checks": [],
+  "delivery_guaranteed": false,
+  "next_step": "Independent built-in image_gen only; then decode and candidate gate plus visual review."
+}

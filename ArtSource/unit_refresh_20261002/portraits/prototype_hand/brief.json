@@ -1,0 +1,27 @@
+{
+  "asset_id": "prototype_hand_display_portrait_128",
+  "content_id": "prototype_hand",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Human young male workshop prototype worker, practical ivory/brown work clothes and tool-filled apron pockets, portable work-tool in hand. His prototype devices and wood crate are separate map objects and should NOT be drawn on floor in this portrait.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\现有生产记录\\OCC_AcademyStage1_ArtProduction_20260921\\B02_enemy_units\\assets\\prototype_hand_r2.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\prototype_hand\\identity_reference_6x.png",
+      "sha256": "4e38ced764ae903a90e98aebcabb077993416553469800cd308081076dd99ce0"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

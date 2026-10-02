@@ -1,0 +1,15 @@
+{
+  "unit": "shieldguard",
+  "status": "QA_PENDING",
+  "rounds": 2,
+  "selected_round": 1,
+  "subject_size": [
+    23,
+    54
+  ],
+  "confidence": 6.7115495246340595,
+  "native_ppu": 32,
+  "foot_contact_y": 62,
+  "asset": "outputs/battle_reset_20261001/shieldguard/asset/shieldguard_battle_static_32x64_v1.png",
+  "static_key_pose_only": true
+}

@@ -2125,10 +2125,9 @@ namespace OCC.Combat.Presentation
             GameObject heroObject = Create("角色像素像", portrait.transform);
             RectTransform heroRect = heroObject.AddComponent<RectTransform>();
             heroRect.anchorMin = heroRect.anchorMax = heroRect.pivot = new Vector2(.5f, .5f);
-            heroRect.anchoredPosition = new Vector2(0, -4); heroRect.sizeDelta = new Vector2(192, 192);
-            Image hero = heroObject.AddComponent<Image>(); hero.sprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath("hero"));
+            heroRect.anchoredPosition = new Vector2(0, -4); heroRect.sizeDelta = new Vector2(256, 256);
+            Image hero = heroObject.AddComponent<Image>(); hero.sprite = Resources.Load<Sprite>(FormalArtRegistry.DisplayPortraitPath("hero"));
             hero.preserveAspect = true; hero.raycastTarget = false;
-            Label("角色称谓", "学院学员", portrait.transform, new Vector2(20, -210), new Vector2(330, 32), 20, text, TextAnchor.MiddleCenter);
 
             MetricChip(parent, 24, -356, "生命", dto.CurrentHealth + "/" + UnitState.HeroBaseHealth, FormalUiTheme.Health,
                 FormalArtRegistry.ResourceMetricPath("health"), 190);

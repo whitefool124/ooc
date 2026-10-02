@@ -1,0 +1,20 @@
+{
+  "unit_id": "hero",
+  "asset_id": "hero_display_portrait_128",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "logical_cells": null,
+  "source_channel": "codex_builtin_imagegen",
+  "view": "front_or_three_quarter",
+  "body_height_target": [
+    100,
+    116
+  ],
+  "palette_max": 40,
+  "battle_use_forbidden": true,
+  "user_requirement": "128px canvas; independent display portrait for every unit",
+  "maximum_sources": 3
+}

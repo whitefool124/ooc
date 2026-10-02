@@ -1,0 +1,60 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "shieldguard_display_portrait_128",
+  "role": "unit_display_portrait_128",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent display portrait, official inferred-grid decode; output-only user-authorized 128px role extension",
+    "source_path": "outputs/unit_portraits_20260930/shieldguard/raw/r1_source.png",
+    "source_sha256": "64a6e5b4b3145f159cedf0bd73eaa312a56323fdc24adb92031e929211e85036"
+  },
+  "delivery": {
+    "output_path": "outputs/unit_portraits_20260930/shieldguard/asset/shieldguard_display_portrait_128.png",
+    "output_sha256": "15cce3606f0bec012b4c2f7a1489ce45546b6f35b660e694171d65b37ba4f3d0",
+    "native_output_path": "outputs/unit_portraits_20260930/shieldguard/asset/shieldguard_display_portrait_128.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 40,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "UI portrait canvas, not world metre scale; never used as a battle sprite."
+  },
+  "application": {
+    "runtime_draw_rect": "128x128 display portrait in object archive; offline preview only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "outputs/unit_portraits_20260930/shieldguard/qa/1x.png",
+    "four_x": "outputs/unit_portraits_20260930/shieldguard/qa/4x.png",
+    "six_x": "outputs/unit_portraits_20260930/shieldguard/qa/6x.png",
+    "grayscale": "outputs/unit_portraits_20260930/shieldguard/qa/grayscale.png",
+    "checker": "outputs/unit_portraits_20260930/shieldguard/qa/checker.png",
+    "application_contact": "outputs/unit_portraits_20260930/shieldguard/application/archive_slot_1x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": ""
+  },
+  "unity_import": null
+}

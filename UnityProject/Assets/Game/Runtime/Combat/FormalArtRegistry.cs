@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,23 +42,40 @@ namespace OCC.Combat
         public static readonly IReadOnlyList<FormalArtEntry> Units = new[]
         {
             new FormalArtEntry("unit.hero", "hero", "Art/FormalUnits64/hero"),
-            new FormalArtEntry("unit.shieldguard", "shieldguard", "Art/FormalUnits64/shieldguard"),
+            new FormalArtEntry("unit.shieldguard", "shieldguard", "Art/UnitStatic32x64/shieldguard"),
             new FormalArtEntry("unit.pyromancer", "pyromancer", "Art/FormalUnits64/pyromancer"),
-            new FormalArtEntry("unit.raider", "raider", "Art/FormalUnits64/raider"),
-            new FormalArtEntry("unit.elite_vanguard", "elite_vanguard", "Art/FormalUnits64/elite"),
+            new FormalArtEntry("unit.raider", "raider", "Art/UnitStatic32x64/raider"),
+            new FormalArtEntry("unit.elite_vanguard", "elite_vanguard", "Art/UnitStatic32x64/elite_vanguard"),
             new FormalArtEntry("unit.core_overseer", "core_overseer", "Art/FormalUnits64/core_overseer"),
             new FormalArtEntry("unit.sigil_mauler", "sigil_mauler", "Art/FormalUnits64/sigil_mauler"),
             new FormalArtEntry("unit.barrier_mender", "barrier_mender", "Art/FormalUnits64/barrier_mender"),
             new FormalArtEntry("unit.tether_hound", "tether_hound", "Art/FormalUnits64/tether_hound"),
-            new FormalArtEntry("unit.stone_snare", "stone_snare", "Art/FormalUnits64/stone_snare"),
+            new FormalArtEntry("unit.stone_snare", "stone_snare", "Art/UnitStatic32x64/stone_snare"),
             new FormalArtEntry("unit.lantern_revealer", "lantern_revealer", "Art/FormalUnits64/lantern_revealer"),
-            new FormalArtEntry("unit.rune_arbalist", "rune_arbalist", "Art/FormalUnits64/rune_arbalist"),
+            new FormalArtEntry("unit.rune_arbalist", "rune_arbalist", "Art/UnitStatic32x64/rune_arbalist"),
             // 新单位正式美术尚未入库，先复用最接近的既有剪影作为占位资源；正式图入库后再替换。
             new FormalArtEntry("unit.elder_tracker_hound", "elder_tracker_hound", "Art/FormalUnits64/tether_hound"),
             new FormalArtEntry("unit.signal_keeper", "signal_keeper", "Art/FormalUnits64/lantern_revealer"),
             new FormalArtEntry("unit.wind_librarian", "wind_librarian", "Art/FormalUnits64/pyromancer"),
             new FormalArtEntry("unit.legacy_storekeeper", "legacy_storekeeper", "Art/FormalUnits64/barrier_mender"),
             new FormalArtEntry("unit.prototype_hand", "prototype_hand", "Art/FormalUnits64/stone_snare")
+        };
+
+        public static readonly IReadOnlyList<FormalArtEntry> DisplayPortraits = new[]
+        {
+            new FormalArtEntry("portrait.hero", "hero", "Art/UnitDisplayPortraits128/hero"),
+            new FormalArtEntry("portrait.tether_hound", "tether_hound", "Art/UnitDisplayPortraits128/tether_hound"),
+            new FormalArtEntry("portrait.shieldguard", "shieldguard", "Art/UnitDisplayPortraits128/shieldguard"),
+            new FormalArtEntry("portrait.raider", "raider", "Art/UnitDisplayPortraits128/raider"),
+            new FormalArtEntry("portrait.elite_vanguard", "elite_vanguard", "Art/UnitDisplayPortraits128/elite_vanguard"),
+            new FormalArtEntry("portrait.stone_snare", "stone_snare", "Art/UnitDisplayPortraits128/stone_snare"),
+            new FormalArtEntry("portrait.rune_arbalist", "rune_arbalist", "Art/UnitDisplayPortraits128/rune_arbalist"),
+            new FormalArtEntry("portrait.core_overseer", "core_overseer", "Art/UnitDisplayPortraits128/core_overseer"),
+            new FormalArtEntry("portrait.elder_tracker_hound", "elder_tracker_hound", "Art/UnitDisplayPortraits128/elder_tracker_hound"),
+            new FormalArtEntry("portrait.wind_librarian", "wind_librarian", "Art/UnitDisplayPortraits128/wind_librarian"),
+            new FormalArtEntry("portrait.prototype_hand", "prototype_hand", "Art/UnitDisplayPortraits128/prototype_hand"),
+            new FormalArtEntry("portrait.legacy_storekeeper", "legacy_storekeeper", "Art/UnitDisplayPortraits128/legacy_storekeeper"),
+            new FormalArtEntry("portrait.signal_keeper", "signal_keeper", "Art/UnitDisplayPortraits128/signal_keeper")
         };
 
         public static readonly IReadOnlyList<FormalArtEntry> Commands = new[]
@@ -428,7 +445,7 @@ namespace OCC.Combat
             new FormalArtEntry("vfx.fire_smoke", "fire_smoke", "Art/FormalVfx32/fire_smoke")
         };
 
-        public static readonly IReadOnlyList<FormalArtEntry> All = Units
+        public static readonly IReadOnlyList<FormalArtEntry> All = Units.Concat(DisplayPortraits)
             .Concat(Commands).Concat(Feedback).Concat(Intents).Concat(Statuses).Concat(Environments)
             .Concat(NodeTypes).Concat(MapNodeTypeIcons).Concat(Navigation).Concat(Semantics).Concat(Elements).Concat(ResourceMetrics).Concat(EquipmentSlots).Concat(MapStates)
             .Concat(MapNodeFrames).Concat(MapNodeMarkers).Concat(LargeMapNodeMarkers).Concat(MapRegions).Concat(MapDecor)
@@ -441,6 +458,8 @@ namespace OCC.Combat
             if (entry == null) throw new KeyNotFoundException("Missing formal art mapping for runtime id: " + runtimeId);
             return entry;
         }
+
+        public static string DisplayPortraitPath(string runtimeId) => DisplayPortraits.FirstOrDefault(entry => entry.RuntimeId == runtimeId)?.ResourcePath;
 
         public static string UnitPath(string runtimeId) => Required(Units, runtimeId).ResourcePath;
         public static string CommandPath(string runtimeId) => Required(Commands, runtimeId).ResourcePath;

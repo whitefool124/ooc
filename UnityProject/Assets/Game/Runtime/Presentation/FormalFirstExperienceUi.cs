@@ -68,6 +68,8 @@ namespace OCC.Combat.Presentation
                 case FirstExperiencePrototypeController.FlowStage.Configuration: BuildConfiguration(); break;
                 case FirstExperiencePrototypeController.FlowStage.AcademyIntro: BuildAcademyIntro(); break;
                 case FirstExperiencePrototypeController.FlowStage.RunCreation: BuildRunCreation(); break;
+                case FirstExperiencePrototypeController.FlowStage.TutorialChoice: BuildTutorialChoice(); break;
+                case FirstExperiencePrototypeController.FlowStage.TutorialGuide: BuildTutorialGuide(); break;
                 default: BuildHandoff(); break;
             }
             LinkNavigation();
@@ -82,7 +84,7 @@ namespace OCC.Combat.Presentation
 
         private string PageSignature()
         {
-            return flow.CurrentStage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
+            return flow.CurrentStage + "|" + flow.TutorialPage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
                 flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
                 flow.IsConfirmingDisplay + "|" +
                 flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
@@ -255,10 +257,10 @@ namespace OCC.Combat.Presentation
 
             GameObject portrait = FormalUiKit.AnchoredPanel("角色立绘", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1160, -230), new Vector2(680, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .96f));
             // The archive page uses the dedicated portrait candidate rather than the
-            // tiny combat unit sprite, so facial features remain readable at 320px.
-            Sprite heroSprite = Resources.Load<Sprite>("Art/FormalUICharacterPortraits/victor_portrait");
+            // tiny combat unit sprite, so facial features remain readable at a 3x integer display scale.
+            Sprite heroSprite = Resources.Load<Sprite>(FormalArtRegistry.DisplayPortraitPath("hero"));
             GameObject portraitObject = FormalUiKit.Create("维克多像素立绘", portrait.transform);
-            RectTransform portraitRect = portraitObject.AddComponent<RectTransform>(); portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(.5f, .5f); portraitRect.pivot = new Vector2(.5f, .5f); portraitRect.anchoredPosition = new Vector2(0, 24); portraitRect.sizeDelta = new Vector2(320, 320);
+            RectTransform portraitRect = portraitObject.AddComponent<RectTransform>(); portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(.5f, .5f); portraitRect.pivot = new Vector2(.5f, .5f); portraitRect.anchoredPosition = new Vector2(0, 24); portraitRect.sizeDelta = new Vector2(384, 384);
             Image portraitImage = portraitObject.AddComponent<Image>(); portraitImage.sprite = heroSprite; portraitImage.preserveAspect = true; portraitImage.raycastTarget = false;
             Label("代号", "档案代号：灰签", portrait.transform, new Vector2(40, -422), new Vector2(600, 40), 24, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
 
@@ -301,6 +303,37 @@ namespace OCC.Combat.Presentation
                 new Vector2(60, -290), new Vector2(1160, 122), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
             ArchiveUiStyle.ScrollButton(AddButton("进入首次地图", "进入学院地图", page.transform, new Vector2(710, -790), new Vector2(500, 88), flow.EnterAcademy, FormalUiTheme.Cyan),
                 () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
+        }
+
+        private void BuildTutorialChoice()
+        {
+            GameObject card = CenterPanel(new Vector2(1160, 580));
+            Label("教程标题", "需要操作教程吗？", card.transform, new Vector2(60, -50), new Vector2(1040, 80), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleCenter);
+            Label("教程说明", "初次来到学院？先了解地图，再在首战中跟随高亮练习移动与施法。\n\n选择会保存在当前档案中，也可随时跳过后续教学。无需教程仍可体验学院入门关卡。", card.transform,
+                new Vector2(80, -180), new Vector2(1000, 190), 28, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            AddButton("开启教程", "开启教程", card.transform, new Vector2(640, -430), new Vector2(430, 90), () => flow.ChooseTutorial(true), FormalUiTheme.Cyan);
+            AddButton("不需要教程", "不需要教程", card.transform, new Vector2(80, -430), new Vector2(430, 90), () => flow.ChooseTutorial(false));
+        }
+
+        private void BuildTutorialGuide()
+        {
+            string[] titles = { "从学院地图出发", "先看敌人的公开意图", "移动也需要行动点", "施法前检查结果预览", "主动结束回合与保存" };
+            string[] text = {
+                "学院地图连接着战斗、事件、工坊、医务室与商店。\n\n先阅读出发节点，再选择已开放的战斗节点，查看遭遇说明后进入战斗。战后完成奖励选择，才能继续探索。",
+                "在战场上选择敌人，查看右侧的公开意图。\n\n留意它准备攻击的位置、路径与范围，再决定站位。公开意图描述敌人的一个完整回合；尽量离开危险区域或提前处理威胁。",
+                "获得操作权后，选择移动，查看可达格与路径。\n\n确认落点之前先检查行动点费用；地形可能改变路径成本。资源允许时可以连续行动，取消预览可以重新选择。",
+                "选择底部术式，再选择合法目标或位置。\n\n确认前检查效果预览、行动点、魔力与冷却。右侧术式说明和战斗百科可以帮助你理解术式；取消预览后可换一个方案。",
+                "行动完成后，用结束回合推进战斗，留意行动条与敌人意图。\n\n地图选择、战果和奖励等完成操作会保存。退出后使用继续档案返回；战斗失败时按结算界面的重试入口继续。"
+            };
+            int index = flow.TutorialPage;
+            GameObject card = CenterPanel(new Vector2(1380, 790));
+            Label("教程进度", "入门操作教程　" + (index + 1) + " / 5", card.transform, new Vector2(70, -38), new Vector2(1240, 48), 24, ArchiveUiStyle.Brass, TextAnchor.MiddleLeft);
+            Label("教程标题", titles[index], card.transform, new Vector2(70, -110), new Vector2(1240, 88), 44, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            FormalUiKit.Line(card.transform, new Vector2(70, -220), new Vector2(1240, 2), ArchiveUiStyle.Rule, "教程分隔");
+            Label("教程内容", text[index], card.transform, new Vector2(80, -270), new Vector2(1220, 300), 32, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            AddButton("教程下一页", index == 4 ? "开始探索" : "下一页", card.transform, new Vector2(1000, -650), new Vector2(300, 86), flow.AdvanceTutorial, FormalUiTheme.Cyan);
+            if (index > 0) AddButton("教程上一页", "上一页", card.transform, new Vector2(80, -650), new Vector2(260, 86), flow.PreviousTutorialPage);
+            AddButton("结束教程", "结束教程", card.transform, new Vector2(380, -650), new Vector2(260, 86), flow.FinishTutorial);
         }
 
         private void BuildRunCreation()

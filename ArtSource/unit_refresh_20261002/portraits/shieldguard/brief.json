@@ -1,0 +1,27 @@
+{
+  "asset_id": "shieldguard_display_portrait_128",
+  "content_id": "shieldguard",
+  "role": "unit_display_portrait_128",
+  "canvas": [
+    128,
+    128
+  ],
+  "native_ppu": 32,
+  "logical_cells": null,
+  "identity": "Academy student wearing practical copper-brown/ivory training clothes, holding a compact training shield and short shield-strike tool. Keep the reference shield and face identity; a student not an armored knight.",
+  "source_strategy": "codex_builtin_imagegen",
+  "existing_asset_audit": "D:\\occart\\OCC_latest\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalUnits64\\shieldguard.png",
+  "source_cap": 3,
+  "battle_use_forbidden": true,
+  "authority": "User2026-09-30 + current academy enemy data/setting",
+  "references": [
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\shieldguard\\identity_reference_6x.png",
+      "sha256": "97499834f162abe08bebad9b20969121686e59846db8bb7117c2b53f85cbe17f"
+    },
+    {
+      "path": "D:\\occart\\OCC_ArtProduction_Handoff_20260922\\outputs\\unit_portraits_20260930\\hero\\qa\\6x.png",
+      "sha256": "261de67ba9057396866b657f63c28ea8a6b406b7e467582308e6202ee4458f63"
+    }
+  ]
+}

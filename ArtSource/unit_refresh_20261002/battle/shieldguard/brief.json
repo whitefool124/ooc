@@ -1,0 +1,42 @@
+{
+  "unit_id": "shieldguard",
+  "canonical_concept_key": "shieldguard_static_reset_key_pose",
+  "role": "tactical_unit_32x64",
+  "canvas": [
+    32,
+    64
+  ],
+  "height_range": [
+    46,
+    58
+  ],
+  "width_max": 30,
+  "native_ppu": 32,
+  "foot_anchor": [
+    16,
+    62
+  ],
+  "source_cap": 3,
+  "palette_max": 24,
+  "reference_calibration": {
+    "status": "PASS_REFERENCE_CALIBRATION",
+    "reasons": [],
+    "actual_subject": [
+      28,
+      52
+    ],
+    "known_native_subject": [
+      27,
+      51
+    ],
+    "expected_source_pitch": 24,
+    "actual_source_pitch": 24
+  },
+  "reference_canvas_only": [
+    64,
+    64
+  ],
+  "prior_dedicated_static_reset_sources_found": 0,
+  "user_request": "2026-10-01 battle appearances using approved colour direction",
+  "portrait_as_battle_sprite_forbidden": true
+}

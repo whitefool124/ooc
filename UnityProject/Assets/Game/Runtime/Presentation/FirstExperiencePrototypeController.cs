@@ -14,7 +14,8 @@ namespace OCC.Combat.Presentation
             Battle1Preview, Battle1, Battle1Result, Reward1, Events12,
             Battle2Preview, Battle2, Battle2Result, Reward2, Event3Workshop,
             Battle3Preview, Battle3, Battle3Result, Reward3, Medical,
-            ElitePreview, Elite, EliteResult, EliteReward, Shop, Complete, RunCreation
+            ElitePreview, Elite, EliteResult, EliteReward, Shop, Complete, RunCreation,
+            TutorialChoice, TutorialGuide
         }
 
         [Serializable]
@@ -30,6 +31,8 @@ namespace OCC.Combat.Presentation
             public int coins = 8;
             public string reward1 = "", reward2 = "", reward3 = "";
             public bool shopPurchase, fixedExperienceComplete;
+            public bool tutorialAsked, tutorialEnabled;
+            public int tutorialPage;
         }
 
         public void QuitToDesktop()
@@ -113,7 +116,7 @@ namespace OCC.Combat.Presentation
         public bool IsEncyclopediaOpen => combatBootstrap != null && combatBootstrap.IsEncyclopediaOpen;
         public void OpenEncyclopedia() => combatBootstrap?.OpenEncyclopedia();
 
-        public static bool IsRuntimeStage(FlowStage stage) => stage >= FlowStage.Map;
+        public static bool IsRuntimeStage(FlowStage stage) => stage >= FlowStage.Map && stage <= FlowStage.RunCreation;
 
         private void Awake()
         {
@@ -167,12 +170,18 @@ namespace OCC.Combat.Presentation
             openingPlayer.targetCamera = Camera.main != null ? Camera.main : FindAnyObjectByType<Camera>();
             openingPlayer.aspectRatio = VideoAspectRatio.FitInside;
             openingPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
+#if UNITY_WEBGL && !UNITY_EDITOR
+            openingPlayer.source = VideoSource.Url;
+            openingPlayer.url = Application.streamingAssetsPath + "/OccOpening45s_UnityWebm.webm";
+#else
             openingPlayer.source = VideoSource.VideoClip;
             openingPlayer.clip = Resources.Load<VideoClip>("Video/OccOpening45s_UnityWebm");
+#endif
             openingPlayer.prepareCompleted += OnOpeningPrepared;
             openingPlayer.loopPointReached += _ => FinishWorldOpening();
             openingPlayer.errorReceived += (_, message) => Debug.LogWarning("Opening video unavailable: " + message);
-            videoPrepared = openingPlayer.clip != null;
+            videoPrepared = openingPlayer.source == VideoSource.Url
+                ? !string.IsNullOrEmpty(openingPlayer.url) : openingPlayer.clip != null;
         }
 
         private void BuildTextures()
@@ -793,6 +802,49 @@ namespace OCC.Combat.Presentation
             handoffError = string.Empty;
             enabled = false;
         }
+        public bool CombatTutorialEnabled => data != null && data.tutorialAsked && data.tutorialEnabled;
+        public void DisableCombatTutorial()
+        {
+            if (data == null) return;
+            data.tutorialEnabled = false;
+            Save();
+        }
+        public int TutorialPage => data == null ? 0 : Mathf.Clamp(data.tutorialPage, 0, 4);
+        public void ChooseTutorial(bool enableTutorial)
+        {
+            if (data.stage != FlowStage.TutorialChoice) return;
+            data.tutorialAsked = true;
+            data.tutorialEnabled = enableTutorial;
+            data.tutorialPage = 0;
+            data.stage = enableTutorial ? FlowStage.TutorialGuide : FlowStage.Map;
+            Save();
+            if (!enableTutorial)
+            {
+                combatBootstrap?.SetFirstExperienceTutorialActive(false);
+                enabled = false;
+            }
+        }
+        public void AdvanceTutorial()
+        {
+            if (data.stage != FlowStage.TutorialGuide) return;
+            if (TutorialPage == 4) { FinishTutorial(); return; }
+            data.tutorialPage = TutorialPage + 1;
+            Save();
+        }
+        public void PreviousTutorialPage()
+        {
+            if (data.stage != FlowStage.TutorialGuide) return;
+            data.tutorialPage = Mathf.Max(0, TutorialPage - 1);
+            Save();
+        }
+        public void FinishTutorial()
+        {
+            if (data.stage != FlowStage.TutorialGuide) return;
+            data.stage = FlowStage.Map;
+            Save();
+            combatBootstrap?.SetFirstExperienceTutorialActive(false);
+            enabled = false;
+        }
         public void EnterAcademy() => EnterAcademyMap(false);
         public void GoBack()
         {
@@ -828,11 +880,17 @@ namespace OCC.Combat.Presentation
                 handoffError = "真实首次体验运行态未能创建或读取。当前槽位数据仍保留，请返回入口或重试。";
                 return;
             }
-            data.stage = FlowStage.Map;
+            // Preserve tutorial progress when resuming. Old saves are never retroactively prompted.
+            bool resumeTutorial = continueSave &&
+                (data.stage == FlowStage.TutorialChoice || data.stage == FlowStage.TutorialGuide);
+            if (!resumeTutorial)
+                data.stage = !continueSave && !data.tutorialAsked
+                    ? FlowStage.TutorialChoice : FlowStage.Map;
             pendingNewRunCreation = false;
             Save();
             handoffError = string.Empty;
-            enabled = false;
+            enabled = data.stage == FlowStage.TutorialChoice || data.stage == FlowStage.TutorialGuide;
+            combatBootstrap.SetFirstExperienceTutorialActive(enabled);
         }
 
         public void ResetPrototype()

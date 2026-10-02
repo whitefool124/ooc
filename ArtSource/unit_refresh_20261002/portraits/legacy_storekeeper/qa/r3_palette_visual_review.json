@@ -1,0 +1,13 @@
+{
+  "status": "REJECT_PALETTE_REVISION_GRID_AND_SIZE",
+  "selected_round": 3,
+  "subject_size": [
+    80,
+    170
+  ],
+  "lattice_confidence": 1.0752,
+  "confidence_min": 1.2,
+  "native_delivery": null,
+  "previous_v1_candidate_retained": true,
+  "note": "Smoky-plum colour concept is visible in source; unstable grid and oversize prevent128px delivery. Cumulative third independent source, no extra retry or manual resize."
+}

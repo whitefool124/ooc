@@ -1,0 +1,60 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "stone_snare_display_portrait_128",
+  "role": "unit_display_portrait_128",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent display portrait, official inferred-grid decode; output-only user-authorized 128px role extension",
+    "source_path": "outputs/unit_portraits_20260930/stone_snare/raw/r1_source.png",
+    "source_sha256": "79beee22973e0a54988685a4094a8a384ebd1a6343b7b931a459802f0ff99918"
+  },
+  "delivery": {
+    "output_path": "outputs/unit_portraits_20260930/stone_snare/asset/stone_snare_display_portrait_128.png",
+    "output_sha256": "614aae0911da0cb9e4591869fdeff4d60c9b75a46dedc0d4022d22e832168250",
+    "native_output_path": "outputs/unit_portraits_20260930/stone_snare/asset/stone_snare_display_portrait_128.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 40,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "UI portrait canvas, not world metre scale; never used as a battle sprite."
+  },
+  "application": {
+    "runtime_draw_rect": "128x128 display portrait in object archive; offline preview only",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "outputs/unit_portraits_20260930/stone_snare/qa/1x.png",
+    "four_x": "outputs/unit_portraits_20260930/stone_snare/qa/4x.png",
+    "six_x": "outputs/unit_portraits_20260930/stone_snare/qa/6x.png",
+    "grayscale": "outputs/unit_portraits_20260930/stone_snare/qa/grayscale.png",
+    "checker": "outputs/unit_portraits_20260930/stone_snare/qa/checker.png",
+    "application_contact": "outputs/unit_portraits_20260930/stone_snare/application/archive_slot_1x.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": ""
+  },
+  "unity_import": null
+}

@@ -1,0 +1,15 @@
+{
+  "unit": "elite_vanguard",
+  "status": "QA_PENDING",
+  "rounds": 1,
+  "selected_round": 1,
+  "subject_size": [
+    22,
+    52
+  ],
+  "confidence": 7.1902,
+  "native_ppu": 32,
+  "foot_contact_y": 62,
+  "asset": "outputs/battle_reset_20261001/elite_vanguard/asset/elite_vanguard_battle_static_32x64_v1.png",
+  "static_key_pose_only": true
+}

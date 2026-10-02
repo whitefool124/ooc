@@ -179,6 +179,17 @@ namespace OCC.Combat.Presentation
             if (change.Area == UiPresentationArea.Combat || change.Area == UiPresentationArea.Flow) refreshDirty = true;
         }
 
+        public RectTransform TutorialFocus(string id)
+        {
+            if (root == null) return null;
+            var shell = root.GetComponent<FormalCombatHudShellView>();
+            if (shell == null) return null;
+            if (id == "B1-03") return shell.ActionPointBadge;
+            if (id == "B1-05") return shell.Commands;
+            if (id == "B1-06") return timelineModule == null ? null : timelineModule.GetComponent<RectTransform>();
+            return shell.RightConsole;
+        }
+
         private void Update()
         {
             if (root == null || bootstrap == null) return;
