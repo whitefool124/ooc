@@ -8,9 +8,9 @@
 
 - 所有任务必须直接在主工作树 `E:/数据库/OCC_Codex` 中开发；Unity 工程的绝对路径为 `E:/数据库/OCC_Codex/UnityProject`。
 - 禁止为本项目创建或使用 Git 附加 worktree、Codex 临时 worktree 或其他仓库副本；开始任务前必须确认当前仓库根目录为 `E:/数据库/OCC_Codex`。
-- Unity CLI／Funplay 操作前必须确认目标工程为 `E:/数据库/OCC_Codex/UnityProject`；首次会刷新或修改 Editor 前回读 `Application.dataPath` 为 `E:/数据库/OCC_Codex/UnityProject/Assets`，同时检查活动场景与已加载场景的脏状态。路径不一致时停止操作并切换到主工作树，不得在错误副本中实现或验证。
+- Unity/Funplay 操作前必须确认 `Application.dataPath` 为 `E:/数据库/OCC_Codex/UnityProject/Assets`；路径不一致时停止操作并切换到主工作树，不得在错误副本中实现或验证。
 - Unity 工程位于 `UnityProject/`，默认场景是 `Assets/Scenes/CombatPrototype.unity`。
-- Unity 开发尽量优先使用 Unity CLI，包括工程与连接检查、Editor 编辑、导入编译、测试、Play Mode 和验证。先发现当前 Editor 实际暴露的命令，不猜命令名；Editor 操作显式指定主工程 `--project-path`，`unity command` 按技能要求携带调用标签。CLI 未覆盖或暂不可用的操作再使用 Funplay MCP／Editor API 补充；不得因工具偏好绕过拒绝或修改错误工程。改动脚本后必须确认导入编译完成并验证 Console，命令派发成功不等于验证通过。
+- 通过 Funplay MCP 检查或修改 Unity；改动脚本后必须重新编译并验证 Console。
 - 不要直接修改 `Library/`、`Logs/`、临时缓存或生成的工程文件。
 - 进入 Play Mode 默认已获项目级授权，可按验收需要直接进入并退出；保存场景或替换正式资产仍需用户明确要求。
 
@@ -69,7 +69,6 @@
 ## 技能与工具维护
 
 - 文档、AGENTS.md 或技能维护只检查差异、元数据和引用，无需启动 Unity、重新编译或进入 Play Mode。
-- Unity CLI 任务先读取当前可用的 `unity:unity-cli` 技能及相关命令参考；以当前 CLI 帮助、命令发现与结果为准，不固化版本或猜测参数。缺少 CLI／Pipeline 时按任务需要处理，不为纯文档维护自动安装或升级。
 - Funplay 插件自带的通用工作流须结合本项目解释：Play Mode 默认已获项目级授权，保存场景和正式资产替换仍遵守上面的明确授权要求；通用移动端 UI 建议不改变 OCC 的 PC 像素布局和既有运行时 UI 架构。
 - 个人技能按实际任务触发；飞书业务仅加载对应领域。旧 README、归档与工具中的失效路径不构成活动规则，遇到相关引用时核实当前入口。
-- Unity CLI／Funplay 任务按需读取 [UnityProject/AGENTS.md](UnityProject/AGENTS.md) 及其中列出的相关技能；优先使用 CLI，只有实际使用 Funplay 时才加载其工作流。本仓库根目录启动的任务也使用该入口，避免遗漏 Unity 子目录下的技能。
+- Unity/Funplay 任务按需读取 [UnityProject/AGENTS.md](UnityProject/AGENTS.md) 及其中列出的项目技能；本仓库根目录启动的任务也使用该入口，避免遗漏 Unity 子目录下的技能。
