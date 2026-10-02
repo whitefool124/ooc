@@ -1,7 +1,7 @@
 {
   "name": "OCC.Combat.Presentation",
   "rootNamespace": "OCC.Combat.Presentation",
-  "references": ["OCC.Combat.Runtime", "Unity.InputSystem"],
+  "references": ["OCC.Combat.Runtime", "Unity.InputSystem", "Unity.RenderPipelines.Universal.Runtime"],
   "includePlatforms": [],
   "excludePlatforms": [],
   "allowUnsafeCode": false,

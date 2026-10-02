@@ -1,0 +1,135 @@
+<div id="occ-tech-vfx">
+  <div class="viz-row" aria-label="特效选择">
+    <button class="btn" type="button" data-effect="0">护幕受击</button>
+    <button class="btn" type="button" data-effect="1">护幕碎裂</button>
+    <button class="btn" type="button" data-effect="2">以太消解</button>
+    <button class="btn" type="button" data-effect="3">空间冲击</button>
+    <button class="btn" type="button" data-effect="4">像素折射</button>
+    <button class="btn" type="button" data-effect="5">移动光源</button>
+    <button class="btn btn-primary" type="button" data-effect="6">护盾光效</button>
+  </div>
+  <canvas width="320" height="180" role="img" aria-label="OCC角色与地面上的实时护盾折射、命中光照和移动光源演示"></canvas>
+  <div class="viz-row">
+    <button class="btn" type="button" data-replay>再播放一次</button>
+    <label class="form-check"><input class="form-check-input" type="checkbox" data-slow><span class="form-check-label">慢放</span></label>
+    <label class="form-check"><input class="form-check-input" type="checkbox" data-original><span class="form-check-label">查看原画面</span></label>
+    <span aria-live="polite" data-status>护盾光效 · 点击护盾可改变命中位置</span>
+  </div>
+  <label class="form-label" for="occ-vfx-phase">演出进度</label>
+  <input class="form-range" id="occ-vfx-phase" type="range" min="0" max="4800" value="0" step="10">
+</div>
+<style>
+#occ-tech-vfx canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;image-rendering:pixelated;margin:12px 0;touch-action:manipulation}
+</style>
+<script>
+(() => {
+const root=document.getElementById('occ-tech-vfx'),canvas=root.querySelector('canvas'),status=root.querySelector('[data-status]');
+const gl=canvas.getContext('webgl',{alpha:false,antialias:false,preserveDrawingBuffer:true});
+if(!gl){status.textContent='当前环境未启用WebGL，无法展示实时特效。';return;}
+const vs=`attribute vec2 a;varying vec2 uv;void main(){uv=a*.5+.5;gl_Position=vec4(a,0.,1.);}`;
+const fs=`precision highp float;
+varying vec2 uv;uniform sampler2D ground;uniform sampler2D unitTex;uniform float age,mode,original;uniform vec2 hit;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+vec4 unitAt(vec2 p){vec2 u=(p-vec2(144.,59.))/vec2(32.,64.);if(u.x<0.||u.y<0.||u.x>1.||u.y>1.)return vec4(0.);return texture2D(unitTex,u);}
+vec3 scene(vec2 p,float dissolve){vec3 c=texture2D(ground,clamp(p/vec2(320.,180.),vec2(0.),vec2(1.))).rgb;vec4 s=unitAt(p);float noise=hash(floor(p/2.));float threshold=(p.y-59.)/64.*.65+noise*.35;float keep=step(dissolve,threshold);float edge=step(threshold,dissolve+.07)*keep*step(.01,dissolve);s.rgb=mix(s.rgb,vec3(.78,1.,.95),edge);return mix(c,s.rgb,s.a*keep);}
+// Procedural tile bevel normals and sprite-alpha rim normals for this preview.
+// These are not authored production normal maps.
+vec3 normalAt(vec2 p){
+vec2 tile=mod(p,32.);vec2 bevel=vec2(step(29.,tile.x)-step(tile.x,2.),step(29.,tile.y)-step(tile.y,2.));
+vec2 edge=vec2(unitAt(p+vec2(-1.,0.)).a-unitAt(p+vec2(1.,0.)).a,unitAt(p+vec2(0.,-1.)).a-unitAt(p+vec2(0.,1.)).a);
+return normalize(vec3(mix(bevel*.8,edge*1.8,unitAt(p).a),1.));}
+float visibility(vec2 p,vec2 lightPos){
+float blocked=0.;float isBody=unitAt(p).a;
+for(int i=1;i<=12;i++){vec2 q=mix(p,lightPos,float(i)/13.);blocked=max(blocked,unitAt(q).a);}
+return mix(1.-blocked*.8,1.,isBody);}
+vec3 lightAt(vec2 p,vec2 lightPos,vec3 tint,float strength,float radius){
+vec2 delta=lightPos-p;float fall=max(0.,1.-length(delta)/radius);fall=fall*fall;
+float facing=.35+.65*max(0.,dot(normalAt(p),normalize(vec3(delta,25.))));
+float amount=floor(fall*facing*strength*7.)/7.;
+return tint*amount*visibility(p,lightPos);}
+void main(){
+vec2 p=floor(vec2(uv.x,1.-uv.y)*vec2(320.,180.))+.5;
+float t=max(age,0.);float active=step(0.,age)*step(age,2.4);float dissolve=mode==2.?smoothstep(.2,1.5,t)*active:0.;
+vec3 c=scene(p,dissolve);
+if(original>.5){gl_FragColor=vec4(scene(p,0.),1.);return;}
+vec3 cyan=vec3(.24,.85,.90),white=vec3(.87,1.,.93),dark=vec3(.10,.36,.48);
+vec2 d=(p-vec2(160.,94.))/vec2(27.,38.);float r=length(d);
+float ring=step(.94,r)*step(r,1.04);float inside=step(r,.94);
+if(mode<1.5){
+float dissolveShell=mode==1.?smoothstep(.15,.8,t)*active:0.;float cellNoise=hash(floor(p/3.));float shellKeep=step(dissolveShell,cellNoise);
+float grid=max(1.-step(1.,mod(p.x+floor(p.y/5.)*3.,8.)),1.-step(1.,mod(p.y,5.)));
+float arc=step(.92,r)*step(r,.94)+step(1.04,r)*step(r,1.07);
+c=mix(c,dark,.13*inside*shellKeep);c=mix(c,cyan,.17*grid*inside*shellKeep);c=mix(c,cyan,ring*.8*shellKeep);c=mix(c,white,arc*.5*shellKeep);
+float waveR=t*67.;float dist=length(p-hit);float wave=step(abs(dist-waveR),1.3)*inside*max(0.,1.-t*1.65)*active;
+c=mix(c,white,wave);float flare=step(dist,4.-t*8.)*active;c=mix(c,white,flare);
+if(mode==1.&&active>.5){for(int i=0;i<20;i++){float f=float(i),angle=f*6.283185/20.;vec2 start=vec2(160.,94.)+vec2(cos(angle)*27.,sin(angle)*38.);float q=max(t-.18,0.);vec2 pos=floor(start+vec2(cos(angle),sin(angle))*q*(18.+hash(vec2(f,1.))*22.)+vec2(0.,q*q*16.));float a=step(max(abs(p.x-pos.x),abs(p.y-pos.y)),1.5)*step(.18,t)*step(t,1.25);c=mix(c,mix(cyan,white,step(.6,hash(vec2(f,4.)))),a);}}
+}
+if(mode==2.&&active>.5){for(int i=0;i<24;i++){float f=float(i);vec2 start=vec2(146.+hash(vec2(f,2.))*28.,64.+hash(vec2(f,3.))*56.);float delay=(1.-(start.y-59.)/64.)*.6;float q=max(t-delay-.2,0.);vec2 pos=floor(start+vec2((hash(vec2(f,5.))-.5)*28.,-24.)*q);float a=step(max(abs(p.x-pos.x),abs(p.y-pos.y)),.8)*step(.01,q)*step(q,.8);c=mix(c,cyan,a);}}
+if(mode==3.&&active>.5){float radius=t*85.,dist=length(p-vec2(160.,103.));float band=step(abs(dist-radius),5.)*max(0.,1.-t*.8);vec2 dir=normalize(p-vec2(160.,103.)+vec2(.001));vec2 offset=floor(dir*3.*band+.5);c=scene(p+offset,0.);float shock=step(abs(dist-radius),.8)*max(0.,1.-t*.8);c=mix(c,white,shock*.8);float echo=step(abs(dist-radius+7.),.6)*max(0.,1.-t);c=mix(c,cyan,echo*.45);}
+if(mode>=4.){
+float clock=age<0.?.65:t;
+vec2 movingLight=vec2(160.+sin(clock*1.35-.9)*67.,93.-cos(clock*1.35-.9)*24.);
+if(mode==5.){
+// A warm point light traverses the original scene, changing bevel and rim shading.
+vec3 energy=lightAt(p,movingLight,vec3(1.,.58,.23),2.3,100.);
+c=scene(p,0.)*.48+scene(p,0.)*energy*1.4+energy*.17;
+float orb=step(length(p-movingLight),2.8);c=mix(c,vec3(1.,.91,.61),orb);
+float halo=floor(max(0.,1.-length(p-movingLight)/13.)*5.)/5.;c+=vec3(1.,.42,.10)*halo*.38;
+}else{
+float pulse=age<0.?.25:exp(-t*2.1);
+float ripple=sin(length(p-hit)*.40-clock*11.)*pulse;
+vec2 offset=floor(d*(8.*(1.-min(r,1.))*inside)+normalize(p-hit+vec2(.01))*ripple*3.*inside+.5);
+vec2 samplePos=p+offset;
+c=scene(samplePos,0.);
+if(mode==6.){
+vec3 energy=lightAt(p,hit,cyan,1.+pulse*4.,88.);
+vec3 rimLight=lightAt(p,vec2(160.,120.),cyan,.6,64.);
+c=c*.62+c*(energy+rimLight)*1.4+(energy+rimLight)*.11;
+float contactRing=step(abs(length(p-hit)-t*52.),1.)*inside*max(0.,1.-t*.8);
+c=mix(c,white,contactRing*.9);
+float groundR=length((p-vec2(160.,127.))/vec2(29.,7.));
+float groundRing=step(abs(groundR-1.),.09);
+c+=cyan*groundRing*(.35+pulse*.4);
+}
+// Transparent refractive shell with a moving hard-edged specular highlight.
+float fresnel=pow(min(r,1.),5.)*inside;
+float sweep=step(abs(d.x*.75+d.y*.35-sin(clock*1.5)*.6),.045)*inside;
+float waveLine=step(abs(sin(r*20.-clock*4.)),.06)*inside;
+c=mix(c,cyan,.10*inside+.18*fresnel);
+c=mix(c,cyan,ring*.8);c=mix(c,white,sweep*.65);
+c+=cyan*waveLine*.09;
+float outsideGlow=floor(max(0.,1.-abs(r-1.)/.28)*5.)/5.;
+if(mode==6.)c+=cyan*outsideGlow*(.16+pulse*.18);
+float contact=step(length(p-hit),2.+pulse*3.)*(.3+pulse*.7);
+if(mode==6.)c=mix(c,white,contact);
+}
+c=clamp(c,0.,1.);
+}
+gl_FragColor=vec4(c,1.);}`;
+function shader(type,text){let s=gl.createShader(type);gl.shaderSource(s,text);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
+try{
+const prog=gl.createProgram();gl.attachShader(prog,shader(gl.VERTEX_SHADER,vs));gl.attachShader(prog,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(prog));gl.useProgram(prog);
+const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);let a=gl.getAttribLocation(prog,'a');gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+let uniforms={};for(const name of ['age','mode','original','hit'])uniforms[name]=gl.getUniformLocation(prog,name);
+function texture(image,n,name){gl.activeTexture(gl.TEXTURE0+n);let tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);gl.uniform1i(gl.getUniformLocation(prog,name),n);}
+function image(src){return new Promise((resolve,reject)=>{let im=new Image();im.onload=()=>resolve(im);im.onerror=reject;im.src=src;});}
+const assets=__OCC_ASSETS__;
+Promise.all([image(assets.floor),image(assets.hero),image(assets.enemy)]).then(([floor,hero,enemy])=>{
+const bg=document.createElement('canvas');bg.width=320;bg.height=180;const ctx=bg.getContext('2d');ctx.imageSmoothingEnabled=false;
+for(let y=0;y<6;y++)for(let x=0;x<10;x++)ctx.drawImage(floor,x*32,y*32);
+ctx.fillStyle='rgba(0,0,0,.18)';ctx.fillRect(0,0,320,180);
+ctx.drawImage(enemy,72,53);ctx.drawImage(enemy,228,72);
+texture(bg,0,'ground');texture(hero,1,'unitTex');
+let current=6,start=-1,raf=0,hit=[181,86],lastAge=-1,manualAge=null;
+const names=['护幕受击','护幕碎裂','以太消解','空间冲击','像素折射','移动光源','护盾光效'];
+function draw(now){let elapsed=manualAge!==null?manualAge:(start<0?-1:(now-start)/1000/(root.querySelector('[data-slow]').checked?3:1));lastAge=elapsed;gl.uniform1f(uniforms.age,elapsed);gl.uniform1f(uniforms.mode,current);gl.uniform1f(uniforms.original,root.querySelector('[data-original]').checked?1:0);gl.uniform2fv(uniforms.hit,hit);gl.drawArrays(gl.TRIANGLES,0,6);root.dataset.mode=String(current);root.dataset.age=String(elapsed);if(manualAge===null)root.querySelector('#occ-vfx-phase').value=String(Math.max(0,elapsed)*1000);if(start>=0&&elapsed<(current>=4?4.8:2.4))raf=requestAnimationFrame(draw);else{start=-1;raf=0;}}
+function play(){cancelAnimationFrame(raf);manualAge=null;start=performance.now();draw(start);status.textContent=names[current]+' · '+(current===0||current===6?'点击护盾可改变命中位置':'实时演示');}
+for(const b of root.querySelectorAll('[data-effect]'))b.addEventListener('click',()=>{current=Number(b.dataset.effect);for(const peer of root.querySelectorAll('[data-effect]')){peer.classList.toggle('btn-primary',peer===b);peer.setAttribute('aria-pressed',String(peer===b));}play();});
+root.querySelector('[data-replay]').addEventListener('click',play);root.querySelector('[data-slow]').addEventListener('change',play);root.querySelector('[data-original]').addEventListener('change',()=>{if(!raf)draw(performance.now());});
+root.querySelector('#occ-vfx-phase').addEventListener('input',e=>{cancelAnimationFrame(raf);raf=0;start=-1;manualAge=Number(e.target.value)/1000;draw(performance.now());status.textContent=names[current]+' · '+Math.round(manualAge*1000)+'ms';});
+canvas.addEventListener('pointerdown',e=>{if(current===0||current===6){const r=canvas.getBoundingClientRect();const q=[(e.clientX-r.left)/r.width*320,(e.clientY-r.top)/r.height*180];const d=[(q[0]-160)/27,(q[1]-94)/38];const len=Math.hypot(...d);hit=len>1?[160+d[0]/len*26,94+d[1]/len*37]:q;play();}});
+draw(performance.now());root.dataset.ready='true';
+}).catch(e=>{status.textContent='素材加载失败：'+e.message;root.dataset.error=String(e);});
+}catch(e){status.textContent='着色器编译失败：'+e.message;root.dataset.error=String(e);}
+})();
+</script>

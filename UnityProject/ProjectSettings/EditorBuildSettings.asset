@@ -8,5 +8,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CombatPrototype.unity
     guid: bc2f0e8d1f168ca42bd4973f1e56605c
+  - enabled: 1
+    path: Assets/Scenes/PixelVfxShowcase.unity
+    guid: 9b4160ea3ed70294a8c4141fb490e815
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

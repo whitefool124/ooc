@@ -1,0 +1,2 @@
+System.InvalidOperationException: Player loop did not reach the target phase.
+  at OCC.Combat.EditorTools.PixelVfxShowcaseVerification.Tick () [0x00059] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\PixelVfxShowcaseVerification.cs:61 
