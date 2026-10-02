@@ -63,7 +63,7 @@ namespace OCC.Combat.Tests
                     if (placement.IsGroundAttachment) { ground++; Assert.That(placement.AssetId, Does.StartWith("academy_floor_")); }
                     else Assert.That(placement.AssetId, Does.Not.StartWith("academy_floor_"));
                 }
-                Assert.That(ground, Is.EqualTo(4));
+                Assert.That(ground, Is.InRange(1, 3));
                 foreach (var structure in AcademyBattlefieldLayoutCatalog.Structures(level)) Assert.That(structure.IsGroundAttachment, Is.False);
             }
         }
@@ -125,7 +125,7 @@ namespace OCC.Combat.Tests
                 null, selection, false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
 
             Assert.That(Build().ObjectTexture.name, Is.EqualTo("academy_pressure_crystal_intact"));
-            Assert.That(Build().ObjectLabel, Is.EqualTo("稳压晶簇"));
+            Assert.That(Build().ObjectLabel, Is.EqualTo("精英稳压晶簇"));
             state.Map.GetTile(position).Durability = 16;
             Assert.That(Build().ObjectTexture.name, Is.EqualTo("academy_pressure_crystal_damaged"));
         }

@@ -23,8 +23,8 @@ namespace OCC.Combat.Tests
 
             Assert.That(cell.Unit, Is.SameAs(hero));
             Assert.That(cell.UnitTexture, Is.Not.Null);
-            Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_ground_macro_court_3x3"));
-            Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(1f / 3f, 1f / 3f, 1f / 3f, 1f / 3f)));
+            Assert.That(cell.FloorTexture.name, Is.EqualTo("academy_block_court_a"));
+            Assert.That(cell.FloorUv, Is.EqualTo(new UnityEngine.Rect(0f, 0f, 1f, 1f)));
             Assert.That(cell.TerrainBoundaryTexture, Is.Null);
             Assert.That(cell.HoverText, Does.Contain("生命当前 50　上限 50"));
         }
@@ -102,10 +102,10 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FloorKey_UsesContinuousAcademyGroundMacroAndUvSlices()
+        public void FloorKey_UsesIndependentNativeTileAndFullUv()
         {
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(null, 9, 2, 0), Is.EqualTo("academy_ground_macro_court_3x3"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorUv(5, 4), Is.EqualTo(new UnityEngine.Rect(2f / 3f, 1f / 3f, 1f / 3f, 1f / 3f)));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(null, 9, 2, 0), Is.EqualTo("academy_block_court_a"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorUv(5, 4), Is.EqualTo(new UnityEngine.Rect(0f, 0f, 1f, 1f)));
         }
 
         [Test]
@@ -153,25 +153,25 @@ namespace OCC.Combat.Tests
             FirstRegionLevelDefinition rail = FirstRegionLevelCatalog.For("rail_patrol");
             FirstRegionLevelDefinition depot = FirstRegionLevelCatalog.For("depot_wreck");
 
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_ground_macro_earth"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 5, 4), Does.StartWith("academy_ground_macro_road"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 5, 0), Does.StartWith("academy_ground_macro_road"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_block_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 5, 4), Does.StartWith("academy_block_road"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_block_ruin"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 5, 0), Does.StartWith("academy_block_road"));
             Assert.That(CombatBattlefieldCellPresenter.FloorRotationDegrees(depot, 5, 0), Is.Zero);
         }
 
         [Test]
-        public void GroundMacros_KeepMaterialFamiliesAndNeverRotate()
+        public void IndependentGroundTiles_KeepMaterialFamiliesAndNeverRotate()
         {
             FirstRegionLevelDefinition rail = FirstRegionLevelCatalog.For("rail_patrol");
             FirstRegionLevelDefinition relay = FirstRegionLevelCatalog.For("relay_raid");
             FirstRegionLevelDefinition depot = FirstRegionLevelCatalog.For("depot_wreck");
             FirstRegionLevelDefinition elite = FirstRegionLevelCatalog.For("elite_foundry");
 
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_ground_macro_earth"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(relay, 9, 11, 0), Does.StartWith("academy_ground_macro_earth"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
-            Assert.That(CombatBattlefieldCellPresenter.FloorKey(elite, 9, 0, 0), Does.StartWith("academy_ground_macro_ruin"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(rail, 9, 0, 0), Does.StartWith("academy_block_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(relay, 9, 11, 0), Does.StartWith("academy_block_earth"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(depot, 9, 0, 0), Does.StartWith("academy_block_ruin"));
+            Assert.That(CombatBattlefieldCellPresenter.FloorKey(elite, 9, 0, 0), Does.StartWith("academy_block_ruin"));
             Assert.That(CombatBattlefieldCellPresenter.FloorRotationDegrees(elite, 0, 0), Is.Zero);
         }
 
@@ -242,7 +242,7 @@ namespace OCC.Combat.Tests
             int terrainCount = weak.Terrain.Count;
             AcademyStructurePlacement[] modules = AcademyBattlefieldLayoutCatalog.VisualModules(weak.Id);
 
-            Assert.That(modules.Count(value => value.AssetId.StartsWith("academy_floor_")), Is.EqualTo(4));
+            Assert.That(modules.Count(value => value.AssetId.StartsWith("academy_floor_")), Is.InRange(1, 3));
             Assert.That(modules.All(value => value.QuarterTurns == 0), Is.True);
             Assert.That(weak.Terrain.Count, Is.EqualTo(terrainCount));
             Assert.That(AcademyBattlefieldLayoutCatalog.Structures("signal_hub")
@@ -250,15 +250,36 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
+        public void VisualModules_StayInsideCurrentMapsAndKeepGameplayCellsReadable()
+        {
+            var levels = FirstRegionLevelCatalog.All.Concat(FirstRegionLevelCatalog.NewEliteLevels)
+                .Concat(new[] { FirstRegionLevelCatalog.RainLanternCourt,
+                    FirstRegionLevelCatalog.GreenhouseCollectionRoom, FirstRegionLevelCatalog.RainPrismCourt,
+                    FirstRegionLevelCatalog.ThreeMaterialPressure });
+            foreach (FirstRegionLevelDefinition level in levels)
+            foreach (AcademyStructurePlacement module in AcademyBattlefieldLayoutCatalog.VisualModules(level.Id))
+            {
+                Assert.That(module.X, Is.InRange(0, level.Width - module.WidthCells), level.Id);
+                Assert.That(module.TopY, Is.InRange(module.HeightCells - 1, level.Height - 1), level.Id);
+                if (!module.IsGroundAttachment) continue;
+                GridPosition position = new GridPosition(module.X, module.TopY);
+                Assert.That(level.Terrain.Any(value => value.Position == position), Is.False, level.Id);
+                Assert.That(level.BlockedPositions.Contains(position), Is.False, level.Id);
+                Assert.That(position, Is.Not.EqualTo(level.HeroSpawn), level.Id);
+                Assert.That(level.EnemyPlacements.Any(value => value.Position == position), Is.False, level.Id);
+            }
+        }
+
+        [Test]
         public void CoverVariant_OnlySelectsVisualAssetForExistingCoverKind()
         {
             GridPosition position = new GridPosition(3, 2);
             Assert.That(AcademyBattlefieldLayoutCatalog.CoverVariant("rail_patrol", position, CoverType.Light),
-                Does.StartWith("academy_prop_"));
+                Does.StartWith("academy_light_"));
             Assert.That(AcademyBattlefieldLayoutCatalog.CoverVariant("rail_patrol", position, CoverType.Heavy),
-                Does.StartWith("academy_prop_"));
+                Does.StartWith("academy_heavy_"));
             Assert.That(AcademyBattlefieldLayoutCatalog.CoverVariant("rail_patrol", position, CoverType.None), Is.Null);
-            Assert.That(AcademyBattlefieldLayoutCatalog.CoverVisualAssetIds(), Has.Length.EqualTo(20));
+            Assert.That(AcademyBattlefieldLayoutCatalog.CoverVisualAssetIds(), Has.Length.EqualTo(5));
         }
 
         [Test]

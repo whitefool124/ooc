@@ -1,0 +1,3 @@
+var lab=UnityEngine.Object.FindFirstObjectByType<OCC.Combat.Presentation.PixelVfxShowcase>();
+if(lab==null) throw new System.Exception("Missing showcase controller.");
+return new {scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene().path,lab.enabled,lab.Mode,lab.Age,lab.Paused,width=UnityEngine.Screen.width,height=UnityEngine.Screen.height,output=lab.Output!=null?lab.Output.width:0,scale=lab.integerFrame.localScale.x,heroFilter=lab.heroTexture.filterMode.ToString(),floorFilter=UnityEngine.Resources.Load<UnityEngine.Texture2D>("Art/FormalAcademyIndependentFloors32/academy_block_court_a").filterMode.ToString(),errors=UnityEditor.ShaderUtil.GetShaderMessages(lab.effectShader)};

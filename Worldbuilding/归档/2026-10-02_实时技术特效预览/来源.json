@@ -1,0 +1,10 @@
+{
+  "assets": {
+    "floor": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+    "hero": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/hero.png",
+    "enemy": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png"
+  },
+  "kind": "WebGL shader study",
+  "unity_imported": false,
+  "new_raster_art": false
+}

@@ -1,0 +1,97 @@
+{
+  "success": true,
+  "scene": "Assets/Scenes/PixelVfxShowcase.unity",
+  "controls": "All 7 mode buttons passed screen raycast and click; replay, pause, slow, original, intensity and stage pointer executed.",
+  "receipts": [
+    {
+      "stage": 0,
+      "Mode": 0,
+      "Age": 2.4,
+      "Paused": true,
+      "Original": false,
+      "hash": "f0aN3ZQVd4jbv+dfHPmfjQ==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 1,
+      "Mode": 1,
+      "Age": 0.658741534,
+      "Paused": true,
+      "Original": false,
+      "hash": "OoexkHT3QjDZD+xqhcIMLw==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 2,
+      "Mode": 2,
+      "Age": 0.653097332,
+      "Paused": true,
+      "Original": false,
+      "hash": "mrjDWqYCcYocqsAC7SN1fw==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 3,
+      "Mode": 3,
+      "Age": 0.666829,
+      "Paused": true,
+      "Original": false,
+      "hash": "Z/Xj29kIqarsTzsoSlrFCg==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 4,
+      "Mode": 4,
+      "Age": 0.658620358,
+      "Paused": true,
+      "Original": false,
+      "hash": "b+hrdc0fmlsAaywHoxkXDQ==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 5,
+      "Mode": 5,
+      "Age": 0.655505657,
+      "Paused": true,
+      "Original": false,
+      "hash": "1YEoOrWJFRDcTUs05wyKog==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 6,
+      "Mode": 6,
+      "Age": 0.6544163,
+      "Paused": true,
+      "Original": false,
+      "hash": "1sc4CLKApPF5+ggNZFTOEg==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 7,
+      "Mode": 6,
+      "Age": 0.6544163,
+      "Paused": true,
+      "Original": true,
+      "hash": "rWcgmjdefKQ/fa3/GsB3LQ==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 8,
+      "Mode": 5,
+      "Age": 0.219212651,
+      "Paused": true,
+      "Original": false,
+      "hash": "muNpnPyFQswWdVGke7gDsA==",
+      "shaderErrors": 0
+    },
+    {
+      "stage": 9,
+      "Mode": 6,
+      "Age": 0.6598126,
+      "Paused": true,
+      "Original": false,
+      "hash": "fXNt76igOK/5yZ1RXd5+2Q==",
+      "shaderErrors": 0
+    }
+  ]
+}

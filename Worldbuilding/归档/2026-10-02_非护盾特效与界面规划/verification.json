@@ -1,0 +1,67 @@
+{
+    "success": true,
+    "scene": "Assets/Scenes/PixelVfxShowcase.unity",
+    "detail": "Seven visible mode buttons passed raycast/click and distinct GPU output. Replay, pause, slow, original, intensity and freely positioned stage effect verified.",
+    "frames": [
+        {
+            "mode": 0,
+            "name": "火矢轨迹",
+            "hash": "1ULB29K5M56lvn3ohBqIhQ==",
+            "age": 0.6512194275856018
+        },
+        {
+            "mode": 1,
+            "name": "火焰爆破",
+            "hash": "Mxq77Ha3YWKg5fH2Tjr1Mg==",
+            "age": 0.6758193373680115
+        },
+        {
+            "mode": 2,
+            "name": "以太消解",
+            "hash": "mrjDWqYCcYocqsAC7SN1fw==",
+            "age": 0.650021493434906
+        },
+        {
+            "mode": 3,
+            "name": "空间冲击",
+            "hash": "RS5Vc66j6078nXkxbuapsA==",
+            "age": 0.660927414894104
+        },
+        {
+            "mode": 4,
+            "name": "热浪折射",
+            "hash": "E9EQGYSjs1eM56dTbh/Tag==",
+            "age": 0.6711587309837341
+        },
+        {
+            "mode": 5,
+            "name": "移动光源",
+            "hash": "xc9LmmTCMeSN9YVueLGVkg==",
+            "age": 0.6687387824058533
+        },
+        {
+            "mode": 6,
+            "name": "地面电弧",
+            "hash": "jdc+POnwvlEcxAilkgabRA==",
+            "age": 0.6580833196640015
+        },
+        {
+            "mode": 6,
+            "name": "地面电弧",
+            "hash": "rWcgmjdefKQ/fa3/GsB3LQ==",
+            "age": 0.6580833196640015
+        },
+        {
+            "mode": 5,
+            "name": "移动光源",
+            "hash": "7tkoNKsnQBJHQjpWl9FLXg==",
+            "age": 0.4036855399608612
+        },
+        {
+            "mode": 6,
+            "name": "地面电弧",
+            "hash": "NrP0up+NGNuTladTmdaMmA==",
+            "age": 0.6600326895713806
+        }
+    ]
+}

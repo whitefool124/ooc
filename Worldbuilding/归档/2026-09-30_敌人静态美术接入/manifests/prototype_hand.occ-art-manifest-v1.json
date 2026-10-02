@@ -1,0 +1,119 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ_enemy_prototype_hand_native32_v1",
+  "role": "tactical_unit_32x64",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent round-2 Codex built-in generation for the academy workshop prototype technician; round 1 was rejected for oversize logical bounds.",
+    "source_path": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/source/prototype_hand_source.png",
+    "source_sha256": "ec46bd6e62c5df343bc9f51941c60f073cb8676357d6f5fb378ae3bb3b3f9bea"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/prototype_hand.png",
+    "output_sha256": "10dd769c9b1b09062aa44ddd60f80147ab42a8a4cdf87e3b31740385ed135d95",
+    "native_output_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/prototype_hand.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 13,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "unit",
+    "logical_cell": [
+      0,
+      0
+    ],
+    "native_anchor": [
+      16,
+      62
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 62
+    },
+    "depth_sort_baseline": 62,
+    "allowed_occlusion_direction": [
+      "front",
+      "rear"
+    ],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "ground_cell",
+    "combined_room_shell": false
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 visual canvas bottom-centred over one 32x32 academy ground cell; feet use baseline y=62 and upper body may overhang the cell.",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "placement": {
+      "native_xy": [
+        64,
+        16
+      ],
+      "screen_axis_aligned": true
+    }
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/prototype_hand_one_x.png",
+    "four_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/prototype_hand_four_x.png",
+    "six_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/prototype_hand_six_x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/prototype_hand_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/prototype_hand_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/application/prototype_hand_application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex Art QA",
+    "date": "2026-09-21",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PASS",
+    "placement_semantics": "PASS",
+    "support_and_contact": "PASS",
+    "material_palette_family": "PASS",
+    "walkability_and_occlusion": "PASS",
+    "notes": "Independent 6x and application review passed: the portable prototype case and red overload lamp distinguish the unit from the rope assistant while keeping one-cell contact. Unity import and runtime texture lookup passed on 2026-09-30; in-battle visual capture is still required before FORMAL."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalUnits64/prototype_hand.png",
+    "guid": "d9222f28b6c968f4ba71adf0b7d6f787",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "compression": "None",
+    "mipmaps": false,
+    "pixels_per_unit": 32
+  },
+  "processing": {
+    "decoder": "Tools/OCCArt/decode_generated_pixel_grid.py",
+    "subject_pitch": 24,
+    "subject_lattice_confidence": 3.8073,
+    "subject_native_bounds": [
+      19,
+      53
+    ],
+    "geometric_resize_or_interpolation": false,
+    "new_colours_introduced": false,
+    "final_palette_note": "12 decoded source colours plus the contract-mandated pure-black exterior ring",
+    "alpha_shape_preserved_during_outline": true,
+    "outline_operation": "replace exterior-facing existing outermost opaque ring with one pure-black native pixel"
+  }
+}

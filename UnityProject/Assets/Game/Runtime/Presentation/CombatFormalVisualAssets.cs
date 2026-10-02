@@ -98,7 +98,8 @@ namespace OCC.Combat.Presentation
                 testArenaUnits["raider"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_raider_pixel_candidate_64");
                 testArenaUnits["shieldguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_shieldguard_pixel_candidate_64");
                 testArenaUnits["pyromancer"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_pyromancer_pixel_candidate_64");
-                testArenaUnits["elite_vanguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_elite_vanguard_pixel_candidate_64");
+                testArenaUnits["elite_vanguard"] = units["elite_vanguard"];
+                testArenaUnits["prototype_hand"] = units["prototype_hand"];
             }
             LoadAcademy();
             foreach (FormalArtEntry entry in FormalArtRegistry.Environments)
@@ -178,14 +179,6 @@ namespace OCC.Combat.Presentation
             }
             foreach (string id in new[] { "academy_tactical_road_edge", "academy_tactical_road_corner", "academy_tactical_road_end" })
                 academy[id] = RequiredTexture("Art/FormalAcademyCombat32/" + id);
-            foreach (string family in new[] { "court", "road", "ruin", "earth" })
-            {
-                foreach (string variant in new[] { "", "_b" })
-                {
-                    string id = $"academy_ground_macro_{family}{variant}_3x3";
-                    academy[id] = RequiredTexture("Art/FormalAcademyGroundMacros32/" + id);
-                }
-            }
             foreach (string id in new[] { "academy_curb_edge", "academy_curb_corner", "academy_curb_opposite",
                          "academy_curb_three", "academy_curb_enclosed" })
                 academy[id] = RequiredTexture("Art/FormalAcademyTerrainOverlays32/" + id);

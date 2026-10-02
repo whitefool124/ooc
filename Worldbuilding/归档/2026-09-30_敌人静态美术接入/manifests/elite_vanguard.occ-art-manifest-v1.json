@@ -1,0 +1,118 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ_enemy_elite_vanguard_native32_v1",
+  "role": "tactical_unit_32x64",
+  "status": "FORMAL_CANDIDATE",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent round-2 Codex built-in generation for the academy earth-aspect marking instructor; round 1 was rejected for oversize logical bounds.",
+    "source_path": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/source/elite_vanguard_source.png",
+    "source_sha256": "f80b741b9714c4d7835f6ea31956c18f69e59e80f95ee54bf94936bfe1205823"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/elite_vanguard.png",
+    "output_sha256": "41ab6233fcc89015e115e235e90c821d6a9703796672286c14f6eeeb06689acc",
+    "native_output_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/elite_vanguard.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "unit",
+    "logical_cell": [
+      0,
+      0
+    ],
+    "native_anchor": [
+      16,
+      62
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 62
+    },
+    "depth_sort_baseline": 62,
+    "allowed_occlusion_direction": [
+      "front",
+      "rear"
+    ],
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "ground_cell",
+    "combined_room_shell": false
+  },
+  "application": {
+    "runtime_draw_rect": "32x64 visual canvas bottom-centred over one 32x32 academy ground cell; feet use baseline y=62 and upper body may overhang the cell.",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "placement": {
+      "native_xy": [
+        64,
+        16
+      ],
+      "screen_axis_aligned": true
+    }
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/elite_vanguard_one_x.png",
+    "four_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/elite_vanguard_four_x.png",
+    "six_x": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/elite_vanguard_six_x.png",
+    "grayscale": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/elite_vanguard_grayscale.png",
+    "checker": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/qa/elite_vanguard_checker.png",
+    "application_contact": "Worldbuilding/归档/2026-09-30_敌人静态美术接入/application/elite_vanguard_application_contact.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "Codex Art QA",
+    "date": "2026-09-21",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PASS",
+    "placement_semantics": "PASS",
+    "support_and_contact": "PASS",
+    "material_palette_family": "PASS",
+    "walkability_and_occlusion": "PASS",
+    "notes": "Independent 6x and application review passed: older maintenance instructor identity, strict side profile, one-cell contact and academy earth-material palette remain readable. Unity import and runtime texture lookup passed on 2026-09-30; in-battle visual capture is still required before FORMAL."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/FormalUnits64/elite_vanguard.png",
+    "guid": "26d6aaca6e4b76a4a980d7fa8c3ba7d6",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "compression": "None",
+    "mipmaps": false,
+    "pixels_per_unit": 32
+  },
+  "processing": {
+    "decoder": "Tools/OCCArt/decode_generated_pixel_grid.py",
+    "subject_pitch": 21,
+    "subject_lattice_confidence": 5.6419,
+    "subject_native_bounds": [
+      22,
+      54
+    ],
+    "geometric_resize_or_interpolation": false,
+    "new_colours_introduced": false,
+    "alpha_shape_preserved_during_outline": true,
+    "outline_operation": "replace exterior-facing existing outermost opaque ring with one pure-black native pixel"
+  }
+}
